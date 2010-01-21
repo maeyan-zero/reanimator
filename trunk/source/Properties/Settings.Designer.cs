@@ -22,17 +22,5 @@ namespace Reanimator.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Hellgate London\\")]
-        public string HellgateDirectory {
-            get {
-                return ((string)(this["HellgateDirectory"]));
-            }
-            set {
-                this["HellgateDirectory"] = value;
-            }
-        }
     }
 }

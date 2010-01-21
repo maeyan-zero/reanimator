@@ -91,9 +91,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(7, 75);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(371, 13);
+            this.label2.Size = new System.Drawing.Size(374, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Root Data Directory (this should to the dir that contains data && data_common)";
+            this.label2.Text = "Root Data Directory (this should be the dir that contains data && data_common)";
             // 
             // label1
             // 
@@ -133,14 +133,18 @@
             // 
             // Options
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(440, 192);
+            this.ControlBox = false;
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Options";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Reanimator Options";
+            this.Text = "Options";
             this.Load += new System.EventHandler(this.Options_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
