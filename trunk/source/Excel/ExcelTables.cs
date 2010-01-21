@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
 using Reanimator.Forms;
+using System.Windows.Forms;
 
 namespace Reanimator.Excel
 {
@@ -18,17 +19,9 @@ namespace Reanimator.Excel
         public Int16 id; 
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    struct TableIndex
-    {
-        public int flag;
-        public int[] indicies;
-    }
-
     public class ExcelTables : ExcelTable
     {
         List<ExcelTables_Table> tables;
-        TableIndex tableIndex;
         Stats stats;
         public Stats Stats
         {
@@ -39,30 +32,11 @@ namespace Reanimator.Excel
         }
         States states;
 
-        public ExcelTables(byte[] data) : base(data)
+        public ExcelTables(byte[] data) : base(data) {}
+
+        protected override void ParseTables(byte[] data)
         {
             tables = ReadTables<ExcelTables_Table>(data, ref offset, Count);
-    
-            tableIndex = (TableIndex)FileTools.ByteArrayToStructure(data, typeof(TableIndex), offset);
-            offset += sizeof(Int32);
-            tableIndex.indicies = FileTools.ByteArrayToInt32Array(data, offset, Count);
-
-            // 2x more table index type chunks - check if 1 is the no. of elements in the file or something
-        }
-
-        public static List<T> ReadTables<T>(byte[] data, ref int offset, int count)
-        {
-            List<T> tables = new List<T>();
-
-            for (int i = 0; i < count; i++)
-            {
-                T table = (T)FileTools.ByteArrayToStructure(data, typeof(T), offset);
-                offset += Marshal.SizeOf(typeof(T));
-
-                tables.Add(table);
-            }
-
-            return tables;
         }
 
         public string GetTableStringId(int index)
@@ -78,7 +52,8 @@ namespace Reanimator.Excel
                 string szFileName = szFolder + "\\" + szStringId + ".txt.cooked";
                 FileStream cookedFile;
 
-                progress.SetCurrentItemText(szStringId.ToLower() + ".txt.cooked");
+                string currentItem = szStringId.ToLower() + ".txt.cooked";
+                progress.SetCurrentItemText(currentItem);
                 progress.Refresh();
 
                 try
@@ -99,14 +74,23 @@ namespace Reanimator.Excel
                     }
                 }
 
-                if (szStringId.Equals("STATS", StringComparison.OrdinalIgnoreCase))
+                byte[] buffer = FileTools.StreamToByteArray(cookedFile);
+                try
                 {
-                    stats = new Stats(FileTools.StreamToByteArray(cookedFile));
+                    if (szStringId.Equals("STATS", StringComparison.OrdinalIgnoreCase))
+                    {
+                        stats = new Stats(buffer);
+                    }
+                    else if (szStringId.Equals("STATES", StringComparison.OrdinalIgnoreCase))
+                    {
+                        states = new States(buffer);
+                    }
                 }
-                else if (szStringId.Equals("STATES", StringComparison.OrdinalIgnoreCase))
+                catch (Exception e)
                 {
-                    states = new States(FileTools.StreamToByteArray(cookedFile));
+                    MessageBox.Show("Failed to parse cooked file " + currentItem + "\n\n" + e.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+
 
                 if (cookedFile != null)
                 {

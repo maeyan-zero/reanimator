@@ -22,7 +22,9 @@ namespace Reanimator.Excel
 
         List<StatsTable> stats;
 
-        public Stats(byte[] data) : base(data)
+        public Stats(byte[] data) : base(data) {}
+
+        protected override void ParseTables(byte[] data)
         {
             stats = ExcelTables.ReadTables<StatsTable>(data, ref offset, Count);
         }

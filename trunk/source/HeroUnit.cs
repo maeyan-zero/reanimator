@@ -3,29 +3,74 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Reanimator.Excel;
 
 namespace Reanimator
 {
-    public class HeroUnitStats
+    public class HeroUnitStat
     {
-        UnitStatBlock statBlock;
-
-        public HeroUnitStats(UnitStatBlock stats)
+        public struct ExtraAttribute
         {
-            statBlock = stats;
-        }
+            public int unknownBool;
+            public int resourceId;
 
-        public int Count
-        {
-            get
+            public string resourceString;
+
+            public ExtraAttribute(UnitStat_ExtraAttribute ex, ExcelTables excelTables)
             {
-                return statBlock.statCount;
+                unknownBool = ex.unknown1_1;
+                resourceId = ex.resource;
+
+                resourceString = excelTables.Stats.GetStringFromId(resourceId);
+            }
+
+            public override string ToString()
+            {
+                return resourceString;
             }
         }
 
-        public int StatIdAt(int index)
+        int statId;
+        ExtraAttribute[] extraAttributes;
+        int otherAttribute1;
+        int otherAttribute2;
+        int otherAttribute3;
+        int resourceId;
+        List<StatValues> values;
+
+        public string statString;
+
+        public HeroUnitStat(UnitStat unitStat, ExcelTables excelTables)
         {
-            return statBlock.stats[index].statId;
+            statId = unitStat.statId;
+            extraAttributes = new ExtraAttribute[unitStat.extraAttributesCount];
+            for (int i = 0; i < unitStat.extraAttributesCount; i++)
+            {
+                extraAttributes[i] = new ExtraAttribute(unitStat.extraAttributes[i], excelTables);
+            }
+            otherAttribute1 = unitStat.otherAttribute.unknown1;
+            otherAttribute2 = unitStat.otherAttribute.unknown2;
+            otherAttribute3 = unitStat.otherAttribute.unknown3;
+            resourceId = unitStat.resource;
+            values = unitStat.values.ToList<StatValues>();
+
+            statString = excelTables.Stats.GetStringFromId(statId);
+        }
+
+        public string StatString
+        {
+            get { return statString; }
+            set { statString = value; }
+        }
+
+        public List<StatValues> Values
+        {
+            get { return values; }
+        }
+
+        public override string ToString()
+        {
+            return StatString;
         }
     }
 
@@ -34,16 +79,9 @@ namespace Reanimator
         BitBuffer bitBuffer;
         Unit heroUnit;
 
-        HeroUnitStats heroStats;
-        public HeroUnitStats Stats
-        {
-            get
-            {
-                return heroStats;
-            }
-        }
-
-        public HeroUnit(byte[] heroData)
+        HeroUnitStat[] stats;
+   
+        public HeroUnit(byte[] heroData, ExcelTables excelTables)
         {
             bitBuffer = new BitBuffer(heroData);
             bitBuffer.DataByteOffset = 0x2028;
@@ -51,7 +89,16 @@ namespace Reanimator
             heroUnit = new Unit();
             ReadUnit(ref heroUnit);
 
-            heroStats = new HeroUnitStats(heroUnit.statBlock);
+            stats = new HeroUnitStat[heroUnit.statBlock.statCount];
+            for (int i = 0; i < heroUnit.statBlock.statCount; i++)
+            {
+                stats[i] = new HeroUnitStat(heroUnit.statBlock.stats[i], excelTables);
+            }
+        }
+
+        public HeroUnitStat[] Stats
+        {
+            get { return stats; }
         }
 
         public Unit[] Items
@@ -425,7 +472,7 @@ namespace Reanimator
             {
                 unitStat.repeatCount = bitBuffer.ReadBits(10);
             }
-            unitStat.values = new int[unitStat.repeatCount];
+            unitStat.values = new StatValues[unitStat.repeatCount];
 
             for (int i = 0; i < unitStat.repeatCount; i++)
             {
@@ -433,11 +480,12 @@ namespace Reanimator
                 {
                     if (unitStat.extraAttributes[j].exists == 1)
                     {
-                        unitStat.extraAttributes[j].value = bitBuffer.ReadBits(unitStat.extraAttributes[j].bitCount);
+                        unitStat.values[i].extraAttributeValues = new int[unitStat.extraAttributesCount];
+                        unitStat.values[i].extraAttributeValues[j] = bitBuffer.ReadBits(unitStat.extraAttributes[j].bitCount);
                     }
                 }
 
-                unitStat.values[i] = bitBuffer.ReadBits(unitStat.bitCount);
+                unitStat.values[i].value = bitBuffer.ReadBits(unitStat.bitCount);
             }
 
             return true;

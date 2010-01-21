@@ -66,10 +66,17 @@ namespace Reanimator
             Marshal.FreeHGlobal(i);
         }
 
-        public static object ByteArrayToStructure(byte[] byteArray, Type type, int offset, params object[] param)
+        public static object ByteArrayToStructure(byte[] byteArray, Type type, int offset)
         {
-            object obj = Activator.CreateInstance(type, param);
+            object obj = Activator.CreateInstance(type);
             ByteArrayToStructure(byteArray, ref obj, offset, 0);
+            return obj;
+        }
+
+        public static object ByteArrayToStructure(byte[] byteArray, Type type, int offset, int length)
+        {
+            object obj = Activator.CreateInstance(type);
+            ByteArrayToStructure(byteArray, ref obj, offset, length);
             return obj;
         }
 
