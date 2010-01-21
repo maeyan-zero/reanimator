@@ -60,6 +60,7 @@
             this.statusBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clientPatcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cascadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,7 +86,6 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.clientPatcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -362,6 +362,13 @@
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
+            // clientPatcherToolStripMenuItem
+            // 
+            this.clientPatcherToolStripMenuItem.Name = "clientPatcherToolStripMenuItem";
+            this.clientPatcherToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.clientPatcherToolStripMenuItem.Text = "Client Patcher...";
+            this.clientPatcherToolStripMenuItem.Click += new System.EventHandler(this.clientPatcherToolStripMenuItem_Click);
+            // 
             // windowsMenu
             // 
             this.windowsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -479,6 +486,7 @@
             this.toolStrip.Size = new System.Drawing.Size(684, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "ToolStrip";
+            this.toolStrip.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Reanimator_MouseClick);
             // 
             // newToolStripButton
             // 
@@ -562,13 +570,6 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // clientPatcherToolStripMenuItem
-            // 
-            this.clientPatcherToolStripMenuItem.Name = "clientPatcherToolStripMenuItem";
-            this.clientPatcherToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.clientPatcherToolStripMenuItem.Text = "Client Patcher...";
-            this.clientPatcherToolStripMenuItem.Click += new System.EventHandler(this.clientPatcherToolStripMenuItem_Click);
-            // 
             // Reanimator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -581,6 +582,8 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "Reanimator";
             this.Text = "Reanimator 2038";
+            this.Load += new System.EventHandler(this.Reanimator_Load);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Reanimator_MouseClick);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.toolStrip.ResumeLayout(false);

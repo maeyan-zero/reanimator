@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
+using Reanimator.Forms;
 
 namespace Reanimator.Excel
 {
@@ -69,13 +70,16 @@ namespace Reanimator.Excel
             return tables[index].szStringId;
         }
 
-        public bool LoadTables(string szFolder)
+        public bool LoadTables(string szFolder, Progress progress)
         {
             for (int i = 0; i < Count; i++)
             {
                 string szStringId = GetTableStringId(i);
                 string szFileName = szFolder + "\\" + szStringId + ".txt.cooked";
                 FileStream cookedFile;
+
+                progress.SetCurrentItemText(szStringId.ToLower() + ".txt.cooked");
+                progress.Refresh();
 
                 try
                 {
@@ -90,6 +94,7 @@ namespace Reanimator.Excel
                     }
                     catch (Exception)
                     {
+                        progress.StepProgress();
                         continue;
                     }
                 }
@@ -107,6 +112,7 @@ namespace Reanimator.Excel
                 {
                     cookedFile.Dispose();
                 }
+                progress.StepProgress();
             }
 
             return true;

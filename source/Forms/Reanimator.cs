@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.IO;
 using Reanimator.Forms;
 using Reanimator.Excel;
+using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace Reanimator
 {
@@ -16,19 +18,18 @@ namespace Reanimator
     {
         private Options options;
         private Config config;
-
         private List<string> indexFilesOpen;
-        private int childFormNumber = 0;
         private ExcelTables excelTables;
 
+        private int childFormNumber = 0;
+  
         public Reanimator()
         {
             config = new Config("config.xml");
             options = new Options(config);
-
             indexFilesOpen = new List<string>();
+               
             InitializeComponent();
-            //OpenFile_COOKED("D:\\Games\\Hellgate London\\Data\\data_common\\excel\\exceltables.txt.cooked");
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -66,15 +67,7 @@ namespace Reanimator
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Index Files (*.idx)|*.idx|All Files (*.*)|*.*";
-
-            if (Properties.Settings.Default.HellgateDirectory == null)
-            {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            }
-            else
-            {
-                openFileDialog.InitialDirectory = Properties.Settings.Default.HellgateDirectory;
-            }
+            openFileDialog.InitialDirectory = config["hglDir"] + "\\Data";
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("idx"))
             {
@@ -100,15 +93,7 @@ namespace Reanimator
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Cooked Files (*.cooked)|*.cooked|All Files (*.*)|*.*";
-
-            if (Properties.Settings.Default.HellgateDirectory == null)
-            {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            }
-            else
-            {
-                openFileDialog.InitialDirectory = Properties.Settings.Default.HellgateDirectory;
-            }
+            openFileDialog.InitialDirectory = config["dataDir"];
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
             {
@@ -164,9 +149,7 @@ namespace Reanimator
 
         private void OpenFile_COOKED(string szFileName)
         {
-            FileStream cookedFile = new FileStream(szFileName, FileMode.Open);
-            excelTables = new ExcelTables(FileTools.StreamToByteArray(cookedFile));
-            excelTables.LoadTables(szFileName.Substring(0, szFileName.LastIndexOf("\\")));
+            MessageBox.Show("Todo");
         }
 
         private void indexExplorer_FormClosed(object sender, FormClosedEventArgs e)
@@ -180,8 +163,9 @@ namespace Reanimator
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+
             if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 string FileName = saveFileDialog.FileName;
@@ -245,26 +229,19 @@ namespace Reanimator
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            options.Show();
+            options.ShowDialog(this);
+            this.BringToFront();
         }
 
         private void clientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            if (Properties.Settings.Default.HellgateDirectory == null)
-            {
-                openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            }
-            else
-            {
-                openFileDialog.InitialDirectory = Properties.Settings.Default.HellgateDirectory;
-            }
+            openFileDialog.InitialDirectory = config["hglDir"] + "\\SP_x64";
             if (openFileDialog.ShowDialog(this) != DialogResult.OK)
             {
                 return;
             }
-
 
             FileStream clientFile;
             try
@@ -275,7 +252,6 @@ namespace Reanimator
             {
                 return;
             }
-
 
             ClientPatcher clientPatcher = new ClientPatcher(FileTools.StreamToByteArray(clientFile));
             if (clientPatcher.ApplyHardcorePatch())
@@ -290,6 +266,36 @@ namespace Reanimator
                 MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             clientFile.Dispose();
+        }
+
+        private void LoadExcelTables(object sender, EventArgs e)
+        {
+            Progress progress = (Progress)sender;
+
+            FileStream excelFile = new FileStream(config["dataDir"] + "\\data_common\\excel\\exceltables.txt.cooked", FileMode.Open);
+            excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
+            progress.ConfigBar(0, excelTables.Count, 1);
+            progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
+            excelTables.LoadTables(config["dataDir"] + "\\data_common\\excel\\", progress);
+            progress.Dispose();
+        }
+
+        // this fixes a weird windows API bug causing the ShowDialog to minimise the main client
+        private void Reanimator_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.Focus();
+        }
+
+        private void Reanimator_Load(object sender, EventArgs e)
+        {
+            this.Show();
+            this.Refresh();
+            // this fixes a weird windows API bug causing the ShowDialog to minimise the main client
+            this.OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, this.Left+10, this.Top+10, 0));
+
+            Progress progress = new Progress();
+            progress.Activated += new EventHandler(LoadExcelTables);
+            progress.ShowDialog(this);
         }
     }
 }
