@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="HellgateDirectory" Type="System.String" Scope="User">
-      <Value Profile="(Default)">D:\Hellgate London</Value>
+      <Value Profile="(Default)">D:\Hellgate London\</Value>
     </Setting>
   </Settings>
 </SettingsFile>
