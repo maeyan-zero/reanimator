@@ -140,7 +140,7 @@ namespace Reanimator
             }
 
             FileStream heroFile = new FileStream(szFileName, FileMode.Open);
-            HeroUnit heroUnit = new HeroUnit(FileTools.StreamToByteArray(heroFile));
+            HeroUnit heroUnit = new HeroUnit(FileTools.StreamToByteArray(heroFile), excelTables);
             HeroEditor heroEditor = new HeroEditor(heroUnit, excelTables);
             heroEditor.Text = "Hero Editor: " + szFileName;
             heroEditor.MdiParent = this;

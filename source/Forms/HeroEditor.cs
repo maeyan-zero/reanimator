@@ -30,7 +30,7 @@ namespace Reanimator.Forms
         {
             // this is just a quick nasty test - ignore me
             Unit[] items = heroUnit.Items;
-            Unit item = items[this.itemListBox.SelectedIndex];
+            Unit item = items[this.items_ListBox.SelectedIndex];
             for (int i = 0; i < item.statBlock.statCount; i++)
             {
                 UnitStat stat = item.statBlock.stats[i];
@@ -53,17 +53,32 @@ namespace Reanimator.Forms
             for (int i = 0; i < items.Length; i++)
             {
                 Unit item = items[i];
-                this.itemListBox.Items.Add("Item #" + i);
+                this.items_ListBox.Items.Add("Item #" + i);
             }
         }
 
         private void PopulateStats()
         {
-            HeroUnitStats stats = heroUnit.Stats;
-            for (int i = 0; i < stats.Count; i++)
+            foreach (HeroUnitStat stat in heroUnit.Stats)
             {
-                int statId = stats.StatIdAt(i);
-                this.charListBox.Items.Add(excelTables.Stats.GetStringFromId(statId));
+                this.charStats_ListBox.Items.Add(stat);
+            }
+        }
+
+        private void charStats_ListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            HeroUnitStat stat = (HeroUnitStat)this.charStats_ListBox.SelectedItem;
+            charStatValues_ListBox.Items.Clear();
+            foreach (StatValues values in stat.Values)
+            {
+                if (values.extraAttributeValues != null)
+                {
+                    foreach (int ea in values.extraAttributeValues)
+                    {
+                        charStatValues_ListBox.Items.Add("  *" + ea);
+                    }
+                }
+                charStatValues_ListBox.Items.Add(values.value);
             }
         }
     }

@@ -24,7 +24,12 @@ namespace Reanimator
         public int unknown1_1;										// 1 bit		// if unknown1 == 2
         public int skipResource;									// 1 bit		// if this is set, then don't read the resource below
         public int resource;										// 16 bits		// i think this is a resource thingy anyways...
-        public int value;                                           // bitCount bits
+    };
+
+    public struct StatValues
+    {
+        public int[] extraAttributeValues;
+        public int value;
     };
 
     public struct UnitStat
@@ -40,7 +45,7 @@ namespace Reanimator
         public int repeatFlag;										// 1 bit		// if set, check for repeat number
         public int repeatCount;										// 10 bits		// i think this can be something other than 10 bits... I think...
 
-        public int[] values;
+        public StatValues[] values;
     };
 
     public struct UnitStatAdditional
