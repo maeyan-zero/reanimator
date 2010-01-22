@@ -329,13 +329,73 @@ namespace Reanimator
             }
 
 
+            if (TestBit(unit.bitField1, 0x1A))
+            {
+                unit.weaponConfigFlag = (uint)bitBuffer.ReadBits(32);
+                if (unit.weaponConfigFlag != 0x91103A74)
+                {
+                    MessageBox.Show("Flags not aligned!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                unit.endFlagBitOffset = bitBuffer.ReadBits(32);     // to end flag
+
+                unit.weaponConfigCount = bitBuffer.ReadBits(6);
+                unit.weaponConfigs = new UnitWeaponConfig[unit.weaponConfigCount];
+                for (int i = 0; i < unit.weaponConfigCount; i++)
+                {
+                    UnitWeaponConfig weaponConfig;
+
+                    weaponConfig.id = bitBuffer.ReadBits(16);
+
+                    weaponConfig.unknownCount1 = bitBuffer.ReadBits(4);
+                    if (weaponConfig.unknownCount1 != 0x02)
+                    {
+                        MessageBox.Show("if (weaponConfig.unknownCount1 != 0x02)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
+                    weaponConfig.exists1 = new int[2];
+                    weaponConfig.unknownIds1 = new int[2];
+                    for (int j = 0; j < weaponConfig.unknownCount1; j++)
+                    {
+                        weaponConfig.exists1[j] = bitBuffer.ReadBits(1);
+                        if (weaponConfig.exists1[j] == 1)
+                        {
+                            weaponConfig.unknownIds1[j] = bitBuffer.ReadBits(32); // under some condition this will be ReadFromOtherFunc thingy
+                        }
+                    }
+
+                    // yes this chunk looks the same as above - the above chunk though is in a specific function and can differ at 1 point
+                    // also, it can be != 2
+                    weaponConfig.unknownCount2 = bitBuffer.ReadBits(4);
+                    weaponConfig.exists2 = new int[weaponConfig.unknownCount2];
+                    weaponConfig.unknownIds2 = new int[weaponConfig.unknownCount2];
+                    for (int j = 0; j < weaponConfig.unknownCount2; j++)
+                    {
+                        weaponConfig.exists2[j] = bitBuffer.ReadBits(1);
+                        if (weaponConfig.exists2[j] == 1)
+                        {
+                            weaponConfig.unknownIds2[j] = bitBuffer.ReadBits(32);
+                        }
+                    }
+
+                    weaponConfig.idAnother = bitBuffer.ReadBits(32); // read from 0x17 file          // 0x3931 -> 0x4B
+
+                    unit.weaponConfigs[i] = weaponConfig;
+                }
+            }
+
+
             if (TestBit(unit.bitField1, 0x00))
             {
                 unit.endFlag = bitBuffer.ReadBits(32);
-                if (unit.beginFlag != unit.endFlag)
+                if (unit.endFlag != unit.beginFlag && unit.endFlag != 0x2B523460)
                 {
-                    MessageBox.Show("Warning! Flags not aligned!\nBit Offset: " + bitBuffer.DataBitOffset + "\nExpected: " + unit.bitCountEOF +
-                        "\nByte Offset: " + (bitBuffer.DataBitOffset >> 8));
+                    int bitOffset = unit.bitCountEOF - bitBuffer.DataBitOffset;
+                    int byteOffset = (bitBuffer.Length - bitBuffer.DataByteOffset) - (bitBuffer.DataBitOffset >> 3);
+                    MessageBox.Show("Flags not aligned!\nBit Offset: " + bitBuffer.DataBitOffset + "\nExpected: " + unit.bitCountEOF + " (+" + bitOffset +
+                        ")\nByte Offset: " + (bitBuffer.DataBitOffset >> 3) + "\nExpected: " + (bitBuffer.Length-bitBuffer.DataByteOffset) + " (+" + byteOffset + ")",
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
 

@@ -139,6 +139,18 @@ namespace Reanimator
         public GearAppearance_S[] gears;				        	// 17 bits * gearCount
     };
 
+    public struct UnitWeaponConfig
+    {
+        public int id;                                              // 16 bits      // .text:00000001403DB5EA mov     edx, 4       .text:00000001403DB5EF call    ConvertNumber?  ; Call Pr
+        public int unknownCount1;                                   // 4 bits       // must be == 0x02
+        public int[] exists1;                                       // 1 bit
+        public int[] unknownIds1;                                   // 32 bits
+        public int unknownCount2;                                   // 4 bits
+        public int[] exists2;                                       // 1 bit
+        public int[] unknownIds2;                                   // 32 bits
+        public int idAnother;                                       // 32 bits
+    };
+
     public struct Unit
     {
         ////// Start of read inside main header check function (in ASM) //////
@@ -250,7 +262,13 @@ namespace Reanimator
         // if (testBit(pUnit->bitField1, 0x12))
         public int itemBitOffset;									// 32 bits		// missed what it did with it
         public int itemCount;										// 10 bits
-        public Unit[] items;													// each item is just a standard data block
+        public Unit[] items;													    // each item is just a standard data block
+
+        // if (testBit(pUnit->bitField1, 0x1A))
+        public uint weaponConfigFlag;                               // 32 bits      // must be 0x91103A74; always present
+        public int endFlagBitOffset;                                // 32 bits      // offset to end of file flag
+        public int weaponConfigCount;                               // 6 bits       // weapon config count
+        public UnitWeaponConfig[] weaponConfigs;                                // i think this has item positions on bottom bar, etc as well
 
         // if (testBit(unit->bitField1, 0x00))
         public int endFlag;											// 32 bits
