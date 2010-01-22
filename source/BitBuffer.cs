@@ -21,10 +21,8 @@ namespace Reanimator
                     dataByteOffset = value;
                 }
             }
-            get
-            {
-                return dataByteOffset;
-            }
+
+            get { return dataByteOffset; }
         }
  
         int dataBitOffset = 0;
@@ -37,10 +35,13 @@ namespace Reanimator
                     dataBitOffset = value;
                 }
             }
-            get
-            {
-                return dataBitOffset;
-            }
+
+            get { return dataBitOffset; }
+        }
+
+        public int Length
+        {
+            get { return data.Length; }
         }
 
         public BitBuffer(byte[] dataIn)
