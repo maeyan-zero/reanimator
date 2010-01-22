@@ -11,12 +11,8 @@ namespace Reanimator.Forms
 {
     public partial class Options : Form
     {
-        Config config;
-
-        public Options(Config c)
+        public Options()
         {
-            config = c;
-
             InitializeComponent();
         }
 
@@ -29,18 +25,18 @@ namespace Reanimator.Forms
         {
             FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog();
             folderBrowserDialogue.Description = "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London";
-            folderBrowserDialogue.SelectedPath = config["hglDir"];
+            folderBrowserDialogue.SelectedPath = Config.hglDir;
 
             if (folderBrowserDialogue.ShowDialog(this) == DialogResult.OK)
             {
-                config["hglDir"] = folderBrowserDialogue.SelectedPath;
-                hglDir.Text = config["hglDir"];
+                Config.hglDir = folderBrowserDialogue.SelectedPath;
+                hglDir.Text = Config.hglDir;
             }
         }
 
         private void dataDirCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            config["dataDirChecked"] = dataDirCheckBox.Checked.ToString();
+            Config.dataDirsRootChecked = dataDirCheckBox.Checked;
             RefreshDataDir();
         }
 
@@ -48,10 +44,10 @@ namespace Reanimator.Forms
         {
             if (dataDirCheckBox.Checked)
             {
-                config["dataDir"] = config["hglDir"];
+                Config.dataDirsRoot = Config.hglDir;
             }
-            
-            dataDirTextBox.Text = config["dataDir"];
+
+            dataDirTextBox.Text = Config.dataDirsRoot;
             dataDirBrowse.Enabled = !dataDirCheckBox.Checked;
             dataDirTextBox.Enabled = !dataDirCheckBox.Checked;
         }
@@ -65,22 +61,22 @@ namespace Reanimator.Forms
 
             FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog();
             folderBrowserDialogue.Description = "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London";
-            folderBrowserDialogue.SelectedPath = config["hglDir"];
+            folderBrowserDialogue.SelectedPath = Config.hglDir;
 
             if (folderBrowserDialogue.ShowDialog(this) == DialogResult.OK)
             {
-                config["dataDir"] = folderBrowserDialogue.SelectedPath;
-                dataDirTextBox.Text = config["dataDir"];
+                Config.dataDirsRoot = folderBrowserDialogue.SelectedPath;
+                dataDirTextBox.Text = Config.dataDirsRoot;
             }
         }
 
         private void Options_Load(object sender, EventArgs e)
         {
-            hglDir.Text = config["hglDir"];
-            dataDirTextBox.Text = config["dataDir"];
-            dataDirCheckBox.Checked = ((string)(config["dataDirChecked"])).Equals("True");
-            dataDirBrowse.Enabled = !dataDirCheckBox.Checked;
-            dataDirTextBox.Enabled = !dataDirCheckBox.Checked;
+            hglDir.Text = Config.hglDir;
+            dataDirTextBox.Text = Config.dataDirsRoot;
+            dataDirCheckBox.Checked = Config.dataDirsRootChecked;
+            dataDirBrowse.Enabled = !Config.dataDirsRootChecked;
+            dataDirTextBox.Enabled = !Config.dataDirsRootChecked;
         }
     }
 }

@@ -5,141 +5,61 @@ using System.Text;
 using System.IO;
 using System.Data;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace Reanimator
 {
-    public class Config
+    public abstract class Config
     {
-        DataSet configSet;
-        string szFileName;
+        static string key = @"SOFTWARE\Reanimator";
+        static RegistryKey rootKey = Registry.CurrentUser.CreateSubKey(key);
+        static RegistryKey configkey = rootKey.CreateSubKey("config");
 
-        public string this[string szIndex]
+        public static T GetValue<T>(string name, T defaultValue)
         {
-            get
-            {
-                return GetItemString(ItemArrayIndex(szIndex));
-            }
+            return (T)configkey.GetValue(name, defaultValue);
+        }
 
-            set
+        public static void SetValue<T>(string name, T value)
+        {
+            if (typeof(T) == typeof(String))
             {
-                SetItemString(szIndex, value);
+                configkey.SetValue(name, value, RegistryValueKind.String);
+            }
+            else if (typeof(T) == typeof(Int32) || typeof(T) == typeof(Int16))
+            {
+                configkey.SetValue(name, value, RegistryValueKind.DWord);
+            }
+            else if (typeof(T) == typeof(Int64))
+            {
+                configkey.SetValue(name, value, RegistryValueKind.QWord);
+            }
+            else if (typeof(T) == typeof(String[]))
+            {
+                configkey.SetValue(name, value, RegistryValueKind.MultiString);
+            }
+            else if (typeof(T) == typeof(Boolean))
+            {
+                throw new NotImplementedException("else if (typeof(T) == typeof(Boolean))");
             }
         }
 
-        public Config(string szFile)
+        public static string hglDir
         {
-            configSet = new DataSet();
-            szFileName = szFile;
-            FileStream configFile = null;
-
-            try
-            {
-                configFile = new FileStream(szFileName, FileMode.Open);
-                configSet.ReadXml(configFile);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Failed to load config file!\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return;
-            }
-            finally
-            {
-                if (configFile != null)
-                {
-                    configFile.Close();
-                }
-
-                try
-                {
-                    configSet.Tables["config"].RowChanged += new DataRowChangeEventHandler(Config_Changed);
-                    configSet.Tables["config"].ColumnChanged += new DataColumnChangeEventHandler(Config_Changed);
-                }
-                catch (Exception)
-                {
-                }
-            }
+            get { return GetValue<string>("hglDir", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
+            set { SetValue<string>("hglDir", value); }
         }
 
-        private void Config_Changed(object sender, EventArgs e)
+        public static bool dataDirsRootChecked
         {
-            Save();
+            get { return GetValue<int>("dataDirsRootChecked", 1) == 1 ? true : false; }
+            set { SetValue<int>("dataDirsRootChecked", value ? 1 : 0); }
         }
 
-        public bool Save()
+        public static string dataDirsRoot
         {
-            FileStream configFile = null;
-
-            try
-            {
-                configFile = new FileStream(szFileName, FileMode.Create, FileAccess.Write);
-                configSet.WriteXml(configFile);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Failed to save config file!\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return false;
-            }
-            finally
-            {
-                if (configFile != null)
-                {
-                    configFile.Close();
-                }
-            }
-
-            return true;
-        }
-
-        private int ItemArrayIndex(string szColumn)
-        {
-            try
-            {
-                return configSet.Tables["config"].Columns[szColumn].Ordinal;
-            }
-            catch (Exception)
-            {
-                return -1;
-            }
-        }
-
-        private string GetItemString(int index)
-        {
-            try
-            {
-                return (string)configSet.Tables["config"].Rows[0].ItemArray[index];
-            }
-            catch (Exception)
-            {
-                return "NOT FOUND";
-            }
-        }
-
-        private bool SetItemString(string szIndex, string szString)
-        {
-            int index = ItemArrayIndex(szIndex);
-            if (index == -1)
-            {
-                DataColumn dataColumn = configSet.Tables["config"].Columns.Add(szIndex);
-                index = dataColumn.Ordinal;
-            }
-
-            try
-            {
-                // why doesn't this work? bleh
-                // configSet.Tables["config"].Rows[0].ItemArray[index] = szString;
-
-                object[] itemArray = configSet.Tables["config"].Rows[0].ItemArray;
-                itemArray[index] = szString;
-                configSet.Tables["config"].Rows[0].ItemArray = itemArray;
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            get { return GetValue<string>("dataDirsRoot", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
+            set { SetValue<string>("dataDirsRoot", value); }
         }
     }
 }
