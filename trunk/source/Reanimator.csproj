@@ -163,7 +163,6 @@
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="config.xml" />
     <Content Include="ExampleMod.xml" />
   </ItemGroup>
   <ItemGroup>

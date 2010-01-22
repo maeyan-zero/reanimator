@@ -17,7 +17,6 @@ namespace Reanimator
     public partial class Reanimator : Form
     {
         private Options options;
-        private Config config;
         private List<string> indexFilesOpen;
         private ExcelTables excelTables;
 
@@ -25,8 +24,7 @@ namespace Reanimator
   
         public Reanimator()
         {
-            config = new Config("config.xml");
-            options = new Options(config);
+            options = new Options();
             indexFilesOpen = new List<string>();
                
             InitializeComponent();
@@ -67,7 +65,7 @@ namespace Reanimator
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Index Files (*.idx)|*.idx|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = config["hglDir"] + "\\Data";
+            openFileDialog.InitialDirectory = Config.hglDir + "\\Data";
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("idx"))
             {
@@ -93,7 +91,7 @@ namespace Reanimator
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Cooked Files (*.cooked)|*.cooked|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = config["dataDir"];
+            openFileDialog.InitialDirectory = Config.dataDirsRoot;
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
             {
@@ -237,7 +235,7 @@ namespace Reanimator
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = config["hglDir"] + "\\SP_x64";
+            openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
             if (openFileDialog.ShowDialog(this) != DialogResult.OK)
             {
                 return;
@@ -271,12 +269,24 @@ namespace Reanimator
         private void LoadExcelTables(object sender, EventArgs e)
         {
             Progress progress = (Progress)sender;
+            FileStream excelFile;
 
-            FileStream excelFile = new FileStream(config["dataDir"] + "\\data_common\\excel\\exceltables.txt.cooked", FileMode.Open);
-            excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
+            try
+            {
+                excelFile = new FileStream(Config.dataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked", FileMode.Open);
+                excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Failed to load exceltables!\nPlease ensure your directories are set correctly.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                progress.Close();
+                progress.Dispose();
+                return;
+            }
+
             progress.ConfigBar(0, excelTables.Count, 1);
             progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
-            excelTables.LoadTables(config["dataDir"] + "\\data_common\\excel\\", progress);
+            excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress);
             progress.Dispose();
         }
 
@@ -294,7 +304,7 @@ namespace Reanimator
             this.OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, this.Left+10, this.Top+10, 0));
 
             Progress progress = new Progress();
-            progress.Activated += new EventHandler(LoadExcelTables);
+            progress.Shown += new EventHandler(LoadExcelTables);
             progress.ShowDialog(this);
         }
     }
