@@ -157,17 +157,17 @@ namespace Reanimator
 
             if (TestBit(unit.bitField1, 0x1F))
             {
-                unit.unknownCount1 = bitBuffer.ReadBits(4) - 8;
-                unit.unknownCount1s = new UnknownCount1_S[unit.unknownCount1];
+                unit.unknownCount1F = bitBuffer.ReadBits(4) - 8;
+                unit.unknownCount1Fs = new UnknownCount1F_S[unit.unknownCount1F];
 
-                for (int i = 0; i < unit.unknownCount1; i++)
+                for (int i = 0; i < unit.unknownCount1F; i++)
                 {
-                    UnknownCount1_S uc1;
+                    UnknownCount1F_S uc1;
 
                     uc1.unknown1 = bitBuffer.ReadBits(16);
                     uc1.unknown2 = bitBuffer.ReadBits(16);
 
-                    unit.unknownCount1s[i] = uc1;
+                    unit.unknownCount1Fs[i] = uc1;
                 }
             }
 
@@ -665,6 +665,178 @@ namespace Reanimator
                 return false;
 
             return true;
+        }
+
+        public byte[] GenerateSaveData()
+        {
+            BitBuffer saveBuffer = new BitBuffer();
+
+            WriteUnit(saveBuffer, heroUnit);
+
+            return saveBuffer.GetData();
+        }
+
+        private void WriteUnit(BitBuffer saveBuffer, Unit unit)
+        {
+            /***** Unit Header *****
+             * majorVersion                                     16                  Should be 0xBF.
+             * minorVersion                                     8                   Should be 0x00 - Not 100% sure that it is a minor version or anything.
+             * bitFieldCount                                    8                   Must be <= 2. I haven't tested with it != 2 though.
+             * {
+             *      bitField                                    32                  Each bit determines if 'x' is read in or not.
+             * }
+             * 
+             * if (TestBit(bitField1, 0x1D))
+             * {
+             *      bitCountEOF                                 32                  // TO CONFIRM
+             * }
+             * 
+             * if (TestBit(bitField1, 0x00))
+             * {
+             *      beginFlag                                   32                  Flags are used to check file alignment.
+             * }
+             * 
+             * if (TestBit(bitField1, 0x1C))
+             * {
+             *      timeStamp1                                  32                  I'm not actually sure what these three things are but they can be set to 0x00000000
+             *      timeStamp2                                  32                  and it will still be loaded fine. I call them time stamps simply because the first
+             *      timeStamp3                                  32                  one changes every time the file is saved.
+             * }
+             * 
+             * if (TestBit(bitField1, 0x1F))
+             * {
+             *      unknownCount                                4                   count + 8 is what must be written. e.g. If count = 3, then write 11.
+             *      {
+             *          unknown                                 16                  // TO BE DETERMINED
+             *          unknown                                 16                  // TO BE DETERMINED
+             *      }
+             * }
+             * 
+             * if (TestBit(bitField2, 0x00))                                        Take note: It's bitField2! This is the only time I've noticed its use.
+             * {
+             *      characterFlagCount                          8                   Character state flags
+             *      {                                                               e.g. Elite, Hardcore, Hardcore Dead, etc.
+             *          characterFlag                           16                  However it should be noted that the game doesn't actually
+             *      }                                                               appear to use these. It uses the ones located further down.
+             * }
+             * 
+             ***** Unit Body *****                                                  (the header "chunk" is read in its own function in-game - hence I call it a header, lol)
+             *
+             * if (TestBit(bitField1, 0x1B))
+             * {
+             *      unknownCount                                5                   Yes, that's *5* bits. The bastards completely mess up byte alignment here.
+             *      {
+             *          unknown1                                16                  // TO BE DETEREMINED
+             *          unknown2                                32                  // TO BE DETEREMINED
+             *      }
+             * }
+             * 
+             * if (TestBit(bitField1, 0x05))
+             * {
+             *      unknownFlag                                 4                   This value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue)
+             *      unknownFlagValue                            16                  or something like that anyways.
+             * }
+             * 
+             * if (TestBit(bitField1, 0x17))
+             * {                                                                    This chunk is read in by a secondary non-standard function.
+             *      unknown[8]                                  64                  I've not really bothered trying to figure it out yet,
+             * }                                                                    But the function is used a few times, but always 64 bits.
+             * 
+             * if (TestBit(bitField1, 0x03) || TestBit(bitField1, 0x01))
+             * {
+             *      unknownBool                                 1                   // TO BE DETEREMINED
+             *      {
+             *          if (TestBit(bitField1, 0x02))
+             *          {
+             *              unknown                             32                  // UNTESTED
+             *          }
+             *      
+             *          unknown                                 16                  // TO BE DETEREMINED
+             *          unknown                                 12                  // TO BE DETEREMINED
+             *          unknown                                 12                  // TO BE DETEREMINED
+             *      }
+             *      
+             *      unknown[8]                                  64                  Non-standard function reading (as above).
+             * }
+             */
+
+            // section chunk flags
+            int useBitCountEOF = (1 << 0x1D);
+            int useFlagAlignment = 1;
+            int useTimeStamps = (1 << 0x1C);
+            int useUnknown1F = (1 << 0x1F);
+            int useCharacterFlags1 = 1;
+
+            // need to keep track of things as we go
+            int bitField1 = 0x00000000;
+            int bitField1Offset = -1;
+            int bitField2 = 0x00000000;
+            int bitField2Offset = -1;
+            int bitCountEOFOffset = -1;
+
+            /***** Unit Header *****/
+
+            saveBuffer.WriteBits(0x00BF, 16);
+            saveBuffer.WriteBits(0x00, 8);
+            saveBuffer.WriteBits(0x02, 8);
+            {
+                bitField1Offset = saveBuffer.DataBitOffset;
+                saveBuffer.WriteBits(bitField1, 32);
+                bitField2Offset = saveBuffer.DataBitOffset;
+                saveBuffer.WriteBits(bitField2, 32);
+            }
+
+            if (useBitCountEOF > 0)
+            {
+                bitCountEOFOffset = saveBuffer.DataBitOffset;
+                saveBuffer.WriteBits(0x00000000, 32);
+                bitField1 |= useBitCountEOF;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (useFlagAlignment > 0)
+            {
+                saveBuffer.WriteBits(0x67616C46, 32);
+                bitField1 |= useFlagAlignment;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (unit.timeStamp1 != 0)
+            {
+                saveBuffer.WriteBits(0x00000000, 32);
+                saveBuffer.WriteBits(0x00000000, 32);
+                saveBuffer.WriteBits(0x00000000, 32);
+                bitField1 |= useTimeStamps;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (unit.unknownCount1F != 0)
+            {
+                saveBuffer.WriteBits(unit.unknownCount1F+8, 4);
+                for (int i = 0; i < unit.unknownCount1F; i++)
+                {
+                    UnknownCount1F_S uc1F = unit.unknownCount1Fs[i];
+                    saveBuffer.WriteBits(uc1F.unknown1, 16);
+                    saveBuffer.WriteBits(uc1F.unknown2, 16);
+                }
+
+                bitField1 |= useUnknown1F;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (unit.playerFlagCount1 != 0)
+            {
+                saveBuffer.WriteBits(unit.playerFlagCount1, 8);
+                for (int i = 0; i < unit.playerFlagCount1; i++)
+                {
+                    saveBuffer.WriteBits(unit.playerFlags1[i], 16);
+                }
+
+                bitField2 |= useCharacterFlags1;
+                saveBuffer.WriteBits(bitField2, 32, bitField2Offset);
+            }
+
+            /***** Unit Body *****/
         }
     }
 }

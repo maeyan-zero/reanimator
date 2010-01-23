@@ -117,5 +117,23 @@ namespace Reanimator
 
             return -1;
         }
+
+        public static byte[] StructureToByteArray(object obj)
+        {
+            int length = Marshal.SizeOf(obj);
+            byte[] byteArray = new byte[length];
+            IntPtr i = Marshal.AllocHGlobal(length);
+
+            Marshal.StructureToPtr(obj, i, true);
+            Marshal.Copy(i, byteArray, 0, length);
+            Marshal.FreeHGlobal(i);
+
+            return byteArray;
+        }
+
+        public static byte[] StringToUnicodeByteArray(string str)
+        {
+            return UnicodeEncoding.Unicode.GetBytes(str);
+        }
     }
 }

@@ -75,7 +75,7 @@ namespace Reanimator
         public UnitStatName[] names;
     };
 
-    public struct UnknownCount1_S
+    public struct UnknownCount1F_S
     {
         public int unknown1;										// 16 bits
         public int unknown2;										// 16 bits
@@ -113,7 +113,7 @@ namespace Reanimator
         {
             public int gear;										// 16 bits
             public int unknownBool;									// 1 bit
-            public int unknownBoolValue;						// 2 bits
+            public int unknownBoolValue;					    	// 2 bits
         };
 
         public int unknownCount1;									// 3 bits
@@ -174,8 +174,8 @@ namespace Reanimator
         public int timeStamp3;										// 32			// set to 00 00 00 00 and it'll still load... it'll do
 
         // if (testBit(unit->bitField1, 0x1F))
-        public int unknownCount1;									// 4
-        public UnknownCount1_S[] unknownCount1s;                                    // no idea wtf these do
+        public int unknownCount1F;									// 4
+        public UnknownCount1F_S[] unknownCount1Fs;                                  // no idea wtf these do
 
         // if (testBit(unit->bitField2, 0x00)					                    // char state flags (e.g. "elite")
         public int playerFlagCount1;								// 8
@@ -187,11 +187,11 @@ namespace Reanimator
         public int unknownCount3;									// 5
         public UnknownCount3_S[] unknownCount3s;			                        // no idea wtf these do either
 
-        // if (testBit(unit->bitField1, 0x05)) // (bitField1 & 0x20)  (haven't encountered save file with this yet)
-        public int unknownFlag;										// 4			// this value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue) or something like that
+        // if (testBit(unit->bitField1, 0x05)) // (bitField1 & 0x20)
+        public int unknownFlag;										// 4		    // this value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue) or something like that
         public int unknownFlagValue;								// 16
 
-        // if (testBit(bitField1, 0x17)) // 64 bits read as 8x8 bytes from non-standard bit read function
+        // if (testBit(bitField1, 0x17)) // 64 bits read as 8x8 chunk bits from non-standard bit read function
         public byte[] unknown1;
 
         // if (testBit(bitField1, 0x03) || testBit(bitField1, 0x01)) // if (bitField1 & 0x08 || bitField1 & 0x02)
