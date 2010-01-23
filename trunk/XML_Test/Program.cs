@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
+using System.Windows.Forms;
 
 namespace XML_Test
 {
@@ -25,10 +26,16 @@ namespace XML_Test
       file3.AddNewModifyEntry(3, 5, 1);
       file2.AddNewModifyEntry(4, 2, 43);
 
+      //Serialize the mod file
       Utilities.Serialize(revival, Directory.GetCurrentDirectory() + @"\Revival.xml");
 
+      //Deserialize the mod file
       Revival rev = Utilities.Deserialize(Directory.GetCurrentDirectory() + @"\Revival.xml");
-      rev.modifications.ToString();
+
+      //Display the created file
+      StreamReader reader = new StreamReader(Directory.GetCurrentDirectory() + @"\Revival.xml");
+      Form1 form = new Form1(reader.ReadToEnd());
+      Application.Run(form);
     }
   }
 }
