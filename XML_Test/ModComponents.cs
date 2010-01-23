@@ -89,6 +89,12 @@ namespace XML_Test
     {
     }
 
+    /// <summary>
+    /// Adds a new modification entry
+    /// </summary>
+    /// <param name="modID">The name of the mod</param>
+    /// <param name="version">The current version number</param>
+    /// <param name="description">A short description of the mod</param>
     public Modification(string modID, string version, string description)
     {
       indices = new List<Index>();
@@ -154,6 +160,10 @@ namespace XML_Test
     {
     }
 
+    /// <summary>
+    /// Adds a new idx file reference
+    /// </summary>
+    /// <param name="idxID">The name of the idx file</param>
     public Index(string idxID)
     {
       this.id = idxID;
@@ -215,6 +225,10 @@ namespace XML_Test
     {
     }
 
+    /// <summary>
+    /// Adds a new txt.cooked file reference
+    /// </summary>
+    /// <param name="fileID">The name of the txt.cooked file</param>
     public File(string fileID)
     {
       this.id = fileID;
@@ -261,12 +275,23 @@ namespace XML_Test
     {
     }
 
+    /// <summary>
+    /// Adds a new cell modification
+    /// </summary>
+    /// <param name="row">The row of the cell</param>
+    /// <param name="column">The column of the cell</param>
     public Modify(int row, int column)
     {
       this.row = row;
       this.col = column;
     }
 
+    /// <summary>
+    /// Adds a new cell modification
+    /// </summary>
+    /// <param name="row">The row of the cell</param>
+    /// <param name="column">The column of the cell</param>
+    /// <param name="value">The new value of the cell</param>
     public Modify(int row, int column, int value)
     {
       this.row = row;
