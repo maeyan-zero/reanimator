@@ -12,23 +12,10 @@ namespace XML_Test
     static void Main(string[] args)
     {
       Revival revival = new Revival();
-        Modification mod = new Modification();
-          mod.id = "Revival SP modification";
-          mod.version = "1.2.0";
-          mod.description = "This is the base SP modification developed by the Revival team.";
-          Index index = new Index();
-            index.id = "hellgate000";
-            File file = new File();
-              file.id = "gameglobals.txt.cooked";
-              Modify modify = new Modify();
-                modify.row = 1;
-                modify.col = 1;      
-                modify.data = 20;
-            file.modifications.Add(modify);
-          index.files.Add(file);
-        mod.indices.Add(index);
-      revival.modifications.Add(mod);
-
+      Modification mod = revival.AddNewModification("Revival SP modification", "1.2.0", "This is the base SP modification developed by the Revival team.");
+      Index index = mod.AddNewIndexFile("hellgate000");
+      File file = index.AddNewCookedFile("gameglobals.txt.cooked");
+      file.AddNewModifyEntry(1, 1, 20);
 
       Utilities.Serialize(revival, Directory.GetCurrentDirectory() + @"\Revival.xml");
 
