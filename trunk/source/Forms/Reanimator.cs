@@ -298,6 +298,8 @@ namespace Reanimator
 
         private void Reanimator_Load(object sender, EventArgs e)
         {
+            this.Height = Config.clientHeight;
+            this.Width = Config.clientWidth;
             this.Show();
             this.Refresh();
             // this fixes a weird windows API bug causing the ShowDialog to minimise the main client
@@ -306,6 +308,12 @@ namespace Reanimator
             Progress progress = new Progress();
             progress.Shown += new EventHandler(LoadExcelTables);
             progress.ShowDialog(this);
+        }
+
+        private void Reanimator_ResizeEnd(object sender, EventArgs e)
+        {
+            Config.clientHeight = this.Height;
+            Config.clientWidth = this.Width;
         }
     }
 }

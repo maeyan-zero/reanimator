@@ -61,5 +61,17 @@ namespace Reanimator
             get { return GetValue<string>("dataDirsRoot", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
             set { SetValue<string>("dataDirsRoot", value); }
         }
+
+        public static int clientHeight
+        {
+            get { return GetValue<int>("clientHeight", 500); }
+            set { SetValue<int>("clientHeight", value); }
+        }
+
+        public static int clientWidth
+        {
+            get { return GetValue<int>("clientWidth", 700); }
+            set { SetValue<int>("clientWidth", value); }
+        }
     }
 }

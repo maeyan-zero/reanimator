@@ -584,6 +584,7 @@
             this.Text = "Reanimator 2038";
             this.Load += new System.EventHandler(this.Reanimator_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Reanimator_MouseClick);
+            this.ResizeEnd += new System.EventHandler(this.Reanimator_ResizeEnd);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.toolStrip.ResumeLayout(false);

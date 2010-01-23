@@ -44,6 +44,11 @@ namespace Reanimator
             get { return data.Length; }
         }
 
+        public BitBuffer()
+        {
+            data = new byte[1024];
+        }
+
         public BitBuffer(byte[] dataIn)
         {
             data = dataIn;
@@ -67,9 +72,8 @@ namespace Reanimator
             b >>= offsetBitsInThisByte;
             bitsToRead -= bitOffset;
 
-            int cleanBits = 0x01 << bitOffset;
-            cleanBits--;
-            b &= (byte)cleanBits;
+            // clean any excess bits we don't want
+            b &= ((0x01 << bitOffset) - 1);
 
             int bytesStillToRead = bitsToRead + 0x07;
             bytesStillToRead >>= 3;
@@ -84,7 +88,7 @@ namespace Reanimator
 
                 if (i == bytesStillToRead)
                 {
-                    cleanBits = bitsToRead - bitLevel;
+                    int cleanBits = bitsToRead - bitLevel;
                     bitsRead = cleanBits;
                     cleanBits = 0x01 << cleanBits;
                     cleanBits--;
@@ -99,6 +103,67 @@ namespace Reanimator
             dataBitOffset += bitCount;
 
             return ret;
+        }
+
+        public void WriteBits(int value, int bitCount)
+        {
+            WriteBits(value, bitCount, dataBitOffset, true);
+        }
+
+        public void WriteBits(int value, int bitCount, int dataBitOffset)
+        {
+            WriteBits(value, bitCount, dataBitOffset, false);
+        }
+
+        public void WriteBits(int value, int bitCount, int dataBitOffset, bool setIncrementOffset)
+        {
+            int bitsToWrite = bitCount;
+            int offsetBitsInFirstByte = dataBitOffset & 0x07;
+            int bitByteOffset = 0x08 - offsetBitsInFirstByte;
+
+            int bitOffset = bitCount;
+            if (bitByteOffset < bitCount)
+                bitOffset = bitByteOffset;
+
+            int bytesToWriteTo = (bitsToWrite + 0x07 + offsetBitsInFirstByte) >> 3;
+            int byteOffset = dataBitOffset >> 3;
+
+            for (int i = 0; i < bytesToWriteTo; i++, byteOffset++)
+            {
+                int bitLevel = 0;
+                if (i > 0)
+                {
+                    bitLevel += offsetBitsInFirstByte;
+                }
+                if (offsetBitsInFirstByte > 0 && i >= 2)
+                {
+                    bitLevel += (i - 1) * 8;
+                }
+                else if (offsetBitsInFirstByte == 0 && i >= 1)
+                {
+                    bitLevel += i * 8;
+                }
+
+                int toWrite = (value >> bitLevel);
+                if (i == 0)
+                {
+                    toWrite &= ((1 << bitOffset) - 1);
+                    toWrite <<= offsetBitsInFirstByte;
+                }
+
+                data[dataByteOffset + byteOffset] |= (byte)toWrite;
+            }
+
+            if (setIncrementOffset)
+            {
+                this.dataBitOffset += bitCount;
+            }
+        }
+
+        public byte[] GetData()
+        {
+            // to do; check bitCount, etc for when used as writer
+            return data;
         }
     }
 }
