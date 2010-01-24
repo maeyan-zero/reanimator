@@ -131,9 +131,9 @@ namespace Reanimator
             for (int i = 0; i < bytesToWriteTo; i++, byteOffset++)
             {
                 int bitLevel = 0;
-                if (i > 0)
+                if (offsetBitsInFirstByte > 0 && i > 0)
                 {
-                    bitLevel += offsetBitsInFirstByte;
+                    bitLevel = 8 - offsetBitsInFirstByte;
                 }
                 if (offsetBitsInFirstByte > 0 && i >= 2)
                 {
