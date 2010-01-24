@@ -188,17 +188,17 @@ namespace Reanimator
 
             if (TestBit(unit.bitField1, 0x1B))
             {
-                unit.unknownCount3 = bitBuffer.ReadBits(5);
-                unit.unknownCount3s = new UnknownCount3_S[unit.unknownCount3];
+                unit.unknownCount1B = bitBuffer.ReadBits(5);
+                unit.unknownCount1Bs = new UnknownCount1B_S[unit.unknownCount1B];
 
-                for (int i = 0; i < unit.unknownCount3; i++)
+                for (int i = 0; i < unit.unknownCount1B; i++)
                 {
-                    UnknownCount3_S uc3;
+                    UnknownCount1B_S uc3;
 
                     uc3.unknown1 = bitBuffer.ReadBits(16);
                     uc3.unknown2 = bitBuffer.ReadBits(32);
 
-                    unit.unknownCount3s[i] = uc3;
+                    unit.unknownCount1Bs[i] = uc3;
                 }
             }
 
@@ -215,33 +215,33 @@ namespace Reanimator
 
             if (TestBit(unit.bitField1, 0x17))
             {
-                unit.unknown1 = ReadNonStandardFunc();
+                unit.unknown17 = ReadNonStandardFunc();
             }
 
 
             if (TestBit(unit.bitField1, 0x03) || TestBit(unit.bitField1, 0x01))
             {
-                unit.unknownBool2 = bitBuffer.ReadBits(1);
-                if (unit.unknownBool2 > 0)
+                unit.unknownBool_01_03 = bitBuffer.ReadBits(1);
+                if (unit.unknownBool_01_03 > 0)
                 {
                     if (TestBit(unit.bitField1, 0x02))
                     {
-                        unit.unknown11 = bitBuffer.ReadBits(32);
+                        unit.unknown_02 = bitBuffer.ReadBits(32);
                     }
 
-                    unit.unknown7 = bitBuffer.ReadBits(16);
-                    unit.unknown8 = bitBuffer.ReadBits(12);
-                    unit.unknown9 = bitBuffer.ReadBits(12);
+                    unit.unknown_01_03_1 = bitBuffer.ReadBits(16);
+                    unit.unknown_01_03_2 = bitBuffer.ReadBits(12);
+                    unit.unknown_01_03_3 = bitBuffer.ReadBits(12);
                 }
 
-                unit.unknown10 = ReadNonStandardFunc();
+                unit.unknown_01_03_4 = ReadNonStandardFunc();
             }
 
 
             if (TestBit(unit.bitField1, 0x06))
             {
-                unit.unknownBool3 = bitBuffer.ReadBits(1);
-                if (unit.unknownBool2 != 1)
+                unit.unknownBool_06 = bitBuffer.ReadBits(1);
+                if (unit.unknownBool_01_03 != 1)
                 {
                     return false;
                 }
@@ -250,26 +250,26 @@ namespace Reanimator
 
             if (TestBit(unit.bitField1, 0x09))
             {
-                unit.unknown12 = bitBuffer.ReadBits(8);
+                unit.unknown_09 = bitBuffer.ReadBits(8);
             }
 
 
             if (TestBit(unit.bitField1, 0x07))
             {
                 unit.jobClass = bitBuffer.ReadBits(8);
-                unit.unknown2 = bitBuffer.ReadBits(8);
+                unit.unknown_07 = bitBuffer.ReadBits(8);
             }
 
 
             if (TestBit(unit.bitField1, 0x08))
             {
-                unit.charCount = bitBuffer.ReadBits(8);
-                if (unit.charCount > 0)
+                unit.characteCount = bitBuffer.ReadBits(8);
+                if (unit.characteCount > 0)
                 {
-                    unit.szName = new Char[unit.charCount];
-                    for (int i = 0; i < unit.charCount; i++)
+                    unit.characterName = new Char[unit.characteCount];
+                    for (int i = 0; i < unit.characteCount; i++)
                     {
-                        unit.szName[i] = (Char)bitBuffer.ReadBits(16);
+                        unit.characterName[i] = (Char)bitBuffer.ReadBits(16);
                     }
                 }
             }
@@ -724,7 +724,7 @@ namespace Reanimator
              *
              * if (TestBit(bitField1, 0x1B))
              * {
-             *      unknownCount                                5                   Yes, that's *5* bits. The bastards completely mess up byte alignment here.
+             *      unknownCount                                5                   // TO BE DETEREMINED
              *      {
              *          unknown1                                16                  // TO BE DETEREMINED
              *          unknown2                                32                  // TO BE DETEREMINED
@@ -733,9 +733,11 @@ namespace Reanimator
              * 
              * if (TestBit(bitField1, 0x05))
              * {
-             *      unknownFlag                                 4                   This value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue)
-             *      unknownFlagValue                            16                  or something like that anyways.
+             *      unknown                                     ??                  Never encountered.
              * }
+             * 
+             * unknownFlag                                      4                   This value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue)
+             * unknownFlagValue                                 16                  or something like that anyways.
              * 
              * if (TestBit(bitField1, 0x17))
              * {                                                                    This chunk is read in by a secondary non-standard function.
@@ -758,14 +760,83 @@ namespace Reanimator
              *      
              *      unknown[8]                                  64                  Non-standard function reading (as above).
              * }
+             * 
+             * if (TestBit(bitField1, 0x06))
+             * {
+             *      unknownBool                                 1                   // TO BE DETEREMINED
+             * }                                                                    // If exists has always been 1.
+             * 
+             * if (TestBit(bitField1, 0x09))
+             * {
+             *      unknown                                     8                   // TO BE DETERMINED
+             * }
+             * 
+             * if (TestBit(bitField1, 0x07))
+             * {
+             *      jobClass                                    8                   I think... Or something to do with it anyways.
+             *      unknown                                     8                   // TO BE DETERMINED
+             * }
+             * 
+             * if (TestBit(bitField1, 0x08))
+             * {
+             *      characterCount                              8                   Number of (unicode) characters in following string.
+             *      characterName                               8*2*characterCount  Character's name - doesn't appear to be actually used in-game...
+             * }
+             * 
+             * if (TestBit(bitField1, 0x0A))
+             * {
+             *      characterFlagCount                          8                   Character state flags
+             *      {                                                               e.g. Elite, Hardcore, Hardcore Dead, etc.
+             *          characterFlag                           16                  These flags actually affect in-game (unlike the previous set which
+             *      }                                                               appear to be unused).
+             * }
+             * 
+             * unknownBool                                      1                   // TO BE DETEREMINED
+             *                                                                      // always appears to be 0.
+             * if (TestBit(bitField1, 0x0D))
+             * {
+             *      UNIT STAT BLOCK                                                 See WriteStatBlock().
+             * }
              */
 
             // section chunk flags
+            // the order is around what they're actually read/checked in loading
             int useBitCountEOF = (1 << 0x1D);
             int useFlagAlignment = 1;
             int useTimeStamps = (1 << 0x1C);
-            int useUnknown1F = (1 << 0x1F);
+            int useUnknown_1F = (1 << 0x1F);
             int useCharacterFlags1 = 1;
+            int useUnknown_1B = (1 << 0x1B);
+            int useUnknown_17 = (1 << 0x17);
+            int useUnknown_03 = 0; // (1 << 0x03);
+            int useUnknown_01 = 0; // (1 << 0x01);
+            int useUnknown_02 = 0; // (1 << 0x02);
+            int useUnknown_06 = 0; // (1 << 0x06);
+            int useUnknown_09 = 0; // (1 << 0x09);
+            int useUnknown_07 = 0; // (1 << 0x07);
+            int useUnknown_08 = 0; // (1 << 0x08);
+            int useCharacterFlags2 = 0; // (1 << 0x0A);
+            int useStats = 0; // (1 << 0x0D);
+
+            // temp "fix" until we know what they actually are and how sensitive it is for missing fields
+            if (TestBit(unit.bitField1, 0x01))
+                useUnknown_01 = (1 << 0x01);
+            if (TestBit(unit.bitField1, 0x02))
+                useUnknown_02 = (1 << 0x02);
+            if (TestBit(unit.bitField1, 0x03))
+                useUnknown_03 = (1 << 0x03);
+            if (TestBit(unit.bitField1, 0x06))
+                useUnknown_06 = (1 << 0x06);
+            if (TestBit(unit.bitField1, 0x09))
+                useUnknown_09 = (1 << 0x09);
+            if (TestBit(unit.bitField1, 0x07))
+                useUnknown_07 = (1 << 0x07);
+            if (TestBit(unit.bitField1, 0x08))
+                useUnknown_08 = (1 << 0x08);
+            if (TestBit(unit.bitField1, 0x0A))
+                useCharacterFlags2 = (1 << 0x0A);
+            if (TestBit(unit.bitField1, 0x0D))
+                useStats = (1 << 0x0D);
 
             // need to keep track of things as we go
             int bitField1 = 0x00000000;
@@ -820,11 +891,11 @@ namespace Reanimator
                     saveBuffer.WriteBits(uc1F.unknown2, 16);
                 }
 
-                bitField1 |= useUnknown1F;
+                bitField1 |= useUnknown_1F;
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
-            if (unit.playerFlagCount1 != 0)
+            if (useCharacterFlags1 > 0)
             {
                 saveBuffer.WriteBits(unit.playerFlagCount1, 8);
                 for (int i = 0; i < unit.playerFlagCount1; i++)
@@ -837,6 +908,248 @@ namespace Reanimator
             }
 
             /***** Unit Body *****/
+
+            if (unit.unknownCount1B > 0)
+            {
+                saveBuffer.WriteBits(unit.unknownCount1B, 5);
+                for (int i = 0; i < unit.unknownCount1B; i++)
+                {
+                    saveBuffer.WriteBits(unit.unknownCount1Bs[i].unknown1, 16);
+                    saveBuffer.WriteBits(unit.unknownCount1Bs[i].unknown2, 32);
+                }
+
+                bitField1 |= useUnknown_1B;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            saveBuffer.WriteBits(unit.unknownFlag, 4);
+            saveBuffer.WriteBits(unit.unknownFlagValue, 16);
+
+            if (useUnknown_17 > 0)
+            {
+                WriteNonStandardFunc(unit.unknown17, saveBuffer);
+                bitField1 |= useUnknown_17;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (useUnknown_03 > 0 || useUnknown_01 > 0)
+            {
+                saveBuffer.WriteBits(unit.unknownBool_01_03, 1);
+                if (unit.unknownBool_01_03 == 1)
+                {
+                    if (useUnknown_02 > 0)
+                    {
+                        saveBuffer.WriteBits(unit.unknown_02, 32);
+                        bitField1 |= useUnknown_02;
+                        saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+                    }
+
+                    saveBuffer.WriteBits(unit.unknown_01_03_1, 16);
+                    saveBuffer.WriteBits(unit.unknown_01_03_2, 12);
+                    saveBuffer.WriteBits(unit.unknown_01_03_3, 12);
+                }
+
+                WriteNonStandardFunc(unit.unknown_01_03_4, saveBuffer);
+
+                bitField1 |= useUnknown_01;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+                bitField1 |= useUnknown_03;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (useUnknown_06 > 0)
+            {
+                saveBuffer.WriteBits(unit.unknownBool_06, 1);
+                bitField1 |= useUnknown_06;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (useUnknown_09 > 0)
+            {
+                saveBuffer.WriteBits(unit.unknown_09, 8);
+                bitField1 |= useUnknown_09;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (useUnknown_07 > 0)
+            {
+                saveBuffer.WriteBits(unit.jobClass, 8);
+                saveBuffer.WriteBits(unit.unknown_07, 8);
+                bitField1 |= useUnknown_07;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (useUnknown_08 > 0)
+            {
+                // does it include \00??
+                string blag = "Alex";
+                byte[] blagBytes = FileTools.StringToUnicodeByteArray(blag);
+                saveBuffer.WriteBits(blagBytes.Length/2, 8);
+                for (int i = 0; i < blagBytes.Length; i++)
+                {
+                    saveBuffer.WriteBits(blagBytes[i], 8);
+                }
+
+                bitField1 |= useUnknown_08;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (useCharacterFlags2 > 0)
+            {
+                saveBuffer.WriteBits(unit.playerFlagCount2, 8);
+                for (int i = 0; i < unit.playerFlagCount2; i++)
+                {
+                    saveBuffer.WriteBits(unit.playerFlags2[i], 16);
+                }
+
+                bitField1 |= useCharacterFlags2;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+
+            if (useStats > 0)
+            {
+                WriteStatBlock(unit.statBlock, true, saveBuffer);
+                bitField1 |= useStats;
+                saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
+            }
+        }
+
+        private void WriteNonStandardFunc(byte[] byteArray, BitBuffer saveBuffer)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                saveBuffer.WriteBits(byteArray[i], 8);
+            }
+        }
+
+        private void WriteStatBlock(UnitStatBlock statBlock, bool writeNameCount, BitBuffer saveBuffer)
+        {
+            /***** Stat Block Header *****
+             * majorVersion                                     16                  Stat block header - Must be 0x000A.
+             * minorVersion                                     3                   Must be 0x0.
+             * 
+             * additionalStatCount                              6                   Additional Stats - Not sure of use yet.
+             * {
+             *      unknown                                     16                  // TO BE DETEREMINED
+             *      statCount                                   16                  Count of following stats.
+             *      {
+             *          STATS                                                       See WriteStat().
+             *      }
+             * }
+             * 
+             * statCount                                        16                  Count of following stats.
+             * {
+             *      STATS                                                           See WriteStat().
+             * }
+             * 
+             * if (writeNameCount)                                                  This is TRUE by default. Set to FALSE when writing a stat block
+             * {                                                                    from the below name stat block chunk.
+             *      nameCount                                   8                   I think this has something to do with item names.
+             *      {
+             *          unknown                                 16                  // TO BE DETEREMINED
+             *          STAT BLOCK                                                  See WriteStatBlock().
+             *      }
+             * }
+             */
+
+            saveBuffer.WriteBits(0x000A, 16);
+            saveBuffer.WriteBits(0x0, 3);
+
+            saveBuffer.WriteBits(statBlock.additionalStatCount, 6);
+            for (int i = 0; i < statBlock.additionalStatCount; i++)
+            {
+                saveBuffer.WriteBits(statBlock.additionalStats[i].unknown, 16);
+                saveBuffer.WriteBits(statBlock.additionalStats[i].stats.Length, 16);
+
+                for (int j = 0; j < statBlock.additionalStats[i].stats.Length; j++)
+                {
+                    WriteStat(statBlock.additionalStats[i].stats[j], saveBuffer);
+                }
+            }
+
+            saveBuffer.WriteBits(statBlock.stats.Length, 16);
+            for (int i = 0; i < statBlock.stats.Length; i++)
+            {
+                WriteStat(statBlock.stats[i], saveBuffer);
+            }
+
+            if (!writeNameCount)
+            {
+                return;
+            }
+
+            saveBuffer.WriteBits(statBlock.names.Length, 8);
+            for (int i = 0; i < statBlock.names.Length; i++)
+            {
+                saveBuffer.WriteBits(statBlock.names[i].unknown1, 16);
+                WriteStatBlock(statBlock.names[i].statBlock, false, saveBuffer);
+            }
+        }
+
+        private void WriteStat(UnitStat stat, BitBuffer saveBuffer)
+        {
+            /***** Stat Block Header *****
+             * statId                                           16                  Stat ID from applicable excel table.
+             * extraAttributesCount                             2                   Count of following.
+             * {
+             *      exists                                      1                   Simple bool test.
+             *      if (exists)
+             *      {
+             *          bitCount_EA                             6                   Number of bits used in file.
+             *          
+             *          unknownFlag                             2                   Only seen 0x0 and 0x2.
+             *          if (unknownFlag == 0x2)
+             *          {
+             *              unknownBool                         1                   // TO BE DETEREMINED
+             *          }
+             *          
+             *          skipResource                            1                   Bool type.
+             *          if (!skipResource)
+             *          {
+             *              resourceId                          16                  Like statId, refers to some value in an excel table.
+             *          }
+             *      }
+             * }
+             * 
+             * bitCount                                         6                   Number of bits used in file.
+             * otherAttributeFlag                               3                   // TO BE DETEREMINED
+             * if (otherAttributeFlag & 0x01)
+             * {
+             *      unknown                                     4                   // TO BE DETEREMINED
+             * }
+             * if (otherAttributeFlag & 0x02)
+             * {
+             *      unknown                                     12                  // TO BE DETEREMINED
+             * }
+             * if (otherAttributeFlag & 0x04)
+             * {
+             *      unknown                                     1                   // TO BE DETEREMINED
+             * }
+             * 
+             * skipResource                                     2                   Bool type. Not sure why it's 2 bits.
+             * if (!skipResource)
+             * {
+             *      resourceId                                  16                  Like statId, refers to some value in an excel table.
+             * }
+             * 
+             * repeatFlag                                       1                   Bool type.
+             * if (repeatFlag)
+             * {
+             *      repeatCount                                 10                  Number of times to read in stat values.
+             * }
+             * 
+             * for (number of repeats)
+             * {
+             *      for (number of extra attributes)
+             *      {
+             *          extraAttributeValue                     bitCount_EA         The extra attribute for the applicable value below.
+             *      }
+             *      
+             *      statValue                                   bitCount            The actual stat value.
+             * }
+             */
+
+
         }
     }
 }

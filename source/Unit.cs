@@ -81,7 +81,7 @@ namespace Reanimator
         public int unknown2;										// 16 bits
     };
 
-    public struct UnknownCount3_S
+    public struct UnknownCount1B_S
     {
         public int unknown1;										// 16 bits
         public int unknown2;										// 32 bits
@@ -184,44 +184,46 @@ namespace Reanimator
         ////// End of read inside main header check function (in ASM) //////
 
         // if (testBit(unit->bitField1, 0x1B))
-        public int unknownCount3;									// 5
-        public UnknownCount3_S[] unknownCount3s;			                        // no idea wtf these do either
+        public int unknownCount1B;									// 5
+        public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea wtf these do either
 
-        // if (testBit(unit->bitField1, 0x05)) // (bitField1 & 0x20)
+        // if (testBit(unit->bitField1, 0x05)) // (bitField1 & 0x20)                // haven't encountered file with this yet
+        // ALERT
+
         public int unknownFlag;										// 4		    // this value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue) or something like that
         public int unknownFlagValue;								// 16
 
         // if (testBit(bitField1, 0x17)) // 64 bits read as 8x8 chunk bits from non-standard bit read function
-        public byte[] unknown1;
+        public byte[] unknown17;
 
         // if (testBit(bitField1, 0x03) || testBit(bitField1, 0x01)) // if (bitField1 & 0x08 || bitField1 & 0x02)
         // {
-        public int unknownBool2;									// 1 bit
+        public int unknownBool_01_03;								// 1 bit
         // {
         // if (testBit(bitField1, 0x02)) // if (bitField & 0x04)
-        public int unknown11;										//32 bits			// untested
+        public int unknown_02;										//32 bits			// untested
 
-        public int unknown7;										// 16 bits
-        public int unknown8;										// 12 bits
-        public int unknown9;										// 12 bits
+        public int unknown_01_03_1;									// 16 bits
+        public int unknown_01_03_2;									// 12 bits
+        public int unknown_01_03_3;									// 12 bits
         // }
 
-        public byte[] unknown10;								    // 8*8 bits (64) - non-standard func
+        public byte[] unknown_01_03_4;								// 8*8 bits (64) - non-standard func
         // }
 
         // if (testBit(bitField1, 0x06)) // if (bitField1 & 0x40) // does more reading, but can't test
-        public int unknownBool3;									// 1 bit					// alert if != 1
+        public int unknownBool_06;									// 1 bit					// alert if != 1
 
         // if (testBit(bitField1, 0x09))
-        public int unknown12;										// 8 bits
+        public int unknown_09;										// 8 bits
 
         // if (testBit(bitField1, 0x07)) // if (bitField1 & 0x80)
         public int jobClass;										// 8 bits		// i think...
-        public int unknown2;										// 8 bits		// this appears to be joined with jobClass to form a WORD... I think...
+        public int unknown_07;										// 8 bits		// this appears to be joined with jobClass to form a WORD... I think...
 
         // if (testBit(bitField1, 0x08))
-        public int charCount;										// 8 bits
-        public Char[] szName;                                                       // character name - why does name change when change filename though?								
+        public int characteCount;									// 8 bits
+        public Char[] characterName;                                                // character name - why does name change when change filename though?								
 
         // if (testBit(bitField1, 0x0A))						                    // char state flags (e.g. "elite")
         public int playerFlagCount2;								// 8 bits

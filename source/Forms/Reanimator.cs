@@ -111,8 +111,9 @@ namespace Reanimator
             {
                 indexFile = new FileStream(szFileName, FileMode.Open);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                MessageBox.Show("Failed to open file: " + szFileName + "\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -129,20 +130,32 @@ namespace Reanimator
             return true;
         }
 
-        private void OpenFile_HG1(string szFileName)
+        private bool OpenFile_HG1(string szFileName)
         {
             if (excelTables == null)
             {
                 MessageBox.Show("You must open the exceltable.txt.cooked file before viewing a character (dirty test implementation requirement)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
 
-            FileStream heroFile = new FileStream(szFileName, FileMode.Open);
+            FileStream heroFile;
+            try
+            {
+                heroFile = new FileStream(szFileName, FileMode.Open);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to open file: " + szFileName + "\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
             HeroUnit heroUnit = new HeroUnit(FileTools.StreamToByteArray(heroFile), excelTables);
             HeroEditor heroEditor = new HeroEditor(heroUnit, excelTables);
             heroEditor.Text = "Hero Editor: " + szFileName;
             heroEditor.MdiParent = this;
             heroEditor.Show();
+
+            return true;
         }
 
         private void OpenFile_COOKED(string szFileName)

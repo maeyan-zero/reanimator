@@ -19,8 +19,15 @@ namespace Reanimator.Excel
         protected struct ExcelHeader
         {
             public Int32 flag;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-            public Int32[] unknown; // is there a CRC in here?
+            public Int32 fileId;                            // or is this a CRC? Or something else weird like that?
+            public Int32 unknown32_1;                       // this is how the game reads this in...
+            public Int32 unknown32_2;                       // what they do I don't know, lol.
+            public Int16 unknown16_1;
+            public Int16 unknown16_2;
+            public Int16 unknown16_3;
+            public Int16 unknown16_4;
+            public Int16 unknown16_5;
+            public Int16 unknown16_6;
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -139,6 +146,7 @@ namespace Reanimator.Excel
                 offset += Count * sizeof(Int32);
 
                 
+                // these 4 index chunks are read in in a single loop, each time with the "flag", followed by the "count"... Something like that
                 // read in some unknown index
                 unknownIndex1 = (UnknownIndex)FileTools.ByteArrayToStructure(data, typeof(UnknownIndex), offset);
                 offset += Marshal.SizeOf(typeof(UnknownIndex));
@@ -161,7 +169,7 @@ namespace Reanimator.Excel
                 }
 
 
-                // untested header1
+                // untested header1 - this appears to be read in as above
                 untestedHeader1 = (UnknownIndex)FileTools.ByteArrayToStructure(data, typeof(UnknownIndex), offset);
                 offset += Marshal.SizeOf(typeof(UnknownIndex));
                 CheckFlag(untestedHeader1.flag);
@@ -171,7 +179,7 @@ namespace Reanimator.Excel
                 }
 
 
-                // untested header2
+                // untested header2 - this appears to be read in as above
                 untestedHeader2 = (UnknownIndex)FileTools.ByteArrayToStructure(data, typeof(UnknownIndex), offset);
                 offset += Marshal.SizeOf(typeof(UnknownIndex));
                 CheckFlag(untestedHeader2.flag);
