@@ -67,20 +67,65 @@ namespace Reanimator.Forms
             }
         }
 
+
         private void charStats_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.panel1.Controls.Clear();
+
             HeroUnitStat stat = (HeroUnitStat)this.charStats_ListBox.SelectedItem;
             charStatValues_ListBox.Items.Clear();
-            foreach (StatValues values in stat.Values)
+
+            int heightOffset = 0;
+            for (int i = 0; i < stat.Length; i++)
             {
-                if (values.extraAttributeValues != null)
+                StatValues statValues = stat.Values(i);
+
+                if (statValues.extraAttributeValues != null)
                 {
-                    foreach (int ea in values.extraAttributeValues)
+                    int j = 1;
+                    foreach (int ea in statValues.extraAttributeValues)
                     {
+                        Label eaValueLabel = new Label();
+                        eaValueLabel.Text = "Attr" + j + ": ";
+                        eaValueLabel.Width = 40;
+                        eaValueLabel.Top = 3 + heightOffset;
+                        TextBox eaValueTextBox = new TextBox();
+                        eaValueTextBox.Text = ea.ToString();
+                        eaValueTextBox.Left = eaValueLabel.Right;
+                        eaValueTextBox.Top = heightOffset;
+
+                        this.panel1.Controls.Add(eaValueLabel);
+                        this.panel1.Controls.Add(eaValueTextBox);
+
+                        heightOffset += 25;
+                        j++;
+
                         charStatValues_ListBox.Items.Add("  *" + ea);
                     }
                 }
-                charStatValues_ListBox.Items.Add(values.value);
+
+                int leftOffset = 0;
+                if (statValues.extraAttributeValues.Length != 0)
+                {
+                    leftOffset += 40;
+                }
+
+                Label valueLabel = new Label();
+                valueLabel.Text = "Value: ";
+                valueLabel.Left = leftOffset;
+                valueLabel.Width = 40;
+                valueLabel.Top = 3 + heightOffset;
+                TextBox valueTextBox = new TextBox();
+                valueTextBox.Text = statValues.val.ToString();
+                valueTextBox.Left = valueLabel.Right;
+                valueTextBox.Top = heightOffset;
+                valueTextBox.DataBindings.Add("Text", statValues, "Value", false, DataSourceUpdateMode.OnPropertyChanged, null, null, null);
+
+                this.panel1.Controls.Add(valueLabel);
+                this.panel1.Controls.Add(valueTextBox);
+
+                charStatValues_ListBox.Items.Add(statValues.val);
+                heightOffset += 45;
             }
         }
 

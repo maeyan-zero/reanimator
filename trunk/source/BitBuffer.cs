@@ -107,10 +107,6 @@ namespace Reanimator
 
         public void WriteBits(int value, int bitCount)
         {
-            if ((dataBitOffset >> 3) + 0x2028 >= 0x2D79)
-            {
-                int breakpoint = 1;
-            }
             WriteBits(value, bitCount, dataBitOffset, true);
         }
 
