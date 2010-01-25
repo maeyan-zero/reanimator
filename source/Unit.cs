@@ -163,7 +163,7 @@ namespace Reanimator
         public int bitField2;										// 32
 
         // if (testBit(unit->bitField1, 0x1D))
-        public int bitCountEOF;										// 32			// i think...
+        public int bitCount;										// 32			// i think...
 
         // if (testBit(unit->bitField1, 0x00))
         public int beginFlag;										// 32			// must be "Flag" (67616C46h) or Can be "`4R+" ("60 34 52 2B", 2B523460h)

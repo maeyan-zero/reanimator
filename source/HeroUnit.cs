@@ -137,7 +137,7 @@ namespace Reanimator
 
             if (TestBit(unit.bitField1, 0x1D))
             {
-                unit.bitCountEOF = bitBuffer.ReadBits(32);
+                unit.bitCount = bitBuffer.ReadBits(32);
             }
 
 
@@ -344,7 +344,7 @@ namespace Reanimator
                 unit.weaponConfigs = new UnitWeaponConfig[unit.weaponConfigCount];
                 for (int i = 0; i < unit.weaponConfigCount; i++)
                 {
-                    UnitWeaponConfig weaponConfig;
+                    UnitWeaponConfig weaponConfig = new UnitWeaponConfig();
 
                     weaponConfig.id = bitBuffer.ReadBits(16);
 
@@ -391,9 +391,9 @@ namespace Reanimator
                 unit.endFlag = bitBuffer.ReadBits(32);
                 if (unit.endFlag != unit.beginFlag && unit.endFlag != 0x2B523460)
                 {
-                    int bitOffset = unit.bitCountEOF - bitBuffer.DataBitOffset;
+                    int bitOffset = unit.bitCount - bitBuffer.DataBitOffset;
                     int byteOffset = (bitBuffer.Length - bitBuffer.DataByteOffset) - (bitBuffer.DataBitOffset >> 3);
-                    MessageBox.Show("Flags not aligned!\nBit Offset: " + bitBuffer.DataBitOffset + "\nExpected: " + unit.bitCountEOF + " (+" + bitOffset +
+                    MessageBox.Show("Flags not aligned!\nBit Offset: " + bitBuffer.DataBitOffset + "\nExpected: " + unit.bitCount + " (+" + bitOffset +
                         ")\nByte Offset: " + (bitBuffer.DataBitOffset >> 3) + "\nExpected: " + (bitBuffer.Length-bitBuffer.DataByteOffset) + " (+" + byteOffset + ")",
                         "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
@@ -536,11 +536,11 @@ namespace Reanimator
 
             for (int i = 0; i < unitStat.repeatCount; i++)
             {
+                unitStat.values[i].extraAttributeValues = new int[unitStat.extraAttributesCount];
                 for (int j = 0; j < unitStat.extraAttributesCount; j++)
                 {
                     if (unitStat.extraAttributes[j].exists == 1)
                     {
-                        unitStat.values[i].extraAttributeValues = new int[unitStat.extraAttributesCount];
                         unitStat.values[i].extraAttributeValues[j] = bitBuffer.ReadBits(unitStat.extraAttributes[j].bitCount);
                     }
                 }
@@ -671,12 +671,12 @@ namespace Reanimator
         {
             BitBuffer saveBuffer = new BitBuffer();
 
-            WriteUnit(saveBuffer, heroUnit);
+            WriteUnit(saveBuffer, heroUnit, false);
 
             return saveBuffer.GetData();
         }
 
-        private void WriteUnit(BitBuffer saveBuffer, Unit unit)
+        private void WriteUnit(BitBuffer saveBuffer, Unit unit, bool isItem)
         {
             /***** Unit Header *****
              * majorVersion                                     16                  Should be 0xBF.
@@ -688,7 +688,7 @@ namespace Reanimator
              * 
              * if (TestBit(bitField1, 0x1D))
              * {
-             *      bitCountEOF                                 32                  // TO CONFIRM
+             *      bitCount                                    32                  Bit count of unit.
              * }
              * 
              * if (TestBit(bitField1, 0x00))
@@ -724,7 +724,7 @@ namespace Reanimator
              *
              * if (TestBit(bitField1, 0x1B))
              * {
-             *      unknownCount                                5                   // TO BE DETEREMINED
+             *      unknownCount                                5                   Count of following block.
              *      {
              *          unknown1                                16                  // TO BE DETEREMINED
              *          unknown2                                32                  // TO BE DETEREMINED
@@ -781,7 +781,7 @@ namespace Reanimator
              * {
              *      characterCount                              8                   Number of (unicode) characters in following string.
              *      characterName                               8*2*characterCount  Character's name - doesn't appear to be actually used in-game...
-             * }
+             * }                                                                    (zero end byte not included)
              * 
              * if (TestBit(bitField1, 0x0A))
              * {
@@ -797,15 +797,100 @@ namespace Reanimator
              * {
              *      UNIT STAT BLOCK                                                 See WriteStatBlock().
              * }
+             * 
+             * appearanceBool                                   1                   Bool type.
+             * {
+             *      unknownCount                                3                   Count of following block.
+             *      {
+             *          if (TestBit(bitField1, 0x0F))
+             *          {
+             *              unknown                             32                  // UNTESTED
+             *          }
+             *          
+             *          unknown                                 16                  // TO BE DETERMINED
+             *          
+             *          if (TestBit(bitField1, 0x00))
+             *          {
+             *              unknownCount                        3                   Count of following block.
+             *              {
+             *                  unknown                         32                  // TO BE DETEREMINED
+             *              }
+             *          }
+             *      }
+             *      
+             *      unknown                                     16                  // TO BE DETEREMINED
+             *      
+             *      if (TestBit(bitField1, 0x16))
+             *      {
+             *          unknown[8]                              64                  Non-standard function reading (as above).
+             *      }
+             *      
+             *      if (TestBit(bitField1, 0x11))
+             *      {
+             *          unknownCount                            4                   Count of following block.
+             *          {
+             *              unknown                             16                  // TO BE DETEREMINED
+             *          }
+             *          
+             *          modelAppearanceCount                    3                   Count of model appearance parts.
+             *          {
+             *              modelAppearance                     16                  Order is: body, head, hair, face accessory. 
+             *          }
+             *          
+             *          unknownCount                            4                   Count of following block.
+             *          {
+             *              unknown                             8                   // TO BE DETERMINED
+             *          }
+             *      }
+             *      
+             *      if (TestBit(bitField1, 0x10))
+             *      {
+             *          gearCount                               16                  Count of equipped gears.
+             *          {
+             *              gearId                              16                  Refers to ID within applicable excel table.
+             *              unknownBool                         1                   Bool type.
+             *              {
+             *                  unknown                         2                   // TO BE DETEREMINED
+             *              }
+             *          }
+             *      }
+             * }
+             * 
+             * 
+             * itemBitOffset                                    32                  Bit offset to end of all item blocks.
+             * itemCount                                        10                  Count of items.
+             * {
+             *      ITEMS
+             * }
+             * 
+             * 
+             * if (TestBit(bitField1, 0x1A))
+             * {
+             *      weaponConfigFlag                            32                  Must be 0x91103A74.
+             *      endFlagBitOffset                            32                  Bit offset to end flag.
+             *      weaponConfigCount                           6                   Count of weapon configs.
+             *      {
+             *          unknown                                 16                  // TO BE DETERMINED
+             *          unknownCount                            4                   Count of following block - Must be 0x02.
+             *          {
+             *              exists                              1                   Bool type.
+             *              {
+             *                  unknown                         32                  // TO BE DETEREMINED
+             *              }
+             *          }
+             *          
+             *          unknownCount                            
+             *      }
+             * }
              */
 
             // section chunk flags
             // the order is around what they're actually read/checked in loading
-            int useBitCountEOF = (1 << 0x1D);
-            int useFlagAlignment = 1;
-            int useTimeStamps = (1 << 0x1C);
+            int use_1D_BitCountEOF = (1 << 0x1D);
+            int use_00_FlagAlignment = 1;
+            int use_1C_TimeStamps = (1 << 0x1C);
             int useUnknown_1F = (1 << 0x1F);
-            int useCharacterFlags1 = 1;
+            int use_00_CharacterFlags1 = 1;
             int useUnknown_1B = (1 << 0x1B);
             int useUnknown_17 = (1 << 0x17);
             int useUnknown_03 = 0; // (1 << 0x03);
@@ -815,8 +900,15 @@ namespace Reanimator
             int useUnknown_09 = 0; // (1 << 0x09);
             int useUnknown_07 = 0; // (1 << 0x07);
             int useUnknown_08 = 0; // (1 << 0x08);
-            int useCharacterFlags2 = 0; // (1 << 0x0A);
-            int useStats = 0; // (1 << 0x0D);
+            int use_0A_CharacterFlags2 = 0; // (1 << 0x0A);
+            int use_0D_Stats = 0; // (1 << 0x0D);
+            int useUnknown_0F = 0; // (1 << 0x0F);
+            int useUnknown_16 = 0; // (1 << 0x16);
+            int useUnknown_11 = 0; // (1 << 0x11);
+            int useUnknown_10 = 0; // (1 << 0x10);
+            int use_12_Utems = 0; // (1 << 0x12);
+            int use_1A_Unknown = 0; // (1 << 0x1A);
+
 
             // temp "fix" until we know what they actually are and how sensitive it is for missing fields
             if (TestBit(unit.bitField1, 0x01))
@@ -834,9 +926,23 @@ namespace Reanimator
             if (TestBit(unit.bitField1, 0x08))
                 useUnknown_08 = (1 << 0x08);
             if (TestBit(unit.bitField1, 0x0A))
-                useCharacterFlags2 = (1 << 0x0A);
+                use_0A_CharacterFlags2 = (1 << 0x0A);
             if (TestBit(unit.bitField1, 0x0D))
-                useStats = (1 << 0x0D);
+                use_0D_Stats = (1 << 0x0D);
+            if (TestBit(unit.bitField1, 0x0F))
+                useUnknown_0F = (1 << 0x0F);
+            if (TestBit(unit.bitField1, 0x16))
+                useUnknown_16 = (1 << 0x16);
+            if (TestBit(unit.bitField1, 0x11))
+                useUnknown_11 = (1 << 0x11);
+            if (TestBit(unit.bitField1, 0x10))
+                useUnknown_10 = (1 << 0x10);
+            if (TestBit(unit.bitField1, 0x12))
+                use_12_Utems = (1 << 0x12);
+            if (TestBit(unit.bitField1, 0x1A))
+                use_1A_Unknown = (1 << 0x1A);
+
+
 
             // need to keep track of things as we go
             int bitField1 = 0x00000000;
@@ -846,6 +952,8 @@ namespace Reanimator
             int bitCountEOFOffset = -1;
 
             /***** Unit Header *****/
+
+            int bitCountStart = saveBuffer.DataBitOffset;
 
             saveBuffer.WriteBits(0x00BF, 16);
             saveBuffer.WriteBits(0x00, 8);
@@ -857,27 +965,34 @@ namespace Reanimator
                 saveBuffer.WriteBits(bitField2, 32);
             }
 
-            if (useBitCountEOF > 0)
+            if (use_1D_BitCountEOF > 0)
             {
                 bitCountEOFOffset = saveBuffer.DataBitOffset;
                 saveBuffer.WriteBits(0x00000000, 32);
-                bitField1 |= useBitCountEOF;
+                bitField1 |= use_1D_BitCountEOF;
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
-            if (useFlagAlignment > 0)
+            if (use_00_FlagAlignment > 0)
             {
-                saveBuffer.WriteBits(0x67616C46, 32);
-                bitField1 |= useFlagAlignment;
+                if (isItem)
+                {
+                    saveBuffer.WriteBits(0x2B523460, 32); // "`4R+"
+                }
+                else
+                {
+                    saveBuffer.WriteBits(0x67616C46, 32); // "Flag"
+                }
+                bitField1 |= use_00_FlagAlignment;
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
             if (unit.timeStamp1 != 0)
             {
-                saveBuffer.WriteBits(0x00000000, 32);
-                saveBuffer.WriteBits(0x00000000, 32);
-                saveBuffer.WriteBits(0x00000000, 32);
-                bitField1 |= useTimeStamps;
+                saveBuffer.WriteBits(unit.timeStamp1, 32);
+                saveBuffer.WriteBits(unit.timeStamp2, 32);
+                saveBuffer.WriteBits(unit.timeStamp3, 32);
+                bitField1 |= use_1C_TimeStamps;
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
@@ -895,7 +1010,7 @@ namespace Reanimator
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
-            if (useCharacterFlags1 > 0)
+            if (use_00_CharacterFlags1 > 0 && !isItem)
             {
                 saveBuffer.WriteBits(unit.playerFlagCount1, 8);
                 for (int i = 0; i < unit.playerFlagCount1; i++)
@@ -903,7 +1018,7 @@ namespace Reanimator
                     saveBuffer.WriteBits(unit.playerFlags1[i], 16);
                 }
 
-                bitField2 |= useCharacterFlags1;
+                bitField2 |= use_00_CharacterFlags1;
                 saveBuffer.WriteBits(bitField2, 32, bitField2Offset);
             }
 
@@ -981,7 +1096,6 @@ namespace Reanimator
 
             if (useUnknown_08 > 0)
             {
-                // does it include \00??
                 string blag = "Alex";
                 byte[] blagBytes = FileTools.StringToUnicodeByteArray(blag);
                 saveBuffer.WriteBits(blagBytes.Length/2, 8);
@@ -994,7 +1108,7 @@ namespace Reanimator
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
-            if (useCharacterFlags2 > 0)
+            if (use_0A_CharacterFlags2 > 0)
             {
                 saveBuffer.WriteBits(unit.playerFlagCount2, 8);
                 for (int i = 0; i < unit.playerFlagCount2; i++)
@@ -1002,16 +1116,162 @@ namespace Reanimator
                     saveBuffer.WriteBits(unit.playerFlags2[i], 16);
                 }
 
-                bitField1 |= useCharacterFlags2;
+                bitField1 |= use_0A_CharacterFlags2;
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
-            if (useStats > 0)
+            saveBuffer.WriteBits(unit.unknownBool1, 1);
+
+            if (use_0D_Stats > 0)
             {
                 WriteStatBlock(unit.statBlock, true, saveBuffer);
-                bitField1 |= useStats;
+                bitField1 |= use_0D_Stats;
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
+
+            saveBuffer.WriteBits(unit.hasAppearanceDetails, 1);
+            if (unit.hasAppearanceDetails > 0)
+            {
+                saveBuffer.WriteBits(unit.unitAppearance.unknownCount1, 3);
+                for (int i = 0; i < unit.unitAppearance.unknownCount1; i++)
+                {
+                    if (useUnknown_0F > 0)
+                    {
+                        saveBuffer.WriteBits(unit.unitAppearance.unknownCount1s[i].unknown1, 32); // untested
+                    }
+
+                    saveBuffer.WriteBits(unit.unitAppearance.unknownCount1s[i].unknown2, 16);
+
+                    if (use_00_FlagAlignment > 0)
+                    {
+                        saveBuffer.WriteBits(unit.unitAppearance.unknownCount1s[i].unknownCount1, 3);
+                        for (int j = 0; j < unit.unitAppearance.unknownCount1s[i].unknownCount1; j++)
+                        {
+                            saveBuffer.WriteBits(unit.unitAppearance.unknownCount1s[i].unknownCount1s[j], 32);
+                        }
+                    }
+                }
+
+                saveBuffer.WriteBits(unit.unitAppearance.unknown1, 16);
+
+                if (useUnknown_16 > 0)
+                {
+                    WriteNonStandardFunc(unit.unitAppearance.unknown2, saveBuffer);
+                }
+
+                if (useUnknown_11 > 0)
+                {
+                    saveBuffer.WriteBits(unit.unitAppearance.unknownCount2, 4);
+                    for (int i = 0; i < unit.unitAppearance.unknownCount2; i++)
+                    {
+                        saveBuffer.WriteBits(unit.unitAppearance.unknownCount2s[i], 16);
+                    }
+
+                    saveBuffer.WriteBits(unit.unitAppearance.modelAppearanceCounter, 3);
+                    for (int i = 0; i < unit.unitAppearance.modelAppearanceCounter; i++)
+                    {
+                        if (i == 0)
+                            saveBuffer.WriteBits(unit.unitAppearance.modelAppearance.body, 16);
+                        if (i == 1)
+                            saveBuffer.WriteBits(unit.unitAppearance.modelAppearance.head, 16);
+                        if (i == 2)
+                            saveBuffer.WriteBits(unit.unitAppearance.modelAppearance.hair, 16);
+                        if (i == 3)
+                            saveBuffer.WriteBits(unit.unitAppearance.modelAppearance.faceAccessory, 16);
+                    }
+
+                    saveBuffer.WriteBits(unit.unitAppearance.unknownCount3, 4);
+                    for (int i = 0; i < unit.unitAppearance.unknownCount3; i++)
+                    {
+                        saveBuffer.WriteBits(unit.unitAppearance.unknownCount3s[i], 8);
+                    }
+                }
+
+                if (useUnknown_10 > 0)
+                {
+                    saveBuffer.WriteBits(unit.unitAppearance.gearCount, 16);
+                    for (int i = 0; i < unit.unitAppearance.gearCount; i++)
+                    {
+                        saveBuffer.WriteBits(unit.unitAppearance.gears[i].gear, 16);
+                        saveBuffer.WriteBits(unit.unitAppearance.gears[i].unknownBool, 1);
+                        if (unit.unitAppearance.gears[i].unknownBool > 0)
+                        {
+                            saveBuffer.WriteBits(unit.unitAppearance.gears[i].unknownBoolValue, 2);
+                        }
+                    }
+                }
+            }
+
+
+            if (use_12_Utems > 0)
+            {
+                int itemBitOffset = saveBuffer.DataBitOffset;
+                saveBuffer.WriteBits(0x00000000, 32);
+                saveBuffer.WriteBits(unit.itemCount, 10);
+                for (int i = 0; i < unit.itemCount; i++)
+                {
+                    WriteUnit(saveBuffer, unit.items[i], true);
+                }
+
+                saveBuffer.WriteBits(saveBuffer.DataBitOffset, 32, itemBitOffset);
+            }
+
+
+            if (use_1A_Unknown > 0)
+            {
+                unchecked { saveBuffer.WriteBits((int)0x91103A74, 32); }
+
+                int endFlagBitOffset = saveBuffer.DataBitOffset;
+                saveBuffer.WriteBits(0x00000000, 32);
+
+                saveBuffer.WriteBits(unit.weaponConfigCount, 6);
+                for (int i = 0; i < unit.weaponConfigCount; i++)
+                {
+                    UnitWeaponConfig weaponConfig = unit.weaponConfigs[i];
+
+                    saveBuffer.WriteBits(weaponConfig.id, 16);
+                    saveBuffer.WriteBits(weaponConfig.unknownCount1, 4);
+                    for (int j = 0; j < weaponConfig.unknownCount1; j++)
+                    {
+                        saveBuffer.WriteBits(weaponConfig.exists1[j], 1);
+                        if (weaponConfig.exists1[j] > 0)
+                        {
+                            saveBuffer.WriteBits(weaponConfig.unknownIds1[j], 32);
+                        }
+                    }
+
+                    // yes this chunk looks the same as above - the above chunk though is in a specific function and can differ at 1 point
+                    // also, it can be != 2
+                    saveBuffer.WriteBits(weaponConfig.unknownCount2, 4);
+                    for (int j = 0; j < weaponConfig.unknownCount2; j++)
+                    {
+                        saveBuffer.WriteBits(weaponConfig.exists2[j], 1);
+                        if (weaponConfig.exists2[j] > 0)
+                        {
+                            saveBuffer.WriteBits(weaponConfig.unknownIds2[j], 32);
+                        }
+                    }
+
+                    saveBuffer.WriteBits(weaponConfig.idAnother, 32);
+                }
+
+                saveBuffer.WriteBits(saveBuffer.DataBitOffset, 32, endFlagBitOffset);
+            }
+
+
+            if (use_00_FlagAlignment > 0)
+            {
+                saveBuffer.WriteBits(0x2B523460, 32); // "`4R+"
+            }
+
+            if (use_1D_BitCountEOF > 0)
+            {
+                saveBuffer.WriteBits(saveBuffer.DataBitOffset - bitCountStart, 32, bitCountEOFOffset);
+            }
+
+            // temp
+            saveBuffer.WriteBits(unit.bitField1, 32, bitField1Offset);
+            saveBuffer.WriteBits(unit.bitField2, 32, bitField2Offset);
         }
 
         private void WriteNonStandardFunc(byte[] byteArray, BitBuffer saveBuffer)
@@ -1088,8 +1348,9 @@ namespace Reanimator
 
         private void WriteStat(UnitStat stat, BitBuffer saveBuffer)
         {
-            /***** Stat Block Header *****
+            /***** Stat Block *****
              * statId                                           16                  Stat ID from applicable excel table.
+             * 
              * extraAttributesCount                             2                   Count of following.
              * {
              *      exists                                      1                   Simple bool test.
@@ -1097,8 +1358,8 @@ namespace Reanimator
              *      {
              *          bitCount_EA                             6                   Number of bits used in file.
              *          
-             *          unknownFlag                             2                   Only seen 0x0 and 0x2.
-             *          if (unknownFlag == 0x2)
+             *          unknownFlag                             2                   Only seen 0x00 and 0x02.
+             *          if (unknownFlag == 0x02)
              *          {
              *              unknownBool                         1                   // TO BE DETEREMINED
              *          }
@@ -1111,7 +1372,8 @@ namespace Reanimator
              *      }
              * }
              * 
-             * bitCount                                         6                   Number of bits used in file.
+             * bitCount                                         6                   Number of bits used in file for stat value.
+             * 
              * otherAttributeFlag                               3                   // TO BE DETEREMINED
              * if (otherAttributeFlag & 0x01)
              * {
@@ -1133,13 +1395,12 @@ namespace Reanimator
              * }
              * 
              * repeatFlag                                       1                   Bool type.
-             * if (repeatFlag)
              * {
              *      repeatCount                                 10                  Number of times to read in stat values.
              * }
              * 
-             * for (number of repeats)
-             * {
+             * for (number of repeats)                                              If the repeatFlag is 0, then obviously we still want to read
+             * {                                                                    in at least once... So really it's like a do {} while() chunk.
              *      for (number of extra attributes)
              *      {
              *          extraAttributeValue                     bitCount_EA         The extra attribute for the applicable value below.
@@ -1149,7 +1410,74 @@ namespace Reanimator
              * }
              */
 
+            saveBuffer.WriteBits(stat.statId, 16);
 
+            saveBuffer.WriteBits(stat.extraAttributes.Length, 2);
+            for (int i = 0; i < stat.extraAttributes.Length; i++)
+            {
+                saveBuffer.WriteBits(stat.extraAttributes[i].exists, 1);
+                if (stat.extraAttributes[i].exists == 0)
+                {
+                    break;
+                }
+
+                saveBuffer.WriteBits(stat.extraAttributes[i].bitCount, 6);
+
+                saveBuffer.WriteBits(stat.extraAttributes[i].unknown1, 2);
+                if (stat.extraAttributes[i].unknown1 == 0x02)
+                {
+                    saveBuffer.WriteBits(stat.extraAttributes[i].unknown1_1, 1);
+                }
+
+                saveBuffer.WriteBits(stat.extraAttributes[i].skipResource, 1);
+                if (stat.extraAttributes[i].skipResource == 0)
+                {
+                    saveBuffer.WriteBits(stat.extraAttributes[i].resource, 16);
+                }
+            }
+
+            saveBuffer.WriteBits(stat.bitCount, 6);
+
+            saveBuffer.WriteBits(stat.otherAttributeFlag, 3);
+            if ((stat.otherAttributeFlag & 0x01) > 0)
+            {
+                saveBuffer.WriteBits(stat.otherAttribute.unknown1, 4);
+            }
+            if ((stat.otherAttributeFlag & 0x02) > 0)
+            {
+                saveBuffer.WriteBits(stat.otherAttribute.unknown2, 12);
+            }
+            if ((stat.otherAttributeFlag & 0x04) > 0)
+            {
+                saveBuffer.WriteBits(stat.otherAttribute.unknown3, 1);
+            }
+
+            saveBuffer.WriteBits(stat.skipResource, 2);
+            if (stat.skipResource == 0)
+            {
+                saveBuffer.WriteBits(stat.resource, 16);
+            }
+
+            int repeatCount = 1;
+            saveBuffer.WriteBits(stat.repeatFlag, 1);
+            if (stat.repeatFlag == 1)
+            {
+                saveBuffer.WriteBits(stat.repeatCount, 10);
+                repeatCount = stat.repeatCount;
+            }
+
+            for (int i = 0; i < repeatCount; i++)
+            {
+                for (int j = 0; j < stat.extraAttributes.Length; j++)
+                {
+                    if (stat.extraAttributes[j].exists == 1)
+                    {
+                        saveBuffer.WriteBits(stat.values[i].extraAttributeValues[j], stat.extraAttributes[j].bitCount);
+                    }
+                }
+
+                saveBuffer.WriteBits(stat.values[i].value, stat.bitCount);
+            }
         }
     }
 }

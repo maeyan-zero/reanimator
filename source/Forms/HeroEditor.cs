@@ -100,7 +100,7 @@ namespace Reanimator.Forms
 
         private void saveCharButton_Click(object sender, EventArgs e)
         {
-            string character = "SaveTest";
+            string character = "Alex";
             FileStream saveFile = new FileStream(character + ".hg1", FileMode.Create, FileAccess.ReadWrite);
 
             // main header
