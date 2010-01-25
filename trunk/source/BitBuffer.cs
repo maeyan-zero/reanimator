@@ -107,6 +107,10 @@ namespace Reanimator
 
         public void WriteBits(int value, int bitCount)
         {
+            if ((dataBitOffset >> 3) + 0x2028 >= 0x2D79)
+            {
+                int breakpoint = 1;
+            }
             WriteBits(value, bitCount, dataBitOffset, true);
         }
 
@@ -117,16 +121,23 @@ namespace Reanimator
 
         public void WriteBits(int value, int bitCount, int dataBitOffset, bool setIncrementOffset)
         {
+            int byteOffset = dataBitOffset >> 3;
+            if (byteOffset > data.Length - 10)
+            {
+                byte[] newData = new byte[data.Length + 1024];
+                Buffer.BlockCopy(data, 0, newData, 0, data.Length);
+                data = newData;
+            }
+
             int bitsToWrite = bitCount;
             int offsetBitsInFirstByte = dataBitOffset & 0x07;
             int bitByteOffset = 0x08 - offsetBitsInFirstByte;
 
-            int bitOffset = bitCount;
+            int bitsInFirstByte = bitCount;
             if (bitByteOffset < bitCount)
-                bitOffset = bitByteOffset;
+                bitsInFirstByte = bitByteOffset;
 
             int bytesToWriteTo = (bitsToWrite + 0x07 + offsetBitsInFirstByte) >> 3;
-            int byteOffset = dataBitOffset >> 3;
 
             for (int i = 0; i < bytesToWriteTo; i++, byteOffset++)
             {
@@ -147,8 +158,17 @@ namespace Reanimator
                 int toWrite = (value >> bitLevel);
                 if (i == 0)
                 {
-                    toWrite &= ((1 << bitOffset) - 1);
+                    toWrite &= ((1 << bitsInFirstByte) - 1);
                     toWrite <<= offsetBitsInFirstByte;
+                    bitsToWrite -= bitsInFirstByte;
+                }
+                else if (i == bytesToWriteTo - 1 && offsetBitsInFirstByte > 0)
+                {
+                    toWrite &= ((1 << bitsToWrite) - 1);
+                }
+                else
+                {
+                    bitsToWrite -= 8;
                 }
 
                 data[dataByteOffset + byteOffset] |= (byte)toWrite;
@@ -162,8 +182,10 @@ namespace Reanimator
 
         public byte[] GetData()
         {
-            // to do; check bitCount, etc for when used as writer
-            return data;
+            int byteCount = (dataBitOffset >> 3) + 1;
+            byte[] saveData = new byte[byteCount];
+            Buffer.BlockCopy(data, 0, saveData, 0, byteCount);
+            return saveData;
         }
     }
 }
