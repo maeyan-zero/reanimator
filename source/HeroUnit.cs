@@ -36,7 +36,7 @@ namespace Reanimator
         int otherAttribute2;
         int otherAttribute3;
         int resourceId;
-        List<StatValues> values;
+        StatValues[] values;
 
         public string statString;
 
@@ -52,7 +52,7 @@ namespace Reanimator
             otherAttribute2 = unitStat.otherAttribute.unknown2;
             otherAttribute3 = unitStat.otherAttribute.unknown3;
             resourceId = unitStat.resource;
-            values = unitStat.values.ToList<StatValues>();
+            values = unitStat.values;
 
             statString = excelTables.Stats.GetStringFromId(statId);
         }
@@ -63,9 +63,14 @@ namespace Reanimator
             set { statString = value; }
         }
 
-        public List<StatValues> Values
+        public StatValues Values(int i)
         {
-            get { return values; }
+            return values[i];
+        }
+
+        public int Length
+        {
+            get { return values.Length; }
         }
 
         public override string ToString()
@@ -536,6 +541,7 @@ namespace Reanimator
 
             for (int i = 0; i < unitStat.repeatCount; i++)
             {
+                unitStat.values[i] = new StatValues();
                 unitStat.values[i].extraAttributeValues = new int[unitStat.extraAttributesCount];
                 for (int j = 0; j < unitStat.extraAttributesCount; j++)
                 {
@@ -545,7 +551,7 @@ namespace Reanimator
                     }
                 }
 
-                unitStat.values[i].value = bitBuffer.ReadBits(unitStat.bitCount);
+                unitStat.values[i].val = bitBuffer.ReadBits(unitStat.bitCount);
             }
 
             return true;
@@ -1476,7 +1482,7 @@ namespace Reanimator
                     }
                 }
 
-                saveBuffer.WriteBits(stat.values[i].value, stat.bitCount);
+                saveBuffer.WriteBits(stat.values[i].val, stat.bitCount);
             }
         }
     }

@@ -26,10 +26,16 @@ namespace Reanimator
         public int resource;										// 16 bits		// i think this is a resource thingy anyways...
     };
 
-    public struct StatValues
+    public class StatValues
     {
         public int[] extraAttributeValues;
-        public int value;
+        public int val;
+
+        public string Value
+        {
+            get { return val.ToString(); }
+            set { val = System.Convert.ToInt32(value, 10); }
+        }
     };
 
     public struct UnitStat
@@ -163,7 +169,7 @@ namespace Reanimator
         public int bitField2;										// 32
 
         // if (testBit(unit->bitField1, 0x1D))
-        public int bitCount;										// 32			// i think...
+        public int bitCount;										// 32			// of unit block
 
         // if (testBit(unit->bitField1, 0x00))
         public int beginFlag;										// 32			// must be "Flag" (67616C46h) or Can be "`4R+" ("60 34 52 2B", 2B523460h)
