@@ -16,11 +16,13 @@ namespace Reanimator.Forms
     {
         HeroUnit heroUnit;
         ExcelTables excelTables;
+        String filePath;
 
-        public HeroEditor(HeroUnit unit, ExcelTables tables)
+        public HeroEditor(HeroUnit unit, ExcelTables tables, String file)
         {
             heroUnit = unit;
             excelTables = tables;
+            filePath = file;
 
             InitializeComponent();
 
@@ -63,7 +65,7 @@ namespace Reanimator.Forms
         {
             foreach (HeroUnitStat stat in heroUnit.Stats)
             {
-                this.charStats_ListBox.Items.Add(stat);
+                this.stats_ListBox.Items.Add(stat);
             }
         }
 
@@ -72,7 +74,7 @@ namespace Reanimator.Forms
         {
             this.panel1.Controls.Clear();
 
-            HeroUnitStat stat = (HeroUnitStat)this.charStats_ListBox.SelectedItem;
+            HeroUnitStat stat = (HeroUnitStat)this.stats_ListBox.SelectedItem;
             charStatValues_ListBox.Items.Clear();
 
             int heightOffset = 0;
@@ -140,7 +142,7 @@ namespace Reanimator.Forms
 
         private void charStats_ListBox_Resize(object sender, EventArgs e)
         {
-            charStatValues_ListBox.Height = charStats_ListBox.Height;
+            charStatValues_ListBox.Height = stats_ListBox.Height;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -154,8 +156,9 @@ namespace Reanimator.Forms
 
         private void saveCharButton_Click(object sender, EventArgs e)
         {
-            string character = "Alex";
-            FileStream saveFile = new FileStream(character + ".hg1", FileMode.Create, FileAccess.ReadWrite);
+            int startIndex = filePath.LastIndexOf("\\")+1;
+            string characterName = filePath.Substring(startIndex, filePath.Length - startIndex - 4);
+            FileStream saveFile = new FileStream(characterName + ".hg1", FileMode.Create, FileAccess.ReadWrite);
 
             // main header
             MainHeader mainHeader;
@@ -173,7 +176,7 @@ namespace Reanimator.Forms
             saveFile.Write(hellgateStringBytes, 0, hellgateStringBytes.Length);
 
             // char name (not actually used in game though I don't think)  (is this needed?)
-            string charString = character;
+            string charString = characterName;
             byte[] charStringBytes = FileTools.StringToUnicodeByteArray(charString);
             saveFile.Seek(0x828, SeekOrigin.Begin);
             saveFile.Write(charStringBytes, 0, charStringBytes.Length);
@@ -192,7 +195,7 @@ namespace Reanimator.Forms
 
             // main character data
             saveFile.Seek(0x2028, SeekOrigin.Begin);
-            byte[] saveData = heroUnit.GenerateSaveData();
+            byte[] saveData = heroUnit.GenerateSaveData(charStringBytes);
             saveFile.Write(saveData, 0, saveData.Length);
 
             saveFile.Close();
