@@ -82,43 +82,37 @@ namespace Reanimator.Forms
             int heightOffset = 0;
             for (int i = 0; i < stat.Length; i++)
             {
-                Unit.StatBlock.Stat.StatValues statValues = stat[i];
+                Unit.StatBlock.Stat.Values statValues = stat[i];
 
-                bool blag = false;
+                bool hasExtraAttribute = false;
                 for (int j = 0; j < 3; j++)
                 {
-                    int extraAttribute = 0;
-                    if (j == 0)
-                        extraAttribute = statValues.ExtraAttribute1;
-                    if (j == 1)
-                        extraAttribute = statValues.ExtraAttribute2;
-                    if (j == 2)
-                        extraAttribute = statValues.ExtraAttribute3;
-
-                    if (extraAttribute == 0)
-                        continue;
+                    if (stat.StatAttribute(j) == null)
+                    {
+                        break;
+                    }
 
                     Label eaValueLabel = new Label();
                     eaValueLabel.Text = "Attr" + j + ": ";
                     eaValueLabel.Width = 40;
                     eaValueLabel.Top = 3 + heightOffset;
                     TextBox eaValueTextBox = new TextBox();
-                    eaValueTextBox.Text = extraAttribute.ToString();
+                    eaValueTextBox.Text = stat.StatAttribute(j).ToString();
                     eaValueTextBox.Left = eaValueLabel.Right;
                     eaValueTextBox.Top = heightOffset;
-                    eaValueTextBox.DataBindings.Add("Text", statValues, "ExtraAttribute" + (j+1));
+                    eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j+1));
 
                     this.panel1.Controls.Add(eaValueLabel);
                     this.panel1.Controls.Add(eaValueTextBox);
 
                     heightOffset += 25;
-                    blag = true;
+                    hasExtraAttribute = true;
                 }
 
                 int leftOffset = 0;
-                if (blag)
+                if (hasExtraAttribute)
                 {
-                    leftOffset += 40;
+                    leftOffset += 35;
                 }
 
                 Label valueLabel = new Label();
