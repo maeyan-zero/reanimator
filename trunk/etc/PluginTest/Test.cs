@@ -72,8 +72,8 @@ namespace PluginTest
         // If it doesn't exist yet, create it
         if (select.Count == 0)
         {
-          ToolStripMenuItem newSelect = new ToolStripMenuItem("Select");
-          newSelect.Name = "Hi alex2069 and maeyan, I'm a plugin entry";
+          ToolStripMenuItem newSelect = new ToolStripMenuItem("Hi alex2069 and maeyan, I'm a plugin entry");
+          newSelect.Name = "Test";
           file.DropDownItems.Add(newSelect);
           select.Add(newSelect);
         }
