@@ -78,34 +78,43 @@ namespace Reanimator.Forms
             int heightOffset = 0;
             for (int i = 0; i < stat.Length; i++)
             {
-                StatValues statValues = stat.Values(i);
+                Unit.StatValues statValues = stat.Values(i);
 
-                if (statValues.extraAttributeValues != null)
+                bool blag = false;
+                for (int j = 0; j < 3; j++)
                 {
-                    int j = 1;
-                    foreach (int ea in statValues.extraAttributeValues)
-                    {
-                        Label eaValueLabel = new Label();
-                        eaValueLabel.Text = "Attr" + j + ": ";
-                        eaValueLabel.Width = 40;
-                        eaValueLabel.Top = 3 + heightOffset;
-                        TextBox eaValueTextBox = new TextBox();
-                        eaValueTextBox.Text = ea.ToString();
-                        eaValueTextBox.Left = eaValueLabel.Right;
-                        eaValueTextBox.Top = heightOffset;
+                    int extraAttribute = 0;
+                    if (j == 0)
+                        extraAttribute = statValues.ExtraAttribute1;
+                    if (j == 1)
+                        extraAttribute = statValues.ExtraAttribute2;
+                    if (j == 2)
+                        extraAttribute = statValues.ExtraAttribute3;
 
-                        this.panel1.Controls.Add(eaValueLabel);
-                        this.panel1.Controls.Add(eaValueTextBox);
+                    if (extraAttribute == 0)
+                        continue;
 
-                        heightOffset += 25;
-                        j++;
+                    Label eaValueLabel = new Label();
+                    eaValueLabel.Text = "Attr" + j + ": ";
+                    eaValueLabel.Width = 40;
+                    eaValueLabel.Top = 3 + heightOffset;
+                    TextBox eaValueTextBox = new TextBox();
+                    eaValueTextBox.Text = extraAttribute.ToString();
+                    eaValueTextBox.Left = eaValueLabel.Right;
+                    eaValueTextBox.Top = heightOffset;
+                    eaValueTextBox.DataBindings.Add("Text", statValues, "ExtraAttribute" + (j+1));
 
-                        charStatValues_ListBox.Items.Add("  *" + ea);
-                    }
+                    this.panel1.Controls.Add(eaValueLabel);
+                    this.panel1.Controls.Add(eaValueTextBox);
+
+                    charStatValues_ListBox.Items.Add("  *" + extraAttribute);
+
+                    heightOffset += 25;
+                    blag = true;
                 }
 
                 int leftOffset = 0;
-                if (statValues.extraAttributeValues.Length != 0)
+                if (blag)
                 {
                     leftOffset += 40;
                 }
@@ -116,15 +125,15 @@ namespace Reanimator.Forms
                 valueLabel.Width = 40;
                 valueLabel.Top = 3 + heightOffset;
                 TextBox valueTextBox = new TextBox();
-                valueTextBox.Text = statValues.val.ToString();
+                valueTextBox.Text = statValues.Stat.ToString();
                 valueTextBox.Left = valueLabel.Right;
                 valueTextBox.Top = heightOffset;
-                valueTextBox.DataBindings.Add("Text", statValues, "Value", false, DataSourceUpdateMode.OnPropertyChanged, null, null, null);
+                valueTextBox.DataBindings.Add("Text", statValues, "Stat");
 
                 this.panel1.Controls.Add(valueLabel);
                 this.panel1.Controls.Add(valueTextBox);
 
-                charStatValues_ListBox.Items.Add(statValues.val);
+                charStatValues_ListBox.Items.Add(statValues.Stat);
                 heightOffset += 45;
             }
         }

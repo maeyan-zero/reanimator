@@ -26,18 +26,6 @@ namespace Reanimator
         public int resource;										// 16 bits		// i think this is a resource thingy anyways...
     };
 
-    public class StatValues
-    {
-        public int[] extraAttributeValues;
-        public int val;
-
-        public string Value
-        {
-            get { return val.ToString(); }
-            set { val = System.Convert.ToInt32(value, 10); }
-        }
-    };
-
     public struct UnitStat
     {
         public int statId;											// 16 bits
@@ -51,7 +39,7 @@ namespace Reanimator
         public int repeatFlag;										// 1 bit		// if set, check for repeat number
         public int repeatCount;										// 10 bits		// i think this can be something other than 10 bits... I think...
 
-        public StatValues[] values;
+        public Unit.StatValues[] values;
     };
 
     public struct UnitStatAdditional
@@ -157,8 +145,39 @@ namespace Reanimator
         public int idAnother;                                       // 32 bits
     };
 
-    public struct Unit
+    public class Unit
     {
+        public class StatValues
+        {
+            int extraAttribute1;
+            int extraAttribute2;
+            int extraAttribute3;
+            int stat;
+
+            public int ExtraAttribute1
+            {
+                get { return extraAttribute1; }
+                set { extraAttribute1 = value; }
+            }
+
+            public int ExtraAttribute2
+            {
+                get { return extraAttribute2; }
+                set { extraAttribute2 = value; }
+            }
+
+            public int ExtraAttribute3
+            {
+                get { return extraAttribute3; }
+                set { extraAttribute3 = value; }
+            }
+
+            public int Stat
+            {
+                get { return stat; }
+                set { stat = value; }
+            }
+        };
         ////// Start of read inside main header check function (in ASM) //////
 
         public int majorVersion;							    	// 16 bits

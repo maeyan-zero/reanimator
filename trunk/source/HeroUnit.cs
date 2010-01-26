@@ -36,7 +36,7 @@ namespace Reanimator
         int otherAttribute2;
         int otherAttribute3;
         int resourceId;
-        StatValues[] values;
+        Unit.StatValues[] values;
 
         public string statString;
 
@@ -63,7 +63,7 @@ namespace Reanimator
             set { statString = value; }
         }
 
-        public StatValues Values(int i)
+        public Unit.StatValues Values(int i)
         {
             return values[i];
         }
@@ -537,21 +537,26 @@ namespace Reanimator
             {
                 unitStat.repeatCount = bitBuffer.ReadBits(10);
             }
-            unitStat.values = new StatValues[unitStat.repeatCount];
+            unitStat.values = new Unit.StatValues[unitStat.repeatCount];
 
             for (int i = 0; i < unitStat.repeatCount; i++)
             {
-                unitStat.values[i] = new StatValues();
-                unitStat.values[i].extraAttributeValues = new int[unitStat.extraAttributesCount];
+                unitStat.values[i] = new Unit.StatValues();
                 for (int j = 0; j < unitStat.extraAttributesCount; j++)
                 {
                     if (unitStat.extraAttributes[j].exists == 1)
                     {
-                        unitStat.values[i].extraAttributeValues[j] = bitBuffer.ReadBits(unitStat.extraAttributes[j].bitCount);
+                        int extraAttribute = bitBuffer.ReadBits(unitStat.extraAttributes[j].bitCount);
+                        if (j == 0)
+                            unitStat.values[i].ExtraAttribute1 = extraAttribute;
+                        if (j == 1)
+                            unitStat.values[i].ExtraAttribute2 = extraAttribute;
+                        if (j == 2)
+                            unitStat.values[i].ExtraAttribute3 = extraAttribute;
                     }
                 }
 
-                unitStat.values[i].val = bitBuffer.ReadBits(unitStat.bitCount);
+                unitStat.values[i].Stat = bitBuffer.ReadBits(unitStat.bitCount);
             }
 
             return true;
@@ -1478,11 +1483,19 @@ namespace Reanimator
                 {
                     if (stat.extraAttributes[j].exists == 1)
                     {
-                        saveBuffer.WriteBits(stat.values[i].extraAttributeValues[j], stat.extraAttributes[j].bitCount);
+                        int extraAttribute = 0;
+                        if (j == 0)
+                            extraAttribute = stat.values[i].ExtraAttribute1;
+                        else if (j == 1)
+                            extraAttribute = stat.values[i].ExtraAttribute2;
+                        else if (j == 2)
+                            extraAttribute = stat.values[i].ExtraAttribute3;
+
+                        saveBuffer.WriteBits(extraAttribute, stat.extraAttributes[j].bitCount);
                     }
                 }
 
-                saveBuffer.WriteBits(stat.values[i].val, stat.bitCount);
+                saveBuffer.WriteBits(stat.values[i].Stat, stat.bitCount);
             }
         }
     }
