@@ -678,16 +678,16 @@ namespace Reanimator
             return true;
         }
 
-        public byte[] GenerateSaveData()
+        public byte[] GenerateSaveData(byte[] charStringBytes)
         {
             BitBuffer saveBuffer = new BitBuffer();
 
-            WriteUnit(saveBuffer, heroUnit, false);
+            WriteUnit(saveBuffer, heroUnit, false, charStringBytes);
 
             return saveBuffer.GetData();
         }
 
-        private void WriteUnit(BitBuffer saveBuffer, Unit unit, bool isItem)
+        private void WriteUnit(BitBuffer saveBuffer, Unit unit, bool isItem, byte[] charStringBytes)
         {
             /***** Unit Header *****
              * majorVersion                                     16                  Should be 0xBF.
@@ -1105,14 +1105,12 @@ namespace Reanimator
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
-            if (useUnknown_08 > 0)
+            if (useUnknown_08 > 0 && charStringBytes != null)
             {
-                string blag = "Alex";
-                byte[] blagBytes = FileTools.StringToUnicodeByteArray(blag);
-                saveBuffer.WriteBits(blagBytes.Length/2, 8);
-                for (int i = 0; i < blagBytes.Length; i++)
+                saveBuffer.WriteBits(charStringBytes.Length/2, 8);
+                for (int i = 0; i < charStringBytes.Length; i++)
                 {
-                    saveBuffer.WriteBits(blagBytes[i], 8);
+                    saveBuffer.WriteBits(charStringBytes[i], 8);
                 }
 
                 bitField1 |= useUnknown_08;
@@ -1221,7 +1219,7 @@ namespace Reanimator
                 saveBuffer.WriteBits(unit.itemCount, 10);
                 for (int i = 0; i < unit.itemCount; i++)
                 {
-                    WriteUnit(saveBuffer, unit.items[i], true);
+                    WriteUnit(saveBuffer, unit.items[i], true, null);
                 }
 
                 saveBuffer.WriteBits(saveBuffer.DataBitOffset, 32, itemBitOffset);
