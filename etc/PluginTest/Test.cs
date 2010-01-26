@@ -69,17 +69,19 @@ namespace PluginTest
         List<ToolStripItem> select = new List<ToolStripItem>();
         select.AddRange(file.DropDownItems.Find("openToolStripMenuItem", true));
 
+        string text = "Hi alex2069 and maeyan, I'm a plugin entry! You can remove my by deleting my dll (PluginTest.dll)";
+
         // If it doesn't exist yet, create it
         if (select.Count == 0)
         {
-          ToolStripMenuItem newSelect = new ToolStripMenuItem("Hi alex2069 and maeyan, I'm a plugin entry");
+          ToolStripMenuItem newSelect = new ToolStripMenuItem(text);
           newSelect.Name = "Test";
           file.DropDownItems.Add(newSelect);
           select.Add(newSelect);
         }
 
         // If it exists, add the button
-        ((ToolStripMenuItem)select[0]).DropDownItems.Add(this.name);
+        ((ToolStripMenuItem)select[0]).DropDownItems.Add(text);
       }
       catch (Exception ex)
       {
