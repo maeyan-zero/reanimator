@@ -17,16 +17,6 @@ namespace Reanimator
         public int unknown3;										// 1 bit		// possibly another reasource flag or something - if not 0x01 alert
     };
 
-    public struct UnitStat_ExtraAttribute
-    {
-        public int exists;											// 1 bit
-        public int bitCount;										// 6 bits
-        public int unknown1;										// 2 bits
-        public int unknown1_1;										// 1 bit		// if unknown1 == 2
-        public int skipResource;									// 1 bit		// if this is set, then don't read the resource below
-        public int resource;										// 16 bits		// i think this is a resource thingy anyways...
-    };
-
     public struct UnitStatAdditional
     {
         public int unknown;											// 16 bits
@@ -122,29 +112,52 @@ namespace Reanimator
         {
             public class Stat
             {
-                public class StatValues
+                public class Attribute
                 {
-                    int extraAttribute1;
-                    int extraAttribute2;
-                    int extraAttribute3;
+                    internal int exists;										// 1 bit
+                    internal int bitCount;										// 6 bits
+                    internal int unknown1;										// 2 bits
+                    internal int unknown1_1;									// 1 bit		// if unknown1 == 2
+                    internal int skipResource;									// 1 bit		// if this is set, then don't read the resource below
+                    internal int resource;										// 16 bits		// i think this is a resource thingy anyways...
+
+                    public bool Exists
+                    {
+                        get { return exists == 1 ? true : false; }
+                        set { exists = (value == true) ? 1 : 0; }
+                    }
+                };
+
+                public class Values
+                {
+                    int attribute1;
+                    int attribute2;
+                    int attribute3;
                     int stat;
 
-                    public int ExtraAttribute1
+                    Stat parentStat;
+
+                    public Values(Stat ps)
                     {
-                        get { return extraAttribute1; }
-                        set { extraAttribute1 = value; }
+                        parentStat = ps;
                     }
 
-                    public int ExtraAttribute2
+                    public int Attribute1
                     {
-                        get { return extraAttribute2; }
-                        set { extraAttribute2 = value; }
+                        get { return attribute1; }
+                        set { attribute1 = value; }
                     }
 
-                    public int ExtraAttribute3
+                    public int Attribute2
                     {
-                        get { return extraAttribute3; }
-                        set { extraAttribute3 = value; }
+                        get { return attribute2; }
+                        set { attribute2 = value; }
+                    }
+
+                    public int Attribute3
+                    {
+                        get { return attribute3; }
+                        set { attribute3 = value; }
                     }
 
                     public int Stat
@@ -152,11 +165,21 @@ namespace Reanimator
                         get { return stat; }
                         set { stat = value; }
                     }
+
+                    public Stat ParentStat
+                    {
+                        get { return parentStat; }
+                    }
                 };
 
+                public Stat()
+                {
+                    attributes = new List<Attribute>();
+                }
+
                 internal int statId;											// 16 bits
-                internal int extraAttributesCount;							    // 2 bits
-                internal UnitStat_ExtraAttribute[] extraAttributes;			                    // no idea what they do though
+                internal int attributesCount;							        // 2 bits
+                internal List<Attribute> attributes;                                                     // tells the game if it's a skill id, or waypoint flag, etc
                 internal int bitCount;									        // 6 bits		// size in bits of extra attribute
                 internal int otherAttributeFlag;								// 3 bits		// i think that's what this is...		// can be 0x00, 0x01, 0x02, 0x03, 0x04
                 internal UnitStat_OtherAttribute otherAttribute;
@@ -165,11 +188,36 @@ namespace Reanimator
                 internal int repeatFlag;										// 1 bit		// if set, check for repeat number
                 internal int repeatCount;										// 10 bits		// i think this can be something other than 10 bits... I think...
 
-                public StatValues[] values;
+                public Values[] values;
 
                 public int Id
                 {
                     get { return statId; }
+                }
+
+                public Attribute StatAttribute1
+                {
+                    get { if (attributes.Count <= 0) return null; else return attributes[0]; }
+                }
+
+                public Attribute StatAttribute2
+                {
+                    get { if (attributes.Count <= 1) return null; else return attributes[0]; }
+                }
+
+                public Attribute StatAttribute3
+                {
+                    get { if (attributes.Count == 2) return null; else return attributes[0]; }
+                }
+
+                public Attribute StatAttribute(int index)
+                {
+                    if (index >= attributes.Count)
+                    {
+                        return null;
+                    }
+
+                    return attributes[index];
                 }
 
                 private string name;
@@ -189,7 +237,7 @@ namespace Reanimator
                     return name;
                 }
 
-                public StatValues this[int index]
+                public Values this[int index]
                 {
                     get { return values[index]; }
                 }
@@ -730,12 +778,12 @@ namespace Reanimator
         private bool ReadStat(ref StatBlock.Stat unitStat)
         {
             unitStat.statId = bitBuffer.ReadBits(16);
-            unitStat.extraAttributesCount = bitBuffer.ReadBits(2);
-            unitStat.extraAttributes = new UnitStat_ExtraAttribute[unitStat.extraAttributesCount];
+            unitStat.attributesCount = bitBuffer.ReadBits(2);
+            //unitStat.attributes = new StatBlock.Stat.Attribute[unitStat.attributesCount];
 
-            for (int i = 0; i < unitStat.extraAttributesCount; i++)
+            for (int i = 0; i < unitStat.attributesCount; i++)
             {
-                UnitStat_ExtraAttribute exAtrib = new UnitStat_ExtraAttribute();
+                StatBlock.Stat.Attribute exAtrib = new StatBlock.Stat.Attribute();
 
                 exAtrib.exists = bitBuffer.ReadBits(1);
                 if (exAtrib.exists != 1)
@@ -755,7 +803,7 @@ namespace Reanimator
                     exAtrib.resource = bitBuffer.ReadBits(16);
                 }
 
-                unitStat.extraAttributes[i] = exAtrib;
+                unitStat.attributes.Add(exAtrib);
             }
 
             unitStat.bitCount = bitBuffer.ReadBits(6);
@@ -790,22 +838,22 @@ namespace Reanimator
             {
                 unitStat.repeatCount = bitBuffer.ReadBits(10);
             }
-            unitStat.values = new StatBlock.Stat.StatValues[unitStat.repeatCount];
+            unitStat.values = new StatBlock.Stat.Values[unitStat.repeatCount];
 
             for (int i = 0; i < unitStat.repeatCount; i++)
             {
-                unitStat.values[i] = new StatBlock.Stat.StatValues();
-                for (int j = 0; j < unitStat.extraAttributesCount; j++)
+                unitStat.values[i] = new StatBlock.Stat.Values(unitStat);
+                for (int j = 0; j < unitStat.attributesCount; j++)
                 {
-                    if (unitStat.extraAttributes[j].exists == 1)
+                    if (unitStat.attributes[j].exists == 1)
                     {
-                        int extraAttribute = bitBuffer.ReadBits(unitStat.extraAttributes[j].bitCount);
+                        int extraAttribute = bitBuffer.ReadBits(unitStat.attributes[j].bitCount);
                         if (j == 0)
-                            unitStat.values[i].ExtraAttribute1 = extraAttribute;
+                            unitStat.values[i].Attribute1 = extraAttribute;
                         if (j == 1)
-                            unitStat.values[i].ExtraAttribute2 = extraAttribute;
+                            unitStat.values[i].Attribute2 = extraAttribute;
                         if (j == 2)
-                            unitStat.values[i].ExtraAttribute3 = extraAttribute;
+                            unitStat.values[i].Attribute3 = extraAttribute;
                     }
                 }
 
@@ -1666,27 +1714,27 @@ namespace Reanimator
 
             saveBuffer.WriteBits(stat.statId, 16);
 
-            saveBuffer.WriteBits(stat.extraAttributes.Length, 2);
-            for (int i = 0; i < stat.extraAttributes.Length; i++)
+            saveBuffer.WriteBits(stat.attributes.Count, 2);
+            for (int i = 0; i < stat.attributes.Count; i++)
             {
-                saveBuffer.WriteBits(stat.extraAttributes[i].exists, 1);
-                if (stat.extraAttributes[i].exists == 0)
+                saveBuffer.WriteBits(stat.attributes[i].exists, 1);
+                if (stat.attributes[i].exists == 0)
                 {
                     break;
                 }
 
-                saveBuffer.WriteBits(stat.extraAttributes[i].bitCount, 6);
+                saveBuffer.WriteBits(stat.attributes[i].bitCount, 6);
 
-                saveBuffer.WriteBits(stat.extraAttributes[i].unknown1, 2);
-                if (stat.extraAttributes[i].unknown1 == 0x02)
+                saveBuffer.WriteBits(stat.attributes[i].unknown1, 2);
+                if (stat.attributes[i].unknown1 == 0x02)
                 {
-                    saveBuffer.WriteBits(stat.extraAttributes[i].unknown1_1, 1);
+                    saveBuffer.WriteBits(stat.attributes[i].unknown1_1, 1);
                 }
 
-                saveBuffer.WriteBits(stat.extraAttributes[i].skipResource, 1);
-                if (stat.extraAttributes[i].skipResource == 0)
+                saveBuffer.WriteBits(stat.attributes[i].skipResource, 1);
+                if (stat.attributes[i].skipResource == 0)
                 {
-                    saveBuffer.WriteBits(stat.extraAttributes[i].resource, 16);
+                    saveBuffer.WriteBits(stat.attributes[i].resource, 16);
                 }
             }
 
@@ -1722,19 +1770,19 @@ namespace Reanimator
 
             for (int i = 0; i < repeatCount; i++)
             {
-                for (int j = 0; j < stat.extraAttributes.Length; j++)
+                for (int j = 0; j < stat.attributes.Count; j++)
                 {
-                    if (stat.extraAttributes[j].exists == 1)
+                    if (stat.attributes[j].exists == 1)
                     {
                         int extraAttribute = 0;
                         if (j == 0)
-                            extraAttribute = stat.values[i].ExtraAttribute1;
+                            extraAttribute = stat.values[i].Attribute1;
                         else if (j == 1)
-                            extraAttribute = stat.values[i].ExtraAttribute2;
+                            extraAttribute = stat.values[i].Attribute2;
                         else if (j == 2)
-                            extraAttribute = stat.values[i].ExtraAttribute3;
+                            extraAttribute = stat.values[i].Attribute3;
 
-                        saveBuffer.WriteBits(extraAttribute, stat.extraAttributes[j].bitCount);
+                        saveBuffer.WriteBits(extraAttribute, stat.attributes[j].bitCount);
                     }
                 }
 

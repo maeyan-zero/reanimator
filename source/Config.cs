@@ -42,6 +42,8 @@ namespace Reanimator
             {
                 throw new NotImplementedException("else if (typeof(T) == typeof(Boolean))");
             }
+
+            configkey.Flush();
         }
 
         public static string hglDir

@@ -123,7 +123,7 @@
             // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(353, 163);
+            this.okButton.Location = new System.Drawing.Point(353, 201);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 1;
@@ -136,7 +136,7 @@
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 192);
+            this.ClientSize = new System.Drawing.Size(440, 273);
             this.ControlBox = false;
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.groupBox1);

@@ -40,15 +40,11 @@ namespace Reanimator.Forms
             this.stats_GroupBox = new System.Windows.Forms.GroupBox();
             this.stats_ListBox = new System.Windows.Forms.ListBox();
             this.items_TabPage = new System.Windows.Forms.TabPage();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.items_ListBox = new System.Windows.Forms.ListBox();
             this.save_Button = new System.Windows.Forms.Button();
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.stats_TabPage.SuspendLayout();
@@ -171,11 +167,7 @@ namespace Reanimator.Forms
             // 
             // items_TabPage
             // 
-            this.items_TabPage.Controls.Add(this.textBox5);
-            this.items_TabPage.Controls.Add(this.textBox4);
-            this.items_TabPage.Controls.Add(this.textBox3);
-            this.items_TabPage.Controls.Add(this.textBox2);
-            this.items_TabPage.Controls.Add(this.textBox1);
+            this.items_TabPage.Controls.Add(this.label1);
             this.items_TabPage.Controls.Add(this.items_ListBox);
             this.items_TabPage.Location = new System.Drawing.Point(4, 22);
             this.items_TabPage.Name = "items_TabPage";
@@ -184,41 +176,6 @@ namespace Reanimator.Forms
             this.items_TabPage.TabIndex = 1;
             this.items_TabPage.Text = "Items";
             this.items_TabPage.UseVisualStyleBackColor = true;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(185, 129);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 20);
-            this.textBox5.TabIndex = 5;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(185, 103);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 4;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(185, 77);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 3;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(185, 51);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 2;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(185, 25);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
             // 
             // items_ListBox
             // 
@@ -260,6 +217,15 @@ namespace Reanimator.Forms
             this.currentlyEditing_ComboBox.TabIndex = 2;
             this.currentlyEditing_ComboBox.SelectedIndexChanged += new System.EventHandler(this.currentlyEditing_ComboBox_SelectedIndexChanged);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(213, 44);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(253, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Ignore this section for now. Select items from above.";
+            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -291,12 +257,7 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TabPage general_TabPage;
         private System.Windows.Forms.TabPage stats_TabPage;
         private System.Windows.Forms.TabPage items_TabPage;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ListBox items_ListBox;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.GroupBox stats_GroupBox;
         private System.Windows.Forms.ListBox stats_ListBox;
         private System.Windows.Forms.Button save_Button;
@@ -307,5 +268,6 @@ namespace Reanimator.Forms
         private System.Windows.Forms.ComboBox currentlyEditing_ComboBox;
         private System.Windows.Forms.Label name_Label;
         private System.Windows.Forms.TextBox name_TextBox;
+        private System.Windows.Forms.Label label1;
     }
 }
