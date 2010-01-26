@@ -74,7 +74,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitBuffer.cs" />
-    <Compile Include="ClientPatcher.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Excel\ExcelTable.cs" />
     <Compile Include="Excel\ExcelTables.cs" />
@@ -83,7 +82,6 @@
     <Compile Include="Excel\States.cs" />
     <Compile Include="Excel\Stats.cs" />
     <Compile Include="Excel\Treasure.cs" />
-    <Compile Include="FileTools.cs" />
     <Compile Include="Forms\HeroEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,6 +185,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\etc\FileTools\FileTools.csproj">
+      <Project>{D6EC58F1-C9CF-44FA-897C-5886BF47F896}</Project>
+      <Name>FileTools</Name>
+    </ProjectReference>
     <ProjectReference Include="..\etc\PluginInterface\PluginInterface.csproj">
       <Project>{BE3D0936-DA75-4F25-A698-602692647B4E}</Project>
       <Name>PluginInterface</Name>

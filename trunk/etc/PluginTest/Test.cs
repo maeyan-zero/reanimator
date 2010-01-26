@@ -8,6 +8,7 @@ namespace PluginTest
   class PlugIn : IPlugin
   {
     private string name;
+    private string hglDirectory;
     private IPluginHost host;
     private MenuStrip hostMenu;
 
@@ -53,9 +54,16 @@ namespace PluginTest
       }
     }
 
-    public string getName()
+    public string HGLDirectory
     {
-      return name;
+      get
+      {
+        return this.hglDirectory;
+      }
+      set
+      {
+        this.hglDirectory = value;
+      }
     }
 
     public void InitializePlugIn()
@@ -69,7 +77,7 @@ namespace PluginTest
         List<ToolStripItem> select = new List<ToolStripItem>();
         select.AddRange(file.DropDownItems.Find("openToolStripMenuItem", true));
 
-        string text = "Hi alex2069 and maeyan, I'm a plugin entry! You can remove my by deleting my dll (PluginTest.dll)";
+        string text = "Hi alex2069 and maeyan, I'm a plugin entry! You can remove me by deleting my dll (PluginTest.dll)";
 
         // If it doesn't exist yet, create it
         if (select.Count == 0)

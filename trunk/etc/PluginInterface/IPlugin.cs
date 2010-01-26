@@ -9,8 +9,8 @@ namespace PluginInterface
     string Name { get; set; }
     IPluginHost Host { get; set; }
     MenuStrip HostMenu { get; set; }
+    string HGLDirectory { get; set; }
     void InitializePlugIn();
-    string getName();
   }
 
   public interface IPluginHost
