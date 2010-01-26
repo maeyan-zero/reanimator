@@ -19,6 +19,10 @@ namespace Reanimator
     public partial class Reanimator : Form, IPluginHost
     {
       #region PLUGINS
+
+
+
+
       private List<IPlugin> pluginList;
 
       public bool Register(IPlugin ipi)
@@ -31,7 +35,7 @@ namespace Reanimator
         MessageBox.Show(message);
       }
 
-      public void StartPlugin()
+      public void LoadPlugins()
       {
         string path = Application.StartupPath + @"\Plugins\";
 
@@ -72,6 +76,7 @@ namespace Reanimator
               IPlugin plugin = (IPlugin)Activator.CreateInstance(ObjType);
               plugin.Host = this;
               plugin.HostMenu = this.menuStrip;
+              plugin.HGLDirectory = Config.hglDir;
               pluginList.Add(plugin);
               plugin.InitializePlugIn();
             }
@@ -82,6 +87,10 @@ namespace Reanimator
           }
         }
       }
+
+
+
+
       #endregion
 
         private Options options;
@@ -96,7 +105,7 @@ namespace Reanimator
             indexFilesOpen = new List<string>();
 
             #region PLUGIN
-            pluginList = new List<IPlugin>();      
+            pluginList = new List<IPlugin>();
             #endregion
 
             InitializeComponent();
@@ -321,40 +330,42 @@ namespace Reanimator
             this.BringToFront();
         }
 
-        private void clientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
-            if (openFileDialog.ShowDialog(this) != DialogResult.OK)
-            {
-                return;
-            }
+        #region CONVERTED TO PLUGIN
+        //private void clientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    OpenFileDialog openFileDialog = new OpenFileDialog();
+        //    openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
+        //    openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
+        //    if (openFileDialog.ShowDialog(this) != DialogResult.OK)
+        //    {
+        //        return;
+        //    }
 
-            FileStream clientFile;
-            try
-            {
-                clientFile = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite);
-            }
-            catch (Exception)
-            {
-                return;
-            }
+        //    FileStream clientFile;
+        //    try
+        //    {
+        //        clientFile = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return;
+        //    }
 
-            ClientPatcher clientPatcher = new ClientPatcher(FileTools.StreamToByteArray(clientFile));
-            if (clientPatcher.ApplyHardcorePatch())
-            {
-                FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
-                fileOut.Write(clientPatcher.Buffer, 0, clientPatcher.Buffer.Length);
-                fileOut.Dispose();
-                MessageBox.Show("Hardcore patch applied!");
-            }
-            else
-            {
-                MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            clientFile.Dispose();
-        }
+        //    ClientPatcher clientPatcher = new ClientPatcher(FileTools.StreamToByteArray(clientFile));
+        //    if (clientPatcher.ApplyHardcorePatch())
+        //    {
+        //        FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
+        //        fileOut.Write(clientPatcher.Buffer, 0, clientPatcher.Buffer.Length);
+        //        fileOut.Dispose();
+        //        MessageBox.Show("Hardcore patch applied!");
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //    clientFile.Dispose();
+        //}
+        #endregion
 
         private void LoadExcelTables(object sender, EventArgs e)
         {
@@ -403,7 +414,7 @@ namespace Reanimator
             #region PLUGIN
             try
             {
-              StartPlugin();
+              LoadPlugins();
             }
             catch (Exception ex)
             {
