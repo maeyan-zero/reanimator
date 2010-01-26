@@ -12,9 +12,16 @@ namespace ClientPatcherPlugin
   public class PlugIn : IPlugin
   {
     private string name;
+    private string description;
     private IPluginHost host;
     private MenuStrip hostMenu;
     private string hglDirectory;
+
+    public PlugIn()
+    {
+      name = "Client Patcher";
+      description = "Adds an option to patch the SP client to support \"Hardcore\" mode.";
+    }
 
     public string Name
     {
@@ -22,9 +29,13 @@ namespace ClientPatcherPlugin
       {
         return this.name;
       }
-      set
+    }
+
+    public string Description
+    {
+      get
       {
-        this.name = value;
+        return description;
       }
     }
 
@@ -64,7 +75,7 @@ namespace ClientPatcherPlugin
       }
     }
 
-    public void InitializePlugIn()
+    public void InitializePlugIn(bool showSuccessMessage)
     {
       try
       {
@@ -79,7 +90,11 @@ namespace ClientPatcherPlugin
           clientPatcher.Click += new EventHandler(clientPatcher_Click);
 
           toolsMenu.DropDownItems.Add(clientPatcher);
-          host.ShowMessage("ClientPatcherPlugin.dll loaded!");
+
+          if (host.Register(this) && showSuccessMessage)
+          {
+            host.ShowMessage("ClientPatcherPlugin.dll loaded!");
+          }
         }
         else
         {

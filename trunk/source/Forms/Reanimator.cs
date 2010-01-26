@@ -22,11 +22,12 @@ namespace Reanimator
 
 
 
-
+      bool showInitializationMessage = true;
       private List<IPlugin> pluginList;
 
       public bool Register(IPlugin ipi)
       {
+        pluginList.Add(ipi);
         return true;
       }
 
@@ -77,8 +78,7 @@ namespace Reanimator
               plugin.Host = this;
               plugin.HostMenu = this.menuStrip;
               plugin.HGLDirectory = Config.hglDir;
-              pluginList.Add(plugin);
-              plugin.InitializePlugIn();
+              plugin.InitializePlugIn(true);
             }
           }
           catch (Exception ex)
@@ -86,6 +86,11 @@ namespace Reanimator
             Console.WriteLine(ex.Message);
           }
         }
+      }
+
+      public IPlugin[] GetPluginList()
+      {
+        return pluginList.ToArray();
       }
 
 
@@ -327,6 +332,13 @@ namespace Reanimator
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             options.ShowDialog(this);
+
+            //update the Plugins with the new HGL path
+            foreach (IPlugin plugin in pluginList)
+            {
+              plugin.HGLDirectory = Config.dataDirsRoot;
+            }
+
             this.BringToFront();
         }
 
