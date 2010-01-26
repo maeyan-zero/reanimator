@@ -6,16 +6,18 @@ namespace PluginInterface
 {
   public interface IPlugin
   {
-    string Name { get; set; }
+    string Name { get; }
+    string Description { get; }
+    string HGLDirectory { get; set; }
     IPluginHost Host { get; set; }
     MenuStrip HostMenu { get; set; }
-    string HGLDirectory { get; set; }
-    void InitializePlugIn();
+    void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded);
   }
 
   public interface IPluginHost
   {
     bool Register(IPlugin ipi);
     void ShowMessage(string message);
+    IPlugin[] GetPluginList();
   }
 }
