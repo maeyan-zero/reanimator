@@ -11,11 +11,79 @@ using Reanimator.Forms;
 using Reanimator.Excel;
 using System.Threading;
 using System.Runtime.InteropServices;
+using PluginInterface;
+using System.Reflection;
 
 namespace Reanimator
 {
-    public partial class Reanimator : Form
+    public partial class Reanimator : Form, IPluginHost
     {
+      #region PLUGINS
+      private List<IPlugin> pluginList;
+
+      public bool Register(IPlugin ipi)
+      {
+        return true;
+      }
+
+      public void ShowMessage(string message)
+      {
+        MessageBox.Show(message);
+      }
+
+      public void StartPlugin()
+      {
+        string path = Application.StartupPath + @"\Plugins\";
+
+        if (!Directory.Exists(path))
+        {
+          Directory.CreateDirectory(path);
+        }
+        string[] pluginFiles = Directory.GetFiles(path, "*.dll");
+
+        for (int i = 0; i < pluginFiles.Length; i++)
+        {
+          string args = pluginFiles[i].Substring(
+            pluginFiles[i].LastIndexOf("\\") + 1,
+            pluginFiles[i].IndexOf(".dll") -
+            pluginFiles[i].LastIndexOf("\\") - 1);
+
+          Type ObjType = null;
+          // load the dll
+          try
+          {
+            // load it
+            Assembly ass = null;
+            ass = Assembly.LoadFile(pluginFiles[i]);
+            if (ass != null)
+            {
+              ObjType = ass.GetType(args + ".PlugIn");
+            }
+          }
+          catch (Exception ex)
+          {
+            Console.WriteLine(ex.Message);
+          }
+          try
+          {
+            // OK Lets create the object as we have the Report Type
+            if (ObjType != null)
+            {
+              IPlugin plugin = (IPlugin)Activator.CreateInstance(ObjType);
+              plugin.Host = this;
+              plugin.HostMenu = this.menuStrip;
+              pluginList.Add(plugin);
+              plugin.InitializePlugIn();
+            }
+          }
+          catch (Exception ex)
+          {
+            Console.WriteLine(ex.Message);
+          }
+        }
+      }
+      #endregion
+
         private Options options;
         private List<string> indexFilesOpen;
         private ExcelTables excelTables;
@@ -26,7 +94,11 @@ namespace Reanimator
         {
             options = new Options();
             indexFilesOpen = new List<string>();
-               
+
+            #region PLUGIN
+            pluginList = new List<IPlugin>();      
+            #endregion
+
             InitializeComponent();
         }
 
@@ -327,6 +399,17 @@ namespace Reanimator
             Progress progress = new Progress();
             progress.Shown += new EventHandler(LoadExcelTables);
             progress.ShowDialog(this);
+
+            #region PLUGIN
+            try
+            {
+              StartPlugin();
+            }
+            catch (Exception ex)
+            {
+              MessageBox.Show(ex.Message);
+            }
+            #endregion
         }
 
         private void Reanimator_ResizeEnd(object sender, EventArgs e)
