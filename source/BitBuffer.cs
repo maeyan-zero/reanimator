@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Reanimator
 {
-    class BitBuffer
+    public class BitBuffer
     {
         byte[] data;
         int dataByteSize = 0;

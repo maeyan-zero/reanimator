@@ -14,30 +14,28 @@ namespace Reanimator.Forms
 {
     public partial class HeroEditor : Form
     {
-        HeroUnit heroUnit;
+        Unit heroUnit;
         ExcelTables excelTables;
         String filePath;
 
-        public HeroEditor(HeroUnit unit, ExcelTables tables, String file)
+        public HeroEditor(Unit unit, ExcelTables tables, String file)
         {
             heroUnit = unit;
             excelTables = tables;
             filePath = file;
 
             InitializeComponent();
-
-            PopulateStats();
-            PopulateItems();
         }
 
         private void ListBox1SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             // this is just a quick nasty test - ignore me
             Unit[] items = heroUnit.Items;
             Unit item = items[this.items_ListBox.SelectedIndex];
             for (int i = 0; i < item.statBlock.statCount; i++)
             {
-                UnitStat stat = item.statBlock.stats[i];
+                Unit.Stat stat = item.statBlock.stats[i];
                 if (i == 0)
                     this.textBox1.Text = "0x" + stat.statId.ToString("X4") + " : " + stat.values[0];
                 if (i == 1)
@@ -48,39 +46,43 @@ namespace Reanimator.Forms
                     this.textBox4.Text = "0x" + stat.statId.ToString("X4") + " : " + stat.values[0];
                 if (i == 4)
                     this.textBox5.Text = "0x" + stat.statId.ToString("X4") + " : " + stat.values[0];
-            }
+            }*/
         }
 
-        private void PopulateItems()
+        private void PopulateItems(Unit unit)
         {
-            Unit[] items = heroUnit.Items;
+            Unit[] items = unit.Items;
             for (int i = 0; i < items.Length; i++)
             {
                 Unit item = items[i];
-                this.items_ListBox.Items.Add("Item #" + i);
+                item.Name = "Item #" + i;
+                this.currentlyEditing_ComboBox.Items.Add(item);
             }
         }
 
-        private void PopulateStats()
+        private void PopulateStats(Unit unit)
         {
-            foreach (HeroUnitStat stat in heroUnit.Stats)
+            stats_ListBox.Items.Clear();
+
+            for (int i = 0; i < unit.Stats.Length; i++)
             {
-                this.stats_ListBox.Items.Add(stat);
+                Unit.StatBlock.Stat stat = unit.Stats[i];
+                stat.Name = excelTables.Stats.GetStringFromId(stat.Id);
+
+                stats_ListBox.Items.Add(stat);
             }
         }
-
 
         private void charStats_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.panel1.Controls.Clear();
 
-            HeroUnitStat stat = (HeroUnitStat)this.stats_ListBox.SelectedItem;
-            charStatValues_ListBox.Items.Clear();
+            Unit.StatBlock.Stat stat = (Unit.StatBlock.Stat)this.stats_ListBox.SelectedItem;
 
             int heightOffset = 0;
             for (int i = 0; i < stat.Length; i++)
             {
-                Unit.StatValues statValues = stat.Values(i);
+                Unit.StatBlock.Stat.StatValues statValues = stat[i];
 
                 bool blag = false;
                 for (int j = 0; j < 3; j++)
@@ -109,8 +111,6 @@ namespace Reanimator.Forms
                     this.panel1.Controls.Add(eaValueLabel);
                     this.panel1.Controls.Add(eaValueTextBox);
 
-                    charStatValues_ListBox.Items.Add("  *" + extraAttribute);
-
                     heightOffset += 25;
                     blag = true;
                 }
@@ -135,14 +135,8 @@ namespace Reanimator.Forms
                 this.panel1.Controls.Add(valueLabel);
                 this.panel1.Controls.Add(valueTextBox);
 
-                charStatValues_ListBox.Items.Add(statValues.Stat);
                 heightOffset += 45;
             }
-        }
-
-        private void charStats_ListBox_Resize(object sender, EventArgs e)
-        {
-            charStatValues_ListBox.Height = stats_ListBox.Height;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -199,6 +193,24 @@ namespace Reanimator.Forms
             saveFile.Write(saveData, 0, saveData.Length);
 
             saveFile.Close();
+        }
+
+        private void HeroEditor_Load(object sender, EventArgs e)
+        {
+            currentlyEditing_ComboBox.Items.Add(heroUnit);
+            currentlyEditing_ComboBox.SelectedIndex = 0;
+
+            name_TextBox.Text = heroUnit.ToString();
+
+            PopulateStats(heroUnit);
+            PopulateItems(heroUnit);
+        }
+
+        private void currentlyEditing_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Unit unit = (Unit)currentlyEditing_ComboBox.SelectedItem;
+
+            PopulateStats(unit);
         }
     }
 }

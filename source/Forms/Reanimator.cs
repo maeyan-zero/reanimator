@@ -149,7 +149,12 @@ namespace Reanimator
                 return false;
             }
 
-            HeroUnit heroUnit = new HeroUnit(FileTools.StreamToByteArray(heroFile), excelTables);
+            BitBuffer bitBuffer = new BitBuffer(FileTools.StreamToByteArray(heroFile));
+            bitBuffer.DataByteOffset = 0x2028;
+
+            Unit heroUnit = new Unit(bitBuffer);
+            heroUnit.ReadUnit(ref heroUnit);
+
             HeroEditor heroEditor = new HeroEditor(heroUnit, excelTables, szFileName);
             heroEditor.Text = "Hero Editor: " + szFileName;
             heroEditor.MdiParent = this;
