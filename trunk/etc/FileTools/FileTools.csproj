@@ -33,7 +33,7 @@
   <ItemGroup>
     <Reference Include="ManagedZLib, Version=1.1.1.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\source\ManagedZLib.dll</HintPath>
+      <HintPath>..\..\bin\Debug\ManagedZLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -50,7 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileTools.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
