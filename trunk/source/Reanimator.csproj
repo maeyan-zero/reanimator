@@ -108,7 +108,6 @@
     <Compile Include="Forms\Progress.Designer.cs">
       <DependentUpon>Progress.cs</DependentUpon>
     </Compile>
-    <Compile Include="HeroUnit.cs" />
     <Compile Include="Index.cs" />
     <Compile Include="ModelTools.cs" />
     <Compile Include="ModTools.cs" />

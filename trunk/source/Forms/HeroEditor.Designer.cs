@@ -30,12 +30,13 @@ namespace Reanimator.Forms
         private void InitializeComponent()
         {
             this.main_TabControl = new System.Windows.Forms.TabControl();
+            this.general_TabPage = new System.Windows.Forms.TabPage();
+            this.name_TextBox = new System.Windows.Forms.TextBox();
+            this.name_Label = new System.Windows.Forms.Label();
             this.stats_TabPage = new System.Windows.Forms.TabPage();
-            this.charStatValues_ListBox = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.save_Button = new System.Windows.Forms.Button();
             this.stats_GroupBox = new System.Windows.Forms.GroupBox();
             this.stats_ListBox = new System.Windows.Forms.ListBox();
             this.items_TabPage = new System.Windows.Forms.TabPage();
@@ -45,10 +46,11 @@ namespace Reanimator.Forms
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.items_ListBox = new System.Windows.Forms.ListBox();
-            this.general_TabPage = new System.Windows.Forms.TabPage();
+            this.save_Button = new System.Windows.Forms.Button();
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.main_TabControl.SuspendLayout();
+            this.general_TabPage.SuspendLayout();
             this.stats_TabPage.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.stats_GroupBox.SuspendLayout();
@@ -69,27 +71,46 @@ namespace Reanimator.Forms
             this.main_TabControl.Size = new System.Drawing.Size(751, 535);
             this.main_TabControl.TabIndex = 0;
             // 
-            // charTab
+            // general_TabPage
             // 
-            this.stats_TabPage.Controls.Add(this.charStatValues_ListBox);
+            this.general_TabPage.Controls.Add(this.name_TextBox);
+            this.general_TabPage.Controls.Add(this.name_Label);
+            this.general_TabPage.Location = new System.Drawing.Point(4, 22);
+            this.general_TabPage.Name = "general_TabPage";
+            this.general_TabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.general_TabPage.Size = new System.Drawing.Size(743, 509);
+            this.general_TabPage.TabIndex = 2;
+            this.general_TabPage.Text = "General";
+            this.general_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // name_TextBox
+            // 
+            this.name_TextBox.Location = new System.Drawing.Point(54, 4);
+            this.name_TextBox.Name = "name_TextBox";
+            this.name_TextBox.Size = new System.Drawing.Size(132, 20);
+            this.name_TextBox.TabIndex = 1;
+            // 
+            // name_Label
+            // 
+            this.name_Label.AutoSize = true;
+            this.name_Label.Location = new System.Drawing.Point(7, 7);
+            this.name_Label.Name = "name_Label";
+            this.name_Label.Size = new System.Drawing.Size(41, 13);
+            this.name_Label.TabIndex = 0;
+            this.name_Label.Text = "Name: ";
+            // 
+            // stats_TabPage
+            // 
             this.stats_TabPage.Controls.Add(this.groupBox2);
             this.stats_TabPage.Controls.Add(this.groupBox1);
             this.stats_TabPage.Controls.Add(this.stats_GroupBox);
             this.stats_TabPage.Location = new System.Drawing.Point(4, 22);
-            this.stats_TabPage.Name = "charTab";
+            this.stats_TabPage.Name = "stats_TabPage";
             this.stats_TabPage.Padding = new System.Windows.Forms.Padding(3);
             this.stats_TabPage.Size = new System.Drawing.Size(743, 509);
             this.stats_TabPage.TabIndex = 0;
             this.stats_TabPage.Text = "Stats";
             this.stats_TabPage.UseVisualStyleBackColor = true;
-            // 
-            // charStatValues_ListBox
-            // 
-            this.charStatValues_ListBox.FormattingEnabled = true;
-            this.charStatValues_ListBox.Location = new System.Drawing.Point(448, 185);
-            this.charStatValues_ListBox.Name = "charStatValues_ListBox";
-            this.charStatValues_ListBox.Size = new System.Drawing.Size(130, 225);
-            this.charStatValues_ListBox.TabIndex = 3;
             // 
             // groupBox2
             // 
@@ -126,23 +147,13 @@ namespace Reanimator.Forms
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Stat Attributes";
             // 
-            // save_Button
-            // 
-            this.save_Button.Location = new System.Drawing.Point(450, 4);
-            this.save_Button.Name = "saveCharButton";
-            this.save_Button.Size = new System.Drawing.Size(75, 23);
-            this.save_Button.TabIndex = 3;
-            this.save_Button.Text = "Save";
-            this.save_Button.UseVisualStyleBackColor = true;
-            this.save_Button.Click += new System.EventHandler(this.saveCharButton_Click);
-            // 
             // stats_GroupBox
             // 
             this.stats_GroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)));
             this.stats_GroupBox.Controls.Add(this.stats_ListBox);
             this.stats_GroupBox.Location = new System.Drawing.Point(8, 6);
-            this.stats_GroupBox.Name = "charStats_GroupBox";
+            this.stats_GroupBox.Name = "stats_GroupBox";
             this.stats_GroupBox.Size = new System.Drawing.Size(186, 495);
             this.stats_GroupBox.TabIndex = 2;
             this.stats_GroupBox.TabStop = false;
@@ -153,10 +164,9 @@ namespace Reanimator.Forms
             this.stats_ListBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.stats_ListBox.FormattingEnabled = true;
             this.stats_ListBox.Location = new System.Drawing.Point(3, 16);
-            this.stats_ListBox.Name = "charStats_ListBox";
+            this.stats_ListBox.Name = "stats_ListBox";
             this.stats_ListBox.Size = new System.Drawing.Size(177, 472);
             this.stats_ListBox.TabIndex = 1;
-            this.stats_ListBox.Resize += new System.EventHandler(this.charStats_ListBox_Resize);
             this.stats_ListBox.SelectedIndexChanged += new System.EventHandler(this.charStats_ListBox_SelectedIndexChanged);
             // 
             // items_TabPage
@@ -168,9 +178,9 @@ namespace Reanimator.Forms
             this.items_TabPage.Controls.Add(this.textBox1);
             this.items_TabPage.Controls.Add(this.items_ListBox);
             this.items_TabPage.Location = new System.Drawing.Point(4, 22);
-            this.items_TabPage.Name = "itemTab";
+            this.items_TabPage.Name = "items_TabPage";
             this.items_TabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.items_TabPage.Size = new System.Drawing.Size(1009, 558);
+            this.items_TabPage.Size = new System.Drawing.Size(743, 509);
             this.items_TabPage.TabIndex = 1;
             this.items_TabPage.Text = "Items";
             this.items_TabPage.UseVisualStyleBackColor = true;
@@ -216,49 +226,55 @@ namespace Reanimator.Forms
             this.items_ListBox.FormattingEnabled = true;
             this.items_ListBox.Location = new System.Drawing.Point(3, 3);
             this.items_ListBox.Name = "items_ListBox";
-            this.items_ListBox.Size = new System.Drawing.Size(150, 550);
+            this.items_ListBox.Size = new System.Drawing.Size(150, 498);
             this.items_ListBox.TabIndex = 0;
             this.items_ListBox.SelectedIndexChanged += new System.EventHandler(this.ListBox1SelectedIndexChanged);
             // 
-            // tabPage1
+            // save_Button
             // 
-            this.general_TabPage.Location = new System.Drawing.Point(4, 22);
-            this.general_TabPage.Name = "tabPage1";
-            this.general_TabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.general_TabPage.Size = new System.Drawing.Size(1009, 558);
-            this.general_TabPage.TabIndex = 2;
-            this.general_TabPage.Text = "General";
-            this.general_TabPage.UseVisualStyleBackColor = true;
+            this.save_Button.Location = new System.Drawing.Point(450, 4);
+            this.save_Button.Name = "save_Button";
+            this.save_Button.Size = new System.Drawing.Size(75, 23);
+            this.save_Button.TabIndex = 3;
+            this.save_Button.Text = "Save";
+            this.save_Button.UseVisualStyleBackColor = true;
+            this.save_Button.Click += new System.EventHandler(this.saveCharButton_Click);
             // 
-            // label1
+            // currentlyEditing_Label
             // 
             this.currentlyEditing_Label.AutoSize = true;
             this.currentlyEditing_Label.Location = new System.Drawing.Point(12, 9);
-            this.currentlyEditing_Label.Name = "label1";
+            this.currentlyEditing_Label.Name = "currentlyEditing_Label";
             this.currentlyEditing_Label.Size = new System.Drawing.Size(89, 13);
             this.currentlyEditing_Label.TabIndex = 1;
             this.currentlyEditing_Label.Text = "Currently Editing: ";
             // 
-            // comboBox1
+            // currentlyEditing_ComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(107, 6);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(337, 21);
-            this.comboBox1.TabIndex = 2;
+            this.currentlyEditing_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.currentlyEditing_ComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.currentlyEditing_ComboBox.FormattingEnabled = true;
+            this.currentlyEditing_ComboBox.Location = new System.Drawing.Point(107, 6);
+            this.currentlyEditing_ComboBox.Name = "currentlyEditing_ComboBox";
+            this.currentlyEditing_ComboBox.Size = new System.Drawing.Size(337, 21);
+            this.currentlyEditing_ComboBox.TabIndex = 2;
+            this.currentlyEditing_ComboBox.SelectedIndexChanged += new System.EventHandler(this.currentlyEditing_ComboBox_SelectedIndexChanged);
             // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(775, 580);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.currentlyEditing_ComboBox);
             this.Controls.Add(this.currentlyEditing_Label);
             this.Controls.Add(this.main_TabControl);
             this.Controls.Add(this.save_Button);
             this.Name = "HeroEditor";
             this.Text = "HeroEditor";
+            this.Load += new System.EventHandler(this.HeroEditor_Load);
             this.main_TabControl.ResumeLayout(false);
+            this.general_TabPage.ResumeLayout(false);
+            this.general_TabPage.PerformLayout();
             this.stats_TabPage.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.stats_GroupBox.ResumeLayout(false);
@@ -286,9 +302,10 @@ namespace Reanimator.Forms
         private System.Windows.Forms.Button save_Button;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ListBox charStatValues_ListBox;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label currentlyEditing_Label;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox currentlyEditing_ComboBox;
+        private System.Windows.Forms.Label name_Label;
+        private System.Windows.Forms.TextBox name_TextBox;
     }
 }
