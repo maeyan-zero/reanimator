@@ -60,6 +60,8 @@ namespace ClientPatcherPlugin
       set
       {
         this.hostMenu = value;
+
+        host.Register(this);
       }
     }
 
@@ -91,7 +93,7 @@ namespace ClientPatcherPlugin
 
           toolsMenu.DropDownItems.Add(clientPatcher);
 
-          if (host.Register(this) && showSuccessMessage)
+          if (showSuccessMessage)
           {
             host.ShowMessage("ClientPatcherPlugin.dll loaded!");
           }
