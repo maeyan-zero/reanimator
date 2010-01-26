@@ -289,14 +289,15 @@ namespace Reanimator
             Progress progress = (Progress)sender;
             FileStream excelFile;
 
+            string excelFilePath = Config.dataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked";
             try
             {
-                excelFile = new FileStream(Config.dataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked", FileMode.Open);
+                excelFile = new FileStream(excelFilePath, FileMode.Open);
                 excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
             }
             catch (Exception)
             {
-                MessageBox.Show("Failed to load exceltables!\nPlease ensure your directories are set correctly.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Failed to load exceltables!\nPlease ensure your directories are set correctly.\n\nFile: \n" + excelFilePath, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 progress.Close();
                 progress.Dispose();
                 return;

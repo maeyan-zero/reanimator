@@ -31,6 +31,11 @@ namespace Reanimator.Forms
             {
                 Config.hglDir = folderBrowserDialogue.SelectedPath;
                 hglDir.Text = Config.hglDir;
+
+                if (Config.dataDirsRootChecked)
+                {
+                    Config.dataDirsRoot = folderBrowserDialogue.SelectedPath;
+                }
             }
         }
 

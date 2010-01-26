@@ -232,11 +232,11 @@ namespace Reanimator.Forms
             // 
             // save_Button
             // 
-            this.save_Button.Location = new System.Drawing.Point(450, 4);
+            this.save_Button.Location = new System.Drawing.Point(599, 6);
             this.save_Button.Name = "save_Button";
             this.save_Button.Size = new System.Drawing.Size(75, 23);
             this.save_Button.TabIndex = 3;
-            this.save_Button.Text = "Save";
+            this.save_Button.Text = "Save File";
             this.save_Button.UseVisualStyleBackColor = true;
             this.save_Button.Click += new System.EventHandler(this.saveCharButton_Click);
             // 
@@ -245,16 +245,16 @@ namespace Reanimator.Forms
             this.currentlyEditing_Label.AutoSize = true;
             this.currentlyEditing_Label.Location = new System.Drawing.Point(12, 9);
             this.currentlyEditing_Label.Name = "currentlyEditing_Label";
-            this.currentlyEditing_Label.Size = new System.Drawing.Size(89, 13);
+            this.currentlyEditing_Label.Size = new System.Drawing.Size(124, 13);
             this.currentlyEditing_Label.TabIndex = 1;
-            this.currentlyEditing_Label.Text = "Currently Editing: ";
+            this.currentlyEditing_Label.Text = "Select Characer or Item: ";
             // 
             // currentlyEditing_ComboBox
             // 
             this.currentlyEditing_ComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.currentlyEditing_ComboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.currentlyEditing_ComboBox.FormattingEnabled = true;
-            this.currentlyEditing_ComboBox.Location = new System.Drawing.Point(107, 6);
+            this.currentlyEditing_ComboBox.Location = new System.Drawing.Point(142, 6);
             this.currentlyEditing_ComboBox.Name = "currentlyEditing_ComboBox";
             this.currentlyEditing_ComboBox.Size = new System.Drawing.Size(337, 21);
             this.currentlyEditing_ComboBox.TabIndex = 2;
