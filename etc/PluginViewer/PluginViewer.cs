@@ -70,6 +70,8 @@ namespace PluginViewer
       set
       {
         this.hostMenu = value;
+
+        host.Register(this);
       }
     }
 
@@ -89,7 +91,7 @@ namespace PluginViewer
 
           toolsMenu.DropDownItems.Add(pluginViewer);
 
-          if (host.Register(this) && showSuccessMessage)
+          if (showSuccessMessage)
           {
             host.ShowMessage("PluginViewer.dll loaded!");
           }

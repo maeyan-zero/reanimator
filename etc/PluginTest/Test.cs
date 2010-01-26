@@ -48,6 +48,7 @@ namespace PluginTest
       set
       {
         this.host = value;
+        // Register the plugin in the host
         host.Register(this);
       }
     }
@@ -109,8 +110,8 @@ namespace PluginTest
         entry.Click += new EventHandler(entry_Click);
         ((ToolStripMenuItem)open[0]).DropDownItems.Add(entry);
 
-        // When initialization is done, register the Plugin in the host and display a success message
-        if (host.Register(this) && showSuccessMessage)
+        // When initialization is done display a success message
+        if (showSuccessMessage)
         {
           host.ShowMessage("PluginTest successfully initialized!");
         }
