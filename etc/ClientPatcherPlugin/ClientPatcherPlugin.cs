@@ -13,6 +13,7 @@ namespace ClientPatcherPlugin
   {
     private string name;
     private string description;
+    private Form parent;
     private IPluginHost host;
     private MenuStrip hostMenu;
     private string hglDirectory;
@@ -39,6 +40,14 @@ namespace ClientPatcherPlugin
       }
     }
 
+    public Form Parent
+    {
+      set
+      {
+        this.parent = value;
+      }
+    }
+
     public IPluginHost Host
     {
       get
@@ -48,6 +57,8 @@ namespace ClientPatcherPlugin
       set
       {
         this.host = value;
+
+        host.Register(this);
       }
     }
 
@@ -60,8 +71,6 @@ namespace ClientPatcherPlugin
       set
       {
         this.hostMenu = value;
-
-        host.Register(this);
       }
     }
 
@@ -77,7 +86,7 @@ namespace ClientPatcherPlugin
       }
     }
 
-    public void InitializePlugIn(bool showSuccessMessage)
+    public void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded)
     {
       try
       {
@@ -93,7 +102,7 @@ namespace ClientPatcherPlugin
 
           toolsMenu.DropDownItems.Add(clientPatcher);
 
-          if (showSuccessMessage)
+          if (showMessageWhenSuccesfullyLoaded)
           {
             host.ShowMessage("ClientPatcherPlugin.dll loaded!");
           }
@@ -135,11 +144,11 @@ namespace ClientPatcherPlugin
         FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
         fileOut.Write(clientPatcher.Buffer, 0, clientPatcher.Buffer.Length);
         fileOut.Dispose();
-        MessageBox.Show("Hardcore patch applied!");
+        this.host.ShowMessage("Hardcore patch applied!");
       }
       else
       {
-        MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        this.host.ShowMessage("Failed to apply Hardcore patch!", "Error");
       }
       clientFile.Dispose();
     }
