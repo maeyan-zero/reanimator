@@ -75,5 +75,11 @@ namespace Reanimator
             get { return GetValue<int>("clientWidth", 700); }
             set { SetValue<int>("clientWidth", value); }
         }
+
+        public static string gameClientPath
+        {
+            get { return GetValue<String>("gameClientPath", "C:\\Program Files\\Flagship Studios\\Hellgate London\\SP_x64\\hellgate_sp_dx9_x64.exe"); }
+            set { SetValue<string>("gameClientPath", value); }
+        }
     }
 }

@@ -28,142 +28,183 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.dataDirBrowse = new System.Windows.Forms.Button();
-            this.dataDirTextBox = new System.Windows.Forms.TextBox();
-            this.dataDirCheckBox = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.hglDirBrowse = new System.Windows.Forms.Button();
-            this.hglDir = new System.Windows.Forms.TextBox();
-            this.okButton = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
+            this.pathSettings_GroupBox = new System.Windows.Forms.GroupBox();
+            this.gameClientPath_Button = new System.Windows.Forms.Button();
+            this.gameClientPath_TextBox = new System.Windows.Forms.TextBox();
+            this.gameClientPath_Label = new System.Windows.Forms.Label();
+            this.dataDir_Button = new System.Windows.Forms.Button();
+            this.dataDir_TextBox = new System.Windows.Forms.TextBox();
+            this.dataDir_CheckBox = new System.Windows.Forms.CheckBox();
+            this.dataDir_Label = new System.Windows.Forms.Label();
+            this.hglDir_Label = new System.Windows.Forms.Label();
+            this.hglDir_Button = new System.Windows.Forms.Button();
+            this.hglDir_TextBox = new System.Windows.Forms.TextBox();
+            this.ok_Button = new System.Windows.Forms.Button();
+            this.pathSettings_GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // pathSettings_GroupBox
             // 
-            this.groupBox1.Controls.Add(this.dataDirBrowse);
-            this.groupBox1.Controls.Add(this.dataDirTextBox);
-            this.groupBox1.Controls.Add(this.dataDirCheckBox);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.hglDirBrowse);
-            this.groupBox1.Controls.Add(this.hglDir);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(412, 145);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Directoy Settings";
+            this.pathSettings_GroupBox.Controls.Add(this.gameClientPath_Button);
+            this.pathSettings_GroupBox.Controls.Add(this.gameClientPath_TextBox);
+            this.pathSettings_GroupBox.Controls.Add(this.gameClientPath_Label);
+            this.pathSettings_GroupBox.Controls.Add(this.dataDir_Button);
+            this.pathSettings_GroupBox.Controls.Add(this.dataDir_TextBox);
+            this.pathSettings_GroupBox.Controls.Add(this.dataDir_CheckBox);
+            this.pathSettings_GroupBox.Controls.Add(this.dataDir_Label);
+            this.pathSettings_GroupBox.Controls.Add(this.hglDir_Label);
+            this.pathSettings_GroupBox.Controls.Add(this.hglDir_Button);
+            this.pathSettings_GroupBox.Controls.Add(this.hglDir_TextBox);
+            this.pathSettings_GroupBox.Location = new System.Drawing.Point(12, 12);
+            this.pathSettings_GroupBox.Name = "pathSettings_GroupBox";
+            this.pathSettings_GroupBox.Size = new System.Drawing.Size(413, 198);
+            this.pathSettings_GroupBox.TabIndex = 0;
+            this.pathSettings_GroupBox.TabStop = false;
+            this.pathSettings_GroupBox.Text = "Path Settings";
             // 
-            // dataDirBrowse
+            // gameClientPath_Button
             // 
-            this.dataDirBrowse.Location = new System.Drawing.Point(329, 112);
-            this.dataDirBrowse.Name = "dataDirBrowse";
-            this.dataDirBrowse.Size = new System.Drawing.Size(75, 23);
-            this.dataDirBrowse.TabIndex = 7;
-            this.dataDirBrowse.Text = "Browse";
-            this.dataDirBrowse.UseVisualStyleBackColor = true;
-            this.dataDirBrowse.Click += new System.EventHandler(this.dataDirBrowse_Click);
+            this.gameClientPath_Button.Location = new System.Drawing.Point(329, 166);
+            this.gameClientPath_Button.Name = "gameClientPath_Button";
+            this.gameClientPath_Button.Size = new System.Drawing.Size(75, 23);
+            this.gameClientPath_Button.TabIndex = 10;
+            this.gameClientPath_Button.Text = "Browse";
+            this.gameClientPath_Button.UseVisualStyleBackColor = true;
+            this.gameClientPath_Button.Click += new System.EventHandler(this.gameClientPath_Button_Click);
             // 
-            // dataDirTextBox
+            // gameClientPath_TextBox
             // 
-            this.dataDirTextBox.Location = new System.Drawing.Point(10, 115);
-            this.dataDirTextBox.Name = "dataDirTextBox";
-            this.dataDirTextBox.Size = new System.Drawing.Size(313, 20);
-            this.dataDirTextBox.TabIndex = 6;
+            this.gameClientPath_TextBox.Location = new System.Drawing.Point(10, 169);
+            this.gameClientPath_TextBox.Name = "gameClientPath_TextBox";
+            this.gameClientPath_TextBox.Size = new System.Drawing.Size(313, 20);
+            this.gameClientPath_TextBox.TabIndex = 9;
+            this.gameClientPath_TextBox.Click += new System.EventHandler(this.gameClientPath_Button_Click);
             // 
-            // dataDirCheckBox
+            // gameClientPath_Label
             // 
-            this.dataDirCheckBox.AutoSize = true;
-            this.dataDirCheckBox.Checked = true;
-            this.dataDirCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.dataDirCheckBox.Location = new System.Drawing.Point(7, 92);
-            this.dataDirCheckBox.Name = "dataDirCheckBox";
-            this.dataDirCheckBox.Size = new System.Drawing.Size(72, 17);
-            this.dataDirCheckBox.TabIndex = 5;
-            this.dataDirCheckBox.Text = "As Above";
-            this.dataDirCheckBox.UseVisualStyleBackColor = true;
-            this.dataDirCheckBox.CheckedChanged += new System.EventHandler(this.dataDirCheckBox_CheckedChanged);
+            this.gameClientPath_Label.AutoSize = true;
+            this.gameClientPath_Label.Location = new System.Drawing.Point(7, 153);
+            this.gameClientPath_Label.Name = "gameClientPath_Label";
+            this.gameClientPath_Label.Size = new System.Drawing.Size(58, 13);
+            this.gameClientPath_Label.TabIndex = 8;
+            this.gameClientPath_Label.Text = "Client Path";
             // 
-            // label2
+            // dataDir_Button
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 75);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(374, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Root Data Directory (this should be the dir that contains data && data_common)";
+            this.dataDir_Button.Location = new System.Drawing.Point(329, 112);
+            this.dataDir_Button.Name = "dataDir_Button";
+            this.dataDir_Button.Size = new System.Drawing.Size(75, 23);
+            this.dataDir_Button.TabIndex = 7;
+            this.dataDir_Button.Text = "Browse";
+            this.dataDir_Button.UseVisualStyleBackColor = true;
+            this.dataDir_Button.Click += new System.EventHandler(this.dataDir_Button_Clicked);
             // 
-            // label1
+            // dataDir_TextBox
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(186, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Hellgate: London Installation Directory";
+            this.dataDir_TextBox.Location = new System.Drawing.Point(10, 115);
+            this.dataDir_TextBox.Name = "dataDir_TextBox";
+            this.dataDir_TextBox.Size = new System.Drawing.Size(313, 20);
+            this.dataDir_TextBox.TabIndex = 6;
+            this.dataDir_TextBox.Click += new System.EventHandler(this.dataDir_Button_Clicked);
             // 
-            // hglDirBrowse
+            // dataDir_CheckBox
             // 
-            this.hglDirBrowse.Location = new System.Drawing.Point(329, 33);
-            this.hglDirBrowse.Name = "hglDirBrowse";
-            this.hglDirBrowse.Size = new System.Drawing.Size(75, 23);
-            this.hglDirBrowse.TabIndex = 2;
-            this.hglDirBrowse.Text = "Browse";
-            this.hglDirBrowse.UseVisualStyleBackColor = true;
-            this.hglDirBrowse.Click += new System.EventHandler(this.hglDirBrowse_Click);
+            this.dataDir_CheckBox.AutoSize = true;
+            this.dataDir_CheckBox.Checked = true;
+            this.dataDir_CheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.dataDir_CheckBox.Location = new System.Drawing.Point(7, 92);
+            this.dataDir_CheckBox.Name = "dataDir_CheckBox";
+            this.dataDir_CheckBox.Size = new System.Drawing.Size(72, 17);
+            this.dataDir_CheckBox.TabIndex = 5;
+            this.dataDir_CheckBox.Text = "As Above";
+            this.dataDir_CheckBox.UseVisualStyleBackColor = true;
+            this.dataDir_CheckBox.CheckedChanged += new System.EventHandler(this.dataDirCheckBox_CheckedChanged);
             // 
-            // hglDir
+            // dataDir_Label
             // 
-            this.hglDir.Location = new System.Drawing.Point(10, 36);
-            this.hglDir.Name = "hglDir";
-            this.hglDir.Size = new System.Drawing.Size(313, 20);
-            this.hglDir.TabIndex = 1;
+            this.dataDir_Label.AutoSize = true;
+            this.dataDir_Label.Location = new System.Drawing.Point(7, 75);
+            this.dataDir_Label.Name = "dataDir_Label";
+            this.dataDir_Label.Size = new System.Drawing.Size(374, 13);
+            this.dataDir_Label.TabIndex = 4;
+            this.dataDir_Label.Text = "Root Data Directory (this should be the dir that contains data && data_common)";
             // 
-            // okButton
+            // hglDir_Label
             // 
-            this.okButton.Location = new System.Drawing.Point(353, 201);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 1;
-            this.okButton.Text = "Ok";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            this.hglDir_Label.AutoSize = true;
+            this.hglDir_Label.Location = new System.Drawing.Point(7, 20);
+            this.hglDir_Label.Name = "hglDir_Label";
+            this.hglDir_Label.Size = new System.Drawing.Size(186, 13);
+            this.hglDir_Label.TabIndex = 3;
+            this.hglDir_Label.Text = "Hellgate: London Installation Directory";
+            // 
+            // hglDir_Button
+            // 
+            this.hglDir_Button.Location = new System.Drawing.Point(329, 33);
+            this.hglDir_Button.Name = "hglDir_Button";
+            this.hglDir_Button.Size = new System.Drawing.Size(75, 23);
+            this.hglDir_Button.TabIndex = 2;
+            this.hglDir_Button.Text = "Browse";
+            this.hglDir_Button.UseVisualStyleBackColor = true;
+            this.hglDir_Button.Click += new System.EventHandler(this.hglDirBrowse_Click);
+            // 
+            // hglDir_TextBox
+            // 
+            this.hglDir_TextBox.Location = new System.Drawing.Point(10, 36);
+            this.hglDir_TextBox.Name = "hglDir_TextBox";
+            this.hglDir_TextBox.Size = new System.Drawing.Size(313, 20);
+            this.hglDir_TextBox.TabIndex = 1;
+            this.hglDir_TextBox.Click += new System.EventHandler(this.hglDirBrowse_Click);
+            // 
+            // ok_Button
+            // 
+            this.ok_Button.Location = new System.Drawing.Point(349, 216);
+            this.ok_Button.Name = "ok_Button";
+            this.ok_Button.Size = new System.Drawing.Size(75, 23);
+            this.ok_Button.TabIndex = 1;
+            this.ok_Button.Text = "Ok";
+            this.ok_Button.UseVisualStyleBackColor = true;
+            this.ok_Button.Click += new System.EventHandler(this.okButton_Click);
             // 
             // Options
             // 
-            this.AcceptButton = this.okButton;
+            this.AcceptButton = this.ok_Button;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 273);
+            this.ClientSize = new System.Drawing.Size(437, 247);
             this.ControlBox = false;
-            this.Controls.Add(this.okButton);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.ok_Button);
+            this.Controls.Add(this.pathSettings_GroupBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Options";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Options";
             this.Load += new System.EventHandler(this.Options_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.pathSettings_GroupBox.ResumeLayout(false);
+            this.pathSettings_GroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button hglDirBrowse;
-        private System.Windows.Forms.TextBox hglDir;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button dataDirBrowse;
-        private System.Windows.Forms.TextBox dataDirTextBox;
-        private System.Windows.Forms.CheckBox dataDirCheckBox;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox pathSettings_GroupBox;
 
+        private System.Windows.Forms.Label hglDir_Label;
+        private System.Windows.Forms.Button hglDir_Button;
+        private System.Windows.Forms.TextBox hglDir_TextBox;
+
+        private System.Windows.Forms.CheckBox dataDir_CheckBox;
+        private System.Windows.Forms.Label dataDir_Label;
+        private System.Windows.Forms.Button dataDir_Button;
+        private System.Windows.Forms.TextBox dataDir_TextBox;
+
+        private System.Windows.Forms.Label gameClientPath_Label;
+        private System.Windows.Forms.TextBox gameClientPath_TextBox;
+        private System.Windows.Forms.Button gameClientPath_Button;
+
+        private System.Windows.Forms.Button ok_Button;
 
     }
 }

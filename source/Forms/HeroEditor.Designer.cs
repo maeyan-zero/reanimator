@@ -40,11 +40,12 @@ namespace Reanimator.Forms
             this.stats_GroupBox = new System.Windows.Forms.GroupBox();
             this.stats_ListBox = new System.Windows.Forms.ListBox();
             this.items_TabPage = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
             this.items_ListBox = new System.Windows.Forms.ListBox();
             this.save_Button = new System.Windows.Forms.Button();
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.stats_TabPage.SuspendLayout();
@@ -177,6 +178,15 @@ namespace Reanimator.Forms
             this.items_TabPage.Text = "Items";
             this.items_TabPage.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(213, 44);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(253, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Ignore this section for now. Select items from above.";
+            // 
             // items_ListBox
             // 
             this.items_ListBox.Dock = System.Windows.Forms.DockStyle.Left;
@@ -189,7 +199,7 @@ namespace Reanimator.Forms
             // 
             // save_Button
             // 
-            this.save_Button.Location = new System.Drawing.Point(599, 6);
+            this.save_Button.Location = new System.Drawing.Point(576, 4);
             this.save_Button.Name = "save_Button";
             this.save_Button.Size = new System.Drawing.Size(75, 23);
             this.save_Button.TabIndex = 3;
@@ -217,20 +227,22 @@ namespace Reanimator.Forms
             this.currentlyEditing_ComboBox.TabIndex = 2;
             this.currentlyEditing_ComboBox.SelectedIndexChanged += new System.EventHandler(this.currentlyEditing_ComboBox_SelectedIndexChanged);
             // 
-            // label1
+            // button1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(213, 44);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(253, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Ignore this section for now. Select items from above.";
+            this.button1.Location = new System.Drawing.Point(657, 4);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(106, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Launch Saved File";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(775, 580);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.currentlyEditing_ComboBox);
             this.Controls.Add(this.currentlyEditing_Label);
             this.Controls.Add(this.main_TabControl);
@@ -269,5 +281,6 @@ namespace Reanimator.Forms
         private System.Windows.Forms.Label name_Label;
         private System.Windows.Forms.TextBox name_TextBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
     }
 }

@@ -17,6 +17,7 @@ namespace Reanimator.Forms
         Unit heroUnit;
         ExcelTables excelTables;
         String filePath;
+        string savedPath;
 
         public HeroEditor(Unit unit, ExcelTables tables, String file)
         {
@@ -87,7 +88,7 @@ namespace Reanimator.Forms
                 bool hasExtraAttribute = false;
                 for (int j = 0; j < 3; j++)
                 {
-                    if (stat.StatAttribute(j) == null)
+                    if (stat.AttributeAt(j) == null)
                     {
                         break;
                     }
@@ -97,7 +98,7 @@ namespace Reanimator.Forms
                     eaValueLabel.Width = 40;
                     eaValueLabel.Top = 3 + heightOffset;
                     TextBox eaValueTextBox = new TextBox();
-                    eaValueTextBox.Text = stat.StatAttribute(j).ToString();
+                    eaValueTextBox.Text = stat.AttributeAt(j).ToString();
                     eaValueTextBox.Left = eaValueLabel.Right;
                     eaValueTextBox.Top = heightOffset;
                     eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j+1));
@@ -147,6 +148,7 @@ namespace Reanimator.Forms
             int startIndex = filePath.LastIndexOf("\\")+1;
             string characterName = filePath.Substring(startIndex, filePath.Length - startIndex - 4);
             FileStream saveFile = new FileStream(characterName + ".hg1", FileMode.Create, FileAccess.ReadWrite);
+            savedPath = saveFile.Name;
 
             // main header
             MainHeader mainHeader;
@@ -205,6 +207,18 @@ namespace Reanimator.Forms
             Unit unit = (Unit)currentlyEditing_ComboBox.SelectedItem;
 
             PopulateStats(unit);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(Config.gameClientPath, "-singleplayer -load\"" + savedPath + "\"");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to start game at:\n" + Config.gameClientPath + "\n\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

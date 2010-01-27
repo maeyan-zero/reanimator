@@ -195,22 +195,22 @@ namespace Reanimator
                     get { return statId; }
                 }
 
-                public Attribute StatAttribute1
+                public Attribute Attribute1
                 {
-                    get { if (attributes.Count <= 0) return null; else return attributes[0]; }
+                    get { return AttributeAt(0); }
                 }
 
-                public Attribute StatAttribute2
+                public Attribute Attribute2
                 {
-                    get { if (attributes.Count <= 1) return null; else return attributes[0]; }
+                    get { return AttributeAt(1); }
                 }
 
-                public Attribute StatAttribute3
+                public Attribute Attribute3
                 {
-                    get { if (attributes.Count == 2) return null; else return attributes[0]; }
+                    get { return AttributeAt(2); }
                 }
 
-                public Attribute StatAttribute(int index)
+                public Attribute AttributeAt(int index)
                 {
                     if (index >= attributes.Count)
                     {
@@ -234,7 +234,7 @@ namespace Reanimator
 
                 public override string ToString()
                 {
-                    return name;
+                    return name + " : (0x" + Id.ToString("X") +" : " + Id + ")";
                 }
 
                 public Values this[int index]
