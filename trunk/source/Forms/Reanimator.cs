@@ -22,7 +22,7 @@ namespace Reanimator
 
 
 
-      bool showInitializationMessage = true;
+      bool showInitializationMessage = false;
       private List<IPlugin> pluginList;
 
       public bool Register(IPlugin ipi)
@@ -34,6 +34,11 @@ namespace Reanimator
       public void ShowMessage(string message)
       {
         MessageBox.Show(message);
+      }
+
+      public void ShowMessage(string message, string title)
+      {
+        MessageBox.Show(message, title);
       }
 
       public void LoadPlugins()
@@ -75,10 +80,11 @@ namespace Reanimator
             if (ObjType != null)
             {
               IPlugin plugin = (IPlugin)Activator.CreateInstance(ObjType);
+              plugin.Parent = this;
               plugin.Host = this;
               plugin.HostMenu = this.menuStrip;
               plugin.HGLDirectory = Config.hglDir;
-              plugin.InitializePlugIn(true);
+              plugin.InitializePlugIn(showInitializationMessage);
             }
           }
           catch (Exception ex)

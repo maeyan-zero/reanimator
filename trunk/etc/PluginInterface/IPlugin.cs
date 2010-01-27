@@ -9,6 +9,8 @@ namespace PluginInterface
     string Name { get; }
     string Description { get; }
     string HGLDirectory { get; set; }
+
+    Form Parent { set; }
     IPluginHost Host { get; set; }
     MenuStrip HostMenu { get; set; }
     void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded);
@@ -18,6 +20,7 @@ namespace PluginInterface
   {
     bool Register(IPlugin ipi);
     void ShowMessage(string message);
+    void ShowMessage(string message, string title);
     IPlugin[] GetPluginList();
   }
 }

@@ -12,6 +12,8 @@ namespace PluginTest
     private string description;
     // The current hgl main folder
     private string hglDirectory;
+    // A reference to the parent form
+    private Form parent;
     // A reference to the plugin host
     private IPluginHost host;
     // A reference to the option bar for easy access
@@ -20,7 +22,7 @@ namespace PluginTest
     public PlugIn()
     {
       name = "Test";
-      description = "A small test plugin";
+      description = "A small test plugin.";
     }
 
     public string Name
@@ -36,6 +38,14 @@ namespace PluginTest
       get
       {
         return description;
+      }
+    }
+
+    public Form Parent
+    {
+      set
+      {
+        this.parent = value;
       }
     }
 
@@ -81,7 +91,7 @@ namespace PluginTest
     /// Initializes the plugin
     /// </summary>
     /// <param name="showSuccessMessage">True: Show a message window after the plugin was loaded successfully. False: Don't show this message</param>
-    public void InitializePlugIn(bool showSuccessMessage)
+    public void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded)
     {
       try
       {
@@ -111,7 +121,7 @@ namespace PluginTest
         ((ToolStripMenuItem)open[0]).DropDownItems.Add(entry);
 
         // When initialization is done display a success message
-        if (showSuccessMessage)
+        if (showMessageWhenSuccesfullyLoaded)
         {
           host.ShowMessage("PluginTest successfully initialized!");
         }

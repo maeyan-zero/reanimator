@@ -5,28 +5,28 @@ using System.Text;
 using PluginInterface;
 using System.Windows.Forms;
 
-namespace PluginViewer
+namespace ItemTransferPlugin
 {
   public class PlugIn : IPlugin
   {
     private string name;
     private string description;
-    private string hglDirectory;
     private Form parent;
     private IPluginHost host;
     private MenuStrip hostMenu;
+    private string hglDirectory;
 
     public PlugIn()
     {
-      name = "Plugin Viewer";
-      description = "Adds an option to display all loaded plugins.";
+      name = "Item Transfer";
+      description = "Adds an option to transfer items between characters.";
     }
 
     public string Name
     {
       get
       {
-        return name;
+        return this.name;
       }
     }
 
@@ -35,18 +35,6 @@ namespace PluginViewer
       get
       {
         return description;
-      }
-    }
-
-    public string HGLDirectory
-    {
-      get
-      {
-        return hglDirectory;
-      }
-      set
-      {
-        this.hglDirectory = value;
       }
     }
 
@@ -62,7 +50,7 @@ namespace PluginViewer
     {
       get
       {
-        return host;
+        return this.host;
       }
       set
       {
@@ -72,15 +60,27 @@ namespace PluginViewer
       }
     }
 
-    public System.Windows.Forms.MenuStrip HostMenu
+    public MenuStrip HostMenu
     {
       get
       {
-        return hostMenu;
+        return this.hostMenu;
       }
       set
       {
         this.hostMenu = value;
+      }
+    }
+
+    public string HGLDirectory
+    {
+      get
+      {
+        return this.hglDirectory;
+      }
+      set
+      {
+        this.hglDirectory = value;
       }
     }
 
@@ -95,19 +95,19 @@ namespace PluginViewer
         {
           toolsMenu = (ToolStripMenuItem)items[0];
 
-          ToolStripMenuItem pluginViewer = new ToolStripMenuItem("Show Plugins");
-          pluginViewer.Click += new EventHandler(pluginViewer_Click);
+          ToolStripMenuItem transferItem = new ToolStripMenuItem("Transfer Items");
+          transferItem.Click += new EventHandler(transferItem_Click);
 
-          toolsMenu.DropDownItems.Add(pluginViewer);
+          toolsMenu.DropDownItems.Add(transferItem);
 
           if (showMessageWhenSuccesfullyLoaded)
           {
-            host.ShowMessage("PluginViewer.dll loaded!");
+            host.ShowMessage("TransferItemPlugin.dll loaded!");
           }
         }
         else
         {
-            host.ShowMessage("Could not find menu entry \"toolsMenu!\"");
+          host.ShowMessage("Could not find menu entry \"toolsMenu!\"");
         }
       }
       catch (Exception ex)
@@ -116,12 +116,12 @@ namespace PluginViewer
       }
     }
 
-    void pluginViewer_Click(object sender, EventArgs e)
+    void transferItem_Click(object sender, EventArgs e)
     {
-      PluginViewerForm viewer = new PluginViewerForm(this.host.GetPluginList());
-      viewer.Text = this.name;
-      viewer.MdiParent = parent;
-      viewer.Show();
+      ItemTransferForm transfer = new ItemTransferForm();
+      transfer.Text = this.name;
+      transfer.MdiParent = parent;
+      transfer.Show();
     }
   }
 }

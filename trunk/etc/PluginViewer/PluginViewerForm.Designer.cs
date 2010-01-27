@@ -42,7 +42,7 @@
       this.lv_pluginList.FullRowSelect = true;
       this.lv_pluginList.Location = new System.Drawing.Point(0, 0);
       this.lv_pluginList.Name = "lv_pluginList";
-      this.lv_pluginList.Size = new System.Drawing.Size(314, 296);
+      this.lv_pluginList.Size = new System.Drawing.Size(464, 204);
       this.lv_pluginList.TabIndex = 0;
       this.lv_pluginList.UseCompatibleStateImageBehavior = false;
       this.lv_pluginList.View = System.Windows.Forms.View.Details;
@@ -55,15 +55,14 @@
       // columnHeader2
       // 
       this.columnHeader2.Text = "Description";
-      this.columnHeader2.Width = 210;
+      this.columnHeader2.Width = 360;
       // 
       // PluginViewerForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-      this.ClientSize = new System.Drawing.Size(314, 296);
+      this.ClientSize = new System.Drawing.Size(464, 204);
       this.Controls.Add(this.lv_pluginList);
-      this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
       this.Name = "PluginViewerForm";
       this.ShowIcon = false;
       this.Text = "Loaded Plugins";
