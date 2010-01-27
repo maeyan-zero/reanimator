@@ -410,8 +410,97 @@ namespace Reanimator
             this.Focus();
         }
 
+        private void Reanimator_ResizeEnd(object sender, EventArgs e)
+        {
+            Config.clientHeight = this.Height;
+            Config.clientWidth = this.Width;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        struct Header
+        {
+            public Int32 header;
+            public Int32 unknown1;
+            public Int32 count;
+            public Int32 unknown2;
+        }
+
+        struct StringBlock
+        {
+            public int unknown1;
+            public string stringId;
+            public int unknown2;
+            public string str;
+            public int unknown3;
+            public string language;
+            public string usage;
+            public string defaultString;
+            public int blockIndex;
+        }
+
+
         private void Reanimator_Load(object sender, EventArgs e)
         {
+            /*
+            FileStream test = new FileStream("strings_strings.xls.uni.cooked", FileMode.Open);
+            byte[] bytes = FileTools.StreamToByteArray(test);
+
+            int offset = 0;
+            Header header = (Header)FileTools.ByteArrayToStructure(bytes, typeof(Header), 0);
+            offset += Marshal.SizeOf(header);
+
+            List<StringBlock> stringBlocks = new List<StringBlock>();
+            for (int i = 0; i < header.count; i++)
+            {
+                StringBlock stringBlock;
+
+                stringBlock.unknown1 = FileTools.ByteArrayToInt32(bytes, offset);
+                offset += sizeof(Int32);
+
+                int count = FileTools.ByteArrayToInt32(bytes, offset);
+                offset += sizeof(Int32);
+                stringBlock.stringId = FileTools.ByteArrayToStringAnsi(bytes, offset);
+                offset += count+1;
+
+                stringBlock.unknown2 = FileTools.ByteArrayToInt32(bytes, offset);
+                offset += sizeof(Int32);
+
+                count = FileTools.ByteArrayToInt32(bytes, offset);
+                offset += sizeof(Int32);
+                stringBlock.str = FileTools.ByteArrayToStringUnicode(bytes, offset);
+                offset += count;
+
+                if (offset >= 0x152A0)
+                {
+                    int breakpoint = 1;
+                }
+
+                stringBlock.unknown3 = FileTools.ByteArrayToInt32(bytes, offset);
+                offset += sizeof(Int32);
+
+                count = FileTools.ByteArrayToInt32(bytes, offset);
+                offset += sizeof(Int32);
+                stringBlock.language = FileTools.ByteArrayToStringUnicode(bytes, offset);
+                offset += (count + 1) * 2;
+
+                count = FileTools.ByteArrayToInt32(bytes, offset);
+                offset += sizeof(Int32);
+                stringBlock.usage = FileTools.ByteArrayToStringUnicode(bytes, offset);
+                offset += (count + 1) * 2;
+
+                if (stringBlock.usage == "Singular")
+                {
+                    count = FileTools.ByteArrayToInt32(bytes, offset);
+                    offset += sizeof(Int32);
+                    stringBlock.defaultString = FileTools.ByteArrayToStringUnicode(bytes, offset);
+                    offset += (count + 1) * 2;
+                }
+
+                stringBlock.blockIndex = FileTools.ByteArrayToInt32(bytes, offset);
+                offset += sizeof(Int32);
+            }*/
+
+
             this.Height = Config.clientHeight;
             this.Width = Config.clientWidth;
             this.Show();
@@ -433,12 +522,8 @@ namespace Reanimator
               MessageBox.Show(ex.Message);
             }
             #endregion
-        }
 
-        private void Reanimator_ResizeEnd(object sender, EventArgs e)
-        {
-            Config.clientHeight = this.Height;
-            Config.clientWidth = this.Width;
+
         }
     }
 }

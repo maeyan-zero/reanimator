@@ -30,7 +30,7 @@ namespace Reanimator.Forms
             if (folderBrowserDialogue.ShowDialog(this) == DialogResult.OK)
             {
                 Config.hglDir = folderBrowserDialogue.SelectedPath;
-                hglDir.Text = Config.hglDir;
+                hglDir_TextBox.Text = Config.hglDir;
 
                 if (Config.dataDirsRootChecked)
                 {
@@ -41,29 +41,24 @@ namespace Reanimator.Forms
 
         private void dataDirCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            Config.dataDirsRootChecked = dataDirCheckBox.Checked;
+            Config.dataDirsRootChecked = dataDir_CheckBox.Checked;
             RefreshDataDir();
         }
 
         private void RefreshDataDir()
         {
-            if (dataDirCheckBox.Checked)
+            if (dataDir_CheckBox.Checked)
             {
                 Config.dataDirsRoot = Config.hglDir;
             }
 
-            dataDirTextBox.Text = Config.dataDirsRoot;
-            dataDirBrowse.Enabled = !dataDirCheckBox.Checked;
-            dataDirTextBox.Enabled = !dataDirCheckBox.Checked;
+            dataDir_TextBox.Text = Config.dataDirsRoot;
+            dataDir_Button.Enabled = !dataDir_CheckBox.Checked;
+            dataDir_TextBox.Enabled = !dataDir_CheckBox.Checked;
         }
 
-        private void dataDirBrowse_Click(object sender, EventArgs e)
+        private void dataDir_Button_Clicked(object sender, EventArgs e)
         {
-            if (!dataDirBrowse.Enabled)
-            {
-                return;
-            }
-
             FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog();
             folderBrowserDialogue.Description = "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London";
             folderBrowserDialogue.SelectedPath = Config.hglDir;
@@ -71,17 +66,30 @@ namespace Reanimator.Forms
             if (folderBrowserDialogue.ShowDialog(this) == DialogResult.OK)
             {
                 Config.dataDirsRoot = folderBrowserDialogue.SelectedPath;
-                dataDirTextBox.Text = Config.dataDirsRoot;
+                dataDir_TextBox.Text = Config.dataDirsRoot;
             }
         }
 
         private void Options_Load(object sender, EventArgs e)
         {
-            hglDir.Text = Config.hglDir;
-            dataDirTextBox.Text = Config.dataDirsRoot;
-            dataDirCheckBox.Checked = Config.dataDirsRootChecked;
-            dataDirBrowse.Enabled = !Config.dataDirsRootChecked;
-            dataDirTextBox.Enabled = !Config.dataDirsRootChecked;
+            hglDir_TextBox.Text = Config.hglDir;
+            dataDir_TextBox.Text = Config.dataDirsRoot;
+            dataDir_CheckBox.Checked = Config.dataDirsRootChecked;
+            dataDir_Button.Enabled = !Config.dataDirsRootChecked;
+            dataDir_TextBox.Enabled = !Config.dataDirsRootChecked;
+            gameClientPath_TextBox.Text = Config.gameClientPath;
+        }
+
+        private void gameClientPath_Button_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
+            if (openFileDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                Config.gameClientPath = openFileDialog.FileName;
+                gameClientPath_TextBox.Text = openFileDialog.FileName;
+            }
         }
     }
 }
