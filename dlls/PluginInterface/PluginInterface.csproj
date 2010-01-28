@@ -63,7 +63,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenericPlugin.cs" />
     <Compile Include="IPlugin.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Excel\Excel.csproj">
+      <Project>{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}</Project>
+      <Name>Excel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

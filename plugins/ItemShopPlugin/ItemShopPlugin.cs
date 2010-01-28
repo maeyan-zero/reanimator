@@ -8,81 +8,12 @@ using System.IO;
 
 namespace ItemShopPlugin
 {
-  public class PlugIn : IPlugin
+  public class PlugIn : GenericPlugin
   {
-    private string name;
-    private string description;
-    private Form parent;
-    private IPluginHost host;
-    private MenuStrip hostMenu;
-    private string hglDirectory;
-
     public PlugIn()
     {
       name = "Item Shop";
       description = "Adds an option to purchase special items that aren't available in game as well as new options for Reanimator (with your Palladium/Items).";
-    }
-
-    public string Name
-    {
-      get
-      {
-        return this.name;
-      }
-    }
-
-    public string Description
-    {
-      get
-      {
-        return description;
-      }
-    }
-
-    public Form Parent
-    {
-      set
-      {
-        this.parent = value;
-      }
-    }
-
-    public IPluginHost Host
-    {
-      get
-      {
-        return this.host;
-      }
-      set
-      {
-        this.host = value;
-
-        host.Register(this);
-      }
-    }
-
-    public MenuStrip HostMenu
-    {
-      get
-      {
-        return this.hostMenu;
-      }
-      set
-      {
-        this.hostMenu = value;
-      }
-    }
-
-    public string HGLDirectory
-    {
-      get
-      {
-        return this.hglDirectory;
-      }
-      set
-      {
-        this.hglDirectory = value;
-      }
     }
 
     public void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded)
@@ -101,10 +32,7 @@ namespace ItemShopPlugin
 
           toolsMenu.DropDownItems.Add(clientPatcher);
 
-          if (showMessageWhenSuccesfullyLoaded)
-          {
-            host.ShowMessage("ItemShopPlugin.dll loaded!");
-          }
+          base.InitializePlugIn(showMessageWhenSuccesfullyLoaded);
         }
         else
         {

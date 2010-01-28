@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Windows.Forms;
+using Reanimator.Excel;
 
 namespace PluginInterface
 {
@@ -8,11 +9,11 @@ namespace PluginInterface
     {
         string Name { get; }
         string Description { get; }
-        string HGLDirectory { get; set; }
 
         Form Parent { set; }
-        IPluginHost Host { get; set; }
-        MenuStrip HostMenu { get; set; }
+        IPluginHost Host { set; }
+        MenuStrip HostMenu { set; }
+
         void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded);
     }
 
@@ -21,6 +22,11 @@ namespace PluginInterface
         bool Register(IPlugin ipi);
         void ShowMessage(string message);
         void ShowMessage(string message, string title);
+
+        string GetHGLDirectory();
+        string GetRootDir();
+        string GetClientDir();
+        ExcelTables GetExcelTables();
         IPlugin[] GetPluginList();
     }
 }
