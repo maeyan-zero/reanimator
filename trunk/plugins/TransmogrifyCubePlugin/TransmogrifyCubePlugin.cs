@@ -86,42 +86,39 @@ namespace TransmogrifyCubePlugin
 
     public void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded)
     {
-      //try
-      //{
-      //  ToolStripItem[] items = hostMenu.Items.Find("toolsMenu", true);
-      //  ToolStripMenuItem toolsMenu;
+      try
+      {
+        ToolStripItem[] items = hostMenu.Items.Find("toolsMenu", true);
+        ToolStripMenuItem toolsMenu;
 
-      //  if (items.Length != 0)
-      //  {
-      //    toolsMenu = (ToolStripMenuItem)items[0];
+        if (items.Length != 0)
+        {
+          toolsMenu = (ToolStripMenuItem)items[0];
 
-      //    ToolStripMenuItem transferItem = new ToolStripMenuItem("Transfer Items");
-      //    transferItem.Click += new EventHandler(transferItem_Click);
+          ToolStripMenuItem transmogrifyItem = new ToolStripMenuItem("Transmogrify Items");
+          transmogrifyItem.Click += new EventHandler(transmogrifyItem_Click);
 
-      //    toolsMenu.DropDownItems.Add(transferItem);
+          toolsMenu.DropDownItems.Add(transmogrifyItem);
 
-      //    if (showMessageWhenSuccesfullyLoaded)
-      //    {
-      //      host.ShowMessage("TransferItemPlugin.dll loaded!");
-      //    }
-      //  }
-      //  else
-      //  {
-      //    host.ShowMessage("Could not find menu entry \"toolsMenu!\"");
-      //  }
-      //}
-      //catch (Exception ex)
-      //{
-      //  host.ShowMessage(ex.Message);
-      //}
+          if (showMessageWhenSuccesfullyLoaded)
+          {
+            host.ShowMessage("TransmogrifyCubePlugin.dll loaded!");
+          }
+        }
+        else
+        {
+          host.ShowMessage("Could not find menu entry \"toolsMenu!\"");
+        }
+      }
+      catch (Exception ex)
+      {
+        host.ShowMessage(ex.Message);
+      }
     }
 
-    void transferItem_Click(object sender, EventArgs e)
+    void transmogrifyItem_Click(object sender, EventArgs e)
     {
-      //ItemTransferForm transfer = new ItemTransferForm();
-      //transfer.Text = this.name;
-      //transfer.MdiParent = parent;
-      //transfer.Show();
+      host.ShowMessage("Not implemented yet");
     }
   }
 }
