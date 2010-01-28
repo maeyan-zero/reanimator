@@ -79,6 +79,7 @@
     <Compile Include="Excel\ExcelTables.cs" />
     <Compile Include="Crc32.cs" />
     <Compile Include="CryptTools.cs" />
+    <Compile Include="Excel\Items.cs" />
     <Compile Include="Excel\States.cs" />
     <Compile Include="Excel\Stats.cs" />
     <Compile Include="Excel\Treasure.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Forms\Reanimator.Designer.cs">
       <DependentUpon>Reanimator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Strings.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>

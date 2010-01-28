@@ -25,6 +25,7 @@ namespace Reanimator
         }
 
         FileStream dataFile;
+        Strings strings;
 
         public IndexExplorer(FileStream file, Index idx)
         {
@@ -39,6 +40,23 @@ namespace Reanimator
             {
                 MessageBox.Show("Unable to open accompanying data file:\n" + dataFileName + "\nYou will be unable to extract any files.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+
+            InitializeComponent();
+            this.dataGridView.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(dataGridView_CellContextMenuStripNeeded);
+            this.dataGridView.RowHeadersVisible = false;
+
+            //Initialize the DataGridViewColumn control
+            IndexFileCheckBoxColumn.DefaultCellStyle.DataSourceNullValue = false;
+            IndexFileCheckBoxColumn.Frozen = false;
+            IndexFileCheckBoxColumn.Width = 24;
+            IndexFileCheckBoxColumn.TrueValue = true;
+            IndexFileCheckBoxColumn.FalseValue = false;
+            IndexFileCheckBoxColumn.Name = "IndexFileCheckBoxColumn";
+        }
+
+        public IndexExplorer(Strings strs)
+        {
+            strings = strs;
 
             InitializeComponent();
             this.dataGridView.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(dataGridView_CellContextMenuStripNeeded);
@@ -199,7 +217,7 @@ namespace Reanimator
                 fileOut.Close();
             }
 
-            MessageBox.Show(files.Length + " file(s) saved!", "Notice");
+            MessageBox.Show(files.Length + " file(s) saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private byte[] ReadDataFile(Index.FileIndex file)
@@ -224,7 +242,7 @@ namespace Reanimator
         //When a new DataSource is loaded display some information
         private void dataGridView_DataSourceChanged(object sender, EventArgs e)
         {
-            this.l_infoText.Text = "Contains " + ((Index.FileIndex[])this.dataGridView.DataSource).Length + " files";
+           // this.l_infoText.Text = "Contains " + ((Index.FileIndex[])this.dataGridView.DataSource).Length + " files";
         }
 
         //Just for debugging purposes... uncomment this section and the event for final use
@@ -327,6 +345,5 @@ namespace Reanimator
         {
             SelectAllEntries(false);
         }
-
     }
 }

@@ -234,7 +234,7 @@ namespace Reanimator
 
                 public override string ToString()
                 {
-                    return name + " : (0x" + Id.ToString("X") +" : " + Id + ")";
+                    return name + " : (0x" + Id.ToString("X") + " : " + Id + ")";
                 }
 
                 public Values this[int index]

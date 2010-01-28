@@ -228,7 +228,5 @@
         private System.Windows.Forms.Button b_unCheckAll;
         private System.Windows.Forms.Button b_unSelectAll;
         private System.Windows.Forms.Label l_searchResults;
-
-
     }
 }

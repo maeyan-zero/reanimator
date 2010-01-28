@@ -25,12 +25,15 @@ namespace Reanimator.Excel
         Stats stats;
         public Stats Stats
         {
-            get
-            {
-                return this.stats;
-            }
+            get { return stats; }
         }
         States states;
+
+        Items items;
+        public Items Items
+        {
+            get { return items; }
+        }
 
         public ExcelTables(byte[] data) : base(data) {}
 
