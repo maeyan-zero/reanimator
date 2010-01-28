@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Reanimator
 {
@@ -23,10 +24,10 @@ namespace Reanimator
             public string StringId { get; set; }
             public int Unknown2 { get; set; }
             public string String { get; set; }
-            public int UsageFlag { get; set; }
-            public string Language { get; set; }
-            public string Usage { get; set; }
-            public string DefaultString { get; set; }
+            public int attributeCount;
+            public string Attribute1 { get; set; }
+            public string Attribute2 { get; set; }
+            public string Attribute3 { get; set; }
         }
 
         byte[] fileData;
@@ -68,45 +69,34 @@ namespace Reanimator
                     stringBlock.String = FileTools.ByteArrayToStringUnicode(fileData, offset);
                     offset += count;
 
-                    if (i >= 0x2eD && i % 20 == 0)
-                    //if (offset >= 0x152A0)
-                    {
-                        int breakpoint = 1;
-                    }
-
-                    stringBlock.UsageFlag = FileTools.ByteArrayToInt32(fileData, offset);
+                    stringBlock.attributeCount = FileTools.ByteArrayToInt32(fileData, offset);
                     offset += sizeof(Int32);
 
-                    if (stringBlock.UsageFlag == 0x00) // 0x01 = Plural next, 0x02 = Singular next
+                    if (stringBlock.attributeCount > 3)
+                    {
+                        MessageBox.Show("Unexpected Attribute Count!\n\nCount: " + stringBlock.attributeCount, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+
+                    for (int j = 0; j < stringBlock.attributeCount; j++)
                     {
                         count = FileTools.ByteArrayToInt32(fileData, offset);
                         offset += sizeof(Int32);
-                        stringBlock.Language = FileTools.ByteArrayToStringUnicode(fileData, offset);
+
+                        if (j == 0)
+                        {
+                            stringBlock.Attribute1 = FileTools.ByteArrayToStringUnicode(fileData, offset);
+                        }
+                        else if (j == 1)
+                        {
+                            stringBlock.Attribute2 = FileTools.ByteArrayToStringUnicode(fileData, offset);
+                        }
+                        else if (j == 2)
+                        {
+                            stringBlock.Attribute3 = FileTools.ByteArrayToStringUnicode(fileData, offset);
+                        }
+
                         offset += (count + 1) * 2;
                     }
-                    else
-                    {
-                        stringBlock.Language = "NOT SET";
-                    }
-
-                    count = FileTools.ByteArrayToInt32(fileData, offset);
-                    offset += sizeof(Int32);
-                    stringBlock.Usage = FileTools.ByteArrayToStringUnicode(fileData, offset);
-                    offset += (count + 1) * 2;
-
-                    if (stringBlock.Usage == "Singular")
-                    {
-                        count = FileTools.ByteArrayToInt32(fileData, offset);
-                        offset += sizeof(Int32);
-                        stringBlock.DefaultString = FileTools.ByteArrayToStringUnicode(fileData, offset);
-                        offset += (count + 1) * 2;
-                    }
-                    else
-                    {
-                        stringBlock.DefaultString = "NOT SET";
-                    }
-
-
 
                     strings.Add(stringBlock);
                 }
