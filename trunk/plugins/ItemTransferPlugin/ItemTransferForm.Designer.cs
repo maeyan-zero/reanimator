@@ -29,13 +29,13 @@
     private void InitializeComponent()
     {
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.clb_char1 = new System.Windows.Forms.CheckedListBox();
       this.cb_char1 = new System.Windows.Forms.ComboBox();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
+      this.clb_char2 = new System.Windows.Forms.CheckedListBox();
       this.cb_char2 = new System.Windows.Forms.ComboBox();
       this.button1 = new System.Windows.Forms.Button();
       this.button2 = new System.Windows.Forms.Button();
-      this.clb_char1 = new System.Windows.Forms.CheckedListBox();
-      this.clb_char2 = new System.Windows.Forms.CheckedListBox();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.SuspendLayout();
@@ -50,6 +50,14 @@
       this.groupBox1.TabIndex = 0;
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Character 1";
+      // 
+      // clb_char1
+      // 
+      this.clb_char1.FormattingEnabled = true;
+      this.clb_char1.Location = new System.Drawing.Point(6, 46);
+      this.clb_char1.Name = "clb_char1";
+      this.clb_char1.Size = new System.Drawing.Size(188, 184);
+      this.clb_char1.TabIndex = 1;
       // 
       // cb_char1
       // 
@@ -71,6 +79,14 @@
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "Character 2";
       // 
+      // clb_char2
+      // 
+      this.clb_char2.FormattingEnabled = true;
+      this.clb_char2.Location = new System.Drawing.Point(6, 46);
+      this.clb_char2.Name = "clb_char2";
+      this.clb_char2.Size = new System.Drawing.Size(188, 184);
+      this.clb_char2.TabIndex = 2;
+      // 
       // cb_char2
       // 
       this.cb_char2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -86,7 +102,7 @@
       this.button1.Name = "button1";
       this.button1.Size = new System.Drawing.Size(28, 21);
       this.button1.TabIndex = 2;
-      this.button1.Text = "<";
+      this.button1.Text = "<<";
       this.button1.UseVisualStyleBackColor = true;
       // 
       // button2
@@ -95,24 +111,8 @@
       this.button2.Name = "button2";
       this.button2.Size = new System.Drawing.Size(28, 21);
       this.button2.TabIndex = 3;
-      this.button2.Text = ">";
+      this.button2.Text = ">>";
       this.button2.UseVisualStyleBackColor = true;
-      // 
-      // clb_char1
-      // 
-      this.clb_char1.FormattingEnabled = true;
-      this.clb_char1.Location = new System.Drawing.Point(6, 46);
-      this.clb_char1.Name = "clb_char1";
-      this.clb_char1.Size = new System.Drawing.Size(188, 184);
-      this.clb_char1.TabIndex = 1;
-      // 
-      // clb_char2
-      // 
-      this.clb_char2.FormattingEnabled = true;
-      this.clb_char2.Location = new System.Drawing.Point(6, 46);
-      this.clb_char2.Name = "clb_char2";
-      this.clb_char2.Size = new System.Drawing.Size(188, 184);
-      this.clb_char2.TabIndex = 2;
       // 
       // ItemTransferForm
       // 

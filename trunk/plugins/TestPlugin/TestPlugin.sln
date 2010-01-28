@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItemTransferPlugin", "..\It
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginViewerPlugin", "..\PluginViewerPlugin\PluginViewerPlugin.csproj", "{2471A97A-27BE-4CEF-BD59-913E9CFC1ED0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransmogrifyCubePlugin", "..\TransmogrifyCubePlugin\TransmogrifyCubePlugin.csproj", "{D01475F3-1004-4687-941B-525E9C2453A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,12 @@ Global
 		{2471A97A-27BE-4CEF-BD59-913E9CFC1ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2471A97A-27BE-4CEF-BD59-913E9CFC1ED0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2471A97A-27BE-4CEF-BD59-913E9CFC1ED0}.Release|x86.ActiveCfg = Release|Any CPU
+		{D01475F3-1004-4687-941B-525E9C2453A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D01475F3-1004-4687-941B-525E9C2453A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D01475F3-1004-4687-941B-525E9C2453A6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D01475F3-1004-4687-941B-525E9C2453A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D01475F3-1004-4687-941B-525E9C2453A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D01475F3-1004-4687-941B-525E9C2453A6}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,6 +14,8 @@ namespace ItemShopPlugin
     public ItemShopForm()
     {
       InitializeComponent();
+
+      MessageBox.Show("Each player starts  with a fixed amount of points he can spend on modifying his character.\nTo get new points, the player has to sell stuff/use Palladium");
     }
   }
 }
