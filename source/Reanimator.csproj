@@ -161,7 +161,6 @@
       <DependentUpon>Reanimator.cs</DependentUpon>
     </Compile>
     <Compile Include="Strings.cs" />
-    <Compile Include="Unit_old.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExampleMod.xml" />
