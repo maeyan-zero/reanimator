@@ -9,84 +9,15 @@ using Reanimator;
 
 namespace ClientPatcherPlugin
 {
-  public class PlugIn : IPlugin
+  public class PlugIn : GenericPlugin
   {
-    private string name;
-    private string description;
-    private Form parent;
-    private IPluginHost host;
-    private MenuStrip hostMenu;
-    private string hglDirectory;
-
     public PlugIn()
     {
       name = "Client Patcher";
       description = "Adds an option to patch the SP client to support \"Hardcore\" mode.";
     }
 
-    public string Name
-    {
-      get
-      {
-        return this.name;
-      }
-    }
-
-    public string Description
-    {
-      get
-      {
-        return description;
-      }
-    }
-
-    public Form Parent
-    {
-      set
-      {
-        this.parent = value;
-      }
-    }
-
-    public IPluginHost Host
-    {
-      get
-      {
-        return this.host;
-      }
-      set
-      {
-        this.host = value;
-
-        host.Register(this);
-      }
-    }
-
-    public MenuStrip HostMenu
-    {
-      get
-      {
-        return this.hostMenu;
-      }
-      set
-      {
-        this.hostMenu = value;
-      }
-    }
-
-    public string HGLDirectory
-    {
-      get
-      {
-        return this.hglDirectory;
-      }
-      set
-      {
-        this.hglDirectory = value;
-      }
-    }
-
-    public void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded)
+    public override void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded)
     {
       try
       {
@@ -102,10 +33,7 @@ namespace ClientPatcherPlugin
 
           toolsMenu.DropDownItems.Add(clientPatcher);
 
-          if (showMessageWhenSuccesfullyLoaded)
-          {
-            host.ShowMessage("ClientPatcherPlugin.dll loaded!");
-          }
+          base.InitializePlugIn(showMessageWhenSuccesfullyLoaded);
         }
         else
         {
@@ -122,7 +50,7 @@ namespace ClientPatcherPlugin
     {
       OpenFileDialog openFileDialog = new OpenFileDialog();
       openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-      openFileDialog.InitialDirectory = hglDirectory + "\\SP_x64";
+      openFileDialog.InitialDirectory = host.GetHGLDirectory() + "\\SP_x64";
       if (openFileDialog.ShowDialog() != DialogResult.OK)
       {
         return;
