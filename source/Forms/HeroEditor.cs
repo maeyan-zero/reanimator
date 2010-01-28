@@ -56,7 +56,7 @@ namespace Reanimator.Forms
             for (int i = 0; i < items.Length; i++)
             {
                 Unit item = items[i];
-                item.Name = "Item #" + i;
+                item.Name = "Item #" + item.unknownFlagValue;
                 this.currentlyEditing_ComboBox.Items.Add(item);
             }
         }

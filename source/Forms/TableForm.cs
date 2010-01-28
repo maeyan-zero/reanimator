@@ -241,7 +241,7 @@ namespace Reanimator
 
         private void dataGridView_DataSourceChanged(object sender, EventArgs e)
         {
-            infoText_Label.Text = "Contains " + ((Array)dataGridView.DataSource).Length + " files.";
+            infoText_Label.Text = "Contains " + ((Array)dataGridView.DataSource).Length + " entries.";
         }
 
         #region debug help

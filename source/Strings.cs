@@ -19,7 +19,7 @@ namespace Reanimator
 
         public struct StringBlock
         {
-            public int BlockId { get; set; }
+            public int ReferenceId { get; set; }
             public int Unknown1 { get; set; }
             public string StringId { get; set; }
             public int Unknown2 { get; set; }
@@ -50,7 +50,7 @@ namespace Reanimator
                 {
                     StringBlock stringBlock = new StringBlock();
 
-                    stringBlock.BlockId = FileTools.ByteArrayToInt32(fileData, offset);
+                    stringBlock.ReferenceId = FileTools.ByteArrayToInt32(fileData, offset);
                     offset += sizeof(Int32);
 
                     stringBlock.Unknown1 = FileTools.ByteArrayToInt32(fileData, offset);
