@@ -37,5 +37,18 @@ namespace Reanimator.Forms
         {
             progressBar1.Increment(progressBar1.Step);
         }
+
+        // Each time the text is modified (a new item is completed) let the progressbar progress and refresh the form
+        private void currentItemLabel_TextChanged(object sender, EventArgs e)
+        {
+          progressBar1.PerformStep();
+          this.Refresh();
+        }
+
+        // Returns the currentItemLabel for setting its text
+        public Label GetItemLabel()
+        {
+          return currentItemLabel;
+        }
     }
 }
