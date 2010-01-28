@@ -18,98 +18,98 @@ namespace Reanimator
 {
     public partial class Reanimator : Form, IPluginHost
     {
-      #region PLUGINS
+        #region PLUGINS
 
 
 
-      bool showInitializationMessage = false;
-      private List<IPlugin> pluginList;
+        bool showInitializationMessage = false;
+        private List<IPlugin> pluginList;
 
-      public bool Register(IPlugin ipi)
-      {
-        pluginList.Add(ipi);
-        return true;
-      }
-
-      public void ShowMessage(string message)
-      {
-        MessageBox.Show(message);
-      }
-
-      public void ShowMessage(string message, string title)
-      {
-        MessageBox.Show(message, title);
-      }
-
-      public void LoadPlugins()
-      {
-        string path = Application.StartupPath + @"\Plugins\";
-
-        if (!Directory.Exists(path))
+        public bool Register(IPlugin ipi)
         {
-          Directory.CreateDirectory(path);
+            pluginList.Add(ipi);
+            return true;
         }
-        string[] pluginFiles = Directory.GetFiles(path, "*.dll");
 
-        for (int i = 0; i < pluginFiles.Length; i++)
+        public void ShowMessage(string message)
         {
-          string args = pluginFiles[i].Substring(
-            pluginFiles[i].LastIndexOf("\\") + 1,
-            pluginFiles[i].IndexOf(".dll") -
-            pluginFiles[i].LastIndexOf("\\") - 1);
-
-          Type ObjType = null;
-          // load the dll
-          try
-          {
-            // load it
-            Assembly ass = null;
-            ass = Assembly.LoadFile(pluginFiles[i]);
-            if (ass != null)
-            {
-              ObjType = ass.GetType(args + ".PlugIn");
-            }
-          }
-          catch (Exception ex)
-          {
-            Console.WriteLine(ex.Message);
-          }
-          try
-          {
-            // OK Lets create the object as we have the Report Type
-            if (ObjType != null)
-            {
-              IPlugin plugin = (IPlugin)Activator.CreateInstance(ObjType);
-              plugin.Parent = this;
-              plugin.Host = this;
-              plugin.HostMenu = this.menuStrip;
-              plugin.HGLDirectory = Config.hglDir;
-              plugin.InitializePlugIn(showInitializationMessage);
-            }
-          }
-          catch (Exception ex)
-          {
-            Console.WriteLine(ex.Message);
-          }
+            MessageBox.Show(message);
         }
-      }
 
-      public IPlugin[] GetPluginList()
-      {
-        return pluginList.ToArray();
-      }
+        public void ShowMessage(string message, string title)
+        {
+            MessageBox.Show(message, title);
+        }
+
+        public void LoadPlugins()
+        {
+            string path = Application.StartupPath + @"\Plugins\";
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            string[] pluginFiles = Directory.GetFiles(path, "*.dll");
+
+            for (int i = 0; i < pluginFiles.Length; i++)
+            {
+                string args = pluginFiles[i].Substring(
+                  pluginFiles[i].LastIndexOf("\\") + 1,
+                  pluginFiles[i].IndexOf(".dll") -
+                  pluginFiles[i].LastIndexOf("\\") - 1);
+
+                Type ObjType = null;
+                // load the dll
+                try
+                {
+                    // load it
+                    Assembly ass = null;
+                    ass = Assembly.LoadFile(pluginFiles[i]);
+                    if (ass != null)
+                    {
+                        ObjType = ass.GetType(args + ".PlugIn");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                try
+                {
+                    // OK Lets create the object as we have the Report Type
+                    if (ObjType != null)
+                    {
+                        IPlugin plugin = (IPlugin)Activator.CreateInstance(ObjType);
+                        plugin.Parent = this;
+                        plugin.Host = this;
+                        plugin.HostMenu = this.menuStrip;
+                        plugin.HGLDirectory = Config.hglDir;
+                        plugin.InitializePlugIn(showInitializationMessage);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        public IPlugin[] GetPluginList()
+        {
+            return pluginList.ToArray();
+        }
 
 
 
 
-      #endregion
+        #endregion
 
         private Options options;
         private List<string> indexFilesOpen;
         private ExcelTables excelTables;
 
         private int childFormNumber = 0;
-  
+
         public Reanimator()
         {
             options = new Options();
@@ -144,6 +144,10 @@ namespace Reanimator
                 else if (openFileDialog.FileName.EndsWith("hg1"))
                 {
                     OpenFile_HG1(openFileDialog.FileName);
+                }
+                else if (openFileDialog.FileName.EndsWith("xls.uni.cooked"))
+                {
+                    OpenFile_STRINGS(openFileDialog.FileName);
                 }
                 else if (openFileDialog.FileName.EndsWith("cooked"))
                 {
@@ -188,6 +192,18 @@ namespace Reanimator
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
             {
                 OpenFile_COOKED(openFileDialog.FileName);
+            }
+        }
+
+        private void StringsFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Strings Files (*.xls.uni.cooked)|*.xls.uni.cooked|All Files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Config.dataDirsRoot;
+
+            if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
+            {
+                OpenFile_STRINGS(openFileDialog.FileName);
             }
         }
 
@@ -255,9 +271,28 @@ namespace Reanimator
             return true;
         }
 
-        private void OpenFile_COOKED(string szFileName)
+        private void OpenFile_COOKED(String fileName)
         {
             MessageBox.Show("Todo");
+        }
+
+        private void OpenFile_STRINGS(String fileName)
+        {
+            try
+            {
+                FileStream stringsFile = new FileStream(fileName, FileMode.Open);
+                Strings strings = new Strings(FileTools.StreamToByteArray(stringsFile));
+                IndexExplorer indexExplorer = new IndexExplorer(strings);
+                Strings.StringBlock[] stringBlocks = strings.GetFileTable();
+                indexExplorer.dataGridView.DataSource = stringBlocks;
+                indexExplorer.Text += ": " + fileName;
+                indexExplorer.MdiParent = this;
+                indexExplorer.Show();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to open file!\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void indexExplorer_FormClosed(object sender, FormClosedEventArgs e)
@@ -342,7 +377,7 @@ namespace Reanimator
             //update the Plugins with the new HGL path
             foreach (IPlugin plugin in pluginList)
             {
-              plugin.HGLDirectory = Config.dataDirsRoot;
+                plugin.HGLDirectory = Config.dataDirsRoot;
             }
 
             this.BringToFront();
@@ -422,97 +457,14 @@ namespace Reanimator
             Config.clientWidth = this.Width;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct Header
-        {
-            public Int32 header;
-            public Int32 unknown1;
-            public Int32 count;
-            public Int32 unknown2;
-        }
-
-        struct StringBlock
-        {
-            public int unknown1;
-            public string stringId;
-            public int unknown2;
-            public string str;
-            public int unknown3;
-            public string language;
-            public string usage;
-            public string defaultString;
-            public int blockIndex;
-        }
-
-
         private void Reanimator_Load(object sender, EventArgs e)
         {
-            /*
-            FileStream test = new FileStream("strings_strings.xls.uni.cooked", FileMode.Open);
-            byte[] bytes = FileTools.StreamToByteArray(test);
-
-            int offset = 0;
-            Header header = (Header)FileTools.ByteArrayToStructure(bytes, typeof(Header), 0);
-            offset += Marshal.SizeOf(header);
-
-            List<StringBlock> stringBlocks = new List<StringBlock>();
-            for (int i = 0; i < header.count; i++)
-            {
-                StringBlock stringBlock;
-
-                stringBlock.unknown1 = FileTools.ByteArrayToInt32(bytes, offset);
-                offset += sizeof(Int32);
-
-                int count = FileTools.ByteArrayToInt32(bytes, offset);
-                offset += sizeof(Int32);
-                stringBlock.stringId = FileTools.ByteArrayToStringAnsi(bytes, offset);
-                offset += count+1;
-
-                stringBlock.unknown2 = FileTools.ByteArrayToInt32(bytes, offset);
-                offset += sizeof(Int32);
-
-                count = FileTools.ByteArrayToInt32(bytes, offset);
-                offset += sizeof(Int32);
-                stringBlock.str = FileTools.ByteArrayToStringUnicode(bytes, offset);
-                offset += count;
-
-                if (offset >= 0x152A0)
-                {
-                    int breakpoint = 1;
-                }
-
-                stringBlock.unknown3 = FileTools.ByteArrayToInt32(bytes, offset);
-                offset += sizeof(Int32);
-
-                count = FileTools.ByteArrayToInt32(bytes, offset);
-                offset += sizeof(Int32);
-                stringBlock.language = FileTools.ByteArrayToStringUnicode(bytes, offset);
-                offset += (count + 1) * 2;
-
-                count = FileTools.ByteArrayToInt32(bytes, offset);
-                offset += sizeof(Int32);
-                stringBlock.usage = FileTools.ByteArrayToStringUnicode(bytes, offset);
-                offset += (count + 1) * 2;
-
-                if (stringBlock.usage == "Singular")
-                {
-                    count = FileTools.ByteArrayToInt32(bytes, offset);
-                    offset += sizeof(Int32);
-                    stringBlock.defaultString = FileTools.ByteArrayToStringUnicode(bytes, offset);
-                    offset += (count + 1) * 2;
-                }
-
-                stringBlock.blockIndex = FileTools.ByteArrayToInt32(bytes, offset);
-                offset += sizeof(Int32);
-            }*/
-
-
             this.Height = Config.clientHeight;
             this.Width = Config.clientWidth;
             this.Show();
             this.Refresh();
             // this fixes a weird windows API bug causing the ShowDialog to minimise the main client
-            this.OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, this.Left+10, this.Top+10, 0));
+            this.OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, this.Left + 10, this.Top + 10, 0));
 
             Progress progress = new Progress();
             progress.Shown += new EventHandler(LoadExcelTables);
@@ -521,11 +473,11 @@ namespace Reanimator
             #region PLUGIN
             try
             {
-              LoadPlugins();
+                LoadPlugins();
             }
             catch (Exception ex)
             {
-              MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
             #endregion
 

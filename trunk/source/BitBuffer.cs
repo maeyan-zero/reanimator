@@ -24,7 +24,7 @@ namespace Reanimator
 
             get { return dataByteOffset; }
         }
- 
+
         int dataBitOffset = 0;
         public int DataBitOffset
         {
