@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{747C7143-60B7-4BC6-9A66-DD1142D0003F}</ProjectGuid>
+    <ProjectGuid>{D01475F3-1004-4687-941B-525E9C2453A6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ItemShopPlugin</RootNamespace>
-    <AssemblyName>ItemShopPlugin</AssemblyName>
+    <RootNamespace>TransmogrifyCubePlugin</RootNamespace>
+    <AssemblyName>TransmogrifyCubePlugin</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -51,19 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ItemShopPlugin.cs" />
-    <Compile Include="ItemShopForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ItemShopForm.Designer.cs">
-      <DependentUpon>ItemShopForm.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ItemShopForm.resx">
-      <DependentUpon>ItemShopForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <Compile Include="TransmogrifyCubePlugin.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
