@@ -441,7 +441,7 @@ namespace Reanimator
 
             progress.ConfigBar(0, excelTables.Count, 1);
             progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
-            excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress);
+            excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress.GetItemLabel());
             progress.Dispose();
         }
 

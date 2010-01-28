@@ -73,16 +73,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitBuffer.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Excel\ExcelTable.cs" />
-    <Compile Include="Excel\ExcelTables.cs" />
-    <Compile Include="Crc32.cs" />
     <Compile Include="CryptTools.cs" />
-    <Compile Include="Excel\Items.cs" />
-    <Compile Include="Excel\States.cs" />
-    <Compile Include="Excel\Stats.cs" />
-    <Compile Include="Excel\Treasure.cs" />
     <Compile Include="Forms\ExcelTable.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -169,7 +161,7 @@
       <DependentUpon>Reanimator.cs</DependentUpon>
     </Compile>
     <Compile Include="Strings.cs" />
-    <Compile Include="Unit.cs" />
+    <Compile Include="Unit_old.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ExampleMod.xml" />
@@ -197,6 +189,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\dlls\Excel\Excel.csproj">
+      <Project>{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}</Project>
+      <Name>Excel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dlls\FileTools\FileTools.csproj">
       <Project>{D6EC58F1-C9CF-44FA-897C-5886BF47F896}</Project>
       <Name>FileTools</Name>
