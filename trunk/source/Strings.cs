@@ -121,5 +121,10 @@ namespace Reanimator
         {
             return strings.ToArray();
         }
+
+        public List<StringBlock> StringsTable
+        {
+            get { return strings; }
+        }
     }
 }

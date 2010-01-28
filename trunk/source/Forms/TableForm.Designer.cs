@@ -1,6 +1,6 @@
 ﻿namespace Reanimator
 {
-    partial class IndexExplorer
+    partial class TableForm
     {
         /// <summary>
         /// Required designer variable.
@@ -34,7 +34,7 @@
             this.IndexFileCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.b_search = new System.Windows.Forms.Button();
             this.tb_searchString = new System.Windows.Forms.TextBox();
-            this.l_infoText = new System.Windows.Forms.Label();
+            this.infoText_Label = new System.Windows.Forms.Label();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.extractSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractCheckedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,7 +43,7 @@
             this.b_selectAll = new System.Windows.Forms.Button();
             this.b_unCheckAll = new System.Windows.Forms.Button();
             this.b_unSelectAll = new System.Windows.Forms.Button();
-            this.l_searchResults = new System.Windows.Forms.Label();
+            this.searchResults_Label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -84,7 +84,7 @@
             this.b_search.Name = "b_search";
             this.b_search.Size = new System.Drawing.Size(75, 20);
             this.b_search.TabIndex = 3;
-            this.b_search.Text = "search";
+            this.b_search.Text = "Search";
             this.b_search.UseVisualStyleBackColor = true;
             this.b_search.Click += new System.EventHandler(this.Search_Click);
             // 
@@ -95,14 +95,14 @@
             this.tb_searchString.Size = new System.Drawing.Size(100, 20);
             this.tb_searchString.TabIndex = 4;
             // 
-            // l_infoText
+            // infoText_Label
             // 
-            this.l_infoText.AutoSize = true;
-            this.l_infoText.Location = new System.Drawing.Point(12, 4);
-            this.l_infoText.Name = "l_infoText";
-            this.l_infoText.Size = new System.Drawing.Size(46, 13);
-            this.l_infoText.TabIndex = 5;
-            this.l_infoText.Text = "InfoText";
+            this.infoText_Label.AutoSize = true;
+            this.infoText_Label.Location = new System.Drawing.Point(12, 4);
+            this.infoText_Label.Name = "infoText_Label";
+            this.infoText_Label.Size = new System.Drawing.Size(46, 13);
+            this.infoText_Label.TabIndex = 5;
+            this.infoText_Label.Text = "InfoText";
             // 
             // contextMenuStrip1
             // 
@@ -141,7 +141,7 @@
             this.b_checkAll.Name = "b_checkAll";
             this.b_checkAll.Size = new System.Drawing.Size(70, 20);
             this.b_checkAll.TabIndex = 6;
-            this.b_checkAll.Text = "check";
+            this.b_checkAll.Text = "Check";
             this.b_checkAll.UseVisualStyleBackColor = true;
             this.b_checkAll.Click += new System.EventHandler(this.CheckAll_Click);
             // 
@@ -152,7 +152,7 @@
             this.b_selectAll.Name = "b_selectAll";
             this.b_selectAll.Size = new System.Drawing.Size(70, 20);
             this.b_selectAll.TabIndex = 7;
-            this.b_selectAll.Text = "select";
+            this.b_selectAll.Text = "Select";
             this.b_selectAll.UseVisualStyleBackColor = true;
             this.b_selectAll.Click += new System.EventHandler(this.SelectAll_Click);
             // 
@@ -163,7 +163,7 @@
             this.b_unCheckAll.Name = "b_unCheckAll";
             this.b_unCheckAll.Size = new System.Drawing.Size(70, 20);
             this.b_unCheckAll.TabIndex = 8;
-            this.b_unCheckAll.Text = "uncheck";
+            this.b_unCheckAll.Text = "Uncheck";
             this.b_unCheckAll.UseVisualStyleBackColor = true;
             this.b_unCheckAll.Click += new System.EventHandler(this.UnCheckAll_Click);
             // 
@@ -174,36 +174,36 @@
             this.b_unSelectAll.Name = "b_unSelectAll";
             this.b_unSelectAll.Size = new System.Drawing.Size(70, 20);
             this.b_unSelectAll.TabIndex = 9;
-            this.b_unSelectAll.Text = "unselect";
+            this.b_unSelectAll.Text = "Unselect";
             this.b_unSelectAll.UseVisualStyleBackColor = true;
             this.b_unSelectAll.Click += new System.EventHandler(this.UnSelectAll_Click);
             // 
             // l_searchResults
             // 
-            this.l_searchResults.AutoSize = true;
-            this.l_searchResults.Location = new System.Drawing.Point(187, 24);
-            this.l_searchResults.Name = "l_searchResults";
-            this.l_searchResults.Size = new System.Drawing.Size(79, 13);
-            this.l_searchResults.TabIndex = 10;
-            this.l_searchResults.Text = "Search Results";
+            this.searchResults_Label.AutoSize = true;
+            this.searchResults_Label.Location = new System.Drawing.Point(187, 24);
+            this.searchResults_Label.Name = "l_searchResults";
+            this.searchResults_Label.Size = new System.Drawing.Size(79, 13);
+            this.searchResults_Label.TabIndex = 10;
+            this.searchResults_Label.Text = "Search Results";
             // 
-            // IndexExplorer
+            // TableForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 284);
-            this.Controls.Add(this.l_searchResults);
+            this.Controls.Add(this.searchResults_Label);
             this.Controls.Add(this.b_unSelectAll);
             this.Controls.Add(this.b_unCheckAll);
             this.Controls.Add(this.b_selectAll);
             this.Controls.Add(this.b_checkAll);
             this.Controls.Add(this.tb_searchString);
-            this.Controls.Add(this.l_infoText);
+            this.Controls.Add(this.infoText_Label);
             this.Controls.Add(this.b_search);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.splitter1);
-            this.Name = "IndexExplorer";
-            this.Text = "Index Explorer";
+            this.Name = "TableForm";
+            this.Text = "Table Form";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -218,7 +218,7 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn IndexFileCheckBoxColumn;
         private System.Windows.Forms.Button b_search;
         private System.Windows.Forms.TextBox tb_searchString;
-        private System.Windows.Forms.Label l_infoText;
+        private System.Windows.Forms.Label infoText_Label;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem extractSelectedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extractCheckedToolStripMenuItem;
@@ -227,6 +227,6 @@
         private System.Windows.Forms.Button b_selectAll;
         private System.Windows.Forms.Button b_unCheckAll;
         private System.Windows.Forms.Button b_unSelectAll;
-        private System.Windows.Forms.Label l_searchResults;
+        private System.Windows.Forms.Label searchResults_Label;
     }
 }

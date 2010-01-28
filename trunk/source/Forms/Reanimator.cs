@@ -226,7 +226,7 @@ namespace Reanimator
             }
 
             Index index = new Index(FileTools.StreamToByteArray(indexFile));
-            IndexExplorer indexExplorer = new IndexExplorer(indexFile, index);
+            TableForm indexExplorer = new TableForm(indexFile, index);
             indexExplorer.dataGridView.DataSource = index.GetFileTable();
             indexExplorer.Text += ": " + szFileName;
             indexExplorer.MdiParent = this;
@@ -282,7 +282,7 @@ namespace Reanimator
             {
                 FileStream stringsFile = new FileStream(fileName, FileMode.Open);
                 Strings strings = new Strings(FileTools.StreamToByteArray(stringsFile));
-                IndexExplorer indexExplorer = new IndexExplorer(strings);
+                TableForm indexExplorer = new TableForm(strings);
                 Strings.StringBlock[] stringBlocks = strings.GetFileTable();
                 indexExplorer.dataGridView.DataSource = stringBlocks;
                 indexExplorer.Text += ": " + fileName;
@@ -297,7 +297,7 @@ namespace Reanimator
 
         private void indexExplorer_FormClosed(object sender, FormClosedEventArgs e)
         {
-            IndexExplorer indexExplorer = (IndexExplorer)sender;
+            TableForm indexExplorer = (TableForm)sender;
             indexFilesOpen.Remove(indexExplorer.IndexFile.Name);
             indexExplorer.IndexFile.Dispose();
             indexExplorer.Dispose();

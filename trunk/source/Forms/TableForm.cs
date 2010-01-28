@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace Reanimator
 {
-    public partial class IndexExplorer : Form, IDisposable
+    public partial class TableForm : Form, IDisposable
     {
         Index index;
         FileStream indexFile;
@@ -27,7 +27,7 @@ namespace Reanimator
         FileStream dataFile;
         Strings strings;
 
-        public IndexExplorer(FileStream file, Index idx)
+        public TableForm(FileStream file, Index idx)
         {
             index = idx;
             indexFile = file;
@@ -54,7 +54,7 @@ namespace Reanimator
             IndexFileCheckBoxColumn.Name = "IndexFileCheckBoxColumn";
         }
 
-        public IndexExplorer(Strings strs)
+        public TableForm(Strings strs)
         {
             strings = strs;
 
@@ -65,9 +65,10 @@ namespace Reanimator
             //Initialize the DataGridViewColumn control
             IndexFileCheckBoxColumn.DefaultCellStyle.DataSourceNullValue = false;
             IndexFileCheckBoxColumn.Frozen = false;
-            IndexFileCheckBoxColumn.Width = 24;
             IndexFileCheckBoxColumn.TrueValue = true;
             IndexFileCheckBoxColumn.FalseValue = false;
+            IndexFileCheckBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            IndexFileCheckBoxColumn.Width = 24;
             IndexFileCheckBoxColumn.Name = "IndexFileCheckBoxColumn";
         }
 
@@ -238,12 +239,14 @@ namespace Reanimator
             return buffer;
         }
 
-        #region debug help
-        //When a new DataSource is loaded display some information
         private void dataGridView_DataSourceChanged(object sender, EventArgs e)
         {
-           // this.l_infoText.Text = "Contains " + ((Index.FileIndex[])this.dataGridView.DataSource).Length + " files";
+            infoText_Label.Text = "Contains " + ((Array)dataGridView.DataSource).Length + " files.";
         }
+
+        #region debug help
+        //When a new DataSource is loaded display some information
+
 
         //Just for debugging purposes... uncomment this section and the event for final use
         //private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -301,29 +304,29 @@ namespace Reanimator
                 }
                 this.dataGridView.ResumeLayout();
 
-                l_searchResults.Text = counter + " matching entries found";
+                searchResults_Label.Text = counter + " matching entries found";
             }
         }
 
         private void SelectAllEntries(bool selected)
         {
-            this.dataGridView.SuspendLayout();
+            dataGridView.SuspendLayout();
             foreach (DataGridViewRow row in this.dataGridView.Rows)
             {
                 row.Selected = selected;
             }
-            this.dataGridView.ResumeLayout();
+            dataGridView.ResumeLayout();
         }
 
         private void CheckAllEntries(bool check)
         {
-            this.dataGridView.SuspendLayout();
+            dataGridView.SuspendLayout();
             foreach (DataGridViewRow row in this.dataGridView.Rows)
             {
                 DataGridViewCell cell = row.Cells["IndexFileCheckBoxColumn"];
                 cell.Value = check;
             }
-            this.dataGridView.ResumeLayout();
+            dataGridView.ResumeLayout();
         }
 
         private void CheckAll_Click(object sender, EventArgs e)
