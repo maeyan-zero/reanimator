@@ -11,11 +11,8 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct ItemsTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-            Int32[] unknown;
-            public Int16 id;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 198)]
-            public byte[] unknownData;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3528)]
+            public byte[] data;
         }
 
         List<ItemsTable> items;

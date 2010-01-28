@@ -88,6 +88,10 @@ namespace Reanimator.Excel
                     {
                         states = new States(buffer);
                     }
+                    else if (szStringId.Equals("ITEMS", StringComparison.OrdinalIgnoreCase))
+                    {
+                        items = new Items(buffer);
+                    }
                 }
                 catch (Exception e)
                 {

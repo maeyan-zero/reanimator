@@ -14,7 +14,7 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] unknown;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-            public string szStringId;
+            public string stringId;
             public Int16 id;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 430)]
             public byte[] unknownData;
@@ -35,7 +35,7 @@ namespace Reanimator.Excel
             {
                 if (statsTable.id == id)
                 {
-                    return statsTable.szStringId;
+                    return statsTable.stringId;
                 }
             }
 

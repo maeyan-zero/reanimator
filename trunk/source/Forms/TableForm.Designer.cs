@@ -54,7 +54,7 @@
             this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(464, 40);
+            this.splitter1.Size = new System.Drawing.Size(700, 40);
             this.splitter1.TabIndex = 1;
             this.splitter1.TabStop = false;
             // 
@@ -69,7 +69,7 @@
             this.dataGridView.Location = new System.Drawing.Point(0, 40);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(464, 244);
+            this.dataGridView.Size = new System.Drawing.Size(700, 380);
             this.dataGridView.TabIndex = 2;
             this.dataGridView.DataSourceChanged += new System.EventHandler(this.dataGridView_DataSourceChanged);
             // 
@@ -137,7 +137,7 @@
             // b_checkAll
             // 
             this.b_checkAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_checkAll.Location = new System.Drawing.Point(318, 0);
+            this.b_checkAll.Location = new System.Drawing.Point(554, 0);
             this.b_checkAll.Name = "b_checkAll";
             this.b_checkAll.Size = new System.Drawing.Size(70, 20);
             this.b_checkAll.TabIndex = 6;
@@ -148,7 +148,7 @@
             // b_selectAll
             // 
             this.b_selectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_selectAll.Location = new System.Drawing.Point(394, 0);
+            this.b_selectAll.Location = new System.Drawing.Point(630, 0);
             this.b_selectAll.Name = "b_selectAll";
             this.b_selectAll.Size = new System.Drawing.Size(70, 20);
             this.b_selectAll.TabIndex = 7;
@@ -159,7 +159,7 @@
             // b_unCheckAll
             // 
             this.b_unCheckAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_unCheckAll.Location = new System.Drawing.Point(318, 20);
+            this.b_unCheckAll.Location = new System.Drawing.Point(554, 20);
             this.b_unCheckAll.Name = "b_unCheckAll";
             this.b_unCheckAll.Size = new System.Drawing.Size(70, 20);
             this.b_unCheckAll.TabIndex = 8;
@@ -170,7 +170,7 @@
             // b_unSelectAll
             // 
             this.b_unSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_unSelectAll.Location = new System.Drawing.Point(394, 20);
+            this.b_unSelectAll.Location = new System.Drawing.Point(630, 20);
             this.b_unSelectAll.Name = "b_unSelectAll";
             this.b_unSelectAll.Size = new System.Drawing.Size(70, 20);
             this.b_unSelectAll.TabIndex = 9;
@@ -178,11 +178,11 @@
             this.b_unSelectAll.UseVisualStyleBackColor = true;
             this.b_unSelectAll.Click += new System.EventHandler(this.UnSelectAll_Click);
             // 
-            // l_searchResults
+            // searchResults_Label
             // 
             this.searchResults_Label.AutoSize = true;
             this.searchResults_Label.Location = new System.Drawing.Point(187, 24);
-            this.searchResults_Label.Name = "l_searchResults";
+            this.searchResults_Label.Name = "searchResults_Label";
             this.searchResults_Label.Size = new System.Drawing.Size(79, 13);
             this.searchResults_Label.TabIndex = 10;
             this.searchResults_Label.Text = "Search Results";
@@ -191,7 +191,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(464, 284);
+            this.ClientSize = new System.Drawing.Size(700, 420);
             this.Controls.Add(this.searchResults_Label);
             this.Controls.Add(this.b_unSelectAll);
             this.Controls.Add(this.b_unCheckAll);

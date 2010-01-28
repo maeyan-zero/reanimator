@@ -142,8 +142,23 @@ namespace Reanimator.Excel
                 tableIndex = (TableIndex)FileTools.ByteArrayToStructure(data, typeof(TableIndex), offset);
                 offset += Marshal.SizeOf(typeof(TableIndex));
                 CheckFlag(tableIndex.flag);
-                tableIndicies = FileTools.ByteArrayToInt32Array(data, offset, Count);
-                offset += Count * sizeof(Int32);
+                if ((uint)excelHeader.fileId == 0x887988c4)
+                {
+                    tableIndicies = new int[Count];
+                    for (int i = 0; i < Count; i++)
+                    {
+                        tableIndicies[i] = FileTools.ByteArrayToInt32(data, offset);
+                        offset += sizeof(Int32);
+                        int size = FileTools.ByteArrayToInt32(data, offset);
+                        offset += sizeof(Int32);
+                        offset += size;
+                    }
+                }
+                else
+                {
+                    tableIndicies = FileTools.ByteArrayToInt32Array(data, offset, Count);
+                    offset += Count * sizeof(Int32);
+                }
 
                 
                 // these 4 index chunks are read in in a single loop, each time with the "flag", followed by the "count"... Something like that

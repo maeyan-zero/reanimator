@@ -83,6 +83,12 @@
     <Compile Include="Excel\States.cs" />
     <Compile Include="Excel\Stats.cs" />
     <Compile Include="Excel\Treasure.cs" />
+    <Compile Include="Forms\ExcelTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExcelTable.Designer.cs">
+      <DependentUpon>ExcelTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\HeroEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,6 +118,10 @@
     <Compile Include="ModTools.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\ExcelTable.resx">
+      <DependentUpon>ExcelTable.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\HeroEditor.resx">
       <DependentUpon>HeroEditor.cs</DependentUpon>
       <SubType>Designer</SubType>

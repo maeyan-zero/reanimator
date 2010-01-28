@@ -542,7 +542,6 @@ namespace Reanimator
                 unit.unknown_01_03_4 = ReadNonStandardFunc();
             }
 
-
             if (TestBit(unit.bitField1, 0x06))
             {
                 unit.unknownBool_06 = bitBuffer.ReadBits(1);
