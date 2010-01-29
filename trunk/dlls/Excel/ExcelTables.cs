@@ -15,7 +15,7 @@ namespace Reanimator.Excel
         public Int32[] unknown;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string szStringId;
-        public Int16 id; 
+        public Int16 id;
     }
 
     public class ExcelTables : ExcelTable
@@ -34,7 +34,13 @@ namespace Reanimator.Excel
             get { return items; }
         }
 
-        public ExcelTables(byte[] data) : base(data) {}
+        ItemLevels itemLevels;
+        public ItemLevels ItemLevels
+        {
+            get { return itemLevels; }
+        }
+
+        public ExcelTables(byte[] data) : base(data) { }
 
         protected override void ParseTables(byte[] data)
         {
@@ -73,7 +79,7 @@ namespace Reanimator.Excel
                     catch (Exception)
                     {
                         //progress.StepProgress();
-                      //progress.PerformStep();
+                        //progress.PerformStep();
                         continue;
                     }
                 }
@@ -92,6 +98,10 @@ namespace Reanimator.Excel
                     else if (szStringId.Equals("ITEMS", StringComparison.OrdinalIgnoreCase))
                     {
                         items = new Items(buffer);
+                    }
+                    else if (szStringId.Equals("ITEM_LEVELS", StringComparison.OrdinalIgnoreCase))
+                    {
+                        itemLevels = new ItemLevels(buffer);
                     }
                 }
                 catch (Exception e)

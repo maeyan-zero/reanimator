@@ -51,6 +51,7 @@
     <Compile Include="Crc32.cs" />
     <Compile Include="ExcelTable.cs" />
     <Compile Include="ExcelTables.cs" />
+    <Compile Include="ItemLevels.cs" />
     <Compile Include="Items.cs" />
     <Compile Include="States.cs" />
     <Compile Include="Stats.cs" />

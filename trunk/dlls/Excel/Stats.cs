@@ -22,7 +22,7 @@ namespace Reanimator.Excel
 
         List<StatsTable> stats;
 
-        public Stats(byte[] data) : base(data) {}
+        public Stats(byte[] data) : base(data) { }
 
         protected override void ParseTables(byte[] data)
         {
@@ -31,7 +31,7 @@ namespace Reanimator.Excel
 
         public string GetStringFromId(int id)
         {
-            foreach(StatsTable statsTable in stats)
+            foreach (StatsTable statsTable in stats)
             {
                 if (statsTable.id == id)
                 {

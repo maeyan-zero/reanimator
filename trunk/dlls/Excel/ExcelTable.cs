@@ -8,9 +8,9 @@ namespace Reanimator.Excel
 {
     public class BadHeaderFlag : Exception
     {
-        public BadHeaderFlag() : base() {}
+        public BadHeaderFlag() : base() { }
 
-        public BadHeaderFlag(string message) : base(message) {}
+        public BadHeaderFlag(string message) : base(message) { }
     }
 
     public abstract class ExcelTable
@@ -160,7 +160,7 @@ namespace Reanimator.Excel
                     offset += Count * sizeof(Int32);
                 }
 
-                
+
                 // these 4 index chunks are read in in a single loop, each time with the "flag", followed by the "count"... Something like that
                 // read in some unknown index
                 unknownIndex1 = (UnknownIndex)FileTools.ByteArrayToStructure(data, typeof(UnknownIndex), offset);

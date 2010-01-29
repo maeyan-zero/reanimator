@@ -93,18 +93,18 @@ namespace Reanimator
 
         public static void GenerateChecksums()
         {
-           // FileStream stream;
-           // Crc32 crcTool = new Crc32();
-           // //foreach (FileIndex file in fileIndex)
-           //// {
-           // for (int i = 0; i < fileIndex.Length / 2; i++)
-           // {
-           //     stream = new FileStream(@Properties.Settings.Default.HellgateDirectory + fileIndex[i * 2 + 1].Filename, FileMode.Open);
-           //     byte[] bytes = FileTools.StreamToByteArray(stream);
-           //     uint checksum = Crc32.Compute(bytes);
-           //     Console.WriteLine("Checksum for file " + fileIndex[i * 2 + 1].Filename + ": " + checksum);
-           // }
-           // //}
+            // FileStream stream;
+            // Crc32 crcTool = new Crc32();
+            // //foreach (FileIndex file in fileIndex)
+            //// {
+            // for (int i = 0; i < fileIndex.Length / 2; i++)
+            // {
+            //     stream = new FileStream(@Properties.Settings.Default.HellgateDirectory + fileIndex[i * 2 + 1].Filename, FileMode.Open);
+            //     byte[] bytes = FileTools.StreamToByteArray(stream);
+            //     uint checksum = Crc32.Compute(bytes);
+            //     Console.WriteLine("Checksum for file " + fileIndex[i * 2 + 1].Filename + ": " + checksum);
+            // }
+            // //}
         }
 
         public static void Check(XmlReader xmlModification)
@@ -142,7 +142,7 @@ namespace Reanimator
 
         public static void GenerateIndexKeys(Index index)
         {
-            
+
         }
     }
 }
