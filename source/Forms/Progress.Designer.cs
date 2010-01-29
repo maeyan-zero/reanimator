@@ -28,59 +28,59 @@
         /// </summary>
         private void InitializeComponent()
         {
-          this.progressBar1 = new System.Windows.Forms.ProgressBar();
-          this.loadingTextLabel = new System.Windows.Forms.Label();
-          this.currentItemLabel = new System.Windows.Forms.Label();
-          this.SuspendLayout();
-          // 
-          // progressBar1
-          // 
-          this.progressBar1.Location = new System.Drawing.Point(12, 50);
-          this.progressBar1.Name = "progressBar1";
-          this.progressBar1.Size = new System.Drawing.Size(378, 23);
-          this.progressBar1.TabIndex = 0;
-          // 
-          // loadingTextLabel
-          // 
-          this.loadingTextLabel.AutoSize = true;
-          this.loadingTextLabel.Location = new System.Drawing.Point(12, 12);
-          this.loadingTextLabel.Margin = new System.Windows.Forms.Padding(3);
-          this.loadingTextLabel.Name = "loadingTextLabel";
-          this.loadingTextLabel.Size = new System.Drawing.Size(61, 13);
-          this.loadingTextLabel.TabIndex = 1;
-          this.loadingTextLabel.Text = "loading text";
-          // 
-          // currentItemLabel
-          // 
-          this.currentItemLabel.AutoSize = true;
-          this.currentItemLabel.Location = new System.Drawing.Point(12, 31);
-          this.currentItemLabel.Margin = new System.Windows.Forms.Padding(3);
-          this.currentItemLabel.Name = "currentItemLabel";
-          this.currentItemLabel.Size = new System.Drawing.Size(62, 13);
-          this.currentItemLabel.TabIndex = 2;
-          this.currentItemLabel.Text = "current item";
-          this.currentItemLabel.TextChanged += new System.EventHandler(this.currentItemLabel_TextChanged);
-          // 
-          // Progress
-          // 
-          this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-          this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-          this.ClientSize = new System.Drawing.Size(394, 77);
-          this.ControlBox = false;
-          this.Controls.Add(this.currentItemLabel);
-          this.Controls.Add(this.loadingTextLabel);
-          this.Controls.Add(this.progressBar1);
-          this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-          this.MaximizeBox = false;
-          this.MinimizeBox = false;
-          this.Name = "Progress";
-          this.ShowIcon = false;
-          this.ShowInTaskbar = false;
-          this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-          this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-          this.Text = "Loading...";
-          this.ResumeLayout(false);
-          this.PerformLayout();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.loadingTextLabel = new System.Windows.Forms.Label();
+            this.currentItemLabel = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(12, 50);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(378, 23);
+            this.progressBar1.TabIndex = 0;
+            // 
+            // loadingTextLabel
+            // 
+            this.loadingTextLabel.AutoSize = true;
+            this.loadingTextLabel.Location = new System.Drawing.Point(12, 12);
+            this.loadingTextLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.loadingTextLabel.Name = "loadingTextLabel";
+            this.loadingTextLabel.Size = new System.Drawing.Size(61, 13);
+            this.loadingTextLabel.TabIndex = 1;
+            this.loadingTextLabel.Text = "loading text";
+            // 
+            // currentItemLabel
+            // 
+            this.currentItemLabel.AutoSize = true;
+            this.currentItemLabel.Location = new System.Drawing.Point(12, 31);
+            this.currentItemLabel.Margin = new System.Windows.Forms.Padding(3);
+            this.currentItemLabel.Name = "currentItemLabel";
+            this.currentItemLabel.Size = new System.Drawing.Size(62, 13);
+            this.currentItemLabel.TabIndex = 2;
+            this.currentItemLabel.Text = "current item";
+            this.currentItemLabel.TextChanged += new System.EventHandler(this.currentItemLabel_TextChanged);
+            // 
+            // Progress
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(394, 77);
+            this.ControlBox = false;
+            this.Controls.Add(this.currentItemLabel);
+            this.Controls.Add(this.loadingTextLabel);
+            this.Controls.Add(this.progressBar1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "Progress";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Loading...";
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

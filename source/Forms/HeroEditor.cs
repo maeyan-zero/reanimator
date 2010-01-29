@@ -101,7 +101,7 @@ namespace Reanimator.Forms
                     eaValueTextBox.Text = stat.AttributeAt(j).ToString();
                     eaValueTextBox.Left = eaValueLabel.Right;
                     eaValueTextBox.Top = heightOffset;
-                    eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j+1));
+                    eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
 
                     this.panel1.Controls.Add(eaValueLabel);
                     this.panel1.Controls.Add(eaValueTextBox);
@@ -145,7 +145,7 @@ namespace Reanimator.Forms
 
         private void saveCharButton_Click(object sender, EventArgs e)
         {
-            int startIndex = filePath.LastIndexOf("\\")+1;
+            int startIndex = filePath.LastIndexOf("\\") + 1;
             string characterName = filePath.Substring(startIndex, filePath.Length - startIndex - 4);
             FileStream saveFile = new FileStream(characterName + ".hg1", FileMode.Create, FileAccess.ReadWrite);
             savedPath = saveFile.Name;

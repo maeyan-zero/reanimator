@@ -20,7 +20,7 @@ namespace Reanimator.Excel
 
         List<StatesTable> states;
 
-        public States(byte[] data) : base(data) {}
+        public States(byte[] data) : base(data) { }
 
         protected override void ParseTables(byte[] data)
         {
