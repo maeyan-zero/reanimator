@@ -22,7 +22,7 @@ namespace Reanimator
 
 
 
-        bool showInitializationMessage = true;
+        bool showInitializationMessage = false;
         private List<IPlugin> pluginList;
 
         public bool Register(IPlugin ipi)

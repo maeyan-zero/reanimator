@@ -88,29 +88,41 @@
             "Select Skill",
             "+3",
             "500000"}, -1);
+      System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Reset starting skill",
+            "1",
+            "0"}, -1);
       this.button1 = new System.Windows.Forms.Button();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
-      this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.label2 = new System.Windows.Forms.Label();
-      this.label1 = new System.Windows.Forms.Label();
-      this.clb_char1 = new System.Windows.Forms.CheckedListBox();
-      this.cb_char1 = new System.Windows.Forms.ComboBox();
       this.tabControl1 = new System.Windows.Forms.TabControl();
       this.tabPage1 = new System.Windows.Forms.TabPage();
-      this.tabPage2 = new System.Windows.Forms.TabPage();
       this.listView1 = new System.Windows.Forms.ListView();
       this.ch_item = new System.Windows.Forms.ColumnHeader();
       this.ch_amount = new System.Windows.Forms.ColumnHeader();
       this.ch_price = new System.Windows.Forms.ColumnHeader();
+      this.tabPage2 = new System.Windows.Forms.TabPage();
       this.listView2 = new System.Windows.Forms.ListView();
       this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
       this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
       this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
+      this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.label4 = new System.Windows.Forms.Label();
+      this.label3 = new System.Windows.Forms.Label();
+      this.label2 = new System.Windows.Forms.Label();
+      this.clb_char1 = new System.Windows.Forms.CheckedListBox();
+      this.cb_char1 = new System.Windows.Forms.ComboBox();
+      this.label1 = new System.Windows.Forms.Label();
+      this.tabPage3 = new System.Windows.Forms.TabPage();
+      this.listView3 = new System.Windows.Forms.ListView();
+      this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+      this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
+      this.columnHeader6 = new System.Windows.Forms.ColumnHeader();
       this.groupBox2.SuspendLayout();
-      this.groupBox1.SuspendLayout();
       this.tabControl1.SuspendLayout();
       this.tabPage1.SuspendLayout();
       this.tabPage2.SuspendLayout();
+      this.groupBox1.SuspendLayout();
+      this.tabPage3.SuspendLayout();
       this.SuspendLayout();
       // 
       // button1
@@ -132,61 +144,11 @@
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "Shop";
       // 
-      // groupBox1
-      // 
-      this.groupBox1.Controls.Add(this.label2);
-      this.groupBox1.Controls.Add(this.label1);
-      this.groupBox1.Controls.Add(this.clb_char1);
-      this.groupBox1.Controls.Add(this.cb_char1);
-      this.groupBox1.Location = new System.Drawing.Point(12, 12);
-      this.groupBox1.Name = "groupBox1";
-      this.groupBox1.Size = new System.Drawing.Size(200, 240);
-      this.groupBox1.TabIndex = 4;
-      this.groupBox1.TabStop = false;
-      this.groupBox1.Text = "Character";
-      // 
-      // label2
-      // 
-      this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(67, 45);
-      this.label2.MaximumSize = new System.Drawing.Size(127, 13);
-      this.label2.MinimumSize = new System.Drawing.Size(127, 13);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(127, 13);
-      this.label2.TabIndex = 3;
-      this.label2.Text = "0";
-      this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-      // 
-      // label1
-      // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(6, 45);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(55, 13);
-      this.label1.TabIndex = 2;
-      this.label1.Text = "Palladium:";
-      // 
-      // clb_char1
-      // 
-      this.clb_char1.FormattingEnabled = true;
-      this.clb_char1.Location = new System.Drawing.Point(6, 61);
-      this.clb_char1.Name = "clb_char1";
-      this.clb_char1.Size = new System.Drawing.Size(188, 169);
-      this.clb_char1.TabIndex = 1;
-      // 
-      // cb_char1
-      // 
-      this.cb_char1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-      this.cb_char1.FormattingEnabled = true;
-      this.cb_char1.Location = new System.Drawing.Point(6, 19);
-      this.cb_char1.Name = "cb_char1";
-      this.cb_char1.Size = new System.Drawing.Size(188, 21);
-      this.cb_char1.TabIndex = 0;
-      // 
       // tabControl1
       // 
       this.tabControl1.Controls.Add(this.tabPage1);
       this.tabControl1.Controls.Add(this.tabPage2);
+      this.tabControl1.Controls.Add(this.tabPage3);
       this.tabControl1.Location = new System.Drawing.Point(6, 19);
       this.tabControl1.Name = "tabControl1";
       this.tabControl1.SelectedIndex = 0;
@@ -203,17 +165,6 @@
       this.tabPage1.TabIndex = 0;
       this.tabPage1.Text = "Character";
       this.tabPage1.UseVisualStyleBackColor = true;
-      // 
-      // tabPage2
-      // 
-      this.tabPage2.Controls.Add(this.listView2);
-      this.tabPage2.Location = new System.Drawing.Point(4, 22);
-      this.tabPage2.Name = "tabPage2";
-      this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-      this.tabPage2.Size = new System.Drawing.Size(200, 189);
-      this.tabPage2.TabIndex = 1;
-      this.tabPage2.Text = "Items";
-      this.tabPage2.UseVisualStyleBackColor = true;
       // 
       // listView1
       // 
@@ -253,6 +204,17 @@
       this.ch_price.Text = "Price";
       this.ch_price.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       this.ch_price.Width = 48;
+      // 
+      // tabPage2
+      // 
+      this.tabPage2.Controls.Add(this.listView2);
+      this.tabPage2.Location = new System.Drawing.Point(4, 22);
+      this.tabPage2.Name = "tabPage2";
+      this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPage2.Size = new System.Drawing.Size(200, 189);
+      this.tabPage2.TabIndex = 1;
+      this.tabPage2.Text = "Items";
+      this.tabPage2.UseVisualStyleBackColor = true;
       // 
       // listView2
       // 
@@ -294,6 +256,124 @@
       this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
       this.columnHeader3.Width = 48;
       // 
+      // groupBox1
+      // 
+      this.groupBox1.Controls.Add(this.label4);
+      this.groupBox1.Controls.Add(this.label3);
+      this.groupBox1.Controls.Add(this.label2);
+      this.groupBox1.Controls.Add(this.clb_char1);
+      this.groupBox1.Controls.Add(this.cb_char1);
+      this.groupBox1.Controls.Add(this.label1);
+      this.groupBox1.Location = new System.Drawing.Point(12, 12);
+      this.groupBox1.Name = "groupBox1";
+      this.groupBox1.Size = new System.Drawing.Size(200, 240);
+      this.groupBox1.TabIndex = 4;
+      this.groupBox1.TabStop = false;
+      this.groupBox1.Text = "Character";
+      // 
+      // label4
+      // 
+      this.label4.AutoSize = true;
+      this.label4.Location = new System.Drawing.Point(36, 45);
+      this.label4.MaximumSize = new System.Drawing.Size(35, 13);
+      this.label4.MinimumSize = new System.Drawing.Size(35, 13);
+      this.label4.Name = "label4";
+      this.label4.Size = new System.Drawing.Size(35, 13);
+      this.label4.TabIndex = 5;
+      this.label4.Text = "0";
+      this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Location = new System.Drawing.Point(6, 45);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(24, 13);
+      this.label3.TabIndex = 4;
+      this.label3.Text = "AP:";
+      // 
+      // label2
+      // 
+      this.label2.AutoSize = true;
+      this.label2.Location = new System.Drawing.Point(138, 45);
+      this.label2.MaximumSize = new System.Drawing.Size(56, 13);
+      this.label2.MinimumSize = new System.Drawing.Size(56, 13);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(56, 13);
+      this.label2.TabIndex = 3;
+      this.label2.Text = "0";
+      this.label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+      // 
+      // clb_char1
+      // 
+      this.clb_char1.FormattingEnabled = true;
+      this.clb_char1.Location = new System.Drawing.Point(6, 65);
+      this.clb_char1.Name = "clb_char1";
+      this.clb_char1.Size = new System.Drawing.Size(188, 169);
+      this.clb_char1.TabIndex = 1;
+      // 
+      // cb_char1
+      // 
+      this.cb_char1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+      this.cb_char1.FormattingEnabled = true;
+      this.cb_char1.Location = new System.Drawing.Point(6, 19);
+      this.cb_char1.Name = "cb_char1";
+      this.cb_char1.Size = new System.Drawing.Size(188, 21);
+      this.cb_char1.TabIndex = 0;
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(77, 45);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(55, 13);
+      this.label1.TabIndex = 2;
+      this.label1.Text = "Palladium:";
+      // 
+      // tabPage3
+      // 
+      this.tabPage3.Controls.Add(this.listView3);
+      this.tabPage3.Location = new System.Drawing.Point(4, 22);
+      this.tabPage3.Name = "tabPage3";
+      this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPage3.Size = new System.Drawing.Size(200, 189);
+      this.tabPage3.TabIndex = 2;
+      this.tabPage3.Text = "Misc";
+      this.tabPage3.UseVisualStyleBackColor = true;
+      // 
+      // listView3
+      // 
+      this.listView3.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader4,
+            this.columnHeader5,
+            this.columnHeader6});
+      this.listView3.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.listView3.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem16});
+      this.listView3.Location = new System.Drawing.Point(3, 3);
+      this.listView3.Name = "listView3";
+      this.listView3.Size = new System.Drawing.Size(194, 183);
+      this.listView3.TabIndex = 3;
+      this.listView3.UseCompatibleStateImageBehavior = false;
+      this.listView3.View = System.Windows.Forms.View.Details;
+      // 
+      // columnHeader4
+      // 
+      this.columnHeader4.Text = "Item";
+      this.columnHeader4.Width = 70;
+      // 
+      // columnHeader5
+      // 
+      this.columnHeader5.Text = "Amount";
+      this.columnHeader5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      this.columnHeader5.Width = 48;
+      // 
+      // columnHeader6
+      // 
+      this.columnHeader6.Text = "Price";
+      this.columnHeader6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+      this.columnHeader6.Width = 48;
+      // 
       // ItemShopForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -305,11 +385,12 @@
       this.Name = "ItemShopForm";
       this.Text = "ItemShopForm";
       this.groupBox2.ResumeLayout(false);
-      this.groupBox1.ResumeLayout(false);
-      this.groupBox1.PerformLayout();
       this.tabControl1.ResumeLayout(false);
       this.tabPage1.ResumeLayout(false);
       this.tabPage2.ResumeLayout(false);
+      this.groupBox1.ResumeLayout(false);
+      this.groupBox1.PerformLayout();
+      this.tabPage3.ResumeLayout(false);
       this.ResumeLayout(false);
 
     }
@@ -334,6 +415,13 @@
     private System.Windows.Forms.ColumnHeader columnHeader1;
     private System.Windows.Forms.ColumnHeader columnHeader2;
     private System.Windows.Forms.ColumnHeader columnHeader3;
+    private System.Windows.Forms.Label label4;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.TabPage tabPage3;
+    private System.Windows.Forms.ListView listView3;
+    private System.Windows.Forms.ColumnHeader columnHeader4;
+    private System.Windows.Forms.ColumnHeader columnHeader5;
+    private System.Windows.Forms.ColumnHeader columnHeader6;
 
   }
 }

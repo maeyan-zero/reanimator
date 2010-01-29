@@ -16,7 +16,7 @@ namespace ItemShopPlugin
       description = "Adds an option to purchase special items that aren't available in game as well as new options for Reanimator (with your Palladium/Items).";
     }
 
-    public void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded)
+    public override void InitializePlugIn(bool showMessageWhenSuccesfullyLoaded)
     {
       try
       {
