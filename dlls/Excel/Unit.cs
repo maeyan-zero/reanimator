@@ -315,7 +315,7 @@ namespace Reanimator
         internal int unknown_09;										// 8 bits
 
         // if (testBit(bitField1, 0x07)) // if (bitField1 & 0x80)
-        internal int jobClass;										    // 8 bits		// i think...
+        public int jobClass;										    // 8 bits		// i think...
         internal int unknown_07;										// 8 bits		// this appears to be joined with jobClass to form a WORD... I think...
 
         // if (testBit(bitField1, 0x08))
@@ -520,7 +520,9 @@ namespace Reanimator
             // On main character unit only
             if (TestBit(unit.bitField1, 0x07))
             {
+                //bitBuffer.ReadBits(1);
                 unit.jobClass = bitBuffer.ReadBits(8);
+                //bitBuffer.ReadBits(3);
                 unit.unknown_07 = bitBuffer.ReadBits(8);
             }
 

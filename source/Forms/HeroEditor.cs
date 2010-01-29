@@ -198,6 +198,52 @@ namespace Reanimator.Forms
 
             name_TextBox.Text = heroUnit.ToString();
 
+            string job;
+            switch (heroUnit.jobClass)
+            {
+              case(93):
+                {
+                  job = "Summoner";
+                }
+                break;
+              case (97):
+                {
+                  job = "Guardian";
+                }
+                break;
+              case (124):
+                {
+                  job = "Marksman";
+                }
+                break;
+              case (141):
+                {
+                  job = "Evoker";
+                }
+                break;
+              case (180):
+                {
+                  job = "Blademaster";
+                }
+                break;
+              case (191):
+                {
+                  job = "Engineer";
+                }
+                break;
+              default:
+                {
+                  job = "None";
+                }
+                break;
+            }
+
+            textBox1.Text = Convert.ToString(heroUnit.jobClass, 2);
+            class_TextBox.Text = job;
+            level_NumericUpDown.Value = heroUnit.Stats[0].values[0].Stat - 8;
+            
+              
+
             PopulateStats(heroUnit);
             PopulateItems(heroUnit);
         }
