@@ -31,6 +31,8 @@ namespace Reanimator.Forms
         {
           this.main_TabControl = new System.Windows.Forms.TabControl();
           this.general_TabPage = new System.Windows.Forms.TabPage();
+          this.label2 = new System.Windows.Forms.Label();
+          this.textBox1 = new System.Windows.Forms.TextBox();
           this.level_NumericUpDown = new System.Windows.Forms.NumericUpDown();
           this.mode_Label = new System.Windows.Forms.Label();
           this.hardcore_CheckBox = new System.Windows.Forms.CheckBox();
@@ -53,8 +55,8 @@ namespace Reanimator.Forms
           this.currentlyEditing_Label = new System.Windows.Forms.Label();
           this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
           this.button1 = new System.Windows.Forms.Button();
-          this.textBox1 = new System.Windows.Forms.TextBox();
-          this.label2 = new System.Windows.Forms.Label();
+          this.dead_CheckBox = new System.Windows.Forms.CheckBox();
+          this.label3 = new System.Windows.Forms.Label();
           this.main_TabControl.SuspendLayout();
           this.general_TabPage.SuspendLayout();
           ((System.ComponentModel.ISupportInitialize)(this.level_NumericUpDown)).BeginInit();
@@ -80,6 +82,8 @@ namespace Reanimator.Forms
           // 
           // general_TabPage
           // 
+          this.general_TabPage.Controls.Add(this.label3);
+          this.general_TabPage.Controls.Add(this.dead_CheckBox);
           this.general_TabPage.Controls.Add(this.label2);
           this.general_TabPage.Controls.Add(this.textBox1);
           this.general_TabPage.Controls.Add(this.level_NumericUpDown);
@@ -98,6 +102,22 @@ namespace Reanimator.Forms
           this.general_TabPage.TabIndex = 2;
           this.general_TabPage.Text = "General";
           this.general_TabPage.UseVisualStyleBackColor = true;
+          // 
+          // label2
+          // 
+          this.label2.AutoSize = true;
+          this.label2.Location = new System.Drawing.Point(192, 33);
+          this.label2.Name = "label2";
+          this.label2.Size = new System.Drawing.Size(43, 13);
+          this.label2.TabIndex = 11;
+          this.label2.Text = "Job bits";
+          // 
+          // textBox1
+          // 
+          this.textBox1.Location = new System.Drawing.Point(241, 30);
+          this.textBox1.Name = "textBox1";
+          this.textBox1.Size = new System.Drawing.Size(100, 20);
+          this.textBox1.TabIndex = 10;
           // 
           // level_NumericUpDown
           // 
@@ -134,12 +154,13 @@ namespace Reanimator.Forms
           // hardcore_CheckBox
           // 
           this.hardcore_CheckBox.AutoSize = true;
-          this.hardcore_CheckBox.Location = new System.Drawing.Point(116, 84);
+          this.hardcore_CheckBox.Location = new System.Drawing.Point(54, 107);
           this.hardcore_CheckBox.Name = "hardcore_CheckBox";
           this.hardcore_CheckBox.Size = new System.Drawing.Size(70, 17);
           this.hardcore_CheckBox.TabIndex = 7;
           this.hardcore_CheckBox.Text = "Hardcore";
           this.hardcore_CheckBox.UseVisualStyleBackColor = true;
+          this.hardcore_CheckBox.CheckedChanged += new System.EventHandler(this.hardcore_CheckBox_CheckedChanged);
           // 
           // elite_CheckBox
           // 
@@ -335,21 +356,26 @@ namespace Reanimator.Forms
           this.button1.UseVisualStyleBackColor = true;
           this.button1.Click += new System.EventHandler(this.button1_Click);
           // 
-          // textBox1
+          // dead_CheckBox
           // 
-          this.textBox1.Location = new System.Drawing.Point(241, 30);
-          this.textBox1.Name = "textBox1";
-          this.textBox1.Size = new System.Drawing.Size(100, 20);
-          this.textBox1.TabIndex = 10;
+          this.dead_CheckBox.AutoSize = true;
+          this.dead_CheckBox.Enabled = false;
+          this.dead_CheckBox.Location = new System.Drawing.Point(134, 107);
+          this.dead_CheckBox.Name = "dead_CheckBox";
+          this.dead_CheckBox.Size = new System.Drawing.Size(52, 17);
+          this.dead_CheckBox.TabIndex = 12;
+          this.dead_CheckBox.Text = "Dead";
+          this.dead_CheckBox.UseVisualStyleBackColor = true;
           // 
-          // label2
+          // label3
           // 
-          this.label2.AutoSize = true;
-          this.label2.Location = new System.Drawing.Point(192, 33);
-          this.label2.Name = "label2";
-          this.label2.Size = new System.Drawing.Size(43, 13);
-          this.label2.TabIndex = 11;
-          this.label2.Text = "Job bits";
+          this.label3.AutoSize = true;
+          this.label3.Location = new System.Drawing.Point(347, 30);
+          this.label3.Name = "label3";
+          this.label3.Size = new System.Drawing.Size(213, 26);
+          this.label3.TabIndex = 13;
+          this.label3.Text = "=> JobClass variable != Character Class as\r\nit changes with the character appeara" +
+              "nce...";
           // 
           // HeroEditor
           // 
@@ -406,5 +432,7 @@ namespace Reanimator.Forms
         private System.Windows.Forms.NumericUpDown level_NumericUpDown;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox dead_CheckBox;
+        private System.Windows.Forms.Label label3;
     }
 }
