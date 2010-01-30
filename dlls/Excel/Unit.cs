@@ -315,8 +315,13 @@ namespace Reanimator
         internal int unknown_09;										// 8 bits
 
         // if (testBit(bitField1, 0x07)) // if (bitField1 & 0x80)
-        public int jobClass;										    // 8 bits		// i think...
+        internal int jobClass;										    // 8 bits		// i think...
         internal int unknown_07;										// 8 bits		// this appears to be joined with jobClass to form a WORD... I think...
+
+        public int JobClass
+        {
+          get { return jobClass; }
+        }
 
         // if (testBit(bitField1, 0x08))
         internal int characterCount;									    // 8 bits
@@ -325,6 +330,11 @@ namespace Reanimator
         // if (testBit(bitField1, 0x0A))						                    // char state flags (e.g. "elite")
         internal int playerFlagCount2;								    // 8 bits
         internal int[] playerFlags2;							        // 16 bits * playerFlagCount2
+
+        public int EliteMode
+        {
+          get { return playerFlagCount2; }
+        }
 
         internal int unknownBool1;									    // 1 bit		// as above - alert if != 0
 

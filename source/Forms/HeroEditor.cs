@@ -196,56 +196,65 @@ namespace Reanimator.Forms
             currentlyEditing_ComboBox.Items.Add(heroUnit);
             currentlyEditing_ComboBox.SelectedIndex = 0;
 
-            name_TextBox.Text = heroUnit.ToString();
-
-            string job;
-            switch (heroUnit.jobClass)
-            {
-              case(93):
-                {
-                  job = "Summoner";
-                }
-                break;
-              case (97):
-                {
-                  job = "Guardian";
-                }
-                break;
-              case (124):
-                {
-                  job = "Marksman";
-                }
-                break;
-              case (141):
-                {
-                  job = "Evoker";
-                }
-                break;
-              case (180):
-                {
-                  job = "Blademaster";
-                }
-                break;
-              case (191):
-                {
-                  job = "Engineer";
-                }
-                break;
-              default:
-                {
-                  job = "None";
-                }
-                break;
-            }
-
-            textBox1.Text = Convert.ToString(heroUnit.jobClass, 2);
-            class_TextBox.Text = job;
-            level_NumericUpDown.Value = heroUnit.Stats[0].values[0].Stat - 8;
-            
-              
-
+            PopulateGeneral(heroUnit);
             PopulateStats(heroUnit);
             PopulateItems(heroUnit);
+        }
+
+        private void PopulateGeneral(Unit heroUnit)
+        {
+          name_TextBox.Text = heroUnit.ToString();
+
+          string job;
+          switch (heroUnit.JobClass)
+          {
+            case (93):
+              {
+                job = "Summoner";
+              }
+              break;
+            case (97):
+              {
+                job = "Guardian";
+              }
+              break;
+            case (124):
+              {
+                job = "Marksman";
+              }
+              break;
+            case (141):
+              {
+                job = "Evoker";
+              }
+              break;
+            case (180):
+              {
+                job = "Blademaster";
+              }
+              break;
+            case (191):
+              {
+                job = "Engineer";
+              }
+              break;
+            default:
+              {
+                job = "Unknown";
+              }
+              break;
+          }
+
+          textBox1.Text = String.Format("{0:00000000}", Int32.Parse(Convert.ToString(heroUnit.JobClass, 2)));
+          class_TextBox.Text = job;
+
+          // sets the level label and corrects the offset to display the real level
+          level_NumericUpDown.Value = heroUnit.Stats[0].values[0].Stat - 8;
+
+          if (heroUnit.EliteMode == 1)
+          {
+            elite_CheckBox.Checked = true;
+          }
         }
 
         private void currentlyEditing_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -265,6 +274,12 @@ namespace Reanimator.Forms
             {
                 MessageBox.Show("Failed to start game at:\n" + Config.gameClientPath + "\n\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void hardcore_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+          dead_CheckBox.Enabled = hardcore_CheckBox.Checked;
+          dead_CheckBox.Checked = false;
         }
     }
 }
