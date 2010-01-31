@@ -9,7 +9,7 @@ namespace Reanimator.Excel
     public class ItemLevels : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class ItemLevelsTable
+        public struct ItemLevelsTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] unknown;
