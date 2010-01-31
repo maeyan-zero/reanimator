@@ -59,9 +59,9 @@ namespace Reanimator.Excel
             public float procChance { get; set; }
             public float luckProbMod { get; set; }
             public Int32 affix1Chance { get; set; }
-            public Int32 affix1Type1_weight { get; set; }
-            public Int32 affix1Type2_weight { get; set; }
-            public Int32 affix1Type3_weight { get; set; }
+            public Int32 affix1Type1Weight { get; set; }
+            public Int32 affix1Type2Weight { get; set; }
+            public Int32 affix1Type3Weight { get; set; }
             public Int32 affix1Type4Weight { get; set; }
             public Int32 affix1Type5Weight { get; set; }
             public Int32 affix1Type6Weight { get; set; }
