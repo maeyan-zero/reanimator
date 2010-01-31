@@ -257,7 +257,7 @@ namespace Reanimator
             return true;
         }
 
-        private bool OpenFile_HG1(string szFileName)
+        private bool OpenFile_HG1(string fileName)
         {
             if (excelTables == null)
             {
@@ -268,11 +268,11 @@ namespace Reanimator
             FileStream heroFile;
             try
             {
-                heroFile = new FileStream(szFileName, FileMode.Open);
+                heroFile = new FileStream(fileName, FileMode.Open);
             }
             catch (Exception e)
             {
-                MessageBox.Show("Failed to open file: " + szFileName + "\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -282,8 +282,8 @@ namespace Reanimator
             Unit heroUnit = new Unit(bitBuffer);
             heroUnit.ReadUnit(ref heroUnit);
 
-            HeroEditor heroEditor = new HeroEditor(heroUnit, excelTables, szFileName);
-            heroEditor.Text = "Hero Editor: " + szFileName;
+            HeroEditor heroEditor = new HeroEditor(heroUnit, excelTables, fileName);
+            heroEditor.Text = "Hero Editor: " + fileName;
             heroEditor.MdiParent = this;
             heroEditor.Show();
 
@@ -292,7 +292,37 @@ namespace Reanimator
 
         private void OpenFile_COOKED(String fileName)
         {
-            MessageBox.Show("Todo");
+            int indexStart = fileName.LastIndexOf("\\") + 1;
+            int indexEnd = fileName.LastIndexOf(".txt");
+            string name = fileName.Substring(indexStart, indexEnd - indexStart);
+            if (name == "items")
+            {
+                ExcelTableForm etf = new ExcelTableForm(excelTables.Items);
+                etf.Text = "Excel Table: " + fileName;
+                etf.MdiParent = this;
+                etf.Show();
+            }
+            else if (name == "item_levels")
+            {
+                ExcelTableForm etf = new ExcelTableForm(excelTables.ItemLevels);
+                etf.Text = "Excel Table: " + fileName;
+                etf.MdiParent = this;
+                etf.Show();
+            }
+            else if (name == "states")
+            {
+                ExcelTableForm etf = new ExcelTableForm(excelTables.States);
+                etf.Text = "Excel Table: " + fileName;
+                etf.MdiParent = this;
+                etf.Show();
+            }
+            else if (name == "stats")
+            {
+                ExcelTableForm etf = new ExcelTableForm(excelTables.Stats);
+                etf.Text = "Excel Table: " + fileName;
+                etf.MdiParent = this;
+                etf.Show();
+            }
         }
 
         private void OpenFile_STRINGS(String fileName)

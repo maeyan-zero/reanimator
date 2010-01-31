@@ -9,42 +9,47 @@ namespace Reanimator.Excel
     public class ItemLevels : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct ItemLevelsTable
+        public class ItemLevelsTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] unknown;
-            Int32 level;
-            Int32 baseDamageMultiplyer;
-            Int32 armor;
-            Int32 armorBuffer;
-            Int32 armorRegen;
-            Int32 shields;
-            Int32 shieldsBuffer;
-            Int32 shieldsRegen;
-            Int32 sfxAttackAbility;
-            Int32 sfxDefenceAbility;
-            Int32 interruptAttack;
-            Int32 interruptDefence;
-            Int32 stealthAttack;
-            Int32 aiChangerAttack;
-            Int32 feed;
-            Int32 levelRequirement;
-            Int32 itemLevelMin;
-            Int32 itemLevelMax;
-            Int32 buyPriceBase;
-            Int32 sellPriceBase;
-            Int32 augmentCostCommon;
-            Int32 augmentCostRare;
-            Int32 augmentCostLegendary;
-            Int32 augmentCostRandom;
-            Int32 scrapUpgradeQuantity;
-            Int32 specialScrapUpgradeQuantity;
-            Int32 itemLevelsPerUpgrade;
+            public Int32 level { get; set; }
+            public Int32 baseDamageMultiplyer { get; set; }
+            public Int32 armor { get; set; }
+            public Int32 armorBuffer { get; set; }
+            public Int32 armorRegen { get; set; }
+            public Int32 shields { get; set; }
+            public Int32 shieldsBuffer { get; set; }
+            public Int32 shieldsRegen { get; set; }
+            public Int32 sfxAttackAbility { get; set; }
+            public Int32 sfxDefenceAbility { get; set; }
+            public Int32 interruptAttack { get; set; }
+            public Int32 interruptDefence { get; set; }
+            public Int32 stealthAttack { get; set; }
+            public Int32 aiChangerAttack { get; set; }
+            public Int32 feed { get; set; }
+            public Int32 levelRequirement { get; set; }
+            public Int32 itemLevelMin { get; set; }
+            public Int32 itemLevelMax { get; set; }
+            public Int32 buyPriceBase { get; set; }
+            public Int32 sellPriceBase { get; set; }
+            public Int32 augmentCostCommon { get; set; }
+            public Int32 augmentCostRare { get; set; }
+            public Int32 augmentCostLegendary { get; set; }
+            public Int32 augmentCostRandom { get; set; }
+            public Int32 scrapUpgradeQuantity { get; set; }
+            public Int32 specialScrapUpgradeQuantity { get; set; }
+            public Int32 itemLevelsPerUpgrade { get; set; }
         }
 
         List<ItemLevelsTable> itemLevels;
 
         public ItemLevels(byte[] data) : base(data) { }
+
+        public override object GetTableArray()
+        {
+            return itemLevels.ToArray();
+        }
 
         protected override void ParseTables(byte[] data)
         {

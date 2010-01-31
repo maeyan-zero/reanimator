@@ -6,14 +6,14 @@ using System.Runtime.InteropServices;
 
 namespace Reanimator.Excel
 {
-    class States : ExcelTable
+    public class States : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct StatesTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
             Int32[] unknown;
-            public Int16 id;
+            public Int16 id { get; set; }
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 198)]
             public byte[] unknownData;
         }
@@ -21,6 +21,11 @@ namespace Reanimator.Excel
         List<StatesTable> states;
 
         public States(byte[] data) : base(data) { }
+
+        public override object GetTableArray()
+        {
+            return states.ToArray();
+        }
 
         protected override void ParseTables(byte[] data)
         {

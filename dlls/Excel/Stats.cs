@@ -24,6 +24,11 @@ namespace Reanimator.Excel
 
         public Stats(byte[] data) : base(data) { }
 
+        public override object GetTableArray()
+        {
+            return stats.ToArray();
+        }
+
         protected override void ParseTables(byte[] data)
         {
             stats = ExcelTables.ReadTables<StatsTable>(data, ref offset, Count);

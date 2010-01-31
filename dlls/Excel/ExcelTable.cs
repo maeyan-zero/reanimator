@@ -87,17 +87,32 @@ namespace Reanimator.Excel
         protected byte[] excelData;
         protected int offset;
         protected ExcelHeader excelHeader;
+        public int FileId
+        {
+            get { return excelHeader.fileId; }
+        }
+
         protected StringHeader stringHeader;
-        protected byte[] strings;
+        public byte[] Strings { get; set; }
+
         protected TableHeader tableHeader;
         protected TableIndex tableIndex;
         protected int[] tableIndicies;
+        public int[] TableIndicies { get { return tableIndicies; } }
+
         protected UnknownIndex unknownIndex1;
         protected int[] unknowns1;
+        public int[] Unknowns1 { get { return unknowns1; } }
         protected UnknownIndex unknownIndex2;
         protected int[] unknowns2;
-        protected UnknownIndex untestedHeader1;
-        protected UnknownIndex untestedHeader2;
+        public int[] Unknowns2 { get { return unknowns2; } }
+        protected UnknownIndex unknownIndex3;
+        protected int[] unknowns3;
+        public int[] Unknowns3 { get { return unknowns3; } }
+        protected UnknownIndex unknownIndex4;
+        protected int[] unknowns4;
+        public int[] Unknowns4 { get { return unknowns4; } }
+
         protected UnknownHeader unknownHeader;
         protected ByteHeader byteHeader;
         protected byte[] bytes;
@@ -125,8 +140,8 @@ namespace Reanimator.Excel
                 CheckFlag(stringHeader.flag);
                 if (stringHeader.stringBlockSize != 0)
                 {
-                    strings = new byte[stringHeader.stringBlockSize];
-                    Buffer.BlockCopy(excelData, offset, strings, 0, strings.Length);
+                    Strings = new byte[stringHeader.stringBlockSize];
+                    Buffer.BlockCopy(excelData, offset, Strings, 0, Strings.Length);
                     offset += stringHeader.stringBlockSize;
                 }
 
@@ -185,20 +200,20 @@ namespace Reanimator.Excel
 
 
                 // untested header1 - this appears to be read in as above
-                untestedHeader1 = (UnknownIndex)FileTools.ByteArrayToStructure(data, typeof(UnknownIndex), offset);
+                unknownIndex3 = (UnknownIndex)FileTools.ByteArrayToStructure(data, typeof(UnknownIndex), offset);
                 offset += Marshal.SizeOf(typeof(UnknownIndex));
-                CheckFlag(untestedHeader1.flag);
-                if (untestedHeader1.count != 0)
+                CheckFlag(unknownIndex3.flag);
+                if (unknownIndex3.count != 0)
                 {
                     throw new NotImplementedException("untestedHeader1.count != 0");
                 }
 
 
                 // untested header2 - this appears to be read in as above
-                untestedHeader2 = (UnknownIndex)FileTools.ByteArrayToStructure(data, typeof(UnknownIndex), offset);
+                unknownIndex4 = (UnknownIndex)FileTools.ByteArrayToStructure(data, typeof(UnknownIndex), offset);
                 offset += Marshal.SizeOf(typeof(UnknownIndex));
-                CheckFlag(untestedHeader2.flag);
-                if (untestedHeader2.count != 0)
+                CheckFlag(unknownIndex4.flag);
+                if (unknownIndex4.count != 0)
                 {
                     throw new NotImplementedException("untestedHeader2.count != 0");
                 }
@@ -274,6 +289,7 @@ namespace Reanimator.Excel
             }
         }
 
+        public abstract object GetTableArray();
         protected abstract void ParseTables(byte[] data);
 
         public static List<T> ReadTables<T>(byte[] data, ref int offset, int count)
