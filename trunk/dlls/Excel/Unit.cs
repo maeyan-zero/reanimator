@@ -250,6 +250,134 @@ namespace Reanimator
             return new string(characterName);
         }
 
+        #region ENABLE/DISABLE ELITE/HC
+        public int PlayerFlagCount1
+        {
+            get { return playerFlagCount1; }
+        }
+
+        public int PlayerFlagCount2
+        {
+            get { return playerFlagCount2; }
+        }
+
+        public int[] Flags1
+        {
+            get { return playerFlags1; }
+        }
+
+        public int[] Flags2
+        {
+            get { return playerFlags2; }
+        }
+
+        // Using this method a lot of flags are set that aren't usually set by HGL, but the results seem to be the same and the implementation is a lot easier
+        // 
+        public void SetGameMode(bool elite, bool hardcore, bool dead)
+        {
+            List<int> arguments = new List<int>();
+
+            if (elite)
+            {
+                arguments.Add(21062);
+            }
+            if (hardcore)
+            {
+                arguments.Add(18243);
+            }
+            if (hardcore && dead)
+            {
+                arguments.Add(18499);
+            }
+
+            playerFlagCount1 = arguments.Count;
+            playerFlagCount2 = arguments.Count;
+
+            playerFlags1 = arguments.ToArray();
+            playerFlags2 = arguments.ToArray();
+        }
+
+        #region set elite and hardcore mode
+        // pFC = playerFlagCounter (int value)
+        // pF = playerFlags (int array)
+
+        // Normal mode only: (strange, but the game crashes if the arrays are not set like this...)
+        // pFC1 = 0, pF1 = int[0]
+        // pFC2 = 0, pF2 = null
+
+        // Elite mode only:
+        // pFC1 = 1, pF1 = 21062
+        // pFC2 = 1, pF2 = 21062
+
+        // HC only (alive):
+        // pFC1 = 1, pF1 = ?
+        // pFC2 = 1, pF2 = ?
+
+        // HC only (dead):
+        // pFC1 = 1, pF1 = ?
+        // pFC2 = 1, pF2 = ?
+
+        // Elite + HC (alive):
+        // pFC1 = 1, pF1 = 21062
+        // pFC2 = 1, pF2 = 18243
+
+        // Elite + HC (dead):
+        // pFC1 = 1, pF1 = 18243 (Elite Flag seems to be overwritten? How does this flag look in normal HC?)
+        // pFC2 = 2, pF2 = 18499, 18243
+
+        // works fine if the character is an elite character and is reset to elite. Doesn't work if the character is a normal character
+        //public void EnableElite()
+        //{
+        //    playerFlagCount1 = 1;
+        //    playerFlagCount2 = 1;
+
+        //    playerFlags1 = new int[] { 21062 };
+        //    playerFlags2 = new int[] { 21062 };
+        //}
+
+        //// works fine if the character is a normal character and is reset to normal. Doesn't work if the character is an elite character
+        //public void EnableNormalMode()
+        //{
+        //    playerFlagCount1 = 0;
+        //    playerFlagCount2 = 0;
+
+        //    playerFlags1 = new int[0];
+        //    playerFlags2 = null;
+        //}
+
+        //// untested
+        //public void EnableHC()
+        //{
+        //    playerFlagCount1 = 0;
+        //    playerFlagCount2 = 1;
+
+        //    playerFlags1 = new int[0];
+        //    playerFlags2 = new int[] { 18243 };
+        //}
+
+        //// 
+        //public void EnableEliteAndHC()
+        //{
+        //    playerFlagCount1 = 2;
+        //    playerFlagCount2 = 2;
+
+        //    playerFlags1 = new int[] { 21062, 18243 };
+        //    playerFlags2 = new int[] { 21062, 18243 };
+        //}
+
+        //// untested... probably only for Elite HC
+        //public void KillCharacter()
+        //{
+        //    playerFlagCount1 = 1;
+        //    playerFlagCount2 = 2;
+
+        //    playerFlags1 = new int[] { 18243 };
+        //    playerFlags2 = new int[] { 18499, 18423 };
+        //}
+        #endregion
+
+        #endregion
+
         ////// Start of read inside main header check function (in ASM) //////
 
         internal int majorVersion;							    	    // 16 bits

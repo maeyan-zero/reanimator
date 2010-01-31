@@ -245,16 +245,88 @@ namespace Reanimator.Forms
               break;
           }
 
-          textBox1.Text = String.Format("{0:00000000}", Int32.Parse(Convert.ToString(heroUnit.JobClass, 2)));
-          class_TextBox.Text = job;
+            textBox1.Text = String.Format("{0:00000000}", Int32.Parse(Convert.ToString(heroUnit.JobClass, 2)));
+            class_TextBox.Text = job;
 
-          // sets the level label and corrects the offset to display the real level
-          level_NumericUpDown.Value = heroUnit.Stats[0].values[0].Stat - 8;
+            SetCheckBoxes();
+            // sets the level label and corrects the offset to display the real level
+            level_NumericUpDown.Value = heroUnit.Stats[0].values[0].Stat - 8;
 
-          if (heroUnit.EliteMode == 1)
-          {
-            elite_CheckBox.Checked = true;
-          }
+            DisplayFlags();
+
+            initialized = true;
+        }
+
+        // flag used to prevent overwriting of the character game mode when loading the check box states
+        bool initialized = false;
+
+        private void SetCheckBoxes()
+        {
+            if (heroUnit.Flags1 != null && heroUnit.Flags1.Contains(21062))
+            {
+                elite_CheckBox.Checked = true;
+            }
+            if (heroUnit.Flags2 != null && heroUnit.Flags2.Contains(18243))
+            {
+                hardcore_CheckBox.Checked = true;
+            }
+            if (heroUnit.Flags2 != null && heroUnit.Flags2.Contains(18499))
+            {
+                dead_CheckBox.Checked = true;
+            }
+        }
+
+        private void CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (initialized)
+            {
+                heroUnit.SetGameMode(elite_CheckBox.Checked, hardcore_CheckBox.Checked, dead_CheckBox.Checked);
+            }
+        }
+
+        private void DisplayFlags()
+        {
+            richTextBox1.Text = string.Empty;
+
+            richTextBox1.Text += "Flag1:\n";
+            richTextBox1.Text += heroUnit.PlayerFlagCount1 + "\n";
+            if (heroUnit.Flags1 != null)
+            {
+                richTextBox1.Text += "Array size: " + heroUnit.Flags1.Length + "\n";
+
+                foreach (int flag in heroUnit.Flags1)
+                {
+                    richTextBox1.Text += flag.ToString() + "\n";
+                }
+            }
+            else
+            {
+                richTextBox1.Text += "null";
+            }
+
+            richTextBox1.Text += "\n\nFlag2:\n";
+            richTextBox1.Text += heroUnit.PlayerFlagCount2 + "\n";
+            if (heroUnit.Flags2 != null)
+            {
+                richTextBox1.Text += "Array size: " + heroUnit.Flags2.Length + "\n";
+
+                foreach (int flag in heroUnit.Flags2)
+                {
+                    richTextBox1.Text += flag.ToString() + "\n";
+                }
+            }
+            else
+            {
+                richTextBox1.Text += "Array = null";
+            }
+        }
+
+        private void hardcore_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            dead_CheckBox.Enabled = hardcore_CheckBox.Checked;
+            dead_CheckBox.Checked = false;
+
+            CheckBox_CheckedChanged(sender, e);
         }
 
         private void currentlyEditing_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -276,10 +348,9 @@ namespace Reanimator.Forms
             }
         }
 
-        private void hardcore_CheckBox_CheckedChanged(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
-          dead_CheckBox.Enabled = hardcore_CheckBox.Checked;
-          dead_CheckBox.Checked = false;
+            DisplayFlags();
         }
     }
 }
