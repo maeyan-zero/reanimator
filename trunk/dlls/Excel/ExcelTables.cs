@@ -26,7 +26,12 @@ namespace Reanimator.Excel
         {
             get { return stats; }
         }
+
         States states;
+        public States States
+        {
+            get { return states; }
+        }
 
         Items items;
         public Items Items
@@ -41,6 +46,11 @@ namespace Reanimator.Excel
         }
 
         public ExcelTables(byte[] data) : base(data) { }
+
+        public override object GetTableArray()
+        {
+            return null;
+        }
 
         protected override void ParseTables(byte[] data)
         {
@@ -61,8 +71,6 @@ namespace Reanimator.Excel
                 FileStream cookedFile;
 
                 string currentItem = szStringId.ToLower() + ".txt.cooked";
-                //progress.SetCurrentItemText(currentItem);
-                //progress.Refresh();
                 label.Text = currentItem;
 
                 try
@@ -78,8 +86,6 @@ namespace Reanimator.Excel
                     }
                     catch (Exception)
                     {
-                        //progress.StepProgress();
-                        //progress.PerformStep();
                         continue;
                     }
                 }
@@ -114,8 +120,6 @@ namespace Reanimator.Excel
                 {
                     cookedFile.Dispose();
                 }
-                //progress.StepProgress();
-                //progress.PerformStep();
             }
 
             return true;

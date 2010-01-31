@@ -49,12 +49,24 @@
   <ItemGroup>
     <Compile Include="BitBuffer.cs" />
     <Compile Include="Crc32.cs" />
-    <Compile Include="ExcelTable.cs" />
-    <Compile Include="ExcelTables.cs" />
-    <Compile Include="ItemLevels.cs" />
-    <Compile Include="Items.cs" />
-    <Compile Include="States.cs" />
-    <Compile Include="Stats.cs" />
+    <Compile Include="ExcelTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExcelTables.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ItemLevels.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Items.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="States.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Stats.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Treasure.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>
