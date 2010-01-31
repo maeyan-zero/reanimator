@@ -34,16 +34,27 @@ namespace Reanimator.Forms
             if (excelTable.Strings != null)
             {
                 String s = String.Empty;
-                foreach (byte b in excelTable.Strings)
+                int initialOffset = 0x24; // in excel file
+                for (int i = 0, j = 0, currentOffset = -1; i < excelTable.Strings.Length; i++)
                 {
+                    byte b = excelTable.Strings[i];
+
                     if (b != 0)
                     {
                         s += (char)b;
+
+                        if (currentOffset == -1)
+                        {
+                            currentOffset = i;
+                        }
                     }
                     else
                     {
-                        this.listBox1.Items.Add(s);
+                        currentOffset += initialOffset;
+                        this.listBox1.Items.Add(j + ": " + s + " (0x" + currentOffset.ToString("X") + " - " + currentOffset + ")");
                         s = String.Empty;
+                        j++;
+                        currentOffset = -1;
                     }
                 }
             }
@@ -90,6 +101,16 @@ namespace Reanimator.Forms
             }
 
             dataGridView2.DataSource = tdsList.ToArray();
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            DataGridViewSelectedCellCollection selectedCells = dataGridView1.SelectedCells;
+            dataGridView2.ClearSelection();
+            foreach (DataGridViewCell cell in selectedCells)
+            {
+                dataGridView2.Rows[cell.RowIndex].Selected = true;
+            }
         }
     }
 }

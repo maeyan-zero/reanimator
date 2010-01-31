@@ -13,7 +13,14 @@ namespace Reanimator.Excel
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
             Int32[] unknown;
-            public Int16 id { get; set; }
+
+            private Int16 id;
+            public Int16 Id
+            {
+                get { return id; }
+                set { id = value; }
+            }
+
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 198)]
             public byte[] unknownData;
         }
