@@ -100,22 +100,22 @@ namespace Reanimator
 
         public string GetHGLDirectory()
         {
-          return Config.hglDir;
+            return Config.hglDir;
         }
 
         public string GetRootDir()
         {
-          return Config.dataDirsRoot;
+            return Config.dataDirsRoot;
         }
 
         public string GetClientDir()
         {
-          return Config.gameClientPath;
+            return Config.gameClientPath;
         }
 
         public ExcelTables GetExcelTables()
         {
-          return excelTables;
+            return excelTables;
         }
 
 
@@ -295,34 +295,17 @@ namespace Reanimator
             int indexStart = fileName.LastIndexOf("\\") + 1;
             int indexEnd = fileName.LastIndexOf(".txt");
             string name = fileName.Substring(indexStart, indexEnd - indexStart);
-            if (name == "items")
+
+            ExcelTable excelTable = excelTables.GetTable(name);
+            if (excelTable == null)
             {
-                ExcelTableForm etf = new ExcelTableForm(excelTables.Items);
-                etf.Text = "Excel Table: " + fileName;
-                etf.MdiParent = this;
-                etf.Show();
+                return;
             }
-            else if (name == "item_levels")
-            {
-                ExcelTableForm etf = new ExcelTableForm(excelTables.ItemLevels);
-                etf.Text = "Excel Table: " + fileName;
-                etf.MdiParent = this;
-                etf.Show();
-            }
-            else if (name == "states")
-            {
-                ExcelTableForm etf = new ExcelTableForm(excelTables.States);
-                etf.Text = "Excel Table: " + fileName;
-                etf.MdiParent = this;
-                etf.Show();
-            }
-            else if (name == "stats")
-            {
-                ExcelTableForm etf = new ExcelTableForm(excelTables.Stats);
-                etf.Text = "Excel Table: " + fileName;
-                etf.MdiParent = this;
-                etf.Show();
-            }
+
+            ExcelTableForm etf = new ExcelTableForm(excelTable);
+            etf.Text = "Excel Table: " + fileName;
+            etf.MdiParent = this;
+            etf.Show();
         }
 
         private void OpenFile_STRINGS(String fileName)

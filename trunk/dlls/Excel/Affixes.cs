@@ -11,8 +11,8 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class AffixesTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            byte[] unknown01;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+            Int32[] header;
             public Int32 affix;
             public Int32 unknown02;
             public Int32 alwaysApply;
@@ -57,6 +57,7 @@ namespace Reanimator.Excel
             public Int32 buyPriceMulti;
             public Int32 buyPriceAdd;
             public Int32 sellPriceMulti;
+            public Int32 sellPriceAdd;
             public Int32 cond;
             public Int32 itemLevel;
             public Int32 prop1Cond;
