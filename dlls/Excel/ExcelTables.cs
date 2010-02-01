@@ -20,69 +20,149 @@ namespace Reanimator.Excel
             public Int16 id;
         }
 
-        List<ExcelTableTable> tables;
-        Stats stats;
-        public Stats Stats
+        List<ExcelTableTable> excelTables;
+
+        class TableIndexManager
         {
-            get { return stats; }
+            class TableIndexHelper
+            {
+                public string stringId;
+                public string fileName;
+                public ExcelTable excelTable;
+                public Type type;
+
+                public TableIndexHelper(string id, string name, ExcelTable table, Type t)
+                {
+                    stringId = id;
+                    fileName = name;
+                    excelTable = table;
+                    type = t;
+                }
+            }
+
+            List<TableIndexHelper> tables;
+
+            public TableIndexManager()
+            {
+                tables = new List<TableIndexHelper>();
+            }
+
+            public void AddTable(string stringId, string fileName, Type type)
+            {
+                if (GetTableIndex(stringId) == null)
+                {
+                    tables.Add(new TableIndexHelper(stringId, fileName, null, type));
+                }
+            }
+
+            public string GetReplacement(string id)
+            {
+                TableIndexHelper tableIndex = GetTableIndex(id);
+
+                if (tableIndex == null)
+                {
+                    return id;
+                }
+                if (tableIndex.fileName == null)
+                {
+                    return id;
+                }
+
+                return tableIndex.fileName;
+            }
+
+            public void CreateTable(string id, byte[] buffer)
+            {
+                TableIndexHelper tableIndex = GetTableIndex(id);
+                if (tableIndex != null)
+                {
+                    tableIndex.excelTable = (ExcelTable)Activator.CreateInstance(tableIndex.type, buffer);
+                }
+            }
+
+            public ExcelTable GetTable(string stringId)
+            {
+                TableIndexHelper tableIndex = GetTableIndex(stringId);
+                if (tableIndex != null)
+                {
+                    return tableIndex.excelTable;
+                }
+
+                return null;
+            }
+
+            private TableIndexHelper GetTableIndex(string id)
+            {
+                foreach (TableIndexHelper tableIndex in tables)
+                {
+                    if (tableIndex.stringId.Equals(id, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return tableIndex;
+                    }
+                }
+
+                return null;
+            }
         }
 
-        States states;
-        public States States
-        {
-            get { return states; }
-        }
+        TableIndexManager tables;
 
-        Items items;
-        public Items Items
+        public ExcelTables(byte[] data)
+            : base(data)
         {
-            get { return items; }
+            tables = new TableIndexManager();
+            tables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
+            tables.AddTable("ITEMQUALITY", null, typeof(Excel.ItemQuality));
+            tables.AddTable("ITEMS", null, typeof(Excel.Items));
+            tables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
+            tables.AddTable("STATES", null, typeof(Excel.States));
+            tables.AddTable("STATS", null, typeof(Excel.Stats));
+            tables.AddTable("TREASURE", null, typeof(Excel.Treasure));
         }
-
-        ItemLevels itemLevels;
-        public ItemLevels ItemLevels
-        {
-            get { return itemLevels; }
-        }
-
-        public ExcelTables(byte[] data) : base(data) { }
 
         public override object GetTableArray()
         {
-            return tables.ToArray();
+            return excelTables.ToArray();
         }
 
         protected override void ParseTables(byte[] data)
         {
-            tables = ReadTables<ExcelTableTable>(data, ref offset, Count);
+            excelTables = ReadTables<ExcelTableTable>(data, ref offset, Count);
         }
 
         public string GetTableStringId(int index)
         {
-            return tables[index].stringId;
+            return excelTables[index].stringId;
         }
 
-        public bool LoadTables(string szFolder, Label label)
+        public ExcelTable GetTable(string stringId)
+        {
+            return tables.GetTable(stringId);
+        }
+
+        public bool LoadTables(string folder, Label label)
         {
             for (int i = 0; i < Count; i++)
             {
-                string szStringId = GetTableStringId(i);
-                string szFileName = szFolder + "\\" + szStringId + ".txt.cooked";
+                string stringId = GetTableStringId(i);
+                string fileName = tables.GetReplacement(stringId);
+
+                string filePath = folder + "\\" + fileName + ".txt.cooked";
                 FileStream cookedFile;
 
-                string currentItem = szStringId.ToLower() + ".txt.cooked";
+                string currentItem = fileName.ToLower() + ".txt.cooked";
                 label.Text = currentItem;
 
                 try
                 {
-                    cookedFile = new FileStream(szFileName, FileMode.Open);
+                    cookedFile = new FileStream(filePath, FileMode.Open);
                 }
                 catch (Exception)
                 {
                     try
                     {
-                        szFileName = szFileName.Replace("_common", "");
-                        cookedFile = new FileStream(szFileName, FileMode.Open);
+                        filePath = filePath.Replace("_common", "");
+                        cookedFile = new FileStream(filePath, FileMode.Open);
                     }
                     catch (Exception)
                     {
@@ -93,22 +173,7 @@ namespace Reanimator.Excel
                 byte[] buffer = FileTools.StreamToByteArray(cookedFile);
                 try
                 {
-                    if (szStringId.Equals("STATS", StringComparison.OrdinalIgnoreCase))
-                    {
-                        stats = new Stats(buffer);
-                    }
-                    else if (szStringId.Equals("STATES", StringComparison.OrdinalIgnoreCase))
-                    {
-                        states = new States(buffer);
-                    }
-                    else if (szStringId.Equals("ITEMS", StringComparison.OrdinalIgnoreCase))
-                    {
-                        items = new Items(buffer);
-                    }
-                    else if (szStringId.Equals("ITEM_LEVELS", StringComparison.OrdinalIgnoreCase))
-                    {
-                        itemLevels = new ItemLevels(buffer);
-                    }
+                    tables.CreateTable(stringId, buffer);
                 }
                 catch (Exception e)
                 {

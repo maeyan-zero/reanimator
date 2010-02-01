@@ -68,7 +68,7 @@ namespace Reanimator.Forms
             for (int i = 0; i < unit.Stats.Length; i++)
             {
                 Unit.StatBlock.Stat stat = unit.Stats[i];
-                stat.Name = excelTables.Stats.GetStringFromId(stat.Id);
+                stat.Name = ((Stats)excelTables.GetTable("stats")).GetStringFromId(stat.Id);
 
                 stats_ListBox.Items.Add(stat);
             }
