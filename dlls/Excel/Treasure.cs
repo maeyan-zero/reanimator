@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Reanimator.Excel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Reanimator
+namespace Reanimator.Excel
 {
     class Treasure: ExcelTable
     {
@@ -92,8 +91,7 @@ namespace Reanimator
 
         protected override void ParseTables(byte[] data)
         {
-            MessageBox.Show("Sorry, had to comment out the \"ParseTables\" function at the end of \"Treasure.cs\" as the Type \"ItemsTable\" couldn't be found.");
-            //treasure = ExcelTables.ReadTables<ItemsTable>(data, ref offset, Count);
+            treasure = ExcelTables.ReadTables<TreasureTable>(data, ref offset, Count);
         }
     }
 }

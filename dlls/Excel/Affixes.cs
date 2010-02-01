@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace Excel
+namespace Reanimator.Excel
 {
     class Affixes : ExcelTable
     {
@@ -85,7 +85,7 @@ namespace Excel
 
         protected override void ParseTables(byte[] data)
         {
-            affixes = ExcelTables.ReadTables<ItemsTable>(data, ref offset, Count);
+            affixes = ExcelTables.ReadTables<AffixesTable>(data, ref offset, Count);
         }
     }
 }

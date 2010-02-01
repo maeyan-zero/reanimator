@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace Reanimator.Excel
 {
@@ -11,9 +12,9 @@ namespace Reanimator.Excel
         public struct ItemQualityTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            public byte[] unknown01 { get; set; }
+            public byte[] unknown01;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-            public byte[] badgeFrame { get; set; }
+            public byte[] badgeFrame;
             public Int32 code { get; set; }
             public Int32 craftingBreakdownTreasure { get; set; }
             public Int32 displayName { get; set; }
@@ -22,7 +23,7 @@ namespace Reanimator.Excel
             public Int32 randomlyNamed { get; set; }
             public Int32 baseDescFormatString { get; set; }
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            public byte[] unknown02 { get; set; }
+            public byte[] unknown02;
             public Int32 nameColor { get; set; }
             public Int32 bkgdColor { get; set; }
             public Int32 doTransactionLogging { get; set; }
@@ -31,7 +32,7 @@ namespace Reanimator.Excel
             public float price_multiplier { get; set; }
             public float recipe_quantity_multiplier { get; set; }
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            public byte[] unknown03 { get; set; }
+            public byte[] unknown03;
             public Int32 minLevel { get; set; }
             public Int32 rarity { get; set; }
             public Int32 vendorRarity { get; set; }
@@ -149,7 +150,7 @@ namespace Reanimator.Excel
 
         protected override void ParseTables(byte[] data)
         {
-            itemQuality = ExcelTables.ReadTables<ItemsTable>(data, ref offset, Count);
+            itemQuality = ExcelTables.ReadTables<ItemQualityTable>(data, ref offset, Count);
         }
     }
 }
