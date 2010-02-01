@@ -9,24 +9,24 @@ namespace Reanimator.Excel
     public class Items : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct ItemsTable
+        class ItemsTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             public byte[] unknown01;
-            public UInt64 name { get; set; }
-            public UInt64 folder { get; set; }
-            public UInt64 appearance { get; set; }
-            public UInt64 appearenceFirst { get; set; }
-            public UInt64 icon { get; set; }
-            public UInt64 holyRadius { get; set; }
-            public UInt64 tinyHitParticle { get; set; }
-            public UInt64 lightHitParticle { get; set; }
-            public UInt64 mediumHitParticle { get; set; }
-            public UInt64 hardHitParticle { get; set; }
-            public UInt64 killedParticle { get; set; }
-            public UInt64 fizzleParticle { get; set; }
-            public UInt64 reflectParticle { get; set; }
-            public UInt64 restoreVitalsParticle { get; set; }
+            public UInt64 name;
+            public UInt64 folder;
+            public UInt64 appearance;
+            public UInt64 appearenceFirst;
+            public UInt64 icon;
+            public UInt64 holyRadius;
+            public UInt64 tinyHitParticle;
+            public UInt64 lightHitParticle;
+            public UInt64 mediumHitParticle;
+            public UInt64 hardHitParticle;
+            public UInt64 killedParticle;
+            public UInt64 fizzleParticle;
+            public UInt64 reflectParticle;
+            public UInt64 restoreVitalsParticle;
             public UInt64 diffuse;
             public UInt64 normal;
             public UInt64 specular;
@@ -59,15 +59,15 @@ namespace Reanimator.Excel
             public UInt32 behaviour;
             public UInt32 dontPath;
             public UInt32 action;
-            public UInt32 affixes { get; set; }
-            public UInt32 properties2 { get; set; }
+            public UInt32 affixes;
+            public UInt32 properties2;
             public UInt32 titleString;
-            public UInt32 typeDescription { get; set; }
+            public UInt32 typeDescription;
             public UInt32 flavorText;
             public UInt32 additionalDescription;
             public UInt32 additionalRaceDescription;
             public UInt32 analyze;
-            public UInt32 recipeList { get; set; }
+            public UInt32 recipeList;
             public UInt32 recipeSingleUse;
             public UInt32 paperdollBackgroundLevel;
             public UInt32 paperdollWeapon1;
@@ -85,16 +85,16 @@ namespace Reanimator.Excel
             public UInt32 unitType;
             public UInt32 unitTypeForLeveling;
             public UInt32 preferedByUnitType;
-            public UInt32 family { get; set; }
+            public UInt32 family;
             public UInt32 censorClassNoHumans;
             public UInt32 censorClassNoGore;
-            public UInt32 sex { get; set; }
-            public UInt32 race { get; set; }
-            public UInt32 rarity { get; set; }
+            public UInt32 sex;
+            public UInt32 race;
+            public UInt32 rarity;
             public UInt32 spawnChance;
             public UInt32 minMonsterExperienceLevel;
-            public UInt32 level { get; set; }
-            public UInt32 monsterQuality { get; set; }
+            public UInt32 level;
+            public UInt32 monsterQuality;
             public UInt32 monsterClassAtUniqueQuality;
             public UInt32 monsterClassAtChampionQuality;
             public UInt32 minionClass;
@@ -122,7 +122,7 @@ namespace Reanimator.Excel
             public float autoPickupDistance;
             public UInt32 pickupPullState;
             public float extraDyingTimeInSeconds;
-            public UInt32 npcInfo { get; set; }
+            public UInt32 npcInfo;
             public UInt32 balanceTestCount;
             public UInt32 balanceTestGroup;
             public UInt32 merchantStartingPane;
@@ -148,7 +148,7 @@ namespace Reanimator.Excel
             public UInt32 pickUpCondition;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             public byte[] unknown04;
-            public UInt32 scriptOnUse { get; set; }
+            public UInt32 scriptOnUse;
             public UInt32 stackSize;
             public UInt32 maxPickUp;
             public UInt32 baseCost;
@@ -185,8 +185,8 @@ namespace Reanimator.Excel
             public UInt32 meleeWeapon;
             public UInt32 cdTicks;
             public UInt32 approxDps;
-            public UInt32 tooltipDamageString { get; set; }
-            public UInt32 requiredAffixGroups1 { get; set; }
+            public UInt32 tooltipDamageString;
+            public UInt32 requiredAffixGroups1;
             public UInt32 requiredAffixGroups2;
             public UInt32 requiredAffixGroups3;
             public UInt32 requiredAffixGroups4;
@@ -195,7 +195,7 @@ namespace Reanimator.Excel
             public UInt32 requiredAffixGroups7;
             public UInt32 requiredAffixGroups8;
             public UInt32 spawnMonsterClass;
-            public UInt32 safeState { get; set; }
+            public UInt32 safeState;
             public UInt32 skillGhost;
             public UInt32 skillRef;
             public UInt32 dmgType;
@@ -206,7 +206,7 @@ namespace Reanimator.Excel
             public UInt32 sfxAttackFocus;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
             public byte[] unknown08;
-            public UInt32 sfxPhysicalAbility { get; set; }
+            public UInt32 sfxPhysicalAbility;
             public UInt32 sfxPhysicalDefense;
             public UInt32 sfxPhysicalKnockbackInCm;
             public UInt32 sfxPhysicalStunDurationInSeconds;
@@ -241,13 +241,13 @@ namespace Reanimator.Excel
             public UInt32 sfxPoisonDurationInSeconds;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
             public byte[] unknown13;
-            public UInt32 dmgIncrement { get; set; }
+            public UInt32 dmgIncrement;
             public UInt32 radialDmgIncrement;
             public UInt32 fieldDmgIncrement;
             public UInt32 dotDmgIncrement;
             public UInt32 aiChangerDmgIncrement;
             public UInt32 toHit;
-            public UInt32 criticalPct { get; set; }
+            public UInt32 criticalPct;
             public UInt32 criticalMult;
             public UInt32 staminaDrainChancePercent;
             public UInt32 staminaDrain;
@@ -301,7 +301,7 @@ namespace Reanimator.Excel
             public UInt32 perLevelProps1;
             public UInt32 perLevelProps2;
             public UInt32 propsElite;
-            public UInt32 affix1 { get; set; }
+            public UInt32 affix1;
             public UInt32 affix2;
             public UInt32 affix3;
             public UInt32 affix4;

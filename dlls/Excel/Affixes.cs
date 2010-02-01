@@ -9,69 +9,69 @@ namespace Reanimator.Excel
     class Affixes : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class AffixesTable
+        class AffixesTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] unknown01;
-            public Int32 affix { get; set; }
-            public Int32 unknown02 { get; set; }
-            public Int32 alwaysApply { get; set; }
-            public Int32 qualityNameString { get; set; }
-            public Int32 setNameString { get; set; }
-            public Int32 magicNameString { get; set; }
-            public Int32 replaceNameString { get; set; }
-            public Int32 flavorText { get; set; }
-            public Int32 unknown03 { get; set; }
-            public Int32 nameColor { get; set; }
-            public Int32 gridColor { get; set; }
-            public Int32 dom { get; set; }
-            public Int32 code { get; set; }
-            public Int32 affixType1 { get; set; }
-            public Int32 affixType2 { get; set; }
-            public Int32 affixType3 { get; set; }
-            public Int32 affixType4 { get; set; }
-            public Int32 affixType5 { get; set; }
-            public Int32 affixType6 { get; set; }
-            public Int32 suffix { get; set; }
-            public Int32 group { get; set; }
-            public Int32 style { get; set; }
-            public Int32 useWhenAugmenting { get; set; }
-            public Int32 spawn { get; set; }
-            public Int32 minLevel { get; set; }
-            public Int32 maxLevel { get; set; }
-            public Int32 allowTypes1 { get; set; }
-            public Int32 allowTypes2 { get; set; }
-            public Int32 allowTypes3 { get; set; }
-            public Int32 allowTypes4 { get; set; }
-            public Int32 allowTypes5 { get; set; }
-            public Int32 allowTypes6 { get; set; }
-            public Int32 groupWeight { get; set; }
-            public Int32 weight { get; set; }
-            public Int32 luckWeight { get; set; }
+            public Int32 affix;
+            public Int32 unknown02;
+            public Int32 alwaysApply;
+            public Int32 qualityNameString;
+            public Int32 setNameString;
+            public Int32 magicNameString;
+            public Int32 replaceNameString;
+            public Int32 flavorText;
+            public Int32 unknown03;
+            public Int32 nameColor;
+            public Int32 gridColor;
+            public Int32 dom;
+            public Int32 code;
+            public Int32 affixType1;
+            public Int32 affixType2;
+            public Int32 affixType3;
+            public Int32 affixType4;
+            public Int32 affixType5;
+            public Int32 affixType6;
+            public Int32 suffix;
+            public Int32 group;
+            public Int32 style;
+            public Int32 useWhenAugmenting;
+            public Int32 spawn;
+            public Int32 minLevel;
+            public Int32 maxLevel;
+            public Int32 allowTypes1;
+            public Int32 allowTypes2;
+            public Int32 allowTypes3;
+            public Int32 allowTypes4;
+            public Int32 allowTypes5;
+            public Int32 allowTypes6;
+            public Int32 groupWeight;
+            public Int32 weight;
+            public Int32 luckWeight;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
             byte[] unknown04;
-            public Int32 colorSet { get; set; }
-            public Int32 colorSetPriority { get; set; }
-            public Int32 state { get; set; }
-            public Int32 saveState { get; set; }
-            public Int32 buyPriceMulti { get; set; }
-            public Int32 buyPriceAdd { get; set; }
-            public Int32 sellPriceMulti { get; set; }
-            public Int32 cond { get; set; }
-            public Int32 itemLevel { get; set; }
-            public Int32 prop1Cond { get; set; }
-            public Int32 prop2Cond { get; set; }
-            public Int32 prop3Cond { get; set; }
-            public Int32 prop4Cond { get; set; }
-            public Int32 prop5Cond { get; set; }
-            public Int32 prop6Cond { get; set; }
-            public Int32 property1 { get; set; }
-            public Int32 property2 { get; set; }
-            public Int32 property3 { get; set; }
-            public Int32 property4 { get; set; }
-            public Int32 property5 { get; set; }
-            public Int32 property6 { get; set; }
-            public Int32 onlyOnItemsRequiringUnitType { get; set; }
+            public Int32 colorSet;
+            public Int32 colorSetPriority;
+            public Int32 state;
+            public Int32 saveState;
+            public Int32 buyPriceMulti;
+            public Int32 buyPriceAdd;
+            public Int32 sellPriceMulti;
+            public Int32 cond;
+            public Int32 itemLevel;
+            public Int32 prop1Cond;
+            public Int32 prop2Cond;
+            public Int32 prop3Cond;
+            public Int32 prop4Cond;
+            public Int32 prop5Cond;
+            public Int32 prop6Cond;
+            public Int32 property1;
+            public Int32 property2;
+            public Int32 property3;
+            public Int32 property4;
+            public Int32 property5;
+            public Int32 property6;
+            public Int32 onlyOnItemsRequiringUnitType;
         }
 
         List<AffixesTable> affixes;

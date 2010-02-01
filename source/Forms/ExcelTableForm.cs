@@ -8,13 +8,14 @@ using System.Text;
 using System.Windows.Forms;
 using Reanimator.Excel;
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace Reanimator.Forms
 {
     public partial class ExcelTableForm : Form
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class TableDataSource
+        class TableIndexDataSource
         {
             public int Index { get; set; }
             public int Unknowns1 { get; set; }
@@ -29,12 +30,11 @@ namespace Reanimator.Forms
 
             // file id
             this.textBox1.Text = "0x" + excelTable.FileId.ToString("X");
-
+            
             // do strings - inefficient, but works.
             if (excelTable.Strings != null)
             {
                 String s = String.Empty;
-                int initialOffset = 0x24; // in excel file
                 for (int i = 0, j = 0, currentOffset = -1; i < excelTable.Strings.Length; i++)
                 {
                     byte b = excelTable.Strings[i];
@@ -50,7 +50,6 @@ namespace Reanimator.Forms
                     }
                     else
                     {
-                        currentOffset += initialOffset;
                         this.listBox1.Items.Add(j + ": " + s + " (0x" + currentOffset.ToString("X") + " - " + currentOffset + ")");
                         s = String.Empty;
                         j++;
@@ -58,12 +57,31 @@ namespace Reanimator.Forms
                     }
                 }
             }
-
+            
             // main table data
-            dataGridView1.DataSource = excelTable.GetTableArray();
+            dataGridView1.AutoGenerateColumns = false;
+            object[] array = (object[])excelTable.GetTableArray();
+            Type type = array[0].GetType();
+            int columnCount = 0;
+            foreach (MemberInfo memberInfo in type.GetFields())
+            {
+                dataGridView1.Columns.Add(memberInfo.Name, memberInfo.Name);
+                columnCount++;
+            }
+            for (int i = 0; i < array.Length; i++)
+            {
+                int row = dataGridView1.Rows.Add();
+                int j = 0;
 
+                foreach (FieldInfo fieldInfo in type.GetFields())
+                {
+                    dataGridView1[j, row].Value = fieldInfo.GetValue(array[i]);
+                    j++;
+                }
+            }
+            
             // generate the table index data source - //TODO is there a better way?
-            List<TableDataSource> tdsList = new List<TableDataSource>();
+            List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
             int[][] intArrays = { excelTable.TableIndicies, excelTable.Unknowns1, excelTable.Unknowns2, excelTable.Unknowns3, excelTable.Unknowns4 };
             for (int i = 0; i < intArrays.Length; i++)
             {
@@ -74,11 +92,11 @@ namespace Reanimator.Forms
 
                 for (int j = 0; j < intArrays[i].Length; j++)
                 {
-                    TableDataSource tds;
+                    TableIndexDataSource tds;
 
                     if (tdsList.Count <= j)
                     {
-                        tdsList.Add(new TableDataSource());
+                        tdsList.Add(new TableIndexDataSource());
                     }
 
                     tds = tdsList[j];
@@ -109,7 +127,14 @@ namespace Reanimator.Forms
             dataGridView2.ClearSelection();
             foreach (DataGridViewCell cell in selectedCells)
             {
-                dataGridView2.Rows[cell.RowIndex].Selected = true;
+                try
+                {
+                    dataGridView2.Rows[cell.RowIndex].Selected = true;
+                }
+                catch (Exception)
+                {
+                    return;
+                }
             }
         }
     }

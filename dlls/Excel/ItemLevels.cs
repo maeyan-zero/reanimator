@@ -9,37 +9,37 @@ namespace Reanimator.Excel
     public class ItemLevels : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct ItemLevelsTable
+        class ItemLevelsTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] unknown;
-            public Int32 level { get; set; }
-            public Int32 baseDamageMultiplyer { get; set; }
-            public Int32 armor { get; set; }
-            public Int32 armorBuffer { get; set; }
-            public Int32 armorRegen { get; set; }
-            public Int32 shields { get; set; }
-            public Int32 shieldsBuffer { get; set; }
-            public Int32 shieldsRegen { get; set; }
-            public Int32 sfxAttackAbility { get; set; }
-            public Int32 sfxDefenceAbility { get; set; }
-            public Int32 interruptAttack { get; set; }
-            public Int32 interruptDefence { get; set; }
-            public Int32 stealthAttack { get; set; }
-            public Int32 aiChangerAttack { get; set; }
-            public Int32 feed { get; set; }
-            public Int32 levelRequirement { get; set; }
-            public Int32 itemLevelMin { get; set; }
-            public Int32 itemLevelMax { get; set; }
-            public Int32 buyPriceBase { get; set; }
-            public Int32 sellPriceBase { get; set; }
-            public Int32 augmentCostCommon { get; set; }
-            public Int32 augmentCostRare { get; set; }
-            public Int32 augmentCostLegendary { get; set; }
-            public Int32 augmentCostRandom { get; set; }
-            public Int32 scrapUpgradeQuantity { get; set; }
-            public Int32 specialScrapUpgradeQuantity { get; set; }
-            public Int32 itemLevelsPerUpgrade { get; set; }
+            public Int32 level;
+            public Int32 baseDamageMultiplyer;
+            public Int32 armor;
+            public Int32 armorBuffer;
+            public Int32 armorRegen;
+            public Int32 shields;
+            public Int32 shieldsBuffer;
+            public Int32 shieldsRegen;
+            public Int32 sfxAttackAbility;
+            public Int32 sfxDefenceAbility;
+            public Int32 interruptAttack;
+            public Int32 interruptDefence;
+            public Int32 stealthAttack;
+            public Int32 aiChangerAttack;
+            public Int32 feed;
+            public Int32 levelRequirement;
+            public Int32 itemLevelMin;
+            public Int32 itemLevelMax;
+            public Int32 buyPriceBase;
+            public Int32 sellPriceBase;
+            public Int32 augmentCostCommon;
+            public Int32 augmentCostRare;
+            public Int32 augmentCostLegendary;
+            public Int32 augmentCostRandom;
+            public Int32 scrapUpgradeQuantity;
+            public Int32 specialScrapUpgradeQuantity;
+            public Int32 itemLevelsPerUpgrade;
         }
 
         List<ItemLevelsTable> itemLevels;
