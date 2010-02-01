@@ -98,7 +98,7 @@ namespace Reanimator.Forms
                     eaValueLabel.Width = 40;
                     eaValueLabel.Top = 3 + heightOffset;
                     TextBox eaValueTextBox = new TextBox();
-                    eaValueTextBox.Text = stat.AttributeAt(j).ToString();
+                    eaValueTextBox.Text =  stat.AttributeAt(j).ToString();
                     eaValueTextBox.Left = eaValueLabel.Right;
                     eaValueTextBox.Top = heightOffset;
                     eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
@@ -249,12 +249,46 @@ namespace Reanimator.Forms
             class_TextBox.Text = job;
 
             SetCheckBoxes();
-            // sets the level label and corrects the offset to display the real level
-            level_NumericUpDown.Value = heroUnit.Stats[0].values[0].Stat - 8;
+
+            SetCharacterValues();
 
             DisplayFlags();
 
             initialized = true;
+        }
+
+        private void SetCharacterValues()
+        {
+            int level = GetSimpleValue("level");
+            level_NumericUpDown.Value = level - 8;
+
+
+            int palladium = GetSimpleValue("gold");
+            // when palladium reaches 9999999 the ingame value is set to a max value ao something like 16000000
+            if (palladium > 9999999)
+            {
+                palladium = 9999999;
+            }
+            //should not occur, but better be save than sorry
+            else if (palladium < 0)
+            {
+                palladium = 0;
+            }
+            palladium_numericUpDown.Value = palladium;
+
+            int statPoints = GetSimpleValue("stat_points");
+            if (statPoints < 0)
+            {
+                statPoints = 0;
+            }
+            statPoints_numericUpDown.Value = statPoints;
+
+            int skillPoints = GetSimpleValue("skill_points");
+            if(skillPoints < 0)
+            {
+                skillPoints = 0;
+            }
+            skillPoints_numericUpDown.Value = skillPoints;
         }
 
         // flag used to prevent overwriting of the character game mode when loading the check box states
@@ -352,5 +386,92 @@ namespace Reanimator.Forms
         {
             DisplayFlags();
         }
+
+
+
+
+        #region modify character values
+        private void SetSimpleValue(string valueName, int value)
+        {
+            if (initialized)
+            {
+                for (int counter = 0; counter < heroUnit.Stats.Length; counter++)
+                {
+                    Unit.StatBlock.Stat unit = heroUnit.Stats[counter];
+
+                    if (unit.Name == valueName)
+                    {
+                        unit.values[0].Stat = value;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void SetComplexValue(string valueName, Unit.StatBlock.Stat stat)
+        {
+            if (initialized)
+            {
+                for (int counter = 0; counter < heroUnit.Stats.Length; counter++)
+                {
+                    Unit.StatBlock.Stat unit = heroUnit.Stats[counter];
+
+                    if (unit.Name == valueName)
+                    {
+                        unit = stat;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private int GetSimpleValue(string valueName)
+        {
+            for (int counter = 0; counter < heroUnit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unit = heroUnit.Stats[counter];
+
+                if (unit.Name == valueName)
+                {
+                    return unit.values[0].Stat;
+                }
+            }
+            return -1;
+        }
+
+        private Unit.StatBlock.Stat GetComplexValue(string valueName)
+        {
+            for (int counter = 0; counter < heroUnit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unit = heroUnit.Stats[counter];
+
+                if (unit.Name == valueName)
+                {
+                    return unit;
+                }
+            }
+            return null;
+        }
+
+        private void level_NumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("level", (int)level_NumericUpDown.Value + 8);
+        }
+
+        private void palladium_numericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("gold", (int)palladium_numericUpDown.Value);
+        }
+
+        private void skillPoints_numericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("skill_points", (int)skillPoints_numericUpDown.Value);
+        }
+
+        private void statPoints_numericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("stat_points", (int)statPoints_numericUpDown.Value);
+        }
+        #endregion
     }
 }

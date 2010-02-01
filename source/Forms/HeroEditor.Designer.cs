@@ -31,6 +31,10 @@ namespace Reanimator.Forms
         {
             this.main_TabControl = new System.Windows.Forms.TabControl();
             this.general_TabPage = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.skillPoints_numericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.palladium_numericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -59,13 +63,18 @@ namespace Reanimator.Forms
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.statPoints_numericUpDown = new System.Windows.Forms.NumericUpDown();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.skillPoints_numericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.palladium_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.level_NumericUpDown)).BeginInit();
             this.stats_TabPage.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.stats_GroupBox.SuspendLayout();
             this.items_TabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.statPoints_numericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -84,6 +93,12 @@ namespace Reanimator.Forms
             // 
             // general_TabPage
             // 
+            this.general_TabPage.Controls.Add(this.label6);
+            this.general_TabPage.Controls.Add(this.statPoints_numericUpDown);
+            this.general_TabPage.Controls.Add(this.label5);
+            this.general_TabPage.Controls.Add(this.skillPoints_numericUpDown);
+            this.general_TabPage.Controls.Add(this.palladium_numericUpDown);
+            this.general_TabPage.Controls.Add(this.label4);
             this.general_TabPage.Controls.Add(this.button2);
             this.general_TabPage.Controls.Add(this.richTextBox1);
             this.general_TabPage.Controls.Add(this.label3);
@@ -107,6 +122,54 @@ namespace Reanimator.Forms
             this.general_TabPage.Text = "General";
             this.general_TabPage.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(359, 80);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(57, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "Skillpoints:";
+            // 
+            // skillPoints_numericUpDown
+            // 
+            this.skillPoints_numericUpDown.Location = new System.Drawing.Point(422, 78);
+            this.skillPoints_numericUpDown.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.skillPoints_numericUpDown.Name = "skillPoints_numericUpDown";
+            this.skillPoints_numericUpDown.Size = new System.Drawing.Size(100, 20);
+            this.skillPoints_numericUpDown.TabIndex = 19;
+            this.skillPoints_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.skillPoints_numericUpDown.ThousandsSeparator = true;
+            this.skillPoints_numericUpDown.ValueChanged += new System.EventHandler(this.skillPoints_numericUpDown_ValueChanged);
+            // 
+            // palladium_numericUpDown
+            // 
+            this.palladium_numericUpDown.Location = new System.Drawing.Point(253, 57);
+            this.palladium_numericUpDown.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.palladium_numericUpDown.Name = "palladium_numericUpDown";
+            this.palladium_numericUpDown.Size = new System.Drawing.Size(100, 20);
+            this.palladium_numericUpDown.TabIndex = 18;
+            this.palladium_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.palladium_numericUpDown.ThousandsSeparator = true;
+            this.palladium_numericUpDown.ValueChanged += new System.EventHandler(this.palladium_numericUpDown_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(192, 62);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(55, 13);
+            this.label4.TabIndex = 17;
+            this.label4.Text = "Palladium:";
+            // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(195, 101);
@@ -128,7 +191,7 @@ namespace Reanimator.Forms
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(347, 30);
+            this.label3.Location = new System.Drawing.Point(359, 30);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(213, 26);
             this.label3.TabIndex = 13;
@@ -158,7 +221,7 @@ namespace Reanimator.Forms
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(241, 30);
+            this.textBox1.Location = new System.Drawing.Point(253, 30);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 10;
@@ -185,6 +248,7 @@ namespace Reanimator.Forms
             0,
             0,
             0});
+            this.level_NumericUpDown.ValueChanged += new System.EventHandler(this.level_NumericUpDown_ValueChanged);
             // 
             // mode_Label
             // 
@@ -401,6 +465,30 @@ namespace Reanimator.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(359, 106);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(57, 13);
+            this.label6.TabIndex = 22;
+            this.label6.Text = "Statpoints:";
+            // 
+            // statPoints_numericUpDown
+            // 
+            this.statPoints_numericUpDown.Location = new System.Drawing.Point(422, 104);
+            this.statPoints_numericUpDown.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.statPoints_numericUpDown.Name = "statPoints_numericUpDown";
+            this.statPoints_numericUpDown.Size = new System.Drawing.Size(100, 20);
+            this.statPoints_numericUpDown.TabIndex = 21;
+            this.statPoints_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.statPoints_numericUpDown.ThousandsSeparator = true;
+            this.statPoints_numericUpDown.ValueChanged += new System.EventHandler(this.statPoints_numericUpDown_ValueChanged);
+            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -417,12 +505,15 @@ namespace Reanimator.Forms
             this.main_TabControl.ResumeLayout(false);
             this.general_TabPage.ResumeLayout(false);
             this.general_TabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.skillPoints_numericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.palladium_numericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.level_NumericUpDown)).EndInit();
             this.stats_TabPage.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.stats_GroupBox.ResumeLayout(false);
             this.items_TabPage.ResumeLayout(false);
             this.items_TabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.statPoints_numericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -460,5 +551,11 @@ namespace Reanimator.Forms
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.NumericUpDown palladium_numericUpDown;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.NumericUpDown skillPoints_numericUpDown;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown statPoints_numericUpDown;
     }
 }
