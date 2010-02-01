@@ -47,7 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Affixes.cs" />
     <Compile Include="BitBuffer.cs" />
+    <Compile Include="ItemQuality.cs" />
     <Compile Include="Crc32.cs" />
     <Compile Include="ExcelTable.cs">
       <SubType>Code</SubType>
