@@ -124,8 +124,6 @@ namespace Reanimator.Excel
             excelData = data;
             offset = 0;
 
-            uint crc = Crc32.Compute(data);
-
             try
             {
                 // read in main header
