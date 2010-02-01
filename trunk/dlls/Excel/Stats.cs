@@ -9,28 +9,18 @@ namespace Reanimator.Excel
     public class Stats : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct StatsTable
+        class StatsTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] unknown;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-            private string stringId;
-            public string StringId
-            {
-                get { return stringId; }
-                set { stringId = value; }
-            }
+            public string stringId;
 
-            private Int16 id;
-            public Int16 Id
-            {
-                get { return id; }
-                set { id = value; }
-            }
+            public Int16 id;
 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 430)]
-            public byte[] unknownData;
+            byte[] unknownData;
         }
 
         List<StatsTable> stats;
@@ -51,9 +41,9 @@ namespace Reanimator.Excel
         {
             foreach (StatsTable statsTable in stats)
             {
-                if (statsTable.Id == id)
+                if (statsTable.id == id)
                 {
-                    return statsTable.StringId;
+                    return statsTable.stringId;
                 }
             }
 

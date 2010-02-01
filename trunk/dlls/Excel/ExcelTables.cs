@@ -8,19 +8,19 @@ using System.Windows.Forms;
 
 namespace Reanimator.Excel
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    struct ExcelTables_Table
-    {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] unknown;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        public string szStringId;
-        public Int16 id;
-    }
-
     public class ExcelTables : ExcelTable
     {
-        List<ExcelTables_Table> tables;
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        class ExcelTableTable
+        {
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+            public Int32[] header;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+            public string szStringId;
+            public Int16 id;
+        }
+
+        List<ExcelTableTable> tables;
         Stats stats;
         public Stats Stats
         {
@@ -49,12 +49,12 @@ namespace Reanimator.Excel
 
         public override object GetTableArray()
         {
-            return null;
+            return tables.ToArray();
         }
 
         protected override void ParseTables(byte[] data)
         {
-            tables = ReadTables<ExcelTables_Table>(data, ref offset, Count);
+            tables = ReadTables<ExcelTableTable>(data, ref offset, Count);
         }
 
         public string GetTableStringId(int index)

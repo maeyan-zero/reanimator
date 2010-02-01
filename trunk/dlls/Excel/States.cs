@@ -3,26 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace Reanimator.Excel
 {
     public class States : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct StatesTable
+        class StatesTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-            Int32[] unknown;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+            Int32[] header;
 
-            private Int16 id;
-            public Int16 Id
-            {
-                get { return id; }
-                set { id = value; }
-            }
+            public Int32 stringIdOffset;
+            public Int32 unknown;
+            public Int16 id;
 
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 198)]
-            public byte[] unknownData;
+            byte[] unknownData;
         }
 
         List<StatesTable> states;

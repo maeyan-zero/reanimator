@@ -138,6 +138,8 @@ namespace Reanimator
             pluginList = new List<IPlugin>();
             #endregion
 
+            int size = Marshal.SizeOf(typeof(States.StatesTable));
+
             InitializeComponent();
         }
 
