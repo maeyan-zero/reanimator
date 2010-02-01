@@ -11,10 +11,10 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class TreasureTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            public byte[] unknown01;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-            public byte[] treasureClass;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+            public Int32[] header;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+            public string treasureClass;
             public Int32 allowUnitTypes1;
             public Int32 allowUnitTypes2;
             public Int32 allowUnitTypes3;
