@@ -62,21 +62,19 @@ namespace Reanimator.Forms
             dataGridView1.AutoGenerateColumns = false;
             object[] array = (object[])excelTable.GetTableArray();
             Type type = array[0].GetType();
-            int columnCount = 0;
             foreach (MemberInfo memberInfo in type.GetFields())
             {
                 dataGridView1.Columns.Add(memberInfo.Name, memberInfo.Name);
-                columnCount++;
             }
             for (int i = 0; i < array.Length; i++)
             {
                 int row = dataGridView1.Rows.Add();
-                int j = 0;
+                int col = 0;
 
                 foreach (FieldInfo fieldInfo in type.GetFields())
                 {
-                    dataGridView1[j, row].Value = fieldInfo.GetValue(array[i]);
-                    j++;
+                    dataGridView1[col, row].Value = fieldInfo.GetValue(array[i]);
+                    col++;
                 }
             }
             

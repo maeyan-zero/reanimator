@@ -16,7 +16,7 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             public Int32[] header;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-            public string szStringId;
+            public string stringId;
             public Int16 id;
         }
 
@@ -59,7 +59,7 @@ namespace Reanimator.Excel
 
         public string GetTableStringId(int index)
         {
-            return tables[index].szStringId;
+            return tables[index].stringId;
         }
 
         public bool LoadTables(string szFolder, Label label)
