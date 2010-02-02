@@ -16,8 +16,8 @@ namespace Reanimator.Excel
             [ExcelTables.ExcelOutput(IsStringOffset=true)]
             public Int32 stringIdOffset;
             Int32 buffer;
-            public Int32 unknown1;
-            public Int32 unknown2;
+            public Int32 unknownInt;
+            public float unknownFloat;
         }
 
         public GameGlobals(byte[] data) : base(data) { }

@@ -116,16 +116,22 @@ namespace Reanimator
                 public class Attribute
                 {
                     internal int exists;										// 1 bit
-                    internal int bitCount;										// 6 bits
-                    internal int unknown1;										// 2 bits
-                    internal int unknown1_1;									// 1 bit		// if unknown1 == 2
-                    internal int skipResource;									// 1 bit		// if this is set, then don't read the resource below
-                    internal int resource;										// 16 bits		// i think this is a resource thingy anyways...
+                    public int BitCount { get; set; }							// 6 bits
+                    public int Unknown1 { get; set; }							// 2 bits
+                    public int Unknown1_1 { get; set; }							// 1 bit		// if unknown1 == 2
+                    internal int skipResource;            						// 1 bit		// if this is set, then don't read the resource below
+                    public int Resource { get; set; }							// 16 bits		// i think this is a resource thingy anyways...
 
                     public bool Exists
                     {
                         get { return exists == 1 ? true : false; }
                         set { exists = (value == true) ? 1 : 0; }
+                    }
+
+                    public bool SkipResource
+                    {
+                        get { return skipResource == 1 ? true : false; }
+                        set { skipResource = (value == true) ? 1 : 0; }
                     }
                 };
 
@@ -888,18 +894,18 @@ namespace Reanimator
                 if (exAtrib.exists != 1)
                     break;
 
-                exAtrib.bitCount = bitBuffer.ReadBits(6);
+                exAtrib.BitCount = bitBuffer.ReadBits(6);
 
-                exAtrib.unknown1 = bitBuffer.ReadBits(2);
-                if (exAtrib.unknown1 == 0x02)
+                exAtrib.Unknown1 = bitBuffer.ReadBits(2);
+                if (exAtrib.Unknown1 == 0x02)
                 {
-                    exAtrib.unknown1_1 = bitBuffer.ReadBits(1);
+                    exAtrib.Unknown1_1 = bitBuffer.ReadBits(1);
                 }
 
                 exAtrib.skipResource = bitBuffer.ReadBits(1);
-                if (exAtrib.skipResource == 0)
+                if (!exAtrib.SkipResource)
                 {
-                    exAtrib.resource = bitBuffer.ReadBits(16);
+                    exAtrib.Resource = bitBuffer.ReadBits(16);
                 }
 
                 unitStat.attributes.Add(exAtrib);
@@ -946,7 +952,7 @@ namespace Reanimator
                 {
                     if (unitStat.attributes[j].exists == 1)
                     {
-                        int extraAttribute = bitBuffer.ReadBits(unitStat.attributes[j].bitCount);
+                        int extraAttribute = bitBuffer.ReadBits(unitStat.attributes[j].BitCount);
                         if (j == 0)
                             unitStat.values[i].Attribute1 = extraAttribute;
                         if (j == 1)
@@ -1822,18 +1828,18 @@ namespace Reanimator
                     break;
                 }
 
-                saveBuffer.WriteBits(stat.attributes[i].bitCount, 6);
+                saveBuffer.WriteBits(stat.attributes[i].BitCount, 6);
 
-                saveBuffer.WriteBits(stat.attributes[i].unknown1, 2);
-                if (stat.attributes[i].unknown1 == 0x02)
+                saveBuffer.WriteBits(stat.attributes[i].Unknown1, 2);
+                if (stat.attributes[i].Unknown1 == 0x02)
                 {
-                    saveBuffer.WriteBits(stat.attributes[i].unknown1_1, 1);
+                    saveBuffer.WriteBits(stat.attributes[i].Unknown1_1, 1);
                 }
 
                 saveBuffer.WriteBits(stat.attributes[i].skipResource, 1);
-                if (stat.attributes[i].skipResource == 0)
+                if (!stat.attributes[i].SkipResource)
                 {
-                    saveBuffer.WriteBits(stat.attributes[i].resource, 16);
+                    saveBuffer.WriteBits(stat.attributes[i].Resource, 16);
                 }
             }
 
@@ -1881,7 +1887,7 @@ namespace Reanimator
                         else if (j == 2)
                             extraAttribute = stat.values[i].Attribute3;
 
-                        saveBuffer.WriteBits(extraAttribute, stat.attributes[j].bitCount);
+                        saveBuffer.WriteBits(extraAttribute, stat.attributes[j].BitCount);
                     }
                 }
 

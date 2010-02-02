@@ -120,6 +120,14 @@ namespace Reanimator.Excel
         public int[] Unknowns4 { get { return unknowns4; } }
 
         protected UnknownHeader unknownHeader;
+        protected struct UnknownMYSH
+        {
+            public int strCount;
+            public char[] str;
+            public int[] ints;
+        }
+        protected UnknownMYSH[] MYSHChunks;
+
         protected ByteHeader byteHeader;
         protected byte[] bytes;
         protected FinalHeader finalHeader;
@@ -236,6 +244,25 @@ namespace Reanimator.Excel
                 {
                     unknownHeader = (UnknownHeader)FileTools.ByteArrayToStructure(data, typeof(UnknownHeader), offset);
                     offset += Marshal.SizeOf(typeof(UnknownHeader));
+
+                    // this is kind of dodgy and assumes a lot, but I've only seen it once and need to see
+                    // it else where to make a decent reader for it.
+                    // Appears In: skills.txt.cooked
+                    // appears lots in properties.txt - to do, figure out
+                    for (int i = 0; i < unknownHeader.unknownCount3; i++)
+                    {
+                        UnknownMYSH unknownMYSH;
+                        unknownMYSH.strCount = FileTools.ByteArrayTo<Int32>(data, offset);
+                        offset += sizeof(Int32);
+                        unknownMYSH.str = new char[unknownMYSH.strCount + 1];
+                        Buffer.BlockCopy(data, offset, unknownMYSH.str, 0, unknownMYSH.strCount);
+                        offset += unknownMYSH.strCount;
+                        int intCount = 6;
+                        unknownMYSH.ints = FileTools.ByteArrayToInt32Array(data, offset, intCount);
+                        offset += intCount * sizeof(Int32);
+
+                        offset += 2 * sizeof(Int32); // the next header
+                    }
                 }
 
 

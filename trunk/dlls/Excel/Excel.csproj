@@ -50,6 +50,7 @@
     <Compile Include="Affixes.cs" />
     <Compile Include="BitBuffer.cs" />
     <Compile Include="GameGlobals.cs" />
+    <Compile Include="GlobalString.cs" />
     <Compile Include="ItemQuality.cs" />
     <Compile Include="Crc32.cs" />
     <Compile Include="ExcelTable.cs">
@@ -64,6 +65,7 @@
     <Compile Include="Items.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Skills.cs" />
     <Compile Include="States.cs">
       <SubType>Code</SubType>
     </Compile>

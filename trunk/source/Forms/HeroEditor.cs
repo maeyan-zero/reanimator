@@ -80,6 +80,56 @@ namespace Reanimator.Forms
 
             Unit.StatBlock.Stat stat = (Unit.StatBlock.Stat)this.stats_ListBox.SelectedItem;
 
+            // yea, copy/paste nastiness ftw
+            if (stat.Attribute1 != null)
+            {
+                statAttribute1_GroupBox.Enabled = true;
+                statAttribute1_bitCount_TextBox.DataBindings.Clear();
+                statAttribute1_unknown1_TextBox.DataBindings.Clear();
+                statAttribute1_unknown1_1_TextBox.DataBindings.Clear();
+                statAttribute1_resource_TextBox.DataBindings.Clear();
+                statAttribute1_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute1, "BitCount");
+                statAttribute1_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1");
+                statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
+                statAttribute1_resource_TextBox.DataBindings.Add("Text", stat.Attribute1, "Resource");
+            }
+            else
+            {
+                statAttribute1_GroupBox.Enabled = false;
+            }
+            if (stat.Attribute2 != null)
+            {
+                statAttribute2_GroupBox.Enabled = true;
+                statAttribute2_bitCount_TextBox.DataBindings.Clear();
+                statAttribute2_unknown1_TextBox.DataBindings.Clear();
+                statAttribute2_unknown1_1_TextBox.DataBindings.Clear();
+                statAttribute2_resource_TextBox.DataBindings.Clear();
+                statAttribute2_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute2, "BitCount");
+                statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
+                statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
+                statAttribute2_resource_TextBox.DataBindings.Add("Text", stat.Attribute2, "Resource");
+            }
+            else
+            {
+                statAttribute2_GroupBox.Enabled = false;
+            }
+            if (stat.Attribute3 != null)
+            {
+                statAttribute3_GroupBox.Enabled = true;
+                statAttribute3_bitCount_TextBox.DataBindings.Clear();
+                statAttribute3_unknown1_TextBox.DataBindings.Clear();
+                statAttribute3_unknown1_1_TextBox.DataBindings.Clear();
+                statAttribute3_resource_TextBox.DataBindings.Clear();
+                statAttribute3_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute3, "BitCount");
+                statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
+                statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
+                statAttribute3_resource_TextBox.DataBindings.Add("Text", stat.Attribute3, "Resource");
+            }
+            else
+            {
+                statAttribute3_GroupBox.Enabled = false;
+            }
+
             int heightOffset = 0;
             for (int i = 0; i < stat.Length; i++)
             {
@@ -98,7 +148,7 @@ namespace Reanimator.Forms
                     eaValueLabel.Width = 40;
                     eaValueLabel.Top = 3 + heightOffset;
                     TextBox eaValueTextBox = new TextBox();
-                    eaValueTextBox.Text =  stat.AttributeAt(j).ToString();
+                    eaValueTextBox.Text = stat.AttributeAt(j).ToString();
                     eaValueTextBox.Left = eaValueLabel.Right;
                     eaValueTextBox.Top = heightOffset;
                     eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
@@ -203,47 +253,47 @@ namespace Reanimator.Forms
 
         private void PopulateGeneral(Unit heroUnit)
         {
-          name_TextBox.Text = heroUnit.ToString();
+            name_TextBox.Text = heroUnit.ToString();
 
-          string job;
-          switch (heroUnit.JobClass)
-          {
-            case (93):
-              {
-                job = "Summoner";
-              }
-              break;
-            case (97):
-              {
-                job = "Guardian";
-              }
-              break;
-            case (124):
-              {
-                job = "Marksman";
-              }
-              break;
-            case (141):
-              {
-                job = "Evoker";
-              }
-              break;
-            case (180):
-              {
-                job = "Blademaster";
-              }
-              break;
-            case (191):
-              {
-                job = "Engineer";
-              }
-              break;
-            default:
-              {
-                job = "Unknown";
-              }
-              break;
-          }
+            string job;
+            switch (heroUnit.JobClass)
+            {
+                case (93):
+                    {
+                        job = "Summoner";
+                    }
+                    break;
+                case (97):
+                    {
+                        job = "Guardian";
+                    }
+                    break;
+                case (124):
+                    {
+                        job = "Marksman";
+                    }
+                    break;
+                case (141):
+                    {
+                        job = "Evoker";
+                    }
+                    break;
+                case (180):
+                    {
+                        job = "Blademaster";
+                    }
+                    break;
+                case (191):
+                    {
+                        job = "Engineer";
+                    }
+                    break;
+                default:
+                    {
+                        job = "Unknown";
+                    }
+                    break;
+            }
 
             textBox1.Text = String.Format("{0:00000000}", Int32.Parse(Convert.ToString(heroUnit.JobClass, 2)));
             class_TextBox.Text = job;
@@ -284,7 +334,7 @@ namespace Reanimator.Forms
             statPoints_numericUpDown.Value = statPoints;
 
             int skillPoints = GetSimpleValue("skill_points");
-            if(skillPoints < 0)
+            if (skillPoints < 0)
             {
                 skillPoints = 0;
             }
@@ -386,8 +436,6 @@ namespace Reanimator.Forms
         {
             DisplayFlags();
         }
-
-
 
 
         #region modify character values

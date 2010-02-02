@@ -55,7 +55,15 @@ namespace Reanimator.Forms
             this.stats_TabPage = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.statAttribute1_GroupBox = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.statAttribute1_resource_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute1_unknown1_1_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute1_unknown1_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute1_bitCount_TextBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.stats_GroupBox = new System.Windows.Forms.GroupBox();
             this.stats_ListBox = new System.Windows.Forms.ListBox();
             this.items_TabPage = new System.Windows.Forms.TabPage();
@@ -65,6 +73,24 @@ namespace Reanimator.Forms
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.statAttribute2_GroupBox = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.statAttribute2_resource_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute2_unknown1_1_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute2_unknown1_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute2_bitCount_TextBox = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.statAttribute3_GroupBox = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.statAttribute3_resource_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute3_unknown1_1_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute3_unknown1_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute3_bitCount_TextBox = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.statPoints_numericUpDown)).BeginInit();
@@ -73,8 +99,11 @@ namespace Reanimator.Forms
             ((System.ComponentModel.ISupportInitialize)(this.level_NumericUpDown)).BeginInit();
             this.stats_TabPage.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.statAttribute1_GroupBox.SuspendLayout();
             this.stats_GroupBox.SuspendLayout();
             this.items_TabPage.SuspendLayout();
+            this.statAttribute2_GroupBox.SuspendLayout();
+            this.statAttribute3_GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -88,7 +117,7 @@ namespace Reanimator.Forms
             this.main_TabControl.Location = new System.Drawing.Point(12, 33);
             this.main_TabControl.Name = "main_TabControl";
             this.main_TabControl.SelectedIndex = 0;
-            this.main_TabControl.Size = new System.Drawing.Size(751, 535);
+            this.main_TabControl.Size = new System.Drawing.Size(657, 535);
             this.main_TabControl.TabIndex = 0;
             // 
             // general_TabPage
@@ -348,25 +377,28 @@ namespace Reanimator.Forms
             // 
             // stats_TabPage
             // 
+            this.stats_TabPage.Controls.Add(this.statAttribute3_GroupBox);
+            this.stats_TabPage.Controls.Add(this.statAttribute2_GroupBox);
             this.stats_TabPage.Controls.Add(this.groupBox2);
-            this.stats_TabPage.Controls.Add(this.groupBox1);
+            this.stats_TabPage.Controls.Add(this.statAttribute1_GroupBox);
             this.stats_TabPage.Controls.Add(this.stats_GroupBox);
             this.stats_TabPage.Location = new System.Drawing.Point(4, 22);
             this.stats_TabPage.Name = "stats_TabPage";
             this.stats_TabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.stats_TabPage.Size = new System.Drawing.Size(743, 509);
+            this.stats_TabPage.Size = new System.Drawing.Size(649, 509);
             this.stats_TabPage.TabIndex = 0;
             this.stats_TabPage.Text = "Stats";
             this.stats_TabPage.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.panel1);
-            this.groupBox2.Location = new System.Drawing.Point(201, 147);
+            this.groupBox2.Location = new System.Drawing.Point(422, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(221, 354);
+            this.groupBox2.Size = new System.Drawing.Size(221, 500);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Stat Values";
@@ -380,19 +412,89 @@ namespace Reanimator.Forms
             this.panel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.panel1.Location = new System.Drawing.Point(7, 20);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(208, 328);
+            this.panel1.Size = new System.Drawing.Size(208, 474);
             this.panel1.TabIndex = 0;
             // 
-            // groupBox1
+            // statAttribute1_GroupBox
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Location = new System.Drawing.Point(200, 6);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(535, 134);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Stat Attributes";
+            this.statAttribute1_GroupBox.Controls.Add(this.label10);
+            this.statAttribute1_GroupBox.Controls.Add(this.label9);
+            this.statAttribute1_GroupBox.Controls.Add(this.statAttribute1_resource_TextBox);
+            this.statAttribute1_GroupBox.Controls.Add(this.statAttribute1_unknown1_1_TextBox);
+            this.statAttribute1_GroupBox.Controls.Add(this.statAttribute1_unknown1_TextBox);
+            this.statAttribute1_GroupBox.Controls.Add(this.statAttribute1_bitCount_TextBox);
+            this.statAttribute1_GroupBox.Controls.Add(this.label8);
+            this.statAttribute1_GroupBox.Controls.Add(this.label7);
+            this.statAttribute1_GroupBox.Location = new System.Drawing.Point(200, 6);
+            this.statAttribute1_GroupBox.Name = "statAttribute1_GroupBox";
+            this.statAttribute1_GroupBox.Size = new System.Drawing.Size(216, 134);
+            this.statAttribute1_GroupBox.TabIndex = 4;
+            this.statAttribute1_GroupBox.TabStop = false;
+            this.statAttribute1_GroupBox.Text = "Stat Attribute 1";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(0, 102);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(53, 13);
+            this.label10.TabIndex = 7;
+            this.label10.Text = "Resource";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(0, 80);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(71, 13);
+            this.label9.TabIndex = 6;
+            this.label9.Text = "Unknown1_1";
+            // 
+            // statAttribute1_resource_TextBox
+            // 
+            this.statAttribute1_resource_TextBox.Location = new System.Drawing.Point(77, 99);
+            this.statAttribute1_resource_TextBox.Name = "statAttribute1_resource_TextBox";
+            this.statAttribute1_resource_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute1_resource_TextBox.TabIndex = 5;
+            // 
+            // statAttribute1_unknown1_1_TextBox
+            // 
+            this.statAttribute1_unknown1_1_TextBox.Location = new System.Drawing.Point(77, 73);
+            this.statAttribute1_unknown1_1_TextBox.Name = "statAttribute1_unknown1_1_TextBox";
+            this.statAttribute1_unknown1_1_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute1_unknown1_1_TextBox.TabIndex = 4;
+            // 
+            // statAttribute1_unknown1_TextBox
+            // 
+            this.statAttribute1_unknown1_TextBox.Location = new System.Drawing.Point(77, 47);
+            this.statAttribute1_unknown1_TextBox.Name = "statAttribute1_unknown1_TextBox";
+            this.statAttribute1_unknown1_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute1_unknown1_TextBox.TabIndex = 3;
+            // 
+            // statAttribute1_bitCount_TextBox
+            // 
+            this.statAttribute1_bitCount_TextBox.Location = new System.Drawing.Point(77, 20);
+            this.statAttribute1_bitCount_TextBox.Name = "statAttribute1_bitCount_TextBox";
+            this.statAttribute1_bitCount_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute1_bitCount_TextBox.TabIndex = 2;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(0, 50);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(59, 13);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "Unknown1";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(0, 23);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(50, 13);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Bit Count";
             // 
             // stats_GroupBox
             // 
@@ -450,7 +552,7 @@ namespace Reanimator.Forms
             // save_Button
             // 
             this.save_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.save_Button.Location = new System.Drawing.Point(576, 4);
+            this.save_Button.Location = new System.Drawing.Point(482, 4);
             this.save_Button.Name = "save_Button";
             this.save_Button.Size = new System.Drawing.Size(75, 23);
             this.save_Button.TabIndex = 3;
@@ -481,7 +583,7 @@ namespace Reanimator.Forms
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(657, 4);
+            this.button1.Location = new System.Drawing.Point(563, 4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(106, 23);
             this.button1.TabIndex = 4;
@@ -489,11 +591,173 @@ namespace Reanimator.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // statAttribute2_GroupBox
+            // 
+            this.statAttribute2_GroupBox.Controls.Add(this.label11);
+            this.statAttribute2_GroupBox.Controls.Add(this.label12);
+            this.statAttribute2_GroupBox.Controls.Add(this.statAttribute2_resource_TextBox);
+            this.statAttribute2_GroupBox.Controls.Add(this.statAttribute2_unknown1_1_TextBox);
+            this.statAttribute2_GroupBox.Controls.Add(this.statAttribute2_unknown1_TextBox);
+            this.statAttribute2_GroupBox.Controls.Add(this.statAttribute2_bitCount_TextBox);
+            this.statAttribute2_GroupBox.Controls.Add(this.label13);
+            this.statAttribute2_GroupBox.Controls.Add(this.label14);
+            this.statAttribute2_GroupBox.Location = new System.Drawing.Point(200, 146);
+            this.statAttribute2_GroupBox.Name = "statAttribute2_GroupBox";
+            this.statAttribute2_GroupBox.Size = new System.Drawing.Size(216, 134);
+            this.statAttribute2_GroupBox.TabIndex = 8;
+            this.statAttribute2_GroupBox.TabStop = false;
+            this.statAttribute2_GroupBox.Text = "Stat Attribute 2";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(0, 102);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(53, 13);
+            this.label11.TabIndex = 7;
+            this.label11.Text = "Resource";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(0, 80);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(71, 13);
+            this.label12.TabIndex = 6;
+            this.label12.Text = "Unknown1_1";
+            // 
+            // statAttribute2_resource_TextBox
+            // 
+            this.statAttribute2_resource_TextBox.Location = new System.Drawing.Point(77, 99);
+            this.statAttribute2_resource_TextBox.Name = "statAttribute2_resource_TextBox";
+            this.statAttribute2_resource_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute2_resource_TextBox.TabIndex = 5;
+            // 
+            // statAttribute2_unknown1_1_TextBox
+            // 
+            this.statAttribute2_unknown1_1_TextBox.Location = new System.Drawing.Point(77, 73);
+            this.statAttribute2_unknown1_1_TextBox.Name = "statAttribute2_unknown1_1_TextBox";
+            this.statAttribute2_unknown1_1_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute2_unknown1_1_TextBox.TabIndex = 4;
+            // 
+            // statAttribute2_unknown1_TextBox
+            // 
+            this.statAttribute2_unknown1_TextBox.Location = new System.Drawing.Point(77, 47);
+            this.statAttribute2_unknown1_TextBox.Name = "statAttribute2_unknown1_TextBox";
+            this.statAttribute2_unknown1_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute2_unknown1_TextBox.TabIndex = 3;
+            // 
+            // statAttribute2_bitCount_TextBox
+            // 
+            this.statAttribute2_bitCount_TextBox.Location = new System.Drawing.Point(77, 20);
+            this.statAttribute2_bitCount_TextBox.Name = "statAttribute2_bitCount_TextBox";
+            this.statAttribute2_bitCount_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute2_bitCount_TextBox.TabIndex = 2;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(0, 50);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(59, 13);
+            this.label13.TabIndex = 1;
+            this.label13.Text = "Unknown1";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(0, 23);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(50, 13);
+            this.label14.TabIndex = 0;
+            this.label14.Text = "Bit Count";
+            // 
+            // statAttribute3_GroupBox
+            // 
+            this.statAttribute3_GroupBox.Controls.Add(this.label15);
+            this.statAttribute3_GroupBox.Controls.Add(this.label16);
+            this.statAttribute3_GroupBox.Controls.Add(this.statAttribute3_resource_TextBox);
+            this.statAttribute3_GroupBox.Controls.Add(this.statAttribute3_unknown1_1_TextBox);
+            this.statAttribute3_GroupBox.Controls.Add(this.statAttribute3_unknown1_TextBox);
+            this.statAttribute3_GroupBox.Controls.Add(this.statAttribute3_bitCount_TextBox);
+            this.statAttribute3_GroupBox.Controls.Add(this.label17);
+            this.statAttribute3_GroupBox.Controls.Add(this.label18);
+            this.statAttribute3_GroupBox.Location = new System.Drawing.Point(200, 286);
+            this.statAttribute3_GroupBox.Name = "statAttribute3_GroupBox";
+            this.statAttribute3_GroupBox.Size = new System.Drawing.Size(216, 134);
+            this.statAttribute3_GroupBox.TabIndex = 9;
+            this.statAttribute3_GroupBox.TabStop = false;
+            this.statAttribute3_GroupBox.Text = "Stat Attribute 3";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(0, 102);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(53, 13);
+            this.label15.TabIndex = 7;
+            this.label15.Text = "Resource";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(0, 80);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(71, 13);
+            this.label16.TabIndex = 6;
+            this.label16.Text = "Unknown1_1";
+            // 
+            // statAttribute3_resource_TextBox
+            // 
+            this.statAttribute3_resource_TextBox.Location = new System.Drawing.Point(77, 99);
+            this.statAttribute3_resource_TextBox.Name = "statAttribute3_resource_TextBox";
+            this.statAttribute3_resource_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute3_resource_TextBox.TabIndex = 5;
+            // 
+            // statAttribute3_unknown1_1_TextBox
+            // 
+            this.statAttribute3_unknown1_1_TextBox.Location = new System.Drawing.Point(77, 73);
+            this.statAttribute3_unknown1_1_TextBox.Name = "statAttribute3_unknown1_1_TextBox";
+            this.statAttribute3_unknown1_1_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute3_unknown1_1_TextBox.TabIndex = 4;
+            // 
+            // statAttribute3_unknown1_TextBox
+            // 
+            this.statAttribute3_unknown1_TextBox.Location = new System.Drawing.Point(77, 47);
+            this.statAttribute3_unknown1_TextBox.Name = "statAttribute3_unknown1_TextBox";
+            this.statAttribute3_unknown1_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute3_unknown1_TextBox.TabIndex = 3;
+            // 
+            // statAttribute3_bitCount_TextBox
+            // 
+            this.statAttribute3_bitCount_TextBox.Location = new System.Drawing.Point(77, 20);
+            this.statAttribute3_bitCount_TextBox.Name = "statAttribute3_bitCount_TextBox";
+            this.statAttribute3_bitCount_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute3_bitCount_TextBox.TabIndex = 2;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(0, 50);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(59, 13);
+            this.label17.TabIndex = 1;
+            this.label17.Text = "Unknown1";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(0, 23);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(50, 13);
+            this.label18.TabIndex = 0;
+            this.label18.Text = "Bit Count";
+            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(775, 580);
+            this.ClientSize = new System.Drawing.Size(681, 580);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.currentlyEditing_ComboBox);
             this.Controls.Add(this.currentlyEditing_Label);
@@ -511,9 +775,15 @@ namespace Reanimator.Forms
             ((System.ComponentModel.ISupportInitialize)(this.level_NumericUpDown)).EndInit();
             this.stats_TabPage.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.statAttribute1_GroupBox.ResumeLayout(false);
+            this.statAttribute1_GroupBox.PerformLayout();
             this.stats_GroupBox.ResumeLayout(false);
             this.items_TabPage.ResumeLayout(false);
             this.items_TabPage.PerformLayout();
+            this.statAttribute2_GroupBox.ResumeLayout(false);
+            this.statAttribute2_GroupBox.PerformLayout();
+            this.statAttribute3_GroupBox.ResumeLayout(false);
+            this.statAttribute3_GroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -529,7 +799,7 @@ namespace Reanimator.Forms
         private System.Windows.Forms.GroupBox stats_GroupBox;
         private System.Windows.Forms.ListBox stats_ListBox;
         private System.Windows.Forms.Button save_Button;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox statAttribute1_GroupBox;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label currentlyEditing_Label;
@@ -557,5 +827,31 @@ namespace Reanimator.Forms
         private System.Windows.Forms.NumericUpDown skillPoints_numericUpDown;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown statPoints_numericUpDown;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox statAttribute1_bitCount_TextBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox statAttribute1_unknown1_TextBox;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox statAttribute1_resource_TextBox;
+        private System.Windows.Forms.TextBox statAttribute1_unknown1_1_TextBox;
+        private System.Windows.Forms.GroupBox statAttribute3_GroupBox;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox statAttribute3_resource_TextBox;
+        private System.Windows.Forms.TextBox statAttribute3_unknown1_1_TextBox;
+        private System.Windows.Forms.TextBox statAttribute3_unknown1_TextBox;
+        private System.Windows.Forms.TextBox statAttribute3_bitCount_TextBox;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.GroupBox statAttribute2_GroupBox;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox statAttribute2_resource_TextBox;
+        private System.Windows.Forms.TextBox statAttribute2_unknown1_1_TextBox;
+        private System.Windows.Forms.TextBox statAttribute2_unknown1_TextBox;
+        private System.Windows.Forms.TextBox statAttribute2_bitCount_TextBox;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
     }
 }
