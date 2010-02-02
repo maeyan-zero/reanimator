@@ -139,18 +139,11 @@ namespace Reanimator.Excel
             public Int32 affix6Type6;
         }
 
-        List<ItemQualityTable> itemQuality;
-
         public ItemQuality(byte[] data) : base(data) { }
-
-        public override object GetTableArray()
-        {
-            return itemQuality.ToArray();
-        }
 
         protected override void ParseTables(byte[] data)
         {
-            itemQuality = ExcelTables.ReadTables<ItemQualityTable>(data, ref offset, Count);
+            ReadTables<ItemQualityTable>(data, ref offset, Count);
         }
     }
 }

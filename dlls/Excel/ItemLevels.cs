@@ -42,18 +42,11 @@ namespace Reanimator.Excel
             public Int32 itemLevelsPerUpgrade;
         }
 
-        List<ItemLevelsTable> itemLevels;
-
         public ItemLevels(byte[] data) : base(data) { }
-
-        public override object GetTableArray()
-        {
-            return itemLevels.ToArray();
-        }
 
         protected override void ParseTables(byte[] data)
         {
-            itemLevels = ExcelTables.ReadTables<ItemLevelsTable>(data, ref offset, Count);
+            ReadTables<ItemLevelsTable>(data, ref offset, Count);
         }
     }
 }

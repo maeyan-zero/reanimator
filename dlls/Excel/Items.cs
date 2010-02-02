@@ -554,18 +554,11 @@ namespace Reanimator.Excel
             byte[] unknown27;
         }
 
-        List<ItemsTable> items;
-
         public Items(byte[] data) : base(data) { }
-
-        public override object GetTableArray()
-        {
-            return items.ToArray();
-        }
 
         protected override void ParseTables(byte[] data)
         {
-            items = ExcelTables.ReadTables<ItemsTable>(data, ref offset, Count);
+            ReadTables<ItemsTable>(data, ref offset, Count);
         }
 
         struct SpawnMask
