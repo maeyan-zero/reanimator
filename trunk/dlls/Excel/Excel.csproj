@@ -65,6 +65,7 @@
     <Compile Include="Items.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Filter.cs" />
     <Compile Include="Skills.cs" />
     <Compile Include="States.cs">
       <SubType>Code</SubType>
