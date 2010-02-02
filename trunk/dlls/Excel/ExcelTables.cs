@@ -31,15 +31,15 @@ namespace Reanimator.Excel
         {
             class TableIndexHelper
             {
-                public string stringId;
-                public string fileName;
+                public string StringId { get; set; }
+                public string FileName { get; set; }
                 public ExcelTable excelTable;
                 public Type type;
 
                 public TableIndexHelper(string id, string name, ExcelTable table, Type t)
                 {
-                    stringId = id;
-                    fileName = name;
+                    StringId = id;
+                    FileName = name;
                     excelTable = table;
                     type = t;
                 }
@@ -68,21 +68,25 @@ namespace Reanimator.Excel
                 {
                     return id;
                 }
-                if (tableIndex.fileName == null)
+                if (tableIndex.FileName == null)
                 {
                     return id;
                 }
 
-                return tableIndex.fileName;
+                return tableIndex.FileName;
             }
 
-            public void CreateTable(string id, byte[] buffer)
+            public ExcelTable CreateTable(string id, byte[] buffer)
             {
                 TableIndexHelper tableIndex = GetTableIndex(id);
                 if (tableIndex != null)
                 {
                     tableIndex.excelTable = (ExcelTable)Activator.CreateInstance(tableIndex.type, buffer);
+                    tableIndex.excelTable.StringId = tableIndex.StringId;
+                    return tableIndex.excelTable;
                 }
+
+                return null;
             }
 
             public ExcelTable GetTable(string stringId)
@@ -100,13 +104,13 @@ namespace Reanimator.Excel
             {
                 foreach (TableIndexHelper tableIndex in tables)
                 {
-                    if (tableIndex.stringId.Equals(id, StringComparison.OrdinalIgnoreCase))
+                    if (tableIndex.StringId.Equals(id, StringComparison.OrdinalIgnoreCase))
                     {
                         return tableIndex;
                     }
-                    else if (tableIndex.fileName != null)
+                    else if (tableIndex.FileName != null)
                     {
-                        if (tableIndex.fileName.Equals(id, StringComparison.OrdinalIgnoreCase))
+                        if (tableIndex.FileName.Equals(id, StringComparison.OrdinalIgnoreCase))
                         {
                             return tableIndex;
                         }
@@ -150,7 +154,7 @@ namespace Reanimator.Excel
             return excelTables.GetTable(stringId);
         }
 
-        public bool LoadTables(string folder, Label label)
+        public bool LoadTables(string folder, Label label, ListBox excelTablesLoaded)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -183,7 +187,12 @@ namespace Reanimator.Excel
                 byte[] buffer = FileTools.StreamToByteArray(cookedFile);
                 try
                 {
-                    excelTables.CreateTable(stringId, buffer);
+                    ExcelTable excelTable = excelTables.CreateTable(stringId, buffer);
+                    if (excelTable != null)
+                    {
+                        excelTablesLoaded.Items.Add(excelTable);
+                    }
+
                 }
                 catch (Exception e)
                 {
