@@ -48,38 +48,14 @@ namespace Reanimator.Forms
 
             // file id
             this.textBox1.Text = "0x" + excelTable.FileId.ToString("X");
-            
-            // do strings - inefficient, but works.
-            if (excelTable.Strings != null)
+
+            // do strings - better than before, but works.
+            // no longer has as much details - though I don't think necessary anymore.
+            foreach (String s in excelTable.Strings.Values)
             {
-                progress.SetLoadingText("Generating strings data...");
-                progress.ConfigBar(0, excelTable.Strings.Length, 1);
-                String s = String.Empty;
-                for (int i = 0, j = 0, currentOffset = -1; i < excelTable.Strings.Length; i++)
-                {
-                    byte b = excelTable.Strings[i];
-
-                    if (b != 0)
-                    {
-                        s += (char)b;
-
-                        if (currentOffset == -1)
-                        {
-                            currentOffset = i;
-                        }
-                    }
-                    else
-                    {
-                        this.listBox1.Items.Add(j + ": " + s + " (0x" + currentOffset.ToString("X") + " - " + currentOffset + ")");
-                        s = String.Empty;
-                        j++;
-                        currentOffset = -1;
-                    }
-                }
-
-                progress.SetCurrentItemText("String... \"" + s + "\"");
+                this.listBox1.Items.Add(s);
             }
-            
+           
             // main table data
             progress.SetLoadingText("Generating table data...");
             dataGridView1.AutoGenerateColumns = false;
@@ -124,7 +100,7 @@ namespace Reanimator.Forms
                     {
                         if (excelOutputAttribute.IsStringOffset)
                         {
-                            value = excelTable.GetStringAtOffset((int)value);
+                            value = excelTable.Strings[value];
                         }
                     }
                     dataGridView1[col, row].Value = value;

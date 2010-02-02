@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Collections;
 
 namespace Reanimator.Excel
 {
@@ -95,7 +96,8 @@ namespace Reanimator.Excel
         }
 
         protected StringHeader stringHeader;
-        public byte[] Strings { get; set; }
+        protected byte[] stringBytes;
+        public Hashtable Strings { get; set; }
 
         protected TableHeader tableHeader;
 
@@ -135,6 +137,7 @@ namespace Reanimator.Excel
 
         public ExcelTable(byte[] data)
         {
+            Strings = new Hashtable();
             excelData = data;
             offset = 0;
 
@@ -152,9 +155,19 @@ namespace Reanimator.Excel
                 CheckFlag(stringHeader.flag);
                 if (stringHeader.stringBlockSize != 0)
                 {
-                    Strings = new byte[stringHeader.stringBlockSize];
-                    Buffer.BlockCopy(excelData, offset, Strings, 0, Strings.Length);
+                    stringBytes = new byte[stringHeader.stringBlockSize];
+                    Buffer.BlockCopy(excelData, offset, stringBytes, 0, stringBytes.Length);
+                    
+                    for (int i = offset; i < offset + stringHeader.stringBlockSize; i++)
+                    {
+                        String s = FileTools.ByteArrayToStringAnsi(excelData, i);
+                        Strings.Add(i-offset, s);
+
+                        i += s.Length;
+                    }
+
                     offset += stringHeader.stringBlockSize;
+
                 }
 
 
@@ -337,25 +350,6 @@ namespace Reanimator.Excel
 
                 tables.Add(table);
             }
-        }
-
-        public String GetStringAtOffset(int offset)
-        {
-            String ret = String.Empty;
-
-            if (Strings != null)
-            {
-                try
-                {
-                    ret = FileTools.ByteArrayToStringAnsi(Strings, offset);
-                }
-                catch (Exception)
-                {
-                    return ret;
-                }
-            }
-
-            return ret;
         }
     }
 }
