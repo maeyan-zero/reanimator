@@ -351,5 +351,11 @@ namespace Reanimator.Excel
                 tables.Add(table);
             }
         }
+
+        public String StringId { get; set; }
+        public override string ToString()
+        {
+            return StringId;
+        }
     }
 }

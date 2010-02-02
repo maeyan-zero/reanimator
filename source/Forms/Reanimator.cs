@@ -126,6 +126,7 @@ namespace Reanimator
         private Options options;
         private List<string> indexFilesOpen;
         private ExcelTables excelTables;
+        private ExcelTablesLoaded excelTablesLoaded;
 
         private int childFormNumber = 0;
 
@@ -139,6 +140,11 @@ namespace Reanimator
             #endregion
 
             InitializeComponent();
+
+            excelTablesLoaded = new ExcelTablesLoaded();
+            excelTablesLoaded.Text = "Currently Loaded Excel Tables";
+            excelTablesLoaded.MdiParent = this;
+            excelTablesLoaded.Show();
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -465,7 +471,7 @@ namespace Reanimator
 
             progress.ConfigBar(0, excelTables.Count, 1);
             progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
-            excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress.GetItemLabel());
+            excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress.GetItemLabel(), excelTablesLoaded.GetTablesListBox());
             progress.Dispose();
         }
 
