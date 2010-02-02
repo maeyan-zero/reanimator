@@ -12,7 +12,7 @@ namespace Reanimator.Excel
         class StatsTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            Int32[] unknown;
+            Int32[] header;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string stringId;
