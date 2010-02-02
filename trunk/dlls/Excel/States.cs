@@ -18,9 +18,10 @@ namespace Reanimator.Excel
             public Int32 stringId;
             Int32 buffer;
             public Int32 id;
-            public Int32 unknown1;
+            Int32 buffer1;              // always 0
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 effect;
-            public Int32 unknown3;
+            Int32 buffer2;              // always 0
             public Int32 unknown4;
             public Int32 unknown5;
             public Int32 unknown6;
@@ -28,45 +29,50 @@ namespace Reanimator.Excel
             public Int32 unknown8;
             public Int32 unknown9;
             public Int32 unknown10;
-            public Int32 unknown11;
-            public Int32 unknown12;
-            public Int32 unknown13;
+            Int32 unknown11;            // always -1
+            Int32 unknown12;            // always -1
+            Int32 unknown13;            // always -1
             public Int32 unknown14;
             public Int32 unknown15;
             public Int32 unknown16;
             public Int32 unknown17;
-            public Int32 unknown18;
+            Int32 unknown18;            // always 0
             public Int32 unknown19;
             public Int32 unknown20;
-            public Int32 unknown21;
-            public Int32 unknown22;
-            public Int32 unknown23;
-            public Int32 unknown24;
-            public Int32 unknown25;
-            public Int32 unknown26;
-            public Int32 unknown27;
+            Int32 unknown21;            // always 0
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            Int32 unknown22;
+            Int32 unknown23;            // always 0
+            Int32 unknown24;            // always 0
+            Int32 unknown25;            // always 0
+            Int32 unknown26;            // always 0
+            Int32 unknown27;            // always 0
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 unknown28;
-            public Int32 unknown29;
+            Int32 unknown29;            // always 0
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 unknown30;
-            public Int32 unknown31;
+            Int32 unknown31;            // always 0
             public Int32 unknown32;
-            public Int32 unknown33;
+            Int32 unknown33;            // always 0
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 unknown34;
-            public Int32 unknown35;
+            Int32 unknown35;            // always 0
             public Int32 unknown36;
-            public Int32 unknown37;
-            public Int32 unknown38;
+            Int32 unknown37;            // always 0
+            Int32 unknown38;            // always 0
             public Int32 unknown39;
             public Int32 unknown40;
             public Int32 unknown41;
-            public Int32 unknown42;
-            public Int32 unknown43;
-            public Int32 unknown44;
-            public Int32 unknown45;
+            Int32 unknown42;            // always -1
+            Int32 unknown43;            // always -1
+            Int32 unknown44;            // always -1
+            Int32 unknown45;            // always 0
             public Int32 unknown46;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 unknown47;
-            public Int32 unknown48;
-            public Int32 unknown49;
+            Int32 unknown48;            // always 0
+            Int32 unknown49;            // always 0
         }
 
         public States(byte[] data) : base(data) { }

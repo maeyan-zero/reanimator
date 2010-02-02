@@ -51,6 +51,7 @@
     <Compile Include="BitBuffer.cs" />
     <Compile Include="Difficulty.cs" />
     <Compile Include="GameGlobals.cs" />
+    <Compile Include="GlobalIndex.cs" />
     <Compile Include="GlobalString.cs" />
     <Compile Include="ItemQuality.cs" />
     <Compile Include="Crc32.cs" />
