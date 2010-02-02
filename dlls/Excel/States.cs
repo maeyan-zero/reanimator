@@ -14,6 +14,7 @@ namespace Reanimator.Excel
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] header;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 stringId;
             Int32 buffer;
             public Int32 id;

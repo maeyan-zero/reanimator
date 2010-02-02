@@ -469,12 +469,6 @@ namespace Reanimator
             progress.Dispose();
         }
 
-        // this fixes a weird windows API bug causing the ShowDialog to minimise the main client
-        private void Reanimator_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Focus();
-        }
-
         private void Reanimator_ResizeEnd(object sender, EventArgs e)
         {
             Config.clientHeight = this.Height;
@@ -487,12 +481,13 @@ namespace Reanimator
             this.Width = Config.clientWidth;
             this.Show();
             this.Refresh();
-            // this fixes a weird windows API bug causing the ShowDialog to minimise the main client
-            this.OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, this.Left + 10, this.Top + 10, 0));
 
             Progress progress = new Progress();
             progress.Shown += new EventHandler(LoadExcelTables);
             progress.ShowDialog(this);
+            // this fixes a weird windows API bug causing the ShowDialog to minimise the main client
+            this.Hide();
+            this.Show();
 
             #region PLUGIN
             try
@@ -504,8 +499,6 @@ namespace Reanimator
                 MessageBox.Show(ex.Message);
             }
             #endregion
-
-
         }
     }
 }

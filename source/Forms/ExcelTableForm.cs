@@ -23,9 +23,28 @@ namespace Reanimator.Forms
             public int Unknowns4 { get; set; }
         };
 
-        public ExcelTableForm(ExcelTable excelTable)
+        private ExcelTable excelTable;
+        private bool doStrings;
+
+        public ExcelTableForm(ExcelTable table)
         {
             InitializeComponent();
+            excelTable = table;
+            doStrings = false;
+            if (MessageBox.Show("Do you wish to convert applicable string offsets to strings?\nWarning: This may increase generation time!", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                doStrings = true;
+            }
+            Progress progress = new Progress();
+            progress.Shown += new EventHandler(Progress_Shown);
+            progress.ShowDialog(this);
+            this.Hide();
+            this.Show();
+        }
+
+        private void Progress_Shown(object sender, EventArgs e)
+        {
+            Progress progress = sender as Progress;
 
             // file id
             this.textBox1.Text = "0x" + excelTable.FileId.ToString("X");
@@ -33,6 +52,8 @@ namespace Reanimator.Forms
             // do strings - inefficient, but works.
             if (excelTable.Strings != null)
             {
+                progress.SetLoadingText("Generating strings data...");
+                progress.ConfigBar(0, excelTable.Strings.Length, 1);
                 String s = String.Empty;
                 for (int i = 0, j = 0, currentOffset = -1; i < excelTable.Strings.Length; i++)
                 {
@@ -55,9 +76,12 @@ namespace Reanimator.Forms
                         currentOffset = -1;
                     }
                 }
+
+                progress.SetCurrentItemText("String... \"" + s + "\"");
             }
             
             // main table data
+            progress.SetLoadingText("Generating table data...");
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.Columns.Add("Index", "Index");
             object[] array = (object[])excelTable.GetTableArray();
@@ -66,14 +90,44 @@ namespace Reanimator.Forms
             {
                 dataGridView1.Columns.Add(memberInfo.Name, memberInfo.Name);
             }
+
+            progress.ConfigBar(0, array.Length, 1);
             foreach (Object table in array)
             {
                 int row = dataGridView1.Rows.Add();
                 int col = 1;
 
+                progress.SetCurrentItemText("Row " + row + " of " + array.Length);
+                if (row % 2 == 0)
+                {
+                    progress.Refresh();
+                }
+
                 foreach (FieldInfo fieldInfo in type.GetFields())
                 {
-                    dataGridView1[col, row].Value = fieldInfo.GetValue(table);
+                    ExcelTables.ExcelOutputAttribute excelOutputAttribute = null;
+                    if (doStrings)
+                    {
+                        MemberInfo memberInfo = fieldInfo as MemberInfo;
+                        foreach (Attribute attribute in memberInfo.GetCustomAttributes(true))
+                        {
+                            excelOutputAttribute = attribute as ExcelTables.ExcelOutputAttribute;
+                            if (excelOutputAttribute != null)
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    Object value = fieldInfo.GetValue(table);
+                    if (excelOutputAttribute != null)
+                    {
+                        if (excelOutputAttribute.IsStringOffset)
+                        {
+                            value = excelTable.GetStringAtOffset((int)value);
+                        }
+                    }
+                    dataGridView1[col, row].Value = value;
                     col++;
                 }
             }
@@ -117,6 +171,7 @@ namespace Reanimator.Forms
             }
 
             dataGridView2.DataSource = tdsList.ToArray();
+            progress.Dispose();
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)

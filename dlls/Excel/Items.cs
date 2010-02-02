@@ -13,10 +13,13 @@ namespace Reanimator.Excel
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] header;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 name;
             Int32 buffer1;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 folder;
             Int32 buffer2;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 appearance;
             Int32 buffer3;
             public Int32 appearenceFirst;
