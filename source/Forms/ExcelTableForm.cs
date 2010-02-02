@@ -131,7 +131,7 @@ namespace Reanimator.Forms
                     switch (i)
                     {
                         case 0:
-                            dataGridView1[0, j].Value = intArrays[i][j];
+                            dataGridView1[i, j].Value = intArrays[i][j];
                             break;
                         case 1:
                             tds.Unknowns1 = intArrays[i][j];
@@ -142,11 +142,33 @@ namespace Reanimator.Forms
                         case 3:
                             tds.Unknowns3 = intArrays[i][j];
                             break;
+                        case 4:
+                            tds.Unknowns4 = intArrays[i][j];
+                            break;
                     }
                 }
             }
 
             dataGridView2.DataSource = tdsList.ToArray();
+
+            if (intArrays[4] == null)
+            {
+                dataGridView2.Columns.RemoveAt(3);
+            }
+            if (intArrays[3] == null)
+            {
+                dataGridView2.Columns.RemoveAt(2);
+            }
+            if (intArrays[2] == null)
+            {
+                dataGridView2.Columns.RemoveAt(1);
+            }
+            if (intArrays[1] == null)
+            {
+                dataGridView2.Columns.RemoveAt(0);
+            }
+
+
             progress.Dispose();
         }
 
