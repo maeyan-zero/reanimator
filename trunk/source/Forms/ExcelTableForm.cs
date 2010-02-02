@@ -85,7 +85,7 @@ namespace Reanimator.Forms
                     if (doStrings)
                     {
                         MemberInfo memberInfo = fieldInfo as MemberInfo;
-                        foreach (Attribute attribute in memberInfo.GetCustomAttributes(true))
+                        foreach (Attribute attribute in memberInfo.GetCustomAttributes(typeof(ExcelTables.ExcelOutputAttribute), true))
                         {
                             excelOutputAttribute = attribute as ExcelTables.ExcelOutputAttribute;
                             if (excelOutputAttribute != null)
