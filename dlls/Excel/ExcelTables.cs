@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace Reanimator.Excel
 {
@@ -128,13 +129,16 @@ namespace Reanimator.Excel
         {
             excelTables = new ExcelTableManagerManager();
             excelTables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
+            excelTables.AddTable("DIFFICULTY", null, typeof(Excel.Difficulty));
+            excelTables.AddTable("FILTER_CHATFILTER", "CHATFILTER", typeof(Excel.Filter));
+            excelTables.AddTable("FILTER_NAMEFILTER", "NAMEFILTER", typeof(Excel.Filter));
             excelTables.AddTable("GAME_GLOBALS", "GAMEGLOBALS", typeof(Excel.GameGlobals));
             excelTables.AddTable("GLOBAL_STRING", "GLOBALSTRING", typeof(Excel.GlobalString));
             excelTables.AddTable("ITEMQUALITY", null, typeof(Excel.ItemQuality));
             excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
             excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
-            excelTables.AddTable("FILTER_CHATFILTER", "CHATFILTER", typeof(Excel.Filter));
-            excelTables.AddTable("FILTER_NAMEFILTER", "NAMEFILTER", typeof(Excel.Filter));
+            excelTables.AddTable("LEVEL", "LEVELS", typeof(Excel.Levels));
+            excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
             excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
             excelTables.AddTable("STATES", null, typeof(Excel.States));
             excelTables.AddTable("STATS", null, typeof(Excel.Stats));
@@ -182,6 +186,7 @@ namespace Reanimator.Excel
                     }
                     catch (Exception)
                     {
+                        Debug.WriteLine("file not found: " + filePath);
                         continue;
                     }
                 }

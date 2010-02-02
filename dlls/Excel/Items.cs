@@ -22,78 +22,87 @@ namespace Reanimator.Excel
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 appearance;
             Int32 buffer3;
-            public Int32 appearenceFirst;
+            Int32 appearenceFirst;      // always -1
             Int32 buffer4;
-            public Int32 icon;
+            Int32 icon;      // always -1
             Int32 buffer5;
-            public Int32 holyRadius;
+            Int32 holyRadius;      // always -1
             Int32 buffer6;
-            public Int32 tinyHitParticle;
+            Int32 tinyHitParticle;      // always -1
             Int32 buffer7;
-            public Int32 lightHitParticle;
+            Int32 lightHitParticle;      // always -1
             Int32 buffer8;
-            public Int32 mediumHitParticle;
+            Int32 mediumHitParticle;      // always -1
             Int32 buffer9;
-            public Int32 hardHitParticle;
+            Int32 hardHitParticle;      // always -1
             Int32 buffer10;
-            public Int32 killedParticle;
+            Int32 killedParticle;      // always -1
             Int32 buffer11;
-            public Int32 fizzleParticle;
+            Int32 fizzleParticle;      // always 0
             Int32 buffer12;
-            public Int32 reflectParticle;
+            Int32 reflectParticle;      // always -1
             Int32 buffer13;
-            public Int32 restoreVitalsParticle;
+            Int32 restoreVitalsParticle;      // always -1
             Int32 buffer14;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 diffuse;
             Int32 buffer15;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 normal;
             Int32 buffer16;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 specular;
             Int32 buffer17;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 lightmap;
             Int32 buffer18;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideSource1;
             Int32 buffer19;
-            public Int32 overrideSource2;
+            Int32 overrideSource2;      // always -1
             Int32 buffer20;
-            public Int32 overrideSource3;
+            Int32 overrideSource3;      // always -1
             Int32 buffer21;
-            public Int32 overrideSource4;
+            Int32 overrideSource4;      // always -1
             Int32 buffer22;
-            public Int32 overrideSource5;
+            Int32 overrideSource5;      // always -1
             Int32 buffer23;
-            public Int32 overrideDest1;
+            Int32 overrideDest1;      // always -1
             Int32 buffer24;
-            public Int32 overrideDest2;
+            Int32 overrideDest2;      // always -1
             Int32 buffer25;
-            public Int32 overrideDest3;
+            Int32 overrideDest3;      // always -1
             Int32 buffer26;
-            public Int32 overrideDest4;
+            Int32 overrideDest4;      // always -1
             Int32 buffer27;
-            public Int32 overrideDest5;
+            Int32 overrideDest5;      // always -1
             Int32 buffer28;
-            public Int32 particleFolder;
+            Int32 particleFolder;      // always -1
             Int32 buffer29;
-            public Int32 pickupFunction;
+            Int32 pickupFunction;      // always -1
             Int32 buffer30;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 triggerString1;
             Int32 buffer31;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 triggerString2;
             Int32 buffer32;
-            public Int32 charSelectFont;
+            Int32 charSelectFont;      // always -1
             Int32 buffer33;
-            public Int32 tooltipDamageIcon;
+            Int32 tooltipDamageIcon;      // always -1
             Int32 buffer34;
-            public Int32 damagingMeleeParticle;
+            Int32 damagingMeleeParticle;      // always -1
             Int32 buffer35;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 muzzleFlash;
             Int32 buffer36;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 904)]
             byte[] unknown02;
-            public Int32 impUnitPhysical;
+            Int32 impUnitPhysical;      // always -1
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 184)]
             byte[] unknown03;
             public Int32 spawn;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 properties1;
             public Int32 behaviour;
             public Int32 dontPath;
@@ -197,21 +206,21 @@ namespace Reanimator.Excel
             public Int32 sellPriceMult;
             public Int32 sellPriceAdd;
             public Int32 inventoryWardrobe;
-            public Int32 characterScreenWardrobe;
-            public Int32 characterScreenState;
-            public Int32 wardrobeBody;
-            public Int32 wardrobeFallback;
-            public Int32 wardrobeUnkown1;
-            public Int32 wardrobeMip;
-            public Int32 wardrobeAppearanceGroup;
-            public Int32 wardrobeAppearanceGroup1st;
-            public Int32 startingStance;
+            Int32 characterScreenWardrobe;      // always -1
+            Int32 characterScreenState;      // always -1
+            Int32 wardrobeBody;      // always -1
+            Int32 wardrobeFallback;      // always -1
+            Int32 wardrobeUnkown1;      // always -1
+            Int32 wardrobeMip;      // always 0
+            Int32 wardrobeAppearanceGroup;      // always -1
+            Int32 wardrobeAppearanceGroup1st;      // always -1
+            Int32 startingStance;      // always -1
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
             byte[] unknown06;
             public Int32 containerUnitType1;
             public Int32 containerUnitType2;
-            public Int32 containerUnitType3;
-            public Int32 containerUnitType4;
+            Int32 containerUnitType3;      // always 0
+            Int32 containerUnitType4;      // always 0
             public Int32 firingErrorIncrease;
             public Int32 firingErrorDecrease;
             public Int32 firingErrorMax;
