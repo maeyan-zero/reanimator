@@ -12,7 +12,7 @@ namespace Reanimator.Excel
         class TreasureTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            public Int32[] header;
+            Int32[] header;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string treasureClass;
             public Int32 allowUnitTypes1;

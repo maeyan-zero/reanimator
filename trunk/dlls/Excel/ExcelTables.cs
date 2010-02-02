@@ -10,6 +10,13 @@ namespace Reanimator.Excel
 {
     public class ExcelTables : ExcelTable
     {
+        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+        public class ExcelOutputAttribute : System.Attribute
+        {
+            public bool IsStringOffset { get; set; }
+        }
+
+
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class ExcelTableTable
         {
@@ -97,6 +104,13 @@ namespace Reanimator.Excel
                     {
                         return tableIndex;
                     }
+                    else if (tableIndex.fileName != null)
+                    {
+                        if (tableIndex.fileName.Equals(id, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return tableIndex;
+                        }
+                    }
                 }
 
                 return null;
@@ -110,6 +124,7 @@ namespace Reanimator.Excel
         {
             excelTables = new ExcelTableManagerManager();
             excelTables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
+            excelTables.AddTable("GAME_GLOBALS", "GAMEGLOBALS", typeof(Excel.GameGlobals));
             excelTables.AddTable("ITEMQUALITY", null, typeof(Excel.ItemQuality));
             excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
             excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));

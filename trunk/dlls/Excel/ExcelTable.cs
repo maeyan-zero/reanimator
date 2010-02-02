@@ -311,5 +311,24 @@ namespace Reanimator.Excel
                 tables.Add(table);
             }
         }
+
+        public String GetStringAtOffset(int offset)
+        {
+            String ret = String.Empty;
+
+            if (Strings != null)
+            {
+                try
+                {
+                    ret = FileTools.ByteArrayToStringAnsi(Strings, offset);
+                }
+                catch (Exception)
+                {
+                    return ret;
+                }
+            }
+
+            return ret;
+        }
     }
 }

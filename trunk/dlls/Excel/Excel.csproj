@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Affixes.cs" />
     <Compile Include="BitBuffer.cs" />
+    <Compile Include="GameGlobals.cs" />
     <Compile Include="ItemQuality.cs" />
     <Compile Include="Crc32.cs" />
     <Compile Include="ExcelTable.cs">

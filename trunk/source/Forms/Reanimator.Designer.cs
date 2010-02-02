@@ -479,7 +479,6 @@
             this.toolStrip.Size = new System.Drawing.Size(684, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "ToolStrip";
-            this.toolStrip.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Reanimator_MouseClick);
             // 
             // newToolStripButton
             // 
@@ -583,7 +582,6 @@
             this.Name = "Reanimator";
             this.Text = "Reanimator 2038";
             this.Load += new System.EventHandler(this.Reanimator_Load);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Reanimator_MouseClick);
             this.ResizeEnd += new System.EventHandler(this.Reanimator_ResizeEnd);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
