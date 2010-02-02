@@ -17,7 +17,6 @@ namespace Reanimator.Forms
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class TableIndexDataSource
         {
-            public int Index { get; set; }
             public int Unknowns1 { get; set; }
             public int Unknowns2 { get; set; }
             public int Unknowns3 { get; set; }
@@ -60,20 +59,21 @@ namespace Reanimator.Forms
             
             // main table data
             dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.Columns.Add("Index", "Index");
             object[] array = (object[])excelTable.GetTableArray();
             Type type = array[0].GetType();
             foreach (MemberInfo memberInfo in type.GetFields())
             {
                 dataGridView1.Columns.Add(memberInfo.Name, memberInfo.Name);
             }
-            for (int i = 0; i < array.Length; i++)
+            foreach (Object table in array)
             {
                 int row = dataGridView1.Rows.Add();
-                int col = 0;
+                int col = 1;
 
                 foreach (FieldInfo fieldInfo in type.GetFields())
                 {
-                    dataGridView1[col, row].Value = fieldInfo.GetValue(array[i]);
+                    dataGridView1[col, row].Value = fieldInfo.GetValue(table);
                     col++;
                 }
             }
@@ -101,7 +101,7 @@ namespace Reanimator.Forms
                     switch (i)
                     {
                         case 0:
-                            tds.Index = intArrays[i][j];
+                            dataGridView1[0, j].Value = intArrays[i][j];
                             break;
                         case 1:
                             tds.Unknowns1 = intArrays[i][j];

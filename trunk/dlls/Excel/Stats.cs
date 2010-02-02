@@ -23,23 +23,16 @@ namespace Reanimator.Excel
             byte[] unknownData;
         }
 
-        List<StatsTable> stats;
-
         public Stats(byte[] data) : base(data) { }
-
-        public override object GetTableArray()
-        {
-            return stats.ToArray();
-        }
 
         protected override void ParseTables(byte[] data)
         {
-            stats = ExcelTables.ReadTables<StatsTable>(data, ref offset, Count);
+            ReadTables<StatsTable>(data, ref offset, Count);
         }
 
         public string GetStringFromId(int id)
         {
-            foreach (StatsTable statsTable in stats)
+            foreach (StatsTable statsTable in tables)
             {
                 if (statsTable.id == id)
                 {

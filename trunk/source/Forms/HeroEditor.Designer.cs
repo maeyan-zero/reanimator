@@ -31,6 +31,8 @@ namespace Reanimator.Forms
         {
             this.main_TabControl = new System.Windows.Forms.TabControl();
             this.general_TabPage = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.statPoints_numericUpDown = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.skillPoints_numericUpDown = new System.Windows.Forms.NumericUpDown();
             this.palladium_numericUpDown = new System.Windows.Forms.NumericUpDown();
@@ -63,10 +65,9 @@ namespace Reanimator.Forms
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.statPoints_numericUpDown = new System.Windows.Forms.NumericUpDown();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.statPoints_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.skillPoints_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.palladium_numericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.level_NumericUpDown)).BeginInit();
@@ -74,7 +75,6 @@ namespace Reanimator.Forms
             this.groupBox2.SuspendLayout();
             this.stats_GroupBox.SuspendLayout();
             this.items_TabPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.statPoints_numericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -121,6 +121,30 @@ namespace Reanimator.Forms
             this.general_TabPage.TabIndex = 2;
             this.general_TabPage.Text = "General";
             this.general_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(359, 106);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(57, 13);
+            this.label6.TabIndex = 22;
+            this.label6.Text = "Statpoints:";
+            // 
+            // statPoints_numericUpDown
+            // 
+            this.statPoints_numericUpDown.Location = new System.Drawing.Point(422, 104);
+            this.statPoints_numericUpDown.Maximum = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            this.statPoints_numericUpDown.Name = "statPoints_numericUpDown";
+            this.statPoints_numericUpDown.Size = new System.Drawing.Size(100, 20);
+            this.statPoints_numericUpDown.TabIndex = 21;
+            this.statPoints_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.statPoints_numericUpDown.ThousandsSeparator = true;
+            this.statPoints_numericUpDown.ValueChanged += new System.EventHandler(this.statPoints_numericUpDown_ValueChanged);
             // 
             // label5
             // 
@@ -184,7 +208,7 @@ namespace Reanimator.Forms
             // 
             this.richTextBox1.Location = new System.Drawing.Point(6, 130);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(731, 373);
+            this.richTextBox1.Size = new System.Drawing.Size(305, 373);
             this.richTextBox1.TabIndex = 14;
             this.richTextBox1.Text = "";
             // 
@@ -465,30 +489,6 @@ namespace Reanimator.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(359, 106);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(57, 13);
-            this.label6.TabIndex = 22;
-            this.label6.Text = "Statpoints:";
-            // 
-            // statPoints_numericUpDown
-            // 
-            this.statPoints_numericUpDown.Location = new System.Drawing.Point(422, 104);
-            this.statPoints_numericUpDown.Maximum = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
-            this.statPoints_numericUpDown.Name = "statPoints_numericUpDown";
-            this.statPoints_numericUpDown.Size = new System.Drawing.Size(100, 20);
-            this.statPoints_numericUpDown.TabIndex = 21;
-            this.statPoints_numericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.statPoints_numericUpDown.ThousandsSeparator = true;
-            this.statPoints_numericUpDown.ValueChanged += new System.EventHandler(this.statPoints_numericUpDown_ValueChanged);
-            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -505,6 +505,7 @@ namespace Reanimator.Forms
             this.main_TabControl.ResumeLayout(false);
             this.general_TabPage.ResumeLayout(false);
             this.general_TabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.statPoints_numericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.skillPoints_numericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.palladium_numericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.level_NumericUpDown)).EndInit();
@@ -513,7 +514,6 @@ namespace Reanimator.Forms
             this.stats_GroupBox.ResumeLayout(false);
             this.items_TabPage.ResumeLayout(false);
             this.items_TabPage.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.statPoints_numericUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

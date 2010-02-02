@@ -75,18 +75,11 @@ namespace Reanimator.Excel
             public Int32 onlyOnItemsRequiringUnitType;
         }
 
-        List<AffixesTable> affixes;
-
         public Affixes(byte[] data) : base(data) { }
-
-        public override object GetTableArray()
-        {
-            return affixes.ToArray();
-        }
 
         protected override void ParseTables(byte[] data)
         {
-            affixes = ExcelTables.ReadTables<AffixesTable>(data, ref offset, Count);
+            ReadTables<AffixesTable>(data, ref offset, Count);
         }
     }
 }

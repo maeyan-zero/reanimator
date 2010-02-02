@@ -79,18 +79,11 @@ namespace Reanimator.Excel
             public Int32 spawnFromLevelTheme;
         }
 
-        List<TreasureTable> treasure;
-
         public Treasure(byte[] data) : base(data) { }
-
-        public override object GetTableArray()
-        {
-            return treasure.ToArray();
-        }
 
         protected override void ParseTables(byte[] data)
         {
-            treasure = ExcelTables.ReadTables<TreasureTable>(data, ref offset, Count);
+            ReadTables<TreasureTable>(data, ref offset, Count);
         }
     }
 }

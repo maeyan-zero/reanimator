@@ -20,9 +20,7 @@ namespace Reanimator.Excel
             public Int16 id;
         }
 
-        List<ExcelTableTable> excelTables;
-
-        class TableIndexManager
+        class ExcelTableManagerManager
         {
             class TableIndexHelper
             {
@@ -42,7 +40,7 @@ namespace Reanimator.Excel
 
             List<TableIndexHelper> tables;
 
-            public TableIndexManager()
+            public ExcelTableManagerManager()
             {
                 tables = new List<TableIndexHelper>();
             }
@@ -105,39 +103,34 @@ namespace Reanimator.Excel
             }
         }
 
-        TableIndexManager tables;
+        ExcelTableManagerManager excelTables;
 
         public ExcelTables(byte[] data)
             : base(data)
         {
-            tables = new TableIndexManager();
-            tables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
-            tables.AddTable("ITEMQUALITY", null, typeof(Excel.ItemQuality));
-            tables.AddTable("ITEMS", null, typeof(Excel.Items));
-            tables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
-            tables.AddTable("STATES", null, typeof(Excel.States));
-            tables.AddTable("STATS", null, typeof(Excel.Stats));
-            tables.AddTable("TREASURE", null, typeof(Excel.Treasure));
-        }
-
-        public override object GetTableArray()
-        {
-            return excelTables.ToArray();
+            excelTables = new ExcelTableManagerManager();
+            excelTables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
+            excelTables.AddTable("ITEMQUALITY", null, typeof(Excel.ItemQuality));
+            excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
+            excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
+            excelTables.AddTable("STATES", null, typeof(Excel.States));
+            excelTables.AddTable("STATS", null, typeof(Excel.Stats));
+            excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));
         }
 
         protected override void ParseTables(byte[] data)
         {
-            excelTables = ReadTables<ExcelTableTable>(data, ref offset, Count);
+            ReadTables<ExcelTableTable>(data, ref offset, Count);
         }
 
         public string GetTableStringId(int index)
         {
-            return excelTables[index].stringId;
+            return ((ExcelTableTable)tables[index]).stringId;
         }
 
         public ExcelTable GetTable(string stringId)
         {
-            return tables.GetTable(stringId);
+            return excelTables.GetTable(stringId);
         }
 
         public bool LoadTables(string folder, Label label)
@@ -145,7 +138,7 @@ namespace Reanimator.Excel
             for (int i = 0; i < Count; i++)
             {
                 string stringId = GetTableStringId(i);
-                string fileName = tables.GetReplacement(stringId);
+                string fileName = excelTables.GetReplacement(stringId);
 
                 string filePath = folder + "\\" + fileName + ".txt.cooked";
                 FileStream cookedFile;
@@ -173,7 +166,7 @@ namespace Reanimator.Excel
                 byte[] buffer = FileTools.StreamToByteArray(cookedFile);
                 try
                 {
-                    tables.CreateTable(stringId, buffer);
+                    excelTables.CreateTable(stringId, buffer);
                 }
                 catch (Exception e)
                 {

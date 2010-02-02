@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Reflection;
 
 namespace Reanimator.Excel
 {
@@ -96,6 +98,10 @@ namespace Reanimator.Excel
         public byte[] Strings { get; set; }
 
         protected TableHeader tableHeader;
+
+        protected List<object> tables;
+        protected DataGridView dataGridView;
+
         protected TableIndex tableIndex;
         protected int[] tableIndicies;
         public int[] TableIndicies { get { return tableIndicies; } }
@@ -148,6 +154,7 @@ namespace Reanimator.Excel
                 tableHeader = (TableHeader)FileTools.ByteArrayToStructure(data, typeof(TableHeader), offset);
                 offset += Marshal.SizeOf(typeof(TableHeader));
                 CheckFlag(tableHeader.flag);
+                tables = new List<object>();
                 ParseTables(data);
 
 
@@ -287,13 +294,15 @@ namespace Reanimator.Excel
             }
         }
 
-        public abstract object GetTableArray();
+        public object GetTableArray()
+        {
+            return tables.ToArray();
+        }
+
         protected abstract void ParseTables(byte[] data);
 
-        public static List<T> ReadTables<T>(byte[] data, ref int offset, int count)
+        public void ReadTables<T>(byte[] data, ref int offset, int count)
         {
-            List<T> tables = new List<T>();
-
             for (int i = 0; i < count; i++)
             {
                 T table = (T)FileTools.ByteArrayToStructure(data, typeof(T), offset);
@@ -301,8 +310,6 @@ namespace Reanimator.Excel
 
                 tables.Add(table);
             }
-
-            return tables;
         }
     }
 }

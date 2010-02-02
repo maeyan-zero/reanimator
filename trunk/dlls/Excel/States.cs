@@ -14,7 +14,6 @@ namespace Reanimator.Excel
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] header;
-
             public Int32 stringId;
             Int32 buffer;
             public Int32 id;
@@ -69,18 +68,11 @@ namespace Reanimator.Excel
             public Int32 unknown49;
         }
 
-        List<StatesTable> states;
-
         public States(byte[] data) : base(data) { }
-
-        public override object GetTableArray()
-        {
-            return states.ToArray();
-        }
 
         protected override void ParseTables(byte[] data)
         {
-            states = ExcelTables.ReadTables<StatesTable>(data, ref offset, Count);
+            ReadTables<StatesTable>(data, ref offset, Count);
         }
     }
 }
