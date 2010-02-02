@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Affixes.cs" />
     <Compile Include="BitBuffer.cs" />
+    <Compile Include="Difficulty.cs" />
     <Compile Include="GameGlobals.cs" />
     <Compile Include="GlobalString.cs" />
     <Compile Include="ItemQuality.cs" />
@@ -66,6 +67,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Filter.cs" />
+    <Compile Include="Levels.cs" />
+    <Compile Include="Procs.cs" />
     <Compile Include="Skills.cs" />
     <Compile Include="States.cs">
       <SubType>Code</SubType>
