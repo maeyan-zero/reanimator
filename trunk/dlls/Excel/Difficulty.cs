@@ -14,10 +14,10 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] header;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-            public String difficulty;
+            public String name;
 
-            public Int32 id;
-            public Int32 unknown;
+            public Int32 code;
+            public Int32 unlockedString;//stridx
         }
 
         public Difficulty(byte[] data) : base(data) { }
