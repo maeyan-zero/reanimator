@@ -102,6 +102,26 @@ namespace Reanimator.Forms
                         {
                             value = excelTable.Strings[value];
                         }
+                        else if (excelOutputAttribute.IsIntOffset)
+                        {
+                            int offset = (int)value;
+                            if (offset != 0 && excelTable.ByteBlock != null)
+                            {
+                                ListBox listBox = new ListBox();
+
+                                String[] fields = excelOutputAttribute.FieldNames;
+                                int i = 0;
+                                foreach (String s in fields)
+                                {
+                                    int intValue = BitConverter.ToInt32(excelTable.ByteBlock, offset + i * sizeof(Int32));
+                                    i++;
+
+                                    listBox.Items.Add(s + " = " + intValue);
+                                }
+
+                                value = listBox;
+                            }
+                        }
                     }
                     dataGridView1[col, row].Value = value;
                     col++;

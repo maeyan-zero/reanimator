@@ -219,7 +219,7 @@ namespace Reanimator
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Failed to extract file from dat!\nFile: " + file.FilenameString +"\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to extract file from dat!\nFile: " + file.FilenameString + "\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
