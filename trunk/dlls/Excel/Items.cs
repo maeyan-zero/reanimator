@@ -197,7 +197,7 @@ namespace Reanimator.Excel
             byte[] unknown37;
             public Int32 impactUnitElectric;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-            byte[] unknown37;
+            byte[] unknown38;
             public Int32 impactUnitSpectral;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown39;
@@ -501,7 +501,7 @@ namespace Reanimator.Excel
             public Int32 questDescription;//index
             public Int32 pickUpCondition;//intptr
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte[] unknown04;
+            byte[] unknownBytes04;
             public Int32 scriptOnUse;//intptr
             public Int32 stackSize;//intptr
             public Int32 maxPickUp;
@@ -522,7 +522,7 @@ namespace Reanimator.Excel
             Int32 wardrobeAppearanceGroup1st;      // always -1
             Int32 startingStance;      // always -1
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-            byte[] unknown06;
+            byte[] unknownBytes06;
             public Int32 containerUnitType1;
             public Int32 containerUnitType2;
             Int32 containerUnitType3;      // always 0
@@ -532,7 +532,7 @@ namespace Reanimator.Excel
             public Int32 firingErrorMax;
             public Int32 accuracyBase;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            byte[] unknown07;
+            byte[] unknownBytes07;
             public Int32 refillHotKey;//index
             public Int32 animGroup;//index
             public Int32 meleeWeapon;//index
@@ -587,13 +587,13 @@ namespace Reanimator.Excel
             public Int32 sfxToxicDamageAsPercentageOfDamageDeliveredFromAttack;
             public float sfxToxicDurationInSeconds;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
-            byte[] unknown12;
+            byte[] unknownBytes12;
             public Int32 sfxPoisonAbility;
             public Int32 sfxPoisonDefense;
             public Int32 sfxPoisonDamageAsPercentageOfDamageDeliveredFromAttack;
             public float sfxPoisonDurationInSeconds;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
-            byte[] unknown13;
+            byte[] unknownBytes13;
             public Int32 dmgIncrement;
             public Int32 radialDmgIncrement;
             public Int32 fieldDmgIncrement;
@@ -619,10 +619,10 @@ namespace Reanimator.Excel
             public Int32 armorUnknown1;
             public Int32 armorPoison;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            byte[] unknown15;
+            byte[] unknownBytes15;
             public Int32 maxArmor;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 44)]
-            byte[] unknown16;
+            byte[] unknownBytes16;
             public Int32 shields;
             public Int32 shieldPhys;
             public Int32 shieldFire;
@@ -632,7 +632,7 @@ namespace Reanimator.Excel
             public Int32 shieldUnknown1;
             public Int32 shieldPoison;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            byte[] unknown18;
+            byte[] unknownBytes18;
             public Int32 strengthPercent;
             public Int32 dexterityPercent;
             public Int32 startingAccuracy;
@@ -668,7 +668,7 @@ namespace Reanimator.Excel
             public Int32 invWidth;
             public Int32 invHeight;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-            byte[] unknown19;
+            byte[] unknownBytes19;
             public Int32 requiredQuality;//index
             public Int32 qualityName;//index
             public Int32 fieldMissile;//index
@@ -690,7 +690,7 @@ namespace Reanimator.Excel
             public Int32 skillMissed14;
             public Int32 skillMissed15;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte[] unknown20;
+            byte[] unknownBytes20;
             public Int32 skillOnFuse;//index
             public Int32 skillOnDamageRepeat;//index
             public Int32 startingskills1;
@@ -847,7 +847,7 @@ namespace Reanimator.Excel
             public Int32 spawnTreasureClassInLevel;//index
             public Int32 oneWayVisualPortalDir;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte[] unknown21;
+            byte[] unknownBytes21;
             public float labelScale;
             public float labelForwardOffset;
             public float heightpercent;
@@ -864,19 +864,19 @@ namespace Reanimator.Excel
             public byte appearanceTallFat;
             public Int32 colorSet;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-            byte[] unknown24;
+            byte[] unknownBytes24;
             public Int32 globalThemeRequired;//index
             public Int32 levelThemeRequired;//index
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte[] unknown25;
+            byte[] unknownBytes25;
             public Int32 undefined1;
             public Int32 undefined2;
             public Int32 undefined3;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 88)]
-            byte[] unknown26;
+            byte[] unknownBytes26;
             public Int32 undefined4;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 48)]
-            byte[] unknown27;
+            byte[] unknownBytes27;
         }
 
         public Items(byte[] data) : base(data) { }
@@ -886,6 +886,7 @@ namespace Reanimator.Excel
             ReadTables<ItemsTable>(data, ref offset, Count);
         }
 
+#pragma warning disable 0169
         struct BitMask1
         {
             bool spawn;//(0
@@ -917,9 +918,9 @@ namespace Reanimator.Excel
             bool flipFaceDirection;//(26
             bool dontUseRangeForSkill;//(27
             bool pullsTarget;//(28
-	        bool damagesOnHitUnit;//(29
-	        bool pulsesStatsOnHitUnit;//(30
-	        bool damagesOnHitBackground;//(31
+            bool damagesOnHitUnit;//(29
+            bool pulsesStatsOnHitUnit;//(30
+            bool damagesOnHitBackground;//(31
         }
 
         struct BitMask2
@@ -953,25 +954,25 @@ namespace Reanimator.Excel
             bool canReflect;//(26
             bool selectTargetIgnoresAimPos;//(27
             bool canMeleeAboveHeight;//(28
-	        bool getFlavorTextFromQuest;//(29
-	        bool unIdentifiedNameFromBaseRow;//(30
+            bool getFlavorTextFromQuest;//(29
+            bool unIdentifiedNameFromBaseRow;//(30
             bool noRandomProperName;//(31
         }
 
         struct BtMask3
         {
             bool noNameModifications;//(0
-	        bool preLoad;//(1
+            bool preLoad;//(1
             bool ignoreInDat;//(2
             bool ignoreSavedStates;//(3
             bool drawUsingCutUpWardrobe;//(4
-	        bool isGood;//(5
+            bool isGood;//(5
             bool isNpc;//(6
             bool canNotBeMoved;//(7
-	        bool noLevel;//(8
-	        bool usesSkills;//(9
-	        bool autoPickup;//(10
-	        bool trigger;//(11
+            bool noLevel;//(8
+            bool usesSkills;//(9
+            bool autoPickup;//(10
+            bool trigger;//(11
             bool dieOnClientTrigger;//(12
             bool neverDestroyDead;//(13
             bool collideWhenDead;//(14
@@ -982,17 +983,17 @@ namespace Reanimator.Excel
             bool destructible;//(19
             bool inAir;//(20
             bool wallWalk;//(21
-	        bool startInTownIdle;//(22
-	        bool onDieDestroy;//(23
+            bool startInTownIdle;//(22
+            bool onDieDestroy;//(23
             bool onDieEndDestroy;//(24
             bool onDieHideModel;//(25
             bool selectableDeadOrDying;//(26
-	        bool interactive;//(27
-	        bool merchantDoesNotRefresh;//(28
+            bool interactive;//(27
+            bool merchantDoesNotRefresh;//(28
             bool hideDialogHead;//(28
-	        bool collideBad;//(29
-	        bool collideGood;//(30
-	        bool modesIgnoreAI;//(31
+            bool collideBad;//(29
+            bool collideGood;//(30
+            bool modesIgnoreAI;//(31
         }
 
         struct BitMask4
@@ -1002,33 +1003,33 @@ namespace Reanimator.Excel
             bool unTargetable;//(2
             bool FaceDuringInteraction;//(3
             bool noSync;//(4
-	        bool canNotTurn;//(5
+            bool canNotTurn;//(5
             bool turnNeckInsteadOfBody;//(6
             bool merchant;//(7
             bool merchantSharedInventory;//(8
-	        bool trader;//(9
-	        bool tradesman;//(10
+            bool trader;//(9
+            bool tradesman;//(10
             bool gambler;//(11
             bool mapVendor;//(12
-	        bool godQuestMessanger;//(13
-	        bool trainer;//(14
-	        bool healer;//(15
+            bool godQuestMessanger;//(13
+            bool trainer;//(14
+            bool healer;//(15
             bool graveKeeper;//(16
             bool taskGiver;//(17
-	        bool canUpgradeItems;//(18
+            bool canUpgradeItems;//(18
             bool canAugmentItems;//(19
             bool autoIdentifiesInventory;//(20
-	        bool npcDungeonWarp;//(21
+            bool npcDungeonWarp;//(21
             bool PvPSignerUpper;//(22
             bool foreman;//(23
-	        bool transporter;//(24
-	        bool showsPortrait;//(25
-	        bool petGetsStatPointsPerLevel;//(26
-	        bool ignoresSkillPowerCost;//(27
-	        bool checkRadiusWhenPathing;//(28
+            bool transporter;//(24
+            bool showsPortrait;//(25
+            bool petGetsStatPointsPerLevel;//(26
+            bool ignoresSkillPowerCost;//(27
+            bool checkRadiusWhenPathing;//(28
             bool checkHeightWhenPathing;//(29
-	        bool questImportantInfo;//(30
-	        bool ignoresToHit;//(31
+            bool questImportantInfo;//(30
+            bool ignoresToHit;//(31
         }
 
         struct BitMask5
@@ -1037,8 +1038,8 @@ namespace Reanimator.Excel
             bool mustFaceMeleeTarget;//(5),
             bool alwaysShowLabel;//(12);
             bool askQuestsForOperate;//(0
-	        bool askFactionForOperate;//(1
-	        bool askPvPCensorshipForOperate;//(2
+            bool askFactionForOperate;//(1
+            bool askPvPCensorshipForOperate;//(2
             bool structural;//(3
             bool askQuestsForKnown;//(4
             bool askQuestsForVisible;//(5
@@ -1046,27 +1047,27 @@ namespace Reanimator.Excel
             bool informQuestsOfLootDrop;//(7
             bool informQuestsOnDeath;//(8
             bool noTrade;//(9
-	        bool flagRoomAsNoSpawn;//(10
+            bool flagRoomAsNoSpawn;//(10
             bool monitorPlayerApproach;//(11
             bool monitorApproachClearLOS;//(12
-	        bool canFizzle;//(13
+            bool canFizzle;//(13
             bool inheritsDirection;//(14
             bool canNotBeDismantled;//(15
             bool canNotBeUpgraded;//(16
             bool canNotBeAugmented;//(17
             bool canNotBeDeModded;//(18
-	        bool ignoreSellWithInventoryConfirm;//(19
-	        bool wardrobePerUnit;//(20
-	        bool wardrobeSharesModelDef;//(21
+            bool ignoreSellWithInventoryConfirm;//(19
+            bool wardrobePerUnit;//(20
+            bool wardrobeSharesModelDef;//(21
             bool noWeaponModel;//(22
             bool noDrop;//(24
             bool noDropExceptForDuplicates;//(25
             bool askQuestsForPickup;//(26
             bool informQuestsOnPickup;//(27
-	        bool examinable;//(28
-	        bool informQuestsToUse;//(29
+            bool examinable;//(28
+            bool informQuestsToUse;//(29
             bool consumeWhenUsed;//(30
-	        bool immuneToCritical;//(31
+            bool immuneToCritical;//(31
         }
 
         struct BitMask6
@@ -1074,55 +1075,55 @@ namespace Reanimator.Excel
             bool hasQuestInfo;//(11),
             bool multiplayerOnly;//(10);
             bool NoRandomAffixes;//(0
-	        bool canBeChampion;//(1
-	        bool noQualityDowngrade;//(2
-	        bool noDrawOnInit;//(3
-	        bool mustFaceMeleeTarget;//(4
-	        bool dontDestroyIfVelocityIsZero;//(5
-	        bool ignoreInteractDistance;//(6
-	        bool operateRequiresGoodQuestStatus;//(7
-	        bool reverseArriveDirection;//(8
+            bool canBeChampion;//(1
+            bool noQualityDowngrade;//(2
+            bool noDrawOnInit;//(3
+            bool mustFaceMeleeTarget;//(4
+            bool dontDestroyIfVelocityIsZero;//(5
+            bool ignoreInteractDistance;//(6
+            bool operateRequiresGoodQuestStatus;//(7
+            bool reverseArriveDirection;//(8
             bool faceAfterWarp;//(9
             bool neverAStartLocation;//(10
-	        bool alwaysShowLabel;//(11
-	        bool undefined13;//(13 //no predefined name
-	        bool isNonweaponMissile;//(15
+            bool alwaysShowLabel;//(11
+            bool undefined13;//(13 //no predefined name
+            bool isNonweaponMissile;//(15
             bool cullByScreensize;//(16
-	        bool linkWarpDestByLevelType;//(17
+            bool linkWarpDestByLevelType;//(17
             bool isBoss;//(18
             bool takeResponsibilityOnKill;//(20
             bool alwaysKnownForSounds;//(21
-	        bool ignoreTargetOnRepeatDmg;//(22
-	        bool bindToLevelArea;//(23
+            bool ignoreTargetOnRepeatDmg;//(22
+            bool bindToLevelArea;//(23
             bool dontCollideWithDestructibles;//(24
             bool blocksEverything;//(25
             bool everyoneCanTarget;//(26
             bool missilePlotArc;//(27
             bool missileIsGore;//(29
-	        bool canAttackFriends;//(30
-	        bool ignoreItemRequirements;//(31
+            bool canAttackFriends;//(30
+            bool ignoreItemRequirements;//(31
         }
         struct Bitmask7
         {
             bool lowLodInTown;//(0
-	        bool treasureClassBeforeRoom;//(1
-	        bool taskGiverNoStartingIcon;//(2
-	        bool dontDepopulate;//(5
+            bool treasureClassBeforeRoom;//(1
+            bool taskGiverNoStartingIcon;//(2
+            bool dontDepopulate;//(5
             bool dontShrinkBones;//(6
-	        bool hasQuestInfo;//(8
-	        bool multiplayerOnly;//(9
-	        bool noSpin;//(10
-	        bool npcGuildMaster;//(11
+            bool hasQuestInfo;//(8
+            bool multiplayerOnly;//(9
+            bool noSpin;//(10
+            bool npcGuildMaster;//(11
             bool autoIdentifyAffixs;//(12
-	        bool npcRespeccer;//(13
+            bool npcRespeccer;//(13
             bool allowObjectStepping;//(14
-	        bool alwaysUseFallback;//(15
+            bool alwaysUseFallback;//(15
             bool canNotSpawnRandomLevelTreasure;//(16
-	        bool xferMissileStats;//(17
+            bool xferMissileStats;//(17
             bool specificToDifficulty;//(18
             bool isFieldMissile;//(19
             bool ignoreFuseMsStat;//(20
-	        bool usesPetLevel;//(21
+            bool usesPetLevel;//(21
         }
         struct BitMask8
         {
@@ -1132,5 +1133,7 @@ namespace Reanimator.Excel
             bool canNotRicochet;//(3)
             bool reTargetOnBounce;//(4)
         }
+
+#pragma warning restore 0169
     }
 }

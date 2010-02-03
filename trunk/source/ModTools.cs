@@ -10,6 +10,7 @@ namespace Reanimator
     /// <summary>
     /// Describes the variables associated with a modification.
     /// </summary>
+#pragma warning disable 0169
     struct Modification
     {
         /// <summary>
@@ -37,6 +38,7 @@ namespace Reanimator
         int bit;
         Object data;
     }
+#pragma warning restore 0169
 
     struct FileIndex
     {

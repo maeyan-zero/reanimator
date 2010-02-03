@@ -197,7 +197,7 @@ namespace Reanimator.Excel
             byte[] unknown37;
             public Int32 impactUnitElectric;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-            byte[] unknown37;
+            byte[] unknown38;
             public Int32 impactUnitSpectral;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown39;
@@ -501,7 +501,7 @@ namespace Reanimator.Excel
             public Int32 questDescription;//index
             public Int32 pickUpCondition;//intptr
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte[] unknown04;
+            byte[] unknownBytes04;
             public Int32 scriptOnUse;//intptr
             public Int32 stackSize;//intptr
             public Int32 maxPickUp;
@@ -522,7 +522,7 @@ namespace Reanimator.Excel
             public Int32 wardrobeAppearanceGroup1st;//index
             public Int32 startingStance;//index
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-            byte[] unknown06;
+            byte[] unknownBytes06;
             public Int32 containerUnitType1;
             public Int32 containerUnitType2;
             public Int32 containerUnitType3;
@@ -532,7 +532,7 @@ namespace Reanimator.Excel
             public Int32 firingErrorMax;
             public Int32 accuracyBase;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            byte[] unknown07;
+            byte[] unknownBytes07;
             public Int32 refillHotKey;//index
             public Int32 animGroup;//index
             public Int32 meleeWeapon;//index
@@ -587,13 +587,13 @@ namespace Reanimator.Excel
             public Int32 sfxToxicDamageAsPercentageOfDamageDeliveredFromAttack;
             public float sfxToxicDurationInSeconds;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
-            byte[] unknown12;
+            byte[] unknownBytes12;
             public Int32 sfxPoisonAbility;
             public Int32 sfxPoisonDefense;
             public Int32 sfxPoisonDamageAsPercentageOfDamageDeliveredFromAttack;
             public float sfxPoisonDurationInSeconds;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
-            byte[] unknown13;
+            byte[] unknownBytes13;
             public Int32 dmgIncrement;
             public Int32 radialDmgIncrement;
             public Int32 fieldDmgIncrement;
@@ -619,10 +619,10 @@ namespace Reanimator.Excel
             public Int32 armorUnknown1;
             public Int32 armorPoison;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            byte[] unknown15;
+            byte[] unknownBytes15;
             public Int32 maxArmor;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 44)]
-            byte[] unknown16;
+            byte[] unknownBytes16;
             public Int32 shields;
             public Int32 shieldPhys;
             public Int32 shieldFire;
@@ -632,7 +632,7 @@ namespace Reanimator.Excel
             public Int32 shieldUnknown1;
             public Int32 shieldPoison;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            byte[] unknown18;
+            byte[] unknownBytes18;
             public Int32 strengthPercent;
             public Int32 dexterityPercent;
             public Int32 startingAccuracy;
@@ -668,7 +668,7 @@ namespace Reanimator.Excel
             public Int32 invWidth;
             public Int32 invHeight;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-            byte[] unknown19;
+            byte[] unknownBytes19;
             public Int32 requiredQuality;//index
             public Int32 qualityName;//index
             public Int32 fieldMissile;//index
@@ -690,7 +690,7 @@ namespace Reanimator.Excel
             public Int32 skillMissed14;
             public Int32 skillMissed15;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte[] unknown20;
+            byte[] unknownBytes20;
             public Int32 skillOnFuse;//index
             public Int32 skillOnDamageRepeat;//index
             public Int32 startingskills1;
@@ -847,7 +847,7 @@ namespace Reanimator.Excel
             public Int32 spawnTreasureClassInLevel;//index
             public Int32 oneWayVisualPortalDir;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte[] unknown21;
+            byte[] unknownBytes21;
             public float labelScale;
             public float labelForwardOffset;
             public float heightpercent;
@@ -864,35 +864,29 @@ namespace Reanimator.Excel
             public byte appearanceTallFat;
             public Int32 colorSet;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-            byte[] unknown24;
+            byte[] unknownBytes24;
             public Int32 globalThemeRequired;//index
             public Int32 levelThemeRequired;//index
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte[] unknown25;
+            byte[] unknownBytes25;
             public Int32 undefined1;
             public Int32 undefined2;
             public Int32 undefined3;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 88)]
-            byte[] unknown26;
+            byte[] unknownBytes26;
             public Int32 undefined4;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 48)]
-            byte[] unknown27;
+            byte[] unknownBytes27;
         }
-
-        List<ObjectsTable> objects;
 
         public Objects(byte[] data) : base(data) { }
 
-        public override object GetTableArray()
-        {
-            return objects.ToArray();
-        }
-
         protected override void ParseTables(byte[] data)
         {
-            objects = ExcelTables.ReadTables<ObjectsTable>(data, ref offset, Count);
+            ReadTables<ObjectsTable>(data, ref offset, Count);
         }
 
+#pragma warning disable 0169
         struct BitMask1
         {
             bool spawn;//(0
@@ -1139,5 +1133,6 @@ namespace Reanimator.Excel
             bool canNotRicochet;//(3)
             bool reTargetOnBounce;//(4)
         }
+#pragma warning restore 0169
     }
 }
