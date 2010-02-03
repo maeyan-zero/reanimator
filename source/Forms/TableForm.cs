@@ -202,18 +202,25 @@ namespace Reanimator
 
             foreach (Index.FileIndex file in files)
             {
-                byte[] buffer = index.ReadDataFile(file);
-
-                string keepPathString = "\\";
-                if (keepPath)
+                try
                 {
-                    keepPathString += file.DirectoryString;
-                    Directory.CreateDirectory(folderBrowserDialog.SelectedPath + keepPathString);
-                }
+                    byte[] buffer = index.ReadDataFile(file);
 
-                FileStream fileOut = new FileStream(folderBrowserDialog.SelectedPath + keepPathString + file.FilenameString, FileMode.Create);
-                fileOut.Write(buffer, 0, buffer.Length);
-                fileOut.Close();
+                    string keepPathString = "\\";
+                    if (keepPath)
+                    {
+                        keepPathString += file.DirectoryString;
+                        Directory.CreateDirectory(folderBrowserDialog.SelectedPath + keepPathString);
+                    }
+
+                    FileStream fileOut = new FileStream(folderBrowserDialog.SelectedPath + keepPathString + file.FilenameString, FileMode.Create);
+                    fileOut.Write(buffer, 0, buffer.Length);
+                    fileOut.Close();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Failed to extract file from dat!\nFile: " + file.FilenameString +"\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             MessageBox.Show(files.Length + " file(s) saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
