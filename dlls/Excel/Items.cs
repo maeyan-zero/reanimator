@@ -34,7 +34,8 @@ namespace Reanimator.Excel
             public Int32 hardHitParticle;//pchar
             Int32 buffer10;
             public Int32 killedParticle;//pchar
-            Int32 buffer11;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+            byte[] buffer11;
             public Int32 fizzleParticle;//pchar
             Int32 buffer12;
             public Int32 reflectParticle;//pchar
@@ -537,7 +538,7 @@ namespace Reanimator.Excel
             public Int32 animGroup;//index
             public Int32 meleeWeapon;//index
             public Int32 cdTicks;
-            public Int32 approxDps;
+            public float approxDps;
             public Int32 tooltipDamageString;//stridx
             public Int32 requiredAffixGroups1;
             public Int32 requiredAffixGroups2;
@@ -822,8 +823,8 @@ namespace Reanimator.Excel
             public float meleeMin;
             public float meleeMax;
             public float walkAndRunDelta;
-            public Int32 rangeMin;
-            public Int32 rangeMax;
+            public float rangeMin;
+            public float rangeMax;
             public Int32 decoyMonster;//index
             public Int32 havokShape;
             public Int32 missileHitUnit;//index
