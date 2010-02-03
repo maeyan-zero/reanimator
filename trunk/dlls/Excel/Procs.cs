@@ -14,17 +14,17 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] header;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-            public String proc;
+            public String name;
 
-            public Int32 id;
-            public Int32 unknown1;
-            public float unknown2;
-            public Int32 unknown3;
-            public float unknown4;
-            public Int32 unknown5;
-            public Int32 unknown6;
-            public Int32 unknown7;
-            public Int32 unknown8;
+            public Int32 code;
+            public Int32 verticalCenter;//bool
+            public float coolDownInSeconds;
+            public Int32 targetInstrumentOwner;//a single bit
+            public float delayeProcTimeInSeconds;
+            public Int32 skill1;//idx
+            public Int32 skill1Param;//idx
+            public Int32 skill2;//idx
+            public Int32 skill2Param;//idx
         }
 
         public Procs(byte[] data) : base(data) { }
