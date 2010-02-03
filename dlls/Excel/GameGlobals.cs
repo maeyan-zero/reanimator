@@ -14,10 +14,10 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] header;
             [ExcelTables.ExcelOutput(IsStringOffset=true)]
-            public Int32 stringIdOffset;
+            public Int32 name;
             Int32 buffer;
-            public Int32 unknownInt;
-            public float unknownFloat;
+            public Int32 int_value;
+            public float float_value;
         }
 
         public GameGlobals(byte[] data) : base(data) { }
