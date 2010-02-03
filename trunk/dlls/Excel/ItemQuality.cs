@@ -14,7 +14,7 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             public byte[] unknown01;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-            public byte[] badgeFrame;
+            public byte[] quality;
             public Int32 code;
             public Int32 craftingBreakdownTreasure;
             public Int32 displayName;
@@ -137,6 +137,8 @@ namespace Reanimator.Excel
             public Int32 affix6Type4;
             public Int32 affix6Type5;
             public Int32 affix6Type6;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+            public byte[] badgeFrame;
         }
 
         public ItemQuality(byte[] data) : base(data) { }
