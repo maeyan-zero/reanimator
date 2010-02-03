@@ -139,11 +139,16 @@ namespace Reanimator.Excel
             excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
             excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
             excelTables.AddTable("LEVEL", "LEVELS", typeof(Excel.Levels));
+            excelTables.AddTable("MISSILES", null, typeof(Excel.Missiles));
+            excelTables.AddTable("MONSTERS", null, typeof(Excel.Monsters));
+            excelTables.AddTable("OBJECTS", null, typeof(Excel.Objects));
+            excelTables.AddTable("PLAYERS", null, typeof(Excel.Players));
             excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
             excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
             excelTables.AddTable("STATES", null, typeof(Excel.States));
             excelTables.AddTable("STATS", null, typeof(Excel.Stats));
             excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));
+            
         }
 
         protected override void ParseTables(byte[] data)
