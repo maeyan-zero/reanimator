@@ -13,6 +13,7 @@ namespace Reanimator.Excel
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] header;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 name;//pchar: pointer to relevant text in the front of the file.
             Int32 buffer1;
             public Int32 folder;//pchar
@@ -460,6 +461,7 @@ namespace Reanimator.Excel
             public Int32 minSpawnLevel;
             public Int32 maxSpawnLevel;
             public Int32 maxLevel;
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] {"name1", "name2", "name3"})]
             public Int32 fixedLevel;//intptr
             public Int32 hpMin;
             public Int32 hpMax;

@@ -131,9 +131,9 @@ namespace Reanimator.Excel
         protected UnknownMYSH[] MYSHChunks;
 
         protected ByteHeader byteHeader;
-        protected byte[] bytes;
+        public byte[] ByteBlock { get; set; }
         protected FinalHeader finalHeader;
-        protected byte[] finalBytes;
+        public byte[] FinalBytes { get; set; }
 
         public ExcelTable(byte[] data)
         {
@@ -285,8 +285,8 @@ namespace Reanimator.Excel
                 CheckFlag(byteHeader.flag);
                 if (byteHeader.count != 0)
                 {
-                    bytes = new byte[byteHeader.count];
-                    Buffer.BlockCopy(data, offset, bytes, 0, byteHeader.count);
+                    ByteBlock = new byte[byteHeader.count];
+                    Buffer.BlockCopy(data, offset, ByteBlock, 0, byteHeader.count);
                     offset += byteHeader.count;
                 }
 
@@ -298,9 +298,9 @@ namespace Reanimator.Excel
                     finalHeader = (FinalHeader)FileTools.ByteArrayToStructure(data, typeof(FinalHeader), offset);
                     offset += Marshal.SizeOf(typeof(FinalHeader));
                     CheckFlag(finalHeader.flag);
-                    finalBytes = new byte[finalHeader.blockCount * 128];
-                    Buffer.BlockCopy(data, offset, finalBytes, 0, finalBytes.Length);
-                    offset += finalBytes.Length;
+                    FinalBytes = new byte[finalHeader.blockCount * 128];
+                    Buffer.BlockCopy(data, offset, FinalBytes, 0, FinalBytes.Length);
+                    offset += FinalBytes.Length;
                 }
                 else
                 {
