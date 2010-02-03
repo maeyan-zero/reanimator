@@ -37,6 +37,7 @@
             this.indexFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.characterFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cookedFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stringsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,7 +86,6 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.stringsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -176,6 +176,13 @@
             this.cookedFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.cookedFileToolStripMenuItem.Text = "Cooked File...";
             this.cookedFileToolStripMenuItem.Click += new System.EventHandler(this.OpenCookedFile);
+            // 
+            // stringsFileToolStripMenuItem
+            // 
+            this.stringsFileToolStripMenuItem.Name = "stringsFileToolStripMenuItem";
+            this.stringsFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.stringsFileToolStripMenuItem.Text = "Strings File...";
+            this.stringsFileToolStripMenuItem.Click += new System.EventHandler(this.StringsFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -508,6 +515,7 @@
             this.saveToolStripButton.Name = "saveToolStripButton";
             this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.saveToolStripButton.Text = "Save";
+            this.saveToolStripButton.Click += new System.EventHandler(this.saveToolStripButton_Click);
             // 
             // toolStripSeparator1
             // 
@@ -561,13 +569,6 @@
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
-            // 
-            // stringsFileToolStripMenuItem
-            // 
-            this.stringsFileToolStripMenuItem.Name = "stringsFileToolStripMenuItem";
-            this.stringsFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
-            this.stringsFileToolStripMenuItem.Text = "Strings File...";
-            this.stringsFileToolStripMenuItem.Click += new System.EventHandler(this.StringsFileToolStripMenuItem_Click);
             // 
             // Reanimator
             // 

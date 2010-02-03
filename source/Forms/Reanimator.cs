@@ -250,13 +250,12 @@ namespace Reanimator
                 return false;
             }
 
-            Index index = new Index(FileTools.StreamToByteArray(indexFile));
-            TableForm indexExplorer = new TableForm(indexFile, index);
+            Index index = new Index(indexFile);
+            TableForm indexExplorer = new TableForm(index);
             indexExplorer.dataGridView.DataSource = index.GetFileTable();
             indexExplorer.Text += ": " + szFileName;
             indexExplorer.MdiParent = this;
             indexExplorer.Show();
-            indexExplorer.FormClosed += new FormClosedEventHandler(indexExplorer_FormClosed);
 
             indexFilesOpen.Add(indexFile.Name);
 
@@ -331,14 +330,6 @@ namespace Reanimator
             {
                 MessageBox.Show("Failed to open file!\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void indexExplorer_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            TableForm indexExplorer = (TableForm)sender;
-            indexFilesOpen.Remove(indexExplorer.IndexFile.Name);
-            indexExplorer.IndexFile.Dispose();
-            indexExplorer.Dispose();
         }
 
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -505,6 +496,17 @@ namespace Reanimator
                 MessageBox.Show(ex.Message);
             }
             #endregion
+        }
+
+        private void saveToolStripButton_Click(object sender, EventArgs e)
+        {
+            TableForm tableForm = this.ActiveMdiChild as TableForm;
+            if (tableForm == null)
+            {
+                return;
+            }
+
+
         }
     }
 }

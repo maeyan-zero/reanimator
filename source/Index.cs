@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace Reanimator
 {
-    public class Index
+    public class Index : IDisposable
     {
         struct Token
         {
@@ -59,6 +60,8 @@ namespace Reanimator
         const int stringStructLength = 6;
         const int fileStructLength = 80;
 
+        FileStream indexFile;
+        FileStream datFile;
         static byte[] buffer;
         static string[] stringTable;
         FileIndex[] fileTable;
@@ -66,89 +69,58 @@ namespace Reanimator
         public struct FileIndex
         {
             int offset;
-
             public int Offset
             {
-                set
-                {
-                    offset = value;
-                }
-                get
-                {
-                    return BitConverter.ToInt32(buffer, offset);
-                }
+                set { offset = value; }
+                get { return BitConverter.ToInt32(buffer, offset); }
             }
 
             int uncompressedSize;
-
             public int UncompressedSize
             {
-                set
-                {
-                    uncompressedSize = value;
-                }
-                get
-                {
-                    return BitConverter.ToInt32(buffer, uncompressedSize);
-                }
+                set { uncompressedSize = value; }
+                get { return BitConverter.ToInt32(buffer, uncompressedSize); }
             }
 
             int compressedSize;
-
             public int CompressedSize
             {
-                set
-                {
-                    compressedSize = value;
-                }
-                get
-                {
-                    return BitConverter.ToInt32(buffer, compressedSize);
-                }
+                set { compressedSize = value; }
+                get { return BitConverter.ToInt32(buffer, compressedSize); }
             }
 
             int directory;
-
             public int Directory
             {
-                set
-                {
-                    directory = value;
-                }
+                set { directory = value; }
             }
-
             public string DirectoryString
             {
-                get
-                {
-                    return stringTable[BitConverter.ToInt32(buffer, directory)];
-                }
+                get { return stringTable[BitConverter.ToInt32(buffer, directory)]; }
             }
 
             int filename;
-
             public int Filename
             {
-                set
-                {
-                    filename = value;
-                }
+                set { filename = value; }
             }
-
             public string FilenameString
             {
-                get
-                {
-                    return stringTable[BitConverter.ToInt32(buffer, filename)];
-                }
+                get { return stringTable[BitConverter.ToInt32(buffer, filename)]; }
             }
         }
 
-        public Index(byte[] indexBuffer)
+        public Index(FileStream file)
         {
-            CryptTools.Decrypt(indexBuffer);
+            indexFile = file;
+            buffer = FileTools.StreamToByteArray(file);
 
-            buffer = indexBuffer;
+            CryptTools.Decrypt(buffer);
+
+            //just ignore me, I was curious
+            //FileStream fOut = new FileStream("out.idx", FileMode.Create);
+            //fOut.Write(buffer, 0, buffer.Length);
+
             structCount = BitConverter.ToInt32(buffer, 4);
             fileCount = BitConverter.ToInt32(buffer, 8);
             stringCount = BitConverter.ToInt32(buffer, 16);
@@ -197,6 +169,73 @@ namespace Reanimator
         public FileIndex[] GetFileTable()
         {
             return fileTable;
+        }
+
+        public String FileName
+        {
+            get { return indexFile.Name.Substring(0, indexFile.Name.LastIndexOf('.')); }
+        }
+
+        public String FileDirectory
+        {
+            get { return indexFile.Name.Substring(0, indexFile.Name.LastIndexOfAny("\\".ToCharArray())); }
+        }
+
+        public bool OpenAccompanyingDat()
+        {
+            if (datFile == null)
+            {
+                try
+                {
+                    datFile = new FileStream(this.FileName + ".dat", FileMode.Open);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool DatFileOpen
+        {
+            get { return datFile == null ? false : true; }
+        }
+
+        public byte[] ReadDataFile(Index.FileIndex file)
+        {
+            if (datFile == null)
+            {
+                return null;
+            }
+
+            // Yes, this needs to be recreated for each file - it was having a fit when I didn't
+            ManagedZLib.Decompress decompress = new ManagedZLib.Decompress(datFile);
+            byte[] buffer = new byte[file.UncompressedSize];
+            datFile.Seek(file.Offset, SeekOrigin.Begin);
+            if (file.CompressedSize == 0)
+            {
+                decompress.Read(buffer, 0, 0);
+            }
+            else
+            {
+                decompress.Read(buffer, 0, file.UncompressedSize);
+            }
+
+            return buffer;
+        }
+
+        public void Dispose()
+        {
+            if (indexFile != null)
+            {
+                indexFile.Dispose();
+            }
+            if (datFile != null)
+            {
+                datFile.Dispose();
+            }
         }
     }
 }
