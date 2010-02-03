@@ -135,9 +135,9 @@ namespace Reanimator.Excel
             excelTables.AddTable("GAME_GLOBALS", "GAMEGLOBALS", typeof(Excel.GameGlobals));
             excelTables.AddTable("GLOBAL_INDEX", "GLOBALINDEX", typeof(Excel.GlobalIndex));
             excelTables.AddTable("GLOBAL_STRING", "GLOBALSTRING", typeof(Excel.GlobalString));
-            excelTables.AddTable("ITEMQUALITY", null, typeof(Excel.ItemQuality));
-            excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
             excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
+            excelTables.AddTable("ITEM_QUALITY", "ITEMQUALITY", typeof(Excel.ItemQuality));
+            excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
             excelTables.AddTable("LEVEL", "LEVELS", typeof(Excel.Levels));
             excelTables.AddTable("MISSILES", null, typeof(Excel.Missiles));
             excelTables.AddTable("MONSTERS", null, typeof(Excel.Monsters));
