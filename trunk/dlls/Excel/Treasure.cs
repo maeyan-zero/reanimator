@@ -34,7 +34,7 @@ namespace Reanimator.Excel
             public float moneyAmountMultiplier;
             public Int32 item1m;
             public Int32 item1;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]   // this is equal to 19 Int32
             public byte[] unknown03;
             public Int32 item1q;
             public Int32 item2m;

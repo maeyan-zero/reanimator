@@ -163,6 +163,8 @@ namespace Reanimator.Excel
 
         public bool LoadTables(string folder, Label label, ListBox excelTablesLoaded)
         {
+            excelTablesLoaded.Sorted = true;
+
             for (int i = 0; i < Count; i++)
             {
                 string stringId = GetTableStringId(i);

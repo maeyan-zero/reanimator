@@ -39,10 +39,10 @@
             this.extractSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractCheckedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.b_checkAll = new System.Windows.Forms.Button();
-            this.b_selectAll = new System.Windows.Forms.Button();
-            this.b_unCheckAll = new System.Windows.Forms.Button();
-            this.b_unSelectAll = new System.Windows.Forms.Button();
+            this.checkAll_Button = new System.Windows.Forms.Button();
+            this.selectAll_Button = new System.Windows.Forms.Button();
+            this.uncheckAll_Button = new System.Windows.Forms.Button();
+            this.unselectAll_Button = new System.Windows.Forms.Button();
             this.searchResults_Label = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -134,49 +134,49 @@
             this.extractAllToolStripMenuItem.Text = "Extract All...";
             this.extractAllToolStripMenuItem.Click += new System.EventHandler(this.extractAllToolStripMenuItem_Click);
             // 
-            // b_checkAll
+            // checkAll_Button
             // 
-            this.b_checkAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_checkAll.Location = new System.Drawing.Point(554, 0);
-            this.b_checkAll.Name = "b_checkAll";
-            this.b_checkAll.Size = new System.Drawing.Size(70, 20);
-            this.b_checkAll.TabIndex = 6;
-            this.b_checkAll.Text = "Check";
-            this.b_checkAll.UseVisualStyleBackColor = true;
-            this.b_checkAll.Click += new System.EventHandler(this.CheckAll_Click);
+            this.checkAll_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkAll_Button.Location = new System.Drawing.Point(538, 0);
+            this.checkAll_Button.Name = "checkAll_Button";
+            this.checkAll_Button.Size = new System.Drawing.Size(75, 20);
+            this.checkAll_Button.TabIndex = 6;
+            this.checkAll_Button.Text = "Check All";
+            this.checkAll_Button.UseVisualStyleBackColor = true;
+            this.checkAll_Button.Click += new System.EventHandler(this.CheckAll_Click);
             // 
-            // b_selectAll
+            // selectAll_Button
             // 
-            this.b_selectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_selectAll.Location = new System.Drawing.Point(630, 0);
-            this.b_selectAll.Name = "b_selectAll";
-            this.b_selectAll.Size = new System.Drawing.Size(70, 20);
-            this.b_selectAll.TabIndex = 7;
-            this.b_selectAll.Text = "Select";
-            this.b_selectAll.UseVisualStyleBackColor = true;
-            this.b_selectAll.Click += new System.EventHandler(this.SelectAll_Click);
+            this.selectAll_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.selectAll_Button.Location = new System.Drawing.Point(619, 0);
+            this.selectAll_Button.Name = "selectAll_Button";
+            this.selectAll_Button.Size = new System.Drawing.Size(81, 20);
+            this.selectAll_Button.TabIndex = 7;
+            this.selectAll_Button.Text = "Select All";
+            this.selectAll_Button.UseVisualStyleBackColor = true;
+            this.selectAll_Button.Click += new System.EventHandler(this.SelectAll_Click);
             // 
-            // b_unCheckAll
+            // uncheckAll_Button
             // 
-            this.b_unCheckAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_unCheckAll.Location = new System.Drawing.Point(554, 20);
-            this.b_unCheckAll.Name = "b_unCheckAll";
-            this.b_unCheckAll.Size = new System.Drawing.Size(70, 20);
-            this.b_unCheckAll.TabIndex = 8;
-            this.b_unCheckAll.Text = "Uncheck";
-            this.b_unCheckAll.UseVisualStyleBackColor = true;
-            this.b_unCheckAll.Click += new System.EventHandler(this.UnCheckAll_Click);
+            this.uncheckAll_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.uncheckAll_Button.Location = new System.Drawing.Point(538, 20);
+            this.uncheckAll_Button.Name = "uncheckAll_Button";
+            this.uncheckAll_Button.Size = new System.Drawing.Size(75, 20);
+            this.uncheckAll_Button.TabIndex = 8;
+            this.uncheckAll_Button.Text = "Uncheck All";
+            this.uncheckAll_Button.UseVisualStyleBackColor = true;
+            this.uncheckAll_Button.Click += new System.EventHandler(this.UnCheckAll_Click);
             // 
-            // b_unSelectAll
+            // unselectAll_Button
             // 
-            this.b_unSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_unSelectAll.Location = new System.Drawing.Point(630, 20);
-            this.b_unSelectAll.Name = "b_unSelectAll";
-            this.b_unSelectAll.Size = new System.Drawing.Size(70, 20);
-            this.b_unSelectAll.TabIndex = 9;
-            this.b_unSelectAll.Text = "Unselect";
-            this.b_unSelectAll.UseVisualStyleBackColor = true;
-            this.b_unSelectAll.Click += new System.EventHandler(this.UnSelectAll_Click);
+            this.unselectAll_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.unselectAll_Button.Location = new System.Drawing.Point(619, 20);
+            this.unselectAll_Button.Name = "unselectAll_Button";
+            this.unselectAll_Button.Size = new System.Drawing.Size(81, 20);
+            this.unselectAll_Button.TabIndex = 9;
+            this.unselectAll_Button.Text = "Unselect All";
+            this.unselectAll_Button.UseVisualStyleBackColor = true;
+            this.unselectAll_Button.Click += new System.EventHandler(this.UnSelectAll_Click);
             // 
             // searchResults_Label
             // 
@@ -193,13 +193,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 420);
             this.Controls.Add(this.searchResults_Label);
-            this.Controls.Add(this.b_unSelectAll);
-            this.Controls.Add(this.b_unCheckAll);
-            this.Controls.Add(this.b_selectAll);
-            this.Controls.Add(this.b_checkAll);
+            this.Controls.Add(this.unselectAll_Button);
+            this.Controls.Add(this.selectAll_Button);
             this.Controls.Add(this.tb_searchString);
-            this.Controls.Add(this.infoText_Label);
+            this.Controls.Add(this.uncheckAll_Button);
             this.Controls.Add(this.b_search);
+            this.Controls.Add(this.infoText_Label);
+            this.Controls.Add(this.checkAll_Button);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.splitter1);
             this.Name = "TableForm";
@@ -223,10 +223,10 @@
         private System.Windows.Forms.ToolStripMenuItem extractSelectedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extractCheckedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem extractAllToolStripMenuItem;
-        private System.Windows.Forms.Button b_checkAll;
-        private System.Windows.Forms.Button b_selectAll;
-        private System.Windows.Forms.Button b_unCheckAll;
-        private System.Windows.Forms.Button b_unSelectAll;
+        private System.Windows.Forms.Button checkAll_Button;
+        private System.Windows.Forms.Button selectAll_Button;
+        private System.Windows.Forms.Button uncheckAll_Button;
+        private System.Windows.Forms.Button unselectAll_Button;
         private System.Windows.Forms.Label searchResults_Label;
     }
 }

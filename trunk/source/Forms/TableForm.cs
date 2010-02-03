@@ -15,49 +15,33 @@ namespace Reanimator
     public partial class TableForm : Form, IDisposable
     {
         Index index;
-        FileStream indexFile;
-        public FileStream IndexFile
-        {
-            get
-            {
-                return indexFile;
-            }
-        }
-
-        FileStream dataFile;
         Strings strings;
 
-        public TableForm(FileStream file, Index idx)
+        public bool IsIndexFile
+        {
+            get { return index == null ? false : true; }
+        }
+
+        public TableForm(Index idx)
         {
             index = idx;
-            indexFile = file;
-            String dataFileName = file.Name.Substring(0, file.Name.LastIndexOf('.')) + ".dat";
-            try
+            if (!index.OpenAccompanyingDat())
             {
-                dataFile = new FileStream(dataFileName, FileMode.Open);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Unable to open accompanying data file:\n" + dataFileName + "\nYou will be unable to extract any files.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Unable to open accompanying data file:\n" + index.FileName + ".dat\nYou will be unable to extract any files.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
-            InitializeComponent();
-            this.dataGridView.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(dataGridView_CellContextMenuStripNeeded);
-            this.dataGridView.RowHeadersVisible = false;
-
-            //Initialize the DataGridViewColumn control
-            IndexFileCheckBoxColumn.DefaultCellStyle.DataSourceNullValue = false;
-            IndexFileCheckBoxColumn.Frozen = false;
-            IndexFileCheckBoxColumn.Width = 24;
-            IndexFileCheckBoxColumn.TrueValue = true;
-            IndexFileCheckBoxColumn.FalseValue = false;
-            IndexFileCheckBoxColumn.Name = "IndexFileCheckBoxColumn";
+            TableFormInit();
         }
 
         public TableForm(Strings strs)
         {
             strings = strs;
 
+            TableFormInit();
+        }
+
+        private void TableFormInit()
+        {
             InitializeComponent();
             this.dataGridView.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(dataGridView_CellContextMenuStripNeeded);
             this.dataGridView.RowHeadersVisible = false;
@@ -130,6 +114,15 @@ namespace Reanimator
 
         private void dataGridView_CellContextMenuStripNeeded(object sender, DataGridViewCellEventArgs e)
         {
+            if (!this.IsIndexFile)
+            {
+                return;
+            }
+            if (!index.DatFileOpen)
+            {
+                return;
+            }
+
             Point pt = dataGridView.PointToClient(MousePosition);
             DataGridView.HitTestInfo hti = dataGridView.HitTest(pt.X, pt.Y);
 
@@ -184,8 +177,13 @@ namespace Reanimator
 
         private void ExtractFiles(Index.FileIndex[] files)
         {
+            if (!index.DatFileOpen)
+            {
+                return;
+            }
+
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.SelectedPath = indexFile.Name.Substring(0, indexFile.Name.LastIndexOfAny("\\".ToCharArray()));
+            folderBrowserDialog.SelectedPath = index.FileDirectory;
             if (folderBrowserDialog.ShowDialog(this) != DialogResult.OK)
             {
                 return;
@@ -204,7 +202,7 @@ namespace Reanimator
 
             foreach (Index.FileIndex file in files)
             {
-                byte[] buffer = ReadDataFile(file);
+                byte[] buffer = index.ReadDataFile(file);
 
                 string keepPathString = "\\";
                 if (keepPath)
@@ -219,24 +217,6 @@ namespace Reanimator
             }
 
             MessageBox.Show(files.Length + " file(s) saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private byte[] ReadDataFile(Index.FileIndex file)
-        {
-            // Yes, this needs to be recreated for each file - it was having a fit when I didn't
-            ManagedZLib.Decompress decompress = new ManagedZLib.Decompress(dataFile);
-            byte[] buffer = new byte[file.UncompressedSize];
-            dataFile.Seek(file.Offset, SeekOrigin.Begin);
-            if (file.CompressedSize == 0)
-            {
-                decompress.Read(buffer, 0, 0);
-            }
-            else
-            {
-                decompress.Read(buffer, 0, file.UncompressedSize);
-            }
-
-            return buffer;
         }
 
         private void dataGridView_DataSourceChanged(object sender, EventArgs e)
@@ -268,9 +248,9 @@ namespace Reanimator
 
         new public void Dispose()
         {
-            if (dataFile != null)
+            if (index != null)
             {
-                dataFile.Dispose();
+                index.Dispose();
             }
 
             Dispose(true);
@@ -310,12 +290,14 @@ namespace Reanimator
 
         private void SelectAllEntries(bool selected)
         {
-            dataGridView.SuspendLayout();
-            foreach (DataGridViewRow row in this.dataGridView.Rows)
+            if (selected)
             {
-                row.Selected = selected;
+                dataGridView.SelectAll();
             }
-            dataGridView.ResumeLayout();
+            else
+            {
+                dataGridView.ClearSelection();
+            }
         }
 
         private void CheckAllEntries(bool check)
