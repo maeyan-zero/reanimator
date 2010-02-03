@@ -15,62 +15,85 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] header;
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
-            public Int32 stringId;
+            public Int32 name;
             Int32 buffer;
-            public Int32 id;
+            public Int32 code;
             Int32 buffer1;              // always 0
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
-            public Int32 effect;
+            public Int32 file;
             Int32 buffer2;              // always 0
-            public Int32 unknown4;
-            public Int32 unknown5;
-            public Int32 unknown6;
-            public Int32 unknown7;
-            public Int32 unknown8;
-            public Int32 unknown9;
-            public Int32 unknown10;
-            Int32 unknown11;            // always -1
-            Int32 unknown12;            // always -1
-            Int32 unknown13;            // always -1
-            public Int32 unknown14;
-            public Int32 unknown15;
-            public Int32 unknown16;
-            public Int32 unknown17;
+            public Int32 isA0;
+            public Int32 isA1;
+            public Int32 isA2;
+            public Int32 isA3;
+            public Int32 isA4;
+            public Int32 isA5;
+            public Int32 isA6;
+            public Int32 isA7;
+            public Int32 isA8;
+            public Int32 isA9;
+            public Int32 statePreventedBy;
+            public Int32 duration;
+            public Int32 onDeath;
+            public Int32 skillScriptParam;
             Int32 unknown18;            // always 0
-            public Int32 unknown19;
-            public Int32 unknown20;
-            Int32 unknown21;            // always 0
+            public Int32 element;
+            public Int32 pulseRateInMs;
+            public Int32 pulseRateInMsClient;            // always 0
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
-            Int32 unknown22;
+            public Int32 pulseSkill;
             Int32 unknown23;            // always 0
             Int32 unknown24;            // always 0
             Int32 unknown25;            // always 0
-            Int32 unknown26;            // always 0
+            public Int32 iconOrder;            // always 0
             Int32 unknown27;            // always 0
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
-            public Int32 unknown28;
+            public Int32 uiIcon;
             Int32 unknown29;            // always 0
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
-            public Int32 unknown30;
+            public Int32 uiIconTexture;
             Int32 unknown31;            // always 0
-            public Int32 unknown32;
+            public Int32 unknown32;     //not defined, even though it's used.
             Int32 unknown33;            // always 0
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
-            public Int32 unknown34;
+            public Int32 unknown34;     //undefined as well.
             Int32 unknown35;            // always 0
-            public Int32 unknown36;
+            public Int32 iconBackColor;
             Int32 unknown37;            // always 0
             Int32 unknown38;            // always 0
-            public Int32 unknown39;
-            public Int32 unknown40;
-            public Int32 unknown41;
-            Int32 unknown42;            // always -1
-            Int32 unknown43;            // always -1
-            Int32 unknown44;            // always -1
-            Int32 unknown45;            // always 0
-            public Int32 unknown46;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
-            public Int32 unknown47;
+            public Int32 iconTooltipStringHellgate;//stridx
+            public Int32 iconTooltipStringMythos;
+            public Int32 iconTooltipStringAll;
+            public Int32 assocState1;            // always -1
+            public Int32 assocState2;            // always -1
+            public Int32 assocState3;            // always -1
+            public Int32 bitMask1;/*bit execute attack script melee, 0
+	bit execute attack script ranged, 1
+	bit execute skill script on remove, 2
+	bit execute script on source, 3
+	bit pulse on client too, 4*/
+            public Int32 gameFlag;
+            public Int32 bitMask2;/*bit stacks, 1
+	bit stacks per source, 2
+	bit send to all, 3
+	bit send to self, 4
+	bit send stats, 5
+	bit client needs duration, 6
+	bit client only, 7
+	bit execute parent events,8
+	bit trigger notarget on set,9
+	bit save position on set, 10
+	bit save with unit, 11
+	bit flag for load, 12
+	but sharing mod state, 13
+	bit used in hellgate, 14
+	bit used in tugboat, 15
+	bit is bad, 16
+	bit pulse on source, 17
+	bit on change repaint item ui, 18
+	bit save in unitfile header, 19
+	bit update chat server on change, 20
+	bit trigger digest save, 22*/
             Int32 unknown48;            // always 0
             Int32 unknown49;            // always 0
         }
