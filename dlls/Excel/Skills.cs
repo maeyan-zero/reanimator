@@ -179,13 +179,13 @@ namespace Reanimator.Excel
 	170 bit does not actively use weapon*/
             public Int32 displayName;//stridx
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public String descriptionStringFunction1;
+            public String descriptionStringFunction;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public String effectStringFunction1;
+            public String effectStringFunction;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 192)]
-            public String descriptionStringFunction2;//doesn't appear to be used
+            public String skillBonusFunction;//doesn't appear to be used
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 192)]
-            public String effectStringFunction2;//doesn't appear to be used
+            public String accumulationStringFunction;//doesn't appear to be used
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
             byte[] unknown1;
             public Int32 descriptionString;//stridx
@@ -204,7 +204,7 @@ namespace Reanimator.Excel
             public String largeIcon;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public String smallIcon;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] unknown2;
             public Int32 iconColor;
             public Int32 iconBackgroundColor;
@@ -308,11 +308,11 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte[] unknown7;
             public Int32 modeOverride;//idx
+            public Int32 bonusSkills0;
             public Int32 bonusSkills1;
             public Int32 bonusSkills2;
             public Int32 bonusSkills3;
             public Int32 bonusSkills4;
-            public Int32 bonusSkills5;
             public Int32 bonusSkillScript0;
             public Int32 bonusSkillScript1;
             public Int32 bonusSkillScript2;
@@ -380,10 +380,10 @@ namespace Reanimator.Excel
             byte[] unknown9;
             public Int32 fuseMissilesOnStateClear;//idx
             public Int32 requiresState;//idx
+            public Int32 prohibitingState0;//idx
             public Int32 prohibitingState1;//idx
             public Int32 prohibitingState2;//idx
             public Int32 prohibitingState3;//idx
-            public Int32 prohibitingState4;//idx
             public Int32 stateOnSelect;//idx
             public Int32 clearStateOnSelect;//idx
             public Int32 holdTicks;
