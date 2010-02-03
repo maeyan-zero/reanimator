@@ -73,7 +73,8 @@ namespace Reanimator.Excel
             public Int32 particleFolder;//pchar
             Int32 buffer29;
             public Int32 pickupFunction;//pchar
-            Int32 buffer30;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+            byte[] buffer30;
             public Int32 triggerString1;//pchar
             Int32 buffer31;
             public Int32 triggerString2;//pchar
