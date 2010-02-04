@@ -16,7 +16,7 @@ namespace Reanimator.Excel
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 mode;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte undefined1;
+            byte[] undefined1;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
             public Int32[] block;
             public Int32 blockOnGround;//bool
@@ -36,12 +36,15 @@ namespace Reanimator.Excel
             public Int32 clearStateEnd;//idx
             public Int32 doEvent;//bool
             public Int32 endEvent;//bool
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 doFunction;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
             public Int32[] undefined2;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 clearFunction;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
             public Int32[] undefined3;
+            [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 endFunction;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
             public Int32[] undefined4;
