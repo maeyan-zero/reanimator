@@ -20,7 +20,7 @@ namespace Reanimator.Excel
             public string paramText;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string setEventHandler;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] undefined1;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string clearEventHandler;

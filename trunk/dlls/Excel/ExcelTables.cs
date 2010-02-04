@@ -133,7 +133,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
             excelTables.AddTable("AICOMMONSTATE", null, typeof(Excel.AiCommonState));
             excelTables.AddTable("BOOKMARKS", null, typeof(Excel.BookMarks));
-            excelTables.AddTable("CONDITIONFUNCTIONS", null, typeof(Excel.ConditionFunctions));
+            excelTables.AddTable("CONDITION_FUNCTIONS", null, typeof(Excel.ConditionFunctions));
             excelTables.AddTable("DAMAGETYPES", null, typeof(Excel.DamageTypes));
             excelTables.AddTable("DIALOG", null, typeof(Excel.Dialog));
             excelTables.AddTable("DIFFICULTY", null, typeof(Excel.Difficulty));
@@ -161,8 +161,8 @@ namespace Reanimator.Excel
             excelTables.AddTable("QUEST_STATUS", "QUESTSTATUS", typeof(Excel.QuestStatus));
             excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
             excelTables.AddTable("SKILLEVENTTYPES", null, typeof(Excel.SkillEventTypes));
-            excelTables.AddTable("STATEEVENTTYPES", null, typeof(Excel.StateEventTypes));
-            excelTables.AddTable("STATELIGHTING", null, typeof(Excel.StateLighting));
+            excelTables.AddTable("STATE_EVENT_TYPES", null, typeof(Excel.StateEventTypes));
+            excelTables.AddTable("STATE_LIGHTING", null, typeof(Excel.StateLighting));
             excelTables.AddTable("STATES", null, typeof(Excel.States));
             excelTables.AddTable("STATS", null, typeof(Excel.Stats));
             excelTables.AddTable("STATS_FUNC", "STATSFUNC", typeof(Excel.StatsFunc));
@@ -172,7 +172,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));
             excelTables.AddTable("UICOMPONENT", null, typeof(Excel.UIComponent));
             excelTables.AddTable("UNIT_EVENT_TYPES", "UNITEVENTS", typeof(Excel.UnitEvents));
-            excelTables.AddTable("UNITMODEGROUPS", null, typeof(Excel.UnitModeGroups));
+            excelTables.AddTable("UNITMODE_GROUPS", null, typeof(Excel.UnitModeGroups));
         }
 
         protected override void ParseTables(byte[] data)

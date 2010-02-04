@@ -18,7 +18,7 @@ namespace Reanimator.Excel
             public string name;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
             public string function;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] undefined1;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
             public Int32 undefinedBool;
@@ -29,7 +29,7 @@ namespace Reanimator.Excel
             public string paramText0;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
             public string paramText1;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte[] undefined2;
         }
 
