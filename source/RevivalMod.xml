@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<revival>
+  <modification>
+    <title>Revival SP modification</title>
+    <decription>This is the base SP modification developed by the Revival team.</decription>
+    <version>1.1.0</version>
+    <pack id="hellgate000">
+      <file id="gameglobals.txt.cooked">
+        <replace>
+          <path>./gameglobals.txt.cooked</path>
+        </replace>
+      </file>
+      <file id="items.txt.cooked">
+        <modify>
+          <entity id="black_knight_dye">
+            <attribute id="affix1">
+              <replace>
+                <data>all_attributes_3</data>
+              </replace>
+            </attribute>
+            <attribute id="property_mask">
+              <bitwise>
+                <bit id="can_vendor">
+                  <flip>on</flip>
+                </bit>
+              </bitwise>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+</revival>
