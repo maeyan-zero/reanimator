@@ -147,6 +147,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("INTERACTMENU", null, typeof(Excel.InteractMenu));
             excelTables.AddTable("INVENTORY", null, typeof(Excel.Inventory));
             excelTables.AddTable("INVENTORYTYPES", null, typeof(Excel.InventoryTypes));
+            excelTables.AddTable("INVLOC", null, typeof(Excel.InvLoc));
             excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
             excelTables.AddTable("ITEM_QUALITY", "ITEMQUALITY", typeof(Excel.ItemQuality));
             excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
