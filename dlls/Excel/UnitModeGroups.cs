@@ -18,7 +18,7 @@ namespace Reanimator.Excel
 
             public Int32 code;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
-            public Int32[] undefined;
+            Int32[] undefined;
         }
 
         public UnitModeGroups(byte[] data) : base(data) { }

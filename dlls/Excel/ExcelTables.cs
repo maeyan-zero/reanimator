@@ -131,7 +131,7 @@ namespace Reanimator.Excel
         {
             excelTables = new ExcelTableManagerManager();
             excelTables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
-            excelTables.AddTable("AICOMMONSTATE", null, typeof(Excel.AiCommonState));
+            excelTables.AddTable("AICOMMON_STATE", null, typeof(Excel.AiCommonState));
             excelTables.AddTable("BOOKMARKS", null, typeof(Excel.BookMarks));
             excelTables.AddTable("CONDITION_FUNCTIONS", null, typeof(Excel.ConditionFunctions));
             excelTables.AddTable("DAMAGETYPES", null, typeof(Excel.DamageTypes));
@@ -144,9 +144,9 @@ namespace Reanimator.Excel
             excelTables.AddTable("GLOBAL_INDEX", "GLOBALINDEX", typeof(Excel.GlobalIndex));
             excelTables.AddTable("GLOBAL_STRING", "GLOBALSTRING", typeof(Excel.GlobalIndex));
             excelTables.AddTable("INTERACT", null, typeof(Excel.Interact));
-            excelTables.AddTable("INTERACTMENU", null, typeof(Excel.InteractMenu));
+            excelTables.AddTable("INTERACT_MENU", null, typeof(Excel.InteractMenu));
             excelTables.AddTable("INVENTORY", null, typeof(Excel.Inventory));
-            excelTables.AddTable("INVENTORYTYPES", "INVENTORY_TYPES", typeof(Excel.InventoryTypes));
+            excelTables.AddTable("INVENTORY_TYPES", null, typeof(Excel.InventoryTypes));
             excelTables.AddTable("INVLOC", null, typeof(Excel.InvLoc));
             excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
             excelTables.AddTable("ITEM_QUALITY", "ITEMQUALITY", typeof(Excel.ItemQuality));
@@ -157,8 +157,8 @@ namespace Reanimator.Excel
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
             excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
-            excelTables.AddTable("QUEST_STATE_VALUE", "QUESTSTATEVALUE", typeof(Excel.BookMarks));
-            excelTables.AddTable("QUEST_STATUS", "QUESTSTATUS", typeof(Excel.QuestStatus));
+            excelTables.AddTable("QUEST_STATE_VALUE", null, typeof(Excel.BookMarks));
+            excelTables.AddTable("QUEST_STATUS", null, typeof(Excel.QuestStatus));
             excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
             excelTables.AddTable("SKILLEVENTTYPES", null, typeof(Excel.SkillEventTypes));
             excelTables.AddTable("STATE_EVENT_TYPES", null, typeof(Excel.StateEventTypes));

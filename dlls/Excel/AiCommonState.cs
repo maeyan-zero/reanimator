@@ -17,8 +17,7 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string stat;
             public short code;
-    
-}
+        }
 
         public AiCommonState(byte[] data) : base(data) { }
 
