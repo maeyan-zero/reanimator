@@ -25,8 +25,6 @@ namespace Reanimator.Excel
             public Int32 unknown02;
             public Int32 pickTypes;
             public Int32 picks;
-            //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
-            //public byte[] unknown03;
             public Int32 undefined01;
             public Int32 undefined02;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]

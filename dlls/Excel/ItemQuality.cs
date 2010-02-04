@@ -11,19 +11,18 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class ItemQualityTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            public byte[] unknown01;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-            public byte[] quality;
-            public Int32 code;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+            Int32[] header;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+            public String quality;
+            public Int32 id;
             public Int32 craftingBreakdownTreasure;
             public Int32 displayName;
             public Int32 displayNameWithItemFormat;
             public Int32 showBaseDesc;
             public Int32 randomlyNamed;
             public Int32 baseDescFormatString;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            public byte[] unknown02;
+            public Int32 unknown01;
             public Int32 nameColor;
             public Int32 bkgdColor;
             public Int32 doTransactionLogging;
@@ -31,8 +30,7 @@ namespace Reanimator.Excel
             public Int32 always_identified;
             public float price_multiplier;
             public float recipe_quantity_multiplier;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            public byte[] unknown03;
+            public Int32 unknown02;
             public Int32 minLevel;
             public Int32 rarity;
             public Int32 vendorRarity;
@@ -137,8 +135,8 @@ namespace Reanimator.Excel
             public Int32 affix6Type4;
             public Int32 affix6Type5;
             public Int32 affix6Type6;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-            public byte[] badgeFrame;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+            public String badgeFrame;
         }
 
         public ItemQuality(byte[] data) : base(data) { }

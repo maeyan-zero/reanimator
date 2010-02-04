@@ -102,6 +102,13 @@ namespace Reanimator
             return (T)Marshal.PtrToStructure(bytePtr, typeof(T)); 
         }
 
+        public static T ByteArrayTo<T>(byte[] byteArray, ref int offset)
+        {
+            IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
+            offset += Marshal.SizeOf(typeof(T));
+            return (T)Marshal.PtrToStructure(bytePtr, typeof(T));
+        }
+
         public static String ByteArrayToStringAnsi(byte[] byteArray, int offset)
         {
             IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);

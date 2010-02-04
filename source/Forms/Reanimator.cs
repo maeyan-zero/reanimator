@@ -257,7 +257,7 @@ namespace Reanimator
                 Mod.Parse(szFileName);
                 return true;
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return false;
             }
