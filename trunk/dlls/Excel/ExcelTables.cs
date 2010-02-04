@@ -133,6 +133,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
             excelTables.AddTable("AICOMMONSTATE", null, typeof(Excel.AiCommonState));
             excelTables.AddTable("BOOKMARKS", null, typeof(Excel.AiCommonState));
+            excelTables.AddTable("CONDITIONFUNCTIONS", null, typeof(Excel.ConditionFunctions));
             excelTables.AddTable("DIFFICULTY", null, typeof(Excel.Difficulty));
             excelTables.AddTable("FILTER_CHATFILTER", "CHATFILTER", typeof(Excel.Filter));
             excelTables.AddTable("FILTER_NAMEFILTER", "NAMEFILTER", typeof(Excel.Filter));
