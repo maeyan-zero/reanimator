@@ -157,6 +157,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
             excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
+            excelTables.AddTable("QUEST_STATE_VALUE", "QUESTSTATEVALUE", typeof(Excel.AiCommonState));
             excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
             excelTables.AddTable("STATES", null, typeof(Excel.States));
             excelTables.AddTable("STATS", null, typeof(Excel.Stats));
