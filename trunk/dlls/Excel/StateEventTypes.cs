@@ -30,8 +30,8 @@ namespace Reanimator.Excel
             public Int16 usesTable1;
             public Int16 comboFilterFunction0;
             public Int16 comboFilterFunction1;
-            public Int16 clientOnly;
-            public Int16 serverOnly;
+            public Int16 clientOnly;//bool
+            public Int16 serverOnly;//bool
             public Int16 bitMask1;/* bit uses force new, 0
 	bit uses first person, 1
 	bit uses add to center, 2
@@ -48,18 +48,18 @@ namespace Reanimator.Excel
 	bit reapply on appearance load, 14
 	bit uses share duration, 13
 	bit uses check condition on weapons, 15  */
-            public Int16 usesBone;
-            public Int16 usesBoneWeight;
-            public Int16 usesAttachments;
-            public Int16 addsRopesOnAddTarget;
-            public Int16 usesMaterialOverrideType;
-            public Int16 refreshStatsPointer;
-            public Int16 usesEnvironmentOverride;
-            public Int16 usesScreenEffects;
-            public Int16 canClearOnFree;
-            public Int16 controlUnitOnly;
-            public Int16 requiresLoadedGraphics;
-            public Int16 applyToAppearanceOverride;
+            public Int16 usesBone;//bool
+            public Int16 usesBoneWeight;//bool
+            public Int16 usesAttachments;//bool
+            public Int16 addsRopesOnAddTarget;//bool
+            public Int16 usesMaterialOverrideType;//bool
+            public Int16 refreshStatsPointer;//bool
+            public Int16 usesEnvironmentOverride;//bool
+            public Int16 usesScreenEffects;//bool
+            public Int16 canClearOnFree;//bool
+            public Int16 controlUnitOnly;//bool
+            public Int16 requiresLoadedGraphics;//bool
+            public Int16 applyToAppearanceOverride;//bool
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte unknown2;
 
