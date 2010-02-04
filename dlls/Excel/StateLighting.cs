@@ -19,9 +19,9 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
             public string sh_cubemap_filename;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte undefined1;
+            byte[] undefined1;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 312)]
-            byte unknown1;
+            byte[] unknown1;
     }
 
         public StateLighting(byte[] data) : base(data) { }
