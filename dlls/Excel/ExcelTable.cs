@@ -85,7 +85,7 @@ namespace Reanimator.Excel
                  ***** String Block ***** (4 + byteCount) bytes
                  * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
                  * byteCount                            Int32                                   // The number of bytes of the following string block.
-                 * bytes                                *****                                   // byteCount in size.
+                 * stringBytes                          byteCount                               // The strings (each one is \0) lumped together as one big block.
                  * 
                  ***** Tables Block ***** (8 + tableSize * tableCount) bytes
                  * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
@@ -133,7 +133,7 @@ namespace Reanimator.Excel
                  *      unknownValue                    Int32
                  * }
                  * 
-                 ***** Unknown Block *****
+                 ***** Unknown Block *****                                                      // The flags in this block are all optional (excluding initial 'cxeh' of course).
                  * flag                                 Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * 
                  * unknownFlag                          Int32                                   // Can be 0x68736372 ('rcsh').
@@ -174,7 +174,7 @@ namespace Reanimator.Excel
                  ***** Data Block *****
                  * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
                  * byteCount                            Int32                                   // Bytes of following block.
-                 * dataBlock                            *****                                   // Count of byteCount.
+                 * dataBlock                            byteCount                               // An int[] - refered to in the tables
                  * 
                  ***** Unknown Block *****
                  * // TODO

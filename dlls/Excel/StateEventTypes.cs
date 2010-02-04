@@ -21,11 +21,11 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string setEventHandler;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
-            byte undefined1;
+            byte[] undefined1;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string clearEventHandler;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            byte undefined2;
+            byte[] undefined2;
             public Int16 usesTable0;
             public Int16 usesTable1;
             public Int16 comboFilterFunction0;
@@ -61,7 +61,7 @@ namespace Reanimator.Excel
             public Int16 requiresLoadedGraphics;//bool
             public Int16 applyToAppearanceOverride;//bool
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte unknown2;
+            byte[] unknown2;
 
 
         }

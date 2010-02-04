@@ -17,11 +17,11 @@ namespace Reanimator.Excel
             public Int32 app;
             public Int32 controlUnit;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            byte undefined1;
+            byte[] undefined1;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4096)]
             public string formula;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-            byte undefined2;
+            byte[] undefined2;
    }
 
         public StatsFunc(byte[] data) : base(data) { }
