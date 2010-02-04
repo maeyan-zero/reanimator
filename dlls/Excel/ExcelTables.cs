@@ -144,6 +144,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("GLOBAL_INDEX", "GLOBALINDEX", typeof(Excel.GlobalIndex));
             excelTables.AddTable("GLOBAL_STRING", "GLOBALSTRING", typeof(Excel.GlobalIndex));
             excelTables.AddTable("INTERACT", null, typeof(Excel.Interact));
+            excelTables.AddTable("INTERACTMENU", null, typeof(Excel.InteractMenu));
             excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
             excelTables.AddTable("ITEM_QUALITY", "ITEMQUALITY", typeof(Excel.ItemQuality));
             excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
