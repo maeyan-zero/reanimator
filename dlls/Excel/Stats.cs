@@ -26,13 +26,13 @@ namespace Reanimator.Excel
             public Int16 regenDelayOnDec;
             public Int16 regenDelayOnZero;
             public Int16 regenDelayMonster;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
             byte undefined1;
             public Int16 offset;
             public Int16 shift;
             public Int16 minSet;
             public Int16 maxSet;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte undefined3;
             public Int16 minAssert;
             public Int16 maxAssert;
@@ -60,7 +60,7 @@ namespace Reanimator.Excel
 	20 bit calc
 	21 bit update database
 	22 bit don't transfer to nonweapon missile */
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte undefined5;
             public Int16 player;//bool
             public Int16 monster;
@@ -69,18 +69,18 @@ namespace Reanimator.Excel
             public Int16 Object;
             public Int16 valbits;
             public Int16 valWindow;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte undefined6;
             public Int16 valShift;
             public Int16 valOffs;
             public Int16 valTable;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
             byte undefined7;
             public Int16 param1Bits;
             public Int16 param2Bits;
             public Int16 param3Bits;
             public Int16 param4Bits;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte undefined8;
             public Int16 param1Shift;
             public Int16 param2Shift;
@@ -94,7 +94,7 @@ namespace Reanimator.Excel
             public Int16 param2Table;
             public Int16 param3Table;
             public Int16 param4Table;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
             byte undefined9;
             public Int16 minTicksBetweenDbCommand;
             public Int16 databaseUnitField;
@@ -103,18 +103,18 @@ namespace Reanimator.Excel
             public Int16 sfStat2;
             public Int16 sfStat3;
             public Int16 sfStat4;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 28)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
             byte undefined10;
             public Int16 checkAgainstTypes1;
             public Int16 checkAgainstTypes2;
             public Int16 reqFailString;//stridx
             public Int16 reqFailStringHellgate;
             public Int16 reqFailStringMythos;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte undefined11;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string versionFunction;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte undefined12;
 
         }
