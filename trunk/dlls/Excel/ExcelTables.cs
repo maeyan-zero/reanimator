@@ -132,7 +132,7 @@ namespace Reanimator.Excel
             excelTables = new ExcelTableManagerManager();
             excelTables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
             excelTables.AddTable("AICOMMONSTATE", null, typeof(Excel.AiCommonState));
-            excelTables.AddTable("BOOKMARKS", null, typeof(Excel.AiCommonState));
+            excelTables.AddTable("BOOKMARKS", null, typeof(Excel.BookMarks));
             excelTables.AddTable("CONDITIONFUNCTIONS", null, typeof(Excel.ConditionFunctions));
             excelTables.AddTable("DAMAGETYPES", null, typeof(Excel.DamageTypes));
             excelTables.AddTable("DIALOG", null, typeof(Excel.Dialog));
@@ -157,7 +157,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
             excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
-            excelTables.AddTable("QUEST_STATE_VALUE", "QUESTSTATEVALUE", typeof(Excel.AiCommonState));
+            excelTables.AddTable("QUEST_STATE_VALUE", "QUESTSTATEVALUE", typeof(Excel.BookMarks));
             excelTables.AddTable("QUEST_STATUS", "QUESTSTATUS", typeof(Excel.QuestStatus));
             excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
             excelTables.AddTable("SKILLEVENTTYPES", null, typeof(Excel.SkillEventTypes));
@@ -166,6 +166,8 @@ namespace Reanimator.Excel
             excelTables.AddTable("STATES", null, typeof(Excel.States));
             excelTables.AddTable("STATS", null, typeof(Excel.Stats));
             excelTables.AddTable("STATSFUNC", null, typeof(Excel.StatsFunc));
+            excelTables.AddTable("STATSSELECTOR", null, typeof(Excel.BookMarks));
+            excelTables.AddTable("TASKSTATUS", null, typeof(Excel.BookMarks));
             excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));
         }
 
