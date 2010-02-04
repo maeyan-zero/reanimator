@@ -146,7 +146,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("INTERACT", null, typeof(Excel.Interact));
             excelTables.AddTable("INTERACTMENU", null, typeof(Excel.InteractMenu));
             excelTables.AddTable("INVENTORY", null, typeof(Excel.Inventory));
-            excelTables.AddTable("INVENTORYTYPES", null, typeof(Excel.InventoryTypes));
+            excelTables.AddTable("INVENTORYTYPES", "INVENTORY_TYPES", typeof(Excel.InventoryTypes));
             excelTables.AddTable("INVLOC", null, typeof(Excel.InvLoc));
             excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
             excelTables.AddTable("ITEM_QUALITY", "ITEMQUALITY", typeof(Excel.ItemQuality));
@@ -198,7 +198,7 @@ namespace Reanimator.Excel
             {
                 string stringId = GetTableStringId(i);
                 string fileName = excelTables.GetReplacement(stringId);
-                if (fileName == "EXCELTABLES")
+                if (fileName == "EXCELTABLES" || fileName == "QUEST_COUNT_TUGBOAT")
                 {
                     continue;
                 }
@@ -224,7 +224,7 @@ namespace Reanimator.Excel
                         }
                         else
                         {
-                            Debug.WriteLine("Debug Output - File not found: " + filePath);
+                            Debug.WriteLine("Debug Output - File not found: " + fileName);
                             continue;
                         }
                     }
@@ -246,7 +246,7 @@ namespace Reanimator.Excel
                     }
                     else
                     {
-                        Debug.WriteLine("Debug Output - File does not have table definition: " + filePath);
+                        Debug.WriteLine("Debug Output - File does not have table definition: " + fileName);
                     }
 
                 }
