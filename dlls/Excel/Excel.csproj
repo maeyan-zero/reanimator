@@ -98,6 +98,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StatsFunc.cs" />
+    <Compile Include="Tag.cs" />
     <Compile Include="Treasure.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>

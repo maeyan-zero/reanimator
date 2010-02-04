@@ -15,7 +15,7 @@ namespace Reanimator.Excel
             Int32[] header;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public String quality;
-            public Int32 id;
+            public Int32 code;
             public Int32 craftingBreakdownTreasure;
             public Int32 displayName;
             public Int32 displayNameWithItemFormat;
