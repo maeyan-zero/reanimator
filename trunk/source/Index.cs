@@ -15,10 +15,51 @@ namespace Reanimator
             public static readonly byte[] info = new byte[] { 111, 105, 103, 104 };
         }
 
-        // Quick overview of a typical index file. This is the movies_low.idx
+        /* Index File Structure Layout
+         * 
+         ***** Main Header *****
+         * token                                Int32                                   // Must be 0x6867696E ('nigh').
+         * structCount                          Int32                                   // Number of Structs in Index(?) - count tokens.
+         * fileCount                            Int32                                   // File count.
+         * 
+         ***** String Block *****
+         * token                                Int32                                   // Must be 0x68677073 ('spgh').
+         * stringCount                          Int32                                   // String count.
+         * blockSize                            Int32                                   // Number of bytes in following block.
+         * stringBytes                          blockSize                               // The strings (each one is \0) lumped together as one big block.
+         * 
+         ***** String Data ***** 
+         * token                                Int32                                   // Must be 0x68677073 ('spgh').
+         * for (stringCount)
+         * {
+         *      stringSize                      Int16                                   // Count of chars in string (not including \0).
+         *      unknown                         Int32                                   // CRC perhaps?
+         * }
+         * 
+         ***** File Block *****
+         * token                                Int32                                   // Must be 0x68677073 ('spgh').
+         * for (fileCount)
+         * {
+         *      token                           Int32                                   // Must be 0x6867696F ('oigh').
+         *      unknown                         Int32
+         *      unknown                         Int32
+         *      dataOffset                      Int32                                   // Offset in bytes within accompanying .dat file.
+         *      null                            Int32                                   // Always 0x00?
+         *      uncompressedSize                Int32
+         *      compressedSize                  Int32
+         *      null                            Int32                                   // Always 0x00?
+         *      directoryArrayPosition          Int32
+         *      filenameArrayPosition           Int32
+         *      unknown                         16 Bytes
+         *      null                            12 Bytes
+         *      startOfFile                     8 Bytes                                 // Appears to be the first 8 bytes of said file.
+         *      token                           Int32                                   // Must be 0x6867696F ('oigh').
+         * }
+         */
 
+        // Quick overview of a typical index file. This is the movies_low.idx
         //0000 0003		110, 105, 103, 104	// Start File Token
-        //0004 0007		4					// No Structs in Index(?) - count tokens
+        //0004 0007		4					// Number of Structs in Index(?) - count tokens.
         //0008 0011		9					// File Count
         //0012 0015		115, 112, 103, 104  // Start of Struct Token
         //0016 0019		18					// String Count
@@ -144,7 +185,10 @@ namespace Reanimator
 
             for (int i = 0; i < stringTable.Length; i++)
             {
-                stringLength = BitConverter.ToInt16(buffer, stringLengthOffset + (i * stringStructLength));
+                int offset = stringLengthOffset + (i * stringStructLength);
+                stringLength = BitConverter.ToInt16(buffer, offset);
+                int unknownValue = BitConverter.ToInt32(buffer, offset + sizeof(Int16));
+
                 characterArray = new char[stringLength];
                 Array.Copy(buffer, position, characterArray, 0, stringLength);
                 stringTable[i] = new string(characterArray);

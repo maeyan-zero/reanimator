@@ -165,8 +165,8 @@ namespace Reanimator.Excel
             excelTables.AddTable("STATELIGHTING", null, typeof(Excel.StateLighting));
             excelTables.AddTable("STATES", null, typeof(Excel.States));
             excelTables.AddTable("STATS", null, typeof(Excel.Stats));
-            excelTables.AddTable("STATSFUNC", null, typeof(Excel.StatsFunc));
-            excelTables.AddTable("STATSSELECTOR", null, typeof(Excel.BookMarks));
+            excelTables.AddTable("STATS_FUNC", "STATSFUNC", typeof(Excel.StatsFunc));
+            excelTables.AddTable("STATS_SELECTOR", "STATSSELECTOR", typeof(Excel.BookMarks));
             excelTables.AddTable("TASKSTATUS", null, typeof(Excel.BookMarks));
             excelTables.AddTable("TAG", null, typeof(Excel.Tag));
             excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));

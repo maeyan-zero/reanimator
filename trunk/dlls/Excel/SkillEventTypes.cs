@@ -94,7 +94,7 @@ namespace Reanimator.Excel
             public string eventHandler;
             public Int32 eventStringFunction;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            byte undefined1;
+            byte[] undefined1;
 
         }
 
