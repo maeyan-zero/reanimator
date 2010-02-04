@@ -171,7 +171,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("TAG", null, typeof(Excel.Tag));
             excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));
             excelTables.AddTable("UICOMPONENT", null, typeof(Excel.UIComponent));
-            excelTables.AddTable("UNITEVENTS", null, typeof(Excel.UnitEvents));
+            excelTables.AddTable("UNIT_EVENT_TYPES", "UNITEVENTS", typeof(Excel.UnitEvents));
             excelTables.AddTable("UNITMODEGROUPS", null, typeof(Excel.UnitModeGroups));
         }
 
@@ -198,6 +198,10 @@ namespace Reanimator.Excel
             {
                 string stringId = GetTableStringId(i);
                 string fileName = excelTables.GetReplacement(stringId);
+                if (fileName == "EXCELTABLES")
+                {
+                    continue;
+                }
 
                 string filePath = folder + "\\" + fileName + ".txt.cooked";
                 FileStream cookedFile;
@@ -207,20 +211,29 @@ namespace Reanimator.Excel
 
                 try
                 {
-                    cookedFile = new FileStream(filePath, FileMode.Open);
+                    if (File.Exists(filePath))
+                    {
+                        cookedFile = new FileStream(filePath, FileMode.Open);
+                    }
+                    else
+                    {
+                        filePath = filePath.Replace("_common", "");
+                        if (File.Exists(filePath))
+                        {
+                            cookedFile = new FileStream(filePath, FileMode.Open);
+                        }
+                        else
+                        {
+                            Debug.WriteLine("Debug Output - File not found: " + filePath);
+                            continue;
+                        }
+                    }
                 }
                 catch (Exception)
                 {
-                    try
-                    {
-                        filePath = filePath.Replace("_common", "");
-                        cookedFile = new FileStream(filePath, FileMode.Open);
-                    }
-                    catch (Exception)
-                    {
-                        Debug.WriteLine("file not found: " + filePath);
-                        continue;
-                    }
+
+                    Debug.WriteLine("Debug Output - File failed to open: " + filePath);
+                    continue;
                 }
 
                 byte[] buffer = FileTools.StreamToByteArray(cookedFile);
@@ -230,6 +243,10 @@ namespace Reanimator.Excel
                     if (excelTable != null)
                     {
                         excelTablesLoaded.Items.Add(excelTable);
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Debug Output - File does not have table definition: " + filePath);
                     }
 
                 }
