@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="CryptTools.cs" />
+    <Compile Include="Crypt.cs" />
     <Compile Include="Forms\ExcelTableForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,8 +112,8 @@
       <DependentUpon>Progress.cs</DependentUpon>
     </Compile>
     <Compile Include="Index.cs" />
-    <Compile Include="ModelTools.cs" />
-    <Compile Include="ModTools.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="Mod.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\ExcelTableForm.resx">
@@ -154,6 +154,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="app.config" />
+    <None Include="ModSchema.xsd" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -173,7 +174,7 @@
     <Compile Include="Strings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ExampleMod.xml" />
+    <Content Include="RevivalMod.xml" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

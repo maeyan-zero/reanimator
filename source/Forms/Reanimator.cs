@@ -178,6 +178,10 @@ namespace Reanimator
                 {
                     OpenFile_COOKED(openFileDialog.FileName);
                 }
+                else if (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml"))
+                {
+                    OpenFile_MOD(openFileDialog.FileName);
+                }
             }
 
         }
@@ -208,8 +212,6 @@ namespace Reanimator
 
         private void OpenCookedFile(object sender, EventArgs e)
         {
-            MessageBox.Show("Testing function! Must open exceltablex.txt.cooked!\n I'd recommend extracting all dat files and keeping the dir structure for it to work correctly (this will be fixed in time).", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Cooked Files (*.cooked)|*.cooked|All Files (*.*)|*.*";
             openFileDialog.InitialDirectory = Config.dataDirsRoot;
@@ -229,6 +231,35 @@ namespace Reanimator
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
             {
                 OpenFile_STRINGS(openFileDialog.FileName);
+            }
+        }
+
+        private void OpenModFile(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Modification Files (*.mod, *.xml)|*.mod;*.xml|All Files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml")))
+            {
+                OpenFile_MOD(openFileDialog.FileName);
+            }
+        }
+
+        private bool OpenFile_MOD(string szFileName)
+        {
+            if (indexFilesOpen.Contains(szFileName))
+            {
+                return false;
+            }
+
+            try
+            {
+                Mod.Parse(szFileName);
+                return true;
+            }
+            catch(Exception e)
+            {
+                return false;
             }
         }
 

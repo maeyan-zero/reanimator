@@ -86,6 +86,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.modificationFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -142,7 +143,8 @@
             this.indexFileToolStripMenuItem,
             this.characterFileToolStripMenuItem,
             this.cookedFileToolStripMenuItem,
-            this.stringsFileToolStripMenuItem});
+            this.stringsFileToolStripMenuItem,
+            this.modificationFileToolStripMenuItem});
             this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
@@ -570,6 +572,13 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
+            // modificationFileToolStripMenuItem
+            // 
+            this.modificationFileToolStripMenuItem.Name = "modificationFileToolStripMenuItem";
+            this.modificationFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.modificationFileToolStripMenuItem.Text = "Modification File...";
+            this.modificationFileToolStripMenuItem.Click += new System.EventHandler(this.OpenModFile);
+            // 
             // Reanimator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -653,6 +662,7 @@
         private System.Windows.Forms.ToolStripMenuItem characterFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cookedFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stringsFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem modificationFileToolStripMenuItem;
     }
 }
 

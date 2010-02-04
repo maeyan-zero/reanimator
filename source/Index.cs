@@ -115,7 +115,7 @@ namespace Reanimator
             indexFile = file;
             buffer = FileTools.StreamToByteArray(file);
 
-            CryptTools.Decrypt(buffer);
+            Crypt.Decrypt(buffer);
 
             //just ignore me, I was curious
             //FileStream fOut = new FileStream("out.idx", FileMode.Create);
