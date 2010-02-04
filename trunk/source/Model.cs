@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Reanimator
 {
-    class ModelTools
+    class Model
     {
     }
 }

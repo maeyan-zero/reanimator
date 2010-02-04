@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<revival>
+<revival xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ModSchema.xsd">
   <modification>
     <title>Revival SP modification</title>
     <decription>This is the base SP modification developed by the Revival team.</decription>
