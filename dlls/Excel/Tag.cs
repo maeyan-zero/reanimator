@@ -17,9 +17,9 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string name;
 
-            public Int16 code;
-            public Int16 isValueTime;//bool
-            public Int16 isHotKey;//bool
+            public Int32 code;
+            public Int32 isValueTime;//bool
+            public Int32 isHotKey;//bool
         }
 
         public Tag(byte[] data) : base(data) { }
