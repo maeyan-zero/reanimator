@@ -47,7 +47,7 @@ namespace Reanimator.Forms
             Progress progress = sender as Progress;
 
             // file id
-            this.textBox1.Text = "0x" + excelTable.FileId.ToString("X");
+            this.textBox1.Text = "0x" + excelTable.StructureId.ToString("X");
 
             // do strings - better than before, but works.
             // no longer has as much details - though I don't think necessary anymore.
@@ -55,7 +55,7 @@ namespace Reanimator.Forms
             {
                 this.listBox1.Items.Add(s);
             }
-           
+
             // main table data
             progress.SetLoadingText("Generating table data...");
             dataGridView1.AutoGenerateColumns = false;
@@ -105,29 +105,33 @@ namespace Reanimator.Forms
                         else if (excelOutputAttribute.IsIntOffset)
                         {
                             int offset = (int)value;
-                            if (offset != 0 && excelTable.ByteBlock != null)
+                            if (offset != 0 && excelTable.DataBlock != null)
                             {
-                                ListBox listBox = new ListBox();
-
+                                DataGridViewComboBoxCell cell = new DataGridViewComboBoxCell();
                                 String[] fields = excelOutputAttribute.FieldNames;
                                 int i = 0;
                                 foreach (String s in fields)
                                 {
-                                    int intValue = BitConverter.ToInt32(excelTable.ByteBlock, offset + i * sizeof(Int32));
+                                    int intValue = BitConverter.ToInt32(excelTable.DataBlock, offset + i * sizeof(Int32));
                                     i++;
 
-                                    listBox.Items.Add(s + " = " + intValue);
+                                    cell.Items.Add(s + " = " + intValue);
                                 }
 
-                                value = listBox;
+                                dataGridView1[col, row] = cell;
+                                value = null;
                             }
                         }
                     }
-                    dataGridView1[col, row].Value = value;
+
+                    if (value != null)
+                    {
+                        dataGridView1[col, row].Value = value;
+                    }
                     col++;
                 }
             }
-            
+
             // generate the table index data source - //TODO is there a better way?
             List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
             int[][] intArrays = { excelTable.TableIndicies, excelTable.Unknowns1, excelTable.Unknowns2, excelTable.Unknowns3, excelTable.Unknowns4 };

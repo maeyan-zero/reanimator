@@ -9,10 +9,10 @@ namespace Reanimator.Excel
     public class Items : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class ItemsTable
+        public class ItemsTable
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            Int32[] header;
+            public Int32[] header;
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 name;//pchar: pointer to relevant text in the front of the file.
             Int32 buffer1;

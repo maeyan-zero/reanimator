@@ -59,7 +59,7 @@ namespace Reanimator
         {
 
         }
-
+#pragma warning disable 0649
         class Modification
         {
             public string title;
@@ -73,5 +73,6 @@ namespace Reanimator
             public int row;
             public object data;
         }
+#pragma warning restore 0649
     }
 }

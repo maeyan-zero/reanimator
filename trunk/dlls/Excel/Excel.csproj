@@ -48,11 +48,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Affixes.cs" />
+    <Compile Include="AiCommonState.cs" />
     <Compile Include="BitBuffer.cs" />
+    <Compile Include="BookMarks.cs" />
+    <Compile Include="ConditionFunctions.cs" />
+    <Compile Include="DamageTypes.cs" />
+    <Compile Include="Dialog.cs" />
     <Compile Include="Difficulty.cs" />
+    <Compile Include="FontColor.cs" />
     <Compile Include="GameGlobals.cs" />
     <Compile Include="GlobalIndex.cs" />
     <Compile Include="GlobalString.cs" />
+    <Compile Include="Interact.cs" />
+    <Compile Include="InteractMenu.cs" />
+    <Compile Include="Inventory.cs" />
+    <Compile Include="InventoryTypes.cs" />
+    <Compile Include="InvLoc.cs" />
     <Compile Include="ItemQuality.cs" />
     <Compile Include="Crc32.cs" />
     <Compile Include="ExcelTable.cs">
@@ -74,13 +85,19 @@
     <Compile Include="Objects.cs" />
     <Compile Include="Players.cs" />
     <Compile Include="Procs.cs" />
+    <Compile Include="Properties.cs" />
+    <Compile Include="QuestStatus.cs" />
+    <Compile Include="SkillEventTypes.cs" />
     <Compile Include="Skills.cs" />
+    <Compile Include="StateEventTypes.cs" />
+    <Compile Include="StateLighting.cs" />
     <Compile Include="States.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Stats.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="StatsFunc.cs" />
     <Compile Include="Treasure.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>
