@@ -19,18 +19,18 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
             public string function;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
-            byte undefined1;
+            byte[] undefined1;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-            public Int16 undefinedBool;
-            public Int16 usesMonsterClass;//bool
-            public Int16 usesObjectClass;//bool
-            public Int16 usesStat;//bool
+            public Int32 undefinedBool;
+            public Int32 usesMonsterClass;//bool
+            public Int32 usesObjectClass;//bool
+            public Int32 usesStat;//bool
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
             public string paramText0;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
             public string paramText1;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-            byte undefined2;
+            byte[] undefined2;
         }
 
         public ConditionFunctions(byte[] data) : base(data) { }

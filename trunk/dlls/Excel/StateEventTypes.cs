@@ -26,13 +26,13 @@ namespace Reanimator.Excel
             public string clearEventHandler;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] undefined2;
-            public Int16 usesTable0;
-            public Int16 usesTable1;
-            public Int16 comboFilterFunction0;
-            public Int16 comboFilterFunction1;
-            public Int16 clientOnly;//bool
-            public Int16 serverOnly;//bool
-            public Int16 bitMask1;/* bit uses force new, 0
+            public Int32 usesTable0;
+            public Int32 usesTable1;
+            public Int32 comboFilterFunction0;
+            public Int32 comboFilterFunction1;
+            public Int32 clientOnly;//bool
+            public Int32 serverOnly;//bool
+            public Int32 bitMask1;/* bit uses force new, 0
 	bit uses first person, 1
 	bit uses add to center, 2
 	bit uses control unit only, 3
@@ -48,18 +48,18 @@ namespace Reanimator.Excel
 	bit reapply on appearance load, 14
 	bit uses share duration, 13
 	bit uses check condition on weapons, 15  */
-            public Int16 usesBone;//bool
-            public Int16 usesBoneWeight;//bool
-            public Int16 usesAttachments;//bool
-            public Int16 addsRopesOnAddTarget;//bool
-            public Int16 usesMaterialOverrideType;//bool
-            public Int16 refreshStatsPointer;//bool
-            public Int16 usesEnvironmentOverride;//bool
-            public Int16 usesScreenEffects;//bool
-            public Int16 canClearOnFree;//bool
-            public Int16 controlUnitOnly;//bool
-            public Int16 requiresLoadedGraphics;//bool
-            public Int16 applyToAppearanceOverride;//bool
+            public Int32 usesBone;//bool
+            public Int32 usesBoneWeight;//bool
+            public Int32 usesAttachments;//bool
+            public Int32 addsRopesOnAddTarget;//bool
+            public Int32 usesMaterialOverrideType;//bool
+            public Int32 refreshStatsPointer;//bool
+            public Int32 usesEnvironmentOverride;//bool
+            public Int32 usesScreenEffects;//bool
+            public Int32 canClearOnFree;//bool
+            public Int32 controlUnitOnly;//bool
+            public Int32 requiresLoadedGraphics;//bool
+            public Int32 applyToAppearanceOverride;//bool
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte[] unknown2;
 
