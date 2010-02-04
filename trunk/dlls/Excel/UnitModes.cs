@@ -17,6 +17,7 @@ namespace Reanimator.Excel
             public Int32 mode;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte[] undefined1;
+            public Int32 code;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
             public Int32[] block;
             public Int32 blockOnGround;//bool
