@@ -173,6 +173,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("UICOMPONENT", null, typeof(Excel.UIComponent));
             excelTables.AddTable("UNIT_EVENT_TYPES", "UNITEVENTS", typeof(Excel.UnitEvents));
             excelTables.AddTable("UNITMODE_GROUPS", null, typeof(Excel.UnitModeGroups));
+            excelTables.AddTable("UNITMODES", null, typeof(Excel.UnitModes));
         }
 
         protected override void ParseTables(byte[] data)

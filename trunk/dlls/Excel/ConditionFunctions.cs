@@ -21,7 +21,7 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] undefined1;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-            public Int32 undefinedBool;
+            public Int32[] undefinedBool;
             public Int32 usesMonsterClass;//bool
             public Int32 usesObjectClass;//bool
             public Int32 usesStat;//bool
