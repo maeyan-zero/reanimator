@@ -68,7 +68,7 @@ namespace Reanimator.Excel
         {
             try
             {
-                /* A typical Excel Table file:
+                /* Excel Table Structure Layout
                  * 
                  ***** Main Header ***** (28) bytes
                  * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
@@ -175,9 +175,16 @@ namespace Reanimator.Excel
                  * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
                  * byteCount                            Int32                                   // Bytes of following block.
                  * dataBlock                            byteCount                               // An int[] - refered to in the tables
-                 * 
-                 ***** Unknown Block *****
-                 * // TODO
+                 *                                                                              // If structureId == 0x1F9DDC98, then this block is read in the
+                 *                                                                              // same style as the second data block, with the second data
+                 *                                                                              // block ommited. (unittypes.txt.cooked)
+                 ***** Data Block 2 *****
+                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
+                 * byteCount                            Int32                                   // Bytes of following blocks shift left 2.
+                 * blockCount                           Int32                                   // Number of blocks to read.
+                 * {
+                 *      dataBlock                       byteCount << 2                          // I have no idea where they drempt this up, but so far
+                 * }                                                                            // it has only been seen in states.txt.cooked
                  */
 
 
@@ -324,10 +331,11 @@ namespace Reanimator.Excel
                 int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                 if (byteCount != 0)
                 {
-                     if (this.excelHeader.structureId == 0x1F9DDC98) // blocks are 68 bytes in size - the byte count = 11 << 2 = 68
-                    {
+                    if (this.excelHeader.structureId == 0x1F9DDC98)         // Only seen in unittypes.txt.cooked so far.
+                    {                                                       // This block reading method is the same as first seend below in the
+                                                                            // states.txt.cooked, but there is no previous data block for unittypes.txt.cooked.
                         int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                        byteCount = (byteCount << 2) * blockCount;                              // no idea where they drempt this up
+                        byteCount = (byteCount << 2) * blockCount;                              // No idea where they drempt this up,
                     }
                     DataBlock = new byte[byteCount];
                     Buffer.BlockCopy(data, offset, DataBlock, 0, byteCount);
@@ -343,21 +351,17 @@ namespace Reanimator.Excel
                     {
                         CheckFlag(flag);
 
-                        int unknown = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                        byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                         int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                        byteCount = (byteCount << 2) * blockCount;
 
-                        FinalBytes = new byte[blockCount * 128];
-                        Buffer.BlockCopy(data, offset, FinalBytes, 0, FinalBytes.Length);
-                        offset += FinalBytes.Length;
+                        if (byteCount != 0)        // Only seen in states.txt.cooked so far  -  Of note is that 
+                        {                          //           the states file has an above data block as well.
+                            FinalBytes = new byte[byteCount];
+                            Buffer.BlockCopy(data, offset, FinalBytes, 0, FinalBytes.Length);
+                            offset += FinalBytes.Length;
+                        }
                     }
-
-                    /*[StructLayout(LayoutKind.Sequential, Pack = 1)]
-                    protected struct FinalHeader
-                    {
-                        public int flag;
-                        public int unknown; // was 0x20 ->     0x20 << 2 = 0x80 = 128 byte block count      // untested
-                        public int blockCount;
-                    }*/
                 }
 
                 if (offset != data.Length)
