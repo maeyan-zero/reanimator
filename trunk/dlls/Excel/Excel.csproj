@@ -101,6 +101,7 @@
     <Compile Include="UnitEvents.cs" />
     <Compile Include="UnitModeGroups.cs" />
     <Compile Include="UnitModes.cs" />
+    <Compile Include="UnitTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FileTools\FileTools.csproj">

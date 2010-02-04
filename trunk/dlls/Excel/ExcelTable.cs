@@ -205,13 +205,13 @@ namespace Reanimator.Excel
                 {
                     this.stringsBytes = new byte[stringsBytesCount];
                     Buffer.BlockCopy(excelData, offset, stringsBytes, 0, stringsBytesCount);
-                    
+
                     // put into a hash table for easier use later, with the stringsBytes[offset] -> offset as the key
                     // sometimes C# makes things hard  -  C++ char* ftw. x.x
                     for (int i = offset; i < offset + stringsBytesCount; i++)
                     {
                         String s = FileTools.ByteArrayToStringAnsi(excelData, i);
-                        Strings.Add(i-offset, s);
+                        Strings.Add(i - offset, s);
 
                         i += s.Length;
                     }
@@ -256,7 +256,7 @@ namespace Reanimator.Excel
 
 
                 // secondary index blocks
-                for ( int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
                     CheckFlag(flag);
@@ -265,7 +265,7 @@ namespace Reanimator.Excel
                     this.unknownIndicies[i] = FileTools.ByteArrayToInt32Array(data, offset, count);
                     offset += count * sizeof(Int32);
                 }
- 
+
 
                 // unknown block
                 flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
@@ -321,10 +321,14 @@ namespace Reanimator.Excel
                 // data block
                 flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
                 CheckFlag(flag);
-
                 int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                 if (byteCount != 0)
                 {
+                     if (this.excelHeader.structureId == 0x1F9DDC98) // blocks are 68 bytes in size - the byte count = 11 << 2 = 68
+                    {
+                        int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                        byteCount = (byteCount << 2) * blockCount;                              // no idea where they drempt this up
+                    }
                     DataBlock = new byte[byteCount];
                     Buffer.BlockCopy(data, offset, DataBlock, 0, byteCount);
                     offset += byteCount;
@@ -332,26 +336,29 @@ namespace Reanimator.Excel
 
 
                 // does it have a final flag chunk?
-                flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                if (flag != 0)
+                if (offset != data.Length)
                 {
-                    CheckFlag(flag);
+                    flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                    if (flag != 0)
+                    {
+                        CheckFlag(flag);
 
-                    int unknown = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                    int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                        int unknown = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                        int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
 
-                    FinalBytes = new byte[blockCount * 128];
-                    Buffer.BlockCopy(data, offset, FinalBytes, 0, FinalBytes.Length);
-                    offset += FinalBytes.Length;
+                        FinalBytes = new byte[blockCount * 128];
+                        Buffer.BlockCopy(data, offset, FinalBytes, 0, FinalBytes.Length);
+                        offset += FinalBytes.Length;
+                    }
+
+                    /*[StructLayout(LayoutKind.Sequential, Pack = 1)]
+                    protected struct FinalHeader
+                    {
+                        public int flag;
+                        public int unknown; // was 0x20 ->     0x20 << 2 = 0x80 = 128 byte block count      // untested
+                        public int blockCount;
+                    }*/
                 }
-
-        /*[StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct FinalHeader
-        {
-            public int flag;
-            public int unknown; // was 0x20 ->     0x20 << 2 = 0x80 = 128 byte block count      // untested
-            public int blockCount;
-        }*/
 
                 if (offset != data.Length)
                 {
@@ -475,7 +482,7 @@ namespace Reanimator.Excel
                     int breakpoint = 1;
                 }
             }
-            
+
         }
 
         public object GetTableArray()
