@@ -130,6 +130,7 @@ namespace Reanimator.Excel
             : base(data)
         {
             excelTables = new ExcelTableManagerManager();
+            excelTables.AddTable("ACHIEVEMENTS", null, typeof(Excel.Achievements));
             excelTables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
             excelTables.AddTable("AICOMMON_STATE", null, typeof(Excel.AiCommonState));
             excelTables.AddTable("BOOKMARKS", null, typeof(Excel.BookMarks));
