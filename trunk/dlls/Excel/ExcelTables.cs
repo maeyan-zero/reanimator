@@ -168,6 +168,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("FACTION_STANDING", "FACTIONSTANDING", typeof(Excel.FactionStanding));
             excelTables.AddTable("FONT", null, typeof(Excel.Font));
             excelTables.AddTable("FONTCOLOR", null, typeof(Excel.FontColor));
+            excelTables.AddTable("FOOTSTEPS", null, typeof(Excel.FootSteps));
             excelTables.AddTable("GAME_GLOBALS", "GAMEGLOBALS", typeof(Excel.GameGlobals));
             excelTables.AddTable("GLOBAL_INDEX", "GLOBALINDEX", typeof(Excel.GlobalIndex));
             excelTables.AddTable("GLOBAL_STRING", "GLOBALSTRING", typeof(Excel.GlobalIndex));
