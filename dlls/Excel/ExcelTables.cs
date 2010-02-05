@@ -188,6 +188,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("LEVELS_DRLGS", "LEVELSDRLGS", typeof(Excel.LevelsDrlgs));
             excelTables.AddTable("LEVELS_ENV", "LEVELSENV", typeof(Excel.LevelsEnv));
             excelTables.AddTable("LEVELS_FILE_PATH", "LEVELSFILEPATH", typeof(Excel.LevelsFilePath));
+            excelTables.AddTable("LEVELS_ROOM_INDEX", "LEVELSROOMINDEX", typeof(Excel.LevelsRoomIndex));
             excelTables.AddTable("MISSILES", null, typeof(Excel.Items));
             excelTables.AddTable("MONSTERS", null, typeof(Excel.Items));
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
