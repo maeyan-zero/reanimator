@@ -197,6 +197,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("MATERIALS_GLOBAL", "MATERIALSGLOBAL", typeof(Excel.MaterialsGlobal));
             excelTables.AddTable("MELEE_WEAPONS", "MELEEWEAPONS", typeof(Excel.MeleeWeapons));
             excelTables.AddTable("MISSILES", null, typeof(Excel.Items));
+            excelTables.AddTable("MONLEVEL", null, typeof(Excel.MonLevel));
             excelTables.AddTable("MONSTERS", null, typeof(Excel.Items));
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
