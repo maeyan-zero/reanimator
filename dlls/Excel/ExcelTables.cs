@@ -141,6 +141,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("ANIMATIONCONDITION", null, typeof(Excel.AnimationCondition));
             excelTables.AddTable("ANIMATIONGROUPS", null, typeof(Excel.AnimationGroups));
             excelTables.AddTable("ANIMATIONSTANCE", null, typeof(Excel.AnimationStance));
+            excelTables.AddTable("BACKGROUNDSOUNDS", null, typeof(Excel.BackGroundSounds));
             excelTables.AddTable("BOOKMARKS", null, typeof(Excel.BookMarks));
             excelTables.AddTable("CONDITION_FUNCTIONS", null, typeof(Excel.ConditionFunctions));
             excelTables.AddTable("DAMAGETYPES", null, typeof(Excel.DamageTypes));
