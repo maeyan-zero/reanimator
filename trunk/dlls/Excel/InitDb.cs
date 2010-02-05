@@ -31,7 +31,7 @@ namespace Reanimator.Excel
             public string featMax;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
             public string featInit;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string numKnob;
 
         }
