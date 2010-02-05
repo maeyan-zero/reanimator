@@ -172,6 +172,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("GAME_GLOBALS", "GAMEGLOBALS", typeof(Excel.GameGlobals));
             excelTables.AddTable("GLOBAL_INDEX", "GLOBALINDEX", typeof(Excel.GlobalIndex));
             excelTables.AddTable("GLOBAL_STRING", "GLOBALSTRING", typeof(Excel.GlobalIndex));
+            excelTables.AddTable("GLOBAL_THEMES", "GLOBALTHEMES", typeof(Excel.GlobalThemes));
             excelTables.AddTable("INTERACT", null, typeof(Excel.Interact));
             excelTables.AddTable("INTERACT_MENU", null, typeof(Excel.InteractMenu));
             excelTables.AddTable("INVENTORY", null, typeof(Excel.Inventory));
