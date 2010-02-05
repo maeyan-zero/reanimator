@@ -153,6 +153,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("CHARACTERCLASS", null, typeof(Excel.CharacterClass));
             excelTables.AddTable("COLORSETS", null, typeof(Excel.ColorSets));
             excelTables.AddTable("CONDITION_FUNCTIONS", null, typeof(Excel.ConditionFunctions));
+            excelTables.AddTable("DAMAGEEFFECTS", null, typeof(Excel.DamageEffects));
             excelTables.AddTable("DAMAGETYPES", null, typeof(Excel.DamageTypes));
             excelTables.AddTable("DIALOG", null, typeof(Excel.Dialog));
             excelTables.AddTable("DIFFICULTY", null, typeof(Excel.Difficulty));
