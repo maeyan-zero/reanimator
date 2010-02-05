@@ -11,7 +11,6 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class LevelsDrlgsTable
         {
-            //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             TableHeader header;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]

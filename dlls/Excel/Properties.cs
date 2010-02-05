@@ -11,8 +11,8 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class PropertiesTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            public Int32[] header;
+            TableHeader header;
+
             public Int32 property;
         }
 

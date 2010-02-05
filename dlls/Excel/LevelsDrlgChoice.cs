@@ -11,8 +11,8 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class LevelsDrlgChoiceTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            Int32[] header;
+            TableHeader header;
+
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 name; //pchar
             public Int32 undefined1;

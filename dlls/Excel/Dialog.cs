@@ -12,8 +12,8 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class DialogTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            Int32[] header;
+            TableHeader header;
+
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string name;
             public Int32 stringAll;//stridx
