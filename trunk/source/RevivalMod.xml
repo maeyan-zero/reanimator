@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="ModSchema.xsd">
   <modification>
     <title>Revival SP modification</title>
-    <decription>This is the base SP modification developed by the Revival team.</decription>
+    <description>This is the base SP modification developed by the Revival team.</description>
     <version>1.1.0</version>
     <pack id="hellgate000">
       <file id="gameglobals.txt.cooked">
@@ -22,7 +22,7 @@
             <attribute id="property_mask">
               <bitwise>
                 <bit id="can_vendor">
-                  <flip>on</flip>
+                  <flip>yes</flip>
                 </bit>
               </bitwise>
             </attribute>

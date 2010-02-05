@@ -1,87 +1,94 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema id="ModSchema"
-    targetNamespace="http://www.hellgateaus.net/ModSchema.xsd"
-    elementFormDefault="qualified"
-    xmlns="http://www.hellgateaus.net/ModSchema.xsd"
-    xmlns:mstns="http://www.hellgateaus.net/ModSchema.xsd"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
->
-  <xs:element name="revival">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="modification">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
-              <xs:element name="version" type="xs:string" maxOccurs="1"/>
-              <xs:element name="description" type="xs:string" maxOccurs="1"/>
-              <xs:element name="pack">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="file">
-                      <xs:complexType>
-                        <xs:sequence>
-                          <xs:element name="modify">
-                            <xs:complexType>
-                              <xs:sequence>
-                                <xs:element name="entity">
-                                  <xs:complexType>
-                                    <xs:sequence>
-                                      <xs:element name="attribute">
-                                        <xs:complexType>
-                                          <xs:sequence>
-                                            <xs:element name="replace">
-                                              <xs:complexType>
-                                                <xs:sequence>
-                                                  <xs:element name="data" minOccurs="1" maxOccurs="1"/>
-                                                </xs:sequence>
-                                              </xs:complexType>
-                                            </xs:element>
-                                            <xs:element name="bitwise">
-                                              <xs:complexType>
-                                                <xs:sequence>
-                                                  <xs:element name="bit">
-                                                    <xs:complexType>
-                                                      <xs:sequence>
-                                                        <xs:element name="flip" minOccurs="1" maxOccurs="1">
-                                                          <xs:simpleType>
-                                                            <xs:restriction base="xs:string">
-                                                              <xs:enumeration value="no"/>
-                                                              <xs:enumeration value="yes"/>
-                                                            </xs:restriction>
-                                                          </xs:simpleType>
-                                                        </xs:element>
-                                                      </xs:sequence>
-                                                      <xs:attribute name="id" type="xs:string"/>
-                                                    </xs:complexType>
-                                                  </xs:element>
-                                                </xs:sequence>
-                                                <xs:attribute name="id" type="xs:string"/>
-                                              </xs:complexType>
-                                            </xs:element>
-                                          </xs:sequence>
-                                          <xs:attribute name="id" type="xs:string"/>
-                                        </xs:complexType>
-                                      </xs:element>
-                                    </xs:sequence>
-                                    <xs:attribute name="id" type="xs:string"/>
-                                  </xs:complexType>
-                                </xs:element>
-                              </xs:sequence>
-                            </xs:complexType>
-                          </xs:element>
-                        </xs:sequence>
-                        <xs:attribute name="id" type="xs:string"/>
-                      </xs:complexType>
-                    </xs:element>
-                  </xs:sequence>
-                  <xs:attribute name="id" type="xs:string"/>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xs:element name="revival">
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name="modification">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="description" type="xs:string" maxOccurs="1"/>
+            <xs:element name="version" type="xs:string" maxOccurs="1"/>
+            <xs:element name="pack">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="file" maxOccurs="unbounded">
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="replace" minOccurs="0">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="path">
+                                <xs:simpleType>
+                                  <xs:restriction base="xs:string"/>
+                                </xs:simpleType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="modify" minOccurs="0" maxOccurs="unbounded">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="entity" minOccurs="1" maxOccurs="unbounded">
+                                <xs:complexType>
+                                  <xs:sequence>
+                                    <xs:element name="attribute" minOccurs="1" maxOccurs="unbounded">
+                                      <xs:complexType>
+                                        <xs:sequence>
+                                          <xs:element name="replace" minOccurs="0">
+                                            <xs:complexType>
+                                              <xs:sequence>
+                                                <xs:element name="data" minOccurs="1" maxOccurs="1"/>
+                                              </xs:sequence>
+                                            </xs:complexType>
+                                          </xs:element>
+                                          <xs:element name="bitwise" minOccurs="0">
+                                            <xs:complexType>
+                                              <xs:sequence>
+                                                <xs:element name="bit" minOccurs="1">
+                                                  <xs:complexType>
+                                                    <xs:sequence>
+                                                      <xs:element name="flip" minOccurs="1" maxOccurs="1">
+                                                        <xs:simpleType>
+                                                          <xs:restriction base="xs:string">
+                                                            <xs:enumeration value="no"/>
+                                                            <xs:enumeration value="yes"/>
+                                                          </xs:restriction>
+                                                        </xs:simpleType>
+                                                      </xs:element>
+                                                    </xs:sequence>
+                                                    <xs:attribute name="id" type="xs:string"/>
+                                                  </xs:complexType>
+                                                </xs:element>
+                                              </xs:sequence>
+                                              <xs:attribute name="id" type="xs:string"/>
+                                            </xs:complexType>
+                                          </xs:element>
+                                        </xs:sequence>
+                                        <xs:attribute name="id" type="xs:string"/>
+                                      </xs:complexType>
+                                    </xs:element>
+                                  </xs:sequence>
+                                  <xs:attribute name="id" type="xs:string"/>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:sequence>
+                      <xs:attribute name="id" type="xs:string"/>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+  
 </xs:schema>
