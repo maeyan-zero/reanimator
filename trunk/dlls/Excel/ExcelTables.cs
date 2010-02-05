@@ -166,6 +166,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("FILTER_NAMEFILTER", "NAMEFILTER", typeof(Excel.Filter));
             excelTables.AddTable("FACTION", null, typeof(Excel.Faction));
             excelTables.AddTable("FACTION_STANDING", "FACTIONSTANDING", typeof(Excel.FactionStanding));
+            excelTables.AddTable("FONT", null, typeof(Excel.Font));
             excelTables.AddTable("FONTCOLOR", null, typeof(Excel.FontColor));
             excelTables.AddTable("GAME_GLOBALS", "GAMEGLOBALS", typeof(Excel.GameGlobals));
             excelTables.AddTable("GLOBAL_INDEX", "GLOBALINDEX", typeof(Excel.GlobalIndex));
