@@ -157,6 +157,8 @@ namespace Reanimator.Excel
             excelTables.AddTable("DAMAGETYPES", null, typeof(Excel.DamageTypes));
             excelTables.AddTable("DIALOG", null, typeof(Excel.Dialog));
             excelTables.AddTable("DIFFICULTY", null, typeof(Excel.Difficulty));
+            excelTables.AddTable("DISPLAY_CHAR", "DISPLAYCHAR", typeof(Excel.Display));
+            excelTables.AddTable("DISPLAY_ITEM", "DISPLAYITEM", typeof(Excel.Display));
             excelTables.AddTable("FILTER_CHATFILTER", "CHATFILTER", typeof(Excel.Filter));
             excelTables.AddTable("FILTER_NAMEFILTER", "NAMEFILTER", typeof(Excel.Filter));
             excelTables.AddTable("FONTCOLOR", null, typeof(Excel.FontColor));
