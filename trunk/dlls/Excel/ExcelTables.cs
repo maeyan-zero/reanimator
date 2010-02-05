@@ -160,6 +160,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("DISPLAY_CHAR", "DISPLAYCHAR", typeof(Excel.Display));
             excelTables.AddTable("DISPLAY_ITEM", "DISPLAYITEM", typeof(Excel.Display));
             excelTables.AddTable("EFFECTS_FILES", "EFFECTSFILES", typeof(Excel.EffectsFiles));
+            excelTables.AddTable("EFFECTS_INDEX", "EFFECTSINDEX", typeof(Excel.EffectsIndex));
             excelTables.AddTable("FILTER_CHATFILTER", "CHATFILTER", typeof(Excel.Filter));
             excelTables.AddTable("FILTER_NAMEFILTER", "NAMEFILTER", typeof(Excel.Filter));
             excelTables.AddTable("FONTCOLOR", null, typeof(Excel.FontColor));
