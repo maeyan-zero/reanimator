@@ -150,6 +150,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("BOOKMARKS", null, typeof(Excel.BookMarks));
             excelTables.AddTable("BUDGETSMODEL", null, typeof(Excel.BudgetsModel));
             excelTables.AddTable("BUDGETTEXTUREMIPS", null, typeof(Excel.BudgetTextureMips));
+            excelTables.AddTable("CHARACTERCLASS", null, typeof(Excel.CharacterClass));
             excelTables.AddTable("CONDITION_FUNCTIONS", null, typeof(Excel.ConditionFunctions));
             excelTables.AddTable("DAMAGETYPES", null, typeof(Excel.DamageTypes));
             excelTables.AddTable("DIALOG", null, typeof(Excel.Dialog));
