@@ -192,6 +192,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("LEVELS_RULES", "LEVELSRULES", typeof(Excel.LevelsRules));
             excelTables.AddTable("LEVELS_THEMES", "LEVELSTHEMES", typeof(Excel.LevelsThemes));
             excelTables.AddTable("LEVELSCALING", null, typeof(Excel.LevelScaling));
+            excelTables.AddTable("LOADINGTIPS", null, typeof(Excel.LoadingTips));
             excelTables.AddTable("MISSILES", null, typeof(Excel.Items));
             excelTables.AddTable("MONSTERS", null, typeof(Excel.Items));
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
