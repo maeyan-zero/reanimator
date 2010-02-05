@@ -11,8 +11,7 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class LevelScalingTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            Int32[] header;
+            TableHeader header;
 
             public Int32 levelDiff;
             public Int32 PlayerAttackMonsterDmg;

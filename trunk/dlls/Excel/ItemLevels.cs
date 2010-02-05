@@ -11,8 +11,8 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class ItemLevelsTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-            byte[] unknown;
+            TableHeader header;
+
             public Int32 level;
             public Int32 baseDamageMultiplyer;
             public Int32 armor;

@@ -124,6 +124,7 @@
     <Compile Include="MeleeWeapons.cs" />
     <Compile Include="MonLevel.cs" />
     <Compile Include="MonScaling.cs" />
+    <Compile Include="MonsterNameTypes.cs" />
     <Compile Include="Procs.cs" />
     <Compile Include="Properties.cs" />
     <Compile Include="QuestStatus.cs" />

@@ -11,8 +11,8 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class ItemsTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            public Int32[] header;
+            TableHeader header;
+
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 name;//pchar: pointer to relevant text in the front of the file.
             Int32 buffer1;

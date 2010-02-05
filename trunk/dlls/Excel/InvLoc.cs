@@ -11,8 +11,7 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class InvLocTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            Int32[] header;
+            TableHeader header;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
             public string name;

@@ -23,8 +23,8 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class ExcelTableTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            public Int32[] header;
+            TableHeader header;
+
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string stringId;
             public Int16 id;

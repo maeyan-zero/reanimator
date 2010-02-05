@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Collections;
+using System.Diagnostics;
 
 namespace Reanimator.Excel
 {
@@ -61,6 +62,8 @@ namespace Reanimator.Excel
         protected List<byte[]> extraIndexData;
         public int[] TableIndicies { get { return tableIndicies; } }
 
+        protected List<String> secondaryStrings;
+
         protected int[][] unknownIndicies;
         public int[] Unknowns1 { get { return unknownIndicies[0]; } }
         public int[] Unknowns2 { get { return unknownIndicies[1]; } }
@@ -82,7 +85,7 @@ namespace Reanimator.Excel
                 /* Excel Table Structure Layout
                  * 
                  ***** Main Header ***** (28) bytes
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh').
                  * structureId                          Int32                                   // This is the id used to determine what structure to use to read the table block.
                  * unknown                              Int32                                   // This is how the game reads this in...
                  * unknown                              Int32                                   // What they do I don't know, lol.
@@ -94,12 +97,12 @@ namespace Reanimator.Excel
                  * unknown                              Int16
                  * 
                  ***** String Block ***** (4 + byteCount) bytes
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh').
                  * byteCount                            Int32                                   // The number of bytes of the following string block.
                  * stringBytes                          byteCount                               // The strings (each one is \0) lumped together as one big block.
                  * 
                  ***** Tables Block ***** (8 + tableSize * tableCount) bytes
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh').
                  * tableCount                           Int32                                   // Count of tables.
                  * {                                                                            // Each table has the same first header 16 byte chunk style.
                  *      unknown                         Int32                                   // Seen as 0x01, 0x02 or 0x03.
@@ -110,42 +113,42 @@ namespace Reanimator.Excel
                  * }
                  * 
                  ***** Primary Index Block ***** (4 + tableCount * 4) bytes
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh').
                  * tableCount                                                                   // This is tableCount from above Table Block (not actually read in just
                  * {                                                                            //                                            here for struct definition)
                  *      index                           Int32                                   // Always seen as 0 -> tableCount - 1, unknown
                  * }                                                                            // if it can be different (do we even care?).
                  * 
                  ***** Secondary Index Block 1 ***** (8 + indexCount * 4) bytes                 // Unsure what these do.
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh'). 
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * indexCount                           Int32                                   // For every table that doesn't have 0x30 as its type,
                  * {                                                                            // has a secondary index.
                  *      unknownValue                    Int32
                  * }
                  * 
                  ***** Secondary Index Block 2 ***** (8 + indexCount * 4) bytes                 // Unsure what these do.
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh'). 
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * indexCount                           Int32
                  * {
                  *      unknownValue                    Int32
                  * }
                  * 
                  ***** Secondary Index Block 3 ***** (8 + indexCount * 4) bytes                 // Unsure what these do.
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh'). 
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * indexCount                           Int32
                  * {
                  *      unknownValue                    Int32
                  * }
                  * 
                  ***** Secondary Index Block 4 ***** (8 + indexCount * 4) bytes                 // Unsure what these do.
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh'). 
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * indexCount                           Int32
                  * {
                  *      unknownValue                    Int32
                  * }
                  * 
                  ***** Unknown Block *****                                                      // The flags in this block are all optional (excluding initial 'cxeh' of course).
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh'). 
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * 
                  * unknownFlag                          Int32                                   // Can be 0x68736372 ('rcsh').
                  * unknownValue                         Int32                                   // Only seen as 0x04.
@@ -183,40 +186,48 @@ namespace Reanimator.Excel
                  * unknownValue                         Int32                                   // Only seen as 0x00.
                  * 
                  ***** Data Block *****
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh').
                  * byteCount                            Int32                                   // Bytes of following block.
                  * dataBlock                            byteCount                               // An int[] - refered to in the tables
                  *                                                                              // If structureId == 0x1F9DDC98, then this block is read in the
                  *                                                                              // same style as the second data block, with the second data
                  *                                                                              // block ommited. (unittypes.txt.cooked)
                  ***** Data Block 2 *****
-                 * flag                                 Int32                                   // Must be 0x68657863 ('cxeh').
+                 * token                                Int32                                   // Must be 0x68657863 ('cxeh').
                  * byteCount                            Int32                                   // Bytes of following blocks shift left 2.
                  * blockCount                           Int32                                   // Number of blocks to read.
                  * {
                  *      dataBlock                       byteCount << 2                          // I have no idea where they drempt this up, but so far
                  * }                                                                            // it has only been seen in states.txt.cooked
+                 * 
+                 * 
+                 * // just testing stuffs
+                 * 0x3F = 0011 1111
+                 * 0x3E = 0011 1110
+                 * 0x3C = 0011 1100
+                 * 0x30 = 0011 0000
                  */
 
 
                 excelData = data;
-                tables = new List<object>();
+                tables = new List<Object>();
                 Strings = new Hashtable();
+                secondaryStrings = new List<String>();
                 unknownIndicies = new int[4][];
                 offset = 0;
 
 
                 // main header
-                int flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(flag);
+                int token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                CheckFlag(token);
 
                 excelHeader = (ExcelHeader)FileTools.ByteArrayToStructure(data, typeof(ExcelHeader), offset);
                 offset += Marshal.SizeOf(typeof(ExcelHeader));
 
 
                 // strings block
-                flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(flag);
+                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                CheckFlag(token);
 
                 int stringsBytesCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                 if (stringsBytesCount != 0)
@@ -239,16 +250,20 @@ namespace Reanimator.Excel
 
 
                 // tables block
-                flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(flag);
+                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                CheckFlag(token);
 
                 this.tableCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                 ParseTables(data);
 
 
                 // index block
-                flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(flag);
+                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                CheckFlag(token);
+
+                Hashtable hashTableUnknown1 = new Hashtable();
+                Hashtable hashTableIndexString = new Hashtable();
+                Hashtable hashTableTableType = new Hashtable();
 
                 if ((uint)excelHeader.structureId == 0x887988C4) // items, missiles, monsters, objects, players
                 {
@@ -271,10 +286,9 @@ namespace Reanimator.Excel
                     tableIndicies = FileTools.ByteArrayToInt32Array(data, offset, Count);
                     offset += Count * sizeof(Int32);
 
-                    /*
-                    Hashtable hashTableIndexString = new Hashtable();
-                    Hashtable hashTableTableType = new Hashtable();
 
+
+                    /*
                     foreach (Object table in tables)
                     {
                         Type type = table.GetType();
@@ -285,6 +299,10 @@ namespace Reanimator.Excel
                             {
                                 TableHeader tableHeader = (TableHeader)fieldInfo.GetValue(table);
 
+                                if (!hashTableUnknown1.ContainsKey(tableHeader.unknown1))
+                                {
+                                    hashTableUnknown1.Add(tableHeader.unknown1, 0);
+                                }
                                 if (!hashTableIndexString.ContainsKey(tableHeader.indexString))
                                 {
                                     hashTableIndexString.Add(tableHeader.indexString, 0);
@@ -294,23 +312,59 @@ namespace Reanimator.Excel
                                     hashTableTableType.Add(tableHeader.tableType, 0);
                                 }
 
-                                int count = (int)hashTableIndexString[tableHeader.indexString];
+                                int count = (int)hashTableUnknown1[tableHeader.unknown1];
+                                hashTableUnknown1[tableHeader.unknown1] = count + 1;
+                                count = (int)hashTableIndexString[tableHeader.indexString];
                                 hashTableIndexString[tableHeader.indexString] = count + 1;
                                 count = (int)hashTableTableType[tableHeader.tableType];
                                 hashTableTableType[tableHeader.tableType] = count + 1;
                             }
                         }
                     }
-                    */
 
+                    Debug.Write("hashTableUnknown1\n");
+                    foreach (Int32 key in hashTableUnknown1.Keys)
+                    {
+                        Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableUnknown1[key]).ToString("X") + "(" + ((int)hashTableUnknown1[key]) + ")\n");
+                    }
+                    Debug.Write("hashTableIndexString\n");
+                    foreach (Int16 key in hashTableIndexString.Keys)
+                    {
+                        Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableIndexString[key]).ToString("X") + "(" + ((int)hashTableIndexString[key]) + ")\n");
+                    }
+                    Debug.Write("hashTableTableType\n");
+                    foreach (Int32 key in hashTableTableType.Keys)
+                    {
+                        Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableTableType[key]).ToString("X") + "(" + ((int)hashTableTableType[key]) + ")\n");
+                    }
+                    Debug.Write("\n");*/
+                }
+
+
+                // secondary string block
+                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                if (!CheckFlag(token, 0x68657863)) // 'cxeh'
+                {
+                    int stringCount = token;
+                    for (int i = 0; i < stringCount; i++)
+                    {
+                        int charCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                        String str = FileTools.ByteArrayToStringAnsi(data, offset);
+                        offset += charCount;
+                        secondaryStrings.Add(str);
+                    }
+                }
+                else
+                {
+                    offset -= 4;
                 }
 
 
                 // secondary index blocks
                 for (int i = 0; i < 4; i++)
                 {
-                    flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                    CheckFlag(flag);
+                    token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                    CheckFlag(token);
 
                     int count = FileTools.ByteArrayTo<Int32>(data, ref offset);
                     this.unknownIndicies[i] = FileTools.ByteArrayToInt32Array(data, offset, count);
@@ -319,16 +373,16 @@ namespace Reanimator.Excel
 
 
                 // unknown block
-                flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(flag);
+                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                CheckFlag(token);
 
-                flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                if (flag != 0x00)
+                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                if (token != 0x00)
                 {
                     while (true)
                     {
 
-                        if (CheckFlag(flag, 0x68736372)) // 'rcsh'
+                        if (CheckFlag(token, 0x68736372)) // 'rcsh'
                         {
                             this.rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);
                             if (this.rcshValue != 0x04)
@@ -336,7 +390,7 @@ namespace Reanimator.Excel
                                 throw new Exception("this.rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (this.rcshValue != 0x04)");
                             }
                         }
-                        else if (CheckFlag(flag, 0x68737974)) // 'tysh'
+                        else if (CheckFlag(token, 0x68737974)) // 'tysh'
                         {
                             this.tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);
                             if (this.tyshValue != 0x02)
@@ -344,12 +398,12 @@ namespace Reanimator.Excel
                                 throw new Exception("this.tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (this.tyshValue != 0x02)");
                             }
                         }
-                        else if (CheckFlag(flag, 0x6873796D)) // 'mysh'
+                        else if (CheckFlag(token, 0x6873796D)) // 'mysh'
                         {
                             offset -= 4;
                             ParseMYSHTables(data, ref offset);
                         }
-                        else if (CheckFlag(flag, 0x68656E64)) // 'dneh'
+                        else if (CheckFlag(token, 0x68656E64)) // 'dneh'
                         {
                             this.dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);
                             if (this.dnehValue != 0x00)
@@ -359,19 +413,19 @@ namespace Reanimator.Excel
                         }
                         else // 'cxeh'  -  starting next block
                         {
-                            CheckFlag(flag);
+                            CheckFlag(token);
                             offset -= 4;
                             break;
                         }
 
-                        flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                        token = FileTools.ByteArrayTo<Int32>(data, ref offset);
                     }
                 }
 
 
                 // data block
-                flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(flag);
+                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                CheckFlag(token);
                 int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                 if (byteCount != 0)
                 {
@@ -390,10 +444,10 @@ namespace Reanimator.Excel
                 // does it have a final flag chunk?
                 if (offset != data.Length)
                 {
-                    flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                    if (flag != 0)
+                    token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                    if (token != 0)
                     {
-                        CheckFlag(flag);
+                        CheckFlag(token);
 
                         byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                         int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
@@ -445,14 +499,19 @@ namespace Reanimator.Excel
             int totalAttributeCount = 0;
             int attributeCount = 0;
             int blockCount = 0;
-
+            int flagCount = 0;
             while (offset < data.Length)
             {
                 ////////////// temp fix /////////////////
                 int f = BitConverter.ToInt32(data, offset);
                 if (CheckFlag(f, 0x68657863))
                 {
+                    Debug.Write("mysh flagCount = " + flagCount + "\n");
                     break;
+                }
+                if (CheckFlag(f, 0x6873796D))
+                {
+                    flagCount++;
                 }
                 offset++;
                 continue;
