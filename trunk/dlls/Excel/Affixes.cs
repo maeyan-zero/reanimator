@@ -11,8 +11,8 @@ namespace Reanimator.Excel
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class AffixesTable
         {
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            Int32[] header;
+            //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+            TableHeader header;
             public Int32 affix;
             public Int32 unknown02;
             public Int32 alwaysApply;
