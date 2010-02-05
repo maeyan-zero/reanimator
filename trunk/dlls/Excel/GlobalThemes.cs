@@ -14,7 +14,7 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             Int32[] header;
 
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string name;
             public Int32 startMonth;
             public Int32 startDay;
