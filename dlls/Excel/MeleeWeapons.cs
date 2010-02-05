@@ -17,10 +17,10 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string name;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string name;
+            public string name2;
             public Int32 undefined1;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-            public string name;
+            public string name3;
             public Int32 undefined2;
             [ExcelTables.ExcelOutput(IsStringOffset = true)]
             public Int32 tinyHit;

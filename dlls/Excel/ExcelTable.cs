@@ -31,6 +31,17 @@ namespace Reanimator.Excel
             public Int16 unknown16_6;
         };
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        protected struct TableHeader
+        {
+            public Int32 unknown1;
+            public Int32 tableType;
+            public Int16 indexString;
+            public Int16 unknown3;
+            public Int16 unknown4;
+            public Int16 unknown5;
+        }
+
         protected byte[] excelData;
         protected int offset;
         protected ExcelHeader excelHeader;
@@ -92,7 +103,7 @@ namespace Reanimator.Excel
                  * tableCount                           Int32                                   // Count of tables.
                  * {                                                                            // Each table has the same first header 16 byte chunk style.
                  *      unknown                         Int32                                   // Seen as 0x01, 0x02 or 0x03.
-                 *      unknown                         Int32                                   // Seen as 0x3C, 0x3E or 0x3F.
+                 *      type                            Int32                                   // Seen as 0x30, 0x3C, 0x3E or 0x3F.
                  *      unknown                         Int32                                   // Appears to always be 0xFFFF0000.     // These two are possibly
                  *      unknown                         Int32                                   // Appears to always be 0xFFFF0000.     // 4x Int16
                  *      *****                           *****                                   // Table type dependent; see applicable table structure class file.
@@ -107,8 +118,8 @@ namespace Reanimator.Excel
                  * 
                  ***** Secondary Index Block 1 ***** (8 + indexCount * 4) bytes                 // Unsure what these do.
                  * flag                                 Int32                                   // Must be 0x68657863 ('cxeh'). 
-                 * indexCount                           Int32
-                 * {
+                 * indexCount                           Int32                                   // For every table that doesn't have 0x30 as its type,
+                 * {                                                                            // has a secondary index.
                  *      unknownValue                    Int32
                  * }
                  * 
@@ -259,6 +270,39 @@ namespace Reanimator.Excel
                 {
                     tableIndicies = FileTools.ByteArrayToInt32Array(data, offset, Count);
                     offset += Count * sizeof(Int32);
+
+                    /*
+                    Hashtable hashTableIndexString = new Hashtable();
+                    Hashtable hashTableTableType = new Hashtable();
+
+                    foreach (Object table in tables)
+                    {
+                        Type type = table.GetType();
+                        FieldInfo fieldInfo = type.GetField("header", BindingFlags.NonPublic | BindingFlags.Instance);
+                        if (fieldInfo != null)
+                        {
+                            if (fieldInfo.FieldType == typeof(TableHeader))
+                            {
+                                TableHeader tableHeader = (TableHeader)fieldInfo.GetValue(table);
+
+                                if (!hashTableIndexString.ContainsKey(tableHeader.indexString))
+                                {
+                                    hashTableIndexString.Add(tableHeader.indexString, 0);
+                                }
+                                if (!hashTableTableType.ContainsKey(tableHeader.tableType))
+                                {
+                                    hashTableTableType.Add(tableHeader.tableType, 0);
+                                }
+
+                                int count = (int)hashTableIndexString[tableHeader.indexString];
+                                hashTableIndexString[tableHeader.indexString] = count + 1;
+                                count = (int)hashTableTableType[tableHeader.tableType];
+                                hashTableTableType[tableHeader.tableType] = count + 1;
+                            }
+                        }
+                    }
+                    */
+
                 }
 
 
@@ -332,8 +376,8 @@ namespace Reanimator.Excel
                 if (byteCount != 0)
                 {
                     if (this.excelHeader.structureId == 0x1F9DDC98)         // Only seen in unittypes.txt.cooked so far.
-                    {                                                       // This block reading method is the same as first seend below in the
-                                                                            // states.txt.cooked, but there is no previous data block for unittypes.txt.cooked.
+                    {                                                       // This block reading method is the same as first seen below in the states.txt.cooked,
+                        // but there is no data in the previous block for unittypes.txt.cooked.
                         int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                         byteCount = (byteCount << 2) * blockCount;                              // No idea where they drempt this up,
                     }
