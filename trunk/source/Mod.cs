@@ -5,9 +5,13 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Reanimator
 {
+#pragma warning disable 0169
+#pragma warning disable 0649
     static class Mod
     {
         private static List<Modification> modification;
@@ -129,4 +133,6 @@ namespace Reanimator
             public bool bitwise;
         }
     }
+#pragma warning restore 0169
+#pragma warning restore 0649
 }
