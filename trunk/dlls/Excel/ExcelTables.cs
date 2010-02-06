@@ -223,6 +223,8 @@ namespace Reanimator.Excel
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
             excelTables.AddTable("PROPERTIES", null, typeof(Excel.Properties));
             excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
+            excelTables.AddTable("PROPS", null, typeof(Excel.LevelsRoomIndex));
+            excelTables.AddTable("QUEST", null, typeof(Excel.Quest));
             excelTables.AddTable("QUEST_STATE_VALUE", null, typeof(Excel.BookMarks));
             excelTables.AddTable("QUEST_STATUS", null, typeof(Excel.QuestStatus));
             excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
