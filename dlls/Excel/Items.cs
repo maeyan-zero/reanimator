@@ -585,21 +585,21 @@ namespace Reanimator.Excel
             public Int32 sellPriceMult;//intptr
             public Int32 sellPriceAdd;//intptr
             public Int32 inventoryWardrobe;//index
-            Int32 characterScreenWardrobe;      // always -1
-            Int32 characterScreenState;      // always -1
-            Int32 wardrobeBody;      // always -1
-            Int32 wardrobeFallback;      // always -1
-            Int32 wardrobeUnkown1;      // always -1
-            Int32 wardrobeMip;      // always 0
-            Int32 wardrobeAppearanceGroup;      // always -1
-            Int32 wardrobeAppearanceGroup1st;      // always -1
-            Int32 startingStance;      // always -1
+            public Int32 characterScreenWardrobe;      // always -1
+            public Int32 characterScreenState;      // always -1
+            public Int32 wardrobeBody;      // always -1
+            public Int32 wardrobeFallback;      // always -1
+            public Int32 wardrobeUnkown1;      // always -1
+            public Int32 wardrobeMip;      // always 0
+            public Int32 wardrobeAppearanceGroup;      // always -1
+            public Int32 wardrobeAppearanceGroup1st;      // always -1
+            public Int32 startingStance;      // always -1
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
             byte[] unknownBytes06;
             public Int32 containerUnitType1;
             public Int32 containerUnitType2;
-            Int32 containerUnitType3;      // always 0
-            Int32 containerUnitType4;      // always 0
+            public Int32 containerUnitType3;      // always 0 but we could use them
+            public Int32 containerUnitType4;      // always 0
             public Int32 firingErrorIncrease;
             public Int32 firingErrorDecrease;
             public Int32 firingErrorMax;

@@ -200,6 +200,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("MONLEVEL", null, typeof(Excel.MonLevel));
             excelTables.AddTable("MONSCALING", null, typeof(Excel.MonScaling));
             excelTables.AddTable("MONSTER_NAME_TYPES", "MONSTERNAMETYPES", typeof(Excel.MonsterNameTypes));
+            excelTables.AddTable("MONSTER_NAMES", "MONSTERNAMES", typeof(Excel.MonsterNames));
             excelTables.AddTable("MONSTERS", null, typeof(Excel.Items));
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
