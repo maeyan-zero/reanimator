@@ -215,6 +215,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("MUSICSTINGERSETS", null, typeof(Excel.MusicStingerSets));
             excelTables.AddTable("NPC", null, typeof(Excel.Npc));
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
+            excelTables.AddTable("OBJECTTRIGGERS", null, typeof(Excel.ObjectTriggers));
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
             excelTables.AddTable("PROPERTIES", null, typeof(Excel.Properties));
             excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
