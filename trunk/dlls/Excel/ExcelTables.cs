@@ -206,6 +206,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("MOVIE_SUBTITLES", "MOVIESUBTITLES", typeof(Excel.MovieSubTitles));
             excelTables.AddTable("MOVIELISTS", null, typeof(Excel.MovieLists));
             excelTables.AddTable("MOVIES", null, typeof(Excel.Movies));
+            excelTables.AddTable("MUSIC", null, typeof(Excel.Music));
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
             excelTables.AddTable("PROPERTIES", null, typeof(Excel.Properties));
