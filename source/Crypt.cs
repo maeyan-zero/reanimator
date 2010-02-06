@@ -7,50 +7,67 @@ namespace Reanimator
 {
     class Crypt
     {
-        struct Encryption
+        class CryptState
         {
             public const int key1 = 0x10DCD;
             public const int key2 = 0xF4559D5;
             public const int key3 = 666;
+            public const int blockSize = 32;
+
+            public Byte[] Data { get; set; }
+            public Byte[] Table { get; set; }
+
+            public UInt32 Offset { get; set; }
+            public UInt32 BlockIndex { get; set; }
+            public Int32 Size { get { return Data.Length; } }
+
+            public CryptState(byte[] indexBuffer)
+            {
+                Data = indexBuffer;
+                BlockIndex = 0xFFFFFFFF;
+                Table = new Byte[CryptState.blockSize * sizeof(Int32)];
+            }
         }
 
-        public static byte Routine(int offset)
+        static byte GetCryptByte(CryptState cryptState)
         {
-            int blockSize = 32;
-            int blockIndex = -1;
-            int value = 0;
-            byte[] bytes = new byte[sizeof(int)];
-            byte[] table = new byte[blockSize * sizeof(int)];
+            UInt32 value = cryptState.Offset / (CryptState.blockSize * sizeof(Int32)) * (CryptState.blockSize * sizeof(Int32));
 
-            blockIndex = offset / (blockSize * sizeof(int)) * (blockSize * sizeof(int));
-            value = blockIndex + Encryption.key3;
-
-            for (int i = 0; i < blockSize; i++)
+            if (cryptState.BlockIndex != value)
             {
-                value = (value * Encryption.key1) + Encryption.key2;
-                bytes = BitConverter.GetBytes(value);
-                Array.Copy(bytes, 0, table, i * 4, 4);
+                cryptState.BlockIndex = value;
+                value += CryptState.key3;
+                for (int i = 0; i < CryptState.blockSize; i++)
+                {
+                    value = (value * CryptState.key1) + CryptState.key2;
+                    byte[] bytes = BitConverter.GetBytes(value);
+                    Buffer.BlockCopy(bytes, 0, cryptState.Table, i * sizeof(UInt32), bytes.Length);
+                }
             }
 
-            return table[offset - blockIndex];
+            return cryptState.Table[cryptState.Offset - cryptState.BlockIndex];
         }
 
         public static void Decrypt(byte[] indexBuffer)
         {
-            for (int i = 0; i < indexBuffer.Length; i++)
+            CryptState cryptState = new CryptState(indexBuffer);
+
+            while (cryptState.Offset < cryptState.Size)
             {
-                indexBuffer[i] -= Routine(i);
+                cryptState.Data[cryptState.Offset] -= Crypt.GetCryptByte(cryptState);
+                cryptState.Offset++;
             }
-            Console.WriteLine("Finished Decrypting Index.");
         }
 
         public static void Encrypt(byte[] indexBuffer)
         {
-            for (int i = 0; i < indexBuffer.Length; i++)
+            CryptState cryptState = new CryptState(indexBuffer);
+
+            while (cryptState.Offset < cryptState.Size)
             {
-                indexBuffer[i] += Routine(i);
+                cryptState.Data[cryptState.Offset] += Crypt.GetCryptByte(cryptState);
+                cryptState.Offset++;
             }
-            Console.WriteLine("Finished Encrypting Index.");
         }
     }
 }
