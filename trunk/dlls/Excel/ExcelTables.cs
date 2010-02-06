@@ -233,6 +233,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("RARENAMES", null, typeof(Excel.RareNames));
             excelTables.AddTable("RECIPELISTS", null, typeof(Excel.RecipeLists));
             excelTables.AddTable("RECIPES", null, typeof(Excel.Recipes));
+            excelTables.AddTable("SKILLGROUPS", null, typeof(Excel.SkillGroups));
             excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
             excelTables.AddTable("SKILLEVENTTYPES", null, typeof(Excel.SkillEventTypes));
             excelTables.AddTable("STATE_EVENT_TYPES", null, typeof(Excel.StateEventTypes));
