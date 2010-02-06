@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -29,6 +29,38 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -141,11 +173,28 @@
     <Compile Include="ObjectTriggers.cs" />
     <Compile Include="Offer.cs" />
     <Compile Include="PlayerLevels.cs" />
+    <Compile Include="PlayerRace.cs" />
     <Compile Include="Procs.cs" />
     <Compile Include="Properties.cs" />
+    <Compile Include="Quest.cs" />
+    <Compile Include="QuestCast.cs" />
+    <Compile Include="QuestState.cs" />
     <Compile Include="QuestStatus.cs" />
+    <Compile Include="QuestTemplate.cs" />
+    <Compile Include="RareNames.cs" />
+    <Compile Include="RecipeLists.cs" />
+    <Compile Include="Recipes.cs" />
     <Compile Include="SkillEventTypes.cs" />
+    <Compile Include="SkillGroups.cs" />
     <Compile Include="Skills.cs" />
+    <Compile Include="SkillTabs.cs" />
+    <Compile Include="Sku.cs" />
+    <Compile Include="SoundBuses.cs" />
+    <Compile Include="SoundMixStates.cs" />
+    <Compile Include="SoundMixStateValues.cs" />
+    <Compile Include="Sounds.cs" />
+    <Compile Include="SoundVideoCasets.cs" />
+    <Compile Include="SpawnClass.cs" />
     <Compile Include="StateEventTypes.cs" />
     <Compile Include="StateLighting.cs" />
     <Compile Include="States.cs">
@@ -155,6 +204,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StatsFunc.cs" />
+    <Compile Include="StringsFiles.cs" />
+    <Compile Include="SubLevel.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="Treasure.cs" />
     <Compile Include="UIComponent.cs" />
