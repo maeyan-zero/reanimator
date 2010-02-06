@@ -240,6 +240,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("SKU", null, typeof(Excel.Sku));
             excelTables.AddTable("SOUNDBUSES", null, typeof(Excel.SoundBuses));
             excelTables.AddTable("SOUNDMIXSTATES", null, typeof(Excel.SoundMixStates));
+            excelTables.AddTable("SOUNDMIXSTATEVALUES", null, typeof(Excel.SoundMixStateValues));
             excelTables.AddTable("STATE_EVENT_TYPES", null, typeof(Excel.StateEventTypes));
             excelTables.AddTable("STATE_LIGHTING", null, typeof(Excel.StateLighting));
             excelTables.AddTable("STATES", null, typeof(Excel.States));
