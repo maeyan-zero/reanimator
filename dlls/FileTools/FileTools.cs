@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 namespace Reanimator
 {
     public class FileTools
-    {
+    {/*
         public static byte[] Extract(FileStream dataBuffer, int offset, int compressedSize, int uncompressedSize)
         {
             if (compressedSize > 0)
@@ -35,7 +35,7 @@ namespace Reanimator
             byte[] buffer2 = StreamToByteArray(ms);
             return buffer2;
         }
-
+        */
         public static byte[] StreamToByteArray(Stream stream)
         {
             using (MemoryStream ms = new MemoryStream())

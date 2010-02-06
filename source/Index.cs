@@ -3,11 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Reanimator
 {
     public class Index : IDisposable
     {
+        [DllImport("zlibwapi86.dll")]
+        private static extern int uncompress
+            (
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] destinationBuffer,
+            [MarshalAs(UnmanagedType.U4)]
+            ref UInt32 destinationLength,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] sourceBuffer,
+            [MarshalAs(UnmanagedType.U4)]
+            UInt32 sourceLength
+            );
+
+        [DllImport("zlibwapi64.dll")]
+        private static extern int uncompress
+            (
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] destinationBuffer,
+            [MarshalAs(UnmanagedType.U8)]
+            ref UInt64 destinationLength,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] sourceBuffer,
+            [MarshalAs(UnmanagedType.U8)]
+            UInt64 sourceLength
+            );
+
+
         struct Token
         {
             public static readonly byte[] head = new byte[] { 110, 105, 103, 104 };
@@ -107,7 +136,7 @@ namespace Reanimator
         static string[] stringTable;
         FileIndex[] fileTable;
 
-        public struct FileIndex
+        public class FileIndex
         {
             int offset;
             public int Offset
@@ -158,7 +187,7 @@ namespace Reanimator
 
             Crypt.Decrypt(buffer);
 
-            //just ignore me, I was curious
+           // just ignore me, I was curious
             //FileStream fOut = new FileStream("out.idx", FileMode.Create);
             //fOut.Write(buffer, 0, buffer.Length);
 
@@ -202,6 +231,7 @@ namespace Reanimator
 
             for (int i = 0; i < fileCount; i++)
             {
+                fileTable[i] = new FileIndex();
                 fileTable[i].Offset = fileDataOffset + (i * fileStructLength) + 12;
                 fileTable[i].UncompressedSize = fileDataOffset + (i * fileStructLength) + 20;
                 fileTable[i].CompressedSize = fileDataOffset + (i * fileStructLength) + 24;
@@ -254,21 +284,39 @@ namespace Reanimator
                 return null;
             }
 
-            // Yes, this needs to be recreated for each file - it was having a fit when I didn't
-            ManagedZLib.Decompress decompress = new ManagedZLib.Decompress(datFile);
-            byte[] buffer = new byte[file.UncompressedSize];
+            int result = -1;
+            byte[] destBuffer = new byte[file.UncompressedSize];
+            byte[] srcBuffer = new byte[file.CompressedSize];
             datFile.Seek(file.Offset, SeekOrigin.Begin);
-            if (file.CompressedSize == 0)
+            datFile.Read(srcBuffer, 0, srcBuffer.Length);
+            if (IntPtr.Size == 4)
             {
-                decompress.Read(buffer, 0, 0);
+                uint len = (uint)file.UncompressedSize;
+                result = uncompress(destBuffer, ref len, srcBuffer, (uint)file.CompressedSize);
             }
             else
             {
-                decompress.Read(buffer, 0, file.UncompressedSize);
+                ulong len = (uint)file.UncompressedSize;
+                result = uncompress(destBuffer, ref len, srcBuffer, (uint)file.CompressedSize);
             }
 
-            return buffer;
+            if (result != 0)
+            {
+                return null;
+            }
+
+            return destBuffer;
         }
+
+        public byte[] GenerateIndexFile()
+        {
+            byte[] buffer = new byte[1024];
+            int offset = 0;
+
+            return null;
+        }
+
+
 
         public void Dispose()
         {
