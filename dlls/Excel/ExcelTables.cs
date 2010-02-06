@@ -230,6 +230,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("QUEST_STATE_VALUE", null, typeof(Excel.BookMarks));
             excelTables.AddTable("QUEST_STATUS", null, typeof(Excel.QuestStatus));
             excelTables.AddTable("QUEST_TEMPLATE", null, typeof(Excel.QuestTemplate));
+            excelTables.AddTable("RARENAMES", null, typeof(Excel.RareNames));
             excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
             excelTables.AddTable("SKILLEVENTTYPES", null, typeof(Excel.SkillEventTypes));
             excelTables.AddTable("STATE_EVENT_TYPES", null, typeof(Excel.StateEventTypes));
