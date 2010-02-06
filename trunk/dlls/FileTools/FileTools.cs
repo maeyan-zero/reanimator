@@ -149,7 +149,7 @@ namespace Reanimator
             return -1;
         }
 
-        public static byte[] StructureToByteArray(object obj)
+        public static byte[] StructureToByteArray(Object obj)
         {
             int length = Marshal.SizeOf(obj);
             byte[] byteArray = new byte[length];
@@ -165,6 +165,13 @@ namespace Reanimator
         public static byte[] StringToUnicodeByteArray(string str)
         {
             return UnicodeEncoding.Unicode.GetBytes(str);
+        }
+
+        public static byte[] WriteToBuffer(byte[] buffer, Object toWrite)
+        {
+            byte[] toWriteData = FileTools.StructureToByteArray(toWrite);
+
+            return null;
         }
     }
 }
