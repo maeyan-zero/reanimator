@@ -219,6 +219,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("OFFER", null, typeof(Excel.Offer));
             excelTables.AddTable("PETLEVEL", null, typeof(Excel.MonLevel));
             excelTables.AddTable("PLAYERLEVELS", null, typeof(Excel.PlayerLevels));
+            excelTables.AddTable("PLAYERRACE", null, typeof(Excel.PlayerRace));
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
             excelTables.AddTable("PROPERTIES", null, typeof(Excel.Properties));
             excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
