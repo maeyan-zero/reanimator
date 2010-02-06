@@ -72,7 +72,7 @@ namespace Reanimator
          * {
          *      token                           Int32                                   // Must be 0x6867696F ('oigh').
          *      unknown                         Int32                                   // Not required for valid game loading (can be null).
-         *      unknown                         Int32                                   // REQUIRED for valid game loading! // game freezes (??)
+         *      unknown                         Int32                                   // REQUIRED for valid game loading! // Must be a specific value... What?
          *      dataOffset                      Int32                                   // Offset in bytes within accompanying .dat file.
          *      null                            Int32
          *      uncompressedSize                Int32
@@ -80,7 +80,7 @@ namespace Reanimator
          *      null                            Int32
          *      directoryArrayPosition          Int32
          *      filenameArrayPosition           Int32
-         *      unknown                         Int32                                   // REQUIRED for valid game loading!  // game clears .idx and .dat (crc?)
+         *      unknown                         Int32                                   // REQUIRED for valid game loading! // Game clears .idx and .dat if null (can be anything but null).
          *      unknown                         Int32                                   // Not required for valid game loading (can be null).
          *      unknown                         Int32                                   // Not required for valid game loading (can be null).
          *      unknown                         Int32                                   // Not required for valid game loading (can be null).
@@ -210,8 +210,8 @@ namespace Reanimator
             Crypt.Decrypt(buffer);
 
            // just ignore me, I was curious
-            //FileStream fOut = new FileStream("out.idx", FileMode.Create);
-            //fOut.Write(buffer, 0, buffer.Length);
+            FileStream fOut = new FileStream("out.idx", FileMode.Create);
+            fOut.Write(buffer, 0, buffer.Length);
 
             structCount = BitConverter.ToInt32(buffer, 4);
             fileCount = BitConverter.ToInt32(buffer, 8);
@@ -374,7 +374,8 @@ namespace Reanimator
                 // final version will be similar to reading - dumping struct using MarshalAs
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.info);
                 offset += 4; // unknown  -  not required
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_2); // game freezes if null
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_2); // game freezes if not correct value
+                
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);
@@ -382,7 +383,7 @@ namespace Reanimator
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Directory);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Filename);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_1); // game clears .idx and .dat if null
+                FileTools.WriteToBuffer(ref buffer, ref offset, (UInt32)1); // game clears .idx and .dat if null
                 offset += 12; // unknown  -  not required
                 offset += 12; // null
                 offset += 8; // first 8 bytes  -  not required
