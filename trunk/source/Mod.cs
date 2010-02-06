@@ -4,75 +4,187 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
+using System.IO;
 
 namespace Reanimator
 {
-    class Mod
+    static class Mod
     {
-        public static void Parse(string path)
+        private static List<Modification> modification;
+
+        public static bool Parse(string xml)
         {
-            XmlTextReader r = new XmlTextReader(path);
-            XmlValidatingReader v = new XmlValidatingReader(r);
-
-            v.ValidationType = ValidationType.Schema;
-            v.ValidationEventHandler += new ValidationEventHandler(ValidationEventHandler);
-
-            while(v.Read())
+            try
             {
-                switch (v.NodeType)
+                // Add the XSD FileStream
+                FileStream xsdStream;
+                xsdStream = new FileStream("..//..//source//ModSchema.xsd", FileMode.Open);
+                
+                // Add the XML Schema using the above stream
+                XmlSchema xmlSchema;
+                xmlSchema = XmlSchema.Read(xsdStream, null);
+
+                // Add XML Reader Settings
+                XmlReaderSettings xmlReaderSettings;
+                xmlReaderSettings = new XmlReaderSettings()
                 {
-                    case XmlNodeType.Element: // The node is an element.
-                        Console.Write("<" + v.Name);
-                        Console.WriteLine(">");
-                        break;
-                    case XmlNodeType.Text: //Display the text in each element.
-                        Console.WriteLine(v.Value);
-                        break;
-                    case XmlNodeType.EndElement: //Display the end of the element.
-                        Console.Write("</" + v.Name);
-                        Console.WriteLine(">");
-                        break;
+                    ValidationType = ValidationType.Schema
+                };
+
+                // Append the Schema above
+                xmlReaderSettings.Schemas.Add(xmlSchema);
+
+                // Add the XML FileStream
+                FileStream xmlStream;
+                xmlStream = new FileStream(xml, FileMode.Open);
+
+                // Add the XML Reader using the stream and setting above
+                XmlReader xmlReader;
+                xmlReader = XmlReader.Create(xmlStream, xmlReaderSettings);
+
+                // Parse the document
+                using (xmlReader)
+                {
+                    while (xmlReader.Read())
+                    {
+                        switch (xmlReader.Name)
+                        {
+                            case "revival":
+                                xmlReader.Read();
+                                modification = new List<Modification>();
+                                break;
+                            case "modification":
+                                xmlReader.Read();
+                                modification.Add(new Modification());
+                                break;
+                            case "title":
+                                xmlReader.Read();
+                                modification.Last().title = xmlReader.Value;
+                                break;
+                            case "description":
+                                xmlReader.Read();
+                                modification.Last().description = xmlReader.Value;
+                                break;
+                            case "version":
+                                xmlReader.Read();
+                                modification.Last().version = xmlReader.Value;
+                                break;
+                            case "pack":
+                                xmlReader.Read();
+                                modification.Last().pack.Add(new Pack(xmlReader["id"]));
+                                break;
+                            case "file":
+                                xmlReader.Read();
+                                modification.Last().pack.Last().file.Add(new File(xmlReader["id"]));
+                                break;
+                            case "modify":
+                                xmlReader.Read();
+                                break;
+                            case "entity":
+                                xmlReader.Read();
+                                modification.Last().pack.Last().file.Last().modify.entity.Add(new Entity(xmlReader["id"]));
+                                break;
+                            case "attribute":
+                                xmlReader.Read();
+                                modification.Last().pack.Last().file.Last().modify.entity.Last().attribute.Add(new Attribute(xmlReader["id"]));
+                                break;
+                            case "replace":
+                                xmlReader.Read();
+                                modification.Last().pack.Last().file.Last().modify.entity.Last().attribute.Last().replace = xmlReader.Value;
+                                break;
+                            case "bitwise":
+                                xmlReader.Read();
+                                modification.Last().pack.Last().file.Last().modify.entity.Last().attribute.Last().bit = xmlReader["id"];
+                                modification.Last().pack.Last().file.Last().modify.entity.Last().attribute.Last().flip = xmlReader.Value;
+                                break;
+                        }
+                    }
                 }
-            }
-            v.Close();
 
-            if (isValid)
+                // Validation Success
+                return true;
+            }
+            catch (Exception e)
             {
-                Console.WriteLine("Document is valid");
+                // Validation Failed
+                Console.WriteLine(e.Message);
+                return false;
             }
-            else
-            {
-                Console.WriteLine("Document is invalid");
-            }
-
         }
 
-        public static void ValidationEventHandler(object sender, ValidationEventArgs args)
-        {
-            isValid = false;
-            Console.WriteLine("Validation event\n" + args.Message);
-        }
-
-        static bool isValid = true;
-
-        enum Function
-        {
-
-        }
-#pragma warning disable 0649
         class Modification
         {
+            public Modification()
+            {
+                pack = new List<Pack>();
+            }
             public string title;
-            public string description;
             public string version;
-            public string pack;
-            public string file;
-            public Function function;
-            public int action;
-            public int col;
-            public int row;
-            public object data;
+            public string description;
+            public List<Pack> pack;
         }
-#pragma warning restore 0649
+
+        public class Pack
+        {
+            public Pack(String id)
+            {
+                file = new List<File>();
+                pack = id;
+            }
+            public string getPackDat()
+            {
+                return pack + ".dat";
+            }
+            public string getPackIdx()
+            {
+                return pack + ".idx";
+            }
+            public string pack;
+            public List<File> file;
+        }
+
+        public class File
+        {
+            public File(String id)
+            {
+                modify = new Modify();
+                file = id;
+            }
+            public string file;
+            public string replace;
+            public Modify modify;
+        }
+
+        public class Modify
+        {
+            public Modify()
+            {
+                entity = new List<Entity>();
+            }
+            public List<Entity> entity;
+        }
+
+        public class Entity
+        {
+            public Entity(String id)
+            {
+                attribute = new List<Attribute>();
+                entity = id;
+            }
+            public string entity;
+            public List<Attribute> attribute;
+        }
+
+        public class Attribute
+        {
+            public Attribute(String id)
+            {
+                attribute = id;
+            }
+            public string attribute;
+            public object replace;
+            public string bit;
+            public string flip;
+        }
     }
 }

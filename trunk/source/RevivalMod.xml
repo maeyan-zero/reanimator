@@ -3,28 +3,17 @@
          xsi:noNamespaceSchemaLocation="ModSchema.xsd">
   <modification>
     <title>Revival SP modification</title>
-    <description>This is the base SP modification developed by the Revival team.</description>
     <version>1.1.0</version>
-    <pack id="hellgate000">
-      <file id="gameglobals.txt.cooked">
-        <replace>
-          <path>./gameglobals.txt.cooked</path>
-        </replace>
-      </file>
+    <description>This is the base SP modification developed by the Revival team.</description>
+    <pack id="sp_hellgate_1.10.180.3416_1.18074.70.4256">
       <file id="items.txt.cooked">
         <modify>
           <entity id="black_knight_dye">
             <attribute id="affix1">
-              <replace>
-                <data>all_attributes_3</data>
-              </replace>
+              <replace>all_attributes_3</replace>
             </attribute>
             <attribute id="property_mask">
-              <bitwise>
-                <bit id="can_vendor">
-                  <flip>yes</flip>
-                </bit>
-              </bitwise>
+              <bitwise id="can_vendor">yes</bitwise>
             </attribute>
           </entity>
         </modify>
