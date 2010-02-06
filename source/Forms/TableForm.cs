@@ -337,5 +337,10 @@ namespace Reanimator
         {
             SelectAllEntries(false);
         }
+
+        public void SaveButton()
+        {
+            byte[] saveData = index.GenerateIndexFile();
+        }
     }
 }

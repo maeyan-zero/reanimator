@@ -39,9 +39,9 @@ namespace Reanimator
 
         struct Token
         {
-            public static readonly byte[] head = new byte[] { 110, 105, 103, 104 };
-            public static readonly byte[] sect = new byte[] { 115, 112, 103, 104 };
-            public static readonly byte[] info = new byte[] { 111, 105, 103, 104 };
+            public static readonly UInt32 head = 0x6867696E; // 'nigh'
+            public static readonly UInt32 sect = 0x68677073; // 'spgh'
+            public static readonly UInt32 info = 0x6867696F; // 'oigh'
         }
 
         /* Index File Structure Layout
@@ -118,10 +118,10 @@ namespace Reanimator
         //0076 0079		111, 105, 103, 104  // TOKEN
         //END REPEAT
 
-        int structCount;         // offset 4
-        int fileCount;           // offset 8
-        int stringCount;         // offset 16
-        int characterCount;      // offset 20
+        Int32 structCount;         // offset 4
+        Int32 fileCount;           // offset 8
+        Int32 stringCount;         // offset 16
+        Int32 characterCount;      // offset 20
 
         int stringDataOffset;
         int stringLengthOffset;
@@ -132,52 +132,52 @@ namespace Reanimator
 
         FileStream indexFile;
         FileStream datFile;
-        static byte[] buffer;
-        static string[] stringTable;
+        byte[] buffer;
+        string[] stringTable;
         FileIndex[] fileTable;
 
         public class FileIndex
         {
             int offset;
-            public int Offset
+            public int Offset { get; set; }/*
             {
                 set { offset = value; }
                 get { return BitConverter.ToInt32(buffer, offset); }
-            }
+            }*/
 
             int uncompressedSize;
-            public int UncompressedSize
+            public int UncompressedSize { get; set; }/*
             {
                 set { uncompressedSize = value; }
                 get { return BitConverter.ToInt32(buffer, uncompressedSize); }
-            }
+            }*/
 
             int compressedSize;
-            public int CompressedSize
+            public int CompressedSize { get; set; }/*
             {
                 set { compressedSize = value; }
                 get { return BitConverter.ToInt32(buffer, compressedSize); }
-            }
+            }*/
 
             int directory;
-            public int Directory
+            public int Directory { get; set; }/*
             {
                 set { directory = value; }
-            }
-            public string DirectoryString
+            }*/
+            public string DirectoryString { get; set; }/*
             {
                 get { return stringTable[BitConverter.ToInt32(buffer, directory)]; }
-            }
+            }*/
 
             int filename;
-            public int Filename
+            public int Filename { get; set; } /*
             {
                 set { filename = value; }
-            }
-            public string FilenameString
+            }*/
+            public string FilenameString { get; set; } /*
             {
                 get { return stringTable[BitConverter.ToInt32(buffer, filename)]; }
-            }
+            }*/
         }
 
         public Index(FileStream file)
@@ -188,7 +188,7 @@ namespace Reanimator
             Crypt.Decrypt(buffer);
 
            // just ignore me, I was curious
-            //FileStream fOut = new FileStream("out.idx", FileMode.Create);
+           // FileStream fOut = new FileStream("out.idx", FileMode.Create);
             //fOut.Write(buffer, 0, buffer.Length);
 
             structCount = BitConverter.ToInt32(buffer, 4);
@@ -197,8 +197,8 @@ namespace Reanimator
             characterCount = BitConverter.ToInt32(buffer, 20);
 
             stringDataOffset = 24;
-            stringLengthOffset = stringDataOffset + characterCount + Token.sect.Length;
-            fileDataOffset = stringLengthOffset + (stringStructLength * stringCount) + Token.sect.Length;
+            stringLengthOffset = stringDataOffset + characterCount + sizeof(UInt32);
+            fileDataOffset = stringLengthOffset + (stringStructLength * stringCount) + sizeof(UInt32);
 
             InitializeStringTable();
             InitializeFileTable();
@@ -237,6 +237,8 @@ namespace Reanimator
                 fileTable[i].CompressedSize = fileDataOffset + (i * fileStructLength) + 24;
                 fileTable[i].Directory = fileDataOffset + (i * fileStructLength) + 32;
                 fileTable[i].Filename = fileDataOffset + (i * fileStructLength) + 36;
+                fileTable[i].DirectoryString = stringTable[BitConverter.ToInt32(buffer, fileTable[i].Directory)];
+                fileTable[i].FilenameString = stringTable[BitConverter.ToInt32(buffer, fileTable[i].Filename)];
             }
         }
 
@@ -310,13 +312,43 @@ namespace Reanimator
 
         public byte[] GenerateIndexFile()
         {
+            return null;
             byte[] buffer = new byte[1024];
             int offset = 0;
 
+
+            // main header
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.head);
+            FileTools.WriteToBuffer(ref buffer, ref offset, (Int32)4);
+            FileTools.WriteToBuffer(ref buffer, ref offset, this.fileCount);
+
+
+            // string block
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, this.stringCount);
+            int stringByteCountOffset = offset;
+            offset += 4;
+            foreach (String str in this.stringTable)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(str));
+                offset++; // \0
+            }
+            FileTools.WriteToBuffer(ref buffer, stringByteCountOffset, (UInt32)offset - stringByteCountOffset);
+
+
+            // string data
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
+            foreach (String str in this.stringTable)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
+                offset += 4; // unknown - leaving as null for now
+            }
+
+
+            // file block
+
             return null;
         }
-
-
 
         public void Dispose()
         {

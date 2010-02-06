@@ -162,16 +162,38 @@ namespace Reanimator
             return byteArray;
         }
 
-        public static byte[] StringToUnicodeByteArray(string str)
+        public static byte[] StringToUnicodeByteArray(String str)
         {
             return UnicodeEncoding.Unicode.GetBytes(str);
         }
 
-        public static byte[] WriteToBuffer(byte[] buffer, Object toWrite)
+        public static byte[] StringToASCIIByteArray(String str)
         {
-            byte[] toWriteData = FileTools.StructureToByteArray(toWrite);
+            return ASCIIEncoding.ASCII.GetBytes(str);
+        }
 
-            return null;
+        public static void WriteToBuffer(ref byte[] buffer, int offset, Object toWrite)
+        {
+            WriteToBuffer(ref buffer, ref offset, toWrite);
+        }
+
+        public static void WriteToBuffer(ref byte[] buffer, ref int offset, Object toWrite)
+        {
+            byte[] toWriteBytes = toWrite as byte[];
+            if (toWriteBytes == null)
+            {
+                toWriteBytes = FileTools.StructureToByteArray(toWrite);
+            }
+
+            if (offset + toWriteBytes.Length > buffer.Length)
+            {
+                byte[] newBuffer = new byte[buffer.Length + 1024];
+                Buffer.BlockCopy(buffer, 0, newBuffer, 0, buffer.Length);
+                buffer = newBuffer;
+            }
+
+            Buffer.BlockCopy(toWriteBytes, 0, buffer, offset, toWriteBytes.Length);
+            offset += toWriteBytes.Length;
         }
     }
 }

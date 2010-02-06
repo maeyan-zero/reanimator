@@ -532,12 +532,10 @@ namespace Reanimator
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
             TableForm tableForm = this.ActiveMdiChild as TableForm;
-            if (tableForm == null)
+            if (tableForm != null)
             {
-                return;
+                tableForm.SaveButton();
             }
-
-
         }
     }
 }
