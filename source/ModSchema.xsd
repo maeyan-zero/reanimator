@@ -1,94 +1,130 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-<xs:element name="revival">
-  <xs:complexType>
-    <xs:sequence>
-      <xs:element name="modification">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="description" type="xs:string" maxOccurs="1"/>
-            <xs:element name="version" type="xs:string" maxOccurs="1"/>
-            <xs:element name="pack">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element name="file" maxOccurs="unbounded">
-                    <xs:complexType>
-                      <xs:sequence>
-                        <xs:element name="replace" minOccurs="0">
-                          <xs:complexType>
-                            <xs:sequence>
-                              <xs:element name="path">
-                                <xs:simpleType>
-                                  <xs:restriction base="xs:string"/>
-                                </xs:simpleType>
-                              </xs:element>
-                            </xs:sequence>
-                          </xs:complexType>
-                        </xs:element>
-                        <xs:element name="modify" minOccurs="0" maxOccurs="unbounded">
-                          <xs:complexType>
-                            <xs:sequence>
-                              <xs:element name="entity" minOccurs="1" maxOccurs="unbounded">
-                                <xs:complexType>
-                                  <xs:sequence>
-                                    <xs:element name="attribute" minOccurs="1" maxOccurs="unbounded">
-                                      <xs:complexType>
-                                        <xs:sequence>
-                                          <xs:element name="replace" minOccurs="0">
-                                            <xs:complexType>
-                                              <xs:sequence>
-                                                <xs:element name="data" minOccurs="1" maxOccurs="1"/>
-                                              </xs:sequence>
-                                            </xs:complexType>
-                                          </xs:element>
-                                          <xs:element name="bitwise" minOccurs="0">
-                                            <xs:complexType>
-                                              <xs:sequence>
-                                                <xs:element name="bit" minOccurs="1">
-                                                  <xs:complexType>
-                                                    <xs:sequence>
-                                                      <xs:element name="flip" minOccurs="1" maxOccurs="1">
-                                                        <xs:simpleType>
-                                                          <xs:restriction base="xs:string">
-                                                            <xs:enumeration value="no"/>
-                                                            <xs:enumeration value="yes"/>
-                                                          </xs:restriction>
-                                                        </xs:simpleType>
-                                                      </xs:element>
-                                                    </xs:sequence>
-                                                    <xs:attribute name="id" type="xs:string"/>
-                                                  </xs:complexType>
-                                                </xs:element>
-                                              </xs:sequence>
-                                              <xs:attribute name="id" type="xs:string"/>
-                                            </xs:complexType>
-                                          </xs:element>
-                                        </xs:sequence>
-                                        <xs:attribute name="id" type="xs:string"/>
-                                      </xs:complexType>
-                                    </xs:element>
-                                  </xs:sequence>
-                                  <xs:attribute name="id" type="xs:string"/>
-                                </xs:complexType>
-                              </xs:element>
-                            </xs:sequence>
-                          </xs:complexType>
-                        </xs:element>
-                      </xs:sequence>
-                      <xs:attribute name="id" type="xs:string"/>
-                    </xs:complexType>
-                  </xs:element>
-                </xs:sequence>
-                <xs:attribute name="id" type="xs:string"/>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:complexType>
-</xs:element>
+  <xs:element name="title" type="xs:string"/>
+  <xs:element name="version" type="xs:string"/>
+  <xs:element name="description" type="xs:string"/>
+  <xs:element name="append" type="xs:string"/>
+  <xs:element name="replace" type="xs:string"/>
   
+  <xs:attribute name="id" type="xs:string"/>
+  
+  <xs:simpleType name="bit">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="no"/>
+      <xs:enumeration value="yes"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="bitwise">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="bit">
+          <xs:attribute ref="id" use="required"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:group name="attribute_modify">
+    <xs:choice>
+      <xs:element ref="bitwise"/>
+      <xs:element ref="replace"/>
+    </xs:choice>
+  </xs:group>
+  
+  <xs:element name="attribute">
+    <xs:annotation>
+      <xs:documentation>Specify the attribute to modify.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:group ref="attribute_modify"/>
+      <xs:attribute ref="id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="entity">
+    <xs:annotation>
+      <xs:documentation>Indentity the entity and which attributes to modify.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="attribute" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute ref="id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="modify">
+    <xs:annotation>
+      <xs:documentation>Specifies which entities you want to modify.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="entity" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:group name="edit">
+    <xs:annotation>
+      <xs:documentation>HGL files can either be modified and/or appended to (eventually).</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element ref="append" minOccurs="0"/>
+      <xs:element ref="modify" minOccurs="0"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:element name="file">
+    <xs:annotation>
+      <xs:documentation>The file can either be replaced (specifying a path) or edited using XML syntax.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="replace"/>
+        <xs:group ref="edit"/>
+      </xs:choice>
+      <xs:attribute ref="id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="pack">
+    <xs:annotation>
+      <xs:documentation>Specify which pack you want to edit, usually this will only be the latest patch pack.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="file" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute ref="id" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="modification">
+    <xs:annotation>
+      <xs:documentation>Describes the details of the modification.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="title" maxOccurs="1"/>
+        <xs:element ref="version" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="description" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="pack"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="revival">
+    <xs:annotation>
+      <xs:appinfo>Revival Modifications</xs:appinfo>
+      <xs:documentation xml:lang="en">This is the base level of a Revival modification.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="modification"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
 </xs:schema>
