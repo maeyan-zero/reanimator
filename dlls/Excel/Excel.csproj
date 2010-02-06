@@ -157,7 +157,13 @@
     <Compile Include="MeleeWeapons.cs" />
     <Compile Include="MonLevel.cs" />
     <Compile Include="MonScaling.cs" />
+    <Compile Include="MonsterNames.cs" />
     <Compile Include="MonsterNameTypes.cs" />
+    <Compile Include="MonsterQuality.cs" />
+    <Compile Include="MovieLists.cs" />
+    <Compile Include="Movies.cs" />
+    <Compile Include="MovieSubTitles.cs" />
+    <Compile Include="Music.cs" />
     <Compile Include="Procs.cs" />
     <Compile Include="Properties.cs" />
     <Compile Include="QuestStatus.cs" />
