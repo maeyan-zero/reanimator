@@ -6,10 +6,10 @@ using System.Runtime.InteropServices;
 
 namespace Reanimator.Excel
 {
-    public class SoundVcaSets : ExcelTable
+    public class SoundVideoCasets : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class SoundVcaSetsTable
+        class SoundVideoCasetsTable
         {
             TableHeader header;
 
@@ -26,11 +26,11 @@ namespace Reanimator.Excel
             public Int32 vca8;//idx
         }
 
-        public SoundVcaSets(byte[] data) : base(data) { }
+        public SoundVideoCasets(byte[] data) : base(data) { }
 
         protected override void ParseTables(byte[] data)
         {
-            ReadTables<SoundVcaSetsTable>(data, ref offset, Count);
+            ReadTables<SoundVideoCasetsTable>(data, ref offset, Count);
         }
     }
 }
