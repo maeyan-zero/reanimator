@@ -341,6 +341,10 @@ namespace Reanimator
         public void SaveButton()
         {
             byte[] saveData = index.GenerateIndexFile();
+            Crypt.Encrypt(saveData);
+            FileStream fOut = new FileStream(index.FileName + ".new.idx", FileMode.Create);
+            fOut.Write(saveData, 0, saveData.Length);
+            fOut.Dispose();
         }
     }
 }

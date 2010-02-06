@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Reanimator
 {
@@ -62,7 +63,7 @@ namespace Reanimator
          * for (stringCount)
          * {
          *      stringSize                      Int16                                   // Count of chars in string (not including \0).
-         *      unknown                         Int32                                   // CRC perhaps?
+         *      unknown                         Int32                                   // CRC perhaps?  -  Not required for valid game loading.
          * }
          * 
          ***** File Block *****
@@ -70,18 +71,23 @@ namespace Reanimator
          * for (fileCount)
          * {
          *      token                           Int32                                   // Must be 0x6867696F ('oigh').
-         *      unknown                         Int32
-         *      unknown                         Int32
+         *      unknown                         Int32                                   // Not required for valid game loading (can be null).
+         *      unknown                         Int32                                   // REQUIRED for valid game loading! // game freezes (??)
          *      dataOffset                      Int32                                   // Offset in bytes within accompanying .dat file.
-         *      null                            Int32                                   // Always 0x00?
+         *      null                            Int32
          *      uncompressedSize                Int32
          *      compressedSize                  Int32
-         *      null                            Int32                                   // Always 0x00?
+         *      null                            Int32
          *      directoryArrayPosition          Int32
          *      filenameArrayPosition           Int32
-         *      unknown                         16 Bytes
-         *      null                            12 Bytes
-         *      startOfFile                     8 Bytes                                 // Appears to be the first 8 bytes of said file.
+         *      unknown                         Int32                                   // REQUIRED for valid game loading!  // game clears .idx and .dat (crc?)
+         *      unknown                         Int32                                   // Not required for valid game loading (can be null).
+         *      unknown                         Int32                                   // Not required for valid game loading (can be null).
+         *      unknown                         Int32                                   // Not required for valid game loading (can be null).
+         *      null                            Int32
+         *      null                            Int32
+         *      null                            Int32
+         *      startOfFile                     8 Bytes                                 // First 8 bytes of said file.  -  Not required for valid game loading (can be null).
          *      token                           Int32                                   // Must be 0x6867696F ('oigh').
          * }
          */
@@ -134,50 +140,66 @@ namespace Reanimator
         FileStream datFile;
         byte[] buffer;
         string[] stringTable;
+        Int32[] stringTableUnknowns;
         FileIndex[] fileTable;
 
         public class FileIndex
         {
-            int offset;
-            public int Offset { get; set; }/*
+            [StructLayout(LayoutKind.Sequential, Pack = 1)]
+            public class FileIndexStruct
             {
-                set { offset = value; }
-                get { return BitConverter.ToInt32(buffer, offset); }
-            }*/
+                public UInt32 startToken;
+                public Int32 unknown1_1;
+                public Int32 unknown1_2;
+                public Int32 dataOffset;
+                public Int32 null1;
+                public Int32 uncompressedSize;
+                public Int32 compressedSize;
+                public Int32 null2;
+                public Int32 directoryArrayPosition;
+                public Int32 filenameArrayPosition;
+                public Int32 unknown2_1;
+                public Int32 unknown2_2;
+                public Int32 unknown2_3;
+                public Int32 unknown2_4;
+                public Int32 null3_1;
+                public Int32 null3_2;
+                public Int32 null3_3;
+                public Int32 first4BytesOfFile;
+                public Int32 second4BytesOfFile;
+                public UInt32 endToken;
+            };
 
-            int uncompressedSize;
-            public int UncompressedSize { get; set; }/*
-            {
-                set { uncompressedSize = value; }
-                get { return BitConverter.ToInt32(buffer, uncompressedSize); }
-            }*/
+            [Browsable(false)]
+            public FileIndexStruct FileStruct { get; set; }
 
-            int compressedSize;
-            public int CompressedSize { get; set; }/*
+            public int DataOffset
             {
-                set { compressedSize = value; }
-                get { return BitConverter.ToInt32(buffer, compressedSize); }
-            }*/
+                get { return FileStruct.dataOffset; }
+            }
 
-            int directory;
-            public int Directory { get; set; }/*
+            public int UncompressedSize
             {
-                set { directory = value; }
-            }*/
-            public string DirectoryString { get; set; }/*
+                get { return FileStruct.uncompressedSize; }
+            }
+            public int CompressedSize
             {
-                get { return stringTable[BitConverter.ToInt32(buffer, directory)]; }
-            }*/
+                get { return FileStruct.compressedSize; }
+            }
 
-            int filename;
-            public int Filename { get; set; } /*
+            [Browsable(false)]
+            public int Directory
             {
-                set { filename = value; }
-            }*/
-            public string FilenameString { get; set; } /*
+                get { return FileStruct.directoryArrayPosition; }
+            }
+            public string DirectoryString { get; set; }
+
+            [Browsable(false)]
+            public int Filename
             {
-                get { return stringTable[BitConverter.ToInt32(buffer, filename)]; }
-            }*/
+                get { return FileStruct.filenameArrayPosition; }
+            }
+            public string FilenameString { get; set; }
         }
 
         public Index(FileStream file)
@@ -188,7 +210,7 @@ namespace Reanimator
             Crypt.Decrypt(buffer);
 
            // just ignore me, I was curious
-           // FileStream fOut = new FileStream("out.idx", FileMode.Create);
+            //FileStream fOut = new FileStream("out.idx", FileMode.Create);
             //fOut.Write(buffer, 0, buffer.Length);
 
             structCount = BitConverter.ToInt32(buffer, 4);
@@ -206,22 +228,21 @@ namespace Reanimator
 
         void InitializeStringTable()
         {
-            stringTable = new string[stringCount];
+            stringTable = new String[stringCount];
+            stringTableUnknowns = new Int32[stringCount];
 
-            int position = 24;
-            short stringLength;
-            char[] characterArray;
+            int stringByteOffset = 24;
+            short stringLength = 0;
 
             for (int i = 0; i < stringTable.Length; i++)
             {
-                int offset = stringLengthOffset + (i * stringStructLength);
-                stringLength = BitConverter.ToInt16(buffer, offset);
-                int unknownValue = BitConverter.ToInt32(buffer, offset + sizeof(Int16));
+                int bufferOffset = stringLengthOffset + (i * stringStructLength);
+                stringLength = BitConverter.ToInt16(buffer, bufferOffset);
 
-                characterArray = new char[stringLength];
-                Array.Copy(buffer, position, characterArray, 0, stringLength);
-                stringTable[i] = new string(characterArray);
-                position += stringLength + 1;
+                stringTable[i] = FileTools.ByteArrayToStringAnsi(buffer, stringByteOffset);
+                stringTableUnknowns[i] = BitConverter.ToInt32(buffer, bufferOffset + sizeof(Int16));
+
+                stringByteOffset += stringLength + 1;
             }
         }
 
@@ -231,14 +252,13 @@ namespace Reanimator
 
             for (int i = 0; i < fileCount; i++)
             {
-                fileTable[i] = new FileIndex();
-                fileTable[i].Offset = fileDataOffset + (i * fileStructLength) + 12;
-                fileTable[i].UncompressedSize = fileDataOffset + (i * fileStructLength) + 20;
-                fileTable[i].CompressedSize = fileDataOffset + (i * fileStructLength) + 24;
-                fileTable[i].Directory = fileDataOffset + (i * fileStructLength) + 32;
-                fileTable[i].Filename = fileDataOffset + (i * fileStructLength) + 36;
-                fileTable[i].DirectoryString = stringTable[BitConverter.ToInt32(buffer, fileTable[i].Directory)];
-                fileTable[i].FilenameString = stringTable[BitConverter.ToInt32(buffer, fileTable[i].Filename)];
+                FileIndex fileIndex = new FileIndex();
+                fileIndex.FileStruct = (FileIndex.FileIndexStruct)FileTools.ByteArrayToStructure(buffer, typeof(FileIndex.FileIndexStruct),
+                                                                                                        fileDataOffset + i * fileStructLength);
+                fileIndex.DirectoryString = stringTable[fileIndex.Directory];
+                fileIndex.FilenameString = stringTable[fileIndex.Filename];
+
+                fileTable[i] = fileIndex;
             }
         }
 
@@ -289,7 +309,7 @@ namespace Reanimator
             int result = -1;
             byte[] destBuffer = new byte[file.UncompressedSize];
             byte[] srcBuffer = new byte[file.CompressedSize];
-            datFile.Seek(file.Offset, SeekOrigin.Begin);
+            datFile.Seek(file.DataOffset, SeekOrigin.Begin);
             datFile.Read(srcBuffer, 0, srcBuffer.Length);
             if (IntPtr.Size == 4)
             {
@@ -312,7 +332,6 @@ namespace Reanimator
 
         public byte[] GenerateIndexFile()
         {
-            return null;
             byte[] buffer = new byte[1024];
             int offset = 0;
 
@@ -333,21 +352,46 @@ namespace Reanimator
                 FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(str));
                 offset++; // \0
             }
-            FileTools.WriteToBuffer(ref buffer, stringByteCountOffset, (UInt32)offset - stringByteCountOffset);
+            FileTools.WriteToBuffer(ref buffer, stringByteCountOffset, (UInt32)(offset - stringByteCountOffset - sizeof(UInt32)));
 
 
             // string data
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
+            int i = 0;
             foreach (String str in this.stringTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
-                offset += 4; // unknown - leaving as null for now
+                offset += 4; // unknown  -  not required
+                i++;
             }
 
 
             // file block
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
+            foreach (FileIndex fileIndex in this.fileTable)
+            {
+                // this looks gross, but is just for testing
+                // final version will be similar to reading - dumping struct using MarshalAs
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.info);
+                offset += 4; // unknown  -  not required
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_2); // game freezes if null
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
+                offset += 4; // null
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.CompressedSize);
+                offset += 4; // null
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Directory);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Filename);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_1); // game clears .idx and .dat if null
+                offset += 12; // unknown  -  not required
+                offset += 12; // null
+                offset += 8; // first 8 bytes  -  not required
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.info);
+            }
 
-            return null;
+            byte[] returnBuffer = new byte[offset];
+            Buffer.BlockCopy(buffer, 0, returnBuffer, 0, returnBuffer.Length);
+            return returnBuffer;
         }
 
         public void Dispose()
