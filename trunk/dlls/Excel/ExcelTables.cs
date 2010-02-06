@@ -209,6 +209,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("MUSIC", null, typeof(Excel.Music));
             excelTables.AddTable("MUSICGROOVELEVELS", null, typeof(Excel.MusicGrooveLevels));
             excelTables.AddTable("MUSICGROOVELEVELTYPES", null, typeof(Excel.MusicGrooveLevelTypes));
+            excelTables.AddTable("MUSICREF", null, typeof(Excel.MusicRef));
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
             excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
             excelTables.AddTable("PROPERTIES", null, typeof(Excel.Properties));
