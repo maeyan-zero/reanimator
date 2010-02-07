@@ -273,6 +273,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("WARDROBE_TEXTURESET", "WARDROBETEXTURESET", typeof(Excel.WardrobeTextureSet));
             excelTables.AddTable("WARDROBE_TEXTURESET_GROUP", "WARDROBETEXTURESETGROUP", typeof(Excel.WardrobeTextureSetGroup));
             excelTables.AddTable("WEATHER", null, typeof(Excel.Weather));
+            excelTables.AddTable("WEATHER_SETS", "WEATHERSETS", typeof(Excel.WeatherSets));
         }
 
         protected override void ParseTables(byte[] data)
