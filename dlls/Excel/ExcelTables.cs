@@ -181,6 +181,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("INVLOC", null, typeof(Excel.InvLoc));
             excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
             excelTables.AddTable("ITEMLOOKGROUPS", "ITEM_LOOK_GROUPS", typeof(Excel.ItemLookGroups));
+            excelTables.AddTable("ITEM_LOOKS", null, typeof(Excel.ItemLooks));
             excelTables.AddTable("ITEM_QUALITY", "ITEMQUALITY", typeof(Excel.ItemQuality));
             excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
             excelTables.AddTable("LEVEL", "LEVELS", typeof(Excel.Levels));
