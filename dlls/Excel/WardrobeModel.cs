@@ -27,7 +27,7 @@ namespace Reanimator.Excel
             public Int32 undefinedBool1;
             public Int32 undefinedBool2;
             public Int32 undefinedBool3;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
             public Int32[] undefined4;
             public float boxMinX;
             public float boxMinY;
