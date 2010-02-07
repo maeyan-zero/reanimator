@@ -126,6 +126,7 @@
     <Compile Include="InventoryTypes.cs" />
     <Compile Include="InvLoc.cs" />
     <Compile Include="ItemLookGroups.cs" />
+    <Compile Include="ItemLooks.cs" />
     <Compile Include="ItemQuality.cs" />
     <Compile Include="Crc32.cs" />
     <Compile Include="ExcelTable.cs">
@@ -207,6 +208,8 @@
     <Compile Include="StringsFiles.cs" />
     <Compile Include="SubLevel.cs" />
     <Compile Include="Tag.cs" />
+    <Compile Include="Tasks.cs" />
+    <Compile Include="TextureTypes.cs" />
     <Compile Include="Treasure.cs" />
     <Compile Include="UIComponent.cs" />
     <Compile Include="Unit.cs" />
@@ -214,6 +217,17 @@
     <Compile Include="UnitModeGroups.cs" />
     <Compile Include="UnitModes.cs" />
     <Compile Include="UnitTypes.cs" />
+    <Compile Include="Wardrobe.cs" />
+    <Compile Include="WardrobeAppearanceGroup.cs" />
+    <Compile Include="WardrobeBlendOp.cs" />
+    <Compile Include="WardrobeBody.cs" />
+    <Compile Include="WardrobeModel.cs" />
+    <Compile Include="WardrobeModelGroup.cs" />
+    <Compile Include="WardrobePart.cs" />
+    <Compile Include="WardrobeTextureSet.cs" />
+    <Compile Include="WardrobeTextureSetGroup.cs" />
+    <Compile Include="Weather.cs" />
+    <Compile Include="WeatherSets.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FileTools\FileTools.csproj">
