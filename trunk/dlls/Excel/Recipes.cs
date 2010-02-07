@@ -22,7 +22,6 @@ namespace Reanimator.Excel
             public Int32 alwaysKnown;
             public Int32 dontRequireExactIngredients;
             public Int32 allowInRandomSingleUse;
-            public Int32 cubeRecipe_;
             public Int32 removeOnLoad;
             public Int32 weight;
             public Int32 experienceEarned;
