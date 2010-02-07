@@ -38,6 +38,7 @@
             this.characterFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cookedFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stringsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modificationFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,7 +87,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.modificationFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cSVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -186,6 +187,13 @@
             this.stringsFileToolStripMenuItem.Text = "Strings File...";
             this.stringsFileToolStripMenuItem.Click += new System.EventHandler(this.StringsFileToolStripMenuItem_Click);
             // 
+            // modificationFileToolStripMenuItem
+            // 
+            this.modificationFileToolStripMenuItem.Name = "modificationFileToolStripMenuItem";
+            this.modificationFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.modificationFileToolStripMenuItem.Text = "Modification File...";
+            this.modificationFileToolStripMenuItem.Click += new System.EventHandler(this.OpenModFile);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -202,6 +210,8 @@
             // 
             // saveAsToolStripMenuItem
             // 
+            this.saveAsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cSVToolStripMenuItem});
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
@@ -572,12 +582,12 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // modificationFileToolStripMenuItem
+            // cSVToolStripMenuItem
             // 
-            this.modificationFileToolStripMenuItem.Name = "modificationFileToolStripMenuItem";
-            this.modificationFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
-            this.modificationFileToolStripMenuItem.Text = "Modification File...";
-            this.modificationFileToolStripMenuItem.Click += new System.EventHandler(this.OpenModFile);
+            this.cSVToolStripMenuItem.Name = "cSVToolStripMenuItem";
+            this.cSVToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cSVToolStripMenuItem.Text = "CSV...";
+            this.cSVToolStripMenuItem.Click += new System.EventHandler(this.cSVToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
@@ -663,6 +673,7 @@
         private System.Windows.Forms.ToolStripMenuItem cookedFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stringsFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modificationFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cSVToolStripMenuItem;
     }
 }
 

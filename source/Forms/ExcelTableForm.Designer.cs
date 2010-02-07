@@ -37,7 +37,6 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.exportButton = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -143,22 +142,11 @@
             this.dataGridView2.Size = new System.Drawing.Size(489, 566);
             this.dataGridView2.TabIndex = 0;
             // 
-            // exportButton
-            // 
-            this.exportButton.Location = new System.Drawing.Point(169, 8);
-            this.exportButton.Name = "exportButton";
-            this.exportButton.Size = new System.Drawing.Size(71, 23);
-            this.exportButton.TabIndex = 5;
-            this.exportButton.Text = "Export";
-            this.exportButton.UseVisualStyleBackColor = true;
-            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
-            // 
             // ExcelTableForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(752, 617);
-            this.Controls.Add(this.exportButton);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.textBox1);
@@ -186,7 +174,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Button exportButton;
+        public System.Windows.Forms.DataGridView dataGridView1;
     }
 }
