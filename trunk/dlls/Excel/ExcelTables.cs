@@ -255,6 +255,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("TASK_STATUS", null, typeof(Excel.BookMarks));
             excelTables.AddTable("TAG", null, typeof(Excel.Tag));
             excelTables.AddTable("TASKS", null, typeof(Excel.Tasks));
+            excelTables.AddTable("TEXTURETYPES", null, typeof(Excel.TextureTypes));
             excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));
             excelTables.AddTable("UI_COMPONENT", null, typeof(Excel.UIComponent));
             excelTables.AddTable("UNIT_EVENT_TYPES", "UNITEVENTS", typeof(Excel.UnitEvents));
