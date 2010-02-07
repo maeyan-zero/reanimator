@@ -534,7 +534,7 @@ namespace Reanimator
             TableForm tableForm = this.ActiveMdiChild as TableForm;
             if (tableForm != null)
             {
-                //tableForm.SaveButton();
+                tableForm.SaveButton();
             }
         }
 
