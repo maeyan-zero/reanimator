@@ -534,7 +534,61 @@ namespace Reanimator
             TableForm tableForm = this.ActiveMdiChild as TableForm;
             if (tableForm != null)
             {
-                tableForm.SaveButton();
+                //tableForm.SaveButton();
+            }
+        }
+
+        private void cSVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ExcelTableForm excelTable = (ExcelTableForm)this.ActiveMdiChild;
+
+                if (excelTable != null)
+                {
+                    string strValue = string.Empty;
+
+                    for (int i = 0; i < excelTable.dataGridView1.Rows.Count - 1; i++)
+                    {
+                        for (int j = 0; j < excelTable.dataGridView1.Rows[i].Cells.Count; j++)
+                        {
+
+                            if (!string.IsNullOrEmpty(excelTable.dataGridView1[j, i].Value.ToString()))
+                            {
+                                if (j > 0)
+                                {
+                                    strValue = strValue + "," + excelTable.dataGridView1[j, i].Value.ToString();
+                                }
+                                else
+                                {
+                                    if (string.IsNullOrEmpty(strValue))
+                                    {
+                                        strValue = excelTable.dataGridView1[j, i].Value.ToString();
+                                    }
+                                    else
+                                    {
+                                        strValue = strValue + Environment.NewLine + excelTable.dataGridView1[j, i].Value.ToString();
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    SaveFileDialog saveFileDialog = new SaveFileDialog();
+                    saveFileDialog.Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*";
+                    saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                    saveFileDialog.FileName = excelTable.GetExcelTableName();
+
+                    if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+                    {
+                        string FileName = saveFileDialog.FileName;
+                        File.WriteAllText(FileName, strValue);
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Export of this form not supported at this time.");
             }
         }
     }
