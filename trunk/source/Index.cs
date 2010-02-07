@@ -259,6 +259,19 @@ namespace Reanimator
                 fileIndex.FilenameString = stringTable[fileIndex.Filename];
 
                 fileTable[i] = fileIndex;
+
+                /*
+                // crc test
+                if (this.DatFileOpen)
+                {
+                    byte[] buff = this.ReadDataFile(fileIndex);
+                    uint crc = Crc32.Compute(buff);
+
+                }
+                else
+                {
+                    OpenAccompanyingDat();
+                }*/
             }
         }
 
@@ -308,23 +321,37 @@ namespace Reanimator
 
             int result = -1;
             byte[] destBuffer = new byte[file.UncompressedSize];
-            byte[] srcBuffer = new byte[file.CompressedSize];
             datFile.Seek(file.DataOffset, SeekOrigin.Begin);
-            datFile.Read(srcBuffer, 0, srcBuffer.Length);
-            if (IntPtr.Size == 4)
+
+            if (file.CompressedSize > 0)
             {
-                uint len = (uint)file.UncompressedSize;
-                result = uncompress(destBuffer, ref len, srcBuffer, (uint)file.CompressedSize);
+                byte[] srcBuffer = new byte[file.CompressedSize];
+                
+                datFile.Read(srcBuffer, 0, srcBuffer.Length);
+                if (IntPtr.Size == 4)
+                {
+                    uint len = (uint)file.UncompressedSize;
+                    result = uncompress(destBuffer, ref len, srcBuffer, (uint)file.CompressedSize);
+                }
+                else
+                {
+                    ulong len = (uint)file.UncompressedSize;
+                    result = uncompress(destBuffer, ref len, srcBuffer, (uint)file.CompressedSize);
+                }
+
+                if (result != 0)
+                {
+                    return null;
+                }
             }
             else
             {
-                ulong len = (uint)file.UncompressedSize;
-                result = uncompress(destBuffer, ref len, srcBuffer, (uint)file.CompressedSize);
-            }
+                result = datFile.Read(destBuffer, 0, file.UncompressedSize);
 
-            if (result != 0)
-            {
-                return null;
+                if (result != file.UncompressedSize)
+                {
+                    return null;
+                }
             }
 
             return destBuffer;
@@ -368,6 +395,7 @@ namespace Reanimator
 
             // file block
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
+            i = 0;
             foreach (FileIndex fileIndex in this.fileTable)
             {
                 // this looks gross, but is just for testing
@@ -375,7 +403,6 @@ namespace Reanimator
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.info);
                 offset += 4; // unknown  -  not required
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_2); // game freezes if not correct value
-                
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);
@@ -388,6 +415,8 @@ namespace Reanimator
                 offset += 12; // null
                 offset += 8; // first 8 bytes  -  not required
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.info);
+
+                i++;
             }
 
             byte[] returnBuffer = new byte[offset];
