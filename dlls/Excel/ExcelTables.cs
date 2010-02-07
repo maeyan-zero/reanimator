@@ -262,6 +262,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("UNITMODE_GROUPS", null, typeof(Excel.UnitModeGroups));
             excelTables.AddTable("UNITMODES", null, typeof(Excel.UnitModes));
             excelTables.AddTable("UNITTYPES", null, typeof(Excel.UnitTypes));
+            excelTables.AddTable("WARDROBE", null, typeof(Excel.Wardrobe));
         }
 
         protected override void ParseTables(byte[] data)
