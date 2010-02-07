@@ -268,6 +268,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("WARDROBE_BODY", "WARDROBEBODY", typeof(Excel.WardrobeBody));
             excelTables.AddTable("WARDROBE_LAYERSET", "WARDROBELAYERSET", typeof(Excel.WardrobeBlendOp));
             excelTables.AddTable("WARDROBE_MODEL", "WARDROBEMODEL", typeof(Excel.WardrobeModel));
+            excelTables.AddTable("WARDROBE_MODEL_GROUP", "WARDROBEMODELGROUP", typeof(Excel.WardrobeModelGroup));
         }
 
         protected override void ParseTables(byte[] data)
