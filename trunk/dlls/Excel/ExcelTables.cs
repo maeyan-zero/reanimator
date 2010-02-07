@@ -84,6 +84,11 @@ namespace Reanimator.Excel
                 TableIndexHelper tableIndex = GetTableIndex(id);
                 if (tableIndex != null)
                 {
+                    if (tableIndex.type == null)
+                    {
+                        return new ExcelTables(null);
+                    }
+
                     tableIndex.excelTable = (ExcelTable)Activator.CreateInstance(tableIndex.type, buffer);
                     tableIndex.excelTable.StringId = tableIndex.StringId;
                     return tableIndex.excelTable;
@@ -101,6 +106,17 @@ namespace Reanimator.Excel
                 }
 
                 return null;
+            }
+
+            public bool IsMythosTable(String stringId)
+            {
+                TableIndexHelper tableIndex = GetTableIndex(stringId);
+                if (tableIndex != null)
+                {
+                    return tableIndex.type == null ? true : false;
+                }
+
+                return false;
             }
 
             private TableIndexHelper GetTableIndex(string id)
@@ -129,6 +145,11 @@ namespace Reanimator.Excel
         public ExcelTables(byte[] data)
             : base(data)
         {
+            if (data == null)
+            {
+                return;
+            }
+
             excelTables = new ExcelTableManagerManager();
             excelTables.AddTable("ACHIEVEMENTS", null, typeof(Excel.Achievements));
             excelTables.AddTable("ACT", null, typeof(Excel.Act));
@@ -187,8 +208,8 @@ namespace Reanimator.Excel
             excelTables.AddTable("LEVEL", "LEVELS", typeof(Excel.Levels));
             excelTables.AddTable("LEVEL_DRLG_CHOICE", "LEVELS_DRLG_CHOICE", typeof(Excel.LevelsDrlgChoice));
             excelTables.AddTable("LEVEL_DRLGS", "LEVELS_DRLGS", typeof(Excel.LevelsDrlgs));
-            excelTables.AddTable("LEVELS_ENV", "LEVELSENV", typeof(Excel.LevelsEnv));
-            excelTables.AddTable("LEVEL_FILE_PATHS", null, typeof(Excel.LevelsFilePath));
+            excelTables.AddTable("LEVELS_ENV", null, typeof(Excel.LevelsEnv));
+            excelTables.AddTable("LEVEL_FILE_PATHS", "LEVELS_FILE_PATH", typeof(Excel.LevelsFilePath));
             excelTables.AddTable("ROOM_INDEX", "LEVELS_ROOM_INDEX", typeof(Excel.LevelsRoomIndex));
             excelTables.AddTable("LEVEL_RULES", "LEVELS_RULES", typeof(Excel.LevelsRules));
             excelTables.AddTable("LEVEL_THEMES", "LEVELS_THEMES", typeof(Excel.LevelsThemes));
@@ -218,6 +239,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
             excelTables.AddTable("OBJECTTRIGGERS", null, typeof(Excel.ObjectTriggers));
             excelTables.AddTable("OFFER", null, typeof(Excel.Offer));
+            //excelTables.AddTable("PALETTES", null, typeof(Excel.FontColor));
             excelTables.AddTable("PETLEVEL", null, typeof(Excel.MonLevel));
             excelTables.AddTable("PLAYERLEVELS", null, typeof(Excel.PlayerLevels));
             excelTables.AddTable("PLAYER_RACE", "PLAYERRACE", typeof(Excel.PlayerRace));
@@ -240,8 +262,8 @@ namespace Reanimator.Excel
             excelTables.AddTable("SKILLTABS", null, typeof(Excel.SkillTabs));
             excelTables.AddTable("SKU", null, typeof(Excel.Sku));
             excelTables.AddTable("SOUNDBUSES", null, typeof(Excel.SoundBuses));
-            excelTables.AddTable("SOUNDMIXSTATES", null, typeof(Excel.SoundMixStates));
-            excelTables.AddTable("SOUNDMIXSTATEVALUES", null, typeof(Excel.SoundMixStateValues));
+            excelTables.AddTable("SOUND_MIXSTATES", "SOUNDMIXSTATES", typeof(Excel.SoundMixStates));
+            excelTables.AddTable("SOUND_MIXSTATE_VALUES", "SOUNDMIXSTATEVALUES", typeof(Excel.SoundMixStateValues));
             excelTables.AddTable("SOUNDS", null, typeof(Excel.Sounds));
             excelTables.AddTable("SOUNDVCASETS", null, typeof(Excel.SoundVideoCasets));
             excelTables.AddTable("SPAWN_CLASS", "SPAWNCLASS", typeof(Excel.SpawnClass));
@@ -256,25 +278,72 @@ namespace Reanimator.Excel
             excelTables.AddTable("TASK_STATUS", null, typeof(Excel.BookMarks));
             excelTables.AddTable("TAG", null, typeof(Excel.Tag));
             excelTables.AddTable("TASKS", null, typeof(Excel.Tasks));
-            excelTables.AddTable("TEXTURETYPES", null, typeof(Excel.TextureTypes));
+            excelTables.AddTable("TEXTURE_TYPES", "TEXTURETYPES", typeof(Excel.TextureTypes));
             excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));
             excelTables.AddTable("UI_COMPONENT", null, typeof(Excel.UIComponent));
             excelTables.AddTable("UNIT_EVENT_TYPES", "UNITEVENTS", typeof(Excel.UnitEvents));
             excelTables.AddTable("UNITMODE_GROUPS", null, typeof(Excel.UnitModeGroups));
             excelTables.AddTable("UNITMODES", null, typeof(Excel.UnitModes));
             excelTables.AddTable("UNITTYPES", null, typeof(Excel.UnitTypes));
-            excelTables.AddTable("WARDROBE", null, typeof(Excel.Wardrobe));
-            excelTables.AddTable("WARDROBE_APPEARANCE_GROUP", "WARDROBEAPPEARANCEGROUP", typeof(Excel.WardrobeAppearanceGroup));
-            excelTables.AddTable("WARDROBE_BLENDOP", "WARDROBEBLENDOP", typeof(Excel.WardrobeBlendOp));
-            excelTables.AddTable("WARDROBE_BODY", "WARDROBEBODY", typeof(Excel.WardrobeBody));
-            excelTables.AddTable("WARDROBE_LAYERSET", "WARDROBELAYERSET", typeof(Excel.WardrobeBlendOp));
-            excelTables.AddTable("WARDROBE_MODEL", "WARDROBEMODEL", typeof(Excel.WardrobeModel));
-            excelTables.AddTable("WARDROBE_MODEL_GROUP", "WARDROBEMODELGROUP", typeof(Excel.WardrobeModelGroup));
-            excelTables.AddTable("WARDROBE_PART", "WARDROBEPART", typeof(Excel.WardrobePart));
-            excelTables.AddTable("WARDROBE_TEXTURESET", "WARDROBETEXTURESET", typeof(Excel.WardrobeTextureSet));
-            excelTables.AddTable("WARDROBE_TEXTURESET_GROUP", "WARDROBETEXTURESETGROUP", typeof(Excel.WardrobeTextureSetGroup));
+            excelTables.AddTable("WARDROBE_LAYER", "WARDROBE", typeof(Excel.Wardrobe));
+            excelTables.AddTable("WARDROBE_APPEARANCE_GROUP", null, typeof(Excel.WardrobeAppearanceGroup));
+            excelTables.AddTable("WARDROBE_BLENDOP", null, typeof(Excel.WardrobeBlendOp));
+            excelTables.AddTable("WARDROBE_BODY", null, typeof(Excel.WardrobeBody));
+            excelTables.AddTable("WARDROBE_LAYERSET", null, typeof(Excel.WardrobeBlendOp));
+            excelTables.AddTable("WARDROBE_MODEL", null, typeof(Excel.WardrobeModel));
+            excelTables.AddTable("WARDROBE_MODEL_GROUP", null, typeof(Excel.WardrobeModelGroup));
+            excelTables.AddTable("WARDROBE_PART", null, typeof(Excel.WardrobePart));
+            excelTables.AddTable("WARDROBE_TEXTURESET", null, typeof(Excel.WardrobeTextureSet));
+            excelTables.AddTable("WARDROBE_TEXTURESET_GROUP", null, typeof(Excel.WardrobeTextureSetGroup));
             excelTables.AddTable("WEATHER", null, typeof(Excel.Weather));
-            excelTables.AddTable("WEATHER_SETS", "WEATHERSETS", typeof(Excel.WeatherSets));
+            excelTables.AddTable("WEATHER_SETS", null, typeof(Excel.WeatherSets));
+
+            // Empty tables
+            excelTables.AddTable("GOSSIP", null, null);
+            excelTables.AddTable("SOUNDOVERRIDES", null, null);
+
+            // Mythos tables
+            excelTables.AddTable("LEVEL_AREAS_MADLIB", null, null);
+            excelTables.AddTable("LEVEL_AREAS_CAVE_NOUNS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_TEMPLE_NOUNS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_GOTHIC_NOUNS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_DESERTGOTHIC_NOUNS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_GOBLIN_NOUNS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_HEATH_NOUNS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_CANYON_NOUNS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_FOREST_NOUNS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_FARMLAND_NOUNS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_ADJECTIVES", null, null);
+            excelTables.AddTable("LEVEL_AREAS_ADJ_BRIGHT", null, null);
+            excelTables.AddTable("LEVEL_AREAS_AFFIXS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_SUFFIXS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_PROPERNAMEZONE1", null, null);
+            excelTables.AddTable("LEVEL_AREAS_PROPERNAMEZONE2", null, null);
+            excelTables.AddTable("LEVEL_AREAS_GOBLIN_NAMES", null, null);
+            excelTables.AddTable("LEVEL_ZONES", null, null);
+            excelTables.AddTable("LEVEL_AREAS", null, null);
+            excelTables.AddTable("LEVEL_AREAS_LINKER", null, null);
+            excelTables.AddTable("LEVEL_AREAS_SUFFIXS", null, null);
+            excelTables.AddTable("LEVEL_ENVIRONMENTS", null, null);
+            excelTables.AddTable("QUEST_COUNT_TUGBOAT", null, null);
+            excelTables.AddTable("QUEST_RANDOM_FOR_TUGBOAT", null, null);
+            excelTables.AddTable("QUEST_TITLES_FOR_TUGBOAT", null, null);
+            excelTables.AddTable("QUEST_REWARD_BY_LEVEL_TUGBOAT", null, null);
+            excelTables.AddTable("QUEST_RANDOM_TASKS_FOR_TUGBOAT", null, null);
+            excelTables.AddTable("QUESTS_TASKS_FOR_TUGBOAT", null, null);
+            excelTables.AddTable("QUEST_DICTIONARY_FOR_TUGBOAT", null, null);
+
+            // I think these are Mythos
+            excelTables.AddTable("INVLOCIDX", null, null);
+            excelTables.AddTable("SKILL_LEVELS", null, null);
+            excelTables.AddTable("SKILL_STATS", null, null);
+            excelTables.AddTable("CHARDISPLAY", null, null);
+            excelTables.AddTable("ITEMDISPLAY", null, null);
+            excelTables.AddTable("EFFECTS", null, null);
+            excelTables.AddTable("RENDER_FLAGS", null, null);
+            excelTables.AddTable("DEBUG_BARS", null, null);
+            excelTables.AddTable("ACHIEVEMENT_SLOTS", null, null);
+            excelTables.AddTable("CRAFTING_SLOTS", null, null);
         }
 
         protected override void ParseTables(byte[] data)
@@ -300,7 +369,7 @@ namespace Reanimator.Excel
             {
                 string stringId = GetTableStringId(i);
                 string fileName = excelTables.GetReplacement(stringId);
-                if (fileName == "EXCELTABLES" || fileName == "QUEST_COUNT_TUGBOAT")
+                if (fileName == "EXCELTABLES")
                 {
                     continue;
                 }
@@ -326,7 +395,10 @@ namespace Reanimator.Excel
                         }
                         else
                         {
-                            Debug.WriteLine("Debug Output - File not found: " + fileName);
+                            if (!excelTables.IsMythosTable(stringId))
+                            {
+                                Debug.WriteLine("Debug Output - File not found: " + fileName);
+                            }
                             continue;
                         }
                     }
@@ -344,7 +416,10 @@ namespace Reanimator.Excel
                     ExcelTable excelTable = excelTables.CreateTable(stringId, buffer);
                     if (excelTable != null)
                     {
-                        excelTablesLoaded.Items.Add(excelTable);
+                        if (!excelTable.IsNull)
+                        {
+                            excelTablesLoaded.Items.Add(excelTable);
+                        }
                     }
                     else
                     {

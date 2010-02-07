@@ -45,7 +45,7 @@ namespace Reanimator.Excel
             public Int32 sizeColorMaskW;
             public Int32 sizeColorMaskH;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-            public Int32[] undefined1;
+            public Int32[] undefined2;
         }
 
         public WardrobeTextureSet(byte[] data) : base(data) { }

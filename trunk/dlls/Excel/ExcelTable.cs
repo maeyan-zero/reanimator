@@ -80,6 +80,12 @@ namespace Reanimator.Excel
 
         public ExcelTable(byte[] data)
         {
+            if (data == null)
+            {
+                isNull = true;
+                return;
+            }
+
             try
             {
                 /* Excel Table Structure Layout
@@ -286,6 +292,10 @@ namespace Reanimator.Excel
                     tableIndicies = FileTools.ByteArrayToInt32Array(data, offset, Count);
                     offset += Count * sizeof(Int32);
 
+                    if (Count == 0)
+                    {
+                        offset += sizeof(Int32);
+                    }
 
 
                     /*
@@ -425,19 +435,22 @@ namespace Reanimator.Excel
 
                 // data block
                 token = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(token);
-                int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                if (byteCount != 0)
+                if (token != 0)
                 {
-                    if (this.excelHeader.structureId == 0x1F9DDC98)         // Only seen in unittypes.txt.cooked so far.
-                    {                                                       // This block reading method is the same as first seen below in the states.txt.cooked,
-                        // but there is no data in the previous block for unittypes.txt.cooked.
-                        int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                        byteCount = (byteCount << 2) * blockCount;                              // No idea where they drempt this up,
+                    CheckFlag(token);
+                    int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                    if (byteCount != 0)
+                    {
+                        if (this.excelHeader.structureId == 0x1F9DDC98)         // Only seen in unittypes.txt.cooked so far.
+                        {                                                       // This block reading method is the same as first seen below in the states.txt.cooked,
+                            // but there is no data in the previous block for unittypes.txt.cooked.
+                            int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                            byteCount = (byteCount << 2) * blockCount;                              // No idea where they drempt this up,
+                        }
+                        DataBlock = new byte[byteCount];
+                        Buffer.BlockCopy(data, offset, DataBlock, 0, byteCount);
+                        offset += byteCount;
                     }
-                    DataBlock = new byte[byteCount];
-                    Buffer.BlockCopy(data, offset, DataBlock, 0, byteCount);
-                    offset += byteCount;
                 }
 
 
@@ -449,7 +462,7 @@ namespace Reanimator.Excel
                     {
                         CheckFlag(token);
 
-                        byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                        int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                         int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
                         byteCount = (byteCount << 2) * blockCount;
 
@@ -481,6 +494,9 @@ namespace Reanimator.Excel
             }
         }
 
+        private bool isNull;
+        public bool IsNull { get { return isNull; } }
+
         private void CheckFlag(int flag)
         {
             if (!CheckFlag(flag, 0x68657863))
@@ -506,7 +522,7 @@ namespace Reanimator.Excel
                 int f = BitConverter.ToInt32(data, offset);
                 if (CheckFlag(f, 0x68657863))
                 {
-                    Debug.Write("mysh flagCount = " + flagCount + "\n");
+                    //Debug.Write("mysh flagCount = " + flagCount + "\n");
                     break;
                 }
                 if (CheckFlag(f, 0x6873796D))
