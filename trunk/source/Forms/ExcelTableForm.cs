@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Reanimator.Excel;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.IO;
 
 namespace Reanimator.Forms
 {
@@ -210,6 +211,47 @@ namespace Reanimator.Forms
                 {
                     return;
                 }
+            }
+        }
+
+        private void exportButton_Click(object sender, EventArgs e)
+        {
+            string strValue = string.Empty;
+
+            for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+            {
+                for (int j = 0; j < dataGridView1.Rows[i].Cells.Count; j++)
+                {
+
+                    if (!string.IsNullOrEmpty(dataGridView1[j, i].Value.ToString()))
+                    {
+                        if (j > 0)
+                        {
+                            strValue = strValue + "," + dataGridView1[j, i].Value.ToString();
+                        }
+                        else
+                        {
+                            if (string.IsNullOrEmpty(strValue))
+                            {
+                                strValue = dataGridView1[j, i].Value.ToString();
+                            }
+                            else
+                            {
+                                strValue = strValue + Environment.NewLine + dataGridView1[j, i].Value.ToString();
+                            }
+                        }
+                    }
+                }
+            }
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*";
+            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+
+            if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                string FileName = saveFileDialog.FileName;
+                File.WriteAllText(FileName, strValue);
             }
         }
     }
