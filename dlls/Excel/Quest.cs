@@ -13,7 +13,7 @@ namespace Reanimator.Excel
         {
             TableHeader header;
 
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string name;
 
             public Int32 code;
