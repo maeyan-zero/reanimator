@@ -264,6 +264,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("UNITTYPES", null, typeof(Excel.UnitTypes));
             excelTables.AddTable("WARDROBE", null, typeof(Excel.Wardrobe));
             excelTables.AddTable("WARDROBE_APPEARANCE_GROUP", "WARDROBEAPPEARANCEGROUP", typeof(Excel.WardrobeAppearanceGroup));
+            excelTables.AddTable("WARDROBE_BLENDOP", "WARDROBEBLENDOP", typeof(Excel.WardrobeBlendOp));
         }
 
         protected override void ParseTables(byte[] data)
