@@ -530,13 +530,14 @@ namespace Reanimator.Excel
             public Int32 minSpawnLevel;
             public Int32 maxSpawnLevel;
             public Int32 maxLevel;
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] {"name1", "name2", "name3"})]
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] {"name1", "name2", "name3"}, DefaultIndex = 1)]
             public Int32 fixedLevel;//intptr
             public Int32 hpMin;
             public Int32 hpMax;
             public Int32 powerMax;
             public Int32 experience;
             public Int32 attackRating;
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 luckBonus;//intptr
             public Int32 luckChanceToSpawn;
             public Int32 roomPopulatePass;
@@ -572,17 +573,24 @@ namespace Reanimator.Excel
             public Int32 maximumImpactFrequency;
             public Int32 onlyCollideWithUnitType;//index
             public Int32 questDescription;//index
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 pickUpCondition;//intptr
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte[] unknownBytes04;
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 scriptOnUse;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 stackSize;//intptr
             public Int32 maxPickUp;
             public Int32 baseCost;
             public Int32 realWorldCost;
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 buyPriceMult;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 buyPriceAdd;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 sellPriceMult;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 sellPriceAdd;//intptr
             public Int32 inventoryWardrobe;//index
             public Int32 characterScreenWardrobe;      // always -1
@@ -627,7 +635,9 @@ namespace Reanimator.Excel
             public Int32 dmgType;//index
             public Int32 weaponDamageScale;
             public Int32 dontUseWeaponDamage;
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 minBaseDmg;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 maxBaseDmg;//intptr
             public Int32 sfxAttackFocus;
             public Int32 sfxUknown1;
@@ -712,18 +722,26 @@ namespace Reanimator.Excel
             public Int32 startingStrength;
             public Int32 startingStamina;
             public Int32 startingWillpower;
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props1;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props2;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props3;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props4;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props5;//intptr
             public Int32 props1AppliesToUnitype;
             public Int32 props2AppliesToUnitype;
             public Int32 props3AppliesToUnitype;
             public Int32 props4AppliesToUnitype;
             public Int32 props5AppliesToUnitype;
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 perLevelProps1;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 perLevelProps2;//intptr
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 propsElite;//intptr
             public Int32 affix1;
             public Int32 affix2;
@@ -780,6 +798,7 @@ namespace Reanimator.Excel
             public Int32 startingskills12;
             public Int32 unitDieBeginSkill;//index
             public Int32 unitDieBeginSkillClient;//index
+            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 scriptOnUnitDieEnd;//intptr
             public Int32 unitDieEndSkill;//index
             public Int32 deadSkill;//index
