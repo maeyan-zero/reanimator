@@ -543,36 +543,11 @@ namespace Reanimator
             try
             {
                 ExcelTableForm excelTable = (ExcelTableForm)this.ActiveMdiChild;
+                string strValue;
 
                 if (excelTable != null)
                 {
-                    string strValue = string.Empty;
-
-                    for (int i = 0; i < excelTable.dataGridView1.Rows.Count - 1; i++)
-                    {
-                        for (int j = 0; j < excelTable.dataGridView1.Rows[i].Cells.Count; j++)
-                        {
-
-                            if (!string.IsNullOrEmpty(excelTable.dataGridView1[j, i].Value.ToString()))
-                            {
-                                if (j > 0)
-                                {
-                                    strValue = strValue + "," + excelTable.dataGridView1[j, i].Value.ToString();
-                                }
-                                else
-                                {
-                                    if (string.IsNullOrEmpty(strValue))
-                                    {
-                                        strValue = excelTable.dataGridView1[j, i].Value.ToString();
-                                    }
-                                    else
-                                    {
-                                        strValue = strValue + Environment.NewLine + excelTable.dataGridView1[j, i].Value.ToString();
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    strValue = Export.CSV(excelTable.dataGridView1);
 
                     SaveFileDialog saveFileDialog = new SaveFileDialog();
                     saveFileDialog.Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*";
