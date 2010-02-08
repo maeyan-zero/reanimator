@@ -41,7 +41,7 @@ namespace Reanimator.Forms
             {
                 doStrings = true;
             }
-            Progress progress = new Progress();
+            ProgressForm progress = new ProgressForm();
             progress.Shown += new EventHandler(Progress_Shown);
             progress.ShowDialog(this);
             this.Hide();
@@ -50,7 +50,7 @@ namespace Reanimator.Forms
 
         private void Progress_Shown(object sender, EventArgs e)
         {
-            Progress progress = sender as Progress;
+            ProgressForm progress = sender as ProgressForm;
 
             // file id
             this.textBox1.Text = "0x" + excelTable.StructureId.ToString("X");

@@ -212,6 +212,7 @@ namespace Reanimator
            // just ignore me, I was curious
             FileStream fOut = new FileStream("out.idx", FileMode.Create);
             fOut.Write(buffer, 0, buffer.Length);
+            fOut.Dispose();
 
             structCount = BitConverter.ToInt32(buffer, 4);
             fileCount = BitConverter.ToInt32(buffer, 8);

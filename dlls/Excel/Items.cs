@@ -980,7 +980,7 @@ namespace Reanimator.Excel
 
 #pragma warning disable 0169
         [FlagsAttribute]
-        enum BitMask1 : int
+        enum BitMask1 : uint
         {
             empty = 0,
             spawn = 1,
