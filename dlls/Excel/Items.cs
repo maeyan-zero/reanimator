@@ -979,40 +979,42 @@ namespace Reanimator.Excel
         }
 
 #pragma warning disable 0169
-        struct BitMask1
+        [FlagsAttribute]
+        enum BitMask1 : int
         {
-            bool spawn;//(0
-            bool spawnAtMerchant;//(1
-            bool ForceIgnoresScale;//(2
-            bool impactOnFuse;//(3
-            bool impactOnFree;//(4
-            bool impactOnHitUnit;//(5
-            bool impactOnHitBackground;//(6
-            bool havokIgnoresDirection;//(7
-            bool damagesOnFuse;//(8
-            bool hitsUnits;//(9
-            bool killOnUnitHit;//(10
-            bool hitsBackground;//(11
-            bool noRayCollision;//(12
-            bool killOnBackground;//(13
-            bool stickOnHit;//(14
-            bool stickOnInit;//(15
-            bool Sync;//(16
-            bool ClientOnly;//(17
-            bool ServerOnly;//(18
-            bool useSourceVel;//(19
-            bool mustHit;//(20
-            bool prioritizeTarget;//(21
-            bool TrailEffectsUseProjectile;//(22
-            bool ImpactEffectsUseProjectile;//(23
-            bool destroyOtherMissiles;//(24
-            bool dontHitSkillTarget;//(25
-            bool flipFaceDirection;//(26
-            bool dontUseRangeForSkill;//(27
-            bool pullsTarget;//(28
-            bool damagesOnHitUnit;//(29
-            bool pulsesStatsOnHitUnit;//(30
-            bool damagesOnHitBackground;//(31
+            empty = 0,
+            spawn = 1,
+            spawnAtMerchant = 2,
+            forceIgnoresScale = 4,
+            impactOnFuse = 8,
+            impactOnFree = 16,
+            impactOnHitUnit = 32,
+            impactOnHitBackground = 64,
+            havokIgnoresDirection = 128,
+            damagesOnFuse = 256,
+            hitsUnits = 512,
+            killOnUnitHit = 1024,
+            hitsBackground = 2048,
+            noRayCollision = 4096,
+            killOnBackground = 8192,
+            stickOnHit = 16384,
+            stickOnInit = 32768,
+            sync = 65536,
+            clientOnly = 131072,
+            serverOnly = 262144,
+            useSourceVel = 524288,
+            mustHit = 1048576,
+            prioritizeTarget = 2097152,
+            trailEffectsUseProjectile = 4194304,
+            impactEffectsUseProjectile = 8388608,
+            destroyOtherMissiles = 16777216,
+            dontHitSkillTarget = 33554432,
+            flipFaceDirection = 67108864,
+            dontUseRangeForSkill = 134217728,
+            pullsTarget = 268435456,
+            damagesOnHitUnit = 536870912,
+            pulsesStatsOnHitUnit = 1073741824,
+            damagesOnHitBackground = 2147483648
         }
 
         struct BitMask2
