@@ -9,10 +9,12 @@ using System.Windows.Forms;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
+using System.Threading;
+using Reanimator.Forms;
 
 namespace Reanimator
 {
-    public partial class TableForm : Form, IDisposable
+    public partial class TableForm : ThreadedFormBase, IDisposable
     {
         Index index;
         Strings strings;
@@ -177,6 +179,16 @@ namespace Reanimator
 
         private void ExtractFiles(Index.FileIndex[] files)
         {
+            new ProgressForm(DoExtractFiles, files).ShowDialog(this);
+        }
+
+        private void DoExtractFiles(ProgressForm progressBar, Object param)
+        {
+            Index.FileIndex[] files = param as Index.FileIndex[];
+            if (param == null)
+            {
+                return;
+            }
             if (!index.DatFileOpen)
             {
                 return;
@@ -184,7 +196,7 @@ namespace Reanimator
 
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             folderBrowserDialog.SelectedPath = index.FileDirectory;
-            if (folderBrowserDialog.ShowDialog(this) != DialogResult.OK)
+            if (this.ShowDialog(folderBrowserDialog) != DialogResult.OK)
             {
                 return;
             }
@@ -200,30 +212,48 @@ namespace Reanimator
                 keepPath = true;
             }
 
+            progressBar.ConfigBar(0, files.Length, 1);
+            progressBar.SetLoadingText("Extracting files to... " + folderBrowserDialog.SelectedPath);
+
+            int filesSaved = 0;
             foreach (Index.FileIndex file in files)
             {
-                try
+                while (true)
                 {
-                    byte[] buffer = index.ReadDataFile(file);
-
-                    string keepPathString = "\\";
-                    if (keepPath)
+                    try
                     {
-                        keepPathString += file.DirectoryString;
-                        Directory.CreateDirectory(folderBrowserDialog.SelectedPath + keepPathString);
-                    }
+                        byte[] buffer = index.ReadDataFile(file);
 
-                    FileStream fileOut = new FileStream(folderBrowserDialog.SelectedPath + keepPathString + file.FilenameString, FileMode.Create);
-                    fileOut.Write(buffer, 0, buffer.Length);
-                    fileOut.Close();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Failed to extract file from dat!\nFile: " + file.FilenameString + "\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        string keepPathString = "\\";
+                        if (keepPath)
+                        {
+                            keepPathString += file.DirectoryString;
+                            Directory.CreateDirectory(folderBrowserDialog.SelectedPath + keepPathString);
+                        }
+
+                        progressBar.SetCurrentItemText(file.FilenameString);
+                        FileStream fileOut = new FileStream(folderBrowserDialog.SelectedPath + keepPathString + file.FilenameString, FileMode.Create);
+                        fileOut.Write(buffer, 0, buffer.Length);
+                        fileOut.Close();
+                        filesSaved++;
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        DialogResult failedDr = MessageBox.Show("Failed to extract file from dat!\nFile: " + file.FilenameString + "\n\n" + e.ToString(), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+                        if (failedDr == DialogResult.Ignore)
+                        {
+                            break;
+                        }
+                        else if (failedDr == DialogResult.Abort)
+                        {
+                            return;
+                        }
+                    }
                 }
             }
 
-            MessageBox.Show(files.Length + " file(s) saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(filesSaved + " file(s) saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void dataGridView_DataSourceChanged(object sender, EventArgs e)

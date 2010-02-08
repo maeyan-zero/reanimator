@@ -1,6 +1,6 @@
 ﻿namespace Reanimator.Forms
 {
-    partial class Progress
+    partial class ProgressForm
     {
         /// <summary>
         /// Required designer variable.
@@ -65,7 +65,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(394, 77);
+            this.ClientSize = new System.Drawing.Size(390, 73);
             this.ControlBox = false;
             this.Controls.Add(this.currentItemLabel);
             this.Controls.Add(this.loadingTextLabel);
@@ -79,6 +79,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Loading...";
+            this.Shown += new System.EventHandler(this.Progress_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

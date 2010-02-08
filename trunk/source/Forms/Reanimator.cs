@@ -474,7 +474,7 @@ namespace Reanimator
 
         private void LoadExcelTables(object sender, EventArgs e)
         {
-            Progress progress = (Progress)sender;
+            ProgressForm progress = (ProgressForm)sender;
             FileStream excelFile;
 
             string excelFilePath = Config.dataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked";
@@ -510,7 +510,7 @@ namespace Reanimator
             this.Show();
             this.Refresh();
 
-            Progress progress = new Progress();
+            ProgressForm progress = new ProgressForm();
             progress.Shown += new EventHandler(LoadExcelTables);
             progress.ShowDialog(this);
             // this fixes a weird windows API bug causing the ShowDialog to minimise the main client

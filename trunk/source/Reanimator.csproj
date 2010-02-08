@@ -106,6 +106,7 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="Crypt.cs" />
+    <Compile Include="Export.cs" />
     <Compile Include="Forms\ExcelTableForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,11 +137,14 @@
     <Compile Include="Forms\Options.Designer.cs">
       <DependentUpon>Options.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Progress.cs">
+    <Compile Include="Forms\ProgressForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Progress.Designer.cs">
-      <DependentUpon>Progress.cs</DependentUpon>
+    <Compile Include="Forms\ProgressForm.Designer.cs">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ThreadedFormBase.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Index.cs" />
     <Compile Include="Model.cs" />
@@ -167,8 +171,8 @@
       <DependentUpon>Options.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Progress.resx">
-      <DependentUpon>Progress.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ProgressForm.resx">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
