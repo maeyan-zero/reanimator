@@ -17,6 +17,7 @@ namespace Reanimator.Excel
             public bool IsStringOffset { get; set; }
             public bool IsIntOffset { get; set; }
             public String[] FieldNames { get; set; }
+            public int DefaultIndex { get; set; }
         }
 
 

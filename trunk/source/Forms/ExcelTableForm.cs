@@ -124,6 +124,8 @@ namespace Reanimator.Forms
                                     cell.Items.Add(s + " = " + intValue);
                                 }
 
+                                cell.Value = cell.Items[excelOutputAttribute.DefaultIndex];
+
                                 dataGridView1[col, row] = cell;
                                 value = null;
                             }
