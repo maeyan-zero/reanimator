@@ -9,37 +9,43 @@ namespace Reanimator
 {
     class Export
     {
-        static public string CSV(DataGridView datagridview)
+        static public string CSV(DataGridView datagridview, bool[] selected)
         {
-            string strValue = string.Empty;
+            StringWriter csv = new StringWriter();
 
-            for (int i = 0; i < datagridview.Rows.Count - 1; i++)
+            for (int row = 0; row < datagridview.Rows.Count - 1; row++)
             {
-                for (int j = 0; j < datagridview.Rows[i].Cells.Count; j++)
+                for (int col = 0; col < datagridview.Rows[row].Cells.Count; col++)
                 {
-
-                    if (!string.IsNullOrEmpty(datagridview[j, i].Value.ToString()))
+                    if (selected[col] == true)
                     {
-                        if (j > 0)
+                        if (datagridview[col, row].Value != null)
                         {
-                            strValue = strValue + "," + datagridview[j, i].Value.ToString();
-                        }
-                        else
-                        {
-                            if (string.IsNullOrEmpty(strValue))
+                            string stringBuffer = datagridview[col, row].Value.ToString();
+
+                            if (stringBuffer.Contains(',') || stringBuffer.Contains('"'))
                             {
-                                strValue = datagridview[j, i].Value.ToString();
+                                //stringBuffer = stringBuffer.Replace("\"", "\"\"");
+                                //stringBuffer = stringBuffer.Replace(",", "\",\"");
+                                stringBuffer = stringBuffer.Insert(0, "\"");
+                                stringBuffer = stringBuffer.Insert(stringBuffer.Length, "\"");
+                                csv.Write(stringBuffer);
                             }
                             else
                             {
-                                strValue = strValue + Environment.NewLine + datagridview[j, i].Value.ToString();
+                                csv.Write(datagridview[col, row].Value);
                             }
+                        }
+                        if (col < datagridview.Rows[row].Cells.Count)
+                        {
+                            csv.Write(",");
                         }
                     }
                 }
+                csv.Write(Environment.NewLine);
             }
 
-            return strValue;
+            return csv.ToString();
         }
     }
 }

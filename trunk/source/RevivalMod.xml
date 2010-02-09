@@ -1,19 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<revival xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="ModSchema.xsd">
+<revival>
   <modification>
     <title>Revival SP modification</title>
-    <version>1.1.0</version>
+    <version>2.0</version>
     <description>This is the base SP modification developed by the Revival team.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>required</type>
     <pack id="sp_hellgate_1.10.180.3416_1.18074.70.4256">
-      <file id="items.txt.cooked">
+      <file id="gameglobals.txt.cooked">
         <modify>
-          <entity id="black_knight_dye">
-            <attribute id="affix1">
-              <replace>all_attributes_3</replace>
+          <entity id="max_luck_tugboat">
+            <attribute id="intData">
+              <replace>10,000</replace>
             </attribute>
-            <attribute id="property_mask">
-              <bitwise id="can_vendor">yes</bitwise>
+          </entity>
+        </modify>
+      </file>
+      <file id="treasure.txt.cooked">
+        <entity>
+          <attribute>
+            <replace></replace>
+          </attribute>
+        </entity>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Elite for normal mode</title>
+    <version>2.0</version>
+    <description>Reduces elite mode characters difficulty to normal mode, while benefiting from additional multipliers.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="sp_hellgate_1.10.180.3416_1.18074.70.4256">
+      <file id="gameglobals.txt.cooked">
+        <modify>
+          <entity id="elite_monster_damage_percent">
+            <attribute id="floatData">
+              <replace>0</replace>
+            </attribute>
+          </entity>
+          <entity id="elite_monster_sfx_chance_percent">
+            <attribute id="floatData">
+              <replace>0</replace>
+            </attribute>
+          </entity>
+          <entity id="elite_player_damage_percent">
+            <attribute id="floatData">
+              <replace>0</replace>
+            </attribute>
+          </entity>
+          <entity id="elite_player_sfx_chance_percent">
+            <attribute id="floatData">
+              <replace>0</replace>
             </attribute>
           </entity>
         </modify>
