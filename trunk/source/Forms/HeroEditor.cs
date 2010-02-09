@@ -26,6 +26,9 @@ namespace Reanimator.Forms
             filePath = file;
 
             InitializeComponent();
+
+            // As long as VS won't let me place the control in the form by hand I'll initialize it here
+            minigame_TabPage.Controls.Add(new MinigameControl());
         }
 
         private void ListBox1SelectedIndexChanged(object sender, EventArgs e)
