@@ -34,13 +34,13 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -99,7 +99,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.dataGridView1);
+            this.tabPage1.Controls.Add(this.dataGridView);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -108,17 +108,17 @@
             this.tabPage1.Text = "Table Data";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // dataGridView
             // 
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(-4, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(489, 571);
-            this.dataGridView1.TabIndex = 1;
-            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Location = new System.Drawing.Point(-4, 0);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.Size = new System.Drawing.Size(489, 571);
+            this.dataGridView.TabIndex = 1;
+            this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
             // tabPage2
             // 
@@ -156,7 +156,7 @@
             this.groupBox1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
@@ -174,6 +174,6 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView dataGridView2;
-        public System.Windows.Forms.DataGridView dataGridView1;
+        public System.Windows.Forms.DataGridView dataGridView;
     }
 }

@@ -64,19 +64,19 @@ namespace Reanimator.Forms
 
             // main table data
             progress.SetLoadingText("Generating table data...");
-            dataGridView1.AutoGenerateColumns = false;
-            dataGridView1.Columns.Add("Index", "Index");
+            dataGridView.AutoGenerateColumns = false;
+            dataGridView.Columns.Add("Index", "Index");
             object[] array = (object[])excelTable.GetTableArray();
             Type type = array[0].GetType();
             foreach (MemberInfo memberInfo in type.GetFields())
             {
-                dataGridView1.Columns.Add(memberInfo.Name, memberInfo.Name);
+                dataGridView.Columns.Add(memberInfo.Name, memberInfo.Name);
             }
 
             progress.ConfigBar(0, array.Length, 1);
             foreach (Object table in array)
             {
-                int row = dataGridView1.Rows.Add();
+                int row = dataGridView.Rows.Add();
                 int col = 1;
 
                 progress.SetCurrentItemText("Row " + row + " of " + array.Length);
@@ -126,7 +126,7 @@ namespace Reanimator.Forms
 
                                 cell.Value = cell.Items[excelOutputAttribute.DefaultIndex];
 
-                                dataGridView1[col, row] = cell;
+                                dataGridView[col, row] = cell;
                                 value = null;
                             }
                         }
@@ -134,7 +134,7 @@ namespace Reanimator.Forms
 
                     if (value != null)
                     {
-                        dataGridView1[col, row].Value = value;
+                        dataGridView[col, row].Value = value;
                     }
                     col++;
                 }
@@ -163,7 +163,7 @@ namespace Reanimator.Forms
                     switch (i)
                     {
                         case 0:
-                            dataGridView1[i, j].Value = intArrays[i][j];
+                            dataGridView[i, j].Value = intArrays[i][j];
                             break;
                         case 1:
                             tds.Unknowns1 = intArrays[i][j];
@@ -206,7 +206,7 @@ namespace Reanimator.Forms
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
-            DataGridViewSelectedCellCollection selectedCells = dataGridView1.SelectedCells;
+            DataGridViewSelectedCellCollection selectedCells = dataGridView.SelectedCells;
             dataGridView2.ClearSelection();
             foreach (DataGridViewCell cell in selectedCells)
             {

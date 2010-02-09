@@ -547,17 +547,26 @@ namespace Reanimator
 
                 if (excelTable != null)
                 {
-                    strValue = Export.CSV(excelTable.dataGridView1);
+                    // Prompts the user to choose what columns to export
+                    CSVSelection select = new CSVSelection(excelTable.dataGridView);
+                    DialogResult result = select.ShowDialog();
 
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*";
-                    saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                    saveFileDialog.FileName = excelTable.GetExcelTableName();
-
-                    if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+                    if (result == DialogResult.OK)
                     {
-                        string FileName = saveFileDialog.FileName;
-                        File.WriteAllText(FileName, strValue);
+                        // Compiles the CSV string
+                        strValue = Export.CSV(excelTable.dataGridView, select.selected);
+
+                        // Prompts the user to choose where to save the file
+                        SaveFileDialog saveFileDialog = new SaveFileDialog();
+                        saveFileDialog.Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*";
+                        saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                        //saveFileDialog.FileName = excelTable.GetExcelTableName();
+
+                        if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+                        {
+                            string FileName = saveFileDialog.FileName;
+                            File.WriteAllText(FileName, strValue);
+                        }
                     }
                 }
             }
