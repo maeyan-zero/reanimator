@@ -131,6 +131,12 @@
     <Compile Include="Forms\HeroEditor.Designer.cs">
       <DependentUpon>HeroEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\MinigameControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\MinigameControl.Designer.cs">
+      <DependentUpon>MinigameControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\TableForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -220,6 +226,25 @@
     <Compile Include="Strings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\MinigameControl.resx">
+      <DependentUpon>MinigameControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Resources\d_critical.png" />
+    <None Include="Resources\d_electric.png" />
+    <None Include="Resources\d_fire.png" />
+    <None Include="Resources\d_physical.png" />
+    <None Include="Resources\d_poison.png" />
+    <None Include="Resources\d_spectral.png" />
+    <None Include="Resources\f_armor.png" />
+    <None Include="Resources\f_gun.png" />
+    <None Include="Resources\f_magical.png" />
+    <None Include="Resources\f_mod.png" />
+    <None Include="Resources\f_sword.png" />
+    <None Include="Resources\k_beast.png" />
+    <None Include="Resources\k_demon.png" />
+    <None Include="Resources\k_necro.png" />
+    <None Include="Resources\k_spectral.png" />
     <Content Include="RevivalMod.xml" />
   </ItemGroup>
   <ItemGroup>
