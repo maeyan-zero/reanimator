@@ -9,19 +9,80 @@
     <pack id="sp_hellgate_1.10.180.3416_1.18074.70.4256">
       <file id="gameglobals.txt.cooked">
         <modify>
+          <!-- start improve effectiveness of luck -->
           <entity id="max_luck_tugboat">
             <attribute id="intData">
-              <replace>10,000</replace>
+              <replace>10000</replace>
+            </attribute>
+          </entity>
+          <!-- end improve effectiveness of luck -->
+        </modify>
+      </file>
+      <file id="treasure.txt.cooked">
+        <modify>
+          <entity>
+            <attribute>
+              <replace></replace>
             </attribute>
           </entity>
         </modify>
       </file>
-      <file id="treasure.txt.cooked">
-        <entity>
-          <attribute>
-            <replace></replace>
-          </attribute>
-        </entity>
+      <file id="items.txt.cooked">
+        <modify>
+          <!-- start remove subscriber and multiplayer flags -->
+          <entity id="*">
+            <attribute id="bitmask2">
+              <bitmask id="subscriberOnly">0</bitmask>
+            </attribute>
+            <attribute id="bitmask6">
+              <bitmask id="multiplayerOnly">0</bitmask>
+            </attribute>
+            <!-- not necessary, but removes annoying text -->
+            <attribute id="bitmask5">
+              <bitmask id="noTrade">0</bitmask>
+            </attribute>
+          </entity>
+          <!-- end remove subscriber and multiplayer flags -->
+          <!-- start allow rejuvenation injectors to drop -->
+          <entity id="basic rejuvenation">
+            <attribute id="bitmask1">
+              <bitmask id="spawn">1</bitmask>
+            </attribute>
+          </entity>
+          <entity id="large rejuvenation">
+            <attribute id="bitmask1">
+              <bitmask id="spawn">1</bitmask>
+            </attribute>
+          </entity>
+          <entity id="rejuvenation3">
+            <attribute id="bitmask1">
+              <bitmask id="spawn">1</bitmask>
+            </attribute>
+          </entity>
+          <entity id="rejuvenation4">
+            <attribute id="bitmask1">
+              <bitmask id="spawn">1</bitmask>
+            </attribute>
+          </entity>
+          <entity id="rejuvenation5">
+            <attribute id="bitmask1">
+              <bitmask id="spawn">1</bitmask>
+            </attribute>
+          </entity>
+          <!-- end allow rejuvenation injectors to drop -->
+          <!-- start retrainer fixes -->
+          <entity id="respec_skills">
+            <attribute id="quality">
+              <replace>-1</replace>
+            </attribute>
+          </entity>
+          <entity id="respec_attrib">
+            <attribute id="quality">
+              <replace>-1</replace>
+            </attribute>
+          </entity>
+          <!-- end retrainer fixes-->
+        </modify>
       </file>
     </pack>
   </modification>
