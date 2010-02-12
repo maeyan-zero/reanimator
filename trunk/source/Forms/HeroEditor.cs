@@ -28,7 +28,9 @@ namespace Reanimator.Forms
             InitializeComponent();
 
             // As long as VS won't let me place the control in the form by hand I'll initialize it here
-            minigame_TabPage.Controls.Add(new MinigameControl());
+            MinigameControl control = new MinigameControl();
+            control.Location = new Point(181, 166);
+            minigame_TabPage.Controls.Add(control);
         }
 
         private void ListBox1SelectedIndexChanged(object sender, EventArgs e)
