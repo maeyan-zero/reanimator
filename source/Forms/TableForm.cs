@@ -18,6 +18,8 @@ namespace Reanimator
     {
         Index index;
         Strings strings;
+        List<int> foundIndices;
+        int currentSelection;
 
         public bool IsIndexFile
         {
@@ -56,6 +58,9 @@ namespace Reanimator
             IndexFileCheckBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             IndexFileCheckBoxColumn.Width = 24;
             IndexFileCheckBoxColumn.Name = "IndexFileCheckBoxColumn";
+
+            foundIndices = new List<int>();
+            currentSelection = 0;
         }
 
         /// <summary>
@@ -304,6 +309,7 @@ namespace Reanimator
         /// <param name="e">Parameters</param>
         private void Search_Click(object sender, EventArgs e)
         {
+            foundIndices.Clear();
             int counter = 0;
 
             this.dataGridView.SuspendLayout();
@@ -313,16 +319,23 @@ namespace Reanimator
 
                 foreach (DataGridViewCell cell in row.Cells)
                 {
-                    if (cell.Value != null && cell.Value.ToString().Contains(tb_searchString.Text))
+                    if (cell.Value != null && cell.Value.ToString().ToLower().Contains(tb_searchString.Text.ToLower()))
                     {
+                        foundIndices.Add(row.Index);
                         cell.Selected = true;
                         counter++;
                     }
                 }
-                this.dataGridView.ResumeLayout();
-
-                searchResults_Label.Text = counter + " matching entries found";
             }
+
+            searchResults_Label.Text = counter + " matching entries found";
+
+            if (foundIndices.Count > 0)
+            {
+                ScrollToPosition(foundIndices[0]);
+            }
+
+            this.dataGridView.ResumeLayout();
         }
 
         private void SelectAllEntries(bool selected)
@@ -375,6 +388,37 @@ namespace Reanimator
             FileStream fOut = new FileStream(index.FileName + ".new.idx", FileMode.Create);
             fOut.Write(saveData, 0, saveData.Length);
             fOut.Dispose();
+        }
+
+        private void b_prev_Click(object sender, EventArgs e)
+        {
+            MoveToNextFoundItem(-1);
+        }
+
+        private void b_next_Click(object sender, EventArgs e)
+        {
+            MoveToNextFoundItem(1);
+        }
+
+        private void MoveToNextFoundItem(int direction)
+        {
+            currentSelection += direction;
+
+            if (currentSelection < 0)
+            {
+                currentSelection = 0;
+            }
+            else if (currentSelection > foundIndices.Count - 1)
+            {
+                currentSelection = foundIndices.Count - 1;
+            }
+
+            ScrollToPosition(foundIndices[currentSelection]);
+        }
+
+        private void ScrollToPosition(int position)
+        {
+            dataGridView.FirstDisplayedScrollingRowIndex = position;
         }
     }
 }

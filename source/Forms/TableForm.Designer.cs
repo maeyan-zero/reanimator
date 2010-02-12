@@ -44,6 +44,8 @@
             this.uncheckAll_Button = new System.Windows.Forms.Button();
             this.unselectAll_Button = new System.Windows.Forms.Button();
             this.searchResults_Label = new System.Windows.Forms.Label();
+            this.b_prev = new System.Windows.Forms.Button();
+            this.b_next = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -80,7 +82,7 @@
             // 
             // b_search
             // 
-            this.b_search.Location = new System.Drawing.Point(106, 20);
+            this.b_search.Location = new System.Drawing.Point(140, 20);
             this.b_search.Name = "b_search";
             this.b_search.Size = new System.Drawing.Size(75, 20);
             this.b_search.TabIndex = 3;
@@ -181,17 +183,39 @@
             // searchResults_Label
             // 
             this.searchResults_Label.AutoSize = true;
-            this.searchResults_Label.Location = new System.Drawing.Point(187, 24);
+            this.searchResults_Label.Location = new System.Drawing.Point(255, 23);
             this.searchResults_Label.Name = "searchResults_Label";
             this.searchResults_Label.Size = new System.Drawing.Size(79, 13);
             this.searchResults_Label.TabIndex = 10;
             this.searchResults_Label.Text = "Search Results";
+            // 
+            // b_prev
+            // 
+            this.b_prev.Location = new System.Drawing.Point(106, 20);
+            this.b_prev.Name = "b_prev";
+            this.b_prev.Size = new System.Drawing.Size(28, 20);
+            this.b_prev.TabIndex = 11;
+            this.b_prev.Text = "<<";
+            this.b_prev.UseVisualStyleBackColor = true;
+            this.b_prev.Click += new System.EventHandler(this.b_prev_Click);
+            // 
+            // b_next
+            // 
+            this.b_next.Location = new System.Drawing.Point(221, 20);
+            this.b_next.Name = "b_next";
+            this.b_next.Size = new System.Drawing.Size(28, 20);
+            this.b_next.TabIndex = 12;
+            this.b_next.Text = ">>";
+            this.b_next.UseVisualStyleBackColor = true;
+            this.b_next.Click += new System.EventHandler(this.b_next_Click);
             // 
             // TableForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 420);
+            this.Controls.Add(this.b_next);
+            this.Controls.Add(this.b_prev);
             this.Controls.Add(this.searchResults_Label);
             this.Controls.Add(this.unselectAll_Button);
             this.Controls.Add(this.selectAll_Button);
@@ -228,5 +252,7 @@
         private System.Windows.Forms.Button uncheckAll_Button;
         private System.Windows.Forms.Button unselectAll_Button;
         private System.Windows.Forms.Label searchResults_Label;
+        private System.Windows.Forms.Button b_prev;
+        private System.Windows.Forms.Button b_next;
     }
 }
