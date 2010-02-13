@@ -92,6 +92,14 @@ namespace Reanimator.Forms
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.tp_test = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.p_wpNormal = new System.Windows.Forms.Panel();
+            this.p_wpNightmare = new System.Windows.Forms.Panel();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.p_miniGame = new System.Windows.Forms.Panel();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.statPoints_numericUpDown)).BeginInit();
@@ -105,6 +113,10 @@ namespace Reanimator.Forms
             this.statAttribute1_GroupBox.SuspendLayout();
             this.stats_GroupBox.SuspendLayout();
             this.items_TabPage.SuspendLayout();
+            this.minigame_TabPage.SuspendLayout();
+            this.tp_test.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -116,6 +128,7 @@ namespace Reanimator.Forms
             this.main_TabControl.Controls.Add(this.stats_TabPage);
             this.main_TabControl.Controls.Add(this.items_TabPage);
             this.main_TabControl.Controls.Add(this.minigame_TabPage);
+            this.main_TabControl.Controls.Add(this.tp_test);
             this.main_TabControl.Location = new System.Drawing.Point(12, 33);
             this.main_TabControl.Name = "main_TabControl";
             this.main_TabControl.SelectedIndex = 0;
@@ -715,6 +728,7 @@ namespace Reanimator.Forms
             // 
             // minigame_TabPage
             // 
+            this.minigame_TabPage.Controls.Add(this.groupBox3);
             this.minigame_TabPage.Location = new System.Drawing.Point(4, 22);
             this.minigame_TabPage.Name = "minigame_TabPage";
             this.minigame_TabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -765,6 +779,79 @@ namespace Reanimator.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // tp_test
+            // 
+            this.tp_test.Controls.Add(this.groupBox1);
+            this.tp_test.Location = new System.Drawing.Point(4, 22);
+            this.tp_test.Name = "tp_test";
+            this.tp_test.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_test.Size = new System.Drawing.Size(649, 509);
+            this.tp_test.TabIndex = 4;
+            this.tp_test.Text = "Test";
+            this.tp_test.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label20);
+            this.groupBox1.Controls.Add(this.label19);
+            this.groupBox1.Controls.Add(this.p_wpNightmare);
+            this.groupBox1.Controls.Add(this.p_wpNormal);
+            this.groupBox1.Location = new System.Drawing.Point(6, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(360, 210);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Warp Terminal Locations";
+            // 
+            // p_wpNormal
+            // 
+            this.p_wpNormal.Location = new System.Drawing.Point(6, 32);
+            this.p_wpNormal.Name = "p_wpNormal";
+            this.p_wpNormal.Size = new System.Drawing.Size(170, 170);
+            this.p_wpNormal.TabIndex = 0;
+            // 
+            // p_wpNightmare
+            // 
+            this.p_wpNightmare.Location = new System.Drawing.Point(182, 32);
+            this.p_wpNightmare.Name = "p_wpNightmare";
+            this.p_wpNightmare.Size = new System.Drawing.Size(170, 170);
+            this.p_wpNightmare.TabIndex = 1;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(3, 16);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(72, 13);
+            this.label19.TabIndex = 2;
+            this.label19.Text = "Normal mode:";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(179, 16);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(87, 13);
+            this.label20.TabIndex = 3;
+            this.label20.Text = "Nightmare mode:";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.p_miniGame);
+            this.groupBox3.Location = new System.Drawing.Point(6, 6);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(300, 200);
+            this.groupBox3.TabIndex = 0;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Minigame";
+            // 
+            // p_miniGame
+            // 
+            this.p_miniGame.Location = new System.Drawing.Point(6, 19);
+            this.p_miniGame.Name = "p_miniGame";
+            this.p_miniGame.Size = new System.Drawing.Size(286, 176);
+            this.p_miniGame.TabIndex = 0;
+            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -796,6 +883,11 @@ namespace Reanimator.Forms
             this.stats_GroupBox.ResumeLayout(false);
             this.items_TabPage.ResumeLayout(false);
             this.items_TabPage.PerformLayout();
+            this.minigame_TabPage.ResumeLayout(false);
+            this.tp_test.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -866,5 +958,13 @@ namespace Reanimator.Forms
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TabPage minigame_TabPage;
+        private System.Windows.Forms.TabPage tp_test;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Panel p_wpNightmare;
+        private System.Windows.Forms.Panel p_wpNormal;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Panel p_miniGame;
     }
 }
