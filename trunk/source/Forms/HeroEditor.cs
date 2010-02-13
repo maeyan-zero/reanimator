@@ -21,16 +21,18 @@ namespace Reanimator.Forms
 
         public HeroEditor(Unit unit, ExcelTables tables, String file)
         {
-            heroUnit = unit;
-            excelTables = tables;
-            filePath = file;
+            try
+            {
+                heroUnit = unit;
+                excelTables = tables;
+                filePath = file;
 
-            InitializeComponent();
-
-            // As long as VS won't let me place the control in the form by hand I'll initialize it here
-            MinigameControl control = new MinigameControl();
-            control.Location = new Point(181, 166);
-            minigame_TabPage.Controls.Add(control);
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Constructor");
+            }
         }
 
         private void ListBox1SelectedIndexChanged(object sender, EventArgs e)
@@ -57,135 +59,168 @@ namespace Reanimator.Forms
 
         private void PopulateItems(Unit unit)
         {
-            Unit[] items = unit.Items;
-            for (int i = 0; i < items.Length; i++)
+            try
             {
-                Unit item = items[i];
-                item.Name = "Item #" + item.unknownFlagValue;
-                this.currentlyEditing_ComboBox.Items.Add(item);
+                Unit[] items = unit.Items;
+                for (int i = 0; i < items.Length; i++)
+                {
+                    Unit item = items[i];
+                    item.Name = "Item #" + item.unknownFlagValue;
+                    this.currentlyEditing_ComboBox.Items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source);
             }
         }
 
         private void PopulateStats(Unit unit)
         {
-            stats_ListBox.Items.Clear();
-
-            for (int i = 0; i < unit.Stats.Length; i++)
+            try
             {
-                Unit.StatBlock.Stat stat = unit.Stats[i];
-                stat.Name = ((Stats)excelTables.GetTable("stats")).GetStringFromId(stat.Id);
+                stats_ListBox.Items.Clear();
 
-                stats_ListBox.Items.Add(stat);
+                for (int i = 0; i < unit.Stats.Length; i++)
+                {
+                    Unit.StatBlock.Stat stat = unit.Stats[i];
+
+                    //string txt = string.Empty;
+                    //for (int counter = 0; counter < excelTables.Count; counter++)
+                    //{
+                    //    txt += excelTables.GetTableStringId(counter) + "\n";
+                    //}
+                    //MessageBox.Show(txt);
+
+                    ExcelTable table = excelTables.GetTable("stats");
+                    Stats stats = (Stats)table;
+
+                    stat.Name = stats.GetStringFromId(stat.Id);
+                    //stat.Name = ((Stats)excelTables.GetTable("stats")).GetStringFromId(stat.Id);
+
+                    stats_ListBox.Items.Add(stat);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "PopulateStats");
             }
         }
 
         private void charStats_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            this.panel1.Controls.Clear();
+            try
+            {
+                this.panel1.Controls.Clear();
 
-            Unit.StatBlock.Stat stat = (Unit.StatBlock.Stat)this.stats_ListBox.SelectedItem;
+                Unit.StatBlock.Stat stat = (Unit.StatBlock.Stat)this.stats_ListBox.SelectedItem;
 
-            // yea, copy/paste nastiness ftw
-            if (stat.Attribute1 != null)
-            {
-                statAttribute1_GroupBox.Enabled = true;
-                statAttribute1_bitCount_TextBox.DataBindings.Clear();
-                statAttribute1_unknown1_TextBox.DataBindings.Clear();
-                statAttribute1_unknown1_1_TextBox.DataBindings.Clear();
-                statAttribute1_resource_TextBox.DataBindings.Clear();
-                statAttribute1_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute1, "BitCount");
-                statAttribute1_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1");
-                statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
-                statAttribute1_resource_TextBox.DataBindings.Add("Text", stat.Attribute1, "Resource");
-            }
-            else
-            {
-                statAttribute1_GroupBox.Enabled = false;
-            }
-            if (stat.Attribute2 != null)
-            {
-                statAttribute2_GroupBox.Enabled = true;
-                statAttribute2_bitCount_TextBox.DataBindings.Clear();
-                statAttribute2_unknown1_TextBox.DataBindings.Clear();
-                statAttribute2_unknown1_1_TextBox.DataBindings.Clear();
-                statAttribute2_resource_TextBox.DataBindings.Clear();
-                statAttribute2_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute2, "BitCount");
-                statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
-                statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
-                statAttribute2_resource_TextBox.DataBindings.Add("Text", stat.Attribute2, "Resource");
-            }
-            else
-            {
-                statAttribute2_GroupBox.Enabled = false;
-            }
-            if (stat.Attribute3 != null)
-            {
-                statAttribute3_GroupBox.Enabled = true;
-                statAttribute3_bitCount_TextBox.DataBindings.Clear();
-                statAttribute3_unknown1_TextBox.DataBindings.Clear();
-                statAttribute3_unknown1_1_TextBox.DataBindings.Clear();
-                statAttribute3_resource_TextBox.DataBindings.Clear();
-                statAttribute3_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute3, "BitCount");
-                statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
-                statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
-                statAttribute3_resource_TextBox.DataBindings.Add("Text", stat.Attribute3, "Resource");
-            }
-            else
-            {
-                statAttribute3_GroupBox.Enabled = false;
-            }
-
-            int heightOffset = 0;
-            for (int i = 0; i < stat.Length; i++)
-            {
-                Unit.StatBlock.Stat.Values statValues = stat[i];
-
-                bool hasExtraAttribute = false;
-                for (int j = 0; j < 3; j++)
+                // yea, copy/paste nastiness ftw
+                if (stat.Attribute1 != null)
                 {
-                    if (stat.AttributeAt(j) == null)
+                    statAttribute1_GroupBox.Enabled = true;
+                    statAttribute1_bitCount_TextBox.DataBindings.Clear();
+                    statAttribute1_unknown1_TextBox.DataBindings.Clear();
+                    statAttribute1_unknown1_1_TextBox.DataBindings.Clear();
+                    statAttribute1_resource_TextBox.DataBindings.Clear();
+                    statAttribute1_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute1, "BitCount");
+                    statAttribute1_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1");
+                    statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
+                    statAttribute1_resource_TextBox.DataBindings.Add("Text", stat.Attribute1, "Resource");
+                }
+                else
+                {
+                    statAttribute1_GroupBox.Enabled = false;
+                }
+                if (stat.Attribute2 != null)
+                {
+                    statAttribute2_GroupBox.Enabled = true;
+                    statAttribute2_bitCount_TextBox.DataBindings.Clear();
+                    statAttribute2_unknown1_TextBox.DataBindings.Clear();
+                    statAttribute2_unknown1_1_TextBox.DataBindings.Clear();
+                    statAttribute2_resource_TextBox.DataBindings.Clear();
+                    statAttribute2_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute2, "BitCount");
+                    statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
+                    statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
+                    statAttribute2_resource_TextBox.DataBindings.Add("Text", stat.Attribute2, "Resource");
+                }
+                else
+                {
+                    statAttribute2_GroupBox.Enabled = false;
+                }
+                if (stat.Attribute3 != null)
+                {
+                    statAttribute3_GroupBox.Enabled = true;
+                    statAttribute3_bitCount_TextBox.DataBindings.Clear();
+                    statAttribute3_unknown1_TextBox.DataBindings.Clear();
+                    statAttribute3_unknown1_1_TextBox.DataBindings.Clear();
+                    statAttribute3_resource_TextBox.DataBindings.Clear();
+                    statAttribute3_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute3, "BitCount");
+                    statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
+                    statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
+                    statAttribute3_resource_TextBox.DataBindings.Add("Text", stat.Attribute3, "Resource");
+                }
+                else
+                {
+                    statAttribute3_GroupBox.Enabled = false;
+                }
+
+                int heightOffset = 0;
+                for (int i = 0; i < stat.Length; i++)
+                {
+                    Unit.StatBlock.Stat.Values statValues = stat[i];
+
+                    bool hasExtraAttribute = false;
+                    for (int j = 0; j < 3; j++)
                     {
-                        break;
+                        if (stat.AttributeAt(j) == null)
+                        {
+                            break;
+                        }
+
+                        Label eaValueLabel = new Label();
+                        eaValueLabel.Text = "Attr" + j + ": ";
+                        eaValueLabel.Width = 40;
+                        eaValueLabel.Top = 3 + heightOffset;
+                        TextBox eaValueTextBox = new TextBox();
+                        eaValueTextBox.Text = stat.AttributeAt(j).ToString();
+                        eaValueTextBox.Left = eaValueLabel.Right;
+                        eaValueTextBox.Top = heightOffset;
+                        eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
+
+                        this.panel1.Controls.Add(eaValueLabel);
+                        this.panel1.Controls.Add(eaValueTextBox);
+
+                        heightOffset += 25;
+                        hasExtraAttribute = true;
                     }
 
-                    Label eaValueLabel = new Label();
-                    eaValueLabel.Text = "Attr" + j + ": ";
-                    eaValueLabel.Width = 40;
-                    eaValueLabel.Top = 3 + heightOffset;
-                    TextBox eaValueTextBox = new TextBox();
-                    eaValueTextBox.Text = stat.AttributeAt(j).ToString();
-                    eaValueTextBox.Left = eaValueLabel.Right;
-                    eaValueTextBox.Top = heightOffset;
-                    eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
+                    int leftOffset = 0;
+                    if (hasExtraAttribute)
+                    {
+                        leftOffset += 35;
+                    }
 
-                    this.panel1.Controls.Add(eaValueLabel);
-                    this.panel1.Controls.Add(eaValueTextBox);
+                    Label valueLabel = new Label();
+                    valueLabel.Text = "Value: ";
+                    valueLabel.Left = leftOffset;
+                    valueLabel.Width = 40;
+                    valueLabel.Top = 3 + heightOffset;
+                    TextBox valueTextBox = new TextBox();
+                    valueTextBox.Text = statValues.Stat.ToString();
+                    valueTextBox.Left = valueLabel.Right;
+                    valueTextBox.Top = heightOffset;
+                    valueTextBox.DataBindings.Add("Text", statValues, "Stat");
 
-                    heightOffset += 25;
-                    hasExtraAttribute = true;
+                    this.panel1.Controls.Add(valueLabel);
+                    this.panel1.Controls.Add(valueTextBox);
+
+                    heightOffset += 45;
                 }
-
-                int leftOffset = 0;
-                if (hasExtraAttribute)
-                {
-                    leftOffset += 35;
-                }
-
-                Label valueLabel = new Label();
-                valueLabel.Text = "Value: ";
-                valueLabel.Left = leftOffset;
-                valueLabel.Width = 40;
-                valueLabel.Top = 3 + heightOffset;
-                TextBox valueTextBox = new TextBox();
-                valueTextBox.Text = statValues.Stat.ToString();
-                valueTextBox.Left = valueLabel.Right;
-                valueTextBox.Top = heightOffset;
-                valueTextBox.DataBindings.Add("Text", statValues, "Stat");
-
-                this.panel1.Controls.Add(valueLabel);
-                this.panel1.Controls.Add(valueTextBox);
-
-                heightOffset += 45;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "charStats_ListBox_SelectedIndexChanged");
             }
         }
 
@@ -248,102 +283,155 @@ namespace Reanimator.Forms
 
         private void HeroEditor_Load(object sender, EventArgs e)
         {
-            currentlyEditing_ComboBox.Items.Add(heroUnit);
-            currentlyEditing_ComboBox.SelectedIndex = 0;
+            try
+            {
+                currentlyEditing_ComboBox.Items.Add(heroUnit);
+                currentlyEditing_ComboBox.SelectedIndex = 0;
 
-            PopulateGeneral(heroUnit);
-            PopulateStats(heroUnit);
-            PopulateItems(heroUnit);
+                PopulateGeneral(heroUnit);
+                PopulateStats(heroUnit);
+                PopulateItems(heroUnit);
+
+
+                PopulateMinigame();
+                PopulateWaypoints();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "HeroEditor_Load");
+            }
+        }
+
+        private void PopulateMinigame()
+        {
+            Unit.StatBlock.Stat minigame = GetComplexValue("minigame_category_needed");
+
+            // As long as VS won't let me place the control in the form by hand I'll initialize it here
+            MinigameControl control = new MinigameControl(minigame.values);
+            p_miniGame.Controls.Add(control);
+        }
+
+        private void PopulateWaypoints()
+        {
+            Unit.StatBlock.Stat wayPoints = GetComplexValue("waypoint_flags");
+
+            if (wayPoints != null)
+            {
+                if (wayPoints.values.Length >= 1)
+                {
+                    WayPointControl wpcNormal = new WayPointControl(wayPoints.values[0]);
+                    p_wpNormal.Controls.Add(wpcNormal);
+                }
+                if (wayPoints.values.Length >= 2)
+                {
+                    WayPointControl wpcNightmare = new WayPointControl(wayPoints.values[1]);
+                    p_wpNightmare.Controls.Add(wpcNightmare);
+                }
+            }
         }
 
         private void PopulateGeneral(Unit heroUnit)
         {
-            name_TextBox.Text = heroUnit.ToString();
-
-            string job;
-            switch (heroUnit.JobClass)
+            try
             {
-                case (93):
-                    {
-                        job = "Summoner";
-                    }
-                    break;
-                case (97):
-                    {
-                        job = "Guardian";
-                    }
-                    break;
-                case (124):
-                    {
-                        job = "Marksman";
-                    }
-                    break;
-                case (141):
-                    {
-                        job = "Evoker";
-                    }
-                    break;
-                case (180):
-                    {
-                        job = "Blademaster";
-                    }
-                    break;
-                case (191):
-                    {
-                        job = "Engineer";
-                    }
-                    break;
-                default:
-                    {
-                        job = "Unknown";
-                    }
-                    break;
+                name_TextBox.Text = heroUnit.ToString();
+
+                string job;
+                switch (heroUnit.JobClass)
+                {
+                    case (93):
+                        {
+                            job = "Summoner";
+                        }
+                        break;
+                    case (97):
+                        {
+                            job = "Guardian";
+                        }
+                        break;
+                    case (124):
+                        {
+                            job = "Marksman";
+                        }
+                        break;
+                    case (141):
+                        {
+                            job = "Evoker";
+                        }
+                        break;
+                    case (180):
+                        {
+                            job = "Blademaster";
+                        }
+                        break;
+                    case (191):
+                        {
+                            job = "Engineer";
+                        }
+                        break;
+                    default:
+                        {
+                            job = "Unknown";
+                        }
+                        break;
+                }
+
+                textBox1.Text = String.Format("{0:00000000}", Int32.Parse(Convert.ToString(heroUnit.JobClass, 2)));
+                class_TextBox.Text = job;
+
+                SetCheckBoxes();
+
+                SetCharacterValues();
+
+                DisplayFlags();
+
+                initialized = true;
             }
-
-            textBox1.Text = String.Format("{0:00000000}", Int32.Parse(Convert.ToString(heroUnit.JobClass, 2)));
-            class_TextBox.Text = job;
-
-            SetCheckBoxes();
-
-            SetCharacterValues();
-
-            DisplayFlags();
-
-            initialized = true;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "PopulateGeneral");
+            }
         }
 
         private void SetCharacterValues()
         {
-            int level = GetSimpleValue("level");
-            level_NumericUpDown.Value = level - 8;
+            try
+            {
+                int level = GetSimpleValue("level");
+                level_NumericUpDown.Value = level - 8;
 
 
-            int palladium = GetSimpleValue("gold");
-            // when palladium reaches 9999999 the ingame value is set to a max value ao something like 16000000
-            if (palladium > 9999999)
-            {
-                palladium = 9999999;
-            }
-            //should not occur, but better be save than sorry
-            else if (palladium < 0)
-            {
-                palladium = 0;
-            }
-            palladium_numericUpDown.Value = palladium;
+                int palladium = GetSimpleValue("gold");
+                // when palladium reaches 9999999 the ingame value is set to a max value ao something like 16000000
+                if (palladium > 9999999)
+                {
+                    palladium = 9999999;
+                }
+                //should not occur, but better be save than sorry
+                else if (palladium < 0)
+                {
+                    palladium = 0;
+                }
+                palladium_numericUpDown.Value = palladium;
 
-            int statPoints = GetSimpleValue("stat_points");
-            if (statPoints < 0)
-            {
-                statPoints = 0;
-            }
-            statPoints_numericUpDown.Value = statPoints;
+                int statPoints = GetSimpleValue("stat_points");
+                if (statPoints < 0)
+                {
+                    statPoints = 0;
+                }
+                statPoints_numericUpDown.Value = statPoints;
 
-            int skillPoints = GetSimpleValue("skill_points");
-            if (skillPoints < 0)
-            {
-                skillPoints = 0;
+                int skillPoints = GetSimpleValue("skill_points");
+                if (skillPoints < 0)
+                {
+                    skillPoints = 0;
+                }
+                skillPoints_numericUpDown.Value = skillPoints;
             }
-            skillPoints_numericUpDown.Value = skillPoints;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "SetCharacterValues");
+            }
         }
 
         // flag used to prevent overwriting of the character game mode when loading the check box states
@@ -498,7 +586,7 @@ namespace Reanimator.Forms
             {
                 Unit.StatBlock.Stat unit = heroUnit.Stats[counter];
 
-                if (unit.Name == valueName)
+                if (unit.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
                 {
                     return unit;
                 }

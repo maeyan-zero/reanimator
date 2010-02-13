@@ -402,18 +402,21 @@ namespace Reanimator
 
         private void MoveToNextFoundItem(int direction)
         {
-            currentSelection += direction;
-
-            if (currentSelection < 0)
+            if (foundIndices.Count > 0)
             {
-                currentSelection = 0;
-            }
-            else if (currentSelection > foundIndices.Count - 1)
-            {
-                currentSelection = foundIndices.Count - 1;
-            }
+                currentSelection += direction;
 
-            ScrollToPosition(foundIndices[currentSelection]);
+                if (currentSelection < 0)
+                {
+                    currentSelection = 0;
+                }
+                else if (currentSelection > foundIndices.Count - 1)
+                {
+                    currentSelection = foundIndices.Count - 1;
+                }
+
+                ScrollToPosition(foundIndices[currentSelection]);
+            }
         }
 
         private void ScrollToPosition(int position)

@@ -43,27 +43,27 @@
             // 
             // p_icons
             // 
-            this.p_icons.Controls.Add(this.b_icon3);
-            this.p_icons.Controls.Add(this.b_icon2);
             this.p_icons.Controls.Add(this.b_icon1);
+            this.p_icons.Controls.Add(this.b_icon2);
+            this.p_icons.Controls.Add(this.b_icon3);
             this.p_icons.Location = new System.Drawing.Point(3, 51);
             this.p_icons.Name = "p_icons";
             this.p_icons.Size = new System.Drawing.Size(280, 70);
             this.p_icons.TabIndex = 0;
             // 
-            // b_icon3
+            // b_icon1
             // 
-            this.b_icon3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.b_icon3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.b_icon3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.b_icon3.ForeColor = System.Drawing.Color.Red;
-            this.b_icon3.Location = new System.Drawing.Point(213, 3);
-            this.b_icon3.Name = "b_icon3";
-            this.b_icon3.Size = new System.Drawing.Size(64, 64);
-            this.b_icon3.TabIndex = 5;
-            this.b_icon3.Text = "-1";
-            this.b_icon3.UseVisualStyleBackColor = true;
-            this.b_icon3.Click += new System.EventHandler(this.b_icon_Click);
+            this.b_icon1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.b_icon1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.b_icon1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.b_icon1.ForeColor = System.Drawing.Color.Red;
+            this.b_icon1.Location = new System.Drawing.Point(3, 3);
+            this.b_icon1.Name = "b_icon1";
+            this.b_icon1.Size = new System.Drawing.Size(64, 64);
+            this.b_icon1.TabIndex = 3;
+            this.b_icon1.Text = "-1";
+            this.b_icon1.UseVisualStyleBackColor = true;
+            this.b_icon1.Click += new System.EventHandler(this.b_icon_Click);
             // 
             // b_icon2
             // 
@@ -79,19 +79,19 @@
             this.b_icon2.UseVisualStyleBackColor = true;
             this.b_icon2.Click += new System.EventHandler(this.b_icon_Click);
             // 
-            // b_icon1
+            // b_icon3
             // 
-            this.b_icon1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.b_icon1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.b_icon1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.b_icon1.ForeColor = System.Drawing.Color.Red;
-            this.b_icon1.Location = new System.Drawing.Point(3, 3);
-            this.b_icon1.Name = "b_icon1";
-            this.b_icon1.Size = new System.Drawing.Size(64, 64);
-            this.b_icon1.TabIndex = 3;
-            this.b_icon1.Text = "-1";
-            this.b_icon1.UseVisualStyleBackColor = true;
-            this.b_icon1.Click += new System.EventHandler(this.b_icon_Click);
+            this.b_icon3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.b_icon3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.b_icon3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.b_icon3.ForeColor = System.Drawing.Color.Red;
+            this.b_icon3.Location = new System.Drawing.Point(213, 3);
+            this.b_icon3.Name = "b_icon3";
+            this.b_icon3.Size = new System.Drawing.Size(64, 64);
+            this.b_icon3.TabIndex = 5;
+            this.b_icon3.Text = "-1";
+            this.b_icon3.UseVisualStyleBackColor = true;
+            this.b_icon3.Click += new System.EventHandler(this.b_icon_Click);
             // 
             // groupBox1
             // 
@@ -169,9 +169,9 @@
         #endregion
 
         private System.Windows.Forms.Panel p_icons;
-        private System.Windows.Forms.Button b_icon3;
-        private System.Windows.Forms.Button b_icon2;
         private System.Windows.Forms.Button b_icon1;
+        private System.Windows.Forms.Button b_icon2;
+        private System.Windows.Forms.Button b_icon3;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton rb_easy;
         private System.Windows.Forms.RadioButton rb_hard;

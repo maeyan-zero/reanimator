@@ -17,6 +17,7 @@ namespace Reanimator.Forms
         AttributeValues[] currentMinigame;
         Random random;
         Difficulty difficulty;
+        Unit.StatBlock.Stat.Values[] minigameValues;
 
         // List of available mini game icons
         private enum MinigameIcons
@@ -64,14 +65,41 @@ namespace Reanimator.Forms
         public MinigameControl()
         {
             InitializeComponent();
+        }
+
+        public MinigameControl(Unit.StatBlock.Stat.Values[] minigame) : this()
+        {
+            minigameValues = minigame;
+            random = new Random(DateTime.Now.Millisecond);
+            currentMinigame = new AttributeValues[3];
+            difficulty = Difficulty.normal;
 
             InitializeAttributes();
+            
+            //RandomizeMinigame();
+            SetCurrentMinigame();
+        }
 
-            currentMinigame = new AttributeValues[3];
+        private void SetCurrentMinigame()
+        {
+            for (int counter = 0; counter < minigameValues.Length; counter++)
+            {
+                AttributeValues game = GetMatchingValues(minigameValues[counter].Attribute1, minigameValues[counter].Attribute2);
+                SetMinigame(game.Icon, minigameValues[counter].Stat - 1, counter + 1);
+            }
+        }
 
-            random = new Random(DateTime.Now.Millisecond);
-            difficulty = Difficulty.normal;
-            RandomizeMinigame();
+        private AttributeValues GetMatchingValues(int attr0, int attr1)
+        {
+            foreach (AttributeValues value in values)
+            {
+                if (value.Attr0 == attr0 && value.Attr1 == attr1)
+                {
+                    return value;
+                }
+            }
+
+            return values[CheckIfLAreadyExists(0)];
         }
 
         private void InitializeAttributes()
@@ -167,6 +195,10 @@ namespace Reanimator.Forms
             button.Text = count.ToString();
             button.Tag = values[valueIndex];
             currentMinigame[buttonIndex] = values[valueIndex];
+
+            minigameValues[buttonIndex].Attribute1 = values[valueIndex].Attr0;
+            minigameValues[buttonIndex].Attribute2 = values[valueIndex].Attr1;
+            minigameValues[buttonIndex].Stat = count + 1;
         }
 
         private int CheckIfLAreadyExists(int newIndex)
