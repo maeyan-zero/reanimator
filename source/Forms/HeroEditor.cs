@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Reanimator.Excel;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Xml.Serialization;
 
 namespace Reanimator.Forms
 {
@@ -302,6 +303,24 @@ namespace Reanimator.Forms
             }
         }
 
+        public static void Serialize(Unit.StatBlock.Stat stats, string path)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Unit.StatBlock.Stat));
+            TextWriter tw = new StreamWriter(path);
+            serializer.Serialize(tw, stats);
+            tw.Close();
+        }
+
+        public static Unit.StatBlock.Stat Deserialize(string path)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Unit.StatBlock.Stat));
+            TextReader tr = new StreamReader(path);
+            Unit.StatBlock.Stat stats = (Unit.StatBlock.Stat)serializer.Deserialize(tr);
+            tr.Close();
+
+            return stats;
+        }
+
         private void PopulateMinigame()
         {
             Unit.StatBlock.Stat minigame = GetComplexValue("minigame_category_needed");
@@ -327,6 +346,12 @@ namespace Reanimator.Forms
                     WayPointControl wpcNightmare = new WayPointControl(wayPoints.values[1]);
                     p_wpNightmare.Controls.Add(wpcNightmare);
                 }
+
+                Serialize(wayPoints, @"F:\test.xml");
+            }
+            else
+            {
+                wayPoints = Deserialize(@"F:\test.xml");
             }
         }
 
@@ -412,21 +437,51 @@ namespace Reanimator.Forms
                 {
                     palladium = 0;
                 }
-                palladium_numericUpDown.Value = palladium;
+                nud_palladium.Value = palladium;
 
                 int statPoints = GetSimpleValue("stat_points");
                 if (statPoints < 0)
                 {
                     statPoints = 0;
                 }
-                statPoints_numericUpDown.Value = statPoints;
+                nud_statPoints.Value = statPoints;
 
                 int skillPoints = GetSimpleValue("skill_points");
                 if (skillPoints < 0)
                 {
                     skillPoints = 0;
                 }
-                skillPoints_numericUpDown.Value = skillPoints;
+                nud_skillPoints.Value = skillPoints;
+
+                int accuracy = GetSimpleValue("accuracy");
+                nud_accuracy.Value = accuracy;
+
+                int strength = GetSimpleValue("strength");
+                nud_strength.Value = strength;
+
+                int stamina = GetSimpleValue("stamina");
+                nud_stamina.Value = stamina;
+
+                int willpower = GetSimpleValue("willpower");
+                nud_willpower.Value = willpower;
+
+                int shields = GetSimpleValue("hp_max");
+                nud_shields.Value = shields;
+
+                int armor = GetSimpleValue("power_max");
+                nud_armor.Value = armor;
+
+                int currentAP = GetSimpleValue("achievement_points_total");
+                nud_currentAP.Value = currentAP;
+
+                int maxAP = GetSimpleValue("achievement_points_cur");
+                nud_maxAP.Value = maxAP;
+
+                int playTime = GetSimpleValue("played_time_in_seconds");
+                TimeSpan t = TimeSpan.FromSeconds(playTime);
+
+                string time = string.Format("{0:D2}d {0:D2}h {1:D2}m {2:D2}s", t.Days, t.Hours, t.Minutes, t.Seconds);
+                tb_playedTime.Text = time;
             }
             catch (Exception ex)
             {
@@ -601,18 +656,59 @@ namespace Reanimator.Forms
 
         private void palladium_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("gold", (int)palladium_numericUpDown.Value);
+            SetSimpleValue("gold", (int)nud_palladium.Value);
         }
 
         private void skillPoints_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("skill_points", (int)skillPoints_numericUpDown.Value);
+            SetSimpleValue("skill_points", (int)nud_skillPoints.Value);
         }
 
         private void statPoints_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("stat_points", (int)statPoints_numericUpDown.Value);
+            SetSimpleValue("stat_points", (int)nud_statPoints.Value);
+        }
+
+        private void nud_accuracy_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("accuracy", (int)nud_accuracy.Value);
+        }
+
+        private void nud_strength_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("strength", (int)nud_strength.Value);
+        }
+
+        private void nud_stamina_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("stamina", (int)nud_stamina.Value);
+        }
+
+        private void nud_willpower_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("willpower", (int)nud_willpower.Value);
+        }
+
+
+        private void nud_shields_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("hp_max", (int)nud_shields.Value);
+        }
+
+        private void nud_armor_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("power_max", (int)nud_armor.Value);
         }
         #endregion
+
+        private void nud_currentAP_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("achievement_points_cur", (int)nud_currentAP.Value);
+        }
+
+        private void nud_maxAP_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("achievement_points_total", (int)nud_maxAP.Value);
+        }
     }
 }
