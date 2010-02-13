@@ -632,7 +632,8 @@ namespace Reanimator.Forms
                     return unit.values[0].Stat;
                 }
             }
-            return -1;
+            MessageBox.Show("No valid entry found for \"" + valueName + "\"");
+            return 0;
         }
 
         private Unit.StatBlock.Stat GetComplexValue(string valueName)
