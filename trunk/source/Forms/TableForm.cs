@@ -31,7 +31,7 @@ namespace Reanimator
             index = idx;
             if (!index.OpenAccompanyingDat())
             {
-                MessageBox.Show("Unable to open accompanying data file:\n" + index.FileName + ".dat\nYou will be unable to extract any files.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox("Unable to open accompanying data file:\n" + index.FileName + ".dat\nYou will be unable to extract any files.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             TableFormInit();
@@ -206,8 +206,9 @@ namespace Reanimator
                 return;
             }
 
+            String extractToPath = folderBrowserDialog.SelectedPath;
             bool keepPath = false;
-            DialogResult dr = MessageBox.Show("Keep directory structure?", "Path", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            DialogResult dr = MessageBox("Keep directory structure?", "Path", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
             if (dr == DialogResult.Cancel)
             {
                 return;
@@ -215,10 +216,11 @@ namespace Reanimator
             else if (dr == DialogResult.Yes)
             {
                 keepPath = true;
+                extractToPath += @"\" + index.FileName;
             }
 
             progressBar.ConfigBar(0, files.Length, 1);
-            progressBar.SetLoadingText("Extracting files to... " + folderBrowserDialog.SelectedPath);
+            progressBar.SetLoadingText("Extracting files to... " + extractToPath);
 
             int filesSaved = 0;
             foreach (Index.FileIndex file in files)
@@ -233,11 +235,11 @@ namespace Reanimator
                         if (keepPath)
                         {
                             keepPathString += file.DirectoryString;
-                            Directory.CreateDirectory(folderBrowserDialog.SelectedPath + keepPathString);
+                            Directory.CreateDirectory(extractToPath + keepPathString);
                         }
 
                         progressBar.SetCurrentItemText(file.FilenameString);
-                        FileStream fileOut = new FileStream(folderBrowserDialog.SelectedPath + keepPathString + file.FilenameString, FileMode.Create);
+                        FileStream fileOut = new FileStream(extractToPath + keepPathString + file.FilenameString, FileMode.Create);
                         fileOut.Write(buffer, 0, buffer.Length);
                         fileOut.Close();
                         filesSaved++;
@@ -245,7 +247,7 @@ namespace Reanimator
                     }
                     catch (Exception e)
                     {
-                        DialogResult failedDr = MessageBox.Show("Failed to extract file from dat!\nFile: " + file.FilenameString + "\n\n" + e.ToString(), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+                        DialogResult failedDr = MessageBox("Failed to extract file from dat!\nFile: " + file.FilenameString + "\n\n" + e.ToString(), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
                         if (failedDr == DialogResult.Ignore)
                         {
                             break;
@@ -258,7 +260,7 @@ namespace Reanimator
                 }
             }
 
-            MessageBox.Show(filesSaved + " file(s) saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox(filesSaved + " file(s) saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void dataGridView_DataSourceChanged(object sender, EventArgs e)
@@ -385,7 +387,7 @@ namespace Reanimator
         {
             byte[] saveData = index.GenerateIndexFile();
             Crypt.Encrypt(saveData);
-            FileStream fOut = new FileStream(index.FileName + ".new.idx", FileMode.Create);
+            FileStream fOut = new FileStream(index.FileDirectory + index.FileName + ".new.idx", FileMode.Create);
             fOut.Write(saveData, 0, saveData.Length);
             fOut.Dispose();
         }

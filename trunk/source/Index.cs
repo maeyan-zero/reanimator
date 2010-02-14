@@ -283,12 +283,16 @@ namespace Reanimator
 
         public String FileName
         {
-            get { return indexFile.Name.Substring(0, indexFile.Name.LastIndexOf('.')); }
+            get
+            {
+                int n = indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1;
+                return indexFile.Name.Substring(n, indexFile.Name.LastIndexOf('.') - n);
+            }
         }
 
         public String FileDirectory
         {
-            get { return indexFile.Name.Substring(0, indexFile.Name.LastIndexOfAny("\\".ToCharArray())); }
+            get { return indexFile.Name.Substring(0, indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1); }
         }
 
         public bool OpenAccompanyingDat()
@@ -297,7 +301,7 @@ namespace Reanimator
             {
                 try
                 {
-                    datFile = new FileStream(this.FileName + ".dat", FileMode.Open);
+                    datFile = new FileStream(this.FileDirectory + this.FileName + ".dat", FileMode.Open);
                 }
                 catch (Exception)
                 {

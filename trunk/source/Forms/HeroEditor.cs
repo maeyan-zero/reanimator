@@ -36,28 +36,6 @@ namespace Reanimator.Forms
             }
         }
 
-        private void ListBox1SelectedIndexChanged(object sender, EventArgs e)
-        {
-            /*
-            // this is just a quick nasty test - ignore me
-            Unit[] items = heroUnit.Items;
-            Unit item = items[this.items_ListBox.SelectedIndex];
-            for (int i = 0; i < item.statBlock.statCount; i++)
-            {
-                Unit.Stat stat = item.statBlock.stats[i];
-                if (i == 0)
-                    this.textBox1.Text = "0x" + stat.statId.ToString("X4") + " : " + stat.values[0];
-                if (i == 1)
-                    this.textBox2.Text = "0x" + stat.statId.ToString("X4") + " : " + stat.values[0];
-                if (i == 2)
-                    this.textBox3.Text = "0x" + stat.statId.ToString("X4") + " : " + stat.values[0];
-                if (i == 3)
-                    this.textBox4.Text = "0x" + stat.statId.ToString("X4") + " : " + stat.values[0];
-                if (i == 4)
-                    this.textBox5.Text = "0x" + stat.statId.ToString("X4") + " : " + stat.values[0];
-            }*/
-        }
-
         private void PopulateItems(Unit unit)
         {
             try
@@ -131,6 +109,10 @@ namespace Reanimator.Forms
                     {
                         statAttribute1_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute1.TableId).StringId;
                     }
+                    else
+                    {
+                        statAttribute1_tableId_TextBox.Text = "NA";
+                    }
                 }
                 else
                 {
@@ -154,6 +136,10 @@ namespace Reanimator.Forms
                     {
                         statAttribute2_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute2.TableId).StringId;
                     }
+                    else
+                    {
+                        statAttribute2_tableId_TextBox.Text = "NA";
+                    }
                 }
                 else
                 {
@@ -176,6 +162,10 @@ namespace Reanimator.Forms
                     if (stat.Attribute3.TableId > 0)
                     {
                         statAttribute3_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute3.TableId).StringId;
+                    }
+                    else
+                    {
+                        statAttribute3_tableId_TextBox.Text = "NA";
                     }
                 }
                 else
