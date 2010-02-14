@@ -347,11 +347,11 @@ namespace Reanimator.Forms
                     p_wpNightmare.Controls.Add(wpcNightmare);
                 }
 
-                Serialize(wayPoints, @"F:\test.xml");
+                //Serialize(wayPoints, @"F:\test.xml");
             }
             else
             {
-                wayPoints = Deserialize(@"F:\test.xml");
+                //wayPoints = Deserialize(@"F:\test.xml");
             }
         }
 
