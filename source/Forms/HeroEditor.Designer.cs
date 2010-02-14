@@ -1116,7 +1116,6 @@ namespace Reanimator.Forms
             this.items_ListBox.Name = "items_ListBox";
             this.items_ListBox.Size = new System.Drawing.Size(150, 498);
             this.items_ListBox.TabIndex = 0;
-            this.items_ListBox.SelectedIndexChanged += new System.EventHandler(this.ListBox1SelectedIndexChanged);
             // 
             // minigame_TabPage
             // 
