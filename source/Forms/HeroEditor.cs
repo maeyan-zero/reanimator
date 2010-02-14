@@ -146,7 +146,6 @@ namespace Reanimator.Forms
                     statAttribute2_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute2, "BitCount");
                     statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
                     statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
-                    statAttribute2_tableId_TextBox.DataBindings.Add("Text", stat.Attribute2, "TableId");
                     if (stat.Attribute2.TableId > 0)
                     {
                         statAttribute2_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute2.TableId).StringId;
@@ -166,7 +165,6 @@ namespace Reanimator.Forms
                     statAttribute3_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute3, "BitCount");
                     statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
                     statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
-                    statAttribute3_tableId_TextBox.DataBindings.Add("Text", stat.Attribute3, "TableId");
                     if (stat.Attribute3.TableId > 0)
                     {
                         statAttribute3_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute3.TableId).StringId;
