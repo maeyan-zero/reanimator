@@ -141,6 +141,7 @@ namespace Reanimator.Excel
             }
         }
 
+        public bool AllTablesLoaded { get; set; }
         ExcelTableManagerManager excelTables;
 
         public ExcelTables(byte[] data)
@@ -379,6 +380,7 @@ namespace Reanimator.Excel
         public bool LoadTables(string folder, Label label, ListBox excelTablesLoaded)
         {
             excelTablesLoaded.Sorted = true;
+            this.AllTablesLoaded = true;
 
             for (int i = 0; i < Count; i++)
             {
@@ -413,7 +415,9 @@ namespace Reanimator.Excel
                         {
                             if (!excelTables.IsMythosTable(stringId))
                             {
+                                MessageBox.Show("File not found!\n\n" + filePath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 Debug.WriteLine("Debug Output - File not found: " + fileName);
+                                this.AllTablesLoaded = false;
                             }
                             continue;
                         }
@@ -421,8 +425,9 @@ namespace Reanimator.Excel
                 }
                 catch (Exception)
                 {
-
+                    MessageBox.Show("Failed to open file for reading!\n\n" + filePath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Debug.WriteLine("Debug Output - File failed to open: " + filePath);
+                    this.AllTablesLoaded = false;
                     continue;
                 }
 
