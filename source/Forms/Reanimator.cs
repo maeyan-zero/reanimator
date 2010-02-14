@@ -295,11 +295,18 @@ namespace Reanimator
 
         private bool OpenFile_HG1(string fileName)
         {
+            String excelError = "You must have all excel tables loaded to use the Hero Editor!";
             if (excelTables == null)
             {
-                MessageBox.Show("You must open the exceltable.txt.cooked file before viewing a character (dirty test implementation requirement)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+            if (!excelTables.AllTablesLoaded)
+            {
+                MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
 
             FileStream heroFile;
             try
@@ -474,6 +481,7 @@ namespace Reanimator
 
         private void LoadExcelTables(object sender, EventArgs e)
         {
+            
             ProgressForm progress = (ProgressForm)sender;
             FileStream excelFile;
 
@@ -495,6 +503,7 @@ namespace Reanimator
             progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
             excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress.GetItemLabel(), excelTablesLoaded.GetTablesListBox());
             progress.Dispose();
+             
         }
 
         private void Reanimator_ResizeEnd(object sender, EventArgs e)
@@ -507,6 +516,8 @@ namespace Reanimator
         {
             this.Height = Config.clientHeight;
             this.Width = Config.clientWidth;
+
+            
             this.Show();
             this.Refresh();
 
@@ -516,6 +527,7 @@ namespace Reanimator
             // this fixes a weird windows API bug causing the ShowDialog to minimise the main client
             this.Hide();
             this.Show();
+            
 
             #region PLUGIN
             try
@@ -574,6 +586,29 @@ namespace Reanimator
             {
                 MessageBox.Show("Export of this form not supported at this time.");
             }
+        }
+
+        private void Reanimator_Shown(object sender, EventArgs e)
+        {
+            /*
+            FileStream excelFile;
+
+            String excelFilePath = Config.dataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked";
+            try
+            {
+                excelFile = new FileStream(excelFilePath, FileMode.Open);
+                excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Failed to load exceltables!\nPlease ensure your directories are set correctly.\n\nFile: \n" + excelFilePath, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            */
+
+            //progress.ConfigBar(0, excelTables.Count, 1);
+            //progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
+           // excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress.GetItemLabel(), excelTablesLoaded.GetTablesListBox());
         }
     }
 }

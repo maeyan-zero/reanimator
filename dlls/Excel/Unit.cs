@@ -119,8 +119,8 @@ namespace Reanimator
                     public int BitCount { get; set; }							// 6 bits
                     public int Unknown1 { get; set; }							// 2 bits
                     public int Unknown1_1 { get; set; }							// 1 bit		// if unknown1 == 2
-                    internal int skipTableId;            						// 1 bit		// if this is set, then don't read the resource below
-                    public int TableId { get; set; }							// 16 bits		// i think this is a resource thingy anyways...
+                    internal int skipTableId;            						// 1 bit		// if this is set, then don't read the table id below
+                    public int TableId { get; set; }							// 16 bits		// this is the excel table id to use
 
                     public bool Exists
                     {
@@ -150,7 +150,7 @@ namespace Reanimator
 
                 internal int id;											    // 16 bits
                 internal int attributesCount;							        // 2 bits
-                internal List<Attribute> attributes;                                                     // tells the game if it's a skill id, or waypoint flag, etc
+                internal List<Attribute> attributes;                                            // tells the game if it's a skill id, or waypoint flag, etc
                 internal int bitCount;									        // 6 bits		// size in bits of extra attribute
                 internal int otherAttributeFlag;								// 3 bits		// i think that's what this is...		// can be 0x00, 0x01, 0x02, 0x03, 0x04
                 internal UnitStat_OtherAttribute otherAttribute;
