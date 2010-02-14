@@ -150,6 +150,7 @@ namespace Reanimator.Excel
             {
                 return;
             }
+            this.StringId = "EXCELTABLES";
 
             excelTables = new ExcelTableManagerManager();
             excelTables.AddTable("ACHIEVEMENTS", null, typeof(Excel.Achievements));
@@ -362,6 +363,19 @@ namespace Reanimator.Excel
             return excelTables.GetTable(stringId);
         }
 
+        public ExcelTable GetTable(int tableId)
+        {
+            foreach (ExcelTableTable excelTable in tables)
+            {
+                if (excelTable.id == tableId)
+                {
+                    return this.GetTable(excelTable.stringId);
+                }
+            }
+
+            return null;
+        }
+
         public bool LoadTables(string folder, Label label, ListBox excelTablesLoaded)
         {
             excelTablesLoaded.Sorted = true;
@@ -372,6 +386,7 @@ namespace Reanimator.Excel
                 string fileName = excelTables.GetReplacement(stringId);
                 if (fileName == "EXCELTABLES")
                 {
+                    excelTablesLoaded.Items.Add(this);
                     continue;
                 }
 

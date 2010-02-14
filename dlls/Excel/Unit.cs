@@ -119,8 +119,8 @@ namespace Reanimator
                     public int BitCount { get; set; }							// 6 bits
                     public int Unknown1 { get; set; }							// 2 bits
                     public int Unknown1_1 { get; set; }							// 1 bit		// if unknown1 == 2
-                    internal int skipResource;            						// 1 bit		// if this is set, then don't read the resource below
-                    public int Resource { get; set; }							// 16 bits		// i think this is a resource thingy anyways...
+                    internal int skipTableId;            						// 1 bit		// if this is set, then don't read the resource below
+                    public int TableId { get; set; }							// 16 bits		// i think this is a resource thingy anyways...
 
                     public bool Exists
                     {
@@ -128,10 +128,10 @@ namespace Reanimator
                         set { exists = (value == true) ? 1 : 0; }
                     }
 
-                    public bool SkipResource
+                    public bool SkipTableId
                     {
-                        get { return skipResource == 1 ? true : false; }
-                        set { skipResource = (value == true) ? 1 : 0; }
+                        get { return skipTableId == 1 ? true : false; }
+                        set { skipTableId = (value == true) ? 1 : 0; }
                     }
                 };
 
@@ -902,10 +902,10 @@ namespace Reanimator
                     exAtrib.Unknown1_1 = bitBuffer.ReadBits(1);
                 }
 
-                exAtrib.skipResource = bitBuffer.ReadBits(1);
-                if (!exAtrib.SkipResource)
+                exAtrib.skipTableId = bitBuffer.ReadBits(1);
+                if (!exAtrib.SkipTableId)
                 {
-                    exAtrib.Resource = bitBuffer.ReadBits(16);
+                    exAtrib.TableId = bitBuffer.ReadBits(16);
                 }
 
                 unitStat.attributes.Add(exAtrib);
@@ -1836,10 +1836,10 @@ namespace Reanimator
                     saveBuffer.WriteBits(stat.attributes[i].Unknown1_1, 1);
                 }
 
-                saveBuffer.WriteBits(stat.attributes[i].skipResource, 1);
-                if (!stat.attributes[i].SkipResource)
+                saveBuffer.WriteBits(stat.attributes[i].skipTableId, 1);
+                if (!stat.attributes[i].SkipTableId)
                 {
-                    saveBuffer.WriteBits(stat.attributes[i].Resource, 16);
+                    saveBuffer.WriteBits(stat.attributes[i].TableId, 16);
                 }
             }
 

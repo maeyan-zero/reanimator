@@ -85,7 +85,7 @@ namespace Reanimator.Forms
             this.statAttribute3_GroupBox = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.statAttribute3_resource_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute3_tableId_TextBox = new System.Windows.Forms.TextBox();
             this.statAttribute3_unknown1_1_TextBox = new System.Windows.Forms.TextBox();
             this.statAttribute3_unknown1_TextBox = new System.Windows.Forms.TextBox();
             this.statAttribute3_bitCount_TextBox = new System.Windows.Forms.TextBox();
@@ -94,7 +94,7 @@ namespace Reanimator.Forms
             this.statAttribute2_GroupBox = new System.Windows.Forms.GroupBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.statAttribute2_resource_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute2_tableId_TextBox = new System.Windows.Forms.TextBox();
             this.statAttribute2_unknown1_1_TextBox = new System.Windows.Forms.TextBox();
             this.statAttribute2_unknown1_TextBox = new System.Windows.Forms.TextBox();
             this.statAttribute2_bitCount_TextBox = new System.Windows.Forms.TextBox();
@@ -105,7 +105,7 @@ namespace Reanimator.Forms
             this.statAttribute1_GroupBox = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.statAttribute1_resource_TextBox = new System.Windows.Forms.TextBox();
+            this.statAttribute1_tableId_TextBox = new System.Windows.Forms.TextBox();
             this.statAttribute1_unknown1_1_TextBox = new System.Windows.Forms.TextBox();
             this.statAttribute1_unknown1_TextBox = new System.Windows.Forms.TextBox();
             this.statAttribute1_bitCount_TextBox = new System.Windows.Forms.TextBox();
@@ -801,7 +801,7 @@ namespace Reanimator.Forms
             // 
             this.statAttribute3_GroupBox.Controls.Add(this.label15);
             this.statAttribute3_GroupBox.Controls.Add(this.label16);
-            this.statAttribute3_GroupBox.Controls.Add(this.statAttribute3_resource_TextBox);
+            this.statAttribute3_GroupBox.Controls.Add(this.statAttribute3_tableId_TextBox);
             this.statAttribute3_GroupBox.Controls.Add(this.statAttribute3_unknown1_1_TextBox);
             this.statAttribute3_GroupBox.Controls.Add(this.statAttribute3_unknown1_TextBox);
             this.statAttribute3_GroupBox.Controls.Add(this.statAttribute3_bitCount_TextBox);
@@ -819,25 +819,25 @@ namespace Reanimator.Forms
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(0, 102);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(53, 13);
+            this.label15.Size = new System.Drawing.Size(43, 13);
             this.label15.TabIndex = 7;
-            this.label15.Text = "Resource";
+            this.label15.Text = "TableId";
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(0, 80);
+            this.label16.Location = new System.Drawing.Point(0, 76);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(71, 13);
             this.label16.TabIndex = 6;
             this.label16.Text = "Unknown1_1";
             // 
-            // statAttribute3_resource_TextBox
+            // statAttribute3_tableId_TextBox
             // 
-            this.statAttribute3_resource_TextBox.Location = new System.Drawing.Point(77, 99);
-            this.statAttribute3_resource_TextBox.Name = "statAttribute3_resource_TextBox";
-            this.statAttribute3_resource_TextBox.Size = new System.Drawing.Size(133, 20);
-            this.statAttribute3_resource_TextBox.TabIndex = 5;
+            this.statAttribute3_tableId_TextBox.Location = new System.Drawing.Point(77, 99);
+            this.statAttribute3_tableId_TextBox.Name = "statAttribute3_tableId_TextBox";
+            this.statAttribute3_tableId_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute3_tableId_TextBox.TabIndex = 5;
             // 
             // statAttribute3_unknown1_1_TextBox
             // 
@@ -882,7 +882,7 @@ namespace Reanimator.Forms
             // 
             this.statAttribute2_GroupBox.Controls.Add(this.label11);
             this.statAttribute2_GroupBox.Controls.Add(this.label12);
-            this.statAttribute2_GroupBox.Controls.Add(this.statAttribute2_resource_TextBox);
+            this.statAttribute2_GroupBox.Controls.Add(this.statAttribute2_tableId_TextBox);
             this.statAttribute2_GroupBox.Controls.Add(this.statAttribute2_unknown1_1_TextBox);
             this.statAttribute2_GroupBox.Controls.Add(this.statAttribute2_unknown1_TextBox);
             this.statAttribute2_GroupBox.Controls.Add(this.statAttribute2_bitCount_TextBox);
@@ -900,25 +900,25 @@ namespace Reanimator.Forms
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(0, 102);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(53, 13);
+            this.label11.Size = new System.Drawing.Size(43, 13);
             this.label11.TabIndex = 7;
-            this.label11.Text = "Resource";
+            this.label11.Text = "TableId";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(0, 80);
+            this.label12.Location = new System.Drawing.Point(0, 77);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(71, 13);
             this.label12.TabIndex = 6;
             this.label12.Text = "Unknown1_1";
             // 
-            // statAttribute2_resource_TextBox
+            // statAttribute2_tableId_TextBox
             // 
-            this.statAttribute2_resource_TextBox.Location = new System.Drawing.Point(77, 99);
-            this.statAttribute2_resource_TextBox.Name = "statAttribute2_resource_TextBox";
-            this.statAttribute2_resource_TextBox.Size = new System.Drawing.Size(133, 20);
-            this.statAttribute2_resource_TextBox.TabIndex = 5;
+            this.statAttribute2_tableId_TextBox.Location = new System.Drawing.Point(77, 99);
+            this.statAttribute2_tableId_TextBox.Name = "statAttribute2_tableId_TextBox";
+            this.statAttribute2_tableId_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute2_tableId_TextBox.TabIndex = 5;
             // 
             // statAttribute2_unknown1_1_TextBox
             // 
@@ -988,7 +988,7 @@ namespace Reanimator.Forms
             // 
             this.statAttribute1_GroupBox.Controls.Add(this.label10);
             this.statAttribute1_GroupBox.Controls.Add(this.label9);
-            this.statAttribute1_GroupBox.Controls.Add(this.statAttribute1_resource_TextBox);
+            this.statAttribute1_GroupBox.Controls.Add(this.statAttribute1_tableId_TextBox);
             this.statAttribute1_GroupBox.Controls.Add(this.statAttribute1_unknown1_1_TextBox);
             this.statAttribute1_GroupBox.Controls.Add(this.statAttribute1_unknown1_TextBox);
             this.statAttribute1_GroupBox.Controls.Add(this.statAttribute1_bitCount_TextBox);
@@ -1006,25 +1006,25 @@ namespace Reanimator.Forms
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(0, 102);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(53, 13);
+            this.label10.Size = new System.Drawing.Size(43, 13);
             this.label10.TabIndex = 7;
-            this.label10.Text = "Resource";
+            this.label10.Text = "TableId";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(0, 80);
+            this.label9.Location = new System.Drawing.Point(0, 77);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(71, 13);
             this.label9.TabIndex = 6;
             this.label9.Text = "Unknown1_1";
             // 
-            // statAttribute1_resource_TextBox
+            // statAttribute1_tableId_TextBox
             // 
-            this.statAttribute1_resource_TextBox.Location = new System.Drawing.Point(77, 99);
-            this.statAttribute1_resource_TextBox.Name = "statAttribute1_resource_TextBox";
-            this.statAttribute1_resource_TextBox.Size = new System.Drawing.Size(133, 20);
-            this.statAttribute1_resource_TextBox.TabIndex = 5;
+            this.statAttribute1_tableId_TextBox.Location = new System.Drawing.Point(77, 99);
+            this.statAttribute1_tableId_TextBox.Name = "statAttribute1_tableId_TextBox";
+            this.statAttribute1_tableId_TextBox.Size = new System.Drawing.Size(133, 20);
+            this.statAttribute1_tableId_TextBox.TabIndex = 5;
             // 
             // statAttribute1_unknown1_1_TextBox
             // 
@@ -1343,12 +1343,12 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TextBox statAttribute1_unknown1_TextBox;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox statAttribute1_resource_TextBox;
+        private System.Windows.Forms.TextBox statAttribute1_tableId_TextBox;
         private System.Windows.Forms.TextBox statAttribute1_unknown1_1_TextBox;
         private System.Windows.Forms.GroupBox statAttribute3_GroupBox;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox statAttribute3_resource_TextBox;
+        private System.Windows.Forms.TextBox statAttribute3_tableId_TextBox;
         private System.Windows.Forms.TextBox statAttribute3_unknown1_1_TextBox;
         private System.Windows.Forms.TextBox statAttribute3_unknown1_TextBox;
         private System.Windows.Forms.TextBox statAttribute3_bitCount_TextBox;
@@ -1357,7 +1357,7 @@ namespace Reanimator.Forms
         private System.Windows.Forms.GroupBox statAttribute2_GroupBox;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox statAttribute2_resource_TextBox;
+        private System.Windows.Forms.TextBox statAttribute2_tableId_TextBox;
         private System.Windows.Forms.TextBox statAttribute2_unknown1_1_TextBox;
         private System.Windows.Forms.TextBox statAttribute2_unknown1_TextBox;
         private System.Windows.Forms.TextBox statAttribute2_bitCount_TextBox;

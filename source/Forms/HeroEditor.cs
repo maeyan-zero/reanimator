@@ -123,11 +123,11 @@ namespace Reanimator.Forms
                     statAttribute1_bitCount_TextBox.DataBindings.Clear();
                     statAttribute1_unknown1_TextBox.DataBindings.Clear();
                     statAttribute1_unknown1_1_TextBox.DataBindings.Clear();
-                    statAttribute1_resource_TextBox.DataBindings.Clear();
+                    statAttribute1_tableId_TextBox.DataBindings.Clear();
                     statAttribute1_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute1, "BitCount");
                     statAttribute1_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1");
                     statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
-                    statAttribute1_resource_TextBox.DataBindings.Add("Text", stat.Attribute1, "Resource");
+                    statAttribute1_tableId_TextBox.DataBindings.Add("Text", stat.Attribute1, "TableId");
                 }
                 else
                 {
@@ -139,11 +139,11 @@ namespace Reanimator.Forms
                     statAttribute2_bitCount_TextBox.DataBindings.Clear();
                     statAttribute2_unknown1_TextBox.DataBindings.Clear();
                     statAttribute2_unknown1_1_TextBox.DataBindings.Clear();
-                    statAttribute2_resource_TextBox.DataBindings.Clear();
+                    statAttribute2_tableId_TextBox.DataBindings.Clear();
                     statAttribute2_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute2, "BitCount");
                     statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
                     statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
-                    statAttribute2_resource_TextBox.DataBindings.Add("Text", stat.Attribute2, "Resource");
+                    statAttribute2_tableId_TextBox.DataBindings.Add("Text", stat.Attribute2, "TableId");
                 }
                 else
                 {
@@ -155,11 +155,11 @@ namespace Reanimator.Forms
                     statAttribute3_bitCount_TextBox.DataBindings.Clear();
                     statAttribute3_unknown1_TextBox.DataBindings.Clear();
                     statAttribute3_unknown1_1_TextBox.DataBindings.Clear();
-                    statAttribute3_resource_TextBox.DataBindings.Clear();
+                    statAttribute3_tableId_TextBox.DataBindings.Clear();
                     statAttribute3_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute3, "BitCount");
                     statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
                     statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
-                    statAttribute3_resource_TextBox.DataBindings.Add("Text", stat.Attribute3, "Resource");
+                    statAttribute3_tableId_TextBox.DataBindings.Add("Text", stat.Attribute3, "TableId");
                 }
                 else
                 {
