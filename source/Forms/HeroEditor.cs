@@ -135,6 +135,10 @@ namespace Reanimator.Forms
                 else
                 {
                     statAttribute1_GroupBox.Enabled = false;
+                    statAttribute1_bitCount_TextBox.Clear();
+                    statAttribute1_unknown1_1_TextBox.Clear();
+                    statAttribute1_unknown1_TextBox.Clear();
+                    statAttribute1_tableId_TextBox.Clear();
                 }
                 if (stat.Attribute2 != null)
                 {
@@ -154,6 +158,10 @@ namespace Reanimator.Forms
                 else
                 {
                     statAttribute2_GroupBox.Enabled = false;
+                    statAttribute2_bitCount_TextBox.Clear();
+                    statAttribute2_unknown1_1_TextBox.Clear();
+                    statAttribute2_unknown1_TextBox.Clear();
+                    statAttribute2_tableId_TextBox.Clear();
                 }
                 if (stat.Attribute3 != null)
                 {
@@ -173,6 +181,10 @@ namespace Reanimator.Forms
                 else
                 {
                     statAttribute3_GroupBox.Enabled = false;
+                    statAttribute3_bitCount_TextBox.Clear();
+                    statAttribute3_unknown1_1_TextBox.Clear();
+                    statAttribute3_unknown1_TextBox.Clear();
+                    statAttribute3_tableId_TextBox.Clear();
                 }
 
                 int heightOffset = 0;
