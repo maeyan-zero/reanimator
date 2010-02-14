@@ -127,7 +127,10 @@ namespace Reanimator.Forms
                     statAttribute1_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute1, "BitCount");
                     statAttribute1_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1");
                     statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
-                    statAttribute1_tableId_TextBox.DataBindings.Add("Text", stat.Attribute1, "TableId");
+                    if (stat.Attribute1.TableId > 0)
+                    {
+                        statAttribute1_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute1.TableId).StringId;
+                    }
                 }
                 else
                 {
@@ -144,6 +147,10 @@ namespace Reanimator.Forms
                     statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
                     statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
                     statAttribute2_tableId_TextBox.DataBindings.Add("Text", stat.Attribute2, "TableId");
+                    if (stat.Attribute2.TableId > 0)
+                    {
+                        statAttribute2_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute2.TableId).StringId;
+                    }
                 }
                 else
                 {
@@ -160,6 +167,10 @@ namespace Reanimator.Forms
                     statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
                     statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
                     statAttribute3_tableId_TextBox.DataBindings.Add("Text", stat.Attribute3, "TableId");
+                    if (stat.Attribute3.TableId > 0)
+                    {
+                        statAttribute3_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute3.TableId).StringId;
+                    }
                 }
                 else
                 {
