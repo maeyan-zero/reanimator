@@ -465,11 +465,20 @@ namespace Reanimator.Forms
                 int willpower = GetSimpleValue("willpower");
                 nud_willpower.Value = willpower;
 
-                int shields = GetSimpleValue("hp_max");
+                int health = GetSimpleValue("hp_cur");
+                nud_health.Value = health;
+
+                int power = GetSimpleValue("power_cur");
+                nud_power.Value = power;
+
+                int shields = GetSimpleValue("shield_buffer_cur");
                 nud_shields.Value = shields;
 
                 int armor = GetSimpleValue("power_max");
-                nud_armor.Value = armor;
+                //nud_armor.Value = armor;
+
+                int sfxDefence = GetSimpleValue("sfx_defense_bonus");
+                nud_sfxDefence.Value = sfxDefence - 100;
 
                 int currentAP = GetSimpleValue("achievement_points_total");
                 nud_currentAP.Value = currentAP;
@@ -632,7 +641,7 @@ namespace Reanimator.Forms
                     return unit.values[0].Stat;
                 }
             }
-            MessageBox.Show("No valid entry found for \"" + valueName + "\"");
+            MessageBox.Show("Field \"" + valueName + "\" not present in current save file!");
             return 0;
         }
 
@@ -693,14 +702,13 @@ namespace Reanimator.Forms
 
         private void nud_shields_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("hp_max", (int)nud_shields.Value);
+            SetSimpleValue("shield_buffer_cur", (int)nud_shields.Value);
         }
 
         private void nud_armor_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("power_max", (int)nud_armor.Value);
+            //SetSimpleValue("power_max", (int)nud_armor.Value);
         }
-        #endregion
 
         private void nud_currentAP_ValueChanged(object sender, EventArgs e)
         {
@@ -711,5 +719,22 @@ namespace Reanimator.Forms
         {
             SetSimpleValue("achievement_points_total", (int)nud_maxAP.Value);
         }
+
+        private void nud_health_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("hp_cur", (int)nud_health.Value);
+        }
+
+        private void nud_power_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("power_cur", (int)nud_power.Value);
+        }
+
+        private void nud_sfxDefence_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue("sfx_defense_bonus", (int)nud_sfxDefence.Value + 100);
+        }
+
+        #endregion
     }
 }

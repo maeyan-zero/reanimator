@@ -31,7 +31,20 @@ namespace Reanimator.Forms
         {
             this.main_TabControl = new System.Windows.Forms.TabControl();
             this.general_TabPage = new System.Windows.Forms.TabPage();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.tb_playedTime = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.nud_maxAP = new System.Windows.Forms.NumericUpDown();
+            this.nud_currentAP = new System.Windows.Forms.NumericUpDown();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.nud_sfxDefence = new System.Windows.Forms.NumericUpDown();
+            this.nud_power = new System.Windows.Forms.NumericUpDown();
+            this.label29 = new System.Windows.Forms.Label();
+            this.nud_health = new System.Windows.Forms.NumericUpDown();
+            this.label30 = new System.Windows.Forms.Label();
             this.nud_armor = new System.Windows.Forms.NumericUpDown();
             this.label25 = new System.Windows.Forms.Label();
             this.nud_shields = new System.Windows.Forms.NumericUpDown();
@@ -55,6 +68,7 @@ namespace Reanimator.Forms
             this.elite_CheckBox = new System.Windows.Forms.CheckBox();
             this.hardcore_CheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label31 = new System.Windows.Forms.Label();
             this.nud_willpower = new System.Windows.Forms.NumericUpDown();
             this.label24 = new System.Windows.Forms.Label();
             this.nud_stamina = new System.Windows.Forms.NumericUpDown();
@@ -115,16 +129,15 @@ namespace Reanimator.Forms
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.label26 = new System.Windows.Forms.Label();
-            this.nud_currentAP = new System.Windows.Forms.NumericUpDown();
-            this.label27 = new System.Windows.Forms.Label();
-            this.nud_maxAP = new System.Windows.Forms.NumericUpDown();
-            this.label28 = new System.Windows.Forms.Label();
-            this.tb_playedTime = new System.Windows.Forms.TextBox();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_maxAP)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_currentAP)).BeginInit();
             this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_sfxDefence)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_power)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_health)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_armor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_shields)).BeginInit();
             this.groupBox6.SuspendLayout();
@@ -149,9 +162,6 @@ namespace Reanimator.Forms
             this.groupBox3.SuspendLayout();
             this.tp_test.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox8.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nud_currentAP)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nud_maxAP)).BeginInit();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -189,22 +199,179 @@ namespace Reanimator.Forms
             this.general_TabPage.Text = "General";
             this.general_TabPage.UseVisualStyleBackColor = true;
             // 
+            // groupBox8
+            // 
+            this.groupBox8.Controls.Add(this.tb_playedTime);
+            this.groupBox8.Controls.Add(this.label28);
+            this.groupBox8.Controls.Add(this.label27);
+            this.groupBox8.Controls.Add(this.label26);
+            this.groupBox8.Controls.Add(this.nud_maxAP);
+            this.groupBox8.Controls.Add(this.nud_currentAP);
+            this.groupBox8.Location = new System.Drawing.Point(6, 318);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(160, 122);
+            this.groupBox8.TabIndex = 27;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Etc";
+            // 
+            // tb_playedTime
+            // 
+            this.tb_playedTime.Enabled = false;
+            this.tb_playedTime.Location = new System.Drawing.Point(64, 71);
+            this.tb_playedTime.Name = "tb_playedTime";
+            this.tb_playedTime.Size = new System.Drawing.Size(90, 20);
+            this.tb_playedTime.TabIndex = 32;
+            this.tb_playedTime.Text = "00:00:00";
+            this.tb_playedTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(6, 74);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(52, 13);
+            this.label28.TabIndex = 31;
+            this.label28.Text = "Play time:";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(6, 45);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(47, 13);
+            this.label27.TabIndex = 30;
+            this.label27.Text = "Max AP:";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(6, 19);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(61, 13);
+            this.label26.TabIndex = 30;
+            this.label26.Text = "Current AP:";
+            // 
+            // nud_maxAP
+            // 
+            this.nud_maxAP.Location = new System.Drawing.Point(106, 45);
+            this.nud_maxAP.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nud_maxAP.Name = "nud_maxAP";
+            this.nud_maxAP.Size = new System.Drawing.Size(48, 20);
+            this.nud_maxAP.TabIndex = 29;
+            this.nud_maxAP.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nud_maxAP.ThousandsSeparator = true;
+            this.nud_maxAP.ValueChanged += new System.EventHandler(this.nud_maxAP_ValueChanged);
+            // 
+            // nud_currentAP
+            // 
+            this.nud_currentAP.Location = new System.Drawing.Point(106, 19);
+            this.nud_currentAP.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nud_currentAP.Name = "nud_currentAP";
+            this.nud_currentAP.Size = new System.Drawing.Size(48, 20);
+            this.nud_currentAP.TabIndex = 29;
+            this.nud_currentAP.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nud_currentAP.ThousandsSeparator = true;
+            this.nud_currentAP.ValueChanged += new System.EventHandler(this.nud_currentAP_ValueChanged);
+            // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.label32);
+            this.groupBox7.Controls.Add(this.nud_sfxDefence);
+            this.groupBox7.Controls.Add(this.nud_power);
+            this.groupBox7.Controls.Add(this.label29);
+            this.groupBox7.Controls.Add(this.nud_health);
+            this.groupBox7.Controls.Add(this.label30);
             this.groupBox7.Controls.Add(this.nud_armor);
             this.groupBox7.Controls.Add(this.label25);
             this.groupBox7.Controls.Add(this.nud_shields);
             this.groupBox7.Controls.Add(this.label3);
             this.groupBox7.Location = new System.Drawing.Point(6, 162);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(160, 100);
+            this.groupBox7.Size = new System.Drawing.Size(160, 150);
             this.groupBox7.TabIndex = 26;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Advanced";
             // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(6, 125);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(59, 13);
+            this.label32.TabIndex = 17;
+            this.label32.Text = "Basic SFX:";
+            // 
+            // nud_sfxDefence
+            // 
+            this.nud_sfxDefence.Location = new System.Drawing.Point(106, 123);
+            this.nud_sfxDefence.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nud_sfxDefence.Name = "nud_sfxDefence";
+            this.nud_sfxDefence.Size = new System.Drawing.Size(48, 20);
+            this.nud_sfxDefence.TabIndex = 16;
+            this.nud_sfxDefence.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nud_sfxDefence.ValueChanged += new System.EventHandler(this.nud_sfxDefence_ValueChanged);
+            // 
+            // nud_power
+            // 
+            this.nud_power.Location = new System.Drawing.Point(106, 45);
+            this.nud_power.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nud_power.Name = "nud_power";
+            this.nud_power.Size = new System.Drawing.Size(48, 20);
+            this.nud_power.TabIndex = 15;
+            this.nud_power.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nud_power.ValueChanged += new System.EventHandler(this.nud_power_ValueChanged);
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(6, 45);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(40, 13);
+            this.label29.TabIndex = 14;
+            this.label29.Text = "Power:";
+            // 
+            // nud_health
+            // 
+            this.nud_health.Location = new System.Drawing.Point(106, 19);
+            this.nud_health.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nud_health.Name = "nud_health";
+            this.nud_health.Size = new System.Drawing.Size(48, 20);
+            this.nud_health.TabIndex = 13;
+            this.nud_health.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nud_health.ValueChanged += new System.EventHandler(this.nud_health_ValueChanged);
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(6, 19);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(41, 13);
+            this.label30.TabIndex = 12;
+            this.label30.Text = "Health:";
+            // 
             // nud_armor
             // 
-            this.nud_armor.Location = new System.Drawing.Point(106, 45);
+            this.nud_armor.Location = new System.Drawing.Point(106, 97);
             this.nud_armor.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -219,15 +386,15 @@ namespace Reanimator.Forms
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(6, 45);
+            this.label25.Location = new System.Drawing.Point(6, 97);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(37, 13);
+            this.label25.Size = new System.Drawing.Size(64, 13);
             this.label25.TabIndex = 10;
-            this.label25.Text = "Armor:";
+            this.label25.Text = "Armor (???):";
             // 
             // nud_shields
             // 
-            this.nud_shields.Location = new System.Drawing.Point(106, 19);
+            this.nud_shields.Location = new System.Drawing.Point(106, 71);
             this.nud_shields.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -242,7 +409,7 @@ namespace Reanimator.Forms
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 19);
+            this.label3.Location = new System.Drawing.Point(6, 71);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(44, 13);
             this.label3.TabIndex = 8;
@@ -276,11 +443,6 @@ namespace Reanimator.Forms
             this.nud_palladium.TabIndex = 24;
             this.nud_palladium.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.nud_palladium.ThousandsSeparator = true;
-            this.nud_palladium.Value = new decimal(new int[] {
-            9999999,
-            0,
-            0,
-            0});
             this.nud_palladium.ValueChanged += new System.EventHandler(this.palladium_numericUpDown_ValueChanged);
             // 
             // label6
@@ -469,6 +631,7 @@ namespace Reanimator.Forms
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.label31);
             this.groupBox4.Controls.Add(this.nud_willpower);
             this.groupBox4.Controls.Add(this.label24);
             this.groupBox4.Controls.Add(this.nud_stamina);
@@ -483,6 +646,15 @@ namespace Reanimator.Forms
             this.groupBox4.TabIndex = 23;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Character Stats";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(6, 130);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(123, 13);
+            this.label31.TabIndex = 8;
+            this.label31.Text = "Values without +AA gear";
             // 
             // nud_willpower
             // 
@@ -1072,88 +1244,6 @@ namespace Reanimator.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.tb_playedTime);
-            this.groupBox8.Controls.Add(this.label28);
-            this.groupBox8.Controls.Add(this.label27);
-            this.groupBox8.Controls.Add(this.label26);
-            this.groupBox8.Controls.Add(this.nud_maxAP);
-            this.groupBox8.Controls.Add(this.nud_currentAP);
-            this.groupBox8.Location = new System.Drawing.Point(6, 269);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(160, 122);
-            this.groupBox8.TabIndex = 27;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Etc";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(6, 19);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(61, 13);
-            this.label26.TabIndex = 30;
-            this.label26.Text = "Current AP:";
-            // 
-            // nud_currentAP
-            // 
-            this.nud_currentAP.Location = new System.Drawing.Point(106, 19);
-            this.nud_currentAP.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nud_currentAP.Name = "nud_currentAP";
-            this.nud_currentAP.Size = new System.Drawing.Size(48, 20);
-            this.nud_currentAP.TabIndex = 29;
-            this.nud_currentAP.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nud_currentAP.ThousandsSeparator = true;
-            this.nud_currentAP.ValueChanged += new System.EventHandler(this.nud_currentAP_ValueChanged);
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(6, 45);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(47, 13);
-            this.label27.TabIndex = 30;
-            this.label27.Text = "Max AP:";
-            // 
-            // nud_maxAP
-            // 
-            this.nud_maxAP.Location = new System.Drawing.Point(106, 45);
-            this.nud_maxAP.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nud_maxAP.Name = "nud_maxAP";
-            this.nud_maxAP.Size = new System.Drawing.Size(48, 20);
-            this.nud_maxAP.TabIndex = 29;
-            this.nud_maxAP.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nud_maxAP.ThousandsSeparator = true;
-            this.nud_maxAP.ValueChanged += new System.EventHandler(this.nud_maxAP_ValueChanged);
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(6, 74);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(52, 13);
-            this.label28.TabIndex = 31;
-            this.label28.Text = "Play time:";
-            // 
-            // tb_playedTime
-            // 
-            this.tb_playedTime.Enabled = false;
-            this.tb_playedTime.Location = new System.Drawing.Point(64, 71);
-            this.tb_playedTime.Name = "tb_playedTime";
-            this.tb_playedTime.Size = new System.Drawing.Size(90, 20);
-            this.tb_playedTime.TabIndex = 32;
-            this.tb_playedTime.Text = "00:00:00";
-            this.tb_playedTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1170,8 +1260,15 @@ namespace Reanimator.Forms
             this.main_TabControl.ResumeLayout(false);
             this.general_TabPage.ResumeLayout(false);
             this.general_TabPage.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_maxAP)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_currentAP)).EndInit();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_sfxDefence)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_power)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nud_health)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_armor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_shields)).EndInit();
             this.groupBox6.ResumeLayout(false);
@@ -1204,10 +1301,6 @@ namespace Reanimator.Forms
             this.tp_test.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nud_currentAP)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nud_maxAP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1308,5 +1401,12 @@ namespace Reanimator.Forms
         private System.Windows.Forms.NumericUpDown nud_currentAP;
         private System.Windows.Forms.TextBox tb_playedTime;
         private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.NumericUpDown nud_power;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.NumericUpDown nud_health;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.NumericUpDown nud_sfxDefence;
     }
 }
