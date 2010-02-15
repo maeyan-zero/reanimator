@@ -88,6 +88,8 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.clientPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bypassSecurityx64ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -376,7 +378,8 @@
             // toolsMenu
             // 
             this.toolsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.clientPatchesToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
             this.toolsMenu.Size = new System.Drawing.Size(48, 20);
             this.toolsMenu.Text = "&Tools";
@@ -384,7 +387,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -589,6 +592,21 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
+            // clientPatchesToolStripMenuItem
+            // 
+            this.clientPatchesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bypassSecurityx64ToolStripMenuItem});
+            this.clientPatchesToolStripMenuItem.Name = "clientPatchesToolStripMenuItem";
+            this.clientPatchesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clientPatchesToolStripMenuItem.Text = "Client Patches";
+            // 
+            // bypassSecurityx64ToolStripMenuItem
+            // 
+            this.bypassSecurityx64ToolStripMenuItem.Name = "bypassSecurityx64ToolStripMenuItem";
+            this.bypassSecurityx64ToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.bypassSecurityx64ToolStripMenuItem.Text = "Bypass Security (x64)";
+            this.bypassSecurityx64ToolStripMenuItem.Click += new System.EventHandler(this.bypassSecurityx64ToolStripMenuItem_Click);
+            // 
             // Reanimator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -674,6 +692,8 @@
         private System.Windows.Forms.ToolStripMenuItem stringsFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modificationFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cSVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clientPatchesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bypassSecurityx64ToolStripMenuItem;
     }
 }
 

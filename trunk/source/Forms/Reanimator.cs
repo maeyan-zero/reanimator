@@ -610,5 +610,27 @@ namespace Reanimator
             //progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
            // excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress.GetItemLabel(), excelTablesLoaded.GetTablesListBox());
         }
+
+        private void bypassSecurityx64ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Exectuable Files (*.exe)|*.exe|All Files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Config.hglDir;
+
+            if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("exe"))
+            {
+                Client hglexe = new Client(File.ReadAllBytes(openFileDialog.FileName));
+                try
+                {
+                    hglexe.ApplyHardcorePatch();
+                    File.WriteAllBytes(openFileDialog.FileName.Insert(openFileDialog.FileName.Length - 4, "-patched"), hglexe.Buffer);
+                    MessageBox.Show("Patch successfully applied!");
+                }
+                catch
+                {
+                    MessageBox.Show("Problem Applying Patch. :(");
+                }
+            }
+        }
     }
 }
