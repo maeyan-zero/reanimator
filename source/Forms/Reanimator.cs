@@ -554,7 +554,7 @@ namespace Reanimator
         {
             try
             {
-                ExcelTableForm excelTable = (ExcelTableForm)this.ActiveMdiChild;
+                TableForm excelTable = (TableForm)this.ActiveMdiChild;
                 string strValue;
 
                 if (excelTable != null)
@@ -566,7 +566,7 @@ namespace Reanimator
                     if (result == DialogResult.OK)
                     {
                         // Compiles the CSV string
-                        strValue = Export.CSV(excelTable.dataGridView, select.selected);
+                        strValue = Export.CSV(excelTable.dataGridView, select.selected, select.comboBoxDelimiter.Text);
 
                         // Prompts the user to choose where to save the file
                         SaveFileDialog saveFileDialog = new SaveFileDialog();

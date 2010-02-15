@@ -9,7 +9,7 @@ namespace Reanimator
 {
     class Export
     {
-        static public string CSV(DataGridView datagridview, bool[] selected)
+        static public string CSV(DataGridView datagridview, bool[] selected, string delimiter)
         {
             StringWriter csv = new StringWriter();
 
@@ -38,7 +38,14 @@ namespace Reanimator
                         }
                         if (col < datagridview.Rows[row].Cells.Count)
                         {
-                            csv.Write(",");
+                            if (delimiter == "Commar")
+                            {
+                                csv.Write(",");
+                            }
+                            else if (delimiter == "Tab")
+                            {
+                                csv.Write("\t");
+                            }
                         }
                     }
                 }
