@@ -20,6 +20,13 @@ namespace Reanimator.Excel
             public int DefaultIndex { get; set; }
         }
 
+        [AttributeUsage(AttributeTargets.Field)]
+        public class ExcelBitmaskAttribute : System.Attribute
+        {
+            uint bitmask;
+
+
+        }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class ExcelTableTable

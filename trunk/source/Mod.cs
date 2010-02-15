@@ -84,13 +84,14 @@ namespace Reanimator
             [XmlElement("description")]
             public string description;
 
+            [XmlElement("url")]
+            public string url;
+
+            [XmlElement("type")]
+            public string type;
+
             [XmlElement("pack")]
             public Pack[] pack;
-
-            public Modification()
-            {
-
-            }
         }
 
         public class Pack
