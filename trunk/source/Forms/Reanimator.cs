@@ -11,118 +11,12 @@ using Reanimator.Forms;
 using Reanimator.Excel;
 using System.Threading;
 using System.Runtime.InteropServices;
-using PluginInterface;
 using System.Reflection;
 
 namespace Reanimator
 {
-    public partial class Reanimator : Form, IPluginHost
+    public partial class Reanimator : Form
     {
-        #region PLUGINS
-
-
-
-        bool showInitializationMessage = false;
-        private List<IPlugin> pluginList;
-
-        public bool Register(IPlugin ipi)
-        {
-            pluginList.Add(ipi);
-            return true;
-        }
-
-        public void ShowMessage(string message)
-        {
-            MessageBox.Show(message);
-        }
-
-        public void ShowMessage(string message, string title)
-        {
-            MessageBox.Show(message, title);
-        }
-
-        public void LoadPlugins()
-        {
-            string path = Application.StartupPath + @"\Plugins\";
-
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            string[] pluginFiles = Directory.GetFiles(path, "*.dll");
-
-            for (int i = 0; i < pluginFiles.Length; i++)
-            {
-                string args = pluginFiles[i].Substring(
-                  pluginFiles[i].LastIndexOf("\\") + 1,
-                  pluginFiles[i].IndexOf(".dll") -
-                  pluginFiles[i].LastIndexOf("\\") - 1);
-
-                Type ObjType = null;
-                // load the dll
-                try
-                {
-                    // load it
-                    Assembly ass = null;
-                    ass = Assembly.LoadFile(pluginFiles[i]);
-                    if (ass != null)
-                    {
-                        ObjType = ass.GetType(args + ".PlugIn");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                try
-                {
-                    // OK Lets create the object as we have the Report Type
-                    if (ObjType != null)
-                    {
-                        IPlugin plugin = (IPlugin)Activator.CreateInstance(ObjType);
-                        plugin.Parent = this;
-                        plugin.Host = this;
-                        plugin.HostMenu = this.menuStrip;
-                        plugin.InitializePlugIn(showInitializationMessage);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
-        }
-
-        public IPlugin[] GetPluginList()
-        {
-            return pluginList.ToArray();
-        }
-
-        public string GetHGLDirectory()
-        {
-            return Config.hglDir;
-        }
-
-        public string GetRootDir()
-        {
-            return Config.dataDirsRoot;
-        }
-
-        public string GetClientDir()
-        {
-            return Config.gameClientPath;
-        }
-
-        public ExcelTables GetExcelTables()
-        {
-            return excelTables;
-        }
-
-
-
-
-        #endregion
-
         private Options options;
         private List<string> indexFilesOpen;
         private ExcelTables excelTables;
@@ -134,10 +28,6 @@ namespace Reanimator
         {
             options = new Options();
             indexFilesOpen = new List<string>();
-
-            #region PLUGIN
-            pluginList = new List<IPlugin>();
-            #endregion
 
             InitializeComponent();
 
@@ -442,42 +332,40 @@ namespace Reanimator
             options.ShowDialog(this);
         }
 
-        #region CONVERTED TO PLUGIN
-        //private void clientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    OpenFileDialog openFileDialog = new OpenFileDialog();
-        //    openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-        //    openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
-        //    if (openFileDialog.ShowDialog(this) != DialogResult.OK)
-        //    {
-        //        return;
-        //    }
+        private void clientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
+            if (openFileDialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
 
-        //    FileStream clientFile;
-        //    try
-        //    {
-        //        clientFile = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return;
-        //    }
+            FileStream clientFile;
+            try
+            {
+                clientFile = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite);
+            }
+            catch (Exception)
+            {
+                return;
+            }
 
-        //    ClientPatcher clientPatcher = new ClientPatcher(FileTools.StreamToByteArray(clientFile));
-        //    if (clientPatcher.ApplyHardcorePatch())
-        //    {
-        //        FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
-        //        fileOut.Write(clientPatcher.Buffer, 0, clientPatcher.Buffer.Length);
-        //        fileOut.Dispose();
-        //        MessageBox.Show("Hardcore patch applied!");
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //    clientFile.Dispose();
-        //}
-        #endregion
+            Client clientPatcher = new Client(FileTools.StreamToByteArray(clientFile));
+            if (clientPatcher.ApplyHardcorePatch())
+            {
+                FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
+                fileOut.Write(clientPatcher.Buffer, 0, clientPatcher.Buffer.Length);
+                fileOut.Dispose();
+                MessageBox.Show("Hardcore patch applied!");
+            }
+            else
+            {
+                MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            clientFile.Dispose();
+        }
 
         private void LoadExcelTables(object sender, EventArgs e)
         {
@@ -527,18 +415,6 @@ namespace Reanimator
             // this fixes a weird windows API bug causing the ShowDialog to minimise the main client
             this.Hide();
             this.Show();
-            
-
-            #region PLUGIN
-            try
-            {
-                LoadPlugins();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            #endregion
         }
 
         private void saveToolStripButton_Click(object sender, EventArgs e)

@@ -290,10 +290,6 @@
       <Project>{D6EC58F1-C9CF-44FA-897C-5886BF47F896}</Project>
       <Name>FileTools</Name>
     </ProjectReference>
-    <ProjectReference Include="..\dlls\PluginInterface\PluginInterface.csproj">
-      <Project>{BE3D0936-DA75-4F25-A698-602692647B4E}</Project>
-      <Name>PluginInterface</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

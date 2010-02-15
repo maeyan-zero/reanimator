@@ -5,17 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reanimator", "Reanimator.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileTools", "..\dlls\FileTools\FileTools.csproj", "{D6EC58F1-C9CF-44FA-897C-5886BF47F896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginInterface", "..\dlls\PluginInterface\PluginInterface.csproj", "{BE3D0936-DA75-4F25-A698-602692647B4E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Excel", "..\dlls\Excel\Excel.csproj", "{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "..\launcher\Launcher.csproj", "{E73FF623-6B89-414A-8E5D-8170FF15ACCC}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -47,18 +41,6 @@ Global
 		{D6EC58F1-C9CF-44FA-897C-5886BF47F896}.Release|x64.ActiveCfg = Release|x64
 		{D6EC58F1-C9CF-44FA-897C-5886BF47F896}.Release|x64.Build.0 = Release|x64
 		{D6EC58F1-C9CF-44FA-897C-5886BF47F896}.Release|x86.ActiveCfg = Release|Any CPU
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Debug|x64.ActiveCfg = Debug|x64
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Debug|x64.Build.0 = Debug|x64
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Debug|x86.ActiveCfg = Debug|x86
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Debug|x86.Build.0 = Debug|x86
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Release|x64.ActiveCfg = Release|x64
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Release|x64.Build.0 = Release|x64
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Release|x86.ActiveCfg = Release|x86
-		{BE3D0936-DA75-4F25-A698-602692647B4E}.Release|x86.Build.0 = Release|x86
 		{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}.Debug|x64.ActiveCfg = Debug|x64
@@ -80,5 +62,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
