@@ -12,6 +12,7 @@ namespace Reanimator.Forms
     public partial class CSVSelection : Form
     {
         public bool[] selected;
+        public bool selectAll;
 
         public CSVSelection()
         {
@@ -29,6 +30,7 @@ namespace Reanimator.Forms
                 checkbox.Click += new EventHandler(checkbox_Click);
                 flowLayoutPanel1.Controls.Add(checkbox);
             }
+            comboBoxDelimiter.SelectedIndex = 1;
         }
 
         private void checkbox_Click(object sender, EventArgs e)
@@ -39,6 +41,34 @@ namespace Reanimator.Forms
                 //if (check.GetType())
                 {
                     selected[i] = check.Checked;
+                }
+            }
+        }
+
+        private void buttonSelectAll_Click(object sender, EventArgs e)
+        {
+            if (selectAll == true)
+            {
+                selectAll = false;
+                for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
+                {
+                    CheckBox check = (CheckBox)flowLayoutPanel1.Controls[i];
+                    {
+                        check.Checked = false;
+                        selected[i] = check.Checked;
+                    }
+                }
+            }
+            else
+            {
+                selectAll = true;
+                for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
+                {
+                    CheckBox check = (CheckBox)flowLayoutPanel1.Controls[i];
+                    {
+                        check.Checked = true;
+                        selected[i] = check.Checked;
+                    }
                 }
             }
         }
