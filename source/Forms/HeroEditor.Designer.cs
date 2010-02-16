@@ -29,6 +29,7 @@ namespace Reanimator.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HeroEditor));
             this.main_TabControl = new System.Windows.Forms.TabControl();
             this.general_TabPage = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -129,6 +130,7 @@ namespace Reanimator.Forms
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.label33 = new System.Windows.Forms.Label();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -182,6 +184,7 @@ namespace Reanimator.Forms
             // 
             // general_TabPage
             // 
+            this.general_TabPage.Controls.Add(this.label33);
             this.general_TabPage.Controls.Add(this.groupBox8);
             this.general_TabPage.Controls.Add(this.groupBox7);
             this.general_TabPage.Controls.Add(this.groupBox6);
@@ -750,9 +753,9 @@ namespace Reanimator.Forms
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(172, 312);
+            this.button2.Location = new System.Drawing.Point(172, 269);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(106, 23);
+            this.button2.Size = new System.Drawing.Size(160, 43);
             this.button2.TabIndex = 15;
             this.button2.Text = "Update Flags";
             this.button2.UseVisualStyleBackColor = true;
@@ -769,7 +772,7 @@ namespace Reanimator.Forms
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(392, 53);
+            this.label2.Location = new System.Drawing.Point(392, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(43, 13);
             this.label2.TabIndex = 11;
@@ -777,7 +780,7 @@ namespace Reanimator.Forms
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(441, 49);
+            this.textBox1.Location = new System.Drawing.Point(441, 6);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 10;
@@ -1243,6 +1246,16 @@ namespace Reanimator.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(338, 30);
+            this.label33.MaximumSize = new System.Drawing.Size(305, 100);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(303, 91);
+            this.label33.TabIndex = 28;
+            this.label33.Text = resources.GetString("label33.Text");
+            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1407,5 +1420,6 @@ namespace Reanimator.Forms
         private System.Windows.Forms.Label label31;
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.NumericUpDown nud_sfxDefence;
+        private System.Windows.Forms.Label label33;
     }
 }
