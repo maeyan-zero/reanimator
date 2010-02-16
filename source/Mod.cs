@@ -7,6 +7,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Reanimator
 {
@@ -22,7 +23,9 @@ namespace Reanimator
             {
                 // Add the XSD FileStream
                 FileStream xsdStream;
+                //xsdStream = new FileStream("..//..//..//source//Mods//ModSchema.xsd", FileMode.Open);
                 xsdStream = new FileStream("..//..//source//ModSchema.xsd", FileMode.Open);
+
                 
                 // Add the XML Schema using the above stream
                 XmlSchema xmlSchema;
@@ -62,6 +65,7 @@ namespace Reanimator
             {
                 // Validation Failed
                 Console.WriteLine(e.Message);
+                MessageBox.Show(e.Message);
                 return false;
             }
         }
@@ -144,7 +148,7 @@ namespace Reanimator
             public object replace;
         }
 
-        public void DemoMod()
+        public static void DemoMod()
         {
             Revival revival = new Revival();
 
@@ -170,10 +174,25 @@ namespace Reanimator
             revival.modification[0].pack[0].file[0].modify.entity[0].attribute[0].replace[0] = "1123";
 
             // Serialization
+            Serialize(revival, @"c:\list.xml");
+        }
+
+        public static void Serialize(Revival revival, string path)
+        {
             XmlSerializer s = new XmlSerializer(typeof(Revival));
-            TextWriter w = new StreamWriter(@"c:\list.xml");
+            TextWriter w = new StreamWriter(path);
             s.Serialize(w, revival);
             w.Close();
+        }
+
+        public Revival Deserialize(string path)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Revival));
+            TextReader tr = new StreamReader(path);
+            Revival revival = (Revival)serializer.Deserialize(tr);
+            tr.Close();
+
+            return revival;
         }
     }
 
