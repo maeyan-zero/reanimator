@@ -380,7 +380,8 @@
             // 
             this.toolsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optionsToolStripMenuItem,
-            this.clientPatchesToolStripMenuItem});
+            this.clientPatchesToolStripMenuItem,
+            this.clientPatcherToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
             this.toolsMenu.Size = new System.Drawing.Size(48, 20);
             this.toolsMenu.Text = "&Tools";
@@ -395,8 +396,7 @@
             // clientPatchesToolStripMenuItem
             // 
             this.clientPatchesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.bypassSecurityx64ToolStripMenuItem,
-            this.clientPatcherToolStripMenuItem});
+            this.bypassSecurityx64ToolStripMenuItem});
             this.clientPatchesToolStripMenuItem.Name = "clientPatchesToolStripMenuItem";
             this.clientPatchesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.clientPatchesToolStripMenuItem.Text = "Client Patches";
@@ -612,8 +612,8 @@
             // clientPatcherToolStripMenuItem
             // 
             this.clientPatcherToolStripMenuItem.Name = "clientPatcherToolStripMenuItem";
-            this.clientPatcherToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.clientPatcherToolStripMenuItem.Text = "Hardcore Patcher";
+            this.clientPatcherToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clientPatcherToolStripMenuItem.Text = "Client Patcher";
             this.clientPatcherToolStripMenuItem.Click += new System.EventHandler(this.clientPatcherToolStripMenuItem_Click);
             // 
             // Reanimator

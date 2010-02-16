@@ -352,7 +352,7 @@ namespace Reanimator
                 return;
             }
 
-            Client clientPatcher = new Client(FileTools.StreamToByteArray(clientFile));
+            ClientPatcher clientPatcher = new ClientPatcher(FileTools.StreamToByteArray(clientFile));
             if (clientPatcher.ApplyHardcorePatch())
             {
                 FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
@@ -495,7 +495,7 @@ namespace Reanimator
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("exe"))
             {
-                Client hglexe = new Client(File.ReadAllBytes(openFileDialog.FileName));
+                ClientPatcher hglexe = new ClientPatcher(File.ReadAllBytes(openFileDialog.FileName));
                 try
                 {
                     hglexe.ApplyHardcorePatch();

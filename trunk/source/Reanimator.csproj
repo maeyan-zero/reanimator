@@ -104,7 +104,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client.cs" />
+    <Compile Include="ClientPatcher.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="Export.cs" />
