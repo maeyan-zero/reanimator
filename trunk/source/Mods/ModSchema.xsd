@@ -4,9 +4,20 @@
   <xs:element name="title" type="xs:string"/>
   <xs:element name="version" type="xs:string"/>
   <xs:element name="description" type="xs:string"/>
+<xs:element name="url" type="xs:string"/>
+<xs:element name="type" type="xs:string"/> <!-- type still misses value restriction for "required" and "optional" -->
   <xs:element name="append" type="xs:string"/>
   <xs:element name="replace" type="xs:string"/>
   
+<!--xs:simpleType name="type">
+	<xs:restriction base="xs:string">
+		<xs:enumeration value="required"/>
+		<xs:enumeration value="optional"/>
+	</xs:restriction>
+</xs:simpleType-->
+  
+<xs:element name="bitmask" type="xs:string"/> <!-- bitmask still needs an id -->
+	
   <xs:attribute name="id" type="xs:string"/>
   
   <xs:simpleType name="bit">
@@ -30,6 +41,7 @@
     <xs:choice>
       <xs:element ref="bitwise"/>
       <xs:element ref="replace"/>
+<xs:element ref="bitmask"/> <!-- appears in the xml file, so it seems to be needed here -->
     </xs:choice>
   </xs:group>
   
@@ -110,6 +122,8 @@
         <xs:element ref="title" maxOccurs="1"/>
         <xs:element ref="version" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="description" minOccurs="0" maxOccurs="1"/>
+<xs:element ref="url" minOccurs="0" maxOccurs="1"/>
+<xs:element ref="type" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="pack"/>
       </xs:sequence>
     </xs:complexType>
