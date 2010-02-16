@@ -7,7 +7,7 @@ using Reanimator;
 
 namespace Reanimator
 {
-    class Client
+    class ClientPatcher
     {
         byte[] buffer;
         public byte[] Buffer
@@ -18,7 +18,7 @@ namespace Reanimator
             }
         }
 
-        public Client(byte[] byteArray)
+        public ClientPatcher(byte[] byteArray)
         {
             buffer = byteArray;
         }
