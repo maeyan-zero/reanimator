@@ -26,7 +26,7 @@ namespace Reanimator.Forms
         };
 
         private ExcelTable excelTable;
-      //  private bool doStrings;
+        //  private bool doStrings;
 
         public String GetExcelTableName()
         {
@@ -37,19 +37,19 @@ namespace Reanimator.Forms
         {
             InitializeComponent();
             dataGridView.DataSource = xlsDataSet;
-           // dataGridView.SuspendLayout();
+            // dataGridView.SuspendLayout();
             excelTable = table;
-          //  doStrings = false;
-          //  if (MessageBox.Show("Do you wish to convert applicable string offsets to strings?\nWarning: This may increase generation time!", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-          // {
-          //      doStrings = true;
-          //  }
+            //  doStrings = false;
+            //  if (MessageBox.Show("Do you wish to convert applicable string offsets to strings?\nWarning: This may increase generation time!", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            // {
+            //      doStrings = true;
+            //  }
             ProgressForm progress = new ProgressForm();
             progress.Shown += new EventHandler(Progress_Shown);
             progress.ShowDialog(this);
             this.Hide();
             this.Show();
-         //   dataGridView.ResumeLayout();
+            //   dataGridView.ResumeLayout();
         }
 
         static DataSet xlsDataSet = new DataSet("xlsDataSet");
@@ -64,11 +64,9 @@ namespace Reanimator.Forms
 
 
             // not sure if we're going to store as a single xml or multiple yet...
-            bool readFromDataSet = false;
             if (xlsDataSet.Tables.Count == 0 && File.Exists("dataSet.xml"))
             {
                 xlsDataSet.ReadXml("dataSet.xml");
-                readFromDataSet = true;
             }
 
 
@@ -253,11 +251,10 @@ namespace Reanimator.Forms
                 }
             }
 
-
-            if (!readFromDataSet)
+            DataTable dtStrings = xlsDataSet.Tables[excelTable.StringId + "_STRINGS"];
+            DataTable dtData = xlsDataSet.Tables[excelTable.StringId];
+            if (dtData.ChildRelations.Count == 0 && dtData.ParentRelations.Count == 0)
             {
-                DataTable dtStrings = xlsDataSet.Tables[excelTable.StringId + "_STRINGS"];
-                DataTable dtData = xlsDataSet.Tables[excelTable.StringId];
                 DataColumn dcParent = dtStrings.Columns["offset"];
                 foreach (DataColumn dc in dtData.Columns)
                 {
@@ -361,8 +358,8 @@ namespace Reanimator.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-        //    DataTable dataTable = xlsDataSet.Tables[0];
-          //  DataRow[] dataRows = dataTable.Select("name = 'goggles'");
+            //    DataTable dataTable = xlsDataSet.Tables[0];
+            //  DataRow[] dataRows = dataTable.Select("name = 'goggles'");
         }
     }
 }
