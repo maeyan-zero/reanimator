@@ -15,6 +15,8 @@ namespace Reanimator.Forms
         public ProgressForm()
         {
             InitializeComponent();
+
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         public delegate void ParameterizedProgressThread(ProgressForm progressBar, Object param);
@@ -23,12 +25,12 @@ namespace Reanimator.Forms
         Object threadParam;
         Form owner;
 
-        public ProgressForm(ParameterizedProgressThread func, Object param)
+        public ProgressForm(ParameterizedProgressThread func, Object param) : this()
         {
             threadFunc = func;
             threadParam = param; //new Object[] {param, this};
 
-            InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
 
             this.Disposed += new EventHandler(ProgressForm_Disposed);
         }

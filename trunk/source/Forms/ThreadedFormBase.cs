@@ -52,5 +52,19 @@ namespace Reanimator.Forms
                 base.Dispose();
             }
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // ThreadedFormBase
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 264);
+            this.Name = "ThreadedFormBase";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.ResumeLayout(false);
+
+        }
     }
 }
