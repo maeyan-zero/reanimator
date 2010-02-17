@@ -99,7 +99,7 @@ namespace Reanimator.Forms
                     }
                     else
                     {
-                        progress.SetLoadingText("First time generation of strings table data..." + "(Table: " + excelTable.StringId + ")");
+                        progress.SetLoadingText("First time generation of strings table data..." + " (Table: " + excelTable.StringId + ")");
                         if (stringsDataTable == null)
                         {
                             stringsDataTable = xlsDataSet.Tables.Add(stringsTableName);
@@ -165,7 +165,7 @@ namespace Reanimator.Forms
                 }
                 else
                 {
-                    progress.SetLoadingText("First time generation of table data..." + "(Table: " + excelTable.StringId + ")");
+                    progress.SetLoadingText("First time generation of table data..." + " (Table: " + excelTable.StringId + ")");
 
                     if (dataTable == null)
                     {
