@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.loadingTextLabel = new System.Windows.Forms.Label();
             this.currentItemLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // progressBar1
+            // progressBar
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 50);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(378, 23);
-            this.progressBar1.TabIndex = 0;
+            this.progressBar.Location = new System.Drawing.Point(12, 50);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(378, 23);
+            this.progressBar.TabIndex = 0;
             // 
             // loadingTextLabel
             // 
@@ -61,19 +61,19 @@
             this.currentItemLabel.Text = "current item";
             this.currentItemLabel.TextChanged += new System.EventHandler(this.currentItemLabel_TextChanged);
             // 
-            // Progress
+            // ProgressForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(390, 73);
+            this.ClientSize = new System.Drawing.Size(400, 81);
             this.ControlBox = false;
             this.Controls.Add(this.currentItemLabel);
             this.Controls.Add(this.loadingTextLabel);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.progressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Progress";
+            this.Name = "ProgressForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -88,7 +88,7 @@
         #endregion
 
         private System.Windows.Forms.Label loadingTextLabel;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label currentItemLabel;
     }
 }

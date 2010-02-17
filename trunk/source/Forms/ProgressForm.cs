@@ -73,9 +73,9 @@ namespace Reanimator.Forms
             }
             else
             {
-                progressBar1.Minimum = minimum;
-                progressBar1.Maximum = maximum;
-                progressBar1.Step = step;
+                progressBar.Minimum = minimum;
+                progressBar.Maximum = maximum;
+                progressBar.Step = step;
             }
         }
 
@@ -110,13 +110,13 @@ namespace Reanimator.Forms
 
         public void StepProgress()
         {
-            progressBar1.Increment(progressBar1.Step);
+            progressBar.Increment(progressBar.Step);
         }
 
         // Each time the text is modified (a new item is completed) let the progressbar progress and refresh the form
         private void currentItemLabel_TextChanged(object sender, EventArgs e)
         {
-            progressBar1.PerformStep();
+            progressBar.PerformStep();
             this.Refresh();
         }
 

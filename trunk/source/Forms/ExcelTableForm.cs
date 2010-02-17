@@ -14,7 +14,7 @@ using System.Collections;
 
 namespace Reanimator.Forms
 {
-    public partial class ExcelTableForm : Form
+    public partial class ExcelTableForm : ThreadedFormBase
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class TableIndexDataSource
@@ -26,7 +26,6 @@ namespace Reanimator.Forms
         };
 
         private ExcelTable excelTable;
-        //  private bool doStrings;
 
         public String GetExcelTableName()
         {
@@ -36,112 +35,151 @@ namespace Reanimator.Forms
         public ExcelTableForm(ExcelTable table)
         {
             InitializeComponent();
-            dataGridView.DataSource = xlsDataSet;
-            // dataGridView.SuspendLayout();
             excelTable = table;
-            //  doStrings = false;
-            //  if (MessageBox.Show("Do you wish to convert applicable string offsets to strings?\nWarning: This may increase generation time!", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            // {
-            //      doStrings = true;
-            //  }
-            ProgressForm progress = new ProgressForm();
-            progress.Shown += new EventHandler(Progress_Shown);
+
+            dataGridView.DoubleBuffered(true);
+            dataGridView.EnableHeadersVisualStyles = false;
+            //dataGridView.CellBorderStyle = DataGridViewCellBorderStyle.None;
+            //dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.SkyBlue;
+            dataGridView.DataSource = xlsDataSet;
+            listBox1.DataSource = xlsDataSet;
+            
+            ProgressForm progress = new ProgressForm(LoadTables, null);
             progress.ShowDialog(this);
             this.Hide();
             this.Show();
-            //   dataGridView.ResumeLayout();
         }
 
         static DataSet xlsDataSet = new DataSet("xlsDataSet");
 
-        private void Progress_Shown(object sender, EventArgs e)
+        private void LoadTables(ProgressForm progress, Object var)
         {
-            ProgressForm progress = sender as ProgressForm;
-
             // file id
             this.textBox1.Text = "0x" + excelTable.StructureId.ToString("X");
 
 
-
-            // not sure if we're going to store as a single xml or multiple yet...
-            if (xlsDataSet.Tables.Count == 0 && File.Exists("dataSet.xml"))
+            // load our data set design
+            String dataSetSchemaString = @"cache\dataSet.xsd";
+            if (File.Exists(dataSetSchemaString))
             {
-                xlsDataSet.ReadXml("dataSet.xml");
-            }
-
-
-
-
-            DataTable stringsDataTable = null;
-            listBox1.DataSource = xlsDataSet;
-            String stringTableName = excelTable.StringId + "_STRINGS";
-            String xmlStringsFilePath = @"xml\" + stringTableName + ".xml";
-            if (xlsDataSet.Tables.Contains(stringTableName))
-            {
-                listBox1.DisplayMember = stringTableName + ".string";
-                listBox1.ValueMember = stringTableName + ".offset";
+                xlsDataSet.ReadXmlSchema(dataSetSchemaString);
             }
             else
             {
-                if (File.Exists(xmlStringsFilePath))
+                Directory.CreateDirectory(@"cache\");
+            }
+
+
+            // load string tables if applicable
+            if (excelTable.Strings.Count > 0)
+            {
+                String stringsTableName = excelTable.StringId + "_STRINGS";
+                String xmlStringsFilePath = @"cache\" + stringsTableName + ".xml";
+
+                DataTable stringsDataTable = xlsDataSet.Tables[stringsTableName];
+                bool loadInTable = false;
+                if (stringsDataTable == null)
                 {
-                    xlsDataSet.ReadXml(xmlStringsFilePath);
-                    listBox1.DataSource = xlsDataSet;
-                    listBox1.DisplayMember = stringTableName + ".string";
-                    listBox1.ValueMember = stringTableName + ".offset";
+                    loadInTable = true;
                 }
                 else
                 {
-                    stringsDataTable = xlsDataSet.Tables.Add(stringTableName);
-                    DataColumn offsetColumn = stringsDataTable.Columns.Add("offset");
-                    offsetColumn.Unique = true;
-                    stringsDataTable.PrimaryKey = new DataColumn[] { offsetColumn };
-                    stringsDataTable.Columns.Add("string");
-
-                    // do strings - better than before, but works.
-                    // no longer has as much details - though I don't think necessary anymore.
-                    foreach (DictionaryEntry entry in excelTable.Strings)
+                    if (stringsDataTable.Rows.Count == 0)
                     {
-                        stringsDataTable.Rows.Add(entry.Key, entry.Value);
-                        //this.listBox1.Items.Add(s);
+                        loadInTable = true;
                     }
+                }
 
-                    listBox1.DataSource = xlsDataSet;
-                    listBox1.DisplayMember = stringTableName + ".string";
-                    listBox1.ValueMember = stringTableName + ".offset";
+                if (loadInTable)
+                {
+                    if (File.Exists(xmlStringsFilePath))
+                    {
+                        progress.SetLoadingText("Loading strings table xml file...");
+                        xlsDataSet.ReadXml(xmlStringsFilePath, XmlReadMode.IgnoreSchema);
+                    }
+                    else
+                    {
+                        progress.SetLoadingText("First time generation of strings table data...");
+                        if (stringsDataTable == null)
+                        {
+                            stringsDataTable = xlsDataSet.Tables.Add(stringsTableName);
+                        }
+
+                        DataColumn offsetColumn = stringsDataTable.Columns["offset"];
+                        if (offsetColumn == null)
+                        {
+                            offsetColumn = stringsDataTable.Columns.Add("offset");
+                            offsetColumn.Unique = true;
+                            stringsDataTable.PrimaryKey = new DataColumn[] { offsetColumn };
+                        }
+
+                        if (!stringsDataTable.Columns.Contains("string"))
+                        {
+                            stringsDataTable.Columns.Add("string");
+                        }
+
+                        foreach (DictionaryEntry entry in excelTable.Strings)
+                        {
+                            stringsDataTable.Rows.Add(entry.Key, entry.Value);
+                        }
+
+                        stringsDataTable.WriteXml(xmlStringsFilePath, XmlWriteMode.IgnoreSchema);
+                    }
+                }
+
+                listBox1.DisplayMember = stringsTableName + ".string";
+                listBox1.ValueMember = stringsTableName + ".offset";
+            }
+            else
+            {
+                // should we hid/remove list box when no strings?
+                // TODO
+                listBox1.DataSource = null;
+            }
+
+
+            // load in main data table
+            String tableName = excelTable.StringId;
+            String xmlFilePath = @"cache\" + tableName + ".xml";
+
+            DataTable dataTable = xlsDataSet.Tables[tableName];
+            bool loadInDataTable = false;
+            if (dataTable == null)
+            {
+                loadInDataTable = true;
+            }
+            else
+            {
+                if (dataTable.Rows.Count == 0)
+                {
+                    loadInDataTable = true;
                 }
             }
 
-
-
-
-
-            DataTable dataTable = null;
-            String xmlFilePath = @"xml\" + excelTable.StringId + ".xml";
-            if (xlsDataSet.Tables.Contains(excelTable.StringId))
-            {
-                dataGridView.DataMember = excelTable.StringId;
-            }
-            else
+            if (loadInDataTable)
             {
                 if (File.Exists(xmlFilePath))
                 {
-                    xlsDataSet.ReadXml(xmlFilePath);
-                    dataGridView.DataMember = excelTable.StringId;
+                    progress.SetLoadingText("Loading table xml file...");
+                    xlsDataSet.ReadXml(xmlFilePath, XmlReadMode.IgnoreSchema);
                 }
                 else
                 {
-                    dataTable = xlsDataSet.Tables.Add(excelTable.StringId);
+                    progress.SetLoadingText("First time generation of table data...");
 
-                    // main table data
-                    progress.SetLoadingText("Generating table data...");
-                    DataColumn indexColumn = dataTable.Columns.Add("Index");
+                    if (dataTable == null)
+                    {
+                        dataTable = xlsDataSet.Tables.Add(excelTable.StringId);
+                    }
+                    object[] array = (object[])excelTable.GetTableArray();
+                    Type type = array[0].GetType();
+
+                    #region generate_columns
+                    DataColumn indexColumn = dataTable.Columns.Add("index");
                     indexColumn.AutoIncrement = true;
                     indexColumn.Unique = true;
                     dataTable.PrimaryKey = new DataColumn[] { indexColumn };
 
-                    object[] array = (object[])excelTable.GetTableArray();
-                    Type type = array[0].GetType();
                     foreach (MemberInfo memberInfo in type.GetFields())
                     {
                         DataColumn dataColumn = dataTable.Columns.Add(memberInfo.Name);
@@ -165,30 +203,26 @@ namespace Reanimator.Forms
                             }
                         }
                     }
-
-
+                    #endregion
 
                     progress.ConfigBar(0, array.Length, 1);
+
+                    #region generate_rows
                     int row = 0;
+
                     foreach (Object table in array)
                     {
-                        int col = 1;
-
                         progress.SetCurrentItemText("Row " + row + " of " + array.Length);
-                        if (row % 2 == 0)
-                        {
-                            progress.Refresh();
-                        }
-
 
                         DataRow dataRow = dataTable.Rows.Add();
-
+                        int col = 1;
 
                         foreach (FieldInfo fieldInfo in type.GetFields())
                         {
+                            Object value = fieldInfo.GetValue(table);
                             ExcelTables.ExcelOutputAttribute excelOutputAttribute = null;
-
                             MemberInfo memberInfo = fieldInfo as MemberInfo;
+
                             foreach (Attribute attribute in memberInfo.GetCustomAttributes(typeof(ExcelTables.ExcelOutputAttribute), true))
                             {
                                 excelOutputAttribute = attribute as ExcelTables.ExcelOutputAttribute;
@@ -198,7 +232,7 @@ namespace Reanimator.Forms
                                 }
                             }
 
-                            Object value = fieldInfo.GetValue(table);
+                            // to fix up / reimplement
                             if (excelOutputAttribute != null && false)
                             {
                                 if (excelOutputAttribute.IsStringOffset)
@@ -246,32 +280,44 @@ namespace Reanimator.Forms
 
                         row++;
                     }
+                    #endregion
 
-                    dataGridView.DataMember = excelTable.StringId;
-                }
-            }
+                    #region generate_relations
+                    DataTable dtStrings = xlsDataSet.Tables[excelTable.StringId + "_STRINGS"];
+                    DataTable dtData = xlsDataSet.Tables[excelTable.StringId];
 
-            DataTable dtStrings = xlsDataSet.Tables[excelTable.StringId + "_STRINGS"];
-            DataTable dtData = xlsDataSet.Tables[excelTable.StringId];
-            if (dtData.ChildRelations.Count == 0 && dtData.ParentRelations.Count == 0)
-            {
-                DataColumn dcParent = dtStrings.Columns["offset"];
-                foreach (DataColumn dc in dtData.Columns)
-                {
-                    if (dc.ExtendedProperties.ContainsKey("IsStringOffset"))
+                    if (dtData.ChildRelations.Count == 0 && dtData.ParentRelations.Count == 0 && dtStrings != null)
                     {
-                        DataColumn dcChild = dc;
-                        String relationName = excelTable.StringId + dcChild.ColumnName + "StringOffset";
-                        DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
-                        xlsDataSet.Relations.Add(relation);
+                        DataColumn dcParent = dtStrings.Columns["offset"];
 
-                        DataColumn dcString = dtData.Columns[dcChild.ColumnName + "_string"];
-                        dcString.Expression = "Parent(" + relationName + ").string";
+                        foreach (DataColumn dc in dtData.Columns)
+                        {
+                            if (dc.ExtendedProperties.ContainsKey("IsStringOffset"))
+                            {
+                                DataColumn dcChild = dc;
+                                String relationName = excelTable.StringId + dcChild.ColumnName + "StringOffset";
+                                DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
+                                xlsDataSet.Relations.Add(relation);
+
+                                dcChild.AllowDBNull = false;
+                                dcChild.DefaultValue = String.Empty;
+                                DataColumn dcString = dtData.Columns[dcChild.ColumnName + "_string"];
+                                dcString.Expression = "Parent(" + relationName + ").string";
+
+                            }
+                        }
                     }
+                    #endregion
+
+                    progress.SetLoadingText("Saving table xml file...");
+                    dataTable.WriteXml(xmlFilePath, XmlWriteMode.IgnoreSchema);
                 }
             }
 
-            // generate the table index data source - //TODO is there a better way?
+            dataGridView.DataMember = excelTable.StringId;
+
+            // generate the table index data source
+            // TODO is there a better way?
             List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
             int[][] intArrays = { excelTable.TableIndicies, excelTable.Unknowns1, excelTable.Unknowns2, excelTable.Unknowns3, excelTable.Unknowns4 };
             for (int i = 0; i < intArrays.Length; i++)
@@ -296,6 +342,7 @@ namespace Reanimator.Forms
                         case 0:
                             // should we still use the "official" one?
                             // or leave as autogenerated - has anyone ever seen it NOT be ascending from 0?
+                            // TODO
                             //dataGridView[i, j].Value = intArrays[i][j];
                             break;
                         case 1:
@@ -333,10 +380,7 @@ namespace Reanimator.Forms
                 dataGridView2.Columns.RemoveAt(0);
             }
 
-
-            xlsDataSet.WriteXml("dataSet.xml", XmlWriteMode.WriteSchema);
-            dataGridView.AutoResizeColumns();
-            progress.Dispose();
+            xlsDataSet.WriteXmlSchema(dataSetSchemaString);
         }
 
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
@@ -358,8 +402,38 @@ namespace Reanimator.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //    DataTable dataTable = xlsDataSet.Tables[0];
-            //  DataRow[] dataRows = dataTable.Select("name = 'goggles'");
+            DataTable affixTable = xlsDataSet.Tables["AFFIXES"];
+            EnumerableRowCollection<DataRow> query = from affix in affixTable.AsEnumerable()
+                                                     where affix.Field<string>("affix").CompareTo("-1") != 0
+                                                     orderby affix.Field<string>("affix_string")
+                                                     select affix;
+
+            DataView view = query.AsDataView();
+
+
+            /*   EnumerableRowCollection<DataRow> query2 = from affix in view.GetEnumerator()
+                                                        where affix.Field<string>("affix_string").StartsWith("Pet")
+                                                        orderby affix.Field<string>("affix_string")
+                                                        select affix;
+
+               view = query2.AsDataView();*/
+            dataGridView.DataSource = view;
+            dataGridView.DataMember = null;
+
+
+            //DataTable dataTable = xlsDataSet.Tables[0];
+            //   DataRow[] dataRows = dataTable.Select("name = 'goggles'");
+        }
+    }
+
+    public static class ExtensionMethods
+    {
+        public static void DoubleBuffered(this DataGridView dgv, bool setting)
+        {
+            Type dgvType = dgv.GetType();
+            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            pi.SetValue(dgv, setting, null);
         }
     }
 }
