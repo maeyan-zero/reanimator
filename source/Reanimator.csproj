@@ -109,6 +109,12 @@
     <Compile Include="Config.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="Export.cs" />
+    <Compile Include="Forms\CacheInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CacheInfo.Designer.cs">
+      <DependentUpon>CacheInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CSVSelection.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -235,6 +241,10 @@
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\CacheInfo.resx">
+      <DependentUpon>CacheInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MinigameControl.resx">
       <DependentUpon>MinigameControl.cs</DependentUpon>
       <SubType>Designer</SubType>

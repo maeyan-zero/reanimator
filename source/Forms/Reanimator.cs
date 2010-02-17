@@ -511,5 +511,12 @@ namespace Reanimator
                 }
             }
         }
+
+        private void cacheToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CacheInfo info = new CacheInfo(@"cache\");
+            info.MdiParent = this;
+            info.Show();
+        }
     }
 }
