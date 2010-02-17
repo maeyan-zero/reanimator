@@ -47,8 +47,12 @@ namespace Reanimator.Forms
 
         private void b_cacheAll_Click(object sender, EventArgs e)
         {
-            foreach (ExcelTable excelTable in listBox1.Items)
+            for(int counter = 0; counter < listBox1.Items.Count; counter++)
             {
+                listBox1.SelectedIndex++;
+
+                ExcelTable excelTable = (ExcelTable)listBox1.Items[counter];
+
                 ExcelTableForm etf = new ExcelTableForm(excelTable);
                 etf.Text = "Excel Table: " + excelTable;
                 etf.MdiParent = this.MdiParent;
