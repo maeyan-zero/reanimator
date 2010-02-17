@@ -144,7 +144,7 @@ namespace Reanimator
 
             try
             {
-                Mod.DemoMod();
+                //Mod.DemoMod();
                 Mod.Parse(szFileName);
                 return true;
             }
