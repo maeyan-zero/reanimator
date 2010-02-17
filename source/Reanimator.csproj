@@ -239,6 +239,10 @@
       <DependentUpon>MinigameControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ThreadedFormBase.resx">
+      <DependentUpon>ThreadedFormBase.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\WayPointControl.resx">
       <DependentUpon>WayPointControl.cs</DependentUpon>
       <SubType>Designer</SubType>

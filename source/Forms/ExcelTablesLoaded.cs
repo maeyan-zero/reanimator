@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Reanimator.Excel;
+using System.IO;
 
 namespace Reanimator.Forms
 {
@@ -30,6 +31,37 @@ namespace Reanimator.Forms
             etf.Text = "Excel Table: " + excelTable;
             etf.MdiParent = this.MdiParent;
             etf.Show();
+        }
+
+        private void b_clearCache_Click(object sender, EventArgs e)
+        {
+            string[] files = Directory.GetFiles(@"cache\");
+
+            foreach (string file in files)
+            {
+                File.Delete(file);
+            }
+
+            MessageBox.Show("Cache cleared!", "Info");
+        }
+
+        private void b_cacheAll_Click(object sender, EventArgs e)
+        {
+            foreach (ExcelTable excelTable in listBox1.Items)
+            {
+                ExcelTableForm etf = new ExcelTableForm(excelTable);
+                etf.Text = "Excel Table: " + excelTable;
+                etf.MdiParent = this.MdiParent;
+                etf.Hide();
+                etf.Close();
+            }
+
+            MessageBox.Show(listBox1.Items.Count + " files cached!", "Info");
+        }
+
+        public void LoadingComplete()
+        {
+            label2.Text = listBox1.Items.Count.ToString();
         }
     }
 }
