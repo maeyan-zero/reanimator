@@ -36,11 +36,11 @@ namespace Reanimator.Excel
         protected struct TableHeader
         {
             public Int32 unknown1;
-            public Int32 tableType;
-            public Int16 indexString;
+            public Int32 unknown2;
+            public Int16 versionMajor;
             public Int16 unknown3;
+            public Int16 versionMinor;
             public Int16 unknown4;
-            public Int16 unknown5;
         }
 
         protected byte[] excelData;

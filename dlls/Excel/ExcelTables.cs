@@ -188,8 +188,8 @@ namespace Reanimator.Excel
             excelTables.AddTable("DAMAGETYPES", null, typeof(Excel.DamageTypes));
             excelTables.AddTable("DIALOG", null, typeof(Excel.Dialog));
             excelTables.AddTable("DIFFICULTY", null, typeof(Excel.Difficulty));
-            excelTables.AddTable("DISPLAY_CHAR", "DISPLAYCHAR", typeof(Excel.Display));
-            excelTables.AddTable("DISPLAY_ITEM", "DISPLAYITEM", typeof(Excel.Display));
+            excelTables.AddTable("DISPLAY_CHAR", "DISPLAYCHAR", typeof(Excel.Display));                     //// THESE AREN'T BEING LOADED - TODO FIXME
+            excelTables.AddTable("DISPLAY_ITEM", "DISPLAYITEM", typeof(Excel.Display));                     //// THESE AREN'T BEING LOADED - TODO FIXME
             excelTables.AddTable("EFFECTSFILES", "EFFECTS_FILES", typeof(Excel.EffectsFiles));
             excelTables.AddTable("EFFECTS_INDEX", "EFFECTSINDEX", typeof(Excel.EffectsIndex));
             excelTables.AddTable("EFFECTSSHADERS", "EFFECTS_SHADERS", typeof(Excel.EffectsShaders));
@@ -381,6 +381,11 @@ namespace Reanimator.Excel
                 }
             }
 
+            return null;
+        }
+
+        public ExcelTable BruteForceCode(int code)
+        {
             return null;
         }
 
