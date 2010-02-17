@@ -94,7 +94,6 @@
     <Compile Include="BackGroundSounds2D.cs" />
     <Compile Include="BackGroundSounds3D.cs" />
     <Compile Include="BadgeRewards.cs" />
-    <Compile Include="BitBuffer.cs" />
     <Compile Include="Bones.cs" />
     <Compile Include="BookMarks.cs" />
     <Compile Include="BudgetsModel.cs" />
@@ -212,7 +211,6 @@
     <Compile Include="TextureTypes.cs" />
     <Compile Include="Treasure.cs" />
     <Compile Include="UIComponent.cs" />
-    <Compile Include="Unit.cs" />
     <Compile Include="UnitEvents.cs" />
     <Compile Include="UnitModeGroups.cs" />
     <Compile Include="UnitModes.cs" />
