@@ -135,7 +135,6 @@ namespace Reanimator.Excel
 
         public bool AllTablesLoaded { get; set; }
         ExcelTableManagerManager excelTables;
-       // List<KeyValuePair<string, ExcelTable>> loadedTables;
         List<ExcelTable> loadedTables;
 
         public ExcelTables(byte[] data)
@@ -147,12 +146,7 @@ namespace Reanimator.Excel
             }
 
             this.StringId = "EXCELTABLES";
-           // loadedTables = new List<KeyValuePair<string, ExcelTable>>();
             loadedTables = new List<ExcelTable>();
-
-            //loadedTables = new DataTable();
-          //  loadedTables.Columns.Add("stringId", typeof(string));
-          //  loadedTables.Columns.Add("excelTable", typeof(ExcelTable));
 
             excelTables = new ExcelTableManagerManager();
             excelTables.AddTable("ACHIEVEMENTS", null, typeof(Excel.Achievements));
@@ -439,6 +433,7 @@ namespace Reanimator.Excel
                 byte[] buffer = FileTools.StreamToByteArray(cookedFile);
                 try
                 {
+                    Debug.Write(stringId + "\n");
                     ExcelTable excelTable = excelTables.CreateTable(stringId, buffer);
                     if (excelTable != null)
                     {

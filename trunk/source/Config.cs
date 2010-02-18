@@ -81,5 +81,11 @@ namespace Reanimator
             get { return GetValue<String>("gameClientPath", "C:\\Program Files\\Flagship Studios\\Hellgate London\\SP_x64\\hellgate_sp_dx9_x64.exe"); }
             set { SetValue<string>("gameClientPath", value); }
         }
+
+        public static string cacheFilePath
+        {
+            get { return GetValue<String>("cacheFilePath", @"cache\dataSet.dat"); }
+            set { SetValue<string>("cacheFilePath", value); }
+        }
     }
 }

@@ -21,24 +21,22 @@ namespace Reanimator.Forms
             excelDataSet = xlsDataSet;
         }
 
-        public ListBox GetTablesListBox()
+        public void BindListBoxDataSource(Object dataSource)
         {
-            return listBox1;
+            loadedTables_ListBox.DataSource = dataSource;
         }
 
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ExcelTable excelTable = listBox1.SelectedValue as ExcelTable;
+            ExcelTable excelTable = loadedTables_ListBox.SelectedValue as ExcelTable;
 
-            ExcelTableForm etf = new ExcelTableForm(excelTable, excelDataSet);
-            etf.Text = "Excel Table: " + excelTable;
-            etf.MdiParent = this.MdiParent;
-            etf.Show();
-        }
-
-        public void LoadingComplete()
-        {
-            label2.Text = listBox1.Items.Count.ToString();
+            if (excelTable != null)
+            {
+                ExcelTableForm etf = new ExcelTableForm(excelTable, excelDataSet);
+                etf.Text = "Excel Table: " + excelTable;
+                etf.MdiParent = this.MdiParent;
+                etf.Show();
+            }
         }
     }
 }

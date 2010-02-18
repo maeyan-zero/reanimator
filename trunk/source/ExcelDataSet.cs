@@ -19,7 +19,6 @@ namespace Reanimator
     {
         DataSet xlsDataSet;
         Hashtable xlsDataTables;
-        static String xlsFilePath = @"cache\dataSet.dat";
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class TableIndexDataSource
@@ -39,25 +38,40 @@ namespace Reanimator
 
         private void LoadDataSet()
         {
-            if (File.Exists(xlsFilePath))
+            if (File.Exists(Config.cacheFilePath))
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                FileStream fs = new FileStream(xlsFilePath, FileMode.Open, FileAccess.Read);
-                xlsDataSet = bf.Deserialize(fs) as DataSet;
+                try
+                {
+                    using (FileStream fs = new FileStream(Config.cacheFilePath, FileMode.Open, FileAccess.Read))
+                    {
+                        BinaryFormatter bf = new BinaryFormatter();
+                        xlsDataSet = bf.Deserialize(fs) as DataSet;
+                    }
+
+                    return;
+                }
+                catch (Exception) { }
             }
-            else
-            {
-                Directory.CreateDirectory(@"cache\");
-                xlsDataSet = new DataSet("xlsDataSet");
-            }
+
+            Directory.CreateDirectory(Config.cacheFilePath.Substring(0, Config.cacheFilePath.LastIndexOf(@"\") + 1));
+            xlsDataSet = new DataSet("xlsDataSet");
         }
 
         public void SaveDataSet()
         {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream fs = new FileStream(xlsFilePath, FileMode.Create, FileAccess.ReadWrite);
-            bf.Serialize(fs, xlsDataSet);
-            fs.Close();
+            using (FileStream fs = new FileStream(Config.cacheFilePath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, xlsDataSet);
+                fs.Close();
+            }
+        }
+
+        public void ClearDataSet()
+        {
+            xlsDataSet.Clear();
+            xlsDataSet.Relations.Clear();
+            xlsDataSet.Tables.Clear();
         }
 
         public void LoadTables(ProgressForm progress, Object var)
@@ -322,6 +336,11 @@ namespace Reanimator
         public DataSet GetDataSet()
         {
             return xlsDataSet;
+        }
+
+        public int LoadedTableCount
+        {
+            get { return xlsDataSet.Tables.Count; }
         }
     }
 }

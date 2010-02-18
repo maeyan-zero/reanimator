@@ -365,42 +365,6 @@ namespace Reanimator
             clientFile.Dispose();
         }
 
-        private void LoadExcelTables(object sender, EventArgs e)
-        {
-            
-            ProgressForm progress = (ProgressForm)sender;
-            FileStream excelFile;
-
-            string excelFilePath = Config.dataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked";
-            try
-            {
-                excelFile = new FileStream(excelFilePath, FileMode.Open);
-                excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Failed to load exceltables!\nPlease ensure your directories are set correctly.\n\nFile: \n" + excelFilePath, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                progress.Close();
-                progress.Dispose();
-                return;
-            }
-
-            progress.ConfigBar(0, excelTables.Count, 1);
-            progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
-            excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress);
-
-            ListBox listBox = excelTablesLoaded.GetTablesListBox();
-            listBox.DataSource = excelTables.GetLoadedTables();
-
-            excelTablesLoaded.LoadingComplete();
-
-            progress.SetLoadingText("Loading table cache data...");
-            excelDataSet = new ExcelDataSet();
-
-            progress.Dispose();
-             
-        }
-
         private void Reanimator_ResizeEnd(object sender, EventArgs e)
         {
             Config.clientHeight = this.Height;
@@ -418,52 +382,16 @@ namespace Reanimator
             progress.Disposed += new EventHandler(progress_Disposed);
             progress.ShowDialog(this);
 
-            if (!File.Exists(@"cache\dataSet.dat"))
-            {
-                DialogResult dr = MessageBox.Show("Reanimator has detected no cached table data.\nDo you wish to generate it now? (this will take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (dr == DialogResult.Yes)
-                {
-                    ProgressForm cachingProgress = new ProgressForm(CacheExcelTables, excelTables.GetLoadedTables());
-                    cachingProgress.ShowDialog(this);
-                }
-            }
+            this.GenerateCache(false);
         }
 
         private void progress_Disposed(object sender, EventArgs e)
         {
             excelTablesLoaded = new ExcelTablesLoaded(excelDataSet);
-            excelTablesLoaded.Text = "Currently Loaded Excel Tables";
-            excelTablesLoaded.b_clearCache.Click += new EventHandler(b_clearCache_Click);
-            excelTablesLoaded.b_cacheAll.Click += new EventHandler(b_cacheAll_Click);
             excelTablesLoaded.MdiParent = this;
             excelTablesLoaded.Show();
-
-            ListBox listBox = excelTablesLoaded.GetTablesListBox();
-            listBox.DataSource = excelTables.GetLoadedTables();
-
-            excelTablesLoaded.LoadingComplete();
-        }
-
-        void b_clearCache_Click(object sender, EventArgs e)
-        {
-            ClearCache();
-        }
-
-        private void ClearCache()
-        {
-            string[] files = Directory.GetFiles(@"cache\");
-
-            foreach (string file in files)
-            {
-                File.Delete(file);
-            }
-        }
-
-        void b_cacheAll_Click(object sender, EventArgs e)
-        {
-            ClearCache();
-            ProgressForm cachingProgress = new ProgressForm(CacheExcelTables, excelTables.GetLoadedTables());
-            cachingProgress.ShowDialog(this);
+            excelTablesLoaded.BindListBoxDataSource(excelTables.GetLoadedTables());
+            excelTablesLoaded.Text = "Currently Loaded Tables [" + excelTables.GetLoadedTables().Count + "]";
         }
 
         private void LoadExcelTables(ProgressForm progress, Object var)
@@ -595,6 +523,45 @@ namespace Reanimator
             CacheInfo info = new CacheInfo(@"cache\");
             info.MdiParent = this;
             info.Show();
+        }
+
+        private void showCacheInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Config.cacheFilePath))
+            {
+                FileInfo fileInfo = new FileInfo(Config.cacheFilePath);
+                MessageBox.Show("Your cache file is using " + fileInfo.Length + " bytes", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("You have no cache saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void generateCacheToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.GenerateCache(true);
+        }
+
+        private void GenerateCache(bool manualRequest)
+        {
+            DialogResult dr = DialogResult.No;
+
+            if (!File.Exists(@"cache\dataSet.dat") || excelDataSet.LoadedTableCount == 0)
+            {
+                dr = MessageBox.Show("Reanimator has detected no cached table data.\nDo you wish to generate it now? (this will take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
+            else if (manualRequest)
+            {
+                dr = MessageBox.Show("Are you sure you wish to regenerate the cache? (this will take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
+
+            if (dr == DialogResult.Yes)
+            {
+                excelDataSet.ClearDataSet();
+                ProgressForm cachingProgress = new ProgressForm(CacheExcelTables, excelTables.GetLoadedTables());
+                cachingProgress.ShowDialog(this);
+            }
         }
     }
 }
