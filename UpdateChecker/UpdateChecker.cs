@@ -12,17 +12,50 @@ namespace Reanimator
     {
         [XmlElement("name")]
         public string name = null;
-        [XmlElement("version")]
-        public string version = null;
         [XmlElement("extension")]
         public string extension = null;
         [XmlElement("link")]
         public string link = null;
+        [XmlElement("majorVersion")]
+        public int majorVersion = 0;
+        [XmlElement("minorVersion")]
+        public int minorVersion = 0;
+        [XmlElement("subVersion")]
+        public int subVersion = 0;
 
-        public string ToString()
+        public bool IsNewestVersion(Mod mod)
+        {
+            if (this.majorVersion >= mod.majorVersion)
+            {
+                if (this.majorVersion > mod.majorVersion)
+                {
+                    return true;
+                }
+                else
+                {
+                    if (this.minorVersion >= mod.minorVersion)
+                    {
+                        if (this.minorVersion > mod.minorVersion)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            if (this.subVersion >= mod.subVersion)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public override string ToString()
         {
             string content = string.Empty;
-            content += name + " - " + version + " - " + extension + " - " + link;
+            content += name + " - " + Version + " - " + extension + " - " + link;
 
             return content;
         }
@@ -31,20 +64,35 @@ namespace Reanimator
         {
             string content = string.Empty;
             content += "Name:\t\t" + name + "\n";
-            content += "Version:\t" + version + "\n";
+            content += "Version:\t" + Version + "\n";
             content += "Extension:\t" + extension + "\n";
             content += "Link:\t\t" + link;
 
             return content;
         }
+
+        public string Version
+        {
+            get
+            {
+                return majorVersion + "_" + minorVersion + "_" + subVersion;
+            }
+            set
+            {
+                string[] ver = value.Split(new char[] { '_' });
+                majorVersion = Int32.Parse(ver[0]);
+                minorVersion = Int32.Parse(ver[1]);
+                subVersion = Int32.Parse(ver[2]);
+            }
+        }
     }
 
     public static class UpdateChecker
     {
-        public static Mod GetModInfoFromSite(string url)
+        public static List<Mod> GetModInfoFromSite(string url)
         {
             string filter = "<div class=\"postbody\"><mod>";
-            Mod myMod = null;
+            List<Mod> myMod = new List<Mod>();
 
             //Console.WriteLine("Opening webpage...");
             List<string> site = GetWebsite(url, filter);
@@ -55,7 +103,7 @@ namespace Reanimator
             //Console.WriteLine("Deserializing information...");
             foreach (string line in site)
             {
-                myMod = Deserialize(line);
+                myMod.Add(Deserialize(line));
             }
             //Console.WriteLine("Finished deserializing information...");
 
@@ -121,7 +169,7 @@ namespace Reanimator
 
         public static void DownloadFile(Mod mod, string saveFolder, string fileExtension)
         {
-            string savePath = saveFolder + mod.name + "_" + mod.version + fileExtension;
+            string savePath = saveFolder + mod.name + "_" + mod.Version + fileExtension;
 
             System.Net.WebClient client = new System.Net.WebClient();
             byte[] file = client.DownloadData(mod.link);
