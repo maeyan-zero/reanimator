@@ -30,53 +30,12 @@ namespace Reanimator
             public int Unknowns4 { get; set; }
         };
 
-
-
         public ExcelDataSet()
         {
-            //xlsDataSet = new DataSet("xlsDataSet");
-            // xlsDataSet.RemotingFormat = SerializationFormat.Binary;
             this.LoadDataSet();
-            // if (this.LoadSchema())
-            //   {
-            ///       this.SaveSchema();
-            //   }
             xlsDataSet.RemotingFormat = SerializationFormat.Binary;
             xlsDataTables = new Hashtable();
         }
-
-        private bool LoadSchema()
-        {
-            if (File.Exists(xlsFilePath))
-            {
-                try
-                {
-                    xlsDataSet.ReadXmlSchema(xlsFilePath);
-                    return false;
-                }
-                catch (System.Xml.XmlException e)
-                {
-                    MessageBox.Show("Failed to correctly parse table schema!\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Failed to load table schema!\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                }
-            }
-            else
-            {
-                Directory.CreateDirectory(@"cache\");
-            }
-
-            return true;
-        }
-
-        private void SaveSchema()
-        {
-            xlsDataSet.WriteXmlSchema(xlsFilePath);
-        }
-
 
         private void LoadDataSet()
         {
@@ -88,6 +47,7 @@ namespace Reanimator
             }
             else
             {
+                Directory.CreateDirectory(@"cache\");
                 xlsDataSet = new DataSet("xlsDataSet");
             }
         }
@@ -310,6 +270,7 @@ namespace Reanimator
 
                 this.xlsDataTables.Add(tableName, dataTable);
             }
+
 
             // generate the table index data source
             // TODO is there a better way?
