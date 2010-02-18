@@ -55,7 +55,6 @@
             this.b_clearCache.TabIndex = 2;
             this.b_clearCache.Text = "Clear cache";
             this.b_clearCache.UseVisualStyleBackColor = true;
-            this.b_clearCache.Click += new System.EventHandler(this.b_clearCache_Click);
             // 
             // b_cacheAll
             // 
@@ -65,7 +64,6 @@
             this.b_cacheAll.TabIndex = 3;
             this.b_cacheAll.Text = "Cache all";
             this.b_cacheAll.UseVisualStyleBackColor = true;
-            this.b_cacheAll.Click += new System.EventHandler(this.b_cacheAll_Click);
             // 
             // label1
             // 
@@ -113,9 +111,9 @@
         #endregion
 
         private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Button b_clearCache;
-        private System.Windows.Forms.Button b_cacheAll;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.Button b_cacheAll;
+        public System.Windows.Forms.Button b_clearCache;
     }
 }
