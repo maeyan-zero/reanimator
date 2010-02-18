@@ -36,36 +36,6 @@ namespace Reanimator.Forms
             etf.Show();
         }
 
-        private void b_clearCache_Click(object sender, EventArgs e)
-        {
-            string[] files = Directory.GetFiles(@"cache\");
-
-            foreach (string file in files)
-            {
-                File.Delete(file);
-            }
-
-            MessageBox.Show("Cache cleared!", "Info");
-        }
-
-        private void b_cacheAll_Click(object sender, EventArgs e)
-        {
-            for(int counter = 0; counter < listBox1.Items.Count; counter++)
-            {
-                listBox1.SelectedIndex++;
-
-                ExcelTable excelTable = (ExcelTable)listBox1.Items[counter];
-
-                ExcelTableForm etf = new ExcelTableForm(excelTable, excelDataSet);
-                etf.Text = "Excel Table: " + excelTable;
-                etf.MdiParent = this.MdiParent;
-                etf.Hide();
-                etf.Close();
-            }
-
-            MessageBox.Show(listBox1.Items.Count + " files cached!", "Info");
-        }
-
         public void LoadingComplete()
         {
             label2.Text = listBox1.Items.Count.ToString();

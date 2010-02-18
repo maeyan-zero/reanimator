@@ -433,6 +433,8 @@ namespace Reanimator
         {
             excelTablesLoaded = new ExcelTablesLoaded(excelDataSet);
             excelTablesLoaded.Text = "Currently Loaded Excel Tables";
+            excelTablesLoaded.b_clearCache.Click += new EventHandler(b_clearCache_Click);
+            excelTablesLoaded.b_cacheAll.Click += new EventHandler(b_cacheAll_Click);
             excelTablesLoaded.MdiParent = this;
             excelTablesLoaded.Show();
 
@@ -440,6 +442,28 @@ namespace Reanimator
             listBox.DataSource = excelTables.GetLoadedTables();
 
             excelTablesLoaded.LoadingComplete();
+        }
+
+        void b_clearCache_Click(object sender, EventArgs e)
+        {
+            ClearCache();
+        }
+
+        private void ClearCache()
+        {
+            string[] files = Directory.GetFiles(@"cache\");
+
+            foreach (string file in files)
+            {
+                File.Delete(file);
+            }
+        }
+
+        void b_cacheAll_Click(object sender, EventArgs e)
+        {
+            ClearCache();
+            ProgressForm cachingProgress = new ProgressForm(CacheExcelTables, excelTables.GetLoadedTables());
+            cachingProgress.ShowDialog(this);
         }
 
         private void LoadExcelTables(ProgressForm progress, Object var)
