@@ -14,7 +14,7 @@ using System.Collections;
 
 namespace Reanimator.Forms
 {
-    public partial class ExcelTableForm : ThreadedFormBase
+    public partial class ExcelTableForm : ThreadedFormBase, IMdiChildBase
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class TableIndexDataSource
@@ -136,25 +136,6 @@ namespace Reanimator.Forms
             }
         }
 
-        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
-        {
-            return;
-
-            DataGridViewSelectedCellCollection selectedCells = dataGridView.SelectedCells;
-            dataGridView2.ClearSelection();
-            foreach (DataGridViewCell cell in selectedCells)
-            {
-                try
-                {
-                    dataGridView2.Rows[cell.RowIndex].Selected = true;
-                }
-                catch (Exception)
-                {
-                    return;
-                }
-            }
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             /*DataTable affixTable = xlsDataSet.Tables["AFFIXES"];
@@ -178,6 +159,11 @@ namespace Reanimator.Forms
 
             //DataTable dataTable = xlsDataSet.Tables[0];
             //   DataRow[] dataRows = dataTable.Select("name = 'goggles'");
+        }
+
+        public void SaveButton()
+        {
+            byte[] excelFileData = excelTable.GenerateExcelFile();
         }
     }
 

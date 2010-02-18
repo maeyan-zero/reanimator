@@ -630,6 +630,16 @@ namespace Reanimator.Excel
             }
         }
 
+        public byte[] GenerateExcelFile()
+        {
+            byte[] buffer = new byte[1024];
+            int offset = 0;
+
+
+
+            return buffer;
+        }
+
         public String StringId { get; set; }
         public override string ToString()
         {
