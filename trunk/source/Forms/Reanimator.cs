@@ -455,8 +455,6 @@ namespace Reanimator
             catch (Exception)
             {
                 MessageBox.Show("Failed to load exceltables!\nPlease ensure your directories are set correctly.\n\nFile: \n" + excelFilePath, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                progress.Close();
-                progress.Dispose();
                 return;
             }
 
