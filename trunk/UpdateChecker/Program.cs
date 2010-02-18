@@ -16,25 +16,35 @@ namespace Reanimator
                 string url = "http://www.hellgateaus.net/forum/viewtopic.php?f=47&t=1279&p=18796#p18796";
                 string folder = @"F:\";
                 string extension = ".mod.zip";
-                Mod mod = UpdateChecker.GetModInfoFromSite(url);
+                
+                Mod installedVersion = new Mod();
+                installedVersion.name = "Test";
+                installedVersion.extension = extension;
+                installedVersion.Version = "0_1_0";
 
-                extension = mod.extension == null ? extension : mod.extension;
+                List<Mod> mods = UpdateChecker.GetModInfoFromSite(url);
 
-                if (!File.Exists(folder + mod.name + "_" + mod.version + extension))
+                foreach (Mod mod in mods)
                 {
-                    Console.WriteLine("Newer version found! Downloading file...");
                     // if the mod file defines its own extension use that one)
-                    UpdateChecker.DownloadFile(mod, folder, extension);
-                }
-                else
-                {
-                    Console.WriteLine("You already have the newest version!");
-                }
+                    extension = mod.extension == null ? extension : mod.extension;
 
-                ConsoleColor tmp = Console.ForegroundColor;
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(mod.ToStringWithMultipleLines());
-                Console.ForegroundColor = tmp;
+                    // might also want to check if the mod is the most up-to-date one (compared to possible other mods)
+                    if (!File.Exists(folder + mod.name + "_" + mod.Version + extension) && !installedVersion.IsNewestVersion(mod))
+                    {
+                        Console.WriteLine("Newer version found! Downloading file...");
+                        UpdateChecker.DownloadFile(mod, folder, extension);
+                    }
+                    else
+                    {
+                        Console.WriteLine("You already have the newest version installed or downloaded!");
+                    }
+
+                    ConsoleColor tmp = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine(mod.ToStringWithMultipleLines());
+                    Console.ForegroundColor = tmp;
+                }
 
                 Console.WriteLine("Done!");
                 Console.Read();
