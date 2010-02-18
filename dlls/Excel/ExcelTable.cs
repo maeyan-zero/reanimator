@@ -53,9 +53,9 @@ namespace Reanimator.Excel
             public Int32 unknown1;
             public Int32 unknown2;
             public Int16 versionMajor;
-            public Int16 unknown3;
+            public Int16 reserved1;                         // I think...
             public Int16 versionMinor;
-            public Int16 unknown4;
+            public Int16 reserved2;                         // I think...
         }
 
         protected byte[] excelData;
@@ -283,8 +283,7 @@ namespace Reanimator.Excel
                 CheckFlag(token);
 
                 Hashtable hashTableUnknown1 = new Hashtable();
-                Hashtable hashTableIndexString = new Hashtable();
-                Hashtable hashTableTableType = new Hashtable();
+                Hashtable hashTableUnknown2 = new Hashtable();
 
                 if ((uint)excelHeader.structureId == 0x887988C4) // items, missiles, monsters, objects, players
                 {
@@ -328,21 +327,15 @@ namespace Reanimator.Excel
                                 {
                                     hashTableUnknown1.Add(tableHeader.unknown1, 0);
                                 }
-                                if (!hashTableIndexString.ContainsKey(tableHeader.indexString))
+                                if (!hashTableUnknown2.ContainsKey(tableHeader.unknown2))
                                 {
-                                    hashTableIndexString.Add(tableHeader.indexString, 0);
-                                }
-                                if (!hashTableTableType.ContainsKey(tableHeader.tableType))
-                                {
-                                    hashTableTableType.Add(tableHeader.tableType, 0);
+                                    hashTableUnknown2.Add(tableHeader.unknown2, 0);
                                 }
 
                                 int count = (int)hashTableUnknown1[tableHeader.unknown1];
                                 hashTableUnknown1[tableHeader.unknown1] = count + 1;
-                                count = (int)hashTableIndexString[tableHeader.indexString];
-                                hashTableIndexString[tableHeader.indexString] = count + 1;
-                                count = (int)hashTableTableType[tableHeader.tableType];
-                                hashTableTableType[tableHeader.tableType] = count + 1;
+                                count = (int)hashTableUnknown2[tableHeader.unknown2];
+                                hashTableUnknown2[tableHeader.unknown2] = count + 1;
                             }
                         }
                     }
@@ -352,17 +345,13 @@ namespace Reanimator.Excel
                     {
                         Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableUnknown1[key]).ToString("X") + "(" + ((int)hashTableUnknown1[key]) + ")\n");
                     }
-                    Debug.Write("hashTableIndexString\n");
-                    foreach (Int16 key in hashTableIndexString.Keys)
+                    Debug.Write("hashTableUnknown2\n");
+                    foreach (Int32 key in hashTableUnknown2.Keys)
                     {
-                        Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableIndexString[key]).ToString("X") + "(" + ((int)hashTableIndexString[key]) + ")\n");
+                        Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableUnknown2[key]).ToString("X") + "(" + ((int)hashTableUnknown2[key]) + ")\n");
                     }
-                    Debug.Write("hashTableTableType\n");
-                    foreach (Int32 key in hashTableTableType.Keys)
-                    {
-                        Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableTableType[key]).ToString("X") + "(" + ((int)hashTableTableType[key]) + ")\n");
-                    }
-                    Debug.Write("\n");*/
+                    Debug.Write("\n");
+                     * */
                 }
 
 
