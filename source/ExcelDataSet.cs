@@ -35,12 +35,12 @@ namespace Reanimator
         public ExcelDataSet()
         {
             //xlsDataSet = new DataSet("xlsDataSet");
-           // xlsDataSet.RemotingFormat = SerializationFormat.Binary;
+            // xlsDataSet.RemotingFormat = SerializationFormat.Binary;
             this.LoadDataSet();
-           // if (this.LoadSchema())
-         //   {
-         ///       this.SaveSchema();
-         //   }
+            // if (this.LoadSchema())
+            //   {
+            ///       this.SaveSchema();
+            //   }
             xlsDataSet.RemotingFormat = SerializationFormat.Binary;
             xlsDataTables = new Hashtable();
         }
@@ -113,68 +113,37 @@ namespace Reanimator
             if (excelTable.Strings.Count > 0)
             {
                 String stringsTableName = excelTable.StringId + "_STRINGS";
-                if (!xlsDataTables.ContainsKey(stringsTableName))
+
+                if (!xlsDataSet.Tables.Contains(stringsTableName))
                 {
                     String xmlStringsFilePath = @"cache\" + stringsTableName + ".dat";
                     DataTable stringsDataTable = xlsDataSet.Tables[stringsTableName];
 
-                    if (File.Exists(xmlStringsFilePath))
+                    if (progress != null)
                     {
-                        if (progress != null)
-                        {
-                            progress.SetLoadingText("Loading strings table xml file...");
-                        }
-                        /*
-
-                        BinaryFormatter bf = new BinaryFormatter();
-                        FileStream fs = new FileStream(xmlStringsFilePath, FileMode.Open, FileAccess.Read);
-                        DataTable dataTable = bf.Deserialize(fs) as DataTable;
-                        xlsDataSet.Tables[stringsTableName].Load(dataTable.CreateDataReader(), LoadOption.OverwriteChanges);
-                        */
-
-
-                        //xlsDataSet.ReadXml(xmlStringsFilePath, XmlReadMode.IgnoreSchema);
-                        stringsDataTable = xlsDataSet.Tables[stringsTableName];
+                        progress.SetLoadingText("First time generation of strings table data..." + " (Table: " + excelTable.StringId + ")");
                     }
-                    else
+                    if (stringsDataTable == null)
                     {
-                        if (progress != null)
-                        {
-                            progress.SetLoadingText("First time generation of strings table data..." + " (Table: " + excelTable.StringId + ")");
-                        }
-                        if (stringsDataTable == null)
-                        {
-                            stringsDataTable = xlsDataSet.Tables.Add(stringsTableName);
-                        }
+                        stringsDataTable = xlsDataSet.Tables.Add(stringsTableName);
+                    }
 
-                        DataColumn offsetColumn = stringsDataTable.Columns["offset"];
-                        if (offsetColumn == null)
-                        {
-                            offsetColumn = stringsDataTable.Columns.Add("offset");
-                            offsetColumn.Unique = true;
-                            stringsDataTable.PrimaryKey = new DataColumn[] { offsetColumn };
-                        }
+                    DataColumn offsetColumn = stringsDataTable.Columns["offset"];
+                    if (offsetColumn == null)
+                    {
+                        offsetColumn = stringsDataTable.Columns.Add("offset");
+                        offsetColumn.Unique = true;
+                        stringsDataTable.PrimaryKey = new DataColumn[] { offsetColumn };
+                    }
 
-                        if (!stringsDataTable.Columns.Contains("string"))
-                        {
-                            stringsDataTable.Columns.Add("string");
-                        }
+                    if (!stringsDataTable.Columns.Contains("string"))
+                    {
+                        stringsDataTable.Columns.Add("string");
+                    }
 
-                        foreach (DictionaryEntry entry in excelTable.Strings)
-                        {
-                            stringsDataTable.Rows.Add(entry.Key, entry.Value);
-                        }
-
-                        /*
-                        BinaryFormatter bf = new BinaryFormatter();
-                        FileStream fs = new FileStream(xmlStringsFilePath, FileMode.Create, FileAccess.ReadWrite);
-                        stringsDataTable.RemotingFormat = SerializationFormat.Binary;
-                        bf.Serialize(fs, stringsDataTable);
-                        xlsDataSet.Tables[stringsTableName].Load(stringsDataTable.CreateDataReader(), LoadOption.OverwriteChanges);
-                        */
-
-
-                        //stringsDataTable.WriteXml(xmlStringsFilePath, XmlWriteMode.IgnoreSchema);
+                    foreach (DictionaryEntry entry in excelTable.Strings)
+                    {
+                        stringsDataTable.Rows.Add(entry.Key, entry.Value);
                     }
 
                     this.xlsDataTables.Add(stringsTableName, stringsDataTable);
@@ -184,60 +153,75 @@ namespace Reanimator
 
             // load in main data table
             String tableName = excelTable.StringId;
-            if (!xlsDataTables.ContainsKey(tableName))
+            if (!xlsDataSet.Tables.Contains(tableName))
             {
                 String xmlFilePath = @"cache\" + tableName + ".dat";
                 DataTable dataTable = xlsDataSet.Tables[tableName];
 
-                if (File.Exists(xmlFilePath))
+                if (progress != null)
                 {
-                    if (progress != null)
-                    {
-                        progress.SetLoadingText("Loading table xml file...");
-                    }
-
-                    /*
-                    BinaryFormatter bf = new BinaryFormatter();
-                    FileStream fs = new FileStream(xmlFilePath, FileMode.Open, FileAccess.Read);
-                    DataTable dataTable2 = bf.Deserialize(fs) as DataTable;
-                    if (xlsDataSet.Tables.Contains(tableName))
-                    {
-                        xlsDataSet.Tables[tableName].Load(dataTable2.CreateDataReader(), LoadOption.OverwriteChanges);
-                    }
-                    else
-                    {
-                        xlsDataSet.Tables.Add(dataTable2);
-                    }*/
-
-
-                    //xlsDataSet.ReadXml(xmlFilePath, XmlReadMode.IgnoreSchema);
-                    dataTable = xlsDataSet.Tables[tableName];
+                    progress.SetLoadingText("First time generation of table data..." + " (Table: " + excelTable.StringId + ")");
                 }
-                else
+
+                if (dataTable == null)
                 {
-                    if (progress != null)
+                    dataTable = xlsDataSet.Tables.Add(excelTable.StringId);
+                }
+                object[] array = (object[])excelTable.GetTableArray();
+                Type type = array[0].GetType();
+
+                #region generate_columns
+                DataColumn indexColumn = dataTable.Columns.Add("index");
+                indexColumn.AutoIncrement = true;
+                indexColumn.Unique = true;
+                dataTable.PrimaryKey = new DataColumn[] { indexColumn };
+
+                foreach (MemberInfo memberInfo in type.GetFields())
+                {
+                    DataColumn dataColumn = dataTable.Columns.Add(memberInfo.Name);
+
+                    ExcelTables.ExcelOutputAttribute excelOutputAttribute = null;
+                    foreach (Attribute attribute in memberInfo.GetCustomAttributes(typeof(ExcelTables.ExcelOutputAttribute), true))
                     {
-                        progress.SetLoadingText("First time generation of table data..." + " (Table: " + excelTable.StringId + ")");
+                        excelOutputAttribute = attribute as ExcelTables.ExcelOutputAttribute;
+                        if (excelOutputAttribute != null)
+                        {
+                            break;
+                        }
                     }
 
-                    if (dataTable == null)
+                    if (excelOutputAttribute != null)
                     {
-                        dataTable = xlsDataSet.Tables.Add(excelTable.StringId);
+                        if (excelOutputAttribute.IsStringOffset)
+                        {
+                            DataColumn dc = dataTable.Columns.Add(dataColumn.ColumnName + "_string");
+                            dataColumn.ExtendedProperties.Add("IsStringOffset", true);
+                        }
                     }
-                    object[] array = (object[])excelTable.GetTableArray();
-                    Type type = array[0].GetType();
+                }
+                #endregion
 
-                    #region generate_columns
-                    DataColumn indexColumn = dataTable.Columns.Add("index");
-                    indexColumn.AutoIncrement = true;
-                    indexColumn.Unique = true;
-                    dataTable.PrimaryKey = new DataColumn[] { indexColumn };
+                if (progress != null)
+                {
+                    progress.ConfigBar(0, array.Length, 1);
+                }
 
-                    foreach (MemberInfo memberInfo in type.GetFields())
+                #region generate_rows
+                int row = 0;
+
+                foreach (Object table in array)
+                {
+                    progress.SetCurrentItemText("Row " + row + " of " + array.Length);
+
+                    DataRow dataRow = dataTable.Rows.Add();
+                    int col = 1;
+
+                    foreach (FieldInfo fieldInfo in type.GetFields())
                     {
-                        DataColumn dataColumn = dataTable.Columns.Add(memberInfo.Name);
-
+                        Object value = fieldInfo.GetValue(table);
                         ExcelTables.ExcelOutputAttribute excelOutputAttribute = null;
+                        MemberInfo memberInfo = fieldInfo as MemberInfo;
+
                         foreach (Attribute attribute in memberInfo.GetCustomAttributes(typeof(ExcelTables.ExcelOutputAttribute), true))
                         {
                             excelOutputAttribute = attribute as ExcelTables.ExcelOutputAttribute;
@@ -246,147 +230,85 @@ namespace Reanimator
                                 break;
                             }
                         }
+                        /*
+                        // to fix up / reimplement
+                        if (excelOutputAttribute != null && false)
+                        {
+                            if (excelOutputAttribute.IsStringOffset)
+                            {
+                                value = excelTable.Strings[value];
+                            }
+                            else if (excelOutputAttribute.IsIntOffset)
+                            {
+                                int offset = (int)value;
+                                if (offset != 0 && excelTable.DataBlock != null)
+                                {
+                                    DataGridViewComboBoxCell cell = new DataGridViewComboBoxCell();
+                                    String[] fields = excelOutputAttribute.FieldNames;
+                                    int i = 0;
+                                    foreach (String s in fields)
+                                    {
+                                        int intValue = BitConverter.ToInt32(excelTable.DataBlock, offset + i * sizeof(Int32));
+                                        i++;
+
+                                        cell.Items.Add(s + " = " + intValue);
+                                    }
+
+                                    cell.Value = cell.Items[excelOutputAttribute.DefaultIndex];
+
+                                    // dataGridView[col, row] = cell;
+                                    value = null;
+                                }
+                            }
+                        }*/
+
+                        if (value != null)
+                        {
+                            dataRow[col] = value;
+                        }
+                        col++;
 
                         if (excelOutputAttribute != null)
                         {
                             if (excelOutputAttribute.IsStringOffset)
                             {
-                                DataColumn dc = dataTable.Columns.Add(dataColumn.ColumnName + "_string");
-                                dataColumn.ExtendedProperties.Add("IsStringOffset", true);
+                                col++;
                             }
                         }
                     }
-                    #endregion
 
-                    if (progress != null)
-                    {
-                        progress.ConfigBar(0, array.Length, 1);
-                    }
-
-                    #region generate_rows
-                    int row = 0;
-
-                    foreach (Object table in array)
-                    {
-                        progress.SetCurrentItemText("Row " + row + " of " + array.Length);
-
-                        DataRow dataRow = dataTable.Rows.Add();
-                        int col = 1;
-
-                        foreach (FieldInfo fieldInfo in type.GetFields())
-                        {
-                            Object value = fieldInfo.GetValue(table);
-                            ExcelTables.ExcelOutputAttribute excelOutputAttribute = null;
-                            MemberInfo memberInfo = fieldInfo as MemberInfo;
-
-                            foreach (Attribute attribute in memberInfo.GetCustomAttributes(typeof(ExcelTables.ExcelOutputAttribute), true))
-                            {
-                                excelOutputAttribute = attribute as ExcelTables.ExcelOutputAttribute;
-                                if (excelOutputAttribute != null)
-                                {
-                                    break;
-                                }
-                            }
-                            /*
-                            // to fix up / reimplement
-                            if (excelOutputAttribute != null && false)
-                            {
-                                if (excelOutputAttribute.IsStringOffset)
-                                {
-                                    value = excelTable.Strings[value];
-                                }
-                                else if (excelOutputAttribute.IsIntOffset)
-                                {
-                                    int offset = (int)value;
-                                    if (offset != 0 && excelTable.DataBlock != null)
-                                    {
-                                        DataGridViewComboBoxCell cell = new DataGridViewComboBoxCell();
-                                        String[] fields = excelOutputAttribute.FieldNames;
-                                        int i = 0;
-                                        foreach (String s in fields)
-                                        {
-                                            int intValue = BitConverter.ToInt32(excelTable.DataBlock, offset + i * sizeof(Int32));
-                                            i++;
-
-                                            cell.Items.Add(s + " = " + intValue);
-                                        }
-
-                                        cell.Value = cell.Items[excelOutputAttribute.DefaultIndex];
-
-                                        // dataGridView[col, row] = cell;
-                                        value = null;
-                                    }
-                                }
-                            }*/
-
-                            if (value != null)
-                            {
-                                dataRow[col] = value;
-                            }
-                            col++;
-
-                            if (excelOutputAttribute != null)
-                            {
-                                if (excelOutputAttribute.IsStringOffset)
-                                {
-                                    col++;
-                                }
-                            }
-                        }
-
-                        row++;
-                    }
-                    #endregion
-
-                    #region generate_relations
-                    DataTable dtStrings = xlsDataSet.Tables[excelTable.StringId + "_STRINGS"];
-                    DataTable dtData = xlsDataSet.Tables[excelTable.StringId];
-
-                    if (dtData.ChildRelations.Count == 0 && dtData.ParentRelations.Count == 0 && dtStrings != null)
-                    {
-                        DataColumn dcParent = dtStrings.Columns["offset"];
-
-                        foreach (DataColumn dc in dtData.Columns)
-                        {
-                            if (dc.ExtendedProperties.ContainsKey("IsStringOffset"))
-                            {
-                                DataColumn dcChild = dc;
-                                String relationName = excelTable.StringId + dcChild.ColumnName + "StringOffset";
-                                DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
-                                xlsDataSet.Relations.Add(relation);
-
-                                dcChild.AllowDBNull = false;
-                                dcChild.DefaultValue = String.Empty;
-                                DataColumn dcString = dtData.Columns[dcChild.ColumnName + "_string"];
-                                dcString.Expression = "Parent(" + relationName + ").string";
-
-                            }
-                        }
-                    }
-                    #endregion
-
-                    if (progress != null)
-                    {
-                        progress.SetLoadingText("Saving table xml file...");
-                    }
-
-                    /*
-
-                    BinaryFormatter bf = new BinaryFormatter();
-                    FileStream fs = new FileStream(xmlFilePath, FileMode.Create, FileAccess.ReadWrite);
-                    dataTable.RemotingFormat = SerializationFormat.Binary;
-                    bf.Serialize(fs, dataTable);
-                    xlsDataSet.Tables[tableName].Load(dataTable.CreateDataReader(), LoadOption.OverwriteChanges);
-                    
-                    */
-
-
-                    //dataTable.WriteXml(xmlFilePath, XmlWriteMode.IgnoreSchema);
+                    row++;
                 }
+                #endregion
+
+                #region generate_relations
+                DataTable dtStrings = xlsDataSet.Tables[excelTable.StringId + "_STRINGS"];
+                DataTable dtData = xlsDataSet.Tables[excelTable.StringId];
+
+                if (dtData.ChildRelations.Count == 0 && dtData.ParentRelations.Count == 0 && dtStrings != null)
+                {
+                    DataColumn dcParent = dtStrings.Columns["offset"];
+
+                    foreach (DataColumn dc in dtData.Columns)
+                    {
+                        if (dc.ExtendedProperties.ContainsKey("IsStringOffset"))
+                        {
+                            DataColumn dcChild = dc;
+                            String relationName = excelTable.StringId + dcChild.ColumnName + "StringOffset";
+                            DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
+                            xlsDataSet.Relations.Add(relation);
+
+                            dcChild.AllowDBNull = false;
+                            dcChild.DefaultValue = String.Empty;
+                            DataColumn dcString = dtData.Columns[dcChild.ColumnName + "_string"];
+                            dcString.Expression = "Parent(" + relationName + ").string";
+
+                        }
+                    }
+                }
+                #endregion
 
                 this.xlsDataTables.Add(tableName, dataTable);
-
-                //this.SaveDataSet();
             }
 
             // generate the table index data source
@@ -434,8 +356,6 @@ namespace Reanimator
                     }
                 }
             }
-
-          //  this.SaveSchema();
         }
 
         public DataSet GetDataSet()
