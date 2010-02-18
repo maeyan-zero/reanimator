@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Reanimator.Excel
 {
-    class ItemQuality : ExcelTable
+    public class ItemQuality : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class ItemQualityTable

@@ -6,25 +6,25 @@ using System.Runtime.InteropServices;
 
 namespace Reanimator.Excel
 {
-    class Affixes : ExcelTable
+    public class Affixes : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class AffixesTable
         {
             TableHeader header;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 affix;
             public Int32 unknown02;
             public Int32 alwaysApply;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 qualityNameString;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 setNameString;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 magicNameString;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 replaceNameString;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 flavorText;
             public Int32 unknown03;
             public Int32 nameColor;

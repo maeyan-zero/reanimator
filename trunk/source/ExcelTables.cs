@@ -6,28 +6,13 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Data;
+using Reanimator.Forms;
 
 namespace Reanimator.Excel
 {
     public class ExcelTables : ExcelTable
     {
-        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-        public class ExcelOutputAttribute : System.Attribute
-        {
-            public bool IsStringOffset { get; set; }
-            public bool IsIntOffset { get; set; }
-            public String[] FieldNames { get; set; }
-            public int DefaultIndex { get; set; }
-        }
-
-        [AttributeUsage(AttributeTargets.Field)]
-        public class ExcelBitmaskAttribute : System.Attribute
-        {
-            uint bitmask;
-
-
-        }
-
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class ExcelTableTable
         {
@@ -150,6 +135,8 @@ namespace Reanimator.Excel
 
         public bool AllTablesLoaded { get; set; }
         ExcelTableManagerManager excelTables;
+       // List<KeyValuePair<string, ExcelTable>> loadedTables;
+        List<ExcelTable> loadedTables;
 
         public ExcelTables(byte[] data)
             : base(data)
@@ -158,7 +145,14 @@ namespace Reanimator.Excel
             {
                 return;
             }
+
             this.StringId = "EXCELTABLES";
+           // loadedTables = new List<KeyValuePair<string, ExcelTable>>();
+            loadedTables = new List<ExcelTable>();
+
+            //loadedTables = new DataTable();
+          //  loadedTables.Columns.Add("stringId", typeof(string));
+          //  loadedTables.Columns.Add("excelTable", typeof(ExcelTable));
 
             excelTables = new ExcelTableManagerManager();
             excelTables.AddTable("ACHIEVEMENTS", null, typeof(Excel.Achievements));
@@ -384,14 +378,13 @@ namespace Reanimator.Excel
             return null;
         }
 
-        public ExcelTable BruteForceCode(int code)
+        public List<ExcelTable> GetLoadedTables()
         {
-            return null;
+            return loadedTables;
         }
 
-        public bool LoadTables(string folder, Label label, ListBox excelTablesLoaded)
+        public bool LoadTables(string folder, ProgressForm progress)
         {
-            excelTablesLoaded.Sorted = true;
             this.AllTablesLoaded = true;
 
             for (int i = 0; i < Count; i++)
@@ -400,7 +393,7 @@ namespace Reanimator.Excel
                 string fileName = excelTables.GetReplacement(stringId);
                 if (fileName == "EXCELTABLES")
                 {
-                    excelTablesLoaded.Items.Add(this);
+                    loadedTables.Add(this);
                     continue;
                 }
 
@@ -408,7 +401,7 @@ namespace Reanimator.Excel
                 FileStream cookedFile;
 
                 string currentItem = fileName.ToLower() + ".txt.cooked";
-                label.Text = currentItem;
+                progress.SetCurrentItemText(currentItem);
 
                 try
                 {
@@ -451,7 +444,7 @@ namespace Reanimator.Excel
                     {
                         if (!excelTable.IsNull)
                         {
-                            excelTablesLoaded.Items.Add(excelTable);
+                            loadedTables.Add(excelTable);
                         }
                     }
                     else
@@ -472,6 +465,7 @@ namespace Reanimator.Excel
                 }
             }
 
+            loadedTables.Sort();
             return true;
         }
     }

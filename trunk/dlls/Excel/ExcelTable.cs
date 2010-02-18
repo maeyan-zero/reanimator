@@ -16,8 +16,23 @@ namespace Reanimator.Excel
         public BadHeaderFlag(string message) : base(message) { }
     }
 
-    public abstract class ExcelTable
+    public abstract class ExcelTable : IComparable
     {
+        [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+        public class ExcelOutputAttribute : System.Attribute
+        {
+            public bool IsStringOffset { get; set; }
+            public bool IsIntOffset { get; set; }
+            public String[] FieldNames { get; set; }
+            public int DefaultIndex { get; set; }
+        }
+
+        [AttributeUsage(AttributeTargets.Field)]
+        public class ExcelBitmaskAttribute : System.Attribute
+        {
+            uint bitmask;
+        }
+
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         protected struct ExcelHeader
         {
@@ -630,6 +645,11 @@ namespace Reanimator.Excel
         public override string ToString()
         {
             return StringId;
+        }
+
+        public int CompareTo(Object o)
+        {
+            return String.Compare(this.ToString(), o.ToString());
         }
     }
 }

@@ -14,12 +14,12 @@ namespace Reanimator.Excel
         {
             TableHeader header;
 
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 name;
             Int32 buffer;
             public Int32 code;
             Int32 buffer1;              // always 0
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 file;
             Int32 buffer2;              // always 0
             public Int32 isA0;
@@ -40,22 +40,22 @@ namespace Reanimator.Excel
             public Int32 element;
             public Int32 pulseRateInMs;
             public Int32 pulseRateInMsClient;            // always 0
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 pulseSkill;
             Int32 unknown23;            // always 0
             Int32 unknown24;            // always 0
             Int32 unknown25;            // always 0
             public Int32 iconOrder;            // always 0
             Int32 unknown27;            // always 0
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 uiIcon;
             Int32 unknown29;            // always 0
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 uiIconTexture;
             Int32 unknown31;            // always 0
             public Int32 unknown32;     //not defined, even though it's used.
             Int32 unknown33;            // always 0
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 unknown34;     //undefined as well.
             Int32 unknown35;            // always 0
             public Int32 iconBackColor;

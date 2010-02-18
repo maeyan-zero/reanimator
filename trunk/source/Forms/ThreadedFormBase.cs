@@ -24,13 +24,27 @@ namespace Reanimator.Forms
 
         // This function name and its conflic is intentional so as to ensure the correct function is used.
         // If you want to use the "original" one, call from base System namespace, etc (like below).
-        // Feel free to add different paramater versions at your own discrestion (I was lazy and didn't feel like doing more than this one).
-        delegate DialogResult MessageBoxCallback(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);
+        // Feel free to add different paramater versions at your own discrestion (I was lazy and didn't feel like doing them all).
+        delegate DialogResult MessageBoxCallback1(string text);
+        protected DialogResult MessageBox(string text)
+        {
+            if (this.InvokeRequired)
+            {
+                MessageBoxCallback1 d = new MessageBoxCallback1(MessageBox);
+                return (DialogResult)this.Invoke(d, new Object[] { text });
+            }
+            else
+            {
+                return System.Windows.Forms.MessageBox.Show(text);
+            }
+        }
+
+        delegate DialogResult MessageBoxCallback4(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);
         protected DialogResult MessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             if (this.InvokeRequired)
             {
-                MessageBoxCallback d = new MessageBoxCallback(MessageBox);
+                MessageBoxCallback4 d = new MessageBoxCallback4(MessageBox);
                 return (DialogResult)this.Invoke(d, new Object[] { text, caption, buttons, icon });
             }
             else
