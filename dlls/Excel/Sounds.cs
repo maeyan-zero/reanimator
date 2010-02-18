@@ -13,13 +13,13 @@ namespace Reanimator.Excel
         {
             TableHeader header;
 
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 name; //pchar
             public Int32 undefined1;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 extension; //pchar
             public Int32 undefined2;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 lqExtension; //pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
             public Int32[] undefined3;
@@ -46,7 +46,7 @@ namespace Reanimator.Excel
 	        12 bit don't crossfade variations
 	        13 bit unk
 	        14 bit load at startup*/
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 directory;//pchar
             public Int32 undefined5;
             public Int32 fileName1;
@@ -161,7 +161,7 @@ namespace Reanimator.Excel
             public Int32 stingerRef;//idx
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
             public Int32[] undefined45;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 effects;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
             public Int32[] undefined46;

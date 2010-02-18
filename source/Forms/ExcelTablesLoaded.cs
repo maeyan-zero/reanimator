@@ -13,9 +13,12 @@ namespace Reanimator.Forms
 {
     public partial class ExcelTablesLoaded : Form
     {
-        public ExcelTablesLoaded()
+        ExcelDataSet excelDataSet;
+
+        public ExcelTablesLoaded(ExcelDataSet xlsDataSet)
         {
             InitializeComponent();
+            excelDataSet = xlsDataSet;
         }
 
         public ListBox GetTablesListBox()
@@ -25,9 +28,9 @@ namespace Reanimator.Forms
 
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ExcelTable excelTable = listBox1.SelectedItem as ExcelTable;
+            ExcelTable excelTable = listBox1.SelectedValue as ExcelTable;
 
-            ExcelTableForm etf = new ExcelTableForm(excelTable);
+            ExcelTableForm etf = new ExcelTableForm(excelTable, excelDataSet);
             etf.Text = "Excel Table: " + excelTable;
             etf.MdiParent = this.MdiParent;
             etf.Show();
@@ -53,7 +56,7 @@ namespace Reanimator.Forms
 
                 ExcelTable excelTable = (ExcelTable)listBox1.Items[counter];
 
-                ExcelTableForm etf = new ExcelTableForm(excelTable);
+                ExcelTableForm etf = new ExcelTableForm(excelTable, excelDataSet);
                 etf.Text = "Excel Table: " + excelTable;
                 etf.MdiParent = this.MdiParent;
                 etf.Hide();

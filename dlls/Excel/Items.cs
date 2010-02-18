@@ -13,266 +13,266 @@ namespace Reanimator.Excel
         {
             TableHeader header;
 
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 name;//pchar: pointer to relevant text in the front of the file.
             Int32 buffer1;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 folder;//pchar
             Int32 buffer2;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 appearance;//pchar
             Int32 buffer3;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 appearenceFirst;//pchar
             Int32 buffer4;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 icon;//pchar
             Int32 buffer5;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 holyRadius;//pchar
             Int32 buffer6;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 tinyHitParticle;//pchar
             Int32 buffer7;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 lightHitParticle;//pchar
             Int32 buffer8;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 mediumHitParticle;//pchar
             Int32 buffer9;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 hardHitParticle;//pchar
             Int32 buffer10;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 killedParticle;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] buffer11;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 fizzleParticle;//pchar
             Int32 buffer12;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 reflectParticle;//pchar
             Int32 buffer13;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 restoreVitalsParticle;//pchar
             Int32 buffer14;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 diffuse;//pchar
             Int32 buffer15;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 normal;//pchar
             Int32 buffer16;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 specular;//pchar
             Int32 buffer17;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 lightmap;//pchar
             Int32 buffer18;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideSource1;//pchar
             Int32 buffer19;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideDest1;//pchar
             Int32 buffer20;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideSource2;//pchar
             Int32 buffer21;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideDest2;//pchar
             Int32 buffer22;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideSource3;//pchar
             Int32 buffer23;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideDest3;//pchar
             Int32 buffer24;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideSource4;//pchar
             Int32 buffer25;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideDest4;//pchar
             Int32 buffer26;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideSource5;//pchar
             Int32 buffer27;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 overrideDest5;//pchar
             Int32 buffer28;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 particleFolder;//pchar
             Int32 buffer29;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 pickupFunction;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] buffer30;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 triggerString1;//pchar
             Int32 buffer31;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 triggerString2;//pchar
             Int32 buffer32;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 charSelectFont;//pchar
             Int32 buffer33;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 tooltipDamageIcon;//pchar
             Int32 buffer34;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 damagingMeleeParticle;//pchar
             Int32 buffer35;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 muzzleFlash;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown02;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 mfDefault;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown03;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 mfPhysical;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown04;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 mfFire;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown05;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 mfElectric;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown06;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 mfSpectral;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown07;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 mfToxic;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
             byte[] unknown08;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 mfPoison;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
             byte[] unknown09;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 trail_RopeNoTarget;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown10;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 trailDefault;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown11;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 trailPhysical;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown12;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 trailFire;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown13;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 trailElectric;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown14;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 trailSpectral;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown15;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 trailToxic;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
             byte[] unknown16;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 trailPoison;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
             byte[] unknown17;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 projectile_RopeWithTarget;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown18;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 projDefault;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown19;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 projPhysical;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown20;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 projFire;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown21;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 projElectric;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown22;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 projSpectral;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown23;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 projToxic;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
             byte[] unknown24;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 projPoison;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
             byte[] unknown25;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impactWall;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown26;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impWallDefault;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown27;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impWallPhysical;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown28;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impWallFire;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown29;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impWallElectric;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown30;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impWallSpectral;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown31;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impWallToxic;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
             byte[] unknown32;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impWallPoison;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
             byte[] unknown33;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impactUnit;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown34;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impactUnitDefault;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown35;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impactUnitPhysical;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown36;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impactUnitFire;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown37;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impactUnitElectric;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown38;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impactUnitSpectral;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
             byte[] unknown39;
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 impactUnitToxic;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 120)]
             byte[] unknown40;
@@ -530,14 +530,14 @@ namespace Reanimator.Excel
             public Int32 minSpawnLevel;
             public Int32 maxSpawnLevel;
             public Int32 maxLevel;
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] {"name1", "name2", "name3"}, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] {"name1", "name2", "name3"}, DefaultIndex = 1)]
             public Int32 fixedLevel;//intptr
             public Int32 hpMin;
             public Int32 hpMax;
             public Int32 powerMax;
             public Int32 experience;
             public Int32 attackRating;
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 luckBonus;//intptr
             public Int32 luckChanceToSpawn;
             public Int32 roomPopulatePass;
@@ -573,24 +573,24 @@ namespace Reanimator.Excel
             public Int32 maximumImpactFrequency;
             public Int32 onlyCollideWithUnitType;//index
             public Int32 questDescription;//index
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 pickUpCondition;//intptr
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte[] unknownBytes04;
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 scriptOnUse;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 stackSize;//intptr
             public Int32 maxPickUp;
             public Int32 baseCost;
             public Int32 realWorldCost;
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 buyPriceMult;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 buyPriceAdd;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 sellPriceMult;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 sellPriceAdd;//intptr
             public Int32 inventoryWardrobe;//index
             public Int32 characterScreenWardrobe;      // always -1
@@ -635,9 +635,9 @@ namespace Reanimator.Excel
             public Int32 dmgType;//index
             public Int32 weaponDamageScale;
             public Int32 dontUseWeaponDamage;
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 minBaseDmg;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 maxBaseDmg;//intptr
             public Int32 sfxAttackFocus;
             public Int32 sfxUknown1;
@@ -722,26 +722,26 @@ namespace Reanimator.Excel
             public Int32 startingStrength;
             public Int32 startingStamina;
             public Int32 startingWillpower;
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props1;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props2;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props3;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props4;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props5;//intptr
             public Int32 props1AppliesToUnitype;
             public Int32 props2AppliesToUnitype;
             public Int32 props3AppliesToUnitype;
             public Int32 props4AppliesToUnitype;
             public Int32 props5AppliesToUnitype;
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 perLevelProps1;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 perLevelProps2;//intptr
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 propsElite;//intptr
             public Int32 affix1;
             public Int32 affix2;
@@ -798,7 +798,7 @@ namespace Reanimator.Excel
             public Int32 startingskills12;
             public Int32 unitDieBeginSkill;//index
             public Int32 unitDieBeginSkillClient;//index
-            [ExcelTables.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
+            [ExcelTable.ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 scriptOnUnitDieEnd;//intptr
             public Int32 unitDieEndSkill;//index
             public Int32 deadSkill;//index

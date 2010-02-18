@@ -13,7 +13,7 @@ namespace Reanimator.Excel
         {
             TableHeader header;
 
-            [ExcelTables.ExcelOutput(IsStringOffset=true)]
+            [ExcelTable.ExcelOutput(IsStringOffset=true)]
             public Int32 name;
             Int32 buffer;
             public Int32 intValue;

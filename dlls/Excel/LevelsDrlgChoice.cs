@@ -13,7 +13,7 @@ namespace Reanimator.Excel
         {
             TableHeader header;
 
-            [ExcelTables.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringOffset = true)]
             public Int32 name; //pchar
             public Int32 undefined1;
             public float namedMonsterChance;

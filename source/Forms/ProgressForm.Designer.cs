@@ -37,8 +37,9 @@
             // 
             this.progressBar.Location = new System.Drawing.Point(12, 50);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(378, 23);
+            this.progressBar.Size = new System.Drawing.Size(372, 23);
             this.progressBar.TabIndex = 0;
+            this.progressBar.UseWaitCursor = true;
             // 
             // loadingTextLabel
             // 
@@ -49,6 +50,7 @@
             this.loadingTextLabel.Size = new System.Drawing.Size(61, 13);
             this.loadingTextLabel.TabIndex = 1;
             this.loadingTextLabel.Text = "loading text";
+            this.loadingTextLabel.UseWaitCursor = true;
             // 
             // currentItemLabel
             // 
@@ -59,17 +61,19 @@
             this.currentItemLabel.Size = new System.Drawing.Size(62, 13);
             this.currentItemLabel.TabIndex = 2;
             this.currentItemLabel.Text = "current item";
+            this.currentItemLabel.UseWaitCursor = true;
             this.currentItemLabel.TextChanged += new System.EventHandler(this.currentItemLabel_TextChanged);
             // 
             // ProgressForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 81);
+            this.ClientSize = new System.Drawing.Size(392, 73);
             this.ControlBox = false;
             this.Controls.Add(this.currentItemLabel);
             this.Controls.Add(this.loadingTextLabel);
             this.Controls.Add(this.progressBar);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -79,6 +83,7 @@
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Loading...";
+            this.UseWaitCursor = true;
             this.Shown += new System.EventHandler(this.Progress_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -28,9 +28,7 @@ namespace Reanimator.Forms
         public ProgressForm(ParameterizedProgressThread func, Object param) : this()
         {
             threadFunc = func;
-            threadParam = param; //new Object[] {param, this};
-
-            this.StartPosition = FormStartPosition.CenterScreen;
+            threadParam = param;
 
             this.Disposed += new EventHandler(ProgressForm_Disposed);
         }
@@ -127,7 +125,5 @@ namespace Reanimator.Forms
         {
             return currentItemLabel;
         }
-
-
     }
 }

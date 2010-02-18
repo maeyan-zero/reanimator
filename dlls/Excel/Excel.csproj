@@ -131,9 +131,6 @@
     <Compile Include="ExcelTable.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExcelTables.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ItemLevels.cs">
       <SubType>Code</SubType>
     </Compile>
