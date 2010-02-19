@@ -322,7 +322,10 @@ namespace Reanimator
         {
             foreach (Form childForm in MdiChildren)
             {
-                childForm.Close();
+                if (childForm.Name != "ExcelTablesLoaded")
+                {
+                    childForm.Close();
+                }
             }
         }
 
@@ -388,6 +391,11 @@ namespace Reanimator
 
         private void Progress_Disposed(object sender, EventArgs e)
         {
+            LoadAndDisplayCurrentlyLoadedExcelTables();
+        }
+
+        private void LoadAndDisplayCurrentlyLoadedExcelTables()
+        {
             excelTablesLoaded = new ExcelTablesLoaded(excelDataSet);
             excelTablesLoaded.MdiParent = this;
             excelTablesLoaded.Show();
@@ -399,7 +407,7 @@ namespace Reanimator
             {
                 excelTablesLoaded.AddItem(sf);
             }
-           // excelTablesLoaded.BindListBoxDataSource(excelDataSet.GetDataSet());//excelTables.GetLoadedTables().Concat<object>(stringsTables.GetLoadedTables()));
+            // excelTablesLoaded.BindListBoxDataSource(excelDataSet.GetDataSet());//excelTables.GetLoadedTables().Concat<object>(stringsTables.GetLoadedTables()));
             excelTablesLoaded.Text = "Currently Loaded Tables [" + (excelTables.LoadedTableCount + stringsTables.Count) + "]";
         }
 
@@ -619,6 +627,20 @@ namespace Reanimator
         {
             ProgressForm progress = new ProgressForm(GenerateRelations, excelTables.GetLoadedTables());
             progress.ShowDialog(this);
+        }
+
+        private void ShowExcelTablesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (showExcelTablesToolStripMenuItem.Checked)
+            {
+                excelTablesLoaded.StartPosition = FormStartPosition.Manual;
+                excelTablesLoaded.Location = new Point(0, 0);
+                excelTablesLoaded.Show();
+            }
+            else
+            {
+                excelTablesLoaded.Hide();
+            }
         }
     }
 }
