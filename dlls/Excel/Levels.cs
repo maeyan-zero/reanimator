@@ -26,9 +26,12 @@ namespace Reanimator.Excel
             public Int32 defaultSubLevel;
             public Int32 previousLevel;
             public Int32 nextLevel;
-            public Int32 levelDisplayName;//stridx
-            public Int32 floorSuffixName;//stridx
-            public Int32 finalSuffixFloorName;//stridx
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Level")]
+            public Int32 levelDisplayName;
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Level")]
+            public Int32 floorSuffixName;
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Level")]
+            public Int32 finalSuffixFloorName;
             public Int32 town;//bool
             public Int32 alwaysActive;//bool
             public Int32 startingLocation;//bool
