@@ -331,40 +331,40 @@ namespace Reanimator
             options.ShowDialog(this);
         }
 
-        private void clientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
-            if (openFileDialog.ShowDialog(this) != DialogResult.OK)
-            {
-                return;
-            }
+        //private void ClientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    OpenFileDialog openFileDialog = new OpenFileDialog();
+        //    openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
+        //    openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
+        //    if (openFileDialog.ShowDialog(this) != DialogResult.OK)
+        //    {
+        //        return;
+        //    }
 
-            FileStream clientFile;
-            try
-            {
-                clientFile = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite);
-            }
-            catch (Exception)
-            {
-                return;
-            }
+        //    FileStream clientFile;
+        //    try
+        //    {
+        //        clientFile = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return;
+        //    }
 
-            ClientPatcher clientPatcher = new ClientPatcher(FileTools.StreamToByteArray(clientFile));
-            if (clientPatcher.ApplyHardcorePatch())
-            {
-                FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
-                fileOut.Write(clientPatcher.Buffer, 0, clientPatcher.Buffer.Length);
-                fileOut.Dispose();
-                MessageBox.Show("Hardcore patch applied!");
-            }
-            else
-            {
-                MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            clientFile.Dispose();
-        }
+        //    ClientPatcher clientPatcher = new ClientPatcher(FileTools.StreamToByteArray(clientFile));
+        //    if (clientPatcher.ApplyHardcorePatch())
+        //    {
+        //        FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
+        //        fileOut.Write(clientPatcher.Buffer, 0, clientPatcher.Buffer.Length);
+        //        fileOut.Dispose();
+        //        MessageBox.Show("Hardcore patch applied!");
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //    clientFile.Dispose();
+        //}
 
         private void Reanimator_ResizeEnd(object sender, EventArgs e)
         {
@@ -380,13 +380,13 @@ namespace Reanimator
             this.Refresh();
 
             ProgressForm progress = new ProgressForm(LoadTables, null);
-            progress.Disposed += new EventHandler(progress_Disposed);
+            progress.Disposed += new EventHandler(Progress_Disposed);
             progress.ShowDialog(this);
 
             this.GenerateCache(false);
         }
 
-        private void progress_Disposed(object sender, EventArgs e)
+        private void Progress_Disposed(object sender, EventArgs e)
         {
             excelTablesLoaded = new ExcelTablesLoaded(excelDataSet);
             excelTablesLoaded.MdiParent = this;
@@ -491,7 +491,7 @@ namespace Reanimator
             }
         }
 
-        private void saveToolStripButton_Click(object sender, EventArgs e)
+        private void SaveToolStripButton_Click(object sender, EventArgs e)
         {
             IMdiChildBase mdiChildBase = this.ActiveMdiChild as IMdiChildBase;
             if (mdiChildBase != null)
@@ -500,7 +500,7 @@ namespace Reanimator
             }
         }
 
-        private void cSVToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CSVToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -538,7 +538,7 @@ namespace Reanimator
             }
         }
 
-        private void bypassSecurityx64ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void BypassSecurityx64ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Exectuable Files (*.exe)|*.exe|All Files (*.*)|*.*";
@@ -560,14 +560,14 @@ namespace Reanimator
             }
         }
 
-        private void cacheToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CacheToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CacheInfo info = new CacheInfo(@"cache\");
             info.MdiParent = this;
             info.Show();
         }
 
-        private void showCacheInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowCacheInfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (File.Exists(Config.cacheFilePath))
             {
@@ -580,7 +580,7 @@ namespace Reanimator
             }
         }
 
-        private void generateCacheToolStripMenuItem_Click(object sender, EventArgs e)
+        private void GenerateCacheToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.GenerateCache(true);
         }
@@ -615,7 +615,7 @@ namespace Reanimator
             }
         }
 
-        private void regenerateRelationsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RegenerateRelationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ProgressForm progress = new ProgressForm(GenerateRelations, excelTables.GetLoadedTables());
             progress.ShowDialog(this);
