@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics;
 
 namespace Reanimator
 {
@@ -84,18 +85,18 @@ namespace Reanimator
 
 
             // load string tables if applicable
+            String mainTableName = excelTable.StringId;
+            String stringsTableName = mainTableName + "_STRINGS";
+            DataTable stringsDataTable = xlsDataSet.Tables[stringsTableName];
             if (excelTable.Strings.Count > 0)
             {
-                String stringsTableName = excelTable.StringId + "_STRINGS";
-
                 if (!xlsDataSet.Tables.Contains(stringsTableName))
                 {
                     String xmlStringsFilePath = @"cache\" + stringsTableName + ".dat";
-                    DataTable stringsDataTable = xlsDataSet.Tables[stringsTableName];
 
                     if (progress != null)
                     {
-                        progress.SetLoadingText("First time generation of strings table data..." + " (Table: " + excelTable.StringId + ")");
+                        progress.SetLoadingText("Cache generation of strings data... " + stringsTableName);
                     }
                     if (stringsDataTable == null)
                     {
@@ -105,14 +106,14 @@ namespace Reanimator
                     DataColumn offsetColumn = stringsDataTable.Columns["offset"];
                     if (offsetColumn == null)
                     {
-                        offsetColumn = stringsDataTable.Columns.Add("offset");
+                        offsetColumn = stringsDataTable.Columns.Add("offset", typeof(int));
                         offsetColumn.Unique = true;
                         stringsDataTable.PrimaryKey = new DataColumn[] { offsetColumn };
                     }
 
                     if (!stringsDataTable.Columns.Contains("string"))
                     {
-                        stringsDataTable.Columns.Add("string");
+                        stringsDataTable.Columns.Add("string", typeof(String));
                     }
 
                     foreach (DictionaryEntry entry in excelTable.Strings)
@@ -126,35 +127,36 @@ namespace Reanimator
 
 
             // load in main data table
-            String tableName = excelTable.StringId;
-            if (!xlsDataSet.Tables.Contains(tableName))
+            DataTable mainDataTable = xlsDataSet.Tables[mainTableName];
+            if (!xlsDataSet.Tables.Contains(mainTableName))
             {
-                String xmlFilePath = @"cache\" + tableName + ".dat";
-                DataTable dataTable = xlsDataSet.Tables[tableName];
+                String xmlFilePath = @"cache\" + mainTableName + ".dat";
 
                 if (progress != null)
                 {
-                    progress.SetLoadingText("First time generation of table data..." + " (Table: " + excelTable.StringId + ")");
+                    progress.SetLoadingText("Cache generation of table data... " + mainTableName);
                 }
 
-                if (dataTable == null)
+                if (mainDataTable == null)
                 {
-                    dataTable = xlsDataSet.Tables.Add(excelTable.StringId);
+                    mainDataTable = xlsDataSet.Tables.Add(excelTable.StringId);
                 }
                 object[] array = (object[])excelTable.GetTableArray();
                 Type type = array[0].GetType();
+                List<ExcelTables.ExcelOutputAttribute> outputAttributes = new List<ExcelTables.ExcelOutputAttribute>(type.GetFields().Length + 1);
 
                 #region generate_columns
-                DataColumn indexColumn = dataTable.Columns.Add("index");
+                DataColumn indexColumn = mainDataTable.Columns.Add("index");
                 indexColumn.AutoIncrement = true;
                 indexColumn.Unique = true;
-                dataTable.PrimaryKey = new DataColumn[] { indexColumn };
+                mainDataTable.PrimaryKey = new DataColumn[] { indexColumn };
+                outputAttributes.Add(null);
 
-                foreach (MemberInfo memberInfo in type.GetFields())
+                foreach (FieldInfo memberInfo in type.GetFields())
                 {
-                    DataColumn dataColumn = dataTable.Columns.Add(memberInfo.Name);
-
+                    DataColumn dataColumn = mainDataTable.Columns.Add(memberInfo.Name, memberInfo.FieldType);
                     ExcelTables.ExcelOutputAttribute excelOutputAttribute = null;
+
                     foreach (Attribute attribute in memberInfo.GetCustomAttributes(typeof(ExcelTables.ExcelOutputAttribute), true))
                     {
                         excelOutputAttribute = attribute as ExcelTables.ExcelOutputAttribute;
@@ -166,11 +168,20 @@ namespace Reanimator
 
                     if (excelOutputAttribute != null)
                     {
-                        if (excelOutputAttribute.IsStringOffset)
+                        outputAttributes.Add(excelOutputAttribute);
+
+                        if (excelOutputAttribute.IsStringOffset && stringsDataTable != null)
                         {
-                            DataColumn dc = dataTable.Columns.Add(dataColumn.ColumnName + "_string");
-                            dataColumn.ExtendedProperties.Add("IsStringOffset", true);
+                            DataColumn dcString = mainDataTable.Columns.Add(dataColumn.ColumnName + "_string", typeof(String));
+                            dcString.DefaultValue = String.Empty;
+                            dcString.AllowDBNull = false;
+
+                            outputAttributes.Add(null);
                         }
+                    }
+                    else
+                    {
+                        outputAttributes.Add(null);
                     }
                 }
                 #endregion
@@ -181,29 +192,19 @@ namespace Reanimator
                 }
 
                 #region generate_rows
-                int row = 0;
+                int row = 1;
+                object[] baseRow = new object[outputAttributes.Count];
 
                 foreach (Object table in array)
                 {
                     progress.SetCurrentItemText("Row " + row + " of " + array.Length);
-
-                    DataRow dataRow = dataTable.Rows.Add();
                     int col = 1;
 
                     foreach (FieldInfo fieldInfo in type.GetFields())
                     {
                         Object value = fieldInfo.GetValue(table);
-                        ExcelTables.ExcelOutputAttribute excelOutputAttribute = null;
-                        MemberInfo memberInfo = fieldInfo as MemberInfo;
+                        ExcelTables.ExcelOutputAttribute excelOutputAttribute = outputAttributes[col];
 
-                        foreach (Attribute attribute in memberInfo.GetCustomAttributes(typeof(ExcelTables.ExcelOutputAttribute), true))
-                        {
-                            excelOutputAttribute = attribute as ExcelTables.ExcelOutputAttribute;
-                            if (excelOutputAttribute != null)
-                            {
-                                break;
-                            }
-                        }
                         /*
                         // to fix up / reimplement
                         if (excelOutputAttribute != null && false)
@@ -238,7 +239,7 @@ namespace Reanimator
 
                         if (value != null)
                         {
-                            dataRow[col] = value;
+                            baseRow[col] = value;
                         }
                         col++;
 
@@ -251,38 +252,42 @@ namespace Reanimator
                         }
                     }
 
+                    mainDataTable.Rows.Add(baseRow);
                     row++;
                 }
                 #endregion
 
                 #region generate_relations
-                DataTable dtStrings = xlsDataSet.Tables[excelTable.StringId + "_STRINGS"];
-                DataTable dtData = xlsDataSet.Tables[excelTable.StringId];
-
-                if (dtData.ChildRelations.Count == 0 && dtData.ParentRelations.Count == 0 && dtStrings != null)
+                if (mainDataTable.ChildRelations.Count == 0 && mainDataTable.ParentRelations.Count == 0 && stringsDataTable != null)
                 {
-                    DataColumn dcParent = dtStrings.Columns["offset"];
+                    DataColumn dcParent = stringsDataTable.Columns["offset"];
+                    int col = 0;
 
-                    foreach (DataColumn dc in dtData.Columns)
+                    foreach (ExcelTables.ExcelOutputAttribute oa in outputAttributes)
                     {
-                        if (dc.ExtendedProperties.ContainsKey("IsStringOffset"))
+                        if (oa == null)
                         {
-                            DataColumn dcChild = dc;
+                            col++;
+                            continue;
+                        }
+
+                        if (oa.IsStringOffset)
+                        {
+                            DataColumn dcChild = mainDataTable.Columns[col];
                             String relationName = excelTable.StringId + dcChild.ColumnName + "StringOffset";
                             DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
                             xlsDataSet.Relations.Add(relation);
 
-                            dcChild.AllowDBNull = false;
-                            dcChild.DefaultValue = String.Empty;
-                            DataColumn dcString = dtData.Columns[dcChild.ColumnName + "_string"];
+                            DataColumn dcString = mainDataTable.Columns[dcChild.ColumnName + "_string"];
                             dcString.Expression = "Parent(" + relationName + ").string";
-
                         }
+
+                        col++;
                     }
                 }
                 #endregion
 
-                this.xlsDataTables.Add(tableName, dataTable);
+                this.xlsDataTables.Add(mainTableName, mainDataTable);
             }
 
 
