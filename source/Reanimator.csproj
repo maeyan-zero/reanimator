@@ -240,7 +240,8 @@
     <Compile Include="Forms\Reanimator.Designer.cs">
       <DependentUpon>Reanimator.cs</DependentUpon>
     </Compile>
-    <Compile Include="Strings.cs" />
+    <Compile Include="StringsFile.cs" />
+    <Compile Include="StringsTables.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>

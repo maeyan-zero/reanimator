@@ -73,9 +73,12 @@ namespace Reanimator.Forms
             }
             else
             {
+                // It'll throw an exception if you try to change outside of its range a second time without resetting the value
+                progressBar.Value = progressBar.Minimum;
                 progressBar.Minimum = minimum;
                 progressBar.Maximum = maximum;
                 progressBar.Step = step;
+                progressBar.Value = minimum;
             }
         }
 
