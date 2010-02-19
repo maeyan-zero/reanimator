@@ -22,9 +22,13 @@ namespace Reanimator.Excel
         public class ExcelOutputAttribute : System.Attribute
         {
             public bool IsStringOffset { get; set; }
+
             public bool IsIntOffset { get; set; }
             public String[] FieldNames { get; set; }
             public int DefaultIndex { get; set; }
+
+            public bool IsStringId { get; set; }
+            public String StringTable { get; set; }
         }
 
         [AttributeUsage(AttributeTargets.Field)]
