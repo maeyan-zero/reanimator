@@ -19,23 +19,38 @@ namespace Reanimator.Forms
         {
             InitializeComponent();
             excelDataSet = xlsDataSet;
+            loadedTables_ListBox.Sorted = true;
         }
 
-        public void BindListBoxDataSource(Object dataSource)
+        public void AddItem(Object o)
         {
-            loadedTables_ListBox.DataSource = dataSource;
+            loadedTables_ListBox.Items.Add(o);
         }
 
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ExcelTable excelTable = loadedTables_ListBox.SelectedValue as ExcelTable;
-
+            ExcelTable excelTable = loadedTables_ListBox.SelectedItem as ExcelTable;
             if (excelTable != null)
             {
                 ExcelTableForm etf = new ExcelTableForm(excelTable, excelDataSet);
                 etf.Text = "Excel Table: " + excelTable;
                 etf.MdiParent = this.MdiParent;
                 etf.Show();
+                return;
+            }
+
+
+            // TODO
+            // Make a single table form!
+            StringsFile stringsFile = loadedTables_ListBox.SelectedItem as StringsFile;
+            if (stringsFile != null)
+            {
+                TableForm indexExplorer = new TableForm(stringsFile);
+                StringsFile.StringBlock[] stringBlocks = stringsFile.GetFileTable();
+                indexExplorer.dataGridView.DataSource = stringBlocks;
+                indexExplorer.Text += ": " + stringsFile;
+                indexExplorer.MdiParent = this.MdiParent;
+                indexExplorer.Show();
             }
         }
     }

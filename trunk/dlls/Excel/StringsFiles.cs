@@ -9,7 +9,7 @@ namespace Reanimator.Excel
     public class StringsFiles : ExcelTable
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class StringsFilesTable
+        public class StringsFilesTable
         {
             TableHeader header;
 

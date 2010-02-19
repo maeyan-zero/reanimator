@@ -377,6 +377,11 @@ namespace Reanimator.Excel
             return loadedTables;
         }
 
+        public int LoadedTableCount
+        {
+            get { return loadedTables.Count; }
+        }
+
         public bool LoadTables(string folder, ProgressForm progress)
         {
             this.AllTablesLoaded = true;

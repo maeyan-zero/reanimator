@@ -17,7 +17,7 @@ namespace Reanimator
     public partial class TableForm : ThreadedFormBase, IDisposable, IMdiChildBase
     {
         Index index;
-        Strings strings;
+        StringsFile strings;
         List<int> foundIndices;
         int currentSelection;
 
@@ -37,7 +37,7 @@ namespace Reanimator
             TableFormInit();
         }
 
-        public TableForm(Strings strs)
+        public TableForm(StringsFile strs)
         {
             strings = strs;
 
