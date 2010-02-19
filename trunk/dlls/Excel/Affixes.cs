@@ -16,15 +16,15 @@ namespace Reanimator.Excel
             public Int32 affix;
             public Int32 unknown02;
             public Int32 alwaysApply;
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
             public Int32 qualityNameString;
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
             public Int32 setNameString;
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
             public Int32 magicNameString;
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
             public Int32 replaceNameString;
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
             public Int32 flavorText;
             public Int32 unknown03;
             public Int32 nameColor;

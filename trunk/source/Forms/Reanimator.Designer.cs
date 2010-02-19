@@ -66,6 +66,8 @@
             this.clientPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bypassSecurityx64ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showCacheInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.generateCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cascadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,8 +93,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.showCacheInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.generateCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.regenerateRelationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -385,7 +386,8 @@
             this.clientPatchesToolStripMenuItem,
             this.cacheToolStripMenuItem,
             this.showCacheInfoToolStripMenuItem,
-            this.generateCacheToolStripMenuItem});
+            this.generateCacheToolStripMenuItem,
+            this.regenerateRelationsToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
             this.toolsMenu.Size = new System.Drawing.Size(48, 20);
             this.toolsMenu.Text = "&Tools";
@@ -418,6 +420,20 @@
             this.cacheToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.cacheToolStripMenuItem.Text = "Show Cache Info [old]";
             this.cacheToolStripMenuItem.Click += new System.EventHandler(this.cacheToolStripMenuItem_Click);
+            // 
+            // showCacheInfoToolStripMenuItem
+            // 
+            this.showCacheInfoToolStripMenuItem.Name = "showCacheInfoToolStripMenuItem";
+            this.showCacheInfoToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.showCacheInfoToolStripMenuItem.Text = "Show Cache Info";
+            this.showCacheInfoToolStripMenuItem.Click += new System.EventHandler(this.showCacheInfoToolStripMenuItem_Click);
+            // 
+            // generateCacheToolStripMenuItem
+            // 
+            this.generateCacheToolStripMenuItem.Name = "generateCacheToolStripMenuItem";
+            this.generateCacheToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.generateCacheToolStripMenuItem.Text = "Regenerate Cache";
+            this.generateCacheToolStripMenuItem.Click += new System.EventHandler(this.generateCacheToolStripMenuItem_Click);
             // 
             // windowsMenu
             // 
@@ -620,19 +636,12 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // showCacheInfoToolStripMenuItem
+            // regenerateRelationsToolStripMenuItem
             // 
-            this.showCacheInfoToolStripMenuItem.Name = "showCacheInfoToolStripMenuItem";
-            this.showCacheInfoToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.showCacheInfoToolStripMenuItem.Text = "Show Cache Info";
-            this.showCacheInfoToolStripMenuItem.Click += new System.EventHandler(this.showCacheInfoToolStripMenuItem_Click);
-            // 
-            // generateCacheToolStripMenuItem
-            // 
-            this.generateCacheToolStripMenuItem.Name = "generateCacheToolStripMenuItem";
-            this.generateCacheToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.generateCacheToolStripMenuItem.Text = "Generate Cache";
-            this.generateCacheToolStripMenuItem.Click += new System.EventHandler(this.generateCacheToolStripMenuItem_Click);
+            this.regenerateRelationsToolStripMenuItem.Name = "regenerateRelationsToolStripMenuItem";
+            this.regenerateRelationsToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.regenerateRelationsToolStripMenuItem.Text = "Regenerate Relations";
+            this.regenerateRelationsToolStripMenuItem.Click += new System.EventHandler(this.regenerateRelationsToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
@@ -724,6 +733,7 @@
         private System.Windows.Forms.ToolStripMenuItem cacheToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showCacheInfoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateCacheToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem regenerateRelationsToolStripMenuItem;
     }
 }
 

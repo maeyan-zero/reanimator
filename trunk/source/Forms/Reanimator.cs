@@ -461,13 +461,34 @@ namespace Reanimator
             progress.ConfigBar(0, stringsTables.Count, 1);
             stringsTables.AddToDataSet(progress, excelDataSet.GetDataSet());
 
+            this.GenerateRelations(progress, loadedTables);
+
+            progress.SetLoadingText("Saving cache data...");
+            progress.SetCurrentItemText("Please wait...");
             excelDataSet.SaveDataSet();
         }
 
         private void CacheExcelTable(ProgressForm progress, Object var)
         {
             ExcelTable excelTable = var as ExcelTable;
-            excelDataSet.LoadTables(progress, excelTable);
+            excelDataSet.LoadTable(progress, excelTable);
+        }
+
+        private void GenerateRelations(ProgressForm progress, Object var)
+        {
+            List<ExcelTable> loadedTables = var as List<ExcelTable>;
+            if (loadedTables == null)
+            {
+                return;
+            }
+
+            progress.SetLoadingText("Generating table relations...");
+            progress.ConfigBar(0, loadedTables.Count, 1);
+            foreach (ExcelTable excelTable in loadedTables)
+            {
+                progress.SetCurrentItemText(excelTable.StringId);
+                excelDataSet.GenerateRelations(excelTable);
+            }
         }
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
@@ -592,6 +613,12 @@ namespace Reanimator
                 ProgressForm cachingProgress = new ProgressForm(CacheTables, excelTables.GetLoadedTables());
                 cachingProgress.ShowDialog(this);
             }
+        }
+
+        private void regenerateRelationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ProgressForm progress = new ProgressForm(GenerateRelations, excelTables.GetLoadedTables());
+            progress.ShowDialog(this);
         }
     }
 }

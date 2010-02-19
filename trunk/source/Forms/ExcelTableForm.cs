@@ -54,7 +54,7 @@ namespace Reanimator.Forms
             // file id
             this.textBox1.Text = "0x" + excelTable.StructureId.ToString("X");
 
-            excelDataSet.LoadTables(progress, var);
+            excelDataSet.LoadTable(progress, var);
 
             if (excelTable.Strings.Count > 0)
             {
