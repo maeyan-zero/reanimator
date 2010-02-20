@@ -152,7 +152,7 @@ namespace Reanimator
         public delegate void GetWebsiteComplete(List<NewMod> mods);
         public event GetWebsiteComplete GetWebsiteCompleteEvent = delegate { };
 
-        public delegate void FileDownloadComplete(string name);
+        public delegate void FileDownloadComplete(NewMod mod);
         public event FileDownloadComplete FileDownloadCompleteEvent = delegate { };
 
         public void GetWebsiteByUrl(string url)
@@ -246,7 +246,6 @@ namespace Reanimator
             ThreadParam param = new ThreadParam();
             param.mod = mod;
             param.saveFolder = saveFolder;
-            param.fileExtension = mod.extension;
 
             ThreadPool.QueueUserWorkItem(new WaitCallback(DownloadFile), (object)param);
         }
@@ -254,8 +253,7 @@ namespace Reanimator
         private void DownloadFile(object o)
         {
             ThreadParam param = (ThreadParam)o;
-            string name = param.mod.ToString();
-            string savePath = param.saveFolder + name;
+            string savePath = param.saveFolder + param.mod.ToString();
 
             System.Net.WebClient client = new System.Net.WebClient();
             byte[] file = client.DownloadData(param.mod.link);
@@ -264,14 +262,13 @@ namespace Reanimator
             fstream.Write(file, 0, file.Length);
             fstream.Close();
 
-            FileDownloadCompleteEvent(name);
+            FileDownloadCompleteEvent(param.mod);
         }
 
         private struct ThreadParam
         {
             public NewMod mod;
             public string saveFolder;
-            public string fileExtension;
         }
     }
 }
