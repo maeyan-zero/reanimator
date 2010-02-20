@@ -14,13 +14,13 @@ namespace Reanimator
             try
             {
                 string url = "http://www.hellgateaus.net/forum/viewtopic.php?f=47&t=1279&p=18796#p18796";
-                string folder = @"F:\";
+                string folder = @"C:\";
                 string extension = ".mod.zip";
                 
                 Mod installedVersion = new Mod();
                 installedVersion.name = "Test";
                 installedVersion.extension = extension;
-                installedVersion.Version = "0_1_0";
+                installedVersion.version.CurrentVersion = "0_1_0";
 
                 List<Mod> mods = UpdateChecker.GetModInfoFromSite(url);
 
@@ -30,9 +30,9 @@ namespace Reanimator
                     extension = mod.extension == null ? extension : mod.extension;
 
                     // might also want to check if the mod is the most up-to-date one (compared to possible other mods)
-                    if (!File.Exists(folder + mod.name + "_" + mod.Version + extension) && !installedVersion.IsNewestVersion(mod))
+                    if (!File.Exists(folder + mod.name + "_" + mod.version.CurrentVersion + extension) && !installedVersion.IsNewestVersion(mod))
                     {
-                        Console.WriteLine("Newer version found! Downloading file...");
+                        Console.WriteLine("Newer version found! Downloading file to " + folder + "...");
                         UpdateChecker.DownloadFile(mod, folder, extension);
                     }
                     else

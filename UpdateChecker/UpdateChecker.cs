@@ -11,11 +11,50 @@ namespace Reanimator
     public class Mod
     {
         [XmlElement("name")]
-        public string name = null;
+        public string name;
         [XmlElement("extension")]
-        public string extension = null;
+        public string extension;
         [XmlElement("link")]
-        public string link = null;
+        public string link;
+        [XmlElement("version")]
+        public Version version;
+
+        public Mod()
+        {
+            this.name = null;
+            this.extension = null;
+            this.link = null;
+            this.version = new Version();
+        }
+
+        public override string ToString()
+        {
+            string content = string.Empty;
+            content += name + " - " + version.CurrentVersion + " - " + extension + " - " + link;
+
+            return content;
+        }
+
+        public string ToStringWithMultipleLines()
+        {
+            string content = string.Empty;
+            content += "Name:\t\t" + name + "\n";
+            content += "Version:\t" + version.CurrentVersion + "\n";
+            content += "Extension:\t" + extension + "\n";
+            content += "Link:\t\t" + link;
+
+            return content;
+        }
+
+        public bool IsNewestVersion(Mod mod)
+        {
+            return this.version.IsNewestVersion(mod);
+        }
+    }
+
+    [XmlRoot("version")]
+    public class Version
+    {
         [XmlElement("majorVersion")]
         public int majorVersion = 0;
         [XmlElement("minorVersion")]
@@ -25,23 +64,23 @@ namespace Reanimator
 
         public bool IsNewestVersion(Mod mod)
         {
-            if (this.majorVersion >= mod.majorVersion)
+            if (this.majorVersion >= mod.version.majorVersion)
             {
-                if (this.majorVersion > mod.majorVersion)
+                if (this.majorVersion > mod.version.majorVersion)
                 {
                     return true;
                 }
                 else
                 {
-                    if (this.minorVersion >= mod.minorVersion)
+                    if (this.minorVersion >= mod.version.minorVersion)
                     {
-                        if (this.minorVersion > mod.minorVersion)
+                        if (this.minorVersion > mod.version.minorVersion)
                         {
                             return true;
                         }
                         else
                         {
-                            if (this.subVersion >= mod.subVersion)
+                            if (this.subVersion >= mod.version.subVersion)
                             {
                                 return true;
                             }
@@ -52,26 +91,7 @@ namespace Reanimator
             return false;
         }
 
-        public override string ToString()
-        {
-            string content = string.Empty;
-            content += name + " - " + Version + " - " + extension + " - " + link;
-
-            return content;
-        }
-
-        public string ToStringWithMultipleLines()
-        {
-            string content = string.Empty;
-            content += "Name:\t\t" + name + "\n";
-            content += "Version:\t" + Version + "\n";
-            content += "Extension:\t" + extension + "\n";
-            content += "Link:\t\t" + link;
-
-            return content;
-        }
-
-        public string Version
+        public string CurrentVersion
         {
             get
             {
@@ -169,7 +189,7 @@ namespace Reanimator
 
         public static void DownloadFile(Mod mod, string saveFolder, string fileExtension)
         {
-            string savePath = saveFolder + mod.name + "_" + mod.Version + fileExtension;
+            string savePath = saveFolder + mod.name + "_" + mod.version.CurrentVersion + fileExtension;
 
             System.Net.WebClient client = new System.Net.WebClient();
             byte[] file = client.DownloadData(mod.link);
