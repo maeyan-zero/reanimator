@@ -38,9 +38,9 @@
             // b_download
             // 
             this.b_download.Enabled = false;
-            this.b_download.Location = new System.Drawing.Point(12, 261);
+            this.b_download.Location = new System.Drawing.Point(12, 253);
             this.b_download.Name = "b_download";
-            this.b_download.Size = new System.Drawing.Size(75, 23);
+            this.b_download.Size = new System.Drawing.Size(75, 34);
             this.b_download.TabIndex = 1;
             this.b_download.Text = "Download";
             this.b_download.UseVisualStyleBackColor = true;

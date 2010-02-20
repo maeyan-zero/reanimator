@@ -13,34 +13,33 @@ namespace Reanimator.Forms
     public partial class UpdateForm : Form//ThreadedFormBase
     {
         UpdateCheckerParams currentVersion;
-        private delegate void UpdateList(NewMod[] mods);
-        private delegate void UpdateText(string text);
-        UpdateList uList;
+        private delegate void AddListEntries(NewMod[] mods);
+        private delegate void UpdateText(string text, bool button);
+        AddListEntries addEntriesToList;
         UpdateText uText;
 
         public UpdateForm(UpdateCheckerParams parameters)
         {
             InitializeComponent();
             //Control.CheckForIllegalCrossThreadCalls = false;
-            uList = UpdateListBox;
+            addEntriesToList = AddListBoxEntries;
             uText = UpdateTextFields;
 
             this.currentVersion = parameters;
         }
 
-        private void UpdateListBox(NewMod[] mods)
+        private void AddListBoxEntries(NewMod[] mods)
         {
-            lb_availableUpdates.Items.Clear();
             Version tmp = currentVersion.installedVersion.version;
 
             foreach (NewMod mod in mods)
             {
-                if(mod.IsNewestVersion(tmp))
+                if (mod.IsNewestVersion(tmp))
                 {
                     this.Text = "New version available!" + currentVersion.installedVersion.version + " -> " + mod.version;
                     tmp = mod.version;
                 }
-                if(File.Exists(currentVersion.saveFolder + mod.ToString()))
+                if (File.Exists(currentVersion.saveFolder + mod.ToString()))
                 {
                     mod.alreadyPresent = true;
                 }
@@ -51,12 +50,22 @@ namespace Reanimator.Forms
                 this.Text = "No new versions available!";
             }
 
+            lb_availableUpdates.SuspendLayout();
+
             lb_availableUpdates.DataSource = mods;
+
+            lb_availableUpdates.ResumeLayout();
         }
 
-        private void UpdateTextFields(string text)
+        private void UpdateTextFields(string text, bool button)
         {
             this.Text = text;
+            b_download.Enabled = button;
+
+            if (lb_availableUpdates.DataSource != null)
+            {
+                lb_availableUpdates_SelectedIndexChanged(null, null);
+            }
         }
 
         public void GetModInfo()
@@ -67,7 +76,7 @@ namespace Reanimator.Forms
                 checker.GetWebsiteCompleteEvent += new UpdateChecker.GetWebsiteComplete(checker_GetWebsiteCompleteEvent);
                 checker.FileDownloadCompleteEvent += new UpdateChecker.FileDownloadComplete(checker_FileDownloadCompleteEvent);
 
-                this.Invoke(uText, "Searching for updates...");
+                this.Invoke(uText, "Searching for updates...", false);
                 checker.GetWebsiteByUrl(currentVersion.installedVersion.link);
             }
             catch (Exception ex)
@@ -80,8 +89,8 @@ namespace Reanimator.Forms
         {
             try
             {
-                this.Invoke(uText, mods.Count + " versions found.");
-                this.Invoke(uList, (object)mods.ToArray());
+                this.Invoke(uText, mods.Count + " versions found.", true);
+                this.Invoke(addEntriesToList, (object)mods.ToArray());
 
                 //foreach (NewMod mod in mods)
                 //{
@@ -104,14 +113,15 @@ namespace Reanimator.Forms
             }
         }
 
-        void checker_FileDownloadCompleteEvent(string name)
+        void checker_FileDownloadCompleteEvent(NewMod mod)
         {
             try
             {
-                this.Invoke(uText, "Download of file " + name + " successful!");
+                this.Invoke(uText, "Download of file " + mod.ToString() + " successful!", false);
             }
             catch (Exception ex)
             {
+                this.Invoke(uText, "Error downloading file!", true);
                 MessageBox.Show(ex.Message);
             }
         }
@@ -154,11 +164,10 @@ namespace Reanimator.Forms
 
             if (!mod.alreadyPresent)
             {
-                // if the mod file defines its own extension use that one)
-                string extension = mod.extension == null ? currentVersion.installedVersion.extension : mod.extension;
-
                 currentVersion.updateChecker.GetFile(mod, currentVersion.saveFolder);
-            }
+                mod.alreadyPresent = true;
+                b_download.Enabled = false;
+            }            
         }
     }
 }
