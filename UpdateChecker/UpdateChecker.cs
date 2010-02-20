@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
+using System.Threading;
 
 namespace Reanimator
 {
     [XmlRoot("mod")]
-    public class Mod
+    public class NewMod
     {
         [XmlElement("name")]
         public string name;
@@ -18,8 +19,10 @@ namespace Reanimator
         public string link;
         [XmlElement("version")]
         public Version version;
+        [XmlIgnore]
+        public bool alreadyPresent;
 
-        public Mod()
+        public NewMod()
         {
             this.name = null;
             this.extension = null;
@@ -30,7 +33,20 @@ namespace Reanimator
         public override string ToString()
         {
             string content = string.Empty;
-            content += name + " - " + version.CurrentVersion + " - " + extension + " - " + link;
+            content += name + "_";
+            content += version.CurrentVersion;
+            content += extension;
+
+            return content;
+        }
+
+        public string ToStringCompleteInfo()
+        {
+            string content = string.Empty;
+            content += name + " - ";
+            content += version.CurrentVersion + " - ";
+            content += extension;
+            content += link;
 
             return content;
         }
@@ -46,9 +62,9 @@ namespace Reanimator
             return content;
         }
 
-        public bool IsNewestVersion(Mod mod)
+        public bool IsNewestVersion(Version version)
         {
-            return this.version.IsNewestVersion(mod);
+            return this.version.IsNewestVersion(version);
         }
     }
 
@@ -62,25 +78,25 @@ namespace Reanimator
         [XmlElement("subVersion")]
         public int subVersion = 0;
 
-        public bool IsNewestVersion(Mod mod)
+        public bool IsNewestVersion(Version version)
         {
-            if (this.majorVersion >= mod.version.majorVersion)
+            if (this.majorVersion >= version.majorVersion)
             {
-                if (this.majorVersion > mod.version.majorVersion)
+                if (this.majorVersion > version.majorVersion)
                 {
                     return true;
                 }
                 else
                 {
-                    if (this.minorVersion >= mod.version.minorVersion)
+                    if (this.minorVersion >= version.minorVersion)
                     {
-                        if (this.minorVersion > mod.version.minorVersion)
+                        if (this.minorVersion > version.minorVersion)
                         {
                             return true;
                         }
                         else
                         {
-                            if (this.subVersion >= mod.version.subVersion)
+                            if (this.subVersion >= version.subVersion)
                             {
                                 return true;
                             }
@@ -107,15 +123,52 @@ namespace Reanimator
         }
     }
 
-    public static class UpdateChecker
+    public class UpdateCheckerParams
     {
-        public static List<Mod> GetModInfoFromSite(string url)
+        public UpdateChecker updateChecker;
+        public NewMod installedVersion;
+        public string saveFolder;
+
+        public UpdateCheckerParams()
         {
+            updateChecker = new UpdateChecker();
+            installedVersion = new NewMod();
+        }
+
+        public UpdateCheckerParams(string name, string version, string extension, string url, string saveFolder)
+        {
+            updateChecker = new UpdateChecker();
+            installedVersion = new NewMod();
+            installedVersion.name = name;
+            installedVersion.extension = extension;
+            installedVersion.link = url;
+            installedVersion.version.CurrentVersion = version;
+            this.saveFolder = saveFolder;
+        }
+    }
+
+    public class UpdateChecker
+    {
+        public delegate void GetWebsiteComplete(List<NewMod> mods);
+        public event GetWebsiteComplete GetWebsiteCompleteEvent = delegate { };
+
+        public delegate void FileDownloadComplete(string name);
+        public event FileDownloadComplete FileDownloadCompleteEvent = delegate { };
+
+        public void GetWebsiteByUrl(string url)
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(GetModInfoFromSite), (object)url);
+        }
+
+        private void GetModInfoFromSite(object o)
+        {
+            string url = (string)o;
+
             string filter = "<div class=\"postbody\"><mod>";
-            List<Mod> myMod = new List<Mod>();
+            List<NewMod> myMods = new List<NewMod>();
 
             //Console.WriteLine("Opening webpage...");
-            List<string> site = GetWebsite(url, filter);
+            List<string> site = DownloadWebsite(url, filter);
 
             //Console.WriteLine("Processing data...");
             Trim(site, "<mod>", "</mod>");
@@ -123,14 +176,15 @@ namespace Reanimator
             //Console.WriteLine("Deserializing information...");
             foreach (string line in site)
             {
-                myMod.Add(Deserialize(line));
+                myMods.Add(Deserialize(line));
             }
             //Console.WriteLine("Finished deserializing information...");
 
-            return myMod;
+            //return myMod;
+            GetWebsiteCompleteEvent(myMods);
         }
 
-        private static List<string> GetWebsite(string path, string filter)
+        private List<string> DownloadWebsite(string path, string filter)
         {
             System.Net.WebClient client = new System.Net.WebClient();
             Stream stream = client.OpenRead(path);
@@ -156,7 +210,7 @@ namespace Reanimator
             return list;
         }
 
-        private static void Trim(List<string> site, string start, string end)
+        private void Trim(List<string> site, string start, string end)
         {
             for (int counter = 0; counter < site.Count; counter++)
             {
@@ -167,7 +221,7 @@ namespace Reanimator
             }
         }
 
-        private static Stream StringToStream(string site)
+        private Stream StringToStream(string site)
         {
             byte[] byteArray = Encoding.ASCII.GetBytes(site);
             MemoryStream stream = new MemoryStream(byteArray);
@@ -175,28 +229,49 @@ namespace Reanimator
             return stream;
         }
 
-        private static Mod Deserialize(string text)
+        private NewMod Deserialize(string text)
         {
             Stream stream = StringToStream(text);
 
-            XmlSerializer serializer = new XmlSerializer(typeof(Mod));
+            XmlSerializer serializer = new XmlSerializer(typeof(NewMod));
             TextReader tr = new StreamReader(stream);
-            Mod info = (Mod)serializer.Deserialize(tr);
+            NewMod info = (NewMod)serializer.Deserialize(tr);
             tr.Close();
 
             return info;
         }
 
-        public static void DownloadFile(Mod mod, string saveFolder, string fileExtension)
+        public void GetFile(NewMod mod, string saveFolder)
         {
-            string savePath = saveFolder + mod.name + "_" + mod.version.CurrentVersion + fileExtension;
+            ThreadParam param = new ThreadParam();
+            param.mod = mod;
+            param.saveFolder = saveFolder;
+            param.fileExtension = mod.extension;
+
+            ThreadPool.QueueUserWorkItem(new WaitCallback(DownloadFile), (object)param);
+        }
+
+        private void DownloadFile(object o)
+        {
+            ThreadParam param = (ThreadParam)o;
+            string name = param.mod.ToString();
+            string savePath = param.saveFolder + name;
 
             System.Net.WebClient client = new System.Net.WebClient();
-            byte[] file = client.DownloadData(mod.link);
+            byte[] file = client.DownloadData(param.mod.link);
 
-            FileStream fstream = new FileStream(savePath, FileMode.CreateNew, FileAccess.Write);
+            FileStream fstream = new FileStream(savePath, FileMode.Create, FileAccess.Write);
             fstream.Write(file, 0, file.Length);
             fstream.Close();
+
+            FileDownloadCompleteEvent(name);
+        }
+
+        private struct ThreadParam
+        {
+            public NewMod mod;
+            public string saveFolder;
+            public string fileExtension;
         }
     }
 }

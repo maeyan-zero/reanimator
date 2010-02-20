@@ -9,11 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Excel", "..\dlls\Excel\Exce
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "..\launcher\Launcher.csproj", "{E73FF623-6B89-414A-8E5D-8170FF15ACCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateChecker", "..\UpdateChecker\UpdateChecker.csproj", "{84FFA630-84E2-4C38-9FBE-79EF33558818}"
+EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -67,8 +65,20 @@ Global
 		{E73FF623-6B89-414A-8E5D-8170FF15ACCC}.Release|x64.ActiveCfg = Release|Any CPU
 		{E73FF623-6B89-414A-8E5D-8170FF15ACCC}.Release|x86.ActiveCfg = Release|Any CPU
 		{E73FF623-6B89-414A-8E5D-8170FF15ACCC}.Release|x86.Build.0 = Release|Any CPU
+		{84FFA630-84E2-4C38-9FBE-79EF33558818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84FFA630-84E2-4C38-9FBE-79EF33558818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84FFA630-84E2-4C38-9FBE-79EF33558818}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{84FFA630-84E2-4C38-9FBE-79EF33558818}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{84FFA630-84E2-4C38-9FBE-79EF33558818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84FFA630-84E2-4C38-9FBE-79EF33558818}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84FFA630-84E2-4C38-9FBE-79EF33558818}.Release|x64.ActiveCfg = Release|Any CPU
+		{84FFA630-84E2-4C38-9FBE-79EF33558818}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

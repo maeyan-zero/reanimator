@@ -23,6 +23,7 @@ namespace Reanimator
         private ExcelTablesLoaded excelTablesLoaded;
         private ExcelDataSet excelDataSet;
         private StringsTables stringsTables;
+        private UpdateCheckerParams currentVersionInfos;
 
         private int childFormNumber = 0;
 
@@ -30,6 +31,12 @@ namespace Reanimator
         {
             options = new Options();
             indexFilesOpen = new List<string>();
+
+            currentVersionInfos = new UpdateCheckerParams();
+            currentVersionInfos.installedVersion.name = "Test";
+            currentVersionInfos.installedVersion.version.CurrentVersion = "1_0_0";
+            currentVersionInfos.installedVersion.link = "http://www.hellgateaus.net/forum/viewtopic.php?f=47&t=1279&p=18796#p18796";
+            currentVersionInfos.saveFolder = @"C:\";
 
             InitializeComponent();
         }
@@ -641,6 +648,29 @@ namespace Reanimator
             {
                 excelTablesLoaded.Hide();
             }
+        }
+
+        private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UpdateForm form = new UpdateForm(currentVersionInfos);
+            form.Show();
+
+            //foreach (NewMod mod in mods)
+            //{
+            //    // if the mod file defines its own extension use that one)
+            //    extension = mod.extension == null ? extension : mod.extension;
+
+            //    // might also want to check if the mod is the most up-to-date one (compared to possible other mods)
+            //    if (!File.Exists(folder + mod.name + "_" + mod.version.CurrentVersion + extension) && !installedVersion.IsNewestVersion(mod))
+            //    {
+            //        Console.WriteLine("Newer version found! Downloading file to " + folder + "...");
+            //        UpdateChecker.DownloadFile(mod, folder, extension);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("You already have the newest version installed or downloaded!");
+            //    }
+            //}
         }
     }
 }
