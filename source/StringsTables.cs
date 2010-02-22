@@ -27,7 +27,7 @@ namespace Reanimator
                 return false;
             }
 
-            String baseDataDir = Config.dataDirsRoot + @"\data\excel\strings\english\";
+            String baseDataDir = Config.DataDirsRoot + @"\data\excel\strings\english\";
             String fileExtension = ".xls.uni.cooked";
 
             foreach (StringsFiles.StringsFilesTable stringTable in (Object[])stringsFiles.GetTableArray())

@@ -46,43 +46,43 @@ namespace Reanimator
             configkey.Flush();
         }
 
-        public static string hglDir
+        public static string HglDir
         {
             get { return GetValue<string>("hglDir", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
             set { SetValue<string>("hglDir", value); }
         }
 
-        public static bool dataDirsRootChecked
+        public static bool DataDirsRootChecked
         {
             get { return GetValue<int>("dataDirsRootChecked", 1) == 1 ? true : false; }
             set { SetValue<int>("dataDirsRootChecked", value ? 1 : 0); }
         }
 
-        public static string dataDirsRoot
+        public static string DataDirsRoot
         {
             get { return GetValue<string>("dataDirsRoot", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
             set { SetValue<string>("dataDirsRoot", value); }
         }
 
-        public static int clientHeight
+        public static int ClientHeight
         {
             get { return GetValue<int>("clientHeight", 500); }
             set { SetValue<int>("clientHeight", value); }
         }
 
-        public static int clientWidth
+        public static int ClientWidth
         {
             get { return GetValue<int>("clientWidth", 700); }
             set { SetValue<int>("clientWidth", value); }
         }
 
-        public static string gameClientPath
+        public static string GameClientPath
         {
             get { return GetValue<String>("gameClientPath", "C:\\Program Files\\Flagship Studios\\Hellgate London\\SP_x64\\hellgate_sp_dx9_x64.exe"); }
             set { SetValue<string>("gameClientPath", value); }
         }
 
-        public static string cacheFilePath
+        public static string CacheFilePath
         {
             get { return GetValue<String>("cacheFilePath", @"cache\dataSet.dat"); }
             set { SetValue<string>("cacheFilePath", value); }

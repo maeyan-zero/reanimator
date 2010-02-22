@@ -25,23 +25,23 @@ namespace Reanimator.Forms
         {
             FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog();
             folderBrowserDialogue.Description = "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London";
-            folderBrowserDialogue.SelectedPath = Config.hglDir;
+            folderBrowserDialogue.SelectedPath = Config.HglDir;
 
             if (folderBrowserDialogue.ShowDialog(this) == DialogResult.OK)
             {
-                Config.hglDir = folderBrowserDialogue.SelectedPath;
-                hglDir_TextBox.Text = Config.hglDir;
+                Config.HglDir = folderBrowserDialogue.SelectedPath;
+                hglDir_TextBox.Text = Config.HglDir;
 
-                if (Config.dataDirsRootChecked)
+                if (Config.DataDirsRootChecked)
                 {
-                    Config.dataDirsRoot = folderBrowserDialogue.SelectedPath;
+                    Config.DataDirsRoot = folderBrowserDialogue.SelectedPath;
                 }
             }
         }
 
         private void dataDirCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            Config.dataDirsRootChecked = dataDir_CheckBox.Checked;
+            Config.DataDirsRootChecked = dataDir_CheckBox.Checked;
             RefreshDataDir();
         }
 
@@ -49,10 +49,10 @@ namespace Reanimator.Forms
         {
             if (dataDir_CheckBox.Checked)
             {
-                Config.dataDirsRoot = Config.hglDir;
+                Config.DataDirsRoot = Config.HglDir;
             }
 
-            dataDir_TextBox.Text = Config.dataDirsRoot;
+            dataDir_TextBox.Text = Config.DataDirsRoot;
             dataDir_Button.Enabled = !dataDir_CheckBox.Checked;
             dataDir_TextBox.Enabled = !dataDir_CheckBox.Checked;
         }
@@ -61,33 +61,33 @@ namespace Reanimator.Forms
         {
             FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog();
             folderBrowserDialogue.Description = "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London";
-            folderBrowserDialogue.SelectedPath = Config.hglDir;
+            folderBrowserDialogue.SelectedPath = Config.HglDir;
 
             if (folderBrowserDialogue.ShowDialog(this) == DialogResult.OK)
             {
-                Config.dataDirsRoot = folderBrowserDialogue.SelectedPath;
-                dataDir_TextBox.Text = Config.dataDirsRoot;
+                Config.DataDirsRoot = folderBrowserDialogue.SelectedPath;
+                dataDir_TextBox.Text = Config.DataDirsRoot;
             }
         }
 
         private void Options_Load(object sender, EventArgs e)
         {
-            hglDir_TextBox.Text = Config.hglDir;
-            dataDir_TextBox.Text = Config.dataDirsRoot;
-            dataDir_CheckBox.Checked = Config.dataDirsRootChecked;
-            dataDir_Button.Enabled = !Config.dataDirsRootChecked;
-            dataDir_TextBox.Enabled = !Config.dataDirsRootChecked;
-            gameClientPath_TextBox.Text = Config.gameClientPath;
+            hglDir_TextBox.Text = Config.HglDir;
+            dataDir_TextBox.Text = Config.DataDirsRoot;
+            dataDir_CheckBox.Checked = Config.DataDirsRootChecked;
+            dataDir_Button.Enabled = !Config.DataDirsRootChecked;
+            dataDir_TextBox.Enabled = !Config.DataDirsRootChecked;
+            gameClientPath_TextBox.Text = Config.GameClientPath;
         }
 
         private void gameClientPath_Button_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
+            openFileDialog.InitialDirectory = Config.HglDir + "\\SP_x64";
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
-                Config.gameClientPath = openFileDialog.FileName;
+                Config.GameClientPath = openFileDialog.FileName;
                 gameClientPath_TextBox.Text = openFileDialog.FileName;
             }
         }

@@ -332,7 +332,7 @@ namespace Reanimator.Excel
             excelTables.AddTable("QUEST_DICTIONARY_FOR_TUGBOAT", null, null);
 
             // I think these are Mythos
-            excelTables.AddTable("INVLOCIDX", null, null);
+            //excelTables.AddTable("INVLOCIDX", null, null);          //// TODO this table is used in hero editor
             excelTables.AddTable("SKILL_LEVELS", null, null);
             excelTables.AddTable("SKILL_STATS", null, null);
             excelTables.AddTable("CHARDISPLAY", null, null);

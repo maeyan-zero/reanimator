@@ -99,7 +99,7 @@ namespace Reanimator
         public static T ByteArrayTo<T>(byte[] byteArray, int offset)
         {
             IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
-            return (T)Marshal.PtrToStructure(bytePtr, typeof(T)); 
+            return (T)Marshal.PtrToStructure(bytePtr, typeof(T));
         }
 
         public static T ByteArrayTo<T>(byte[] byteArray, ref int offset)
@@ -185,15 +185,38 @@ namespace Reanimator
                 toWriteBytes = FileTools.StructureToByteArray(toWrite);
             }
 
-            if (offset + toWriteBytes.Length > buffer.Length)
+            WriteToBuffer(ref buffer, ref offset, toWriteBytes, toWriteBytes.Length, 0, false, 0);
+        }
+
+        public static void WriteToBuffer(ref byte[] buffer, int offset, byte[] toWriteBytes, int lengthToWrite, int srcOffset, bool insert, int insertOffset)
+        {
+            WriteToBuffer(ref buffer, ref offset, toWriteBytes, lengthToWrite, srcOffset, insert, insertOffset);
+        }
+
+        public static void WriteToBuffer(ref byte[] buffer, ref int offset, byte[] toWriteBytes, int lengthToWrite, int srcOffset, bool insert, int insertOffset)
+        {
+            byte[] insertBuffer = null;
+            if (insert)
             {
-                byte[] newBuffer = new byte[buffer.Length + 1024];
+                insertBuffer = new byte[buffer.Length - srcOffset];
+                Buffer.BlockCopy(buffer, 0, insertBuffer, 0, insertBuffer.Length);
+            }
+
+            if (offset + lengthToWrite > buffer.Length)
+            {
+                byte[] newBuffer = new byte[buffer.Length + lengthToWrite + 1024];
                 Buffer.BlockCopy(buffer, 0, newBuffer, 0, buffer.Length);
                 buffer = newBuffer;
             }
 
-            Buffer.BlockCopy(toWriteBytes, 0, buffer, offset, toWriteBytes.Length);
-            offset += toWriteBytes.Length;
+            Buffer.BlockCopy(toWriteBytes, srcOffset, buffer, offset, lengthToWrite);
+
+            if (insert && insertBuffer != null)
+            {
+                Buffer.BlockCopy(insertBuffer, 0, buffer, offset + lengthToWrite, insertBuffer.Length);
+            }
+
+            offset += lengthToWrite;
         }
     }
 }

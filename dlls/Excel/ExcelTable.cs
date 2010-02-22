@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Collections;
 using System.Diagnostics;
+using System.Data;
 
 namespace Reanimator.Excel
 {
@@ -37,6 +38,22 @@ namespace Reanimator.Excel
             uint bitmask;
         }
 
+        protected abstract class FileTokens
+        {
+            public static Int32 StartOfBlock = 0x68657863;      // 'cxeh'
+            public static Int32 TokenRCSH = 0x68736372;         // 'rcsh'
+            public static Int32 TokenTYSH = 0x68737974;         // 'tysh'
+            public static Int32 TokenMYSH = 0x6873796D;         // 'mysh'
+            public static Int32 TokenDNEH = 0x68656E64;         // 'dneh'
+        }
+
+        public abstract class ColumnTypeKeys
+        {
+            public static String IsStringOffset = "IsStringOffset";
+            public static String IsStringId = "IsStringId";
+            public static String IsRelationGenerated = "IsRelationGenerated";
+        }
+
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         protected struct ExcelHeader
         {
@@ -61,6 +78,7 @@ namespace Reanimator.Excel
             public Int16 versionMinor;
             public Int16 reserved2;                         // I think...
         }
+        protected static TableHeader defaultTableHeader;
 
         protected byte[] excelData;
         protected int offset;
@@ -132,8 +150,10 @@ namespace Reanimator.Excel
                  * {                                                                            // Each table has the same first header 16 byte chunk style.
                  *      unknown                         Int32                                   // Seen as 0x01, 0x02 or 0x03.
                  *      type                            Int32                                   // Seen as 0x30, 0x3C, 0x3E or 0x3F.
-                 *      unknown                         Int32                                   // Appears to always be 0xFFFF0000.     // These two are possibly
-                 *      unknown                         Int32                                   // Appears to always be 0xFFFF0000.     // 4x Int16
+                 *      majorVersion                    Int16                                   // Usually 0x00.
+                 *      reserved                        Int16                                   // Only seen as 0xFF.
+                 *      minorVersion                    Int16                                   // Usually 0x00.
+                 *      reserved                        Int16                                   // Only seen as 0xFF.
                  *      *****                           *****                                   // Table type dependent; see applicable table structure class file.
                  * }
                  * 
@@ -634,11 +654,126 @@ namespace Reanimator.Excel
             }
         }
 
-        public byte[] GenerateExcelFile()
+        public byte[] GenerateExcelFile(DataSet dataSet)
         {
+            return null;
+            DataTable dataTable = dataSet.Tables[this.StringId];
+            if (dataTable == null)
+            {
+                return null;
+            }
+
             byte[] buffer = new byte[1024];
             int offset = 0;
 
+
+            // main header
+            FileTools.WriteToBuffer(ref buffer, ref offset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref offset, this.excelHeader);
+
+
+            // string block
+            FileTools.WriteToBuffer(ref buffer, ref offset, FileTokens.StartOfBlock);
+            int stringsByteCount = 0;
+            int stringsByteOffset = offset;
+            byte[] stringBytes = null;
+            offset += sizeof(Int32);
+
+
+            // tables block
+            FileTools.WriteToBuffer(ref buffer, ref offset, FileTokens.StartOfBlock);
+            Int32 tableCount = dataTable.Rows.Count;
+            FileTools.WriteToBuffer(ref buffer, ref offset, tableCount);
+
+            Type tableType = this.tables[0].GetType();
+            TableHeader defaultTableHeader;
+            defaultTableHeader.unknown1 = 0x03;
+            defaultTableHeader.unknown2 = 0x3F;
+            defaultTableHeader.versionMajor = 0x00;
+            defaultTableHeader.reserved1 = -1;
+            defaultTableHeader.versionMinor = 0x00;
+            defaultTableHeader.reserved2 = -1;
+            int row = 0;
+            foreach (DataRow dr in dataTable.Rows)
+            {
+                object table = Activator.CreateInstance(tableType);
+                int col = 1;
+                foreach (FieldInfo fieldInfo in tableType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+                {
+                    if (fieldInfo.FieldType == typeof(ExcelTable.TableHeader))
+                    {
+                        if (this.tables.Count > row)
+                        {
+                            fieldInfo.SetValue(table, fieldInfo.GetValue(this.tables[row]));
+                        }
+                        else
+                        {
+                            fieldInfo.SetValue(table, defaultTableHeader);
+                        }
+                        continue;
+                    }
+
+                    DataColumn dc = dataTable.Columns[col];
+                    if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsRelationGenerated))
+                    {
+                        if ((bool)dc.ExtendedProperties[ColumnTypeKeys.IsRelationGenerated] == true)
+                        {
+                            continue;
+                        }
+                    }
+
+                    if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsStringOffset))
+                    {
+                        if ((bool)dc.ExtendedProperties[ColumnTypeKeys.IsStringOffset] == true)
+                        {
+                            if (stringBytes == null)
+                            {
+                                stringBytes = new byte[1024];
+                            }
+
+                            String s = dr[dc] as String;
+                            if (s == null)
+                            {
+                                fieldInfo.SetValue(table, -1);
+                            }
+                            else
+                            {
+                                fieldInfo.SetValue(table, stringsByteCount);
+                                FileTools.WriteToBuffer(ref stringBytes, ref stringsByteCount, FileTools.StringToASCIIByteArray(s));
+                                stringsByteCount++; // \0
+                            }
+                        }
+                    }
+                    else
+                    {
+                        fieldInfo.SetValue(table, dr[dc]);
+                    }
+                    col++;
+                }
+
+                FileTools.WriteToBuffer(ref buffer, ref offset, table);
+                row++;
+            }
+
+
+            // write strings block
+            if (stringBytes != null && stringsByteCount > 0)
+            {
+                FileTools.WriteToBuffer(ref buffer, stringsByteOffset, stringsByteCount);
+                //FileTools.WriteToBuffer(ref buffer, stringsByteOffset + sizeof(Int32), stringBytes, stringsByteCount, 0, true);
+            }
+
+
+            // primary index block
+            FileTools.WriteToBuffer(ref buffer, ref offset, FileTokens.StartOfBlock);
+            byte[] primaryIndex = new byte[dataTable.Rows.Count * sizeof(Int32)];
+            //Int32[] primaryIndex = new Int32[dataTable.Rows.Count];
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                byte[] integer = BitConverter.GetBytes((Int32)i);
+                Buffer.BlockCopy(integer, 0, primaryIndex, i*4, sizeof(Int32));
+            }
+            FileTools.WriteToBuffer(ref buffer, ref offset, primaryIndex);
 
 
             return buffer;

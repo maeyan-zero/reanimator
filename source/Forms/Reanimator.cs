@@ -39,6 +39,20 @@ namespace Reanimator
             currentVersionInfos.saveFolder = @"C:\";
 
             InitializeComponent();
+            /*
+            using (FileStream fs = new FileStream(Config.cacheFilePath, FileMode.Open, FileAccess.Read))
+            {
+                byte[] buffer = new byte[fs.Length];
+                int count = fs.Read(buffer, 0, buffer.Length);
+
+                MemoryStream ms = new MemoryStream(buffer);
+
+                BinaryFormatter bf = new BinaryFormatter();
+                DataSet ds = (DataSet)bf.Deserialize(ms);
+                fs.Close();
+
+                
+            }*/
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -84,7 +98,7 @@ namespace Reanimator
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Index Files (*.idx)|*.idx|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.hglDir + "\\Data";
+            openFileDialog.InitialDirectory = Config.HglDir + "\\Data";
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("idx"))
             {
@@ -108,7 +122,7 @@ namespace Reanimator
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Cooked Files (*.cooked)|*.cooked|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.dataDirsRoot;
+            openFileDialog.InitialDirectory = Config.DataDirsRoot;
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
             {
@@ -120,7 +134,7 @@ namespace Reanimator
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Strings Files (*.xls.uni.cooked)|*.xls.uni.cooked|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.dataDirsRoot;
+            openFileDialog.InitialDirectory = Config.DataDirsRoot;
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
             {
@@ -378,14 +392,14 @@ namespace Reanimator
 
         private void Reanimator_ResizeEnd(object sender, EventArgs e)
         {
-            Config.clientHeight = this.Height;
-            Config.clientWidth = this.Width;
+            Config.ClientHeight = this.Height;
+            Config.ClientWidth = this.Width;
         }
 
         private void Reanimator_Load(object sender, EventArgs e)
         {
-            this.Height = Config.clientHeight;
-            this.Width = Config.clientWidth;
+            this.Height = Config.ClientHeight;
+            this.Width = Config.ClientWidth;
             this.Show();
             this.Refresh();
 
@@ -422,7 +436,7 @@ namespace Reanimator
         {
             FileStream excelFile;
 
-            string excelFilePath = Config.dataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked";
+            string excelFilePath = Config.DataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked";
             try
             {
                 excelFile = new FileStream(excelFilePath, FileMode.Open);
@@ -436,7 +450,7 @@ namespace Reanimator
 
             progress.ConfigBar(0, excelTables.Count, 1);
             progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
-            excelTables.LoadTables(Config.dataDirsRoot + "\\data_common\\excel\\", progress);
+            excelTables.LoadTables(Config.DataDirsRoot + "\\data_common\\excel\\", progress);
 
             Excel.StringsFiles stringsFiles = (Excel.StringsFiles)excelTables.GetTable("STRING_FILES");
             if (stringsFiles != null)
@@ -468,13 +482,12 @@ namespace Reanimator
                 progress.SetCurrentItemText("Caching: " + excelTable.StringId);
                 ProgressForm tableProgress = new ProgressForm(CacheExcelTable, excelTable);
                 tableProgress.StartPosition = FormStartPosition.CenterScreen;
-
                 tableProgress.ShowDialog();
             }
 
             progress.SetLoadingText("Caching strings tables (" + stringsTables.Count + ")...");
             progress.ConfigBar(0, stringsTables.Count, 1);
-            stringsTables.AddToDataSet(progress, excelDataSet.GetDataSet());
+            stringsTables.AddToDataSet(progress, excelDataSet.XlsDataSet);
 
             this.GenerateRelations(progress, loadedTables);
 
@@ -558,7 +571,7 @@ namespace Reanimator
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Exectuable Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.hglDir;
+            openFileDialog.InitialDirectory = Config.HglDir;
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("exe"))
             {
@@ -585,9 +598,9 @@ namespace Reanimator
 
         private void ShowCacheInfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (File.Exists(Config.cacheFilePath))
+            if (File.Exists(Config.CacheFilePath))
             {
-                FileInfo fileInfo = new FileInfo(Config.cacheFilePath);
+                FileInfo fileInfo = new FileInfo(Config.CacheFilePath);
                 MessageBox.Show("Your cache file is using " + fileInfo.Length + " bytes", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else

@@ -195,11 +195,11 @@ namespace Reanimator
             public string DirectoryString { get; set; }
 
             [Browsable(false)]
-            public int Filename
+            public int FileName
             {
                 get { return FileStruct.filenameArrayPosition; }
             }
-            public string FilenameString { get; set; }
+            public string FileNameString { get; set; }
         }
 
         public Index(FileStream file)
@@ -257,7 +257,7 @@ namespace Reanimator
                 fileIndex.FileStruct = (FileIndex.FileIndexStruct)FileTools.ByteArrayToStructure(buffer, typeof(FileIndex.FileIndexStruct),
                                                                                                         fileDataOffset + i * fileStructLength);
                 fileIndex.DirectoryString = stringTable[fileIndex.Directory];
-                fileIndex.FilenameString = stringTable[fileIndex.Filename];
+                fileIndex.FileNameString = stringTable[fileIndex.FileName];
 
                 fileTable[i] = fileIndex;
 
@@ -414,7 +414,7 @@ namespace Reanimator
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.CompressedSize);
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Directory);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Filename);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileName);
                 FileTools.WriteToBuffer(ref buffer, ref offset, (UInt32)1); // game clears .idx and .dat if null
                 offset += 12; // unknown  -  not required
                 offset += 12; // null
