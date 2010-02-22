@@ -592,11 +592,11 @@ namespace Reanimator.Forms
         {
             try
             {
-                System.Diagnostics.Process.Start(Config.gameClientPath, "-singleplayer -load\"" + savedPath + "\"");
+                System.Diagnostics.Process.Start(Config.GameClientPath, "-singleplayer -load\"" + savedPath + "\"");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to start game at:\n" + Config.gameClientPath + "\n\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to start game at:\n" + Config.GameClientPath + "\n\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

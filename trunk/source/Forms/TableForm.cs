@@ -238,8 +238,8 @@ namespace Reanimator
                             Directory.CreateDirectory(extractToPath + keepPathString);
                         }
 
-                        progressBar.SetCurrentItemText(file.FilenameString);
-                        FileStream fileOut = new FileStream(extractToPath + keepPathString + file.FilenameString, FileMode.Create);
+                        progressBar.SetCurrentItemText(file.FileNameString);
+                        FileStream fileOut = new FileStream(extractToPath + keepPathString + file.FileNameString, FileMode.Create);
                         fileOut.Write(buffer, 0, buffer.Length);
                         fileOut.Close();
                         filesSaved++;
@@ -247,7 +247,7 @@ namespace Reanimator
                     }
                     catch (Exception e)
                     {
-                        DialogResult failedDr = MessageBox("Failed to extract file from dat!\nFile: " + file.FilenameString + "\n\n" + e.ToString(), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+                        DialogResult failedDr = MessageBox("Failed to extract file from dat!\nFile: " + file.FileNameString + "\n\n" + e.ToString(), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
                         if (failedDr == DialogResult.Ignore)
                         {
                             break;

@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Reanimator
 {
-    class Export
+    static class Export
     {
         static public string CSV(DataGridView datagridview, bool[] selected, string delimiter)
         {

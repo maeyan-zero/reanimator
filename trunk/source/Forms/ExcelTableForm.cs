@@ -42,8 +42,8 @@ namespace Reanimator.Forms
             dataGridView.DoubleBuffered(true);
             dataGridView.EnableHeadersVisualStyles = false;
             dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView.DataSource = xlsDataSet.GetDataSet();
-            listBox1.DataSource = xlsDataSet.GetDataSet();
+            dataGridView.DataSource = xlsDataSet.XlsDataSet;
+            listBox1.DataSource = xlsDataSet.XlsDataSet;
 
             ProgressForm progress = new ProgressForm(LoadTables, excelTable);
             progress.ShowDialog(this);
@@ -55,14 +55,14 @@ namespace Reanimator.Forms
             this.textBox1.Text = "0x" + excelTable.StructureId.ToString("X");
 
             excelDataSet.LoadTable(progress, var);
-
+            /*
             if (excelTable.Strings.Count > 0)
             {
                 String stringsTableName = excelTable.StringId + "_STRINGS";
                 listBox1.DisplayMember = stringsTableName + ".string";
                 listBox1.ValueMember = stringsTableName + ".offset";
             }
-            else
+            else*/
             {
                 // should we hid/remove list box when no strings?
                 // TODO
@@ -163,7 +163,7 @@ namespace Reanimator.Forms
 
         public void SaveButton()
         {
-            byte[] excelFileData = excelTable.GenerateExcelFile();
+            byte[] excelFileData = excelTable.GenerateExcelFile((DataSet)this.dataGridView.DataSource);
         }
     }
 

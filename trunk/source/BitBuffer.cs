@@ -8,10 +8,10 @@ namespace Reanimator
     public class BitBuffer
     {
         byte[] data;
-        int dataByteSize = 0;
-        int dataBitSize = 0;
+        int dataByteSize;
+        int dataBitSize;
 
-        int dataByteOffset = 0;
+        int dataByteOffset;
         public int DataByteOffset
         {
             set
@@ -25,7 +25,7 @@ namespace Reanimator
             get { return dataByteOffset; }
         }
 
-        int dataBitOffset = 0;
+        int dataBitOffset;
         public int DataBitOffset
         {
             set
