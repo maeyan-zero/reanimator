@@ -13,15 +13,19 @@ namespace Reanimator.Excel
         {
             TableHeader header;
 
-            public Int32 undefined;
+            Int32 undefined;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string name;
 
             public Int32 code;
-            public Int32 nameString;//stridx
-            public Int32 descripFormatString;//stridx
-            public Int32 detailsString;//stridx
-            public Int32 rewardTypeString;//stridx
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Strings")]
+            public Int32 nameString;
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Strings")]
+            public Int32 descripFormatString;
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Strings")]
+            public Int32 detailsString;
+            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Strings")]
+            public Int32 rewardTypeString;
             public Int32 revealCondition;
             public Int32 revealValue;
             public Int32 revealParentAchievement;//idx

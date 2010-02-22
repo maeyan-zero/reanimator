@@ -499,6 +499,7 @@ namespace Reanimator
 
             progress.SetLoadingText("Generating table relations...");
             progress.ConfigBar(0, loadedTables.Count, 1);
+            excelDataSet.ClearRelations();
             foreach (ExcelTable excelTable in loadedTables)
             {
                 progress.SetCurrentItemText(excelTable.StringId);

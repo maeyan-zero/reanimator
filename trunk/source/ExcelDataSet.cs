@@ -45,13 +45,17 @@ namespace Reanimator
                 {
                     using (FileStream fs = new FileStream(Config.cacheFilePath, FileMode.Open, FileAccess.Read))
                     {
+
                         BinaryFormatter bf = new BinaryFormatter();
                         xlsDataSet = bf.Deserialize(fs) as DataSet;
                     }
 
                     return;
                 }
-                catch (Exception) { }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Failed to load table cache!\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             Directory.CreateDirectory(Config.cacheFilePath.Substring(0, Config.cacheFilePath.LastIndexOf(@"\") + 1));
@@ -296,9 +300,13 @@ namespace Reanimator
             }
         }
 
-        public void GenerateRelations(ExcelTable excelTable)
+        public void ClearRelations()
         {
             xlsDataSet.Relations.Clear();
+        }
+
+        public void GenerateRelations(ExcelTable excelTable)
+        {
             String isRelExtKey = "IsRelationGenerated";
             object[] array = (object[])excelTable.GetTableArray();
             Type type = array[0].GetType();
@@ -309,7 +317,7 @@ namespace Reanimator
             DataTable mainDataTable = xlsDataSet.Tables[mainTableName];
             DataTable stringsDataTable = xlsDataSet.Tables[stringsTableName];
 
-            // remove all extra generated columns first
+            // remove all extra generated columns on this table
             for (col = 0; col < mainDataTable.Columns.Count; col++)
             {
                 DataColumn dc = mainDataTable.Columns[col];
