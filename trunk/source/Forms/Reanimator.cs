@@ -24,6 +24,7 @@ namespace Reanimator
         private TableDataSet tableDataSet;
         private StringsTables stringsTables;
         private UpdateCheckerParams currentVersionInfos;
+        private UpdateForm updateForm;
 
         private int childFormNumber = 0;
 
@@ -675,8 +676,14 @@ namespace Reanimator
 
         private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            UpdateForm form = new UpdateForm(currentVersionInfos);
-            form.Show();
+            if (updateForm == null)
+            {
+                updateForm = new UpdateForm(currentVersionInfos);
+                updateForm.StartPosition = FormStartPosition.CenterScreen;
+                updateForm.MdiParent = this;
+            }
+
+            updateForm.Show();
 
             //foreach (NewMod mod in mods)
             //{
