@@ -10,7 +10,7 @@ using System.Data;
 
 namespace Reanimator
 {
-    class StringsTables
+    public class StringsTables
     {
         List<StringsFile> stringsFiles;
 
@@ -59,47 +59,6 @@ namespace Reanimator
                     continue;
                 }
             }
-
-            return true;
-        }
-
-        public bool AddToDataSet(ProgressForm progress, Object arg)
-        {
-            DataSet ds = arg as DataSet;
-            if (ds == null)
-            {
-                return false;
-            }
-
-            foreach (StringsFile stringsFile in stringsFiles)
-            {
-                progress.SetCurrentItemText(stringsFile.Name);
-
-                if (ds.Tables.Contains(stringsFile.Name))
-                {
-                    continue;
-                }
-
-                DataTable dt = ds.Tables.Add(stringsFile.Name);
-                foreach (StringsFile.StringBlock stringsBlock in stringsFile.StringsTable)
-                {
-                    if (dt.Columns.Count == 0)
-                    {
-                        dt.Columns.Add("ReferenceId", stringsBlock.ReferenceId.GetType());
-                        dt.Columns.Add("Unknown1", stringsBlock.Unknown1.GetType());
-                        dt.Columns.Add("StringId", stringsBlock.StringId.GetType());
-                        dt.Columns.Add("Unknown2", stringsBlock.Unknown2.GetType());
-                        dt.Columns.Add("String", stringsBlock.String.GetType());
-                        dt.Columns.Add("Attribute1", stringsBlock.Attribute1.GetType());
-                        dt.Columns.Add("Attribute2", stringsBlock.Attribute2.GetType());
-                        dt.Columns.Add("Attribute3", stringsBlock.Attribute3.GetType());
-                    }
-
-                    dt.Rows.Add(stringsBlock.ReferenceId, stringsBlock.Unknown1, stringsBlock.StringId, stringsBlock.Unknown2,
-                        stringsBlock.String, stringsBlock.Attribute1, stringsBlock.Attribute2, stringsBlock.Attribute3);
-                }
-            }
-
 
             return true;
         }

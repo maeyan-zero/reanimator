@@ -14,7 +14,7 @@ using System.Collections;
 
 namespace Reanimator.Forms
 {
-    public partial class ExcelTableForm : ThreadedFormBase, IMdiChildBase
+    public partial class ExcelTableForm : Form, IMdiChildBase
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class TableIndexDataSource
@@ -26,53 +26,60 @@ namespace Reanimator.Forms
         };
 
         ExcelTable excelTable;
-        ExcelDataSet excelDataSet;
+        StringsFile stringsFile;
+        TableDataSet tableDataSet;
 
         public String GetExcelTableName()
         {
             return excelTable.StringId;
         }
 
-        public ExcelTableForm(ExcelTable table, ExcelDataSet xlsDataSet)
+        public ExcelTableForm(Object table, TableDataSet xlsDataSet)
+        {
+            excelTable = table as ExcelTable;
+            stringsFile = table as StringsFile;
+            tableDataSet = xlsDataSet;
+
+            Init();
+
+            ProgressForm progress = new ProgressForm(LoadTable, table);
+            progress.ShowDialog(this);
+        }
+
+        private void Init()
         {
             InitializeComponent();
-            excelTable = table;
-            excelDataSet = xlsDataSet;
 
             dataGridView.DoubleBuffered(true);
             dataGridView.EnableHeadersVisualStyles = false;
             dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView.DataSource = xlsDataSet.XlsDataSet;
-            listBox1.DataSource = xlsDataSet.XlsDataSet;
-
-            ProgressForm progress = new ProgressForm(LoadTables, excelTable);
-            progress.ShowDialog(this);
+            dataGridView.DataSource = tableDataSet.XlsDataSet;
         }
 
-        private void LoadTables(ProgressForm progress, Object var)
+        private void LoadTable(ProgressForm progress, Object var)
         {
-            // file id
-            this.textBox1.Text = "0x" + excelTable.StructureId.ToString("X");
+            // this merely checks the table is already in the dataset
+            // if not - then it will load it in
+            tableDataSet.LoadTable(progress, var);
 
-            excelDataSet.LoadTable(progress, var);
-            /*
-            if (excelTable.Strings.Count > 0)
+            if (stringsFile != null)
             {
-                String stringsTableName = excelTable.StringId + "_STRINGS";
-                listBox1.DisplayMember = stringsTableName + ".string";
-                listBox1.ValueMember = stringsTableName + ".offset";
-            }
-            else*/
-            {
-                // should we hid/remove list box when no strings?
-                // TODO
-                listBox1.DataSource = null;
+                dataGridView.DataMember = stringsFile.Name;
+                return;
             }
 
-            dataGridView.DataMember = excelTable.StringId;
+            if (excelTable != null)
+            {
+                dataGridView.DataMember = excelTable.StringId;
+            }
+            else
+            {
+                return;
+            }
 
             // generate the table index data source
             // TODO is there a better way?
+            // TODO remove me once unknowns no longer unknowns
             List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
             int[][] intArrays = { excelTable.TableIndicies, excelTable.Unknowns1, excelTable.Unknowns2, excelTable.Unknowns3, excelTable.Unknowns4 };
             for (int i = 0; i < intArrays.Length; i++)
