@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Reanimator
 {
     public class BitBuffer
     {
         byte[] data;
-        int dataByteSize;
-        int dataBitSize;
+        readonly int dataByteSize;
+        readonly int dataBitSize;
 
         int dataByteOffset;
         public int DataByteOffset

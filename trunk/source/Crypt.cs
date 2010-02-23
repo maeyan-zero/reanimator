@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Reanimator
 {
@@ -9,13 +6,13 @@ namespace Reanimator
     {
         class CryptState
         {
-            public const int key1 = 0x10DCD;
-            public const int key2 = 0xF4559D5;
-            public const int key3 = 666;
-            public const int blockSize = 32;
+            public const int Key1 = 0x10DCD;
+            public const int Key2 = 0xF4559D5;
+            public const int Key3 = 666;
+            public const int BlockSize = 32;
 
-            public Byte[] Data { get; set; }
-            public Byte[] Table { get; set; }
+            public Byte[] Data { get; private set; }
+            public Byte[] Table { get; private set; }
 
             public UInt32 Offset { get; set; }
             public UInt32 BlockIndex { get; set; }
@@ -25,21 +22,21 @@ namespace Reanimator
             {
                 Data = indexBuffer;
                 BlockIndex = 0xFFFFFFFF;
-                Table = new Byte[CryptState.blockSize * sizeof(Int32)];
+                Table = new Byte[CryptState.BlockSize * sizeof(Int32)];
             }
         }
 
         static byte GetCryptByte(CryptState cryptState)
         {
-            UInt32 value = cryptState.Offset / (CryptState.blockSize * sizeof(Int32)) * (CryptState.blockSize * sizeof(Int32));
+            UInt32 value = cryptState.Offset / (CryptState.BlockSize * sizeof(Int32)) * (CryptState.BlockSize * sizeof(Int32));
 
             if (cryptState.BlockIndex != value)
             {
                 cryptState.BlockIndex = value;
-                value += CryptState.key3;
-                for (int i = 0; i < CryptState.blockSize; i++)
+                value += CryptState.Key3;
+                for (int i = 0; i < CryptState.BlockSize; i++)
                 {
-                    value = (value * CryptState.key1) + CryptState.key2;
+                    value = (value * CryptState.Key1) + CryptState.Key2;
                     byte[] bytes = BitConverter.GetBytes(value);
                     Buffer.BlockCopy(bytes, 0, cryptState.Table, i * sizeof(UInt32), bytes.Length);
                 }

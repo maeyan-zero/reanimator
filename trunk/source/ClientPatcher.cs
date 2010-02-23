@@ -1,26 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Reanimator;
-
-namespace Reanimator
+﻿namespace Reanimator
 {
     class ClientPatcher
     {
-        byte[] buffer;
-        public byte[] Buffer
-        {
-            get
-            {
-                return buffer;
-            }
-        }
+        public byte[] Buffer { get; private set; }
 
         public ClientPatcher(byte[] byteArray)
         {
-            buffer = byteArray;
+            Buffer = byteArray;
         }
 
         public bool ApplyHardcorePatch()
@@ -43,7 +29,7 @@ namespace Reanimator
                                     0x75, 0x33,
                                     0xE8, 0x90, 0x90, 0x90, 0x90,
                                     0x48, 0x85, 0xC0 };
-            int firstCheckIndex = FileTools.ByteArrayContains(buffer, firstCheck);
+            int firstCheckIndex = FileTools.ByteArrayContains(Buffer, firstCheck);
             if (firstCheckIndex == -1)
             {
                 return false;
@@ -80,15 +66,15 @@ namespace Reanimator
                                               0xE8, 0x90, 0x90, 0x90, 0x90,
                                               0x85, 0xC0,
                                               0x75, 0x44 };
-            int secondAndThirdChecksIndex = FileTools.ByteArrayContains(buffer, secondAndThirdChecks);
+            int secondAndThirdChecksIndex = FileTools.ByteArrayContains(Buffer, secondAndThirdChecks);
             if (secondAndThirdChecksIndex == -1)
             {
                 return false;
             }
 
-            buffer[firstCheckIndex + 12] -= 0x07;
-            buffer[secondAndThirdChecksIndex + 22] += 0x01;
-            buffer[secondAndThirdChecksIndex + 36] -= 0x01;
+            Buffer[firstCheckIndex + 12] -= 0x07;
+            Buffer[secondAndThirdChecksIndex + 22] += 0x01;
+            Buffer[secondAndThirdChecksIndex + 36] -= 0x01;
 
             return true;
         }

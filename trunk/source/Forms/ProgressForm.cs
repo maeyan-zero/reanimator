@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 
@@ -21,45 +15,43 @@ namespace Reanimator.Forms
 
         public delegate void ParameterizedProgressThread(ProgressForm progressBar, Object param);
 
-        ParameterizedProgressThread threadFunc;
-        Object threadParam;
-        Form owner;
+        readonly ParameterizedProgressThread _threadFunc;
+        readonly Object _threadParam;
+        Form _owner;
 
         public ProgressForm(ParameterizedProgressThread func, Object param) : this()
         {
-            threadFunc = func;
-            threadParam = param;
+            _threadFunc = func;
+            _threadParam = param;
 
-            this.Disposed += new EventHandler(ProgressForm_Disposed);
+            this.Disposed += ProgressForm_Disposed;
         }
 
         private void ProgressForm_Disposed(Object sender, EventArgs e)
         {
-            if (this.owner != null)
-            {
-                this.owner.Hide();
-                this.owner.Show();
-            }
+            if (this._owner == null) return;
+
+            this._owner.Hide();
+            this._owner.Show();
         }
 
         private void Progress_Shown(Object sender, EventArgs e)
         {
-            if (threadFunc != null)
-            {
-                Form f = sender as Form;
-                if (f != null)
-                {
-                    this.owner = f.Owner;
-                }
+            if (_threadFunc == null) return;
 
-                Thread t = new Thread(ProgressThread);
-                t.Start(threadParam);
+            Form f = sender as Form;
+            if (f != null)
+            {
+                this._owner = f.Owner;
             }
+
+            Thread t = new Thread(ProgressThread);
+            t.Start(_threadParam);
         }
 
         private void ProgressThread(Object param)
         {
-            threadFunc.Invoke(this, param);
+            _threadFunc.Invoke(this, param);
             this.Dispose();
         }
 
@@ -68,7 +60,7 @@ namespace Reanimator.Forms
         {
             if (this.InvokeRequired)
             {
-                ConfigBarCallback d = new ConfigBarCallback(ConfigBar);
+                ConfigBarCallback d = ConfigBar;
                 this.Invoke(d, new Object[] { minimum, maximum, step });
             }
             else
@@ -87,7 +79,7 @@ namespace Reanimator.Forms
         {
             if (this.InvokeRequired)
             {
-                SetLoadingTextCallback d = new SetLoadingTextCallback(SetLoadingText);
+                SetLoadingTextCallback d = SetLoadingText;
                 this.Invoke(d, new Object[] { loadingText });
             }
             else
@@ -101,7 +93,7 @@ namespace Reanimator.Forms
         {
             if (this.InvokeRequired)
             {
-                SetCurrentItemTextCallback d = new SetCurrentItemTextCallback(SetCurrentItemText);
+                SetCurrentItemTextCallback d = SetCurrentItemText;
                 this.Invoke(d, new Object[] { currentItem });
             }
             else
@@ -115,7 +107,7 @@ namespace Reanimator.Forms
         {
             if (this.InvokeRequired)
             {
-                StepProgressCallback d = new StepProgressCallback(StepProgress);
+                StepProgressCallback d = StepProgress;
                 this.Invoke(d);
             }
             else
@@ -132,7 +124,7 @@ namespace Reanimator.Forms
         {
             if (this.InvokeRequired)
             {
-                SetStyleCallback d = new SetStyleCallback(SetStyle);
+                SetStyleCallback d = SetStyle;
                 this.Invoke(d, new Object[] { progressBarStyle });
             }
             else
