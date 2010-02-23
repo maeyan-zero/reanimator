@@ -629,7 +629,7 @@ namespace Reanimator
             DialogResult dr = DialogResult.No;
 
             bool partialGeneration = false;
-            if (!File.Exists(@"cache\dataSet.dat") || tableDataSet.LoadedTableCount == 0)
+            if (!File.Exists(Config.CacheFilePath) || tableDataSet.LoadedTableCount == 0)
             {
                 dr = MessageBox.Show("Reanimator has detected no cached table data.\nDo you wish to generate it now? (this may take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }

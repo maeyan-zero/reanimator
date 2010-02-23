@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Collections;
-using System.Diagnostics;
 using System.Data;
 
 namespace Reanimator.Excel
 {
     public class BadHeaderFlag : Exception
     {
-        public BadHeaderFlag() : base() { }
         public BadHeaderFlag(string message) : base(message) { }
     }
 
     public abstract class ExcelTable : IComparable
     {
         [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
-        public class ExcelOutputAttribute : System.Attribute
+        public class ExcelOutputAttribute : Attribute
         {
             public bool IsStringOffset { get; set; }
 
@@ -33,103 +29,99 @@ namespace Reanimator.Excel
         }
 
         [AttributeUsage(AttributeTargets.Field)]
-        public class ExcelBitmaskAttribute : System.Attribute
+        public class ExcelBitmaskAttribute : Attribute
         {
             uint bitmask;
         }
 
-        protected abstract class FileTokens
+        private abstract class FileTokens
         {
-            public static Int32 StartOfBlock = 0x68657863;      // 'cxeh'
-            public static Int32 TokenRCSH = 0x68736372;         // 'rcsh'
-            public static Int32 TokenTYSH = 0x68737974;         // 'tysh'
-            public static Int32 TokenMYSH = 0x6873796D;         // 'mysh'
-            public static Int32 TokenDNEH = 0x68656E64;         // 'dneh'
+            public const Int32 StartOfBlock = 0x68657863;      // 'cxeh'
+            public static Int32 TokenRcsh = 0x68736372;         // 'rcsh'
+            public static Int32 TokenTysh = 0x68737974;         // 'tysh'
+            public static Int32 TokenMysh = 0x6873796D;         // 'mysh'
+            public static Int32 TokenDneh = 0x68656E64;         // 'dneh'
         }
 
         public abstract class ColumnTypeKeys
         {
-            public static String IsStringOffset = "IsStringOffset";
-            public static String IsStringId = "IsStringId";
-            public static String IsRelationGenerated = "IsRelationGenerated";
+            public const String IsStringOffset = "IsStringOffset";
+            public const String IsStringId = "IsStringId";
+            public const String IsRelationGenerated = "IsRelationGenerated";
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         protected struct ExcelHeader
         {
-            public Int32 structureId;                       // This is the id used to determine what structure to use to read the table block.
-            public Int32 unknown32_1;                       // This is how the game reads this in...
-            public Int32 unknown32_2;                       // What they do I don't know, lol.
-            public Int16 unknown16_1;
-            public Int16 unknown16_2;
-            public Int16 unknown16_3;
-            public Int16 unknown16_4;
-            public Int16 unknown16_5;
-            public Int16 unknown16_6;
+            public Int32 StructureId;                       // This is the id used to determine what structure to use to read the table block.
+            public Int32 Unknown321;                       // This is how the game reads this in...
+            public Int32 Unknown322;                       // What they do I don't know, lol.
+            public Int16 Unknown161;
+            public Int16 Unknown162;
+            public Int16 Unknown163;
+            public Int16 Unknown164;
+            public Int16 Unknown165;
+            public Int16 Unknown166;
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         protected struct TableHeader
         {
-            public Int32 unknown1;
-            public Int32 unknown2;
-            public Int16 versionMajor;
-            public Int16 reserved1;                         // I think...
-            public Int16 versionMinor;
-            public Int16 reserved2;                         // I think...
+            public Int32 Unknown1;
+            public Int32 Unknown2;
+            public Int16 VersionMajor;
+            public Int16 Reserved1;                         // I think...
+            public Int16 VersionMinor;
+            public Int16 Reserved2;                         // I think...
         }
-        protected static TableHeader defaultTableHeader;
+        protected static TableHeader DefaultTableHeader;
 
-        protected byte[] excelData;
+        private readonly byte[] _excelData;
         protected int offset;
-        protected ExcelHeader excelHeader;
+        private ExcelHeader _excelHeader;
         public int StructureId
         {
-            get { return excelHeader.structureId; }
+            get { return _excelHeader.StructureId; }
         }
 
         protected byte[] stringsBytes;
         public Hashtable Strings { get; private set; }
 
-        int tableCount;
-        protected List<object> tables;
-        protected DataGridView dataGridView;
+        protected readonly List<object> tables;
 
-        protected int[] tableIndicies;
-        protected List<byte[]> extraIndexData;
+        private int[] tableIndicies;
+        private List<byte[]> extraIndexData;
         public int[] TableIndicies { get { return tableIndicies; } }
 
-        protected List<String> secondaryStrings;
+        public List<String> secondaryStrings;
 
-        protected int[][] unknownIndicies;
+        private int[][] unknownIndicies;
         public int[] Unknowns1 { get { return unknownIndicies[0]; } }
         public int[] Unknowns2 { get { return unknownIndicies[1]; } }
         public int[] Unknowns3 { get { return unknownIndicies[2]; } }
         public int[] Unknowns4 { get { return unknownIndicies[3]; } }
 
-        protected int rcshValue;
-        protected int tyshValue;
+        private readonly Int32 _rcshValue;
+        private readonly Int32 _tyshValue;
         // mysh
-        protected int dnehValue;
+        private readonly Int32 _dnehValue;
 
-        public byte[] DataBlock { get; set; }
-        public byte[] FinalBytes { get; set; }
+        private byte[] DataBlock { get; set; }
+        private byte[] FinalBytes { get; set; }
 
-        public ExcelTable(byte[] data)
+        protected ExcelTable(byte[] excelData)
         {
-            if (data == null)
+            if (excelData == null)
             {
-                isNull = true;
+                IsNull = true;
                 return;
             }
 
-            try
-            {
-                /* Excel Table Structure Layout
+            /* Excel Table Structure Layout
                  * 
                  ***** Main Header ***** (28) bytes
                  * token                                Int32                                   // Must be 0x68657863 ('cxeh').
-                 * structureId                          Int32                                   // This is the id used to determine what structure to use to read the table block.
+                 * StructureId                          Int32                                   // This is the id used to determine what structure to use to read the table block.
                  * unknown                              Int32                                   // This is how the game reads this in...
                  * unknown                              Int32                                   // What they do I don't know, lol.
                  * unknown                              Int16
@@ -234,7 +226,7 @@ namespace Reanimator.Excel
                  * token                                Int32                                   // Must be 0x68657863 ('cxeh').
                  * byteCount                            Int32                                   // Bytes of following block.
                  * dataBlock                            byteCount                               // An int[] - refered to in the tables
-                 *                                                                              // If structureId == 0x1F9DDC98, then this block is read in the
+                 *                                                                              // If StructureId == 0x1F9DDC98, then this block is read in the
                  *                                                                              // same style as the second data block, with the second data
                  *                                                                              // block ommited. (unittypes.txt.cooked)
                  ***** Data Block 2 *****
@@ -254,89 +246,89 @@ namespace Reanimator.Excel
                  */
 
 
-                excelData = data;
-                tables = new List<Object>();
-                Strings = new Hashtable();
-                secondaryStrings = new List<String>();
-                unknownIndicies = new int[4][];
-                offset = 0;
+            _excelData = excelData;
+            tables = new List<Object>();
+            Strings = new Hashtable();
+            secondaryStrings = new List<String>();
+            unknownIndicies = new int[4][];
+            offset = 0;
 
 
-                // main header
-                int token = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(token);
+            // main header
+            int token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            CheckFlag(token);
 
-                excelHeader = (ExcelHeader)FileTools.ByteArrayToStructure(data, typeof(ExcelHeader), offset);
-                offset += Marshal.SizeOf(typeof(ExcelHeader));
+            _excelHeader = (ExcelHeader)FileTools.ByteArrayToStructure(excelData, typeof(ExcelHeader), offset);
+            offset += Marshal.SizeOf(typeof(ExcelHeader));
 
 
-                // strings block
-                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(token);
+            // strings block
+            token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            CheckFlag(token);
 
-                int stringsBytesCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                if (stringsBytesCount != 0)
+            int stringsBytesCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            if (stringsBytesCount != 0)
+            {
+                this.stringsBytes = new byte[stringsBytesCount];
+                Buffer.BlockCopy(_excelData, offset, stringsBytes, 0, stringsBytesCount);
+
+                // put into a hash table for easier use later, with the stringsBytes[offset] -> offset as the key
+                // sometimes C# makes things hard  -  C++ char* ftw. x.x
+                for (int i = offset; i < offset + stringsBytesCount; i++)
                 {
-                    this.stringsBytes = new byte[stringsBytesCount];
-                    Buffer.BlockCopy(excelData, offset, stringsBytes, 0, stringsBytesCount);
+                    String s = FileTools.ByteArrayToStringAnsi(_excelData, i);
+                    Strings.Add(i - offset, s);
 
-                    // put into a hash table for easier use later, with the stringsBytes[offset] -> offset as the key
-                    // sometimes C# makes things hard  -  C++ char* ftw. x.x
-                    for (int i = offset; i < offset + stringsBytesCount; i++)
-                    {
-                        String s = FileTools.ByteArrayToStringAnsi(excelData, i);
-                        Strings.Add(i - offset, s);
+                    i += s.Length;
+                }
 
-                        i += s.Length;
-                    }
+                offset += stringsBytesCount;
+            }
 
-                    offset += stringsBytesCount;
+
+            // tables block
+            token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            CheckFlag(token);
+
+            Count = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            ParseTables(excelData);
+
+
+            // index block
+            token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            CheckFlag(token);
+
+            Hashtable hashTableUnknown1 = new Hashtable();
+            Hashtable hashTableUnknown2 = new Hashtable();
+
+            if ((uint)_excelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
+            {
+                tableIndicies = new int[Count];
+                extraIndexData = new List<byte[]>();
+
+                for (int i = 0; i < Count; i++)
+                {
+                    tableIndicies[i] = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                    int size = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+
+                    byte[] extra = new byte[size];
+                    Buffer.BlockCopy(excelData, offset, extra, 0, size);
+                    offset += size;
+                    extraIndexData.Add(extra);
+                }
+            }
+            else
+            {
+                tableIndicies = FileTools.ByteArrayToInt32Array(excelData, offset, Count);
+                offset += Count * sizeof(Int32);
+
+                if (Count == 0)
+                {
+                    offset += sizeof(Int32);
                 }
 
 
-                // tables block
-                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(token);
-
-                this.tableCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                ParseTables(data);
-
-
-                // index block
-                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                CheckFlag(token);
-
-                Hashtable hashTableUnknown1 = new Hashtable();
-                Hashtable hashTableUnknown2 = new Hashtable();
-
-                if ((uint)excelHeader.structureId == 0x887988C4) // items, missiles, monsters, objects, players
-                {
-                    tableIndicies = new int[Count];
-                    extraIndexData = new List<byte[]>();
-
-                    for (int i = 0; i < Count; i++)
-                    {
-                        tableIndicies[i] = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                        int size = FileTools.ByteArrayTo<Int32>(data, ref offset);
-
-                        byte[] extra = new byte[size];
-                        Buffer.BlockCopy(data, offset, extra, 0, size);
-                        offset += size;
-                        extraIndexData.Add(extra);
-                    }
-                }
-                else
-                {
-                    tableIndicies = FileTools.ByteArrayToInt32Array(data, offset, Count);
-                    offset += Count * sizeof(Int32);
-
-                    if (Count == 0)
-                    {
-                        offset += sizeof(Int32);
-                    }
-
-
-                    /*
+                /*
                     foreach (Object table in tables)
                     {
                         Type type = table.GetType();
@@ -347,19 +339,19 @@ namespace Reanimator.Excel
                             {
                                 TableHeader tableHeader = (TableHeader)fieldInfo.GetValue(table);
 
-                                if (!hashTableUnknown1.ContainsKey(tableHeader.unknown1))
+                                if (!hashTableUnknown1.ContainsKey(tableHeader.Unknown1))
                                 {
-                                    hashTableUnknown1.Add(tableHeader.unknown1, 0);
+                                    hashTableUnknown1.Add(tableHeader.Unknown1, 0);
                                 }
-                                if (!hashTableUnknown2.ContainsKey(tableHeader.unknown2))
+                                if (!hashTableUnknown2.ContainsKey(tableHeader.Unknown2))
                                 {
-                                    hashTableUnknown2.Add(tableHeader.unknown2, 0);
+                                    hashTableUnknown2.Add(tableHeader.Unknown2, 0);
                                 }
 
-                                int count = (int)hashTableUnknown1[tableHeader.unknown1];
-                                hashTableUnknown1[tableHeader.unknown1] = count + 1;
-                                count = (int)hashTableUnknown2[tableHeader.unknown2];
-                                hashTableUnknown2[tableHeader.unknown2] = count + 1;
+                                int count = (int)hashTableUnknown1[tableHeader.Unknown1];
+                                hashTableUnknown1[tableHeader.Unknown1] = count + 1;
+                                count = (int)hashTableUnknown2[tableHeader.Unknown2];
+                                hashTableUnknown2[tableHeader.Unknown2] = count + 1;
                             }
                         }
                     }
@@ -376,156 +368,143 @@ namespace Reanimator.Excel
                     }
                     Debug.Write("\n");
                      * */
-                }
+            }
 
 
-                // secondary string block
-                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                if (!CheckFlag(token, 0x68657863)) // 'cxeh'
+            // secondary string block
+            token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            if (!CheckFlag(token, 0x68657863)) // 'cxeh'
+            {
+                int stringCount = token;
+                for (int i = 0; i < stringCount; i++)
                 {
-                    int stringCount = token;
-                    for (int i = 0; i < stringCount; i++)
-                    {
-                        int charCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                        String str = FileTools.ByteArrayToStringAnsi(data, offset);
-                        offset += charCount;
-                        secondaryStrings.Add(str);
-                    }
+                    int charCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                    String str = FileTools.ByteArrayToStringAnsi(excelData, offset);
+                    offset += charCount;
+                    secondaryStrings.Add(str);
                 }
-                else
-                {
-                    offset -= 4;
-                }
+            }
+            else
+            {
+                offset -= 4;
+            }
 
 
-                // secondary index blocks
-                for (int i = 0; i < 4; i++)
-                {
-                    token = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                    CheckFlag(token);
-
-                    int count = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                    this.unknownIndicies[i] = FileTools.ByteArrayToInt32Array(data, offset, count);
-                    offset += count * sizeof(Int32);
-                }
-
-
-                // unknown block
-                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+            // secondary index blocks
+            for (int i = 0; i < 4; i++)
+            {
+                token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                 CheckFlag(token);
 
-                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                if (token != 0x00)
+                int count = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                unknownIndicies[i] = FileTools.ByteArrayToInt32Array(excelData, offset, count);
+                offset += count * sizeof(Int32);
+            }
+
+
+            // unknown block
+            token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            CheckFlag(token);
+
+            token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            if (token != 0x00)
+            {
+                while (true)
                 {
-                    while (true)
+
+                    if (CheckFlag(token, 0x68736372)) // 'rcsh'
                     {
-
-                        if (CheckFlag(token, 0x68736372)) // 'rcsh'
+                        _rcshValue = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                        if (_rcshValue != 0x04)
                         {
-                            this.rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                            if (this.rcshValue != 0x04)
-                            {
-                                throw new Exception("this.rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (this.rcshValue != 0x04)");
-                            }
+                            throw new Exception("_rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_rcshValue != 0x04)");
                         }
-                        else if (CheckFlag(token, 0x68737974)) // 'tysh'
-                        {
-                            this.tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                            if (this.tyshValue != 0x02)
-                            {
-                                throw new Exception("this.tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (this.tyshValue != 0x02)");
-                            }
-                        }
-                        else if (CheckFlag(token, 0x6873796D)) // 'mysh'
-                        {
-                            offset -= 4;
-                            ParseMYSHTables(data, ref offset);
-                        }
-                        else if (CheckFlag(token, 0x68656E64)) // 'dneh'
-                        {
-                            this.dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                            if (this.dnehValue != 0x00)
-                            {
-                                throw new Exception("this.dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (this.dnehValue != 0x02)");
-                            }
-                        }
-                        else // 'cxeh'  -  starting next block
-                        {
-                            CheckFlag(token);
-                            offset -= 4;
-                            break;
-                        }
-
-                        token = FileTools.ByteArrayTo<Int32>(data, ref offset);
                     }
+                    else if (CheckFlag(token, 0x68737974)) // 'tysh'
+                    {
+                        _tyshValue = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                        if (_tyshValue != 0x02)
+                        {
+                            throw new Exception("_tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_tyshValue != 0x02)");
+                        }
+                    }
+                    else if (CheckFlag(token, 0x6873796D)) // 'mysh'
+                    {
+                        offset -= 4;
+                        ParseMyshTables(excelData, ref offset);
+                    }
+                    else if (CheckFlag(token, 0x68656E64)) // 'dneh'
+                    {
+                        _dnehValue = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                        if (_dnehValue != 0x00)
+                        {
+                            throw new Exception("_dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_dnehValue != 0x02)");
+                        }
+                    }
+                    else // 'cxeh'  -  starting next block
+                    {
+                        CheckFlag(token);
+                        offset -= 4;
+                        break;
+                    }
+
+                    token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                 }
+            }
 
 
-                // data block
-                token = FileTools.ByteArrayTo<Int32>(data, ref offset);
+            // data block
+            token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+            if (token != 0)
+            {
+                CheckFlag(token);
+                int byteCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                if (byteCount != 0)
+                {
+                    if (_excelHeader.StructureId == 0x1F9DDC98)         // Only seen in unittypes.txt.cooked so far.
+                    {                                                       // This block reading method is the same as first seen below in the states.txt.cooked,
+                        // but there is no data in the previous block for unittypes.txt.cooked.
+                        int blockCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                        byteCount = (byteCount << 2) * blockCount;                              // No idea where they drempt this up,
+                    }
+                    DataBlock = new byte[byteCount];
+                    Buffer.BlockCopy(excelData, offset, DataBlock, 0, byteCount);
+                    offset += byteCount;
+                }
+            }
+
+
+            // does it have a final flag chunk?
+            if (offset != excelData.Length)
+            {
+                token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                 if (token != 0)
                 {
                     CheckFlag(token);
-                    int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                    if (byteCount != 0)
-                    {
-                        if (this.excelHeader.structureId == 0x1F9DDC98)         // Only seen in unittypes.txt.cooked so far.
-                        {                                                       // This block reading method is the same as first seen below in the states.txt.cooked,
-                            // but there is no data in the previous block for unittypes.txt.cooked.
-                            int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                            byteCount = (byteCount << 2) * blockCount;                              // No idea where they drempt this up,
-                        }
-                        DataBlock = new byte[byteCount];
-                        Buffer.BlockCopy(data, offset, DataBlock, 0, byteCount);
-                        offset += byteCount;
+
+                    int byteCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                    int blockCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                    byteCount = (byteCount << 2) * blockCount;
+
+                    if (byteCount != 0)        // Only seen in states.txt.cooked so far  -  Of note is that 
+                    {                          //           the states file has an above data block as well.
+                        FinalBytes = new byte[byteCount];
+                        Buffer.BlockCopy(excelData, offset, FinalBytes, 0, FinalBytes.Length);
+                        offset += FinalBytes.Length;
                     }
-                }
-
-
-                // does it have a final flag chunk?
-                if (offset != data.Length)
-                {
-                    token = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                    if (token != 0)
-                    {
-                        CheckFlag(token);
-
-                        int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                        int blockCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                        byteCount = (byteCount << 2) * blockCount;
-
-                        if (byteCount != 0)        // Only seen in states.txt.cooked so far  -  Of note is that 
-                        {                          //           the states file has an above data block as well.
-                            FinalBytes = new byte[byteCount];
-                            Buffer.BlockCopy(data, offset, FinalBytes, 0, FinalBytes.Length);
-                            offset += FinalBytes.Length;
-                        }
-                    }
-                }
-
-                if (offset != data.Length)
-                {
-                    throw new BadHeaderFlag("offset != data.Length");
                 }
             }
-            catch (Exception e)
+
+            if (offset != excelData.Length)
             {
-                throw e;
+                throw new BadHeaderFlag("offset != data.Length");
             }
         }
 
-        public int Count
-        {
-            get
-            {
-                return tableCount;
-            }
-        }
+        public int Count { get; private set; }
+        public bool IsNull { get; private set; }
 
-        private bool isNull;
-        public bool IsNull { get { return isNull; } }
-
-        private void CheckFlag(int flag)
+        private static void CheckFlag(int flag)
         {
             if (!CheckFlag(flag, 0x68657863))
             {
@@ -533,12 +512,12 @@ namespace Reanimator.Excel
             }
         }
 
-        private bool CheckFlag(int flag, int to)
+        private static bool CheckFlag(int flag, int to)
         {
             return flag == to ? true : false;
         }
 
-        private void ParseMYSHTables(byte[] data, ref int offset)
+        private static void ParseMyshTables(byte[] data, ref int offset)
         {
             int totalAttributeCount = 0;
             int attributeCount = 0;
@@ -643,12 +622,12 @@ namespace Reanimator.Excel
 
         protected abstract void ParseTables(byte[] data);
 
-        public void ReadTables<T>(byte[] data, ref int offset, int count)
+        protected void ReadTables<T>(byte[] data, ref int byteOffset, int count)
         {
             for (int i = 0; i < count; i++)
             {
-                T table = (T)FileTools.ByteArrayToStructure(data, typeof(T), offset);
-                offset += Marshal.SizeOf(typeof(T));
+                T table = (T)FileTools.ByteArrayToStructure(data, typeof(T), byteOffset);
+                byteOffset += Marshal.SizeOf(typeof(T));
 
                 tables.Add(table);
             }
@@ -656,42 +635,42 @@ namespace Reanimator.Excel
 
         public byte[] GenerateExcelFile(DataSet dataSet)
         {
-            DataTable dataTable = dataSet.Tables[this.StringId];
+            DataTable dataTable = dataSet.Tables[StringId];
             if (dataTable == null)
             {
                 return null;
             }
 
             byte[] buffer = new byte[1024];
-            int offset = 0;
+            int byteOffset = 0;
 
 
             // main header
-            FileTools.WriteToBuffer(ref buffer, ref offset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref offset, this.excelHeader);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, _excelHeader);
 
 
             // string block
-            FileTools.WriteToBuffer(ref buffer, ref offset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
             int stringsByteCount = 0;
-            int stringsByteOffset = offset;
+            int stringsByteOffset = byteOffset;
             byte[] stringBytes = null;
-            offset += sizeof(Int32);
+            byteOffset += sizeof(Int32);
 
 
             // tables block
-            FileTools.WriteToBuffer(ref buffer, ref offset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
             Int32 tableCount = dataTable.Rows.Count;
-            FileTools.WriteToBuffer(ref buffer, ref offset, tableCount);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, tableCount);
 
-            Type tableType = this.tables[0].GetType();
+            Type tableType = tables[0].GetType();
             TableHeader defaultTableHeader;
-            defaultTableHeader.unknown1 = 0x03;
-            defaultTableHeader.unknown2 = 0x3F;
-            defaultTableHeader.versionMajor = 0x00;
-            defaultTableHeader.reserved1 = -1;
-            defaultTableHeader.versionMinor = 0x00;
-            defaultTableHeader.reserved2 = -1;
+            defaultTableHeader.Unknown1 = 0x03;
+            defaultTableHeader.Unknown2 = 0x3F;
+            defaultTableHeader.VersionMajor = 0x00;
+            defaultTableHeader.Reserved1 = -1;
+            defaultTableHeader.VersionMinor = 0x00;
+            defaultTableHeader.Reserved2 = -1;
             int row = 0;
             foreach (DataRow dr in dataTable.Rows)
             {
@@ -699,25 +678,36 @@ namespace Reanimator.Excel
                 int col = 1;
                 foreach (FieldInfo fieldInfo in tableType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                 {
-                    if (fieldInfo.FieldType == typeof(ExcelTable.TableHeader))
+                    // if it's private, there wont be a column - try for original or assign default
+                    if (fieldInfo.IsPrivate)
                     {
-                        if (this.tables.Count > row)
+                        if (tables.Count > row)
                         {
-                            fieldInfo.SetValue(table, fieldInfo.GetValue(this.tables[row]));
+                            fieldInfo.SetValue(table, fieldInfo.GetValue(tables[row]));
                         }
                         else
                         {
-                            fieldInfo.SetValue(table, defaultTableHeader);
+                            if (fieldInfo.FieldType == typeof(TableHeader))
+                            {
+                                fieldInfo.SetValue(table, defaultTableHeader);
+                            }
+                            else
+                            {
+                                fieldInfo.SetValue(table, 0);
+                            }
                         }
+
                         continue;
                     }
 
+
+                    // get the applicable column
                     DataColumn dc = dataTable.Columns[col];
                     while (dc != null)
                     {
                         if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsRelationGenerated))
                         {
-                            if ((bool)dc.ExtendedProperties[ColumnTypeKeys.IsRelationGenerated] == true)
+                            if ((bool)dc.ExtendedProperties[ColumnTypeKeys.IsRelationGenerated])
                             {
                                 col++;
                                 dc = dataTable.Columns[col];
@@ -727,10 +717,16 @@ namespace Reanimator.Excel
 
                         break;
                     }
+                    if (dc == null)
+                    {
+                        break;
+                    }
 
+
+                    // if it's a string offset, add string to string buffer and set value as offset
                     if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsStringOffset))
                     {
-                        if ((bool)dc.ExtendedProperties[ColumnTypeKeys.IsStringOffset] == true)
+                        if ((bool)dc.ExtendedProperties[ColumnTypeKeys.IsStringOffset])
                         {
                             if (stringBytes == null)
                             {
@@ -739,6 +735,10 @@ namespace Reanimator.Excel
 
                             String s = dr[dc] as String;
                             if (s == null)
+                            {
+                                fieldInfo.SetValue(table, -1);
+                            }
+                            else if (s.Length == 0)
                             {
                                 fieldInfo.SetValue(table, -1);
                             }
@@ -758,7 +758,7 @@ namespace Reanimator.Excel
                     col++;
                 }
 
-                FileTools.WriteToBuffer(ref buffer, ref offset, table);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, table);
                 row++;
             }
 
@@ -772,18 +772,119 @@ namespace Reanimator.Excel
 
 
             // primary index block
-            FileTools.WriteToBuffer(ref buffer, ref offset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
             byte[] primaryIndex = new byte[dataTable.Rows.Count * sizeof(Int32)];
-            //Int32[] primaryIndex = new Int32[dataTable.Rows.Count];
-            for (int i = 0; i < dataTable.Rows.Count; i++)
+            for (Int32 i = 0; i < dataTable.Rows.Count; i++)
             {
-                byte[] integer = BitConverter.GetBytes((Int32)i);
-                Buffer.BlockCopy(integer, 0, primaryIndex, i*4, sizeof(Int32));
+                byte[] integer = BitConverter.GetBytes(i);
+                Buffer.BlockCopy(integer, 0, primaryIndex, i * sizeof(Int32), sizeof(Int32));
             }
-            FileTools.WriteToBuffer(ref buffer, ref offset, primaryIndex);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, primaryIndex);
 
 
-            return buffer;
+            // secondary index blocks
+            String[] sorts = new[] { "name", "code", null, null };
+            foreach (String sortBy in sorts)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+                Int32 countOfIndicies = 0;
+                int countOfIndiciesOffset = byteOffset;
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, countOfIndicies);
+
+                if (sortBy == null)
+                {
+                    continue;
+                }
+                if (!dataTable.Columns.Contains(sortBy))
+                {
+                    continue;
+                }
+
+                dataTable.DefaultView.Sort = sortBy;
+                DataView dataView = dataTable.DefaultView;
+                byte[] secondaryIndex = new byte[dataTable.Rows.Count * sizeof(Int32)];
+                foreach (DataRowView dr in dataView)
+                {
+                    Object value = dr[sortBy];
+
+                    String s = value as String;
+                    if (s != null)
+                    {
+                        if (s.Length == 0)
+                        {
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        if ((int)value <= 0)
+                        {
+                            continue;
+                        }
+                    }
+
+                    byte[] integer = BitConverter.GetBytes((Int32)dr[0]);
+                    Buffer.BlockCopy(integer, 0, secondaryIndex, countOfIndicies * sizeof(Int32), sizeof(Int32));
+                    countOfIndicies++;
+                }
+                FileTools.WriteToBuffer(ref buffer, countOfIndiciesOffset, countOfIndicies);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, secondaryIndex, countOfIndicies * sizeof(Int32), false);
+            }
+
+
+            // weird unknown header chunks
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            if (_rcshValue != 0)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenRcsh);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, _rcshValue);
+
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenTysh);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, _tyshValue);
+
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenDneh);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dnehValue);
+            }
+
+
+            // data block 1
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            const int zeroValue = 0;
+            if (DataBlock != null)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, DataBlock.Length);
+                if (DataBlock.Length > 0)
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, DataBlock);
+                }
+            }
+            else
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
+            }
+
+
+            // data block 2
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            if (FinalBytes != null)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes.Length);
+                if (FinalBytes.Length > 0)
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
+                }
+            }
+            else
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
+            }
+            byteOffset -= sizeof (Int32);
+
+
+            // return final buffer
+            byte[] returnBuffer = new byte[byteOffset];
+            Buffer.BlockCopy(buffer, 0, returnBuffer, 0, byteOffset);
+            return returnBuffer;
         }
 
         public String StringId { get; set; }
@@ -794,7 +895,7 @@ namespace Reanimator.Excel
 
         public int CompareTo(Object o)
         {
-            return String.Compare(this.ToString(), o.ToString());
+            return String.Compare(ToString(), o.ToString());
         }
     }
 }

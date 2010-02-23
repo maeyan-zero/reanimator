@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Reanimator.Forms
@@ -23,19 +17,21 @@ namespace Reanimator.Forms
 
         private void hglDirBrowse_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog();
-            folderBrowserDialogue.Description = "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London";
-            folderBrowserDialogue.SelectedPath = Config.HglDir;
+            FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog
+                                                            {
+                                                                Description =
+                                                                    "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London",
+                                                                SelectedPath = Config.HglDir
+                                                            };
 
-            if (folderBrowserDialogue.ShowDialog(this) == DialogResult.OK)
+            if (folderBrowserDialogue.ShowDialog(this) != DialogResult.OK) return;
+
+            Config.HglDir = folderBrowserDialogue.SelectedPath;
+            hglDir_TextBox.Text = Config.HglDir;
+
+            if (Config.DataDirsRootChecked)
             {
-                Config.HglDir = folderBrowserDialogue.SelectedPath;
-                hglDir_TextBox.Text = Config.HglDir;
-
-                if (Config.DataDirsRootChecked)
-                {
-                    Config.DataDirsRoot = folderBrowserDialogue.SelectedPath;
-                }
+                Config.DataDirsRoot = folderBrowserDialogue.SelectedPath;
             }
         }
 
@@ -59,15 +55,17 @@ namespace Reanimator.Forms
 
         private void dataDir_Button_Clicked(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog();
-            folderBrowserDialogue.Description = "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London";
-            folderBrowserDialogue.SelectedPath = Config.HglDir;
+            FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog
+                                                            {
+                                                                Description =
+                                                                    "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London",
+                                                                SelectedPath = Config.HglDir
+                                                            };
 
-            if (folderBrowserDialogue.ShowDialog(this) == DialogResult.OK)
-            {
-                Config.DataDirsRoot = folderBrowserDialogue.SelectedPath;
-                dataDir_TextBox.Text = Config.DataDirsRoot;
-            }
+            if (folderBrowserDialogue.ShowDialog(this) != DialogResult.OK) return;
+
+            Config.DataDirsRoot = folderBrowserDialogue.SelectedPath;
+            dataDir_TextBox.Text = Config.DataDirsRoot;
         }
 
         private void Options_Load(object sender, EventArgs e)
@@ -82,9 +80,12 @@ namespace Reanimator.Forms
 
         private void gameClientPath_Button_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.HglDir + "\\SP_x64";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+                                                {
+                                                    Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*",
+                                                    InitialDirectory = Config.HglDir + "\\SP_x64"
+                                                };
+
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
                 Config.GameClientPath = openFileDialog.FileName;

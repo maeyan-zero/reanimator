@@ -118,7 +118,7 @@ namespace Reanimator
                     internal int exists;										// 1 bit
                     public int BitCount { get; set; }							// 6 bits
                     public int Unknown1 { get; set; }							// 2 bits
-                    public int Unknown1_1 { get; set; }							// 1 bit		// if unknown1 == 2
+                    public int Unknown1_1 { get; set; }							// 1 bit		// if Unknown1 == 2
                     internal int skipTableId;            						// 1 bit		// if this is set, then don't read the table id below
                     public int TableId { get; set; }							// 16 bits		// this is the excel table id to use
 
@@ -1135,8 +1135,8 @@ namespace Reanimator
              * {
              *      unknownCount                                5                   Count of following block.
              *      {
-             *          unknown1                                16                  // TO BE DETEREMINED
-             *          unknown2                                32                  // TO BE DETEREMINED
+             *          Unknown1                                16                  // TO BE DETEREMINED
+             *          Unknown2                                32                  // TO BE DETEREMINED
              *      }
              * }
              * 
