@@ -18,7 +18,7 @@ using System.Globalization;
 
 namespace Reanimator
 {
-    public class ExcelDataSet : IDisposable
+    public class TableDataSet : IDisposable
     {
         DataSet xlsDataSet;
         Hashtable xlsDataTables;
@@ -32,7 +32,10 @@ namespace Reanimator
             public int Unknowns4 { get; set; }
         };
 
-        public ExcelDataSet()
+        public ExcelTables ExcelTables { get; set; }
+        public StringsTables StringsTables { get; set; }
+
+        public TableDataSet()
         {
             this.LoadDataSet();
             xlsDataSet.RemotingFormat = SerializationFormat.Binary;
@@ -86,55 +89,22 @@ namespace Reanimator
 
         public void LoadTable(ProgressForm progress, Object var)
         {
+            StringsFile stringsFile = var as StringsFile;
+            if (stringsFile != null)
+            {
+                this.LoadStringsTable(progress, stringsFile);
+            }
+
             ExcelTable excelTable = var as ExcelTable;
-            if (excelTable == null)
+            if (excelTable != null)
             {
-                return;
+                this.LoadExcelTable(progress, excelTable);
             }
 
+        }
 
-
-            /*
-            // load string tables if applicable
-            
-            String stringsTableName = mainTableName + "_STRINGS";
-            DataTable stringsDataTable = xlsDataSet.Tables[stringsTableName];
-            if (excelTable.Strings.Count > 0)
-            {
-                if (!xlsDataSet.Tables.Contains(stringsTableName))
-                {
-                    if (progress != null)
-                    {
-                        progress.SetLoadingText("Cache generation of strings data... " + stringsTableName);
-                    }
-                    if (stringsDataTable == null)
-                    {
-                        stringsDataTable = xlsDataSet.Tables.Add(stringsTableName);
-                    }
-
-                    DataColumn offsetColumn = stringsDataTable.Columns["offset"];
-                    if (offsetColumn == null)
-                    {
-                        offsetColumn = stringsDataTable.Columns.Add("offset", typeof(int));
-                        offsetColumn.Unique = true;
-                        stringsDataTable.PrimaryKey = new DataColumn[] { offsetColumn };
-                    }
-
-                    if (!stringsDataTable.Columns.Contains("string"))
-                    {
-                        stringsDataTable.Columns.Add("string", typeof(String));
-                    }
-
-                    foreach (DictionaryEntry entry in excelTable.Strings)
-                    {
-                        stringsDataTable.Rows.Add(entry.Key, entry.Value);
-                    }
-
-                    this.xlsDataTables.Add(stringsTableName, stringsDataTable);
-                }
-            }
-            */
-
+        public void LoadExcelTable(ProgressForm progress, ExcelTable excelTable)
+        {
             // load in main data table
             String mainTableName = excelTable.StringId;
             DataTable mainDataTable = xlsDataSet.Tables[mainTableName];
@@ -317,6 +287,35 @@ namespace Reanimator
                             break;
                     }
                 }
+            }
+        }
+
+        private void LoadStringsTable(ProgressForm progress, StringsFile stringsFile)
+        {
+            progress.SetCurrentItemText(stringsFile.Name);
+
+            if (xlsDataSet.Tables.Contains(stringsFile.Name))
+            {
+                return;
+            }
+
+            DataTable dt = xlsDataSet.Tables.Add(stringsFile.Name);
+            foreach (StringsFile.StringBlock stringsBlock in stringsFile.StringsTable)
+            {
+                if (dt.Columns.Count == 0)
+                {
+                    dt.Columns.Add("ReferenceId", stringsBlock.ReferenceId.GetType());
+                    dt.Columns.Add("Unknown1", stringsBlock.Unknown1.GetType());
+                    dt.Columns.Add("StringId", stringsBlock.StringId.GetType());
+                    dt.Columns.Add("Unknown2", stringsBlock.Unknown2.GetType());
+                    dt.Columns.Add("String", stringsBlock.String.GetType());
+                    dt.Columns.Add("Attribute1", stringsBlock.Attribute1.GetType());
+                    dt.Columns.Add("Attribute2", stringsBlock.Attribute2.GetType());
+                    dt.Columns.Add("Attribute3", stringsBlock.Attribute3.GetType());
+                }
+
+                dt.Rows.Add(stringsBlock.ReferenceId, stringsBlock.Unknown1, stringsBlock.StringId, stringsBlock.Unknown2,
+                    stringsBlock.String, stringsBlock.Attribute1, stringsBlock.Attribute2, stringsBlock.Attribute3);
             }
         }
 

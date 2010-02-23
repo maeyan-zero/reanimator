@@ -20,8 +20,8 @@ namespace Reanimator
         private Options options;
         private List<string> indexFilesOpen;
         private ExcelTables excelTables;
-        private ExcelTablesLoaded excelTablesLoaded;
-        private ExcelDataSet excelDataSet;
+        private ExcelTablesLoaded tablesLoaded;
+        private TableDataSet tableDataSet;
         private StringsTables stringsTables;
         private UpdateCheckerParams currentVersionInfos;
 
@@ -39,20 +39,6 @@ namespace Reanimator
             currentVersionInfos.saveFolder = @"C:\";
 
             InitializeComponent();
-            /*
-            using (FileStream fs = new FileStream(Config.cacheFilePath, FileMode.Open, FileAccess.Read))
-            {
-                byte[] buffer = new byte[fs.Length];
-                int count = fs.Read(buffer, 0, buffer.Length);
-
-                MemoryStream ms = new MemoryStream(buffer);
-
-                BinaryFormatter bf = new BinaryFormatter();
-                DataSet ds = (DataSet)bf.Deserialize(ms);
-                fs.Close();
-
-                
-            }*/
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -255,7 +241,7 @@ namespace Reanimator
                 return;
             }
 
-            ExcelTableForm etf = new ExcelTableForm(excelTable, excelDataSet);
+            ExcelTableForm etf = new ExcelTableForm(excelTable, tableDataSet);
             etf.Text = "Excel Table: " + fileName;
             etf.MdiParent = this;
             etf.Show();
@@ -404,66 +390,91 @@ namespace Reanimator
             this.Refresh();
 
             ProgressForm progress = new ProgressForm(LoadTables, null);
-            progress.Disposed += new EventHandler(Progress_Disposed);
+            progress.Disposed += delegate { LoadAndDisplayCurrentlyLoadedExcelTables(); };
             progress.ShowDialog(this);
 
             this.GenerateCache(false);
         }
 
-        private void Progress_Disposed(object sender, EventArgs e)
-        {
-            LoadAndDisplayCurrentlyLoadedExcelTables();
-        }
-
         private void LoadAndDisplayCurrentlyLoadedExcelTables()
         {
-            excelTablesLoaded = new ExcelTablesLoaded(excelDataSet);
-            excelTablesLoaded.MdiParent = this;
-            excelTablesLoaded.Show();
+            tablesLoaded = new ExcelTablesLoaded(tableDataSet);
+            tablesLoaded.MdiParent = this;
+            tablesLoaded.Show();
             foreach (ExcelTable et in excelTables.GetLoadedTables())
             {
-                excelTablesLoaded.AddItem(et);
+                tablesLoaded.AddItem(et);
             }
             foreach (StringsFile sf in stringsTables.GetLoadedTables())
             {
-                excelTablesLoaded.AddItem(sf);
+                tablesLoaded.AddItem(sf);
             }
-            // excelTablesLoaded.BindListBoxDataSource(excelDataSet.GetDataSet());//excelTables.GetLoadedTables().Concat<object>(stringsTables.GetLoadedTables()));
-            excelTablesLoaded.Text = "Currently Loaded Tables [" + (excelTables.LoadedTableCount + stringsTables.Count) + "]";
+            tablesLoaded.Text = "Currently Loaded Tables [" + (excelTables.LoadedTableCount + stringsTables.Count) + "]";
         }
 
         private void LoadTables(ProgressForm progress, Object var)
         {
-            FileStream excelFile;
+            // begin loading in dataSet.dat right away
+            Thread loadTableDataSet = new Thread(() => { tableDataSet = new TableDataSet(); });
+            loadTableDataSet.Start();
 
+
+            // read in .t.c files
             string excelFilePath = Config.DataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked";
             try
             {
-                excelFile = new FileStream(excelFilePath, FileMode.Open);
-                excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
+                using (FileStream excelFile = new FileStream(excelFilePath, FileMode.Open))
+                {
+                    excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
+                }
+
+                progress.ConfigBar(0, excelTables.Count, 1);
+                progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
+                excelTables.LoadTables(Config.DataDirsRoot + "\\data_common\\excel\\", progress);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                MessageBox.Show("Failed to load exceltables!\nPlease ensure your directories are set correctly.\n\nFile: \n" + excelFilePath, "Alert", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
+                MessageBox.Show("Failed to load exceltables!\nPlease ensure your directories are set correctly.\n\nFile: \n" + excelFilePath + "\n\n" + e.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
-            progress.ConfigBar(0, excelTables.Count, 1);
-            progress.SetLoadingText("Loading in excel tables (" + excelTables.Count + ")...");
-            excelTables.LoadTables(Config.DataDirsRoot + "\\data_common\\excel\\", progress);
 
-            Excel.StringsFiles stringsFiles = (Excel.StringsFiles)excelTables.GetTable("STRING_FILES");
-            if (stringsFiles != null)
+            // read in strings files
+            try
             {
-                progress.SetLoadingText("Loading in strings files (" + stringsFiles.Count + ")...");
-                progress.ConfigBar(0, stringsFiles.Count, 1);
-                stringsTables = new StringsTables();
-                stringsTables.LoadStringsTables(progress, stringsFiles);
+                Excel.StringsFiles stringsFiles = (Excel.StringsFiles)excelTables.GetTable("STRING_FILES");
+                if (stringsFiles != null)
+                {
+                    progress.SetLoadingText("Loading in strings files (" + stringsFiles.Count + ")...");
+                    progress.ConfigBar(0, stringsFiles.Count, 1);
+                    stringsTables = new StringsTables();
+                    stringsTables.LoadStringsTables(progress, stringsFiles);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to load in string tables!\nPlease ensure your directories are set correctly.\n\n" + e.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
+
+            // wait for the cache to finish loading in if it hasn't already
             progress.SetLoadingText("Loading table cache data...");
             progress.SetCurrentItemText("Please wait...");
-            excelDataSet = new ExcelDataSet();
+            int i = 0;
+            int stepCount = 100;
+            while (loadTableDataSet.ThreadState == ThreadState.Running)
+            {
+                if (i % stepCount == 0)
+                {
+                    progress.ConfigBar(0, stepCount, 1);
+                }
+                progress.StepProgress();
+
+                Thread.Sleep(50);
+                i++;
+            }
+
+            tableDataSet.ExcelTables = excelTables;
+            tableDataSet.StringsTables = stringsTables;
         }
 
         private void CacheTables(ProgressForm progress, Object var)
@@ -474,9 +485,9 @@ namespace Reanimator
                 return;
             }
 
+
             progress.SetLoadingText("First use table caching...");
             progress.ConfigBar(0, loadedTables.Count, 1);
-
             foreach (ExcelTable excelTable in loadedTables)
             {
                 progress.SetCurrentItemText("Caching: " + excelTable.StringId);
@@ -485,21 +496,27 @@ namespace Reanimator
                 tableProgress.ShowDialog();
             }
 
+
             progress.SetLoadingText("Caching strings tables (" + stringsTables.Count + ")...");
             progress.ConfigBar(0, stringsTables.Count, 1);
-            stringsTables.AddToDataSet(progress, excelDataSet.XlsDataSet);
+            foreach (StringsFile stringsFile in stringsTables.GetLoadedTables())
+            {
+                tableDataSet.LoadTable(progress, stringsFile);
+            }
+
 
             this.GenerateRelations(progress, loadedTables);
 
+
             progress.SetLoadingText("Saving cache data...");
             progress.SetCurrentItemText("Please wait...");
-            excelDataSet.SaveDataSet();
+            tableDataSet.SaveDataSet();
         }
 
         private void CacheExcelTable(ProgressForm progress, Object var)
         {
             ExcelTable excelTable = var as ExcelTable;
-            excelDataSet.LoadTable(progress, excelTable);
+            tableDataSet.LoadTable(progress, excelTable);
         }
 
         private void GenerateRelations(ProgressForm progress, Object var)
@@ -512,11 +529,11 @@ namespace Reanimator
 
             progress.SetLoadingText("Generating table relations...");
             progress.ConfigBar(0, loadedTables.Count, 1);
-            excelDataSet.ClearRelations();
+            tableDataSet.ClearRelations();
             foreach (ExcelTable excelTable in loadedTables)
             {
                 progress.SetCurrentItemText(excelTable.StringId);
-                excelDataSet.GenerateRelations(excelTable);
+                tableDataSet.GenerateRelations(excelTable);
             }
         }
 
@@ -619,7 +636,7 @@ namespace Reanimator
             DialogResult dr = DialogResult.No;
 
             bool partialGeneration = false;
-            if (!File.Exists(@"cache\dataSet.dat") || excelDataSet.LoadedTableCount == 0)
+            if (!File.Exists(@"cache\dataSet.dat") || tableDataSet.LoadedTableCount == 0)
             {
                 dr = MessageBox.Show("Reanimator has detected no cached table data.\nDo you wish to generate it now? (this may take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
@@ -627,7 +644,7 @@ namespace Reanimator
             {
                 dr = MessageBox.Show("Are you sure you wish to regenerate the cache? (this will take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
-            else if (excelDataSet.LoadedTableCount < excelTables.LoadedTableCount + stringsTables.Count)
+            else if (tableDataSet.LoadedTableCount < excelTables.LoadedTableCount + stringsTables.Count)
             {
                 dr = MessageBox.Show("Reanimator has detected that not all tables have been cached.\nDo you wish to generate the remaining now? (this may take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 partialGeneration = true;
@@ -637,7 +654,7 @@ namespace Reanimator
             {
                 if (!partialGeneration)
                 {
-                    excelDataSet.ClearDataSet();
+                    tableDataSet.ClearDataSet();
                 }
                 ProgressForm cachingProgress = new ProgressForm(CacheTables, excelTables.GetLoadedTables());
                 cachingProgress.ShowDialog(this);
@@ -654,13 +671,13 @@ namespace Reanimator
         {
             if (showExcelTablesToolStripMenuItem.Checked)
             {
-                excelTablesLoaded.StartPosition = FormStartPosition.Manual;
-                excelTablesLoaded.Location = new Point(0, 0);
-                excelTablesLoaded.Show();
+                tablesLoaded.StartPosition = FormStartPosition.Manual;
+                tablesLoaded.Location = new Point(0, 0);
+                tablesLoaded.Show();
             }
             else
             {
-                excelTablesLoaded.Hide();
+                tablesLoaded.Hide();
             }
         }
 

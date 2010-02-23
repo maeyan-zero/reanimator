@@ -108,7 +108,7 @@
     <Compile Include="ClientPatcher.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Crypt.cs" />
-    <Compile Include="ExcelDataSet.cs" />
+    <Compile Include="TableDataSet.cs" />
     <Compile Include="ExcelTables.cs" />
     <Compile Include="Export.cs" />
     <Compile Include="Forms\CacheInfo.cs">

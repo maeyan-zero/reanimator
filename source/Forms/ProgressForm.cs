@@ -108,12 +108,20 @@ namespace Reanimator.Forms
             {
                 currentItemLabel.Text = currentItem;
             }
-
         }
 
+        delegate void StepProgressCallback();
         public void StepProgress()
         {
-            progressBar.Increment(progressBar.Step);
+            if (this.InvokeRequired)
+            {
+                StepProgressCallback d = new StepProgressCallback(StepProgress);
+                this.Invoke(d);
+            }
+            else
+            {
+                progressBar.Increment(progressBar.Step);
+            }
         }
 
         // Each time the text is modified (a new item is completed) let the progressbar progress and refresh the form
