@@ -129,11 +129,11 @@
     <Compile Include="Forms\ExcelTableForm.Designer.cs">
       <DependentUpon>ExcelTableForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ExcelTablesLoaded.cs">
+    <Compile Include="Forms\TablesLoaded.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ExcelTablesLoaded.Designer.cs">
-      <DependentUpon>ExcelTablesLoaded.cs</DependentUpon>
+    <Compile Include="Forms\TablesLoaded.Designer.cs">
+      <DependentUpon>TablesLoaded.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\HeroEditor.cs">
       <SubType>Form</SubType>
@@ -194,8 +194,8 @@
       <DependentUpon>ExcelTableForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ExcelTablesLoaded.resx">
-      <DependentUpon>ExcelTablesLoaded.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\TablesLoaded.resx">
+      <DependentUpon>TablesLoaded.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HeroEditor.resx">

@@ -11,11 +11,11 @@ using System.IO;
 
 namespace Reanimator.Forms
 {
-    public partial class ExcelTablesLoaded : Form
+    public partial class TablesLoaded : Form
     {
         TableDataSet tableDataSet;
 
-        public ExcelTablesLoaded(TableDataSet xlsDataSet)
+        public TablesLoaded(TableDataSet xlsDataSet)
         {
             InitializeComponent();
             tableDataSet = xlsDataSet;

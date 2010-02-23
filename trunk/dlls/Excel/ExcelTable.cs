@@ -656,7 +656,6 @@ namespace Reanimator.Excel
 
         public byte[] GenerateExcelFile(DataSet dataSet)
         {
-            return null;
             DataTable dataTable = dataSet.Tables[this.StringId];
             if (dataTable == null)
             {
@@ -714,12 +713,19 @@ namespace Reanimator.Excel
                     }
 
                     DataColumn dc = dataTable.Columns[col];
-                    if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsRelationGenerated))
+                    while (dc != null)
                     {
-                        if ((bool)dc.ExtendedProperties[ColumnTypeKeys.IsRelationGenerated] == true)
+                        if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsRelationGenerated))
                         {
-                            continue;
+                            if ((bool)dc.ExtendedProperties[ColumnTypeKeys.IsRelationGenerated] == true)
+                            {
+                                col++;
+                                dc = dataTable.Columns[col];
+                                continue;
+                            }
                         }
+
+                        break;
                     }
 
                     if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsStringOffset))
@@ -746,7 +752,8 @@ namespace Reanimator.Excel
                     }
                     else
                     {
-                        fieldInfo.SetValue(table, dr[dc]);
+                        Object o = dr[dc];
+                        fieldInfo.SetValue(table, o);
                     }
                     col++;
                 }
@@ -760,7 +767,7 @@ namespace Reanimator.Excel
             if (stringBytes != null && stringsByteCount > 0)
             {
                 FileTools.WriteToBuffer(ref buffer, stringsByteOffset, stringsByteCount);
-                //FileTools.WriteToBuffer(ref buffer, stringsByteOffset + sizeof(Int32), stringBytes, stringsByteCount, 0, true);
+                FileTools.WriteToBuffer(ref buffer, stringsByteOffset + sizeof(Int32), stringBytes, stringsByteCount, true);
             }
 
 

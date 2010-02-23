@@ -120,21 +120,32 @@ namespace Reanimator.Forms
             }
             else
             {
-                progressBar.Increment(progressBar.Step);
+                if (progressBar.Style != ProgressBarStyle.Marquee)
+                {
+                    progressBar.Increment(progressBar.Step);
+                }
+            }
+        }
+
+        delegate void SetStyleCallback(ProgressBarStyle progressBarStyle);
+        public void SetStyle(ProgressBarStyle progressBarStyle)
+        {
+            if (this.InvokeRequired)
+            {
+                SetStyleCallback d = new SetStyleCallback(SetStyle);
+                this.Invoke(d, new Object[] { progressBarStyle });
+            }
+            else
+            {
+                progressBar.Style = progressBarStyle;
             }
         }
 
         // Each time the text is modified (a new item is completed) let the progressbar progress and refresh the form
         private void currentItemLabel_TextChanged(object sender, EventArgs e)
         {
-            progressBar.PerformStep();
+            this.StepProgress();
             this.Refresh();
-        }
-
-        // Returns the currentItemLabel for setting its text
-        public Label GetItemLabel()
-        {
-            return currentItemLabel;
         }
     }
 }

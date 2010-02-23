@@ -185,31 +185,31 @@ namespace Reanimator
                 toWriteBytes = FileTools.StructureToByteArray(toWrite);
             }
 
-            WriteToBuffer(ref buffer, ref offset, toWriteBytes, toWriteBytes.Length, 0, false, 0);
+            WriteToBuffer(ref buffer, ref offset, toWriteBytes, toWriteBytes.Length, false);
         }
 
-        public static void WriteToBuffer(ref byte[] buffer, int offset, byte[] toWriteBytes, int lengthToWrite, int srcOffset, bool insert, int insertOffset)
+        public static void WriteToBuffer(ref byte[] buffer, int offset, byte[] toWriteBytes, int lengthToWrite, bool insert)
         {
-            WriteToBuffer(ref buffer, ref offset, toWriteBytes, lengthToWrite, srcOffset, insert, insertOffset);
+            WriteToBuffer(ref buffer, ref offset, toWriteBytes, lengthToWrite, insert);
         }
 
-        public static void WriteToBuffer(ref byte[] buffer, ref int offset, byte[] toWriteBytes, int lengthToWrite, int srcOffset, bool insert, int insertOffset)
+        public static void WriteToBuffer(ref byte[] buffer, ref int offset, byte[] toWriteBytes, int lengthToWrite, bool insert)
         {
             byte[] insertBuffer = null;
             if (insert)
             {
-                insertBuffer = new byte[buffer.Length - srcOffset];
-                Buffer.BlockCopy(buffer, 0, insertBuffer, 0, insertBuffer.Length);
+                insertBuffer = new byte[buffer.Length - offset];
+                Buffer.BlockCopy(buffer, offset, insertBuffer, 0, insertBuffer.Length);
             }
 
-            if (offset + lengthToWrite > buffer.Length)
+            if (offset + lengthToWrite > buffer.Length || insert)
             {
                 byte[] newBuffer = new byte[buffer.Length + lengthToWrite + 1024];
                 Buffer.BlockCopy(buffer, 0, newBuffer, 0, buffer.Length);
                 buffer = newBuffer;
             }
 
-            Buffer.BlockCopy(toWriteBytes, srcOffset, buffer, offset, lengthToWrite);
+            Buffer.BlockCopy(toWriteBytes, 0, buffer, offset, lengthToWrite);
 
             if (insert && insertBuffer != null)
             {
