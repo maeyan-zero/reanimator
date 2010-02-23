@@ -20,7 +20,7 @@ namespace Reanimator
         private Options options;
         private List<string> indexFilesOpen;
         private ExcelTables excelTables;
-        private ExcelTablesLoaded tablesLoaded;
+        private TablesLoaded tablesLoaded;
         private TableDataSet tableDataSet;
         private StringsTables stringsTables;
         private UpdateCheckerParams currentVersionInfos;
@@ -398,7 +398,7 @@ namespace Reanimator
 
         private void LoadAndDisplayCurrentlyLoadedExcelTables()
         {
-            tablesLoaded = new ExcelTablesLoaded(tableDataSet);
+            tablesLoaded = new TablesLoaded(tableDataSet);
             tablesLoaded.MdiParent = this;
             tablesLoaded.Show();
             foreach (ExcelTable et in excelTables.GetLoadedTables())
@@ -457,20 +457,12 @@ namespace Reanimator
 
 
             // wait for the cache to finish loading in if it hasn't already
+            progress.SetStyle(ProgressBarStyle.Marquee);
             progress.SetLoadingText("Loading table cache data...");
             progress.SetCurrentItemText("Please wait...");
-            int i = 0;
-            int stepCount = 100;
             while (loadTableDataSet.ThreadState == ThreadState.Running)
             {
-                if (i % stepCount == 0)
-                {
-                    progress.ConfigBar(0, stepCount, 1);
-                }
-                progress.StepProgress();
-
                 Thread.Sleep(50);
-                i++;
             }
 
             tableDataSet.ExcelTables = excelTables;

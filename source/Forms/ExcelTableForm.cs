@@ -171,6 +171,11 @@ namespace Reanimator.Forms
         public void SaveButton()
         {
             byte[] excelFileData = excelTable.GenerateExcelFile((DataSet)this.dataGridView.DataSource);
+
+            using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
+            {
+                fs.Write(excelFileData, 0, excelFileData.Length);
+            }
         }
     }
 
