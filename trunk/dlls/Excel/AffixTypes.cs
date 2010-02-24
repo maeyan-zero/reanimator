@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Reanimator.Excel
@@ -14,11 +11,13 @@ namespace Reanimator.Excel
             TableHeader header;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-            public string affixType;
+            public string AffixType;
 
-            public Int32 nameColor;//idx
-            public Int32 downGrade;//idx
-            public Int32 required;//bool
+            [ExcelOutput(IsTableIndex = true, TableId = 0x3330, Column = "Color")]
+            public Int32 NameColor;
+
+            public Int32 DownGrade;//idx
+            public Int32 Required;//bool
         }
 
         public AffixTypes(byte[] data) : base(data) { }

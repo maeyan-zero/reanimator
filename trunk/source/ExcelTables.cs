@@ -20,7 +20,7 @@ namespace Reanimator.Excel
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string stringId;
-            public Int16 id;
+            public Int16 code;
         }
 
         class ExcelTableManagerManager
@@ -41,18 +41,18 @@ namespace Reanimator.Excel
                 }
             }
 
-            List<TableIndexHelper> tables;
+            readonly List<TableIndexHelper> _tables;
 
             public ExcelTableManagerManager()
             {
-                tables = new List<TableIndexHelper>();
+                _tables = new List<TableIndexHelper>();
             }
 
             public void AddTable(string stringId, string fileName, Type type)
             {
                 if (GetTableIndex(stringId) == null)
                 {
-                    tables.Add(new TableIndexHelper(stringId, fileName, null, type));
+                    _tables.Add(new TableIndexHelper(stringId, fileName, null, type));
                 }
             }
 
@@ -93,12 +93,7 @@ namespace Reanimator.Excel
             public ExcelTable GetTable(string stringId)
             {
                 TableIndexHelper tableIndex = GetTableIndex(stringId);
-                if (tableIndex != null)
-                {
-                    return tableIndex.excelTable;
-                }
-
-                return null;
+                return tableIndex != null ? tableIndex.excelTable : null;
             }
 
             public bool IsMythosTable(String stringId)
@@ -114,18 +109,17 @@ namespace Reanimator.Excel
 
             private TableIndexHelper GetTableIndex(string id)
             {
-                foreach (TableIndexHelper tableIndex in tables)
+                foreach (TableIndexHelper tableIndex in _tables)
                 {
                     if (tableIndex.StringId.Equals(id, StringComparison.OrdinalIgnoreCase))
                     {
                         return tableIndex;
                     }
-                    else if (tableIndex.FileName != null)
+                    if (tableIndex.FileName == null) continue;
+
+                    if (tableIndex.FileName.Equals(id, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (tableIndex.FileName.Equals(id, StringComparison.OrdinalIgnoreCase))
-                        {
-                            return tableIndex;
-                        }
+                        return tableIndex;
                     }
                 }
 
@@ -134,8 +128,8 @@ namespace Reanimator.Excel
         }
 
         public bool AllTablesLoaded { get; set; }
-        ExcelTableManagerManager excelTables;
-        List<ExcelTable> loadedTables;
+        readonly ExcelTableManagerManager _excelTables;
+        readonly List<ExcelTable> _loadedTables;
 
         public ExcelTables(byte[] data)
             : base(data)
@@ -145,203 +139,203 @@ namespace Reanimator.Excel
                 return;
             }
 
-            this.StringId = "EXCELTABLES";
-            loadedTables = new List<ExcelTable>();
+            StringId = "EXCELTABLES";
+            _loadedTables = new List<ExcelTable>();
 
-            excelTables = new ExcelTableManagerManager();
-            excelTables.AddTable("ACHIEVEMENTS", null, typeof(Excel.Achievements));
-            excelTables.AddTable("ACT", null, typeof(Excel.Act));
-            excelTables.AddTable("AFFIXES", null, typeof(Excel.Affixes));
-            excelTables.AddTable("AFFIXTYPES", null, typeof(Excel.AffixTypes));
-            excelTables.AddTable("AI_BEHAVIOR", null, typeof(Excel.AiBehaviour));
-            excelTables.AddTable("AICOMMON_STATE", null, typeof(Excel.AiCommonState));
-            excelTables.AddTable("AI_INIT", null, typeof(Excel.AiInit));
-            excelTables.AddTable("AI_START", null, typeof(Excel.AiStart));
-            excelTables.AddTable("ANIMATION_CONDITION", null, typeof(Excel.AnimationCondition));
-            excelTables.AddTable("ANIMATION_GROUP", "ANIMATION_GROUPS", typeof(Excel.AnimationGroups));
-            excelTables.AddTable("ANIMATION_STANCE", null, typeof(Excel.AnimationStance));
-            excelTables.AddTable("BACKGROUNDSOUNDS", null, typeof(Excel.BackGroundSounds));
-            excelTables.AddTable("BACKGROUNDSOUNDS2D", null, typeof(Excel.BackGroundSounds2D));
-            excelTables.AddTable("BACKGROUNDSOUNDS3D", null, typeof(Excel.BackGroundSounds3D));
-            excelTables.AddTable("BADGE_REWARDS", null, typeof(Excel.BadgeRewards));
-            excelTables.AddTable("BONES", null, typeof(Excel.Bones));
-            excelTables.AddTable("BONEWEIGHTS", null, typeof(Excel.Bones));
-            excelTables.AddTable("BOOKMARKS", null, typeof(Excel.BookMarks));
-            excelTables.AddTable("BUDGETS_MODEL", null, typeof(Excel.BudgetsModel));
-            excelTables.AddTable("BUDGETS_TEXTURE_MIPS", null, typeof(Excel.BudgetTextureMips));
-            excelTables.AddTable("CHARACTER_CLASS", null, typeof(Excel.CharacterClass));
-            excelTables.AddTable("COLORSETS", null, typeof(Excel.ColorSets));
-            excelTables.AddTable("CONDITION_FUNCTIONS", null, typeof(Excel.ConditionFunctions));
-            excelTables.AddTable("DAMAGE_EFFECTS", "DAMAGEEFFECTS", typeof(Excel.DamageEffects));
-            excelTables.AddTable("DAMAGETYPES", null, typeof(Excel.DamageTypes));
-            excelTables.AddTable("DIALOG", null, typeof(Excel.Dialog));
-            excelTables.AddTable("DIFFICULTY", null, typeof(Excel.Difficulty));
-            excelTables.AddTable("DISPLAY_CHAR", "DISPLAYCHAR", typeof(Excel.Display));                     //// THESE AREN'T BEING LOADED - TODO FIXME
-            excelTables.AddTable("DISPLAY_ITEM", "DISPLAYITEM", typeof(Excel.Display));                     //// THESE AREN'T BEING LOADED - TODO FIXME
-            excelTables.AddTable("EFFECTSFILES", "EFFECTS_FILES", typeof(Excel.EffectsFiles));
-            excelTables.AddTable("EFFECTS_INDEX", "EFFECTSINDEX", typeof(Excel.EffectsIndex));
-            excelTables.AddTable("EFFECTSSHADERS", "EFFECTS_SHADERS", typeof(Excel.EffectsShaders));
-            excelTables.AddTable("FILTER_CHATFILTER", "CHATFILTER", typeof(Excel.Filter));
-            excelTables.AddTable("FILTER_NAMEFILTER", "NAMEFILTER", typeof(Excel.Filter));
-            excelTables.AddTable("FACTION", null, typeof(Excel.Faction));
-            excelTables.AddTable("FACTIONSTANDING", "FACTION_STANDING", typeof(Excel.FactionStanding));
-            excelTables.AddTable("FONT", null, typeof(Excel.Font));
-            excelTables.AddTable("FONTCOLORS", "FONTCOLOR", typeof(Excel.FontColor));
-            excelTables.AddTable("FOOTSTEPS", null, typeof(Excel.FootSteps));
-            excelTables.AddTable("GAME_GLOBALS", "GAMEGLOBALS", typeof(Excel.GameGlobals));
-            excelTables.AddTable("GLOBAL_INDEX", "GLOBALINDEX", typeof(Excel.GlobalIndex));
-            excelTables.AddTable("GLOBAL_STRING", "GLOBALSTRING", typeof(Excel.GlobalIndex));
-            excelTables.AddTable("GLOBALTHEMES", "GLOBAL_THEMES", typeof(Excel.GlobalThemes));
-            excelTables.AddTable("INITDB", null, typeof(Excel.InitDb));
-            excelTables.AddTable("INTERACT", null, typeof(Excel.Interact));
-            excelTables.AddTable("INTERACT_MENU", null, typeof(Excel.InteractMenu));
-            excelTables.AddTable("INVENTORY", null, typeof(Excel.Inventory));
-            excelTables.AddTable("INVENTORY_TYPES", null, typeof(Excel.InventoryTypes));
-            excelTables.AddTable("INVLOC", null, typeof(Excel.InvLoc));
-            excelTables.AddTable("ITEM_LEVELS", null, typeof(Excel.ItemLevels));
-            excelTables.AddTable("ITEMLOOKGROUPS", "ITEM_LOOK_GROUPS", typeof(Excel.ItemLookGroups));
-            excelTables.AddTable("ITEM_LOOKS", null, typeof(Excel.ItemLooks));
-            excelTables.AddTable("ITEM_QUALITY", "ITEMQUALITY", typeof(Excel.ItemQuality));
-            excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
-            excelTables.AddTable("LEVEL", "LEVELS", typeof(Excel.Levels));
-            excelTables.AddTable("LEVEL_DRLG_CHOICE", "LEVELS_DRLG_CHOICE", typeof(Excel.LevelsDrlgChoice));
-            excelTables.AddTable("LEVEL_DRLGS", "LEVELS_DRLGS", typeof(Excel.LevelsDrlgs));
-            excelTables.AddTable("LEVELS_ENV", null, typeof(Excel.LevelsEnv));
-            excelTables.AddTable("LEVEL_FILE_PATHS", "LEVELS_FILE_PATH", typeof(Excel.LevelsFilePath));
-            excelTables.AddTable("ROOM_INDEX", "LEVELS_ROOM_INDEX", typeof(Excel.LevelsRoomIndex));
-            excelTables.AddTable("LEVEL_RULES", "LEVELS_RULES", typeof(Excel.LevelsRules));
-            excelTables.AddTable("LEVEL_THEMES", "LEVELS_THEMES", typeof(Excel.LevelsThemes));
-            excelTables.AddTable("LEVEL_SCALING", "LEVELSCALING", typeof(Excel.LevelScaling));
-            excelTables.AddTable("LOADING_TIPS", null, typeof(Excel.LoadingTips));
-            excelTables.AddTable("MATERIALSCOLLISION", "MATERIALS_COLLISION", typeof(Excel.MaterialsCollision));
-            excelTables.AddTable("MATERIALSGLOBAL", "MATERIALS_GLOBAL", typeof(Excel.MaterialsGlobal));
-            excelTables.AddTable("MELEE_WEAPONS", "MELEEWEAPONS", typeof(Excel.MeleeWeapons));
-            excelTables.AddTable("MISSILES", null, typeof(Excel.Items));
-            excelTables.AddTable("MONLEVEL", null, typeof(Excel.MonLevel));
-            excelTables.AddTable("MONSCALING", null, typeof(Excel.MonScaling));
-            excelTables.AddTable("MONSTERNAMETYPES", "MONSTER_NAME_TYPES", typeof(Excel.MonsterNameTypes));
-            excelTables.AddTable("MONSTERNAMES", "MONSTER_NAMES", typeof(Excel.MonsterNames));
-            excelTables.AddTable("MONSTERS", null, typeof(Excel.Items));
-            excelTables.AddTable("MONSTER_QUALITY", null, typeof(Excel.MonsterQuality));
-            excelTables.AddTable("MOVIESUBTITLES", "MOVIE_SUBTITLES", typeof(Excel.MovieSubTitles));
-            excelTables.AddTable("MOVIELISTS", null, typeof(Excel.MovieLists));
-            excelTables.AddTable("MOVIES", null, typeof(Excel.Movies));
-            excelTables.AddTable("MUSIC", null, typeof(Excel.Music));
-            excelTables.AddTable("MUSICGROOVELEVELS", null, typeof(Excel.MusicGrooveLevels));
-            excelTables.AddTable("MUSICGROOVELEVELTYPES", null, typeof(Excel.MusicGrooveLevelTypes));
-            excelTables.AddTable("MUSIC_REF", "MUSICREF", typeof(Excel.MusicRef));
-            excelTables.AddTable("MUSIC_SCRIPT_DEBUG", "MUSICSCRIPTDEBUG", typeof(Excel.MusicScriptDebug));
-            excelTables.AddTable("MUSICSTINGERS", null, typeof(Excel.MusicStingers));
-            excelTables.AddTable("MUSICSTINGERSETS", null, typeof(Excel.MusicStingerSets));
-            excelTables.AddTable("NPC", null, typeof(Excel.Npc));
-            excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
-            excelTables.AddTable("OBJECTTRIGGERS", null, typeof(Excel.ObjectTriggers));
-            excelTables.AddTable("OFFER", null, typeof(Excel.Offer));
-            //excelTables.AddTable("PALETTES", null, typeof(Excel.FontColor));
-            excelTables.AddTable("PETLEVEL", null, typeof(Excel.MonLevel));
-            excelTables.AddTable("PLAYERLEVELS", null, typeof(Excel.PlayerLevels));
-            excelTables.AddTable("PLAYER_RACE", "PLAYERRACE", typeof(Excel.PlayerRace));
-            excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
-            excelTables.AddTable("PROPERTIES", null, typeof(Excel.Properties));
-            excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
-            excelTables.AddTable("PROPS", null, typeof(Excel.LevelsRoomIndex));
-            excelTables.AddTable("QUEST", null, typeof(Excel.Quest));
-            excelTables.AddTable("QUEST_CAST", null, typeof(Excel.QuestCast));
-            excelTables.AddTable("QUEST_STATE", null, typeof(Excel.QuestState));
-            excelTables.AddTable("QUEST_STATE_VALUE", null, typeof(Excel.BookMarks));
-            excelTables.AddTable("QUEST_STATUS", null, typeof(Excel.QuestStatus));
-            excelTables.AddTable("QUEST_TEMPLATE", null, typeof(Excel.QuestTemplate));
-            excelTables.AddTable("RARENAMES", null, typeof(Excel.RareNames));
-            excelTables.AddTable("RECIPELISTS", null, typeof(Excel.RecipeLists));
-            excelTables.AddTable("RECIPES", null, typeof(Excel.Recipes));
-            excelTables.AddTable("SKILLGROUPS", null, typeof(Excel.SkillGroups));
-            excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
-            excelTables.AddTable("SKILLEVENTTYPES", null, typeof(Excel.SkillEventTypes));
-            excelTables.AddTable("SKILLTABS", null, typeof(Excel.SkillTabs));
-            excelTables.AddTable("SKU", null, typeof(Excel.Sku));
-            excelTables.AddTable("SOUNDBUSES", null, typeof(Excel.SoundBuses));
-            excelTables.AddTable("SOUND_MIXSTATES", "SOUNDMIXSTATES", typeof(Excel.SoundMixStates));
-            excelTables.AddTable("SOUND_MIXSTATE_VALUES", "SOUNDMIXSTATEVALUES", typeof(Excel.SoundMixStateValues));
-            excelTables.AddTable("SOUNDS", null, typeof(Excel.Sounds));
-            excelTables.AddTable("SOUNDVCASETS", null, typeof(Excel.SoundVideoCasets));
-            excelTables.AddTable("SPAWN_CLASS", "SPAWNCLASS", typeof(Excel.SpawnClass));
-            excelTables.AddTable("SUBLEVEL", null, typeof(Excel.SubLevel));
-            excelTables.AddTable("STATE_EVENT_TYPES", null, typeof(Excel.StateEventTypes));
-            excelTables.AddTable("STATE_LIGHTING", null, typeof(Excel.StateLighting));
-            excelTables.AddTable("STATES", null, typeof(Excel.States));
-            excelTables.AddTable("STATS", null, typeof(Excel.Stats));
-            excelTables.AddTable("STATS_FUNC", "STATSFUNC", typeof(Excel.StatsFunc));
-            excelTables.AddTable("STATS_SELECTOR", "STATSSELECTOR", typeof(Excel.BookMarks));
-            excelTables.AddTable("STRING_FILES", null, typeof(Excel.StringsFiles));
-            excelTables.AddTable("TASK_STATUS", null, typeof(Excel.BookMarks));
-            excelTables.AddTable("TAG", null, typeof(Excel.Tag));
-            excelTables.AddTable("TASKS", null, typeof(Excel.Tasks));
-            excelTables.AddTable("TEXTURE_TYPES", "TEXTURETYPES", typeof(Excel.TextureTypes));
-            excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));
-            excelTables.AddTable("UI_COMPONENT", null, typeof(Excel.UIComponent));
-            excelTables.AddTable("UNIT_EVENT_TYPES", "UNITEVENTS", typeof(Excel.UnitEvents));
-            excelTables.AddTable("UNITMODE_GROUPS", null, typeof(Excel.UnitModeGroups));
-            excelTables.AddTable("UNITMODES", null, typeof(Excel.UnitModes));
-            excelTables.AddTable("UNITTYPES", null, typeof(Excel.UnitTypes));
-            excelTables.AddTable("WARDROBE_LAYER", "WARDROBE", typeof(Excel.Wardrobe));
-            excelTables.AddTable("WARDROBE_APPEARANCE_GROUP", null, typeof(Excel.WardrobeAppearanceGroup));
-            excelTables.AddTable("WARDROBE_BLENDOP", null, typeof(Excel.WardrobeBlendOp));
-            excelTables.AddTable("WARDROBE_BODY", null, typeof(Excel.WardrobeBody));
-            excelTables.AddTable("WARDROBE_LAYERSET", null, typeof(Excel.WardrobeBlendOp));
-            excelTables.AddTable("WARDROBE_MODEL", null, typeof(Excel.WardrobeModel));
-            excelTables.AddTable("WARDROBE_MODEL_GROUP", null, typeof(Excel.WardrobeModelGroup));
-            excelTables.AddTable("WARDROBE_PART", null, typeof(Excel.WardrobePart));
-            excelTables.AddTable("WARDROBE_TEXTURESET", null, typeof(Excel.WardrobeTextureSet));
-            excelTables.AddTable("WARDROBE_TEXTURESET_GROUP", null, typeof(Excel.WardrobeTextureSetGroup));
-            excelTables.AddTable("WEATHER", null, typeof(Excel.Weather));
-            excelTables.AddTable("WEATHER_SETS", null, typeof(Excel.WeatherSets));
+            _excelTables = new ExcelTableManagerManager();
+            _excelTables.AddTable("ACHIEVEMENTS", null, typeof(Achievements));
+            _excelTables.AddTable("ACT", null, typeof(Act));
+            _excelTables.AddTable("AFFIXES", null, typeof(Affixes));
+            _excelTables.AddTable("AFFIXTYPES", null, typeof(AffixTypes));
+            _excelTables.AddTable("AI_BEHAVIOR", null, typeof(AiBehaviour));
+            _excelTables.AddTable("AICOMMON_STATE", null, typeof(AiCommonState));
+            _excelTables.AddTable("AI_INIT", null, typeof(AiInit));
+            _excelTables.AddTable("AI_START", null, typeof(AiStart));
+            _excelTables.AddTable("ANIMATION_CONDITION", null, typeof(AnimationCondition));
+            _excelTables.AddTable("ANIMATION_GROUP", "ANIMATION_GROUPS", typeof(AnimationGroups));
+            _excelTables.AddTable("ANIMATION_STANCE", null, typeof(AnimationStance));
+            _excelTables.AddTable("BACKGROUNDSOUNDS", null, typeof(BackGroundSounds));
+            _excelTables.AddTable("BACKGROUNDSOUNDS2D", null, typeof(BackGroundSounds2D));
+            _excelTables.AddTable("BACKGROUNDSOUNDS3D", null, typeof(BackGroundSounds3D));
+            _excelTables.AddTable("BADGE_REWARDS", null, typeof(BadgeRewards));
+            _excelTables.AddTable("BONES", null, typeof(Bones));
+            _excelTables.AddTable("BONEWEIGHTS", null, typeof(Bones));
+            _excelTables.AddTable("BOOKMARKS", null, typeof(BookMarks));
+            _excelTables.AddTable("BUDGETS_MODEL", null, typeof(BudgetsModel));
+            _excelTables.AddTable("BUDGETS_TEXTURE_MIPS", null, typeof(BudgetTextureMips));
+            _excelTables.AddTable("CHARACTER_CLASS", null, typeof(CharacterClass));
+            _excelTables.AddTable("COLORSETS", null, typeof(ColorSets));
+            _excelTables.AddTable("CONDITION_FUNCTIONS", null, typeof(ConditionFunctions));
+            _excelTables.AddTable("DAMAGE_EFFECTS", "DAMAGEEFFECTS", typeof(DamageEffects));
+            _excelTables.AddTable("DAMAGETYPES", null, typeof(DamageTypes));
+            _excelTables.AddTable("DIALOG", null, typeof(Dialog));
+            _excelTables.AddTable("DIFFICULTY", null, typeof(Difficulty));
+            _excelTables.AddTable("DISPLAY_CHAR", "DISPLAYCHAR", typeof(Display));                     //// THESE AREN'T BEING LOADED - TODO FIXME
+            _excelTables.AddTable("DISPLAY_ITEM", "DISPLAYITEM", typeof(Display));                     //// THESE AREN'T BEING LOADED - TODO FIXME
+            _excelTables.AddTable("EFFECTSFILES", "EFFECTS_FILES", typeof(EffectsFiles));
+            _excelTables.AddTable("EFFECTS_INDEX", "EFFECTSINDEX", typeof(EffectsIndex));
+            _excelTables.AddTable("EFFECTSSHADERS", "EFFECTS_SHADERS", typeof(EffectsShaders));
+            _excelTables.AddTable("FILTER_CHATFILTER", "CHATFILTER", typeof(Filter));
+            _excelTables.AddTable("FILTER_NAMEFILTER", "NAMEFILTER", typeof(Filter));
+            _excelTables.AddTable("FACTION", null, typeof(Faction));
+            _excelTables.AddTable("FACTIONSTANDING", "FACTION_STANDING", typeof(FactionStanding));
+            _excelTables.AddTable("FONT", null, typeof(Font));
+            _excelTables.AddTable("FONTCOLORS", "FONTCOLOR", typeof(FontColor));
+            _excelTables.AddTable("FOOTSTEPS", null, typeof(FootSteps));
+            _excelTables.AddTable("GAME_GLOBALS", "GAMEGLOBALS", typeof(GameGlobals));
+            _excelTables.AddTable("GLOBAL_INDEX", "GLOBALINDEX", typeof(GlobalIndex));
+            _excelTables.AddTable("GLOBAL_STRING", "GLOBALSTRING", typeof(GlobalIndex));
+            _excelTables.AddTable("GLOBALTHEMES", "GLOBAL_THEMES", typeof(GlobalThemes));
+            _excelTables.AddTable("INITDB", null, typeof(InitDb));
+            _excelTables.AddTable("INTERACT", null, typeof(Interact));
+            _excelTables.AddTable("INTERACT_MENU", null, typeof(InteractMenu));
+            _excelTables.AddTable("INVENTORY", null, typeof(Inventory));
+            _excelTables.AddTable("INVENTORY_TYPES", null, typeof(InventoryTypes));
+            _excelTables.AddTable("INVLOC", null, typeof(InvLoc));
+            _excelTables.AddTable("ITEM_LEVELS", null, typeof(ItemLevels));
+            _excelTables.AddTable("ITEMLOOKGROUPS", "ITEM_LOOK_GROUPS", typeof(ItemLookGroups));
+            _excelTables.AddTable("ITEM_LOOKS", null, typeof(ItemLooks));
+            _excelTables.AddTable("ITEM_QUALITY", "ITEMQUALITY", typeof(ItemQuality));
+            _excelTables.AddTable("ITEMS", null, typeof(Excel.Items));
+            _excelTables.AddTable("LEVEL", "LEVELS", typeof(Excel.Levels));
+            _excelTables.AddTable("LEVEL_DRLG_CHOICE", "LEVELS_DRLG_CHOICE", typeof(Excel.LevelsDrlgChoice));
+            _excelTables.AddTable("LEVEL_DRLGS", "LEVELS_DRLGS", typeof(Excel.LevelsDrlgs));
+            _excelTables.AddTable("LEVELS_ENV", null, typeof(Excel.LevelsEnv));
+            _excelTables.AddTable("LEVEL_FILE_PATHS", "LEVELS_FILE_PATH", typeof(Excel.LevelsFilePath));
+            _excelTables.AddTable("ROOM_INDEX", "LEVELS_ROOM_INDEX", typeof(Excel.LevelsRoomIndex));
+            _excelTables.AddTable("LEVEL_RULES", "LEVELS_RULES", typeof(Excel.LevelsRules));
+            _excelTables.AddTable("LEVEL_THEMES", "LEVELS_THEMES", typeof(Excel.LevelsThemes));
+            _excelTables.AddTable("LEVEL_SCALING", "LEVELSCALING", typeof(Excel.LevelScaling));
+            _excelTables.AddTable("LOADING_TIPS", null, typeof(Excel.LoadingTips));
+            _excelTables.AddTable("MATERIALSCOLLISION", "MATERIALS_COLLISION", typeof(Excel.MaterialsCollision));
+            _excelTables.AddTable("MATERIALSGLOBAL", "MATERIALS_GLOBAL", typeof(Excel.MaterialsGlobal));
+            _excelTables.AddTable("MELEE_WEAPONS", "MELEEWEAPONS", typeof(Excel.MeleeWeapons));
+            _excelTables.AddTable("MISSILES", null, typeof(Excel.Items));
+            _excelTables.AddTable("MONLEVEL", null, typeof(Excel.MonLevel));
+            _excelTables.AddTable("MONSCALING", null, typeof(Excel.MonScaling));
+            _excelTables.AddTable("MONSTERNAMETYPES", "MONSTER_NAME_TYPES", typeof(Excel.MonsterNameTypes));
+            _excelTables.AddTable("MONSTERNAMES", "MONSTER_NAMES", typeof(Excel.MonsterNames));
+            _excelTables.AddTable("MONSTERS", null, typeof(Excel.Items));
+            _excelTables.AddTable("MONSTER_QUALITY", null, typeof(Excel.MonsterQuality));
+            _excelTables.AddTable("MOVIESUBTITLES", "MOVIE_SUBTITLES", typeof(Excel.MovieSubTitles));
+            _excelTables.AddTable("MOVIELISTS", null, typeof(Excel.MovieLists));
+            _excelTables.AddTable("MOVIES", null, typeof(Excel.Movies));
+            _excelTables.AddTable("MUSIC", null, typeof(Excel.Music));
+            _excelTables.AddTable("MUSICGROOVELEVELS", null, typeof(Excel.MusicGrooveLevels));
+            _excelTables.AddTable("MUSICGROOVELEVELTYPES", null, typeof(Excel.MusicGrooveLevelTypes));
+            _excelTables.AddTable("MUSIC_REF", "MUSICREF", typeof(Excel.MusicRef));
+            _excelTables.AddTable("MUSIC_SCRIPT_DEBUG", "MUSICSCRIPTDEBUG", typeof(Excel.MusicScriptDebug));
+            _excelTables.AddTable("MUSICSTINGERS", null, typeof(Excel.MusicStingers));
+            _excelTables.AddTable("MUSICSTINGERSETS", null, typeof(Excel.MusicStingerSets));
+            _excelTables.AddTable("NPC", null, typeof(Excel.Npc));
+            _excelTables.AddTable("OBJECTS", null, typeof(Excel.Items));
+            _excelTables.AddTable("OBJECTTRIGGERS", null, typeof(Excel.ObjectTriggers));
+            _excelTables.AddTable("OFFER", null, typeof(Excel.Offer));
+            //_excelTables.AddTable("PALETTES", null, typeof(Excel.FontColor));
+            _excelTables.AddTable("PETLEVEL", null, typeof(Excel.MonLevel));
+            _excelTables.AddTable("PLAYERLEVELS", null, typeof(Excel.PlayerLevels));
+            _excelTables.AddTable("PLAYER_RACE", "PLAYERRACE", typeof(Excel.PlayerRace));
+            _excelTables.AddTable("PLAYERS", null, typeof(Excel.Items));
+            _excelTables.AddTable("PROPERTIES", null, typeof(Excel.Properties));
+            _excelTables.AddTable("PROCS", null, typeof(Excel.Procs));
+            _excelTables.AddTable("PROPS", null, typeof(Excel.LevelsRoomIndex));
+            _excelTables.AddTable("QUEST", null, typeof(Excel.Quest));
+            _excelTables.AddTable("QUEST_CAST", null, typeof(Excel.QuestCast));
+            _excelTables.AddTable("QUEST_STATE", null, typeof(Excel.QuestState));
+            _excelTables.AddTable("QUEST_STATE_VALUE", null, typeof(Excel.BookMarks));
+            _excelTables.AddTable("QUEST_STATUS", null, typeof(Excel.QuestStatus));
+            _excelTables.AddTable("QUEST_TEMPLATE", null, typeof(Excel.QuestTemplate));
+            _excelTables.AddTable("RARENAMES", null, typeof(Excel.RareNames));
+            _excelTables.AddTable("RECIPELISTS", null, typeof(Excel.RecipeLists));
+            _excelTables.AddTable("RECIPES", null, typeof(Excel.Recipes));
+            _excelTables.AddTable("SKILLGROUPS", null, typeof(Excel.SkillGroups));
+            _excelTables.AddTable("SKILLS", null, typeof(Excel.Skills));
+            _excelTables.AddTable("SKILLEVENTTYPES", null, typeof(Excel.SkillEventTypes));
+            _excelTables.AddTable("SKILLTABS", null, typeof(Excel.SkillTabs));
+            _excelTables.AddTable("SKU", null, typeof(Excel.Sku));
+            _excelTables.AddTable("SOUNDBUSES", null, typeof(Excel.SoundBuses));
+            _excelTables.AddTable("SOUND_MIXSTATES", "SOUNDMIXSTATES", typeof(Excel.SoundMixStates));
+            _excelTables.AddTable("SOUND_MIXSTATE_VALUES", "SOUNDMIXSTATEVALUES", typeof(Excel.SoundMixStateValues));
+            _excelTables.AddTable("SOUNDS", null, typeof(Excel.Sounds));
+            _excelTables.AddTable("SOUNDVCASETS", null, typeof(Excel.SoundVideoCasets));
+            _excelTables.AddTable("SPAWN_CLASS", "SPAWNCLASS", typeof(Excel.SpawnClass));
+            _excelTables.AddTable("SUBLEVEL", null, typeof(Excel.SubLevel));
+            _excelTables.AddTable("STATE_EVENT_TYPES", null, typeof(Excel.StateEventTypes));
+            _excelTables.AddTable("STATE_LIGHTING", null, typeof(Excel.StateLighting));
+            _excelTables.AddTable("STATES", null, typeof(Excel.States));
+            _excelTables.AddTable("STATS", null, typeof(Excel.Stats));
+            _excelTables.AddTable("STATS_FUNC", "STATSFUNC", typeof(Excel.StatsFunc));
+            _excelTables.AddTable("STATS_SELECTOR", "STATSSELECTOR", typeof(Excel.BookMarks));
+            _excelTables.AddTable("STRING_FILES", null, typeof(Excel.StringsFiles));
+            _excelTables.AddTable("TASK_STATUS", null, typeof(Excel.BookMarks));
+            _excelTables.AddTable("TAG", null, typeof(Excel.Tag));
+            _excelTables.AddTable("TASKS", null, typeof(Excel.Tasks));
+            _excelTables.AddTable("TEXTURE_TYPES", "TEXTURETYPES", typeof(Excel.TextureTypes));
+            _excelTables.AddTable("TREASURE", null, typeof(Excel.Treasure));
+            _excelTables.AddTable("UI_COMPONENT", null, typeof(Excel.UIComponent));
+            _excelTables.AddTable("UNIT_EVENT_TYPES", "UNITEVENTS", typeof(Excel.UnitEvents));
+            _excelTables.AddTable("UNITMODE_GROUPS", null, typeof(Excel.UnitModeGroups));
+            _excelTables.AddTable("UNITMODES", null, typeof(Excel.UnitModes));
+            _excelTables.AddTable("UNITTYPES", null, typeof(Excel.UnitTypes));
+            _excelTables.AddTable("WARDROBE_LAYER", "WARDROBE", typeof(Excel.Wardrobe));
+            _excelTables.AddTable("WARDROBE_APPEARANCE_GROUP", null, typeof(Excel.WardrobeAppearanceGroup));
+            _excelTables.AddTable("WARDROBE_BLENDOP", null, typeof(Excel.WardrobeBlendOp));
+            _excelTables.AddTable("WARDROBE_BODY", null, typeof(Excel.WardrobeBody));
+            _excelTables.AddTable("WARDROBE_LAYERSET", null, typeof(Excel.WardrobeBlendOp));
+            _excelTables.AddTable("WARDROBE_MODEL", null, typeof(Excel.WardrobeModel));
+            _excelTables.AddTable("WARDROBE_MODEL_GROUP", null, typeof(Excel.WardrobeModelGroup));
+            _excelTables.AddTable("WARDROBE_PART", null, typeof(Excel.WardrobePart));
+            _excelTables.AddTable("WARDROBE_TEXTURESET", null, typeof(Excel.WardrobeTextureSet));
+            _excelTables.AddTable("WARDROBE_TEXTURESET_GROUP", null, typeof(Excel.WardrobeTextureSetGroup));
+            _excelTables.AddTable("WEATHER", null, typeof(Excel.Weather));
+            _excelTables.AddTable("WEATHER_SETS", null, typeof(Excel.WeatherSets));
 
             // Empty tables
-            excelTables.AddTable("GOSSIP", null, null);
-            excelTables.AddTable("SOUNDOVERRIDES", null, null);
+            _excelTables.AddTable("GOSSIP", null, null);
+            _excelTables.AddTable("SOUNDOVERRIDES", null, null);
 
             // Mythos tables
-            excelTables.AddTable("LEVEL_AREAS_MADLIB", null, null);
-            excelTables.AddTable("LEVEL_AREAS_CAVE_NOUNS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_TEMPLE_NOUNS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_GOTHIC_NOUNS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_DESERTGOTHIC_NOUNS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_GOBLIN_NOUNS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_HEATH_NOUNS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_CANYON_NOUNS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_FOREST_NOUNS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_FARMLAND_NOUNS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_ADJECTIVES", null, null);
-            excelTables.AddTable("LEVEL_AREAS_ADJ_BRIGHT", null, null);
-            excelTables.AddTable("LEVEL_AREAS_AFFIXS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_SUFFIXS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_PROPERNAMEZONE1", null, null);
-            excelTables.AddTable("LEVEL_AREAS_PROPERNAMEZONE2", null, null);
-            excelTables.AddTable("LEVEL_AREAS_GOBLIN_NAMES", null, null);
-            excelTables.AddTable("LEVEL_ZONES", null, null);
-            excelTables.AddTable("LEVEL_AREAS", null, null);
-            excelTables.AddTable("LEVEL_AREAS_LINKER", null, null);
-            excelTables.AddTable("LEVEL_AREAS_SUFFIXS", null, null);
-            excelTables.AddTable("LEVEL_ENVIRONMENTS", null, null);
-            excelTables.AddTable("QUEST_COUNT_TUGBOAT", null, null);
-            excelTables.AddTable("QUEST_RANDOM_FOR_TUGBOAT", null, null);
-            excelTables.AddTable("QUEST_TITLES_FOR_TUGBOAT", null, null);
-            excelTables.AddTable("QUEST_REWARD_BY_LEVEL_TUGBOAT", null, null);
-            excelTables.AddTable("QUEST_RANDOM_TASKS_FOR_TUGBOAT", null, null);
-            excelTables.AddTable("QUESTS_TASKS_FOR_TUGBOAT", null, null);
-            excelTables.AddTable("QUEST_DICTIONARY_FOR_TUGBOAT", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_MADLIB", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_CAVE_NOUNS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_TEMPLE_NOUNS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_GOTHIC_NOUNS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_DESERTGOTHIC_NOUNS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_GOBLIN_NOUNS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_HEATH_NOUNS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_CANYON_NOUNS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_FOREST_NOUNS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_FARMLAND_NOUNS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_ADJECTIVES", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_ADJ_BRIGHT", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_AFFIXS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_SUFFIXS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_PROPERNAMEZONE1", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_PROPERNAMEZONE2", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_GOBLIN_NAMES", null, null);
+            _excelTables.AddTable("LEVEL_ZONES", null, null);
+            _excelTables.AddTable("LEVEL_AREAS", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_LINKER", null, null);
+            _excelTables.AddTable("LEVEL_AREAS_SUFFIXS", null, null);
+            _excelTables.AddTable("LEVEL_ENVIRONMENTS", null, null);
+            _excelTables.AddTable("QUEST_COUNT_TUGBOAT", null, null);
+            _excelTables.AddTable("QUEST_RANDOM_FOR_TUGBOAT", null, null);
+            _excelTables.AddTable("QUEST_TITLES_FOR_TUGBOAT", null, null);
+            _excelTables.AddTable("QUEST_REWARD_BY_LEVEL_TUGBOAT", null, null);
+            _excelTables.AddTable("QUEST_RANDOM_TASKS_FOR_TUGBOAT", null, null);
+            _excelTables.AddTable("QUESTS_TASKS_FOR_TUGBOAT", null, null);
+            _excelTables.AddTable("QUEST_DICTIONARY_FOR_TUGBOAT", null, null);
 
             // I think these are Mythos
-            //excelTables.AddTable("INVLOCIDX", null, null);          //// TODO this table is used in hero editor
-            excelTables.AddTable("SKILL_LEVELS", null, null);
-            excelTables.AddTable("SKILL_STATS", null, null);
-            excelTables.AddTable("CHARDISPLAY", null, null);
-            excelTables.AddTable("ITEMDISPLAY", null, null);
-            excelTables.AddTable("EFFECTS", null, null);
-            excelTables.AddTable("RENDER_FLAGS", null, null);
-            excelTables.AddTable("DEBUG_BARS", null, null);
-            excelTables.AddTable("ACHIEVEMENT_SLOTS", null, null);
-            excelTables.AddTable("CRAFTING_SLOTS", null, null);
+            //_excelTables.AddTable("INVLOCIDX", null, null);          //// TODO this table is used in hero editor
+            _excelTables.AddTable("SKILL_LEVELS", null, null);
+            _excelTables.AddTable("SKILL_STATS", null, null);
+            _excelTables.AddTable("CHARDISPLAY", null, null);
+            _excelTables.AddTable("ITEMDISPLAY", null, null);
+            _excelTables.AddTable("EFFECTS", null, null);
+            _excelTables.AddTable("RENDER_FLAGS", null, null);
+            _excelTables.AddTable("DEBUG_BARS", null, null);
+            _excelTables.AddTable("ACHIEVEMENT_SLOTS", null, null);
+            _excelTables.AddTable("CRAFTING_SLOTS", null, null);
         }
 
         protected override void ParseTables(byte[] data)
@@ -356,14 +350,14 @@ namespace Reanimator.Excel
 
         public ExcelTable GetTable(string stringId)
         {
-            return excelTables.GetTable(stringId);
+            return _excelTables.GetTable(stringId);
         }
 
         public ExcelTable GetTable(int tableId)
         {
             foreach (ExcelTableTable excelTable in tables)
             {
-                if (excelTable.id == tableId)
+                if (excelTable.code == tableId)
                 {
                     return this.GetTable(excelTable.stringId);
                 }
@@ -374,25 +368,25 @@ namespace Reanimator.Excel
 
         public List<ExcelTable> GetLoadedTables()
         {
-            return loadedTables;
+            return _loadedTables;
         }
 
         public int LoadedTableCount
         {
-            get { return loadedTables.Count; }
+            get { return _loadedTables.Count; }
         }
 
         public bool LoadTables(string folder, ProgressForm progress)
         {
-            this.AllTablesLoaded = true;
+            AllTablesLoaded = true;
 
             for (int i = 0; i < Count; i++)
             {
                 string stringId = GetTableStringId(i);
-                string fileName = excelTables.GetReplacement(stringId);
+                string fileName = _excelTables.GetReplacement(stringId);
                 if (fileName == "EXCELTABLES")
                 {
-                    loadedTables.Add(this);
+                    _loadedTables.Add(this);
                     continue;
                 }
 
@@ -417,11 +411,11 @@ namespace Reanimator.Excel
                         }
                         else
                         {
-                            if (!excelTables.IsMythosTable(stringId))
+                            if (!_excelTables.IsMythosTable(stringId))
                             {
                                 MessageBox.Show("File not found!\n\n" + filePath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 Debug.WriteLine("Debug Output - File not found: " + fileName);
-                                this.AllTablesLoaded = false;
+                                AllTablesLoaded = false;
                             }
                             continue;
                         }
@@ -431,7 +425,7 @@ namespace Reanimator.Excel
                 {
                     MessageBox.Show("Failed to open file for reading!\n\n" + filePath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Debug.WriteLine("Debug Output - File failed to open: " + filePath);
-                    this.AllTablesLoaded = false;
+                    AllTablesLoaded = false;
                     continue;
                 }
 
@@ -439,12 +433,12 @@ namespace Reanimator.Excel
                 try
                 {
                     Debug.Write(stringId + "\n");
-                    ExcelTable excelTable = excelTables.CreateTable(stringId, buffer);
+                    ExcelTable excelTable = _excelTables.CreateTable(stringId, buffer);
                     if (excelTable != null)
                     {
                         if (!excelTable.IsNull)
                         {
-                            loadedTables.Add(excelTable);
+                            _loadedTables.Add(excelTable);
                         }
                     }
                     else
@@ -465,7 +459,7 @@ namespace Reanimator.Excel
                 }
             }
 
-            loadedTables.Sort();
+            _loadedTables.Sort();
             return true;
         }
     }

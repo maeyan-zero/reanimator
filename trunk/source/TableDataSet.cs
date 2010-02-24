@@ -16,6 +16,11 @@ namespace Reanimator
 {
     public class TableDataSet : IDisposable
     {
+        private static String _tableVersion = "1.0.0";
+        private static String _relationsVersion = "1.0.0";
+        private static String _tableVersionKey = "TableVersion";
+        private static String _relationsVersionKey = "RelationsVersion";
+
         DataSet _xlsDataSet;
         readonly Hashtable _xlsDataTables;
 
@@ -47,11 +52,22 @@ namespace Reanimator
                     using (FileStream fs = new FileStream(Config.CacheFilePath, FileMode.Open, FileAccess.Read))
                     {
 
-                        BinaryFormatter bf = new BinaryFormatter {TypeFormat = FormatterTypeStyle.XsdString};
+                        BinaryFormatter bf = new BinaryFormatter { TypeFormat = FormatterTypeStyle.XsdString };
                         _xlsDataSet = bf.Deserialize(fs) as DataSet;
-                    }
+                        if (_xlsDataSet != null)
+                        {
+                            String currentVersion = _xlsDataSet.ExtendedProperties[_tableVersionKey] as String;
+                            if (currentVersion != null)
+                            {
+                                if (currentVersion.CompareTo(_tableVersion) == 0)
+                                {
+                                    return;
+                                }
+                            }
 
-                    return;
+                            MessageBox.Show("The loaded dataset cache is out of date and must be regnerated before it can be used again!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
@@ -60,14 +76,22 @@ namespace Reanimator
             }
 
             Directory.CreateDirectory(Config.CacheFilePath.Substring(0, Config.CacheFilePath.LastIndexOf(@"\") + 1));
-            _xlsDataSet = new DataSet("xlsDataSet") {Locale = new CultureInfo("en-us", true)};
+            _xlsDataSet = new DataSet("xlsDataSet") { Locale = new CultureInfo("en-us", true) };
         }
 
         public void SaveDataSet()
         {
             using (FileStream fs = new FileStream(Config.CacheFilePath, FileMode.Create, FileAccess.ReadWrite))
             {
-                BinaryFormatter bf = new BinaryFormatter {TypeFormat = FormatterTypeStyle.XsdString};
+                BinaryFormatter bf = new BinaryFormatter { TypeFormat = FormatterTypeStyle.XsdString };
+                if (_xlsDataSet.ExtendedProperties.Contains(_tableVersionKey))
+                {
+                    _xlsDataSet.ExtendedProperties[_tableVersionKey] = _tableVersion;
+                }
+                else
+                {
+                    _xlsDataSet.ExtendedProperties.Add(_tableVersionKey, _tableVersion);
+                }
                 bf.Serialize(fs, _xlsDataSet);
                 fs.Close();
             }
@@ -117,7 +141,7 @@ namespace Reanimator
                 List<ExcelTable.ExcelOutputAttribute> outputAttributes = new List<ExcelTable.ExcelOutputAttribute>(type.GetFields().Length + 1);
 
                 #region generate_columns
-                DataColumn indexColumn = mainDataTable.Columns.Add("index");
+                DataColumn indexColumn = mainDataTable.Columns.Add("Index");
                 indexColumn.AutoIncrement = true;
                 indexColumn.Unique = true;
                 mainDataTable.PrimaryKey = new[] { indexColumn };
@@ -145,6 +169,15 @@ namespace Reanimator
                             DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, typeof(String));
                             dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringOffset, true);
                             dataColumn.DefaultValue = String.Empty;
+                            continue;
+                        }
+                        if (excelOutputAttribute.IsStringIndex)
+                        {
+                            DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
+                            dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringIndex, true);
+                            outputAttributes.Add(null);
+                            DataColumn dataColumnString = mainDataTable.Columns.Add(fieldInfo.Name + "_string", typeof(String));
+                            dataColumnString.DefaultValue = String.Empty;
                             continue;
                         }
                     }
@@ -179,48 +212,33 @@ namespace Reanimator
                         Object value = fieldInfo.GetValue(table);
                         ExcelTable.ExcelOutputAttribute excelOutputAttribute = outputAttributes[col];
 
-                        /*
-                        // to fix up / reimplement
-                        if (excelOutputAttribute != null && false)
-                        {
-                            if (excelOutputAttribute.IsStringOffset)
-                            {
-                                value = excelTable.Strings[value];
-                            }
-                            else if (excelOutputAttribute.IsIntOffset)
-                            {
-                                int offset = (int)value;
-                                if (offset != 0 && excelTable.DataBlock != null)
-                                {
-                                    DataGridViewComboBoxCell cell = new DataGridViewComboBoxCell();
-                                    String[] fields = excelOutputAttribute.FieldNames;
-                                    int i = 0;
-                                    foreach (String s in fields)
-                                    {
-                                        int intValue = BitConverter.ToInt32(excelTable.DataBlock, offset + i * sizeof(Int32));
-                                        i++;
-
-                                        cell.Items.Add(s + " = " + intValue);
-                                    }
-
-                                    cell.Value = cell.Items[excelOutputAttribute.DefaultIndex];
-
-                                    // dataGridView[col, row] = cell;
-                                    value = null;
-                                }
-                            }
-                        }*/
-
                         if (excelOutputAttribute != null)
                         {
                             if (excelOutputAttribute.IsStringOffset)
                             {
-                                value = excelTable.Strings[value];
+                                baseRow[col] = excelTable.Strings[value];
+                                col++;
+                            }
+                            else if (excelOutputAttribute.IsStringIndex)
+                            {
+                                int valueInt = (int)value;
+                                String stringValue = valueInt == -1 ? String.Empty : excelTable.SecondaryStrings[valueInt];
+                                baseRow[col] = value;
+                                col++;
+                                baseRow[col] = stringValue;
+                                col++;
+                            }
+                            else
+                            {
+                                baseRow[col] = value;
+                                col++;
                             }
                         }
-
-                        baseRow[col] = value;
-                        col++;
+                        else
+                        {
+                            baseRow[col] = value;
+                            col++;
+                        }
                     }
 
                     mainDataTable.Rows.Add(baseRow);
@@ -351,15 +369,16 @@ namespace Reanimator
                 if (excelOutputAttribute != null)
                 {
                     DataColumn dcChild = mainDataTable.Columns[col];
+                    dcChild.ExtendedProperties.Clear();
 
                     if (excelOutputAttribute.IsStringId)
                     {
-                        DataTable dtStrings = _xlsDataSet.Tables[excelOutputAttribute.StringTable];
+                        DataTable dtStrings = _xlsDataSet.Tables[excelOutputAttribute.Table];
                         if (dtStrings != null)
                         {
                             DataColumn dcParent = dtStrings.Columns["ReferenceId"];
-                            
-                            String relationName = excelTable.StringId + dcChild.ColumnName + "StringId";
+
+                            String relationName = excelTable.StringId + dcChild.ColumnName + ExcelTable.ColumnTypeKeys.IsStringId;
                             DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
                             _xlsDataSet.Relations.Add(relation);
 
@@ -370,10 +389,42 @@ namespace Reanimator
                             col++;
                         }
                     }
+                    else if (excelOutputAttribute.IsTableIndex)
+                    {
+                        DataTable dt = GetExcelTable(excelOutputAttribute.TableId);
+                        if (dt == null && excelOutputAttribute.Table != null)
+                        {
+                            dt = _xlsDataSet.Tables[excelOutputAttribute.Table];
+                        }
+
+                        if (dt != null)
+                        {
+                            DataColumn dcParent = dt.Columns["Index"];
+
+                            String relationName = excelTable.StringId + dcChild.ColumnName + ExcelTable.ColumnTypeKeys.IsTableIndex;
+                            DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
+                            _xlsDataSet.Relations.Add(relation);
+
+                            DataColumn dcString = mainDataTable.Columns.Add(dcChild.ColumnName + "_string", typeof(String), String.Format("Parent({0}).{1}", relationName, excelOutputAttribute.Column));
+                            dcString.SetOrdinal(col + 1);
+                            dcString.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsRelationGenerated, true);
+                            dcChild.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsTableIndex, true);
+                            col++;
+                        }
+                    }
                 }
 
                 col++;
             }
+        }
+
+        public DataTable GetExcelTable(int code)
+        {
+            DataTable excelTables = _xlsDataSet.Tables["EXCELTABLES"];
+            if (excelTables == null) return null;
+
+            DataRow[] rows = excelTables.Select(String.Format("code = '{0}'", code));
+            return rows.Length == 0 ? null : _xlsDataSet.Tables[rows[0][1].ToString()];
         }
 
         public DataSet XlsDataSet

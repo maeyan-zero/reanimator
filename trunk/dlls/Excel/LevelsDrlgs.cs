@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Reanimator.Excel
@@ -19,6 +16,7 @@ namespace Reanimator.Excel
             public string drlgRuleSet;
             public Int32 drlgDisplayName;//stridx
             public Int32 undefined1;
+            [ExcelOutput(IsStringIndex = true)]
             public Int32 style;
             public Int32 theme0;
             public Int32 theme1;

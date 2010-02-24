@@ -10,7 +10,8 @@ namespace Reanimator.Forms
         {
             InitializeComponent();
 
-            this.StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
+            progressBar.MarqueeAnimationSpeed = 25;
         }
 
         public delegate void ParameterizedProgressThread(ProgressForm progressBar, Object param);
@@ -24,15 +25,15 @@ namespace Reanimator.Forms
             _threadFunc = func;
             _threadParam = param;
 
-            this.Disposed += ProgressForm_Disposed;
+            Disposed += ProgressForm_Disposed;
         }
 
         private void ProgressForm_Disposed(Object sender, EventArgs e)
         {
-            if (this._owner == null) return;
+            if (_owner == null) return;
 
-            this._owner.Hide();
-            this._owner.Show();
+            _owner.Hide();
+            _owner.Show();
         }
 
         private void Progress_Shown(Object sender, EventArgs e)
@@ -42,7 +43,7 @@ namespace Reanimator.Forms
             Form f = sender as Form;
             if (f != null)
             {
-                this._owner = f.Owner;
+                _owner = f.Owner;
             }
 
             Thread t = new Thread(ProgressThread);
@@ -52,16 +53,16 @@ namespace Reanimator.Forms
         private void ProgressThread(Object param)
         {
             _threadFunc.Invoke(this, param);
-            this.Dispose();
+            Dispose();
         }
 
         delegate void ConfigBarCallback(int minimum, int maximum, int step);
         public void ConfigBar(int minimum, int maximum, int step)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 ConfigBarCallback d = ConfigBar;
-                this.Invoke(d, new Object[] { minimum, maximum, step });
+                Invoke(d, new Object[] { minimum, maximum, step });
             }
             else
             {
@@ -77,10 +78,10 @@ namespace Reanimator.Forms
         delegate void SetLoadingTextCallback(String loadingText);
         public void SetLoadingText(String loadingText)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 SetLoadingTextCallback d = SetLoadingText;
-                this.Invoke(d, new Object[] { loadingText });
+                Invoke(d, new Object[] { loadingText });
             }
             else
             {
@@ -91,10 +92,10 @@ namespace Reanimator.Forms
         delegate void SetCurrentItemTextCallback(String currentItem);
         public void SetCurrentItemText(String currentItem)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 SetCurrentItemTextCallback d = SetCurrentItemText;
-                this.Invoke(d, new Object[] { currentItem });
+                Invoke(d, new Object[] { currentItem });
             }
             else
             {
@@ -105,10 +106,10 @@ namespace Reanimator.Forms
         delegate void StepProgressCallback();
         public void StepProgress()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 StepProgressCallback d = StepProgress;
-                this.Invoke(d);
+                Invoke(d);
             }
             else
             {
@@ -122,10 +123,10 @@ namespace Reanimator.Forms
         delegate void SetStyleCallback(ProgressBarStyle progressBarStyle);
         public void SetStyle(ProgressBarStyle progressBarStyle)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 SetStyleCallback d = SetStyle;
-                this.Invoke(d, new Object[] { progressBarStyle });
+                Invoke(d, new Object[] { progressBarStyle });
             }
             else
             {
@@ -136,8 +137,8 @@ namespace Reanimator.Forms
         // Each time the text is modified (a new item is completed) let the progressbar progress and refresh the form
         private void currentItemLabel_TextChanged(object sender, EventArgs e)
         {
-            this.StepProgress();
-            this.Refresh();
+            StepProgress();
+            Refresh();
         }
     }
 }
