@@ -25,6 +25,7 @@ namespace Reanimator
         private StringsTables stringsTables;
         private UpdateCheckerParams currentVersionInfos;
         private UpdateForm updateForm;
+        private Mod modification;
 
         private int childFormNumber = 0;
 
@@ -40,6 +41,23 @@ namespace Reanimator
             currentVersionInfos.saveFolder = @"C:\";
 
             InitializeComponent();
+        }
+
+        private void CheckEnvironment()
+        {
+            if (Directory.Exists(Config.HglDir) == false)
+            {
+                MessageBox.Show("It looks like your using Reanimator for the first time. Please set your Hellgate: London directory.");
+                DialogResult result = options.ShowDialog();
+            }
+            if (Config.datUnpacked == false)
+            {
+                DialogResult result = MessageBox.Show("To use Reanimator, you must extract files from the latest patch 1.2. Continue?", "Initialization", MessageBoxButtons.OKCancel);
+                if (result == DialogResult.OK)
+                {
+                    // Extract DAT appropriatly
+                }
+            }
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -149,8 +167,15 @@ namespace Reanimator
 
             try
             {
-                //Mod.DemoMod();
+                // Pass Excel Table references
+                if (modification == null)
+                {
+                    modification = new Mod(excelTables);
+                }
+
+                // Check for consistency
                 Mod.Parse(szFileName);
+
                 return true;
             }
             catch (Exception e)

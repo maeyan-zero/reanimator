@@ -81,5 +81,11 @@ namespace Reanimator
             get { return GetValue("cacheFilePath", @"cache\dataSet.dat"); }
             set { SetValue("cacheFilePath", value); }
         }
+
+        public static bool datUnpacked
+        {
+            get { return GetValue<bool>("datUnpacked", false); }
+            set { SetValue<bool>("datUnpacked", value); }
+        }
     }
 }
