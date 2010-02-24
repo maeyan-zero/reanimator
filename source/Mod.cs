@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Reanimator.Excel;
 
 namespace Reanimator
 {
@@ -15,7 +16,12 @@ namespace Reanimator
 #pragma warning disable 0649
     public class Mod
     {
-        List<Modification> modification;
+        ExcelTables excelTables;
+
+        public Mod(ExcelTables excel)
+        {
+            excelTables = excel;
+        }
 
         public static bool Parse(string xml)
         {
@@ -74,7 +80,7 @@ namespace Reanimator
         public class Revival
         {
             [XmlElement("modification")]
-            public Modification[] modification;
+            Modification[] modification;
 
             public Modification[] Modification
             {
@@ -129,32 +135,55 @@ namespace Reanimator
             {
                 return this.modification == null;
             }
+
+            public MyEnumerator GetEnumerator()
+            {
+                return new MyEnumerator(this);
+            }
+
+            public class MyEnumerator
+            {
+                int nIndex;
+                Revival collection;
+                public MyEnumerator(Revival coll)
+                {
+                    collection = coll;
+                    nIndex = -1;
+                }
+
+                public bool MoveNext()
+                {
+                    nIndex++;
+                    return (nIndex < collection.modification.GetLength(0));
+                }
+
+                public Modification Current
+                {
+                    get
+                    {
+                        return (collection.modification[nIndex]);
+                    }
+                }
+            }
         }
 
         public class Modification
         {
             [XmlElement("title")]
-            public string title;
-
+            string title;
             [XmlElement("version")]
-            public string version;
-
+            string version;
             [XmlElement("description")]
-            public string description;
-
+            string description;
             [XmlElement("url")]
-            public string url;
-
+            string url;
             [XmlElement("type")]
-            public string type;
-
+            string type;
             [XmlElement("pack")]
-            public Pack[] pack;
+            Pack[] pack;
 
-            public Pack[] Pack
-            {
-                get { return pack; }
-            }
+            [NonSerialized]
+            public bool apply;
 
             public Modification()
             {
@@ -191,6 +220,11 @@ namespace Reanimator
                 AddPack(pack);
             }
 
+            public Pack[] Pack
+            {
+                get { return pack; }
+            }
+
             public void AddPack(Pack pack)
             {
                 if (this.pack == null)
@@ -224,6 +258,36 @@ namespace Reanimator
             public bool HasPack()
             {
                 return this.pack == null;
+            }
+
+            public MyEnumerator GetEnumerator()
+            {
+                return new MyEnumerator(this);
+            }
+
+            public class MyEnumerator
+            {
+                int nIndex;
+                Modification collection;
+                public MyEnumerator(Modification coll)
+                {
+                    collection = coll;
+                    nIndex = -1;
+                }
+
+                public bool MoveNext()
+                {
+                    nIndex++;
+                    return (nIndex < collection.pack.GetLength(0));
+                }
+
+                public Pack Current
+                {
+                    get
+                    {
+                        return (collection.pack[nIndex]);
+                    }
+                }
             }
         }
 
@@ -294,6 +358,36 @@ namespace Reanimator
             public bool HasFile()
             {
                 return file == null;
+            }
+
+            public MyEnumerator GetEnumerator()
+            {
+                return new MyEnumerator(this);
+            }
+
+            public class MyEnumerator
+            {
+                int nIndex;
+                Pack collection;
+                public MyEnumerator(Pack coll)
+                {
+                    collection = coll;
+                    nIndex = -1;
+                }
+
+                public bool MoveNext()
+                {
+                    nIndex++;
+                    return (nIndex < collection.file.GetLength(0));
+                }
+
+                public File Current
+                {
+                    get
+                    {
+                        return (collection.file[nIndex]);
+                    }
+                }
             }
         }
 
@@ -384,6 +478,36 @@ namespace Reanimator
             {
                 return this.entity != null;
             }
+
+            public MyEnumerator GetEnumerator()
+            {
+                return new MyEnumerator(this);
+            }
+
+            public class MyEnumerator
+            {
+                int nIndex;
+                Modify collection;
+                public MyEnumerator(Modify coll)
+                {
+                    collection = coll;
+                    nIndex = -1;
+                }
+
+                public bool MoveNext()
+                {
+                    nIndex++;
+                    return (nIndex < collection.entity.GetLength(0));
+                }
+
+                public Entity Current
+                {
+                    get
+                    {
+                        return (collection.entity[nIndex]);
+                    }
+                }
+            }
         }
 
         public class Entity
@@ -451,6 +575,36 @@ namespace Reanimator
             public bool HasAttribute()
             {
                 return attribute == null;
+            }
+
+            public MyEnumerator GetEnumerator()
+            {
+                return new MyEnumerator(this);
+            }
+
+            public class MyEnumerator
+            {
+                int nIndex;
+                Entity collection;
+                public MyEnumerator(Entity coll)
+                {
+                    collection = coll;
+                    nIndex = -1;
+                }
+
+                public bool MoveNext()
+                {
+                    nIndex++;
+                    return (nIndex < collection.attribute.GetLength(0));
+                }
+
+                public Attribute Current
+                {
+                    get
+                    {
+                        return (collection.attribute[nIndex]);
+                    }
+                }
             }
         }
 
@@ -554,89 +708,6 @@ namespace Reanimator
             }
         }
 
-        public class Replace
-        {
-            public object replace;
-        }
-
-        public static void DemoMod()
-        {
-            Revival revival1 = new Revival();
-            Modification mod = new Modification();
-            Pack pack = new Pack();
-            File file = new File();
-            Modify modify = new Modify();
-            Entity entity = new Entity();
-            Attribute attribute = new Attribute();
-
-            revival1.AddModification(mod);
-            mod.AddPack(pack);
-            pack.AddFile(file);
-            file.SetModify(modify);
-            modify.AddEntity(entity);
-            entity.AddAttribute(attribute);
-            attribute.AddReplace("1123");
-
-
-            mod.title = "Revival SP modificaton";
-            mod.description = "This is the description";
-            mod.version = "1.1.0";
-            mod.url = "www.hellgateaus.net";
-            mod.type = "required";
-
-            pack.id = "hellgate000";
-
-            file.id = "gameglobals.txt.cooked";
-
-            entity.id = "vendorRefresh";
-
-            attribute.id = "intData";
-
-
-            Revival revival = new Revival();
-
-            revival.modification = new Modification[1];
-            revival.modification[0] = new Modification();
-            revival.modification[0].title = "Revival SP modificaton";
-            revival.modification[0].description = "This is the description";
-            revival.modification[0].version = "1.1.0";
-            revival.modification[0].pack = new Pack[1];
-            revival.modification[0].pack[0] = new Pack();
-            revival.modification[0].pack[0].id = "hellgate000";
-            revival.modification[0].pack[0].file = new File[1];
-            revival.modification[0].pack[0].file[0] = new File();
-            revival.modification[0].pack[0].file[0].id = "gameglobals.txt.cooked";
-            revival.modification[0].pack[0].file[0].modify = new Modify();
-            revival.modification[0].pack[0].file[0].modify.entity = new Entity[1];
-            revival.modification[0].pack[0].file[0].modify.entity[0] = new Entity();
-            revival.modification[0].pack[0].file[0].modify.entity[0].id = "vendorRefresh";
-            revival.modification[0].pack[0].file[0].modify.entity[0].attribute = new Attribute[1];
-            revival.modification[0].pack[0].file[0].modify.entity[0].attribute[0] = new Attribute();
-            revival.modification[0].pack[0].file[0].modify.entity[0].attribute[0].id = "intData";
-            revival.modification[0].pack[0].file[0].modify.entity[0].attribute[0].replace = new String[1];
-            revival.modification[0].pack[0].file[0].modify.entity[0].attribute[0].replace[0] = "1123";
-            //revival.modification[0].pack[0].file[0].modify.entity[0].attribute[1] = new Attribute();
-            //revival.modification[0].pack[0].file[0].modify.entity[0].attribute[1].id = "outData";
-            //revival.modification[0].pack[0].file[0].modify.entity[0].attribute[1].replace = new String[1];
-            //revival.modification[0].pack[0].file[0].modify.entity[0].attribute[1].replace[0] = "1123";
-
-            //revival.modification[0].pack[0].file[0].modify.entity = new Entity[2];
-            //revival.modification[0].pack[0].file[0].modify.entity[1] = new Entity();
-            //revival.modification[0].pack[0].file[0].modify.entity[1].id = "vendorRefresh";
-            //revival.modification[0].pack[0].file[0].modify.entity[1].attribute = new Attribute[2];
-            //revival.modification[0].pack[0].file[0].modify.entity[1].attribute[0] = new Attribute();
-            //revival.modification[0].pack[0].file[0].modify.entity[1].attribute[0].id = "intData";
-            //revival.modification[0].pack[0].file[0].modify.entity[1].attribute[0].replace = new String[1];
-            //revival.modification[0].pack[0].file[0].modify.entity[1].attribute[0].replace[0] = "1123";
-            //revival.modification[0].pack[0].file[0].modify.entity[1].attribute[1] = new Attribute();
-            //revival.modification[0].pack[0].file[0].modify.entity[1].attribute[1].id = "outData";
-            //revival.modification[0].pack[0].file[0].modify.entity[1].attribute[1].replace = new String[1];
-            //revival.modification[0].pack[0].file[0].modify.entity[1].attribute[1].replace[0] = "1123";
-
-            // Serialization
-            Serialize(revival1, @"c:\list.xml");
-        }
-
         public static void Serialize(Revival revival, string path)
         {
             XmlSerializer s = new XmlSerializer(typeof(Revival));
@@ -645,7 +716,7 @@ namespace Reanimator
             w.Close();
         }
 
-        public Revival Deserialize(string path)
+        public static Revival Deserialize(string path)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Revival));
             TextReader tr = new StreamReader(path);
@@ -653,6 +724,61 @@ namespace Reanimator
             tr.Close();
 
             return revival;
+        }
+
+        public List<ExcelTable> Apply(Revival revival)
+        {
+            List<ExcelTable> excelTable = new List<ExcelTable>();
+            List<String> loadedTables = new List<string>();
+
+            try
+            {
+                foreach (Modification modification in revival)
+                {
+                    if (modification.apply == true)
+                    {
+                        foreach (Pack pack in modification)
+                        {
+                            // Generally only the one pack will be modified
+                            // Logic here is skipped at the moment
+                            foreach (File file in pack)
+                            {
+                                if (loadedTables.Contains(file.id) == false)
+                                {
+                                    excelTable.Add(excelTables.GetTable(file.id));
+                                    loadedTables.Add(file.id);
+                                }
+
+                                if (file.modify != null)
+                                {
+                                    foreach (Entity entity in file.modify)
+                                    {
+                                        foreach (Attribute attribute in entity)
+                                        {
+                                            if (attribute.replace != null)
+                                            {
+                                                // Replace
+                                            }
+                                            else if (attribute.bitmask != null)
+                                            {
+                                                //foreach (bool bit in attribute.bitmask)
+                                                //{
+                                                //    // Perform Bitwise operation
+                                                //}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return excelTable;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 
