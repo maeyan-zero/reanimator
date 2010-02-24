@@ -14,7 +14,7 @@ namespace Reanimator.Excel
             TableHeader header;
 
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-            public string color;
+            public string Color;
             public byte blue;
             public byte green;
             public byte red;

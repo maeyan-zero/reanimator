@@ -12,25 +12,26 @@ namespace Reanimator.Excel
         class AffixesTable
         {
             TableHeader header;
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelOutput(IsStringOffset = true)]
             public Int32 affix;
             public Int32 unknown02;
             public Int32 alwaysApply;
-            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
+            [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
             public Int32 qualityNameString;
-            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
+            [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
             public Int32 setNameString;
-            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
+            [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
             public Int32 magicNameString;
-            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
+            [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
             public Int32 replaceNameString;
-            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Affix")]
+            [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
             public Int32 flavorText;
             public Int32 unknown03;
             public Int32 nameColor;
             public Int32 gridColor;
             public Int32 dom;
             public Int32 code;
+            [ExcelOutput(IsTableIndex = true, TableId = 0x7530, Column = "AffixType")]
             public Int32 affixType1;
             public Int32 affixType2;
             public Int32 affixType3;
@@ -38,6 +39,7 @@ namespace Reanimator.Excel
             public Int32 affixType5;
             public Int32 affixType6;
             public Int32 suffix;
+            [ExcelOutput(IsStringIndex = true)]
             public Int32 group;
             public Int32 style;
             public Int32 useWhenAugmenting;

@@ -71,7 +71,7 @@ namespace Reanimator.Forms
             if (excelTable != null)
             {
                 dataGridView.DataMember = excelTable.StringId;
-                this.listBox1.DataSource = excelTable.secondaryStrings;
+                listBox1.DataSource = excelTable.SecondaryStrings;
             }
             else
             {

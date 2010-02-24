@@ -18,13 +18,13 @@ namespace Reanimator.Excel
             public string name;
 
             public Int32 code;
-            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Strings")]
+            [ExcelTable.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
             public Int32 nameString;
-            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Strings")]
+            [ExcelTable.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
             public Int32 descripFormatString;
-            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Strings")]
+            [ExcelTable.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
             public Int32 detailsString;
-            [ExcelTable.ExcelOutput(IsStringId = true, StringTable = "Strings_Strings")]
+            [ExcelTable.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
             public Int32 rewardTypeString;
             public Int32 revealCondition;
             public Int32 revealValue;

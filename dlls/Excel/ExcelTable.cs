@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Collections;
@@ -19,13 +20,17 @@ namespace Reanimator.Excel
         public class ExcelOutputAttribute : Attribute
         {
             public bool IsStringOffset { get; set; }
+            public bool IsStringIndex { get; set; }
 
             public bool IsIntOffset { get; set; }
             public String[] FieldNames { get; set; }
             public int DefaultIndex { get; set; }
 
             public bool IsStringId { get; set; }
-            public String StringTable { get; set; }
+            public bool IsTableIndex { get; set; }
+            public String Table { get; set; }
+            public int TableId { get; set; }
+            public String Column { get; set; }
         }
 
         [AttributeUsage(AttributeTargets.Field)]
@@ -46,8 +51,10 @@ namespace Reanimator.Excel
         public abstract class ColumnTypeKeys
         {
             public const String IsStringOffset = "IsStringOffset";
+            public const String IsStringIndex = "IsStringIndex";
             public const String IsStringId = "IsStringId";
             public const String IsRelationGenerated = "IsRelationGenerated";
+            public const String IsTableIndex = "IsTableIndex";
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -78,21 +85,17 @@ namespace Reanimator.Excel
         private readonly byte[] _excelData;
         protected int offset;
         private ExcelHeader _excelHeader;
-        public int StructureId
-        {
-            get { return _excelHeader.StructureId; }
-        }
 
         private readonly byte[] _stringsBytes;
         public Hashtable Strings { get; private set; }
-
+        
         protected readonly List<object> tables;
 
         private readonly int[] _tableIndicies;
         private readonly List<byte[]> _extraIndexData;
         public int[] TableIndicies { get { return _tableIndicies; } }
 
-        public List<String> secondaryStrings;
+        public List<String> SecondaryStrings { get; private set; }
 
         private int[][] unknownIndicies;
         public int[] Unknowns1 { get { return unknownIndicies[0]; } }
@@ -248,7 +251,7 @@ namespace Reanimator.Excel
             _excelData = excelData;
             tables = new List<Object>();
             Strings = new Hashtable();
-            secondaryStrings = new List<String>();
+            SecondaryStrings = new List<String>();
             unknownIndicies = new int[4][];
             offset = 0;
 
@@ -259,6 +262,7 @@ namespace Reanimator.Excel
 
             _excelHeader = (ExcelHeader)FileTools.ByteArrayToStructure(excelData, typeof(ExcelHeader), offset);
             offset += Marshal.SizeOf(typeof(ExcelHeader));
+            Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", _excelHeader.Unknown161, _excelHeader.Unknown162, _excelHeader.Unknown163, _excelHeader.Unknown164, _excelHeader.Unknown165, _excelHeader.Unknown166, _excelHeader.Unknown321, _excelHeader.Unknown322));
 
 
             // strings block
@@ -326,47 +330,43 @@ namespace Reanimator.Excel
                     offset += sizeof(Int32);
                 }
 
-
-                /*
-                    foreach (Object table in tables)
+                foreach (Object table in tables)
+                {
+                    Type type = table.GetType();
+                    FieldInfo fieldInfo = type.GetField("header", BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (fieldInfo != null)
                     {
-                        Type type = table.GetType();
-                        FieldInfo fieldInfo = type.GetField("header", BindingFlags.NonPublic | BindingFlags.Instance);
-                        if (fieldInfo != null)
+                        if (fieldInfo.FieldType == typeof(TableHeader))
                         {
-                            if (fieldInfo.FieldType == typeof(TableHeader))
+                            TableHeader tableHeader = (TableHeader)fieldInfo.GetValue(table);
+
+                            if (!hashTableUnknown1.ContainsKey(tableHeader.Unknown1))
                             {
-                                TableHeader tableHeader = (TableHeader)fieldInfo.GetValue(table);
-
-                                if (!hashTableUnknown1.ContainsKey(tableHeader.Unknown1))
-                                {
-                                    hashTableUnknown1.Add(tableHeader.Unknown1, 0);
-                                }
-                                if (!hashTableUnknown2.ContainsKey(tableHeader.Unknown2))
-                                {
-                                    hashTableUnknown2.Add(tableHeader.Unknown2, 0);
-                                }
-
-                                int count = (int)hashTableUnknown1[tableHeader.Unknown1];
-                                hashTableUnknown1[tableHeader.Unknown1] = count + 1;
-                                count = (int)hashTableUnknown2[tableHeader.Unknown2];
-                                hashTableUnknown2[tableHeader.Unknown2] = count + 1;
+                                hashTableUnknown1.Add(tableHeader.Unknown1, 0);
                             }
+                            if (!hashTableUnknown2.ContainsKey(tableHeader.Unknown2))
+                            {
+                                hashTableUnknown2.Add(tableHeader.Unknown2, 0);
+                            }
+
+                            int count = (int)hashTableUnknown1[tableHeader.Unknown1];
+                            hashTableUnknown1[tableHeader.Unknown1] = count + 1;
+                            count = (int)hashTableUnknown2[tableHeader.Unknown2];
+                            hashTableUnknown2[tableHeader.Unknown2] = count + 1;
                         }
                     }
+                }
 
-                    Debug.Write("hashTableUnknown1\n");
-                    foreach (Int32 key in hashTableUnknown1.Keys)
-                    {
-                        Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableUnknown1[key]).ToString("X") + "(" + ((int)hashTableUnknown1[key]) + ")\n");
-                    }
-                    Debug.Write("hashTableUnknown2\n");
-                    foreach (Int32 key in hashTableUnknown2.Keys)
-                    {
-                        Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableUnknown2[key]).ToString("X") + "(" + ((int)hashTableUnknown2[key]) + ")\n");
-                    }
-                    Debug.Write("\n");
-                     * */
+                Debug.Write("hashTableUnknown1\n");
+                foreach (Int32 key in hashTableUnknown1.Keys)
+                {
+                    Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableUnknown1[key]).ToString("X") + "(" + ((int)hashTableUnknown1[key]) + ")\n");
+                }
+                Debug.Write("hashTableUnknown2\n");
+                foreach (Int32 key in hashTableUnknown2.Keys)
+                {
+                    Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableUnknown2[key]).ToString("X") + "(" + ((int)hashTableUnknown2[key]) + ")\n");
+                }
             }
 
 
@@ -380,8 +380,10 @@ namespace Reanimator.Excel
                     int charCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                     String str = FileTools.ByteArrayToStringAnsi(excelData, offset);
                     offset += charCount;
-                    secondaryStrings.Add(str);
+                    SecondaryStrings.Add(str);
                 }
+
+                Debug.Write("Has secondary strings...\n");
             }
             else
             {
@@ -410,7 +412,6 @@ namespace Reanimator.Excel
             {
                 while (true)
                 {
-
                     if (CheckFlag(token, 0x68736372)) // 'rcsh'
                     {
                         _rcshValue = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
@@ -418,6 +419,7 @@ namespace Reanimator.Excel
                         {
                             throw new Exception("_rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_rcshValue != 0x04)");
                         }
+                        Debug.Write(String.Format("Has rcsh value = {0}\n", _rcshValue));
                     }
                     else if (CheckFlag(token, 0x68737974)) // 'tysh'
                     {
@@ -426,11 +428,13 @@ namespace Reanimator.Excel
                         {
                             throw new Exception("_tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_tyshValue != 0x02)");
                         }
+                        Debug.Write(String.Format("Has tysh value = {0}\n", _tyshValue));
                     }
                     else if (CheckFlag(token, 0x6873796D)) // 'mysh'
                     {
                         offset -= 4;
                         ParseMyshTables(excelData, ref offset);
+                        Debug.Write(String.Format("Has mysh value = true\n"));
                     }
                     else if (CheckFlag(token, 0x68656E64)) // 'dneh'
                     {
@@ -439,6 +443,7 @@ namespace Reanimator.Excel
                         {
                             throw new Exception("_dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_dnehValue != 0x02)");
                         }
+                        Debug.Write(String.Format("Has dneh value = {0}\n", _dnehValue));
                     }
                     else // 'cxeh'  -  starting next block
                     {
@@ -469,6 +474,7 @@ namespace Reanimator.Excel
                     DataBlock = new byte[byteCount];
                     Buffer.BlockCopy(excelData, offset, DataBlock, 0, byteCount);
                     offset += byteCount;
+                    Debug.Write(String.Format("Has data block .Length = {0}\n", byteCount));
                 }
             }
 
@@ -491,6 +497,7 @@ namespace Reanimator.Excel
                         Buffer.BlockCopy(excelData, offset, FinalBytes, 0, FinalBytes.Length);
                         offset += FinalBytes.Length;
                     }
+                    Debug.Write(String.Format("Has final block .Length = {0}\n", byteCount));
                 }
             }
 
@@ -498,6 +505,8 @@ namespace Reanimator.Excel
             {
                 throw new BadHeaderFlag("offset != data.Length");
             }
+
+            Debug.Write("\n");
         }
 
         public int Count { get; private set; }
@@ -782,7 +791,7 @@ namespace Reanimator.Excel
 
 
             // secondary index blocks
-            String[] sorts = new[] { "name", "asdf", "code", "group" };
+            String[] sorts = new[] { "name", "???", "code", "code1" /*ITEMS*/, "group" /*AFFIXES*/, "style" /*LEVEL_DRLGS*/ };
             int secondaryIndexCount = 0;
             foreach (String sortBy in sorts)
             {
@@ -832,7 +841,7 @@ namespace Reanimator.Excel
             }
 
             const int zeroValue = 0;
-            for ( ; secondaryIndexCount < 4; secondaryIndexCount++)
+            for (; secondaryIndexCount < 4; secondaryIndexCount++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
@@ -888,7 +897,7 @@ namespace Reanimator.Excel
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
             }
-            byteOffset -= sizeof (Int32);
+            byteOffset -= sizeof(Int32);
 
 
             // return final buffer
