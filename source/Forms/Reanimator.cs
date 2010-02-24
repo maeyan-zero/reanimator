@@ -50,7 +50,7 @@ namespace Reanimator
                 MessageBox.Show("It looks like your using Reanimator for the first time. Please set your Hellgate: London directory.");
                 DialogResult result = options.ShowDialog();
             }
-            if (Config.datUnpacked == false)
+            if (Config.DatUnpacked == false)
             {
                 DialogResult result = MessageBox.Show("To use Reanimator, you must extract files from the latest patch 1.2. Continue?", "Initialization", MessageBoxButtons.OKCancel);
                 if (result == DialogResult.OK)

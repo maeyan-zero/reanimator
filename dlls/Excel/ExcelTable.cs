@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using System.Reflection;
 using System.Collections;
 using System.Data;
@@ -37,10 +36,10 @@ namespace Reanimator.Excel
         private abstract class FileTokens
         {
             public const Int32 StartOfBlock = 0x68657863;      // 'cxeh'
-            public static Int32 TokenRcsh = 0x68736372;         // 'rcsh'
-            public static Int32 TokenTysh = 0x68737974;         // 'tysh'
-            public static Int32 TokenMysh = 0x6873796D;         // 'mysh'
-            public static Int32 TokenDneh = 0x68656E64;         // 'dneh'
+            public const Int32 TokenRcsh = 0x68736372;         // 'rcsh'
+            public const Int32 TokenTysh = 0x68737974;         // 'tysh'
+            public const Int32 TokenMysh = 0x6873796D;         // 'mysh'
+            public const Int32 TokenDneh = 0x68656E64;         // 'dneh'
         }
 
         public abstract class ColumnTypeKeys
@@ -51,7 +50,7 @@ namespace Reanimator.Excel
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct ExcelHeader
+        private struct ExcelHeader
         {
             public Int32 StructureId;                       // This is the id used to determine what structure to use to read the table block.
             public Int32 Unknown321;                       // This is how the game reads this in...
@@ -74,7 +73,6 @@ namespace Reanimator.Excel
             public Int16 VersionMinor;
             public Int16 Reserved2;                         // I think...
         }
-        protected static TableHeader DefaultTableHeader;
 
         private readonly byte[] _excelData;
         protected int offset;
@@ -84,14 +82,14 @@ namespace Reanimator.Excel
             get { return _excelHeader.StructureId; }
         }
 
-        protected byte[] stringsBytes;
+        private readonly byte[] _stringsBytes;
         public Hashtable Strings { get; private set; }
 
         protected readonly List<object> tables;
 
-        private int[] tableIndicies;
-        private List<byte[]> extraIndexData;
-        public int[] TableIndicies { get { return tableIndicies; } }
+        private readonly int[] _tableIndicies;
+        private readonly List<byte[]> _extraIndexData;
+        public int[] TableIndicies { get { return _tableIndicies; } }
 
         public List<String> secondaryStrings;
 
@@ -269,10 +267,10 @@ namespace Reanimator.Excel
             int stringsBytesCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
             if (stringsBytesCount != 0)
             {
-                this.stringsBytes = new byte[stringsBytesCount];
-                Buffer.BlockCopy(_excelData, offset, stringsBytes, 0, stringsBytesCount);
+                _stringsBytes = new byte[stringsBytesCount];
+                Buffer.BlockCopy(_excelData, offset, _stringsBytes, 0, stringsBytesCount);
 
-                // put into a hash table for easier use later, with the stringsBytes[offset] -> offset as the key
+                // put into a hash table for easier use later, with the _stringsBytes[offset] -> offset as the key
                 // sometimes C# makes things hard  -  C++ char* ftw. x.x
                 for (int i = offset; i < offset + stringsBytesCount; i++)
                 {
@@ -303,23 +301,23 @@ namespace Reanimator.Excel
 
             if ((uint)_excelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
             {
-                tableIndicies = new int[Count];
-                extraIndexData = new List<byte[]>();
+                _tableIndicies = new int[Count];
+                _extraIndexData = new List<byte[]>();
 
                 for (int i = 0; i < Count; i++)
                 {
-                    tableIndicies[i] = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
+                    _tableIndicies[i] = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                     int size = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
 
                     byte[] extra = new byte[size];
                     Buffer.BlockCopy(excelData, offset, extra, 0, size);
                     offset += size;
-                    extraIndexData.Add(extra);
+                    _extraIndexData.Add(extra);
                 }
             }
             else
             {
-                tableIndicies = FileTools.ByteArrayToInt32Array(excelData, offset, Count);
+                _tableIndicies = FileTools.ByteArrayToInt32Array(excelData, offset, Count);
                 offset += Count * sizeof(Int32);
 
                 if (Count == 0)
@@ -783,22 +781,21 @@ namespace Reanimator.Excel
 
 
             // secondary index blocks
-            String[] sorts = new[] { "name", "code", null, null };
+            String[] sorts = new[] { "name", "asdf", "code", "group" };
+            int secondaryIndexCount = 0;
             foreach (String sortBy in sorts)
             {
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-                Int32 countOfIndicies = 0;
-                int countOfIndiciesOffset = byteOffset;
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, countOfIndicies);
-
-                if (sortBy == null)
-                {
-                    continue;
-                }
                 if (!dataTable.Columns.Contains(sortBy))
                 {
                     continue;
                 }
+
+
+                Int32 countOfIndicies = 0;
+                int countOfIndiciesOffset = byteOffset;
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, countOfIndicies);
+
 
                 dataTable.DefaultView.Sort = sortBy;
                 DataView dataView = dataTable.DefaultView;
@@ -827,8 +824,17 @@ namespace Reanimator.Excel
                     Buffer.BlockCopy(integer, 0, secondaryIndex, countOfIndicies * sizeof(Int32), sizeof(Int32));
                     countOfIndicies++;
                 }
+
                 FileTools.WriteToBuffer(ref buffer, countOfIndiciesOffset, countOfIndicies);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, secondaryIndex, countOfIndicies * sizeof(Int32), false);
+                secondaryIndexCount++;
+            }
+
+            const int zeroValue = 0;
+            for ( ; secondaryIndexCount < 4; secondaryIndexCount++)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
             }
 
 
@@ -842,6 +848,10 @@ namespace Reanimator.Excel
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenTysh);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _tyshValue);
 
+                // TODO add _mysh values
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenMysh);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
+
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenDneh);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dnehValue);
             }
@@ -849,7 +859,6 @@ namespace Reanimator.Excel
 
             // data block 1
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            const int zeroValue = 0;
             if (DataBlock != null)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, DataBlock.Length);

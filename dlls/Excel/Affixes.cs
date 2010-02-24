@@ -53,8 +53,8 @@ namespace Reanimator.Excel
             public Int32 groupWeight;
             public Int32 weight;
             public Int32 luckWeight;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-            byte[] unknown04;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+            Int32[] unknown04;
             public Int32 colorSet;
             public Int32 colorSetPriority;
             public Int32 state;

@@ -9,32 +9,46 @@ namespace Reanimator
         static readonly RegistryKey RootKey = Registry.CurrentUser.CreateSubKey(Key);
         static readonly RegistryKey Configkey = RootKey.CreateSubKey("config");
 
-        public static T GetValue<T>(string name, T defaultValue)
+        private static T GetValue<T>(string name, T defaultValue)
         {
+            if (typeof(T) == typeof(Boolean))
+            {
+                Object ret;
+                if ((bool)(Object)defaultValue)
+                {
+                    ret = Configkey.GetValue(name, 1);
+                    
+                }
+
+                ret = Configkey.GetValue(name, 0);
+
+                return (T)(Object)((int)ret == 0 ? false : true);
+            }
+
             return (T)Configkey.GetValue(name, defaultValue);
         }
 
-        public static void SetValue<T>(string name, T value)
+        private static void SetValue(string name, Object value)
         {
-            if (typeof(T) == typeof(String))
+            if (value.GetType() == typeof(String))
             {
                 Configkey.SetValue(name, value, RegistryValueKind.String);
             }
-            else if (typeof(T) == typeof(Int32) || typeof(T) == typeof(Int16))
+            else if (value.GetType() == typeof(Int32) || value.GetType() == typeof(Int16))
             {
                 Configkey.SetValue(name, value, RegistryValueKind.DWord);
             }
-            else if (typeof(T) == typeof(Int64))
+            else if (value.GetType() == typeof(Int64))
             {
                 Configkey.SetValue(name, value, RegistryValueKind.QWord);
             }
-            else if (typeof(T) == typeof(String[]))
+            else if (value.GetType() == typeof(String[]))
             {
                 Configkey.SetValue(name, value, RegistryValueKind.MultiString);
             }
-            else if (typeof(T) == typeof(Boolean))
+            else if (value.GetType() == typeof(Boolean))
             {
-                throw new NotImplementedException("else if (typeof(T) == typeof(Boolean))");
+                SetValue(name, ((bool) value) ? 1 : 0);
             }
 
             Configkey.Flush();
@@ -42,50 +56,50 @@ namespace Reanimator
 
         public static string HglDir
         {
-            get { return GetValue("hglDir", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
-            set { SetValue("hglDir", value); }
+            get { return GetValue("HglDir", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
+            set { SetValue("HglDir", value); }
         }
 
         public static bool DataDirsRootChecked
         {
-            get { return GetValue("dataDirsRootChecked", 1) == 1 ? true : false; }
-            set { SetValue("dataDirsRootChecked", value ? 1 : 0); }
+            get { return GetValue("DataDirsRootChecked", true); }
+            set { SetValue("DataDirsRootChecked", value); }
         }
 
         public static string DataDirsRoot
         {
-            get { return GetValue("dataDirsRoot", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
-            set { SetValue("dataDirsRoot", value); }
+            get { return GetValue("DataDirsRoot", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
+            set { SetValue("DataDirsRoot", value); }
         }
 
         public static int ClientHeight
         {
-            get { return GetValue("clientHeight", 500); }
-            set { SetValue("clientHeight", value); }
+            get { return GetValue("ClientHeight", 500); }
+            set { SetValue("ClientHeight", value); }
         }
 
         public static int ClientWidth
         {
-            get { return GetValue("clientWidth", 700); }
-            set { SetValue("clientWidth", value); }
+            get { return GetValue("ClientWidth", 700); }
+            set { SetValue("ClientWidth", value); }
         }
 
         public static string GameClientPath
         {
-            get { return GetValue("gameClientPath", "C:\\Program Files\\Flagship Studios\\Hellgate London\\SP_x64\\hellgate_sp_dx9_x64.exe"); }
-            set { SetValue("gameClientPath", value); }
+            get { return GetValue("GameClientPath", "C:\\Program Files\\Flagship Studios\\Hellgate London\\SP_x64\\hellgate_sp_dx9_x64.exe"); }
+            set { SetValue("GameClientPath", value); }
         }
 
         public static string CacheFilePath
         {
-            get { return GetValue("cacheFilePath", @"cache\dataSet.dat"); }
-            set { SetValue("cacheFilePath", value); }
+            get { return GetValue("CacheFilePath", @"cache\dataSet.dat"); }
+            set { SetValue("CacheFilePath", value); }
         }
 
-        public static bool datUnpacked
+        public static bool DatUnpacked
         {
-            get { return GetValue<bool>("datUnpacked", false); }
-            set { SetValue<bool>("datUnpacked", value); }
+            get { return GetValue("DatUnpacked", false); }
+            set { SetValue("DatUnpacked", value); }
         }
     }
 }
