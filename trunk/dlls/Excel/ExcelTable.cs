@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Collections;
 using System.Data;
+using System.Data;
 
 namespace Reanimator.Excel
 {
@@ -905,6 +906,16 @@ namespace Reanimator.Excel
         public int CompareTo(Object o)
         {
             return String.Compare(ToString(), o.ToString());
+        }
+
+        public virtual DataTable GetRowReferences()
+        {
+            return new DataTable();
+        }
+
+        public virtual DataTable GetColumnReferences()
+        {
+            return new DataTable();
         }
     }
 }

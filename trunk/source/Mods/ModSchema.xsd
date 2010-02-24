@@ -10,10 +10,6 @@
 
   <xs:attribute name="id" type="xs:string"/>
   
-  <xs:simpleType name="bit">
-    <xs:restriction base="xs:boolean"/>
-  </xs:simpleType>
-
   <xs:element name="type">
     <xs:simpleType>
       <xs:restriction base="xs:string">
@@ -23,19 +19,22 @@
     </xs:simpleType>
   </xs:element>
   
-  <xs:element name="bitmask">
+  <xs:element name="bitwise">
     <xs:complexType>
-      <xs:simpleContent>
-        <xs:extension base="bit">
-          <xs:attribute ref="id" use="required"/>
-        </xs:extension>
-      </xs:simpleContent>
+      <xs:sequence>
+        <xs:element name="switch" minOccurs="1" maxOccurs="1">
+          <xs:simpleType>
+            <xs:restriction base="xs:boolean"/>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute ref="id" use="required"/>
     </xs:complexType>
   </xs:element>
 
   <xs:group name="attribute_modify">
     <xs:choice>
-      <xs:element ref="bitmask" maxOccurs="unbounded"/>
+      <xs:element ref="bitwise" maxOccurs="unbounded"/>
       <xs:element ref="replace"/>
     </xs:choice>
   </xs:group>
