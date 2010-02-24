@@ -17,10 +17,11 @@ namespace Reanimator
                 if ((bool)(Object)defaultValue)
                 {
                     ret = Configkey.GetValue(name, 1);
-                    
                 }
-
-                ret = Configkey.GetValue(name, 0);
+                else
+                {
+                    ret = Configkey.GetValue(name, 0);
+                }
 
                 return (T)(Object)((int)ret == 0 ? false : true);
             }
