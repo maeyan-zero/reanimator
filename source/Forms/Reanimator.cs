@@ -25,7 +25,6 @@ namespace Reanimator
         private StringsTables stringsTables;
         private UpdateCheckerParams currentVersionInfos;
         private UpdateForm updateForm;
-        private Mod modification;
 
         private int childFormNumber = 0;
 
@@ -167,14 +166,16 @@ namespace Reanimator
 
             try
             {
-                // Pass Excel Table references
-                if (modification == null)
-                {
-                    modification = new Mod(excelTables);
-                }
+                Mod.excelTables = excelTables;
+                bool pass = Mod.Parse(szFileName);
 
-                // Check for consistency
-                Mod.Parse(szFileName);
+                if (pass)
+                {
+                    Mod.Revival revivalMod = Mod.Deserialize(szFileName);
+                    ModificationForm modificationForm = new ModificationForm(revivalMod);
+                    modificationForm.MdiParent = this;
+                    modificationForm.Show();
+                }
 
                 return true;
             }
