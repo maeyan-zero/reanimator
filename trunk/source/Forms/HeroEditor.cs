@@ -10,6 +10,7 @@ using Reanimator.Excel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
+using System.Collections;
 
 namespace Reanimator.Forms
 {
@@ -221,6 +222,12 @@ namespace Reanimator.Forms
             }
         }
 
+        /* 
+         * This is how the table lookup works:
+         * if Attribute1 set -> Attribute1 = tableID && values.Attribute1 set -> values.Attribute1 = codeID
+         * if Attribute1 not set -> Resource = tableID && values.Attribute1 set -> values.Attribute1 = codeID
+         * if Attribute1 not set -> Resource = tableID && values.Attribute1 not set -> values.stat = codeID
+         */
         private void SetStatValues(Unit.StatBlock.Stat stat)
         {
             string lookUpString;
@@ -379,6 +386,61 @@ namespace Reanimator.Forms
 
                         return string.Empty;
                     }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            List<string> references = new List<string>();
+            CheckTableReferencesForItems(references, heroUnit.Items);
+            
+            listBox1.DataSource = references;
+        }
+
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            List<string> references = new List<string>();
+            CheckTableReferencesForItems(references, new Unit[] { heroUnit });
+
+            listBox1.DataSource = references;
+        }
+        
+        private void CheckTableReferencesForItems(List<string> references, Unit[] items)
+        {
+            string id = string.Empty;
+
+            foreach (Unit item in items)
+            {
+                foreach (Unit.StatBlock.Stat stats in item.Stats.stats)
+                {
+                    CheckTableReferencesForItems(references, item.Items);
+
+                    if (stats.skipResource == 0)
+                    {
+                        id = excelTables.GetTable(stats.resource).StringId;
+                        if (!references.Contains(id))
+                        {
+                            references.Add(id);
+                        }
+                    }
+                    else
+                    {
+                        foreach (Unit.StatBlock.Stat.Attribute att in stats.attributes)
+                        {
+                            ExcelTable tab = excelTables.GetTable(att.TableId);
+                            if (tab != null)
+                            {
+                                id = tab.StringId;
+
+                                if (!references.Contains(id))
+                                {
+                                    references.Add(id);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
