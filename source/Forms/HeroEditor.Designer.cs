@@ -127,10 +127,14 @@ namespace Reanimator.Forms
             this.label19 = new System.Windows.Forms.Label();
             this.p_wpNightmare = new System.Windows.Forms.Panel();
             this.p_wpNormal = new System.Windows.Forms.Panel();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.save_Button = new System.Windows.Forms.Button();
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -164,6 +168,7 @@ namespace Reanimator.Forms
             this.groupBox3.SuspendLayout();
             this.tp_test.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -176,6 +181,7 @@ namespace Reanimator.Forms
             this.main_TabControl.Controls.Add(this.items_TabPage);
             this.main_TabControl.Controls.Add(this.minigame_TabPage);
             this.main_TabControl.Controls.Add(this.tp_test);
+            this.main_TabControl.Controls.Add(this.tabPage1);
             this.main_TabControl.Location = new System.Drawing.Point(12, 33);
             this.main_TabControl.Name = "main_TabControl";
             this.main_TabControl.SelectedIndex = 0;
@@ -1214,6 +1220,27 @@ namespace Reanimator.Forms
             this.p_wpNormal.Size = new System.Drawing.Size(170, 170);
             this.p_wpNormal.TabIndex = 0;
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.button4);
+            this.tabPage1.Controls.Add(this.button3);
+            this.tabPage1.Controls.Add(this.listBox1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(649, 509);
+            this.tabPage1.TabIndex = 5;
+            this.tabPage1.Text = "ItemReferences";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(6, 31);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(637, 472);
+            this.listBox1.TabIndex = 0;
+            // 
             // save_Button
             // 
             this.save_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1255,6 +1282,26 @@ namespace Reanimator.Forms
             this.button1.Text = "Launch Saved File";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(282, 6);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(181, 23);
+            this.button3.TabIndex = 1;
+            this.button3.Text = "Check item references";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(6, 6);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(270, 23);
+            this.button4.TabIndex = 2;
+            this.button4.Text = "Check character and item references";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // HeroEditor
             // 
@@ -1313,6 +1360,7 @@ namespace Reanimator.Forms
             this.tp_test.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1421,5 +1469,9 @@ namespace Reanimator.Forms
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.NumericUpDown nud_sfxDefence;
         private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }
