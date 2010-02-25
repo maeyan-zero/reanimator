@@ -117,6 +117,7 @@
     <Compile Include="TableDataSet.cs" />
     <Compile Include="ExcelTables.cs" />
     <Compile Include="Export.cs" />
+    <Compile Include="FileLoader\TableLoader.cs" />
     <Compile Include="Forms\CacheInfo.cs">
       <SubType>Form</SubType>
     </Compile>

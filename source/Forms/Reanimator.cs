@@ -224,11 +224,12 @@ namespace Reanimator
                 MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-            if (!excelTables.AllTablesLoaded)
-            {
-                MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
+//Commented out so the hero editor can be opened. Add back in if the missing file specification is added
+//if (!excelTables.AllTablesLoaded)
+//{
+//    MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+//    return false;
+//}
 
 
             FileStream heroFile;
@@ -248,7 +249,7 @@ namespace Reanimator
             Unit heroUnit = new Unit(bitBuffer);
             heroUnit.ReadUnit(ref heroUnit);
 
-            HeroEditor heroEditor = new HeroEditor(heroUnit, excelTables, fileName);
+            HeroEditor heroEditor = new HeroEditor(heroUnit, tableDataSet, fileName);
             heroEditor.Text = "Hero Editor: " + fileName;
             heroEditor.MdiParent = this;
             heroEditor.Show();
