@@ -32,6 +32,7 @@ namespace Reanimator.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HeroEditor));
             this.main_TabControl = new System.Windows.Forms.TabControl();
             this.general_TabPage = new System.Windows.Forms.TabPage();
+            this.label33 = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.tb_playedTime = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
@@ -130,7 +131,6 @@ namespace Reanimator.Forms
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.label33 = new System.Windows.Forms.Label();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -201,6 +201,16 @@ namespace Reanimator.Forms
             this.general_TabPage.TabIndex = 2;
             this.general_TabPage.Text = "General";
             this.general_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(338, 30);
+            this.label33.MaximumSize = new System.Drawing.Size(305, 100);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(303, 91);
+            this.label33.TabIndex = 28;
+            this.label33.Text = resources.GetString("label33.Text");
             // 
             // groupBox8
             // 
@@ -1245,16 +1255,6 @@ namespace Reanimator.Forms
             this.button1.Text = "Launch Saved File";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // label33
-            // 
-            this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(338, 30);
-            this.label33.MaximumSize = new System.Drawing.Size(305, 100);
-            this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(303, 91);
-            this.label33.TabIndex = 28;
-            this.label33.Text = resources.GetString("label33.Text");
             // 
             // HeroEditor
             // 

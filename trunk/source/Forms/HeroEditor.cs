@@ -16,16 +16,18 @@ namespace Reanimator.Forms
     public partial class HeroEditor : Form
     {
         Unit heroUnit;
+        TableDataSet dataSet;
         ExcelTables excelTables;
         String filePath;
         string savedPath;
 
-        public HeroEditor(Unit unit, ExcelTables tables, String file)
+        public HeroEditor(Unit unit, TableDataSet tables, String file)
         {
             try
             {
                 heroUnit = unit;
-                excelTables = tables;
+                dataSet = tables;
+                excelTables = tables.ExcelTables;
                 filePath = file;
 
                 InitializeComponent();
@@ -84,6 +86,39 @@ namespace Reanimator.Forms
             {
                 MessageBox.Show(ex.Message, "PopulateStats");
             }
+        }
+
+        //private string DoStringLookup(Unit.StatBlock.Stat stat, int lookupId)
+        //{
+        //    string lookUpString = string.Empty;
+
+        //    lookUpString = MapIdToString(stat, lookupId);
+
+        //    return lookUpString;
+        //}
+
+        private string MapIdToString(Unit.StatBlock.Stat stat, int tableId, int lookupId)
+        {
+            string value = string.Empty;
+
+            if (stat.values.Length != 0)
+            {
+                string select = "code = '" + lookupId.ToString() + "'";
+                DataTable table = dataSet.GetExcelTable(tableId);
+                DataRow[] row = null;
+
+                if(table != null)
+                {
+                    row = table.Select(select);
+
+                    if (row != null && row.Length != 0)
+                    {
+                        value = (string)row[0][1];
+                    }
+                }
+            }
+
+            return value;
         }
 
         private void charStats_ListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -177,62 +212,173 @@ namespace Reanimator.Forms
                     statAttribute3_tableId_TextBox.Clear();
                 }
 
-                int heightOffset = 0;
-                for (int i = 0; i < stat.Length; i++)
-                {
-                    Unit.StatBlock.Stat.Values statValues = stat[i];
-
-                    bool hasExtraAttribute = false;
-                    for (int j = 0; j < 3; j++)
-                    {
-                        if (stat.AttributeAt(j) == null)
-                        {
-                            break;
-                        }
-
-                        Label eaValueLabel = new Label();
-                        eaValueLabel.Text = "Attr" + j + ": ";
-                        eaValueLabel.Width = 40;
-                        eaValueLabel.Top = 3 + heightOffset;
-                        TextBox eaValueTextBox = new TextBox();
-                        eaValueTextBox.Text = stat.AttributeAt(j).ToString();
-                        eaValueTextBox.Left = eaValueLabel.Right;
-                        eaValueTextBox.Top = heightOffset;
-                        eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
-
-                        this.panel1.Controls.Add(eaValueLabel);
-                        this.panel1.Controls.Add(eaValueTextBox);
-
-                        heightOffset += 25;
-                        hasExtraAttribute = true;
-                    }
-
-                    int leftOffset = 0;
-                    if (hasExtraAttribute)
-                    {
-                        leftOffset += 35;
-                    }
-
-                    Label valueLabel = new Label();
-                    valueLabel.Text = "Value: ";
-                    valueLabel.Left = leftOffset;
-                    valueLabel.Width = 40;
-                    valueLabel.Top = 3 + heightOffset;
-                    TextBox valueTextBox = new TextBox();
-                    valueTextBox.Text = statValues.Stat.ToString();
-                    valueTextBox.Left = valueLabel.Right;
-                    valueTextBox.Top = heightOffset;
-                    valueTextBox.DataBindings.Add("Text", statValues, "Stat");
-
-                    this.panel1.Controls.Add(valueLabel);
-                    this.panel1.Controls.Add(valueTextBox);
-
-                    heightOffset += 45;
-                }
+                SetStatValues(stat);
+                
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "charStats_ListBox_SelectedIndexChanged");
+            }
+        }
+
+        private void SetStatValues(Unit.StatBlock.Stat stat)
+        {
+            string lookUpString;
+            int heightOffset = 0;
+            for (int i = 0; i < stat.Length; i++)
+            {
+                Unit.StatBlock.Stat.Values statValues = stat[i];
+
+                bool hasExtraAttribute = false;
+                for (int j = 0; j < 3; j++)
+                {
+                    if (stat.AttributeAt(j) == null)
+                    {
+                        break;
+                    }
+
+                    Label eaValueLabel = new Label();
+                    eaValueLabel.Text = "Attr" + j + ": ";
+                    eaValueLabel.Width = 40;
+                    eaValueLabel.Top = 3 + heightOffset;
+                    TextBox eaValueTextBox = new TextBox();
+                    eaValueTextBox.Left = eaValueLabel.Right;
+                    eaValueTextBox.Top = heightOffset;
+
+                    if (stat.Name.Equals("minigame_category_needed", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        // checks for minigame entries by values as those don't define any tables
+                        lookUpString = GetMinigameGoal(stat.values[i].Attribute1, stat.values[i].Attribute2);
+                    }
+                    else
+                    {
+                        lookUpString = MapIdToString(stat, stat.AttributeAt(j).TableId, stat.values[i].AttributeAt(j));
+                    }
+
+                    if (lookUpString != string.Empty)
+                    {
+                        eaValueTextBox.Text = lookUpString;
+                    }
+                    else
+                    {
+                        eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
+                    }
+
+                    this.panel1.Controls.Add(eaValueLabel);
+                    this.panel1.Controls.Add(eaValueTextBox);
+
+                    heightOffset += 25;
+                    hasExtraAttribute = true;
+                }
+
+                int leftOffset = 0;
+                if (hasExtraAttribute)
+                {
+                    leftOffset += 35;
+                }
+
+                Label valueLabel = new Label();
+                valueLabel.Text = "Value: ";
+                valueLabel.Left = leftOffset;
+                valueLabel.Width = 40;
+                valueLabel.Top = 3 + heightOffset;
+                TextBox valueTextBox = new TextBox();
+
+                valueTextBox.Left = valueLabel.Right;
+                valueTextBox.Top = heightOffset;
+
+                lookUpString = MapIdToString(stat, stat.resource, stat.values[i].Stat);
+
+                if (lookUpString != string.Empty)
+                {
+                    valueTextBox.Text = lookUpString;
+                }
+                else
+                {
+                    valueTextBox.DataBindings.Add("Text", statValues, "Stat");
+                }
+
+                this.panel1.Controls.Add(valueLabel);
+                this.panel1.Controls.Add(valueTextBox);
+
+                heightOffset += 45;
+            }
+        }
+
+        private string GetMinigameGoal(int val1, int val2)
+        {
+            switch (val2)
+            {
+                case 1:
+                    {
+                        return "deal physical";
+                    }
+                case 2:
+                    {
+                        return "deal fire";
+                    }
+                case 3:
+                    {
+                        return "deal electric";
+                    }
+                case 4:
+                    {
+                        return "deal spectral";
+                    }
+                case 5:
+                    {
+                        return "deal poison";
+                    }
+
+                case 10:
+                    {
+                        return "kill necro";
+                    }
+                case 11:
+                    {
+                        return "kill beast";
+                    }
+                case 12:
+                    {
+                        return "kill spectral";
+                    }
+                case 13:
+                    {
+                        return "kill demon";
+                    }
+
+                case 15:
+                    {
+                        return "find mod";
+                    }
+                case 17:
+                    {
+                        return "find armor";
+                    }
+                case 43:
+                    {
+                        return "find sword";
+                    }
+                case 46:
+                    {
+                        return "find gun";
+                    }
+                default:
+                    {
+                        if (val2 == 0)
+                        {
+                            if (val1 == 2)
+                            {
+                                return "deal critical";
+                            }
+                            else if (val1 == 5)
+                            {
+                                return "find magical";
+                            }
+                        }
+
+                        return string.Empty;
+                    }
             }
         }
 

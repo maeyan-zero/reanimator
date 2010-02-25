@@ -141,7 +141,30 @@ namespace Reanimator
                     public int Attribute2 { get; set; }
                     public int Attribute3 { get; set; }
                     public int Stat { get; set; }
-                };
+
+                    public int AttributeAt(int index)
+                    {
+                        switch (index)
+                        {
+                            case 0:
+                                {
+                                    return Attribute1;
+                                }
+                            case 1:
+                                {
+                                    return Attribute2;
+                                }
+                            case 2:
+                                {
+                                    return Attribute3;
+                                }
+                            default:
+                                {
+                                    return -1;
+                                }
+                        }
+                    }
+                }
 
                 public Stat()
                 {
