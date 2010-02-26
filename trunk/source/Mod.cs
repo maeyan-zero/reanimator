@@ -8,15 +8,25 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using System.Data;
 using Reanimator.Excel;
 
 namespace Reanimator
 {
     public class Mod
     {
-        public static ExcelTables excelTables;
+        Revival revival;
+        TableDataSet dataSet;
+        List<ExcelTable> modifiedTables;
 
-        public static bool Parse(string xml)
+        public Mod(TableDataSet dataSet, String revivalModPath)
+        {
+            this.dataSet = dataSet;
+            this.revival = Deserialize(revivalModPath);
+            modifiedTables = new List<ExcelTable>();
+        }
+
+        public static bool Parse(string xmlPath)
         {
             try
             {
@@ -43,7 +53,7 @@ namespace Reanimator
 
                 // Add the XML FileStream
                 FileStream xmlStream;
-                xmlStream = new FileStream(xml, FileMode.Open);
+                xmlStream = new FileStream(xmlPath, FileMode.Open);
 
                 // Add the XML Reader using the stream and setting above
                 XmlReader xmlReader;
@@ -73,7 +83,7 @@ namespace Reanimator
             }
         }
 
-        public static void Serialize(Revival revival, string path)
+        public void Serialize(string path)
         {
             XmlSerializer s = new XmlSerializer(typeof(Revival));
             TextWriter w = new StreamWriter(path);
@@ -81,7 +91,7 @@ namespace Reanimator
             w.Close();
         }
 
-        public static Revival Deserialize(string path)
+        public Revival Deserialize(string path)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(Revival));
             TextReader tr = new StreamReader(path);
@@ -91,11 +101,8 @@ namespace Reanimator
             return revival;
         }
 
-        public static List<ExcelTable> Apply(Revival revival)
+        public void Apply()
         {
-            List<ExcelTable> excelTable = new List<ExcelTable>();
-            List<String> loadedTables = new List<string>();
-
             try
             {
                 foreach (Modification modification in revival)
@@ -104,32 +111,24 @@ namespace Reanimator
                     {
                         foreach (Pack pack in modification)
                         {
-                            // Generally only the one pack will be modified
-                            // Logic here is skipped at the moment
                             foreach (File file in pack)
                             {
-                                if (loadedTables.Contains(file.id) == false)
-                                {
-                                    excelTable.Add(excelTables.GetTable(file.id));
-                                    loadedTables.Add(file.id);
-                                }
-
                                 if (file.modify != null)
                                 {
                                     foreach (Entity entity in file.modify)
                                     {
                                         foreach (Attribute attribute in entity)
                                         {
-                                            if (attribute.replace != null)
+                                            if (entity.id == "*")
                                             {
-                                                // Replace
+                                                for (int i = 0; i < dataSet.XlsDataSet.Tables[file.id].Rows.Count; i++)
+                                                {
+                                                    ModLogic(file.id, attribute, i);
+                                                }
                                             }
-                                            else if (attribute.bitwise != null)
+                                            else
                                             {
-                                                //foreach (bool bit in attribute.bitmask)
-                                                //{
-                                                //    // Perform Bitwise operation
-                                                //}
+                                                ModLogic(file.id, attribute, entity.value);
                                             }
                                         }
                                     }
@@ -138,12 +137,92 @@ namespace Reanimator
                         }
                     }
                 }
-                return excelTable;
+
+                // Add each modified Excel file to a list
+                foreach (Modification modification in revival)
+                {
+                    if (modification.apply == true)
+                    {
+                        foreach (Pack pack in modification)
+                        {
+                            foreach (File file in pack)
+                            {
+                                // Don't save the same file twice
+                                if (modifiedTables.Contains(dataSet.ExcelTables.GetTable(file.id)) == false)
+                                {
+                                    modifiedTables.Add(dataSet.ExcelTables.GetTable(file.id));
+                                }
+                            }
+                        }
+                    }
+                }
             }
             catch
             {
-                return null;
+
             }
+        }
+
+        public void Save(string path)
+        {
+            foreach (ExcelTable table in modifiedTables)
+            {
+                
+            }
+        }
+
+        private void ModLogic(String file, Attribute attribute, int row)
+        {
+            try
+            {
+                if (attribute.replace != null)
+                {
+                    dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace;
+                }
+                if (attribute.bitwise != null)
+                {
+                    //foreach (bool bit in attribute.bitmask)
+                    //{
+                    //    // Perform Bitwise operation
+                    //}
+                }
+                if (attribute.divide != null)
+                {
+                    dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / Convert.ToInt32(attribute.divide);
+                }
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+        }
+
+        public int Length
+        {
+            get
+            {
+                return revival.modification.Count();
+            }
+        }
+
+        public string Title(int i)
+        {
+            return revival.modification[i].title;
+        }
+
+        public string Description(int i)
+        {
+             return revival.modification[i].GetListDescription();
+        }
+
+        public bool Enabled(int i)
+        {
+            return revival.modification[i].type == "required" ? true : false;
+        }
+
+        public void Apply(int i, bool use)
+        {
+            revival.modification[i].apply = use;
         }
 
         [XmlRoot("revival")]
@@ -343,6 +422,9 @@ namespace Reanimator
             [XmlAttribute]
             public string id;
 
+            [XmlAttribute]
+            public int value;
+
             [XmlElement(typeof(Attribute))]
             public Attribute[] attribute;
 
@@ -384,6 +466,9 @@ namespace Reanimator
 
             [XmlElement]
             public string replace;
+
+            [XmlElement]
+            public string divide;
 
             [XmlElement(typeof(Bitwise))]
             public Bitwise[] bitwise;

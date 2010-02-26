@@ -6,16 +6,57 @@
     <description>This is the base SP modification developed by the Revival team.</description>
     <url>http://www.hellgateaus.net</url>
     <type>required</type>
-    <pack id="sp_hellgate_1.10.180.3416_1.18074.70.4256">
-      <file id="gameglobals.txt.cooked">
+    <pack id="Default">
+      <file id="Game_Globals">
         <modify>
-          <!-- start improve effectiveness of luck -->
-          <entity id="MaxLuckTugboat">
-            <attribute id="IntData">
+          <entity id="MaxLuckTugboat" value="55">
+            <attribute id="IntValue">
               <replace>10000</replace>
             </attribute>
           </entity>
-          <!-- end improve effectiveness of luck -->
+        </modify>
+      </file>
+      <file id="ItemLevels">
+        <modify>
+          <entity id="*">
+            <attribute id="AugmentCostRare">
+              <divide>2</divide>
+            </attribute>
+            <attribute id="AugmentCostLegendary">
+              <divide>2</divide>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+      <file id="ItemQuality">
+        <modify>
+          <entity id="Legendary" value="3">
+            <attribute id="VendorRarity">
+              <replace>4</replace>
+            </attribute>
+          </entity>
+          <entity id="Mutant" value="4">
+            <attribute id="ExtraScrapQuality">
+              <replace>4</replace>
+            </attribute>
+          </entity>
+          <entity id="Unique" value="5">
+            <attribute id="VendorRarity">
+              <replace>1</replace>
+            </attribute>
+            <attribute id="PriceMultiplier">
+              <replace>21</replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+      <file id="Items">
+        <modify>
+          <entity id="SkillRetrainer" value="15">
+            <attribute id="Quality">
+              <replace>5</replace>
+            </attribute>
+          </entity>
         </modify>
       </file>
     </pack>
@@ -26,11 +67,11 @@
     <description>Reduces elite mode characters difficulty to normal mode, while benefiting from additional multipliers.</description>
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
-    <pack id="sp_hellgate_1.10.180.3416_1.18074.70.4256">
-      <file id="gameglobals.txt.cooked">
+    <pack id="Default">
+      <file id="GameGlobals">
         <modify>
-          <entity id="elite_monster_damage_percent">
-            <attribute id="floatData">
+          <entity id="EliteMonsterDamagePercent">
+            <attribute id="FloatData">
               <replace>0</replace>
             </attribute>
           </entity>
