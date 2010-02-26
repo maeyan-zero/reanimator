@@ -170,8 +170,8 @@ namespace Reanimator.Excel
             _excelTables.AddTable("DAMAGETYPES", null, typeof(DamageTypes));
             _excelTables.AddTable("DIALOG", null, typeof(Dialog));
             _excelTables.AddTable("DIFFICULTY", null, typeof(Difficulty));
-            _excelTables.AddTable("DISPLAY_CHAR", "DISPLAYCHAR", typeof(Display));                     //// THESE AREN'T BEING LOADED - TODO FIXME
-            _excelTables.AddTable("DISPLAY_ITEM", "DISPLAYITEM", typeof(Display));                     //// THESE AREN'T BEING LOADED - TODO FIXME
+            _excelTables.AddTable("CHARDISPLAY", "DISPLAY_CHAR", typeof(Display));
+            _excelTables.AddTable("ITEMDISPLAY", "DISPLAY_ITEM", typeof(Display));
             _excelTables.AddTable("EFFECTSFILES", "EFFECTS_FILES", typeof(EffectsFiles));
             _excelTables.AddTable("EFFECTS_INDEX", "EFFECTSINDEX", typeof(EffectsIndex));
             _excelTables.AddTable("EFFECTSSHADERS", "EFFECTS_SHADERS", typeof(EffectsShaders));
@@ -328,8 +328,6 @@ namespace Reanimator.Excel
             // I think these are Mythos
             _excelTables.AddTable("SKILL_LEVELS", null, null);
             _excelTables.AddTable("SKILL_STATS", null, null);
-            _excelTables.AddTable("CHARDISPLAY", null, null);
-            _excelTables.AddTable("ITEMDISPLAY", null, null);
             _excelTables.AddTable("EFFECTS", null, null);
             _excelTables.AddTable("RENDER_FLAGS", null, null);
             _excelTables.AddTable("DEBUG_BARS", null, null);
@@ -386,6 +384,12 @@ namespace Reanimator.Excel
                 if (fileName == "EXCELTABLES")
                 {
                     _loadedTables.Add(this);
+                    continue;
+                }
+
+                // stop double loading issues with INVLOC/INVLOCIDX
+                if (stringId == "INVLOC")
+                {
                     continue;
                 }
 
