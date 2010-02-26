@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Collections;
 using System.Data;
-using System.Data;
 
 namespace Reanimator.Excel
 {
@@ -84,7 +83,7 @@ namespace Reanimator.Excel
 
         private readonly byte[] _excelData;
         protected int offset;
-        private ExcelHeader _excelHeader;
+        private readonly ExcelHeader _excelHeader;
 
         private readonly byte[] _stringsBytes;
         public Hashtable Strings { get; private set; }
@@ -97,11 +96,11 @@ namespace Reanimator.Excel
 
         public List<String> SecondaryStrings { get; private set; }
 
-        private int[][] unknownIndicies;
-        public int[] Unknowns1 { get { return unknownIndicies[0]; } }
-        public int[] Unknowns2 { get { return unknownIndicies[1]; } }
-        public int[] Unknowns3 { get { return unknownIndicies[2]; } }
-        public int[] Unknowns4 { get { return unknownIndicies[3]; } }
+        private readonly int[][] _unknownIndicies;
+        public int[] Unknowns1 { get { return _unknownIndicies[0]; } }
+        public int[] Unknowns2 { get { return _unknownIndicies[1]; } }
+        public int[] Unknowns3 { get { return _unknownIndicies[2]; } }
+        public int[] Unknowns4 { get { return _unknownIndicies[3]; } }
 
         private readonly Int32 _rcshValue;
         private readonly Int32 _tyshValue;
@@ -252,7 +251,7 @@ namespace Reanimator.Excel
             tables = new List<Object>();
             Strings = new Hashtable();
             SecondaryStrings = new List<String>();
-            unknownIndicies = new int[4][];
+            _unknownIndicies = new int[4][];
             offset = 0;
 
 
@@ -398,7 +397,7 @@ namespace Reanimator.Excel
                 CheckFlag(token);
 
                 int count = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
-                unknownIndicies[i] = FileTools.ByteArrayToInt32Array(excelData, offset, count);
+                _unknownIndicies[i] = FileTools.ByteArrayToInt32Array(excelData, offset, count);
                 offset += count * sizeof(Int32);
             }
 

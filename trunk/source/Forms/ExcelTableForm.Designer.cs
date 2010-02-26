@@ -33,9 +33,10 @@
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.regenTable = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -101,16 +102,6 @@
             this.dataGridView2.Size = new System.Drawing.Size(724, 566);
             this.dataGridView2.TabIndex = 0;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(412, -8);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(65, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.listBox1);
@@ -130,11 +121,32 @@
             this.listBox1.Size = new System.Drawing.Size(211, 563);
             this.listBox1.TabIndex = 0;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(412, -8);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(65, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // regenTable
+            // 
+            this.regenTable.Location = new System.Drawing.Point(281, 1);
+            this.regenTable.Name = "regenTable";
+            this.regenTable.Size = new System.Drawing.Size(125, 23);
+            this.regenTable.TabIndex = 6;
+            this.regenTable.Text = "Regenerate This Table";
+            this.regenTable.UseVisualStyleBackColor = true;
+            this.regenTable.Click += new System.EventHandler(this.regenTable_Click);
+            // 
             // ExcelTableForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(752, 617);
+            this.Controls.Add(this.regenTable);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.tabControl1);
             this.Name = "ExcelTableForm";
@@ -159,5 +171,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button regenTable;
     }
 }

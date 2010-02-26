@@ -31,7 +31,7 @@ namespace Reanimator.Excel
             public Int32 gridColor;
             public Int32 dom;
             public Int32 code;
-            [ExcelOutput(IsTableIndex = true, TableId = 0x7530, Column = "AffixType")]
+            [ExcelOutput(IsTableIndex = true, TableId = 0x7530 /*AFFIXTYPES*/, Column = "AffixType")]
             public Int32 affixType1;
             public Int32 affixType2;
             public Int32 affixType3;

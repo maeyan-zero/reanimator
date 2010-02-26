@@ -117,7 +117,6 @@
     <Compile Include="TableDataSet.cs" />
     <Compile Include="ExcelTables.cs" />
     <Compile Include="Export.cs" />
-    <Compile Include="FileLoader\TableLoader.cs" />
     <Compile Include="Forms\CacheInfo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -336,6 +335,9 @@
       <Project>{84FFA630-84E2-4C38-9FBE-79EF33558818}</Project>
       <Name>UpdateChecker</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FileLoader\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
