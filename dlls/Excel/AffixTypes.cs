@@ -13,7 +13,7 @@ namespace Reanimator.Excel
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
             public string AffixType;
 
-            [ExcelOutput(IsTableIndex = true, TableId = 0x3330, Column = "Color")]
+            [ExcelOutput(IsTableIndex = true, TableId = 0x3330 /*FONTCOLORS*/, Column = "Color")]
             public Int32 NameColor;
 
             public Int32 DownGrade;//idx

@@ -224,12 +224,11 @@ namespace Reanimator
                 MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
-//Commented out so the hero editor can be opened. Add back in if the missing file specification is added
-//if (!excelTables.AllTablesLoaded)
-//{
-//    MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-//    return false;
-//}
+            if (!excelTables.AllTablesLoaded)
+            {
+                MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
 
 
             FileStream heroFile;

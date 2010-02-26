@@ -178,6 +178,12 @@ namespace Reanimator.Forms
                 fs.Write(excelFileData, 0, excelFileData.Length);
             }
         }
+
+        private void regenTable_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Todo");
+            //if (tableDataSet.XlsDataSet.Tables.Remove(excelTable.StringId))
+        }
     }
 
     public static class ExtensionMethods

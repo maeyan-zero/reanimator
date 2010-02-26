@@ -16,7 +16,7 @@ namespace Reanimator
 {
     public class TableDataSet : IDisposable
     {
-        private static String _tableVersion = "1.0.0";
+        private static String _tableVersion = "1.0.1";
         private static String _relationsVersion = "1.0.0";
         private static String _tableVersionKey = "TableVersion";
         private static String _relationsVersionKey = "RelationsVersion";
@@ -125,7 +125,7 @@ namespace Reanimator
             // load in main data table
             String mainTableName = excelTable.StringId;
             DataTable mainDataTable = _xlsDataSet.Tables[mainTableName];
-            if (!_xlsDataSet.Tables.Contains(mainTableName))
+            if (mainDataTable == null)
             {
                 if (progress != null)
                 {
