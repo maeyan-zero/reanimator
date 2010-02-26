@@ -166,15 +166,19 @@ namespace Reanimator
 
             try
             {
-                Mod.excelTables = excelTables;
+                // Check the XML is valid before declaring an object
                 bool pass = Mod.Parse(szFileName);
 
                 if (pass)
                 {
-                    Mod.Revival revivalMod = Mod.Deserialize(szFileName);
+                    Mod revivalMod = new Mod(tableDataSet, szFileName);
                     ModificationForm modificationForm = new ModificationForm(revivalMod);
                     modificationForm.MdiParent = this;
                     modificationForm.Show();
+                }
+                else
+                {
+                    MessageBox.Show("The Modification appears to be invalid. Check syntax and try again.");
                 }
 
                 return true;

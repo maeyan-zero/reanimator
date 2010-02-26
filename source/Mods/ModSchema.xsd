@@ -7,8 +7,10 @@
   <xs:element name="url" type="xs:string"/>
   <xs:element name="append" type="xs:string"/>
   <xs:element name="replace" type="xs:string"/>
+  <xs:element name="divide" type="xs:string"/>
 
   <xs:attribute name="id" type="xs:string"/>
+  <xs:attribute name="value" type="xs:integer"/>
   
   <xs:element name="type">
     <xs:simpleType>
@@ -36,6 +38,7 @@
     <xs:choice>
       <xs:element ref="bitwise" maxOccurs="unbounded"/>
       <xs:element ref="replace"/>
+      <xs:element ref="divide"/>
     </xs:choice>
   </xs:group>
   
@@ -58,6 +61,7 @@
         <xs:element ref="attribute" maxOccurs="unbounded"/>
       </xs:sequence>
       <xs:attribute ref="id" use="required"/>
+      <xs:attribute ref="value" use="optional"/>
     </xs:complexType>
   </xs:element>
   
