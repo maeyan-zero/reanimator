@@ -128,13 +128,16 @@ namespace Reanimator.Forms
             this.p_wpNightmare = new System.Windows.Forms.Panel();
             this.p_wpNormal = new System.Windows.Forms.Panel();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.save_Button = new System.Windows.Forms.Button();
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button5 = new System.Windows.Forms.Button();
+            this.listBox2 = new System.Windows.Forms.ListBox();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -169,6 +172,7 @@ namespace Reanimator.Forms
             this.tp_test.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -182,6 +186,7 @@ namespace Reanimator.Forms
             this.main_TabControl.Controls.Add(this.minigame_TabPage);
             this.main_TabControl.Controls.Add(this.tp_test);
             this.main_TabControl.Controls.Add(this.tabPage1);
+            this.main_TabControl.Controls.Add(this.tabPage2);
             this.main_TabControl.Location = new System.Drawing.Point(12, 33);
             this.main_TabControl.Name = "main_TabControl";
             this.main_TabControl.SelectedIndex = 0;
@@ -1233,6 +1238,26 @@ namespace Reanimator.Forms
             this.tabPage1.Text = "ItemReferences";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(6, 6);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(270, 23);
+            this.button4.TabIndex = 2;
+            this.button4.Text = "Check character and item references";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(282, 6);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(181, 23);
+            this.button3.TabIndex = 1;
+            this.button3.Text = "Check item references";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
@@ -1283,25 +1308,35 @@ namespace Reanimator.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button3
+            // tabPage2
             // 
-            this.button3.Location = new System.Drawing.Point(282, 6);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(181, 23);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "Check item references";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.tabPage2.Controls.Add(this.button5);
+            this.tabPage2.Controls.Add(this.listBox2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(649, 509);
+            this.tabPage2.TabIndex = 6;
+            this.tabPage2.Text = "Item values";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // button5
             // 
-            this.button4.Location = new System.Drawing.Point(6, 6);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(270, 23);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "Check character and item references";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button5.Location = new System.Drawing.Point(6, 6);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(270, 23);
+            this.button5.TabIndex = 5;
+            this.button5.Text = "Check item values";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // listBox2
+            // 
+            this.listBox2.FormattingEnabled = true;
+            this.listBox2.Location = new System.Drawing.Point(6, 31);
+            this.listBox2.Name = "listBox2";
+            this.listBox2.Size = new System.Drawing.Size(637, 472);
+            this.listBox2.TabIndex = 3;
             // 
             // HeroEditor
             // 
@@ -1361,6 +1396,7 @@ namespace Reanimator.Forms
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1473,5 +1509,8 @@ namespace Reanimator.Forms
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ListBox listBox2;
     }
 }
