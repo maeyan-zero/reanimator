@@ -163,6 +163,7 @@ namespace Reanimator.Excel
             _excelTables.AddTable("BOOKMARKS", null, typeof(BookMarks));
             _excelTables.AddTable("BUDGETS_MODEL", null, typeof(BudgetsModel));
             _excelTables.AddTable("BUDGETS_TEXTURE_MIPS", null, typeof(BudgetTextureMips));
+            _excelTables.AddTable("CHAT_INSTANCED_CHANNELS", null, typeof(ChatInstancedChannels));
             _excelTables.AddTable("CHARACTER_CLASS", null, typeof(CharacterClass));
             _excelTables.AddTable("COLORSETS", null, typeof(ColorSets));
             _excelTables.AddTable("CONDITION_FUNCTIONS", null, typeof(ConditionFunctions));
@@ -172,9 +173,9 @@ namespace Reanimator.Excel
             _excelTables.AddTable("DIFFICULTY", null, typeof(Difficulty));
             _excelTables.AddTable("CHARDISPLAY", "DISPLAY_CHAR", typeof(Display));
             _excelTables.AddTable("ITEMDISPLAY", "DISPLAY_ITEM", typeof(Display));
-            _excelTables.AddTable("EFFECTSFILES", "EFFECTS_FILES", typeof(EffectsFiles));
-            _excelTables.AddTable("EFFECTS_INDEX", "EFFECTSINDEX", typeof(EffectsIndex));
-            _excelTables.AddTable("EFFECTSSHADERS", "EFFECTS_SHADERS", typeof(EffectsShaders));
+            _excelTables.AddTable("EFFECTS_FILES", null, typeof(EffectsFiles));
+            _excelTables.AddTable("EFFECTS", "EFFECTS_INDEX", typeof(EffectsIndex));
+            _excelTables.AddTable("EFFECTS_SHADERS", null, typeof(EffectsShaders));
             _excelTables.AddTable("FILTER_CHATFILTER", "CHATFILTER", typeof(Filter));
             _excelTables.AddTable("FILTER_NAMEFILTER", "NAMEFILTER", typeof(Filter));
             _excelTables.AddTable("FACTION", null, typeof(Faction));
@@ -221,6 +222,7 @@ namespace Reanimator.Excel
             _excelTables.AddTable("MOVIELISTS", null, typeof(MovieLists));
             _excelTables.AddTable("MOVIES", null, typeof(Movies));
             _excelTables.AddTable("MUSIC", null, typeof(Music));
+            _excelTables.AddTable("MUSICCONDITIONS", null, typeof(MusicConditions));
             _excelTables.AddTable("MUSICGROOVELEVELS", null, typeof(MusicGrooveLevels));
             _excelTables.AddTable("MUSICGROOVELEVELTYPES", null, typeof(MusicGrooveLevelTypes));
             _excelTables.AddTable("MUSIC_REF", "MUSICREF", typeof(Excel.MusicRef));
@@ -231,7 +233,7 @@ namespace Reanimator.Excel
             _excelTables.AddTable("OBJECTS", null, typeof(Items));
             _excelTables.AddTable("OBJECTTRIGGERS", null, typeof(ObjectTriggers));
             _excelTables.AddTable("OFFER", null, typeof(Offer));
-            //_excelTables.AddTable("PALETTES", null, typeof(Excel.FontColor));
+            _excelTables.AddTable("PALETTES", null, typeof(Palettes));
             _excelTables.AddTable("PETLEVEL", null, typeof(MonLevel));
             _excelTables.AddTable("PLAYERLEVELS", null, typeof(PlayerLevels));
             _excelTables.AddTable("PLAYER_RACE", "PLAYERRACE", typeof(PlayerRace));
@@ -257,6 +259,7 @@ namespace Reanimator.Excel
             _excelTables.AddTable("SOUND_MIXSTATES", "SOUNDMIXSTATES", typeof(SoundMixStates));
             _excelTables.AddTable("SOUND_MIXSTATE_VALUES", "SOUNDMIXSTATEVALUES", typeof(SoundMixStateValues));
             _excelTables.AddTable("SOUNDS", null, typeof(Sounds));
+            _excelTables.AddTable("SOUNDVCAS", null, typeof(SoundVidCas));
             _excelTables.AddTable("SOUNDVCASETS", null, typeof(SoundVideoCasets));
             _excelTables.AddTable("SPAWN_CLASS", "SPAWNCLASS", typeof(SpawnClass));
             _excelTables.AddTable("SUBLEVEL", null, typeof(SubLevel));
@@ -328,7 +331,6 @@ namespace Reanimator.Excel
             // I think these are Mythos
             _excelTables.AddTable("SKILL_LEVELS", null, null);
             _excelTables.AddTable("SKILL_STATS", null, null);
-            _excelTables.AddTable("EFFECTS", null, null);
             _excelTables.AddTable("RENDER_FLAGS", null, null);
             _excelTables.AddTable("DEBUG_BARS", null, null);
             _excelTables.AddTable("ACHIEVEMENT_SLOTS", null, null);
@@ -435,7 +437,7 @@ namespace Reanimator.Excel
                 byte[] buffer = FileTools.StreamToByteArray(cookedFile);
                 try
                 {
-                    Debug.Write(stringId + "\n");
+                    //Debug.Write(stringId + "\n");
                     ExcelTable excelTable = _excelTables.CreateTable(stringId, buffer);
                     if (excelTable != null)
                     {

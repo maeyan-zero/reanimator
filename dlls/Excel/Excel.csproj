@@ -99,6 +99,7 @@
     <Compile Include="BudgetsModel.cs" />
     <Compile Include="BudgetTextureMips.cs" />
     <Compile Include="CharacterClass.cs" />
+    <Compile Include="ChatInstancedChannels.cs" />
     <Compile Include="ColorSets.cs" />
     <Compile Include="ConditionFunctions.cs" />
     <Compile Include="DamageEffects.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Movies.cs" />
     <Compile Include="MovieSubTitles.cs" />
     <Compile Include="Music.cs" />
+    <Compile Include="MusicConditions.cs" />
     <Compile Include="MusicGrooveLevels.cs" />
     <Compile Include="MusicGrooveLevelTypes.cs" />
     <Compile Include="MusicRef.cs" />
@@ -169,6 +171,7 @@
     <Compile Include="Npc.cs" />
     <Compile Include="ObjectTriggers.cs" />
     <Compile Include="Offer.cs" />
+    <Compile Include="Palettes.cs" />
     <Compile Include="PlayerLevels.cs" />
     <Compile Include="PlayerRace.cs" />
     <Compile Include="Procs.cs" />
@@ -190,6 +193,7 @@
     <Compile Include="SoundMixStates.cs" />
     <Compile Include="SoundMixStateValues.cs" />
     <Compile Include="Sounds.cs" />
+    <Compile Include="SoundVidCas.cs" />
     <Compile Include="SoundVideoCasets.cs" />
     <Compile Include="SpawnClass.cs" />
     <Compile Include="StateEventTypes.cs" />
