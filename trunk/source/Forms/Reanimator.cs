@@ -682,6 +682,16 @@ namespace Reanimator
                 ProgressForm cachingProgress = new ProgressForm(CacheTables, excelTables.GetLoadedTables());
                 cachingProgress.ShowDialog(this);
             }
+            else if (tableDataSet.RegenerateRelations)
+            {
+                dr = MessageBox.Show("Reanimator has detected your table relations are out of date.\nDo you wish to regenerate them?", "Regenerate Relations", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (dr == DialogResult.Yes)
+                {
+                    ProgressForm progress = new ProgressForm(GenerateRelations, excelTables.GetLoadedTables());
+                    progress.ShowDialog(this);
+                    tableDataSet.SaveDataSet();
+                }
+            }
         }
 
         private void RegenerateRelationsToolStripMenuItem_Click(object sender, EventArgs e)
