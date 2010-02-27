@@ -445,7 +445,7 @@ namespace Reanimator
         // ALERT
 
         internal int unknownFlag;										// 4		    // this value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue) or something like that
-        public int unknownFlagValue;								    // 16
+        public int itemCode;								            // 16
 
         // if (testBit(bitField1, 0x17)) // 64 bits read as 8x8 chunk bits from non-standard bit read function
         internal byte[] unknown17;
@@ -457,7 +457,7 @@ namespace Reanimator
         // if (testBit(bitField1, 0x02)) // if (bitField & 0x04)
         internal int unknown_02;										// 32 bits			// untested
 
-        internal int itemId;        									// 16 bits          // i think...
+        internal int unknown_01_03_1;        									// 16 bits          // i think...
         internal int unknown_01_03_2;									// 12 bits
         internal int unknown_01_03_3;									// 12 bits
         // }
@@ -642,7 +642,7 @@ namespace Reanimator
 
 
             unit.unknownFlag = bitBuffer.ReadBits(4);
-            unit.unknownFlagValue = bitBuffer.ReadBits(16);
+            unit.itemCode = bitBuffer.ReadBits(16);
 
 
             if (TestBit(unit.bitField1, 0x17))
@@ -661,7 +661,7 @@ namespace Reanimator
                         unit.unknown_02 = bitBuffer.ReadBits(32);
                     }
 
-                    unit.itemId = bitBuffer.ReadBits(16);
+                    unit.unknown_01_03_1 = bitBuffer.ReadBits(16);
                     unit.unknown_01_03_2 = bitBuffer.ReadBits(12);
                     unit.unknown_01_03_3 = bitBuffer.ReadBits(12);
                 }
@@ -1470,7 +1470,7 @@ namespace Reanimator
             }
 
             saveBuffer.WriteBits(unit.unknownFlag, 4);
-            saveBuffer.WriteBits(unit.unknownFlagValue, 16);
+            saveBuffer.WriteBits(unit.itemCode, 16);
 
             if (useUnknown_17 > 0)
             {
@@ -1491,7 +1491,7 @@ namespace Reanimator
                         saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
                     }
 
-                    saveBuffer.WriteBits(unit.itemId, 16);
+                    saveBuffer.WriteBits(unit.unknown_01_03_1, 16);
                     saveBuffer.WriteBits(unit.unknown_01_03_2, 12);
                     saveBuffer.WriteBits(unit.unknown_01_03_3, 12);
                 }

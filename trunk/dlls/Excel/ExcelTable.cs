@@ -792,10 +792,15 @@ namespace Reanimator.Excel
 
 
             // secondary index blocks
-            String[] sorts = new[] { "name", "???", "code", "code1" /*ITEMS*/, "group" /*AFFIXES*/, "style" /*LEVEL_DRLGS*/ };
+            String[] sorts = new[] { "name", "code", "code1" /*ITEMS*/, "group" /*AFFIXES*/, "style" /*LEVEL_DRLGS*/ };
+            bool stringNameDone = false;
             int secondaryIndexCount = 0;
             foreach (String sortBy in sorts)
             {
+                if (dataTable.Columns[0].DataType == typeof(String))
+                {
+
+                }
                 if (!dataTable.Columns.Contains(sortBy))
                 {
                     continue;

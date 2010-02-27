@@ -47,7 +47,7 @@ namespace Reanimator.Forms
                 for (int i = 0; i < items.Length; i++)
                 {
                     Unit item = items[i];
-                    item.Name = "Item #" + item.unknownFlagValue;
+                    item.Name = dataSet.GetExcelTable(27953).Select(String.Format("code1 = '{0}'", item.itemCode))[0]["name"] as String;
                     this.currentlyEditing_ComboBox.Items.Add(item);
                 }
             }
