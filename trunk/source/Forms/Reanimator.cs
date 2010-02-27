@@ -242,7 +242,7 @@ namespace Reanimator
             }
             catch (Exception e)
             {
-                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 

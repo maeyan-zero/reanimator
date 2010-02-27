@@ -261,7 +261,7 @@ namespace Reanimator.Excel
 
             _excelHeader = (ExcelHeader)FileTools.ByteArrayToStructure(excelData, typeof(ExcelHeader), offset);
             offset += Marshal.SizeOf(typeof(ExcelHeader));
-            Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", _excelHeader.Unknown161, _excelHeader.Unknown162, _excelHeader.Unknown163, _excelHeader.Unknown164, _excelHeader.Unknown165, _excelHeader.Unknown166, _excelHeader.Unknown321, _excelHeader.Unknown322));
+            //Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", _excelHeader.Unknown161, _excelHeader.Unknown162, _excelHeader.Unknown163, _excelHeader.Unknown164, _excelHeader.Unknown165, _excelHeader.Unknown166, _excelHeader.Unknown321, _excelHeader.Unknown322));
 
 
             // strings block
@@ -329,6 +329,7 @@ namespace Reanimator.Excel
                     offset += sizeof(Int32);
                 }
 
+                /*
                 foreach (Object table in tables)
                 {
                     Type type = table.GetType();
@@ -366,6 +367,7 @@ namespace Reanimator.Excel
                 {
                     Debug.Write("[0x" + key.ToString("X") + "] = 0x" + ((int)hashTableUnknown2[key]).ToString("X") + "(" + ((int)hashTableUnknown2[key]) + ")\n");
                 }
+                */
             }
 
 
@@ -382,7 +384,7 @@ namespace Reanimator.Excel
                     SecondaryStrings.Add(str);
                 }
 
-                Debug.Write("Has secondary strings...\n");
+                //Debug.Write("Has secondary strings...\n");
             }
             else
             {
@@ -418,7 +420,7 @@ namespace Reanimator.Excel
                         {
                             throw new Exception("_rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_rcshValue != 0x04)");
                         }
-                        Debug.Write(String.Format("Has rcsh value = {0}\n", _rcshValue));
+                        //Debug.Write(String.Format("Has rcsh value = {0}\n", _rcshValue));
                     }
                     else if (CheckFlag(token, 0x68737974)) // 'tysh'
                     {
@@ -427,13 +429,13 @@ namespace Reanimator.Excel
                         {
                             throw new Exception("_tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_tyshValue != 0x02)");
                         }
-                        Debug.Write(String.Format("Has tysh value = {0}\n", _tyshValue));
+                        //Debug.Write(String.Format("Has tysh value = {0}\n", _tyshValue));
                     }
                     else if (CheckFlag(token, 0x6873796D)) // 'mysh'
                     {
                         offset -= 4;
                         ParseMyshTables(excelData, ref offset);
-                        Debug.Write(String.Format("Has mysh value = true\n"));
+                        //Debug.Write(String.Format("Has mysh value = true\n"));
                     }
                     else if (CheckFlag(token, 0x68656E64)) // 'dneh'
                     {
@@ -442,7 +444,7 @@ namespace Reanimator.Excel
                         {
                             throw new Exception("_dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_dnehValue != 0x02)");
                         }
-                        Debug.Write(String.Format("Has dneh value = {0}\n", _dnehValue));
+                        //Debug.Write(String.Format("Has dneh value = {0}\n", _dnehValue));
                     }
                     else // 'cxeh'  -  starting next block
                     {
@@ -473,7 +475,7 @@ namespace Reanimator.Excel
                     DataBlock = new byte[byteCount];
                     Buffer.BlockCopy(excelData, offset, DataBlock, 0, byteCount);
                     offset += byteCount;
-                    Debug.Write(String.Format("Has data block .Length = {0}\n", byteCount));
+                    //Debug.Write(String.Format("Has data block .Length = {0}\n", byteCount));
                 }
             }
 
@@ -496,7 +498,7 @@ namespace Reanimator.Excel
                         Buffer.BlockCopy(excelData, offset, FinalBytes, 0, FinalBytes.Length);
                         offset += FinalBytes.Length;
                     }
-                    Debug.Write(String.Format("Has final block .Length = {0}\n", byteCount));
+                    //Debug.Write(String.Format("Has final block .Length = {0}\n", byteCount));
                 }
             }
 
@@ -505,7 +507,7 @@ namespace Reanimator.Excel
                 throw new BadHeaderFlag("offset != data.Length");
             }
 
-            Debug.Write("\n");
+            //Debug.Write("\n");
         }
 
         public int Count { get; private set; }
