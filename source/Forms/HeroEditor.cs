@@ -19,6 +19,7 @@ namespace Reanimator.Forms
         Unit heroUnit;
         TableDataSet dataSet;
         ExcelTables excelTables;
+        Stats _statsTable;
         String filePath;
         string savedPath;
 
@@ -29,7 +30,11 @@ namespace Reanimator.Forms
                 heroUnit = unit;
                 dataSet = tables;
                 excelTables = tables.ExcelTables;
+                _statsTable = (Stats)excelTables.GetTable("stats");
                 filePath = file;
+
+                Hashtable hash = new Hashtable();
+                GenerateUnitNameStrings(new Unit[] { heroUnit }, hash);
 
                 InitializeComponent();
             }
@@ -95,23 +100,21 @@ namespace Reanimator.Forms
             try
             {
                 stats_ListBox.Items.Clear();
+                //GenerateStatNameStrings(unit.Items);
 
                 for (int i = 0; i < unit.Stats.Length; i++)
                 {
                     Unit.StatBlock.Stat stat = unit.Stats[i];
 
-                    //string txt = string.Empty;
-                    //for (int counter = 0; counter < excelTables.Count; counter++)
-                    //{
-                    //    txt += excelTables.GetTableStringId(counter) + "\n";
-                    //}
-                    //MessageBox.Show(txt);
+                    ////string txt = string.Empty;
+                    ////for (int counter = 0; counter < excelTables.Count; counter++)
+                    ////{
+                    ////    txt += excelTables.GetTableStringId(counter) + "\n";
+                    ////}
+                    ////MessageBox.Show(txt);
 
-                    ExcelTable table = excelTables.GetTable("stats");
-                    Stats stats = (Stats)table;
-
-                    stat.Name = stats.GetStringFromId(stat.Id);
-                    //stat.Name = ((Stats)excelTables.GetTable("stats")).GetStringFromId(stat.Id);
+                    //stat.Name = _statsTable.GetStringFromId(stat.Id);
+                    ////stat.Name = ((Stats)excelTables.GetTable("stats")).GetStringFromId(stat.Id);
 
                     stats_ListBox.Items.Add(stat);
                 }
@@ -119,6 +122,44 @@ namespace Reanimator.Forms
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "PopulateStats");
+            }
+        }
+
+        private void GenerateUnitNameStrings(Unit[] units, Hashtable hash)
+        {
+            try
+            {
+                Unit.StatBlock.Stat stat;
+                string name;
+                foreach (Unit unit in units)
+                {
+                    for (int counter = 0; counter < unit.Stats.Length; counter++)
+                    {
+                        stat = unit.Stats[counter];
+
+                        if(hash.Contains(stat.id))
+                        {
+                            name = (string)hash[stat.Id];
+                        }
+                        else
+                        {
+                            name = _statsTable.GetStringFromId(stat.id);
+
+                            if (name != null)
+                            {
+                                hash.Add(stat.id, name);
+                            }
+                        }
+
+                        unit.Stats[counter].Name = name;
+                    }
+
+                    GenerateUnitNameStrings(unit.Items, hash);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -429,7 +470,6 @@ namespace Reanimator.Forms
             listBox1.DataSource = references;
         }
 
-
         private void button4_Click(object sender, EventArgs e)
         {
             List<string> references = new List<string>();
@@ -539,19 +579,127 @@ namespace Reanimator.Forms
             {
                 currentlyEditing_ComboBox.Items.Add(heroUnit);
                 currentlyEditing_ComboBox.SelectedIndex = 0;
-
+                
                 PopulateGeneral(heroUnit);
+
+                initialized = true;
+
                 PopulateStats(heroUnit);
                 PopulateItems(heroUnit);
 
 
                 PopulateMinigame();
                 PopulateWaypoints();
+
+                InitUnknownStatList();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "HeroEditor_Load");
             }
+        }
+
+        private void InitUnknownStatList()
+        {
+            string text = string.Empty;
+            text += "jobClass: " + heroUnit.jobClass + "\n";
+            text += "majorVersion: " + heroUnit.majorVersion + "\n";
+            text += "minorVersion: " + heroUnit.minorVersion + "\n";
+            text += "playerFlagCount1: " + heroUnit.playerFlagCount1 + "\n";
+            text += "playerFlagCount2: " + heroUnit.playerFlagCount2 + "\n";
+            if (heroUnit.playerFlags1 != null)
+            {
+                foreach (int val in heroUnit.playerFlags1)
+                {
+                    text += "playerFlags1: " + val + "\n";
+                }
+            }
+            if (heroUnit.playerFlags2 != null)
+            {
+                foreach (int val in heroUnit.playerFlags2)
+                {
+                    text += "playerFlags2: " + val + "\n";
+                }
+            }
+            text += "timeStamp1: " + heroUnit.timeStamp1 + "\n";
+            text += "timeStamp2: " + heroUnit.timeStamp2 + "\n";
+            text += "timeStamp3: " + heroUnit.timeStamp3 + "\n";
+            text += "unknown_01_03_1: " + heroUnit.unknown_01_03_1 + "\n";
+            text += "unknown_01_03_2: " + heroUnit.unknown_01_03_2 + "\n";
+            text += "unknown_01_03_3: " + heroUnit.unknown_01_03_3 + "\n";
+            if (heroUnit.unknown_01_03_4 != null)
+            {
+                foreach (byte val in heroUnit.unknown_01_03_4)
+                {
+                    text += "unknown_01_03_4: " + (int)val;
+                }
+            }
+            text += "unknown_02: " + heroUnit.unknown_02 + "\n";
+            text += "unknown_07: " + heroUnit.unknown_07 + "\n";
+            text += "unknown_09: " + heroUnit.unknown_09 + "\n";
+            if (heroUnit.unknown17 != null)
+            {
+                foreach (byte val in heroUnit.unknown17)
+                {
+                    text += "unknown17: " + (int)val + "\n";
+                }
+            }
+            text += "unknownBool_01_03: " + heroUnit.unknownBool_01_03 + "\n";
+            text += "unknownBool_06: " + heroUnit.unknownBool_06 + "\n";
+            text += "unknownBool1: " + heroUnit.unknownBool1 + "\n";
+            text += "unknownCount1B: " + heroUnit.unknownCount1B + "\n";
+            text += "unknownCount1F: " + heroUnit.unknownCount1F + "\n";
+            text += "unknownFlag: " + heroUnit.unknownFlag + "\n";
+            text += "weaponConfigCount: " + heroUnit.weaponConfigCount + "\n";
+            text += "weaponConfigFlag: " + heroUnit.weaponConfigFlag + "\n";
+
+            text += "\n\n\n\n";
+
+            UnitAppearance appearance = heroUnit.unitAppearance;
+            text += "unknown1: " + appearance.unknown1 + "\n";
+
+            if (appearance.unknown2 != null)
+            {
+                foreach (byte val in appearance.unknown2)
+                {
+                    text += "unknown2: " + (int)val + "\n";
+                }
+            }
+
+            if (appearance.unknownCount1s != null)
+            {
+                foreach (UnitAppearance.UnknownCount1_S count in appearance.unknownCount1s)
+                {
+                    text += "unknown1: " + count.unknown1 + "\n";
+                    text += "unknown2: " + count.unknown2 + "\n";
+
+                    if (count.unknownCount1s != null)
+                    {
+                        foreach (int val in count.unknownCount1s)
+                        {
+                            text += "unknownCount1s: " + val + "\n";
+                        }
+                    }
+                }
+            }
+
+            if (appearance.unknownCount2s != null)
+            {
+                foreach (int val in appearance.unknownCount2s)
+                {
+                    text += "unknownCount2s: " + val + "\n";
+                }
+            }
+
+            if (appearance.unknownCount3s != null)
+            {
+                foreach (int val in appearance.unknownCount3s)
+                {
+                    text += "unknownCount3s: " + val + "\n";
+                }
+            }
+
+            richTextBox2.Text = text;
         }
 
         public static void Serialize(Unit.StatBlock.Stat stats, string path)
@@ -660,8 +808,6 @@ namespace Reanimator.Forms
                 SetCharacterValues();
 
                 DisplayFlags();
-
-                initialized = true;
             }
             catch (Exception ex)
             {
@@ -997,14 +1143,11 @@ namespace Reanimator.Forms
 
         private void CheckItemValues(List<string> values, Unit[] items)
         {
-            ExcelTable table = excelTables.GetTable("stats");
-            Stats stats = (Stats)table;
-
             foreach (Unit item in items)
             {
                 foreach (Unit.StatBlock.Stat stat in item.Stats.stats)
                 {
-                    string val = stats.GetStringFromId(stat.Id) + stat.ToString();
+                    string val = stat.ToString();
                     if (!values.Contains(val))
                     {
                         values.Add(val);
