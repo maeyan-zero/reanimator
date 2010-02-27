@@ -129,7 +129,6 @@ namespace Reanimator.Forms
                 this.panel1.Controls.Clear();
 
                 Unit.StatBlock.Stat stat = (Unit.StatBlock.Stat)this.stats_ListBox.SelectedItem;
-
                 // yea, copy/paste nastiness ftw
                 if (stat.Attribute1 != null)
                 {
@@ -955,5 +954,32 @@ namespace Reanimator.Forms
         }
 
         #endregion
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            List<string> itemValues = new List<string>();
+            CheckItemValues(itemValues, heroUnit.Items);
+            listBox2.DataSource = itemValues;
+        }
+
+        private void CheckItemValues(List<string> values, Unit[] items)
+        {
+            ExcelTable table = excelTables.GetTable("stats");
+            Stats stats = (Stats)table;
+
+            foreach (Unit item in items)
+            {
+                foreach (Unit.StatBlock.Stat stat in item.Stats.stats)
+                {
+                    string val = stats.GetStringFromId(stat.Id) + stat.ToString();
+                    if (!values.Contains(val))
+                    {
+                        values.Add(val);
+                    }
+                }
+
+                CheckItemValues(values, item.Items);
+            }
+        }
     }
 }
