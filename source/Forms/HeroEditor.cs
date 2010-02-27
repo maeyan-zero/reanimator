@@ -47,8 +47,41 @@ namespace Reanimator.Forms
                 for (int i = 0; i < items.Length; i++)
                 {
                     Unit item = items[i];
-                    item.Name = dataSet.GetExcelTable(27953).Select(String.Format("code1 = '{0}'", item.itemCode))[0]["name"] as String;
-                    this.currentlyEditing_ComboBox.Items.Add(item);
+                    if (item == null) continue;
+
+                    item.Name = "Item Id: " + item.itemCode;
+
+                    DataTable itemsTable = dataSet.GetExcelTable(27953);
+                    if (itemsTable == null)
+                    {
+                        currentlyEditing_ComboBox.Items.Add(item);
+                        continue;
+                    }
+
+                    if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
+                    {
+                        currentlyEditing_ComboBox.Items.Add(item);
+                        continue;
+                    }
+                    DataRow[] itemsRows = itemsTable.Select(String.Format("code1 = '{0}'", item.itemCode));
+
+                    if (itemsRows.Length == 0)
+                    {
+                        currentlyEditing_ComboBox.Items.Add(item);
+                        continue;
+                    }
+                    String itemName = itemsRows[0]["String_string"] as String;
+
+                    if (itemName == null)
+                    {
+                        currentlyEditing_ComboBox.Items.Add(item);
+                        continue;
+                    }
+
+                    item.Name = itemName;
+                    currentlyEditing_ComboBox.Items.Add(item);
+
+                    // TODO why doesn't ((Unit)currentlyEditing_ComboBox.Items[indexAdded]).Name work? Force "repaint/rebuild" of .ToString() needed?
                 }
             }
             catch (Exception ex)

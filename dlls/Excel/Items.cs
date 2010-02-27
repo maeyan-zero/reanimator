@@ -483,12 +483,18 @@ namespace Reanimator.Excel
       'is field missile',19
       'ignore fuse ms stat',20
 	  'uses petlevel',21*/
-            public Int32 String;//string index
-            public Int32 typeDescription;//string index
-            public Int32 flavorText;//string index
-            public Int32 additionalDescription;//string index
-            public Int32 additionalRaceDescription;//string index
-            public Int32 analyze;//string index
+            [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+            public Int32 String;
+            [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+            public Int32 typeDescription;
+            [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+            public Int32 flavorText;
+            [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+            public Int32 additionalDescription;
+            [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+            public Int32 additionalRaceDescription;
+            [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+            public Int32 analyze;
             public Int32 recipeList;//index
             public Int32 recipeSingleUse;//index
             public Int32 paperdollBackgroundLevel;//index

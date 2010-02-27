@@ -35,9 +35,11 @@ namespace Reanimator
 
         public ExcelTables ExcelTables { get; set; }
         public StringsTables StringsTables { get; set; }
+        public bool RegenerateRelations { get; private set; }
 
         public TableDataSet()
         {
+            RegenerateRelations = true;
             LoadDataSet();
             _xlsDataSet.RemotingFormat = SerializationFormat.Binary;
             _xlsDataTables = new Hashtable();
@@ -56,14 +58,35 @@ namespace Reanimator
                         _xlsDataSet = bf.Deserialize(fs) as DataSet;
                         if (_xlsDataSet != null)
                         {
-                            String currentVersion = _xlsDataSet.ExtendedProperties[_tableVersionKey] as String;
-                            if (currentVersion != null)
+                            bool isTableUpToDate = false;
+                            String loadedCurrentVersion = _xlsDataSet.ExtendedProperties[_tableVersionKey] as String;
+                            String loadedRelationsVersion = _xlsDataSet.ExtendedProperties[_relationsVersionKey] as String;
+
+                            if (loadedCurrentVersion != null)
                             {
-                                if (currentVersion.CompareTo(_tableVersion) == 0)
+                                if (loadedCurrentVersion.CompareTo(_tableVersion) == 0)
                                 {
-                                    return;
+                                    isTableUpToDate = true;
                                 }
                             }
+
+                            if (loadedRelationsVersion != null)
+                            {
+                                if (loadedRelationsVersion.CompareTo(_relationsVersion) == 0)
+                                {
+                                    RegenerateRelations = false;
+                                }
+                                else
+                                {
+                                    ClearRelations();
+                                }
+                            }
+                            else
+                            {
+                                ClearRelations();
+                            }
+
+                            if (isTableUpToDate) return;
 
                             MessageBox.Show("The loaded dataset cache is out of date and must be regnerated before it can be used again!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
@@ -91,6 +114,14 @@ namespace Reanimator
                 else
                 {
                     _xlsDataSet.ExtendedProperties.Add(_tableVersionKey, _tableVersion);
+                }
+                if (_xlsDataSet.ExtendedProperties.Contains(_relationsVersionKey))
+                {
+                    _xlsDataSet.ExtendedProperties[_relationsVersionKey] = _relationsVersion;
+                }
+                else
+                {
+                    _xlsDataSet.ExtendedProperties.Add(_relationsVersionKey, _relationsVersion);
                 }
                 bf.Serialize(fs, _xlsDataSet);
                 fs.Close();
@@ -378,13 +409,16 @@ namespace Reanimator
                         {
                             DataColumn dcParent = dtStrings.Columns["ReferenceId"];
 
-                            String relationName = excelTable.StringId + dcChild.ColumnName + ExcelTable.ColumnTypeKeys.IsStringId;
-                            DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
+                            String relationName = String.Format("{0}_{1}_{2}", excelTable.StringId, dcChild.ColumnName, ExcelTable.ColumnTypeKeys.IsStringId);
+                            // parent and child are swapped here for StringId relations
+                            DataRelation relation = new DataRelation(relationName, dcChild, dcParent, false);
                             _xlsDataSet.Relations.Add(relation);
 
-                            DataColumn dcString = mainDataTable.Columns.Add(dcChild.ColumnName + "_string", typeof(String), "Parent(" + relationName + ").String");
+                            DataColumn dcString = mainDataTable.Columns.Add(dcChild.ColumnName + "_string", typeof(String));
                             dcString.SetOrdinal(col + 1);
                             dcString.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsRelationGenerated, true);
+                            // need to use MIN (and thus Child) for cases of strings with same reference id (e.g. Items; SINGULAR and PLURAL, etc)
+                            dcString.Expression = "MIN(Child(" + relationName + ").String)";
                             dcChild.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringId, true);
                             col++;
                         }
