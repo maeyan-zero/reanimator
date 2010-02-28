@@ -46,52 +46,74 @@ namespace Reanimator.Forms
 
         private void PopulateItems(Unit unit)
         {
-            try
+            bool canGetItemNames = true;
+            DataTable itemsTable = dataSet.GetExcelTable(27953);
+            DataTable affixTable = dataSet.GetExcelTable(30512);
+            if (itemsTable == null || affixTable == null)
+                canGetItemNames = false;
+            if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
+                canGetItemNames = false;
+            if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") || !affixTable.Columns.Contains("magicNameString_string"))
+                canGetItemNames = false;
+
+
+            Unit[] items = unit.Items;
+            for (int i = 0; i < items.Length; i++)
             {
-                Unit[] items = unit.Items;
-                for (int i = 0; i < items.Length; i++)
+                Unit item = items[i];
+                if (item == null) continue;
+
+
+                // assign default name
+                item.Name = "Item Id: " + item.itemCode;
+                if (!canGetItemNames)
                 {
-                    Unit item = items[i];
-                    if (item == null) continue;
-
-                    item.Name = "Item Id: " + item.itemCode;
-
-                    DataTable itemsTable = dataSet.GetExcelTable(27953);
-                    if (itemsTable == null)
-                    {
-                        currentlyEditing_ComboBox.Items.Add(item);
-                        continue;
-                    }
-
-                    if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
-                    {
-                        currentlyEditing_ComboBox.Items.Add(item);
-                        continue;
-                    }
-                    DataRow[] itemsRows = itemsTable.Select(String.Format("code1 = '{0}'", item.itemCode));
-
-                    if (itemsRows.Length == 0)
-                    {
-                        currentlyEditing_ComboBox.Items.Add(item);
-                        continue;
-                    }
-                    String itemName = itemsRows[0]["String_string"] as String;
-
-                    if (itemName == null)
-                    {
-                        currentlyEditing_ComboBox.Items.Add(item);
-                        continue;
-                    }
-
-                    item.Name = itemName;
                     currentlyEditing_ComboBox.Items.Add(item);
-
-                    // TODO why doesn't ((Unit)currentlyEditing_ComboBox.Items[indexAdded]).Name work? Force "repaint/rebuild" of .ToString() needed?
+                    continue;
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, ex.Source);
+
+
+                // get item name
+                DataRow[] itemsRows = itemsTable.Select(String.Format("code1 = '{0}'", item.itemCode));
+                if (itemsRows.Length == 0)
+                {
+                    currentlyEditing_ComboBox.Items.Add(item);
+                    continue;
+                }
+                item.Name = itemsRows[0]["String_string"] as String;
+
+
+                // does it have an affix/prefix
+                String affixString = String.Empty;
+                for (int s = 0; s < item.Stats.Length; s++)
+                {
+                    if (item.Stats[s].Id == 0x7438) // "applied_affix"
+                    {
+                        int affixCode = item.Stats[s].values[0].Stat;
+                        DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
+                        if (affixRows.Length > 0)
+                        {
+                            String replaceString = affixRows[0]["setNameString_string"] as String;
+                            if (replaceString == null || replaceString.Length == 0)
+                            {
+                                replaceString = affixRows[0]["magicNameString_string"] as String;
+                                if (replaceString == null || replaceString.Length == 0)
+                                {
+                                    break;
+                                }
+                            }
+
+                            affixString = replaceString;
+                            break;
+                        }
+                    }
+                }
+
+                if (affixString.Length > 0)
+                {
+                    item.Name = affixString.Replace("[item]", item.Name);
+                }
+                currentlyEditing_ComboBox.Items.Add(item);
             }
         }
 
@@ -137,7 +159,7 @@ namespace Reanimator.Forms
                     {
                         stat = unit.Stats[counter];
 
-                        if(hash.Contains(stat.id))
+                        if (hash.Contains(stat.id))
                         {
                             name = (string)hash[stat.Id];
                         }
@@ -182,7 +204,7 @@ namespace Reanimator.Forms
                 DataTable table = dataSet.GetExcelTable(tableId);
                 DataRow[] row = null;
 
-                if(table != null)
+                if (table != null)
                 {
                     row = table.Select(select);
 
@@ -287,7 +309,7 @@ namespace Reanimator.Forms
                 }
 
                 SetStatValues(stat);
-                
+
             }
             catch (Exception ex)
             {
@@ -466,7 +488,7 @@ namespace Reanimator.Forms
         {
             List<string> references = new List<string>();
             CheckTableReferencesForItems(references, heroUnit.Items);
-            
+
             listBox1.DataSource = references;
         }
 
@@ -477,7 +499,7 @@ namespace Reanimator.Forms
 
             listBox1.DataSource = references;
         }
-        
+
         private void CheckTableReferencesForItems(List<string> references, Unit[] items)
         {
             string id = string.Empty;
@@ -575,28 +597,21 @@ namespace Reanimator.Forms
 
         private void HeroEditor_Load(object sender, EventArgs e)
         {
-            try
-            {
-                currentlyEditing_ComboBox.Items.Add(heroUnit);
-                currentlyEditing_ComboBox.SelectedIndex = 0;
-                
-                PopulateGeneral(heroUnit);
+            currentlyEditing_ComboBox.Items.Add(heroUnit);
+            currentlyEditing_ComboBox.SelectedIndex = 0;
 
-                initialized = true;
+            PopulateGeneral(heroUnit);
 
-                PopulateStats(heroUnit);
-                PopulateItems(heroUnit);
+            initialized = true;
+
+            PopulateStats(heroUnit);
+            PopulateItems(heroUnit);
 
 
-                PopulateMinigame();
-                PopulateWaypoints();
+            PopulateMinigame();
+            PopulateWaypoints();
 
-                InitUnknownStatList();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "HeroEditor_Load");
-            }
+            InitUnknownStatList();
         }
 
         private void InitUnknownStatList()
