@@ -87,7 +87,8 @@ namespace Reanimator.Forms
                 String affixString = String.Empty;
                 for (int s = 0; s < item.Stats.Length; s++)
                 {
-                    if (item.Stats[s].Id == 0x7438) // "applied_affix"
+                    // "applied_affix"
+                    if (item.Stats[s].Id == 0x7438)
                     {
                         int affixCode = item.Stats[s].values[0].Stat;
                         DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
@@ -104,6 +105,17 @@ namespace Reanimator.Forms
                             }
 
                             affixString = replaceString;
+                        }
+                    }
+
+                    // "item_quality"
+                    if (item.Stats[s].Id == 0x7832)
+                    {
+                        // is unique || is mutant then no affix
+                        int itemQualityCode = item.Stats[s].values[0].Stat;
+                        if (itemQualityCode == 13616 || itemQualityCode == 13360)
+                        {
+                            affixString = String.Empty;
                             break;
                         }
                     }
