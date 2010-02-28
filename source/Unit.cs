@@ -271,6 +271,7 @@ namespace Reanimator
 
         public string Name
         {
+            get { return ToString(); }
             set { characterName = value.ToCharArray(); }
         }
 
