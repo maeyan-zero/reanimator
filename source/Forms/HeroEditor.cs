@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Reanimator.Excel;
 using System.IO;
@@ -16,32 +13,24 @@ namespace Reanimator.Forms
 {
     public partial class HeroEditor : Form
     {
-        Unit heroUnit;
-        TableDataSet dataSet;
-        ExcelTables excelTables;
-        Stats _statsTable;
-        String filePath;
+        readonly Unit _heroUnit;
+        readonly TableDataSet dataSet;
+        readonly ExcelTables excelTables;
+        readonly Stats _statsTable;
+        readonly String _filePath;
         string savedPath;
 
-        public HeroEditor(Unit unit, TableDataSet tables, String file)
+        public HeroEditor(Unit heroUnit, TableDataSet tableDataSet, String filePath)
         {
-            try
-            {
-                heroUnit = unit;
-                dataSet = tables;
-                excelTables = tables.ExcelTables;
-                _statsTable = (Stats)excelTables.GetTable("stats");
-                filePath = file;
+            _heroUnit = heroUnit;
+            dataSet = tableDataSet;
+            excelTables = tableDataSet.ExcelTables;
+            _statsTable = excelTables.GetTable("stats") as Stats;
+            _filePath = filePath;
 
-                Hashtable hash = new Hashtable();
-                GenerateUnitNameStrings(new Unit[] { heroUnit }, hash);
+            GenerateUnitNameStrings(new[] { _heroUnit }, null);
 
-                InitializeComponent();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Constructor");
-            }
+            InitializeComponent();
         }
 
         private void PopulateItems(Unit unit)
@@ -49,12 +38,18 @@ namespace Reanimator.Forms
             bool canGetItemNames = true;
             DataTable itemsTable = dataSet.GetExcelTable(27953);
             DataTable affixTable = dataSet.GetExcelTable(30512);
-            if (itemsTable == null || affixTable == null)
+            if (itemsTable != null && affixTable != null)
+            {
+                if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
+                    canGetItemNames = false;
+                if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") ||
+                    !affixTable.Columns.Contains("magicNameString_string"))
+                    canGetItemNames = false;
+            }
+            else
+            {
                 canGetItemNames = false;
-            if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
-                canGetItemNames = false;
-            if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") || !affixTable.Columns.Contains("magicNameString_string"))
-                canGetItemNames = false;
+            }
 
 
             Unit[] items = unit.Items;
@@ -95,10 +90,10 @@ namespace Reanimator.Forms
                         if (affixRows.Length > 0)
                         {
                             String replaceString = affixRows[0]["setNameString_string"] as String;
-                            if (replaceString == null || replaceString.Length == 0)
+                            if (String.IsNullOrEmpty(replaceString))
                             {
                                 replaceString = affixRows[0]["magicNameString_string"] as String;
-                                if (replaceString == null || replaceString.Length == 0)
+                                if (String.IsNullOrEmpty(replaceString))
                                 {
                                     break;
                                 }
@@ -161,16 +156,21 @@ namespace Reanimator.Forms
 
         private void GenerateUnitNameStrings(Unit[] units, Hashtable hash)
         {
+            if (hash == null)
+            {
+                hash = new Hashtable();
+            }
+
             try
             {
                 Unit.StatBlock.Stat stat;
-                string name;
                 foreach (Unit unit in units)
                 {
                     for (int counter = 0; counter < unit.Stats.Length; counter++)
                     {
                         stat = unit.Stats[counter];
 
+                        String name;
                         if (hash.Contains(stat.id))
                         {
                             name = (string)hash[stat.Id];
@@ -212,9 +212,9 @@ namespace Reanimator.Forms
 
             if (stat.values.Length != 0)
             {
-                string select = "code = '" + lookupId.ToString() + "'";
+                String select = String.Format("code = '{0}'", lookupId);
                 DataTable table = dataSet.GetExcelTable(tableId);
-                DataRow[] row = null;
+                DataRow[] row;
 
                 if (table != null)
                 {
@@ -236,7 +236,7 @@ namespace Reanimator.Forms
             {
                 this.panel1.Controls.Clear();
 
-                Unit.StatBlock.Stat stat = (Unit.StatBlock.Stat)this.stats_ListBox.SelectedItem;
+                Unit.StatBlock.Stat stat = (Unit.StatBlock.Stat)stats_ListBox.SelectedItem;
                 // yea, copy/paste nastiness ftw
                 if (stat.Attribute1 != null)
                 {
@@ -499,7 +499,7 @@ namespace Reanimator.Forms
         private void button3_Click(object sender, EventArgs e)
         {
             List<string> references = new List<string>();
-            CheckTableReferencesForItems(references, heroUnit.Items);
+            CheckTableReferencesForItems(references, _heroUnit.Items);
 
             listBox1.DataSource = references;
         }
@@ -507,14 +507,14 @@ namespace Reanimator.Forms
         private void button4_Click(object sender, EventArgs e)
         {
             List<string> references = new List<string>();
-            CheckTableReferencesForItems(references, new Unit[] { heroUnit });
+            CheckTableReferencesForItems(references, new Unit[] { _heroUnit });
 
             listBox1.DataSource = references;
         }
 
         private void CheckTableReferencesForItems(List<string> references, Unit[] items)
         {
-            string id = string.Empty;
+            string id;
 
             foreach (Unit item in items)
             {
@@ -535,14 +535,13 @@ namespace Reanimator.Forms
                         foreach (Unit.StatBlock.Stat.Attribute att in stats.attributes)
                         {
                             ExcelTable tab = excelTables.GetTable(att.TableId);
-                            if (tab != null)
-                            {
-                                id = tab.StringId;
+                            if (tab == null) continue;
 
-                                if (!references.Contains(id))
-                                {
-                                    references.Add(id);
-                                }
+                            id = tab.StringId;
+
+                            if (!references.Contains(id))
+                            {
+                                references.Add(id);
                             }
                         }
                     }
@@ -551,32 +550,32 @@ namespace Reanimator.Forms
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        protected struct MainHeader
+        private struct MainHeader
         {
-            public Int32 flag;
-            public Int32 version;
-            public Int32 dataOffset1;
-            public Int32 dataOffset2;
+            public Int32 Flag;
+            public Int32 Version;
+            public Int32 DataOffset1;
+            public Int32 DataOffset2;
         };
 
         private void saveCharButton_Click(object sender, EventArgs e)
         {
-            int startIndex = filePath.LastIndexOf("\\") + 1;
-            string characterName = filePath.Substring(startIndex, filePath.Length - startIndex - 4);
+            int startIndex = _filePath.LastIndexOf("\\") + 1;
+            string characterName = _filePath.Substring(startIndex, _filePath.Length - startIndex - 4);
             FileStream saveFile = new FileStream(characterName + ".hg1", FileMode.Create, FileAccess.ReadWrite);
             savedPath = saveFile.Name;
 
             // main header
             MainHeader mainHeader;
-            mainHeader.flag = 0x484D4752; // "RGMH"
-            mainHeader.version = 1;
-            mainHeader.dataOffset1 = 0x2028;
-            mainHeader.dataOffset2 = 0x2028;
+            mainHeader.Flag = 0x484D4752; // "RGMH"
+            mainHeader.Version = 1;
+            mainHeader.DataOffset1 = 0x2028;
+            mainHeader.DataOffset2 = 0x2028;
             byte[] data = FileTools.StructureToByteArray(mainHeader);
             saveFile.Write(data, 0, data.Length);
 
             // hellgate string (is this needed?)
-            string hellgateString = "Hellgate: London";
+            const string hellgateString = "Hellgate: London";
             byte[] hellgateStringBytes = FileTools.StringToUnicodeByteArray(hellgateString);
             saveFile.Seek(0x28, SeekOrigin.Begin);
             saveFile.Write(hellgateStringBytes, 0, hellgateStringBytes.Length);
@@ -588,20 +587,20 @@ namespace Reanimator.Forms
             saveFile.Write(charStringBytes, 0, charStringBytes.Length);
 
             // no detail string (is this needed?)
-            string noDetailString = "No detail";
+            const string noDetailString = "No detail";
             byte[] noDetailStringBytes = FileTools.StringToUnicodeByteArray(noDetailString);
             saveFile.Seek(0x1028, SeekOrigin.Begin);
             saveFile.Write(noDetailStringBytes, 0, noDetailStringBytes.Length);
 
             // load char string (is this needed?)
-            string loadCharacterString = "Load this Character";
+            const string loadCharacterString = "Load this Character";
             byte[] loadCharacterStringBytes = FileTools.StringToUnicodeByteArray(loadCharacterString);
             saveFile.Seek(0x1828, SeekOrigin.Begin);
             saveFile.Write(loadCharacterStringBytes, 0, loadCharacterStringBytes.Length);
 
             // main character data
             saveFile.Seek(0x2028, SeekOrigin.Begin);
-            byte[] saveData = heroUnit.GenerateSaveData(charStringBytes);
+            byte[] saveData = _heroUnit.GenerateSaveData(charStringBytes);
             saveFile.Write(saveData, 0, saveData.Length);
 
             saveFile.Close();
@@ -609,15 +608,15 @@ namespace Reanimator.Forms
 
         private void HeroEditor_Load(object sender, EventArgs e)
         {
-            currentlyEditing_ComboBox.Items.Add(heroUnit);
+            currentlyEditing_ComboBox.Items.Add(_heroUnit);
             currentlyEditing_ComboBox.SelectedIndex = 0;
 
-            PopulateGeneral(heroUnit);
+            PopulateGeneral(_heroUnit);
 
             initialized = true;
 
-            PopulateStats(heroUnit);
-            PopulateItems(heroUnit);
+            PopulateStats(_heroUnit);
+            PopulateItems(_heroUnit);
 
 
             PopulateMinigame();
@@ -629,60 +628,60 @@ namespace Reanimator.Forms
         private void InitUnknownStatList()
         {
             string text = string.Empty;
-            text += "jobClass: " + heroUnit.jobClass + "\n";
-            text += "majorVersion: " + heroUnit.majorVersion + "\n";
-            text += "minorVersion: " + heroUnit.minorVersion + "\n";
-            text += "playerFlagCount1: " + heroUnit.playerFlagCount1 + "\n";
-            text += "playerFlagCount2: " + heroUnit.playerFlagCount2 + "\n";
-            if (heroUnit.playerFlags1 != null)
+            text += "jobClass: " + _heroUnit.jobClass + "\n";
+            text += "majorVersion: " + _heroUnit.majorVersion + "\n";
+            text += "minorVersion: " + _heroUnit.minorVersion + "\n";
+            text += "playerFlagCount1: " + _heroUnit.playerFlagCount1 + "\n";
+            text += "playerFlagCount2: " + _heroUnit.playerFlagCount2 + "\n";
+            if (_heroUnit.playerFlags1 != null)
             {
-                foreach (int val in heroUnit.playerFlags1)
+                foreach (int val in _heroUnit.playerFlags1)
                 {
                     text += "playerFlags1: " + val + "\n";
                 }
             }
-            if (heroUnit.playerFlags2 != null)
+            if (_heroUnit.playerFlags2 != null)
             {
-                foreach (int val in heroUnit.playerFlags2)
+                foreach (int val in _heroUnit.playerFlags2)
                 {
                     text += "playerFlags2: " + val + "\n";
                 }
             }
-            text += "timeStamp1: " + heroUnit.timeStamp1 + "\n";
-            text += "timeStamp2: " + heroUnit.timeStamp2 + "\n";
-            text += "timeStamp3: " + heroUnit.timeStamp3 + "\n";
-            text += "unknown_01_03_1: " + heroUnit.unknown_01_03_1 + "\n";
-            text += "unknown_01_03_2: " + heroUnit.unknown_01_03_2 + "\n";
-            text += "unknown_01_03_3: " + heroUnit.unknown_01_03_3 + "\n";
-            if (heroUnit.unknown_01_03_4 != null)
+            text += "timeStamp1: " + _heroUnit.timeStamp1 + "\n";
+            text += "timeStamp2: " + _heroUnit.timeStamp2 + "\n";
+            text += "timeStamp3: " + _heroUnit.timeStamp3 + "\n";
+            text += "unknown_01_03_1: " + _heroUnit.unknown_01_03_1 + "\n";
+            text += "unknown_01_03_2: " + _heroUnit.unknown_01_03_2 + "\n";
+            text += "unknown_01_03_3: " + _heroUnit.unknown_01_03_3 + "\n";
+            if (_heroUnit.unknown_01_03_4 != null)
             {
-                foreach (byte val in heroUnit.unknown_01_03_4)
+                foreach (byte val in _heroUnit.unknown_01_03_4)
                 {
                     text += "unknown_01_03_4: " + (int)val;
                 }
             }
-            text += "unknown_02: " + heroUnit.unknown_02 + "\n";
-            text += "unknown_07: " + heroUnit.unknown_07 + "\n";
-            text += "unknown_09: " + heroUnit.unknown_09 + "\n";
-            if (heroUnit.unknown17 != null)
+            text += "unknown_02: " + _heroUnit.unknown_02 + "\n";
+            text += "unknown_07: " + _heroUnit.unknown_07 + "\n";
+            text += "unknown_09: " + _heroUnit.unknown_09 + "\n";
+            if (_heroUnit.unknown17 != null)
             {
-                foreach (byte val in heroUnit.unknown17)
+                foreach (byte val in _heroUnit.unknown17)
                 {
                     text += "unknown17: " + (int)val + "\n";
                 }
             }
-            text += "unknownBool_01_03: " + heroUnit.unknownBool_01_03 + "\n";
-            text += "unknownBool_06: " + heroUnit.unknownBool_06 + "\n";
-            text += "unknownBool1: " + heroUnit.unknownBool1 + "\n";
-            text += "unknownCount1B: " + heroUnit.unknownCount1B + "\n";
-            text += "unknownCount1F: " + heroUnit.unknownCount1F + "\n";
-            text += "unknownFlag: " + heroUnit.unknownFlag + "\n";
-            text += "weaponConfigCount: " + heroUnit.weaponConfigCount + "\n";
-            text += "weaponConfigFlag: " + heroUnit.weaponConfigFlag + "\n";
+            text += "unknownBool_01_03: " + _heroUnit.unknownBool_01_03 + "\n";
+            text += "unknownBool_06: " + _heroUnit.unknownBool_06 + "\n";
+            text += "unknownBool1: " + _heroUnit.unknownBool1 + "\n";
+            text += "unknownCount1B: " + _heroUnit.unknownCount1B + "\n";
+            text += "unknownCount1F: " + _heroUnit.unknownCount1F + "\n";
+            text += "unknownFlag: " + _heroUnit.unknownFlag + "\n";
+            text += "weaponConfigCount: " + _heroUnit.weaponConfigCount + "\n";
+            text += "weaponConfigFlag: " + _heroUnit.weaponConfigFlag + "\n";
 
             text += "\n\n\n\n";
 
-            UnitAppearance appearance = heroUnit.unitAppearance;
+            UnitAppearance appearance = _heroUnit.unitAppearance;
             text += "unknown1: " + appearance.unknown1 + "\n";
 
             if (appearance.unknown2 != null)
@@ -927,15 +926,15 @@ namespace Reanimator.Forms
 
         private void SetCheckBoxes()
         {
-            if (heroUnit.Flags1 != null && heroUnit.Flags1.Contains(21062))
+            if (_heroUnit.Flags1 != null && _heroUnit.Flags1.Contains(21062))
             {
                 elite_CheckBox.Checked = true;
             }
-            if (heroUnit.Flags2 != null && heroUnit.Flags2.Contains(18243))
+            if (_heroUnit.Flags2 != null && _heroUnit.Flags2.Contains(18243))
             {
                 hardcore_CheckBox.Checked = true;
             }
-            if (heroUnit.Flags2 != null && heroUnit.Flags2.Contains(18499))
+            if (_heroUnit.Flags2 != null && _heroUnit.Flags2.Contains(18499))
             {
                 dead_CheckBox.Checked = true;
             }
@@ -945,7 +944,7 @@ namespace Reanimator.Forms
         {
             if (initialized)
             {
-                heroUnit.SetGameMode(elite_CheckBox.Checked, hardcore_CheckBox.Checked, dead_CheckBox.Checked);
+                _heroUnit.SetGameMode(elite_CheckBox.Checked, hardcore_CheckBox.Checked, dead_CheckBox.Checked);
             }
         }
 
@@ -954,12 +953,12 @@ namespace Reanimator.Forms
             richTextBox1.Text = string.Empty;
 
             richTextBox1.Text += "Flag1:\n";
-            richTextBox1.Text += heroUnit.PlayerFlagCount1 + "\n";
-            if (heroUnit.Flags1 != null)
+            richTextBox1.Text += _heroUnit.PlayerFlagCount1 + "\n";
+            if (_heroUnit.Flags1 != null)
             {
-                richTextBox1.Text += "Array size: " + heroUnit.Flags1.Length + "\n";
+                richTextBox1.Text += "Array size: " + _heroUnit.Flags1.Length + "\n";
 
-                foreach (int flag in heroUnit.Flags1)
+                foreach (int flag in _heroUnit.Flags1)
                 {
                     richTextBox1.Text += flag.ToString() + "\n";
                 }
@@ -970,12 +969,12 @@ namespace Reanimator.Forms
             }
 
             richTextBox1.Text += "\n\nFlag2:\n";
-            richTextBox1.Text += heroUnit.PlayerFlagCount2 + "\n";
-            if (heroUnit.Flags2 != null)
+            richTextBox1.Text += _heroUnit.PlayerFlagCount2 + "\n";
+            if (_heroUnit.Flags2 != null)
             {
-                richTextBox1.Text += "Array size: " + heroUnit.Flags2.Length + "\n";
+                richTextBox1.Text += "Array size: " + _heroUnit.Flags2.Length + "\n";
 
-                foreach (int flag in heroUnit.Flags2)
+                foreach (int flag in _heroUnit.Flags2)
                 {
                     richTextBox1.Text += flag.ToString() + "\n";
                 }
@@ -1022,43 +1021,39 @@ namespace Reanimator.Forms
         #region modify character values
         private void SetSimpleValue(string valueName, int value)
         {
-            if (initialized)
-            {
-                for (int counter = 0; counter < heroUnit.Stats.Length; counter++)
-                {
-                    Unit.StatBlock.Stat unit = heroUnit.Stats[counter];
+            if (!initialized) return;
 
-                    if (unit.Name == valueName)
-                    {
-                        unit.values[0].Stat = value;
-                        return;
-                    }
-                }
+            for (int counter = 0; counter < _heroUnit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unit = _heroUnit.Stats[counter];
+
+                if (unit.Name != valueName) continue;
+
+                unit.values[0].Stat = value;
+                return;
             }
         }
 
         private void SetComplexValue(string valueName, Unit.StatBlock.Stat stat)
         {
-            if (initialized)
-            {
-                for (int counter = 0; counter < heroUnit.Stats.Length; counter++)
-                {
-                    Unit.StatBlock.Stat unit = heroUnit.Stats[counter];
+            if (!initialized) return;
 
-                    if (unit.Name == valueName)
-                    {
-                        unit = stat;
-                        return;
-                    }
-                }
+            for (int counter = 0; counter < _heroUnit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unit = _heroUnit.Stats[counter];
+
+                if (unit.Name != valueName) continue;
+
+                unit = stat;
+                return;
             }
         }
 
         private int GetSimpleValue(string valueName)
         {
-            for (int counter = 0; counter < heroUnit.Stats.Length; counter++)
+            for (int counter = 0; counter < _heroUnit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unit = heroUnit.Stats[counter];
+                Unit.StatBlock.Stat unit = _heroUnit.Stats[counter];
 
                 if (unit.Name == valueName)
                 {
@@ -1071,9 +1066,9 @@ namespace Reanimator.Forms
 
         private Unit.StatBlock.Stat GetComplexValue(string valueName)
         {
-            for (int counter = 0; counter < heroUnit.Stats.Length; counter++)
+            for (int counter = 0; counter < _heroUnit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unit = heroUnit.Stats[counter];
+                Unit.StatBlock.Stat unit = _heroUnit.Stats[counter];
 
                 if (unit.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -1164,7 +1159,7 @@ namespace Reanimator.Forms
         private void button5_Click(object sender, EventArgs e)
         {
             List<string> itemValues = new List<string>();
-            CheckItemValues(itemValues, heroUnit.Items);
+            CheckItemValues(itemValues, _heroUnit.Items);
             listBox2.DataSource = itemValues;
         }
 
