@@ -26,7 +26,7 @@ namespace Reanimator
         private UpdateCheckerParams currentVersionInfos;
         private UpdateForm updateForm;
 
-        private int childFormNumber = 0;
+        private int _childFormNumber;
 
         public Reanimator()
         {
@@ -61,16 +61,17 @@ namespace Reanimator
 
         private void ShowNewForm(object sender, EventArgs e)
         {
-            Form childForm = new Form();
-            childForm.MdiParent = this;
-            childForm.Text = "Window " + childFormNumber++;
+            Form childForm = new Form {MdiParent = this, Text = "Window " + _childFormNumber++};
             childForm.Show();
         }
 
         private void OpenFile(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "HGL Files (*.idx, *.hg1, *.cooked)|*.idx;*.hg1;*.cooked|All Files (*.*)|*.*";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+                                                {
+                                                    Filter =
+                                                        "HGL Files (*.idx, *.hg1, *.cooked)|*.idx;*.hg1;*.cooked|All Files (*.*)|*.*"
+                                                };
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK)
             {
@@ -84,7 +85,7 @@ namespace Reanimator
                 }
                 else if (openFileDialog.FileName.EndsWith("xls.uni.cooked"))
                 {
-                    OpenFile_STRINGS(openFileDialog.FileName);
+                    OpenFileStrings(openFileDialog.FileName);
                 }
                 else if (openFileDialog.FileName.EndsWith("cooked"))
                 {
@@ -100,9 +101,11 @@ namespace Reanimator
 
         private void OpenIndexFile(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Index Files (*.idx)|*.idx|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.HglDir + "\\Data";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+                                                {
+                                                    Filter = "Index Files (*.idx)|*.idx|All Files (*.*)|*.*",
+                                                    InitialDirectory = Config.HglDir + "\\Data"
+                                                };
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("idx"))
             {
@@ -142,7 +145,7 @@ namespace Reanimator
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
             {
-                OpenFile_STRINGS(openFileDialog.FileName);
+                OpenFileStrings(openFileDialog.FileName);
             }
         }
 
@@ -278,12 +281,15 @@ namespace Reanimator
             etf.Show();
         }
 
-        private void OpenFile_STRINGS(String fileName)
+        private void OpenFileStrings(String fileName)
         {
             try
             {
                 FileStream stringsFile = new FileStream(fileName, FileMode.Open);
                 StringsFile strings = new StringsFile(FileTools.StreamToByteArray(stringsFile));
+                if (!strings.IsGood) return;
+
+                strings.FilePath = fileName;
                 TableForm indexExplorer = new TableForm(strings);
                 StringsFile.StringBlock[] stringBlocks = strings.GetFileTable();
                 indexExplorer.dataGridView.DataSource = stringBlocks;
@@ -293,7 +299,7 @@ namespace Reanimator
             }
             catch (Exception e)
             {
-                MessageBox.Show("Failed to open file!\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to open file!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -305,7 +311,7 @@ namespace Reanimator
 
             if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
             {
-                string FileName = saveFileDialog.FileName;
+                string fileName = saveFileDialog.FileName;
             }
         }
 
@@ -429,8 +435,7 @@ namespace Reanimator
 
         private void LoadAndDisplayCurrentlyLoadedExcelTables()
         {
-            tablesLoaded = new TablesLoaded(tableDataSet);
-            tablesLoaded.MdiParent = this;
+            tablesLoaded = new TablesLoaded(tableDataSet) {MdiParent = this};
             tablesLoaded.Show();
             foreach (ExcelTable et in excelTables.GetLoadedTables())
             {
@@ -595,8 +600,8 @@ namespace Reanimator
 
                         if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
                         {
-                            string FileName = saveFileDialog.FileName;
-                            File.WriteAllText(FileName, strValue);
+                            string fileName = saveFileDialog.FileName;
+                            File.WriteAllText(fileName, strValue);
                         }
                     }
                 }
@@ -718,9 +723,11 @@ namespace Reanimator
         {
             if (updateForm == null)
             {
-                updateForm = new UpdateForm(currentVersionInfos);
-                updateForm.StartPosition = FormStartPosition.CenterScreen;
-                updateForm.MdiParent = this;
+                updateForm = new UpdateForm(currentVersionInfos)
+                                 {
+                                     StartPosition = FormStartPosition.CenterScreen,
+                                     MdiParent = this
+                                 };
             }
 
             updateForm.Show();

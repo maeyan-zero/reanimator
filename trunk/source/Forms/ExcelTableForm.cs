@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Reanimator.Excel;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.IO;
-using System.Collections;
 
 namespace Reanimator.Forms
 {
@@ -25,20 +21,15 @@ namespace Reanimator.Forms
             public int Unknowns4 { get; set; }
         };
 
-        ExcelTable excelTable;
-        StringsFile stringsFile;
-        TableDataSet tableDataSet;
+        readonly ExcelTable _excelTable;
+        readonly StringsFile _stringsFile;
+        readonly TableDataSet _tableDataSet;
 
-        public String GetExcelTableName()
+        public ExcelTableForm(Object table, TableDataSet tableDataSet)
         {
-            return excelTable.StringId;
-        }
-
-        public ExcelTableForm(Object table, TableDataSet xlsDataSet)
-        {
-            excelTable = table as ExcelTable;
-            stringsFile = table as StringsFile;
-            tableDataSet = xlsDataSet;
+            _excelTable = table as ExcelTable;
+            _stringsFile = table as StringsFile;
+            _tableDataSet = tableDataSet;
 
             Init();
 
@@ -53,25 +44,25 @@ namespace Reanimator.Forms
             dataGridView.DoubleBuffered(true);
             dataGridView.EnableHeadersVisualStyles = false;
             dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView.DataSource = tableDataSet.XlsDataSet;
+            dataGridView.DataSource = _tableDataSet.XlsDataSet;
         }
 
         private void LoadTable(ProgressForm progress, Object var)
         {
             // this merely checks the table is already in the dataset
             // if not - then it will load it in
-            tableDataSet.LoadTable(progress, var);
+            _tableDataSet.LoadTable(progress, var);
 
-            if (stringsFile != null)
+            if (_stringsFile != null)
             {
-                dataGridView.DataMember = stringsFile.Name;
+                dataGridView.DataMember = _stringsFile.Name;
                 return;
             }
 
-            if (excelTable != null)
+            if (_excelTable != null)
             {
-                dataGridView.DataMember = excelTable.StringId;
-                listBox1.DataSource = excelTable.SecondaryStrings;
+                dataGridView.DataMember = _excelTable.StringId;
+                listBox1.DataSource = _excelTable.SecondaryStrings;
             }
             else
             {
@@ -82,7 +73,7 @@ namespace Reanimator.Forms
             // TODO is there a better way?
             // TODO remove me once unknowns no longer unknowns
             List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
-            int[][] intArrays = { excelTable.TableIndicies, excelTable.Unknowns1, excelTable.Unknowns2, excelTable.Unknowns3, excelTable.Unknowns4 };
+            int[][] intArrays = { _excelTable.TableIndicies, _excelTable.Unknowns1, _excelTable.Unknowns2, _excelTable.Unknowns3, _excelTable.Unknowns4 };
             for (int i = 0; i < intArrays.Length; i++)
             {
                 if (intArrays[i] == null)
@@ -171,18 +162,79 @@ namespace Reanimator.Forms
 
         public void SaveButton()
         {
-            byte[] excelFileData = excelTable.GenerateExcelFile((DataSet)this.dataGridView.DataSource);
+            DataTable table = ((DataSet) this.dataGridView.DataSource).Tables[this.dataGridView.DataMember];
+            if (table == null) return;
 
-            using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
+            // TODO have excel file saving use same method as string file saving
+            if (_stringsFile == null)
             {
-                fs.Write(excelFileData, 0, excelFileData.Length);
+                byte[] excelFileData = _excelTable.GenerateExcelFile((DataSet)this.dataGridView.DataSource);
+
+                using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
+                {
+                    fs.Write(excelFileData, 0, excelFileData.Length);
+                }
+            }
+            else
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    AddExtension = false,
+                    DefaultExt = StringsFile.FileExtention,
+                    FileName = _stringsFile.Name.ToLower(),
+                    Filter = String.Format("Strings Files (*.{0})|*.{0}", StringsFile.FileExtention),
+                    InitialDirectory = _stringsFile.FilePath.Substring(0, _stringsFile.FilePath.LastIndexOf(@"\"))
+                };
+                if (saveFileDialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    saveFileDialog.Dispose();
+                    return;
+                }
+                String filePath = saveFileDialog.FileName;
+                saveFileDialog.Dispose();
+
+                // since AddExtension = false doesn't seem to do shit
+                const string replaceExtension = "." + StringsFile.FileExtention;
+                while (filePath.Contains(replaceExtension))
+                {
+                    filePath = filePath.Replace(replaceExtension, "");
+                }
+                filePath += replaceExtension;
+
+                if (!filePath.Contains(StringsFile.FileExtention))
+                {
+                    filePath += StringsFile.FileExtention;
+                }
+
+                byte[] stringsFileData = _stringsFile.GenerateStringsFile(table);
+                if (stringsFileData == null || stringsFileData.Length == 0)
+                {
+                    MessageBox.Show("Failed to generate string byte data!", "Error", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    return;
+                }
+
+                try
+                {
+                    using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
+                    {
+                        fs.Write(stringsFileData, 0, stringsFileData.Length);
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Failed to write to file!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                MessageBox.Show("1 File Saved!", "Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void regenTable_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Todo");
-            //if (tableDataSet.XlsDataSet.Tables.Remove(excelTable.StringId))
+            //if (_tableDataSet.XlsDataSet.Tables.Remove(_excelTable.StringId))
         }
     }
 
