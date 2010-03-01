@@ -38,5 +38,29 @@ namespace Reanimator.Forms
                 etf.Show();
             }
         }
+
+        private void TablesLoaded_LocationChanged(object sender, EventArgs e)
+        {
+            Size parentSize = this.MdiParent.ClientSize;
+            Point location = this.Location;
+            int distance = 10;
+
+            if (location.X <= distance)
+            {
+                this.Location = new Point(0, this.Location.Y);
+            }
+            else if (parentSize.Width - this.Width - location.X - 4 <= distance)
+            {
+                this.Location = new Point(parentSize.Width - this.Width - 4, this.Location.Y);
+            }
+            if (location.Y <= distance)
+            {
+                this.Location = new Point(this.Location.X, 0);
+            }
+            else if (parentSize.Height - this.Height - location.Y - 76 <= distance)
+            {
+                this.Location = new Point(this.Location.X, parentSize.Height - this.Height - 76);
+            }
+        }
     }
 }

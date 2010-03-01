@@ -24,6 +24,7 @@ namespace Reanimator.Forms
         readonly ExcelTable _excelTable;
         readonly StringsFile _stringsFile;
         readonly TableDataSet _tableDataSet;
+        DataView _dataView;
 
         public ExcelTableForm(Object table, TableDataSet tableDataSet)
         {
@@ -35,6 +36,17 @@ namespace Reanimator.Forms
 
             ProgressForm progress = new ProgressForm(LoadTable, table);
             progress.ShowDialog(this);
+
+            UseDataView();
+        }
+
+        private void UseDataView()
+        {
+            String temp = this.dataGridView.DataMember;
+            DataTable dataTable = _tableDataSet.XlsDataSet.Tables[temp];
+            _dataView = dataTable.DefaultView;
+            this.dataGridView.DataMember = null;
+            this.dataGridView.DataSource = _dataView;
         }
 
         private void Init()
@@ -44,7 +56,21 @@ namespace Reanimator.Forms
             dataGridView.DoubleBuffered(true);
             dataGridView.EnableHeadersVisualStyles = false;
             dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-            dataGridView.DataSource = _tableDataSet.XlsDataSet;
+            //dataGridView.DataSource = _tableDataSet.XlsDataSet;
+            dataGridView.DataMember = null;
+            dataGridView.DataSource = _dataView;
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _dataView.Sort = tstb_sortCriteria.Text;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void LoadTable(ProgressForm progress, Object var)
