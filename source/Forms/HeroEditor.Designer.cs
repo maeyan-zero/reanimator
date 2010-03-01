@@ -134,12 +134,19 @@ namespace Reanimator.Forms
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.button5 = new System.Windows.Forms.Button();
             this.listBox2 = new System.Windows.Forms.ListBox();
+            this.unknownTabList = new System.Windows.Forms.TabPage();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.save_Button = new System.Windows.Forms.Button();
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.unknownTabList = new System.Windows.Forms.TabPage();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.lb_availableItemValues = new System.Windows.Forms.ListBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.l_itemName = new System.Windows.Forms.Label();
+            this.cb_availableItems = new System.Windows.Forms.ComboBox();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -176,6 +183,9 @@ namespace Reanimator.Forms
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.unknownTabList.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.groupBox10.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -191,6 +201,7 @@ namespace Reanimator.Forms
             this.main_TabControl.Controls.Add(this.tabPage1);
             this.main_TabControl.Controls.Add(this.tabPage2);
             this.main_TabControl.Controls.Add(this.unknownTabList);
+            this.main_TabControl.Controls.Add(this.tabPage3);
             this.main_TabControl.Location = new System.Drawing.Point(12, 33);
             this.main_TabControl.Name = "main_TabControl";
             this.main_TabControl.SelectedIndex = 0;
@@ -1302,6 +1313,26 @@ namespace Reanimator.Forms
             this.listBox2.Sorted = true;
             this.listBox2.TabIndex = 3;
             // 
+            // unknownTabList
+            // 
+            this.unknownTabList.Controls.Add(this.richTextBox2);
+            this.unknownTabList.Location = new System.Drawing.Point(4, 22);
+            this.unknownTabList.Name = "unknownTabList";
+            this.unknownTabList.Padding = new System.Windows.Forms.Padding(3);
+            this.unknownTabList.Size = new System.Drawing.Size(649, 509);
+            this.unknownTabList.TabIndex = 7;
+            this.unknownTabList.Text = "Unknown values";
+            this.unknownTabList.UseVisualStyleBackColor = true;
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox2.Location = new System.Drawing.Point(3, 3);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(643, 503);
+            this.richTextBox2.TabIndex = 0;
+            this.richTextBox2.Text = "";
+            // 
             // save_Button
             // 
             this.save_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1344,25 +1375,74 @@ namespace Reanimator.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // unknownTabList
+            // tabPage3
             // 
-            this.unknownTabList.Controls.Add(this.richTextBox2);
-            this.unknownTabList.Location = new System.Drawing.Point(4, 22);
-            this.unknownTabList.Name = "unknownTabList";
-            this.unknownTabList.Padding = new System.Windows.Forms.Padding(3);
-            this.unknownTabList.Size = new System.Drawing.Size(649, 509);
-            this.unknownTabList.TabIndex = 7;
-            this.unknownTabList.Text = "Unknown values";
-            this.unknownTabList.UseVisualStyleBackColor = true;
+            this.tabPage3.Controls.Add(this.groupBox10);
+            this.tabPage3.Controls.Add(this.groupBox9);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(649, 509);
+            this.tabPage3.TabIndex = 8;
+            this.tabPage3.Text = "Modify Items";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // richTextBox2
+            // lb_availableItemValues
             // 
-            this.richTextBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox2.Location = new System.Drawing.Point(3, 3);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(643, 503);
-            this.richTextBox2.TabIndex = 0;
-            this.richTextBox2.Text = "";
+            this.lb_availableItemValues.FormattingEnabled = true;
+            this.lb_availableItemValues.Location = new System.Drawing.Point(6, 49);
+            this.lb_availableItemValues.Name = "lb_availableItemValues";
+            this.lb_availableItemValues.Size = new System.Drawing.Size(200, 225);
+            this.lb_availableItemValues.TabIndex = 0;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.l_itemName);
+            this.groupBox9.Controls.Add(this.label34);
+            this.groupBox9.Location = new System.Drawing.Point(224, 6);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(419, 280);
+            this.groupBox9.TabIndex = 1;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Item stats";
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.cb_availableItems);
+            this.groupBox10.Controls.Add(this.lb_availableItemValues);
+            this.groupBox10.Location = new System.Drawing.Point(6, 6);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(212, 280);
+            this.groupBox10.TabIndex = 2;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Available items";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(6, 16);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(38, 13);
+            this.label34.TabIndex = 0;
+            this.label34.Text = "Name:";
+            // 
+            // l_itemName
+            // 
+            this.l_itemName.AutoSize = true;
+            this.l_itemName.Location = new System.Drawing.Point(50, 16);
+            this.l_itemName.Name = "l_itemName";
+            this.l_itemName.Size = new System.Drawing.Size(33, 13);
+            this.l_itemName.TabIndex = 1;
+            this.l_itemName.Text = "name";
+            // 
+            // cb_availableItems
+            // 
+            this.cb_availableItems.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_availableItems.FormattingEnabled = true;
+            this.cb_availableItems.Location = new System.Drawing.Point(6, 19);
+            this.cb_availableItems.Name = "cb_availableItems";
+            this.cb_availableItems.Size = new System.Drawing.Size(200, 21);
+            this.cb_availableItems.TabIndex = 1;
             // 
             // HeroEditor
             // 
@@ -1424,6 +1504,10 @@ namespace Reanimator.Forms
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.unknownTabList.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            this.groupBox10.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1541,5 +1625,12 @@ namespace Reanimator.Forms
         private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.TabPage unknownTabList;
         private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.ListBox lb_availableItemValues;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.ComboBox cb_availableItems;
+        private System.Windows.Forms.Label l_itemName;
+        private System.Windows.Forms.Label label34;
     }
 }

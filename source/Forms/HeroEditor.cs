@@ -355,9 +355,15 @@ namespace Reanimator.Forms
                     eaValueLabel.Text = "Attr" + j + ": ";
                     eaValueLabel.Width = 40;
                     eaValueLabel.Top = 3 + heightOffset;
+                    TextBox eaMappingTextBox = new TextBox();
+                    eaMappingTextBox.Left = eaValueLabel.Right;
+                    eaMappingTextBox.Top = heightOffset;
+                    eaMappingTextBox.Width = 80;
+
                     TextBox eaValueTextBox = new TextBox();
-                    eaValueTextBox.Left = eaValueLabel.Right;
-                    eaValueTextBox.Top = heightOffset;
+                    eaValueTextBox.Left = eaValueLabel.Right + eaMappingTextBox.Width;
+                    eaValueLabel.Top = heightOffset;
+                    eaValueTextBox.Width = 80;
 
                     if (stat.Name.Equals("minigame_category_needed", StringComparison.InvariantCultureIgnoreCase))
                     {
@@ -371,14 +377,17 @@ namespace Reanimator.Forms
 
                     if (lookUpString != string.Empty)
                     {
-                        eaValueTextBox.Text = lookUpString;
+                        eaMappingTextBox.Text = lookUpString;
+                        eaValueTextBox.Text = stat.values[i].AttributeAt(j).ToString();
                     }
                     else
                     {
-                        eaValueTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
+                        eaMappingTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
+                        eaValueTextBox.Text = stat.values[i].AttributeAt(j).ToString();
                     }
 
                     this.panel1.Controls.Add(eaValueLabel);
+                    this.panel1.Controls.Add(eaMappingTextBox);
                     this.panel1.Controls.Add(eaValueTextBox);
 
                     heightOffset += 25;
