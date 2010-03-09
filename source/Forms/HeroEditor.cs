@@ -8,6 +8,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 using System.Collections;
+using Reanimator.HeroEditorFunctions;
+using System.Drawing;
 
 namespace Reanimator.Forms
 {
@@ -32,6 +34,29 @@ namespace Reanimator.Forms
 
             InitializeComponent();
         }
+
+        private void HeroEditor_Load(object sender, EventArgs e)
+        {
+            currentlyEditing_ComboBox.Items.Add(_heroUnit);
+            currentlyEditing_ComboBox.SelectedIndex = 0;
+
+            PopulateGeneral(_heroUnit);
+
+            initialized = true;
+
+            PopulateStats(_heroUnit);
+            PopulateItems(_heroUnit);
+
+            PopulateMinigame();
+            PopulateWaypoints();
+
+            InitUnknownStatList();
+
+
+            InitSkillPanel(8);
+        }
+
+
 
         private void PopulateItems(Unit unit)
         {
@@ -569,6 +594,8 @@ namespace Reanimator.Forms
 
         private void saveCharButton_Click(object sender, EventArgs e)
         {
+            SkillPanelToCharValues();
+
             int startIndex = _filePath.LastIndexOf("\\") + 1;
             string characterName = _filePath.Substring(startIndex, _filePath.Length - startIndex - 4);
             FileStream saveFile = new FileStream(characterName + ".hg1", FileMode.Create, FileAccess.ReadWrite);
@@ -613,25 +640,6 @@ namespace Reanimator.Forms
             saveFile.Write(saveData, 0, saveData.Length);
 
             saveFile.Close();
-        }
-
-        private void HeroEditor_Load(object sender, EventArgs e)
-        {
-            currentlyEditing_ComboBox.Items.Add(_heroUnit);
-            currentlyEditing_ComboBox.SelectedIndex = 0;
-
-            PopulateGeneral(_heroUnit);
-
-            initialized = true;
-
-            PopulateStats(_heroUnit);
-            PopulateItems(_heroUnit);
-
-
-            PopulateMinigame();
-            PopulateWaypoints();
-
-            InitUnknownStatList();
         }
 
         private void InitUnknownStatList()
@@ -1187,6 +1195,121 @@ namespace Reanimator.Forms
 
                 CheckItemValues(values, item.Items);
             }
+        }
+
+        List<SkillControls> _skillControls;
+        public void InitSkillPanel(int characterClass)
+        {
+            tp_skills.SuspendLayout();
+
+            DataTable table = dataSet.GetExcelTable(27952);
+            SkillComponents comp = new SkillComponents();
+
+            tp_skills.Controls.Clear();
+            Panel panel = comp.CreatePanel(ref table, characterClass);
+            panel.Scale(new SizeF(.7f, .7f));
+
+            tp_skills.Controls.Add(panel);
+
+            _skillControls = comp.SkillControls;
+
+            CharValuesToSkillPanel();
+
+            tp_skills.ResumeLayout();
+        }
+
+        private void CharValuesToSkillPanel()
+        {
+            Unit.StatBlock.Stat skillList = null;
+
+            foreach (Unit.StatBlock.Stat skills in _heroUnit.Stats.stats)
+            {
+                if (skills.Name.Equals("skill_level", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    skillList = skills;
+                    break;
+                }
+            }
+            
+            foreach (SkillControls skill in _skillControls)
+            {
+                foreach (Unit.StatBlock.Stat.Values value in skillList.values)
+                {
+                    if (value.Attribute1 == skill._id)
+                    {
+                        skill.CurrentLevel = value.Stat;
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void SkillPanelToCharValues()
+        {
+            Unit.StatBlock.Stat skillList = null;
+
+            foreach (Unit.StatBlock.Stat skills in _heroUnit.Stats.stats)
+            {
+                if (skills.Name.Equals("skill_level", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    skillList = skills;
+                    break;
+                }
+            }
+
+            foreach (SkillControls skill in _skillControls)
+            {
+                bool found = false;
+
+                foreach (Unit.StatBlock.Stat.Values value in skillList.values)
+                {
+                    if (value.Attribute1 == skill._id)
+                    {
+                        value.Stat = skill.CurrentLevel;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found && skill.CurrentLevel > 0)
+                {
+                    List<Unit.StatBlock.Stat.Values> values = new List<Unit.StatBlock.Stat.Values>();
+                    values.AddRange(skillList.values);
+
+                    Unit.StatBlock.Stat.Values newValue = new Unit.StatBlock.Stat.Values();
+                    newValue.Attribute1 = skill._id;
+                    newValue.Stat = skill.CurrentLevel;
+
+                    values.Add(newValue);
+
+                    skillList.values = values.ToArray();
+                    skillList.repeatCount = values.Count;
+                }
+            }
+        }
+
+        bool isMousePressed;
+        private void HeroEditor_MouseDown(object sender, MouseEventArgs e)
+        {
+            if(!isMousePressed)
+            {
+                isMousePressed = true;
+                this.SuspendLayout();
+            }
+        }
+
+        private void HeroEditor_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (isMousePressed)
+            {
+                isMousePressed = false;
+                this.ResumeLayout();
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            InitSkillPanel(int.Parse(comboBox1.Text));
         }
     }
 }

@@ -108,6 +108,20 @@
     <Compile Include="ClientPatcher.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Crypt.cs" />
+    <Compile Include="Forms\HeroEditorFunctions\Atlas_functions.cs" />
+    <Compile Include="Forms\HeroEditorFunctions\SkillComponents.cs">
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\SkillPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\StatComponents.cs" />
+    <Compile Include="Forms\HeroEditorFunctions\XmlUtilities.cs" />
+    <Compile Include="Forms\ItemDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemDisplay.Designer.cs">
+      <DependentUpon>ItemDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ModificationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -261,6 +275,10 @@
       <DependentUpon>CacheInfo.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemDisplay.resx">
+      <DependentUpon>ItemDisplay.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MinigameControl.resx">
       <DependentUpon>MinigameControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -297,6 +315,13 @@
     <None Include="Resources\k_necro.png" />
     <None Include="Resources\k_spectral.png" />
     <Content Include="Mods\RevivalMod.xml" />
+    <None Include="Resources\buttonSubstractNormal.png" />
+    <None Include="Resources\buttonSubstractHover.png" />
+    <None Include="Resources\buttonSubstractClicked.png" />
+    <None Include="Resources\buttonAddNormal.png" />
+    <None Include="Resources\buttonAddHover.png" />
+    <None Include="Resources\buttonAddClicked.png" />
+    <None Include="Resources\ruperts3.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

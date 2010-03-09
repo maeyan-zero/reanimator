@@ -136,17 +136,25 @@ namespace Reanimator.Forms
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.unknownTabList = new System.Windows.Forms.TabPage();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.cb_availableItems = new System.Windows.Forms.ComboBox();
+            this.lb_availableItemValues = new System.Windows.Forms.ListBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.l_itemName = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.tp_skills = new System.Windows.Forms.TabPage();
             this.save_Button = new System.Windows.Forms.Button();
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.lb_availableItemValues = new System.Windows.Forms.ListBox();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.label34 = new System.Windows.Forms.Label();
-            this.l_itemName = new System.Windows.Forms.Label();
-            this.cb_availableItems = new System.Windows.Forms.ComboBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.tp_stats = new System.Windows.Forms.TabPage();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -184,8 +192,10 @@ namespace Reanimator.Forms
             this.tabPage2.SuspendLayout();
             this.unknownTabList.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.groupBox9.SuspendLayout();
             this.groupBox10.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.tabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -202,10 +212,13 @@ namespace Reanimator.Forms
             this.main_TabControl.Controls.Add(this.tabPage2);
             this.main_TabControl.Controls.Add(this.unknownTabList);
             this.main_TabControl.Controls.Add(this.tabPage3);
+            this.main_TabControl.Controls.Add(this.tabPage4);
+            this.main_TabControl.Controls.Add(this.tp_skills);
+            this.main_TabControl.Controls.Add(this.tp_stats);
             this.main_TabControl.Location = new System.Drawing.Point(12, 33);
             this.main_TabControl.Name = "main_TabControl";
             this.main_TabControl.SelectedIndex = 0;
-            this.main_TabControl.Size = new System.Drawing.Size(657, 535);
+            this.main_TabControl.Size = new System.Drawing.Size(760, 559);
             this.main_TabControl.TabIndex = 0;
             // 
             // general_TabPage
@@ -223,7 +236,7 @@ namespace Reanimator.Forms
             this.general_TabPage.Location = new System.Drawing.Point(4, 22);
             this.general_TabPage.Name = "general_TabPage";
             this.general_TabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.general_TabPage.Size = new System.Drawing.Size(649, 509);
+            this.general_TabPage.Size = new System.Drawing.Size(752, 533);
             this.general_TabPage.TabIndex = 2;
             this.general_TabPage.Text = "General";
             this.general_TabPage.UseVisualStyleBackColor = true;
@@ -831,7 +844,7 @@ namespace Reanimator.Forms
             this.stats_TabPage.Location = new System.Drawing.Point(4, 22);
             this.stats_TabPage.Name = "stats_TabPage";
             this.stats_TabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.stats_TabPage.Size = new System.Drawing.Size(649, 509);
+            this.stats_TabPage.Size = new System.Drawing.Size(752, 533);
             this.stats_TabPage.TabIndex = 0;
             this.stats_TabPage.Text = "Stats";
             this.stats_TabPage.UseVisualStyleBackColor = true;
@@ -1133,7 +1146,7 @@ namespace Reanimator.Forms
             this.items_TabPage.Location = new System.Drawing.Point(4, 22);
             this.items_TabPage.Name = "items_TabPage";
             this.items_TabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.items_TabPage.Size = new System.Drawing.Size(649, 509);
+            this.items_TabPage.Size = new System.Drawing.Size(752, 533);
             this.items_TabPage.TabIndex = 1;
             this.items_TabPage.Text = "Items";
             this.items_TabPage.UseVisualStyleBackColor = true;
@@ -1153,7 +1166,7 @@ namespace Reanimator.Forms
             this.items_ListBox.FormattingEnabled = true;
             this.items_ListBox.Location = new System.Drawing.Point(3, 3);
             this.items_ListBox.Name = "items_ListBox";
-            this.items_ListBox.Size = new System.Drawing.Size(150, 498);
+            this.items_ListBox.Size = new System.Drawing.Size(150, 524);
             this.items_ListBox.TabIndex = 0;
             // 
             // minigame_TabPage
@@ -1162,7 +1175,7 @@ namespace Reanimator.Forms
             this.minigame_TabPage.Location = new System.Drawing.Point(4, 22);
             this.minigame_TabPage.Name = "minigame_TabPage";
             this.minigame_TabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.minigame_TabPage.Size = new System.Drawing.Size(649, 509);
+            this.minigame_TabPage.Size = new System.Drawing.Size(752, 533);
             this.minigame_TabPage.TabIndex = 3;
             this.minigame_TabPage.Text = "Minigame";
             this.minigame_TabPage.UseVisualStyleBackColor = true;
@@ -1190,7 +1203,7 @@ namespace Reanimator.Forms
             this.tp_test.Location = new System.Drawing.Point(4, 22);
             this.tp_test.Name = "tp_test";
             this.tp_test.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_test.Size = new System.Drawing.Size(649, 509);
+            this.tp_test.Size = new System.Drawing.Size(752, 533);
             this.tp_test.TabIndex = 4;
             this.tp_test.Text = "Test";
             this.tp_test.UseVisualStyleBackColor = true;
@@ -1248,7 +1261,7 @@ namespace Reanimator.Forms
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(649, 509);
+            this.tabPage1.Size = new System.Drawing.Size(752, 533);
             this.tabPage1.TabIndex = 5;
             this.tabPage1.Text = "ItemReferences";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -1289,7 +1302,7 @@ namespace Reanimator.Forms
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(649, 509);
+            this.tabPage2.Size = new System.Drawing.Size(752, 533);
             this.tabPage2.TabIndex = 6;
             this.tabPage2.Text = "Item values";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1319,7 +1332,7 @@ namespace Reanimator.Forms
             this.unknownTabList.Location = new System.Drawing.Point(4, 22);
             this.unknownTabList.Name = "unknownTabList";
             this.unknownTabList.Padding = new System.Windows.Forms.Padding(3);
-            this.unknownTabList.Size = new System.Drawing.Size(649, 509);
+            this.unknownTabList.Size = new System.Drawing.Size(752, 533);
             this.unknownTabList.TabIndex = 7;
             this.unknownTabList.Text = "Unknown values";
             this.unknownTabList.UseVisualStyleBackColor = true;
@@ -1329,14 +1342,148 @@ namespace Reanimator.Forms
             this.richTextBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox2.Location = new System.Drawing.Point(3, 3);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(643, 503);
+            this.richTextBox2.Size = new System.Drawing.Size(746, 527);
             this.richTextBox2.TabIndex = 0;
             this.richTextBox2.Text = "";
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.groupBox10);
+            this.tabPage3.Controls.Add(this.groupBox9);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(752, 533);
+            this.tabPage3.TabIndex = 8;
+            this.tabPage3.Text = "Modify Items";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.cb_availableItems);
+            this.groupBox10.Controls.Add(this.lb_availableItemValues);
+            this.groupBox10.Location = new System.Drawing.Point(6, 6);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(212, 280);
+            this.groupBox10.TabIndex = 2;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Available items";
+            // 
+            // cb_availableItems
+            // 
+            this.cb_availableItems.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_availableItems.FormattingEnabled = true;
+            this.cb_availableItems.Location = new System.Drawing.Point(6, 19);
+            this.cb_availableItems.Name = "cb_availableItems";
+            this.cb_availableItems.Size = new System.Drawing.Size(200, 21);
+            this.cb_availableItems.TabIndex = 1;
+            // 
+            // lb_availableItemValues
+            // 
+            this.lb_availableItemValues.FormattingEnabled = true;
+            this.lb_availableItemValues.Location = new System.Drawing.Point(6, 49);
+            this.lb_availableItemValues.Name = "lb_availableItemValues";
+            this.lb_availableItemValues.Size = new System.Drawing.Size(200, 225);
+            this.lb_availableItemValues.TabIndex = 0;
+            // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.l_itemName);
+            this.groupBox9.Controls.Add(this.label34);
+            this.groupBox9.Location = new System.Drawing.Point(224, 6);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(419, 280);
+            this.groupBox9.TabIndex = 1;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Item stats";
+            // 
+            // l_itemName
+            // 
+            this.l_itemName.AutoSize = true;
+            this.l_itemName.Location = new System.Drawing.Point(50, 16);
+            this.l_itemName.Name = "l_itemName";
+            this.l_itemName.Size = new System.Drawing.Size(33, 13);
+            this.l_itemName.TabIndex = 1;
+            this.l_itemName.Text = "name";
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(6, 16);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(38, 13);
+            this.label34.TabIndex = 0;
+            this.label34.Text = "Name:";
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.tabControl1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(752, 533);
+            this.tabPage4.TabIndex = 9;
+            this.tabPage4.Text = "Items";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage6);
+            this.tabControl1.Controls.Add(this.tabPage7);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(746, 527);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.tabControl1.TabIndex = 0;
+            // 
+            // tabPage5
+            // 
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(738, 501);
+            this.tabPage5.TabIndex = 0;
+            this.tabPage5.Text = "Equipment";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(738, 501);
+            this.tabPage6.TabIndex = 1;
+            this.tabPage6.Text = "Inventory";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(738, 501);
+            this.tabPage7.TabIndex = 2;
+            this.tabPage7.Text = "Stash";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // tp_skills
+            // 
+            this.tp_skills.AutoScroll = true;
+            this.tp_skills.Location = new System.Drawing.Point(4, 22);
+            this.tp_skills.Name = "tp_skills";
+            this.tp_skills.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_skills.Size = new System.Drawing.Size(752, 533);
+            this.tp_skills.TabIndex = 11;
+            this.tp_skills.Text = "Skills";
+            this.tp_skills.UseVisualStyleBackColor = true;
             // 
             // save_Button
             // 
             this.save_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.save_Button.Location = new System.Drawing.Point(482, 4);
+            this.save_Button.Location = new System.Drawing.Point(585, 4);
             this.save_Button.Name = "save_Button";
             this.save_Button.Size = new System.Drawing.Size(75, 23);
             this.save_Button.TabIndex = 3;
@@ -1367,7 +1514,7 @@ namespace Reanimator.Forms
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(563, 4);
+            this.button1.Location = new System.Drawing.Point(666, 4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(106, 23);
             this.button1.TabIndex = 4;
@@ -1375,88 +1522,49 @@ namespace Reanimator.Forms
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // tabPage3
+            // comboBox1
             // 
-            this.tabPage3.Controls.Add(this.groupBox10);
-            this.tabPage3.Controls.Add(this.groupBox9);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(649, 509);
-            this.tabPage3.TabIndex = 8;
-            this.tabPage3.Text = "Modify Items";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "1",
+            "3",
+            "6",
+            "8",
+            "11",
+            "13"});
+            this.comboBox1.Location = new System.Drawing.Point(485, 6);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(94, 21);
+            this.comboBox1.TabIndex = 0;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
-            // lb_availableItemValues
+            // tp_stats
             // 
-            this.lb_availableItemValues.FormattingEnabled = true;
-            this.lb_availableItemValues.Location = new System.Drawing.Point(6, 49);
-            this.lb_availableItemValues.Name = "lb_availableItemValues";
-            this.lb_availableItemValues.Size = new System.Drawing.Size(200, 225);
-            this.lb_availableItemValues.TabIndex = 0;
-            // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.l_itemName);
-            this.groupBox9.Controls.Add(this.label34);
-            this.groupBox9.Location = new System.Drawing.Point(224, 6);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(419, 280);
-            this.groupBox9.TabIndex = 1;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Item stats";
-            // 
-            // groupBox10
-            // 
-            this.groupBox10.Controls.Add(this.cb_availableItems);
-            this.groupBox10.Controls.Add(this.lb_availableItemValues);
-            this.groupBox10.Location = new System.Drawing.Point(6, 6);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(212, 280);
-            this.groupBox10.TabIndex = 2;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "Available items";
-            // 
-            // label34
-            // 
-            this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(6, 16);
-            this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(38, 13);
-            this.label34.TabIndex = 0;
-            this.label34.Text = "Name:";
-            // 
-            // l_itemName
-            // 
-            this.l_itemName.AutoSize = true;
-            this.l_itemName.Location = new System.Drawing.Point(50, 16);
-            this.l_itemName.Name = "l_itemName";
-            this.l_itemName.Size = new System.Drawing.Size(33, 13);
-            this.l_itemName.TabIndex = 1;
-            this.l_itemName.Text = "name";
-            // 
-            // cb_availableItems
-            // 
-            this.cb_availableItems.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cb_availableItems.FormattingEnabled = true;
-            this.cb_availableItems.Location = new System.Drawing.Point(6, 19);
-            this.cb_availableItems.Name = "cb_availableItems";
-            this.cb_availableItems.Size = new System.Drawing.Size(200, 21);
-            this.cb_availableItems.TabIndex = 1;
+            this.tp_stats.Location = new System.Drawing.Point(4, 22);
+            this.tp_stats.Name = "tp_stats";
+            this.tp_stats.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_stats.Size = new System.Drawing.Size(752, 533);
+            this.tp_stats.TabIndex = 12;
+            this.tp_stats.Text = "Stats";
+            this.tp_stats.UseVisualStyleBackColor = true;
             // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(681, 580);
+            this.ClientSize = new System.Drawing.Size(784, 604);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.currentlyEditing_ComboBox);
             this.Controls.Add(this.currentlyEditing_Label);
             this.Controls.Add(this.main_TabControl);
             this.Controls.Add(this.save_Button);
+            this.DoubleBuffered = true;
             this.Name = "HeroEditor";
             this.Text = "HeroEditor";
             this.Load += new System.EventHandler(this.HeroEditor_Load);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.HeroEditor_MouseUp);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.HeroEditor_MouseDown);
             this.main_TabControl.ResumeLayout(false);
             this.general_TabPage.ResumeLayout(false);
             this.general_TabPage.PerformLayout();
@@ -1505,9 +1613,11 @@ namespace Reanimator.Forms
             this.tabPage2.ResumeLayout(false);
             this.unknownTabList.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
-            this.groupBox10.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1632,5 +1742,13 @@ namespace Reanimator.Forms
         private System.Windows.Forms.ComboBox cb_availableItems;
         private System.Windows.Forms.Label l_itemName;
         private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TabPage tp_skills;
+        private System.Windows.Forms.TabPage tp_stats;
     }
 }
