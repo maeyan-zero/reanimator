@@ -60,6 +60,48 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap buttonAddClicked {
+            get {
+                object obj = ResourceManager.GetObject("buttonAddClicked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap buttonAddHover {
+            get {
+                object obj = ResourceManager.GetObject("buttonAddHover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap buttonAddNormal {
+            get {
+                object obj = ResourceManager.GetObject("buttonAddNormal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap buttonSubstractClicked {
+            get {
+                object obj = ResourceManager.GetObject("buttonSubstractClicked", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap buttonSubstractHover {
+            get {
+                object obj = ResourceManager.GetObject("buttonSubstractHover", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap buttonSubstractNormal {
+            get {
+                object obj = ResourceManager.GetObject("buttonSubstractNormal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap d_critical {
             get {
                 object obj = ResourceManager.GetObject("d_critical", resourceCulture);
@@ -161,6 +203,13 @@ namespace Reanimator.Properties {
         internal static System.Drawing.Bitmap k_spectral {
             get {
                 object obj = ResourceManager.GetObject("k_spectral", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap ruperts3 {
+            get {
+                object obj = ResourceManager.GetObject("ruperts3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
