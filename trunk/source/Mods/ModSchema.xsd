@@ -6,8 +6,10 @@
   <xs:element name="description" type="xs:string"/>
   <xs:element name="url" type="xs:string"/>
   <xs:element name="append" type="xs:string"/>
-  <xs:element name="replace" type="xs:string"/>
-  <xs:element name="divide" type="xs:string"/>
+  <xs:element name="integer" type="xs:integer"/>
+  <xs:element name="float" type="xs:float"/>
+  <xs:element name="string" type="xs:string"/>
+  
 
   <xs:attribute name="id" type="xs:string"/>
   <xs:attribute name="value" type="xs:integer"/>
@@ -20,6 +22,26 @@
       </xs:restriction>
     </xs:simpleType>
   </xs:element>
+
+  <xs:element name="replace">
+    <xs:complexType>
+      <xs:group ref="data_type"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="divide">
+    <xs:complexType>
+      <xs:group ref="data_type"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:group name="data_type">
+    <xs:choice>
+      <xs:element ref="integer"/>
+      <xs:element ref="float"/>
+      <xs:element ref="string"/>
+    </xs:choice>
+  </xs:group>
   
   <xs:element name="bitwise">
     <xs:complexType>

@@ -119,6 +119,7 @@ namespace Reanimator
                                     {
                                         foreach (Attribute attribute in entity)
                                         {
+                                            // Wildcard. Modify all entries
                                             if (entity.id == "*")
                                             {
                                                 for (int i = 0; i < dataSet.XlsDataSet.Tables[file.id].Rows.Count; i++)
@@ -126,6 +127,7 @@ namespace Reanimator
                                                     ModLogic(file.id, attribute, i);
                                                 }
                                             }
+                                            // Modify a single entry
                                             else
                                             {
                                                 ModLogic(file.id, attribute, entity.value);
@@ -150,16 +152,21 @@ namespace Reanimator
                                 // Don't save the same file twice
                                 if (modifiedTables.Contains(dataSet.ExcelTables.GetTable(file.id)) == false)
                                 {
-                                    modifiedTables.Add(dataSet.ExcelTables.GetTable(file.id));
+                                    byte[] excelFileData = dataSet.ExcelTables.GetTable(file.id).GenerateExcelFile(dataSet.XlsDataSet.Tables[file.id].DataSet);
+
+                                    using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
+                                    {
+                                        fs.Write(excelFileData, 0, excelFileData.Length);
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                MessageBox.Show(e.ToString());
             }
         }
 
@@ -177,7 +184,18 @@ namespace Reanimator
             {
                 if (attribute.replace != null)
                 {
-                    dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace;
+                    if (attribute.replace.int_data != null)
+                    {
+                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace.int_data;
+                    }
+                    if (attribute.replace.float_data != null)
+                    {
+                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace.float_data;
+                    }
+                    if (attribute.replace.string_data != null)
+                    {
+                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace.string_data;
+                    }
                 }
                 if (attribute.bitwise != null)
                 {
@@ -188,7 +206,14 @@ namespace Reanimator
                 }
                 if (attribute.divide != null)
                 {
-                    dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / Convert.ToInt32(attribute.divide);
+                    if (attribute.divide.int_data != null)
+                    {
+                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / attribute.divide.int_data;
+                    }
+                    if (attribute.divide.float_data != null)
+                    {
+                        //dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / attribute.divide.float_data;
+                    }
                 }
             }
             catch(Exception e)
@@ -464,11 +489,11 @@ namespace Reanimator
             [XmlAttribute]
             public string id;
 
-            [XmlElement]
-            public string replace;
+            [XmlElement(typeof(Replace))]
+            public Replace replace;
 
-            [XmlElement]
-            public string divide;
+            [XmlElement(typeof(Divide))]
+            public Divide divide;
 
             [XmlElement(typeof(Bitwise))]
             public Bitwise[] bitwise;
@@ -480,7 +505,28 @@ namespace Reanimator
             public string id;
 
             [XmlElement("switch")]
-            public bool switchh;
+            public bool switch_data;
+        }
+
+        public class Replace
+        {
+            [XmlElement("integer")]
+            public int int_data;
+
+            [XmlElement("float")]
+            public float float_data;
+
+            [XmlElement("string")]
+            public string string_data;
+        }
+        
+        public class Divide
+        {
+            [XmlElement("integer")]
+            public int int_data;
+
+            [XmlElement("float")]
+            public float float_data;
         }
     }
 }
