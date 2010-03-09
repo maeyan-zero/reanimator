@@ -172,6 +172,18 @@ namespace Reanimator
             return ASCIIEncoding.ASCII.GetBytes(str);
         }
 
+        public static byte[] IntArrayToByteArray(int[] source)
+        {
+            byte[] result = new byte[source.Length * sizeof(int)];
+
+            for (int i = 0; i < source.Length; i++)
+            {
+                Array.Copy(BitConverter.GetBytes(source[i]), 0, result, i * sizeof(int), sizeof(int));
+            }
+
+            return result;
+        }
+
         public static void WriteToBuffer(ref byte[] buffer, int offset, Object toWrite)
         {
             WriteToBuffer(ref buffer, ref offset, toWrite);

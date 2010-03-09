@@ -7,58 +7,74 @@
     <url>http://www.hellgateaus.net</url>
     <type>required</type>
     <pack id="Default">
-      <file id="Game_Globals">
+      <!--<file id="Game_Globals">
         <modify>
           <entity id="MaxLuckTugboat" value="55">
             <attribute id="IntValue">
-              <replace>10000</replace>
+              <replace>
+                <integer>10000</integer>
+              </replace>
             </attribute>
           </entity>
         </modify>
       </file>
-      <file id="ItemLevels">
+      <file id="Item_Levels">
         <modify>
           <entity id="*">
             <attribute id="AugmentCostRare">
-              <divide>2</divide>
+              <divide>
+                <integer>2</integer>
+              </divide>
             </attribute>
             <attribute id="AugmentCostLegendary">
-              <divide>2</divide>
+              <divide>
+                <integer>2</integer>
+              </divide>
             </attribute>
           </entity>
         </modify>
-      </file>
-      <file id="ItemQuality">
+      </file>-->
+      <file id="Item_Quality">
         <modify>
           <entity id="Legendary" value="3">
             <attribute id="VendorRarity">
-              <replace>4</replace>
+              <replace>
+                <integer>4</integer>
+              </replace>
             </attribute>
           </entity>
           <entity id="Mutant" value="4">
             <attribute id="ExtraScrapQuality">
-              <replace>4</replace>
+              <replace>
+                <integer>4</integer>
+              </replace>
             </attribute>
           </entity>
           <entity id="Unique" value="5">
             <attribute id="VendorRarity">
-              <replace>1</replace>
+              <replace>
+                <integer>1</integer>
+              </replace>
             </attribute>
-            <attribute id="PriceMultiplier">
-              <replace>21</replace>
+            <attribute id="Price_Multiplier">
+              <replace>
+                <integer>21</integer>
+              </replace>
             </attribute>
           </entity>
         </modify>
       </file>
-      <file id="Items">
+      <!--<file id="Items">
         <modify>
           <entity id="SkillRetrainer" value="15">
             <attribute id="Quality">
-              <replace>5</replace>
+              <replace>
+                <integer>5</integer>
+              </replace>
             </attribute>
           </entity>
         </modify>
-      </file>
+      </file>-->
     </pack>
   </modification>
   <modification>
@@ -68,26 +84,34 @@
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
     <pack id="Default">
-      <file id="GameGlobals">
+      <file id="Game_Globals">
         <modify>
           <entity id="EliteMonsterDamagePercent">
-            <attribute id="FloatData">
-              <replace>0</replace>
+            <attribute id="FloatValue">
+              <replace>
+                <float>0</float>
+              </replace>
             </attribute>
           </entity>
-          <entity id="elite_monster_sfx_chance_percent">
-            <attribute id="floatData">
-              <replace>0</replace>
+          <entity id="EliteMonsterSFXChancePercent">
+            <attribute id="FloatValue">
+              <replace>
+                <float>0</float>
+              </replace>
             </attribute>
           </entity>
-          <entity id="elite_player_damage_percent">
-            <attribute id="floatData">
-              <replace>0</replace>
+          <entity id="ElitePlayerDamagePercent">
+            <attribute id="FloatValue">
+              <replace>
+                <float>0</float>
+              </replace>
             </attribute>
           </entity>
-          <entity id="elite_player_sfx_chance_percent">
-            <attribute id="floatData">
-              <replace>0</replace>
+          <entity id="ElitePlayerSFXChancePercent">
+            <attribute id="FloatValue">
+              <replace>
+                <float>0</float>
+              </replace>
             </attribute>
           </entity>
         </modify>
