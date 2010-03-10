@@ -276,6 +276,11 @@ namespace Reanimator
             }
         }
 
+        public void SetFileTable(FileIndex[] fileIndex)
+        {
+            fileTable = fileIndex;
+        }
+
         public FileIndex[] GetFileTable()
         {
             return fileTable;

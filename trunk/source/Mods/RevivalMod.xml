@@ -39,26 +39,26 @@
           <entity id="Legendary" value="3">
             <attribute id="VendorRarity">
               <replace>
-                <integer>4</integer>
+                <data>4</data>
               </replace>
             </attribute>
           </entity>
           <entity id="Mutant" value="4">
             <attribute id="ExtraScrapQuality">
               <replace>
-                <integer>4</integer>
+                <data>4</data>
               </replace>
             </attribute>
           </entity>
           <entity id="Unique" value="5">
             <attribute id="VendorRarity">
               <replace>
-                <integer>1</integer>
+                <data>1</data>
               </replace>
             </attribute>
             <attribute id="Price_Multiplier">
               <replace>
-                <integer>21</integer>
+                <data>21</data>
               </replace>
             </attribute>
           </entity>
@@ -89,28 +89,28 @@
           <entity id="EliteMonsterDamagePercent">
             <attribute id="FloatValue">
               <replace>
-                <float>0</float>
+                <data>0</data>
               </replace>
             </attribute>
           </entity>
           <entity id="EliteMonsterSFXChancePercent">
             <attribute id="FloatValue">
               <replace>
-                <float>0</float>
+                <data>0</data>
               </replace>
             </attribute>
           </entity>
           <entity id="ElitePlayerDamagePercent">
             <attribute id="FloatValue">
               <replace>
-                <float>0</float>
+                <data>0</data>
               </replace>
             </attribute>
           </entity>
           <entity id="ElitePlayerSFXChancePercent">
             <attribute id="FloatValue">
               <replace>
-                <float>0</float>
+                <data>0</data>
               </replace>
             </attribute>
           </entity>

@@ -174,8 +174,8 @@ namespace Reanimator
 
                 if (pass)
                 {
-                    Mod revivalMod = new Mod(tableDataSet, szFileName);
-                    ModificationForm modificationForm = new ModificationForm(revivalMod);
+                    Mod revivalMod = new Mod(szFileName);
+                    ModificationForm modificationForm = new ModificationForm();
                     modificationForm.MdiParent = this;
                     modificationForm.Show();
                 }
