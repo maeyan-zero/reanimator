@@ -526,11 +526,6 @@ namespace Reanimator.Excel
             return flag == to ? true : false;
         }
 
-        private static byte[] ConvertString(string input)
-        {
-            
-        }
-
         private static void ParseMyshTables(byte[] data, ref int offset)
         {
             int totalAttributeCount = 0;
