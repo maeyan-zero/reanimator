@@ -16,7 +16,7 @@ namespace Reanimator
 {
     public class TableDataSet : IDisposable
     {
-        private const String TableVersion = "1.0.2";
+        private const String TableVersion = "1.0.3";
         private const String RelationsVersion = "1.0.0";
         private const String TableVersionKey = "TableVersion";
         private const String RelationsVersionKey = "RelationsVersion";
@@ -408,7 +408,6 @@ namespace Reanimator
                 if (excelOutputAttribute != null)
                 {
                     DataColumn dcChild = mainDataTable.Columns[col];
-                    dcChild.ExtendedProperties.Clear();
 
                     if (excelOutputAttribute.IsStringId)
                     {
@@ -427,7 +426,6 @@ namespace Reanimator
                             dcString.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsRelationGenerated, true);
                             // need to use MIN (and thus Child) for cases of strings with same reference id (e.g. Items; SINGULAR and PLURAL, etc)
                             dcString.Expression = "MIN(Child(" + relationName + ").String)";
-                            dcChild.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringId, true);
                             col++;
                         }
                     }
@@ -450,7 +448,6 @@ namespace Reanimator
                             DataColumn dcString = mainDataTable.Columns.Add(dcChild.ColumnName + "_string", typeof(String), String.Format("Parent({0}).{1}", relationName, excelOutputAttribute.Column));
                             dcString.SetOrdinal(col + 1);
                             dcString.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsRelationGenerated, true);
-                            dcChild.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsTableIndex, true);
                             col++;
                         }
                     }
