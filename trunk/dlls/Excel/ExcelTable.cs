@@ -526,6 +526,11 @@ namespace Reanimator.Excel
             return flag == to ? true : false;
         }
 
+        private static byte[] ConvertString(string input)
+        {
+            
+        }
+
         private static void ParseMyshTables(byte[] data, ref int offset)
         {
             int totalAttributeCount = 0;
@@ -781,77 +786,104 @@ namespace Reanimator.Excel
 
 
             // primary index block
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            byte[] primaryIndex = new byte[dataTable.Rows.Count * sizeof(Int32)];
-            for (Int32 i = 0; i < dataTable.Rows.Count; i++)
-            {
-                byte[] integer = BitConverter.GetBytes(i);
-                Buffer.BlockCopy(integer, 0, primaryIndex, i * sizeof(Int32), sizeof(Int32));
-            }
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, primaryIndex);
-
+            //FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            //byte[] primaryIndex = new byte[dataTable.Rows.Count * sizeof(Int32)];
+            //for (Int32 i = 0; i < dataTable.Rows.Count; i++)
+            //{
+            //    byte[] integer = BitConverter.GetBytes(i);
+            //    Buffer.BlockCopy(integer, 0, primaryIndex, i * sizeof(Int32), sizeof(Int32));
+            //}
+            //FileTools.WriteToBuffer(ref buffer, ref byteOffset, primaryIndex);
 
             // secondary index blocks
-            String[] sorts = new[] { "name", "code", "code1" /*ITEMS*/, "group" /*AFFIXES*/, "style" /*LEVEL_DRLGS*/ };
-            bool stringNameDone = false;
-            int secondaryIndexCount = 0;
-            foreach (String sortBy in sorts)
-            {
-                if (dataTable.Columns[0].DataType == typeof(String))
-                {
+            //String[] sorts = new[] { "name", "code", "code1" /*ITEMS*/, "group" /*AFFIXES*/, "style" /*LEVEL_DRLGS*/ };
+            //bool stringNameDone = false;
+            //int secondaryIndexCount = 0;
+            //foreach (String sortBy in sorts)
+            //{
+            //    if (dataTable.Columns[0].DataType == typeof(String))
+            //    {
 
-                }
-                if (!dataTable.Columns.Contains(sortBy))
-                {
-                    continue;
-                }
-
-
-                Int32 countOfIndicies = 0;
-                int countOfIndiciesOffset = byteOffset;
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, countOfIndicies);
+            //    }
+            //    if (!dataTable.Columns.Contains(sortBy))
+            //    {
+            //        continue;
+            //    }
 
 
-                dataTable.DefaultView.Sort = sortBy;
-                DataView dataView = dataTable.DefaultView;
-                byte[] secondaryIndex = new byte[dataTable.Rows.Count * sizeof(Int32)];
-                foreach (DataRowView dr in dataView)
-                {
-                    Object value = dr[sortBy];
+            //    Int32 countOfIndicies = 0;
+            //    int countOfIndiciesOffset = byteOffset;
+            //    FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            //    FileTools.WriteToBuffer(ref buffer, ref byteOffset, countOfIndicies);
 
-                    String s = value as String;
-                    if (s != null)
-                    {
-                        if (s.Length == 0)
-                        {
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        if ((int)value <= 0)
-                        {
-                            continue;
-                        }
-                    }
 
-                    byte[] integer = BitConverter.GetBytes((Int32)dr[0]);
-                    Buffer.BlockCopy(integer, 0, secondaryIndex, countOfIndicies * sizeof(Int32), sizeof(Int32));
-                    countOfIndicies++;
-                }
+            //    dataTable.DefaultView.Sort = sortBy;
+            //    DataView dataView = dataTable.DefaultView;
+            //    byte[] secondaryIndex = new byte[dataTable.Rows.Count * sizeof(Int32)];
+            //    foreach (DataRowView dr in dataView)
+            //    {
+            //        Object value = dr[sortBy];
 
-                FileTools.WriteToBuffer(ref buffer, countOfIndiciesOffset, countOfIndicies);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, secondaryIndex, countOfIndicies * sizeof(Int32), false);
-                secondaryIndexCount++;
-            }
+            //        String s = value as String;
+            //        if (s != null)
+            //        {
+            //            if (s.Length == 0)
+            //            {
+            //                continue;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if ((int)value <= 0)
+            //            {
+            //                continue;
+            //            }
+            //        }
+
+            //        byte[] integer = BitConverter.GetBytes((Int32)dr[0]);
+            //        Buffer.BlockCopy(integer, 0, secondaryIndex, countOfIndicies * sizeof(Int32), sizeof(Int32));
+            //        countOfIndicies++;
+            //    }
+
+            //    FileTools.WriteToBuffer(ref buffer, countOfIndiciesOffset, countOfIndicies);
+            //    FileTools.WriteToBuffer(ref buffer, ref byteOffset, secondaryIndex, countOfIndicies * sizeof(Int32), false);
+            //    secondaryIndexCount++;
+            //}
 
             const int zeroValue = 0;
-            for (; secondaryIndexCount < 4; secondaryIndexCount++)
-            {
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
-            }
+            //for (; secondaryIndexCount < 4; secondaryIndexCount++)
+            //{
+            //    FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            //    FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
+            //}
+
+            //start Maeyans footer fix
+            //this is a temporary fix until a logical, dynamic implementation is created
+            //like Alex started above
+
+            // Primary index #1
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(_tableIndicies));
+            
+            // Index #1
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Unknowns1.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(Unknowns1));
+
+            // Index #2
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Unknowns2.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(Unknowns2));
+
+            // Index #3
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Unknowns3.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(Unknowns3));
+
+            // Index #4
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Unknowns4.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(Unknowns4));
 
 
             // weird unknown header chunks
@@ -865,8 +897,8 @@ namespace Reanimator.Excel
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _tyshValue);
 
                 // TODO add _mysh values
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenMysh);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
+                //FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenMysh);
+                //FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
 
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenDneh);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dnehValue);
@@ -894,18 +926,17 @@ namespace Reanimator.Excel
             if (FinalBytes != null)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes.Length);
-                if (FinalBytes.Length > 0)
-                {
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
-                }
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
             }
             else
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
             }
-            byteOffset -= sizeof(Int32);
 
+            // One last null
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
 
+            //byteOffset -= sizeof(Int32);
             // return final buffer
             byte[] returnBuffer = new byte[byteOffset];
             Buffer.BlockCopy(buffer, 0, returnBuffer, 0, byteOffset);
