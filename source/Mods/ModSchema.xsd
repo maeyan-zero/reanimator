@@ -9,7 +9,6 @@
   <xs:element name="integer" type="xs:integer"/>
   <xs:element name="float" type="xs:float"/>
   <xs:element name="string" type="xs:string"/>
-  
 
   <xs:attribute name="id" type="xs:string"/>
   <xs:attribute name="value" type="xs:integer"/>
@@ -25,13 +24,17 @@
 
   <xs:element name="replace">
     <xs:complexType>
-      <xs:group ref="data_type"/>
+      <xs:sequence>
+        <xs:element name="data"/>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 
   <xs:element name="divide">
     <xs:complexType>
-      <xs:group ref="data_type"/>
+      <xs:sequence>
+        <xs:element name="data"/>
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
 

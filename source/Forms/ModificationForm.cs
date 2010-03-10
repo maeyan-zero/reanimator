@@ -12,41 +12,19 @@ namespace Reanimator.Forms
 {
     public partial class ModificationForm : Form
     {
-        Mod revivalMod;
+        Mod mod;
+        TableDataSet dataSet;
 
         public ModificationForm()
         {
             InitializeComponent();
-        }
-
-        public ModificationForm(Mod revivalMod)
-        {
-            InitializeComponent();
-
-            this.revivalMod = revivalMod;
-
-            for (int i = 0; i < revivalMod.Length; i++)
-            {
-                checkedListBox.Items.Add(revivalMod.Title(i), revivalMod.Enabled(i));
-            }
+            methodComboBox.SelectedIndex = 0;
+            dataSet = new TableDataSet();
         }
 
         private void checkedListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            textBoxDescription.Text = revivalMod.Description(checkedListBox.SelectedIndex);
-        }
-
-        private void ModificationForm_Load(object sender, EventArgs e)
-        {
-            checkedListBox.SelectedIndex = 0;
-
-            for (int i = 0; i < revivalMod.Length; i++ )
-            {
-                if (revivalMod.Enabled(i))
-                {
-                    revivalMod.Apply(i, true);
-                }
-            }
+            textBoxDescription.Text = mod.getDescription(checkedListBox.SelectedIndex);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -58,17 +36,53 @@ namespace Reanimator.Forms
         {
             if (e.CurrentValue == CheckState.Checked)
             {
-                revivalMod.Apply(checkedListBox.Items.Count - 1, true);
+                mod.setApply(checkedListBox.Items.Count - 1, true);
             }
             else
             {
-                revivalMod.Apply(checkedListBox.Items.Count - 1, false);
+                mod.setApply(checkedListBox.Items.Count - 1, false);
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void continueButton_Click(object sender, EventArgs e)
         {
-            revivalMod.Apply();
+            mod.Apply(dataSet);
+
+        }
+
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Modification Files (*.mod, *.xml)|*.mod;*.xml|All Files (*.*)|*.*";
+
+            if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml")))
+            {
+                if (Mod.Parse(openFileDialog.FileName))
+                {
+                    if (mod == null)
+                    {
+                        mod = new Mod(openFileDialog.FileName);
+                    }
+                    else
+                    {
+                        mod.Add(new Mod(openFileDialog.FileName));
+                    }
+                    checkedListBox.Items.Clear();
+                    for (int i = 0; i < mod.Length; i++)
+                    {
+                        checkedListBox.Items.Add(mod.getDescription(i), mod.getEnabled(i));
+                        if (mod.getEnabled(i))
+                        {
+                            checkedListBox.SetItemCheckState(i, CheckState.Indeterminate);
+                        }
+                    }
+                    checkedListBox.SelectedIndex = 0;
+                }
+                else
+                {
+                    MessageBox.Show("Invalid mod. Check syntax and try again.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

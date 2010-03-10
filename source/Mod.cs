@@ -15,32 +15,48 @@ namespace Reanimator
 {
     public class Mod
     {
-        Revival revival;
-        TableDataSet dataSet;
-        List<ExcelTable> modifiedTables;
+        static public readonly string defaultPack = "sp_hellgate_1.10.180.3416_1.18074.70.4256";
 
-        public Mod(TableDataSet dataSet, String revivalModPath)
+        public enum Method { EXTRACT, REPACK }
+        public enum DataType { INT, FLOAT, STRING }
+
+        Revival revival;
+        //TableDataSet dataSet;
+        List<ExcelTable> excelList;
+        List<Index> indexList;
+
+        public Mod(String revivalModPath)
         {
-            this.dataSet = dataSet;
+            //this.dataSet = dataSet;
             this.revival = Deserialize(revivalModPath);
-            modifiedTables = new List<ExcelTable>();
+            this.excelList = new List<ExcelTable>();
+            this.indexList = new List<Index>();
+        }
+
+        public void Add(Mod mod)
+        {
+            foreach (Modification newMod in mod.revival)
+            {
+                if (revival.modification.Contains(newMod) == false)
+                {
+                    Modification[] newModSet = new Modification[revival.modification.Length + 1];
+                    revival.modification.CopyTo(newModSet, 0);
+                    newModSet[newModSet.Length - 1] = newMod;
+                    revival.modification = newModSet;
+                }
+            }
         }
 
         public static bool Parse(string xmlPath)
         {
             try
             {
-                // Add the XSD FileStream
                 FileStream xsdStream;
-                xsdStream = new FileStream("..//..//..//source//Mods//ModSchema.xsd", FileMode.Open);
-                //xsdStream = new FileStream("..//..//source//ModSchema.xsd", FileMode.Open);
+                xsdStream = new FileStream("ModSchema.xsd", FileMode.Open);
 
-                
-                // Add the XML Schema using the above stream
                 XmlSchema xmlSchema;
                 xmlSchema = XmlSchema.Read(xsdStream, null);
 
-                // Add XML Reader Settings
                 XmlReaderSettings xmlReaderSettings;
                 xmlReaderSettings = new XmlReaderSettings()
                 {
@@ -48,24 +64,18 @@ namespace Reanimator
                     ProhibitDtd = false
                 };
 
-                // Append the Schema above
                 xmlReaderSettings.Schemas.Add(xmlSchema);
 
-                // Add the XML FileStream
                 FileStream xmlStream;
                 xmlStream = new FileStream(xmlPath, FileMode.Open);
 
-                // Add the XML Reader using the stream and setting above
                 XmlReader xmlReader;
                 xmlReader = XmlReader.Create(xmlStream, xmlReaderSettings);
 
                 // Parse the document
                 using (xmlReader)
                 {
-                    while (xmlReader.Read())
-                    {
-
-                    }
+                    while (xmlReader.Read()) { }
                 }
     
                 xsdStream.Close();
@@ -75,7 +85,6 @@ namespace Reanimator
             }
             catch (Exception e)
             {
-                // Validation Failed
                 Console.WriteLine(e.Message);
                 MessageBox.Show(e.Message);
 
@@ -101,10 +110,11 @@ namespace Reanimator
             return revival;
         }
 
-        public void Apply()
+        public void Apply(TableDataSet dataSet)
         {
             try
             {
+                // Modify the dataSet
                 foreach (Modification modification in revival)
                 {
                     if (modification.apply == true)
@@ -119,18 +129,16 @@ namespace Reanimator
                                     {
                                         foreach (Attribute attribute in entity)
                                         {
-                                            // Wildcard. Modify all entries
                                             if (entity.id == "*")
                                             {
                                                 for (int i = 0; i < dataSet.XlsDataSet.Tables[file.id].Rows.Count; i++)
                                                 {
-                                                    ModLogic(file.id, attribute, i);
+                                                    ModLogic(dataSet, file.id, attribute, i);
                                                 }
                                             }
-                                            // Modify a single entry
                                             else
                                             {
-                                                ModLogic(file.id, attribute, entity.value);
+                                                ModLogic(dataSet, file.id, attribute, entity.value);
                                             }
                                         }
                                     }
@@ -140,7 +148,7 @@ namespace Reanimator
                     }
                 }
 
-                // Add each modified Excel file to a list
+                // Add each modified Excel file & Index to a list
                 foreach (Modification modification in revival)
                 {
                     if (modification.apply == true)
@@ -150,9 +158,9 @@ namespace Reanimator
                             foreach (File file in pack)
                             {
                                 // Don't save the same file twice
-                                if (modifiedTables.Contains(dataSet.ExcelTables.GetTable(file.id)) == false)
+                                if (excelList.Contains(dataSet.ExcelTables.GetTable(file.id)) == false)
                                 {
-                                    byte[] excelFileData = dataSet.ExcelTables.GetTable(file.id).GenerateExcelFile(dataSet.XlsDataSet.Tables[file.id].DataSet);
+                                    byte[] excelFileData = dataSet.ExcelTables.GetTable(file.id).GenerateExcelFile(dataSet.XlsDataSet);
 
                                     using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
                                     {
@@ -160,6 +168,15 @@ namespace Reanimator
                                     }
                                 }
                             }
+
+                            //if (pack.id == "Default")
+                            //{
+                            //    indexList.Add(new Index(new FileStream(@Config.HglDir + "\\data\\" + defaultPack + ".idx", FileMode.Open)));
+                            //}
+                            //else
+                            //{
+                            //    indexList.Add(new Index(new FileStream(@Config.HglDir + "\\data\\" + pack.id + ".idx", FileMode.Open)));
+                            //}
                         }
                     }
                 }
@@ -170,49 +187,62 @@ namespace Reanimator
             }
         }
 
-        public void Save(string path)
+        public void Save(string path, Method method)
         {
-            foreach (ExcelTable table in modifiedTables)
+            foreach (ExcelTable excelFile in excelList)
             {
-                
+
+            }
+
+            foreach (Index indexFile in indexList)
+            {
+                switch (method)
+                {
+                    case Method.EXTRACT:
+                        
+                        break;
+                    case Method.REPACK:
+
+                        break;
+                }
             }
         }
 
-        private void ModLogic(String file, Attribute attribute, int row)
+        private void ModLogic(TableDataSet dataSet, String file, Attribute attribute, int row)
         {
             try
             {
                 if (attribute.replace != null)
                 {
-                    if (attribute.replace.int_data != null)
+                    if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(Int32))
                     {
-                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace.int_data;
+                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToUInt32(attribute.replace.data);
                     }
-                    if (attribute.replace.float_data != null)
+                    else if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(float))
                     {
-                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace.float_data;
+                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToSingle(attribute.replace.data);
                     }
-                    if (attribute.replace.string_data != null)
+                    else if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(string))
                     {
-                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace.string_data;
+                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace.data;
                     }
                 }
-                if (attribute.bitwise != null)
+                else if (attribute.bitwise != null)
                 {
                     //foreach (bool bit in attribute.bitmask)
                     //{
                     //    // Perform Bitwise operation
                     //}
                 }
-                if (attribute.divide != null)
+                else if (attribute.divide != null)
                 {
-                    if (attribute.divide.int_data != null)
+                    if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(Int32))
                     {
-                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / attribute.divide.int_data;
+                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / Convert.ToInt32(attribute.divide.data);
                     }
-                    if (attribute.divide.float_data != null)
+                    else if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(float))
                     {
-                        //dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / attribute.divide.float_data;
+                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToSingle(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / Convert.ToSingle(attribute.divide.data);
                     }
                 }
             }
@@ -230,22 +260,22 @@ namespace Reanimator
             }
         }
 
-        public string Title(int i)
+        public string getTitle(int i)
         {
             return revival.modification[i].title;
         }
 
-        public string Description(int i)
+        public string getDescription(int i)
         {
              return revival.modification[i].GetListDescription();
         }
 
-        public bool Enabled(int i)
+        public bool getEnabled(int i)
         {
             return revival.modification[i].type == "required" ? true : false;
         }
 
-        public void Apply(int i, bool use)
+        public void setApply(int i, bool use)
         {
             revival.modification[i].apply = use;
         }
@@ -510,23 +540,14 @@ namespace Reanimator
 
         public class Replace
         {
-            [XmlElement("integer")]
-            public int int_data;
-
-            [XmlElement("float")]
-            public float float_data;
-
-            [XmlElement("string")]
-            public string string_data;
+            [XmlElement("data")]
+            public string data;
         }
         
         public class Divide
         {
-            [XmlElement("integer")]
-            public int int_data;
-
-            [XmlElement("float")]
-            public float float_data;
+            [XmlElement("data")]
+            public string data;
         }
     }
 }
