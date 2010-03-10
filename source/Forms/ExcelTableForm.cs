@@ -37,7 +37,7 @@ namespace Reanimator.Forms
             ProgressForm progress = new ProgressForm(LoadTable, table);
             progress.ShowDialog(this);
 
-            UseDataView();
+            //UseDataView();
         }
 
         private void UseDataView()
@@ -56,9 +56,9 @@ namespace Reanimator.Forms
             dataGridView.DoubleBuffered(true);
             dataGridView.EnableHeadersVisualStyles = false;
             dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-            //dataGridView.DataSource = _tableDataSet.XlsDataSet;
+            dataGridView.DataSource = _tableDataSet.XlsDataSet;
             dataGridView.DataMember = null;
-            dataGridView.DataSource = _dataView;
+           // dataGridView.DataSource = _dataView;
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
