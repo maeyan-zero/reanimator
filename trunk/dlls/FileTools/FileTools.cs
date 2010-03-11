@@ -9,33 +9,7 @@ using System.Runtime.InteropServices;
 namespace Reanimator
 {
     public class FileTools
-    {/*
-        public static byte[] Extract(FileStream dataBuffer, int offset, int compressedSize, int uncompressedSize)
-        {
-            if (compressedSize > 0)
-            {
-                byte[] buffer = new byte[compressedSize];
-                dataBuffer.Seek(offset, SeekOrigin.Begin);
-                dataBuffer.Read(buffer, 0, compressedSize);
-
-                ManagedZLib.CompressionStream ms = new ManagedZLib.CompressionStream(new MemoryStream(buffer), ManagedZLib.CompressionOptions.Decompress);
-                return StreamToByteArray(ms);
-            }
-            else
-            {
-                byte[] buffer = new byte[uncompressedSize];
-                //buffer = StreamToByteArray(dataBuffer);
-                return buffer;
-            }
-        }
-
-        public static byte[] Compress(byte[] buffer)
-        {
-            ManagedZLib.CompressionStream ms = new ManagedZLib.CompressionStream(new MemoryStream(buffer), ManagedZLib.CompressionOptions.Compress);
-            byte[] buffer2 = StreamToByteArray(ms);
-            return buffer2;
-        }
-        */
+    {
         public static byte[] StreamToByteArray(Stream stream)
         {
             using (MemoryStream ms = new MemoryStream())

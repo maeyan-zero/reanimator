@@ -269,7 +269,6 @@
     <Compile Include="StringsFile.cs" />
     <Compile Include="StringsTables.cs" />
     <Compile Include="Unit.cs" />
-    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\CacheInfo.resx">

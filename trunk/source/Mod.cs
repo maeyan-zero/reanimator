@@ -16,21 +16,29 @@ namespace Reanimator
     public class Mod
     {
         static public readonly string defaultPack = "sp_hellgate_1.10.180.3416_1.18074.70.4256";
+        static private readonly int excelTablesIndex = 2572;
 
         public enum Method { EXTRACT, REPACK }
-        public enum DataType { INT, FLOAT, STRING }
 
         Revival revival;
-        //TableDataSet dataSet;
+
+        TableDataSet dataSet;
+        ExcelTables excelTables;
+
         List<ExcelTable> excelList;
+        List<String> loadedExcelList;
+
         List<Index> indexList;
+        List<String> loadedIndexList;
 
         public Mod(String revivalModPath)
         {
             //this.dataSet = dataSet;
             this.revival = Deserialize(revivalModPath);
             this.excelList = new List<ExcelTable>();
+            this.loadedExcelList = new List<String>();
             this.indexList = new List<Index>();
+            this.loadedIndexList = new List<String>();
         }
 
         public void Add(Mod mod)
@@ -110,36 +118,79 @@ namespace Reanimator
             return revival;
         }
 
-        public void Apply(TableDataSet dataSet)
+        public void Apply()
         {
-            try
+            foreach (Modification modification in revival)
             {
-                // Modify the dataSet
-                foreach (Modification modification in revival)
+                if (modification.apply == true)
                 {
-                    if (modification.apply == true)
+                    foreach (Pack pack in modification)
                     {
-                        foreach (Pack pack in modification)
+                        try
                         {
-                            foreach (File file in pack)
+                            if (pack.id == "Default" || pack.id == "default")
                             {
-                                if (file.modify != null)
+                                pack.id = defaultPack;
+                            }
+                            if (loadedIndexList.Contains(pack.id) == false)
+                            {
+                                String path = Config.HglDir + "\\data\\" + pack.id + ".idx";
+                                FileStream stream = new FileStream(@path, FileMode.Open);
+                                indexList.Add(new Index(stream));
+                                stream.Close();
+                                loadedIndexList.Add(pack.id);
+                                pack.listId = loadedIndexList.Count - 1;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show("Error reading IDX file. Details: " + Environment.NewLine + e.ToString(), "IDX Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+                        Index.FileIndex[] fileIndex = indexList[pack.listId].GetFileTable();
+                        
+                        foreach (File file in pack)
+                        {
+                            try
+                            {
+                                if (excelTables == null)
                                 {
-                                    foreach (Entity entity in file.modify)
+                                    if (indexList[pack.listId].DatFileOpen == false)
                                     {
-                                        foreach (Attribute attribute in entity)
+                                        if (indexList[pack.listId].OpenAccompanyingDat() == false)
                                         {
-                                            if (entity.id == "*")
+                                            MessageBox.Show("Could not open accompying DAT.");
+                                        }
+                                    }
+
+                                    excelTables = new ExcelTables(indexList[pack.listId].ReadDataFile(fileIndex[excelTablesIndex]));
+                                }
+                                if (loadedIndexList.Contains(file.id) == false)
+                                {
+                                    //byte[] buffer = indexList[pack.listId].ReadDataFile(fileIndex
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                MessageBox.Show("Error reading DAT file. Details: " + Environment.NewLine + e.ToString(), "DAT Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+
+                            if (file.modify != null)
+                            {
+                                foreach (Entity entity in file.modify)
+                                {
+                                    foreach (Attribute attribute in entity)
+                                    {
+                                        if (entity.id == "*")
+                                        {
+                                            for (int i = 0; i < dataSet.XlsDataSet.Tables[file.id].Rows.Count; i++)
                                             {
-                                                for (int i = 0; i < dataSet.XlsDataSet.Tables[file.id].Rows.Count; i++)
-                                                {
-                                                    ModLogic(dataSet, file.id, attribute, i);
-                                                }
+                                                ModLogic(dataSet, file.id, attribute, i);
                                             }
-                                            else
-                                            {
-                                                ModLogic(dataSet, file.id, attribute, entity.value);
-                                            }
+                                        }
+                                        else
+                                        {
+                                            ModLogic(dataSet, file.id, attribute, entity.value);
                                         }
                                     }
                                 }
@@ -147,43 +198,30 @@ namespace Reanimator
                         }
                     }
                 }
+            }
 
-                // Add each modified Excel file & Index to a list
-                foreach (Modification modification in revival)
+            // Add each modified Excel file & Index to a list
+            foreach (Modification modification in revival)
+            {
+                if (modification.apply == true)
                 {
-                    if (modification.apply == true)
+                    foreach (Pack pack in modification)
                     {
-                        foreach (Pack pack in modification)
+                        foreach (File file in pack)
                         {
-                            foreach (File file in pack)
+                            // Don't save the same file twice
+                            if (excelList.Contains(dataSet.ExcelTables.GetTable(file.id)) == false)
                             {
-                                // Don't save the same file twice
-                                if (excelList.Contains(dataSet.ExcelTables.GetTable(file.id)) == false)
-                                {
-                                    byte[] excelFileData = dataSet.ExcelTables.GetTable(file.id).GenerateExcelFile(dataSet.XlsDataSet);
+                                byte[] excelFileData = dataSet.ExcelTables.GetTable(file.id).GenerateExcelFile(dataSet.XlsDataSet);
 
-                                    using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
-                                    {
-                                        fs.Write(excelFileData, 0, excelFileData.Length);
-                                    }
+                                using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
+                                {
+                                    fs.Write(excelFileData, 0, excelFileData.Length);
                                 }
                             }
-
-                            //if (pack.id == "Default")
-                            //{
-                            //    indexList.Add(new Index(new FileStream(@Config.HglDir + "\\data\\" + defaultPack + ".idx", FileMode.Open)));
-                            //}
-                            //else
-                            //{
-                            //    indexList.Add(new Index(new FileStream(@Config.HglDir + "\\data\\" + pack.id + ".idx", FileMode.Open)));
-                            //}
                         }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
             }
         }
 
@@ -229,10 +267,7 @@ namespace Reanimator
                 }
                 else if (attribute.bitwise != null)
                 {
-                    //foreach (bool bit in attribute.bitmask)
-                    //{
-                    //    // Perform Bitwise operation
-                    //}
+                    //TODO
                 }
                 else if (attribute.divide != null)
                 {
@@ -396,6 +431,9 @@ namespace Reanimator
             [XmlElement(typeof(File))]
             public File[] file;
 
+            [XmlIgnoreAttribute]
+            public int listId;
+
             public MyEnumerator GetEnumerator()
             {
                 return new MyEnumerator(this);
@@ -434,6 +472,9 @@ namespace Reanimator
 
             [XmlElement(typeof(Modify))]
             public Modify modify;
+
+            [XmlIgnoreAttribute]
+            public int listId;
         }
 
         public class Modify
