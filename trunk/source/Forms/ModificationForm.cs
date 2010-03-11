@@ -21,7 +21,7 @@ namespace Reanimator.Forms
             InitializeComponent();
             methodComboBox.SelectedIndex = 0;
             dataSet = new TableDataSet();
-            this.progress = new ProgressForm(;
+            //this.progress = new ProgressForm(;
         }
 
         public ModificationForm(TableDataSet dataSet)
