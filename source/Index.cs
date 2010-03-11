@@ -13,7 +13,7 @@ namespace Reanimator
     {
         [DllImport("zlibwapi86.dll")]
         private static extern int uncompress
-            (
+        (
             [MarshalAs(UnmanagedType.LPArray)]
             Byte[] destinationBuffer,
             [MarshalAs(UnmanagedType.U4)]
@@ -22,11 +22,11 @@ namespace Reanimator
             Byte[] sourceBuffer,
             [MarshalAs(UnmanagedType.U4)]
             UInt32 sourceLength
-            );
+        );
 
         [DllImport("zlibwapi64.dll")]
         private static extern int uncompress
-            (
+        (
             [MarshalAs(UnmanagedType.LPArray)]
             Byte[] destinationBuffer,
             [MarshalAs(UnmanagedType.U8)]
@@ -35,9 +35,7 @@ namespace Reanimator
             Byte[] sourceBuffer,
             [MarshalAs(UnmanagedType.U8)]
             UInt64 sourceLength
-            );
-
-        static readonly string affix = "backup\\";
+        );
 
         struct Token
         {
@@ -45,85 +43,6 @@ namespace Reanimator
             public static readonly UInt32 sect = 0x68677073; // 'spgh'
             public static readonly UInt32 info = 0x6867696F; // 'oigh'
         }
-
-        /* Index File Structure Layout
-         * 
-         ***** Main Header *****
-         * token                                Int32                                   // Must be 0x6867696E ('nigh').
-         * structCount                          Int32                                   // Number of Structs in Index(?) - count tokens.
-         * fileCount                            Int32                                   // File count.
-         * 
-         ***** String Block *****
-         * token                                Int32                                   // Must be 0x68677073 ('spgh').
-         * stringCount                          Int32                                   // String count.
-         * blockSize                            Int32                                   // Number of bytes in following block.
-         * stringBytes                          blockSize                               // The strings (each one is \0) lumped together as one big block.
-         * 
-         ***** String Data ***** 
-         * token                                Int32                                   // Must be 0x68677073 ('spgh').
-         * for (stringCount)
-         * {
-         *      stringSize                      Int16                                   // Count of chars in string (not including \0).
-         *      unknown                         Int32                                   // CRC perhaps?  -  Not required for valid game loading.
-         * }
-         * 
-         ***** File Block *****
-         * token                                Int32                                   // Must be 0x68677073 ('spgh').
-         * for (fileCount)
-         * {
-         *      token                           Int32                                   // Must be 0x6867696F ('oigh').
-         *      unknown                         Int32                                   // Not required for valid game loading (can be null).
-         *      unknown                         Int32                                   // REQUIRED for valid game loading! // Must be a specific value... What?
-         *      dataOffset                      Int32                                   // Offset in bytes within accompanying .dat file.
-         *      null                            Int32
-         *      uncompressedSize                Int32
-         *      compressedSize                  Int32
-         *      null                            Int32
-         *      directoryArrayPosition          Int32
-         *      filenameArrayPosition           Int32
-         *      unknown                         Int32                                   // REQUIRED for valid game loading! // Game clears .idx and .dat if null (can be anything but null).
-         *      unknown                         Int32                                   // Not required for valid game loading (can be null).
-         *      unknown                         Int32                                   // Not required for valid game loading (can be null).
-         *      unknown                         Int32                                   // Not required for valid game loading (can be null).
-         *      null                            Int32
-         *      null                            Int32
-         *      null                            Int32
-         *      startOfFile                     8 Bytes                                 // First 8 bytes of said file.  -  Not required for valid game loading (can be null).
-         *      token                           Int32                                   // Must be 0x6867696F ('oigh').
-         * }
-         */
-
-        // Quick overview of a typical index file. This is the movies_low.idx
-        //0000 0003		110, 105, 103, 104	// Start File Token
-        //0004 0007		4					// Number of Structs in Index(?) - count tokens.
-        //0008 0011		9					// File Count
-        //0012 0015		115, 112, 103, 104  // Start of Struct Token
-        //0016 0019		18					// String Count
-        //0020 0023		44, 1				// No Bytes
-        //0024 0323		****				// Char Data
-        //0324 0327		115, 112, 103, 104  // Start of Struct Token
-        //START REPEAT (string count) len:6
-        //0328 0329		15, 0				// String size
-        //0330 0333		X, X, X, X			// Unknown 4 bytes
-        //END REPEAT
-        //0436 0439		115, 112, 103, 104  // Start of Struct Token
-        //START REPEAT (file count) len:80
-        //0000 0003		111, 105, 103, 104  // TOKEN
-        //0004 0007       x, x, x, x
-        //0008 0011		x, x, x, x
-        //0012 0015							// Offset in Data file (Long)
-        //0016 0019		Null?
-        //0020 0023		xxxx				// Uncompressed Size
-        //0024 0027		xxxx				// Compressed Size
-        //0028 0032       Null
-        //0032 0035							// Directory array position
-        //0036 0039 							// Filename array position
-        //0040 0055		16 bytes?
-        //0056 0067		NULLS 12 bytes
-        //0068 0071		66, 73, 75, 105		// Unknown1 CONST
-        //0072 0075		184, 4, 168, 0		// Unknown2
-        //0076 0079		111, 105, 103, 104  // TOKEN
-        //END REPEAT
 
         Int32 structCount;         // offset 4
         Int32 fileCount;           // offset 8
@@ -143,6 +62,8 @@ namespace Reanimator
         string[] stringTable;
         Int32[] stringTableUnknowns;
         FileIndex[] fileTable;
+
+        const string affix = "backup\\"; // used for modifications
 
         public class FileIndex
         {
@@ -210,11 +131,6 @@ namespace Reanimator
 
             Crypt.Decrypt(buffer);
 
-           // just ignore me, I was curious
-            FileStream fOut = new FileStream("out.idx", FileMode.Create);
-            fOut.Write(buffer, 0, buffer.Length);
-            fOut.Dispose();
-
             structCount = BitConverter.ToInt32(buffer, 4);
             fileCount = BitConverter.ToInt32(buffer, 8);
             stringCount = BitConverter.ToInt32(buffer, 16);
@@ -261,19 +177,6 @@ namespace Reanimator
                 fileIndex.FileNameString = stringTable[fileIndex.FileName];
 
                 fileTable[i] = fileIndex;
-
-                /*
-                // crc test
-                if (this.DatFileOpen)
-                {
-                    byte[] buff = this.ReadDataFile(fileIndex);
-                    uint crc = Crc32.Compute(buff);
-
-                }
-                else
-                {
-                    OpenAccompanyingDat();
-                }*/
             }
         }
 
