@@ -175,6 +175,17 @@
           </entity>
         </modify>
       </file>
+      <file id="Inventory">
+        <modify>
+          <entity id="biggrid" value="10">
+            <attribute id="height">
+              <replace>
+                <data>24</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
     </pack>
   </modification>
   <modification>
