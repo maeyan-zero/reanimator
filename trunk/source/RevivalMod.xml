@@ -1,4 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE revival [
+  <!ENTITY normal "0">
+  <!ENTITY uncommon "1">
+  <!ENTITY rare "2">
+  <!ENTITY legendary "3">
+  <!ENTITY mutant "4">
+  <!ENTITY unique "5">
+]>
 <revival xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ModSchema.xsd">
   <modification>
     <title>Revival SP modification</title>
@@ -58,7 +66,7 @@
             <!-- Mutant items create mutant quality nanoshards. -->
             <attribute id="ExtraScrapQuality">
               <replace>
-                <data>4</data>
+                <data>&mutant;</data>
               </replace>
             </attribute>
           </entity>
@@ -80,11 +88,27 @@
       </file>
       <file id="Items">
         <modify>
+          <!-- Remove the No Trade attribute from all items. -->
+          <entity id="*">
+            <attribute id="bitmask05">
+              <bitwise id="noTrade">
+                <switch>false</switch>
+              </bitwise>
+            </attribute>
+          </entity>
           <entity id="SkillRetrainer" value="15">
             <attribute id="Quality">
               <replace>
-                <data>5</data>
+                <data>&unique;</data>
               </replace>
+            </attribute>
+          </entity>
+          <!-- 6x pets. Mantrawraith, Cokomoko & Zombot -->
+          <entity id="*" range="178-183">
+            <attribute id="bitmask05">
+              <bitwise id="noDropExceptForDuplicates">
+                <switch>true</switch>
+              </bitwise>
             </attribute>
           </entity>
         </modify>
@@ -102,8 +126,6 @@
                 <data>1</data>
               </replace>
             </attribute>
-          </entity>
-          <entity id="*" range="1-18">
             <attribute id="cubeRecipe">
               <replace>
                 <data>1</data>
@@ -117,8 +139,6 @@
                 <data>1</data>
               </replace>
             </attribute>
-          </entity>
-          <entity id="*" range="42-79">
             <attribute id="cubeRecipe">
               <replace>
                 <data>1</data>
