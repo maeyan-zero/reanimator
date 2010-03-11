@@ -184,6 +184,13 @@
               </replace>
             </attribute>
           </entity>
+          <entity id="stash" value="26">
+            <attribute id="height">
+              <replace>
+                <data>100</data>
+              </replace>
+            </attribute>
+          </entity>
         </modify>
       </file>
     </pack>
