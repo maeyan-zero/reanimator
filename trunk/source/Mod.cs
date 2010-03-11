@@ -149,7 +149,7 @@ namespace Reanimator
                         }
 
                         Index.FileIndex[] fileIndex = indexList[pack.listId].GetFileTable();
-                        
+
                         foreach (File file in pack)
                         {
                             try
@@ -168,22 +168,22 @@ namespace Reanimator
                                 }
                                 if (loadedExcelList.Contains(file.id) == false)
                                 {
-                                   int fileIndexNo = indexList[pack.listId].Locate(file.id + ".txt.cooked");
-                                   if (fileIndexNo == -1)
-                                   {
-                                       fileIndexNo = indexList[pack.listId].Locate(file.id.Replace("_", "") + ".txt.cooked");
-                                   }
-                                   if (fileIndexNo != -1)
-                                   {
-                                       excelList.Add(excelTables._excelTables.CreateTable(file.id, indexList[pack.listId].ReadDataFile(fileIndex[fileIndexNo])));
-                                       loadedExcelList.Add(file.id);
-                                       file.listId = loadedExcelList.Count - 1;
-                                       dataSet.LoadTable(progressForm, excelList[file.listId]);
-                                   }
-                                   else
-                                   {
-                                       MessageBox.Show("Could not locate file: " + file.id);
-                                   }
+                                    int fileIndexNo = indexList[pack.listId].Locate(file.id + ".txt.cooked");
+                                    if (fileIndexNo == -1)
+                                    {
+                                        fileIndexNo = indexList[pack.listId].Locate(file.id.Replace("_", "") + ".txt.cooked");
+                                    }
+                                    if (fileIndexNo != -1)
+                                    {
+                                        excelList.Add(excelTables._excelTables.CreateTable(file.id, indexList[pack.listId].ReadDataFile(fileIndex[fileIndexNo])));
+                                        loadedExcelList.Add(file.id);
+                                        file.listId = loadedExcelList.Count - 1;
+                                        //dataSet.LoadTable(progressForm, excelList[file.listId]);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Could not locate file: " + file.id);
+                                    }
                                 }
                             }
                             catch (Exception e)
@@ -211,31 +211,6 @@ namespace Reanimator
                                     }
                                 }
                             }
-                            
-                        }
-                    }
-                }
-            }
-
-            // Add each modified Excel file & Index to a list
-            foreach (Modification modification in revival)
-            {
-                if (modification.apply == true)
-                {
-                    foreach (Pack pack in modification)
-                    {
-                        foreach (File file in pack)
-                        {
-                            // Don't save the same file twice
-                            if (excelList.Contains(dataSet.ExcelTables.GetTable(file.id)) == false)
-                            {
-                                byte[] excelFileData = dataSet.ExcelTables.GetTable(file.id).GenerateExcelFile(dataSet.XlsDataSet);
-
-                                using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
-                                {
-                                    fs.Write(excelFileData, 0, excelFileData.Length);
-                                }
-                            }
                         }
                     }
                 }
@@ -246,7 +221,12 @@ namespace Reanimator
         {
             foreach (ExcelTable excelFile in excelList)
             {
+                //byte[] excelFileData = dataSet.ExcelTables.GetTable(file.id).GenerateExcelFile(dataSet.XlsDataSet);
 
+                //using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
+                //{
+                //    fs.Write(excelFileData, 0, excelFileData.Length);
+                //}
             }
 
             foreach (Index indexFile in indexList)
