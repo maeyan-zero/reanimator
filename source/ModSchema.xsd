@@ -11,8 +11,7 @@
   <xs:element name="string" type="xs:string"/>
 
   <xs:attribute name="id" type="xs:string"/>
-  <xs:attribute name="value" type="xs:integer"/>
-  <xs:attribute name="range" type="xs:string"/>
+  <xs:attribute name="value" type="xs:string"/>
   
   <xs:element name="type">
     <xs:simpleType>
@@ -80,7 +79,6 @@
       </xs:sequence>
       <xs:attribute ref="id" use="required"/>
       <xs:attribute ref="value" use="optional"/>
-      <xs:attribute ref="range" use="optional"/>
     </xs:complexType>
   </xs:element>
   

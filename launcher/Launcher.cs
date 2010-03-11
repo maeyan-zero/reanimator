@@ -76,11 +76,11 @@ namespace launcher
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("HellgateAus.net Launcher" + Environment.NewLine +
+            MessageBox.Show("HellgateAus.net Launcher 2038" + Environment.NewLine +
                             "Developed by Maeyan, Alex2069, Kite & Malachor." + Environment.NewLine +
                             "Visit us at http://www.hellgateaus.net" + Environment.NewLine +
                             "Contact maeyan.zero@gmail.com for info.",
-                            "HellgateAus.net Launcher", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            "HellgateAus.net Launcher 2038", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
