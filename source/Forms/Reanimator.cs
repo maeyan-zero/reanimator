@@ -748,7 +748,7 @@ namespace Reanimator
 
         private void applyModificationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ModificationForm modificationForm = new ModificationForm(tableDataSet);
+            ModificationForm modificationForm = new ModificationForm();
             modificationForm.Show();
         }
     }
