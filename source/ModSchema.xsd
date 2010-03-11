@@ -12,6 +12,7 @@
 
   <xs:attribute name="id" type="xs:string"/>
   <xs:attribute name="value" type="xs:integer"/>
+  <xs:attribute name="range" type="xs:string"/>
   
   <xs:element name="type">
     <xs:simpleType>
@@ -38,14 +39,6 @@
     </xs:complexType>
   </xs:element>
 
-  <xs:group name="data_type">
-    <xs:choice>
-      <xs:element ref="integer"/>
-      <xs:element ref="float"/>
-      <xs:element ref="string"/>
-    </xs:choice>
-  </xs:group>
-  
   <xs:element name="bitwise">
     <xs:complexType>
       <xs:sequence>
@@ -87,6 +80,7 @@
       </xs:sequence>
       <xs:attribute ref="id" use="required"/>
       <xs:attribute ref="value" use="optional"/>
+      <xs:attribute ref="range" use="optional"/>
     </xs:complexType>
   </xs:element>
   

@@ -7,12 +7,21 @@
     <url>http://www.hellgateaus.net</url>
     <type>required</type>
     <pack id="Default">
-      <!--<file id="Game_Globals">
+      <file id="Game_Globals">
         <modify>
+          <!-- Allows Normal quality items to drop when luck is maxed. -->
+          <entity id="MaxLuck" value="54">
+            <attribute id="IntValue">
+              <replace>
+                <data>8000</data>
+              </replace>
+            </attribute>
+          </entity>
+          <!-- Makes luck notably effective. -->
           <entity id="MaxLuckTugboat" value="55">
             <attribute id="IntValue">
               <replace>
-                <integer>10000</integer>
+                <data>8000</data>
               </replace>
             </attribute>
           </entity>
@@ -20,23 +29,25 @@
       </file>
       <file id="Item_Levels">
         <modify>
+          <!-- Halves the cost of Rare and Legendary augmentations. -->
           <entity id="*">
             <attribute id="AugmentCostRare">
               <divide>
-                <integer>2</integer>
+                <data>2</data>
               </divide>
             </attribute>
             <attribute id="AugmentCostLegendary">
               <divide>
-                <integer>2</integer>
+                <data>2</data>
               </divide>
             </attribute>
           </entity>
         </modify>
-      </file>-->
+      </file>
       <file id="Item_Quality">
         <modify>
           <entity id="Legendary" value="3">
+            <!-- Vendors sometimes offer Legendary items. -->
             <attribute id="VendorRarity">
               <replace>
                 <data>4</data>
@@ -44,6 +55,7 @@
             </attribute>
           </entity>
           <entity id="Mutant" value="4">
+            <!-- Mutant items create mutant quality nanoshards. -->
             <attribute id="ExtraScrapQuality">
               <replace>
                 <data>4</data>
@@ -51,11 +63,13 @@
             </attribute>
           </entity>
           <entity id="Unique" value="5">
+            <!-- Vendors sometimes offer Legendary items. -->
             <attribute id="VendorRarity">
               <replace>
                 <data>1</data>
               </replace>
             </attribute>
+            <!-- The buy/sell price of unique items is significantly increased. -->
             <attribute id="Price_Multiplier">
               <replace>
                 <data>21</data>
@@ -64,17 +78,66 @@
           </entity>
         </modify>
       </file>
-      <!--<file id="Items">
+      <file id="Items">
         <modify>
           <entity id="SkillRetrainer" value="15">
             <attribute id="Quality">
               <replace>
-                <integer>5</integer>
+                <data>5</data>
               </replace>
             </attribute>
           </entity>
         </modify>
-      </file>-->
+      </file>
+      <file id="Recipies">
+        <!-- Notes:
+             Unfortunetly recipies can not be discovered because that functionality
+             does not exist in the SP 1.2 client. All recipes that want to be used
+             must have 'alwaysKnown' set to 1 and 'cubeRecipe' set to 1.-->
+        <modify>
+          <!-- Enable crafting recipes -->
+          <entity id="*" range="1-18">
+            <attribute id="alwaysKnown">
+              <replace>
+                <data>1</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" range="1-18">
+            <attribute id="cubeRecipe">
+              <replace>
+                <data>1</data>
+              </replace>
+            </attribute>
+          </entity>
+          <!-- Enable consumable recipes -->
+          <entity id="*" range="42-79">
+            <attribute id="alwaysKnown">
+              <replace>
+                <data>1</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" range="42-79">
+            <attribute id="cubeRecipe">
+              <replace>
+                <data>1</data>
+              </replace>
+            </attribute>
+          </entity>
+          <!-- Prevent pet recipes from showing that don't work -->
+          <entity id="*" range="80-82">
+            <attribute id="cubeRecipe">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+      <file id="Treasure">
+        
+      </file>
     </pack>
   </modification>
   <modification>

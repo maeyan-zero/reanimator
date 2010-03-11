@@ -249,7 +249,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <None Include="Mods\ModSchema.xsd" />
+    <None Include="ModSchema.xsd" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -314,7 +314,7 @@
     <None Include="Resources\k_demon.png" />
     <None Include="Resources\k_necro.png" />
     <None Include="Resources\k_spectral.png" />
-    <Content Include="Mods\RevivalMod.xml" />
+    <Content Include="RevivalMod.xml" />
     <None Include="Resources\buttonSubstractNormal.png" />
     <None Include="Resources\buttonSubstractHover.png" />
     <None Include="Resources\buttonSubstractClicked.png" />
@@ -358,9 +358,6 @@
       <Project>{84FFA630-84E2-4C38-9FBE-79EF33558818}</Project>
       <Name>UpdateChecker</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FileLoader\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
