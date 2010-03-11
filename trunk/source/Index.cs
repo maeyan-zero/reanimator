@@ -277,6 +277,18 @@ namespace Reanimator
             }
         }
 
+        public int Locate(String fileName)
+        {
+            for (int i = 0; i < fileTable.Length; i++)
+            {
+                if (fileName.ToLower().Contains(fileTable[i].FileNameString))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         public void SetFileTable(FileIndex[] fileIndex)
         {
             fileTable = fileIndex;

@@ -21,6 +21,7 @@ namespace Reanimator.Forms
             InitializeComponent();
             methodComboBox.SelectedIndex = 0;
             dataSet = new TableDataSet();
+            this.progress = new ProgressForm(;
         }
 
         public ModificationForm(TableDataSet dataSet)
@@ -28,6 +29,7 @@ namespace Reanimator.Forms
             InitializeComponent();
             methodComboBox.SelectedIndex = 0;
             this.dataSet = dataSet;
+            this.progress = new ProgressForm();
         }
 
         private void checkedListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -54,7 +56,7 @@ namespace Reanimator.Forms
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            mod.Apply();
+            mod.Apply(progress);
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)

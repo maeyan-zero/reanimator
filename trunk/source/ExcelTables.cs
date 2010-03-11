@@ -23,7 +23,7 @@ namespace Reanimator.Excel
             public Int16 code;
         }
 
-        class ExcelTableManagerManager
+        public class ExcelTableManagerManager
         {
             class TableIndexHelper
             {
@@ -128,7 +128,7 @@ namespace Reanimator.Excel
         }
 
         public bool AllTablesLoaded { get; set; }
-        readonly ExcelTableManagerManager _excelTables;
+        public readonly ExcelTableManagerManager _excelTables;
         readonly List<ExcelTable> _loadedTables;
 
         public ExcelTables(byte[] data)

@@ -33,10 +33,11 @@ namespace Reanimator
 
         public Mod(String revivalModPath)
         {
-            //this.dataSet = dataSet;
             this.revival = Deserialize(revivalModPath);
+
             this.excelList = new List<ExcelTable>();
             this.loadedExcelList = new List<String>();
+
             this.indexList = new List<Index>();
             this.loadedIndexList = new List<String>();
         }
@@ -118,7 +119,7 @@ namespace Reanimator
             return revival;
         }
 
-        public void Apply()
+        public void Apply(Forms.ProgressForm progress)
         {
             foreach (Modification modification in revival)
             {
@@ -165,9 +166,24 @@ namespace Reanimator
 
                                     excelTables = new ExcelTables(indexList[pack.listId].ReadDataFile(fileIndex[excelTablesIndex]));
                                 }
-                                if (loadedIndexList.Contains(file.id) == false)
+                                if (loadedExcelList.Contains(file.id) == false)
                                 {
-                                    //byte[] buffer = indexList[pack.listId].ReadDataFile(fileIndex
+                                   int fileIndexNo = indexList[pack.listId].Locate(file.id + ".txt.cooked");
+                                   if (fileIndexNo == -1)
+                                   {
+                                       fileIndexNo = indexList[pack.listId].Locate(file.id.Replace("_", "") + ".txt.cooked");
+                                   }
+                                   if (fileIndexNo != -1)
+                                   {
+                                       excelList.Add(excelTables._excelTables.CreateTable(file.id, indexList[pack.listId].ReadDataFile(fileIndex[fileIndexNo])));
+                                       loadedExcelList.Add(file.id);
+                                       file.listId = loadedExcelList.Count - 1;
+                                       dataSet.LoadTable(progressForm, excelList[file.listId]);
+                                   }
+                                   else
+                                   {
+                                       MessageBox.Show("Could not locate file: " + file.id);
+                                   }
                                 }
                             }
                             catch (Exception e)
@@ -195,6 +211,7 @@ namespace Reanimator
                                     }
                                 }
                             }
+                            
                         }
                     }
                 }
