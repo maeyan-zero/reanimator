@@ -37,6 +37,7 @@ namespace Reanimator
             UInt64 sourceLength
             );
 
+        static readonly string affix = "backup\\";
 
         struct Token
         {
@@ -432,6 +433,69 @@ namespace Reanimator
             byte[] returnBuffer = new byte[offset];
             Buffer.BlockCopy(buffer, 0, returnBuffer, 0, returnBuffer.Length);
             return returnBuffer;
+        }
+
+        public bool ApplyDirectoryAffix(int id)
+        {
+            Index.FileIndex[] fileIndex = this.GetFileTable();
+
+            if (fileIndex[id].DirectoryString.Contains(affix))
+            {
+                return false;
+            }
+            else
+            {
+                fileIndex[id].DirectoryString = fileIndex[id].DirectoryString.Insert(0, affix);
+            }
+
+            this.SetFileTable(fileIndex);
+
+            return true;
+        }
+
+        public bool IsModified()
+        {
+            Index.FileIndex[] fileIndex = this.GetFileTable();
+
+            foreach (Index.FileIndex file in fileIndex)
+            {
+                if (file.DirectoryString.Contains(affix))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool RestoreIndex(string path)
+        {
+            Index.FileIndex[] fileIndex = this.GetFileTable();
+
+            foreach (Index.FileIndex file in fileIndex)
+            {
+                if (file.DirectoryString.Contains(affix))
+                {
+                    file.DirectoryString = file.DirectoryString.Remove(0, affix.Length);
+                }
+            }
+            this.SetFileTable(fileIndex);
+
+            byte[] buffer = this.GenerateIndexFile();
+            Crypt.Encrypt(buffer);
+
+            try
+            {
+                FileStream stream = new FileStream(path, FileMode.CreateNew);
+                stream.Write(buffer, 0, buffer.Length);
+                stream.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
         }
 
         public void Dispose()

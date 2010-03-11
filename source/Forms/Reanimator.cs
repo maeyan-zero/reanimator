@@ -151,13 +151,9 @@ namespace Reanimator
 
         private void OpenModFile(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Modification Files (*.mod, *.xml)|*.mod;*.xml|All Files (*.*)|*.*";
-
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml")))
-            {
-                OpenFile_MOD(openFileDialog.FileName);
-            }
+            ModificationForm modificationForm = new ModificationForm(tableDataSet);
+            //modificationForm.MdiParent = this;
+            modificationForm.Show();
         }
 
         private bool OpenFile_MOD(string szFileName)
@@ -176,8 +172,8 @@ namespace Reanimator
                 {
                     Mod revivalMod = new Mod(szFileName);
                     ModificationForm modificationForm = new ModificationForm();
-                    modificationForm.MdiParent = this;
-                    modificationForm.Show();
+                    //modificationForm.MdiParent = this;
+                    modificationForm.ShowDialog();
                 }
                 else
                 {
@@ -748,6 +744,12 @@ namespace Reanimator
             //        Console.WriteLine("You already have the newest version installed or downloaded!");
             //    }
             //}
+        }
+
+        private void applyModificationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ModificationForm modificationForm = new ModificationForm(tableDataSet);
+            modificationForm.Show();
         }
     }
 }

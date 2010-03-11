@@ -82,6 +82,7 @@
             this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
@@ -96,7 +97,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.applyModificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -398,7 +399,8 @@
             this.toolsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optionsToolStripMenuItem,
             this.clientPatchesToolStripMenuItem,
-            this.cacheInfoToolStripMenuItem});
+            this.cacheInfoToolStripMenuItem,
+            this.applyModificationsToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
             this.toolsMenu.Size = new System.Drawing.Size(48, 20);
             this.toolsMenu.Text = "&Tools";
@@ -406,7 +408,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -415,7 +417,7 @@
             this.clientPatchesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bypassSecurityx64ToolStripMenuItem});
             this.clientPatchesToolStripMenuItem.Name = "clientPatchesToolStripMenuItem";
-            this.clientPatchesToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.clientPatchesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.clientPatchesToolStripMenuItem.Text = "Client Patches";
             // 
             // bypassSecurityx64ToolStripMenuItem
@@ -433,7 +435,7 @@
             this.regenerateCacheToolStripMenuItem,
             this.regenerateRelationsToolStripMenuItem1});
             this.cacheInfoToolStripMenuItem.Name = "cacheInfoToolStripMenuItem";
-            this.cacheInfoToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.cacheInfoToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.cacheInfoToolStripMenuItem.Text = "Cache Info";
             // 
             // klToolStripMenuItem
@@ -555,6 +557,13 @@
             this.searchToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.searchToolStripMenuItem.Text = "&Search";
             // 
+            // checkForUpdatesToolStripMenuItem
+            // 
+            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
+            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.checkForUpdatesToolStripMenuItem.Text = "Check for &Updates";
+            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.CheckForUpdatesToolStripMenuItem_Click);
+            // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
@@ -666,12 +675,12 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // checkForUpdatesToolStripMenuItem
+            // applyModificationsToolStripMenuItem
             // 
-            this.checkForUpdatesToolStripMenuItem.Name = "checkForUpdatesToolStripMenuItem";
-            this.checkForUpdatesToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.checkForUpdatesToolStripMenuItem.Text = "Check for &Updates";
-            this.checkForUpdatesToolStripMenuItem.Click += new System.EventHandler(this.CheckForUpdatesToolStripMenuItem_Click);
+            this.applyModificationsToolStripMenuItem.Name = "applyModificationsToolStripMenuItem";
+            this.applyModificationsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.applyModificationsToolStripMenuItem.Text = "Apply Modifications";
+            this.applyModificationsToolStripMenuItem.Click += new System.EventHandler(this.applyModificationsToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
@@ -767,6 +776,7 @@
         private System.Windows.Forms.ToolStripMenuItem regenerateRelationsToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem showExcelTablesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem applyModificationsToolStripMenuItem;
     }
 }
 

@@ -14,12 +14,20 @@ namespace Reanimator.Forms
     {
         Mod mod;
         TableDataSet dataSet;
+        ProgressForm progress;
 
         public ModificationForm()
         {
             InitializeComponent();
             methodComboBox.SelectedIndex = 0;
             dataSet = new TableDataSet();
+        }
+
+        public ModificationForm(TableDataSet dataSet)
+        {
+            InitializeComponent();
+            methodComboBox.SelectedIndex = 0;
+            this.dataSet = dataSet;
         }
 
         private void checkedListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -46,8 +54,7 @@ namespace Reanimator.Forms
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            mod.Apply(dataSet);
-
+            mod.Apply();
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
@@ -70,7 +77,7 @@ namespace Reanimator.Forms
                     checkedListBox.Items.Clear();
                     for (int i = 0; i < mod.Length; i++)
                     {
-                        checkedListBox.Items.Add(mod.getDescription(i), mod.getEnabled(i));
+                        checkedListBox.Items.Add(mod.getTitle(i), mod.getEnabled(i));
                         if (mod.getEnabled(i))
                         {
                             checkedListBox.SetItemCheckState(i, CheckState.Indeterminate);
