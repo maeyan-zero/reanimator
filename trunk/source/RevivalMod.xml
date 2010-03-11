@@ -7,7 +7,8 @@
   <!ENTITY mutant "4">
   <!ENTITY unique "5">
 ]>
-<revival xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ModSchema.xsd">
+<revival xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ModSchema.xsd">
   <modification>
     <title>Revival SP modification</title>
     <version>2.0</version>
@@ -66,7 +67,7 @@
             <!-- Mutant items create mutant quality nanoshards. -->
             <attribute id="ExtraScrapQuality">
               <replace>
-                <data>&mutant;</data>
+                <data>4</data>
               </replace>
             </attribute>
           </entity>
@@ -90,8 +91,8 @@
         <modify>
           <!-- Remove the No Trade attribute from all items. -->
           <entity id="*">
-            <attribute id="bitmask05">
-              <bitwise id="noTrade">
+            <attribute id="Bitmask05">
+              <bitwise id="NoTrade">
                 <switch>false</switch>
               </bitwise>
             </attribute>
@@ -99,14 +100,14 @@
           <entity id="SkillRetrainer" value="15">
             <attribute id="Quality">
               <replace>
-                <data>&unique;</data>
+                <data>5</data>
               </replace>
             </attribute>
           </entity>
           <!-- 6x pets. Mantrawraith, Cokomoko & Zombot -->
-          <entity id="*" range="178-183">
-            <attribute id="bitmask05">
-              <bitwise id="noDropExceptForDuplicates">
+          <entity id="*" value="178-183">
+            <attribute id="Bitmask05">
+              <bitwise id="NoDropExceptForDuplicates">
                 <switch>true</switch>
               </bitwise>
             </attribute>
@@ -120,43 +121,59 @@
              must have 'alwaysKnown' set to 1 and 'cubeRecipe' set to 1.-->
         <modify>
           <!-- Enable crafting recipes -->
-          <entity id="*" range="1-18">
-            <attribute id="alwaysKnown">
+          <entity id="*" value="1-18">
+            <attribute id="AlwaysKnown">
               <replace>
-                <data>1</data>
+                <data>true</data>
               </replace>
             </attribute>
-            <attribute id="cubeRecipe">
+            <attribute id="CubeRecipe">
               <replace>
-                <data>1</data>
+                <data>true</data>
               </replace>
             </attribute>
           </entity>
           <!-- Enable consumable recipes -->
-          <entity id="*" range="42-79">
-            <attribute id="alwaysKnown">
+          <entity id="*" value="42-79">
+            <attribute id="AlwaysKnown">
               <replace>
-                <data>1</data>
+                <data>true</data>
               </replace>
             </attribute>
-            <attribute id="cubeRecipe">
+            <attribute id="CubeRecipe">
               <replace>
-                <data>1</data>
+                <data>true</data>
               </replace>
             </attribute>
           </entity>
           <!-- Prevent pet recipes from showing that don't work -->
-          <entity id="*" range="80-82">
-            <attribute id="cubeRecipe">
+          <entity id="*" value="80-82">
+            <attribute id="CubeRecipe">
               <replace>
-                <data>0</data>
+                <data>false</data>
               </replace>
             </attribute>
           </entity>
         </modify>
       </file>
       <file id="Treasure">
-        
+        <modify>
+          <!-- Always allow mutant items to drop 1/10 -->
+          <entity id="Beast_of_Abbadon_Loot" value="364">
+            <attribute id="NoDrop">
+              <replace>
+                <data>90</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="Fiend_Loot" value="331">
+            <attribute id="NoDrop">
+              <replace>
+                <data>90</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
       </file>
     </pack>
   </modification>

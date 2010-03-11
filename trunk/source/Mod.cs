@@ -119,7 +119,7 @@ namespace Reanimator
             return revival;
         }
 
-        public void Apply(Forms.ProgressForm progress)
+        public void Apply(Forms.ProgressForm progress, Object argument)
         {
             foreach (Modification modification in revival)
             {
@@ -178,7 +178,7 @@ namespace Reanimator
                                         excelList.Add(excelTables._excelTables.CreateTable(file.id, indexList[pack.listId].ReadDataFile(fileIndex[fileIndexNo])));
                                         loadedExcelList.Add(file.id);
                                         file.listId = loadedExcelList.Count - 1;
-                                        //dataSet.LoadTable(progressForm, excelList[file.listId]);
+                                        dataSet.LoadTable(progress, excelList[file.listId]);
                                     }
                                     else
                                     {
@@ -206,7 +206,7 @@ namespace Reanimator
                                         }
                                         else
                                         {
-                                            ModLogic(dataSet, file.id, attribute, entity.value);
+                                            //ModLogic(dataSet, file.id, attribute, entity.value);
                                         }
                                     }
                                 }
@@ -516,7 +516,13 @@ namespace Reanimator
             public string id;
 
             [XmlAttribute]
-            public int value;
+            public string value;
+
+            [XmlIgnoreAttribute]
+            public int min;
+
+            [XmlIgnoreAttribute]
+            public int max;
 
             [XmlElement(typeof(Attribute))]
             public Attribute[] attribute;
