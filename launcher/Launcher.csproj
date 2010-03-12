@@ -105,6 +105,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Revival\data\uix\loading.dds" />
+    <None Include="Revival\data\uix\main_new_atlas.dds" />
+    <None Include="Revival\data\uix\nonwsloading.dds" />
+    <None Include="Revival\Schema.xsd" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -116,6 +120,13 @@
       <Project>{8A8B82E9-BCC8-4550-9740-AC611E48F92A}</Project>
       <Name>Reanimator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Revival\data\uix\xml\inventory_screen.xml" />
+    <Content Include="Revival\Revival.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Revival\data\background\_advertisements\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

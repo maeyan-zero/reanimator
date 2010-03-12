@@ -383,7 +383,7 @@ namespace Reanimator
             return false;
         }
 
-        public bool RestoreIndex(string path)
+        public bool Restore(string path)
         {
             Index.FileIndex[] fileIndex = this.GetFileTable();
 

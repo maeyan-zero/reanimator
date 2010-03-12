@@ -72,6 +72,28 @@ namespace Reanimator.Excel
                 return tableIndex.FileName;
             }
 
+            public string ResolveTableId(string id)
+            {
+                TableIndexHelper tableIndex = GetTableIndex(id);
+
+                if (tableIndex == null)
+                {
+                    return id;
+                }
+                if (tableIndex.FileName == null)
+                {
+                    return id;
+                }
+                if (tableIndex.StringId == null)
+                {
+                    return tableIndex.FileName;
+                }
+                else
+                {
+                    return tableIndex.StringId;
+                }
+            }
+
             public ExcelTable CreateTable(string id, byte[] buffer)
             {
                 TableIndexHelper tableIndex = GetTableIndex(id);
@@ -125,6 +147,8 @@ namespace Reanimator.Excel
 
                 return null;
             }
+
+
         }
 
         public bool AllTablesLoaded { get; set; }

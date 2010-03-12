@@ -34,6 +34,7 @@ namespace Reanimator
         public Mod(String revivalModPath)
         {
             this.revival = Deserialize(revivalModPath);
+            this.dataSet = new TableDataSet();
 
             this.excelList = new List<ExcelTable>();
             this.loadedExcelList = new List<String>();
@@ -61,7 +62,7 @@ namespace Reanimator
             try
             {
                 FileStream xsdStream;
-                xsdStream = new FileStream("ModSchema.xsd", FileMode.Open);
+                xsdStream = new FileStream("Schema.xsd", FileMode.Open);
 
                 XmlSchema xmlSchema;
                 xmlSchema = XmlSchema.Read(xsdStream, null);
@@ -175,7 +176,8 @@ namespace Reanimator
                                     }
                                     if (fileIndexNo != -1)
                                     {
-                                        excelList.Add(excelTables._excelTables.CreateTable(file.id, indexList[pack.listId].ReadDataFile(fileIndex[fileIndexNo])));
+                                        file.tableRef = excelTables._excelTables.ResolveTableId(file.id.Replace(".txt.cooked", ""));
+                                        excelList.Add(excelTables._excelTables.CreateTable(file.tableRef, indexList[pack.listId].ReadDataFile(fileIndex[fileIndexNo])));
                                         loadedExcelList.Add(file.id);
                                         file.listId = loadedExcelList.Count - 1;
                                         dataSet.LoadTable(progress, excelList[file.listId]);
@@ -197,16 +199,37 @@ namespace Reanimator
                                 {
                                     foreach (Attribute attribute in entity)
                                     {
-                                        if (entity.id == "*")
+                                        try
                                         {
-                                            for (int i = 0; i < dataSet.XlsDataSet.Tables[file.id].Rows.Count; i++)
+                                            if (entity.id == "*")
                                             {
-                                                ModLogic(dataSet, file.id, attribute, i);
+                                                if (entity.value != null)
+                                                {
+                                                    int indexVal = entity.value.IndexOf('-');
+                                                    int startVal = Convert.ToInt32(entity.value.Substring(0, indexVal));
+                                                    int lastVal = Convert.ToInt32(entity.value.Substring(indexVal + 1, entity.value.Length - (indexVal + 1)));
+
+                                                    for (int i = startVal; i <= lastVal; i++)
+                                                    {
+                                                        ModLogic(dataSet, file.tableRef, attribute, i);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    for (int i = 0; i < dataSet.XlsDataSet.Tables[file.tableRef].Rows.Count; i++)
+                                                    {
+                                                        ModLogic(dataSet, file.tableRef, attribute, i);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ModLogic(dataSet, file.tableRef, attribute, Convert.ToInt32(entity.value));
                                             }
                                         }
-                                        else
+                                        catch (Exception e)
                                         {
-                                            //ModLogic(dataSet, file.id, attribute, entity.value);
+                                            MessageBox.Show("There seems to be an error in the entity syntax. Details: " + e.ToString());
                                         }
                                     }
                                 }
@@ -264,7 +287,40 @@ namespace Reanimator
                 }
                 else if (attribute.bitwise != null)
                 {
-                    //TODO
+                    //for (int j = 0; j < attribute.bitwise.Length; j++)
+                    //{
+                    //    string[] bitmask;
+
+                    //    switch (attribute.id)
+                    //    {
+                    //        case "Bitmask01":
+                    //            bitmask = Enum.GetNames(Items.BitMask01);
+                    //            break;
+                    //        case "Bitmask02":
+                    //            //bitmask = Enum.GetNames(Items.BitMask02);
+                    //            break;
+                    //        case "Bitmask03":
+                    //            //bitmask = Enum.GetNames(Items.BitMask03);
+                    //            break;
+                    //        case "Bitmask04":
+                    //            //bitmask = Enum.GetNames(Items.BitMask04);
+                    //            break;
+                    //        case "Bitmask05":
+                    //            //bitmask = Enum.GetNames(Items.BitMask05);
+                    //            break;
+                    //    }
+
+                    //}
+                    //for (int i = 0; i < bitmask.Length; i++)
+                    //{
+                    //    if (string.Compare(attribute.bitwise[j].id, bitmask[j], true))
+                    //    {
+                    //        if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] & (j ^ 32))
+                    //        {
+
+                    //        }
+                    //    }
+                    //}
                 }
                 else if (attribute.divide != null)
                 {
@@ -355,6 +411,8 @@ namespace Reanimator
             public string title;
             [XmlElement]
             public string version;
+            [XmlElement]
+            public string author;
             [XmlElement]
             public string description;
             [XmlElement]
@@ -470,8 +528,14 @@ namespace Reanimator
             [XmlElement(typeof(Modify))]
             public Modify modify;
 
+            [XmlElement(typeof(Replace))]
+            public Replace replace;
+
             [XmlIgnoreAttribute]
             public int listId;
+
+            [XmlIgnoreAttribute]
+            public string tableRef;
         }
 
         public class Modify

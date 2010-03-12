@@ -276,7 +276,7 @@ namespace Reanimator.Excel
             public Int32 impactUnitToxic;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 120)]
             byte[] unknown40;
-            public Int32 bitmask01;/**'spawn',0
+            public BitMask01 bitmask01;/**'spawn',0
       'spawn at merchant',1
       'ForceIgnoresScale',2
       'impact on fuse',3
@@ -986,9 +986,8 @@ namespace Reanimator.Excel
 
 #pragma warning disable 0169
         [FlagsAttribute]
-        enum BitMask1 : uint
+        public enum BitMask01 : uint
         {
-            empty = 0,
             spawn = 1,
             spawnAtMerchant = 2,
             forceIgnoresScale = 4,

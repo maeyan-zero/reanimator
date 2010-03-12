@@ -41,6 +41,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.characterCombo = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -133,11 +134,12 @@
             this.launchLabel.AutoSize = true;
             this.launchLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.launchLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.launchLabel.Location = new System.Drawing.Point(12, 393);
+            this.launchLabel.Location = new System.Drawing.Point(12, 356);
             this.launchLabel.Name = "launchLabel";
             this.launchLabel.Size = new System.Drawing.Size(197, 37);
             this.launchLabel.TabIndex = 5;
             this.launchLabel.Text = "Unleash Hell";
+            this.launchLabel.Click += new System.EventHandler(this.launchLabel_Click);
             // 
             // groupBox1
             // 
@@ -149,12 +151,21 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "RSS Feed";
             // 
+            // characterCombo
+            // 
+            this.characterCombo.FormattingEnabled = true;
+            this.characterCombo.Location = new System.Drawing.Point(19, 397);
+            this.characterCombo.Name = "characterCombo";
+            this.characterCombo.Size = new System.Drawing.Size(190, 21);
+            this.characterCombo.TabIndex = 7;
+            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
             this.ClientSize = new System.Drawing.Size(624, 442);
+            this.Controls.Add(this.characterCombo);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.launchLabel);
             this.Controls.Add(this.menuStrip1);
@@ -165,6 +176,7 @@
             this.Name = "Launcher";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HellgateAus.net Launcher 2038";
+            this.Load += new System.EventHandler(this.Launcher_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -187,6 +199,7 @@
         private System.Windows.Forms.ToolStripMenuItem enableHCCharacterToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ComboBox characterCombo;
 
     }
 }
