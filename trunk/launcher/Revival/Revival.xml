@@ -1,37 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE revival [
-  <!ENTITY normal "0">
-  <!ENTITY uncommon "1">
-  <!ENTITY rare "2">
-  <!ENTITY legendary "3">
-  <!ENTITY mutant "4">
-  <!ENTITY unique "5">
-]>
 <revival xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="Schema.xsd">
   <modification>
     <title>Revival SP modification</title>
     <version>2.0</version>
-    <author>Maeyan, Malachor, Kite</author>
+    <author>The Revival Team</author>
     <description>This is the base SP modification developed by the Revival team.</description>
     <url>http://www.hellgateaus.net</url>
     <type>required</type>
     <pack id="default">
       <file id="gameglobals.txt.cooked">
         <modify>
-          <!-- Allows Normal quality items to drop when luck is maxed. -->
-          <entity id="MaxLuck" value="54">
-            <attribute id="IntValue">
-              <replace>
-                <data>8000</data>
-              </replace>
-            </attribute>
-          </entity>
-          <!-- Makes luck notably effective. -->
           <entity id="MaxLuckTugboat" value="55">
             <attribute id="IntValue">
               <replace>
-                <data>8000</data>
+                <data>10000</data>
               </replace>
             </attribute>
           </entity>
@@ -39,7 +22,6 @@
       </file>
       <file id="item_levels.txt.cooked">
         <modify>
-          <!-- Halves the cost of Rare and Legendary augmentations. -->
           <entity id="*">
             <attribute id="AugmentCostRare">
               <divide>
@@ -57,7 +39,6 @@
       <file id="itemquality.txt.cooked">
         <modify>
           <entity id="Legendary" value="3">
-            <!-- Vendors sometimes offer Legendary items. -->
             <attribute id="VendorRarity">
               <replace>
                 <data>4</data>
@@ -65,7 +46,6 @@
             </attribute>
           </entity>
           <entity id="Mutant" value="4">
-            <!-- Mutant items create mutant quality nanoshards. -->
             <attribute id="ExtraScrapQuality">
               <replace>
                 <data>4</data>
@@ -73,13 +53,11 @@
             </attribute>
           </entity>
           <entity id="Unique" value="5">
-            <!-- Vendors sometimes offer Legendary items. -->
             <attribute id="VendorRarity">
               <replace>
                 <data>1</data>
               </replace>
             </attribute>
-            <!-- The buy/sell price of unique items is significantly increased. -->
             <attribute id="Price_Multiplier">
               <replace>
                 <data>21</data>
@@ -90,22 +68,51 @@
       </file>
       <file id="items.txt.cooked">
         <modify>
-          <!-- Remove the No Trade attribute from all items. -->
+          <!--UNLOCK SUBSCRIBER & MULTIPLAYER ITEMS, REMOVE NO TRADE-->
           <entity id="*">
+            <attribute id="Bitmask02">
+              <bitwise id="SubscriberOnly">
+                <switch>0</switch>
+              </bitwise>
+            </attribute>
             <attribute id="Bitmask05">
               <bitwise id="NoTrade">
                 <switch>0</switch>
               </bitwise>
             </attribute>
+            <attribute id="Bitmask06">
+              <bitwise id="MultiplayerOnly">
+                <switch>0</switch>
+              </bitwise>
+            </attribute>
           </entity>
-          <entity id="SkillRetrainer" value="15">
+          <!--SKILL RETRAINER-->
+          <entity id="Skill_Retrainer" value="15">
             <attribute id="Quality">
               <replace>
                 <data>5</data>
               </replace>
             </attribute>
+            <attribute id="Bitmask05">
+              <bitwise id="NoDrop">
+                <switch>1</switch>
+              </bitwise>
+            </attribute>
           </entity>
-          <!-- 6x pets. Mantrawraith, Cokomoko & Zombot -->
+          <!--ATTRIBUTE RETRAINER-->
+          <entity id="Attribute_Retrainer" value="265">
+            <attribute id="Quality">
+              <replace>
+                <data>5</data>
+              </replace>
+            </attribute>
+            <attribute id="Bitmask05">
+              <bitwise id="NoDrop">
+                <switch>1</switch>
+              </bitwise>
+            </attribute>
+          </entity>
+          <!--MANTRAWRAITH, ZOMBOT AND COKOMOKO-->
           <entity id="*" value="178-183">
             <attribute id="Bitmask05">
               <bitwise id="NoDropExceptForDuplicates">
@@ -116,12 +123,8 @@
         </modify>
       </file>
       <file id="recipes.txt.cooked">
-        <!-- Notes:
-             Unfortunetly recipies can not be discovered because that functionality
-             does not exist in the SP 1.2 client. All recipes that want to be used
-             must have 'alwaysKnown' set to 1 and 'cubeRecipe' set to 1.-->
         <modify>
-          <!-- Enable crafting recipes -->
+          <!--ENABLE CRAFTING RECIPES-->
           <entity id="*" value="1-18">
             <attribute id="AlwaysKnown">
               <replace>
@@ -134,7 +137,7 @@
               </replace>
             </attribute>
           </entity>
-          <!-- Enable consumable recipes -->
+          <!--ENABLE CONSUMABLE RECIPES-->
           <entity id="*" value="42-79">
             <attribute id="AlwaysKnown">
               <replace>
@@ -147,7 +150,7 @@
               </replace>
             </attribute>
           </entity>
-          <!-- Prevent pet recipes from showing that don't work -->
+          <!--HIDE BROKEN PET RECIPES-->
           <entity id="*" value="80-82">
             <attribute id="CubeRecipe">
               <replace>
@@ -159,7 +162,7 @@
       </file>
       <file id="treasure.txt.cooked">
         <modify>
-          <!-- Always allow mutant items to drop 1/10 -->
+          <!--MUTANT ITEMS DROP 1/10 CHANCE-->
           <entity id="Beast_of_Abbadon_Loot" value="364">
             <attribute id="NoDrop">
               <replace>
@@ -217,8 +220,9 @@
     </pack>
   </modification>
   <modification>
-    <title>Elite for normal mode</title>
+    <title>Elite for Normal Mode</title>
     <version>2.0</version>
+    <author>The Revival Team</author>
     <description>Reduces elite mode characters difficulty to normal mode, while benefiting from additional multipliers.</description>
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
@@ -250,6 +254,96 @@
             <attribute id="FloatValue">
               <replace>
                 <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Purchasable Retrainers</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Allows retrainers to be purchased from all vendors.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="default">
+      <file id="items.txt.cooked">
+        <modify>
+          <entity id="Attribute_Retrainer">
+            <attribute id="BuyPriceMult">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="BuyPriceAdd">
+              <replace>
+                <data>500,000</data>
+              </replace>
+            </attribute>
+            <attribute id="SellPriceMult">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="SellPriceAdd">
+              <replace>
+                <data>500,000</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="Skill_Retrainer">
+            <attribute id="BuyPriceMult">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="BuyPriceAdd">
+              <replace>
+                <data>750,000</data>
+              </replace>
+            </attribute>
+            <attribute id="SellPriceMult">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="SellPriceAdd">
+              <replace>
+                <data>750,000</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+      <file id="treasure.txt.cooked">
+        <modify>
+          <entity id="Vendor_Wares">
+            <attribute id="Item6">
+              <replace>
+                <data>123</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Auto Pickup Items</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Allows consumables &amp; quest items to be automatically picked up.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="default">
+      <file id="items.txt.cooked">
+        <modify>
+          <entity id="*">
+            <attribute id="StackSize">
+              <replace>
+                <data></data>
               </replace>
             </attribute>
           </entity>
