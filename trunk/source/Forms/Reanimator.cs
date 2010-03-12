@@ -749,7 +749,7 @@ namespace Reanimator
         private void applyModificationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ModificationForm modificationForm = new ModificationForm();
-            modificationForm.Show();
+            modificationForm.ShowDialog();
         }
     }
 }

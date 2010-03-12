@@ -249,7 +249,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <None Include="ModSchema.xsd" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -314,7 +313,6 @@
     <None Include="Resources\k_demon.png" />
     <None Include="Resources\k_necro.png" />
     <None Include="Resources\k_spectral.png" />
-    <Content Include="RevivalMod.xml" />
     <None Include="Resources\buttonSubstractNormal.png" />
     <None Include="Resources\buttonSubstractHover.png" />
     <None Include="Resources\buttonSubstractClicked.png" />

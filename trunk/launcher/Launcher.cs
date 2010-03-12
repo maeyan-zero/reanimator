@@ -14,6 +14,8 @@ namespace launcher
     public partial class Launcher : Form
     {
         string indexPath;
+        String[] saveFolderContents;
+        int[] characterIndex;
 
         public Launcher()
         {
@@ -43,18 +45,18 @@ namespace launcher
                 FileStream stream = new FileStream(@indexPath, FileMode.Open);
                 Index index = new Index(stream);
 
-                //if (Utility.IndexIsModified(index))
+                if (index.IsModified())
                 {
-                    //if (Utility.RestoreIndex(index, indexPath) == true)
+                    if (index.Restore(indexPath) == true)
                     {
                         MessageBox.Show("All modifications successfully removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    //else
+                    else
                     {
                         MessageBox.Show("There was a problem retoring the index.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                //else
+                else
                 {
                     MessageBox.Show("Installation already appears clean.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
@@ -81,6 +83,44 @@ namespace launcher
                             "Visit us at http://www.hellgateaus.net" + Environment.NewLine +
                             "Contact maeyan.zero@gmail.com for info.",
                             "HellgateAus.net Launcher 2038", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void launchLabel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (characterCombo.SelectedIndex != -1 && characterCombo.SelectedIndex != 0)
+                {
+                    System.Diagnostics.Process.Start(Config.GameClientPath, "-singleplayer -load\"" + saveFolderContents[characterIndex[characterCombo.SelectedIndex]] + "\"");
+                }
+                else
+                {
+                    System.Diagnostics.Process.Start(Config.GameClientPath, "-singleplayer\"");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to start game at:\n" + Config.GameClientPath + "\n\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Launcher_Load(object sender, EventArgs e)
+        {
+            String characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
+            saveFolderContents = Directory.GetFiles(characterFolder);
+            characterIndex = new int[saveFolderContents.Length + 1];
+            
+            characterCombo.Items.Add("");
+            for (int i = 0; i < saveFolderContents.Length; i++)
+            {
+                if (saveFolderContents[i].Contains(".hg1"))
+                {
+                    String characterName = saveFolderContents[i].Remove(0, saveFolderContents[i].LastIndexOf("\\") + 1);
+                    characterName = characterName.Remove(characterName.Length - 4, 4);
+                    characterCombo.Items.Add(characterName);
+                    characterIndex[characterCombo.Items.Count - 1] = i;
+                }
+            }
         }
     }
 }
