@@ -158,6 +158,35 @@
               </replace>
             </attribute>
           </entity>
+          <!-- fixing conflicting recipes-->
+          <entity id="gloves" value="11">
+            <attribute id="ingredient4ItemQuality">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="torso" value="15">
+            <attribute id="ingredient5ItemQuality">
+              <replace>
+                <data>2</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="shield" value="16">
+            <attribute id="ingredient5ItemQuality">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="focus_item" value="17">
+            <attribute id="ingredient5ItemQuality">
+              <replace>
+                <data>2</data>
+              </replace>
+            </attribute>
+          </entity>
         </modify>
       </file>
       <file id="treasure.txt.cooked">
