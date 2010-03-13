@@ -204,5 +204,13 @@ namespace Reanimator
 
             offset += lengthToWrite;
         }
+
+        public static void BinaryToArray<T>(BinaryReader binReader, T[] destination)
+        {
+            for (int i = 0; i < destination.Length; i++)
+            {
+                destination[i] = (T)FileTools.ByteArrayToStructure(binReader.ReadBytes(Marshal.SizeOf(typeof(T))), typeof(T), 0);
+            }
+        }
     }
 }
