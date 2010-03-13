@@ -107,7 +107,7 @@ namespace Reanimator.Excel
         // mysh
         private readonly Int32 _dnehValue;
 
-        private byte[] DataBlock { get; set; }
+        public byte[] DataBlock { get; set; }
         private byte[] FinalBytes { get; set; }
 
         protected ExcelTable(byte[] excelData)

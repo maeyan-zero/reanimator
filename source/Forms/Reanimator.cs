@@ -751,5 +751,19 @@ namespace Reanimator
             ModificationForm modificationForm = new ModificationForm();
             modificationForm.ShowDialog();
         }
+
+        private void modelFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Model Files (*.am)|*.am|All Files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Config.HglDir;
+
+            if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("am"))
+            {
+                FileStream stream = new FileStream(@openFileDialog.FileName, FileMode.Open);
+                Model model = new Model(new BinaryReader(stream));
+                stream.Close();
+            }
+        }
     }
 }
