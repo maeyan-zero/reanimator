@@ -1,0 +1,16 @@
+#summary Describes data structures associated with item types.
+
+= Introduction =
+
+Add your content here.
+
+
+= Medpack =
+
+Index: 75
+
+== Props1 ==
+|| *offset* || *size* || *description* ||
+|| 0x00 || Uint32 || Const: 26 ||
+|| 0x04 || Uint32 || Heal value ||
+|| 0x08 || Uint32 || null ||
