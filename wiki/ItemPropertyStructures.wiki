@@ -11,7 +11,7 @@ Add your content here.
 Index: 75
 
 == Props1 ==
-|| *offset* || *size* || *description* ||
-|| 0x00 || Uint32 || Const: 26 ||
-|| 0x04 || Uint32 || Heal value ||
-|| 0x08 || Uint32 || null ||
+|| *Alias* || *Size* || *Notes* ||
+|| Token || Uint32 || Const: 26 ||
+|| Value || Uint32 || Heal value ||
+|| Null || Uint32 || null ||
