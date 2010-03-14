@@ -763,6 +763,7 @@ namespace Reanimator
                 FileStream stream = new FileStream(@openFileDialog.FileName, FileMode.Open);
                 Model model = new Model(new BinaryReader(stream));
                 stream.Close();
+                model.Export();
             }
         }
     }
