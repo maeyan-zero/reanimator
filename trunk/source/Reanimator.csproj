@@ -128,6 +128,7 @@
     <Compile Include="Forms\ModificationForm.Designer.cs">
       <DependentUpon>ModificationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Havok.cs" />
     <Compile Include="TableDataSet.cs" />
     <Compile Include="ExcelTables.cs" />
     <Compile Include="Export.cs" />

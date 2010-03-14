@@ -4,25 +4,14 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Xml;
 
 namespace Reanimator
 {
     class Model
     {
-        /*
-         * HEADER
-         * int     type identifier
-         * int     const 163 0xA3
-         * int     const 1 0x01
-         * int     no structs
-         * FILE CONTENTS[no structs]
-         * {
-         * int      id
-         * int      start offset
-         * int      end offset
-         * }
-         * 
-         **/
+        String modelID;
+
         Int32 type;
         Int32 minorVersion;
         Int32 majorVersion;
@@ -31,6 +20,8 @@ namespace Reanimator
         List<Index> index;
         List<Table> indexMap;
         List<Geometry> geometry;
+        Reserved reserved;
+        Footer footer;
 
         public Model(BinaryReader binReader)
         {
@@ -56,18 +47,15 @@ namespace Reanimator
                         geometry.Add(GetGeometry(binReader));
                         break;
                     case (uint)Structure.Reserved:
-                        // This is a large, empty array.. probably reserved memory
-                        // Actually, at the end of the array is a descriptive string of the item
-                        // then 64 bytes of data
-                        binReader.ReadBytes((int)structure.size);
+                        reserved = GetReserved(binReader);
                         break;
                     case (uint)Structure.Footer:
-                        // contains the full path of the object
-                        // followed by another ~64bytes of data
-                        binReader.ReadBytes((int)structure.size);
+                        footer = GetFooter(binReader);
                         break;
                 }
             }
+            binReader.ReadBytes(8); // this should bring to EOF
+            binReader.Close();
         }
 
         Index GetIndex(BinaryReader binReader)
@@ -116,11 +104,116 @@ namespace Reanimator
             return geometry;
         }
 
+        Reserved GetReserved(BinaryReader binReader)
+        {
+            Reserved reserved = new Reserved();
+            binReader.ReadInt32(); //null
+            binReader.ReadInt32(); // 01
+            // the following skips a butt load of reserved space
+            while (binReader.ReadInt32() != 0x01) { } // Read until the marker has been reached
+            binReader.ReadInt32(); //null
+            reserved.title = GetString(binReader);
+            binReader.ReadInt32(); //null
+            reserved.unknown = binReader.ReadBytes(64);
+            return reserved;
+        }
+
+        Footer GetFooter(BinaryReader binReader)
+        {
+            Footer footer = new Footer();
+            binReader.ReadInt32(); //null
+            footer.path = GetString(binReader);
+            footer.unknown = binReader.ReadBytes(64);
+            return footer;
+        }
+
         String GetString(BinaryReader binReader)
         {
             byte[] byteString = new byte[binReader.ReadUInt32()];
             byteString = binReader.ReadBytes(byteString.Length);
             return byteString.ToString();
+        }
+
+        String GetMergedPositions()
+        {
+            string positions = "";
+            foreach (Index idx in index)
+            {
+                for (int i = 0; i < idx.data.Length; i++)
+                {
+                    positions += idx.data[i].ToString() + " ";
+                }
+            }
+            return positions;
+        }
+
+        public void Export()
+        {
+            XmlWriterSettings wSettings = new XmlWriterSettings();
+            wSettings.Indent = true;
+            MemoryStream ms = new MemoryStream();
+            XmlWriter xw = XmlWriter.Create(ms, wSettings);// Write Declaration
+
+            //debug
+            modelID = "model_name_here";
+
+            xw.WriteStartDocument();
+            xw.WriteStartElement("COLLADA");
+            xw.WriteStartElement("asset");
+            xw.WriteStartElement("contributor");
+            xw.WriteStartElement("author");
+            xw.WriteString("Ripped by Maeyan, Mesh by Flagship Studio (c)");
+            xw.WriteEndElement();
+            xw.WriteStartElement("copyright");
+            xw.WriteString("Ripped by Maeyan, Mesh by Flagship Studio (c)");
+            xw.WriteEndElement();
+            xw.WriteEndElement();// End Contributor
+            xw.WriteStartElement("created");
+            xw.WriteString(DateTime.Today.ToLongDateString());
+            xw.WriteEndElement();
+            xw.WriteStartElement("modified");
+            xw.WriteString(DateTime.Today.ToLongDateString());
+            xw.WriteEndElement();
+            xw.WriteStartElement("unit");
+            xw.WriteAttributeString("meter", "0.01");
+            xw.WriteAttributeString("name", "centimeter");
+            xw.WriteEndElement();
+            xw.WriteStartElement("up_axis");
+            xw.WriteString("Y_UP");
+            xw.WriteEndElement();
+            xw.WriteEndElement();// End asset
+
+            xw.WriteStartElement("library_geometries");
+            xw.WriteAttributeString("id", modelID);
+            xw.WriteStartElement("geometry");
+            xw.WriteStartElement("mesh");
+            xw.WriteAttributeString("id", modelID + "-positions");
+            xw.WriteStartElement("source");
+
+            xw.WriteStartElement("float_array");
+            xw.WriteString(GetMergedPositions());
+            xw.WriteEndElement();
+
+            xw.WriteStartElement("technique_common");
+            xw.WriteAttributeString("stride", 3);
+            xw.WriteAttributeString("source", "#" + modelID = "-positions-array");
+            xw.WriteEndElement();
+
+            xw.WriteStartElement("accessor");
+            xw.WriteEndElement();
+
+            xw.WriteEndElement();// End mesh
+            xw.WriteEndElement();// End geometry
+            xw.WriteEndElement();// End library_geometries
+
+            xw.WriteEndElement();// End COLLADA
+            xw.WriteEndDocument();
+            xw.Flush();
+
+            FileStream stream = new FileStream(@"D:\\out.xml", FileMode.OpenOrCreate);
+            stream.Write(ms.ToArray(), 0, ms.ToArray().Length);
+            stream.Close();
+
         }
 
         enum Type : uint
@@ -189,6 +282,18 @@ namespace Reanimator
             public Single[] uv { get; set; }
             public Single[] position { get; set; }
             public Single[] normal { get; set; }
+        }
+
+        struct Reserved
+        {
+            public String title { get; set; }
+            public byte[] unknown { get; set; }
+        }
+
+        struct Footer
+        {
+            public String path { get; set; }
+            public byte[] unknown { get; set; }
         }
     }
 }
