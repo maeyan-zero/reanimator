@@ -772,5 +772,19 @@ namespace Reanimator
                 stream.Close();
             }
         }
+
+        private void havokFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Havok Files (*.hkx)|*.hkx|All Files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Config.HglDir;
+
+            if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("hkx")))
+            {
+                FileStream stream = new FileStream(@openFileDialog.FileName, FileMode.Open);
+                Havok havok = new Havok(new BinaryReader(stream));
+                stream.Close();
+            }
+        }
     }
 }

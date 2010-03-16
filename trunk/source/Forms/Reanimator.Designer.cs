@@ -39,6 +39,7 @@
             this.cookedFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stringsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modificationFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modelFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -98,7 +99,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.modelFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.havokFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -157,7 +158,8 @@
             this.cookedFileToolStripMenuItem,
             this.stringsFileToolStripMenuItem,
             this.modificationFileToolStripMenuItem,
-            this.modelFileToolStripMenuItem});
+            this.modelFileToolStripMenuItem,
+            this.havokFileToolStripMenuItem});
             this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
@@ -205,6 +207,13 @@
             this.modificationFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.modificationFileToolStripMenuItem.Text = "Modification File...";
             this.modificationFileToolStripMenuItem.Click += new System.EventHandler(this.OpenModFile);
+            // 
+            // modelFileToolStripMenuItem
+            // 
+            this.modelFileToolStripMenuItem.Name = "modelFileToolStripMenuItem";
+            this.modelFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.modelFileToolStripMenuItem.Text = "Model File...";
+            this.modelFileToolStripMenuItem.Click += new System.EventHandler(this.modelFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -684,12 +693,12 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // modelFileToolStripMenuItem
+            // havokFileToolStripMenuItem
             // 
-            this.modelFileToolStripMenuItem.Name = "modelFileToolStripMenuItem";
-            this.modelFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
-            this.modelFileToolStripMenuItem.Text = "Model File...";
-            this.modelFileToolStripMenuItem.Click += new System.EventHandler(this.modelFileToolStripMenuItem_Click);
+            this.havokFileToolStripMenuItem.Name = "havokFileToolStripMenuItem";
+            this.havokFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.havokFileToolStripMenuItem.Text = "Havok File...";
+            this.havokFileToolStripMenuItem.Click += new System.EventHandler(this.havokFileToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
@@ -787,6 +796,7 @@
         private System.Windows.Forms.ToolStripMenuItem checkForUpdatesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem applyModificationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modelFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem havokFileToolStripMenuItem;
     }
 }
 
