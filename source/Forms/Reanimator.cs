@@ -758,7 +758,7 @@ namespace Reanimator
             openFileDialog.Filter = "Model Files (*.am)|*.am|All Files (*.*)|*.*";
             openFileDialog.InitialDirectory = Config.HglDir;
 
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("am"))
+            if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("am") || openFileDialog.FileName.EndsWith("m")))
             {
                 FileStream stream = new FileStream(@openFileDialog.FileName, FileMode.Open);
                 Model model = new Model(new BinaryReader(stream));
