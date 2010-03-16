@@ -9,20 +9,41 @@ namespace Reanimator
 {
     class Havok
     {
-        FileHeader head;
-        byte[] classDeclaration;
-        byte[] environmentData;
+        byte[] head;
 
         HavokClassManager manager;
+        List<hkObject> content;
 
         public Havok(BinaryReader binReader)
         {
+            content = new List<hkObject>();
             InitializeHavokClassManager();
+            head = binReader.ReadBytes(208);
+            
+            int classnameslen = BitConverter.ToInt32(head, 132);
+            int classnamesoffset = 208 + classnameslen;
+            try
+            {
+                while (binReader.BaseStream.Position < classnamesoffset)
+                {
+                    uint token = binReader.ReadUInt32();
+                    string classname = GetClassName(binReader);
 
-            //FileTools.BinaryToArray<FileHeader>(binReader, head);
-            //classDeclaration = binReader.ReadBytes(head.datalength);
-           // environmentData = binReader.ReadBytes(environmentLength);
-
+                    Type type = manager.GetClass(token);
+                    if (type != null)
+                    {
+                        content.Add((hkObject)Activator.CreateInstance(type));
+                    }
+                    else
+                    {
+                        throw new Exception(classname);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                System.Console.WriteLine("Undefined class: " + e.ToString());
+            }
         }
 
         public class HavokClassManager
@@ -37,100 +58,170 @@ namespace Reanimator
                 }
             }
 
+            public HavokClassManager()
+            {
+                _havokClass = new List<HavokClass>();
+            }
+
             public void AddClass(string classid, uint token, Type type)
             {
                 _havokClass.Add(new HavokClass(classid, token, type));
             }
 
+            public Type GetClass(string classid)
+            {
+                foreach (HavokClass havokClass in _havokClass)
+                {
+                    if (havokClass.ClassID == classid)
+                    {
+                        return havokClass.Type;
+                    }
+                }
+                return null;
+            }
+
+            public Type GetClass(uint token)
+            {
+                foreach (HavokClass havokClass in _havokClass)
+                {
+                    if (havokClass.Token == token)
+                    {
+                        return havokClass.Type;
+                    }
+                }
+                return null;
+            }
+
             public class HavokClass
             {
-                string classid;
-                uint token;
-                Type type;
+                string _classid;
+                uint _token;
+                Type _type;
+
+                public string ClassID
+                {
+                    get
+                    {
+                        return _classid;
+                    }
+                }
+
+                public uint Token
+                {
+                    get
+                    {
+                        return _token;
+                    }
+                }
+
+                public Type Type
+                {
+                    get
+                    {
+                        return _type;
+                    }
+                }
 
                 public HavokClass(string classid, uint token, Type type)
                 {
-                    this.classid = classid;
-                    this.token = token;
-                    this.type = type;
+                    this._classid = classid;
+                    this._token = token;
+                    this._type = type;
                 }
             }
-
-
         }
 
         void InitializeHavokClassManager()
         {
             manager = new HavokClassManager();
 
-            manager.AddClass("hkClass", 0xEB9627A5, typeof(hkClass));
-            manager.AddClass("hkClassMember", 0x4B28502E, typeof(hkClassMember));
-            manager.AddClass("hkClassEnum", 0xA1179609, typeof(hkClassEnum));
-            manager.AddClass("hkClassEnumItem", 0x6C8A6FCE, typeof(hkClassEnumItem));
-            manager.AddClass("hkAnimationBinding", 0x39F89DE3, typeof(hkAnimationBinding));
-            manager.AddClass("hkxVertexP4N4C1T2", 0x8AEB5D03, typeof(hkxVertexP4N4C1T2));
-            manager.AddClass("hkxMaterial", 0x9C48433D, typeof(hkxMaterial));
-            manager.AddClass("hkxIndexBuffer", 0x378C8A1C, typeof(hkxIndexBuffer));
+            manager.AddClass("hkClass", 0xA52796EB, typeof(hkClass));
+            manager.AddClass("hkClassMember", 0x2E50284B, typeof(hkClassMember));
+            manager.AddClass("hkClassEnum", 0x099617A1, typeof(hkClassEnum));
+            manager.AddClass("hkClassEnumItem", 0xCE6F8A6C, typeof(hkClassEnumItem));
+            manager.AddClass("hkAnimationBinding", 0xE39DF839, typeof(hkAnimationBinding));
+            manager.AddClass("hkxVertexP4N4C1T2", 0x035DEB8A, typeof(hkxVertexP4N4C1T2));
+            manager.AddClass("hkxMaterial", 0x3D43489C, typeof(hkxMaterial));
+            manager.AddClass("hkxIndexBuffer", 0x1C8A8C37, typeof(hkxIndexBuffer));
             manager.AddClass("hkxTextureInplace", 0x4C134BF6, typeof(hkxTextureInplace));
-            manager.AddClass("hkxTextureFile", 0x77EF1702, typeof(hkxTextureFile));
-            manager.AddClass("hkxMeshSection", 0x6724D403, typeof(hkxMeshSection));
-            manager.AddClass("hkInterleavedSkeletalAnimation", 0xFF541CC2, typeof(hkInterleavedSkeletalAnimation));
-            manager.AddClass("hkSkeletalAnimation", 0x49C8AAB1, typeof(hkSkeletalAnimation));
-            manager.AddClass("hkxVertexFormat", 0x94D19F37, typeof(hkxVertexFormat));
-            manager.AddClass("hkxSkinBinding", 0x10C732C5, typeof(hkxSkinBinding));
-            manager.AddClass("hkxScene", 0x36866F1C, typeof(hkxScene));
-            manager.AddClass("hkMeshBindingMapping", 0xF4A6A64D, typeof(hkMeshBindingMapping));
-            manager.AddClass("hkReferencedObject", 0x13111C3B, typeof(hkReferencedObject));
-            manager.AddClass("hkxVertexP4N4T4B4W4I4Q4", 0xC675E385, typeof(hkxVertexP4N4T4B4W4I4Q4));
-            manager.AddClass("hkxLight", 0x93A9928E, typeof(hkxLight));
-            manager.AddClass("hkAnimationContainer", 0x6D6256F4, typeof(hkAnimationContainer));
-            manager.AddClass("hkRootLevelContainer", 0x4EA398F5, typeof(hkRootLevelContainer));
-            manager.AddClass("hkxAttribute", 0xC1A64D91, typeof(hkxAttribute));
-            manager.AddClass("hkAnimatedReferenceFrame", 0xC1A64D91, typeof(hkAnimatedReferenceFrame));
-            manager.AddClass("hkxNodeAnnotationData", 0x17951E52, typeof(hkxNodeAnnotationData));
-            manager.AddClass("hkBaseObject", 0x008A70E0, typeof(hkBaseObject));
-            manager.AddClass("hkMeshBinding", 0x9C31F988, typeof(hkMeshBinding));
-            manager.AddClass("hkAnnotationTrack", 0x90C66F84, typeof(hkAnnotationTrack));
-            manager.AddClass("hkxCamera", 0xAE5FC6D5, typeof(hkxCamera));
-            manager.AddClass("hkxMaterialTextureStage", 0x9FBA85E0, typeof(hkxMaterialTextureStage));
-            manager.AddClass("hkxMesh", 0xBD06CE6D, typeof(hkxMesh));
-            manager.AddClass("hkBone", 0xF01140A7, typeof(hkBone));
-            manager.AddClass("hkAnnotationTrackAnnotation", 0xCA881873, typeof(hkAnnotationTrackAnnotation));
-            manager.AddClass("hkBoneAttachement", 0x9A3EDD8E, typeof(hkBoneAttachement));
-            manager.AddClass("hkRootLevelContainerNamedVariant", 0x9C893A85, typeof(hkRootLevelContainerNamedVariant));
-            manager.AddClass("hkSkeleton", 0x64615EA3, typeof(hkSkeleton));
-            manager.AddClass("hkxNode", 0x9FC7620A, typeof(hkxNode));
-            manager.AddClass("hkxAttributeGroup", 0x1CC06716, typeof(hkxAttributeGroup));
-            manager.AddClass("hkxVertexBuffer", 0x54140657, typeof(hkxVertexBuffer));
+            manager.AddClass("hkxTextureFile", 0x0217EF77, typeof(hkxTextureFile));
+            manager.AddClass("hkxMeshSection", 0x03D42467, typeof(hkxMeshSection));
+            manager.AddClass("hkInterleavedSkeletalAnimation", 0xC21C54FF, typeof(hkInterleavedSkeletalAnimation));
+            manager.AddClass("hkSkeletalAnimation", 0xB1AAC849, typeof(hkSkeletalAnimation));
+            manager.AddClass("hkxVertexFormat", 0x379FD194, typeof(hkxVertexFormat));
+            manager.AddClass("hkxSkinBinding", 0xC532C710, typeof(hkxSkinBinding));
+            manager.AddClass("hkxScene", 0x1C6F8636, typeof(hkxScene));
+            manager.AddClass("hkMeshBindingMapping", 0x4DA6A6F4, typeof(hkMeshBindingMapping));
+            manager.AddClass("hkReferencedObject", 0x3B1C1113, typeof(hkReferencedObject));
+            manager.AddClass("hkxVertexP4N4T4B4W4I4Q4", 0x85E375C6, typeof(hkxVertexP4N4T4B4W4I4Q4));
+            manager.AddClass("hkxLight", 0x8E92A993, typeof(hkxLight));
+            manager.AddClass("hkAnimationContainer", 0xF456626D, typeof(hkAnimationContainer));
+            manager.AddClass("hkRootLevelContainer", 0xF598A34E, typeof(hkRootLevelContainer));
+            manager.AddClass("hkxAttribute", 0x914DA6C1, typeof(hkxAttribute));
+            manager.AddClass("hkAnimatedReferenceFrame", 0x914DA6C1, typeof(hkAnimatedReferenceFrame));
+            manager.AddClass("hkxNodeAnnotationData", 0x521E9517, typeof(hkxNodeAnnotationData));
+            manager.AddClass("hkBaseObject", 0xE0708A00, typeof(hkBaseObject));
+            manager.AddClass("hkMeshBinding", 0x88F9319C, typeof(hkMeshBinding));
+            manager.AddClass("hkAnnotationTrack", 0x846FC690, typeof(hkAnnotationTrack));
+            manager.AddClass("hkxCamera", 0xD5C65FAE, typeof(hkxCamera));
+            manager.AddClass("hkxMaterialTextureStage", 0xE085BA9F, typeof(hkxMaterialTextureStage));
+            manager.AddClass("hkxMesh", 0x6DCE06BD, typeof(hkxMesh));
+            manager.AddClass("hkBone", 0xA74011F0, typeof(hkBone));
+            manager.AddClass("hkAnnotationTrackAnnotation", 0x731888CA, typeof(hkAnnotationTrackAnnotation));
+            manager.AddClass("hkBoneAttachement", 0x8EDD3E9A, typeof(hkBoneAttachement));
+            manager.AddClass("hkRootLevelContainerNamedVariant", 0x853A899C, typeof(hkRootLevelContainerNamedVariant));
+            manager.AddClass("hkSkeleton", 0xA35E6164, typeof(hkSkeleton));
+            manager.AddClass("hkxNode", 0x0A62C79F, typeof(hkxNode));
+            manager.AddClass("hkxAttributeGroup", 0x1667C01C, typeof(hkxAttributeGroup));
+            manager.AddClass("hkxVertexBuffer", 0x57061454, typeof(hkxVertexBuffer));
         }
 
-        class hkClass
+        string GetClassName(BinaryReader binReader)
+        {
+            char[] classname = new char[binReader.ReadByte()];
+            for (int i = 0; i < classname.Length; i++)
+            {
+                classname[i] = (char)binReader.ReadByte();
+            }
+            return FileTools.ArrayToStringGeneric<char>(classname, "");
+        }
+
+        class hkObject
+        {
+
+        }
+
+        class hkClass : hkObject
         {
             hkClassMember classMember;
         }
 
-        class hkClassMember
+        class hkClassMember : hkObject
         {
             hkClassEnum classEnum;
         }
 
-        class hkClassEnum
+        class hkClassEnum : hkObject
         {
             hkClassEnumItem classEnumItem;
         }
 
-        class hkClassEnumItem
+        class hkClassEnumItem : hkObject
         {
 
         }
 
-        class hkAnimationBinding
+        class hkAnimationBinding : hkObject
         {
-
+            hkReferencedObject originalSkeletonName;
+            int animation;
+            int[] transformTrackToBoneIndices;
+            int[] floatTrackToFloatSlotIndices;
+            string blendHint;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class hkxVertexP4N4C1T2
+        //[StructLayout(LayoutKind.Sequential, Pack = 1)]
+        class hkxVertexP4N4C1T2 : hkObject
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             float[] position;
@@ -142,8 +233,8 @@ namespace Reanimator
             int diffuseB;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class hkxVertexP4N4T4B4W4I4Q4
+        //[StructLayout(LayoutKind.Sequential, Pack = 1)]
+        class hkxVertexP4N4T4B4W4I4Q4 : hkObject
         {
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             float[] position;
@@ -161,162 +252,171 @@ namespace Reanimator
             short[] qu1;
         }
 
-        class hkxMaterial
+        class hkxMaterial : hkObject
         {
 
         }
 
-        class hkxIndexBuffer
+        class hkxIndexBuffer : hkObject
+        {
+            string indexType;
+            short[] indices16;
+            int[] indices32;
+            int vertexBaseOffset;
+            int length;
+        }
+
+        class hkxTextureInplace : hkObject
         {
 
         }
 
-        class hkxTextureInplace
+        class hkxTextureFile : hkObject
+        {
+            string filename;
+            hkReferencedObject name;
+            hkReferencedObject originalFilename;
+        }
+
+        class hkxMeshSection : hkObject
         {
 
         }
 
-        class hkxTextureFile
+        class hkInterleavedSkeletalAnimation : hkObject
         {
 
         }
 
-        class hkxMeshSection
+        class hkSkeletalAnimation : hkObject
         {
 
         }
 
-        class hkInterleavedSkeletalAnimation
+        class hkxVertexFormat : hkObject
         {
 
         }
 
-        class hkSkeletalAnimation
+        class hkxSkinBinding : hkObject
         {
 
         }
 
-        class hkxVertexFormat
+        class hkxScene : hkObject
         {
 
         }
 
-        class hkxSkinBinding
+        class hkMeshBindingMapping : hkObject
         {
 
         }
 
-        class hkxScene
+        class hkReferencedObject : hkObject
+        {
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+            int[] texture;
+            string usageHint;
+            int tcoordChannel;
+        }
+
+        class hkxLight : hkObject
         {
 
         }
 
-        class hkMeshBindingMapping
+        class hkAnimationContainer : hkObject
         {
 
         }
 
-        class hkReferencedObject
+        class hkRootLevelContainer : hkObject
         {
 
         }
 
-        class hkxLight
+        class hkxAttribute : hkObject
         {
 
         }
 
-        class hkAnimationContainer
+        class hkAnimatedReferenceFrame : hkObject
         {
 
         }
 
-        class hkRootLevelContainer
+        class hkxNodeAnnotationData : hkObject
         {
 
         }
 
-        class hkxAttribute
+        class hkBaseObject : hkObject
         {
 
         }
 
-        class hkAnimatedReferenceFrame
+        class hkMeshBinding : hkObject
         {
 
         }
 
-        class hkxNodeAnnotationData
+        class hkAnnotationTrack : hkObject
         {
 
         }
 
-        class hkBaseObject
+        class hkxCamera : hkObject
         {
 
         }
 
-        class hkMeshBinding
+        class hkxMaterialTextureStage : hkObject
         {
 
         }
 
-        class hkAnnotationTrack
+        class hkxMesh : hkObject
         {
 
         }
 
-        class hkxCamera
+        class hkBone : hkObject
         {
 
         }
 
-        class hkxMaterialTextureStage
+        class hkAnnotationTrackAnnotation : hkObject
         {
 
         }
 
-        class hkxMesh
+        class hkBoneAttachement : hkObject
         {
 
         }
 
-        class hkBone
+        class hkRootLevelContainerNamedVariant : hkObject
         {
 
         }
 
-        class hkAnnotationTrackAnnotation
+        class hkSkeleton : hkObject
         {
 
         }
 
-        class hkBoneAttachement
+        class hkxNode : hkObject
         {
 
         }
 
-        class hkRootLevelContainerNamedVariant
+        class hkxAttributeGroup : hkObject
         {
 
         }
 
-        class hkSkeleton
-        {
-
-        }
-
-        class hkxNode
-        {
-
-        }
-
-        class hkxAttributeGroup
-        {
-
-        }
-
-        class hkxVertexBuffer
+        class hkxVertexBuffer : hkObject
         {
 
         }
@@ -337,8 +437,11 @@ namespace Reanimator
             int value11;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
             byte[] version;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
             byte[] classnames;
+            int value12;
+            int classnameLength;
+
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
             byte[] classnamesData;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
@@ -350,53 +453,6 @@ namespace Reanimator
             byte[] types;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
             byte[] typesData;
-        }
-
-        class hkaSkeleton
-        {
-            string name;
-            int[] parentIndices;
-            int[] bones;
-            float[] referencePose;
-            int floatSlots;
-            int localFrames;
-        }
-
-        class hkaBone
-        {
-            string name;
-            bool lockTranslation;
-        }
-
-        class hkaInterleavedUncompressedAnimation
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class hkVertexBuffer01
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class hkVertexBuffer02
-        {
-
-        }
-
-        class hkMaterial
-        {
-            string name;
-            int stages;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            float[] diffuseColor;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            float[] ambientColor;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            float[] speculatColor;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-            float[] emissiveColor;
         }
     }
 }
