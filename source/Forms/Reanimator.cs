@@ -763,7 +763,13 @@ namespace Reanimator
                 FileStream stream = new FileStream(@openFileDialog.FileName, FileMode.Open);
                 Model model = new Model(new BinaryReader(stream));
                 stream.Close();
-                model.Export();
+                stream = new FileStream(@"d:\out.obj", FileMode.OpenOrCreate);
+                stream.Flush();
+                string exportedModel = Export.Asset.ToObj(model);
+                System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+                byte[] buffer = encoding.GetBytes(exportedModel);
+                stream.Write(buffer, 0, buffer.Length);
+                stream.Close();
             }
         }
     }
