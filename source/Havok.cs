@@ -19,9 +19,9 @@ namespace Reanimator
         {
             InitializeHavokClassManager();
 
-            FileTools.BinaryToArray<FileHeader>(binReader, head);
-            classDeclaration = binReader.ReadBytes(head.datalength);
-            environmentData = binReader.ReadBytes(environmentLength);
+            //FileTools.BinaryToArray<FileHeader>(binReader, head);
+            //classDeclaration = binReader.ReadBytes(head.datalength);
+           // environmentData = binReader.ReadBytes(environmentLength);
 
         }
 
@@ -29,7 +29,7 @@ namespace Reanimator
         {
             List<HavokClass> _havokClass;
 
-            public HavokClass HavokClassList
+            public List<HavokClass> HavokClassList
             {
                 get
                 {
@@ -42,7 +42,7 @@ namespace Reanimator
                 _havokClass.Add(new HavokClass(classid, token, type));
             }
 
-            class HavokClass
+            public class HavokClass
             {
                 string classid;
                 uint token;
@@ -385,13 +385,6 @@ namespace Reanimator
 
         }
 
-
-        class hkIndex
-        {
-            IndexType indexType;
-            short[] indices;
-        }
-
         class hkMaterial
         {
             string name;
@@ -404,11 +397,6 @@ namespace Reanimator
             float[] speculatColor;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             float[] emissiveColor;
-        }
-
-        class hkaSkeleton
-        {
-
         }
     }
 }
