@@ -220,8 +220,8 @@ namespace Reanimator
 
             for (int i = 0; i < uv.Length / 2; i++)
             {
-                uv[length++] = geometry[idx].uv[i].x;
-                uv[length++] = geometry[idx].uv[i].y;
+                uv[length++] = geometry[idx].uv[i].s;
+                uv[length++] = geometry[idx].uv[i].t;
             }
 
             return uv;
@@ -242,6 +242,10 @@ namespace Reanimator
             modelID = "model_name_here";
             DateTime now = DateTime.Now;
 
+            //
+            // HEADER
+            //
+
             xw.WriteStartDocument();
             xw.WriteStartElement("COLLADA");
             xw.WriteAttributeString("version", "1.4.1");
@@ -252,7 +256,7 @@ namespace Reanimator
             xw.WriteString("Ripped by Maeyan");
             xw.WriteEndElement();
             xw.WriteStartElement("authoring_tool");
-            xw.WriteString("3ds Max 9");
+            xw.WriteString("3ds Max 7.0.0");
             xw.WriteEndElement();
             xw.WriteStartElement("copyright");
             xw.WriteString("Flagship Studios");
@@ -281,7 +285,7 @@ namespace Reanimator
             xw.WriteStartElement("material");
             xw.WriteAttributeString("id", "default");
             xw.WriteStartElement("instance_effect");
-            xw.WriteAttributeString("url", "#default-fx");
+            xw.WriteAttributeString("url", "#lambert-fx");
             xw.WriteEndElement();
             xw.WriteEndElement();
             xw.WriteEndElement();
@@ -292,21 +296,69 @@ namespace Reanimator
 
             xw.WriteStartElement("library_effects");
             xw.WriteStartElement("effect");
-            xw.WriteAttributeString("id", "default-fx");
+            xw.WriteAttributeString("id", "lambert-fx");
             xw.WriteStartElement("profile_COMMON");
             xw.WriteStartElement("technique");
             xw.WriteAttributeString("sid", "common");
-            xw.WriteStartElement("phong");
-            xw.WriteStartElement("diffuse");
+            xw.WriteStartElement("lambert");
+
+            xw.WriteStartElement("emission");
             xw.WriteStartElement("color");
             xw.WriteString("0 0 0 1");
             xw.WriteEndElement(); // color
             xw.WriteEndElement(); // diffuse
-            xw.WriteEndElement(); // phong
+
+            xw.WriteStartElement("ambient");
+            xw.WriteStartElement("color");
+            xw.WriteString("0 0 0 1");
+            xw.WriteEndElement(); // color
+            xw.WriteEndElement(); // diffuse
+
+            xw.WriteStartElement("diffuse");
+            xw.WriteStartElement("color");
+            xw.WriteString("0.5 0.5 0.5 1");
+            xw.WriteEndElement(); // color
+            xw.WriteEndElement(); // diffuse
+
+            xw.WriteStartElement("reflective");
+            xw.WriteStartElement("color");
+            xw.WriteString("1 1 1 1");
+            xw.WriteEndElement(); // color
+            xw.WriteEndElement(); // diffuse
+
+            xw.WriteStartElement("reflectivity");
+            xw.WriteStartElement("float");
+            xw.WriteString("1");
+            xw.WriteEndElement(); // color
+            xw.WriteEndElement(); // diffuse
+
+            xw.WriteStartElement("transparent");
+            xw.WriteStartElement("color");
+            xw.WriteString("0 0 0 1");
+            xw.WriteEndElement(); // color
+            xw.WriteEndElement(); // diffuse
+
+            xw.WriteStartElement("transparency");
+            xw.WriteStartElement("float");
+            xw.WriteString("1");
+            xw.WriteEndElement(); // color
+            xw.WriteEndElement(); // diffuse
+
+            xw.WriteStartElement("index_of_refraction");
+            xw.WriteStartElement("float");
+            xw.WriteString("0");
+            xw.WriteEndElement(); // color
+            xw.WriteEndElement(); // diffuse
+
+            xw.WriteEndElement(); // lambert
             xw.WriteEndElement(); // Technique
             xw.WriteEndElement(); // profile_COMMON
             xw.WriteEndElement(); // Effect
             xw.WriteEndElement(); // Library Effects
+
+            //
+            // LIBRARY GEOMETRIES
+            //
 
             xw.WriteStartElement("library_geometries");
             xw.WriteAttributeString("id", modelID);
@@ -366,7 +418,7 @@ namespace Reanimator
                     xw.WriteEndElement();
                     xw.WriteStartElement("technique_common");
                     xw.WriteStartElement("accessor");
-                    xw.WriteAttributeString("stride", "3");
+                    xw.WriteAttributeString("stride", "2");
                     xw.WriteAttributeString("source", "#" + modelID + "-uv-array");
                     xw.WriteAttributeString("count", (uvArray.Length / 2).ToString());
                     xw.WriteStartElement("param");
@@ -401,12 +453,14 @@ namespace Reanimator
 
                 xw.WriteStartElement("triangles");
                 xw.WriteAttributeString("count", (triangleArray.Length / 3).ToString());
-                xw.WriteAttributeString("material", "defaultSG");
+                xw.WriteAttributeString("material", "initialShadingGroup");
                 xw.WriteStartElement("input");
                 xw.WriteAttributeString("offset", "0");
                 xw.WriteAttributeString("semantic", "VERTEX");
                 xw.WriteAttributeString("source", "#" + modelID + "-vertices");
                 xw.WriteEndElement();
+                xw.WriteStartElement("input");
+                xw.WriteAttributeString("offset", "0");
                 xw.WriteAttributeString("semantic", "TEXCOORD");
                 xw.WriteAttributeString("source", "#" + modelID + "-uv-" + i.ToString());
                 xw.WriteEndElement();
@@ -428,11 +482,7 @@ namespace Reanimator
             xw.WriteStartElement("visual_scene");
             xw.WriteAttributeString("id", "scene");
             xw.WriteStartElement("node");
-            xw.WriteAttributeString("layer", "L1");
             xw.WriteAttributeString("id", modelID + "-geometry");
-            xw.WriteStartElement("translate");
-            xw.WriteString("0 0 0");
-            xw.WriteEndElement();
             xw.WriteStartElement("rotate");
             xw.WriteAttributeString("sid", "rotateZ");
             xw.WriteString("0 0 1 0");
@@ -451,7 +501,7 @@ namespace Reanimator
             xw.WriteStartElement("technique_common");
             xw.WriteStartElement("instance_material");
             xw.WriteAttributeString("target", "#default");
-            xw.WriteAttributeString("symbol", "defaultSG");
+            xw.WriteAttributeString("symbol", "initialShadingGroup");
             xw.WriteEndElement(); // instance_material
             xw.WriteEndElement(); // technique_common
             xw.WriteEndElement(); // bind_material
@@ -602,8 +652,8 @@ namespace Reanimator
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class UV
         {
-            public Single x { get; set; }
-            public Single y { get; set; }
+            public Single s { get; set; }
+            public Single t { get; set; }
         }
     }
 }

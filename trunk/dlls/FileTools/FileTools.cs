@@ -212,5 +212,28 @@ namespace Reanimator
                 destination[i] = (T)FileTools.ByteArrayToStructure(binReader.ReadBytes(Marshal.SizeOf(typeof(T))), typeof(T), 0);
             }
         }
+
+        public static string ArrayToStringGeneric<T>(IList<T> array, string delimeter)
+        {
+            string outputString = "";
+
+            for (int i = 0; i < array.Count; i++)
+            {
+                if (array[i] is IList<T>)
+                {
+                    //Recursively convert nested arrays to string
+                    outputString += ArrayToStringGeneric<T>((IList<T>)array[i], delimeter);
+                }
+                else
+                {
+                    outputString += array[i];
+                }
+
+                if (i != array.Count - 1)
+                    outputString += delimeter;
+            }
+
+            return outputString;
+        }
     }
 }
