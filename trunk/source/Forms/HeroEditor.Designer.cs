@@ -149,12 +149,12 @@ namespace Reanimator.Forms
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.tp_skills = new System.Windows.Forms.TabPage();
+            this.tp_stats = new System.Windows.Forms.TabPage();
             this.save_Button = new System.Windows.Forms.Button();
             this.currentlyEditing_Label = new System.Windows.Forms.Label();
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.tp_stats = new System.Windows.Forms.TabPage();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -1480,6 +1480,16 @@ namespace Reanimator.Forms
             this.tp_skills.Text = "Skills";
             this.tp_skills.UseVisualStyleBackColor = true;
             // 
+            // tp_stats
+            // 
+            this.tp_stats.Location = new System.Drawing.Point(4, 22);
+            this.tp_stats.Name = "tp_stats";
+            this.tp_stats.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_stats.Size = new System.Drawing.Size(752, 533);
+            this.tp_stats.TabIndex = 12;
+            this.tp_stats.Text = "Stats";
+            this.tp_stats.UseVisualStyleBackColor = true;
+            // 
             // save_Button
             // 
             this.save_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -1537,16 +1547,6 @@ namespace Reanimator.Forms
             this.comboBox1.Size = new System.Drawing.Size(94, 21);
             this.comboBox1.TabIndex = 0;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // tp_stats
-            // 
-            this.tp_stats.Location = new System.Drawing.Point(4, 22);
-            this.tp_stats.Name = "tp_stats";
-            this.tp_stats.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_stats.Size = new System.Drawing.Size(752, 533);
-            this.tp_stats.TabIndex = 12;
-            this.tp_stats.Text = "Stats";
-            this.tp_stats.UseVisualStyleBackColor = true;
             // 
             // HeroEditor
             // 

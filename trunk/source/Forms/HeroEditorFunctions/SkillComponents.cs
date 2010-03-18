@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Reanimator.Properties;
+using System.IO;
 
 namespace Reanimator.HeroEditorFunctions
 {
@@ -29,9 +30,9 @@ namespace Reanimator.HeroEditorFunctions
         Panel _panel;
                 
 
-        public SkillComponents()
+        public SkillComponents(SkillPanel skillPanel)
         {
-            _skillPanel = new SkillPanel();
+            _skillPanel = skillPanel;
             _skillControls = new List<SkillControls>();
             _panel = new Panel();
 
@@ -49,19 +50,41 @@ namespace Reanimator.HeroEditorFunctions
             _skillTable = skillTable;
             int generalSkillTableId = 0;
 
+            string bmpPath = Directory.GetCurrentDirectory() + @"\" + characterClassId + ".bmp";
+
+            bool draw = !File.Exists(bmpPath);
             string select = "skillTab = '" + characterClassId + "'";
             DataRow[] skills = _skillTable.Select(select);
 
             select = "skillTab = '" + generalSkillTableId + "'";
             DataRow[] generalSkills = _skillTable.Select(select);
+            //draw = true;
+            Bitmap connectorLns = null;
+            Bitmap generalSkl = CreateGeneralSkills(generalSkills, draw);
+            Bitmap classSkl = CreateClassSkills(skills, draw);
 
-            Bitmap connectorLns = CreateConnectorLines(skills);
-            Bitmap generalSkl = CreateGeneralSkills(generalSkills);
-            Bitmap classSkl = CreateClassSkills(skills);
+            if (draw)
+            {
+                connectorLns = CreateConnectorLines(skills);
+                _g.DrawImage(connectorLns, new Point());
+                _g.DrawImage(generalSkl, new Point());
+                _g.DrawImage(classSkl, new Point());
 
-            _g.DrawImage(connectorLns, new Point());
-            _g.DrawImage(generalSkl, new Point());
-            _g.DrawImage(classSkl, new Point());
+                //Bitmap b = new Bitmap(_completeSkillPanel.Width, _completeSkillPanel.Height);
+                //Graphics g = Graphics.FromImage(b);
+                //g.Clear(Color.White);
+                //g.DrawImage(connectorLns, new Point());
+                //g.DrawImage(classSkl, new Point());
+                //g.DrawImage(generalSkl, new Point());
+                //b.Save(@"F:\classId" + characterClassId + ".bmp");
+                //_completeSkillPanel.Save(@"F:\Panel" + characterClassId + ".bmp");
+
+                _completeSkillPanel.Save(bmpPath);
+            }
+            else
+            {
+                _completeSkillPanel = (Bitmap)Bitmap.FromFile(bmpPath);
+            }
 
             _panel.BackgroundImage = _completeSkillPanel;
             _panel.BackgroundImageLayout = ImageLayout.Stretch;
@@ -135,7 +158,7 @@ namespace Reanimator.HeroEditorFunctions
             return connectorLineLayer;
         }
 
-        private Bitmap CreateClassSkills(DataRow[] classSkills)
+        private Bitmap CreateClassSkills(DataRow[] classSkills, bool drawBG)
         {
             try
             {
@@ -154,9 +177,15 @@ namespace Reanimator.HeroEditorFunctions
                 //TODO:
                 //When adding a skillpoint, check if the (skills) prerequisites were met
 
-                Bitmap skillIconLayer = new Bitmap(_completeSkillPanel.Size.Width, _completeSkillPanel.Size.Height);
-                Graphics g = Graphics.FromImage(skillIconLayer);
-                g.Clear(Color.Transparent);
+                Bitmap skillIconLayer = null;
+                Graphics g = null;
+
+                if (drawBG)
+                {
+                    skillIconLayer = new Bitmap(_completeSkillPanel.Size.Width, _completeSkillPanel.Size.Height);
+                    g = Graphics.FromImage(skillIconLayer);
+                    g.Clear(Color.Transparent);
+                }
 
                 int xOffset = 48;//144;
                 int yOffset = 96 + 24;//192;
@@ -174,29 +203,29 @@ namespace Reanimator.HeroEditorFunctions
                     int requiredSkill = (int)skill["requiredskills1"];
 
                     Point loc = new Point(x * distanceX + xOffset, y * distanceY + yOffset);
-                    // draw skillIconPanel
-                    g.DrawImage(_skillIconPanel, loc);
 
-                    // draw skillIcon
-                    Bitmap image = _skillPanel.GetImageFromSkillTree(iconName);
-                    g.DrawImage(image, new Point(loc.X + 4, loc.Y + 4));
+                    if (drawBG)
+                    {
+                        // draw skillIconPanel
+                        g.DrawImage(_skillIconPanel, loc);
+
+                        // draw skillIcon
+                        Bitmap image = _skillPanel.GetImageFromSkillTree(iconName);
+                        g.DrawImage(image, new Point(loc.X + 4, loc.Y + 4));
+                        image.Dispose();
+                    }
 
                     // set controls
                     SkillControls skillControl = new SkillControls((int)skill["code"], skillName);
-                    skillControl.MaxLevel = maxLevel;
-                    skillControl.Location = new Point(loc.X, loc.Y + 4);
+                    CreateControls(ref skillControl, maxLevel, loc);
                     skillControl.GridPosition = new Point(x, y);
                     skillControl.Size = _skillIconPanel.Size;
-
-                    _skillControls.Add(skillControl);
-                    _panel.Controls.Add(skillControl.AddButton);
-                    _panel.Controls.Add(skillControl.SubsButton);
-                    _panel.Controls.Add(skillControl.Label);
-
-                    image.Dispose();
                 }
 
-                g.Dispose();
+                if (g != null)
+                {
+                    g.Dispose();
+                }
                 return skillIconLayer;
             }
             catch (Exception ex)
@@ -206,11 +235,17 @@ namespace Reanimator.HeroEditorFunctions
             }
         }
 
-        private Bitmap CreateGeneralSkills(DataRow[] generalSkills)
+        private Bitmap CreateGeneralSkills(DataRow[] generalSkills, bool drawBG)
         {
-            Bitmap generalSkillLayer = new Bitmap(_completeSkillPanel.Size.Width, _completeSkillPanel.Size.Height);
-            Graphics g = Graphics.FromImage(generalSkillLayer);
-            g.Clear(Color.Transparent);
+            Bitmap generalSkillLayer = null;
+            Graphics g = null;
+
+            if (drawBG)
+            {
+                generalSkillLayer = new Bitmap(_completeSkillPanel.Size.Width, _completeSkillPanel.Size.Height);
+                g = Graphics.FromImage(generalSkillLayer);
+                g.Clear(Color.Transparent);
+            }
 
             int xOffset = 0;
             int yOffset = 0;
@@ -235,22 +270,18 @@ namespace Reanimator.HeroEditorFunctions
                     // _g.DrawImage(_skillIconPanel, loc);
 
                     // draw skillIcon
-                    Bitmap image = _skillPanel.GetImageFromSkillTree(iconName);
-                    g.DrawImage(image, new Point(loc.X + 4, loc.Y + 4));
+                    if (drawBG)
+                    {
+                        Bitmap image = _skillPanel.GetImageFromSkillTree(iconName);
+                        g.DrawImage(image, new Point(loc.X + 4, loc.Y + 4));
+                        image.Dispose();
+                    }
 
                     // set controls
                     SkillControls skillControl = new SkillControls((int)generalSkill["code"], skillName);
-                    skillControl.MaxLevel = maxLevel;
-                    skillControl.Location = new Point(loc.X, loc.Y + 4);
-
-                    _skillControls.Add(skillControl);
-                    _panel.Controls.Add(skillControl.AddButton);
-                    _panel.Controls.Add(skillControl.SubsButton);
-                    _panel.Controls.Add(skillControl.Label);
-
-                    image.Dispose();
+                    CreateControls(ref skillControl, maxLevel, loc);
                 }
-                else
+                else if(drawBG)
                 {
                     xOffset = 24;
                     yOffset = 974;
@@ -264,8 +295,22 @@ namespace Reanimator.HeroEditorFunctions
                 }
             }
 
-            g.Dispose();
+            if (g != null)
+            {
+                g.Dispose();
+            }
             return generalSkillLayer;
+        }
+
+        private void CreateControls(ref SkillControls skillControl, int maxLevel, Point loc)
+        {
+            skillControl.MaxLevel = maxLevel;
+            skillControl.Location = new Point(loc.X, loc.Y + 4);
+
+            _skillControls.Add(skillControl);
+            _panel.Controls.Add(skillControl.AddButton);
+            _panel.Controls.Add(skillControl.SubsButton);
+            _panel.Controls.Add(skillControl.Label);
         }
     }
 
@@ -314,18 +359,14 @@ namespace Reanimator.HeroEditorFunctions
             SkillButton button = new SkillButton();
             button.Name = name;
 
-            button.BackgroundImage = normal;
-            button.ButtonNormal = normal;
-            button.ButtonHover = hover;
-            button.ButtonClicked = clicked;
+            button.SetButtonImages(normal, hover, clicked);
 
-            button.Size = normal.Size;
-            button.BackgroundImageLayout = ImageLayout.Stretch;
-            button.FlatStyle = FlatStyle.Flat;
-            button.FlatAppearance.BorderSize = 0;
-            button.FlatAppearance.CheckedBackColor = Color.Black;
-            button.FlatAppearance.MouseDownBackColor = Color.Black;
-            button.FlatAppearance.MouseOverBackColor = Color.Black;
+            //button.BackgroundImageLayout = ImageLayout.Stretch;
+            //button.FlatStyle = FlatStyle.Flat;
+            //button.FlatAppearance.BorderSize = 0;
+            //button.FlatAppearance.CheckedBackColor = Color.Black;
+            //button.FlatAppearance.MouseDownBackColor = Color.Black;
+            //button.FlatAppearance.MouseOverBackColor = Color.Black;
 
             return button;
         }
@@ -357,13 +398,13 @@ namespace Reanimator.HeroEditorFunctions
 
         void _addButton_Click(object sender, EventArgs e)
         {
-            CurrentLevel = (currentLevel + 1) > maxLevel ? currentLevel : (currentLevel + 1);
+            currentLevel = (currentLevel + 1) > maxLevel ? currentLevel : (currentLevel + 1);
             Label.Text = this.ToString();
         }
 
         void _subsButton_Click(object sender, EventArgs e)
         {
-            CurrentLevel = (currentLevel - 1) < 0 ? 0 : (currentLevel - 1);
+            currentLevel = (currentLevel - 1) < 0 ? 0 : (currentLevel - 1);
             Label.Text = this.ToString();
         }
 

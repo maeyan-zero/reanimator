@@ -30,6 +30,8 @@ namespace Reanimator.Forms
             _statsTable = excelTables.GetTable("stats") as Stats;
             _filePath = filePath;
 
+            _skillPanel = new SkillPanel();
+
             GenerateUnitNameStrings(new[] { _heroUnit }, null);
 
             InitializeComponent();
@@ -52,11 +54,10 @@ namespace Reanimator.Forms
 
             InitUnknownStatList();
 
-
-            InitSkillPanel(8);
+            int charClassId = 1;
+            InitSkillPanel(charClassId);
+            InitStatPanel();
         }
-
-
 
         private void PopulateItems(Unit unit)
         {
@@ -392,7 +393,7 @@ namespace Reanimator.Forms
 
                     if (stat.Name.Equals("minigame_category_needed", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        // checks for minigame entries by values as those don't define any tables
+                        // checks for minigame entries by using the values as the minigame doesn't define any tables
                         lookUpString = GetMinigameGoal(stat.values[i].Attribute1, stat.values[i].Attribute2);
                     }
                     else
@@ -1197,16 +1198,34 @@ namespace Reanimator.Forms
             }
         }
 
+        SkillPanel _skillPanel;
+        private void InitStatPanel()
+        {
+            tp_stats.SuspendLayout();
+
+            DataTable table = dataSet.GetExcelTable(23088);
+            StatComponents comp = new StatComponents(_skillPanel);
+
+            Panel panel = comp.CreatePanel(_heroUnit, table);
+
+            panel.Scale(new SizeF(.7f, .7f));
+
+            tp_stats.Controls.Add(panel);
+
+            tp_stats.ResumeLayout();
+        }
+
         List<SkillControls> _skillControls;
         public void InitSkillPanel(int characterClass)
         {
             tp_skills.SuspendLayout();
 
             DataTable table = dataSet.GetExcelTable(27952);
-            SkillComponents comp = new SkillComponents();
+            SkillComponents comp = new SkillComponents(_skillPanel);
 
             tp_skills.Controls.Clear();
             Panel panel = comp.CreatePanel(ref table, characterClass);
+
             panel.Scale(new SizeF(.7f, .7f));
 
             tp_skills.Controls.Add(panel);

@@ -60,6 +60,27 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap attribute_small {
+            get {
+                object obj = ResourceManager.GetObject("attribute_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap attributeAdd_small {
+            get {
+                object obj = ResourceManager.GetObject("attributeAdd_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap attributeSubs_small {
+            get {
+                object obj = ResourceManager.GetObject("attributeSubs_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap buttonAddClicked {
             get {
                 object obj = ResourceManager.GetObject("buttonAddClicked", resourceCulture);
@@ -98,6 +119,13 @@ namespace Reanimator.Properties {
         internal static System.Drawing.Bitmap buttonSubstractNormal {
             get {
                 object obj = ResourceManager.GetObject("buttonSubstractNormal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap completePanel_small {
+            get {
+                object obj = ResourceManager.GetObject("completePanel_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -144,6 +172,13 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap defense_small {
+            get {
+                object obj = ResourceManager.GetObject("defense_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap f_armor {
             get {
                 object obj = ResourceManager.GetObject("f_armor", resourceCulture);
@@ -179,6 +214,13 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap faction_small {
+            get {
+                object obj = ResourceManager.GetObject("faction_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap k_beast {
             get {
                 object obj = ResourceManager.GetObject("k_beast", resourceCulture);
@@ -207,9 +249,30 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap panelButton_maximize_small {
+            get {
+                object obj = ResourceManager.GetObject("panelButton_maximize_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap panelButton_minimize_small {
+            get {
+                object obj = ResourceManager.GetObject("panelButton_minimize_small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap ruperts3 {
             get {
                 object obj = ResourceManager.GetObject("ruperts3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap statistics_small {
+            get {
+                object obj = ResourceManager.GetObject("statistics_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
