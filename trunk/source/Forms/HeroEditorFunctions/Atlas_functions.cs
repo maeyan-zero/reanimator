@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace Reanimator.HeroEditorFunctions
+namespace Reanimator.Forms
 {
 //<file>data\uix\skilltree_atlas.png</file>
 //<widthbasis>1600</widthbasis>

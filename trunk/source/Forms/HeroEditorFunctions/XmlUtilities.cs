@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace Reanimator.HeroEditorFunctions
+namespace Reanimator.Forms
 {
     public static class XmlUtilities<T>
     {

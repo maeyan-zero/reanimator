@@ -109,12 +109,59 @@
     <Compile Include="Config.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="Forms\HeroEditorFunctions\Atlas_functions.cs" />
-    <Compile Include="Forms\HeroEditorFunctions\SkillComponents.cs">
+    <Compile Include="Forms\HeroEditorFunctions\AttributesControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\HeroEditorFunctions\SkillPanel.cs">
+    <Compile Include="Forms\HeroEditorFunctions\AttributesControl.Designer.cs">
+      <DependentUpon>AttributesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\BasicStatisticsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\BasicStatisticsControl.Designer.cs">
+      <DependentUpon>BasicStatisticsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CharacterSkillsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CharacterSkillsControl.Designer.cs">
+      <DependentUpon>CharacterSkillsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CharacterValuesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CharacterValuesControl.Designer.cs">
+      <DependentUpon>CharacterValuesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CompletePanelControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CompletePanelControl.Designer.cs">
+      <DependentUpon>CompletePanelControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\DefenseControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\DefenseControl.Designer.cs">
+      <DependentUpon>DefenseControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\FactionStandingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\FactionStandingsControl.Designer.cs">
+      <DependentUpon>FactionStandingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\ParentStatusControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\ParentStatusControl.Designer.cs">
+      <DependentUpon>ParentStatusControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CreateCharacterSkillControlsAndBmps.cs">
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\GetImagesFromTextureFiles.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Forms\HeroEditorFunctions\StatComponents.cs" />
     <Compile Include="Forms\HeroEditorFunctions\XmlUtilities.cs" />
     <Compile Include="Forms\ItemDisplay.cs">
       <SubType>UserControl</SubType>
@@ -273,6 +320,38 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\CacheInfo.resx">
       <DependentUpon>CacheInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\AttributesControl.resx">
+      <DependentUpon>AttributesControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\BasicStatisticsControl.resx">
+      <DependentUpon>BasicStatisticsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\CharacterSkillsControl.resx">
+      <DependentUpon>CharacterSkillsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\CharacterValuesControl.resx">
+      <DependentUpon>CharacterValuesControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\CompletePanelControl.resx">
+      <DependentUpon>CompletePanelControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\DefenseControl.resx">
+      <DependentUpon>DefenseControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\FactionStandingsControl.resx">
+      <DependentUpon>FactionStandingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\ParentStatusControl.resx">
+      <DependentUpon>ParentStatusControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemDisplay.resx">

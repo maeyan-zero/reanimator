@@ -1,4 +1,4 @@
-﻿// The old Unit file with "public" modifiers
+// The old Unit file with "internal" modifiers
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,11 +109,6 @@ namespace Reanimator
 
     public class Unit
     {
-        //Used for XMLSerialization
-        public Unit()
-        {
-        }
-
         public class StatBlock
         {
             public Stat GetStatByName(string name)
@@ -144,11 +139,11 @@ namespace Reanimator
             {
                 public class Attribute
                 {
-                    public int exists;										// 1 bit
+                    internal int exists;										// 1 bit
                     public int BitCount { get; set; }							// 6 bits
                     public int Unknown1 { get; set; }							// 2 bits
                     public int Unknown1_1 { get; set; }							// 1 bit		// if Unknown1 == 2
-                    public int skipTableId;            						// 1 bit		// if this is set, then don't read the table id below
+                    internal int skipTableId;            						// 1 bit		// if this is set, then don't read the table id below
                     public int TableId { get; set; }							// 16 bits		// this is the excel table id to use
 
                     public bool Exists
@@ -214,16 +209,16 @@ namespace Reanimator
                     attributes = new List<Attribute>();
                 }
 
-                public int id;											    // 16 bits
-                public int attributesCount;							        // 2 bits
-                public List<Attribute> attributes;                                            // tells the game if it's a skill id, or waypoint flag, etc
-                public int bitCount;									        // 6 bits		// size in bits of extra attribute
-                public int otherAttributeFlag;								// 3 bits		// i think that's what this is...		// can be 0x00, 0x01, 0x02, 0x03, 0x04
-                public UnitStat_OtherAttribute otherAttribute;
-                public int skipResource;									    // 2 bits		// resouce flag I think...
-                public int resource;										    // 16 bits		// like in extra attributes - read if above is 0x00
-                public int repeatFlag;										// 1 bit		// if set, check for repeat number
-                public int repeatCount;										// 10 bits		// i think this can be something other than 10 bits... I think...
+                internal int id;											    // 16 bits
+                internal int attributesCount;							        // 2 bits
+                internal List<Attribute> attributes;                                            // tells the game if it's a skill id, or waypoint flag, etc
+                internal int bitCount;									        // 6 bits		// size in bits of extra attribute
+                internal int otherAttributeFlag;								// 3 bits		// i think that's what this is...		// can be 0x00, 0x01, 0x02, 0x03, 0x04
+                internal UnitStat_OtherAttribute otherAttribute;
+                internal int skipResource;									    // 2 bits		// resouce flag I think...
+                internal int resource;										    // 16 bits		// like in extra attributes - read if above is 0x00
+                internal int repeatFlag;										// 1 bit		// if set, check for repeat number
+                internal int repeatCount;										// 10 bits		// i think this can be something other than 10 bits... I think...
 
                 public Values[] values;
 
@@ -275,16 +270,16 @@ namespace Reanimator
                 }
             };
 
-            public int statVersion;										// 16 bits
-            public int unknown1;										    // 3 bits		// untested - alert if != 0
-            public int additionalStatCount;								// 6 bits
-            public UnitStatAdditional[] additionalStats;
+            internal int statVersion;										// 16 bits
+            internal int unknown1;										    // 3 bits		// untested - alert if != 0
+            internal int additionalStatCount;								// 6 bits
+            internal UnitStatAdditional[] additionalStats;
 
-            public int statCount;										    // 16 bits
-            public Stat[] stats;
+            internal int statCount;										    // 16 bits
+            internal Stat[] stats;
 
-            public int nameCount;										    // 8 bits		// i think this has something to do with item affix/prefix naming
-            public UnitStatName[] names;
+            internal int nameCount;										    // 8 bits		// i think this has something to do with item affix/prefix naming
+            internal UnitStatName[] names;
 
             public int Length
             {
@@ -307,7 +302,7 @@ namespace Reanimator
             get { return statBlock; }
         }
 
-        public List<Unit> Items
+        public Unit[] Items
         {
             get { return items; }
         }
@@ -453,99 +448,97 @@ namespace Reanimator
 
         ////// Start of read inside main header check function (in ASM) //////
 
-        public int majorVersion;							    	    // 16 bits
-        public int minorVersion;							    	    // 8
+        internal int majorVersion;							    	    // 16 bits
+        internal int minorVersion;							    	    // 8
 
-        public int bitFieldCount;									    // 8			// must be <= 2
-        public int bitField1;										    // 32
-        public int bitField2;										    // 32
+        internal int bitFieldCount;									    // 8			// must be <= 2
+        internal int bitField1;										    // 32
+        internal int bitField2;										    // 32
 
         // if (testBit(unit->bitField1, 0x1D))
-        public int bitCount;										    // 32			// of unit block
+        internal int bitCount;										    // 32			// of unit block
 
         // if (testBit(unit->bitField1, 0x00))
-        public int beginFlag;										    // 32			// must be "Flag" (67616C46h) or Can be "`4R+" ("60 34 52 2B", 2B523460h)
+        internal int beginFlag;										    // 32			// must be "Flag" (67616C46h) or Can be "`4R+" ("60 34 52 2B", 2B523460h)
 
         // if (testBit(unit->bitField1, 0x1C))
-        public int timeStamp1;										// 32			// i don't think these are actually time stamps
-        public int timeStamp2;										// 32			// but since they change all the time and can be
-        public int timeStamp3;										// 32			// set to 00 00 00 00 and it'll still load... it'll do
+        internal int timeStamp1;										// 32			// i don't think these are actually time stamps
+        internal int timeStamp2;										// 32			// but since they change all the time and can be
+        internal int timeStamp3;										// 32			// set to 00 00 00 00 and it'll still load... it'll do
 
         // if (testBit(unit->bitField1, 0x1F))
-        public int unknownCount1F;									// 4
-        public UnknownCount1F_S[] unknownCount1Fs;                                  // no idea wtf these do
+        internal int unknownCount1F;									// 4
+        internal UnknownCount1F_S[] unknownCount1Fs;                                  // no idea wtf these do
 
         // if (testBit(unit->bitField2, 0x00)					                    // char state flags (e.g. "elite")
-        public int playerFlagCount1;								    // 8
-        public int[] playerFlags1;                                    // 16 * playerFlagCount1					
+        internal int playerFlagCount1;								    // 8
+        internal int[] playerFlags1;                                    // 16 * playerFlagCount1					
 
         ////// End of read inside main header check function (in ASM) //////
 
         // if (testBit(unit->bitField1, 0x1B))
-public int unknownCount1B;									// 5
-public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea wtf these do either
+        public int unknownCount1B;									// 5
+        public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea wtf these do either
 
         // if (testBit(unit->bitField1, 0x05)) // (bitField1 & 0x20)                // haven't encountered file with this yet
         // ALERT
 
-        public int unknownFlag;										// 4		    // this value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue) or something like that
+        internal int unknownFlag;										// 4		    // this value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue) or something like that
         public int itemCode;								            // 16
 
         // if (testBit(bitField1, 0x17)) // 64 bits read as 8x8 chunk bits from non-standard bit read function
-        public byte[] unknown17;
+        internal byte[] unknown17;
 
         // if (testBit(bitField1, 0x03) || testBit(bitField1, 0x01)) // if (bitField1 & 0x08 || bitField1 & 0x02)
         // {
-        public int unknownBool_01_03;								    // 1 bit
+        internal int unknownBool_01_03;								    // 1 bit
         // {
         // if (testBit(bitField1, 0x02)) // if (bitField & 0x04)
-        public int unknown_02;										// 32 bits			// untested
+        internal int unknown_02;										// 32 bits			// untested
 
-        public int inventoryType;        									// 16 bits          // i think...
-        //public int unknown_01_03_2;									// 12 bits
-        public int inventoryPositionX;									// 12 bits
-        //public int unknown_01_03_3;									// 12 bits
-        public int inventoryPositionY;									// 12 bits
+        internal int unknown_01_03_1;        									// 16 bits          // i think...
+        internal int unknown_01_03_2;									// 12 bits
+        internal int unknown_01_03_3;									// 12 bits
         // }
 
-        public byte[] unknown_01_03_4;								// 8*8 bits (64) - non-standard func
+        internal byte[] unknown_01_03_4;								// 8*8 bits (64) - non-standard func
         // }
 
         // if (testBit(bitField1, 0x06)) // if (bitField1 & 0x40) // does more reading, but can't test
-        public int unknownBool_06;									// 1 bit					// alert if != 1
+        internal int unknownBool_06;									// 1 bit					// alert if != 1
 
         // if (testBit(bitField1, 0x09))
-        public int unknown_09;										// 8 bits
+        internal int unknown_09;										// 8 bits
 
         // if (testBit(bitField1, 0x07)) // if (bitField1 & 0x80)
-        public int jobClass;										    // 8 bits		// i think...
-        public int unknown_07;										// 8 bits		// this appears to be joined with jobClass to form a WORD... I think...
+        internal int jobClass;										    // 8 bits		// i think...
+        internal int unknown_07;										// 8 bits		// this appears to be joined with jobClass to form a WORD... I think...
 
         public int JobClass
         {
-          get { return jobClass; }
+            get { return jobClass; }
         }
 
         // if (testBit(bitField1, 0x08))
-        public int characterCount;									    // 8 bits
-        public Char[] characterName;                                                // character name - why does name change when change filename though?								
+        internal int characterCount;									    // 8 bits
+        internal Char[] characterName;                                                // character name - why does name change when change filename though?								
 
         // if (testBit(bitField1, 0x0A))						                    // char state flags (e.g. "elite")
-        public int playerFlagCount2;								    // 8 bits
-        public int[] playerFlags2;							        // 16 bits * playerFlagCount2
+        internal int playerFlagCount2;								    // 8 bits
+        internal int[] playerFlags2;							        // 16 bits * playerFlagCount2
 
         public int EliteMode
         {
-          get { return playerFlagCount2; }
+            get { return playerFlagCount2; }
         }
 
-        public int unknownBool1;									    // 1 bit		// as above - alert if != 0
+        internal int unknownBool1;									    // 1 bit		// as above - alert if != 0
 
         // if (testBit(bitField1, 0x0D))
-        public StatBlock statBlock;
+        internal StatBlock statBlock;
 
-        public int hasAppearanceDetails;							    // 1
-        public UnitAppearance unitAppearance;
+        internal int hasAppearanceDetails;							    // 1
+        internal UnitAppearance unitAppearance;
         /*
         // {
         BYTE unknownCount7;										    // 3 bits
@@ -572,18 +565,18 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
         // }*/
 
         // if (testBit(pUnit->bitField1, 0x12))
-        public int itemBitOffset;									    // 32 bits		// missed what it did with it
-        public int itemCount;										    // 10 bits
-        public List<Unit> items;													    // each item is just a standard data block
+        internal int itemBitOffset;									    // 32 bits		// missed what it did with it
+        internal int itemCount;										    // 10 bits
+        internal Unit[] items;													    // each item is just a standard data block
 
         // if (testBit(pUnit->bitField1, 0x1A))
-        public uint weaponConfigFlag;                                 // 32 bits      // must be 0x91103A74; always present
-        public int endFlagBitOffset;                                  // 32 bits      // offset to end of file flag
-        public int weaponConfigCount;                                 // 6 bits       // weapon config count
-        public UnitWeaponConfig[] weaponConfigs;                                // i think this has item positions on bottom bar, etc as well
+        internal uint weaponConfigFlag;                                 // 32 bits      // must be 0x91103A74; always present
+        internal int endFlagBitOffset;                                  // 32 bits      // offset to end of file flag
+        internal int weaponConfigCount;                                 // 6 bits       // weapon config count
+        internal UnitWeaponConfig[] weaponConfigs;                                // i think this has item positions on bottom bar, etc as well
 
         // if (testBit(unit->bitField1, 0x00))
-        public int endFlag;											// 32 bits
+        internal int endFlag;											// 32 bits
 
         BitBuffer bitBuffer;
 
@@ -707,9 +700,9 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
                         unit.unknown_02 = bitBuffer.ReadBits(32);
                     }
 
-                    unit.inventoryType = bitBuffer.ReadBits(16);
-                    unit.inventoryPositionX = bitBuffer.ReadBits(12);
-                    unit.inventoryPositionY = bitBuffer.ReadBits(12);
+                    unit.unknown_01_03_1 = bitBuffer.ReadBits(16);
+                    unit.unknown_01_03_2 = bitBuffer.ReadBits(12);
+                    unit.unknown_01_03_3 = bitBuffer.ReadBits(12);
                 }
 
                 unit.unknown_01_03_4 = ReadNonStandardFunc();
@@ -796,7 +789,7 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
             {
                 unit.itemBitOffset = bitBuffer.ReadBits(32);
                 unit.itemCount = bitBuffer.ReadBits(10);
-                unit.items = new List<Unit>();
+                unit.items = new Unit[unit.itemCount];
                 for (int i = 0; i < unit.itemCount; i++)
                 {
                     Unit item = new Unit(bitBuffer);
@@ -804,7 +797,7 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
                     if (!ReadUnit(ref item))
                         return false;
 
-                    unit.items.Add(item);
+                    unit.items[i] = item;
                 }
             }
 
@@ -1537,9 +1530,9 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
                         saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
                     }
 
-                    saveBuffer.WriteBits(unit.inventoryType, 16);
-                    saveBuffer.WriteBits(unit.inventoryPositionX, 12);
-                    saveBuffer.WriteBits(unit.inventoryPositionY, 12);
+                    saveBuffer.WriteBits(unit.unknown_01_03_1, 16);
+                    saveBuffer.WriteBits(unit.unknown_01_03_2, 12);
+                    saveBuffer.WriteBits(unit.unknown_01_03_3, 12);
                 }
 
                 WriteNonStandardFunc(unit.unknown_01_03_4, saveBuffer);
