@@ -100,6 +100,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -122,6 +123,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\background.png" />
+    <None Include="Resources\templar_mouseOver.png" />
+    <None Include="Resources\templar_normal.png" />
+    <None Include="Resources\background_old.png" />
     <Content Include="Revival\data\uix\xml\inventory_screen.xml" />
     <Content Include="Revival\Revival.xml" />
   </ItemGroup>
