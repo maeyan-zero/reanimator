@@ -22,8 +22,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
             try
             {
                 string[] files = Directory.GetFiles(Directory.GetCurrentDirectory());
-                if (files.Contains("skillpanel_atlas.xml") && files.Contains("skilltree_atlas.xml") && //files.Contains("wsinventory_atlas.xml")
-                   files.Contains("skillpanel_atlas.png") && files.Contains("skilltree_atlas.png"))// && files.Contains("wsinventory_atlas.png")
+                string currentDir = Directory.GetCurrentDirectory();
+                if (files.Contains(currentDir + @"\skillpanel_atlas.xml") && files.Contains(currentDir + @"\skilltree_atlas.xml") && files.Contains(currentDir + @"\wsinventory_atlas.xml") &&
+                    files.Contains(currentDir + @"\skillpanel_atlas.png") && files.Contains(currentDir + @"\skilltree_atlas.png") && files.Contains(currentDir + @"\wsinventory_atlas.png"))
                 {
                     _skillPanel = XmlUtilities<Atlas>.Deserialize("skillpanel_atlas.xml");
                     _skillTree = XmlUtilities<Atlas>.Deserialize("skilltree_atlas.xml");
@@ -40,7 +41,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 }
                 else
                 {
-                    MessageBox.Show("Make sure the following files are in the same directory as the Reanimator.exe:\n" +
+                    MessageBox.Show("Make sure the following files are in the same directory as the Reanimator.exe (" + currentDir + "):\n" +
                     "\t- skillpanel_atlas.xml\n" +
                     "\t- skillpanel_atlas.png\n" +
                     "\t- skilltree_atlas.xml\n" +
