@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Reanimator;
+using launcher.Properties;
 
 namespace launcher
 {
@@ -85,7 +86,31 @@ namespace launcher
                             "HellgateAus.net Launcher 2038", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void launchLabel_Click(object sender, EventArgs e)
+        private void Launcher_Load(object sender, EventArgs e)
+        {
+            String characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
+            saveFolderContents = Directory.GetFiles(characterFolder);
+            characterIndex = new int[saveFolderContents.Length + 1];
+            
+            characterCombo.Items.Add("");
+            for (int i = 0; i < saveFolderContents.Length; i++)
+            {
+                if (saveFolderContents[i].Contains(".hg1"))
+                {
+                    String characterName = saveFolderContents[i].Remove(0, saveFolderContents[i].LastIndexOf("\\") + 1);
+                    characterName = characterName.Remove(characterName.Length - 4, 4);
+                    characterCombo.Items.Add(characterName);
+                    characterIndex[characterCombo.Items.Count - 1] = i;
+                }
+            }
+        }
+
+        private void p_start_Click(object sender, EventArgs e)
+        {
+            StartGame();
+        }
+
+        private void StartGame()
         {
             try
             {
@@ -104,23 +129,24 @@ namespace launcher
             }
         }
 
-        private void Launcher_Load(object sender, EventArgs e)
+        private void p_start_MouseEnter(object sender, EventArgs e)
         {
-            String characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
-            saveFolderContents = Directory.GetFiles(characterFolder);
-            characterIndex = new int[saveFolderContents.Length + 1];
-            
-            characterCombo.Items.Add("");
-            for (int i = 0; i < saveFolderContents.Length; i++)
-            {
-                if (saveFolderContents[i].Contains(".hg1"))
-                {
-                    String characterName = saveFolderContents[i].Remove(0, saveFolderContents[i].LastIndexOf("\\") + 1);
-                    characterName = characterName.Remove(characterName.Length - 4, 4);
-                    characterCombo.Items.Add(characterName);
-                    characterIndex[characterCombo.Items.Count - 1] = i;
-                }
-            }
+            p_start.BackgroundImage = Resources.templar_mouseOver;
+        }
+
+        private void p_start_MouseLeave(object sender, EventArgs e)
+        {
+            p_start.BackgroundImage = Resources.templar_normal;
+        }
+
+        private void p_start_MouseDown(object sender, MouseEventArgs e)
+        {
+            p_start.BackgroundImage = Resources.templar_normal;
+        }
+
+        private void p_start_MouseUp(object sender, MouseEventArgs e)
+        {
+            p_start.BackgroundImage = Resources.templar_mouseOver;
         }
     }
 }

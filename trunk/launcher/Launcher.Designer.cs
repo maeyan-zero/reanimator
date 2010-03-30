@@ -39,10 +39,11 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.enableHCCharacterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.launchLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.characterCombo = new System.Windows.Forms.ComboBox();
+            this.p_start = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.p_start)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -129,20 +130,9 @@
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // launchLabel
-            // 
-            this.launchLabel.AutoSize = true;
-            this.launchLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.launchLabel.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.launchLabel.Location = new System.Drawing.Point(12, 356);
-            this.launchLabel.Name = "launchLabel";
-            this.launchLabel.Size = new System.Drawing.Size(197, 37);
-            this.launchLabel.TabIndex = 5;
-            this.launchLabel.Text = "Unleash Hell";
-            this.launchLabel.Click += new System.EventHandler(this.launchLabel_Click);
-            // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.Color.Transparent;
             this.groupBox1.ForeColor = System.Drawing.SystemColors.Control;
             this.groupBox1.Location = new System.Drawing.Point(381, 30);
             this.groupBox1.Name = "groupBox1";
@@ -153,21 +143,42 @@
             // 
             // characterCombo
             // 
+            this.characterCombo.BackColor = System.Drawing.Color.Black;
+            this.characterCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.characterCombo.ForeColor = System.Drawing.Color.DarkOrange;
             this.characterCombo.FormattingEnabled = true;
-            this.characterCombo.Location = new System.Drawing.Point(19, 397);
+            this.characterCombo.Location = new System.Drawing.Point(229, 411);
             this.characterCombo.Name = "characterCombo";
-            this.characterCombo.Size = new System.Drawing.Size(190, 21);
+            this.characterCombo.Size = new System.Drawing.Size(146, 21);
             this.characterCombo.TabIndex = 7;
+            this.characterCombo.Text = "Select a character";
+            // 
+            // p_start
+            // 
+            this.p_start.BackColor = System.Drawing.Color.Transparent;
+            this.p_start.BackgroundImage = global::launcher.Properties.Resources.templar_normal;
+            this.p_start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.p_start.Location = new System.Drawing.Point(229, 236);
+            this.p_start.Name = "p_start";
+            this.p_start.Size = new System.Drawing.Size(146, 180);
+            this.p_start.TabIndex = 13;
+            this.p_start.TabStop = false;
+            this.p_start.MouseLeave += new System.EventHandler(this.p_start_MouseLeave);
+            this.p_start.Click += new System.EventHandler(this.p_start_Click);
+            this.p_start.MouseDown += new System.Windows.Forms.MouseEventHandler(this.p_start_MouseDown);
+            this.p_start.MouseUp += new System.Windows.Forms.MouseEventHandler(this.p_start_MouseUp);
+            this.p_start.MouseEnter += new System.EventHandler(this.p_start_MouseEnter);
             // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
+            this.BackgroundImage = global::launcher.Properties.Resources.background_old;
             this.ClientSize = new System.Drawing.Size(624, 444);
             this.Controls.Add(this.characterCombo);
+            this.Controls.Add(this.p_start);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.launchLabel);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
@@ -179,6 +190,7 @@
             this.Load += new System.EventHandler(this.Launcher_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.p_start)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,7 +201,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem programToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.Label launchLabel;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
@@ -200,6 +211,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ComboBox characterCombo;
+        private System.Windows.Forms.PictureBox p_start;
 
     }
 }
