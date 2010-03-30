@@ -574,7 +574,7 @@ namespace Reanimator
         {
             try
             {
-                TableForm excelTable = (TableForm)this.ActiveMdiChild;
+                ExcelTableForm excelTable = (ExcelTableForm)this.ActiveMdiChild;
                 string strValue;
 
                 if (excelTable != null)
