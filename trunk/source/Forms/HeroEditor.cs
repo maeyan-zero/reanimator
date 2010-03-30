@@ -1414,9 +1414,11 @@ namespace Reanimator.Forms
         {
             try
             {
+                const int ITEMSIZE = 56;
+
                 foreach (Unit item in _heroUnit.Items)
                 {
-                    foreach (Control control in tp_inventory.Controls)
+                    foreach (Control control in tp_characterInventory.Controls)
                     {
                         if (item.inventoryType.ToString() == (string)control.Tag)
                         {
@@ -1424,8 +1426,6 @@ namespace Reanimator.Forms
                             {
                                 ((ListBox)control).Items.Add(item);
 
-                                if (item.inventoryType == 19760)
-                                {
                                     int quality = GetSimpleValue(item, "item_quality");
 
                                     Color color = Color.White;
@@ -1463,17 +1463,32 @@ namespace Reanimator.Forms
                                     b.FlatStyle = FlatStyle.Flat;
                                     b.BackColor = color;
                                     b.Text = item.Name;
-                                    b.Width = GetItemWidth(item) * 32;
-                                    b.Height = GetItemHeight(item) * 32;
-                                    b.Location = new Point(item.inventoryPositionX * 32, item.inventoryPositionY * 32);
-                                    p_inventoryPanel.Controls.Add(b);
-                                }
+                                    b.Width = GetItemWidth(item) * ITEMSIZE;
+                                    b.Height = GetItemHeight(item) * ITEMSIZE;
+                                    b.Location = new Point(item.inventoryPositionX * ITEMSIZE, item.inventoryPositionY * ITEMSIZE);
+
+                                    if (item.inventoryType == 19760)
+                                    {
+                                        tp_inventory.Controls.Add(b);
+                                    }
+                                    else if (item.inventoryType == 28208)
+                                    {
+                                        tp_stash.Controls.Add(b);
+                                    }
+                                    else if (item.inventoryType == 26928)
+                                    {
+                                        tp_extraStash.Controls.Add(b);
+                                    }
+                                    else if (item.inventoryType == 22577)
+                                    {
+                                        tp_cubeStash.Controls.Add(b);
+                                    }                                
 
                                 break;
                             }
                             else if (item.inventoryType == 25904)
                             {
-                                TextBox box = (TextBox)tp_inventory.Controls["tb_hand" + item.inventoryPositionX];
+                                TextBox box = (TextBox)tp_characterInventory.Controls["tb_hand" + item.inventoryPositionX];
                                 box.Text += item;
                                 break;
                             }
@@ -1485,6 +1500,11 @@ namespace Reanimator.Forms
                         }
                     }
                 }
+
+                l_inventory.Text += " (" + lb_inventory.Items.Count + ")";
+                l_stash.Text += " (" + lb_stash.Items.Count + ")";
+                l_extraStash.Text += " (" + lb_extraStash.Items.Count + ")";
+                l_cubeStash.Text += " (" + lb_cubeStash.Items.Count + ")";
             }
             catch (Exception ex)
             {

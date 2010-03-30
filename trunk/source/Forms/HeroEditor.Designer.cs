@@ -145,17 +145,14 @@ namespace Reanimator.Forms
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.l_itemName = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.tabPage7 = new System.Windows.Forms.TabPage();
-            this.tp_skills = new System.Windows.Forms.TabPage();
-            this.tp_stats = new System.Windows.Forms.TabPage();
             this.tp_characterValues = new System.Windows.Forms.TabPage();
-            this.tp_inventory = new System.Windows.Forms.TabPage();
-            this.label53 = new System.Windows.Forms.Label();
-            this.tb_cubeStash = new System.Windows.Forms.ListBox();
+            this.tp_characterInventory = new System.Windows.Forms.TabPage();
+            this.label54 = new System.Windows.Forms.Label();
+            this.label55 = new System.Windows.Forms.Label();
+            this.tb_itemHeight = new System.Windows.Forms.TextBox();
+            this.tb_itemWidth = new System.Windows.Forms.TextBox();
+            this.l_cubeStash = new System.Windows.Forms.Label();
+            this.lb_cubeStash = new System.Windows.Forms.ListBox();
             this.tb_hand5 = new System.Windows.Forms.TextBox();
             this.tb_hand4 = new System.Windows.Forms.TextBox();
             this.tb_hand3 = new System.Windows.Forms.TextBox();
@@ -171,12 +168,12 @@ namespace Reanimator.Forms
             this.tb_invPosY = new System.Windows.Forms.TextBox();
             this.tb_invPosX = new System.Windows.Forms.TextBox();
             this.tb_hand1 = new System.Windows.Forms.TextBox();
-            this.label50 = new System.Windows.Forms.Label();
+            this.l_extraStash = new System.Windows.Forms.Label();
             this.lb_extraStash = new System.Windows.Forms.ListBox();
-            this.label49 = new System.Windows.Forms.Label();
+            this.l_stash = new System.Windows.Forms.Label();
             this.lb_stash = new System.Windows.Forms.ListBox();
-            this.label48 = new System.Windows.Forms.Label();
-            this.lv_inventory = new System.Windows.Forms.ListBox();
+            this.l_inventory = new System.Windows.Forms.Label();
+            this.lb_inventory = new System.Windows.Forms.ListBox();
             this.tb_belt = new System.Windows.Forms.TextBox();
             this.label47 = new System.Windows.Forms.Label();
             this.tb_gloves = new System.Windows.Forms.TextBox();
@@ -206,11 +203,11 @@ namespace Reanimator.Forms
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
-            this.label54 = new System.Windows.Forms.Label();
-            this.label55 = new System.Windows.Forms.Label();
-            this.tb_itemHeight = new System.Windows.Forms.TextBox();
-            this.tb_itemWidth = new System.Windows.Forms.TextBox();
-            this.p_inventoryPanel = new System.Windows.Forms.Panel();
+            this.tc_characterItemPlacements = new System.Windows.Forms.TabControl();
+            this.tp_inventory = new System.Windows.Forms.TabPage();
+            this.tp_stash = new System.Windows.Forms.TabPage();
+            this.tp_extraStash = new System.Windows.Forms.TabPage();
+            this.tp_cubeStash = new System.Windows.Forms.TabPage();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -250,9 +247,8 @@ namespace Reanimator.Forms
             this.tabPage3.SuspendLayout();
             this.groupBox10.SuspendLayout();
             this.groupBox9.SuspendLayout();
-            this.tabPage4.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tp_inventory.SuspendLayout();
+            this.tp_characterInventory.SuspendLayout();
+            this.tc_characterItemPlacements.SuspendLayout();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -269,11 +265,8 @@ namespace Reanimator.Forms
             this.main_TabControl.Controls.Add(this.tabPage2);
             this.main_TabControl.Controls.Add(this.unknownTabList);
             this.main_TabControl.Controls.Add(this.tabPage3);
-            this.main_TabControl.Controls.Add(this.tabPage4);
-            this.main_TabControl.Controls.Add(this.tp_skills);
-            this.main_TabControl.Controls.Add(this.tp_stats);
             this.main_TabControl.Controls.Add(this.tp_characterValues);
-            this.main_TabControl.Controls.Add(this.tp_inventory);
+            this.main_TabControl.Controls.Add(this.tp_characterInventory);
             this.main_TabControl.Location = new System.Drawing.Point(12, 33);
             this.main_TabControl.Name = "main_TabControl";
             this.main_TabControl.SelectedIndex = 0;
@@ -1282,7 +1275,7 @@ namespace Reanimator.Forms
             this.tp_test.Padding = new System.Windows.Forms.Padding(3);
             this.tp_test.Size = new System.Drawing.Size(1220, 746);
             this.tp_test.TabIndex = 4;
-            this.tp_test.Text = "Test";
+            this.tp_test.Text = "Warp Terminals";
             this.tp_test.UseVisualStyleBackColor = true;
             // 
             // groupBox1
@@ -1492,81 +1485,6 @@ namespace Reanimator.Forms
             this.label34.TabIndex = 0;
             this.label34.Text = "Name:";
             // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.tabControl1);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1220, 746);
-            this.tabPage4.TabIndex = 9;
-            this.tabPage4.Text = "Items";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabPage5);
-            this.tabControl1.Controls.Add(this.tabPage6);
-            this.tabControl1.Controls.Add(this.tabPage7);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(3, 3);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1214, 740);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl1.TabIndex = 0;
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(1206, 714);
-            this.tabPage5.TabIndex = 0;
-            this.tabPage5.Text = "Equipment";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(1206, 714);
-            this.tabPage6.TabIndex = 1;
-            this.tabPage6.Text = "Inventory";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // tabPage7
-            // 
-            this.tabPage7.Location = new System.Drawing.Point(4, 22);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(1206, 714);
-            this.tabPage7.TabIndex = 2;
-            this.tabPage7.Text = "Stash";
-            this.tabPage7.UseVisualStyleBackColor = true;
-            // 
-            // tp_skills
-            // 
-            this.tp_skills.AutoScroll = true;
-            this.tp_skills.Location = new System.Drawing.Point(4, 22);
-            this.tp_skills.Name = "tp_skills";
-            this.tp_skills.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_skills.Size = new System.Drawing.Size(1220, 746);
-            this.tp_skills.TabIndex = 11;
-            this.tp_skills.Text = "Skills";
-            this.tp_skills.UseVisualStyleBackColor = true;
-            // 
-            // tp_stats
-            // 
-            this.tp_stats.Location = new System.Drawing.Point(4, 22);
-            this.tp_stats.Name = "tp_stats";
-            this.tp_stats.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_stats.Size = new System.Drawing.Size(1220, 746);
-            this.tp_stats.TabIndex = 12;
-            this.tp_stats.Text = "Stats";
-            this.tp_stats.UseVisualStyleBackColor = true;
-            // 
             // tp_characterValues
             // 
             this.tp_characterValues.Location = new System.Drawing.Point(4, 22);
@@ -1577,81 +1495,113 @@ namespace Reanimator.Forms
             this.tp_characterValues.Text = "Character values";
             this.tp_characterValues.UseVisualStyleBackColor = true;
             // 
-            // tp_inventory
+            // tp_characterInventory
             // 
-            this.tp_inventory.Controls.Add(this.p_inventoryPanel);
-            this.tp_inventory.Controls.Add(this.label54);
-            this.tp_inventory.Controls.Add(this.label55);
-            this.tp_inventory.Controls.Add(this.tb_itemHeight);
-            this.tp_inventory.Controls.Add(this.tb_itemWidth);
-            this.tp_inventory.Controls.Add(this.label53);
-            this.tp_inventory.Controls.Add(this.tb_cubeStash);
-            this.tp_inventory.Controls.Add(this.tb_hand5);
-            this.tp_inventory.Controls.Add(this.tb_hand4);
-            this.tp_inventory.Controls.Add(this.tb_hand3);
-            this.tp_inventory.Controls.Add(this.textBox10);
-            this.tp_inventory.Controls.Add(this.label52);
-            this.tp_inventory.Controls.Add(this.textBox9);
-            this.tp_inventory.Controls.Add(this.label51);
-            this.tp_inventory.Controls.Add(this.tb_hand2);
-            this.tp_inventory.Controls.Add(this.label37);
-            this.tp_inventory.Controls.Add(this.tb_invLoc);
-            this.tp_inventory.Controls.Add(this.label36);
-            this.tp_inventory.Controls.Add(this.label35);
-            this.tp_inventory.Controls.Add(this.tb_invPosY);
-            this.tp_inventory.Controls.Add(this.tb_invPosX);
-            this.tp_inventory.Controls.Add(this.tb_hand1);
-            this.tp_inventory.Controls.Add(this.label50);
-            this.tp_inventory.Controls.Add(this.lb_extraStash);
-            this.tp_inventory.Controls.Add(this.label49);
-            this.tp_inventory.Controls.Add(this.lb_stash);
-            this.tp_inventory.Controls.Add(this.label48);
-            this.tp_inventory.Controls.Add(this.lv_inventory);
-            this.tp_inventory.Controls.Add(this.tb_belt);
-            this.tp_inventory.Controls.Add(this.label47);
-            this.tp_inventory.Controls.Add(this.tb_gloves);
-            this.tp_inventory.Controls.Add(this.label46);
-            this.tp_inventory.Controls.Add(this.label45);
-            this.tp_inventory.Controls.Add(this.tb_hand0);
-            this.tp_inventory.Controls.Add(this.label44);
-            this.tp_inventory.Controls.Add(this.tb_pants);
-            this.tp_inventory.Controls.Add(this.label43);
-            this.tp_inventory.Controls.Add(this.tb_boots);
-            this.tp_inventory.Controls.Add(this.label42);
-            this.tp_inventory.Controls.Add(this.tb_shoulders);
-            this.tp_inventory.Controls.Add(this.label41);
-            this.tp_inventory.Controls.Add(this.tb_dyeKit);
-            this.tp_inventory.Controls.Add(this.label40);
-            this.tp_inventory.Controls.Add(this.tb_torso);
-            this.tp_inventory.Controls.Add(this.label39);
-            this.tp_inventory.Controls.Add(this.tb_head);
-            this.tp_inventory.Controls.Add(this.label38);
-            this.tp_inventory.Location = new System.Drawing.Point(4, 22);
-            this.tp_inventory.Name = "tp_inventory";
-            this.tp_inventory.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_inventory.Size = new System.Drawing.Size(1220, 746);
-            this.tp_inventory.TabIndex = 14;
-            this.tp_inventory.Text = "Inventory";
-            this.tp_inventory.UseVisualStyleBackColor = true;
+            this.tp_characterInventory.Controls.Add(this.tc_characterItemPlacements);
+            this.tp_characterInventory.Controls.Add(this.label54);
+            this.tp_characterInventory.Controls.Add(this.label55);
+            this.tp_characterInventory.Controls.Add(this.tb_itemHeight);
+            this.tp_characterInventory.Controls.Add(this.tb_itemWidth);
+            this.tp_characterInventory.Controls.Add(this.l_cubeStash);
+            this.tp_characterInventory.Controls.Add(this.lb_cubeStash);
+            this.tp_characterInventory.Controls.Add(this.tb_hand5);
+            this.tp_characterInventory.Controls.Add(this.tb_hand4);
+            this.tp_characterInventory.Controls.Add(this.tb_hand3);
+            this.tp_characterInventory.Controls.Add(this.textBox10);
+            this.tp_characterInventory.Controls.Add(this.label52);
+            this.tp_characterInventory.Controls.Add(this.textBox9);
+            this.tp_characterInventory.Controls.Add(this.label51);
+            this.tp_characterInventory.Controls.Add(this.tb_hand2);
+            this.tp_characterInventory.Controls.Add(this.label37);
+            this.tp_characterInventory.Controls.Add(this.tb_invLoc);
+            this.tp_characterInventory.Controls.Add(this.label36);
+            this.tp_characterInventory.Controls.Add(this.label35);
+            this.tp_characterInventory.Controls.Add(this.tb_invPosY);
+            this.tp_characterInventory.Controls.Add(this.tb_invPosX);
+            this.tp_characterInventory.Controls.Add(this.tb_hand1);
+            this.tp_characterInventory.Controls.Add(this.l_extraStash);
+            this.tp_characterInventory.Controls.Add(this.lb_extraStash);
+            this.tp_characterInventory.Controls.Add(this.l_stash);
+            this.tp_characterInventory.Controls.Add(this.lb_stash);
+            this.tp_characterInventory.Controls.Add(this.l_inventory);
+            this.tp_characterInventory.Controls.Add(this.lb_inventory);
+            this.tp_characterInventory.Controls.Add(this.tb_belt);
+            this.tp_characterInventory.Controls.Add(this.label47);
+            this.tp_characterInventory.Controls.Add(this.tb_gloves);
+            this.tp_characterInventory.Controls.Add(this.label46);
+            this.tp_characterInventory.Controls.Add(this.label45);
+            this.tp_characterInventory.Controls.Add(this.tb_hand0);
+            this.tp_characterInventory.Controls.Add(this.label44);
+            this.tp_characterInventory.Controls.Add(this.tb_pants);
+            this.tp_characterInventory.Controls.Add(this.label43);
+            this.tp_characterInventory.Controls.Add(this.tb_boots);
+            this.tp_characterInventory.Controls.Add(this.label42);
+            this.tp_characterInventory.Controls.Add(this.tb_shoulders);
+            this.tp_characterInventory.Controls.Add(this.label41);
+            this.tp_characterInventory.Controls.Add(this.tb_dyeKit);
+            this.tp_characterInventory.Controls.Add(this.label40);
+            this.tp_characterInventory.Controls.Add(this.tb_torso);
+            this.tp_characterInventory.Controls.Add(this.label39);
+            this.tp_characterInventory.Controls.Add(this.tb_head);
+            this.tp_characterInventory.Controls.Add(this.label38);
+            this.tp_characterInventory.Location = new System.Drawing.Point(4, 22);
+            this.tp_characterInventory.Name = "tp_characterInventory";
+            this.tp_characterInventory.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_characterInventory.Size = new System.Drawing.Size(1220, 746);
+            this.tp_characterInventory.TabIndex = 14;
+            this.tp_characterInventory.Text = "Inventory";
+            this.tp_characterInventory.UseVisualStyleBackColor = true;
             // 
-            // label53
+            // label54
             // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(638, 285);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(65, 13);
-            this.label53.TabIndex = 47;
-            this.label53.Text = "Cube Stash:";
+            this.label54.AutoSize = true;
+            this.label54.Location = new System.Drawing.Point(36, 435);
+            this.label54.Name = "label54";
+            this.label54.Size = new System.Drawing.Size(62, 13);
+            this.label54.TabIndex = 51;
+            this.label54.Text = "Item height:";
             // 
-            // tb_cubeStash
+            // label55
             // 
-            this.tb_cubeStash.FormattingEnabled = true;
-            this.tb_cubeStash.Location = new System.Drawing.Point(641, 301);
-            this.tb_cubeStash.Name = "tb_cubeStash";
-            this.tb_cubeStash.Size = new System.Drawing.Size(191, 251);
-            this.tb_cubeStash.TabIndex = 46;
-            this.tb_cubeStash.Tag = "22577";
-            this.tb_cubeStash.SelectedIndexChanged += new System.EventHandler(this.lv_itemSelected_SelectedIndexChanged);
+            this.label55.AutoSize = true;
+            this.label55.Location = new System.Drawing.Point(36, 409);
+            this.label55.Name = "label55";
+            this.label55.Size = new System.Drawing.Size(58, 13);
+            this.label55.TabIndex = 50;
+            this.label55.Text = "Item width:";
+            // 
+            // tb_itemHeight
+            // 
+            this.tb_itemHeight.Location = new System.Drawing.Point(108, 432);
+            this.tb_itemHeight.Name = "tb_itemHeight";
+            this.tb_itemHeight.Size = new System.Drawing.Size(100, 20);
+            this.tb_itemHeight.TabIndex = 49;
+            // 
+            // tb_itemWidth
+            // 
+            this.tb_itemWidth.Location = new System.Drawing.Point(108, 406);
+            this.tb_itemWidth.Name = "tb_itemWidth";
+            this.tb_itemWidth.Size = new System.Drawing.Size(100, 20);
+            this.tb_itemWidth.TabIndex = 48;
+            // 
+            // l_cubeStash
+            // 
+            this.l_cubeStash.AutoSize = true;
+            this.l_cubeStash.Location = new System.Drawing.Point(638, 285);
+            this.l_cubeStash.Name = "l_cubeStash";
+            this.l_cubeStash.Size = new System.Drawing.Size(65, 13);
+            this.l_cubeStash.TabIndex = 47;
+            this.l_cubeStash.Text = "Cube Stash:";
+            // 
+            // lb_cubeStash
+            // 
+            this.lb_cubeStash.FormattingEnabled = true;
+            this.lb_cubeStash.Location = new System.Drawing.Point(641, 301);
+            this.lb_cubeStash.Name = "lb_cubeStash";
+            this.lb_cubeStash.Size = new System.Drawing.Size(191, 251);
+            this.lb_cubeStash.TabIndex = 46;
+            this.lb_cubeStash.Tag = "22577";
+            this.lb_cubeStash.SelectedIndexChanged += new System.EventHandler(this.lv_itemSelected_SelectedIndexChanged);
             // 
             // tb_hand5
             // 
@@ -1774,14 +1724,14 @@ namespace Reanimator.Forms
             this.tb_hand1.TabIndex = 27;
             this.tb_hand1.Tag = "25904";
             // 
-            // label50
+            // l_extraStash
             // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(441, 285);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(64, 13);
-            this.label50.TabIndex = 26;
-            this.label50.Text = "Extra Stash:";
+            this.l_extraStash.AutoSize = true;
+            this.l_extraStash.Location = new System.Drawing.Point(441, 285);
+            this.l_extraStash.Name = "l_extraStash";
+            this.l_extraStash.Size = new System.Drawing.Size(147, 13);
+            this.l_extraStash.TabIndex = 26;
+            this.l_extraStash.Text = "Extra Stash (Quest rewards?):";
             // 
             // lb_extraStash
             // 
@@ -1793,14 +1743,14 @@ namespace Reanimator.Forms
             this.lb_extraStash.Tag = "26928";
             this.lb_extraStash.SelectedIndexChanged += new System.EventHandler(this.lv_itemSelected_SelectedIndexChanged);
             // 
-            // label49
+            // l_stash
             // 
-            this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(638, 9);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(37, 13);
-            this.label49.TabIndex = 24;
-            this.label49.Text = "Stash:";
+            this.l_stash.AutoSize = true;
+            this.l_stash.Location = new System.Drawing.Point(638, 9);
+            this.l_stash.Name = "l_stash";
+            this.l_stash.Size = new System.Drawing.Size(37, 13);
+            this.l_stash.TabIndex = 24;
+            this.l_stash.Text = "Stash:";
             // 
             // lb_stash
             // 
@@ -1812,24 +1762,24 @@ namespace Reanimator.Forms
             this.lb_stash.Tag = "28208";
             this.lb_stash.SelectedIndexChanged += new System.EventHandler(this.lv_itemSelected_SelectedIndexChanged);
             // 
-            // label48
+            // l_inventory
             // 
-            this.label48.AutoSize = true;
-            this.label48.Location = new System.Drawing.Point(441, 9);
-            this.label48.Name = "label48";
-            this.label48.Size = new System.Drawing.Size(54, 13);
-            this.label48.TabIndex = 22;
-            this.label48.Text = "Inventory:";
+            this.l_inventory.AutoSize = true;
+            this.l_inventory.Location = new System.Drawing.Point(441, 9);
+            this.l_inventory.Name = "l_inventory";
+            this.l_inventory.Size = new System.Drawing.Size(54, 13);
+            this.l_inventory.TabIndex = 22;
+            this.l_inventory.Text = "Inventory:";
             // 
-            // lv_inventory
+            // lb_inventory
             // 
-            this.lv_inventory.FormattingEnabled = true;
-            this.lv_inventory.Location = new System.Drawing.Point(444, 25);
-            this.lv_inventory.Name = "lv_inventory";
-            this.lv_inventory.Size = new System.Drawing.Size(191, 251);
-            this.lv_inventory.TabIndex = 21;
-            this.lv_inventory.Tag = "19760";
-            this.lv_inventory.SelectedIndexChanged += new System.EventHandler(this.lv_itemSelected_SelectedIndexChanged);
+            this.lb_inventory.FormattingEnabled = true;
+            this.lb_inventory.Location = new System.Drawing.Point(444, 25);
+            this.lb_inventory.Name = "lb_inventory";
+            this.lb_inventory.Size = new System.Drawing.Size(191, 251);
+            this.lb_inventory.TabIndex = 21;
+            this.lb_inventory.Tag = "19760";
+            this.lb_inventory.SelectedIndexChanged += new System.EventHandler(this.lv_itemSelected_SelectedIndexChanged);
             // 
             // tb_belt
             // 
@@ -2089,6 +2039,7 @@ namespace Reanimator.Forms
             // 
             // button9
             // 
+            this.button9.Enabled = false;
             this.button9.Location = new System.Drawing.Point(933, 7);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(75, 23);
@@ -2097,44 +2048,61 @@ namespace Reanimator.Forms
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
-            // label54
+            // tc_characterItemPlacements
             // 
-            this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(36, 435);
-            this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(62, 13);
-            this.label54.TabIndex = 51;
-            this.label54.Text = "Item height:";
+            this.tc_characterItemPlacements.Controls.Add(this.tp_inventory);
+            this.tc_characterItemPlacements.Controls.Add(this.tp_stash);
+            this.tc_characterItemPlacements.Controls.Add(this.tp_extraStash);
+            this.tc_characterItemPlacements.Controls.Add(this.tp_cubeStash);
+            this.tc_characterItemPlacements.Location = new System.Drawing.Point(838, 6);
+            this.tc_characterItemPlacements.Name = "tc_characterItemPlacements";
+            this.tc_characterItemPlacements.SelectedIndex = 0;
+            this.tc_characterItemPlacements.Size = new System.Drawing.Size(376, 546);
+            this.tc_characterItemPlacements.TabIndex = 54;
             // 
-            // label55
+            // tp_inventory
             // 
-            this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(36, 409);
-            this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(58, 13);
-            this.label55.TabIndex = 50;
-            this.label55.Text = "Item width:";
+            this.tp_inventory.AutoScroll = true;
+            this.tp_inventory.Location = new System.Drawing.Point(4, 22);
+            this.tp_inventory.Name = "tp_inventory";
+            this.tp_inventory.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_inventory.Size = new System.Drawing.Size(368, 520);
+            this.tp_inventory.TabIndex = 0;
+            this.tp_inventory.Text = "Inventory";
+            this.tp_inventory.UseVisualStyleBackColor = true;
             // 
-            // tb_itemHeight
+            // tp_stash
             // 
-            this.tb_itemHeight.Location = new System.Drawing.Point(108, 432);
-            this.tb_itemHeight.Name = "tb_itemHeight";
-            this.tb_itemHeight.Size = new System.Drawing.Size(100, 20);
-            this.tb_itemHeight.TabIndex = 49;
+            this.tp_stash.AutoScroll = true;
+            this.tp_stash.Location = new System.Drawing.Point(4, 22);
+            this.tp_stash.Name = "tp_stash";
+            this.tp_stash.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_stash.Size = new System.Drawing.Size(368, 520);
+            this.tp_stash.TabIndex = 1;
+            this.tp_stash.Text = "Stash";
+            this.tp_stash.UseVisualStyleBackColor = true;
             // 
-            // tb_itemWidth
+            // tp_extraStash
             // 
-            this.tb_itemWidth.Location = new System.Drawing.Point(108, 406);
-            this.tb_itemWidth.Name = "tb_itemWidth";
-            this.tb_itemWidth.Size = new System.Drawing.Size(100, 20);
-            this.tb_itemWidth.TabIndex = 48;
+            this.tp_extraStash.AutoScroll = true;
+            this.tp_extraStash.Location = new System.Drawing.Point(4, 22);
+            this.tp_extraStash.Name = "tp_extraStash";
+            this.tp_extraStash.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_extraStash.Size = new System.Drawing.Size(368, 520);
+            this.tp_extraStash.TabIndex = 2;
+            this.tp_extraStash.Text = "Extra Stash";
+            this.tp_extraStash.UseVisualStyleBackColor = true;
             // 
-            // p_inventoryPanel
+            // tp_cubeStash
             // 
-            this.p_inventoryPanel.Location = new System.Drawing.Point(838, 25);
-            this.p_inventoryPanel.Name = "p_inventoryPanel";
-            this.p_inventoryPanel.Size = new System.Drawing.Size(376, 715);
-            this.p_inventoryPanel.TabIndex = 52;
+            this.tp_cubeStash.AutoScroll = true;
+            this.tp_cubeStash.Location = new System.Drawing.Point(4, 22);
+            this.tp_cubeStash.Name = "tp_cubeStash";
+            this.tp_cubeStash.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_cubeStash.Size = new System.Drawing.Size(368, 520);
+            this.tp_cubeStash.TabIndex = 3;
+            this.tp_cubeStash.Text = "Cube Stash";
+            this.tp_cubeStash.UseVisualStyleBackColor = true;
             // 
             // HeroEditor
             // 
@@ -2208,10 +2176,9 @@ namespace Reanimator.Forms
             this.groupBox10.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.groupBox9.PerformLayout();
-            this.tabPage4.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.tp_inventory.ResumeLayout(false);
-            this.tp_inventory.PerformLayout();
+            this.tp_characterInventory.ResumeLayout(false);
+            this.tp_characterInventory.PerformLayout();
+            this.tc_characterItemPlacements.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2336,14 +2303,7 @@ namespace Reanimator.Forms
         private System.Windows.Forms.ComboBox cb_availableItems;
         private System.Windows.Forms.Label l_itemName;
         private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.TabPage tabPage7;
         private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.TabPage tp_skills;
-        private System.Windows.Forms.TabPage tp_stats;
         private System.Windows.Forms.TabPage tp_characterValues;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.TextBox textBox2;
@@ -2352,7 +2312,7 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.TabPage tp_inventory;
+        private System.Windows.Forms.TabPage tp_characterInventory;
         private System.Windows.Forms.TextBox tb_gloves;
         private System.Windows.Forms.Label label46;
         private System.Windows.Forms.Label label45;
@@ -2372,12 +2332,12 @@ namespace Reanimator.Forms
         private System.Windows.Forms.Label label38;
         private System.Windows.Forms.TextBox tb_belt;
         private System.Windows.Forms.Label label47;
-        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.Label l_extraStash;
         private System.Windows.Forms.ListBox lb_extraStash;
-        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label l_stash;
         private System.Windows.Forms.ListBox lb_stash;
-        private System.Windows.Forms.Label label48;
-        private System.Windows.Forms.ListBox lv_inventory;
+        private System.Windows.Forms.Label l_inventory;
+        private System.Windows.Forms.ListBox lb_inventory;
         private System.Windows.Forms.TextBox tb_hand1;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.TextBox tb_invLoc;
@@ -2393,12 +2353,16 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TextBox tb_hand4;
         private System.Windows.Forms.TextBox tb_hand3;
         private System.Windows.Forms.TextBox tb_hand5;
-        private System.Windows.Forms.Label label53;
-        private System.Windows.Forms.ListBox tb_cubeStash;
+        private System.Windows.Forms.Label l_cubeStash;
+        private System.Windows.Forms.ListBox lb_cubeStash;
         private System.Windows.Forms.Label label54;
         private System.Windows.Forms.Label label55;
         private System.Windows.Forms.TextBox tb_itemHeight;
         private System.Windows.Forms.TextBox tb_itemWidth;
-        private System.Windows.Forms.Panel p_inventoryPanel;
+        private System.Windows.Forms.TabControl tc_characterItemPlacements;
+        private System.Windows.Forms.TabPage tp_inventory;
+        private System.Windows.Forms.TabPage tp_stash;
+        private System.Windows.Forms.TabPage tp_extraStash;
+        private System.Windows.Forms.TabPage tp_cubeStash;
     }
 }
