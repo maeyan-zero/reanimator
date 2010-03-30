@@ -21,10 +21,9 @@ namespace Reanimator
             head = binReader.ReadBytes(208);
             
             int classnameslen = BitConverter.ToInt32(head, 132);
-            int classnamesoffset = 208 + classnameslen;
             try
             {
-                while (binReader.BaseStream.Position < classnamesoffset)
+                while (binReader.BaseStream.Position < classnameslen)
                 {
                     uint token = binReader.ReadUInt32();
                     string classname = GetClassName(binReader);
@@ -33,12 +32,17 @@ namespace Reanimator
                     if (type != null)
                     {
                         content.Add((hkObject)Activator.CreateInstance(type));
+                        if (type == typeof(hkxVertexBuffer)) // dirty fix
+                        {
+                            binReader.BaseStream.Position = classnameslen;
+                        }
                     }
                     else
                     {
                         throw new Exception(classname);
                     }
                 }
+                binReader.ReadByte();
             }
             catch(Exception e)
             {
@@ -137,13 +141,13 @@ namespace Reanimator
 
             manager.AddClass("hkClass", 0xA52796EB, typeof(hkClass));
             manager.AddClass("hkClassMember", 0x2E50284B, typeof(hkClassMember));
-            manager.AddClass("hkClassEnum", 0x099617A1, typeof(hkClassEnum));
+            manager.AddClass("hkClassEnum", 0x9617A10C, typeof(hkClassEnum));
             manager.AddClass("hkClassEnumItem", 0xCE6F8A6C, typeof(hkClassEnumItem));
             manager.AddClass("hkAnimationBinding", 0xE39DF839, typeof(hkAnimationBinding));
             manager.AddClass("hkxVertexP4N4C1T2", 0x035DEB8A, typeof(hkxVertexP4N4C1T2));
             manager.AddClass("hkxMaterial", 0x3D43489C, typeof(hkxMaterial));
             manager.AddClass("hkxIndexBuffer", 0x1C8A8C37, typeof(hkxIndexBuffer));
-            manager.AddClass("hkxTextureInplace", 0x4C134BF6, typeof(hkxTextureInplace));
+            manager.AddClass("hkxTextureInplace", 0xF64B134C, typeof(hkxTextureInplace));
             manager.AddClass("hkxTextureFile", 0x0217EF77, typeof(hkxTextureFile));
             manager.AddClass("hkxMeshSection", 0x03D42467, typeof(hkxMeshSection));
             manager.AddClass("hkInterleavedSkeletalAnimation", 0xC21C54FF, typeof(hkInterleavedSkeletalAnimation));
@@ -158,7 +162,7 @@ namespace Reanimator
             manager.AddClass("hkAnimationContainer", 0xF456626D, typeof(hkAnimationContainer));
             manager.AddClass("hkRootLevelContainer", 0xF598A34E, typeof(hkRootLevelContainer));
             manager.AddClass("hkxAttribute", 0x914DA6C1, typeof(hkxAttribute));
-            manager.AddClass("hkAnimatedReferenceFrame", 0x914DA6C1, typeof(hkAnimatedReferenceFrame));
+            manager.AddClass("hkAnimatedReferenceFrame", 0xDA8C7D7D, typeof(hkAnimatedReferenceFrame));
             manager.AddClass("hkxNodeAnnotationData", 0x521E9517, typeof(hkxNodeAnnotationData));
             manager.AddClass("hkBaseObject", 0xE0708A00, typeof(hkBaseObject));
             manager.AddClass("hkMeshBinding", 0x88F9319C, typeof(hkMeshBinding));
@@ -168,22 +172,28 @@ namespace Reanimator
             manager.AddClass("hkxMesh", 0x6DCE06BD, typeof(hkxMesh));
             manager.AddClass("hkBone", 0xA74011F0, typeof(hkBone));
             manager.AddClass("hkAnnotationTrackAnnotation", 0x731888CA, typeof(hkAnnotationTrackAnnotation));
-            manager.AddClass("hkBoneAttachement", 0x8EDD3E9A, typeof(hkBoneAttachement));
+            manager.AddClass("hkBoneAttachement", 0x8BDD3E9A, typeof(hkBoneAttachement));
             manager.AddClass("hkRootLevelContainerNamedVariant", 0x853A899C, typeof(hkRootLevelContainerNamedVariant));
             manager.AddClass("hkSkeleton", 0xA35E6164, typeof(hkSkeleton));
             manager.AddClass("hkxNode", 0x0A62C79F, typeof(hkxNode));
             manager.AddClass("hkxAttributeGroup", 0x1667C01C, typeof(hkxAttributeGroup));
             manager.AddClass("hkxVertexBuffer", 0x57061454, typeof(hkxVertexBuffer));
+            manager.AddClass("hkxAnimatedFloat", 0x9BB15AF4, typeof(hkxAnimatedFloat));
         }
 
         string GetClassName(BinaryReader binReader)
         {
-            char[] classname = new char[binReader.ReadByte()];
-            for (int i = 0; i < classname.Length; i++)
+            char[] classname = new char[64];
+            binReader.ReadByte(); // 0x09
+            for (int i = 0; ; i++)
             {
                 classname[i] = (char)binReader.ReadByte();
+                if (classname[i] == 0)
+                {
+                    break;
+                }
             }
-            return FileTools.ArrayToStringGeneric<char>(classname, "");
+            return FileTools.ArrayToStringGeneric<char>(classname, ""); ;
         }
 
         class hkObject
@@ -417,6 +427,11 @@ namespace Reanimator
         }
 
         class hkxVertexBuffer : hkObject
+        {
+
+        }
+
+        class hkxAnimatedFloat : hkObject
         {
 
         }
