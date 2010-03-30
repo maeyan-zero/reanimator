@@ -447,6 +447,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll"
-copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"</PostBuildEvent>
+copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"
+copy "$(ProjectDir)\Resources\copyMyContentToTheExecutableFolder" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
