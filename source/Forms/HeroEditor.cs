@@ -8,8 +8,9 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
 using System.Collections;
-using Reanimator.HeroEditorFunctions;
+using Reanimator.Forms;
 using System.Drawing;
+using Reanimator.Forms.HeroEditorFunctions;
 
 namespace Reanimator.Forms
 {
@@ -18,6 +19,7 @@ namespace Reanimator.Forms
         readonly Unit _heroUnit;
         readonly TableDataSet dataSet;
         readonly ExcelTables excelTables;
+        readonly CompletePanelControl _panel;
         readonly Stats _statsTable;
         readonly String _filePath;
         string savedPath;
@@ -27,10 +29,9 @@ namespace Reanimator.Forms
             _heroUnit = heroUnit;
             dataSet = tableDataSet;
             excelTables = tableDataSet.ExcelTables;
+            _panel = new CompletePanelControl();
             _statsTable = excelTables.GetTable("stats") as Stats;
             _filePath = filePath;
-
-            _skillPanel = new SkillPanel();
 
             GenerateUnitNameStrings(new[] { _heroUnit }, null);
 
@@ -55,8 +56,9 @@ namespace Reanimator.Forms
             InitUnknownStatList();
 
             int charClassId = 1;
-            InitSkillPanel(charClassId);
-            InitStatPanel();
+            InitializeAttributeSkillPanel(charClassId);
+
+            InitInventory();
         }
 
         private void PopulateItems(Unit unit)
@@ -78,8 +80,8 @@ namespace Reanimator.Forms
             }
 
 
-            Unit[] items = unit.Items;
-            for (int i = 0; i < items.Length; i++)
+            List<Unit> items = unit.Items;
+            for (int i = 0; i < items.Count; i++)
             {
                 Unit item = items[i];
                 if (item == null) continue;
@@ -214,7 +216,7 @@ namespace Reanimator.Forms
                         unit.Stats[counter].Name = name;
                     }
 
-                    GenerateUnitNameStrings(unit.Items, hash);
+                    GenerateUnitNameStrings(unit.Items.ToArray(), hash);
                 }
             }
             catch (Exception ex)
@@ -534,7 +536,7 @@ namespace Reanimator.Forms
         private void button3_Click(object sender, EventArgs e)
         {
             List<string> references = new List<string>();
-            CheckTableReferencesForItems(references, _heroUnit.Items);
+            CheckTableReferencesForItems(references, _heroUnit.Items.ToArray());
 
             listBox1.DataSource = references;
         }
@@ -555,7 +557,7 @@ namespace Reanimator.Forms
             {
                 foreach (Unit.StatBlock.Stat stats in item.Stats.stats)
                 {
-                    CheckTableReferencesForItems(references, item.Items);
+                    CheckTableReferencesForItems(references, item.Items.ToArray());
 
                     if (stats.skipResource == 0)
                     {
@@ -595,7 +597,7 @@ namespace Reanimator.Forms
 
         private void saveCharButton_Click(object sender, EventArgs e)
         {
-            SkillPanelToCharValues();
+            _panel.GetSkillControls(_heroUnit);
 
             int startIndex = _filePath.LastIndexOf("\\") + 1;
             string characterName = _filePath.Substring(startIndex, _filePath.Length - startIndex - 4);
@@ -668,9 +670,9 @@ namespace Reanimator.Forms
             text += "timeStamp1: " + _heroUnit.timeStamp1 + "\n";
             text += "timeStamp2: " + _heroUnit.timeStamp2 + "\n";
             text += "timeStamp3: " + _heroUnit.timeStamp3 + "\n";
-            text += "unknown_01_03_1: " + _heroUnit.unknown_01_03_1 + "\n";
-            text += "unknown_01_03_2: " + _heroUnit.unknown_01_03_2 + "\n";
-            text += "unknown_01_03_3: " + _heroUnit.unknown_01_03_3 + "\n";
+            text += "unknown_01_03_1: " + _heroUnit.inventoryType + "\n";
+            text += "unknown_01_03_2: " + _heroUnit.inventoryPositionX + "\n";
+            text += "unknown_01_03_3: " + _heroUnit.inventoryPositionY + "\n";
             if (_heroUnit.unknown_01_03_4 != null)
             {
                 foreach (byte val in _heroUnit.unknown_01_03_4)
@@ -766,7 +768,7 @@ namespace Reanimator.Forms
 
         private void PopulateMinigame()
         {
-            Unit.StatBlock.Stat minigame = GetComplexValue("minigame_category_needed");
+            Unit.StatBlock.Stat minigame = GetComplexValue(_heroUnit, "minigame_category_needed");
 
             // As long as VS won't let me place the control in the form by hand I'll initialize it here
             MinigameControl control = new MinigameControl(minigame.values);
@@ -775,7 +777,7 @@ namespace Reanimator.Forms
 
         private void PopulateWaypoints()
         {
-            Unit.StatBlock.Stat wayPoints = GetComplexValue("waypoint_flags");
+            Unit.StatBlock.Stat wayPoints = GetComplexValue(_heroUnit, "waypoint_flags");
 
             if (wayPoints != null)
             {
@@ -863,11 +865,11 @@ namespace Reanimator.Forms
         {
             try
             {
-                int level = GetSimpleValue("level");
+                int level = GetSimpleValue(_heroUnit, "level");
                 level_NumericUpDown.Value = level - 8;
 
 
-                int palladium = GetSimpleValue("gold");
+                int palladium = GetSimpleValue(_heroUnit, "gold");
                 // when palladium reaches 9999999 the ingame value is set to a max value ao something like 16000000
                 if (palladium > 9999999)
                 {
@@ -880,54 +882,54 @@ namespace Reanimator.Forms
                 }
                 nud_palladium.Value = palladium;
 
-                int statPoints = GetSimpleValue("stat_points");
+                int statPoints = GetSimpleValue(_heroUnit, "stat_points");
                 if (statPoints < 0)
                 {
                     statPoints = 0;
                 }
                 nud_statPoints.Value = statPoints;
 
-                int skillPoints = GetSimpleValue("skill_points");
+                int skillPoints = GetSimpleValue(_heroUnit, "skill_points");
                 if (skillPoints < 0)
                 {
                     skillPoints = 0;
                 }
                 nud_skillPoints.Value = skillPoints;
 
-                int accuracy = GetSimpleValue("accuracy");
+                int accuracy = GetSimpleValue(_heroUnit, "accuracy");
                 nud_accuracy.Value = accuracy;
 
-                int strength = GetSimpleValue("strength");
+                int strength = GetSimpleValue(_heroUnit, "strength");
                 nud_strength.Value = strength;
 
-                int stamina = GetSimpleValue("stamina");
+                int stamina = GetSimpleValue(_heroUnit, "stamina");
                 nud_stamina.Value = stamina;
 
-                int willpower = GetSimpleValue("willpower");
+                int willpower = GetSimpleValue(_heroUnit, "willpower");
                 nud_willpower.Value = willpower;
 
-                int health = GetSimpleValue("hp_cur");
+                int health = GetSimpleValue(_heroUnit, "hp_cur");
                 nud_health.Value = health;
 
-                int power = GetSimpleValue("power_cur");
+                int power = GetSimpleValue(_heroUnit, "power_cur");
                 nud_power.Value = power;
 
-                int shields = GetSimpleValue("shield_buffer_cur");
+                int shields = GetSimpleValue(_heroUnit, "shield_buffer_cur");
                 nud_shields.Value = shields;
 
-                int armor = GetSimpleValue("power_max");
+                int armor = GetSimpleValue(_heroUnit, "power_max");
                 //nud_armor.Value = armor;
 
-                int sfxDefence = GetSimpleValue("sfx_defense_bonus");
+                int sfxDefence = GetSimpleValue(_heroUnit, "sfx_defense_bonus");
                 nud_sfxDefence.Value = sfxDefence - 100;
 
-                int currentAP = GetSimpleValue("achievement_points_total");
+                int currentAP = GetSimpleValue(_heroUnit, "achievement_points_total");
                 nud_currentAP.Value = currentAP;
 
-                int maxAP = GetSimpleValue("achievement_points_cur");
+                int maxAP = GetSimpleValue(_heroUnit, "achievement_points_cur");
                 nud_maxAP.Value = maxAP;
 
-                int playTime = GetSimpleValue("played_time_in_seconds");
+                int playTime = GetSimpleValue(_heroUnit, "played_time_in_seconds");
                 TimeSpan t = TimeSpan.FromSeconds(playTime);
 
                 string time = string.Format("{0:D2}d {0:D2}h {1:D2}m {2:D2}s", t.Days, t.Hours, t.Minutes, t.Seconds);
@@ -947,22 +949,47 @@ namespace Reanimator.Forms
             if (_heroUnit.Flags1 != null && _heroUnit.Flags1.Contains(21062))
             {
                 elite_CheckBox.Checked = true;
+                startedAsElite = true;
             }
             if (_heroUnit.Flags2 != null && _heroUnit.Flags2.Contains(18243))
             {
                 hardcore_CheckBox.Checked = true;
+                startedAsHC = true;
             }
             if (_heroUnit.Flags2 != null && _heroUnit.Flags2.Contains(18499))
             {
                 dead_CheckBox.Checked = true;
+                startedAsDead = true;
             }
         }
 
+        bool startedAsElite;
+        bool startedAsHC;
+        bool startedAsDead;
+
+        // Set Elite/HC/Dead mode
         private void CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (initialized)
             {
                 _heroUnit.SetGameMode(elite_CheckBox.Checked, hardcore_CheckBox.Checked, dead_CheckBox.Checked);
+
+                if(startedAsElite && !elite_CheckBox.Checked)
+                {
+                    _heroUnit.unknownCount1Bs[0].unknown2 -= 32;
+                }
+                else if (!startedAsElite && elite_CheckBox.Checked)
+                {
+                    _heroUnit.unknownCount1Bs[0].unknown2 += 32;
+                }
+                if (startedAsHC && !hardcore_CheckBox.Checked)
+                {
+                    _heroUnit.unknownCount1Bs[0].unknown2 -= 5;
+                }
+                else if (!startedAsHC && hardcore_CheckBox.Checked)
+                {
+                    _heroUnit.unknownCount1Bs[0].unknown2 += 5;
+                }
             }
         }
 
@@ -1001,6 +1028,10 @@ namespace Reanimator.Forms
             {
                 richTextBox1.Text += "Array = null";
             }
+
+            richTextBox1.Text += "\n\n\n\n";
+            textBox2.Text = _heroUnit.unknownCount1Bs[0].unknown1.ToString();
+            textBox3.Text = _heroUnit.unknownCount1Bs[0].unknown2.ToString();
         }
 
         private void hardcore_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -1013,9 +1044,52 @@ namespace Reanimator.Forms
 
         private void currentlyEditing_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Unit unit = (Unit)currentlyEditing_ComboBox.SelectedItem;
+            try
+            {
+                Unit unit = (Unit)currentlyEditing_ComboBox.SelectedItem;
 
-            PopulateStats(unit);
+                ShowInvInfo(unit);
+
+                PopulateStats(unit);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "currentlyEditing_ComboBox_SelectedIndexChanged");
+            }
+        }
+
+        private void ShowInvInfo(Unit unit)
+        {
+            tb_invLoc.Text = unit.inventoryType.ToString();
+            tb_invPosX.Text = unit.inventoryPositionX.ToString();
+            tb_invPosY.Text = unit.inventoryPositionY.ToString();
+
+            tb_itemWidth.Text = GetItemWidth(unit).ToString();
+            tb_itemHeight.Text = GetItemHeight(unit).ToString();
+        }
+
+        private int GetItemWidth(Unit item)
+        {
+            int width = GetSimpleValue(item, "inventory_width");
+
+            if (width <= 0)
+            {
+                width = 1;
+            }
+
+            return width;
+        }
+
+        private int GetItemHeight(Unit item)
+        {
+            int height = GetSimpleValue(item, "inventory_height");
+
+            if (height <= 0)
+            {
+                height = 1;
+            }
+
+            return height;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -1037,60 +1111,60 @@ namespace Reanimator.Forms
 
 
         #region modify character values
-        private void SetSimpleValue(string valueName, int value)
+        private void SetSimpleValue(Unit unit, string valueName, int value)
         {
             if (!initialized) return;
 
-            for (int counter = 0; counter < _heroUnit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unit = _heroUnit.Stats[counter];
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
 
-                if (unit.Name != valueName) continue;
+                if (unitStats.Name != valueName) continue;
 
-                unit.values[0].Stat = value;
+                unitStats.values[0].Stat = value;
                 return;
             }
         }
 
-        private void SetComplexValue(string valueName, Unit.StatBlock.Stat stat)
+        private void SetComplexValue(Unit unit, string valueName, Unit.StatBlock.Stat stat)
         {
             if (!initialized) return;
 
-            for (int counter = 0; counter < _heroUnit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unit = _heroUnit.Stats[counter];
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
 
-                if (unit.Name != valueName) continue;
+                if (unitStats.Name != valueName) continue;
 
-                unit = stat;
+                unitStats = stat;
                 return;
             }
         }
 
-        private int GetSimpleValue(string valueName)
+        private int GetSimpleValue(Unit unit, string valueName)
         {
-            for (int counter = 0; counter < _heroUnit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unit = _heroUnit.Stats[counter];
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
 
-                if (unit.Name == valueName)
+                if (unitStats.Name == valueName)
                 {
-                    return unit.values[0].Stat;
+                    return unitStats.values[0].Stat;
                 }
             }
-            MessageBox.Show("Field \"" + valueName + "\" not present in current save file!");
+            //MessageBox.Show("Field \"" + valueName + "\" not present in unit " + unit.Name + "!");
             return 0;
         }
 
-        private Unit.StatBlock.Stat GetComplexValue(string valueName)
+        private Unit.StatBlock.Stat GetComplexValue(Unit unit, string valueName)
         {
-            for (int counter = 0; counter < _heroUnit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unit = _heroUnit.Stats[counter];
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
 
-                if (unit.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
+                if (unitStats.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
                 {
-                    return unit;
+                    return unitStats;
                 }
             }
             return null;
@@ -1098,48 +1172,48 @@ namespace Reanimator.Forms
 
         private void level_NumericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("level", (int)level_NumericUpDown.Value + 8);
+            SetSimpleValue(_heroUnit, "level", (int)level_NumericUpDown.Value + 8);
         }
 
         private void palladium_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("gold", (int)nud_palladium.Value);
+            SetSimpleValue(_heroUnit, "gold", (int)nud_palladium.Value);
         }
 
         private void skillPoints_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("skill_points", (int)nud_skillPoints.Value);
+            SetSimpleValue(_heroUnit, "skill_points", (int)nud_skillPoints.Value);
         }
 
         private void statPoints_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("stat_points", (int)nud_statPoints.Value);
+            SetSimpleValue(_heroUnit, "stat_points", (int)nud_statPoints.Value);
         }
 
         private void nud_accuracy_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("accuracy", (int)nud_accuracy.Value);
+            SetSimpleValue(_heroUnit, "accuracy", (int)nud_accuracy.Value);
         }
 
         private void nud_strength_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("strength", (int)nud_strength.Value);
+            SetSimpleValue(_heroUnit, "strength", (int)nud_strength.Value);
         }
 
         private void nud_stamina_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("stamina", (int)nud_stamina.Value);
+            SetSimpleValue(_heroUnit, "stamina", (int)nud_stamina.Value);
         }
 
         private void nud_willpower_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("willpower", (int)nud_willpower.Value);
+            SetSimpleValue(_heroUnit, "willpower", (int)nud_willpower.Value);
         }
 
 
         private void nud_shields_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("shield_buffer_cur", (int)nud_shields.Value);
+            SetSimpleValue(_heroUnit, "shield_buffer_cur", (int)nud_shields.Value);
         }
 
         private void nud_armor_ValueChanged(object sender, EventArgs e)
@@ -1149,27 +1223,27 @@ namespace Reanimator.Forms
 
         private void nud_currentAP_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("achievement_points_cur", (int)nud_currentAP.Value);
+            SetSimpleValue(_heroUnit, "achievement_points_cur", (int)nud_currentAP.Value);
         }
 
         private void nud_maxAP_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("achievement_points_total", (int)nud_maxAP.Value);
+            SetSimpleValue(_heroUnit, "achievement_points_total", (int)nud_maxAP.Value);
         }
 
         private void nud_health_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("hp_cur", (int)nud_health.Value);
+            SetSimpleValue(_heroUnit, "hp_cur", (int)nud_health.Value);
         }
 
         private void nud_power_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("power_cur", (int)nud_power.Value);
+            SetSimpleValue(_heroUnit, "power_cur", (int)nud_power.Value);
         }
 
         private void nud_sfxDefence_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue("sfx_defense_bonus", (int)nud_sfxDefence.Value + 100);
+            SetSimpleValue(_heroUnit, "sfx_defense_bonus", (int)nud_sfxDefence.Value + 100);
         }
 
         #endregion
@@ -1177,7 +1251,7 @@ namespace Reanimator.Forms
         private void button5_Click(object sender, EventArgs e)
         {
             List<string> itemValues = new List<string>();
-            CheckItemValues(itemValues, _heroUnit.Items);
+            CheckItemValues(itemValues, _heroUnit.Items.ToArray());
             listBox2.DataSource = itemValues;
         }
 
@@ -1194,118 +1268,79 @@ namespace Reanimator.Forms
                     }
                 }
 
-                CheckItemValues(values, item.Items);
+                CheckItemValues(values, item.Items.ToArray());
             }
         }
 
-        SkillPanel _skillPanel;
-        private void InitStatPanel()
-        {
-            tp_stats.SuspendLayout();
+        //private void CharValuesToSkillPanel()
+        //{
+        //    Unit.StatBlock.Stat skillList = null;
 
-            DataTable table = dataSet.GetExcelTable(23088);
-            StatComponents comp = new StatComponents(_skillPanel);
-
-            Panel panel = comp.CreatePanel(_heroUnit, table);
-
-            panel.Scale(new SizeF(.7f, .7f));
-
-            tp_stats.Controls.Add(panel);
-
-            tp_stats.ResumeLayout();
-        }
-
-        List<SkillControls> _skillControls;
-        public void InitSkillPanel(int characterClass)
-        {
-            tp_skills.SuspendLayout();
-
-            DataTable table = dataSet.GetExcelTable(27952);
-            SkillComponents comp = new SkillComponents(_skillPanel);
-
-            tp_skills.Controls.Clear();
-            Panel panel = comp.CreatePanel(ref table, characterClass);
-
-            panel.Scale(new SizeF(.7f, .7f));
-
-            tp_skills.Controls.Add(panel);
-
-            _skillControls = comp.SkillControls;
-
-            CharValuesToSkillPanel();
-
-            tp_skills.ResumeLayout();
-        }
-
-        private void CharValuesToSkillPanel()
-        {
-            Unit.StatBlock.Stat skillList = null;
-
-            foreach (Unit.StatBlock.Stat skills in _heroUnit.Stats.stats)
-            {
-                if (skills.Name.Equals("skill_level", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    skillList = skills;
-                    break;
-                }
-            }
+        //    foreach (Unit.StatBlock.Stat skills in _heroUnit.Stats.stats)
+        //    {
+        //        if (skills.Name.Equals("skill_level", StringComparison.CurrentCultureIgnoreCase))
+        //        {
+        //            skillList = skills;
+        //            break;
+        //        }
+        //    }
             
-            foreach (SkillControls skill in _skillControls)
-            {
-                foreach (Unit.StatBlock.Stat.Values value in skillList.values)
-                {
-                    if (value.Attribute1 == skill._id)
-                    {
-                        skill.CurrentLevel = value.Stat;
-                        break;
-                    }
-                }
-            }
-        }
+        //    foreach (SkillControls skill in _skillControls)
+        //    {
+        //        foreach (Unit.StatBlock.Stat.Values value in skillList.values)
+        //        {
+        //            if (value.Attribute1 == skill._id)
+        //            {
+        //                skill.CurrentLevel = value.Stat;
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
 
-        private void SkillPanelToCharValues()
-        {
-            Unit.StatBlock.Stat skillList = null;
+        //private void SkillPanelToCharValues()
+        //{
+        //    Unit.StatBlock.Stat skillList = null;
 
-            foreach (Unit.StatBlock.Stat skills in _heroUnit.Stats.stats)
-            {
-                if (skills.Name.Equals("skill_level", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    skillList = skills;
-                    break;
-                }
-            }
+        //    foreach (Unit.StatBlock.Stat skills in _heroUnit.Stats.stats)
+        //    {
+        //        if (skills.Name.Equals("skill_level", StringComparison.CurrentCultureIgnoreCase))
+        //        {
+        //            skillList = skills;
+        //            break;
+        //        }
+        //    }
 
-            foreach (SkillControls skill in _skillControls)
-            {
-                bool found = false;
+        //    foreach (SkillControls skill in _skillControls)
+        //    {
+        //        bool found = false;
 
-                foreach (Unit.StatBlock.Stat.Values value in skillList.values)
-                {
-                    if (value.Attribute1 == skill._id)
-                    {
-                        value.Stat = skill.CurrentLevel;
-                        found = true;
-                        break;
-                    }
-                }
+        //        foreach (Unit.StatBlock.Stat.Values value in skillList.values)
+        //        {
+        //            if (value.Attribute1 == skill._id)
+        //            {
+        //                value.Stat = skill.CurrentLevel;
+        //                found = true;
+        //                break;
+        //            }
+        //        }
 
-                if (!found && skill.CurrentLevel > 0)
-                {
-                    List<Unit.StatBlock.Stat.Values> values = new List<Unit.StatBlock.Stat.Values>();
-                    values.AddRange(skillList.values);
+        //        if (!found && skill.CurrentLevel > 0)
+        //        {
+        //            List<Unit.StatBlock.Stat.Values> values = new List<Unit.StatBlock.Stat.Values>();
+        //            values.AddRange(skillList.values);
 
-                    Unit.StatBlock.Stat.Values newValue = new Unit.StatBlock.Stat.Values();
-                    newValue.Attribute1 = skill._id;
-                    newValue.Stat = skill.CurrentLevel;
+        //            Unit.StatBlock.Stat.Values newValue = new Unit.StatBlock.Stat.Values();
+        //            newValue.Attribute1 = skill._id;
+        //            newValue.Stat = skill.CurrentLevel;
 
-                    values.Add(newValue);
+        //            values.Add(newValue);
 
-                    skillList.values = values.ToArray();
-                    skillList.repeatCount = values.Count;
-                }
-            }
-        }
+        //            skillList.values = values.ToArray();
+        //            skillList.repeatCount = values.Count;
+        //        }
+        //    }
+        //}
 
         bool isMousePressed;
         private void HeroEditor_MouseDown(object sender, MouseEventArgs e)
@@ -1326,9 +1361,144 @@ namespace Reanimator.Forms
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        #region SKILLPANEL
+        private void InitializeAttributeSkillPanel(int characterClass)
         {
-            InitSkillPanel(int.Parse(comboBox1.Text));
+            DataTable table = dataSet.GetExcelTable(27952);
+            _panel.Initialize(ref table, characterClass, _heroUnit);
+
+            tp_characterValues.Controls.Add(_panel);
+            tp_characterValues.Size = _panel.Size;
+        }
+        #endregion
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            _heroUnit.unknownCount1Bs[0].unknown1 = Int32.Parse(textBox2.Text);
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            _heroUnit.unknownCount1Bs[0].unknown2 = Int32.Parse(textBox3.Text);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Unit unit = (Unit)currentlyEditing_ComboBox.SelectedItem;
+
+            XmlUtilities<Unit>.Serialize(unit, @"F:\" + unit.Name + ".xml");
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Unit unit = XmlUtilities<Unit>.Deserialize(@"F:\" + textBox4.Text + ".xml");
+            //unit.inventoryPositionX++;
+            //unit.inventoryPositionY++;
+            _heroUnit.Items.Add(unit);
+            _heroUnit.itemCount++;
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            _heroUnit.Items.Remove((Unit)currentlyEditing_ComboBox.SelectedItem);
+            _heroUnit.itemCount--;
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Unit unit = (Unit)currentlyEditing_ComboBox.SelectedItem;
+            unit.inventoryPositionX++;
+        }
+
+        private void InitInventory()
+        {
+            try
+            {
+                foreach (Unit item in _heroUnit.Items)
+                {
+                    foreach (Control control in tp_inventory.Controls)
+                    {
+                        if (item.inventoryType.ToString() == (string)control.Tag)
+                        {
+                            if (item.inventoryType == 19760 || item.inventoryType == 28208 || item.inventoryType == 26928 || item.inventoryType == 22577)
+                            {
+                                ((ListBox)control).Items.Add(item);
+
+                                if (item.inventoryType == 19760)
+                                {
+                                    int quality = GetSimpleValue(item, "item_quality");
+
+                                    Color color = Color.White;
+
+                                    if (quality == 13360)
+                                    {
+                                        color = Color.Purple;
+                                    }
+                                    else if(quality == 12336)
+                                    {
+                                        color = Color.White;
+                                    }
+                                    else if (quality == 13616)
+                                    {
+                                        color = Color.Gold;
+                                    }
+                                    else if (quality == 14384)
+                                    {
+                                        color = Color.Red;
+                                    }
+                                    else if (quality == 18480 || quality == 18736)
+                                    {
+                                        color = Color.Blue;
+                                    }
+                                    else if (quality == 12592)
+                                    {
+                                        color = Color.Green;
+                                    }
+                                    else if (quality == 13104 || quality == 16944)
+                                    {
+                                        color = Color.Orange;
+                                    }
+
+                                    Button b = new Button();
+                                    b.FlatStyle = FlatStyle.Flat;
+                                    b.BackColor = color;
+                                    b.Text = item.Name;
+                                    b.Width = GetItemWidth(item) * 32;
+                                    b.Height = GetItemHeight(item) * 32;
+                                    b.Location = new Point(item.inventoryPositionX * 32, item.inventoryPositionY * 32);
+                                    p_inventoryPanel.Controls.Add(b);
+                                }
+
+                                break;
+                            }
+                            else if (item.inventoryType == 25904)
+                            {
+                                TextBox box = (TextBox)tp_inventory.Controls["tb_hand" + item.inventoryPositionX];
+                                box.Text += item;
+                                break;
+                            }
+                            else
+                            {
+                                control.Text += item;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "InitInventory");
+            }
+        }
+
+        private void lv_itemSelected_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListBox view = (ListBox)sender;
+
+            Unit unit = (Unit)view.SelectedItems[0];
+
+            ShowInvInfo(unit);
         }
     }
 }
