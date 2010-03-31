@@ -1060,12 +1060,42 @@ namespace Reanimator.Forms
 
         private void ShowInvInfo(Unit unit)
         {
+            DataTable items = dataSet.GetExcelTable(27953);
+            DataRow[] itemRow = items.Select("code1 = '" + unit.itemCode + "'");
+
+            if (itemRow.Length > 0)
+            {
+                int value = (int)itemRow[0]["unitType"];
+
+                DataTable unitTypes = dataSet.GetExcelTable(21040);
+                DataRow[] unitRow = unitTypes.Select("Index = '" + value + "'");
+
+                if (unitRow.Length > 0)
+                {
+                    tb_itemType.Text = unitRow[0]["type"].ToString();
+                }
+            }
+            else
+            {
+                tb_itemType.Text = "unknown";
+            }
+
+            tb_itemName.Text = unit.Name;
             tb_invLoc.Text = unit.inventoryType.ToString();
             tb_invPosX.Text = unit.inventoryPositionX.ToString();
             tb_invPosY.Text = unit.inventoryPositionY.ToString();
 
             tb_itemWidth.Text = GetItemWidth(unit).ToString();
             tb_itemHeight.Text = GetItemHeight(unit).ToString();
+
+            int quantity = GetSimpleValue(unit, ItemValueNames.item_quantity.ToString());
+
+            if(quantity <= 0)
+            {
+                quantity = 1;
+            }
+
+            tb_itemCount.Text = quantity.ToString();
         }
 
         private int GetItemWidth(Unit item)
@@ -1466,6 +1496,8 @@ namespace Reanimator.Forms
                                     b.Width = GetItemWidth(item) * ITEMSIZE;
                                     b.Height = GetItemHeight(item) * ITEMSIZE;
                                     b.Location = new Point(item.inventoryPositionX * ITEMSIZE, item.inventoryPositionY * ITEMSIZE);
+                                    b.Tag = item;
+                                    b.Click += new EventHandler(b_Click);
 
                                     if (quantity == 1)
                                     {
@@ -1534,6 +1566,13 @@ namespace Reanimator.Forms
             {
                 MessageBox.Show(ex.Message, "InitInventory");
             }
+        }
+
+        void b_Click(object sender, EventArgs e)
+        {
+            Unit unit = (Unit)((Button)sender).Tag;
+
+            ShowInvInfo(unit);
         }
 
         private void lv_itemSelected_SelectedIndexChanged(object sender, EventArgs e)
