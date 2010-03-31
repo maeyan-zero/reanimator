@@ -393,7 +393,7 @@ namespace Reanimator.Forms
                     eaValueLabel.Top = heightOffset;
                     eaValueTextBox.Width = 80;
 
-                    if (stat.Name.Equals("minigame_category_needed", StringComparison.InvariantCultureIgnoreCase))
+                    if (stat.Name.Equals(ItemValueNames.minigame_category_needed.ToString(), StringComparison.InvariantCultureIgnoreCase))
                     {
                         // checks for minigame entries by using the values as the minigame doesn't define any tables
                         lookUpString = GetMinigameGoal(stat.values[i].Attribute1, stat.values[i].Attribute2);
@@ -768,7 +768,7 @@ namespace Reanimator.Forms
 
         private void PopulateMinigame()
         {
-            Unit.StatBlock.Stat minigame = GetComplexValue(_heroUnit, "minigame_category_needed");
+            Unit.StatBlock.Stat minigame = GetComplexValue(_heroUnit, ItemValueNames.minigame_category_needed.ToString());
 
             // As long as VS won't let me place the control in the form by hand I'll initialize it here
             MinigameControl control = new MinigameControl(minigame.values);
@@ -777,7 +777,7 @@ namespace Reanimator.Forms
 
         private void PopulateWaypoints()
         {
-            Unit.StatBlock.Stat wayPoints = GetComplexValue(_heroUnit, "waypoint_flags");
+            Unit.StatBlock.Stat wayPoints = GetComplexValue(_heroUnit, ItemValueNames.waypoint_flags.ToString());
 
             if (wayPoints != null)
             {
@@ -865,11 +865,11 @@ namespace Reanimator.Forms
         {
             try
             {
-                int level = GetSimpleValue(_heroUnit, "level");
+                int level = GetSimpleValue(_heroUnit, ItemValueNames.level.ToString());
                 level_NumericUpDown.Value = level - 8;
 
 
-                int palladium = GetSimpleValue(_heroUnit, "gold");
+                int palladium = GetSimpleValue(_heroUnit, ItemValueNames.gold.ToString());
                 // when palladium reaches 9999999 the ingame value is set to a max value ao something like 16000000
                 if (palladium > 9999999)
                 {
@@ -882,54 +882,54 @@ namespace Reanimator.Forms
                 }
                 nud_palladium.Value = palladium;
 
-                int statPoints = GetSimpleValue(_heroUnit, "stat_points");
+                int statPoints = GetSimpleValue(_heroUnit, ItemValueNames.stat_points.ToString());
                 if (statPoints < 0)
                 {
                     statPoints = 0;
                 }
                 nud_statPoints.Value = statPoints;
 
-                int skillPoints = GetSimpleValue(_heroUnit, "skill_points");
+                int skillPoints = GetSimpleValue(_heroUnit, ItemValueNames.skill_points.ToString());
                 if (skillPoints < 0)
                 {
                     skillPoints = 0;
                 }
                 nud_skillPoints.Value = skillPoints;
 
-                int accuracy = GetSimpleValue(_heroUnit, "accuracy");
+                int accuracy = GetSimpleValue(_heroUnit, ItemValueNames.accuracy.ToString());
                 nud_accuracy.Value = accuracy;
 
-                int strength = GetSimpleValue(_heroUnit, "strength");
+                int strength = GetSimpleValue(_heroUnit, ItemValueNames.strength.ToString());
                 nud_strength.Value = strength;
 
-                int stamina = GetSimpleValue(_heroUnit, "stamina");
+                int stamina = GetSimpleValue(_heroUnit, ItemValueNames.stamina.ToString());
                 nud_stamina.Value = stamina;
 
-                int willpower = GetSimpleValue(_heroUnit, "willpower");
+                int willpower = GetSimpleValue(_heroUnit, ItemValueNames.willpower.ToString());
                 nud_willpower.Value = willpower;
 
-                int health = GetSimpleValue(_heroUnit, "hp_cur");
+                int health = GetSimpleValue(_heroUnit, ItemValueNames.hp_cur.ToString());
                 nud_health.Value = health;
 
-                int power = GetSimpleValue(_heroUnit, "power_cur");
+                int power = GetSimpleValue(_heroUnit, ItemValueNames.power_cur.ToString());
                 nud_power.Value = power;
 
-                int shields = GetSimpleValue(_heroUnit, "shield_buffer_cur");
+                int shields = GetSimpleValue(_heroUnit, ItemValueNames.shield_buffer_cur.ToString());
                 nud_shields.Value = shields;
 
-                int armor = GetSimpleValue(_heroUnit, "power_max");
+                int armor = GetSimpleValue(_heroUnit, ItemValueNames.power_max.ToString());
                 //nud_armor.Value = armor;
 
-                int sfxDefence = GetSimpleValue(_heroUnit, "sfx_defense_bonus");
+                int sfxDefence = GetSimpleValue(_heroUnit, ItemValueNames.sfx_defense_bonus.ToString());
                 nud_sfxDefence.Value = sfxDefence - 100;
 
-                int currentAP = GetSimpleValue(_heroUnit, "achievement_points_total");
+                int currentAP = GetSimpleValue(_heroUnit, ItemValueNames.achievement_points_total.ToString());
                 nud_currentAP.Value = currentAP;
 
-                int maxAP = GetSimpleValue(_heroUnit, "achievement_points_cur");
+                int maxAP = GetSimpleValue(_heroUnit, ItemValueNames.achievement_points_cur.ToString());
                 nud_maxAP.Value = maxAP;
 
-                int playTime = GetSimpleValue(_heroUnit, "played_time_in_seconds");
+                int playTime = GetSimpleValue(_heroUnit, ItemValueNames.played_time_in_seconds.ToString());
                 TimeSpan t = TimeSpan.FromSeconds(playTime);
 
                 string time = string.Format("{0:D2}d {0:D2}h {1:D2}m {2:D2}s", t.Days, t.Hours, t.Minutes, t.Seconds);
@@ -1070,7 +1070,7 @@ namespace Reanimator.Forms
 
         private int GetItemWidth(Unit item)
         {
-            int width = GetSimpleValue(item, "inventory_width");
+            int width = GetSimpleValue(item, ItemValueNames.inventory_width.ToString());
 
             if (width <= 0)
             {
@@ -1082,7 +1082,7 @@ namespace Reanimator.Forms
 
         private int GetItemHeight(Unit item)
         {
-            int height = GetSimpleValue(item, "inventory_height");
+            int height = GetSimpleValue(item, ItemValueNames.inventory_height.ToString());
 
             if (height <= 0)
             {
@@ -1422,39 +1422,40 @@ namespace Reanimator.Forms
                     {
                         if (item.inventoryType.ToString() == (string)control.Tag)
                         {
+                            int quality = GetSimpleValue(item, ItemValueNames.item_quality.ToString());
+                            int quantity = GetSimpleValue(item, ItemValueNames.item_quantity.ToString());
+                            if (quantity <= 0)
+                            {
+                                quantity = 1;
+                            }
+
                             if (item.inventoryType == 19760 || item.inventoryType == 28208 || item.inventoryType == 26928 || item.inventoryType == 22577)
                             {
                                 ((ListBox)control).Items.Add(item);
 
-                                    int quality = GetSimpleValue(item, "item_quality");
-
                                     Color color = Color.White;
 
-                                    if (quality == 13360)
+                                    if (quality == (int)ItemQuality.Mutant || quality == (int)ItemQuality.MutantMod)
                                     {
                                         color = Color.Purple;
                                     }
-                                    else if(quality == 12336)
+                                    else if (quality == (int)ItemQuality.Normal || quality == (int)ItemQuality.NormalMod)
                                     {
                                         color = Color.White;
                                     }
-                                    else if (quality == 13616)
+                                    else if (quality == (int)ItemQuality.Unique || quality == (int)ItemQuality.UniqueMod)
                                     {
                                         color = Color.Gold;
                                     }
-                                    else if (quality == 14384)
-                                    {
-                                        color = Color.Red;
-                                    }
-                                    else if (quality == 18480 || quality == 18736)
+                                    else if (quality == (int)ItemQuality.Rare || quality == (int)ItemQuality.RareMod)
                                     {
                                         color = Color.Blue;
                                     }
-                                    else if (quality == 12592)
+                                    else if (quality == (int)ItemQuality.Uncommon)
                                     {
                                         color = Color.Green;
                                     }
-                                    else if (quality == 13104 || quality == 16944)
+                                    else if (quality == (int)ItemQuality.Legendary || quality == (int)ItemQuality.LegendaryMod)
                                     {
                                         color = Color.Orange;
                                     }
@@ -1462,10 +1463,18 @@ namespace Reanimator.Forms
                                     Button b = new Button();
                                     b.FlatStyle = FlatStyle.Flat;
                                     b.BackColor = color;
-                                    b.Text = item.Name;
                                     b.Width = GetItemWidth(item) * ITEMSIZE;
                                     b.Height = GetItemHeight(item) * ITEMSIZE;
                                     b.Location = new Point(item.inventoryPositionX * ITEMSIZE, item.inventoryPositionY * ITEMSIZE);
+
+                                    if (quantity == 1)
+                                    {
+                                        b.Text = item.Name;
+                                    }
+                                    else
+                                    {
+                                        b.Text = quantity + "x " + item.Name;
+                                    }
 
                                     if (item.inventoryType == 19760)
                                     {
@@ -1489,12 +1498,27 @@ namespace Reanimator.Forms
                             else if (item.inventoryType == 25904)
                             {
                                 TextBox box = (TextBox)tp_characterInventory.Controls["tb_hand" + item.inventoryPositionX];
-                                box.Text += item;
+
+                                if (quantity == 1)
+                                {
+                                    box.Text += item.Name;
+                                }
+                                else
+                                {
+                                    box.Text += quantity + "x " + item.Name;
+                                }
                                 break;
                             }
                             else
                             {
-                                control.Text += item;
+                                if (quantity == 1)
+                                {
+                                    control.Text += item.Name;
+                                }
+                                else
+                                {
+                                    control.Text += quantity + "x " + item.Name;
+                                }
                                 break;
                             }
                         }
