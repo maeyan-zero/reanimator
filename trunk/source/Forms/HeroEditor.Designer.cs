@@ -147,6 +147,11 @@ namespace Reanimator.Forms
             this.label34 = new System.Windows.Forms.Label();
             this.tp_characterValues = new System.Windows.Forms.TabPage();
             this.tp_characterInventory = new System.Windows.Forms.TabPage();
+            this.tc_characterItemPlacements = new System.Windows.Forms.TabControl();
+            this.tp_inventory = new System.Windows.Forms.TabPage();
+            this.tp_stash = new System.Windows.Forms.TabPage();
+            this.tp_extraStash = new System.Windows.Forms.TabPage();
+            this.tp_cubeStash = new System.Windows.Forms.TabPage();
             this.label54 = new System.Windows.Forms.Label();
             this.label55 = new System.Windows.Forms.Label();
             this.tb_itemHeight = new System.Windows.Forms.TextBox();
@@ -203,11 +208,12 @@ namespace Reanimator.Forms
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
-            this.tc_characterItemPlacements = new System.Windows.Forms.TabControl();
-            this.tp_inventory = new System.Windows.Forms.TabPage();
-            this.tp_stash = new System.Windows.Forms.TabPage();
-            this.tp_extraStash = new System.Windows.Forms.TabPage();
-            this.tp_cubeStash = new System.Windows.Forms.TabPage();
+            this.tb_itemCount = new System.Windows.Forms.TextBox();
+            this.label48 = new System.Windows.Forms.Label();
+            this.tb_itemName = new System.Windows.Forms.TextBox();
+            this.label49 = new System.Windows.Forms.Label();
+            this.tb_itemType = new System.Windows.Forms.TextBox();
+            this.label50 = new System.Windows.Forms.Label();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -1497,6 +1503,12 @@ namespace Reanimator.Forms
             // 
             // tp_characterInventory
             // 
+            this.tp_characterInventory.Controls.Add(this.label50);
+            this.tp_characterInventory.Controls.Add(this.tb_itemType);
+            this.tp_characterInventory.Controls.Add(this.label49);
+            this.tp_characterInventory.Controls.Add(this.tb_itemName);
+            this.tp_characterInventory.Controls.Add(this.label48);
+            this.tp_characterInventory.Controls.Add(this.tb_itemCount);
             this.tp_characterInventory.Controls.Add(this.tc_characterItemPlacements);
             this.tp_characterInventory.Controls.Add(this.label54);
             this.tp_characterInventory.Controls.Add(this.label55);
@@ -1552,10 +1564,66 @@ namespace Reanimator.Forms
             this.tp_characterInventory.Text = "Inventory";
             this.tp_characterInventory.UseVisualStyleBackColor = true;
             // 
+            // tc_characterItemPlacements
+            // 
+            this.tc_characterItemPlacements.Controls.Add(this.tp_inventory);
+            this.tc_characterItemPlacements.Controls.Add(this.tp_stash);
+            this.tc_characterItemPlacements.Controls.Add(this.tp_extraStash);
+            this.tc_characterItemPlacements.Controls.Add(this.tp_cubeStash);
+            this.tc_characterItemPlacements.Location = new System.Drawing.Point(838, 6);
+            this.tc_characterItemPlacements.Name = "tc_characterItemPlacements";
+            this.tc_characterItemPlacements.SelectedIndex = 0;
+            this.tc_characterItemPlacements.Size = new System.Drawing.Size(376, 546);
+            this.tc_characterItemPlacements.TabIndex = 54;
+            // 
+            // tp_inventory
+            // 
+            this.tp_inventory.AutoScroll = true;
+            this.tp_inventory.Location = new System.Drawing.Point(4, 22);
+            this.tp_inventory.Name = "tp_inventory";
+            this.tp_inventory.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_inventory.Size = new System.Drawing.Size(368, 520);
+            this.tp_inventory.TabIndex = 0;
+            this.tp_inventory.Text = "Inventory";
+            this.tp_inventory.UseVisualStyleBackColor = true;
+            // 
+            // tp_stash
+            // 
+            this.tp_stash.AutoScroll = true;
+            this.tp_stash.Location = new System.Drawing.Point(4, 22);
+            this.tp_stash.Name = "tp_stash";
+            this.tp_stash.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_stash.Size = new System.Drawing.Size(368, 520);
+            this.tp_stash.TabIndex = 1;
+            this.tp_stash.Text = "Stash";
+            this.tp_stash.UseVisualStyleBackColor = true;
+            // 
+            // tp_extraStash
+            // 
+            this.tp_extraStash.AutoScroll = true;
+            this.tp_extraStash.Location = new System.Drawing.Point(4, 22);
+            this.tp_extraStash.Name = "tp_extraStash";
+            this.tp_extraStash.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_extraStash.Size = new System.Drawing.Size(368, 520);
+            this.tp_extraStash.TabIndex = 2;
+            this.tp_extraStash.Text = "Extra Stash";
+            this.tp_extraStash.UseVisualStyleBackColor = true;
+            // 
+            // tp_cubeStash
+            // 
+            this.tp_cubeStash.AutoScroll = true;
+            this.tp_cubeStash.Location = new System.Drawing.Point(4, 22);
+            this.tp_cubeStash.Name = "tp_cubeStash";
+            this.tp_cubeStash.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_cubeStash.Size = new System.Drawing.Size(368, 520);
+            this.tp_cubeStash.TabIndex = 3;
+            this.tp_cubeStash.Text = "Cube Stash";
+            this.tp_cubeStash.UseVisualStyleBackColor = true;
+            // 
             // label54
             // 
             this.label54.AutoSize = true;
-            this.label54.Location = new System.Drawing.Point(36, 435);
+            this.label54.Location = new System.Drawing.Point(37, 453);
             this.label54.Name = "label54";
             this.label54.Size = new System.Drawing.Size(62, 13);
             this.label54.TabIndex = 51;
@@ -1564,7 +1632,7 @@ namespace Reanimator.Forms
             // label55
             // 
             this.label55.AutoSize = true;
-            this.label55.Location = new System.Drawing.Point(36, 409);
+            this.label55.Location = new System.Drawing.Point(37, 427);
             this.label55.Name = "label55";
             this.label55.Size = new System.Drawing.Size(58, 13);
             this.label55.TabIndex = 50;
@@ -1572,14 +1640,14 @@ namespace Reanimator.Forms
             // 
             // tb_itemHeight
             // 
-            this.tb_itemHeight.Location = new System.Drawing.Point(108, 432);
+            this.tb_itemHeight.Location = new System.Drawing.Point(109, 450);
             this.tb_itemHeight.Name = "tb_itemHeight";
             this.tb_itemHeight.Size = new System.Drawing.Size(100, 20);
             this.tb_itemHeight.TabIndex = 49;
             // 
             // tb_itemWidth
             // 
-            this.tb_itemWidth.Location = new System.Drawing.Point(108, 406);
+            this.tb_itemWidth.Location = new System.Drawing.Point(109, 424);
             this.tb_itemWidth.Name = "tb_itemWidth";
             this.tb_itemWidth.Size = new System.Drawing.Size(100, 20);
             this.tb_itemWidth.TabIndex = 48;
@@ -1671,7 +1739,7 @@ namespace Reanimator.Forms
             // 
             // label37
             // 
-            this.label37.Location = new System.Drawing.Point(36, 331);
+            this.label37.Location = new System.Drawing.Point(37, 349);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(41, 13);
             this.label37.TabIndex = 29;
@@ -1679,7 +1747,7 @@ namespace Reanimator.Forms
             // 
             // tb_invLoc
             // 
-            this.tb_invLoc.Location = new System.Drawing.Point(108, 328);
+            this.tb_invLoc.Location = new System.Drawing.Point(109, 346);
             this.tb_invLoc.Name = "tb_invLoc";
             this.tb_invLoc.Size = new System.Drawing.Size(100, 20);
             this.tb_invLoc.TabIndex = 34;
@@ -1687,7 +1755,7 @@ namespace Reanimator.Forms
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(36, 383);
+            this.label36.Location = new System.Drawing.Point(37, 401);
             this.label36.Name = "label36";
             this.label36.Size = new System.Drawing.Size(53, 13);
             this.label36.TabIndex = 33;
@@ -1696,7 +1764,7 @@ namespace Reanimator.Forms
             // label35
             // 
             this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(36, 357);
+            this.label35.Location = new System.Drawing.Point(37, 375);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(53, 13);
             this.label35.TabIndex = 32;
@@ -1704,14 +1772,14 @@ namespace Reanimator.Forms
             // 
             // tb_invPosY
             // 
-            this.tb_invPosY.Location = new System.Drawing.Point(108, 380);
+            this.tb_invPosY.Location = new System.Drawing.Point(109, 398);
             this.tb_invPosY.Name = "tb_invPosY";
             this.tb_invPosY.Size = new System.Drawing.Size(100, 20);
             this.tb_invPosY.TabIndex = 31;
             // 
             // tb_invPosX
             // 
-            this.tb_invPosX.Location = new System.Drawing.Point(108, 354);
+            this.tb_invPosX.Location = new System.Drawing.Point(109, 372);
             this.tb_invPosX.Name = "tb_invPosX";
             this.tb_invPosX.Size = new System.Drawing.Size(100, 20);
             this.tb_invPosX.TabIndex = 30;
@@ -2048,61 +2116,53 @@ namespace Reanimator.Forms
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
-            // tc_characterItemPlacements
+            // tb_itemCount
             // 
-            this.tc_characterItemPlacements.Controls.Add(this.tp_inventory);
-            this.tc_characterItemPlacements.Controls.Add(this.tp_stash);
-            this.tc_characterItemPlacements.Controls.Add(this.tp_extraStash);
-            this.tc_characterItemPlacements.Controls.Add(this.tp_cubeStash);
-            this.tc_characterItemPlacements.Location = new System.Drawing.Point(838, 6);
-            this.tc_characterItemPlacements.Name = "tc_characterItemPlacements";
-            this.tc_characterItemPlacements.SelectedIndex = 0;
-            this.tc_characterItemPlacements.Size = new System.Drawing.Size(376, 546);
-            this.tc_characterItemPlacements.TabIndex = 54;
+            this.tb_itemCount.Location = new System.Drawing.Point(109, 476);
+            this.tb_itemCount.Name = "tb_itemCount";
+            this.tb_itemCount.Size = new System.Drawing.Size(100, 20);
+            this.tb_itemCount.TabIndex = 55;
             // 
-            // tp_inventory
+            // label48
             // 
-            this.tp_inventory.AutoScroll = true;
-            this.tp_inventory.Location = new System.Drawing.Point(4, 22);
-            this.tp_inventory.Name = "tp_inventory";
-            this.tp_inventory.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_inventory.Size = new System.Drawing.Size(368, 520);
-            this.tp_inventory.TabIndex = 0;
-            this.tp_inventory.Text = "Inventory";
-            this.tp_inventory.UseVisualStyleBackColor = true;
+            this.label48.AutoSize = true;
+            this.label48.Location = new System.Drawing.Point(37, 479);
+            this.label48.Name = "label48";
+            this.label48.Size = new System.Drawing.Size(60, 13);
+            this.label48.TabIndex = 56;
+            this.label48.Text = "Item count:";
             // 
-            // tp_stash
+            // tb_itemName
             // 
-            this.tp_stash.AutoScroll = true;
-            this.tp_stash.Location = new System.Drawing.Point(4, 22);
-            this.tp_stash.Name = "tp_stash";
-            this.tp_stash.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_stash.Size = new System.Drawing.Size(368, 520);
-            this.tp_stash.TabIndex = 1;
-            this.tp_stash.Text = "Stash";
-            this.tp_stash.UseVisualStyleBackColor = true;
+            this.tb_itemName.Location = new System.Drawing.Point(109, 320);
+            this.tb_itemName.Name = "tb_itemName";
+            this.tb_itemName.Size = new System.Drawing.Size(100, 20);
+            this.tb_itemName.TabIndex = 57;
             // 
-            // tp_extraStash
+            // label49
             // 
-            this.tp_extraStash.AutoScroll = true;
-            this.tp_extraStash.Location = new System.Drawing.Point(4, 22);
-            this.tp_extraStash.Name = "tp_extraStash";
-            this.tp_extraStash.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_extraStash.Size = new System.Drawing.Size(368, 520);
-            this.tp_extraStash.TabIndex = 2;
-            this.tp_extraStash.Text = "Extra Stash";
-            this.tp_extraStash.UseVisualStyleBackColor = true;
+            this.label49.AutoSize = true;
+            this.label49.Location = new System.Drawing.Point(37, 323);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(59, 13);
+            this.label49.TabIndex = 58;
+            this.label49.Text = "Item name:";
             // 
-            // tp_cubeStash
+            // tb_itemType
             // 
-            this.tp_cubeStash.AutoScroll = true;
-            this.tp_cubeStash.Location = new System.Drawing.Point(4, 22);
-            this.tp_cubeStash.Name = "tp_cubeStash";
-            this.tp_cubeStash.Padding = new System.Windows.Forms.Padding(3);
-            this.tp_cubeStash.Size = new System.Drawing.Size(368, 520);
-            this.tp_cubeStash.TabIndex = 3;
-            this.tp_cubeStash.Text = "Cube Stash";
-            this.tp_cubeStash.UseVisualStyleBackColor = true;
+            this.tb_itemType.Location = new System.Drawing.Point(109, 294);
+            this.tb_itemType.Name = "tb_itemType";
+            this.tb_itemType.Size = new System.Drawing.Size(100, 20);
+            this.tb_itemType.TabIndex = 59;
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(37, 297);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(53, 13);
+            this.label50.TabIndex = 60;
+            this.label50.Text = "Item type:";
             // 
             // HeroEditor
             // 
@@ -2364,5 +2424,11 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TabPage tp_stash;
         private System.Windows.Forms.TabPage tp_extraStash;
         private System.Windows.Forms.TabPage tp_cubeStash;
+        private System.Windows.Forms.Label label48;
+        private System.Windows.Forms.TextBox tb_itemCount;
+        private System.Windows.Forms.TextBox tb_itemName;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.TextBox tb_itemType;
     }
 }
