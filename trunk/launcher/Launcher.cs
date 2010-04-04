@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using Reanimator;
 using launcher.Properties;
+using System.Diagnostics;
 
 namespace launcher
 {
@@ -147,6 +148,11 @@ namespace launcher
         private void p_start_MouseUp(object sender, MouseEventArgs e)
         {
             p_start.BackgroundImage = Resources.templar_mouseOver;
+        }
+
+        private void p_homePageLink_Click(object sender, EventArgs e)
+        {
+            Process.Start(@"http://www.hellgateaus.net");
         }
     }
 }
