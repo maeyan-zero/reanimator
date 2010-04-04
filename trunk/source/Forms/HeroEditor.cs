@@ -725,7 +725,7 @@ namespace Reanimator.Forms
 
         private void PopulateMinigame()
         {
-            Unit.StatBlock.Stat minigame = GetComplexValue(_heroUnit, ItemValueNames.minigame_category_needed.ToString());
+            Unit.StatBlock.Stat minigame = _itemFunctions.GetComplexValue(_heroUnit, ItemValueNames.minigame_category_needed.ToString());
 
             // As long as VS won't let me place the control in the form by hand I'll initialize it here
             MinigameControl control = new MinigameControl(minigame.values);
@@ -734,7 +734,7 @@ namespace Reanimator.Forms
 
         private void PopulateWaypoints()
         {
-            Unit.StatBlock.Stat wayPoints = GetComplexValue(_heroUnit, ItemValueNames.waypoint_flags.ToString());
+            Unit.StatBlock.Stat wayPoints = _itemFunctions.GetComplexValue(_heroUnit, ItemValueNames.waypoint_flags.ToString());
 
             if (wayPoints != null)
             {
@@ -822,11 +822,11 @@ namespace Reanimator.Forms
         {
             try
             {
-                int level = GetSimpleValue(_heroUnit, ItemValueNames.level.ToString());
+                int level = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.level.ToString());
                 level_NumericUpDown.Value = level - 8;
 
 
-                int palladium = GetSimpleValue(_heroUnit, ItemValueNames.gold.ToString());
+                int palladium = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.gold.ToString());
                 // when palladium reaches 9999999 the ingame value is set to a max value ao something like 16000000
                 if (palladium > 9999999)
                 {
@@ -839,54 +839,54 @@ namespace Reanimator.Forms
                 }
                 nud_palladium.Value = palladium;
 
-                int statPoints = GetSimpleValue(_heroUnit, ItemValueNames.stat_points.ToString());
+                int statPoints = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.stat_points.ToString());
                 if (statPoints < 0)
                 {
                     statPoints = 0;
                 }
                 nud_statPoints.Value = statPoints;
 
-                int skillPoints = GetSimpleValue(_heroUnit, ItemValueNames.skill_points.ToString());
+                int skillPoints = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.skill_points.ToString());
                 if (skillPoints < 0)
                 {
                     skillPoints = 0;
                 }
                 nud_skillPoints.Value = skillPoints;
 
-                int accuracy = GetSimpleValue(_heroUnit, ItemValueNames.accuracy.ToString());
+                int accuracy = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.accuracy.ToString());
                 nud_accuracy.Value = accuracy;
 
-                int strength = GetSimpleValue(_heroUnit, ItemValueNames.strength.ToString());
+                int strength = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.strength.ToString());
                 nud_strength.Value = strength;
 
-                int stamina = GetSimpleValue(_heroUnit, ItemValueNames.stamina.ToString());
+                int stamina = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.stamina.ToString());
                 nud_stamina.Value = stamina;
 
-                int willpower = GetSimpleValue(_heroUnit, ItemValueNames.willpower.ToString());
+                int willpower = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.willpower.ToString());
                 nud_willpower.Value = willpower;
 
-                int health = GetSimpleValue(_heroUnit, ItemValueNames.hp_cur.ToString());
+                int health = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.hp_cur.ToString());
                 nud_health.Value = health;
 
-                int power = GetSimpleValue(_heroUnit, ItemValueNames.power_cur.ToString());
+                int power = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.power_cur.ToString());
                 nud_power.Value = power;
 
-                int shields = GetSimpleValue(_heroUnit, ItemValueNames.shield_buffer_cur.ToString());
+                int shields = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.shield_buffer_cur.ToString());
                 nud_shields.Value = shields;
 
-                int armor = GetSimpleValue(_heroUnit, ItemValueNames.power_max.ToString());
+                int armor = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.power_max.ToString());
                 //nud_armor.Value = armor;
 
-                int sfxDefence = GetSimpleValue(_heroUnit, ItemValueNames.sfx_defense_bonus.ToString());
+                int sfxDefence = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.sfx_defense_bonus.ToString());
                 nud_sfxDefence.Value = sfxDefence - 100;
 
-                int currentAP = GetSimpleValue(_heroUnit, ItemValueNames.achievement_points_total.ToString());
+                int currentAP = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.achievement_points_total.ToString());
                 nud_currentAP.Value = currentAP;
 
-                int maxAP = GetSimpleValue(_heroUnit, ItemValueNames.achievement_points_cur.ToString());
+                int maxAP = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.achievement_points_cur.ToString());
                 nud_maxAP.Value = maxAP;
 
-                int playTime = GetSimpleValue(_heroUnit, ItemValueNames.played_time_in_seconds.ToString());
+                int playTime = _itemFunctions.GetSimpleValue(_heroUnit, ItemValueNames.played_time_in_seconds.ToString());
                 TimeSpan t = TimeSpan.FromSeconds(playTime);
 
                 string time = string.Format("{0:D2}d {0:D2}h {1:D2}m {2:D2}s", t.Days, t.Hours, t.Minutes, t.Seconds);
@@ -1063,6 +1063,7 @@ namespace Reanimator.Forms
                 tb_itemType.Text = "unknown";
             }
 
+            tb_itemLevel.Text = (_itemFunctions.GetSimpleValue(_currentlySelectedItem, ItemValueNames.level.ToString()) - 8).ToString();
             tb_itemName.Text = unit.Name;
             tb_invLoc.Text = unit.inventoryType.ToString();
 
@@ -1072,7 +1073,7 @@ namespace Reanimator.Forms
             tb_itemWidth.Text = GetItemWidth(unit).ToString();
             tb_itemHeight.Text = GetItemHeight(unit).ToString();
 
-            int quantity = GetSimpleValue(unit, ItemValueNames.item_quantity.ToString());
+            int quantity = _itemFunctions.GetSimpleValue(unit, ItemValueNames.item_quantity.ToString());
 
             if(quantity <= 0)
             {
@@ -1084,7 +1085,7 @@ namespace Reanimator.Forms
 
         private void nud_itemCount_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_currentlySelectedItem, ItemValueNames.item_quantity.ToString(), (int)nud_itemQuantity.Value);
+            _itemFunctions.SetSimpleValue(_currentlySelectedItem, ItemValueNames.item_quantity.ToString(), (int)nud_itemQuantity.Value);
         }
 
         private void nud_invPosX_ValueChanged(object sender, EventArgs e)
@@ -1099,7 +1100,7 @@ namespace Reanimator.Forms
 
         private int GetItemWidth(Unit item)
         {
-            int width = GetSimpleValue(item, ItemValueNames.inventory_width.ToString());
+            int width = _itemFunctions.GetSimpleValue(item, ItemValueNames.inventory_width.ToString());
 
             if (width <= 0)
             {
@@ -1111,7 +1112,7 @@ namespace Reanimator.Forms
 
         private int GetItemHeight(Unit item)
         {
-            int height = GetSimpleValue(item, ItemValueNames.inventory_height.ToString());
+            int height = _itemFunctions.GetSimpleValue(item, ItemValueNames.inventory_height.ToString());
 
             if (height <= 0)
             {
@@ -1140,139 +1141,139 @@ namespace Reanimator.Forms
 
 
         #region modify character values
-        private void SetSimpleValue(Unit unit, string valueName, int value)
-        {
-            if (!initialized) return;
+        //private void SetSimpleValue(Unit unit, string valueName, int value)
+        //{
+        //    if (!initialized) return;
 
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
-            {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+        //    for (int counter = 0; counter < unit.Stats.Length; counter++)
+        //    {
+        //        Unit.StatBlock.Stat unitStats = unit.Stats[counter];
 
-                if (unitStats.Name != valueName) continue;
+        //        if (unitStats.Name != valueName) continue;
 
-                unitStats.values[0].Stat = value;
-                return;
-            }
-        }
+        //        unitStats.values[0].Stat = value;
+        //        return;
+        //    }
+        //}
 
-        private void SetComplexValue(Unit unit, string valueName, Unit.StatBlock.Stat stat)
-        {
-            if (!initialized) return;
+        //private void SetComplexValue(Unit unit, string valueName, Unit.StatBlock.Stat stat)
+        //{
+        //    if (!initialized) return;
 
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
-            {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+        //    for (int counter = 0; counter < unit.Stats.Length; counter++)
+        //    {
+        //        Unit.StatBlock.Stat unitStats = unit.Stats[counter];
 
-                if (unitStats.Name != valueName) continue;
+        //        if (unitStats.Name != valueName) continue;
 
-                unitStats = stat;
-                return;
-            }
-        }
+        //        unitStats = stat;
+        //        return;
+        //    }
+        //}
 
-        private int GetSimpleValue(Unit unit, string valueName)
-        {
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
-            {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+        //private int GetSimpleValue(Unit unit, string valueName)
+        //{
+        //    for (int counter = 0; counter < unit.Stats.Length; counter++)
+        //    {
+        //        Unit.StatBlock.Stat unitStats = unit.Stats[counter];
 
-                if (unitStats.Name == valueName)
-                {
-                    return unitStats.values[0].Stat;
-                }
-            }
-            //MessageBox.Show("Field \"" + valueName + "\" not present in unit " + unit.Name + "!");
-            return 0;
-        }
+        //        if (unitStats.Name == valueName)
+        //        {
+        //            return unitStats.values[0].Stat;
+        //        }
+        //    }
+        //    //MessageBox.Show("Field \"" + valueName + "\" not present in unit " + unit.Name + "!");
+        //    return 0;
+        //}
 
-        private Unit.StatBlock.Stat GetComplexValue(Unit unit, string valueName)
-        {
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
-            {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+        //private Unit.StatBlock.Stat GetComplexValue(Unit unit, string valueName)
+        //{
+        //    for (int counter = 0; counter < unit.Stats.Length; counter++)
+        //    {
+        //        Unit.StatBlock.Stat unitStats = unit.Stats[counter];
 
-                if (unitStats.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
-                {
-                    return unitStats;
-                }
-            }
-            return null;
-        }
+        //        if (unitStats.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
+        //        {
+        //            return unitStats;
+        //        }
+        //    }
+        //    return null;
+        //}
 
         private void level_NumericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "level", (int)level_NumericUpDown.Value + 8);
+            _itemFunctions.SetSimpleValue(_heroUnit, "level", (int)level_NumericUpDown.Value + 8);
         }
 
         private void palladium_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "gold", (int)nud_palladium.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "gold", (int)nud_palladium.Value);
         }
 
         private void skillPoints_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "skill_points", (int)nud_skillPoints.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "skill_points", (int)nud_skillPoints.Value);
         }
 
         private void statPoints_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "stat_points", (int)nud_statPoints.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "stat_points", (int)nud_statPoints.Value);
         }
 
         private void nud_accuracy_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "accuracy", (int)nud_accuracy.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "accuracy", (int)nud_accuracy.Value);
         }
 
         private void nud_strength_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "strength", (int)nud_strength.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "strength", (int)nud_strength.Value);
         }
 
         private void nud_stamina_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "stamina", (int)nud_stamina.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "stamina", (int)nud_stamina.Value);
         }
 
         private void nud_willpower_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "willpower", (int)nud_willpower.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "willpower", (int)nud_willpower.Value);
         }
 
 
         private void nud_shields_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "shield_buffer_cur", (int)nud_shields.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "shield_buffer_cur", (int)nud_shields.Value);
         }
 
         private void nud_armor_ValueChanged(object sender, EventArgs e)
         {
-            //SetSimpleValue("power_max", (int)nud_armor.Value);
+            //_itemFunctions.SetSimpleValue("power_max", (int)nud_armor.Value);
         }
 
         private void nud_currentAP_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "achievement_points_cur", (int)nud_currentAP.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "achievement_points_cur", (int)nud_currentAP.Value);
         }
 
         private void nud_maxAP_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "achievement_points_total", (int)nud_maxAP.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "achievement_points_total", (int)nud_maxAP.Value);
         }
 
         private void nud_health_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "hp_cur", (int)nud_health.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "hp_cur", (int)nud_health.Value);
         }
 
         private void nud_power_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "power_cur", (int)nud_power.Value);
+            _itemFunctions.SetSimpleValue(_heroUnit, "power_cur", (int)nud_power.Value);
         }
 
         private void nud_sfxDefence_ValueChanged(object sender, EventArgs e)
         {
-            SetSimpleValue(_heroUnit, "sfx_defense_bonus", (int)nud_sfxDefence.Value + 100);
+            _itemFunctions.SetSimpleValue(_heroUnit, "sfx_defense_bonus", (int)nud_sfxDefence.Value + 100);
         }
 
         #endregion
@@ -1451,8 +1452,8 @@ namespace Reanimator.Forms
                     {
                         if (item.inventoryType.ToString() == (string)control.Tag)
                         {
-                            int quality = GetSimpleValue(item, ItemValueNames.item_quality.ToString());
-                            int quantity = GetSimpleValue(item, ItemValueNames.item_quantity.ToString());
+                            int quality = _itemFunctions.GetSimpleValue(item, ItemValueNames.item_quality.ToString());
+                            int quantity = _itemFunctions.GetSimpleValue(item, ItemValueNames.item_quantity.ToString());
                             if (quantity <= 0)
                             {
                                 quantity = 1;

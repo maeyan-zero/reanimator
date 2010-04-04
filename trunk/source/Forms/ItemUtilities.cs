@@ -220,7 +220,68 @@ namespace Reanimator.Forms
                 }
             }
         }
+
+        public void SetSimpleValue(Unit unit, string valueName, int value)
+        {
+            //if (!initialized) return;
+
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+
+                if (unitStats.Name != valueName) continue;
+
+                unitStats.values[0].Stat = value;
+                return;
+            }
+        }
+
+        public void SetComplexValue(Unit unit, string valueName, Unit.StatBlock.Stat stat)
+        {
+            //if (!initialized) return;
+
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+
+                if (unitStats.Name != valueName) continue;
+
+                unitStats = stat;
+                return;
+            }
+        }
+
+        public int GetSimpleValue(Unit unit, string valueName)
+        {
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+
+                if (unitStats.Name == valueName)
+                {
+                    return unitStats.values[0].Stat;
+                }
+            }
+            //MessageBox.Show("Field \"" + valueName + "\" not present in unit " + unit.Name + "!");
+            return 0;
+        }
+
+        public Unit.StatBlock.Stat GetComplexValue(Unit unit, string valueName)
+        {
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+
+                if (unitStats.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return unitStats;
+                }
+            }
+            return null;
+        }
     }
+
+
 
     enum ItemQuality
     {
