@@ -16,13 +16,15 @@ namespace Reanimator.Forms
 {
     public partial class HeroEditor : Form
     {
-        readonly Unit _heroUnit;
+        /*readonly*/ Unit _heroUnit;
         readonly TableDataSet dataSet;
         readonly ExcelTables excelTables;
         readonly CompletePanelControl _panel;
-        readonly Stats _statsTable;
+        //readonly Stats _statsTable;
         readonly String _filePath;
         string savedPath;
+        UnitHelpFunctions _itemFunctions;
+        const string RESOURCEFOLDER = @"F:\";
 
         public HeroEditor(Unit heroUnit, TableDataSet tableDataSet, String filePath)
         {
@@ -30,10 +32,13 @@ namespace Reanimator.Forms
             dataSet = tableDataSet;
             excelTables = tableDataSet.ExcelTables;
             _panel = new CompletePanelControl();
-            _statsTable = excelTables.GetTable("stats") as Stats;
+            //_statsTable = excelTables.GetTable("stats") as Stats;
             _filePath = filePath;
 
-            GenerateUnitNameStrings(new[] { _heroUnit }, null);
+            _itemFunctions = new UnitHelpFunctions(ref dataSet, ref excelTables);
+            _itemFunctions.LoadCharacterValues(_heroUnit);
+            //_itemFunctions.GenerateUnitNameStrings();
+            //_itemFunctions.PopulateItems(ref _heroUnit);
 
             InitializeComponent();
         }
@@ -48,7 +53,7 @@ namespace Reanimator.Forms
             initialized = true;
 
             PopulateStats(_heroUnit);
-            PopulateItems(_heroUnit);
+            PopulateItemDropDown(_heroUnit);
 
             PopulateMinigame();
             PopulateWaypoints();
@@ -61,95 +66,99 @@ namespace Reanimator.Forms
             InitInventory();
         }
 
-        private void PopulateItems(Unit unit)
+        private void PopulateItemDropDown(Unit unit)
         {
-            bool canGetItemNames = true;
-            DataTable itemsTable = dataSet.GetExcelTable(27953);
-            DataTable affixTable = dataSet.GetExcelTable(30512);
-            if (itemsTable != null && affixTable != null)
+            foreach (Unit item in unit.Items)
             {
-                if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
-                    canGetItemNames = false;
-                if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") ||
-                    !affixTable.Columns.Contains("magicNameString_string"))
-                    canGetItemNames = false;
-            }
-            else
-            {
-                canGetItemNames = false;
-            }
-
-
-            List<Unit> items = unit.Items;
-            for (int i = 0; i < items.Count; i++)
-            {
-                Unit item = items[i];
-                if (item == null) continue;
-
-
-                // assign default name
-                item.Name = "Item Id: " + item.itemCode;
-                if (!canGetItemNames)
-                {
-                    currentlyEditing_ComboBox.Items.Add(item);
-                    continue;
-                }
-
-
-                // get item name
-                DataRow[] itemsRows = itemsTable.Select(String.Format("code1 = '{0}'", item.itemCode));
-                if (itemsRows.Length == 0)
-                {
-                    currentlyEditing_ComboBox.Items.Add(item);
-                    continue;
-                }
-                item.Name = itemsRows[0]["String_string"] as String;
-
-
-                // does it have an affix/prefix
-                String affixString = String.Empty;
-                for (int s = 0; s < item.Stats.Length; s++)
-                {
-                    // "applied_affix"
-                    if (item.Stats[s].Id == 0x7438)
-                    {
-                        int affixCode = item.Stats[s].values[0].Stat;
-                        DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
-                        if (affixRows.Length > 0)
-                        {
-                            String replaceString = affixRows[0]["setNameString_string"] as String;
-                            if (String.IsNullOrEmpty(replaceString))
-                            {
-                                replaceString = affixRows[0]["magicNameString_string"] as String;
-                                if (String.IsNullOrEmpty(replaceString))
-                                {
-                                    break;
-                                }
-                            }
-
-                            affixString = replaceString;
-                        }
-                    }
-
-                    // "item_quality"
-                    if (item.Stats[s].Id == 0x7832)
-                    {
-                        // is unique || is mutant then no affix
-                        int itemQualityCode = item.Stats[s].values[0].Stat;
-                        if (itemQualityCode == 13616 || itemQualityCode == 13360)
-                        {
-                            affixString = String.Empty;
-                            break;
-                        }
-                    }
-                }
-
-                if (affixString.Length > 0)
-                {
-                    item.Name = affixString.Replace("[item]", item.Name);
-                }
                 currentlyEditing_ComboBox.Items.Add(item);
             }
+            //bool canGetItemNames = true;
+            //DataTable itemsTable = dataSet.GetExcelTable(27953);
+            //DataTable affixTable = dataSet.GetExcelTable(30512);
+            //if (itemsTable != null && affixTable != null)
+            //{
+            //    if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
+            //        canGetItemNames = false;
+            //    if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") ||
+            //        !affixTable.Columns.Contains("magicNameString_string"))
+            //        canGetItemNames = false;
+            //}
+            //else
+            //{
+            //    canGetItemNames = false;
+            //}
+
+
+            //List<Unit> items = unit.Items;
+            //for (int i = 0; i < items.Count; i++)
+            //{
+            //    Unit item = items[i];
+            //    if (item == null) continue;
+
+
+            //    // assign default name
+            //    item.Name = "Item Id: " + item.itemCode;
+            //    if (!canGetItemNames)
+            //    {
+            //        currentlyEditing_ComboBox.Items.Add(item);
+            //        continue;
+            //    }
+
+
+            //    // get item name
+            //    DataRow[] itemsRows = itemsTable.Select(String.Format("code1 = '{0}'", item.itemCode));
+            //    if (itemsRows.Length == 0)
+            //    {
+            //        currentlyEditing_ComboBox.Items.Add(item);
+            //        continue;
+            //    }
+            //    item.Name = itemsRows[0]["String_string"] as String;
+
+
+            //    // does it have an affix/prefix
+            //    String affixString = String.Empty;
+            //    for (int s = 0; s < item.Stats.Length; s++)
+            //    {
+            //        // "applied_affix"
+            //        if (item.Stats[s].Id == 0x7438)
+            //        {
+            //            int affixCode = item.Stats[s].values[0].Stat;
+            //            DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
+            //            if (affixRows.Length > 0)
+            //            {
+            //                String replaceString = affixRows[0]["setNameString_string"] as String;
+            //                if (String.IsNullOrEmpty(replaceString))
+            //                {
+            //                    replaceString = affixRows[0]["magicNameString_string"] as String;
+            //                    if (String.IsNullOrEmpty(replaceString))
+            //                    {
+            //                        break;
+            //                    }
+            //                }
+
+            //                affixString = replaceString;
+            //            }
+            //        }
+
+            //        // "item_quality"
+            //        if (item.Stats[s].Id == 0x7832)
+            //        {
+            //            // is unique || is mutant then no affix
+            //            int itemQualityCode = item.Stats[s].values[0].Stat;
+            //            if (itemQualityCode == 13616 || itemQualityCode == 13360)
+            //            {
+            //                affixString = String.Empty;
+            //                break;
+            //            }
+            //        }
+            //    }
+
+            //    if (affixString.Length > 0)
+            //    {
+            //        item.Name = affixString.Replace("[item]", item.Name);
+            //    }
+            //    currentlyEditing_ComboBox.Items.Add(item);
+            //}
         }
 
         private void PopulateStats(Unit unit)
@@ -182,81 +191,29 @@ namespace Reanimator.Forms
             }
         }
 
-        private void GenerateUnitNameStrings(Unit[] units, Hashtable hash)
-        {
-            if (hash == null)
-            {
-                hash = new Hashtable();
-            }
-
-            try
-            {
-                Unit.StatBlock.Stat stat;
-                foreach (Unit unit in units)
-                {
-                    for (int counter = 0; counter < unit.Stats.Length; counter++)
-                    {
-                        stat = unit.Stats[counter];
-
-                        String name;
-                        if (hash.Contains(stat.id))
-                        {
-                            name = (string)hash[stat.Id];
-                        }
-                        else
-                        {
-                            name = _statsTable.GetStringFromId(stat.id);
-
-                            if (name != null)
-                            {
-                                hash.Add(stat.id, name);
-                            }
-                        }
-
-                        unit.Stats[counter].Name = name;
-                    }
-
-                    GenerateUnitNameStrings(unit.Items.ToArray(), hash);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        //private string DoStringLookup(Unit.StatBlock.Stat stat, int lookupId)
+        //private string MapIdToString(Unit.StatBlock.Stat stat, int tableId, int lookupId)
         //{
-        //    string lookUpString = string.Empty;
+        //    string value = string.Empty;
 
-        //    lookUpString = MapIdToString(stat, lookupId);
+        //    if (stat.values.Length != 0)
+        //    {
+        //        String select = String.Format("code = '{0}'", lookupId);
+        //        DataTable table = dataSet.GetExcelTable(tableId);
+        //        DataRow[] row;
 
-        //    return lookUpString;
+        //        if (table != null)
+        //        {
+        //            row = table.Select(select);
+
+        //            if (row != null && row.Length != 0)
+        //            {
+        //                value = (string)row[0][1];
+        //            }
+        //        }
+        //    }
+
+        //    return value;
         //}
-
-        private string MapIdToString(Unit.StatBlock.Stat stat, int tableId, int lookupId)
-        {
-            string value = string.Empty;
-
-            if (stat.values.Length != 0)
-            {
-                String select = String.Format("code = '{0}'", lookupId);
-                DataTable table = dataSet.GetExcelTable(tableId);
-                DataRow[] row;
-
-                if (table != null)
-                {
-                    row = table.Select(select);
-
-                    if (row != null && row.Length != 0)
-                    {
-                        value = (string)row[0][1];
-                    }
-                }
-            }
-
-            return value;
-        }
 
         private void charStats_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -400,7 +357,7 @@ namespace Reanimator.Forms
                     }
                     else
                     {
-                        lookUpString = MapIdToString(stat, stat.AttributeAt(j).TableId, stat.values[i].AttributeAt(j));
+                        lookUpString = _itemFunctions.MapIdToString(stat, stat.AttributeAt(j).TableId, stat.values[i].AttributeAt(j));
                     }
 
                     if (lookUpString != string.Empty)
@@ -438,7 +395,7 @@ namespace Reanimator.Forms
                 valueTextBox.Left = valueLabel.Right;
                 valueTextBox.Top = heightOffset;
 
-                lookUpString = MapIdToString(stat, stat.resource, stat.values[i].Stat);
+                lookUpString = _itemFunctions.MapIdToString(stat, stat.resource, stat.values[i].Stat);
 
                 if (lookUpString != string.Empty)
                 {
@@ -984,11 +941,33 @@ namespace Reanimator.Forms
                 }
                 if (startedAsHC && !hardcore_CheckBox.Checked)
                 {
-                    _heroUnit.unknownCount1Bs[0].unknown2 -= 5;
+                    _heroUnit.unknownCount1Bs[0].unknown2 -= 62;
                 }
                 else if (!startedAsHC && hardcore_CheckBox.Checked)
                 {
-                    _heroUnit.unknownCount1Bs[0].unknown2 += 5;
+                    /*
+                     * From Elite to HC mode:
+                     * UnknownCount1B_S.unknown2 += 62
+                     * playerFlags1 = 18243
+                     * playerFlags2 = 18243
+                     * statCount++
+                     * add entry "quest_global_fix_flags"
+                    */
+
+                    if (_heroUnit.Stats.GetStatByName(ItemValueNames.quest_global_fix_flags.ToString()) == null)
+                    {
+                        List<Unit.StatBlock.Stat> stats = new List<Unit.StatBlock.Stat>();
+                        stats.AddRange(_heroUnit.Stats.stats);
+
+                        Unit.StatBlock.Stat questFlag = XmlUtilities<Unit.StatBlock.Stat>.Deserialize(RESOURCEFOLDER + @"\" + ItemValueNames.quest_global_fix_flags.ToString() + ".xml");
+
+                        stats.Add(questFlag);
+
+                        _heroUnit.Stats.stats = stats.ToArray();
+                        _heroUnit.Stats.statCount = stats.Count;
+                    }
+
+                    _heroUnit.unknownCount1Bs[0].unknown2 += 62;
                 }
             }
         }
@@ -1058,8 +1037,12 @@ namespace Reanimator.Forms
             }
         }
 
+        Unit _currentlySelectedItem;
         private void ShowInvInfo(Unit unit)
         {
+            //save currently selected item
+            _currentlySelectedItem = unit;
+
             DataTable items = dataSet.GetExcelTable(27953);
             DataRow[] itemRow = items.Select("code1 = '" + unit.itemCode + "'");
 
@@ -1082,8 +1065,9 @@ namespace Reanimator.Forms
 
             tb_itemName.Text = unit.Name;
             tb_invLoc.Text = unit.inventoryType.ToString();
-            tb_invPosX.Text = unit.inventoryPositionX.ToString();
-            tb_invPosY.Text = unit.inventoryPositionY.ToString();
+
+            nud_invPosX.Value = unit.inventoryPositionX;
+            nud_invPosY.Value = unit.inventoryPositionY;
 
             tb_itemWidth.Text = GetItemWidth(unit).ToString();
             tb_itemHeight.Text = GetItemHeight(unit).ToString();
@@ -1095,7 +1079,22 @@ namespace Reanimator.Forms
                 quantity = 1;
             }
 
-            tb_itemCount.Text = quantity.ToString();
+            nud_itemQuantity.Value = quantity;
+        }
+
+        private void nud_itemCount_ValueChanged(object sender, EventArgs e)
+        {
+            SetSimpleValue(_currentlySelectedItem, ItemValueNames.item_quantity.ToString(), (int)nud_itemQuantity.Value);
+        }
+
+        private void nud_invPosX_ValueChanged(object sender, EventArgs e)
+        {
+            _currentlySelectedItem.inventoryPositionX = (int)nud_invPosX.Value;
+        }
+
+        private void nud_invPosY_ValueChanged(object sender, EventArgs e)
+        {
+            _currentlySelectedItem.inventoryPositionY = (int)nud_invPosY.Value;
         }
 
         private int GetItemWidth(Unit item)
@@ -1416,12 +1415,12 @@ namespace Reanimator.Forms
         {
             Unit unit = (Unit)currentlyEditing_ComboBox.SelectedItem;
 
-            XmlUtilities<Unit>.Serialize(unit, @"F:\" + unit.Name + ".xml");
+            XmlUtilities<Unit>.Serialize(unit, RESOURCEFOLDER + @"\" + unit.Name + ".xml");
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            Unit unit = XmlUtilities<Unit>.Deserialize(@"F:\" + textBox4.Text + ".xml");
+            Unit unit = XmlUtilities<Unit>.Deserialize(RESOURCEFOLDER + @"\" + textBox4.Text + ".xml");
             //unit.inventoryPositionX++;
             //unit.inventoryPositionY++;
             _heroUnit.Items.Add(unit);
@@ -1523,12 +1522,14 @@ namespace Reanimator.Forms
                                     else if (item.inventoryType == 22577)
                                     {
                                         tp_cubeStash.Controls.Add(b);
-                                    }                                
+                                    }
 
                                 break;
                             }
                             else if (item.inventoryType == 25904)
                             {
+                                lb_equipped.Items.Add(item);
+
                                 TextBox box = (TextBox)tp_characterInventory.Controls["tb_hand" + item.inventoryPositionX];
 
                                 if (quantity == 1)
@@ -1543,6 +1544,8 @@ namespace Reanimator.Forms
                             }
                             else
                             {
+                                lb_equipped.Items.Add(item);
+
                                 if (quantity == 1)
                                 {
                                     control.Text += item.Name;
@@ -1559,8 +1562,9 @@ namespace Reanimator.Forms
 
                 l_inventory.Text += " (" + lb_inventory.Items.Count + ")";
                 l_stash.Text += " (" + lb_stash.Items.Count + ")";
-                l_extraStash.Text += " (" + lb_extraStash.Items.Count + ")";
+                l_questRewards.Text += " (" + lb_questRewards.Items.Count + ")";
                 l_cubeStash.Text += " (" + lb_cubeStash.Items.Count + ")";
+                l_equipped.Text += " (" + lb_equipped.Items.Count + ")";
             }
             catch (Exception ex)
             {
@@ -1582,6 +1586,14 @@ namespace Reanimator.Forms
             Unit unit = (Unit)view.SelectedItems[0];
 
             ShowInvInfo(unit);
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Unit unit = XmlUtilities<Unit>.Deserialize(RESOURCEFOLDER + @"\" + textBox4.Text + ".xml");
+            //unit.inventoryPositionX++;
+            //unit.inventoryPositionY++;
+            _heroUnit = unit;
         }
     }
 }

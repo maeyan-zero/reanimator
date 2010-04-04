@@ -355,7 +355,17 @@ namespace Reanimator
             }
             if (hardcore)
             {
-                arguments.Add(18243);
+                //unknownCount1Fs[0].unknown1 = 16705;
+
+                playerFlagCount1 = 1;
+                playerFlags1 = new int[] { 18243 };
+
+                playerFlagCount2 = 1;
+                playerFlags2 = new int[] { 18243 };
+
+                //unknownCount1B = 1;
+                //unknownCount1Bs[0].unknown1 = 12336;
+                //unknownCount1Bs[0].unknown2 += 62;
             }
             if (hardcore && dead)
             {
@@ -363,11 +373,11 @@ namespace Reanimator
             }
 
 
-            playerFlagCount1 = arguments.Count;
-            playerFlagCount2 = arguments.Count;
+            //playerFlagCount1 = arguments.Count;
+            //playerFlagCount2 = arguments.Count;
 
-            playerFlags1 = arguments.ToArray();
-            playerFlags2 = arguments.ToArray();
+            //playerFlags1 = arguments.ToArray();
+            //playerFlags2 = arguments.ToArray();
         }
 
         #region set elite and hardcore mode

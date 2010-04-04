@@ -40,6 +40,7 @@
             this.stringsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modificationFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modelFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.havokFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,7 +100,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.havokFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tradeItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -214,6 +215,13 @@
             this.modelFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.modelFileToolStripMenuItem.Text = "Model File...";
             this.modelFileToolStripMenuItem.Click += new System.EventHandler(this.modelFileToolStripMenuItem_Click);
+            // 
+            // havokFileToolStripMenuItem
+            // 
+            this.havokFileToolStripMenuItem.Name = "havokFileToolStripMenuItem";
+            this.havokFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.havokFileToolStripMenuItem.Text = "Havok File...";
+            this.havokFileToolStripMenuItem.Click += new System.EventHandler(this.havokFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -411,7 +419,8 @@
             this.optionsToolStripMenuItem,
             this.clientPatchesToolStripMenuItem,
             this.cacheInfoToolStripMenuItem,
-            this.applyModificationsToolStripMenuItem});
+            this.applyModificationsToolStripMenuItem,
+            this.tradeItemsToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
             this.toolsMenu.Size = new System.Drawing.Size(48, 20);
             this.toolsMenu.Text = "&Tools";
@@ -693,12 +702,12 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // havokFileToolStripMenuItem
+            // tradeItemsToolStripMenuItem
             // 
-            this.havokFileToolStripMenuItem.Name = "havokFileToolStripMenuItem";
-            this.havokFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
-            this.havokFileToolStripMenuItem.Text = "Havok File...";
-            this.havokFileToolStripMenuItem.Click += new System.EventHandler(this.havokFileToolStripMenuItem_Click);
+            this.tradeItemsToolStripMenuItem.Name = "tradeItemsToolStripMenuItem";
+            this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.tradeItemsToolStripMenuItem.Text = "Trade Items";
+            this.tradeItemsToolStripMenuItem.Click += new System.EventHandler(this.tradeItemsToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
@@ -797,6 +806,7 @@
         private System.Windows.Forms.ToolStripMenuItem applyModificationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modelFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem havokFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tradeItemsToolStripMenuItem;
     }
 }
 
