@@ -12,6 +12,7 @@ using Reanimator.Excel;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using Reanimator.Forms.ItemTransfer;
 
 namespace Reanimator
 {
@@ -221,35 +222,35 @@ namespace Reanimator
 
         private bool OpenFile_HG1(string fileName)
         {
-            String excelError = "You must have all excel tables loaded to use the Hero Editor!";
-            if (excelTables == null)
-            {
-                MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            if (!excelTables.AllTablesLoaded)
-            {
-                MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
+            //String excelError = "You must have all excel tables loaded to use the Hero Editor!";
+            //if (excelTables == null)
+            //{
+            //    MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return false;
+            //}
+            //if (!excelTables.AllTablesLoaded)
+            //{
+            //    MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return false;
+            //}
 
 
-            FileStream heroFile;
-            try
-            {
-                heroFile = new FileStream(fileName, FileMode.Open);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
+            //FileStream heroFile;
+            //try
+            //{
+            //    heroFile = new FileStream(fileName, FileMode.Open);
+            //}
+            //catch (Exception e)
+            //{
+            //    MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return false;
+            //}
 
-            BitBuffer bitBuffer = new BitBuffer(FileTools.StreamToByteArray(heroFile));
-            bitBuffer.DataByteOffset = 0x2028;
+            //BitBuffer bitBuffer = new BitBuffer(FileTools.StreamToByteArray(heroFile));
+            //bitBuffer.DataByteOffset = 0x2028;
 
-            Unit heroUnit = new Unit(bitBuffer);
-            heroUnit.ReadUnit(ref heroUnit);
+            //Unit heroUnit = new Unit(bitBuffer);
+            Unit heroUnit = UnitHelpFunctions.OpenCharacterFile(ref excelTables, fileName);
 
             HeroEditor heroEditor = new HeroEditor(heroUnit, tableDataSet, fileName);
             heroEditor.Text = "Hero Editor: " + fileName;
@@ -785,6 +786,12 @@ namespace Reanimator
                 Havok havok = new Havok(new BinaryReader(stream));
                 stream.Close();
             }
+        }
+
+        private void tradeItemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ItemTransferForm transfer = new ItemTransferForm(ref tableDataSet, ref excelTables);
+            transfer.ShowDialog(this);
         }
     }
 }
