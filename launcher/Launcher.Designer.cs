@@ -42,7 +42,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.characterCombo = new System.Windows.Forms.ComboBox();
             this.p_start = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.p_openHomePage = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p_start)).BeginInit();
             this.SuspendLayout();
@@ -174,19 +174,14 @@
             this.p_start.MouseUp += new System.Windows.Forms.MouseEventHandler(this.p_start_MouseUp);
             this.p_start.MouseEnter += new System.EventHandler(this.p_start_MouseEnter);
             // 
-            // button1
+            // p_openHomePage
             // 
-            this.button1.BackColor = System.Drawing.Color.Transparent;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(12, 376);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(200, 56);
-            this.button1.TabIndex = 15;
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.p_homePageLink_Click);
+            this.p_openHomePage.BackColor = System.Drawing.Color.Transparent;
+            this.p_openHomePage.Location = new System.Drawing.Point(12, 376);
+            this.p_openHomePage.Name = "p_openHomePage";
+            this.p_openHomePage.Size = new System.Drawing.Size(200, 56);
+            this.p_openHomePage.TabIndex = 16;
+            this.p_openHomePage.Click += new System.EventHandler(this.p_homePageLink_Click);
             // 
             // Launcher
             // 
@@ -195,7 +190,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
             this.BackgroundImage = global::launcher.Properties.Resources.background_old;
             this.ClientSize = new System.Drawing.Size(624, 444);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.p_openHomePage);
             this.Controls.Add(this.characterCombo);
             this.Controls.Add(this.p_start);
             this.Controls.Add(this.groupBox1);
@@ -233,7 +228,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ComboBox characterCombo;
         private System.Windows.Forms.PictureBox p_start;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel p_openHomePage;
 
     }
 }

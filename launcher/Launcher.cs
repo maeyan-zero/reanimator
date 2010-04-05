@@ -15,19 +15,22 @@ namespace launcher
 {
     public partial class Launcher : Form
     {
-        string indexPath;
-        String[] saveFolderContents;
-        int[] characterIndex;
+        string _indexPath;
+        string _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
+        List<string> _availableCharacters;
+
+        string _homepage = "http://www.hellgateaus.net";
 
         public Launcher()
         {
-            indexPath = Config.DataDirsRoot + "\\data\\" + Mod.defaultPack + ".idx";
+            _indexPath = Config.DataDirsRoot + "\\data\\" + Mod.defaultPack + ".idx";
+            _availableCharacters = new List<string>();
             InitializeComponent();
         }
 
         private void installToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Directory.Exists(Config.HglDir) == true)
+            if (Directory.Exists(Config.HglDir))
             {
                 Reanimator.Forms.ModificationForm modForm = new Reanimator.Forms.ModificationForm();
                 modForm.ShowDialog();
@@ -44,18 +47,18 @@ namespace launcher
 
             if (result == DialogResult.Yes)
             {
-                FileStream stream = new FileStream(@indexPath, FileMode.Open);
+                FileStream stream = new FileStream(_indexPath, FileMode.Open);
                 Index index = new Index(stream);
 
                 if (index.IsModified())
                 {
-                    if (index.Restore(indexPath) == true)
+                    if (index.Restore(_indexPath))
                     {
                         MessageBox.Show("All modifications successfully removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        MessageBox.Show("There was a problem retoring the index.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("There was a problem restoring the index.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
@@ -82,32 +85,28 @@ namespace launcher
         {
             MessageBox.Show("HellgateAus.net Launcher 2038" + Environment.NewLine +
                             "Developed by Maeyan, Alex2069, Kite & Malachor." + Environment.NewLine +
-                            "Visit us at http://www.hellgateaus.net" + Environment.NewLine +
+                            "Visit us at " + _homepage + " " + Environment.NewLine +
                             "Contact maeyan.zero@gmail.com for info.",
                             "HellgateAus.net Launcher 2038", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void Launcher_Load(object sender, EventArgs e)
         {
-            String characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
-            saveFolderContents = Directory.GetFiles(characterFolder);
-            characterIndex = new int[saveFolderContents.Length + 1];
-            
-            characterCombo.Items.Add("");
-            for (int i = 0; i < saveFolderContents.Length; i++)
+            _availableCharacters.Add("Start game");
+            _availableCharacters.AddRange(Directory.GetFiles(_characterFolder, "*.hg1"));
+
+            //remove path and file extension to get the pure character name
+            for (int i = 0; i < _availableCharacters.Count; i++)
             {
-                if (saveFolderContents[i].Contains(".hg1"))
-                {
-                    String characterName = saveFolderContents[i].Remove(0, saveFolderContents[i].LastIndexOf("\\") + 1);
-                    characterName = characterName.Remove(characterName.Length - 4, 4);
-                    characterCombo.Items.Add(characterName);
-                    characterIndex[characterCombo.Items.Count - 1] = i;
-                }
+                _availableCharacters[i] = _availableCharacters[i].Replace(_characterFolder + @"\", string.Empty).Replace(".hg1", string.Empty);
             }
+
+            characterCombo.DataSource = _availableCharacters;
         }
 
         private void p_start_Click(object sender, EventArgs e)
         {
+            MinimizeWindow();
             StartGame();
         }
 
@@ -115,13 +114,16 @@ namespace launcher
         {
             try
             {
-                if (characterCombo.SelectedIndex != -1 && characterCombo.SelectedIndex != 0)
+                if (characterCombo.SelectedIndex > 0)
                 {
-                    System.Diagnostics.Process.Start(Config.GameClientPath, "-singleplayer -load\"" + saveFolderContents[characterIndex[characterCombo.SelectedIndex]] + "\"");
+                    string characterToLoad = _characterFolder + @"\" + characterCombo.SelectedItem + @".hg1";
+                    string arguments = "-singleplayer -load\"" + characterToLoad;
+
+                    Process.Start(Config.GameClientPath, arguments);
                 }
                 else
                 {
-                    System.Diagnostics.Process.Start(Config.GameClientPath, "-singleplayer\"");
+                    Process.Start(Config.GameClientPath, "-singleplayer\"");
                 }
             }
             catch (Exception ex)
@@ -152,7 +154,14 @@ namespace launcher
 
         private void p_homePageLink_Click(object sender, EventArgs e)
         {
-            Process.Start(@"http://www.hellgateaus.net");
+            MinimizeWindow();
+            Process.Start(_homepage);
+        }
+
+        private void MinimizeWindow()
+        {
+            //minimizes the window to prevent multiple clicks on the launch/openHomePage button
+            this.WindowState = FormWindowState.Minimized;
         }
     }
 }
