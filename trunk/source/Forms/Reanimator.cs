@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Reanimator.Forms;
 using Reanimator.Excel;
 using System.Threading;
-using System.Runtime.InteropServices;
-using System.Reflection;
 using Reanimator.Forms.ItemTransfer;
 
 namespace Reanimator
@@ -433,16 +427,31 @@ namespace Reanimator
         private void LoadAndDisplayCurrentlyLoadedExcelTables()
         {
             tablesLoaded = new TablesLoaded(tableDataSet) {MdiParent = this};
-            tablesLoaded.Show();
-            foreach (ExcelTable et in excelTables.GetLoadedTables())
+            int loadedTableCount = 0;
+
+            if (excelTables != null)
             {
-                tablesLoaded.AddItem(et);
+                foreach (ExcelTable et in excelTables.GetLoadedTables())
+                {
+                    tablesLoaded.AddItem(et);
+                }
+                loadedTableCount += excelTables.LoadedTableCount;
             }
-            foreach (StringsFile sf in stringsTables.GetLoadedTables())
+
+            if (stringsTables != null)
             {
-                tablesLoaded.AddItem(sf);
+                foreach (StringsFile sf in stringsTables.GetLoadedTables())
+                {
+                    tablesLoaded.AddItem(sf);
+                }
+                loadedTableCount += stringsTables.Count;
             }
-            tablesLoaded.Text = "Currently Loaded Tables [" + (excelTables.LoadedTableCount + stringsTables.Count) + "]";
+
+            if (loadedTableCount > 0)
+            {
+                tablesLoaded.Text = "Currently Loaded Tables [" + loadedTableCount + "]";
+                tablesLoaded.Show();
+            }
         }
 
         private void LoadTables(ProgressForm progress, Object var)
@@ -467,25 +476,32 @@ namespace Reanimator
             }
             catch (Exception e)
             {
-                MessageBox.Show("Failed to load exceltables!\nPlease ensure your directories are set correctly.\n\nFile: \n" + excelFilePath + "\n\n" + e.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(
+                    "Failed to load exceltables!\nPlease ensure your directories are set correctly.\nTools > Options\n\nFile: \n" +
+                    excelFilePath + "\n\n" + e, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
 
             // read in strings files
-            try
+            if (excelTables != null)
             {
-                Excel.StringsFiles stringsFiles = (Excel.StringsFiles)excelTables.GetTable("STRING_FILES");
-                if (stringsFiles != null)
+                try
                 {
-                    progress.SetLoadingText("Loading in strings files (" + stringsFiles.Count + ")...");
-                    progress.ConfigBar(0, stringsFiles.Count, 1);
-                    stringsTables = new StringsTables();
-                    stringsTables.LoadStringsTables(progress, stringsFiles);
+                    Excel.StringsFiles stringsFiles = (Excel.StringsFiles) excelTables.GetTable("STRING_FILES");
+                    if (stringsFiles != null)
+                    {
+                        progress.SetLoadingText("Loading in strings files (" + stringsFiles.Count + ")...");
+                        progress.ConfigBar(0, stringsFiles.Count, 1);
+                        stringsTables = new StringsTables();
+                        stringsTables.LoadStringsTables(progress, stringsFiles);
+                    }
                 }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Failed to load in string tables!\nPlease ensure your directories are set correctly.\n\n" + e.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                catch (Exception e)
+                {
+                    MessageBox.Show(
+                        "Failed to load in string tables!\nPlease ensure your directories are set correctly.\n\n" +
+                        e, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
 
 

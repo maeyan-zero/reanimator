@@ -74,6 +74,7 @@
             this.regenerateCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.regenerateRelationsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.applyModificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tradeItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cascadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -100,7 +101,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.tradeItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -416,11 +417,12 @@
             // toolsMenu
             // 
             this.toolsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.optionsToolStripMenuItem,
             this.clientPatchesToolStripMenuItem,
             this.cacheInfoToolStripMenuItem,
             this.applyModificationsToolStripMenuItem,
-            this.tradeItemsToolStripMenuItem});
+            this.tradeItemsToolStripMenuItem,
+            this.toolStripSeparator9,
+            this.optionsToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
             this.toolsMenu.Size = new System.Drawing.Size(48, 20);
             this.toolsMenu.Text = "&Tools";
@@ -492,6 +494,13 @@
             this.applyModificationsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.applyModificationsToolStripMenuItem.Text = "Apply Modifications";
             this.applyModificationsToolStripMenuItem.Click += new System.EventHandler(this.applyModificationsToolStripMenuItem_Click);
+            // 
+            // tradeItemsToolStripMenuItem
+            // 
+            this.tradeItemsToolStripMenuItem.Name = "tradeItemsToolStripMenuItem";
+            this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.tradeItemsToolStripMenuItem.Text = "Trade Items";
+            this.tradeItemsToolStripMenuItem.Click += new System.EventHandler(this.tradeItemsToolStripMenuItem_Click);
             // 
             // windowsMenu
             // 
@@ -702,12 +711,10 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // tradeItemsToolStripMenuItem
+            // toolStripSeparator9
             // 
-            this.tradeItemsToolStripMenuItem.Name = "tradeItemsToolStripMenuItem";
-            this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.tradeItemsToolStripMenuItem.Text = "Trade Items";
-            this.tradeItemsToolStripMenuItem.Click += new System.EventHandler(this.tradeItemsToolStripMenuItem_Click);
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(178, 6);
             // 
             // Reanimator
             // 
@@ -807,6 +814,7 @@
         private System.Windows.Forms.ToolStripMenuItem modelFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem havokFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tradeItemsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
     }
 }
 
