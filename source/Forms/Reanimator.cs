@@ -72,11 +72,11 @@ namespace Reanimator
             {
                 if (openFileDialog.FileName.EndsWith("idx"))
                 {
-                    OpenFile_IDX(openFileDialog.FileName);
+                    OpenFileIdx(openFileDialog.FileName);
                 }
                 else if (openFileDialog.FileName.EndsWith("hg1"))
                 {
-                    OpenFile_HG1(openFileDialog.FileName);
+                    OpenFileHg1(openFileDialog.FileName);
                 }
                 else if (openFileDialog.FileName.EndsWith("xls.uni.cooked"))
                 {
@@ -84,11 +84,11 @@ namespace Reanimator
                 }
                 else if (openFileDialog.FileName.EndsWith("cooked"))
                 {
-                    OpenFile_COOKED(openFileDialog.FileName);
+                    OpenFileCooked(openFileDialog.FileName);
                 }
                 else if (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml"))
                 {
-                    OpenFile_MOD(openFileDialog.FileName);
+                    OpenFileMod(openFileDialog.FileName);
                 }
             }
 
@@ -104,7 +104,7 @@ namespace Reanimator
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("idx"))
             {
-                OpenFile_IDX(openFileDialog.FileName);
+                OpenFileIdx(openFileDialog.FileName);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Reanimator
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("hg1"))
             {
-                OpenFile_HG1(openFileDialog.FileName);
+                OpenFileHg1(openFileDialog.FileName);
             }
         }
 
@@ -128,7 +128,7 @@ namespace Reanimator
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
             {
-                OpenFile_COOKED(openFileDialog.FileName);
+                OpenFileCooked(openFileDialog.FileName);
             }
         }
 
@@ -151,12 +151,9 @@ namespace Reanimator
             modificationForm.Show();
         }
 
-        private bool OpenFile_MOD(string szFileName)
+        private void OpenFileMod(string szFileName)
         {
-            if (indexFilesOpen.Contains(szFileName))
-            {
-                return false;
-            }
+            if (indexFilesOpen.Contains(szFileName)) return;
 
             try
             {
@@ -175,21 +172,18 @@ namespace Reanimator
                     MessageBox.Show("The Modification appears to be invalid. Check syntax and try again.");
                 }
 
-                return true;
+                return;
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-                return false;
+                return;
             }
         }
 
-        private bool OpenFile_IDX(string szFileName)
+        private void OpenFileIdx(string szFileName)
         {
-            if (indexFilesOpen.Contains(szFileName))
-            {
-                return false;
-            }
+            if (indexFilesOpen.Contains(szFileName)) return;
 
             FileStream indexFile;
             try
@@ -198,64 +192,44 @@ namespace Reanimator
             }
             catch (Exception e)
             {
-                MessageBox.Show("Failed to open file: " + szFileName + "\n\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                MessageBox.Show("Failed to open file: " + szFileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             Index index = new Index(indexFile);
-            TableForm indexExplorer = new TableForm(index);
-            indexExplorer.dataGridView.DataSource = index.GetFileTable();
+            TableForm indexExplorer = new TableForm(index)
+                                          {
+                                              dataGridView = {DataSource = index.GetFileTable()}
+                                          };
             indexExplorer.Text += ": " + szFileName;
             indexExplorer.MdiParent = this;
             indexExplorer.Show();
 
             indexFilesOpen.Add(indexFile.Name);
 
-            return true;
+            return;
         }
 
-        private bool OpenFile_HG1(string fileName)
+        private void OpenFileHg1(string fileName)
         {
-            //String excelError = "You must have all excel tables loaded to use the Hero Editor!";
-            //if (excelTables == null)
-            //{
-            //    MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return false;
-            //}
-            //if (!excelTables.AllTablesLoaded)
-            //{
-            //    MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return false;
-            //}
+            // TODO give some sort of decent error or something
+            if (excelTables == null) return;
 
-
-            //FileStream heroFile;
-            //try
-            //{
-            //    heroFile = new FileStream(fileName, FileMode.Open);
-            //}
-            //catch (Exception e)
-            //{
-            //    MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    return false;
-            //}
-
-            //BitBuffer bitBuffer = new BitBuffer(FileTools.StreamToByteArray(heroFile));
-            //bitBuffer.DataByteOffset = 0x2028;
-
-            //Unit heroUnit = new Unit(bitBuffer);
             Unit heroUnit = UnitHelpFunctions.OpenCharacterFile(ref excelTables, fileName);
 
-            HeroEditor heroEditor = new HeroEditor(heroUnit, tableDataSet, fileName);
-            heroEditor.Text = "Hero Editor: " + fileName;
-            heroEditor.MdiParent = this;
+            HeroEditor heroEditor = new HeroEditor(heroUnit, tableDataSet, fileName)
+                                        {
+                                            Text = "Hero Editor: " + fileName,
+                                            MdiParent = this
+                                        };
             heroEditor.Show();
-
-            return true;
         }
 
-        private void OpenFile_COOKED(String fileName)
+        private void OpenFileCooked(String fileName)
         {
+            // TODO give some sort of decent error or something
+            if (excelTables == null) return;
+
             int indexStart = fileName.LastIndexOf("\\") + 1;
             int indexEnd = fileName.LastIndexOf(".txt");
             string name = fileName.Substring(indexStart, indexEnd - indexStart);
@@ -281,11 +255,14 @@ namespace Reanimator
                 if (!strings.IsGood) return;
 
                 strings.FilePath = fileName;
-                TableForm indexExplorer = new TableForm(strings);
                 StringsFile.StringBlock[] stringBlocks = strings.GetFileTable();
-                indexExplorer.dataGridView.DataSource = stringBlocks;
+
+                TableForm indexExplorer = new TableForm(strings)
+                                              {
+                                                  dataGridView = {DataSource = stringBlocks},
+                                                  MdiParent = this
+                                              };
                 indexExplorer.Text += ": " + fileName;
-                indexExplorer.MdiParent = this;
                 indexExplorer.Show();
             }
             catch (Exception e)
@@ -592,7 +569,6 @@ namespace Reanimator
             try
             {
                 ExcelTableForm excelTable = (ExcelTableForm)this.ActiveMdiChild;
-                string strValue;
 
                 if (excelTable != null)
                 {
@@ -603,13 +579,16 @@ namespace Reanimator
                     if (result == DialogResult.OK)
                     {
                         // Compiles the CSV string
-                        strValue = Export.CSV(excelTable.dataGridView, select.selected, select.comboBoxDelimiter.Text);
+                        string strValue = Export.CSV(excelTable.dataGridView, select.selected, select.comboBoxDelimiter.Text);
 
                         // Prompts the user to choose where to save the file
-                        SaveFileDialog saveFileDialog = new SaveFileDialog();
-                        saveFileDialog.Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*";
-                        saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-                        //saveFileDialog.FileName = excelTable.GetExcelTableName();
+                        SaveFileDialog saveFileDialog = new SaveFileDialog
+                                                            {
+                                                                Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*",
+                                                                InitialDirectory =
+                                                                    Environment.GetFolderPath(
+                                                                    Environment.SpecialFolder.Personal)
+                                                            };
 
                         if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
                         {
@@ -627,9 +606,11 @@ namespace Reanimator
 
         private void BypassSecurityx64ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Exectuable Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.HglDir;
+            OpenFileDialog openFileDialog = new OpenFileDialog
+                                                {
+                                                    Filter = "Exectuable Files (*.exe)|*.exe|All Files (*.*)|*.*",
+                                                    InitialDirectory = Config.HglDir
+                                                };
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("exe"))
             {
@@ -649,8 +630,7 @@ namespace Reanimator
 
         private void CacheToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CacheInfo info = new CacheInfo(@"cache\");
-            info.MdiParent = this;
+            CacheInfo info = new CacheInfo(@"cache\") {MdiParent = this};
             info.Show();
         }
 
@@ -700,7 +680,7 @@ namespace Reanimator
                 ProgressForm cachingProgress = new ProgressForm(CacheTables, excelTables.GetLoadedTables());
                 cachingProgress.ShowDialog(this);
             }
-            else if (tableDataSet.RegenerateRelations)
+            else if (tableDataSet.RegenerateRelations && excelTables != null && tableDataSet.LoadedTableCount > 0)
             {
                 dr = MessageBox.Show("Reanimator has detected your table relations are out of date.\nDo you wish to regenerate them?", "Regenerate Relations", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == DialogResult.Yes)
@@ -714,6 +694,8 @@ namespace Reanimator
 
         private void RegenerateRelationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (excelTables == null) return;
+
             ProgressForm progress = new ProgressForm(GenerateRelations, excelTables.GetLoadedTables());
             progress.ShowDialog(this);
         }
@@ -771,9 +753,11 @@ namespace Reanimator
 
         private void modelFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Model Files (*.am)|*.am|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.HglDir;
+            OpenFileDialog openFileDialog = new OpenFileDialog
+                                                {
+                                                    Filter = "Model Files (*.am)|*.am|All Files (*.*)|*.*",
+                                                    InitialDirectory = Config.HglDir
+                                                };
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("am") || openFileDialog.FileName.EndsWith("m")))
             {
