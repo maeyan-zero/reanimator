@@ -777,6 +777,7 @@ namespace Reanimator.Excel
             {
                 FileTools.WriteToBuffer(ref buffer, stringsByteOffset, stringsByteCount);
                 FileTools.WriteToBuffer(ref buffer, stringsByteOffset + sizeof(Int32), stringBytes, stringsByteCount, true);
+                byteOffset += stringsByteCount;
             }
 
 
@@ -882,9 +883,10 @@ namespace Reanimator.Excel
 
 
             // weird unknown header chunks
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
             if (_rcshValue != 0)
             {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenRcsh);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _rcshValue);
 
