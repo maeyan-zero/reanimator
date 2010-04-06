@@ -152,8 +152,16 @@ namespace Reanimator.Excel
         }
 
         public bool AllTablesLoaded { get; set; }
-        public readonly ExcelTableManagerManager _excelTables;
+        readonly ExcelTableManagerManager _excelTables;
         readonly List<ExcelTable> _loadedTables;
+
+        public ExcelTableManagerManager TableManager
+        {
+            get
+            {
+                return _excelTables;
+            }
+        }
 
         public ExcelTables(byte[] data)
             : base(data)

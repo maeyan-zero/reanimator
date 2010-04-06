@@ -58,6 +58,7 @@ namespace Reanimator.Forms
         {
             ProgressForm progressForm = new ProgressForm(mod.Apply, null);
             progressForm.ShowDialog(this);
+            mod.Save(Config.HglDir, Mod.Method.EXTRACT);
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)

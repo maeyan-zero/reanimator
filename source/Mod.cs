@@ -27,9 +27,11 @@ namespace Reanimator
 
         List<ExcelTable> excelList;
         List<String> loadedExcelList;
+        List<String> savedExcelList;
 
         List<Index> indexList;
         List<String> loadedIndexList;
+        List<String> savedIndexList;
 
         public Mod(String revivalModPath)
         {
@@ -38,9 +40,11 @@ namespace Reanimator
 
             this.excelList = new List<ExcelTable>();
             this.loadedExcelList = new List<String>();
+            this.savedExcelList = new List<String>();
 
             this.indexList = new List<Index>();
             this.loadedIndexList = new List<String>();
+            this.savedIndexList = new List<String>();
         }
 
         public void Add(Mod mod)
@@ -169,15 +173,15 @@ namespace Reanimator
                                 }
                                 if (loadedExcelList.Contains(file.id) == false)
                                 {
-                                    int fileIndexNo = indexList[pack.listId].Locate(file.id + ".txt.cooked");
-                                    if (fileIndexNo == -1)
+                                    file.indexId = indexList[pack.listId].Locate(file.id + ".txt.cooked");
+                                    if (file.indexId == -1)
                                     {
-                                        fileIndexNo = indexList[pack.listId].Locate(file.id.Replace("_", "") + ".txt.cooked");
+                                        file.indexId = indexList[pack.listId].Locate(file.id.Replace("_", "") + ".txt.cooked");
                                     }
-                                    if (fileIndexNo != -1)
+                                    if (file.indexId != -1)
                                     {
-                                        file.tableRef = excelTables._excelTables.ResolveTableId(file.id.Replace(".txt.cooked", ""));
-                                        excelList.Add(excelTables._excelTables.CreateTable(file.tableRef, indexList[pack.listId].ReadDataFile(fileIndex[fileIndexNo])));
+                                        file.tableRef = excelTables.TableManager.ResolveTableId(file.id.Replace(".txt.cooked", ""));
+                                        excelList.Add(excelTables.TableManager.CreateTable(file.tableRef, indexList[pack.listId].ReadDataFile(fileIndex[file.indexId])));
                                         loadedExcelList.Add(file.id);
                                         file.listId = loadedExcelList.Count - 1;
                                         dataSet.LoadTable(progress, excelList[file.listId]);
@@ -242,16 +246,35 @@ namespace Reanimator
 
         public void Save(string path, Method method)
         {
-            foreach (ExcelTable excelFile in excelList)
+            foreach (Modification modification in revival)
             {
-                //byte[] excelFileData = dataSet.ExcelTables.GetTable(file.id).GenerateExcelFile(dataSet.XlsDataSet);
+                if (modification.apply == true)
+                {
+                    foreach (Pack pack in modification)
+                    {
+                        Index.FileIndex[] fileIndex = indexList[pack.listId].GetFileTable();
 
-                //using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
-                //{
-                //    fs.Write(excelFileData, 0, excelFileData.Length);
-                //}
+                        foreach (File file in pack)
+                        {
+                            if (savedExcelList.Contains(file.id) == false)
+                            {
+                                byte[] excelBytes = excelList[file.listId].GenerateExcelFile(dataSet.XlsDataSet);
+                                string dir = Config.HglDir + "\\" + fileIndex[file.indexId].DirectoryString;
+                                string filename = excelList[file.listId].StringId.ToLower() + ".txt.cooked";
+
+                                if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+                                using (FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                                {
+                                    fs.Write(excelBytes, 0, excelBytes.Length);
+                                    savedExcelList.Add(file.id);
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
+            // Modify the IDX files
             foreach (Index indexFile in indexList)
             {
                 switch (method)
@@ -533,6 +556,9 @@ namespace Reanimator
 
             [XmlIgnoreAttribute]
             public int listId;
+
+            [XmlIgnoreAttribute]
+            public int indexId;
 
             [XmlIgnoreAttribute]
             public string tableRef;

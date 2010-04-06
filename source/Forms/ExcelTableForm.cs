@@ -190,13 +190,13 @@ namespace Reanimator.Forms
         {
             DataTable table = ((DataSet) this.dataGridView.DataSource).Tables[this.dataGridView.DataMember];
             if (table == null) return;
-
             // TODO have excel file saving use same method as string file saving
             if (_stringsFile == null)
             {
                 byte[] excelFileData = _excelTable.GenerateExcelFile((DataSet)this.dataGridView.DataSource);
+                string filename = _excelTable.StringId.ToLower() + ".txt.cooked";
 
-                using (FileStream fs = new FileStream("test.txt.cooked", FileMode.Create, FileAccess.ReadWrite))
+                using (FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite))
                 {
                     fs.Write(excelFileData, 0, excelFileData.Length);
                 }
