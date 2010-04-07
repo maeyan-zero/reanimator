@@ -18,9 +18,11 @@ namespace Reanimator
         static public readonly string defaultPack = "sp_hellgate_1.10.180.3416_1.18074.70.4256";
         static private readonly int excelTablesIndex = 2572;
 
+
         public enum Method { EXTRACT, REPACK }
 
         Revival revival;
+        String directory;
 
         TableDataSet dataSet;
         ExcelTables excelTables;
@@ -36,6 +38,7 @@ namespace Reanimator
         public Mod(String revivalModPath)
         {
             this.revival = Deserialize(revivalModPath);
+            this.directory = revivalModPath.Substring(0, revivalModPath.LastIndexOf("\\"));
             this.dataSet = new TableDataSet();
 
             this.excelList = new List<ExcelTable>();
@@ -244,47 +247,81 @@ namespace Reanimator
             }
         }
 
-        public void Save(string path, Method method)
+        public void Save(Forms.ProgressForm progress, Object argument)
         {
+            progress.SetLoadingText("Modifying and Saving all files.");
+
             foreach (Modification modification in revival)
             {
                 if (modification.apply == true)
                 {
                     foreach (Pack pack in modification)
                     {
-                        Index.FileIndex[] fileIndex = indexList[pack.listId].GetFileTable();
-
                         foreach (File file in pack)
                         {
-                            if (savedExcelList.Contains(file.id) == false)
-                            {
-                                byte[] excelBytes = excelList[file.listId].GenerateExcelFile(dataSet.XlsDataSet);
-                                string dir = Config.HglDir + "\\" + fileIndex[file.indexId].DirectoryString;
-                                string filename = excelList[file.listId].StringId.ToLower() + ".txt.cooked";
+                            progress.SetCurrentItemText(file.id);
 
-                                if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-                                using (FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                            // Its an Excel File
+                            if (file.modify != null)
+                            {
+                                // Check if its already saved
+                                if (savedExcelList.Contains(file.id) == false && file.tableRef != null)
                                 {
-                                    fs.Write(excelBytes, 0, excelBytes.Length);
-                                    savedExcelList.Add(file.id);
+                                    byte[] excelBytes = excelList[file.listId].GenerateExcelFile(dataSet.XlsDataSet);
+                                    string dir = Config.HglDir + "\\" + indexList[pack.listId].FileTable[file.indexId].DirectoryString;
+                                    string filename = excelTables.TableManager.GetReplacement(file.id);
+
+                                    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+
+                                    using (FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                                    {
+                                        fs.Write(excelBytes, 0, excelBytes.Length);
+                                        savedExcelList.Add(file.id);
+                                    }
                                 }
+                            }
+                            // Its not an Excel file
+                            else if (file.replace != null)
+                            {
+                                string source = this.directory + "\\" + file.replace.data;
+                                string destination = Config.HglDir + "\\" + indexList[pack.listId].FileTable[file.indexId].DirectoryString;
+
+                                try
+                                {
+                                    if (System.IO.File.Exists(source) == false)
+                                    {
+                                        throw new Exception("Source file not found");
+                                    }
+                                    if (Directory.Exists(destination) == false)
+                                    {
+                                        Directory.CreateDirectory(destination);
+                                    }
+                                    System.IO.File.Copy(source, destination + file.id, true);
+                                }
+                                catch (Exception e)
+                                {
+                                    MessageBox.Show(e.ToString());
+                                }
+                            }
+
+                            // Modify the index if it isn't already
+                            if (indexList[pack.listId].FileTable[file.indexId].IsModified() == false)
+                            {
+                                indexList[pack.listId].RemoveFromIndex(file.indexId);
                             }
                         }
                     }
                 }
             }
 
-            // Modify the IDX files
-            foreach (Index indexFile in indexList)
+            // Save the modified index files
+            foreach (Index indx in indexList)
             {
-                switch (method)
+                using (FileStream fs = new FileStream(Config.HglDir + "\\data\\" + indx.FileName + ".idx", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
-                    case Method.EXTRACT:
-                        
-                        break;
-                    case Method.REPACK:
-
-                        break;
+                    byte[] buffer = indx.GenerateIndexFile();
+                    Crypt.Encrypt(buffer);
+                    fs.Write(buffer, 0, buffer.Length);
                 }
             }
         }
