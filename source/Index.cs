@@ -63,7 +63,9 @@ namespace Reanimator
         Int32[] stringTableUnknowns;
         FileIndex[] fileTable;
 
-        const string affix = "backup\\"; // used for modifications
+        bool modified;
+
+        const string affix = ".backup"; // used for modifications
 
         public class FileIndex
         {
@@ -122,6 +124,19 @@ namespace Reanimator
                 get { return FileStruct.filenameArrayPosition; }
             }
             public string FileNameString { get; set; }
+
+            public bool IsModified()
+            {
+                if (DirectoryString.Contains(affix))
+                    return true;
+                else
+                    return false;
+            }
+
+            public void Modify()
+            {
+                 //= affix + DirectoryString;
+            }
         }
 
         public Index(FileStream file)
@@ -142,6 +157,16 @@ namespace Reanimator
 
             InitializeStringTable();
             InitializeFileTable();
+
+            // check if the file has been modified
+            for (int i = 0; i < stringTable.Length; i++)
+            {
+                if (stringTable[i] == affix)
+                {
+                    modified = true;
+                    break;
+                }
+            }
         }
 
         void InitializeStringTable()
@@ -195,6 +220,14 @@ namespace Reanimator
         public void SetFileTable(FileIndex[] fileIndex)
         {
             fileTable = fileIndex;
+        }
+
+        public FileIndex[] FileTable
+        {
+            get
+            {
+                return fileTable;
+            }
         }
 
         public FileIndex[] GetFileTable()
@@ -350,58 +383,50 @@ namespace Reanimator
             return returnBuffer;
         }
 
-        public bool ApplyDirectoryAffix(int id)
+        public bool RemoveFromIndex(int id)
         {
-            Index.FileIndex[] fileIndex = this.GetFileTable();
-
-            if (fileIndex[id].DirectoryString.Contains(affix))
+            if (fileTable[id].FileNameString.Contains(affix))
             {
                 return false;
             }
             else
             {
-                fileIndex[id].DirectoryString = fileIndex[id].DirectoryString.Insert(0, affix);
+                stringTable[fileTable[id].FileName] += affix;
+                return true;
             }
-
-            this.SetFileTable(fileIndex);
-
-            return true;
         }
 
         public bool IsModified()
         {
-            Index.FileIndex[] fileIndex = this.GetFileTable();
-
-            foreach (Index.FileIndex file in fileIndex)
+            foreach (Index.FileIndex file in fileTable)
             {
-                if (file.DirectoryString.Contains(affix))
+                if (file.FileNameString.Contains(affix))
                 {
                     return true;
                 }
             }
-
             return false;
         }
 
         public bool Restore(string path)
         {
-            Index.FileIndex[] fileIndex = this.GetFileTable();
-
-            foreach (Index.FileIndex file in fileIndex)
+            foreach (Index.FileIndex file in fileTable)
             {
-                if (file.DirectoryString.Contains(affix))
+                if (file.FileNameString.Contains(affix))
                 {
-                    file.DirectoryString = file.DirectoryString.Remove(0, affix.Length);
+                    stringTable[file.FileName] = stringTable[file.FileName].Remove(
+                        stringTable[file.FileName].Length - affix.Length, affix.Length);
                 }
             }
-            this.SetFileTable(fileIndex);
+
+            indexFile.Dispose();
 
             byte[] buffer = this.GenerateIndexFile();
             Crypt.Encrypt(buffer);
 
             try
             {
-                FileStream stream = new FileStream(path, FileMode.CreateNew);
+                FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
                 stream.Write(buffer, 0, buffer.Length);
                 stream.Close();
                 return true;

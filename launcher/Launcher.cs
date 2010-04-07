@@ -23,7 +23,7 @@ namespace launcher
 
         public Launcher()
         {
-            _indexPath = Config.DataDirsRoot + "\\data\\" + Mod.defaultPack + ".idx";
+            _indexPath = Config.HglDir + "\\data\\" + Mod.defaultPack + ".idx";
             _availableCharacters = new List<string>();
             InitializeComponent();
         }

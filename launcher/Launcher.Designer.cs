@@ -139,9 +139,9 @@
             // 
             this.groupBox1.BackColor = System.Drawing.Color.Transparent;
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.groupBox1.Location = new System.Drawing.Point(381, 12);
+            this.groupBox1.Location = new System.Drawing.Point(381, 39);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(231, 420);
+            this.groupBox1.Size = new System.Drawing.Size(231, 393);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "RSS Feed";
@@ -189,7 +189,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
             this.BackgroundImage = global::launcher.Properties.Resources.background_old;
-            this.ClientSize = new System.Drawing.Size(624, 444);
+            this.ClientSize = new System.Drawing.Size(624, 442);
             this.Controls.Add(this.p_openHomePage);
             this.Controls.Add(this.characterCombo);
             this.Controls.Add(this.p_start);
