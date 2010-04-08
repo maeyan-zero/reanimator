@@ -933,18 +933,20 @@ namespace Reanimator.Forms
             {
                 _heroUnit.SetGameMode(elite_CheckBox.Checked, hardcore_CheckBox.Checked, dead_CheckBox.Checked);
 
+                /*
                 if(startedAsElite && !elite_CheckBox.Checked)
                 {
-                    _heroUnit.unknownCount1Bs[0].unknown2 -= 32;
+                    _heroUnit.unknownCount1Bs[0].itemEndBitOffset -= 32;
                 }
                 else if (!startedAsElite && elite_CheckBox.Checked)
                 {
-                    _heroUnit.unknownCount1Bs[0].unknown2 += 32;
+                    _heroUnit.unknownCount1Bs[0].itemEndBitOffset += 32;
                 }
                 if (startedAsHC && !hardcore_CheckBox.Checked)
                 {
-                    _heroUnit.unknownCount1Bs[0].unknown2 -= 62;
+                    _heroUnit.unknownCount1Bs[0].itemEndBitOffset -= 62;
                 }
+                
                 else if (!startedAsHC && hardcore_CheckBox.Checked)
                 {
                     /*
@@ -955,7 +957,7 @@ namespace Reanimator.Forms
                      * statCount++
                      * add entry "quest_global_fix_flags"
                     */
-
+                /*
                     if (_heroUnit.Stats.GetStatByName(ItemValueNames.quest_global_fix_flags.ToString()) == null)
                     {
                         List<Unit.StatBlock.Stat> stats = new List<Unit.StatBlock.Stat>();
@@ -969,8 +971,9 @@ namespace Reanimator.Forms
                         _heroUnit.Stats.statCount = stats.Count;
                     }
 
-                    _heroUnit.unknownCount1Bs[0].unknown2 += 62;
+                    _heroUnit.unknownCount1Bs[0].itemEndBitOffset += 62;
                 }
+                */
             }
         }
 
@@ -1012,7 +1015,7 @@ namespace Reanimator.Forms
 
             richTextBox1.Text += "\n\n\n\n";
             textBox2.Text = _heroUnit.unknownCount1Bs[0].unknown1.ToString();
-            textBox3.Text = _heroUnit.unknownCount1Bs[0].unknown2.ToString();
+            textBox3.Text = _heroUnit.unknownCount1Bs[0].itemEndBitOffset.ToString();
         }
 
         private void hardcore_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -1429,7 +1432,7 @@ namespace Reanimator.Forms
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
-            _heroUnit.unknownCount1Bs[0].unknown2 = Int32.Parse(textBox3.Text);
+            _heroUnit.unknownCount1Bs[0].itemEndBitOffset = Int32.Parse(textBox3.Text);
         }
 
         private void saveAsData_Click(object sender, EventArgs e)
