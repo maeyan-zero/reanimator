@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using Reanimator.Excel;
 using System.IO;
@@ -1430,18 +1432,42 @@ namespace Reanimator.Forms
             _heroUnit.unknownCount1Bs[0].unknown2 = Int32.Parse(textBox3.Text);
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void saveAsData_Click(object sender, EventArgs e)
         {
-            Unit unit = (Unit)currentlyEditing_ComboBox.SelectedItem;
+            Unit unit = currentlyEditing_ComboBox.SelectedItem as Unit;
+            if (unit == null) return;
 
-            XmlUtilities<Unit>.Serialize(unit, RESOURCEFOLDER + @"\" + unit.Name + ".xml");
+            String savePath = FileTools.SaveFileDiag("dat", "Data", unit.Name, null);
+            if (String.IsNullOrEmpty(savePath)) return;
+
+            using (FileStream fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
+            {
+                BinaryFormatter bf = new BinaryFormatter { TypeFormat = FormatterTypeStyle.XsdString };
+                bf.Serialize(fs, unit);
+                fs.Close();
+            }
+
+            XmlUtilities<Unit>.Serialize(unit, savePath + ".xml");
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            Unit unit = XmlUtilities<Unit>.Deserialize(RESOURCEFOLDER + @"\" + textBox4.Text + ".xml");
+            //Unit unit = XmlUtilities<Unit>.Deserialize(RESOURCEFOLDER + @"\" + textBox4.Text + ".xml");
             //unit.inventoryPositionX++;
             //unit.inventoryPositionY++;
+
+            String filePath = FileTools.OpenFileDiag("dat", "Data", null);
+            if (String.IsNullOrEmpty(filePath)) return;
+
+            Unit unit;
+            using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                BinaryFormatter bf = new BinaryFormatter { TypeFormat = FormatterTypeStyle.XsdString };
+                unit = bf.Deserialize(fs) as Unit;
+                fs.Close();
+            }
+            if (unit == null) return;
+
             _heroUnit.Items.Add(unit);
             _heroUnit.itemCount++;
         }

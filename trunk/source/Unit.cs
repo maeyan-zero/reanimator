@@ -1,13 +1,13 @@
 ﻿// The old Unit file with "public" modifiers
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace Reanimator
 {
     // pretty sure this is populated based on a bit field... should check...
+    [Serializable]
     public struct UnitStat_OtherAttribute
     {
         // if (otherAttributeFlag & 0x01)
@@ -18,6 +18,7 @@ namespace Reanimator
         public int unknown3;										// 1 bit		// possibly another reasource flag or something - if not 0x01 alert
     };
 
+    [Serializable]
     public struct UnitStatAdditional
     {
         public int unknown;											// 16 bits
@@ -25,26 +26,31 @@ namespace Reanimator
         public Unit.StatBlock.Stat[] stats;
     };
 
+    [Serializable]
     public struct UnitStatName
     {
         public int unknown1;										// 16 bits
         public Unit.StatBlock statBlock;							// nameCount * UnitStatBlock stuffs
     };
 
+    [Serializable]
     public struct UnknownCount1F_S
     {
         public int unknown1;										// 16 bits
         public int unknown2;										// 16 bits
     };
 
+    [Serializable]
     public struct UnknownCount1B_S
     {
         public int unknown1;										// 16 bits
         public int unknown2;										// 32 bits
     };
 
+    [Serializable]
     public struct UnitAppearance
     {
+        [Serializable]
         public struct UnknownCount1_S
         {
             // if (bitTest(bitField1, 0x0F)) // untested
@@ -57,6 +63,7 @@ namespace Reanimator
             public int[] unknownCount1s;						    // 32 bits * unknownCount1
         };
 
+        [Serializable]
         public struct ModelAppearance_S
         {
             public int body;										// 16 bits
@@ -65,6 +72,7 @@ namespace Reanimator
             public int faceAccessory;								// 16 bits
         };
 
+        [Serializable]
         public struct GearAppearance_S
         {
             public int gear;										// 16 bits
@@ -95,6 +103,7 @@ namespace Reanimator
         public GearAppearance_S[] gears;				        	// 17 bits * gearCount
     };
 
+    [Serializable]
     public struct UnitWeaponConfig
     {
         public int id;                                              // 16 bits      // .text:00000001403DB5EA mov     edx, 4       .text:00000001403DB5EF call    ConvertNumber?  ; Call Pr
@@ -107,6 +116,7 @@ namespace Reanimator
         public int idAnother;                                       // 32 bits
     };
 
+    [Serializable]
     public class Unit
     {
         //Used for XMLSerialization
@@ -114,6 +124,7 @@ namespace Reanimator
         {
         }
 
+        [Serializable]
         public class StatBlock
         {
             public Stat GetStatByName(string name)
@@ -140,8 +151,10 @@ namespace Reanimator
                 return null;
             }
 
+            [Serializable]
             public class Stat
             {
+                [Serializable]
                 public class Attribute
                 {
                     public int exists;										// 1 bit
@@ -164,6 +177,7 @@ namespace Reanimator
                     }
                 };
 
+                [Serializable]
                 public class Values
                 {
                     public int Attribute1 { get; set; }
@@ -595,6 +609,7 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
         // if (testBit(unit->bitField1, 0x00))
         public int endFlag;											// 32 bits
 
+        [NonSerialized]
         BitBuffer bitBuffer;
 
         public bool ReadUnit(ref Unit unit)

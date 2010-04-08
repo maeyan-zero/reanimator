@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
-using System.IO.Compression;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Reanimator
 {
-    public class FileTools
+    public static class FileTools
     {
         public static byte[] StreamToByteArray(Stream stream)
         {
@@ -138,12 +137,12 @@ namespace Reanimator
 
         public static byte[] StringToUnicodeByteArray(String str)
         {
-            return UnicodeEncoding.Unicode.GetBytes(str);
+            return Encoding.Unicode.GetBytes(str);
         }
 
         public static byte[] StringToASCIIByteArray(String str)
         {
-            return ASCIIEncoding.ASCII.GetBytes(str);
+            return Encoding.ASCII.GetBytes(str);
         }
 
         public static byte[] IntArrayToByteArray(int[] source)
@@ -234,6 +233,64 @@ namespace Reanimator
             }
 
             return outputString;
+        }
+
+        public static String SaveFileDiag(String fileExtension, String typeName, String defaultFileName, String initialDirectory)
+        {
+            // This little function is here because for some reason AddExtension = false doesn't seem to do shit.
+            // So basically I just check it manually.
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                AddExtension = false,
+                DefaultExt = fileExtension,
+                FileName = defaultFileName,
+                Filter = String.Format("{1} File(s) (*.{0})|*.{0}", fileExtension, typeName),
+                InitialDirectory = initialDirectory
+            };
+
+            if (saveFileDialog.ShowDialog() != DialogResult.OK)
+            {
+                saveFileDialog.Dispose();
+                return null;
+            }
+            String filePath = saveFileDialog.FileName;
+            saveFileDialog.Dispose();
+
+            // since AddExtension = false doesn't seem to do shit
+            string replaceExtension = "." + fileExtension;
+            while (filePath.Contains(replaceExtension))
+            {
+                filePath = filePath.Replace(replaceExtension, "");
+            }
+            filePath += replaceExtension;
+
+            if (!filePath.Contains(fileExtension))
+            {
+                filePath += fileExtension;
+            }
+
+            return filePath;
+        }
+
+        public static string OpenFileDiag(String fileExtension, String typeName, String initialDirectory)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                DefaultExt = fileExtension,
+                Filter = String.Format("{1} File(s) (*.{0})|*.{0}", fileExtension, typeName),
+                InitialDirectory = initialDirectory
+            };
+
+            if (openFileDialog.ShowDialog() != DialogResult.OK)
+            {
+                openFileDialog.Dispose();
+                return null;
+            }
+            String filePath = openFileDialog.FileName;
+            openFileDialog.Dispose();
+
+            return filePath;
         }
     }
 }
