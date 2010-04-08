@@ -214,7 +214,7 @@ namespace Reanimator.Forms
             this.currentlyEditing_ComboBox = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button6 = new System.Windows.Forms.Button();
+            this.saveAsData_Button = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.button8 = new System.Windows.Forms.Button();
@@ -2195,24 +2195,24 @@ namespace Reanimator.Forms
             "8",
             "11",
             "13"});
-            this.comboBox1.Location = new System.Drawing.Point(485, 6);
+            this.comboBox1.Location = new System.Drawing.Point(586, 4);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(36, 21);
             this.comboBox1.TabIndex = 0;
             // 
-            // button6
+            // saveAsData_Button
             // 
-            this.button6.Location = new System.Drawing.Point(527, 6);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 5;
-            this.button6.Text = "SaveItem";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.saveAsData_Button.Location = new System.Drawing.Point(485, 4);
+            this.saveAsData_Button.Name = "saveAsData_Button";
+            this.saveAsData_Button.Size = new System.Drawing.Size(95, 23);
+            this.saveAsData_Button.TabIndex = 5;
+            this.saveAsData_Button.Text = "Save as Data";
+            this.saveAsData_Button.UseVisualStyleBackColor = true;
+            this.saveAsData_Button.Click += new System.EventHandler(this.saveAsData_Click);
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(714, 6);
+            this.button7.Location = new System.Drawing.Point(734, 2);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 6;
@@ -2222,7 +2222,7 @@ namespace Reanimator.Forms
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(608, 6);
+            this.textBox4.Location = new System.Drawing.Point(628, 4);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(100, 20);
             this.textBox4.TabIndex = 7;
@@ -2250,7 +2250,7 @@ namespace Reanimator.Forms
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(795, 6);
+            this.button10.Location = new System.Drawing.Point(815, 1);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(75, 23);
             this.button10.TabIndex = 10;
@@ -2318,7 +2318,7 @@ namespace Reanimator.Forms
             this.Controls.Add(this.button8);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
+            this.Controls.Add(this.saveAsData_Button);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.currentlyEditing_ComboBox);
@@ -2517,7 +2517,7 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TabPage tp_characterValues;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button saveAsData_Button;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Button button8;
