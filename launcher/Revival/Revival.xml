@@ -399,17 +399,6 @@
       </file>
       <file id="statsfunc.txt.cooked">
         <modify>
-          <entity id="MaxLuckTugboat" value="55">
-            <attribute id="IntValue">
-              <replace>
-                <data>10000</data>
-              </replace>
-            </attribute>
-          </entity>
-        </modify>
-      </file>
-      <file id="statsfunc.txt.cooked">
-        <modify>
           <entity id="Strength_Bonus_Damage" value="21">
             <attribute id="formula">
               <replace>
