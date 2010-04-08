@@ -310,12 +310,12 @@ namespace Reanimator.Forms
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(338, 30);
+            this.label33.Location = new System.Drawing.Point(389, 14);
             this.label33.MaximumSize = new System.Drawing.Size(305, 100);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(249, 39);
+            this.label33.Size = new System.Drawing.Size(249, 26);
             this.label33.TabIndex = 28;
-            this.label33.Text = "Not working:\r\ngender\r\nArmor: There is no armor field inside the savegames";
+            this.label33.Text = "Not working:\r\nArmor: There is no armor field inside the savegames";
             // 
             // groupBox8
             // 
@@ -325,9 +325,9 @@ namespace Reanimator.Forms
             this.groupBox8.Controls.Add(this.label26);
             this.groupBox8.Controls.Add(this.nud_maxAP);
             this.groupBox8.Controls.Add(this.nud_currentAP);
-            this.groupBox8.Location = new System.Drawing.Point(6, 318);
+            this.groupBox8.Location = new System.Drawing.Point(3, 292);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(160, 122);
+            this.groupBox8.Size = new System.Drawing.Size(214, 122);
             this.groupBox8.TabIndex = 27;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Etc";
@@ -335,7 +335,7 @@ namespace Reanimator.Forms
             // tb_playedTime
             // 
             this.tb_playedTime.Enabled = false;
-            this.tb_playedTime.Location = new System.Drawing.Point(64, 71);
+            this.tb_playedTime.Location = new System.Drawing.Point(118, 69);
             this.tb_playedTime.Name = "tb_playedTime";
             this.tb_playedTime.Size = new System.Drawing.Size(90, 20);
             this.tb_playedTime.TabIndex = 32;
@@ -371,7 +371,7 @@ namespace Reanimator.Forms
             // 
             // nud_maxAP
             // 
-            this.nud_maxAP.Location = new System.Drawing.Point(106, 45);
+            this.nud_maxAP.Location = new System.Drawing.Point(160, 43);
             this.nud_maxAP.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -386,7 +386,7 @@ namespace Reanimator.Forms
             // 
             // nud_currentAP
             // 
-            this.nud_currentAP.Location = new System.Drawing.Point(106, 19);
+            this.nud_currentAP.Location = new System.Drawing.Point(160, 17);
             this.nud_currentAP.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -411,9 +411,9 @@ namespace Reanimator.Forms
             this.groupBox7.Controls.Add(this.label25);
             this.groupBox7.Controls.Add(this.nud_shields);
             this.groupBox7.Controls.Add(this.label3);
-            this.groupBox7.Location = new System.Drawing.Point(6, 162);
+            this.groupBox7.Location = new System.Drawing.Point(6, 136);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(160, 150);
+            this.groupBox7.Size = new System.Drawing.Size(211, 150);
             this.groupBox7.TabIndex = 26;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Advanced";
@@ -429,7 +429,7 @@ namespace Reanimator.Forms
             // 
             // nud_sfxDefence
             // 
-            this.nud_sfxDefence.Location = new System.Drawing.Point(106, 123);
+            this.nud_sfxDefence.Location = new System.Drawing.Point(157, 123);
             this.nud_sfxDefence.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -443,7 +443,7 @@ namespace Reanimator.Forms
             // 
             // nud_power
             // 
-            this.nud_power.Location = new System.Drawing.Point(106, 45);
+            this.nud_power.Location = new System.Drawing.Point(157, 45);
             this.nud_power.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -466,7 +466,7 @@ namespace Reanimator.Forms
             // 
             // nud_health
             // 
-            this.nud_health.Location = new System.Drawing.Point(106, 19);
+            this.nud_health.Location = new System.Drawing.Point(157, 17);
             this.nud_health.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -489,7 +489,7 @@ namespace Reanimator.Forms
             // 
             // nud_armor
             // 
-            this.nud_armor.Location = new System.Drawing.Point(106, 97);
+            this.nud_armor.Location = new System.Drawing.Point(157, 97);
             this.nud_armor.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -512,7 +512,7 @@ namespace Reanimator.Forms
             // 
             // nud_shields
             // 
-            this.nud_shields.Location = new System.Drawing.Point(106, 71);
+            this.nud_shields.Location = new System.Drawing.Point(157, 71);
             this.nud_shields.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -541,7 +541,7 @@ namespace Reanimator.Forms
             this.groupBox6.Controls.Add(this.nud_statPoints);
             this.groupBox6.Controls.Add(this.label5);
             this.groupBox6.Controls.Add(this.nud_skillPoints);
-            this.groupBox6.Location = new System.Drawing.Point(172, 162);
+            this.groupBox6.Location = new System.Drawing.Point(223, 162);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(160, 101);
             this.groupBox6.TabIndex = 25;
@@ -634,7 +634,7 @@ namespace Reanimator.Forms
             this.groupBox5.Controls.Add(this.hardcore_CheckBox);
             this.groupBox5.Location = new System.Drawing.Point(6, 6);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(160, 150);
+            this.groupBox5.Size = new System.Drawing.Size(211, 123);
             this.groupBox5.TabIndex = 24;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Basic Stats";
@@ -652,14 +652,14 @@ namespace Reanimator.Forms
             // 
             this.name_TextBox.Location = new System.Drawing.Point(53, 21);
             this.name_TextBox.Name = "name_TextBox";
-            this.name_TextBox.Size = new System.Drawing.Size(101, 20);
+            this.name_TextBox.Size = new System.Drawing.Size(148, 20);
             this.name_TextBox.TabIndex = 1;
             // 
             // class_TextBox
             // 
             this.class_TextBox.Location = new System.Drawing.Point(53, 47);
             this.class_TextBox.Name = "class_TextBox";
-            this.class_TextBox.Size = new System.Drawing.Size(101, 20);
+            this.class_TextBox.Size = new System.Drawing.Size(148, 20);
             this.class_TextBox.TabIndex = 3;
             // 
             // class_Label
@@ -685,7 +685,7 @@ namespace Reanimator.Forms
             0,
             0});
             this.level_NumericUpDown.Name = "level_NumericUpDown";
-            this.level_NumericUpDown.Size = new System.Drawing.Size(101, 20);
+            this.level_NumericUpDown.Size = new System.Drawing.Size(78, 20);
             this.level_NumericUpDown.TabIndex = 9;
             this.level_NumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.level_NumericUpDown.Value = new decimal(new int[] {
@@ -698,7 +698,7 @@ namespace Reanimator.Forms
             // dead_CheckBox
             // 
             this.dead_CheckBox.AutoSize = true;
-            this.dead_CheckBox.Location = new System.Drawing.Point(102, 122);
+            this.dead_CheckBox.Location = new System.Drawing.Point(149, 99);
             this.dead_CheckBox.Name = "dead_CheckBox";
             this.dead_CheckBox.Size = new System.Drawing.Size(52, 17);
             this.dead_CheckBox.TabIndex = 12;
@@ -738,7 +738,7 @@ namespace Reanimator.Forms
             // hardcore_CheckBox
             // 
             this.hardcore_CheckBox.AutoSize = true;
-            this.hardcore_CheckBox.Location = new System.Drawing.Point(53, 122);
+            this.hardcore_CheckBox.Location = new System.Drawing.Point(102, 99);
             this.hardcore_CheckBox.Name = "hardcore_CheckBox";
             this.hardcore_CheckBox.Size = new System.Drawing.Size(41, 17);
             this.hardcore_CheckBox.TabIndex = 7;
@@ -757,7 +757,7 @@ namespace Reanimator.Forms
             this.groupBox4.Controls.Add(this.label22);
             this.groupBox4.Controls.Add(this.nud_accuracy);
             this.groupBox4.Controls.Add(this.label21);
-            this.groupBox4.Location = new System.Drawing.Point(172, 6);
+            this.groupBox4.Location = new System.Drawing.Point(223, 6);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(160, 150);
             this.groupBox4.TabIndex = 23;
@@ -867,7 +867,7 @@ namespace Reanimator.Forms
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(172, 269);
+            this.button2.Location = new System.Drawing.Point(223, 269);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(160, 43);
             this.button2.TabIndex = 15;
@@ -877,7 +877,7 @@ namespace Reanimator.Forms
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(341, 76);
+            this.richTextBox1.Location = new System.Drawing.Point(392, 50);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(305, 373);
             this.richTextBox1.TabIndex = 14;
