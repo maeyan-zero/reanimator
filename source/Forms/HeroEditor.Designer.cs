@@ -148,6 +148,12 @@ namespace Reanimator.Forms
             this.tp_characterValues = new System.Windows.Forms.TabPage();
             this.tp_characterInventory = new System.Windows.Forms.TabPage();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.label57 = new System.Windows.Forms.Label();
+            this.tb_modValue = new System.Windows.Forms.TextBox();
+            this.tb_modAttribute = new System.Windows.Forms.TextBox();
+            this.label56 = new System.Windows.Forms.Label();
+            this.label53 = new System.Windows.Forms.Label();
+            this.cb_availableMods = new System.Windows.Forms.ComboBox();
             this.l_itemLevel = new System.Windows.Forms.Label();
             this.tb_itemLevel = new System.Windows.Forms.TextBox();
             this.nud_invPosY = new System.Windows.Forms.NumericUpDown();
@@ -216,16 +222,9 @@ namespace Reanimator.Forms
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.saveAsData_Button = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
-            this.cb_availableMods = new System.Windows.Forms.ComboBox();
-            this.label53 = new System.Windows.Forms.Label();
-            this.label56 = new System.Windows.Forms.Label();
-            this.tb_modAttribute = new System.Windows.Forms.TextBox();
-            this.tb_modValue = new System.Windows.Forms.TextBox();
-            this.label57 = new System.Windows.Forms.Label();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -914,9 +913,9 @@ namespace Reanimator.Forms
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(392, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 13);
+            this.label2.Size = new System.Drawing.Size(24, 13);
             this.label2.TabIndex = 11;
-            this.label2.Text = "Job bits";
+            this.label2.Text = "Job";
             // 
             // textBox1
             // 
@@ -1599,6 +1598,56 @@ namespace Reanimator.Forms
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "Item infos:";
             // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(13, 307);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(37, 13);
+            this.label57.TabIndex = 73;
+            this.label57.Text = "Value:";
+            // 
+            // tb_modValue
+            // 
+            this.tb_modValue.Location = new System.Drawing.Point(85, 304);
+            this.tb_modValue.Name = "tb_modValue";
+            this.tb_modValue.Size = new System.Drawing.Size(100, 20);
+            this.tb_modValue.TabIndex = 72;
+            // 
+            // tb_modAttribute
+            // 
+            this.tb_modAttribute.Location = new System.Drawing.Point(85, 278);
+            this.tb_modAttribute.Name = "tb_modAttribute";
+            this.tb_modAttribute.Size = new System.Drawing.Size(100, 20);
+            this.tb_modAttribute.TabIndex = 71;
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(13, 281);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(49, 13);
+            this.label56.TabIndex = 70;
+            this.label56.Text = "Attribute:";
+            // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(13, 254);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(36, 13);
+            this.label53.TabIndex = 69;
+            this.label53.Text = "Mods:";
+            // 
+            // cb_availableMods
+            // 
+            this.cb_availableMods.FormattingEnabled = true;
+            this.cb_availableMods.Location = new System.Drawing.Point(85, 251);
+            this.cb_availableMods.Name = "cb_availableMods";
+            this.cb_availableMods.Size = new System.Drawing.Size(100, 21);
+            this.cb_availableMods.TabIndex = 68;
+            this.cb_availableMods.SelectedIndexChanged += new System.EventHandler(this.cb_availableMods_SelectedIndexChanged);
+            // 
             // l_itemLevel
             // 
             this.l_itemLevel.AutoSize = true;
@@ -2211,7 +2260,7 @@ namespace Reanimator.Forms
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(734, 2);
+            this.button7.Location = new System.Drawing.Point(648, 1);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 6;
@@ -2219,16 +2268,9 @@ namespace Reanimator.Forms
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(628, 4);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 7;
-            // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(891, 4);
+            this.button8.Location = new System.Drawing.Point(810, 1);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(75, 23);
             this.button8.TabIndex = 8;
@@ -2239,7 +2281,7 @@ namespace Reanimator.Forms
             // button9
             // 
             this.button9.Enabled = false;
-            this.button9.Location = new System.Drawing.Point(972, 4);
+            this.button9.Location = new System.Drawing.Point(891, 2);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(75, 23);
             this.button9.TabIndex = 9;
@@ -2249,63 +2291,13 @@ namespace Reanimator.Forms
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(815, 1);
+            this.button10.Location = new System.Drawing.Point(729, 1);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(75, 23);
             this.button10.TabIndex = 10;
             this.button10.Text = "LoadChar";
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
-            // 
-            // cb_availableMods
-            // 
-            this.cb_availableMods.FormattingEnabled = true;
-            this.cb_availableMods.Location = new System.Drawing.Point(85, 251);
-            this.cb_availableMods.Name = "cb_availableMods";
-            this.cb_availableMods.Size = new System.Drawing.Size(100, 21);
-            this.cb_availableMods.TabIndex = 68;
-            this.cb_availableMods.SelectedIndexChanged += new System.EventHandler(this.cb_availableMods_SelectedIndexChanged);
-            // 
-            // label53
-            // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(13, 254);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(36, 13);
-            this.label53.TabIndex = 69;
-            this.label53.Text = "Mods:";
-            // 
-            // label56
-            // 
-            this.label56.AutoSize = true;
-            this.label56.Location = new System.Drawing.Point(13, 281);
-            this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(49, 13);
-            this.label56.TabIndex = 70;
-            this.label56.Text = "Attribute:";
-            // 
-            // tb_modAttribute
-            // 
-            this.tb_modAttribute.Location = new System.Drawing.Point(85, 278);
-            this.tb_modAttribute.Name = "tb_modAttribute";
-            this.tb_modAttribute.Size = new System.Drawing.Size(100, 20);
-            this.tb_modAttribute.TabIndex = 71;
-            // 
-            // tb_modValue
-            // 
-            this.tb_modValue.Location = new System.Drawing.Point(85, 304);
-            this.tb_modValue.Name = "tb_modValue";
-            this.tb_modValue.Size = new System.Drawing.Size(100, 20);
-            this.tb_modValue.TabIndex = 72;
-            // 
-            // label57
-            // 
-            this.label57.AutoSize = true;
-            this.label57.Location = new System.Drawing.Point(13, 307);
-            this.label57.Name = "label57";
-            this.label57.Size = new System.Drawing.Size(37, 13);
-            this.label57.TabIndex = 73;
-            this.label57.Text = "Value:";
             // 
             // HeroEditor
             // 
@@ -2315,7 +2307,6 @@ namespace Reanimator.Forms
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
-            this.Controls.Add(this.textBox4);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.saveAsData_Button);
             this.Controls.Add(this.comboBox1);
@@ -2518,7 +2509,6 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button saveAsData_Button;
         private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.TabPage tp_characterInventory;
