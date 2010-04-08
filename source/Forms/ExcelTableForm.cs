@@ -259,6 +259,8 @@ namespace Reanimator.Forms
 
         private void regenTable_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Todo");
+
             // TODO this section is buggy/incomplete regarding table relations
             /*
             if (_excelTable == null) return;
