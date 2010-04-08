@@ -59,10 +59,6 @@ namespace Reanimator.Forms
                             {
                                 hash.Add(stat.id, name);
                             }
-                            else
-                            {
-                                string abc;
-                            }
                         }
 
                         unit.Stats[counter].Name = name;
@@ -234,7 +230,7 @@ namespace Reanimator.Forms
             }
         }
 
-        public void SetSimpleValue(Unit unit, string valueName, int value)
+        public static void SetSimpleValue(Unit unit, string valueName, int value)
         {
             //if (!initialized) return;
 
@@ -249,7 +245,7 @@ namespace Reanimator.Forms
             }
         }
 
-        public void SetComplexValue(Unit unit, string valueName, Unit.StatBlock.Stat stat)
+        public static void SetComplexValue(Unit unit, string valueName, Unit.StatBlock.Stat stat)
         {
             //if (!initialized) return;
 
@@ -264,7 +260,7 @@ namespace Reanimator.Forms
             }
         }
 
-        public int GetSimpleValue(Unit unit, string valueName)
+        public static int GetSimpleValue(Unit unit, string valueName)
         {
             for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
@@ -279,7 +275,7 @@ namespace Reanimator.Forms
             return 0;
         }
 
-        public Unit.StatBlock.Stat GetComplexValue(Unit unit, string valueName)
+        public static Unit.StatBlock.Stat GetComplexValue(Unit unit, string valueName)
         {
             for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
@@ -464,6 +460,7 @@ namespace Reanimator.Forms
         Inventory = 19760,
         Stash = 28208,
         QuestRewards = 26928,
-        Cube = 22577
+        Cube = 22577,
+        CurrentWeaponSet = 25904
     };
 }

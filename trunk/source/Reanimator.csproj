@@ -169,6 +169,13 @@
     <Compile Include="Forms\ItemDisplay.Designer.cs">
       <DependentUpon>ItemDisplay.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ItemTransfer\InventoryHandler.cs" />
+    <Compile Include="Forms\ItemTransfer\ItemPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemTransfer\ItemPanel.Designer.cs">
+      <DependentUpon>ItemPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ItemTransfer\ItemTransferForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -365,6 +372,10 @@
       <DependentUpon>ItemDisplay.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemTransfer\ItemPanel.resx">
+      <DependentUpon>ItemPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemTransfer\ItemTransferForm.resx">
       <DependentUpon>ItemTransferForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -447,6 +458,15 @@
       <Project>{84FFA630-84E2-4C38-9FBE-79EF33558818}</Project>
       <Name>UpdateChecker</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inventory_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inventory_bg2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inventory_bg1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
