@@ -18,7 +18,8 @@ namespace Reanimator.Forms
 {
     public partial class HeroEditor : Form
     {
-        /*readonly*/ Unit _heroUnit;
+        /*readonly*/
+        Unit _heroUnit;
         readonly TableDataSet dataSet;
         readonly ExcelTables excelTables;
         readonly CompletePanelControl _panel;
@@ -644,7 +645,7 @@ namespace Reanimator.Forms
             {
                 foreach (byte val in _heroUnit.unitUniqueId)
                 {
-                    text += "unknown17: " + (int)val + "\n";
+                    text += "unitUniqueId: " + (int)val + "\n";
                 }
             }
             text += "unknownBool_01_03: " + _heroUnit.unknownBool_01_03 + "\n";
@@ -761,55 +762,37 @@ namespace Reanimator.Forms
         {
             try
             {
-                name_TextBox.Text = heroUnit.ToString();
+                name_TextBox.Text = heroUnit.Name;
 
                 string job;
-                switch (heroUnit.JobClass)
+                switch (heroUnit.unitCode)
                 {
-                    case (93):
-                        {
-                            job = "Summoner";
-                        }
+                    case (0x7679):
+                        job = "Summoner";
                         break;
-                    case (97):
-                        {
-                            job = "Guardian";
-                        }
+                    case (0x7A7A):
+                        job = "Guardian";
                         break;
-                    case (124):
-                        {
-                            job = "Marksman";
-                        }
+                    case (0x7678):
+                        job = "Marksman";
                         break;
-                    case (141):
-                        {
-                            job = "Evoker";
-                        }
+                    case (0x7879):
+                        job = "Evoker";
                         break;
-                    case (180):
-                        {
-                            job = "Blademaster";
-                        }
+                    case (0x787A):
+                        job = "Blademaster";
                         break;
-                    case (191):
-                        {
-                            job = "Engineer";
-                        }
+                    case (0x7878):
+                        job = "Engineer";
                         break;
                     default:
-                        {
-                            job = "Unknown";
-                        }
+                        job = "Unknown";
                         break;
                 }
-
-                textBox1.Text = String.Format("{0:00000000}", Int32.Parse(Convert.ToString(heroUnit.JobClass, 2)));
                 class_TextBox.Text = job;
 
                 SetStateCheckBoxes();
-
                 SetCharacterValues();
-
                 DisplayFlags();
             }
             catch (Exception ex)
@@ -962,7 +945,7 @@ namespace Reanimator.Forms
                 _heroUnit.PlayerFlags1.Remove(stateId);
                 _heroUnit.PlayerFlags2.Remove(stateId);
             }
-            
+
         }
 
         private void DisplayFlags()
@@ -1029,7 +1012,7 @@ namespace Reanimator.Forms
             _currentlySelectedItem = unit;
 
             DataTable items = dataSet.GetExcelTable(27953);
-            DataRow[] itemRow = items.Select("code1 = '" + unit.itemCode + "'");
+            DataRow[] itemRow = items.Select("code1 = '" + unit.unitCode + "'");
 
             if (itemRow.Length > 0)
             {
@@ -1060,7 +1043,7 @@ namespace Reanimator.Forms
 
             int quantity = _itemFunctions.GetSimpleValue(unit, ItemValueNames.item_quantity.ToString());
 
-            if(quantity <= 0)
+            if (quantity <= 0)
             {
                 quantity = 1;
             }
@@ -1317,7 +1300,7 @@ namespace Reanimator.Forms
         //            break;
         //        }
         //    }
-            
+
         //    foreach (SkillControls skill in _skillControls)
         //    {
         //        foreach (Unit.StatBlock.Stat.Values value in skillList.values)
@@ -1378,7 +1361,7 @@ namespace Reanimator.Forms
         bool isMousePressed;
         private void HeroEditor_MouseDown(object sender, MouseEventArgs e)
         {
-            if(!isMousePressed)
+            if (!isMousePressed)
             {
                 isMousePressed = true;
                 this.SuspendLayout();
@@ -1490,67 +1473,67 @@ namespace Reanimator.Forms
                             {
                                 ((ListBox)control).Items.Add(item);
 
-                                    Color color = Color.White;
+                                Color color = Color.White;
 
-                                    if (quality == (int)ItemQuality.Mutant || quality == (int)ItemQuality.MutantMod)
-                                    {
-                                        color = Color.Purple;
-                                    }
-                                    else if (quality == (int)ItemQuality.Normal || quality == (int)ItemQuality.NormalMod)
-                                    {
-                                        color = Color.White;
-                                    }
-                                    else if (quality == (int)ItemQuality.Unique || quality == (int)ItemQuality.UniqueMod)
-                                    {
-                                        color = Color.Gold;
-                                    }
-                                    else if (quality == (int)ItemQuality.Rare || quality == (int)ItemQuality.RareMod)
-                                    {
-                                        color = Color.Blue;
-                                    }
-                                    else if (quality == (int)ItemQuality.Uncommon)
-                                    {
-                                        color = Color.Green;
-                                    }
-                                    else if (quality == (int)ItemQuality.Legendary || quality == (int)ItemQuality.LegendaryMod)
-                                    {
-                                        color = Color.Orange;
-                                    }
+                                if (quality == (int)ItemQuality.Mutant || quality == (int)ItemQuality.MutantMod)
+                                {
+                                    color = Color.Purple;
+                                }
+                                else if (quality == (int)ItemQuality.Normal || quality == (int)ItemQuality.NormalMod)
+                                {
+                                    color = Color.White;
+                                }
+                                else if (quality == (int)ItemQuality.Unique || quality == (int)ItemQuality.UniqueMod)
+                                {
+                                    color = Color.Gold;
+                                }
+                                else if (quality == (int)ItemQuality.Rare || quality == (int)ItemQuality.RareMod)
+                                {
+                                    color = Color.Blue;
+                                }
+                                else if (quality == (int)ItemQuality.Uncommon)
+                                {
+                                    color = Color.Green;
+                                }
+                                else if (quality == (int)ItemQuality.Legendary || quality == (int)ItemQuality.LegendaryMod)
+                                {
+                                    color = Color.Orange;
+                                }
 
-                                    Button b = new Button();
-                                    b.FlatStyle = FlatStyle.Flat;
-                                    b.BackColor = color;
-                                    b.Width = GetItemWidth(item) * ITEMSIZE;
-                                    b.Height = GetItemHeight(item) * ITEMSIZE;
-                                    b.Location = new Point(item.inventoryPositionX * ITEMSIZE, item.inventoryPositionY * ITEMSIZE);
-                                    b.Tag = item;
-                                    b.Click += new EventHandler(b_Click);
+                                Button b = new Button();
+                                b.FlatStyle = FlatStyle.Flat;
+                                b.BackColor = color;
+                                b.Width = GetItemWidth(item) * ITEMSIZE;
+                                b.Height = GetItemHeight(item) * ITEMSIZE;
+                                b.Location = new Point(item.inventoryPositionX * ITEMSIZE, item.inventoryPositionY * ITEMSIZE);
+                                b.Tag = item;
+                                b.Click += new EventHandler(b_Click);
 
-                                    if (quantity == 1)
-                                    {
-                                        b.Text = item.Name;
-                                    }
-                                    else
-                                    {
-                                        b.Text = quantity + "x " + item.Name;
-                                    }
+                                if (quantity == 1)
+                                {
+                                    b.Text = item.Name;
+                                }
+                                else
+                                {
+                                    b.Text = quantity + "x " + item.Name;
+                                }
 
-                                    if (item.inventoryType == 19760)
-                                    {
-                                        tp_inventory.Controls.Add(b);
-                                    }
-                                    else if (item.inventoryType == 28208)
-                                    {
-                                        tp_stash.Controls.Add(b);
-                                    }
-                                    else if (item.inventoryType == 26928)
-                                    {
-                                        tp_extraStash.Controls.Add(b);
-                                    }
-                                    else if (item.inventoryType == 22577)
-                                    {
-                                        tp_cubeStash.Controls.Add(b);
-                                    }
+                                if (item.inventoryType == 19760)
+                                {
+                                    tp_inventory.Controls.Add(b);
+                                }
+                                else if (item.inventoryType == 28208)
+                                {
+                                    tp_stash.Controls.Add(b);
+                                }
+                                else if (item.inventoryType == 26928)
+                                {
+                                    tp_extraStash.Controls.Add(b);
+                                }
+                                else if (item.inventoryType == 22577)
+                                {
+                                    tp_cubeStash.Controls.Add(b);
+                                }
 
                                 break;
                             }
@@ -1618,10 +1601,11 @@ namespace Reanimator.Forms
 
         private void button10_Click(object sender, EventArgs e)
         {
-            Unit unit = XmlUtilities<Unit>.Deserialize(RESOURCEFOLDER + @"\" + textBox4.Text + ".xml");
+            MessageBox.Show("Fixme");
+            //Unit unit = XmlUtilities<Unit>.Deserialize(RESOURCEFOLDER + @"\" + textBox4.Text + ".xml");
             //unit.inventoryPositionX++;
             //unit.inventoryPositionY++;
-            _heroUnit = unit;
+            //_heroUnit = unit;
         }
 
         private void cb_availableMods_SelectedIndexChanged(object sender, EventArgs e)

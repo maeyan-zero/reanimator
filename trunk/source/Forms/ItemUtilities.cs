@@ -164,19 +164,19 @@ namespace Reanimator.Forms
 
 
                 // assign default name
-                item.Name = "Item Id: " + item.itemCode;
+                item.Name = "Item Id: " + item.unitCode;
                 if (!canGetItemNames)
                 {
                     continue;
                 }
-                if (item.itemCode == 25393)
+                if (item.unitCode == 25393)
                 {
                     string a;
                 }
 
 
                 // get item name
-                DataRow[] itemsRows = itemsTable.Select(String.Format("code1 = '{0}'", item.itemCode));
+                DataRow[] itemsRows = itemsTable.Select(String.Format("code1 = '{0}'", item.unitCode));
                 if (itemsRows.Length == 0)
                 {
                     continue;

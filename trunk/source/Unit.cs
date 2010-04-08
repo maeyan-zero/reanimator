@@ -375,7 +375,7 @@ namespace Reanimator
         // ALERT
 
         public int unknownFlag;										// 4		    // this value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue) or something like that
-        public int itemCode;								            // 16
+        public int unitCode;								            // 16           // the code identifier of the unit (e.g. Job Class, or Item Id)
 
         // if (testBit(bitField1, 0x17)) // 64 bits read as 8x8 chunk bits from non-standard bit read function
         public byte[] unitUniqueId;                   // a unique id identifiying this unit "structure"
@@ -573,7 +573,7 @@ namespace Reanimator
 
 
             unit.unknownFlag = bitBuffer.ReadBits(4);
-            unit.itemCode = bitBuffer.ReadBits(16);
+            unit.unitCode = bitBuffer.ReadBits(16);
 
 
             if (TestBit(unit.bitField1, 0x17))
@@ -1404,7 +1404,7 @@ namespace Reanimator
             }
 
             saveBuffer.WriteBits(unit.unknownFlag, 4);
-            saveBuffer.WriteBits(unit.itemCode, 16);
+            saveBuffer.WriteBits(unit.unitCode, 16);
 
             if (useUnknown_17 > 0)
             {
