@@ -29,6 +29,11 @@ namespace Reanimator.Forms.ItemTransfer
         Unit _selectedItemCharacter2;
         ListBox _listBoxcharacter2;
 
+        InventoryHandler _characterInventory1;
+        InventoryHandler _characterInventory2;
+
+        ItemPanel _testPanel;
+
         public ItemTransferForm(ref TableDataSet dataSet, ref ExcelTables excelTables)
         {
             InitializeComponent();
@@ -44,8 +49,13 @@ namespace Reanimator.Forms.ItemTransfer
 
             string[] characters = LoadCharacterNames();
 
+            _characterInventory1 = new InventoryHandler();
+            _characterInventory2 = new InventoryHandler();
+
             cb_selectCharacter1.DataSource = characters;
             cb_selectCharacter2.DataSource = characters.Clone();
+
+            _testPanel = new ItemPanel();
         }
 
         private string[] LoadCharacterNames()
@@ -75,6 +85,11 @@ namespace Reanimator.Forms.ItemTransfer
                 //_itemHelpFunctions.PopulateItems(ref _characterUnit1);
 
                 InitInventory(_characterUnit1, lb_characterEquipment1, lb_characterInventory1, lb_characterStash1, lb_characterCube1);
+
+                _characterInventory1.Initialize(_characterUnit1.Items);
+
+                richTextBox1.Text = string.Empty;
+                richTextBox1.Text = _characterInventory1.ToString();
             }
         }
 
@@ -90,6 +105,8 @@ namespace Reanimator.Forms.ItemTransfer
                 //_itemHelpFunctions.PopulateItems(ref _characterUnit2);
 
                 InitInventory(_characterUnit2, lb_characterEquipment2, lb_characterInventory2, lb_characterStash2, lb_characterCube2);
+
+                _characterInventory2.Initialize(_characterUnit2.Items);
             }
         }
 
@@ -102,6 +119,15 @@ namespace Reanimator.Forms.ItemTransfer
                     if (item.inventoryType == (int)InventoryTypes.Inventory)
                     {
                         inventory.Items.Add(item);
+
+                        int buttonUnitSize = 40;
+                        _testPanel.Location = new Point();
+                        _testPanel.Size = new Size(6 * buttonUnitSize, 24 * buttonUnitSize);
+                        tabPage9.Controls.Add(_testPanel);
+
+                        InventoryItem inv = new InventoryItem(item);
+                        inv.ButtonUnitSize = buttonUnitSize;
+                        _testPanel.AddItem(inv);
                     }
                     else if (item.inventoryType == (int)InventoryTypes.Stash)
                     {
@@ -131,12 +157,11 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if (_selectedItemCharacter1 != null)
             {
+                _characterInventory2.AddItem(_selectedItemCharacter1);
                 _listBoxcharacter2.Items.Add(_selectedItemCharacter1);
-                _listBoxcharacter1.Items.Remove(_selectedItemCharacter1);
 
-                //modify item location
-                //modify item position
-                //modify item ids
+                _characterInventory1.RemoveItem(_selectedItemCharacter1);
+                _listBoxcharacter1.Items.Remove(_selectedItemCharacter1);
             }
         }
 
@@ -144,7 +169,10 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if (_selectedItemCharacter2 != null)
             {
+                _characterInventory1.AddItem(_selectedItemCharacter2);
                 _listBoxcharacter1.Items.Add(_selectedItemCharacter2);
+
+                _characterInventory2.RemoveItem(_selectedItemCharacter2);
                 _listBoxcharacter2.Items.Remove(_selectedItemCharacter2);
             }
         }
@@ -172,6 +200,11 @@ namespace Reanimator.Forms.ItemTransfer
         private void tc_character2_SelectedIndexChanged(object sender, EventArgs e)
         {
             _listBoxcharacter2 = (ListBox)tc_character2.SelectedTab.Controls[0];
+        }
+
+        private void b_save_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

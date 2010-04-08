@@ -221,6 +221,13 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap inventory_bg1 {
+            get {
+                object obj = ResourceManager.GetObject("inventory_bg1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap k_beast {
             get {
                 object obj = ResourceManager.GetObject("k_beast", resourceCulture);

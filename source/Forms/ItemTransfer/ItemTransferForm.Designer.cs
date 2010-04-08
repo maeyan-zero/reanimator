@@ -38,6 +38,8 @@
             this.lb_characterStash1 = new System.Windows.Forms.ListBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.lb_characterCube1 = new System.Windows.Forms.ListBox();
+            this.tp_DEBUG = new System.Windows.Forms.TabPage();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.cb_selectCharacter1 = new System.Windows.Forms.ComboBox();
             this.gb_characterName2 = new System.Windows.Forms.GroupBox();
             this.tc_character2 = new System.Windows.Forms.TabControl();
@@ -49,6 +51,7 @@
             this.lb_characterStash2 = new System.Windows.Forms.ListBox();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.lb_characterCube2 = new System.Windows.Forms.ListBox();
+            this.tabPage9 = new System.Windows.Forms.TabPage();
             this.b_transferToLeft = new System.Windows.Forms.Button();
             this.b_transferToRight = new System.Windows.Forms.Button();
             this.b_delete = new System.Windows.Forms.Button();
@@ -64,6 +67,7 @@
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.tp_DEBUG.SuspendLayout();
             this.gb_characterName2.SuspendLayout();
             this.tc_character2.SuspendLayout();
             this.tabPage5.SuspendLayout();
@@ -88,6 +92,7 @@
             this.tc_character1.Controls.Add(this.tabPage2);
             this.tc_character1.Controls.Add(this.tabPage3);
             this.tc_character1.Controls.Add(this.tabPage4);
+            this.tc_character1.Controls.Add(this.tp_DEBUG);
             this.tc_character1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tc_character1.Location = new System.Drawing.Point(3, 16);
             this.tc_character1.Multiline = true;
@@ -185,6 +190,27 @@
             this.lb_characterCube1.TabIndex = 1;
             this.lb_characterCube1.SelectedIndexChanged += new System.EventHandler(this.lb_character1_SelectedIndexChanged);
             // 
+            // tp_DEBUG
+            // 
+            this.tp_DEBUG.Controls.Add(this.richTextBox1);
+            this.tp_DEBUG.Location = new System.Drawing.Point(4, 22);
+            this.tp_DEBUG.Name = "tp_DEBUG";
+            this.tp_DEBUG.Padding = new System.Windows.Forms.Padding(3);
+            this.tp_DEBUG.Size = new System.Drawing.Size(266, 348);
+            this.tp_DEBUG.TabIndex = 4;
+            this.tp_DEBUG.Text = "DEBUG";
+            this.tp_DEBUG.UseVisualStyleBackColor = true;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Font = new System.Drawing.Font("MS Mincho", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.richTextBox1.Location = new System.Drawing.Point(3, 3);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(260, 342);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
+            // 
             // cb_selectCharacter1
             // 
             this.cb_selectCharacter1.FormattingEnabled = true;
@@ -209,6 +235,7 @@
             this.tc_character2.Controls.Add(this.tabPage6);
             this.tc_character2.Controls.Add(this.tabPage7);
             this.tc_character2.Controls.Add(this.tabPage8);
+            this.tc_character2.Controls.Add(this.tabPage9);
             this.tc_character2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tc_character2.Location = new System.Drawing.Point(3, 16);
             this.tc_character2.Multiline = true;
@@ -306,6 +333,17 @@
             this.lb_characterCube2.TabIndex = 1;
             this.lb_characterCube2.SelectedIndexChanged += new System.EventHandler(this.lb_character2_SelectedIndexChanged);
             // 
+            // tabPage9
+            // 
+            this.tabPage9.AutoScroll = true;
+            this.tabPage9.Location = new System.Drawing.Point(4, 22);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage9.Size = new System.Drawing.Size(266, 348);
+            this.tabPage9.TabIndex = 4;
+            this.tabPage9.Text = "tabPage9";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            // 
             // b_transferToLeft
             // 
             this.b_transferToLeft.Location = new System.Drawing.Point(298, 39);
@@ -372,6 +410,7 @@
             this.b_save.TabIndex = 10;
             this.b_save.Text = "!";
             this.b_save.UseVisualStyleBackColor = true;
+            this.b_save.Click += new System.EventHandler(this.b_save_Click);
             // 
             // label1
             // 
@@ -408,6 +447,7 @@
             this.Controls.Add(this.gb_characterName2);
             this.Controls.Add(this.cb_selectCharacter1);
             this.Controls.Add(this.gb_characterName1);
+            this.DoubleBuffered = true;
             this.Name = "ItemTransferForm";
             this.Text = "Trade Items";
             this.gb_characterName1.ResumeLayout(false);
@@ -416,6 +456,7 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
+            this.tp_DEBUG.ResumeLayout(false);
             this.gb_characterName2.ResumeLayout(false);
             this.tc_character2.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
@@ -459,5 +500,8 @@
         private System.Windows.Forms.Button b_save;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TabPage tp_DEBUG;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.TabPage tabPage9;
     }
 }
