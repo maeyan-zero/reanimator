@@ -44,7 +44,7 @@ namespace Reanimator
     public struct UnknownCount1B_S
     {
         public int unknown1;										// 16 bits
-        public int unknown2;										// 32 bits
+        public int itemEndBitOffset;								// 32 bits
     };
 
     [Serializable]
@@ -596,7 +596,7 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
         // }*/
 
         // if (testBit(pUnit->bitField1, 0x12))
-        public int itemBitOffset;									    // 32 bits		// missed what it did with it
+        public int itemEndBitOffset;									// 32 bits      // bit offset to end of items block
         public int itemCount;										    // 10 bits
         public List<Unit> items;													    // each item is just a standard data block
 
@@ -694,12 +694,19 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
                 unit.unknownCount1B = bitBuffer.ReadBits(5);
                 unit.unknownCount1Bs = new UnknownCount1B_S[unit.unknownCount1B];
 
+                if (unit.unknownCount1B > 1)
+                {
+                    MessageBox.Show("Unexpected unknownCount1B > 1!!\nNot-Implmented cases. Please report this error!",
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
                 for (int i = 0; i < unit.unknownCount1B; i++)
                 {
                     UnknownCount1B_S uc3;
 
                     uc3.unknown1 = bitBuffer.ReadBits(16);
-                    uc3.unknown2 = bitBuffer.ReadBits(32);
+                    uc3.itemEndBitOffset = bitBuffer.ReadBits(32);
 
                     unit.unknownCount1Bs[i] = uc3;
                 }
@@ -819,7 +826,7 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
 
             if (TestBit(unit.bitField1, 0x12))
             {
-                unit.itemBitOffset = bitBuffer.ReadBits(32);
+                unit.itemEndBitOffset = bitBuffer.ReadBits(32);
                 unit.itemCount = bitBuffer.ReadBits(10);
                 unit.items = new List<Unit>();
                 for (int i = 0; i < unit.itemCount; i++)
@@ -1409,7 +1416,7 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
             int useUnknown_16 = 0; // (1 << 0x16);
             int useUnknown_11 = 0; // (1 << 0x11);
             int useUnknown_10 = 0; // (1 << 0x10);
-            int use_12_Utems = 0; // (1 << 0x12);
+            int use_12_Items = 0; // (1 << 0x12);
             int use_1A_Unknown = 0; // (1 << 0x1A);
 
 
@@ -1441,7 +1448,7 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
             if (TestBit(unit.bitField1, 0x10))
                 useUnknown_10 = (1 << 0x10);
             if (TestBit(unit.bitField1, 0x12))
-                use_12_Utems = (1 << 0x12);
+                use_12_Items = (1 << 0x12);
             if (TestBit(unit.bitField1, 0x1A))
                 use_1A_Unknown = (1 << 0x1A);
 
@@ -1527,13 +1534,15 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
 
             /***** Unit Body *****/
 
+            int bitOffsetItemEndBitOffset = 0;
             if (unit.unknownCount1B > 0)
             {
                 saveBuffer.WriteBits(unit.unknownCount1B, 5);
                 for (int i = 0; i < unit.unknownCount1B; i++)
                 {
                     saveBuffer.WriteBits(unit.unknownCount1Bs[i].unknown1, 16);
-                    saveBuffer.WriteBits(unit.unknownCount1Bs[i].unknown2, 32);
+                    bitOffsetItemEndBitOffset = saveBuffer.DataBitOffset;
+                    saveBuffer.WriteBits(0x00000000, 32);
                 }
 
                 bitField1 |= useUnknown_1B;
@@ -1704,7 +1713,7 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
             }
 
 
-            if (use_12_Utems > 0)
+            if (use_12_Items > 0)
             {
                 int itemBitOffset = saveBuffer.DataBitOffset;
                 saveBuffer.WriteBits(0x00000000, 32);
@@ -1715,6 +1724,10 @@ public UnknownCount1B_S[] unknownCount1Bs;			                        // no idea 
                 }
 
                 saveBuffer.WriteBits(saveBuffer.DataBitOffset, 32, itemBitOffset);
+                if (bitOffsetItemEndBitOffset > 0)
+                {
+                    saveBuffer.WriteBits(saveBuffer.DataBitOffset, 32, bitOffsetItemEndBitOffset);
+                }
             }
 
 
