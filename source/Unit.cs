@@ -261,12 +261,7 @@ namespace Reanimator
 
                 public Attribute AttributeAt(int index)
                 {
-                    if (index >= attributes.Count)
-                    {
-                        return null;
-                    }
-
-                    return attributes[index];
+                    return index >= attributes.Count ? null : attributes[index];
                 }
 
                 public string Name { get; set; }
@@ -334,10 +329,10 @@ namespace Reanimator
 
         ////// Start of read inside main header check function (in ASM) //////
 
-        public int majorVersion;							    	    // 16 bits
-        public int minorVersion;							    	    // 8
+        int _majorVersion;							    	            // 16 bits
+        int _minorVersion;							    	            // 8
 
-        public int bitFieldCount;									    // 8			// must be <= 2
+        int _bitFieldCount;									            // 8			// must be <= 2
         public int bitField1;										    // 32
         public int bitField2;										    // 32
 
@@ -373,7 +368,7 @@ namespace Reanimator
         public int unitCode;								            // 16           // the code identifier of the unit (e.g. Job Class, or Item Id)
 
         // if (testBit(bitField1, 0x17)) // 64 bits read as 8x8 chunk bits from non-standard bit read function
-        public byte[] unitUniqueId;                   // a unique id identifiying this unit "structure"
+        public byte[] unitUniqueId;                                     // 64           // a unique id identifiying this unit "structure"
 
         // if (testBit(bitField1, 0x03) || testBit(bitField1, 0x01)) // if (bitField1 & 0x08 || bitField1 & 0x02)
         // {
@@ -401,7 +396,7 @@ namespace Reanimator
         public int unknown_07_2;									    // 8 	    	// this appears to be joined with unknown_07_1 to form a WORD... I think...
 
         // if (testBit(bitField1, 0x08))
-        public int characterCount;									    // 8 
+        int _charNameCount;									            // 8            // count of characters of following character name var
         public Char[] characterName;                                                    // character name - why does name change when change filename though?								
 
         // if (testBit(bitField1, 0x0A))						                        // char state flags (e.g. "elite")
@@ -446,9 +441,9 @@ namespace Reanimator
         public List<Unit> Items;                                                        // each item is just a standard data block
 
         // if (testBit(pUnit->bitField1, 0x1A))
-        public uint weaponConfigFlag;                                   // 32           // must be 0x91103A74; always present
-        public int endFlagBitOffset;                                    // 32           // offset to end of file flag
-        public int weaponConfigCount;                                   // 6            // weapon config count
+        uint _weaponConfigFlag;                                         // 32           // must be 0x91103A74; always present
+        int _endFlagBitOffset;                                          // 32           // offset to end of file flag
+        int _weaponConfigCount;                                         // 6            // weapon config count
         public UnitWeaponConfig[] weaponConfigs;                                        // i think this has item positions on bottom bar, etc as well
 
         // if (testBit(unit->bitField1, 0x00))
@@ -465,25 +460,25 @@ namespace Reanimator
         /// <returns>True on success.</returns>
         public bool ReadUnit(ref Unit unit)
         {
-            unit.majorVersion = _bitBuffer.ReadBits(16);
-            if (unit.majorVersion != 0x00BF)
+            unit._majorVersion = _bitBuffer.ReadBits(16);
+            if (unit._majorVersion != 0x00BF)
             {
-                MessageBox.Show("Error! Invalid Unit Major Version: " + unit.majorVersion.ToString("X4"));
+                MessageBox.Show("Error! Invalid Unit Major Version: " + unit._majorVersion.ToString("X4"));
                 return false;
             }
-            unit.minorVersion = _bitBuffer.ReadBits(8);
-            if (unit.minorVersion != 0x00)
+            unit._minorVersion = _bitBuffer.ReadBits(8);
+            if (unit._minorVersion != 0x00)
             {
-                MessageBox.Show("Warning! Untested Unit Minor Version: " + unit.minorVersion.ToString("X2"));
+                MessageBox.Show("Warning! Untested Unit Minor Version: " + unit._minorVersion.ToString("X2"));
             }
 
 
-            unit.bitFieldCount = _bitBuffer.ReadBits(8);
-            if (unit.bitFieldCount >= 1)
+            unit._bitFieldCount = _bitBuffer.ReadBits(8);
+            if (unit._bitFieldCount >= 1)
             {
                 unit.bitField1 = _bitBuffer.ReadBits(32);
             }
-            if (unit.bitFieldCount == 2)
+            if (unit._bitFieldCount == 2)
             {
                 unit.bitField2 = _bitBuffer.ReadBits(32);
             }
@@ -619,11 +614,11 @@ namespace Reanimator
             // On main character unit only
             if (TestBit(unit.bitField1, 0x08))
             {
-                unit.characterCount = _bitBuffer.ReadBits(8);
-                if (unit.characterCount > 0)
+                unit._charNameCount = _bitBuffer.ReadBits(8);
+                if (unit._charNameCount > 0)
                 {
-                    unit.characterName = new Char[unit.characterCount];
-                    for (int i = 0; i < unit.characterCount; i++)
+                    unit.characterName = new Char[unit._charNameCount];
+                    for (int i = 0; i < unit._charNameCount; i++)
                     {
                         unit.characterName[i] = (Char)_bitBuffer.ReadBits(16);
                     }
@@ -687,24 +682,25 @@ namespace Reanimator
 
             if (TestBit(unit.bitField1, 0x1A))
             {
-                unit.weaponConfigFlag = (uint)_bitBuffer.ReadBits(32);
-                if (unit.weaponConfigFlag != 0x91103A74)
+                unit._weaponConfigFlag = (uint)_bitBuffer.ReadBits(32);
+                if (unit._weaponConfigFlag != 0x91103A74)
                 {
                     MessageBox.Show("Flags not aligned!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
 
-                unit.endFlagBitOffset = _bitBuffer.ReadBits(32);     // to end flag
+                unit._endFlagBitOffset = _bitBuffer.ReadBits(32);     // to end flag
 
-                unit.weaponConfigCount = _bitBuffer.ReadBits(6);
-                unit.weaponConfigs = new UnitWeaponConfig[unit.weaponConfigCount];
-                for (int i = 0; i < unit.weaponConfigCount; i++)
+                unit._weaponConfigCount = _bitBuffer.ReadBits(6);
+                unit.weaponConfigs = new UnitWeaponConfig[unit._weaponConfigCount];
+                for (int i = 0; i < unit._weaponConfigCount; i++)
                 {
-                    UnitWeaponConfig weaponConfig = new UnitWeaponConfig();
+                    UnitWeaponConfig weaponConfig = new UnitWeaponConfig
+                                                        {
+                                                            id = _bitBuffer.ReadBits(16),
+                                                            unknownCount1 = _bitBuffer.ReadBits(4)
+                                                        };
 
-                    weaponConfig.id = _bitBuffer.ReadBits(16);
-
-                    weaponConfig.unknownCount1 = _bitBuffer.ReadBits(4);
                     if (weaponConfig.unknownCount1 != 0x02)
                     {
                         MessageBox.Show("if (weaponConfig.unknownCount1 != 0x02)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -1033,9 +1029,9 @@ namespace Reanimator
         private void WriteUnit(BitBuffer saveBuffer, Unit unit, bool isItem, byte[] charStringBytes)
         {
             /***** Unit Header *****
-             * majorVersion                                     16                  Should be 0xBF.
-             * minorVersion                                     8                   Should be 0x00 - Not 100% sure that it is a minor version or anything.
-             * bitFieldCount                                    8                   Must be <= 2. I haven't tested with it != 2 though.
+             * _majorVersion                                     16                  Should be 0xBF.
+             * _minorVersion                                     8                   Should be 0x00 - Not 100% sure that it is a minor version or anything.
+             * _bitFieldCount                                    8                   Must be <= 2. I haven't tested with it != 2 though.
              * {
              *      bitField                                    32                  Each bit determines if 'x' is read in or not.
              * }
@@ -1220,9 +1216,9 @@ namespace Reanimator
              * 
              * if (TestBit(bitField1, 0x1A))
              * {
-             *      weaponConfigFlag                            32                  Must be 0x91103A74.
-             *      endFlagBitOffset                            32                  Bit offset to end flag.
-             *      weaponConfigCount                           6                   Count of weapon configs.
+             *      _weaponConfigFlag                            32                  Must be 0x91103A74.
+             *      _endFlagBitOffset                            32                  Bit offset to end flag.
+             *      _weaponConfigCount                           6                   Count of weapon configs.
              *      {
              *          unknown                                 16                  // TO BE DETERMINED
              *          unknownCount                            4                   Count of following block - Must be 0x02.
@@ -1588,8 +1584,9 @@ namespace Reanimator
                 int endFlagBitOffset = saveBuffer.DataBitOffset;
                 saveBuffer.WriteBits(0x00000000, 32);
 
-                saveBuffer.WriteBits(unit.weaponConfigCount, 6);
-                for (int i = 0; i < unit.weaponConfigCount; i++)
+                int weaponConfigCount = unit.weaponConfigs.Length;
+                saveBuffer.WriteBits(weaponConfigCount, 6);
+                for (int i = 0; i < weaponConfigCount; i++)
                 {
                     UnitWeaponConfig weaponConfig = unit.weaponConfigs[i];
 
@@ -1649,8 +1646,8 @@ namespace Reanimator
         private void WriteStatBlock(StatBlock statBlock, bool writeNameCount, BitBuffer saveBuffer)
         {
             /***** Stat Block Header *****
-             * majorVersion                                     16                  Stat block header - Must be 0x000A.
-             * minorVersion                                     3                   Must be 0x0.
+             * _majorVersion                                     16                  Stat block header - Must be 0x000A.
+             * _minorVersion                                     3                   Must be 0x0.
              * 
              * additionalStatCount                              6                   Additional Stats - Not sure of use yet.
              * {

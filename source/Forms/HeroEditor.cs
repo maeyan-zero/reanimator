@@ -602,8 +602,6 @@ namespace Reanimator.Forms
         {
             string text = string.Empty;
             text += "unknown_07_1: " + _heroUnit.unknown_07_1 + "\n";
-            text += "majorVersion: " + _heroUnit.majorVersion + "\n";
-            text += "minorVersion: " + _heroUnit.minorVersion + "\n";
             text += "playerFlagCount1: " + _heroUnit.PlayerFlags1.Count + "\n";
             text += "playerFlagCount2: " + _heroUnit.PlayerFlags2.Count + "\n";
             if (_heroUnit.PlayerFlags1 != null)
@@ -649,8 +647,6 @@ namespace Reanimator.Forms
             text += "unknownCount1B: " + _heroUnit.unknownCount1B + "\n";
             text += "unknownCount1F: " + _heroUnit.unknownCount1F + "\n";
             text += "unknownFlag: " + _heroUnit.unknownFlag + "\n";
-            text += "weaponConfigCount: " + _heroUnit.weaponConfigCount + "\n";
-            text += "weaponConfigFlag: " + _heroUnit.weaponConfigFlag + "\n";
 
             text += "\n\n\n\n";
 
@@ -763,23 +759,47 @@ namespace Reanimator.Forms
                 switch (heroUnit.unitCode)
                 {
                     case (0x7679):
-                        job = "Summoner";
+                        job = "Male Summoner";
                         break;
+                    case (0x7579):
+                        job = "Female Summoner";
+                        break;
+
                     case (0x7A7A):
-                        job = "Guardian";
+                        job = "Male Guardian";
                         break;
+                    case (0x797A):
+                        job = "Feale Guardian";
+                        break;
+
                     case (0x7678):
-                        job = "Marksman";
+                        job = "Male Marksman";
                         break;
+                    case (0x7578):
+                        job = "Female Marksman";
+                        break;
+
                     case (0x7879):
-                        job = "Evoker";
+                        job = "Male Evoker";
                         break;
+                    case (0x7779):
+                        job = "Female Evoker";
+                        break;
+
                     case (0x787A):
-                        job = "Blademaster";
+                        job = "Male Blademaster";
                         break;
+                    case (0x777A):
+                        job = "Female Blademaster";
+                        break;
+
                     case (0x7878):
-                        job = "Engineer";
+                        job = "Male Engineer";
                         break;
+                    case (0x7778):
+                        job = "Female Engineer";
+                        break;
+
                     default:
                         job = "Unknown";
                         break;
