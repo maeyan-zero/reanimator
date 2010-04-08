@@ -408,6 +408,31 @@
           </entity>
         </modify>
       </file>
+      <file id="players.txt.cooked">
+        <modify>
+          <entity id="*" value="0-3">
+            <attribute id="maxLevel">
+              <replace>
+                <data>55</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="8-11">
+            <attribute id="maxLevel">
+              <replace>
+                <data>55</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="14-17">
+            <attribute id="maxLevel">
+              <replace>
+                <data>55</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
     </pack>
   </modification>
   <modification>
