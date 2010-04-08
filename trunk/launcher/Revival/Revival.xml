@@ -531,10 +531,24 @@
     <pack id="default">
       <file id="items.txt.cooked">
         <modify>
-          <entity id="*">
-            <attribute id="StackSize">
+          <entity id="*" value="2-111">
+            <attribute id="autoPickupDistance">
               <replace>
-                <data></data>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="120-177">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="247-255">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
               </replace>
             </attribute>
           </entity>
