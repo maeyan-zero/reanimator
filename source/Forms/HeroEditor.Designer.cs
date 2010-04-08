@@ -29,11 +29,8 @@ namespace Reanimator.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HeroEditor));
             this.main_TabControl = new System.Windows.Forms.TabControl();
             this.general_TabPage = new System.Windows.Forms.TabPage();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.label33 = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.tb_playedTime = new System.Windows.Forms.TextBox();
@@ -83,8 +80,6 @@ namespace Reanimator.Forms
             this.label21 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.stats_TabPage = new System.Windows.Forms.TabPage();
             this.statAttribute3_GroupBox = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
@@ -296,8 +291,6 @@ namespace Reanimator.Forms
             // 
             // general_TabPage
             // 
-            this.general_TabPage.Controls.Add(this.textBox3);
-            this.general_TabPage.Controls.Add(this.textBox2);
             this.general_TabPage.Controls.Add(this.label33);
             this.general_TabPage.Controls.Add(this.groupBox8);
             this.general_TabPage.Controls.Add(this.groupBox7);
@@ -306,8 +299,6 @@ namespace Reanimator.Forms
             this.general_TabPage.Controls.Add(this.groupBox4);
             this.general_TabPage.Controls.Add(this.button2);
             this.general_TabPage.Controls.Add(this.richTextBox1);
-            this.general_TabPage.Controls.Add(this.label2);
-            this.general_TabPage.Controls.Add(this.textBox1);
             this.general_TabPage.Location = new System.Drawing.Point(4, 22);
             this.general_TabPage.Name = "general_TabPage";
             this.general_TabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -316,31 +307,15 @@ namespace Reanimator.Forms
             this.general_TabPage.Text = "General";
             this.general_TabPage.UseVisualStyleBackColor = true;
             // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(649, 313);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 30;
-            this.textBox3.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(649, 287);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 29;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
             // label33
             // 
             this.label33.AutoSize = true;
             this.label33.Location = new System.Drawing.Point(338, 30);
             this.label33.MaximumSize = new System.Drawing.Size(305, 100);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(303, 91);
+            this.label33.Size = new System.Drawing.Size(249, 39);
             this.label33.TabIndex = 28;
-            this.label33.Text = resources.GetString("label33.Text");
+            this.label33.Text = "Not working:\r\ngender\r\nArmor: There is no armor field inside the savegames";
             // 
             // groupBox8
             // 
@@ -902,27 +877,11 @@ namespace Reanimator.Forms
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(338, 133);
+            this.richTextBox1.Location = new System.Drawing.Point(341, 76);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(305, 373);
             this.richTextBox1.TabIndex = 14;
             this.richTextBox1.Text = "";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(392, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(24, 13);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Job";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(441, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 10;
             // 
             // stats_TabPage
             // 
@@ -2410,8 +2369,6 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TextBox class_TextBox;
         private System.Windows.Forms.Label class_Label;
         private System.Windows.Forms.NumericUpDown level_NumericUpDown;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox dead_CheckBox;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button button2;
@@ -2505,8 +2462,6 @@ namespace Reanimator.Forms
         private System.Windows.Forms.Label label34;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TabPage tp_characterValues;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button saveAsData_Button;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;

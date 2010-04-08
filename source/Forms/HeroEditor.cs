@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
@@ -9,8 +8,6 @@ using Reanimator.Excel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml.Serialization;
-using System.Collections;
-using Reanimator.Forms;
 using System.Drawing;
 using Reanimator.Forms.HeroEditorFunctions;
 
@@ -18,27 +15,25 @@ namespace Reanimator.Forms
 {
     public partial class HeroEditor : Form
     {
-        /*readonly*/
-        Unit _heroUnit;
-        readonly TableDataSet dataSet;
-        readonly ExcelTables excelTables;
+        readonly Unit _heroUnit;
+        readonly TableDataSet _dataSet;
+        readonly ExcelTables _excelTables;
         readonly CompletePanelControl _panel;
         //readonly Stats _statsTable;
         readonly String _filePath;
-        string savedPath;
-        UnitHelpFunctions _itemFunctions;
-        const string RESOURCEFOLDER = @"F:\";
+        string _savedPath;
+        readonly UnitHelpFunctions _itemFunctions;
 
         public HeroEditor(Unit heroUnit, TableDataSet tableDataSet, String filePath)
         {
             _heroUnit = heroUnit;
-            dataSet = tableDataSet;
-            excelTables = tableDataSet.ExcelTables;
+            _dataSet = tableDataSet;
+            _excelTables = tableDataSet.ExcelTables;
             _panel = new CompletePanelControl();
-            //_statsTable = excelTables.GetTable("stats") as Stats;
+            //_statsTable = _excelTables.GetTable("stats") as Stats;
             _filePath = filePath;
 
-            _itemFunctions = new UnitHelpFunctions(ref dataSet, ref excelTables);
+            _itemFunctions = new UnitHelpFunctions(ref _dataSet, ref _excelTables);
             _itemFunctions.LoadCharacterValues(_heroUnit);
             //_itemFunctions.GenerateUnitNameStrings();
             //_itemFunctions.PopulateItems(ref _heroUnit);
@@ -74,8 +69,8 @@ namespace Reanimator.Forms
                 currentlyEditing_ComboBox.Items.Add(item);
             }
             //bool canGetItemNames = true;
-            //DataTable itemsTable = dataSet.GetExcelTable(27953);
-            //DataTable affixTable = dataSet.GetExcelTable(30512);
+            //DataTable itemsTable = _dataSet.GetExcelTable(27953);
+            //DataTable affixTable = _dataSet.GetExcelTable(30512);
             //if (itemsTable != null && affixTable != null)
             //{
             //    if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
@@ -174,14 +169,14 @@ namespace Reanimator.Forms
                     Unit.StatBlock.Stat stat = unit.Stats[i];
 
                     ////string txt = string.Empty;
-                    ////for (int counter = 0; counter < excelTables.Count; counter++)
+                    ////for (int counter = 0; counter < _excelTables.Count; counter++)
                     ////{
-                    ////    txt += excelTables.GetTableStringId(counter) + "\n";
+                    ////    txt += _excelTables.GetTableStringId(counter) + "\n";
                     ////}
                     ////MessageBox.Show(txt);
 
                     //stat.Name = _statsTable.GetStringFromId(stat.Id);
-                    ////stat.Name = ((Stats)excelTables.GetTable("stats")).GetStringFromId(stat.Id);
+                    ////stat.Name = ((Stats)_excelTables.GetTable("stats")).GetStringFromId(stat.Id);
 
                     stats_ListBox.Items.Add(stat);
                 }
@@ -199,7 +194,7 @@ namespace Reanimator.Forms
         //    if (stat.values.Length != 0)
         //    {
         //        String select = String.Format("code = '{0}'", lookupId);
-        //        DataTable table = dataSet.GetExcelTable(tableId);
+        //        DataTable table = _dataSet.GetExcelTable(tableId);
         //        DataRow[] row;
 
         //        if (table != null)
@@ -236,7 +231,7 @@ namespace Reanimator.Forms
                     statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
                     if (stat.Attribute1.TableId > 0)
                     {
-                        statAttribute1_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute1.TableId).StringId;
+                        statAttribute1_tableId_TextBox.Text = _excelTables.GetTable(stat.Attribute1.TableId).StringId;
                     }
                     else
                     {
@@ -263,7 +258,7 @@ namespace Reanimator.Forms
                     statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
                     if (stat.Attribute2.TableId > 0)
                     {
-                        statAttribute2_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute2.TableId).StringId;
+                        statAttribute2_tableId_TextBox.Text = _excelTables.GetTable(stat.Attribute2.TableId).StringId;
                     }
                     else
                     {
@@ -290,7 +285,7 @@ namespace Reanimator.Forms
                     statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
                     if (stat.Attribute3.TableId > 0)
                     {
-                        statAttribute3_tableId_TextBox.Text = excelTables.GetTable(stat.Attribute3.TableId).StringId;
+                        statAttribute3_tableId_TextBox.Text = _excelTables.GetTable(stat.Attribute3.TableId).StringId;
                     }
                     else
                     {
@@ -519,7 +514,7 @@ namespace Reanimator.Forms
 
                     if (stats.skipResource == 0)
                     {
-                        id = excelTables.GetTable(stats.resource).StringId;
+                        id = _excelTables.GetTable(stats.resource).StringId;
                         if (!references.Contains(id))
                         {
                             references.Add(id);
@@ -529,7 +524,7 @@ namespace Reanimator.Forms
                     {
                         foreach (Unit.StatBlock.Stat.Attribute att in stats.attributes)
                         {
-                            ExcelTable tab = excelTables.GetTable(att.TableId);
+                            ExcelTable tab = _excelTables.GetTable(att.TableId);
                             if (tab == null) continue;
 
                             id = tab.StringId;
@@ -560,7 +555,7 @@ namespace Reanimator.Forms
             int startIndex = _filePath.LastIndexOf("\\") + 1;
             string characterName = _filePath.Substring(startIndex, _filePath.Length - startIndex - 4);
             FileStream saveFile = new FileStream(characterName + ".hg1", FileMode.Create, FileAccess.ReadWrite);
-            savedPath = saveFile.Name;
+            _savedPath = saveFile.Name;
 
             // main header
             MainHeader mainHeader;
@@ -606,7 +601,7 @@ namespace Reanimator.Forms
         private void InitUnknownStatList()
         {
             string text = string.Empty;
-            text += "jobClass: " + _heroUnit.jobClass + "\n";
+            text += "unknown_07_1: " + _heroUnit.unknown_07_1 + "\n";
             text += "majorVersion: " + _heroUnit.majorVersion + "\n";
             text += "minorVersion: " + _heroUnit.minorVersion + "\n";
             text += "playerFlagCount1: " + _heroUnit.PlayerFlags1.Count + "\n";
@@ -639,7 +634,7 @@ namespace Reanimator.Forms
                 }
             }
             text += "unknown_02: " + _heroUnit.unknown_02 + "\n";
-            text += "unknown_07: " + _heroUnit.unknown_07 + "\n";
+            text += "unknown_07: " + _heroUnit.unknown_07_2 + "\n";
             text += "unknown_09: " + _heroUnit.unknown_09 + "\n";
             if (_heroUnit.unitUniqueId != null)
             {
@@ -985,8 +980,6 @@ namespace Reanimator.Forms
             }
 
             richTextBox1.Text += "\n\n\n\n";
-            textBox2.Text = _heroUnit.unknownCount1Bs[0].unknown1.ToString();
-            textBox3.Text = _heroUnit.unknownCount1Bs[0].itemEndBitOffset.ToString();
         }
 
         private void currentlyEditing_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1011,14 +1004,14 @@ namespace Reanimator.Forms
             //save currently selected item
             _currentlySelectedItem = unit;
 
-            DataTable items = dataSet.GetExcelTable(27953);
+            DataTable items = _dataSet.GetExcelTable(27953);
             DataRow[] itemRow = items.Select("code1 = '" + unit.unitCode + "'");
 
             if (itemRow.Length > 0)
             {
                 int value = (int)itemRow[0]["unitType"];
 
-                DataTable unitTypes = dataSet.GetExcelTable(21040);
+                DataTable unitTypes = _dataSet.GetExcelTable(21040);
                 DataRow[] unitRow = unitTypes.Select("Index = '" + value + "'");
 
                 if (unitRow.Length > 0)
@@ -1112,7 +1105,7 @@ namespace Reanimator.Forms
         {
             try
             {
-                System.Diagnostics.Process.Start(Config.GameClientPath, "-singleplayer -load\"" + savedPath + "\"");
+                System.Diagnostics.Process.Start(Config.GameClientPath, "-singleplayer -load\"" + _savedPath + "\"");
             }
             catch (Exception ex)
             {
@@ -1380,23 +1373,13 @@ namespace Reanimator.Forms
         #region SKILLPANEL
         private void InitializeAttributeSkillPanel(int characterClass)
         {
-            DataTable table = dataSet.GetExcelTable(27952);
+            DataTable table = _dataSet.GetExcelTable(27952);
             _panel.Initialize(ref table, characterClass, _heroUnit);
 
             tp_characterValues.Controls.Add(_panel);
             tp_characterValues.Size = _panel.Size;
         }
         #endregion
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            _heroUnit.unknownCount1Bs[0].unknown1 = Int32.Parse(textBox2.Text);
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-            _heroUnit.unknownCount1Bs[0].itemEndBitOffset = Int32.Parse(textBox3.Text);
-        }
 
         private void saveAsData_Click(object sender, EventArgs e)
         {
@@ -1435,13 +1418,11 @@ namespace Reanimator.Forms
             if (unit == null) return;
 
             _heroUnit.Items.Add(unit);
-            _heroUnit.itemCount++;
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
             _heroUnit.Items.Remove((Unit)currentlyEditing_ComboBox.SelectedItem);
-            _heroUnit.itemCount--;
         }
 
         private void button9_Click(object sender, EventArgs e)
