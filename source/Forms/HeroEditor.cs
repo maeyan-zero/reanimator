@@ -1081,6 +1081,24 @@ namespace Reanimator.Forms
             }
 
             nud_itemQuantity.Value = quantity;
+
+            ShowItemMods(unit.Items.ToArray());
+        }
+
+        private void ShowItemMods(Unit[] items)
+        {
+            cb_availableMods.Items.Clear();
+
+            if (items.Length > 0)
+            {
+                cb_availableMods.Enabled = true;
+                cb_availableMods.Items.AddRange(items);
+                cb_availableMods.SelectedIndex = 0;
+            }
+            else
+            {
+                cb_availableMods.Enabled = false;
+            }
         }
 
         private void nud_itemCount_ValueChanged(object sender, EventArgs e)
@@ -1595,6 +1613,14 @@ namespace Reanimator.Forms
             //unit.inventoryPositionX++;
             //unit.inventoryPositionY++;
             _heroUnit = unit;
+        }
+
+        private void cb_availableMods_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Unit mod = (Unit)cb_availableMods.SelectedItem;
+            Unit.StatBlock.Stat affix = mod.Stats.GetStatByName(ItemValueNames.applied_affix.ToString());
+            tb_modAttribute.Text = affix.Id.ToString();
+            tb_modValue.Text = affix.values[0].Stat.ToString();
         }
     }
 }
