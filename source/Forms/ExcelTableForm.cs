@@ -259,8 +259,20 @@ namespace Reanimator.Forms
 
         private void regenTable_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Todo");
-            //if (_tableDataSet.XlsDataSet.Tables.Remove(_excelTable.StringId))
+            // TODO this section is buggy/incomplete regarding table relations
+            /*
+            if (_excelTable == null) return;
+
+            if (!_tableDataSet.XlsDataSet.Tables.Contains(_excelTable.StringId)) return;
+
+            dataGridView.DataMember = null;
+            listBox1.DataSource = null;
+            _tableDataSet.XlsDataSet.Tables.Remove(_excelTable.StringId);
+
+            _tableDataSet.LoadTable(null, _excelTable);
+            dataGridView.DataMember = _excelTable.StringId;
+            listBox1.DataSource = _excelTable.SecondaryStrings;
+            */
         }
     }
 
