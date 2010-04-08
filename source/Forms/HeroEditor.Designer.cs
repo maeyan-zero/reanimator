@@ -724,14 +724,13 @@ namespace Reanimator.Forms
             // dead_CheckBox
             // 
             this.dead_CheckBox.AutoSize = true;
-            this.dead_CheckBox.Enabled = false;
             this.dead_CheckBox.Location = new System.Drawing.Point(102, 122);
             this.dead_CheckBox.Name = "dead_CheckBox";
             this.dead_CheckBox.Size = new System.Drawing.Size(52, 17);
             this.dead_CheckBox.TabIndex = 12;
             this.dead_CheckBox.Text = "Dead";
             this.dead_CheckBox.UseVisualStyleBackColor = true;
-            this.dead_CheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
+            this.dead_CheckBox.CheckedChanged += new System.EventHandler(this.dead_CheckBox_Changed);
             // 
             // level_Label
             // 
@@ -760,7 +759,7 @@ namespace Reanimator.Forms
             this.elite_CheckBox.TabIndex = 6;
             this.elite_CheckBox.Text = "Elite";
             this.elite_CheckBox.UseVisualStyleBackColor = true;
-            this.elite_CheckBox.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
+            this.elite_CheckBox.CheckedChanged += new System.EventHandler(this.elite_CheckBox_Changed);
             // 
             // hardcore_CheckBox
             // 
@@ -771,7 +770,7 @@ namespace Reanimator.Forms
             this.hardcore_CheckBox.TabIndex = 7;
             this.hardcore_CheckBox.Text = "HC";
             this.hardcore_CheckBox.UseVisualStyleBackColor = true;
-            this.hardcore_CheckBox.CheckedChanged += new System.EventHandler(this.hardcore_CheckBox_CheckedChanged);
+            this.hardcore_CheckBox.CheckedChanged += new System.EventHandler(this.hardcore_CheckBox_Changed);
             // 
             // groupBox4
             // 

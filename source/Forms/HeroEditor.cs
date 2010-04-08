@@ -52,8 +52,6 @@ namespace Reanimator.Forms
 
             PopulateGeneral(_heroUnit);
 
-            initialized = true;
-
             PopulateStats(_heroUnit);
             PopulateItemDropDown(_heroUnit);
 
@@ -610,20 +608,20 @@ namespace Reanimator.Forms
             text += "jobClass: " + _heroUnit.jobClass + "\n";
             text += "majorVersion: " + _heroUnit.majorVersion + "\n";
             text += "minorVersion: " + _heroUnit.minorVersion + "\n";
-            text += "playerFlagCount1: " + _heroUnit.playerFlagCount1 + "\n";
-            text += "playerFlagCount2: " + _heroUnit.playerFlagCount2 + "\n";
-            if (_heroUnit.playerFlags1 != null)
+            text += "playerFlagCount1: " + _heroUnit.PlayerFlags1.Count + "\n";
+            text += "playerFlagCount2: " + _heroUnit.PlayerFlags2.Count + "\n";
+            if (_heroUnit.PlayerFlags1 != null)
             {
-                foreach (int val in _heroUnit.playerFlags1)
+                foreach (int val in _heroUnit.PlayerFlags1)
                 {
                     text += "playerFlags1: " + val + "\n";
                 }
             }
-            if (_heroUnit.playerFlags2 != null)
+            if (_heroUnit.PlayerFlags2 != null)
             {
-                foreach (int val in _heroUnit.playerFlags2)
+                foreach (int val in _heroUnit.PlayerFlags2)
                 {
-                    text += "playerFlags2: " + val + "\n";
+                    text += "PlayerFlags2: " + val + "\n";
                 }
             }
             text += "timeStamp1: " + _heroUnit.timeStamp1 + "\n";
@@ -642,9 +640,9 @@ namespace Reanimator.Forms
             text += "unknown_02: " + _heroUnit.unknown_02 + "\n";
             text += "unknown_07: " + _heroUnit.unknown_07 + "\n";
             text += "unknown_09: " + _heroUnit.unknown_09 + "\n";
-            if (_heroUnit.unknown17 != null)
+            if (_heroUnit.unitUniqueId != null)
             {
-                foreach (byte val in _heroUnit.unknown17)
+                foreach (byte val in _heroUnit.unitUniqueId)
                 {
                     text += "unknown17: " + (int)val + "\n";
                 }
@@ -808,7 +806,7 @@ namespace Reanimator.Forms
                 textBox1.Text = String.Format("{0:00000000}", Int32.Parse(Convert.ToString(heroUnit.JobClass, 2)));
                 class_TextBox.Text = job;
 
-                SetCheckBoxes();
+                SetStateCheckBoxes();
 
                 SetCharacterValues();
 
@@ -900,81 +898,71 @@ namespace Reanimator.Forms
             }
         }
 
-        // flag used to prevent overwriting of the character game mode when loading the check box states
-        bool initialized = false;
-
-        private void SetCheckBoxes()
+        // TODO use enums or something - using 21062, 18243 and 18499 is just messy and asking for trouble
+        private void SetStateCheckBoxes()
         {
-            if (_heroUnit.Flags1 != null && _heroUnit.Flags1.Contains(21062))
+            // elite
+            if (_heroUnit.PlayerFlags1.Contains(21062) || _heroUnit.PlayerFlags2.Contains(21062))
             {
                 elite_CheckBox.Checked = true;
-                startedAsElite = true;
             }
-            if (_heroUnit.Flags2 != null && _heroUnit.Flags2.Contains(18243))
+
+            // hc
+            if (_heroUnit.PlayerFlags1.Contains(18243) || _heroUnit.PlayerFlags2.Contains(18243))
             {
                 hardcore_CheckBox.Checked = true;
-                startedAsHC = true;
             }
-            if (_heroUnit.Flags2 != null && _heroUnit.Flags2.Contains(18499))
+
+            // dead
+            if (_heroUnit.PlayerFlags1.Contains(18499) || _heroUnit.PlayerFlags2.Contains(18499))
             {
                 dead_CheckBox.Checked = true;
-                startedAsDead = true;
             }
         }
 
-        bool startedAsElite;
-        bool startedAsHC;
-        bool startedAsDead;
-
-        // Set Elite/HC/Dead mode
-        private void CheckBox_CheckedChanged(object sender, EventArgs e)
+        private void dead_CheckBox_Changed(object sender, EventArgs e)
         {
-            if (initialized)
+            CheckBox cb = sender as CheckBox;
+            if (cb == null) return;
+
+            SetCharacterState(18499, cb.Checked);
+        }
+
+        private void elite_CheckBox_Changed(object sender, EventArgs e)
+        {
+            CheckBox cb = sender as CheckBox;
+            if (cb == null) return;
+
+            SetCharacterState(21062, cb.Checked);
+        }
+
+        private void hardcore_CheckBox_Changed(object sender, EventArgs e)
+        {
+            CheckBox cb = sender as CheckBox;
+            if (cb == null) return;
+
+            SetCharacterState(18243, cb.Checked);
+        }
+
+        private void SetCharacterState(int stateId, bool set)
+        {
+            if (set)
             {
-                _heroUnit.SetGameMode(elite_CheckBox.Checked, hardcore_CheckBox.Checked, dead_CheckBox.Checked);
-
-                /*
-                if(startedAsElite && !elite_CheckBox.Checked)
+                if (!_heroUnit.PlayerFlags1.Contains(stateId))
                 {
-                    _heroUnit.unknownCount1Bs[0].itemEndBitOffset -= 32;
+                    _heroUnit.PlayerFlags1.Add(stateId);
                 }
-                else if (!startedAsElite && elite_CheckBox.Checked)
+                if (!_heroUnit.PlayerFlags2.Contains(stateId))
                 {
-                    _heroUnit.unknownCount1Bs[0].itemEndBitOffset += 32;
+                    _heroUnit.PlayerFlags2.Add(stateId);
                 }
-                if (startedAsHC && !hardcore_CheckBox.Checked)
-                {
-                    _heroUnit.unknownCount1Bs[0].itemEndBitOffset -= 62;
-                }
-                
-                else if (!startedAsHC && hardcore_CheckBox.Checked)
-                {
-                    /*
-                     * From Elite to HC mode:
-                     * UnknownCount1B_S.unknown2 += 62
-                     * playerFlags1 = 18243
-                     * playerFlags2 = 18243
-                     * statCount++
-                     * add entry "quest_global_fix_flags"
-                    */
-                /*
-                    if (_heroUnit.Stats.GetStatByName(ItemValueNames.quest_global_fix_flags.ToString()) == null)
-                    {
-                        List<Unit.StatBlock.Stat> stats = new List<Unit.StatBlock.Stat>();
-                        stats.AddRange(_heroUnit.Stats.stats);
-
-                        Unit.StatBlock.Stat questFlag = XmlUtilities<Unit.StatBlock.Stat>.Deserialize(RESOURCEFOLDER + @"\" + ItemValueNames.quest_global_fix_flags.ToString() + ".xml");
-
-                        stats.Add(questFlag);
-
-                        _heroUnit.Stats.stats = stats.ToArray();
-                        _heroUnit.Stats.statCount = stats.Count;
-                    }
-
-                    _heroUnit.unknownCount1Bs[0].itemEndBitOffset += 62;
-                }
-                */
             }
+            else
+            {
+                _heroUnit.PlayerFlags1.Remove(stateId);
+                _heroUnit.PlayerFlags2.Remove(stateId);
+            }
+            
         }
 
         private void DisplayFlags()
@@ -982,14 +970,14 @@ namespace Reanimator.Forms
             richTextBox1.Text = string.Empty;
 
             richTextBox1.Text += "Flag1:\n";
-            richTextBox1.Text += _heroUnit.PlayerFlagCount1 + "\n";
-            if (_heroUnit.Flags1 != null)
+            richTextBox1.Text += _heroUnit.PlayerFlags1.Count + "\n";
+            if (_heroUnit.PlayerFlags1 != null)
             {
-                richTextBox1.Text += "Array size: " + _heroUnit.Flags1.Length + "\n";
+                richTextBox1.Text += "Array size: " + _heroUnit.PlayerFlags1.Count + "\n";
 
-                foreach (int flag in _heroUnit.Flags1)
+                foreach (int flag in _heroUnit.PlayerFlags1)
                 {
-                    richTextBox1.Text += flag.ToString() + "\n";
+                    richTextBox1.Text += flag + "\n";
                 }
             }
             else
@@ -998,14 +986,14 @@ namespace Reanimator.Forms
             }
 
             richTextBox1.Text += "\n\nFlag2:\n";
-            richTextBox1.Text += _heroUnit.PlayerFlagCount2 + "\n";
-            if (_heroUnit.Flags2 != null)
+            richTextBox1.Text += _heroUnit.PlayerFlags2.Count + "\n";
+            if (_heroUnit.PlayerFlags2 != null)
             {
-                richTextBox1.Text += "Array size: " + _heroUnit.Flags2.Length + "\n";
+                richTextBox1.Text += "Array size: " + _heroUnit.PlayerFlags2.Count + "\n";
 
-                foreach (int flag in _heroUnit.Flags2)
+                foreach (int flag in _heroUnit.PlayerFlags2)
                 {
-                    richTextBox1.Text += flag.ToString() + "\n";
+                    richTextBox1.Text += flag + "\n";
                 }
             }
             else
@@ -1016,14 +1004,6 @@ namespace Reanimator.Forms
             richTextBox1.Text += "\n\n\n\n";
             textBox2.Text = _heroUnit.unknownCount1Bs[0].unknown1.ToString();
             textBox3.Text = _heroUnit.unknownCount1Bs[0].itemEndBitOffset.ToString();
-        }
-
-        private void hardcore_CheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            dead_CheckBox.Enabled = hardcore_CheckBox.Checked;
-            dead_CheckBox.Checked = false;
-
-            CheckBox_CheckedChanged(sender, e);
         }
 
         private void currentlyEditing_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
