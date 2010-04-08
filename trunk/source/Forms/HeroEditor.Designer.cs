@@ -148,6 +148,8 @@ namespace Reanimator.Forms
             this.tp_characterValues = new System.Windows.Forms.TabPage();
             this.tp_characterInventory = new System.Windows.Forms.TabPage();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.l_itemLevel = new System.Windows.Forms.Label();
+            this.tb_itemLevel = new System.Windows.Forms.TextBox();
             this.nud_invPosY = new System.Windows.Forms.NumericUpDown();
             this.label50 = new System.Windows.Forms.Label();
             this.nud_invPosX = new System.Windows.Forms.NumericUpDown();
@@ -218,8 +220,12 @@ namespace Reanimator.Forms
             this.button8 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
-            this.tb_itemLevel = new System.Windows.Forms.TextBox();
-            this.l_itemLevel = new System.Windows.Forms.Label();
+            this.cb_availableMods = new System.Windows.Forms.ComboBox();
+            this.label53 = new System.Windows.Forms.Label();
+            this.label56 = new System.Windows.Forms.Label();
+            this.tb_modAttribute = new System.Windows.Forms.TextBox();
+            this.tb_modValue = new System.Windows.Forms.TextBox();
+            this.label57 = new System.Windows.Forms.Label();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -1563,6 +1569,12 @@ namespace Reanimator.Forms
             // 
             // groupBox11
             // 
+            this.groupBox11.Controls.Add(this.label57);
+            this.groupBox11.Controls.Add(this.tb_modValue);
+            this.groupBox11.Controls.Add(this.tb_modAttribute);
+            this.groupBox11.Controls.Add(this.label56);
+            this.groupBox11.Controls.Add(this.label53);
+            this.groupBox11.Controls.Add(this.cb_availableMods);
             this.groupBox11.Controls.Add(this.l_itemLevel);
             this.groupBox11.Controls.Add(this.tb_itemLevel);
             this.groupBox11.Controls.Add(this.nud_invPosY);
@@ -1581,12 +1593,28 @@ namespace Reanimator.Forms
             this.groupBox11.Controls.Add(this.tb_itemName);
             this.groupBox11.Controls.Add(this.label54);
             this.groupBox11.Controls.Add(this.label48);
-            this.groupBox11.Location = new System.Drawing.Point(12, 301);
+            this.groupBox11.Location = new System.Drawing.Point(18, 276);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(191, 251);
+            this.groupBox11.Size = new System.Drawing.Size(191, 357);
             this.groupBox11.TabIndex = 66;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "Item infos:";
+            // 
+            // l_itemLevel
+            // 
+            this.l_itemLevel.AutoSize = true;
+            this.l_itemLevel.Location = new System.Drawing.Point(13, 20);
+            this.l_itemLevel.Name = "l_itemLevel";
+            this.l_itemLevel.Size = new System.Drawing.Size(55, 13);
+            this.l_itemLevel.TabIndex = 67;
+            this.l_itemLevel.Text = "Item level:";
+            // 
+            // tb_itemLevel
+            // 
+            this.tb_itemLevel.Location = new System.Drawing.Point(85, 17);
+            this.tb_itemLevel.Name = "tb_itemLevel";
+            this.tb_itemLevel.Size = new System.Drawing.Size(100, 20);
+            this.tb_itemLevel.TabIndex = 66;
             // 
             // nud_invPosY
             // 
@@ -1955,7 +1983,7 @@ namespace Reanimator.Forms
             // 
             // tb_belt
             // 
-            this.tb_belt.Location = new System.Drawing.Point(259, 92);
+            this.tb_belt.Location = new System.Drawing.Point(286, 111);
             this.tb_belt.Name = "tb_belt";
             this.tb_belt.Size = new System.Drawing.Size(140, 20);
             this.tb_belt.TabIndex = 20;
@@ -1964,7 +1992,7 @@ namespace Reanimator.Forms
             // label47
             // 
             this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(199, 95);
+            this.label47.Location = new System.Drawing.Point(226, 114);
             this.label47.Name = "label47";
             this.label47.Size = new System.Drawing.Size(25, 13);
             this.label47.TabIndex = 19;
@@ -1972,7 +2000,7 @@ namespace Reanimator.Forms
             // 
             // tb_gloves
             // 
-            this.tb_gloves.Location = new System.Drawing.Point(53, 66);
+            this.tb_gloves.Location = new System.Drawing.Point(80, 85);
             this.tb_gloves.Name = "tb_gloves";
             this.tb_gloves.Size = new System.Drawing.Size(140, 20);
             this.tb_gloves.TabIndex = 18;
@@ -1981,7 +2009,7 @@ namespace Reanimator.Forms
             // label46
             // 
             this.label46.AutoSize = true;
-            this.label46.Location = new System.Drawing.Point(9, 69);
+            this.label46.Location = new System.Drawing.Point(36, 88);
             this.label46.Name = "label46";
             this.label46.Size = new System.Drawing.Size(40, 13);
             this.label46.TabIndex = 17;
@@ -2015,7 +2043,7 @@ namespace Reanimator.Forms
             // 
             // tb_pants
             // 
-            this.tb_pants.Location = new System.Drawing.Point(259, 118);
+            this.tb_pants.Location = new System.Drawing.Point(286, 137);
             this.tb_pants.Name = "tb_pants";
             this.tb_pants.Size = new System.Drawing.Size(140, 20);
             this.tb_pants.TabIndex = 11;
@@ -2024,7 +2052,7 @@ namespace Reanimator.Forms
             // label43
             // 
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(199, 121);
+            this.label43.Location = new System.Drawing.Point(226, 140);
             this.label43.Name = "label43";
             this.label43.Size = new System.Drawing.Size(34, 13);
             this.label43.TabIndex = 10;
@@ -2032,7 +2060,7 @@ namespace Reanimator.Forms
             // 
             // tb_boots
             // 
-            this.tb_boots.Location = new System.Drawing.Point(53, 92);
+            this.tb_boots.Location = new System.Drawing.Point(80, 111);
             this.tb_boots.Name = "tb_boots";
             this.tb_boots.Size = new System.Drawing.Size(140, 20);
             this.tb_boots.TabIndex = 9;
@@ -2041,7 +2069,7 @@ namespace Reanimator.Forms
             // label42
             // 
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(9, 95);
+            this.label42.Location = new System.Drawing.Point(36, 114);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(34, 13);
             this.label42.TabIndex = 8;
@@ -2049,7 +2077,7 @@ namespace Reanimator.Forms
             // 
             // tb_shoulders
             // 
-            this.tb_shoulders.Location = new System.Drawing.Point(259, 40);
+            this.tb_shoulders.Location = new System.Drawing.Point(286, 59);
             this.tb_shoulders.Name = "tb_shoulders";
             this.tb_shoulders.Size = new System.Drawing.Size(140, 20);
             this.tb_shoulders.TabIndex = 7;
@@ -2058,7 +2086,7 @@ namespace Reanimator.Forms
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(199, 43);
+            this.label41.Location = new System.Drawing.Point(226, 62);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(54, 13);
             this.label41.TabIndex = 6;
@@ -2066,7 +2094,7 @@ namespace Reanimator.Forms
             // 
             // tb_dyeKit
             // 
-            this.tb_dyeKit.Location = new System.Drawing.Point(53, 40);
+            this.tb_dyeKit.Location = new System.Drawing.Point(80, 59);
             this.tb_dyeKit.Name = "tb_dyeKit";
             this.tb_dyeKit.Size = new System.Drawing.Size(140, 20);
             this.tb_dyeKit.TabIndex = 5;
@@ -2075,7 +2103,7 @@ namespace Reanimator.Forms
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(9, 43);
+            this.label40.Location = new System.Drawing.Point(36, 62);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(38, 13);
             this.label40.TabIndex = 4;
@@ -2083,7 +2111,7 @@ namespace Reanimator.Forms
             // 
             // tb_torso
             // 
-            this.tb_torso.Location = new System.Drawing.Point(259, 66);
+            this.tb_torso.Location = new System.Drawing.Point(286, 85);
             this.tb_torso.Name = "tb_torso";
             this.tb_torso.Size = new System.Drawing.Size(140, 20);
             this.tb_torso.TabIndex = 3;
@@ -2092,7 +2120,7 @@ namespace Reanimator.Forms
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(199, 69);
+            this.label39.Location = new System.Drawing.Point(226, 88);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(34, 13);
             this.label39.TabIndex = 2;
@@ -2100,7 +2128,7 @@ namespace Reanimator.Forms
             // 
             // tb_head
             // 
-            this.tb_head.Location = new System.Drawing.Point(180, 6);
+            this.tb_head.Location = new System.Drawing.Point(207, 25);
             this.tb_head.Name = "tb_head";
             this.tb_head.Size = new System.Drawing.Size(140, 20);
             this.tb_head.TabIndex = 1;
@@ -2109,7 +2137,7 @@ namespace Reanimator.Forms
             // label38
             // 
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(141, 9);
+            this.label38.Location = new System.Drawing.Point(168, 28);
             this.label38.Name = "label38";
             this.label38.Size = new System.Drawing.Size(33, 13);
             this.label38.TabIndex = 0;
@@ -2230,21 +2258,55 @@ namespace Reanimator.Forms
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
-            // tb_itemLevel
+            // cb_availableMods
             // 
-            this.tb_itemLevel.Location = new System.Drawing.Point(85, 17);
-            this.tb_itemLevel.Name = "tb_itemLevel";
-            this.tb_itemLevel.Size = new System.Drawing.Size(100, 20);
-            this.tb_itemLevel.TabIndex = 66;
+            this.cb_availableMods.FormattingEnabled = true;
+            this.cb_availableMods.Location = new System.Drawing.Point(85, 251);
+            this.cb_availableMods.Name = "cb_availableMods";
+            this.cb_availableMods.Size = new System.Drawing.Size(100, 21);
+            this.cb_availableMods.TabIndex = 68;
+            this.cb_availableMods.SelectedIndexChanged += new System.EventHandler(this.cb_availableMods_SelectedIndexChanged);
             // 
-            // l_itemLevel
+            // label53
             // 
-            this.l_itemLevel.AutoSize = true;
-            this.l_itemLevel.Location = new System.Drawing.Point(13, 20);
-            this.l_itemLevel.Name = "l_itemLevel";
-            this.l_itemLevel.Size = new System.Drawing.Size(55, 13);
-            this.l_itemLevel.TabIndex = 67;
-            this.l_itemLevel.Text = "Item level:";
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(13, 254);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(36, 13);
+            this.label53.TabIndex = 69;
+            this.label53.Text = "Mods:";
+            // 
+            // label56
+            // 
+            this.label56.AutoSize = true;
+            this.label56.Location = new System.Drawing.Point(13, 281);
+            this.label56.Name = "label56";
+            this.label56.Size = new System.Drawing.Size(49, 13);
+            this.label56.TabIndex = 70;
+            this.label56.Text = "Attribute:";
+            // 
+            // tb_modAttribute
+            // 
+            this.tb_modAttribute.Location = new System.Drawing.Point(85, 278);
+            this.tb_modAttribute.Name = "tb_modAttribute";
+            this.tb_modAttribute.Size = new System.Drawing.Size(100, 20);
+            this.tb_modAttribute.TabIndex = 71;
+            // 
+            // tb_modValue
+            // 
+            this.tb_modValue.Location = new System.Drawing.Point(85, 304);
+            this.tb_modValue.Name = "tb_modValue";
+            this.tb_modValue.Size = new System.Drawing.Size(100, 20);
+            this.tb_modValue.TabIndex = 72;
+            // 
+            // label57
+            // 
+            this.label57.AutoSize = true;
+            this.label57.Location = new System.Drawing.Point(13, 307);
+            this.label57.Name = "label57";
+            this.label57.Size = new System.Drawing.Size(37, 13);
+            this.label57.TabIndex = 73;
+            this.label57.Text = "Value:";
             // 
             // HeroEditor
             // 
@@ -2524,5 +2586,11 @@ namespace Reanimator.Forms
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Label l_itemLevel;
         private System.Windows.Forms.TextBox tb_itemLevel;
+        private System.Windows.Forms.ComboBox cb_availableMods;
+        private System.Windows.Forms.Label label53;
+        private System.Windows.Forms.Label label57;
+        private System.Windows.Forms.TextBox tb_modValue;
+        private System.Windows.Forms.TextBox tb_modAttribute;
+        private System.Windows.Forms.Label label56;
     }
 }

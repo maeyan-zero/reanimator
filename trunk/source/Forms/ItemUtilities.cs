@@ -59,6 +59,10 @@ namespace Reanimator.Forms
                             {
                                 hash.Add(stat.id, name);
                             }
+                            else
+                            {
+                                string abc;
+                            }
                         }
 
                         unit.Stats[counter].Name = name;
@@ -165,6 +169,10 @@ namespace Reanimator.Forms
                 {
                     continue;
                 }
+                if (item.itemCode == 25393)
+                {
+                    string a;
+                }
 
 
                 // get item name
@@ -217,6 +225,11 @@ namespace Reanimator.Forms
                 if (affixString.Length > 0)
                 {
                     item.Name = affixString.Replace("[item]", item.Name);
+                }
+
+                if (item.Items.Count > 0)
+                {
+                    PopulateItems(item);
                 }
             }
         }
