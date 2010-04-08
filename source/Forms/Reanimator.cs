@@ -146,9 +146,9 @@ namespace Reanimator
 
         private void OpenModFile(object sender, EventArgs e)
         {
-            ModificationForm modificationForm = new ModificationForm(tableDataSet);
+            //ModificationForm modificationForm = new ModificationForm(tableDataSet);
             //modificationForm.MdiParent = this;
-            modificationForm.Show();
+            //modificationForm.Show();
         }
 
         private void OpenFileMod(string szFileName)
@@ -162,7 +162,7 @@ namespace Reanimator
 
                 if (pass)
                 {
-                    Mod revivalMod = new Mod(szFileName);
+                    //Mod revivalMod = new Mod(szFileName, index);
                     ModificationForm modificationForm = new ModificationForm();
                     //modificationForm.MdiParent = this;
                     modificationForm.ShowDialog();
@@ -195,11 +195,10 @@ namespace Reanimator
                 MessageBox.Show("Failed to open file: " + szFileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
             Index index = new Index(indexFile);
             TableForm indexExplorer = new TableForm(index)
                                           {
-                                              dataGridView = {DataSource = index.GetFileTable()}
+                                              dataGridView = {DataSource = index.FileTable}
                                           };
             indexExplorer.Text += ": " + szFileName;
             indexExplorer.MdiParent = this;
@@ -792,6 +791,17 @@ namespace Reanimator
         {
             ItemTransferForm transfer = new ItemTransferForm(ref tableDataSet, ref excelTables);
             transfer.ShowDialog(this);
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.ActiveMdiChild.GetType() == typeof(TableForm))
+            {
+                if (((TableForm)ActiveMdiChild).IsIndexFile == true)
+                {
+                    ((TableForm)ActiveMdiChild).SaveButton();
+                }
+            }
         }
     }
 }

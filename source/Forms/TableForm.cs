@@ -179,7 +179,7 @@ namespace Reanimator
 
         private void extractAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExtractFiles(index.GetFileTable());
+            ExtractFiles(index.FileTable);
         }
 
         private void ExtractFiles(Index.FileIndex[] files)

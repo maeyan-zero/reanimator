@@ -15,7 +15,6 @@ namespace launcher
 {
     public partial class Launcher : Form
     {
-        string _indexPath;
         string _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
         List<string> _availableCharacters;
 
@@ -23,7 +22,6 @@ namespace launcher
 
         public Launcher()
         {
-            _indexPath = Config.HglDir + "\\data\\" + Mod.defaultPack + ".idx";
             _availableCharacters = new List<string>();
             InitializeComponent();
         }
@@ -47,26 +45,34 @@ namespace launcher
 
             if (result == DialogResult.Yes)
             {
-                FileStream stream = new FileStream(_indexPath, FileMode.Open);
-                Index index = new Index(stream);
-
-                if (index.IsModified())
+                String index_file = Config.HglDir + "\\data\\" + Index.LatestPatch + ".idx";
+                try
                 {
-                    if (index.Restore(_indexPath))
+                    FileStream stream = new FileStream(index_file, FileMode.Open);
+                    Index index = new Index(stream);
+
+                    if (index.Modified)
                     {
-                        MessageBox.Show("All modifications successfully removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        if (index.Restore())
+                        {
+                            MessageBox.Show("All modifications successfully removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("There was a problem restoring the index.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                     else
                     {
-                        MessageBox.Show("There was a problem restoring the index.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Installation already appears clean.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                     }
+                    index.Dispose();
+                    stream.Dispose();
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Installation already appears clean.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    MessageBox.Show(ex.ToString());
                 }
-
-                stream.Close();
             }
         }
 

@@ -7,29 +7,35 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Reanimator.Excel;
+using System.IO;
 
 namespace Reanimator.Forms
 {
     public partial class ModificationForm : Form
     {
         Mod mod;
-        TableDataSet dataSet;
-        //ProgressForm progress;
-
+        Index[] index;
+        TableDataSet dataSet = new TableDataSet();
+        
         public ModificationForm()
         {
             InitializeComponent();
             methodComboBox.SelectedIndex = 0;
-            dataSet = new TableDataSet();
-            //this.progress = new ProgressForm(;
+
+            OpenIndexFiles();
         }
 
-        public ModificationForm(TableDataSet dataSet)
+        private void OpenIndexFiles()
         {
-            InitializeComponent();
-            methodComboBox.SelectedIndex = 0;
-            this.dataSet = dataSet;
-            //this.progress = new ProgressForm();
+            index = new Index[Index.FileNames.Length];
+
+            for (int i = 0; i < index.Length; i++)
+            {
+                using (FileStream fs = new FileStream(Config.HglDir + "\\data\\" + Index.FileNames[i] + ".idx", FileMode.Open))
+                {
+                    index[i] = new Index(fs);
+                }
+            }
         }
 
         private void checkedListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -63,6 +69,8 @@ namespace Reanimator.Forms
             progressForm = new ProgressForm(mod.Save, null);
             progressForm.ShowDialog(this);
             progressForm.Dispose();
+
+            mod.Dispose();
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
@@ -76,11 +84,11 @@ namespace Reanimator.Forms
                 {
                     if (mod == null)
                     {
-                        mod = new Mod(openFileDialog.FileName);
+                        mod = new Mod(openFileDialog.FileName, index);
                     }
                     else
                     {
-                        mod.Add(new Mod(openFileDialog.FileName));
+                        mod.Add(new Mod(openFileDialog.FileName, index));
                     }
                     checkedListBox.Items.Clear();
                     for (int i = 0; i < mod.Length; i++)
