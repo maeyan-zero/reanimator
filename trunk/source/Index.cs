@@ -37,6 +37,21 @@ namespace Reanimator
             UInt64 sourceLength
         );
 
+        static public readonly int LatestPatch = 10;
+        static public readonly int LatestPatchLocalized = 11;
+        static public readonly int ExcelTablesIndex = 2572;
+        static public readonly string[] FileNames = { "hellgate_bghigh000",
+                                                     "hellgate_graphicshigh000", 
+                                                     "hellgate_localized000", 
+                                                     "hellgate_movies000",
+                                                     "hellgate_movieshigh000",
+                                                     "hellgate_movieslow000",
+                                                     "hellgate_playershigh000",
+                                                     "hellgate_sound000",
+                                                     "hellgate_soundmusic000",
+                                                     "hellgate000",
+                                                     "sp_hellgate_1.10.180.3416_1.18074.70.4256",
+                                                     "sp_hellgate_localized_1.10.180.3416_1.18074.70.4256" };
         struct Token
         {
             public static readonly UInt32 head = 0x6867696E; // 'nigh'
@@ -56,16 +71,24 @@ namespace Reanimator
         const int stringStructLength = 6;
         const int fileStructLength = 80;
 
-        FileStream indexFile;
-        FileStream datFile;
         byte[] buffer;
         string[] stringTable;
         Int32[] stringTableUnknowns;
         FileIndex[] fileTable;
 
         bool modified;
+        const string affix = "backup\\";
 
-        const string affix = ".backup"; // used for modifications
+        FileStream indexFile;
+        FileStream datFile;
+
+        public FileStream DataFile
+        {
+            get
+            {
+                return datFile;
+            }
+        }
 
         public class FileIndex
         {
@@ -115,6 +138,7 @@ namespace Reanimator
             public int Directory
             {
                 get { return FileStruct.directoryArrayPosition; }
+                set { FileStruct.directoryArrayPosition = value; }
             }
             public string DirectoryString { get; set; }
 
@@ -125,17 +149,47 @@ namespace Reanimator
             }
             public string FileNameString { get; set; }
 
-            public bool IsModified()
+            public bool Modified
             {
-                if (DirectoryString.Contains(affix))
-                    return true;
-                else
-                    return false;
+                get
+                {
+                    return DirectoryString.Contains(affix);
+                }
             }
+        }
 
-            public void Modify()
+        public FileIndex[] FileTable
+        {
+            get
             {
-                 //= affix + DirectoryString;
+                return fileTable;
+            }
+        }
+
+        public String FileName
+        {
+            get
+            {
+                int n = indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1;
+                return indexFile.Name.Substring(n, indexFile.Name.LastIndexOf('.') - n);
+            }
+        }
+
+        public String FileDirectory
+        {
+            get { return indexFile.Name.Substring(0, indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1); }
+        }
+
+        public bool DatFileOpen
+        {
+            get { return datFile == null ? false : true; }
+        }
+
+        public bool Modified
+        {
+            get
+            {
+                return modified;
             }
         }
 
@@ -158,10 +212,14 @@ namespace Reanimator
             InitializeStringTable();
             InitializeFileTable();
 
-            // check if the file has been modified
-            for (int i = 0; i < stringTable.Length; i++)
+            CheckForModifications();
+        }
+
+        void CheckForModifications()
+        {
+            foreach (string str in stringTable)
             {
-                if (stringTable[i] == affix)
+                if (str.Contains(affix))
                 {
                     modified = true;
                     break;
@@ -217,38 +275,6 @@ namespace Reanimator
             return -1;
         }
 
-        public void SetFileTable(FileIndex[] fileIndex)
-        {
-            fileTable = fileIndex;
-        }
-
-        public FileIndex[] FileTable
-        {
-            get
-            {
-                return fileTable;
-            }
-        }
-
-        public FileIndex[] GetFileTable()
-        {
-            return fileTable;
-        }
-
-        public String FileName
-        {
-            get
-            {
-                int n = indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1;
-                return indexFile.Name.Substring(n, indexFile.Name.LastIndexOf('.') - n);
-            }
-        }
-
-        public String FileDirectory
-        {
-            get { return indexFile.Name.Substring(0, indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1); }
-        }
-
         public bool OpenAccompanyingDat()
         {
             if (datFile == null)
@@ -266,14 +292,9 @@ namespace Reanimator
             return true;
         }
 
-        public bool DatFileOpen
-        {
-            get { return datFile == null ? false : true; }
-        }
-
         public byte[] ReadDataFile(Index.FileIndex file)
         {
-            if (datFile == null)
+            if (OpenAccompanyingDat() == false)
             {
                 return null;
             }
@@ -321,12 +342,10 @@ namespace Reanimator
             byte[] buffer = new byte[1024];
             int offset = 0;
 
-
             // main header
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.head);
             FileTools.WriteToBuffer(ref buffer, ref offset, (Int32)4);
             FileTools.WriteToBuffer(ref buffer, ref offset, this.fileCount);
-
 
             // string block
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
@@ -340,7 +359,6 @@ namespace Reanimator
             }
             FileTools.WriteToBuffer(ref buffer, stringByteCountOffset, (UInt32)(offset - stringByteCountOffset - sizeof(UInt32)));
 
-
             // string data
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
             int i = 0;
@@ -348,9 +366,9 @@ namespace Reanimator
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
                 offset += 4; // unknown  -  not required
+                //FileTools.WriteToBuffer(ref buffer, ref offset, stringTableUnknowns[i]);
                 i++;
             }
-
 
             // file block
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
@@ -360,7 +378,8 @@ namespace Reanimator
                 // this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.info);
-                offset += 4; // unknown  -  not required
+                //offset += 4; // unknown  -  not required
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_1);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_2); // game freezes if not correct value
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
                 offset += 4; // null
@@ -369,12 +388,17 @@ namespace Reanimator
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Directory);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileName);
-                FileTools.WriteToBuffer(ref buffer, ref offset, (UInt32)1); // game clears .idx and .dat if null
-                offset += 12; // unknown  -  not required
+                //FileTools.WriteToBuffer(ref buffer, ref offset, (UInt32)1); // game clears .idx and .dat if null
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_1);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_2);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_3);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_4);
+                //offset += 12; // unknown  -  not required
                 offset += 12; // null
-                offset += 8; // first 8 bytes  -  not required
+                //offset += 8; // first 8 bytes  -  not required
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.first4BytesOfFile);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.second4BytesOfFile);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.info);
-
                 i++;
             }
 
@@ -383,52 +407,60 @@ namespace Reanimator
             return returnBuffer;
         }
 
-        public bool RemoveFromIndex(int id)
+        public void AppendDirectorySuffix(int i)
         {
-            if (fileTable[id].FileNameString.Contains(affix))
+            string dir = affix + stringTable[fileTable[i].Directory];
+            int index = StringExists(dir);
+            // If the directory doesn't exist, add it.
+            if (index == -1)
             {
-                return false;
+                index = stringTable.Length;
+                string[] buffer = new string[index + 1];
+                stringTable.CopyTo(buffer, 0);
+                buffer[index] = affix + stringTable[fileTable[i].Directory];
+                stringTable = buffer;
+                stringCount++;
             }
-            else
-            {
-                stringTable[fileTable[id].FileName] += affix;
-                return true;
-            }
+            fileTable[i].Directory = index;
+            modified = true;
         }
 
-        public bool IsModified()
+        public void RemoveDirectorySuffix(int i)
         {
-            foreach (Index.FileIndex file in fileTable)
-            {
-                if (file.FileNameString.Contains(affix))
-                {
-                    return true;
-                }
-            }
-            return false;
+            string dir = fileTable[i].DirectoryString.Remove(0, affix.Length);
+            fileTable[i].Directory = StringExists(dir);
         }
 
-        public bool Restore(string path)
+        public int StringExists(string s)
         {
-            foreach (Index.FileIndex file in fileTable)
+            for (int i = 0; i < stringTable.Length; i++ )
+                if (stringTable[i] == s)
+                    return i;
+
+            return -1;
+        }
+
+        public bool Restore()
+        {
+            for (int i = 0; i < stringTable.Length; i++)
             {
-                if (file.FileNameString.Contains(affix))
+                if (stringTable[i].Contains(affix))
                 {
-                    stringTable[file.FileName] = stringTable[file.FileName].Remove(
-                        stringTable[file.FileName].Length - affix.Length, affix.Length);
+                    stringTable[i] = stringTable[i].Remove(stringTable[i].Length - affix.Length, affix.Length);
                 }
             }
-
-            indexFile.Dispose();
 
             byte[] buffer = this.GenerateIndexFile();
             Crypt.Encrypt(buffer);
 
+            indexFile.Dispose();
+
             try
             {
-                FileStream stream = new FileStream(path, FileMode.OpenOrCreate);
-                stream.Write(buffer, 0, buffer.Length);
-                stream.Close();
+                FileStream fs = new FileStream(this.FileDirectory + "\\" + this.FileName + ".idx", FileMode.OpenOrCreate);
+                fs.Flush();
+                fs.Write(buffer, 0, buffer.Length);
+                fs.Close();
                 return true;
             }
             catch (Exception e)
