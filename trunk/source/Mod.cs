@@ -159,8 +159,9 @@ namespace Reanimator
                                         {
                                             // Resolve the correct table reference
                                             file.table_ref = excel_tables.TableManager.ResolveTableId(file.id.Replace(".txt.cooked", ""));
-                                            // Reference the file
-                                            Index.FileIndex file_index = index[Index.LatestPatch].FileTable[Index.ExcelTablesIndex];
+                                            file.index_id_patch = index[Index.LatestPatch].Locate(file.id);
+                                            // Reference the file index
+                                            Index.FileIndex file_index = index[Index.LatestPatch].FileTable[file.index_id_patch];
                                             // Extract the file
                                             excel_list.Add(excel_tables.TableManager.CreateTable(file.table_ref, index[Index.LatestPatch].ReadDataFile(file_index)));
                                             // Record the file has been loaded
@@ -274,7 +275,7 @@ namespace Reanimator
                                     if (saved_excel_list.Contains(file.id) == false && file.table_ref != null)
                                     {
                                         byte[] excelBytes = excel_list[file.list_id].GenerateExcelFile(data_set.XlsDataSet);
-                                        string dir = Config.HglDir + "\\" + index[pack.list_id].FileTable[file.index_id].DirectoryString;
+                                        string dir = Config.HglDir + "\\" + index[Index.LatestPatch].FileTable[file.index_id_patch].DirectoryString;
                                         string filename = excel_tables.TableManager.GetReplacement(file.id);
 
                                         if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
