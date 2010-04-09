@@ -2953,7 +2953,7 @@
           <y>279</y>
           <width>400</width>
           <height>660</height>
-          <ScrollVertMax>9900</ScrollVertMax>
+          <ScrollVertMax>660</ScrollVertMax>
 					<invloc>merchant_buyback</invloc>          
           <rendersection>Models</rendersection>
           <OnSetFocusUnit>UIMerchantInvGridOnSetControlUnit</OnSetFocusUnit>
@@ -2964,7 +2964,7 @@
             <x>5</x>
             <y>5</y>
             <width>384</width>
-            <height>640</height>
+            <height>660</height>
             <fontsize>22</fontsize>
             <rendersection>ItemText</rendersection>
             <align>topleft</align>
