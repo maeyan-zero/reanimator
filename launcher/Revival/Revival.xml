@@ -375,6 +375,13 @@
               </replace>
             </attribute>
           </entity>
+          <entity id="merchant_buyback" value="47">
+            <attribute id="height">
+              <replace>
+                <data>10</data>
+              </replace>
+            </attribute>
+          </entity>
           <entity id="Cube" value="55">
             <attribute id="playerPutRestricted">
               <replace>
