@@ -452,6 +452,32 @@
           </entity>
         </modify>
       </file>
+      <file id="quest.txt.cooked">
+        <modify>
+          <entity id="Cube" value="245">
+            <attribute id="nameString">
+              <replace>
+                <data>7999</data>
+              </replace>
+            </attribute>
+            <attribute id="subscriberOnly">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="castGiver">
+              <replace>
+                <data>208</data>
+              </replace>
+            </attribute>
+            <attribute id="descriptionDialog">
+              <replace>
+                <data>1740</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
     </pack>
   </modification>
   <modification>
