@@ -267,7 +267,8 @@ namespace Reanimator
         {
             for (int i = 0; i < fileTable.Length; i++)
             {
-                if (fileName.ToLower().Contains(fileTable[i].FileNameString))
+                int result = String.Compare(fileName, fileTable[i].FileNameString, true);
+                if (result == 0)
                 {
                     return i;
                 }
@@ -442,11 +443,19 @@ namespace Reanimator
 
         public bool Restore()
         {
-            for (int i = 0; i < stringTable.Length; i++)
+            for (int i = 0; i < FileTable.Length; i++)
             {
-                if (stringTable[i].Contains(affix))
+                if (FileTable[i].DirectoryString.Contains(affix))
                 {
-                    stringTable[i] = stringTable[i].Remove(stringTable[i].Length - affix.Length, affix.Length);
+                    string original = FileTable[i].DirectoryString.Remove(0, affix.Length);
+                    for (int j = 0; j < stringTable.Length; j++)
+                    {
+                        if (stringTable[j] == original)
+                        {
+                            FileTable[i].Directory = j;
+                            break;
+                        }
+                    }
                 }
             }
 
