@@ -362,16 +362,28 @@
       <file id="inventory.txt.cooked">
         <modify>
           <entity id="Inventory" value="10">
-            <attribute id="Height">
+            <attribute id="height">
               <replace>
                 <data>24</data>
               </replace>
             </attribute>
           </entity>
           <entity id="Stash" value="26">
-            <attribute id="Height">
+            <attribute id="height">
               <replace>
                 <data>100</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="Cube" value="55">
+            <attribute id="playerPutRestricted">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="playerTakeRestricted">
+              <replace>
+                <data>0</data>
               </replace>
             </attribute>
           </entity>
