@@ -56,7 +56,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(624, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(632, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -68,7 +68,7 @@
             this.exitToolStripMenuItem});
             this.programToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.programToolStripMenuItem.Name = "programToolStripMenuItem";
-            this.programToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.programToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.programToolStripMenuItem.Text = "Program";
             // 
             // settingsToolStripMenuItem
@@ -99,39 +99,39 @@
             this.enableHCCharacterToolStripMenuItem});
             this.toolsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // installToolStripMenuItem
             // 
             this.installToolStripMenuItem.Name = "installToolStripMenuItem";
-            this.installToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.installToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.installToolStripMenuItem.Text = "Install Modifications...";
             this.installToolStripMenuItem.Click += new System.EventHandler(this.installToolStripMenuItem_Click);
             // 
             // revertToolStripMenuItem
             // 
             this.revertToolStripMenuItem.Name = "revertToolStripMenuItem";
-            this.revertToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.revertToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.revertToolStripMenuItem.Text = "Uninstall Modifications...";
             this.revertToolStripMenuItem.Click += new System.EventHandler(this.revertToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(202, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(188, 6);
             // 
             // enableHCCharacterToolStripMenuItem
             // 
             this.enableHCCharacterToolStripMenuItem.Name = "enableHCCharacterToolStripMenuItem";
-            this.enableHCCharacterToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.enableHCCharacterToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.enableHCCharacterToolStripMenuItem.Text = "Enable HC Character...";
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -141,7 +141,7 @@
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.groupBox1.Location = new System.Drawing.Point(381, 39);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(231, 393);
+            this.groupBox1.Size = new System.Drawing.Size(49, 184);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "RSS Feed";
@@ -152,7 +152,7 @@
             this.characterCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.characterCombo.ForeColor = System.Drawing.Color.DarkOrange;
             this.characterCombo.FormattingEnabled = true;
-            this.characterCombo.Location = new System.Drawing.Point(229, 411);
+            this.characterCombo.Location = new System.Drawing.Point(474, 396);
             this.characterCombo.Name = "characterCombo";
             this.characterCombo.Size = new System.Drawing.Size(146, 21);
             this.characterCombo.TabIndex = 7;
@@ -163,7 +163,7 @@
             this.p_start.BackColor = System.Drawing.Color.Transparent;
             this.p_start.BackgroundImage = global::launcher.Properties.Resources.templar_normal;
             this.p_start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.p_start.Location = new System.Drawing.Point(229, 236);
+            this.p_start.Location = new System.Drawing.Point(474, 224);
             this.p_start.Name = "p_start";
             this.p_start.Size = new System.Drawing.Size(146, 180);
             this.p_start.TabIndex = 13;
@@ -177,9 +177,9 @@
             // p_openHomePage
             // 
             this.p_openHomePage.BackColor = System.Drawing.Color.Transparent;
-            this.p_openHomePage.Location = new System.Drawing.Point(12, 376);
+            this.p_openHomePage.Location = new System.Drawing.Point(106, 376);
             this.p_openHomePage.Name = "p_openHomePage";
-            this.p_openHomePage.Size = new System.Drawing.Size(200, 56);
+            this.p_openHomePage.Size = new System.Drawing.Size(223, 28);
             this.p_openHomePage.TabIndex = 16;
             this.p_openHomePage.Click += new System.EventHandler(this.p_homePageLink_Click);
             // 
@@ -188,8 +188,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
-            this.BackgroundImage = global::launcher.Properties.Resources.background_old;
-            this.ClientSize = new System.Drawing.Size(624, 442);
+            this.BackgroundImage = global::launcher.Properties.Resources.background4;
+            this.ClientSize = new System.Drawing.Size(632, 453);
             this.Controls.Add(this.p_openHomePage);
             this.Controls.Add(this.characterCombo);
             this.Controls.Add(this.p_start);

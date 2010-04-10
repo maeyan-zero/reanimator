@@ -127,6 +127,7 @@
     <None Include="Resources\templar_mouseOver.png" />
     <None Include="Resources\templar_normal.png" />
     <None Include="Resources\background_old.png" />
+    <None Include="Resources\background41.png" />
     <Content Include="Revival\data\uix\xml\inventory_screen.xml" />
     <Content Include="Revival\Revival.xml" />
   </ItemGroup>
