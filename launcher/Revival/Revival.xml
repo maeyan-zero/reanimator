@@ -639,9 +639,9 @@
           <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy.wm</data>
         </replace>
       </file>
-      <file id="tm_tech_heavy_colormask.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+      <file id="tm_tech_heavy_color_mask.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
         <replace>
-          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_colormask.dds</data>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_color_mask.dds</data>
         </replace>
       </file>
       <file id="tm_tech_heavy_diffuse.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
@@ -649,9 +649,9 @@
           <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_diffuse.dds</data>
         </replace>
       </file>
-      <file id="tm_tech_heavy_glow.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+      <file id="tm_tech_heavy_sillum.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
         <replace>
-          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_glow.dds</data>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_sillum.dds</data>
         </replace>
       </file>
       <file id="tm_tech_heavy_normal.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
