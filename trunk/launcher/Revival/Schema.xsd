@@ -12,6 +12,7 @@
   <xs:element name="string" type="xs:string"/>
 
   <xs:attribute name="id" type="xs:string"/>
+  <xs:attribute name="dir" type="xs:string"/>
   <xs:attribute name="value" type="xs:string"/>
   
   <xs:element name="type">
@@ -114,6 +115,7 @@
         <xs:group ref="edit"/>
       </xs:choice>
       <xs:attribute ref="id" use="required"/>
+      <xs:attribute ref="dir" use="required"/>
     </xs:complexType>
   </xs:element>
 
