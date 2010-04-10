@@ -45,29 +45,24 @@ namespace launcher
 
             if (result == DialogResult.Yes)
             {
-                String index_file = Config.HglDir + "\\data\\" + Index.LatestPatch + ".idx";
                 try
                 {
-                    FileStream stream = new FileStream(index_file, FileMode.Open);
-                    Index index = new Index(stream);
+                    for (int i = 0; i < Index.FileNames.Length; i++)
+                    {
+                        FileStream stream = new FileStream(Config.HglDir + "\\data\\" + Index.FileNames[i] + ".idx", FileMode.Open);
+                        Index index = new Index(stream);
 
-                    if (index.Modified)
-                    {
-                        if (index.Restore())
+                        if (index.Modified)
                         {
-                            MessageBox.Show("All modifications successfully removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            if (index.Restore() == false)
+                            {
+                                throw new Exception("Problem cleaning file: " + Index.FileNames[i]);
+                            }
                         }
-                        else
-                        {
-                            MessageBox.Show("There was a problem restoring the index.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        index.Dispose();
+                        stream.Dispose();
                     }
-                    else
-                    {
-                        MessageBox.Show("Installation already appears clean.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                    }
-                    index.Dispose();
-                    stream.Dispose();
+                    MessageBox.Show("Success");
                 }
                 catch (Exception ex)
                 {
