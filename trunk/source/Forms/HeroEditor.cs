@@ -601,7 +601,6 @@ namespace Reanimator.Forms
         private void InitUnknownStatList()
         {
             string text = string.Empty;
-            text += "unknown_07_1: " + _heroUnit.unknown_07_1 + "\n";
             text += "playerFlagCount1: " + _heroUnit.PlayerFlags1.Count + "\n";
             text += "playerFlagCount2: " + _heroUnit.PlayerFlags2.Count + "\n";
             if (_heroUnit.PlayerFlags1 != null)
@@ -632,7 +631,6 @@ namespace Reanimator.Forms
                 }
             }
             text += "unknown_02: " + _heroUnit.unknown_02 + "\n";
-            text += "unknown_07: " + _heroUnit.unknown_07_2 + "\n";
             text += "unknown_09: " + _heroUnit.unknown_09 + "\n";
             if (_heroUnit.unitUniqueId != null)
             {
