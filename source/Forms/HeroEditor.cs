@@ -645,7 +645,7 @@ namespace Reanimator.Forms
             text += "unknownBool_06: " + _heroUnit.unknownBool_06 + "\n";
             text += "unknownBool1: " + _heroUnit.unknownBool1 + "\n";
             text += "unknownCount1F: " + _heroUnit.unknownCount1F + "\n";
-            text += "unknownFlag: " + _heroUnit.unknownFlag + "\n";
+            text += "unitType: " + _heroUnit.unitType + "\n";
 
             text += "\n\n\n\n";
 
