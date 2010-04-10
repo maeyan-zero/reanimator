@@ -394,8 +394,31 @@ namespace Reanimator
         public int unknown_09;										    // 8
 
         // if (testBit(bitField1, 0x07)) // if (bitField1 & 0x80)
-        public int unknown_07_1;									    // 8		    // unknown
-        public int unknown_07_2;									    // 8 	    	// this appears to be joined with unknown_07_1 to form a WORD... I think...
+        // {
+        int _characterHeight;									        // 8		    // Unsigned - Ranges from 1-255
+        public int CharacterHeight
+        {
+            get { return _characterHeight; }
+            set {
+                if (value < 0 || value > 255)
+                    _characterHeight = 125;
+                else
+                    _characterHeight = value;
+            }
+        }
+
+        int _characterWidth;									        // 8 	    	// Unsigned - Ranges from 1-255
+        public int CharacterWidth
+        {
+            get { return _characterWidth; }
+            set
+            {
+                if (value < 0 || value > 255) _characterWidth = 125;
+                else _characterWidth = value;
+            }
+
+        }
+        // }
 
         // if (testBit(bitField1, 0x08))
         int _charNameCount;									            // 8            // count of characters of following character name var
@@ -624,8 +647,8 @@ namespace Reanimator
             // On main character unit only
             if (TestBit(unit.bitField1, 0x07))
             {
-                unit.unknown_07_1 = _bitBuffer.ReadBits(8);
-                unit.unknown_07_2 = _bitBuffer.ReadBits(8);
+                unit.CharacterHeight = _bitBuffer.ReadBits(8);
+                unit.CharacterWidth = _bitBuffer.ReadBits(8);
             }
 
             // On main character unit only
@@ -1460,8 +1483,8 @@ namespace Reanimator
 
             if (useUnknown_07 > 0)
             {
-                saveBuffer.WriteBits(unit.unknown_07_1, 8);
-                saveBuffer.WriteBits(unit.unknown_07_2, 8);
+                saveBuffer.WriteBits(unit._characterHeight, 8);
+                saveBuffer.WriteBits(unit._characterWidth, 8);
                 bitField1 |= useUnknown_07;
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
