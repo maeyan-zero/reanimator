@@ -45,7 +45,7 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(356, 347);
+            this.button1.Location = new System.Drawing.Point(364, 358);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -57,7 +57,7 @@
             // 
             this.continueButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.continueButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.continueButton.Location = new System.Drawing.Point(275, 347);
+            this.continueButton.Location = new System.Drawing.Point(283, 358);
             this.continueButton.Name = "continueButton";
             this.continueButton.Size = new System.Drawing.Size(75, 23);
             this.continueButton.TabIndex = 2;
@@ -72,7 +72,7 @@
             this.checkedListBox.FormattingEnabled = true;
             this.checkedListBox.Location = new System.Drawing.Point(13, 52);
             this.checkedListBox.Name = "checkedListBox";
-            this.checkedListBox.Size = new System.Drawing.Size(418, 94);
+            this.checkedListBox.Size = new System.Drawing.Size(426, 94);
             this.checkedListBox.TabIndex = 3;
             this.checkedListBox.SelectedIndexChanged += new System.EventHandler(this.checkedListBox_SelectedIndexChanged);
             this.checkedListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_ItemCheck);
@@ -85,7 +85,7 @@
             this.textBoxDescription.Location = new System.Drawing.Point(13, 174);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
-            this.textBoxDescription.Size = new System.Drawing.Size(418, 112);
+            this.textBoxDescription.Size = new System.Drawing.Size(426, 123);
             this.textBoxDescription.TabIndex = 4;
             // 
             // methodComboBox
@@ -98,16 +98,16 @@
             "Extract modified excel files, remove from IDX (default)",
             "Repack modified excel files, modify IDX offsets (safe)",
             "Override modified excel files, leave IDX intact (unsafe)"});
-            this.methodComboBox.Location = new System.Drawing.Point(13, 320);
+            this.methodComboBox.Location = new System.Drawing.Point(13, 331);
             this.methodComboBox.Name = "methodComboBox";
-            this.methodComboBox.Size = new System.Drawing.Size(418, 21);
+            this.methodComboBox.Size = new System.Drawing.Size(426, 21);
             this.methodComboBox.TabIndex = 5;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 302);
+            this.label1.Location = new System.Drawing.Point(13, 313);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(96, 13);
             this.label1.TabIndex = 6;
@@ -137,7 +137,7 @@
             this.addToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(444, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(452, 24);
             this.menuStrip1.TabIndex = 9;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -152,7 +152,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 382);
+            this.ClientSize = new System.Drawing.Size(452, 393);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);

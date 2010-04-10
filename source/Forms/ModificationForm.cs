@@ -13,7 +13,7 @@ namespace Reanimator.Forms
 {
     public partial class ModificationForm : Form
     {
-        Mod mod;
+        RevivalMod mod;
         Index[] index;
         TableDataSet dataSet = new TableDataSet();
         
@@ -62,11 +62,11 @@ namespace Reanimator.Forms
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            ProgressForm progressForm = new ProgressForm(mod.Apply, null);
+            ProgressForm progressForm = new ProgressForm(mod.ModifyExcelFiles, null);
             progressForm.ShowDialog(this);
             progressForm.Dispose();
 
-            progressForm = new ProgressForm(mod.Save, null);
+            progressForm = new ProgressForm(mod.SaveToDisk, null);
             progressForm.ShowDialog(this);
             progressForm.Dispose();
 
@@ -80,15 +80,15 @@ namespace Reanimator.Forms
 
             if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml")))
             {
-                if (Mod.Parse(openFileDialog.FileName))
+                if (RevivalMod.Parse(openFileDialog.FileName))
                 {
                     if (mod == null)
                     {
-                        mod = new Mod(openFileDialog.FileName, index);
+                        mod = new RevivalMod(openFileDialog.FileName);
                     }
                     else
                     {
-                        mod.Add(new Mod(openFileDialog.FileName, index));
+                        mod.Append(new RevivalMod(openFileDialog.FileName));
                     }
                     checkedListBox.Items.Clear();
                     for (int i = 0; i < mod.Length; i++)
