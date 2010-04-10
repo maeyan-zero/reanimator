@@ -66,213 +66,6 @@
           </entity>
         </modify>
       </file>
-      <file id="items.txt.cooked">
-        <modify>
-          <!--UNLOCK SUBSCRIBER & MULTIPLAYER ITEMS, REMOVE NO TRADE-->
-          <entity id="*">
-            <attribute id="Bitmask02">
-              <bitwise id="SubscriberOnly">
-                <switch>0</switch>
-              </bitwise>
-            </attribute>
-            <attribute id="Bitmask05">
-              <bitwise id="NoTrade">
-                <switch>0</switch>
-              </bitwise>
-            </attribute>
-            <attribute id="Bitmask06">
-              <bitwise id="MultiplayerOnly">
-                <switch>0</switch>
-              </bitwise>
-            </attribute>
-          </entity>
-          <!--SKILL RETRAINER-->
-          <entity id="Skill_Retrainer" value="15">
-            <attribute id="Quality">
-              <replace>
-                <data>5</data>
-              </replace>
-            </attribute>
-            <attribute id="Bitmask05">
-              <bitwise id="NoDrop">
-                <switch>1</switch>
-              </bitwise>
-            </attribute>
-          </entity>
-          <!--ATTRIBUTE RETRAINER-->
-          <entity id="Attribute_Retrainer" value="265">
-            <attribute id="Quality">
-              <replace>
-                <data>5</data>
-              </replace>
-            </attribute>
-            <attribute id="Bitmask05">
-              <bitwise id="NoDrop">
-                <switch>1</switch>
-              </bitwise>
-            </attribute>
-          </entity>
-          <!--MANTRAWRAITH, ZOMBOT AND COKOMOKO-->
-          <entity id="*" value="178-183">
-            <attribute id="Bitmask05">
-              <bitwise id="NoDropExceptForDuplicates">
-                <switch>1</switch>
-              </bitwise>
-            </attribute>
-          </entity>
-        </modify>
-      </file>
-      <file id="monsters.txt.cooked">
-        <modify>
-         <entity id="Lollipop" value="849">
-           <attribute id="npcInfo">
-             <replace>
-               <data>77</data>
-             </replace>
-           </attribute>
-         </entity>
-          <entity id="RobSomeone" value="877">
-            <attribute id="npcInfo">
-              <replace>
-                <data>37</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Patrick" value="834">
-            <attribute id="npcInfo">
-              <replace>
-                <data>48</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="George" value="830">
-            <attribute id="npcInfo">
-              <replace>
-                <data>80</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Gilmour" value="845">
-            <attribute id="npcInfo">
-              <replace>
-                <data>61</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Connor" value="877">
-            <attribute id="npcInfo">
-              <replace>
-                <data>78</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Petrus" value="889">
-            <attribute id="npcInfo">
-              <replace>
-                <data>37</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Tyndall" value="890">
-            <attribute id="npcInfo">
-              <replace>
-                <data>67</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="TechSmith101" value="965">
-            <attribute id="npcInfo">
-              <replace>
-                <data>92</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Tinker" value="873">
-            <attribute id="npcInfo">
-              <replace>
-                <data>43</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Holloway" value="841">
-            <attribute id="npcInfo">
-              <replace>
-                <data>58</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Wilde" value="863">
-            <attribute id="npcInfo">
-              <replace>
-                <data>39</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Russo" value="894">
-            <attribute id="npcInfo">
-              <replace>
-                <data>41</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Stamp" value="896">
-            <attribute id="npcInfo">
-              <replace>
-                <data>41</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Angel" value="898">
-            <attribute id="npcInfo">
-              <replace>
-                <data>30</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Abigail" value="826">
-            <attribute id="npcInfo">
-              <replace>
-                <data>30</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Salus" value="874">
-            <attribute id="npcInfo">
-              <replace>
-                <data>28</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Emma" value="847">
-            <attribute id="npcInfo">
-              <replace>
-                <data>30</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Sarah" value="855">
-            <attribute id="npcInfo">
-              <replace>
-                <data>28</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Joy" value="864">
-            <attribute id="npcInfo">
-              <replace>
-                <data>30</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Cornwall" value="888">
-            <attribute id="npcInfo">
-              <replace>
-                <data>31</data>
-              </replace>
-            </attribute>
-          </entity>
-        </modify>
-      </file>
       <file id="recipes.txt.cooked">
         <modify>
           <!--ENABLE CRAFTING RECIPES-->
@@ -407,35 +200,10 @@
           </entity>
         </modify>
       </file>
-      <file id="players.txt.cooked">
-        <modify>
-          <entity id="*" value="0-3">
-            <attribute id="maxLevel">
-              <replace>
-                <data>55</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="*" value="8-11">
-            <attribute id="maxLevel">
-              <replace>
-                <data>55</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="*" value="14-17">
-            <attribute id="maxLevel">
-              <replace>
-                <data>55</data>
-              </replace>
-            </attribute>
-          </entity>
-        </modify>
-      </file>
       <file id="quest.txt.cooked">
         <modify>
           <entity id="Cube" value="245">
-            <attribute id="nameString">
+            <attribute id="nameStringKey">
               <replace>
                 <data>7999</data>
               </replace>
@@ -487,7 +255,7 @@
     <description>Reduces elite mode characters difficulty to normal mode, while benefiting from additional multipliers.</description>
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
-    <pack id="default">
+    <pack id="hellgate000">
       <file id="gameglobals.txt.cooked">
         <modify>
           <entity id="EliteMonsterDamagePercent">
@@ -529,7 +297,7 @@
     <description>Allows retrainers to be purchased from all vendors.</description>
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
-    <pack id="default">
+    <pack id="hellgate000">
       <file id="items.txt.cooked">
         <modify>
           <entity id="Attribute_Retrainer">
@@ -598,7 +366,7 @@
     <description>Allows consumables &amp; quest items to be automatically picked up.</description>
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
-    <pack id="default">
+    <pack id="hellgate000">
       <file id="items.txt.cooked">
         <modify>
           <entity id="*" value="2-111">
