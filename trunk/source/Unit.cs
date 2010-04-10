@@ -39,13 +39,6 @@ namespace Reanimator
     };
 
     [Serializable]
-    public struct UnknownCount1B_S
-    {
-        public int unknown1;										// 16 bits
-        public int itemEndBitOffset;								// 32 bits
-    };
-
-    [Serializable]
     public struct UnitAppearance
     {
         [Serializable]
@@ -304,11 +297,19 @@ namespace Reanimator
             }
         };
 
+        [Serializable]
+        private class UnitBitOffsets
+        {
+            internal int index;                                         // 16           // only seen as 0x3030 ('00' in ascii - assuming as "0th" index) - alert if otherwise
+            internal int offset;                                        // 32           // only seen as offset to end of items bit offset
+        }
+
         public Unit(BitBuffer bb)
         {
             _bitBuffer = bb;
             PlayerFlags1 = new List<int>();
             PlayerFlags2 = new List<int>();
+            _bitOffsets = new List<UnitBitOffsets>();
         }
 
         public StatBlock Stats
@@ -353,13 +354,13 @@ namespace Reanimator
 
         // if (testBit(unit->bitField2, 0x00)					                        // char state flags (e.g. "elite")
         int _playerFlagCount1;								            // 8
-        public List<int> PlayerFlags1 { get; private set; }             // 16 * _playerFlagCount1					
+        public List<int> PlayerFlags1 { get; set; }             // 16 * _playerFlagCount1					
 
         ////// End of read inside main header check function (in ASM) //////
 
         // if (testBit(unit->bitField1, 0x1B))
-        public int unknownCount1B;									    // 5
-        public UnknownCount1B_S[] unknownCount1Bs;			                            // no idea wtf these do either
+        private int _bitOffsetCount;                                    // 5            // only ever seen as 0 or 1 - alert if otherwise
+        private readonly List<UnitBitOffsets> _bitOffsets;                              // only seen with item end bit offset in it
 
         // if (testBit(unit->bitField1, 0x05)) // (bitField1 & 0x20)                    // haven't encountered file with this yet
         // ALERT
@@ -400,8 +401,8 @@ namespace Reanimator
         public Char[] characterName;                                                    // character name - why does name change when change filename though?								
 
         // if (testBit(bitField1, 0x0A))						                        // char state flags (e.g. "elite")
-        int _playerFlagCount2;								            // 8 
-        public List<int> PlayerFlags2 { get; private set; }				// 16  * _playerFlagCount2
+        int _playerFlagCount2;								            // 8            // count of flags PlayerFlags2
+        public List<int> PlayerFlags2 { get; set; }				        // 16  * _playerFlagCount2
 
         public int unknownBool1;									    // 1    		// as above - alert if != 0
 
@@ -533,30 +534,39 @@ namespace Reanimator
 
             if (TestBit(unit.bitField1, 0x1B))
             {
-                unit.unknownCount1B = _bitBuffer.ReadBits(5);
-                unit.unknownCount1Bs = new UnknownCount1B_S[unit.unknownCount1B];
-
-                if (unit.unknownCount1B > 1)
+                unit._bitOffsetCount = _bitBuffer.ReadBits(5);
+                if (unit._bitOffsetCount > 1)
                 {
-                    MessageBox.Show("Unexpected unknownCount1B > 1!!\nNot-Implmented cases. Please report this error!",
+                    MessageBox.Show("Unexpected unit._bitOffsetCount (> 1)!\nNot-Implemented cases. Please report this error and supply the offending file.",
                                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
 
-                for (int i = 0; i < unit.unknownCount1B; i++)
+                for (int i = 0; i < unit._bitOffsetCount; i++)
                 {
-                    UnknownCount1B_S uc3;
+                    UnitBitOffsets bitOffsets = new UnitBitOffsets
+                                                    {
+                                                        index = _bitBuffer.ReadBits(16),
+                                                        offset = _bitBuffer.ReadBits(32)
+                                                    };
 
-                    uc3.unknown1 = _bitBuffer.ReadBits(16);
-                    uc3.itemEndBitOffset = _bitBuffer.ReadBits(32);
+                    if (bitOffsets.index != 0x3030) // '00'
+                    {
+                        MessageBox.Show("Unexpected value for bitOffsets.index (!= 0x3030)!\nNot-Implemented cases. Please report this error and supply the offending file.",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
 
-                    unit.unknownCount1Bs[i] = uc3;
+                    unit._bitOffsets.Add(bitOffsets);
                 }
             }
 
 
             if (TestBit(unit.bitField1, 0x05))
             {
+                MessageBox.Show(
+                    "Unexpected bit case for unit._bitField1 (0x05 = true)!\nNot-Implemented cases. Please report this error and supply the offending file.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -1029,9 +1039,9 @@ namespace Reanimator
         private void WriteUnit(BitBuffer saveBuffer, Unit unit, bool isItem, byte[] charStringBytes)
         {
             /***** Unit Header *****
-             * _majorVersion                                     16                  Should be 0xBF.
-             * _minorVersion                                     8                   Should be 0x00 - Not 100% sure that it is a minor version or anything.
-             * _bitFieldCount                                    8                   Must be <= 2. I haven't tested with it != 2 though.
+             * majorVersion                                     16                  Should be 0xBF.
+             * minorVersion                                     8                   Should be 0x00 - Not 100% sure that it is a minor version or anything.
+             * bitFieldCount                                    8                   Must be <= 2. I haven't tested with it != 2 though.
              * {
              *      bitField                                    32                  Each bit determines if 'x' is read in or not.
              * }
@@ -1043,7 +1053,7 @@ namespace Reanimator
              * 
              * if (TestBit(bitField1, 0x00))
              * {
-             *      _beginFlag                                   32                  Flags are used to check file alignment.
+             *      beginFlag                                   32                  Flags are used to check file alignment.
              * }
              * 
              * if (TestBit(bitField1, 0x1C))
@@ -1074,16 +1084,16 @@ namespace Reanimator
              *
              * if (TestBit(bitField1, 0x1B))
              * {
-             *      unknownCount                                5                   Count of following block.
+             *      bitOffsetsCount                             5                   Count of following block.
              *      {
-             *          Unknown1                                16                  // TO BE DETEREMINED
-             *          Unknown2                                32                  // TO BE DETEREMINED
+             *          index                                   16                  Index value of offset (e.g. 0x3030 = item end bit offset)
+             *          offset                                  32                  Bit Offset value
              *      }
              * }
              * 
              * if (TestBit(bitField1, 0x05))
              * {
-             *      unknown                                     ??                  Never encountered.
+             *      --                                          ??                  Never encountered.
              * }
              * 
              * unknownFlag                                      4                   This value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue)
@@ -1091,8 +1101,8 @@ namespace Reanimator
              * 
              * if (TestBit(bitField1, 0x17))
              * {                                                                    This chunk is read in by a secondary non-standard function.
-             *      unknown[8]                                  64                  I've not really bothered trying to figure it out yet,
-             * }                                                                    But the function is used a few times, but always 64 bits.
+             *      unitId[8]                                   64                  Contains a unique id for this unit object (e.g. item hash id to stop duping, etc).
+             * }
              * 
              * if (TestBit(bitField1, 0x03) || TestBit(bitField1, 0x01))
              * {
@@ -1108,7 +1118,7 @@ namespace Reanimator
              *          unknown                                 12                  // TO BE DETEREMINED
              *      }
              *      
-             *      unknown[8]                                  64                  Non-standard function reading (as above).
+             *      unknown[8]                                  64                  Non-standard function reading - unknown usage.
              * }
              * 
              * if (TestBit(bitField1, 0x06))
@@ -1123,7 +1133,7 @@ namespace Reanimator
              * 
              * if (TestBit(bitField1, 0x07))
              * {
-             *      jobClass                                    8                   I think... Or something to do with it anyways.
+             *      unknown                                     8                   // TO BE DETERMINED
              *      unknown                                     8                   // TO BE DETERMINED
              * }
              * 
@@ -1208,7 +1218,7 @@ namespace Reanimator
              * 
              * 
              * itemBitOffset                                    32                  Bit offset to end of all item blocks.
-             * _itemCount                                        10                  Count of items.
+             * itemCount                                        10                  Count of items.
              * {
              *      ITEMS
              * }
@@ -1216,9 +1226,9 @@ namespace Reanimator
              * 
              * if (TestBit(bitField1, 0x1A))
              * {
-             *      _weaponConfigFlag                            32                  Must be 0x91103A74.
-             *      _endFlagBitOffset                            32                  Bit offset to end flag.
-             *      _weaponConfigCount                           6                   Count of weapon configs.
+             *      weaponConfigFlag                            32                  Must be 0x91103A74.
+             *      endFlagBitOffset                            32                  Bit offset to end flag.
+             *      weaponConfigCount                           6                   Count of weapon configs.
              *      {
              *          unknown                                 16                  // TO BE DETERMINED
              *          unknownCount                            4                   Count of following block - Must be 0x02.
@@ -1241,7 +1251,7 @@ namespace Reanimator
             int use_1C_TimeStamps = (1 << 0x1C);
             int useUnknown_1F = (1 << 0x1F);
             int use_00_CharacterFlags1 = 1;
-            int useUnknown_1B = (1 << 0x1B);
+            int use_1B_BitOffsets = (1 << 0x1B);
             int useUnknown_17 = (1 << 0x17);
             int useUnknown_03 = 0; // (1 << 0x03);
             int useUnknown_01 = 0; // (1 << 0x01);
@@ -1377,17 +1387,19 @@ namespace Reanimator
             /***** Unit Body *****/
 
             int bitOffsetItemEndBitOffset = 0;
-            if (unit.unknownCount1B > 0)
+            if (unit._bitOffsetCount > 0)
             {
-                saveBuffer.WriteBits(unit.unknownCount1B, 5);
-                for (int i = 0; i < unit.unknownCount1B; i++)
+                int bitOffsetsCount = unit._bitOffsets.Count;
+
+                saveBuffer.WriteBits(bitOffsetsCount, 5);
+                for (int i = 0; i < bitOffsetsCount; i++)
                 {
-                    saveBuffer.WriteBits(unit.unknownCount1Bs[i].unknown1, 16);
+                    saveBuffer.WriteBits(unit._bitOffsets[i].index, 16);
                     bitOffsetItemEndBitOffset = saveBuffer.DataBitOffset;
                     saveBuffer.WriteBits(0x00000000, 32);
                 }
 
-                bitField1 |= useUnknown_1B;
+                bitField1 |= use_1B_BitOffsets;
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
@@ -1770,6 +1782,15 @@ namespace Reanimator
              *      statValue                                   bitCount            The actual stat value.
              * }
              */
+
+            if (stat.id == 25667) // difficulty_max
+            {
+                int bp = 1;
+            }
+            if (stat.id == 25155) // difficulty_current
+            {
+                int bp = 1;
+            }
 
             saveBuffer.WriteBits(stat.id, 16);
 
