@@ -310,6 +310,7 @@ namespace Reanimator
             PlayerFlags1 = new List<int>();
             PlayerFlags2 = new List<int>();
             _bitOffsets = new List<UnitBitOffsets>();
+            Items = new List<Unit>();
         }
 
         public StatBlock Stats
@@ -365,7 +366,7 @@ namespace Reanimator
         // if (testBit(unit->bitField1, 0x05)) // (bitField1 & 0x20)                    // haven't encountered file with this yet
         // ALERT
 
-        public int unknownFlag;										    // 4		    // this value > e.g. 0x03 -> (0x3000000...00 & unknownFlagValue) or something like that
+        public int unitType;										    // 4		    // 1 = character, 2 = monster (e.g. engineer drone), 3 = ?, 4 = item
         public int unitCode;								            // 16           // the code identifier of the unit (e.g. Job Class, or Item Id)
 
         // if (testBit(bitField1, 0x17)) // 64 bits read as 8x8 chunk bits from non-standard bit read function
@@ -571,7 +572,13 @@ namespace Reanimator
             }
 
 
-            unit.unknownFlag = _bitBuffer.ReadBits(4);
+            unit.unitType = _bitBuffer.ReadBits(4);
+            if (unit.unitType != 1 && unit.unitType != 2 && unit.unitType != 4)
+            {
+                MessageBox.Show(
+                    "Unexpected value for unit.unitType (!= 1, 2, 4)!\nNot-Implemented cases. Please report this warning and supply the offending file.",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             unit.unitCode = _bitBuffer.ReadBits(16);
 
 
@@ -677,7 +684,6 @@ namespace Reanimator
             {
                 unit._itemEndBitOffset = _bitBuffer.ReadBits(32);
                 unit._itemCount = _bitBuffer.ReadBits(10);
-                unit.Items = new List<Unit>();
                 for (int i = 0; i < unit._itemCount; i++)
                 {
                     Unit item = new Unit(_bitBuffer);
@@ -1403,7 +1409,7 @@ namespace Reanimator
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
-            saveBuffer.WriteBits(unit.unknownFlag, 4);
+            saveBuffer.WriteBits(unit.unitType, 4);
             saveBuffer.WriteBits(unit.unitCode, 16);
 
             if (useUnknown_17 > 0)
