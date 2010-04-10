@@ -9,7 +9,7 @@
     <url>http://www.hellgateaus.net</url>
     <type>required</type>
     <pack id="hellgate000">
-      <file id="gameglobals.txt.cooked">
+      <file id="gameglobals.txt.cooked" dir="data_common\excel\">
         <modify>
           <entity id="MaxLuckTugboat" value="55">
             <attribute id="IntValue">
@@ -20,7 +20,7 @@
           </entity>
         </modify>
       </file>
-      <file id="item_levels.txt.cooked">
+      <file id="item_levels.txt.cooked" dir="data\excel\">
         <modify>
           <entity id="*">
             <attribute id="AugmentCostRare">
@@ -36,7 +36,7 @@
           </entity>
         </modify>
       </file>
-      <file id="itemquality.txt.cooked">
+      <file id="itemquality.txt.cooked" dir="data\excel\">
         <modify>
           <entity id="Legendary" value="3">
             <attribute id="VendorRarity">
@@ -66,7 +66,7 @@
           </entity>
         </modify>
       </file>
-      <file id="items.txt.cooked">
+      <file id="items.txt.cooked" dir="data\excel\">
         <modify>
           <!--UNLOCK SUBSCRIBER & MULTIPLAYER ITEMS, REMOVE NO TRADE-->
           <entity id="*">
@@ -122,7 +122,7 @@
           </entity>
         </modify>
       </file>
-      <file id="monsters.txt.cooked">
+      <file id="monsters.txt.cooked" dir="data\excel\">
         <modify>
           <entity id="Lollipop" value="849">
             <attribute id="npcInfo">
@@ -273,7 +273,7 @@
           </entity>
         </modify>
       </file>
-      <file id="recipes.txt.cooked">
+      <file id="recipes.txt.cooked" dir="data\excel\">
         <modify>
           <!--ENABLE CRAFTING RECIPES-->
           <entity id="*" value="1-18">
@@ -340,7 +340,7 @@
           </entity>
         </modify>
       </file>
-      <file id="treasure.txt.cooked">
+      <file id="treasure.txt.cooked" dir="data\excel\">
         <modify>
           <!--MUTANT ITEMS DROP 1/10 CHANCE-->
           <entity id="Beast_of_Abbadon_Loot" value="364">
@@ -359,7 +359,7 @@
           </entity>
         </modify>
       </file>
-      <file id="inventory.txt.cooked">
+      <file id="inventory.txt.cooked" dir="data_common\excel\">
         <modify>
           <entity id="Inventory" value="10">
             <attribute id="height">
@@ -396,7 +396,7 @@
           </entity>
         </modify>
       </file>
-      <file id="statsfunc.txt.cooked">
+      <file id="statsfunc.txt.cooked" dir="data_common\excel\">
         <modify>
           <entity id="Strength_Bonus_Damage" value="21">
             <attribute id="formula">
@@ -407,7 +407,7 @@
           </entity>
         </modify>
       </file>
-      <file id="players.txt.cooked">
+      <file id="players.txt.cooked" dir="data\excel\">
         <modify>
           <entity id="*" value="0-3">
             <attribute id="maxLevel">
@@ -432,7 +432,7 @@
           </entity>
         </modify>
       </file>
-      <file id="quest.txt.cooked">
+      <file id="quest.txt.cooked" dir="data\excel\">
         <modify>
           <entity id="Cube" value="245">
             <attribute id="nameStringKey">
@@ -458,22 +458,22 @@
           </entity>
         </modify>
       </file>
-      <file id="loading.dds">
+      <file id="loading.dds" dir="data\uix\">
         <replace>
           <data>data\uix\loading.dds</data>
         </replace>
       </file>
-      <file id="nonwsloading.dds">
+      <file id="nonwsloading.dds" dir="data\uix\">
         <replace>
           <data>data\uix\nonwsloading.dds</data>
         </replace>
       </file>
-      <file id="main_new_atlas.dds">
+      <file id="main_new_atlas.dds" dir="data\uix\">
         <replace>
           <data>data\uix\main_new_atlas.dds</data>
         </replace>
       </file>
-      <file id="inventory_screen.xml">
+      <file id="inventory_screen.xml" dir="data\uix\xml\">
         <replace>
           <data>data\uix\xml\inventory_screen.xml</data>
         </replace>
@@ -488,7 +488,7 @@
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
     <pack id="hellgate000">
-      <file id="gameglobals.txt.cooked">
+      <file id="gameglobals.txt.cooked" dir="data_common\excel\">
         <modify>
           <entity id="EliteMonsterDamagePercent">
             <attribute id="FloatValue">
@@ -530,7 +530,7 @@
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
     <pack id="hellgate000">
-      <file id="items.txt.cooked">
+      <file id="items.txt.cooked" dir="data\excel\">
         <modify>
           <entity id="Attribute_Retrainer">
             <attribute id="BuyPriceMult">
@@ -578,7 +578,7 @@
           </entity>
         </modify>
       </file>
-      <file id="treasure.txt.cooked">
+      <file id="treasure.txt.cooked" dir="data\excel\">
         <modify>
           <entity id="Vendor_Wares">
             <attribute id="Item6">
@@ -599,7 +599,7 @@
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
     <pack id="hellgate000">
-      <file id="items.txt.cooked">
+      <file id="items.txt.cooked" dir="data\excel\">
         <modify>
           <entity id="*" value="2-111">
             <attribute id="autoPickupDistance">
@@ -623,6 +623,51 @@
             </attribute>
           </entity>
         </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Hellgate: Ressurection Armor</title>
+    <version>1.0</version>
+    <author>The Revival Team</author>
+    <description>Models taken from Hellgate: Ressurection</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="hellgate_playershigh000">
+      <file id="tm_tech_heavy.wm" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy.wm</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_colormask.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_colormask.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_diffuse.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_diffuse.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_glow.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_glow.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_normal.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_normal.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_normal_bc5.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_normal_bc5.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_specular.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_specular.dds</data>
+        </replace>
       </file>
     </pack>
   </modification>
