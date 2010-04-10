@@ -8,7 +8,7 @@
     <description>This is the base SP modification developed by the Revival team.</description>
     <url>http://www.hellgateaus.net</url>
     <type>required</type>
-    <pack id="default">
+    <pack id="hellgate000">
       <file id="gameglobals.txt.cooked">
         <modify>
           <entity id="MaxLuckTugboat" value="55">
@@ -396,26 +396,6 @@
           </entity>
         </modify>
       </file>
-      <file id="loading.dds">
-        <replace>
-          <data>data\uix\loading.dds</data>
-        </replace>
-      </file>
-      <file id="nonwsloading.dds">
-        <replace>
-          <data>data\uix\nonwsloading.dds</data>
-        </replace>
-      </file>
-      <file id="main_new_atlas.dds">
-        <replace>
-          <data>data\uix\main_new_atlas.dds</data>
-        </replace>
-      </file>
-      <file id="inventory_screen.xml">
-        <replace>
-          <data>data\uix\xml\inventory_screen.xml</data>
-        </replace>
-      </file>
       <file id="statsfunc.txt.cooked">
         <modify>
           <entity id="Strength_Bonus_Damage" value="21">
@@ -477,6 +457,26 @@
             </attribute>
           </entity>
         </modify>
+      </file>
+      <file id="loading.dds">
+        <replace>
+          <data>data\uix\loading.dds</data>
+        </replace>
+      </file>
+      <file id="nonwsloading.dds">
+        <replace>
+          <data>data\uix\nonwsloading.dds</data>
+        </replace>
+      </file>
+      <file id="main_new_atlas.dds">
+        <replace>
+          <data>data\uix\main_new_atlas.dds</data>
+        </replace>
+      </file>
+      <file id="inventory_screen.xml">
+        <replace>
+          <data>data\uix\xml\inventory_screen.xml</data>
+        </replace>
       </file>
     </pack>
   </modification>
