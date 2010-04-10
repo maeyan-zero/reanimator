@@ -13,31 +13,43 @@ using Reanimator.Excel;
 
 namespace Reanimator
 {
-    public class Mod : IDisposable
+    public class RevivalMod : IDisposable
     {
-        Revival revival;
-        String directory;
-        Index[] index;
-        TableDataSet data_set;
-        ExcelTables excel_tables;
+        Index[] index;                  // An array of all the Hellgate idx files.
+        Revival revival;                // The modifications
 
-        List<ExcelTable> excel_list;
-        List<String> loaded_excel_list;
-        List<String> saved_excel_list;
+        TableDataSet data_set;          // Dataset representation of excel files.
 
-        public Mod(string path, Index[] index)
+        ExcelTables excel_tables;       // Interface for accessing Excel data.
+        List<ExcelTable> excel_list;    // Excel files.
+        List<String> loaded_excel_list; // Loaded Excel files.
+        List<String> saved_excel_list;  // Saved Excel files.
+
+        List<StringsFile> string_list;  // String files.
+        List<String> loaded_string_list;// Loaded String files.
+        List<String> saved_string_list; // Saved String files.
+
+        /// <summary>
+        /// Constructor for Revival modifications. Must pass the path to the Revival modification.
+        /// </summary>
+        public RevivalMod(string path)
         {
-            this.revival = Deserialize(path);
-            this.directory = path.Substring(0, path.LastIndexOf("\\"));
-            this.index = index;
-            this.data_set = new TableDataSet();
+            revival = Deserialize(path);
+            revival.directory = path.Substring(0, path.LastIndexOf("\\"));
+            index = Index.LoadIndexFiles(Config.HglDir + "\\data\\");
 
-            this.excel_list = new List<ExcelTable>();
-            this.loaded_excel_list = new List<String>();
-            this.saved_excel_list = new List<String>();
+            data_set = new TableDataSet();
+
+            excel_list = new List<ExcelTable>();
+            loaded_excel_list = new List<String>();
+            saved_excel_list = new List<String>();
+
+            string_list = new List<StringsFile>();
+            loaded_string_list = new List<String>();
+            saved_string_list = new List<String>();
         }
 
-        public void Add(Mod mod)
+        public void Append(RevivalMod mod)
         {
             foreach (Modification newMod in mod.revival)
             {
@@ -115,7 +127,7 @@ namespace Reanimator
         }
 
         // To be used with a progress form only.
-        public void Apply(Forms.ProgressForm progress, Object argument)
+        public void ModifyExcelFiles(Forms.ProgressForm progress, Object argument)
         {
             foreach (Modification modification in revival)
             {
@@ -124,7 +136,7 @@ namespace Reanimator
                 {
                     foreach (Pack pack in modification)
                     {
-                        // Find the packs index files indice
+                        // Find the index indice.
                         for (int i = 0; i < Index.FileNames.Length; i++)
                         {
                             if (pack.id == Index.FileNames[i])
@@ -138,28 +150,30 @@ namespace Reanimator
                         {
                             try
                             {
-                                // If the file is an Excel type, extract it.
-                                if (file.id.Contains(".txt.cooked"))
+                                //
+                                // Excel file.
+                                //
+                                if (file.id.Contains(".txt.cooked") == true)
                                 {
-                                    // Check if the ExcelTables class has been initialized yet.
+                                    // Has ExcelTables interface been initialized?
                                     if (excel_tables == null)
                                     {
+                                        // Excel Table FileIndex
                                         Index.FileIndex file_index = index[Index.LatestPatch].FileTable[Index.ExcelTablesIndex];
-                                        // Get the latest version of this file from the patch file.
+                                        // Extract and initialize.
                                         excel_tables = new ExcelTables(index[Index.LatestPatch].ReadDataFile(file_index));
                                     }
 
-                                    // Extract the file if it hasn't been already.
+                                    // Has file been extracted yet?
                                     if (loaded_excel_list.Contains(file.id) == false)
                                     {
-                                        // Find the excel file inside the latest patch.
-                                        file.index_id = index[Index.LatestPatch].Locate(file.id);
+                                        // Find the index indice.
+                                        file.index_id_patch = index[Index.LatestPatch].Locate(file.id, file.dir);
 
-                                        if (file.index_id != -1)
+                                        if (file.index_id_patch != -1)
                                         {
-                                            // Resolve the correct table reference
+                                            // Resolve the correct table reference.
                                             file.table_ref = excel_tables.TableManager.ResolveTableId(file.id.Replace(".txt.cooked", ""));
-                                            file.index_id_patch = index[Index.LatestPatch].Locate(file.id);
                                             // Reference the file index
                                             Index.FileIndex file_index = index[Index.LatestPatch].FileTable[file.index_id_patch];
                                             // Extract the file
@@ -178,7 +192,19 @@ namespace Reanimator
                                     }
                                 }
 
-                                // If a modification script has been wrote, apply it.
+                                //
+                                // Strings file.
+                                //
+                                if (loaded_string_list.Contains(file.id) == false)
+                                {
+                                    // Find the index indice.
+                                    file.index_id_patch = index[Index.LatestPatch].Locate(file.id, file.dir);
+
+                                }
+
+                                //
+                                // Modify the files.
+                                //
                                 if (file.modify != null)
                                 {
                                     // Only Excel files can be modified
@@ -244,7 +270,7 @@ namespace Reanimator
             }
         }
 
-        public void Save(Forms.ProgressForm progress, Object argument)
+        public void SaveToDisk(Forms.ProgressForm progress, Object argument)
         {
             progress.SetLoadingText("Modifying and Saving all files.");
 
@@ -258,40 +284,65 @@ namespace Reanimator
                         {
                             try
                             {
-                                file.index_id = index[pack.list_id].Locate(file.id);
+                                // Get the file's index relative to its base index class. Another index may be required
+                                // for its location in the patch file. This index is stored in file.index_id_patch if it
+                                // exists.
+                                file.index_id = index[pack.list_id].Locate(file.id, file.dir);
+                                file.index_id_patch = index[Index.LatestPatch].Locate(file.id, file.dir);
 
-                                if (index[Index.LatestPatch].Locate(file.id) != -1)
-                                {
-                                    file.patched = true;
-                                    file.index_id_patch = index[Index.LatestPatch].Locate(file.id);
-                                }
-
+                                // Update the progress bar.
                                 progress.SetCurrentItemText(file.id);
 
-                                // Its an Excel file
+                                // Modified files are dumped from memory.
                                 if (file.modify != null)
                                 {
-                                    // Check if its already saved
-                                    if (saved_excel_list.Contains(file.id) == false && file.table_ref != null)
+                                    // Excel Files.
+                                    if (file.id.Contains("txt.cooked") == true)
                                     {
-                                        byte[] excelBytes = excel_list[file.list_id].GenerateExcelFile(data_set.XlsDataSet);
-                                        string dir = Config.HglDir + "\\" + index[Index.LatestPatch].FileTable[file.index_id_patch].DirectoryString;
-                                        string filename = excel_tables.TableManager.GetReplacement(file.id);
-
-                                        if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-
-                                        using (FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                                        // Been saved yet?
+                                        if (saved_excel_list.Contains(file.id) == false && file.table_ref != null)
                                         {
-                                            fs.Write(excelBytes, 0, excelBytes.Length);
-                                            saved_excel_list.Add(file.id);
+                                            string dir = Config.HglDir + "\\" + index[Index.LatestPatch].FileTable[file.index_id_patch].DirectoryString;
+                                            string filename = excel_tables.TableManager.GetReplacement(file.id);
+
+                                            byte[] excel_bytes = excel_list[file.list_id].GenerateExcelFile(data_set.XlsDataSet);
+
+                                            if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+
+                                            using (FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                                            {
+                                                fs.Write(excel_bytes, 0, excel_bytes.Length);
+                                                saved_excel_list.Add(file.id);
+                                            }
+                                        }
+                                    }
+
+                                    // String Files.
+                                    if (file.id.Contains("xls.uni.cooked") == true)
+                                    {
+                                        // Been saved yet?
+                                        if (saved_excel_list.Contains(file.id) == false && file.table_ref != null)
+                                        {
+                                            string dir = Config.HglDir + "\\" + index[Index.LatestPatch].FileTable[file.index_id_patch].DirectoryString;
+                                            string filename = excel_tables.TableManager.GetReplacement(file.id);
+
+                                            byte[] excel_bytes = excel_list[file.list_id].GenerateExcelFile(data_set.XlsDataSet);
+
+                                            if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+
+                                            using (FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                                            {
+                                                fs.Write(excel_bytes, 0, excel_bytes.Length);
+                                                saved_excel_list.Add(file.id);
+                                            }
                                         }
                                     }
                                 }
 
-                                // Its not an Excel file
+                                // Replace copies the replacing file to the HGL dir.
                                 if (file.replace != null)
                                 {
-                                    string source = this.directory + "\\" + file.replace.data;
+                                    string source = revival.directory + "\\" + file.replace.data;
                                     string destination = Config.HglDir + "\\" + index[pack.list_id].FileTable[file.index_id].DirectoryString;
 
                                     if (System.IO.File.Exists(source) == false)
@@ -310,8 +361,8 @@ namespace Reanimator
                                 {
                                     index[pack.list_id].AppendDirectorySuffix(file.index_id);
 
-                                    // If the file is inside the patch file, modify this too.
-                                    if (file.patched == true)
+                                    // Modify the patch index.
+                                    if (file.index_id_patch >= 0)
                                     {
                                         index[Index.LatestPatch].AppendDirectorySuffix(file.index_id_patch);
                                     }
@@ -448,6 +499,9 @@ namespace Reanimator
         {
             [XmlElement(typeof(Modification))]
             public Modification[] modification;
+
+            [XmlIgnoreAttribute]
+            public String directory;
 
             public MyEnumerator GetEnumerator()
             {
@@ -600,6 +654,9 @@ namespace Reanimator
             [XmlAttribute]
             public string id;
 
+            [XmlAttribute]
+            public string dir;
+
             [XmlElement(typeof(Modify))]
             public Modify modify;
 
@@ -617,9 +674,6 @@ namespace Reanimator
 
             [XmlIgnoreAttribute]
             public string table_ref;
-
-            [XmlIgnoreAttribute]
-            public bool patched;
         }
 
         public class Modify

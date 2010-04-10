@@ -158,7 +158,7 @@ namespace Reanimator
             try
             {
                 // Check the XML is valid before declaring an object
-                bool pass = Mod.Parse(szFileName);
+                bool pass = RevivalMod.Parse(szFileName);
 
                 if (pass)
                 {

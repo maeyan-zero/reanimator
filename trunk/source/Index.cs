@@ -166,6 +166,19 @@ namespace Reanimator
             }
         }
 
+        static public Index[] LoadIndexFiles(string path)
+        {
+            Index[] index = new Index[Index.FileNames.Length];
+            for (int i = 0; i < index.Length; i++)
+            {
+                using (FileStream fs = new FileStream(path + Index.FileNames[i] + ".idx", FileMode.Open))
+                {
+                    index[i] = new Index(fs);
+                }
+            }
+            return index;
+        }
+
         public String FileName
         {
             get
@@ -217,9 +230,9 @@ namespace Reanimator
 
         void CheckForModifications()
         {
-            foreach (string str in stringTable)
+            foreach (FileIndex file in fileTable)
             {
-                if (str.Contains(affix))
+                if (file.DirectoryString.Contains(affix))
                 {
                     modified = true;
                     break;
@@ -263,12 +276,13 @@ namespace Reanimator
             }
         }
 
-        public int Locate(String fileName)
+        public int Locate(String file, String dir)
         {
             for (int i = 0; i < fileTable.Length; i++)
             {
-                int result = String.Compare(fileName, fileTable[i].FileNameString, true);
-                if (result == 0)
+                int result1 = String.Compare(file, fileTable[i].FileNameString, true);
+                int result2 = String.Compare(dir, fileTable[i].DirectoryString, true);
+                if (result1 == 0 && result2 == 0)
                 {
                     return i;
                 }
