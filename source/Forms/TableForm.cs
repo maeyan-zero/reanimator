@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.IO.Compression;
-using System.Reflection;
-using System.Threading;
 using Reanimator.Forms;
 
 namespace Reanimator
@@ -424,6 +417,22 @@ namespace Reanimator
         private void ScrollToPosition(int position)
         {
             dataGridView.FirstDisplayedScrollingRowIndex = position;
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!IsIndexFile) return;
+
+            Index.FileIndex[] filesIndex = dataGridView.DataSource as Index.FileIndex[];
+            DataGridViewSelectedRowCollection selectedRows = dataGridView.SelectedRows;
+
+            foreach (DataGridViewRow row in selectedRows)
+            {
+                index.AppendDirectorySuffix(row.Index);
+            }
+
+            
+
         }
     }
 }

@@ -244,8 +244,8 @@ namespace Reanimator.Excel
             public Int32 impWallToxic;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
             byte[] unknown32;
-            [ExcelOutput(IsStringOffset = true)]
-            public Int32 impWallPoison;//pchar
+            //[ExcelOutput(IsStringOffset = true)]
+            private Int32 impWallPoison;//pchar // unknown!!
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
             byte[] unknown33;
             [ExcelOutput(IsStringOffset = true)]

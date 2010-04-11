@@ -689,11 +689,12 @@ namespace Reanimator.Excel
                     // if it's private, there wont be a column - try for original or assign default
                     if (fieldInfo.IsPrivate)
                     {
+                        // if the row we're on is less than the table count, then we have an already present value
                         if (tables.Count > row)
                         {
                             fieldInfo.SetValue(table, fieldInfo.GetValue(tables[row]));
                         }
-                        else
+                        else // must be a new/added row
                         {
                             if (fieldInfo.FieldType == typeof(TableHeader))
                             {

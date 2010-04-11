@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
 using System.ComponentModel;
 
 namespace Reanimator
@@ -54,9 +50,9 @@ namespace Reanimator
                                                      "sp_hellgate_localized_1.10.180.3416_1.18074.70.4256" };
         struct Token
         {
-            public static readonly UInt32 head = 0x6867696E; // 'nigh'
-            public static readonly UInt32 sect = 0x68677073; // 'spgh'
-            public static readonly UInt32 info = 0x6867696F; // 'oigh'
+            public const UInt32 Head = 0x6867696E; // 'nigh'
+            public const UInt32 Sect = 0x68677073; // 'spgh'
+            public const UInt32 Info = 0x6867696F; // 'oigh'
         }
 
         Int32 structCount;         // offset 4
@@ -71,7 +67,7 @@ namespace Reanimator
         const int stringStructLength = 6;
         const int fileStructLength = 80;
 
-        byte[] buffer;
+        readonly byte[] _buffer;
         string[] stringTable;
         Int32[] stringTableUnknowns;
         FileIndex[] fileTable;
@@ -209,14 +205,14 @@ namespace Reanimator
         public Index(FileStream file)
         {
             indexFile = file;
-            buffer = FileTools.StreamToByteArray(file);
+            _buffer = FileTools.StreamToByteArray(file);
 
-            Crypt.Decrypt(buffer);
+            Crypt.Decrypt(_buffer);
 
-            structCount = BitConverter.ToInt32(buffer, 4);
-            fileCount = BitConverter.ToInt32(buffer, 8);
-            stringCount = BitConverter.ToInt32(buffer, 16);
-            characterCount = BitConverter.ToInt32(buffer, 20);
+            structCount = BitConverter.ToInt32(_buffer, 4);
+            fileCount = BitConverter.ToInt32(_buffer, 8);
+            stringCount = BitConverter.ToInt32(_buffer, 16);
+            characterCount = BitConverter.ToInt32(_buffer, 20);
 
             stringDataOffset = 24;
             stringLengthOffset = stringDataOffset + characterCount + sizeof(UInt32);
@@ -251,10 +247,10 @@ namespace Reanimator
             for (int i = 0; i < stringTable.Length; i++)
             {
                 int bufferOffset = stringLengthOffset + (i * stringStructLength);
-                stringLength = BitConverter.ToInt16(buffer, bufferOffset);
+                stringLength = BitConverter.ToInt16(_buffer, bufferOffset);
 
-                stringTable[i] = FileTools.ByteArrayToStringAnsi(buffer, stringByteOffset);
-                stringTableUnknowns[i] = BitConverter.ToInt32(buffer, bufferOffset + sizeof(Int16));
+                stringTable[i] = FileTools.ByteArrayToStringAnsi(_buffer, stringByteOffset);
+                stringTableUnknowns[i] = BitConverter.ToInt32(_buffer, bufferOffset + sizeof(Int16));
 
                 stringByteOffset += stringLength + 1;
             }
@@ -267,7 +263,7 @@ namespace Reanimator
             for (int i = 0; i < fileCount; i++)
             {
                 FileIndex fileIndex = new FileIndex();
-                fileIndex.FileStruct = (FileIndex.FileIndexStruct)FileTools.ByteArrayToStructure(buffer, typeof(FileIndex.FileIndexStruct),
+                fileIndex.FileStruct = (FileIndex.FileIndexStruct)FileTools.ByteArrayToStructure(_buffer, typeof(FileIndex.FileIndexStruct),
                                                                                                         fileDataOffset + i * fileStructLength);
                 fileIndex.DirectoryString = stringTable[fileIndex.Directory];
                 fileIndex.FileNameString = stringTable[fileIndex.FileName];
@@ -296,7 +292,7 @@ namespace Reanimator
             {
                 try
                 {
-                    datFile = new FileStream(this.FileDirectory + this.FileName + ".dat", FileMode.Open);
+                    datFile = new FileStream(FileDirectory + FileName + ".dat", FileMode.Open);
                 }
                 catch (Exception)
                 {
@@ -358,12 +354,12 @@ namespace Reanimator
             int offset = 0;
 
             // main header
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.head);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Head);
             FileTools.WriteToBuffer(ref buffer, ref offset, (Int32)4);
             FileTools.WriteToBuffer(ref buffer, ref offset, this.fileCount);
 
             // string block
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
             FileTools.WriteToBuffer(ref buffer, ref offset, this.stringCount);
             int stringByteCountOffset = offset;
             offset += 4;
@@ -375,24 +371,24 @@ namespace Reanimator
             FileTools.WriteToBuffer(ref buffer, stringByteCountOffset, (UInt32)(offset - stringByteCountOffset - sizeof(UInt32)));
 
             // string data
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
             int i = 0;
             foreach (String str in this.stringTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
                 offset += 4; // unknown  -  not required
-                //FileTools.WriteToBuffer(ref buffer, ref offset, stringTableUnknowns[i]);
+                //FileTools.WriteToBuffer(ref _buffer, ref offset, stringTableUnknowns[i]);
                 i++;
             }
 
             // file block
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.sect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
             i = 0;
             foreach (FileIndex fileIndex in this.fileTable)
             {
                 // this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
-                FileTools.WriteToBuffer(ref buffer, ref offset, Token.info);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
                 //offset += 4; // unknown  -  not required
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_1);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_2); // game freezes if not correct value
@@ -403,7 +399,7 @@ namespace Reanimator
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Directory);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileName);
-                //FileTools.WriteToBuffer(ref buffer, ref offset, (UInt32)1); // game clears .idx and .dat if null
+                //FileTools.WriteToBuffer(ref _buffer, ref offset, (UInt32)1); // game clears .idx and .dat if null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_1);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_2);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_3);
@@ -413,7 +409,7 @@ namespace Reanimator
                 //offset += 8; // first 8 bytes  -  not required
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.first4BytesOfFile);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.second4BytesOfFile);
-                FileTools.WriteToBuffer(ref buffer, ref offset, Token.info);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
                 i++;
             }
 
