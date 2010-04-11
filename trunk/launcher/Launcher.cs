@@ -45,6 +45,8 @@ namespace launcher
 
             if (result == DialogResult.Yes)
             {
+                bool change_made = false;
+
                 try
                 {
                     for (int i = 0; i < Index.FileNames.Length; i++)
@@ -58,15 +60,24 @@ namespace launcher
                             {
                                 throw new Exception("Problem cleaning file: " + Index.FileNames[i]);
                             }
+                            change_made = true;
                         }
                         index.Dispose();
                         stream.Dispose();
                     }
-                    MessageBox.Show("Success");
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.ToString());
+                }
+
+                if (change_made == true)
+                {
+                    MessageBox.Show("All modifications have been successfully removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("The installation already appears clean.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }

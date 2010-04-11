@@ -14,28 +14,11 @@ namespace Reanimator.Forms
     public partial class ModificationForm : Form
     {
         RevivalMod mod;
-        Index[] index;
-        TableDataSet dataSet = new TableDataSet();
         
         public ModificationForm()
         {
             InitializeComponent();
             methodComboBox.SelectedIndex = 0;
-
-            OpenIndexFiles();
-        }
-
-        private void OpenIndexFiles()
-        {
-            index = new Index[Index.FileNames.Length];
-
-            for (int i = 0; i < index.Length; i++)
-            {
-                using (FileStream fs = new FileStream(Config.HglDir + "\\data\\" + Index.FileNames[i] + ".idx", FileMode.Open))
-                {
-                    index[i] = new Index(fs);
-                }
-            }
         }
 
         private void checkedListBox_SelectedIndexChanged(object sender, EventArgs e)

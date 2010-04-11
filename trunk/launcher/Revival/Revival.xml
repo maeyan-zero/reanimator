@@ -633,7 +633,62 @@
     <description>Models taken from Hellgate: Ressurection</description>
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
+    <pack id="hellgate000">
+      <!--MALE ORDER MATERIALS-->
+      <file id="tm_tech_heavy_diffuse.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_diffuse.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_sillum.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_sillum.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_normal.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_normal.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_specular.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_specular.xml.cooked</data>
+        </replace>
+      </file>
+      <!--MALE ORDER ARMOUR BODY LOW-->
+      <file id="tm_tech_heavy_color_mask.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_color_mask.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_diffuse.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_diffuse.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_sillum.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_sillum.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_color_mask.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_color_mask.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_diffuse.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_diffuse.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_sillum.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_sillum.xml.cooked</data>
+        </replace>
+      </file>
+    </pack>
     <pack id="hellgate_playershigh000">
+      <!--ORDER BODY ARMOUR. MALE-->
       <file id="tm_tech_heavy.wm" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
         <replace>
           <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy.wm</data>
