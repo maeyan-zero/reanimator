@@ -39,8 +39,14 @@ namespace Reanimator
     };
 
     [Serializable]
-    public struct UnitAppearance
+    public class UnitAppearance
     {
+        public UnitAppearance()
+        {
+            wardrobeLayers = new List<int>();
+            wardrobeAppearanceGroups = new List<int>();
+        }
+
         [Serializable]
         public struct UnknownCount1_S
         {
@@ -55,16 +61,7 @@ namespace Reanimator
         };
 
         [Serializable]
-        public struct ModelAppearance_S
-        {
-            public int body;										// 16 bits
-            public int head;										// 16 bits
-            public int hair;										// 16 bits
-            public int faceAccessory;								// 16 bits
-        };
-
-        [Serializable]
-        public struct GearAppearance_S
+        public struct GearAppearance
         {
             public int gear;										// 16 bits
             public int unknownBool;									// 1 bit
@@ -80,18 +77,18 @@ namespace Reanimator
         public byte[] unknown2;										// non-standard read in again
 
         // if (bitTest(bitField1, 0x11))
-        public int unknownCount2;									// 4 bits
-        public int[] unknownCount2s;						        // 16 bits * unknownCount2
+        public int wardrobeLayerCount;							    // 4 bits
+        public List<int> wardrobeLayers;						    // 16 bits * wardrobeLayerCount
 
-        public int modelAppearanceCounter;							// 3 bits
-        public ModelAppearance_S modelAppearance;					// 16 bits * modelAppearanceCounter
+        public int wardrobeAppearanceGroupCount;					// 3 bits
+        public List<int> wardrobeAppearanceGroups;					// 16 bits * wardrobeAppearanceGroupCount
 
         public int unknownCount3;									// 4 bits
         public int[] unknownCount3s;						        // 8 bits * unknownCount3
 
         // if (testBit(pUnit->bitField1, 0x10))
         public int gearCount;										// 16 bits
-        public GearAppearance_S[] gears;				        	// 17 bits * gearCount
+        public GearAppearance[] gears;				        	// 17 bits * gearCount
     };
 
     [Serializable]
@@ -989,29 +986,16 @@ namespace Reanimator
 
             if (TestBit(heroUnit.bitField1, 0x11))
             {
-                appearance.unknownCount2 = _bitBuffer.ReadBits(4);
-                appearance.unknownCount2s = new int[appearance.unknownCount2];
-                for (int i = 0; i < appearance.unknownCount2; i++)
+                appearance.wardrobeLayerCount = _bitBuffer.ReadBits(4);
+                for (int i = 0; i < appearance.wardrobeLayerCount; i++)
                 {
-                    appearance.unknownCount2s[i] = _bitBuffer.ReadBits(16);
+                    appearance.wardrobeLayers.Add(_bitBuffer.ReadBits(16));
                 }
 
-                appearance.modelAppearanceCounter = _bitBuffer.ReadBits(3);
-                for (int i = 0; i < appearance.modelAppearanceCounter; i++)
+                appearance.wardrobeAppearanceGroupCount = _bitBuffer.ReadBits(3);
+                for (int i = 0; i < appearance.wardrobeAppearanceGroupCount; i++)
                 {
-                    int modelAppearance = _bitBuffer.ReadBits(16);
-                    if (i == 0)
-                        appearance.modelAppearance.body = modelAppearance;
-                    if (i == 1)
-                        appearance.modelAppearance.head = modelAppearance;
-                    if (i == 2)
-                        appearance.modelAppearance.hair = modelAppearance;
-                    if (i == 3)
-                        appearance.modelAppearance.faceAccessory = modelAppearance;
-                    if (i >= 4)
-                    {
-                        MessageBox.Show("Warning! appearance.modelAppearanceCounter >= 4");
-                    }
+                    appearance.wardrobeAppearanceGroups.Add(_bitBuffer.ReadBits(16));
                 }
 
                 appearance.unknownCount3 = _bitBuffer.ReadBits(4);
@@ -1026,10 +1010,10 @@ namespace Reanimator
             if (TestBit(heroUnit.bitField1, 0x10))
             {
                 appearance.gearCount = _bitBuffer.ReadBits(16);
-                appearance.gears = new UnitAppearance.GearAppearance_S[appearance.gearCount];
+                appearance.gears = new UnitAppearance.GearAppearance[appearance.gearCount];
                 for (int i = 0; i < appearance.gearCount; i++)
                 {
-                    UnitAppearance.GearAppearance_S gear = new UnitAppearance.GearAppearance_S();
+                    UnitAppearance.GearAppearance gear = new UnitAppearance.GearAppearance();
 
                     gear.gear = _bitBuffer.ReadBits(16);
                     gear.unknownBool = _bitBuffer.ReadBits(1);
@@ -1557,23 +1541,18 @@ namespace Reanimator
 
                 if (useUnknown_11 > 0)
                 {
-                    saveBuffer.WriteBits(unit.unitAppearance.unknownCount2, 4);
-                    for (int i = 0; i < unit.unitAppearance.unknownCount2; i++)
+                    int wardrobeLayerCount = unit.unitAppearance.wardrobeLayers.Count;
+                    saveBuffer.WriteBits(wardrobeLayerCount, 4);
+                    for (int i = 0; i < wardrobeLayerCount; i++)
                     {
-                        saveBuffer.WriteBits(unit.unitAppearance.unknownCount2s[i], 16);
+                        saveBuffer.WriteBits(unit.unitAppearance.wardrobeLayers[i], 16);
                     }
 
-                    saveBuffer.WriteBits(unit.unitAppearance.modelAppearanceCounter, 3);
-                    for (int i = 0; i < unit.unitAppearance.modelAppearanceCounter; i++)
+                    int wardrobeAppearanceGroupCount = unit.unitAppearance.wardrobeAppearanceGroups.Count;
+                    saveBuffer.WriteBits(wardrobeAppearanceGroupCount, 3);
+                    for (int i = 0; i < wardrobeAppearanceGroupCount; i++)
                     {
-                        if (i == 0)
-                            saveBuffer.WriteBits(unit.unitAppearance.modelAppearance.body, 16);
-                        if (i == 1)
-                            saveBuffer.WriteBits(unit.unitAppearance.modelAppearance.head, 16);
-                        if (i == 2)
-                            saveBuffer.WriteBits(unit.unitAppearance.modelAppearance.hair, 16);
-                        if (i == 3)
-                            saveBuffer.WriteBits(unit.unitAppearance.modelAppearance.faceAccessory, 16);
+                        saveBuffer.WriteBits(unit.unitAppearance.wardrobeAppearanceGroups[i], 16);
                     }
 
                     saveBuffer.WriteBits(unit.unitAppearance.unknownCount3, 4);
