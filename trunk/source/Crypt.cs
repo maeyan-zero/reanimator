@@ -2,7 +2,7 @@
 
 namespace Reanimator
 {
-    class Crypt
+    static class Crypt
     {
         class CryptState
         {
@@ -22,7 +22,7 @@ namespace Reanimator
             {
                 Data = indexBuffer;
                 BlockIndex = 0xFFFFFFFF;
-                Table = new Byte[CryptState.BlockSize * sizeof(Int32)];
+                Table = new Byte[BlockSize * sizeof(Int32)];
             }
         }
 
@@ -51,7 +51,7 @@ namespace Reanimator
 
             while (cryptState.Offset < cryptState.Size)
             {
-                cryptState.Data[cryptState.Offset] -= Crypt.GetCryptByte(cryptState);
+                cryptState.Data[cryptState.Offset] -= GetCryptByte(cryptState);
                 cryptState.Offset++;
             }
         }
@@ -62,7 +62,7 @@ namespace Reanimator
 
             while (cryptState.Offset < cryptState.Size)
             {
-                cryptState.Data[cryptState.Offset] += Crypt.GetCryptByte(cryptState);
+                cryptState.Data[cryptState.Offset] += GetCryptByte(cryptState);
                 cryptState.Offset++;
             }
         }

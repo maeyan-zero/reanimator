@@ -292,7 +292,7 @@ namespace Reanimator
             // TODO is there a better way?
             // TODO get rid of me
             List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
-            int[][] intArrays = { excelTable.TableIndicies, excelTable.Unknowns1, excelTable.Unknowns2, excelTable.Unknowns3, excelTable.Unknowns4 };
+            int[][] intArrays = { excelTable.TableIndicies, excelTable.SortIndex1, excelTable.SortIndex2, excelTable.SortIndex3, excelTable.SortIndex4 };
             for (int i = 0; i < intArrays.Length; i++)
             {
                 if (intArrays[i] == null)

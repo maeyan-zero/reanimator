@@ -399,11 +399,10 @@ namespace Reanimator
         public int CharacterHeight
         {
             get { return _characterHeight; }
-            set {
-                if (value < 0 || value > 255)
-                    _characterHeight = 125;
-                else
-                    _characterHeight = value;
+            set
+            {
+                if (value < 0 || value > 255) _characterHeight = 125;
+                else  _characterHeight = value;
             }
         }
 
@@ -421,8 +420,10 @@ namespace Reanimator
         // }
 
         // if (testBit(bitField1, 0x08))
+        // {
         int _charNameCount;									            // 8            // count of characters of following character name var
-        public Char[] characterName;                                                    // character name - why does name change when change filename though?								
+        char[] characterName;                                                           // character name - why does name change when change filename though?
+        // }
 
         // if (testBit(bitField1, 0x0A))						                        // char state flags (e.g. "elite")
         int _playerFlagCount2;								            // 8            // count of flags PlayerFlags2
@@ -1483,8 +1484,8 @@ namespace Reanimator
 
             if (useUnknown_07 > 0)
             {
-                saveBuffer.WriteBits(unit._characterHeight, 8);
-                saveBuffer.WriteBits(unit._characterWidth, 8);
+                saveBuffer.WriteBits(unit.CharacterHeight, 8);
+                saveBuffer.WriteBits(unit.CharacterWidth, 8);
                 bitField1 |= useUnknown_07;
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }

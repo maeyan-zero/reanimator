@@ -99,7 +99,7 @@ namespace Reanimator.Forms
             // TODO is there a better way?
             // TODO remove me once unknowns no longer unknowns
             List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
-            int[][] intArrays = { _excelTable.TableIndicies, _excelTable.Unknowns1, _excelTable.Unknowns2, _excelTable.Unknowns3, _excelTable.Unknowns4 };
+            int[][] intArrays = { _excelTable.TableIndicies, _excelTable.SortIndex1, _excelTable.SortIndex2, _excelTable.SortIndex3, _excelTable.SortIndex4 };
             for (int i = 0; i < intArrays.Length; i++)
             {
                 if (intArrays[i] == null)
