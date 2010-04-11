@@ -67,33 +67,19 @@ namespace Reanimator
         {
             try
             {
-                FileStream xsdStream;
-                xsdStream = new FileStream("Schema.xsd", FileMode.Open);
-
-                XmlSchema xmlSchema;
-                xmlSchema = XmlSchema.Read(xsdStream, null);
-
-                XmlReaderSettings xmlReaderSettings;
-                xmlReaderSettings = new XmlReaderSettings()
+                FileStream xsdStream = new FileStream("Schema.xsd", FileMode.Open);
+                XmlSchema xmlSchema = XmlSchema.Read(xsdStream, null);
+                XmlReaderSettings xmlReaderSettings = new XmlReaderSettings()
                 {
                     ValidationType = ValidationType.Schema,
                     ProhibitDtd = false
                 };
-
                 xmlReaderSettings.Schemas.Add(xmlSchema);
-
-                FileStream xmlStream;
-                xmlStream = new FileStream(path, FileMode.Open);
-
-                XmlReader xmlReader;
-                xmlReader = XmlReader.Create(xmlStream, xmlReaderSettings);
-
+                FileStream xmlStream = new FileStream(path, FileMode.Open);
+                XmlReader xmlReader = XmlReader.Create(xmlStream, xmlReaderSettings);
                 // Parse the document
                 using (xmlReader)
-                {
                     while (xmlReader.Read()) { }
-                }
-    
                 xsdStream.Close();
                 xmlStream.Close();
 
@@ -102,7 +88,6 @@ namespace Reanimator
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                MessageBox.Show(e.Message);
 
                 return false;
             }
@@ -195,12 +180,33 @@ namespace Reanimator
                                 //
                                 // Strings file.
                                 //
-                                if (loaded_string_list.Contains(file.id) == false)
-                                {
-                                    // Find the index indice.
-                                    file.index_id_patch = index[Index.LatestPatch].Locate(file.id, file.dir);
 
-                                }
+                                //if (file.id.Contains("xls.uni.cooked") == true)
+                                //{
+                                //    if (loaded_string_list.Contains(file.id) == false)
+                                //    {
+                                //        // Find the index indice.
+                                //        file.index_id_patch = index[Index.LatestPatchLocalized].Locate(file.id, file.dir);
+
+                                //        if (file.index_id_patch != -1)
+                                //        {
+                                //            // Reference the file index
+                                //            Index.FileIndex file_index = index[Index.LatestPatchLocalized].FileTable[file.index_id_patch];
+                                //            // Extract the strings file
+                                //            string_list.Add(new StringsFile(index[Index.LatestPatchLocalized].ReadDataFile(file_index)));
+                                //            // Record the file has been loaded
+                                //            loaded_string_list.Add(file.id);
+                                //            // Record the indice
+                                //            file.list_id = loaded_string_list.Count - 1;
+                                //            // Add the table to the data set
+                                //            data_set.LoadTable(progress, string_list[file.list_id]);
+                                //        }
+                                //        else
+                                //        {
+                                //            throw new Exception("Could not locate file: " + file.id);
+                                //        }
+                                //    }
+                                //}
 
                                 //
                                 // Modify the files.
@@ -288,7 +294,15 @@ namespace Reanimator
                                 // for its location in the patch file. This index is stored in file.index_id_patch if it
                                 // exists.
                                 file.index_id = index[pack.list_id].Locate(file.id, file.dir);
-                                file.index_id_patch = index[Index.LatestPatch].Locate(file.id, file.dir);
+
+                                if (file.id.Contains(".xls.uni.cooked") == false)
+                                {
+                                    file.index_id_patch = index[Index.LatestPatch].Locate(file.id, file.dir);
+                                }
+                                else
+                                {
+                                    file.index_id_patch = index[Index.LatestPatchLocalized].Locate(file.id, file.dir);
+                                }
 
                                 // Update the progress bar.
                                 progress.SetCurrentItemText(file.id);
@@ -317,45 +331,57 @@ namespace Reanimator
                                         }
                                     }
 
+                                    //
                                     // String Files.
-                                    if (file.id.Contains("xls.uni.cooked") == true)
-                                    {
-                                        // Been saved yet?
-                                        if (saved_excel_list.Contains(file.id) == false && file.table_ref != null)
-                                        {
-                                            string dir = Config.HglDir + "\\" + index[Index.LatestPatch].FileTable[file.index_id_patch].DirectoryString;
-                                            string filename = excel_tables.TableManager.GetReplacement(file.id);
+                                    //
 
-                                            byte[] excel_bytes = excel_list[file.list_id].GenerateExcelFile(data_set.XlsDataSet);
+                                    //if (file.id.Contains("xls.uni.cooked") == true)
+                                    //{
+                                    //    // Been saved yet?
+                                    //    if (saved_excel_list.Contains(file.id) == false && file.table_ref != null)
+                                    //    {
+                                    //        string dir = Config.HglDir + "\\" + index[Index.LatestPatch].FileTable[file.index_id_patch].DirectoryString;
+                                    //        string filename = excel_tables.TableManager.GetReplacement(file.id);
 
-                                            if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+                                    //        byte[] excel_bytes = excel_list[file.list_id].GenerateExcelFile(data_set.XlsDataSet);
 
-                                            using (FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                                            {
-                                                fs.Write(excel_bytes, 0, excel_bytes.Length);
-                                                saved_excel_list.Add(file.id);
-                                            }
-                                        }
-                                    }
+                                    //        if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+
+                                    //        using (FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                                    //        {
+                                    //            fs.Write(excel_bytes, 0, excel_bytes.Length);
+                                    //            saved_excel_list.Add(file.id);
+                                    //        }
+                                    //    }
+                                    //}
                                 }
 
-                                // Replace copies the replacing file to the HGL dir.
+                                
                                 if (file.replace != null)
                                 {
-                                    string source = revival.directory + "\\" + file.replace.data;
-                                    string destination = Config.HglDir + "\\" + index[pack.list_id].FileTable[file.index_id].DirectoryString;
+                                    // If its a strings file, repack it
+                                    if (file.id.Contains(".xls.uni.cooked") == true)
+                                    {
 
-                                    if (System.IO.File.Exists(source) == false)
-                                    {
-                                        throw new Exception("Source file not found");
                                     }
-                                    if (Directory.Exists(destination) == false)
+                                    // Replace copies the replacing file to the HGL dir.
+                                    else
                                     {
-                                        Directory.CreateDirectory(destination);
+                                        string source = revival.directory + "\\" + file.replace.data;
+                                        string destination = Config.HglDir + "\\" + index[pack.list_id].FileTable[file.index_id].DirectoryString;
+
+                                        if (System.IO.File.Exists(source) == false)
+                                        {
+                                            throw new Exception("Source file not found");
+                                        }
+                                        if (Directory.Exists(destination) == false)
+                                        {
+                                            Directory.CreateDirectory(destination);
+                                        }
+                                        System.IO.File.Copy(source, destination + file.id, true);
                                     }
-                                    System.IO.File.Copy(source, destination + file.id, true);
                                 }
-
+                                
                                 // Modify the index if it isn't already
                                 if (index[pack.list_id].FileTable[file.index_id].Modified == false)
                                 {
@@ -364,7 +390,16 @@ namespace Reanimator
                                     // Modify the patch index.
                                     if (file.index_id_patch >= 0)
                                     {
-                                        index[Index.LatestPatch].AppendDirectorySuffix(file.index_id_patch);
+                                        // Handle strings
+                                        if (file.id.Contains(".xls.uni.cooked") == true)
+                                        {
+                                            // change offsets
+                                            //index[Index.LatestPatchLocalized].AppendDirectorySuffix(file.index_id_patch);
+                                        }
+                                        else
+                                        {
+                                            index[Index.LatestPatch].AppendDirectorySuffix(file.index_id_patch);
+                                        }
                                     }
                                 }
                             }
@@ -788,6 +823,9 @@ namespace Reanimator
         {
             [XmlElement("data")]
             public string data;
+
+            [XmlAttribute]
+            public bool repack;
         }
         
         public class Divide

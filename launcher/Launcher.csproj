@@ -130,6 +130,7 @@
     <None Include="Resources\background41.png" />
     <Content Include="Revival\data\uix\xml\inventory_screen.xml" />
     <Content Include="Revival\Revival.xml" />
+    <Content Include="Revival\Buffer.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Revival\data\background\_advertisements\" />
