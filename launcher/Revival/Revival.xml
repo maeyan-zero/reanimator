@@ -445,7 +445,7 @@
                 <data>0</data>
               </replace>
             </attribute>
-            <attribute id="castGiver">
+            <attribute id="offerReward">
               <replace>
                 <data>208</data>
               </replace>
@@ -476,6 +476,11 @@
       <file id="inventory_screen.xml" dir="data\uix\xml\">
         <replace>
           <data>data\uix\xml\inventory_screen.xml</data>
+        </replace>
+      </file>
+      <file id="character_select.xml" dir="data\uix\xml\">
+        <replace>
+          <data>data\uix\xml\character_select.xml</data>
         </replace>
       </file>
     </pack>
