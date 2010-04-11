@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Collections;
@@ -96,18 +95,18 @@ namespace Reanimator.Excel
 
         public List<String> SecondaryStrings { get; private set; }
 
-        private readonly int[][] _unknownIndicies;
-        public int[] Unknowns1 { get { return _unknownIndicies[0]; } }
-        public int[] Unknowns2 { get { return _unknownIndicies[1]; } }
-        public int[] Unknowns3 { get { return _unknownIndicies[2]; } }
-        public int[] Unknowns4 { get { return _unknownIndicies[3]; } }
+        private readonly int[][] _sortIndicies;
+        public int[] SortIndex1 { get { return _sortIndicies[0]; } }
+        public int[] SortIndex2 { get { return _sortIndicies[1]; } }
+        public int[] SortIndex3 { get { return _sortIndicies[2]; } }
+        public int[] SortIndex4 { get { return _sortIndicies[3]; } }
 
         private readonly Int32 _rcshValue;
         private readonly Int32 _tyshValue;
         // mysh
         private readonly Int32 _dnehValue;
 
-        public byte[] DataBlock { get; set; }
+        private byte[] DataBlock { get; set; }
         private byte[] FinalBytes { get; set; }
 
         protected ExcelTable(byte[] excelData)
@@ -157,32 +156,32 @@ namespace Reanimator.Excel
                  *      index                           Int32                                   // Always seen as 0 -> tableCount - 1, unknown
                  * }                                                                            // if it can be different (do we even care?).
                  * 
-                 ***** Secondary Index Block 1 ***** (8 + indexCount * 4) bytes                 // Unsure what these do.
+                 ***** Sort Index Block 1 ***** (8 + indexCount * 4) bytes                      // Sort index array
                  * token                                Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * indexCount                           Int32                                   // For every table that doesn't have 0x30 as its type,
                  * {                                                                            // has a secondary index.
-                 *      unknownValue                    Int32
+                 *      index                           Int32
                  * }
                  * 
-                 ***** Secondary Index Block 2 ***** (8 + indexCount * 4) bytes                 // Unsure what these do.
+                 ***** Sort Index Block 2 ***** (8 + indexCount * 4) bytes                      // Sort index array
                  * token                                Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * indexCount                           Int32
                  * {
-                 *      unknownValue                    Int32
+                 *      index                           Int32
                  * }
                  * 
-                 ***** Secondary Index Block 3 ***** (8 + indexCount * 4) bytes                 // Unsure what these do.
+                 ***** Sort Index Block 3 ***** (8 + indexCount * 4) bytes                      // Sort index array
                  * token                                Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * indexCount                           Int32
                  * {
-                 *      unknownValue                    Int32
+                 *      index                           Int32
                  * }
                  * 
-                 ***** Secondary Index Block 4 ***** (8 + indexCount * 4) bytes                 // Unsure what these do.
+                 ***** Sort Index Block 4 ***** (8 + indexCount * 4) bytes                      // Sort index array
                  * token                                Int32                                   // Must be 0x68657863 ('cxeh'). 
                  * indexCount                           Int32
                  * {
-                 *      unknownValue                    Int32
+                 *      index                           Int32
                  * }
                  * 
                  ***** Unknown Block *****                                                      // The flags in this block are all optional (excluding initial 'cxeh' of course).
@@ -251,7 +250,7 @@ namespace Reanimator.Excel
             tables = new List<Object>();
             Strings = new Hashtable();
             SecondaryStrings = new List<String>();
-            _unknownIndicies = new int[4][];
+            _sortIndicies = new int[4][];
             offset = 0;
 
 
@@ -392,14 +391,14 @@ namespace Reanimator.Excel
             }
 
 
-            // secondary index blocks
+            // sort index blocks
             for (int i = 0; i < 4; i++)
             {
                 token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                 CheckFlag(token);
 
                 int count = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
-                _unknownIndicies[i] = FileTools.ByteArrayToInt32Array(excelData, offset, count);
+                _sortIndicies[i] = FileTools.ByteArrayToInt32Array(excelData, offset, count);
                 offset += count * sizeof(Int32);
             }
 
@@ -857,29 +856,56 @@ namespace Reanimator.Excel
             //this is a temporary fix until a logical, dynamic implementation is created
             //like Alex started above
 
-            // Primary index #1
+            // primary index
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(_tableIndicies));
+            if ((uint)_excelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
+            {
+                for (int i = 0; i < Count; i++)
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _tableIndicies[i]);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _extraIndexData[i]);
+                }
+            }
+            else
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(_tableIndicies));
+            }
+
+            // secondary string block
+            Int32 secondaryStringCount = SecondaryStrings.Count;
+            if (secondaryStringCount > 0)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, secondaryStringCount);
+
+                for (int i = 0; i < secondaryStringCount; i++)
+                {
+                    String str = SecondaryStrings[i];
+                    Int32 strCharCount = str.Length + 1; // +1 for \0
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, strCharCount);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, str);
+                    // TODO check if writing str increases the byteOffset by strCharCount or by str.Length!!!
+                }
+            }
             
-            // Index #1
+            // sort index #1
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Unknowns1.Length);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(Unknowns1));
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex1.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex1));
 
-            // Index #2
+            // sort index #2
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Unknowns2.Length);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(Unknowns2));
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex2.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex2));
 
-            // Index #3
+            // sort index #3
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Unknowns3.Length);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(Unknowns3));
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex3.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex3));
 
-            // Index #4
+            // sort index #4
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Unknowns4.Length);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(Unknowns4));
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex4.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex4));
 
 
             // weird unknown header chunks

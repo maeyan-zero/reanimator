@@ -653,6 +653,8 @@ namespace Reanimator
 
         private void GenerateCache(bool manualRequest)
         {
+            if (excelTables == null) return;
+
             DialogResult dr = DialogResult.No;
 
             bool partialGeneration = false;
