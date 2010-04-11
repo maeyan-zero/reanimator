@@ -164,11 +164,7 @@ namespace Reanimator
 
         public static void WriteToBuffer(ref byte[] buffer, ref int offset, Object toWrite)
         {
-            byte[] toWriteBytes = toWrite as byte[];
-            if (toWriteBytes == null)
-            {
-                toWriteBytes = FileTools.StructureToByteArray(toWrite);
-            }
+            byte[] toWriteBytes = toWrite as byte[] ?? StructureToByteArray(toWrite);
 
             WriteToBuffer(ref buffer, ref offset, toWriteBytes, toWriteBytes.Length, false);
         }
