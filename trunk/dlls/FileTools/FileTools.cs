@@ -288,5 +288,30 @@ namespace Reanimator
 
             return filePath;
         }
+
+        public static bool WriteFile(String filePath, byte[] byteData)
+        {
+            DialogResult dr = DialogResult.Yes;
+            while (dr == DialogResult.Yes)
+            {
+                try
+                {
+                    using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
+                    {
+                        fs.Write(byteData, 0, byteData.Length);
+                    }
+
+                    return true;
+                }
+                catch (Exception e)
+                {
+                    dr = MessageBox.Show("Failed to write to file!\nTry Again?\n\n" + e, "Error",
+                                         MessageBoxButtons.YesNo,
+                                         MessageBoxIcon.Error);
+                }
+            }
+
+            return false;
+        }
     }
 }

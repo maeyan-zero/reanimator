@@ -675,14 +675,6 @@ namespace Reanimator.Forms
                 }
             }
 
-            if (appearance.unknownCount2s != null)
-            {
-                foreach (int val in appearance.unknownCount2s)
-                {
-                    text += "unknownCount2s: " + val + "\n";
-                }
-            }
-
             if (appearance.unknownCount3s != null)
             {
                 foreach (int val in appearance.unknownCount3s)

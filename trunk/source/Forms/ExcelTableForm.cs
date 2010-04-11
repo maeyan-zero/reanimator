@@ -188,63 +188,34 @@ namespace Reanimator.Forms
 
         public void SaveButton()
         {
-            DataTable table = ((DataSet) this.dataGridView.DataSource).Tables[this.dataGridView.DataMember];
+            DataTable table = ((DataSet)dataGridView.DataSource).Tables[dataGridView.DataMember];
             if (table == null) return;
-            // TODO have excel file saving use same method as string file saving
+
+            bool saveResults;
+
             if (_stringsFile == null)
             {
-                byte[] excelFileData = _excelTable.GenerateExcelFile((DataSet)this.dataGridView.DataSource);
-                string filename = _excelTable.StringId.ToLower() + ".txt.cooked";
+                String savePath = FileTools.SaveFileDiag("txt.cooked", "Excel Cooked", _excelTable.StringId.ToLower(), Config.DataDirsRoot);
+                if (String.IsNullOrEmpty(savePath)) return;
 
-                DialogResult dr = DialogResult.Yes;
-                while (dr == DialogResult.Yes)
+                byte[] excelFileData = _excelTable.GenerateExcelFile((DataSet)dataGridView.DataSource);
+                if (excelFileData == null || excelFileData.Length == 0)
                 {
-                    try
-                    {
-                        using (FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite))
-                        {
-                            fs.Write(excelFileData, 0, excelFileData.Length);
-                        }
-                        break;
-                    }
-                    catch (Exception e)
-                    {
-                        dr = MessageBox.Show("Failed to write to file!\nTry Again?\n\n" + e, "Error",
-                                             MessageBoxButtons.YesNo,
-                                             MessageBoxIcon.Error);
-                    }
+                    MessageBox.Show("Failed to generate excel table data!", "Error", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    return;
                 }
+
+                saveResults = FileTools.WriteFile(savePath, excelFileData);
             }
             else
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    AddExtension = false,
-                    DefaultExt = StringsFile.FileExtention,
-                    FileName = _stringsFile.Name.ToLower(),
-                    Filter = String.Format("Strings Files (*.{0})|*.{0}", StringsFile.FileExtention),
-                    InitialDirectory = _stringsFile.FilePath.Substring(0, _stringsFile.FilePath.LastIndexOf(@"\"))
-                };
-                if (saveFileDialog.ShowDialog(this) != DialogResult.OK)
-                {
-                    saveFileDialog.Dispose();
-                    return;
-                }
-                String filePath = saveFileDialog.FileName;
-                saveFileDialog.Dispose();
-
-                // since AddExtension = false doesn't seem to do shit
-                const string replaceExtension = "." + StringsFile.FileExtention;
-                while (filePath.Contains(replaceExtension))
-                {
-                    filePath = filePath.Replace(replaceExtension, "");
-                }
-                filePath += replaceExtension;
-
-                if (!filePath.Contains(StringsFile.FileExtention))
-                {
-                    filePath += StringsFile.FileExtention;
-                }
+                String savePath = FileTools.SaveFileDiag(StringsFile.FileExtention, "Strings Cooked",
+                                                         _stringsFile.Name.ToLower(),
+                                                         _stringsFile.FilePath.Substring(0,
+                                                                                         _stringsFile.FilePath.
+                                                                                             LastIndexOf(@"\")));
+                if (String.IsNullOrEmpty(savePath)) return;
 
                 byte[] stringsFileData = _stringsFile.GenerateStringsFile(table);
                 if (stringsFileData == null || stringsFileData.Length == 0)
@@ -254,20 +225,13 @@ namespace Reanimator.Forms
                     return;
                 }
 
-                try
-                {
-                    using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
-                    {
-                        fs.Write(stringsFileData, 0, stringsFileData.Length);
-                    }
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Failed to write to file!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                MessageBox.Show("1 File Saved!", "Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                saveResults = FileTools.WriteFile(savePath, stringsFileData);
+            }
+            
+            if (saveResults)
+            {
+                MessageBox.Show("File saved Successfully!", "Completed", MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
             }
         }
 
