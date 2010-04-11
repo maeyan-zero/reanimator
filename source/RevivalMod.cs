@@ -10,11 +10,39 @@ using System.IO;
 using System.Windows.Forms;
 using System.Data;
 using Reanimator.Excel;
+using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace Reanimator
 {
     public class RevivalMod : IDisposable
     {
+        [DllImport("zlibwapi86.dll")]
+        private static extern int compress
+        (
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] destinationBuffer,
+            [MarshalAs(UnmanagedType.U4)]
+            ref UInt32 destinationLength,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] sourceBuffer,
+            [MarshalAs(UnmanagedType.U4)]
+            UInt32 sourceLength
+        );
+
+        [DllImport("zlibwapi64.dll")]
+        private static extern int compress
+        (
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] destinationBuffer,
+            [MarshalAs(UnmanagedType.U8)]
+            ref UInt64 destinationLength,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] sourceBuffer,
+            [MarshalAs(UnmanagedType.U8)]
+            UInt64 sourceLength
+        );
+
         Index[] index;                  // An array of all the Hellgate idx files.
         Revival revival;                // The modifications
 
@@ -135,7 +163,7 @@ namespace Reanimator
                         {
                             try
                             {
-                                //
+                                //////
                                 // Excel file.
                                 //
                                 if (file.id.Contains(".txt.cooked") == true)
@@ -177,7 +205,7 @@ namespace Reanimator
                                     }
                                 }
 
-                                //
+                                //////
                                 // Strings file.
                                 //
 
@@ -208,7 +236,7 @@ namespace Reanimator
                                 //    }
                                 //}
 
-                                //
+                                //////
                                 // Modify the files.
                                 //
                                 if (file.modify != null)
@@ -360,9 +388,25 @@ namespace Reanimator
                                 if (file.replace != null)
                                 {
                                     // If its a strings file, repack it
-                                    if (file.id.Contains(".xls.uni.cooked") == true)
+                                    if (file.replace.repack == true)
                                     {
+                                        //FileStream buffer = new FileStream(revival.directory + "\\" + file.replace.data, FileMode.Open);
+                                        
+                                        //byte[] byte_buffer = new byte[buffer.Length];
 
+                                        //uint len = (uint)buffer.Length;
+
+                                        //byte[] compressed_buffer = new byte[byte_buffer.Length];
+
+                                        //buffer.Read(byte_buffer, 0, (int)buffer.Length);
+
+                                        //compress(byte_buffer, ref len, compressed_buffer, (uint)byte_buffer.Length);
+                                        
+                                        //index[pack.list_id].DataFile.Seek(0, SeekOrigin.End);
+
+                                        //index[pack.list_id].DataFile.Write(compressed_buffer, 0, compressed_buffer.Length);
+
+                                        //buffer.Dispose();
                                     }
                                     // Replace copies the replacing file to the HGL dir.
                                     else
@@ -448,40 +492,42 @@ namespace Reanimator
                 }
                 else if (attribute.bitwise != null)
                 {
-                    //for (int j = 0; j < attribute.bitwise.Length; j++)
-                    //{
-                    //    string[] bitmask;
+                    uint value = Convert.ToUInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]);
+                    uint arg = 0;
+                    uint result = 0;
+                    bool current = false;
 
-                    //    switch (attribute.id)
-                    //    {
-                    //        case "Bitmask01":
-                    //            bitmask = Enum.GetNames(Items.BitMask01);
-                    //            break;
-                    //        case "Bitmask02":
-                    //            //bitmask = Enum.GetNames(Items.BitMask02);
-                    //            break;
-                    //        case "Bitmask03":
-                    //            //bitmask = Enum.GetNames(Items.BitMask03);
-                    //            break;
-                    //        case "Bitmask04":
-                    //            //bitmask = Enum.GetNames(Items.BitMask04);
-                    //            break;
-                    //        case "Bitmask05":
-                    //            //bitmask = Enum.GetNames(Items.BitMask05);
-                    //            break;
-                    //    }
+                    for (int j = 0; j < attribute.bitwise.Length; j++)
+                    {
+                        foreach (Bitwise bitmask in attribute.bitwise)
+                        {
+                            switch (attribute.id)
+                            {
+                                case "bitmask01":
+                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask01), bitmask.id, true);
+                                    break;
+                                case "bitmask02":
+                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask02), bitmask.id, true);
+                                    break;
+                                case "bitmask03":
+                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask03), bitmask.id, true);
+                                    break;
+                                case "bitmask04":
+                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask04), bitmask.id, true);
+                                    break;
+                                case "bitmask05":
+                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask05), bitmask.id, true);
+                                    break;
+                            }
+                            result = value & arg;
+                            if (result > 0) current = true;
 
-                    //}
-                    //for (int i = 0; i < bitmask.Length; i++)
-                    //{
-                    //    if (string.Compare(attribute.bitwise[j].id, bitmask[j], true))
-                    //    {
-                    //        if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] & (j ^ 32))
-                    //        {
-
-                    //        }
-                    //    }
-                    //}
+                            if (current != bitmask.switch_data)
+                            {
+                                dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = (value ^= arg);
+                            }
+                        }
+                    }
                 }
                 else if (attribute.divide != null)
                 {
@@ -715,6 +761,9 @@ namespace Reanimator
         {
             [XmlElement(typeof(Entity))]
             public Entity[] entity;
+
+            [XmlAttribute]
+            public bool repack;
 
             public MyEnumerator GetEnumerator()
             {

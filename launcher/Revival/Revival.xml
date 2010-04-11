@@ -70,17 +70,17 @@
         <modify>
           <!--UNLOCK SUBSCRIBER & MULTIPLAYER ITEMS, REMOVE NO TRADE-->
           <entity id="*">
-            <attribute id="Bitmask02">
+            <attribute id="bitmask02">
               <bitwise id="SubscriberOnly">
                 <switch>0</switch>
               </bitwise>
             </attribute>
-            <attribute id="Bitmask05">
+            <attribute id="bitmask05">
               <bitwise id="NoTrade">
                 <switch>0</switch>
               </bitwise>
             </attribute>
-            <attribute id="Bitmask06">
+            <attribute id="bitmask06">
               <bitwise id="MultiplayerOnly">
                 <switch>0</switch>
               </bitwise>
@@ -489,6 +489,13 @@
       <file id="character_select.xml" dir="data\uix\xml\">
         <replace>
           <data>data\uix\xml\character_select.xml</data>
+        </replace>
+      </file>
+    </pack>
+    <pack id="hellgate_localized000">
+      <file id="strings_items.xls.uni.cooked" dir="data\excel\strings\english\">
+        <replace repack="true">
+          <data>data\excel\strings\english\strings_items.xls.uni.cooked</data>
         </replace>
       </file>
     </pack>
