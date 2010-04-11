@@ -196,9 +196,23 @@ namespace Reanimator.Forms
                 byte[] excelFileData = _excelTable.GenerateExcelFile((DataSet)this.dataGridView.DataSource);
                 string filename = _excelTable.StringId.ToLower() + ".txt.cooked";
 
-                using (FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite))
+                DialogResult dr = DialogResult.Yes;
+                while (dr == DialogResult.Yes)
                 {
-                    fs.Write(excelFileData, 0, excelFileData.Length);
+                    try
+                    {
+                        using (FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite))
+                        {
+                            fs.Write(excelFileData, 0, excelFileData.Length);
+                        }
+                        break;
+                    }
+                    catch (Exception e)
+                    {
+                        dr = MessageBox.Show("Failed to write to file!\nTry Again?\n\n" + e, "Error",
+                                             MessageBoxButtons.YesNo,
+                                             MessageBoxIcon.Error);
+                    }
                 }
             }
             else

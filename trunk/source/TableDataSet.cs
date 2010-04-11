@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using Reanimator.Forms;
 using System.IO;
 using Reanimator.Excel;
@@ -16,7 +17,7 @@ namespace Reanimator
 {
     public class TableDataSet : IDisposable
     {
-        private const String TableVersion = "1.0.5";
+        private const String TableVersion = "1.0.6";
         private const String RelationsVersion = "1.0.0";
         private const String TableVersionKey = "TableVersion";
         private const String RelationsVersionKey = "RelationsVersion";
@@ -234,6 +235,11 @@ namespace Reanimator
                 int row = 1;
                 object[] baseRow = new object[outputAttributes.Count];
 
+#if DEBUG
+                Hashtable hashtableStrings = new Hashtable();
+                Hashtable hashTableCounts = new Hashtable();
+#endif
+
                 foreach (Object table in array)
                 {
                     if (progress != null)
@@ -251,7 +257,27 @@ namespace Reanimator
                         {
                             if (excelOutputAttribute.IsStringOffset)
                             {
-                                baseRow[col] = excelTable.Strings[value];
+                                int valueInt = (int)value;
+#if DEBUG
+                                if (valueInt != -1)
+                                {
+                                    if (hashtableStrings.ContainsKey(valueInt))
+                                    {
+                                        if (!hashTableCounts.ContainsKey(valueInt))
+                                        {
+                                            hashTableCounts.Add(valueInt, 1);
+                                        }
+
+                                        hashTableCounts[valueInt] = ((int)hashTableCounts[valueInt]) + 1;
+                                    }
+                                    else
+                                    {
+                                        hashtableStrings.Add(valueInt, excelTable.Strings[valueInt]);
+                                    }
+
+                                }
+#endif
+                                baseRow[col] = excelTable.Strings[valueInt];
                                 col++;
                             }
                             else if (excelOutputAttribute.IsStringIndex)
@@ -284,6 +310,12 @@ namespace Reanimator
 
                 #endregion
 
+#if DEBUG
+                if (hashTableCounts.Count != 0)
+                {
+                    Debug.Write("hashTableCounts.Count = " + hashTableCounts.Count + "\n");
+                }
+#endif
                 _xlsDataTables.Add(mainTableName, mainDataTable);
             }
 
