@@ -14,6 +14,7 @@
   <xs:attribute name="id" type="xs:string"/>
   <xs:attribute name="dir" type="xs:string"/>
   <xs:attribute name="value" type="xs:string"/>
+  <xs:attribute name="repack" type="xs:boolean"/>
   
   <xs:element name="type">
     <xs:simpleType>
@@ -29,6 +30,7 @@
       <xs:sequence>
         <xs:element name="data"/>
       </xs:sequence>
+      <xs:attribute ref="repack" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -92,6 +94,7 @@
       <xs:sequence>
         <xs:element ref="entity" maxOccurs="unbounded"/>
       </xs:sequence>
+      <xs:attribute ref="repack" use="optional"/>
     </xs:complexType>
   </xs:element>
 

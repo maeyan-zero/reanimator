@@ -1022,40 +1022,41 @@ namespace Reanimator.Excel
             damagesOnHitBackground = 2147483648
         }
 
-        struct BitMask2
+        [FlagsAttribute]
+        public enum BitMask02 : uint
         {
-            bool alwaysCheckForCollisions;//(0
-            bool setShapePercentages;//(1
-            bool useSourceAppearance;//(2
-            bool dontTransferRidersFromOwner;//(3
-            bool dontTransferDamagesOnClient;//(4
-            bool missileIgnorePostLaunch;//(5
-            bool attacksLocationOnHitUnit;//(6
-            bool dontDeactivateWithRoom;//(7
-            bool angerOthersOnDamaged;//(8
-            bool angerOthersOnDeath;//(9
-            bool alwaysFaceSkillTarget;//(10
-            bool setRopeEndWithNoTarget;//(11
-            bool forceDrawDirectionToMoveDirection;//(12
-            bool questNameColor;//(13
-            bool doNotSortWeapons;//(14
-            bool ignoresEquipClassReqs;//(15
-            bool doNotUseSorceForToHit;//(16
-            bool angleWhilePathing;//(17
-            bool dontAddWardrobeLayer;//(18
-            bool dontUseContainerAppearance;//(19
-            bool subscriberOnly;//(20
-            bool computeLevelRequirement;//(21
-            bool dontFattenCollision;//(22
-            bool automapSave;//(23
-            bool requiresCanOperateToBeKnown;//(24
-            bool forceFreeOnRoomReset;//(25
-            bool canReflect;//(26
-            bool selectTargetIgnoresAimPos;//(27
-            bool canMeleeAboveHeight;//(28
-            bool getFlavorTextFromQuest;//(29
-            bool unIdentifiedNameFromBaseRow;//(30
-            bool noRandomProperName;//(31
+            alwaysCheckForCollisions = 1,
+            setShapePercentages = 2,
+            useSourceAppearance = 4,
+            dontTransferRidersFromOwner = 8,
+            dontTransferDamagesOnClient = 16,
+            missileIgnorePostLaunch = 32,
+            attacksLocationOnHitUnit = 64,
+            dontDeactivateWithRoom = 128,
+            angerOthersOnDamaged = 256,
+            angerOthersOnDeath = 512,
+            alwaysFaceSkillTarget = 1024,
+            setRopeEndWithNoTarget = 2048,
+            forceDrawDirectionToMoveDirection = 4096,
+            questNameColor = 8192,
+            doNotSortWeapons = 16384,
+            ignoresEquipClassReqs = 32768,
+            doNotUseSorceForToHit = 65536,
+            angleWhilePathing = 131072,
+            dontAddWardrobeLayer = 262144,
+            dontUseContainerAppearance = 524288,
+            subscriberOnly = 1048576,
+            computeLevelRequirement = 2097152,
+            dontFattenCollision = 4194304,
+            automapSave = 8388608,
+            requiresCanOperateToBeKnown = 16777216,
+            forceFreeOnRoomReset = 33554432,
+            canReflect = 67108864,
+            selectTargetIgnoresAimPos = 134217728,
+            canMeleeAboveHeight = 268435456,
+            getFlavorTextFromQuest = 536870912,
+            unIdentifiedNameFromBaseRow = 1073741824,
+            noRandomProperName = 2147483648
         }
 
         struct BtMask3
