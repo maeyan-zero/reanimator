@@ -863,6 +863,8 @@ namespace Reanimator.Excel
                 for (int i = 0; i < Count; i++)
                 {
                     FileTools.WriteToBuffer(ref buffer, ref byteOffset, _tableIndicies[i]);
+                    Int32 sizeOfData = _extraIndexData[i].Length;
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, sizeOfData);
                     FileTools.WriteToBuffer(ref buffer, ref byteOffset, _extraIndexData[i]);
                 }
             }
