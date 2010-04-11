@@ -120,6 +120,14 @@
               </bitwise>
             </attribute>
           </entity>
+          <!--Wart's Peg Leg-->
+          <entity id="Warts_Peg_Leg" value="735">
+            <attribute id="containerUnitType1">
+              <replace>
+                <data>1</data>
+              </replace>
+            </attribute>
+          </entity>
         </modify>
       </file>
       <file id="monsters.txt.cooked" dir="data\excel\">
