@@ -18,12 +18,22 @@ namespace Reanimator.Forms
         public ModificationForm()
         {
             InitializeComponent();
-            methodComboBox.SelectedIndex = 0;
+            titleLabel.Text = "";
+            authorLabel.Text = "";
+            versionLabel.Text = "";
+            urlLabel.Text = "";
+            typeLabel.Text = "";
         }
 
         private void checkedListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            textBoxDescription.Text = mod.getDescription(checkedListBox.SelectedIndex);
+            pictureBox.Image = mod.Caption;
+            titleLabel.Text = mod.getTitle(checkedListBox.SelectedIndex);
+            authorLabel.Text = mod.getAuthor(checkedListBox.SelectedIndex);
+            versionLabel.Text = mod.getVersion(checkedListBox.SelectedIndex);
+            urlLabel.Text = mod.getUrl(checkedListBox.SelectedIndex);
+            typeLabel.Text = mod.getUsage(checkedListBox.SelectedIndex);
+            descriptionText.Text = mod.getDescription(checkedListBox.SelectedIndex);
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -20,6 +20,7 @@
     <xs:simpleType>
       <xs:restriction base="xs:string">
         <xs:enumeration value="required"/>
+        <xs:enumeration value="recommended"/>
         <xs:enumeration value="optional"/>
       </xs:restriction>
     </xs:simpleType>
