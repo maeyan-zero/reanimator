@@ -1059,77 +1059,79 @@ namespace Reanimator.Excel
             noRandomProperName = 2147483648
         }
 
-        struct BtMask3
+        [FlagsAttribute]
+        public enum BitMask03 : uint
         {
-            bool noNameModifications;//(0
-            bool preLoad;//(1
-            bool ignoreInDat;//(2
-            bool ignoreSavedStates;//(3
-            bool drawUsingCutUpWardrobe;//(4
-            bool isGood;//(5
-            bool isNpc;//(6
-            bool canNotBeMoved;//(7
-            bool noLevel;//(8
-            bool usesSkills;//(9
-            bool autoPickup;//(10
-            bool trigger;//(11
-            bool dieOnClientTrigger;//(12
-            bool neverDestroyDead;//(13
-            bool collideWhenDead;//(14
-            bool startDead;//(15
-            bool givesLoot;//(16
-            bool dontTriggerByProximity;//(17
-            bool triggerOnEnterRoom;//(18
-            bool destructible;//(19
-            bool inAir;//(20
-            bool wallWalk;//(21
-            bool startInTownIdle;//(22
-            bool onDieDestroy;//(23
-            bool onDieEndDestroy;//(24
-            bool onDieHideModel;//(25
-            bool selectableDeadOrDying;//(26
-            bool interactive;//(27
-            bool merchantDoesNotRefresh;//(28
-            bool hideDialogHead;//(28
-            bool collideBad;//(29
-            bool collideGood;//(30
-            bool modesIgnoreAI;//(31
+            noNameModifications = 1,
+            preLoad = 2,
+            ignoreInDat = 4,
+            ignoreSavedStates = 8,
+            drawUsingCutUpWardrobe = 16,
+            isGood = 32,
+            isNpc = 64,
+            canNotBeMoved = 128,
+            noLevel = 256,
+            usesSkills = 512,
+            autoPickup = 1024,
+            trigger = 2048,
+            dieOnClientTrigger = 4096,
+            neverDestroyDead = 8192,
+            collideWhenDead = 16384,
+            startDead = 32768,
+            givesLoot = 65536,
+            dontTriggerByProximity = 131072,
+            triggerOnEnterRoom = 262144,
+            destructible = 524288,
+            inAir = 1048576,
+            wallWalk = 2097152,
+            startInTownIdle = 4194304,
+            onDieDestroy = 8388608,
+            onDieEndDestroy = 16777216,
+            onDieHideModel = 33554432,
+            selectableDeadOrDying = 67108864,
+            interactive = 134217728,
+            //merchantDoesNotRefresh = 268435456, //28
+            //hideDialogHead = 268435456, // 28
+            collideBad = 536870912,
+            collideGood = 1073741824,
+            modesIgnoreAI = 2147483648
         }
 
-        struct BitMask4
+        [FlagsAttribute]
+        public enum BitMask04 : uint
         {
-            bool dontPath;//(0
-            bool snapToPathnodeOnCreate;//(1
-            bool unTargetable;//(2
-            bool FaceDuringInteraction;//(3
-            bool noSync;//(4
-            bool canNotTurn;//(5
-            bool turnNeckInsteadOfBody;//(6
-            bool merchant;//(7
-            bool merchantSharedInventory;//(8
-            bool trader;//(9
-            bool tradesman;//(10
-            bool gambler;//(11
-            bool mapVendor;//(12
-            bool godQuestMessanger;//(13
-            bool trainer;//(14
-            bool healer;//(15
-            bool graveKeeper;//(16
-            bool taskGiver;//(17
-            bool canUpgradeItems;//(18
-            bool canAugmentItems;//(19
-            bool autoIdentifiesInventory;//(20
-            bool npcDungeonWarp;//(21
-            bool PvPSignerUpper;//(22
-            bool foreman;//(23
-            bool transporter;//(24
-            bool showsPortrait;//(25
-            bool petGetsStatPointsPerLevel;//(26
-            bool ignoresSkillPowerCost;//(27
-            bool checkRadiusWhenPathing;//(28
-            bool checkHeightWhenPathing;//(29
-            bool questImportantInfo;//(30
-            bool ignoresToHit;//(31
+            dontPath = 1,
+            snapToPathnodeOnCreate = 2,
+            unTargetable = 4,
+            FaceDuringInteraction = 8,
+            noSync = 16,
+            canNotTurn = 32,
+            turnNeckInsteadOfBody = 64,
+            merchant = 128,
+            merchantSharedInventory = 256,
+            trader = 512,
+            tradesman = 1024,
+            gambler = 2048,
+            mapVendor = 4096,
+            godQuestMessanger = 8192,
+            trainer = 16384,
+            healer = 32768,
+            graveKeeper = 65536,
+            taskGiver = 131072,
+            canUpgradeItems = 262144,
+            canAugmentItems = 524288,
+            autoIdentifiesInventory = 1048576,
+            npcDungeonWarp = 2097152,
+            PvPSignerUpper = 4194304,
+            foreman = 8388608,
+            transporter = 16777216,
+            showsPortrait = 33554432,
+            petGetsStatPointsPerLevel = 67108864,
+            ignoresSkillPowerCost = 134217728,
+            checkRadiusWhenPathing = 268435456,
+            checkHeightWhenPathing = 536870912,
+            questImportantInfo = 1073741824,
+            ignoresToHit = 2147483648
         }
 
         struct BitMask5

@@ -30,7 +30,6 @@
       <xs:sequence>
         <xs:element name="data"/>
       </xs:sequence>
-      <xs:attribute ref="repack" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -119,6 +118,7 @@
       </xs:choice>
       <xs:attribute ref="id" use="required"/>
       <xs:attribute ref="dir" use="required"/>
+      <xs:attribute ref="repack" use="optional"/>
     </xs:complexType>
   </xs:element>
 
