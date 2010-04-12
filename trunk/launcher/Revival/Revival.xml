@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <revival xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="Schema.xsd">
+         xsi:schemaLocation="http://www.hellgateaus.net schema.xsd">
   <modification>
     <title>Revival SP modification</title>
     <version>2.0</version>
@@ -80,7 +80,7 @@
                 <switch>0</switch>
               </bitwise>
             </attribute>
-            <attribute id="bitmask06">
+            <attribute id="bitmask07">
               <bitwise id="MultiplayerOnly">
                 <switch>0</switch>
               </bitwise>
@@ -93,7 +93,7 @@
                 <data>5</data>
               </replace>
             </attribute>
-            <attribute id="Bitmask05">
+            <attribute id="bitmask05">
               <bitwise id="NoDrop">
                 <switch>1</switch>
               </bitwise>
@@ -106,7 +106,7 @@
                 <data>5</data>
               </replace>
             </attribute>
-            <attribute id="Bitmask05">
+            <attribute id="bitmask05">
               <bitwise id="NoDrop">
                 <switch>1</switch>
               </bitwise>
@@ -114,7 +114,7 @@
           </entity>
           <!--MANTRAWRAITH, ZOMBOT AND COKOMOKO-->
           <entity id="*" value="178-183">
-            <attribute id="Bitmask05">
+            <attribute id="bitmask05">
               <bitwise id="NoDropExceptForDuplicates">
                 <switch>1</switch>
               </bitwise>
