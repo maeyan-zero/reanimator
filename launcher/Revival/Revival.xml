@@ -493,8 +493,8 @@
       </file>
     </pack>
     <pack id="hellgate_localized000">
-      <file id="strings_items.xls.uni.cooked" dir="data\excel\strings\english\">
-        <replace repack="true">
+      <file id="strings_items.xls.uni.cooked" dir="data\excel\strings\english\" repack="true">
+        <replace>
           <data>data\excel\strings\english\strings_items.xls.uni.cooked</data>
         </replace>
       </file>

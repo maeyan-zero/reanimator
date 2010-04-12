@@ -388,7 +388,7 @@ namespace Reanimator
                                 if (file.replace != null)
                                 {
                                     // If its a strings file, repack it
-                                    if (file.replace.repack == true)
+                                    if (file.repack == true)
                                     {
                                         //FileStream buffer = new FileStream(revival.directory + "\\" + file.replace.data, FileMode.Open);
                                         
@@ -738,6 +738,9 @@ namespace Reanimator
             [XmlAttribute]
             public string dir;
 
+            [XmlAttribute]
+            public bool repack;
+
             [XmlElement(typeof(Modify))]
             public Modify modify;
 
@@ -872,9 +875,6 @@ namespace Reanimator
         {
             [XmlElement("data")]
             public string data;
-
-            [XmlAttribute]
-            public bool repack;
         }
         
         public class Divide
