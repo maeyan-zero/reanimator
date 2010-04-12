@@ -39,59 +39,6 @@ namespace Reanimator
     };
 
     [Serializable]
-    public class UnitAppearance
-    {
-        public UnitAppearance()
-        {
-            wardrobeLayers = new List<int>();
-            wardrobeAppearanceGroups = new List<int>();
-        }
-
-        [Serializable]
-        public struct UnknownCount1_S
-        {
-            // if (bitTest(bitField1, 0x0F)) // untested
-            public int unknown1;									// 32 bits
-
-            public int unknown2;									// 16 bits
-
-            // if (bitTest(bitField1, 0x00)) // if (bitField1 & 0x01)
-            public int unknownCount1;								// 3 bits		// alert if != 0 (not encountered yet)
-            public int[] unknownCount1s;						    // 32 bits * unknownCount1
-        };
-
-        [Serializable]
-        public struct GearAppearance
-        {
-            public int gear;										// 16 bits
-            public int unknownBool;									// 1 bit
-            public int unknownBoolValue;					    	// 2 bits
-        };
-
-        public int unknownCount1;									// 3 bits
-        public UnknownCount1_S[] unknownCount1s;
-
-        public int unknown1;										// 16 bits
-
-        // if (bitTest(bitField1, 0x16))
-        public byte[] unknown2;										// non-standard read in again
-
-        // if (bitTest(bitField1, 0x11))
-        public int wardrobeLayerCount;							    // 4 bits
-        public List<int> wardrobeLayers;						    // 16 bits * wardrobeLayerCount
-
-        public int wardrobeAppearanceGroupCount;					// 3 bits
-        public List<int> wardrobeAppearanceGroups;					// 16 bits * wardrobeAppearanceGroupCount
-
-        public int unknownCount3;									// 4 bits
-        public int[] unknownCount3s;						        // 8 bits * unknownCount3
-
-        // if (testBit(pUnit->bitField1, 0x10))
-        public int gearCount;										// 16 bits
-        public GearAppearance[] gears;				        	// 17 bits * gearCount
-    };
-
-    [Serializable]
     public struct UnitWeaponConfig
     {
         public int id;                                              // 16 bits      // .text:00000001403DB5EA mov     edx, 4       .text:00000001403DB5EF call    ConvertNumber?  ; Call Pr
@@ -111,6 +58,66 @@ namespace Reanimator
         public Unit()
         {
         }
+
+        [Serializable]
+        public class UnitAppearance
+        {
+            [Serializable]
+            public class EquippedItem
+            {
+                // if (bitTest(bitField1, 0x0F))                                
+                // unknown;									        // 32               Haven't encountered - saw in ASM though.
+
+                public int itemCode;									// 16
+
+                // if (bitTest(bitField1, 0x00)) // if (bitField1 & 0x01)
+                public int affixCount;								    // 3 bits
+                public List<int> affixCodes;						    // 32 bits * affixCount
+
+                public EquippedItem()
+                {
+                    affixCodes = new List<int>();
+                }
+            };
+
+            [Serializable]
+            public class ModelWardrobeLayer
+            {
+                public int itemCode;									// 16
+                public int unknownBool;									// 1
+                public int unknownBoolValue;					    	// 2
+            };
+
+            public int equippedItemCount;								// 3
+            public readonly List<EquippedItem> EquippedItems;
+
+            public int unknown1;										// 16
+
+            // if (bitTest(bitField1, 0x16))
+            public byte[] unknown2;										// non-standard read in again
+
+            // if (bitTest(bitField1, 0x11))
+            public int wardrobeLayerHeadCount;							// 4
+            public readonly List<int> WardrobeLayersHead;				// 16 * wardrobeLayerHeadCount
+
+            public int wardrobeAppearanceGroupCount;					// 3
+            public readonly List<int> WardrobeAppearanceGroups;			// 16 * wardrobeAppearanceGroupCount
+
+            public int unknownCount3;									// 4
+            public int[] unknownCount3s;						        // 8 * unknownCount3
+
+            // if (testBit(pUnit->bitField1, 0x10))
+            public int wardrobeLayerCount;								// 16          This is the model appearance
+            public readonly List<ModelWardrobeLayer> WardrobeLayers;
+
+            public UnitAppearance()
+            {
+                EquippedItems = new List<EquippedItem>();
+                WardrobeLayersHead = new List<int>();
+                WardrobeAppearanceGroups = new List<int>();
+                WardrobeLayers = new List<ModelWardrobeLayer>();
+            }
+        };
 
         [Serializable]
         public class StatBlock
@@ -948,30 +955,31 @@ namespace Reanimator
 
         private bool ReadAppearance(ref Unit heroUnit, ref UnitAppearance appearance)
         {
-            appearance.unknownCount1 = _bitBuffer.ReadBits(3);
-            appearance.unknownCount1s = new UnitAppearance.UnknownCount1_S[appearance.unknownCount1];
-            for (int i = 0; i < appearance.unknownCount1; i++)
+            appearance.equippedItemCount = _bitBuffer.ReadBits(3);
+            for (int i = 0; i < appearance.equippedItemCount; i++)
             {
-                UnitAppearance.UnknownCount1_S uc1 = new UnitAppearance.UnknownCount1_S();
+                UnitAppearance.EquippedItem equippedItem = new UnitAppearance.EquippedItem();
 
-                if (TestBit(heroUnit.bitField1, 0x0F)) // untested
+                if (TestBit(heroUnit.bitField1, 0x0F))
                 {
-                    uc1.unknown1 = _bitBuffer.ReadBits(32);
+                    MessageBox.Show(
+                        "Unexpected bitField1 value! (0x0F == true)\nNot-Implemented cases. Please report this warning and supply the offending file.",
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
                 }
 
-                uc1.unknown2 = _bitBuffer.ReadBits(16);
+                equippedItem.itemCode = _bitBuffer.ReadBits(16);
 
                 if (TestBit(heroUnit.bitField1, 0x00))
                 {
-                    uc1.unknownCount1 = _bitBuffer.ReadBits(3);
-                    uc1.unknownCount1s = new int[uc1.unknownCount1];
-                    for (int j = 0; j < uc1.unknownCount1; j++)
+                    equippedItem.affixCount = _bitBuffer.ReadBits(3);
+                    for (int j = 0; j < equippedItem.affixCount; j++)
                     {
-                        uc1.unknownCount1s[j] = _bitBuffer.ReadBits(32);
+                        equippedItem.affixCodes.Add(_bitBuffer.ReadBits(32));
                     }
                 }
 
-                appearance.unknownCount1s[i] = uc1;
+                appearance.EquippedItems.Add(equippedItem);
             }
 
 
@@ -986,16 +994,16 @@ namespace Reanimator
 
             if (TestBit(heroUnit.bitField1, 0x11))
             {
-                appearance.wardrobeLayerCount = _bitBuffer.ReadBits(4);
-                for (int i = 0; i < appearance.wardrobeLayerCount; i++)
+                appearance.wardrobeLayerHeadCount = _bitBuffer.ReadBits(4);
+                for (int i = 0; i < appearance.wardrobeLayerHeadCount; i++)
                 {
-                    appearance.wardrobeLayers.Add(_bitBuffer.ReadBits(16));
+                    appearance.WardrobeLayersHead.Add(_bitBuffer.ReadBits(16));
                 }
 
                 appearance.wardrobeAppearanceGroupCount = _bitBuffer.ReadBits(3);
                 for (int i = 0; i < appearance.wardrobeAppearanceGroupCount; i++)
                 {
-                    appearance.wardrobeAppearanceGroups.Add(_bitBuffer.ReadBits(16));
+                    appearance.WardrobeAppearanceGroups.Add(_bitBuffer.ReadBits(16));
                 }
 
                 appearance.unknownCount3 = _bitBuffer.ReadBits(4);
@@ -1009,20 +1017,19 @@ namespace Reanimator
 
             if (TestBit(heroUnit.bitField1, 0x10))
             {
-                appearance.gearCount = _bitBuffer.ReadBits(16);
-                appearance.gears = new UnitAppearance.GearAppearance[appearance.gearCount];
-                for (int i = 0; i < appearance.gearCount; i++)
+                appearance.wardrobeLayerCount = _bitBuffer.ReadBits(16);
+                for (int i = 0; i < appearance.wardrobeLayerCount; i++)
                 {
-                    UnitAppearance.GearAppearance gear = new UnitAppearance.GearAppearance();
+                    UnitAppearance.ModelWardrobeLayer gear = new UnitAppearance.ModelWardrobeLayer();
 
-                    gear.gear = _bitBuffer.ReadBits(16);
+                    gear.itemCode = _bitBuffer.ReadBits(16);
                     gear.unknownBool = _bitBuffer.ReadBits(1);
                     if (gear.unknownBool == 1)
                     {
                         gear.unknownBoolValue = _bitBuffer.ReadBits(2);
                     }
 
-                    appearance.gears[i] = gear;
+                    appearance.WardrobeLayers.Add(gear);
                 }
             }
 
@@ -1276,7 +1283,6 @@ namespace Reanimator
             int useUnknown_08 = 0; // (1 << 0x08);
             int use_0A_CharacterFlags2 = 0; // (1 << 0x0A);
             int use_0D_Stats = 0; // (1 << 0x0D);
-            int useUnknown_0F = 0; // (1 << 0x0F);
             int useUnknown_16 = 0; // (1 << 0x16);
             int useUnknown_11 = 0; // (1 << 0x11);
             int useUnknown_10 = 0; // (1 << 0x10);
@@ -1303,8 +1309,6 @@ namespace Reanimator
                 use_0A_CharacterFlags2 = (1 << 0x0A);
             if (TestBit(unit.bitField1, 0x0D))
                 use_0D_Stats = (1 << 0x0D);
-            if (TestBit(unit.bitField1, 0x0F))
-                useUnknown_0F = (1 << 0x0F);
             if (TestBit(unit.bitField1, 0x16))
                 useUnknown_16 = (1 << 0x16);
             if (TestBit(unit.bitField1, 0x11))
@@ -1512,23 +1516,21 @@ namespace Reanimator
             saveBuffer.WriteBits(unit.hasAppearanceDetails, 1);
             if (unit.hasAppearanceDetails > 0)
             {
-                saveBuffer.WriteBits(unit.unitAppearance.unknownCount1, 3);
-                for (int i = 0; i < unit.unitAppearance.unknownCount1; i++)
+                int equippedItemCount = unit.unitAppearance.EquippedItems.Count;
+                saveBuffer.WriteBits(equippedItemCount, 3);
+                for (int i = 0; i < equippedItemCount; i++)
                 {
-                    if (useUnknown_0F > 0)
-                    {
-                        saveBuffer.WriteBits(unit.unitAppearance.unknownCount1s[i].unknown1, 32); // untested
-                    }
+                    UnitAppearance.EquippedItem equippedItem = unit.unitAppearance.EquippedItems[i];
 
-                    saveBuffer.WriteBits(unit.unitAppearance.unknownCount1s[i].unknown2, 16);
+                    saveBuffer.WriteBits(equippedItem.itemCode, 16);
 
-                    if (use_00_FlagAlignment > 0)
+                    if (use_00_FlagAlignment <= 0) continue;
+
+                    int affixCount = equippedItem.affixCodes.Count;
+                    saveBuffer.WriteBits(affixCount, 3);
+                    for (int j = 0; j < affixCount; j++)
                     {
-                        saveBuffer.WriteBits(unit.unitAppearance.unknownCount1s[i].unknownCount1, 3);
-                        for (int j = 0; j < unit.unitAppearance.unknownCount1s[i].unknownCount1; j++)
-                        {
-                            saveBuffer.WriteBits(unit.unitAppearance.unknownCount1s[i].unknownCount1s[j], 32);
-                        }
+                        saveBuffer.WriteBits(equippedItem.affixCodes[j], 32);
                     }
                 }
 
@@ -1541,18 +1543,18 @@ namespace Reanimator
 
                 if (useUnknown_11 > 0)
                 {
-                    int wardrobeLayerCount = unit.unitAppearance.wardrobeLayers.Count;
+                    int wardrobeLayerCount = unit.unitAppearance.WardrobeLayersHead.Count;
                     saveBuffer.WriteBits(wardrobeLayerCount, 4);
                     for (int i = 0; i < wardrobeLayerCount; i++)
                     {
-                        saveBuffer.WriteBits(unit.unitAppearance.wardrobeLayers[i], 16);
+                        saveBuffer.WriteBits(unit.unitAppearance.WardrobeLayersHead[i], 16);
                     }
 
-                    int wardrobeAppearanceGroupCount = unit.unitAppearance.wardrobeAppearanceGroups.Count;
+                    int wardrobeAppearanceGroupCount = unit.unitAppearance.WardrobeAppearanceGroups.Count;
                     saveBuffer.WriteBits(wardrobeAppearanceGroupCount, 3);
                     for (int i = 0; i < wardrobeAppearanceGroupCount; i++)
                     {
-                        saveBuffer.WriteBits(unit.unitAppearance.wardrobeAppearanceGroups[i], 16);
+                        saveBuffer.WriteBits(unit.unitAppearance.WardrobeAppearanceGroups[i], 16);
                     }
 
                     saveBuffer.WriteBits(unit.unitAppearance.unknownCount3, 4);
@@ -1564,14 +1566,14 @@ namespace Reanimator
 
                 if (useUnknown_10 > 0)
                 {
-                    saveBuffer.WriteBits(unit.unitAppearance.gearCount, 16);
-                    for (int i = 0; i < unit.unitAppearance.gearCount; i++)
+                    saveBuffer.WriteBits(unit.unitAppearance.wardrobeLayerCount, 16);
+                    for (int i = 0; i < unit.unitAppearance.wardrobeLayerCount; i++)
                     {
-                        saveBuffer.WriteBits(unit.unitAppearance.gears[i].gear, 16);
-                        saveBuffer.WriteBits(unit.unitAppearance.gears[i].unknownBool, 1);
-                        if (unit.unitAppearance.gears[i].unknownBool > 0)
+                        saveBuffer.WriteBits(unit.unitAppearance.WardrobeLayers[i].itemCode, 16);
+                        saveBuffer.WriteBits(unit.unitAppearance.WardrobeLayers[i].unknownBool, 1);
+                        if (unit.unitAppearance.WardrobeLayers[i].unknownBool > 0)
                         {
-                            saveBuffer.WriteBits(unit.unitAppearance.gears[i].unknownBoolValue, 2);
+                            saveBuffer.WriteBits(unit.unitAppearance.WardrobeLayers[i].unknownBoolValue, 2);
                         }
                     }
                 }
