@@ -12,50 +12,19 @@ using System.Data;
 using Reanimator.Excel;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Drawing;
 
 namespace Reanimator
 {
     public class RevivalMod : IDisposable
     {
-        [DllImport("zlibwapi86.dll")]
-        private static extern int compress
-        (
-            [MarshalAs(UnmanagedType.LPArray)]
-            Byte[] destinationBuffer,
-            [MarshalAs(UnmanagedType.U4)]
-            ref UInt32 destinationLength,
-            [MarshalAs(UnmanagedType.LPArray)]
-            Byte[] sourceBuffer,
-            [MarshalAs(UnmanagedType.U4)]
-            UInt32 sourceLength
-        );
-
-        [DllImport("zlibwapi64.dll")]
-        private static extern int compress
-        (
-            [MarshalAs(UnmanagedType.LPArray)]
-            Byte[] destinationBuffer,
-            [MarshalAs(UnmanagedType.U8)]
-            ref UInt64 destinationLength,
-            [MarshalAs(UnmanagedType.LPArray)]
-            Byte[] sourceBuffer,
-            [MarshalAs(UnmanagedType.U8)]
-            UInt64 sourceLength
-        );
-
         Index[] index;                  // An array of all the Hellgate idx files.
         Revival revival;                // The modifications
-
         TableDataSet data_set;          // Dataset representation of excel files.
-
         ExcelTables excel_tables;       // Interface for accessing Excel data.
         List<ExcelTable> excel_list;    // Excel files.
         List<String> loaded_excel_list; // Loaded Excel files.
         List<String> saved_excel_list;  // Saved Excel files.
-
-        List<StringsFile> string_list;  // String files.
-        List<String> loaded_string_list;// Loaded String files.
-        List<String> saved_string_list; // Saved String files.
 
         /// <summary>
         /// Constructor for Revival modifications. Must pass the path to the Revival modification.
@@ -65,16 +34,14 @@ namespace Reanimator
             revival = Deserialize(path);
             revival.directory = path.Substring(0, path.LastIndexOf("\\"));
             index = Index.LoadIndexFiles(Config.HglDir + "\\data\\");
-
+            if (System.IO.File.Exists(revival.directory + "\\caption.png"))
+            {
+                revival.image = Image.FromFile(revival.directory + "\\caption.png");
+            }
             data_set = new TableDataSet();
-
             excel_list = new List<ExcelTable>();
             loaded_excel_list = new List<String>();
             saved_excel_list = new List<String>();
-
-            string_list = new List<StringsFile>();
-            loaded_string_list = new List<String>();
-            saved_string_list = new List<String>();
         }
 
         public void Append(RevivalMod mod)
@@ -139,7 +106,6 @@ namespace Reanimator
             return revival;
         }
 
-        // To be used with a progress form only.
         public void ModifyExcelFiles(Forms.ProgressForm progress, Object argument)
         {
             foreach (Modification modification in revival)
@@ -468,32 +434,40 @@ namespace Reanimator
             }
         }
 
-        private void Logic(TableDataSet dataSet, String file, Attribute attribute, int row)
+        private void Logic(TableDataSet data_set, String file, Attribute attribute, int row)
         {
             try
             {
+                //////
+                // Replace
+                //
                 if (attribute.replace != null)
                 {
-                    if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(Int32))
+                    if (data_set.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(Int32))
                     {
-                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToUInt32(attribute.replace.data);
+                        data_set.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToUInt32(attribute.replace.data);
                     }
-                    else if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(float))
+                    else if (data_set.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(float))
                     {
-                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToSingle(attribute.replace.data);
+                        data_set.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToSingle(attribute.replace.data);
                     }
-                    else if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(string))
+                    else if (data_set.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(string))
                     {
-                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace.data;
+                        data_set.XlsDataSet.Tables[file].Rows[row][attribute.id] = attribute.replace.data;
                     }
                 }
-                else if (attribute.bitwise != null)
+
+                //////
+                // Bitwise
+                //
+                if (attribute.bitwise != null)
                 {
-                    uint value = Convert.ToUInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]);
+                    uint value = Convert.ToUInt32(data_set.XlsDataSet.Tables[file].Rows[row][attribute.id]);
                     uint arg = 0;
                     uint result = 0;
                     bool current = false;
 
+                    // Need better logic for determining datatypes. This switch case seems cumbersome
                     for (int j = 0; j < attribute.bitwise.Length; j++)
                     {
                         foreach (Bitwise bitmask in attribute.bitwise)
@@ -522,27 +496,41 @@ namespace Reanimator
                                     arg = (uint)Enum.Parse(typeof(Items.BitMask07), bitmask.id, true);
                                     break;
                             }
-                            result = value & arg;
-                            if (result > 0) current = true;
 
+                            // Is the current value on or off?
+                            if ((value & arg) > 0)
+                            {
+                                current = true;
+                            }
+
+                            // Does the current value need to be inversed?
                             if (current != bitmask.switch_data)
                             {
-                                dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = (value ^= arg);
+                                data_set.XlsDataSet.Tables[file].Rows[row][attribute.id] = (value ^= arg);
                             }
                         }
                     }
                 }
-                else if (attribute.divide != null)
+
+                //////
+                // Divide
+                //
+                if (attribute.divide != null)
                 {
-                    if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(Int32))
+                    if (data_set.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(Int32))
                     {
-                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToInt32(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / Convert.ToInt32(attribute.divide.data);
+                        data_set.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToInt32(data_set.XlsDataSet.Tables[file].Rows[row][attribute.id]) / Convert.ToInt32(attribute.divide.data);
                     }
-                    else if (dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(float))
+                    else if (data_set.XlsDataSet.Tables[file].Rows[row][attribute.id].GetType() == typeof(float))
                     {
-                        dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToSingle(dataSet.XlsDataSet.Tables[file].Rows[row][attribute.id]) / Convert.ToSingle(attribute.divide.data);
+                        data_set.XlsDataSet.Tables[file].Rows[row][attribute.id] = Convert.ToSingle(data_set.XlsDataSet.Tables[file].Rows[row][attribute.id]) / Convert.ToSingle(attribute.divide.data);
                     }
                 }
+
+                //////
+                // Multiply
+                //
+                // TODO
             }
             catch(Exception e)
             {
@@ -563,9 +551,29 @@ namespace Reanimator
             return revival.modification[i].title;
         }
 
+        public string getVersion(int i)
+        {
+            return revival.modification[i].version;
+        }
+
+        public string getAuthor(int i)
+        {
+            return revival.modification[i].author;
+        }
+
+        public string getUrl(int i)
+        {
+            return revival.modification[i].url;
+        }
+
+        public string getUsage(int i)
+        {
+             return revival.modification[i].type;
+        }
+
         public string getDescription(int i)
         {
-             return revival.modification[i].GetListDescription();
+            return revival.modification[i].description;
         }
 
         public bool getEnabled(int i)
@@ -578,6 +586,14 @@ namespace Reanimator
             revival.modification[i].apply = use;
         }
 
+        public Image Caption
+        {
+            get
+            {
+                return revival.image;
+            }
+        }
+
         [XmlRoot("revival")]
         public class Revival
         {
@@ -586,6 +602,9 @@ namespace Reanimator
 
             [XmlIgnoreAttribute]
             public String directory;
+
+            [XmlIgnoreAttribute]
+            public Image image;
 
             public MyEnumerator GetEnumerator()
             {
