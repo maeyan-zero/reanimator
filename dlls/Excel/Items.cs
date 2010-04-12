@@ -276,215 +276,13 @@ namespace Reanimator.Excel
             public Int32 impactUnitToxic;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 120)]
             byte[] unknown40;
-            public BitMask01 bitmask01;/**'spawn',0
-      'spawn at merchant',1
-      'ForceIgnoresScale',2
-      'impact on fuse',3
-      'impact on free',4
-      'impact on hit unit',5
-      'impact on hit background',6
-      'havok ignores direction',7
-      'damages on fuse',8
-      'hits units',9
-      'kill on unit hit',10
-      'hits background',11
-      'no ray collision',12
-      'kill on background',13
-      'stick on hit',14
-      'stick on init',15
-      'Sync',16
-      'Client only',17
-      'Server only',18
-      'use source vel',19
-      'must hit',20
-      'prioritize target',21
-      'TrailEffectsUseProjectile',22
-      'ImpactEffectsUseProjectile',23
-      'destroy other missiles',24
-      'dont hit skill target',25
-      'flip face direction',26
-      'don''t use range for skill',27
-      'pulls target',28
-	  'damages on hit unit',29
-	  'pulses stats on hit unit',30
-	  'damages on hit background',31*/
-            public Int32 bitmask02;/**'always check for collisions',0
-      'set shape percentages',1
-      'use source appearance',2
-      'don''t transfer riders from owner',3
-      'don''t transfer damages on client',4
-      'missile ignore postlaunch',5
-      'attacks location on hit unit',6
-      'dont deactivate with room',7
-      'anger others on damaged',8
-      'anger others on death',9
-      'always face skill target',10
-      'Set Rope End with No Target',11
-      'force draw direction to move direction',12
-      'quest name color',13
-      'do not sort weapons',14
-      'Ignores equip class reqs',15
-      'do not use sorce for tohit',16
-      'angle while pathing',17
-      'don''t add wardrobe layer',18
-      'don''t use container appearance',19
-      'subscriber only',20
-      'compute level requirement',21
-      'don''t fatten collision',22
-      'automap save',23
-      'requires can operate to be known',24
-      'force free on room reset',25
-      'can reflect',26
-      'select target ignores aim pos',27
-      'can melee above height',28
-	  'get flavortext from Quest',29
-	  'unidentified name from base row',30
-      'no random proper name',31*/
-            public Int32 bitmask03;/**'no name modifications',0
-	  'preload',1
-      'ignore in dat',2
-      'ignore saved states',3
-      'draw using cut up wardrobe',4
-	  'is good',5
-      'is npc',6
-      'cannot be moved',7
-	  'nolevel',8
-	  'uses skills',9
-	  'autopickup',10
-	  'trigger',11
-      'die on client trigger',12
-      'never destroy dead',13
-      'collide when dead',14
-      'Start dead',15
-      'gives loot',16
-      'donÆt trigger by proximity',17
-      'trigger on enter room',18
-      'destructible',19
-      'in air',20
-      'wall walk',21
-	  'start in town idle',22
-	  'on die destroy',23
-      'on die end destroy',24
-      'on die hide model',25
-      'selectable dead or dying',26
-	  'interactive',27
-      'HideDialogHead',28
-	  'collide bad',29
-	  'collide good',30
-	  'modes ignore AI',31*/
-            public Int32 bitmask04;/**'dont path',0
-      'snap to pathnode on create',1
-      'untargetable',2
-      'FaceDuringInteraction',3
-      'no sync',4
-	  'cannot turn',5
-      'turn neck instead of body',6
-      'Merchant',7
-      'Merchant Shared Inventory',8
-	  'Trader',9
-	  'Tradesman',10
-      'Gambler',11
-      'MapVendor',12
-	  'GodQuestMessanger',13
-	  'Trainer',14
-	  'Healer',15
-      'Gravekeeper',16
-      'TaskGiver',17
-	  'Can Upgrade Items',18
-      'Can Augment Items',19
-      'Auto Identifies Inventory',20
-	  'NPCDungeonWarp',21
-      'PvPSignerUpper',22
-      'Foreman',23
-	  'Transporter',24
-	  'Shows Portrait',25
-	  'Pet Gets Stat Points per Level',26
-	  'Ignores Skill Power Cost',27
-	  'check radius when pathing',28
-      'check height when pathing',29
-	  'QuestImportantInfo',30
-	  'ignores tohit',31*/
-            public Int32 bitmask05;/**'AskQuestsForOperate',0
-	  'AskFactionForOperate',1
-	  'AskPvPCensorshipForOperate',2
-      'Structural',3
-      'AskQuestsForKnown',4
-      'AskQuestsForVisible',5
-      'inform quests on init',6
-      'InformQuestsOfLootDrop',7
-      'inform quests on death',8
-      'no trade',9
-	  'Flag Room As No Spawn',10
-      'MonitorPlayerApproach',11
-      'MonitorApproachClearLOS',12
-	  'can fizzle',13
-      'inherits direction',14
-	  'cannot be dismantled',15
-      'cannot be upgraded',16
-      'cannot be augmented',17
-      'cannot be de-modded',18
-	  'ignore sell with inventory confirm',19
-	  'wardrobe per unit',20
-	  'wardrobe shares model def',21
-      'no weapon model',22
-      'NoDrop',24
-      'NoDropExceptForDuplicates',25
-      'AskQuestsForPickup',26
-      'InformQuestsOnPickup',27
-	  'Examinable',28
-	  'InformQuestsToUse',29
-      'Consume When Used',30
-	  'immune to critical',31*/
-            public Int32 bitmask06;/**'no random affixes',0
-	  'can be champion',1
-	  'no quality downgrade',2
-	  'no draw on init',3
-	  'must face melee target',4
-	  'don''t destroy if velocity is zero',5
-	  'ignore interact distance',6
-	  'operate requires good quest status',7
-	  'reverse arrive direction',8
-      'face after warp',9
-      'never a start location',10
-	  'always show label',11
-	  '',13 //no predefined name
-	  'is nonweapon missile',15
-      'cull by screensize',16
-	  'link warp dest by level type',17
-      'is boss',18
-      'take responsibility on kill',20
-      'always known for sounds',21
-	  'ignore target on repeat dmg',22
-	  'bind to level area',23
-      'don''t collide with destructibles',24
-      'blocks everything',25
-      'everyone can target',26
-      'missile plot arc',27
-      'Pet dies on Warp',28
-      'missile is gore',29
-	  'Can Attack Friends',30
-	  'ignore item requirements',31*/
-            public Int32 bitmask07;/**'low lod in town',0
-	  'treasure class before room',1
-	  'TaskGiver No Starting Icon',2
-      'Assign GUID',3
-      'Merchant Does Not Refresh',4
-	  'dont depopulate',5
-      'don''t shrink bones',6
-	  'has quest info',8
-	  'multiplayer only',9
-	  'No Spin',10
-	  'NPCGuildMaster',11
-      'auto identify affixs',12
-	  'NPCRespeccer',13
-      'allow object stepping',14
-	  'always use fallback',15
-      'cannot spawn random level treasure',16
-	  'xfer missile stats',17
-      'specific to difficulty',18
-      'is field missile',19
-      'ignore fuse ms stat',20
-	  'uses petlevel',21*/
+            public BitMask01 bitmask01;
+            public BitMask02 bitmask02;
+            public BitMask03 bitmask03;
+            public BitMask04 bitmask04;
+            public BitMask05 bitmask05;
+            public BitMask06 bitmask06;
+            public BitMask07 bitmask07;
             [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
             public Int32 String;
             [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
@@ -987,7 +785,6 @@ namespace Reanimator.Excel
             ReadTables<ItemsTable>(data, ref offset, Count);
         }
 
-#pragma warning disable 0169
         [FlagsAttribute]
         public enum BitMask01 : uint
         {
@@ -1136,111 +933,115 @@ namespace Reanimator.Excel
             ignoresToHit = 2147483648
         }
 
-        struct BitMask5
+        [FlagsAttribute]
+        public enum BitMask05 : uint
         {
-            bool askQuestsForOperate;//(0
-            bool askFactionForOperate;//(1
-            bool askPvPCensorshipForOperate;//(2
-            bool structural;//(3
-            bool askQuestsForKnown;//(4
-            bool askQuestsForVisible;//(5
-            bool informQuestsOnInit;//(6
-            bool informQuestsOfLootDrop;//(7
-            bool informQuestsOnDeath;//(8
-            bool noTrade;//(9
-            bool flagRoomAsNoSpawn;//(10
-            bool monitorPlayerApproach;//(11
-            bool monitorApproachClearLOS;//(12
-            bool canFizzle;//(13
-            bool inheritsDirection;//(14
-            bool canNotBeDismantled;//(15
-            bool canNotBeUpgraded;//(16
-            bool canNotBeAugmented;//(17
-            bool canNotBeDeModded;//(18
-            bool ignoreSellWithInventoryConfirm;//(19
-            bool wardrobePerUnit;//(20
-            bool wardrobeSharesModelDef;//(21
-            bool noWeaponModel;//(22
+            askQuestsForOperate = 1,
+            askFactionForOperate = 2,
+            askPvPCensorshipForOperate = 4,
+            structural = 8,
+            askQuestsForKnown = 16,
+            askQuestsForVisible = 32,
+            informQuestsOnInit = 64,
+            informQuestsOfLootDrop = 128,
+            informQuestsOnDeath = 256,
+            noTrade = 512,
+            flagRoomAsNoSpawn = 1024,
+            monitorPlayerApproach = 2048,
+            monitorApproachClearLOS = 4096,
+            canFizzle = 8192,
+            inheritsDirection = 16384,
+            canNotBeDismantled = 32768,
+            canNotBeUpgraded = 65536,
+            canNotBeAugmentedtaskGiver = 131072,
+            canNotBeDeModded = 262144,
+            ignoreSellWithInventoryConfirm = 524288,
+            wardrobePerUnit = 1048576,
+            wardrobeSharesModelDef = 2097152,
+            noWeaponModel = 4194304,
             //23
-            bool noDrop;//(24
-            bool noDropExceptForDuplicates;//(25
-            bool askQuestsForPickup;//(26
-            bool informQuestsOnPickup;//(27
-            bool examinable;//(28
-            bool informQuestsToUse;//(29
-            bool consumeWhenUsed;//(30
-            bool immuneToCritical;//(31
+            noDrop = 16777216,
+            noDropExceptForDuplicates = 33554432,
+            askQuestsForPickup = 67108864,
+            informQuestsOnPickup = 134217728,
+            examinable = 268435456,
+            informQuestsToUse = 536870912,
+            consumeWhenUsed = 1073741824,
+            immuneToCritical = 2147483648
         }
 
-        struct BitMask6
+        [FlagsAttribute]
+        public enum BitMask06 : uint
         {
-            bool NoRandomAffixes;//(0
-            bool canBeChampion;//(1
-            bool noQualityDowngrade;//(2
-            bool noDrawOnInit;//(3
-            bool mustFaceMeleeTarget;//(4
-            bool dontDestroyIfVelocityIsZero;//(5
-            bool ignoreInteractDistance;//(6
-            bool operateRequiresGoodQuestStatus;//(7
-            bool reverseArriveDirection;//(8
-            bool faceAfterWarp;//(9
-            bool neverAStartLocation;//(10
-            bool alwaysShowLabel;//(11
+            NoRandomAffixes = 1,
+            canBeChampion = 2,
+            noQualityDowngrade = 4,
+            noDrawOnInit = 8,
+            mustFaceMeleeTarget = 16,
+            dontDestroyIfVelocityIsZero = 32,
+            ignoreInteractDistance = 64,
+            operateRequiresGoodQuestStatus = 128,
+            reverseArriveDirection = 256,
+            faceAfterWarp = 512,
+            neverAStartLocation = 1024,
+            alwaysShowLabel = 2048,
             //12
-            bool undefined13;//(13 //no predefined name
+            undefined13 = 8192, //no predefined name
             //14
-            bool isNonweaponMissile;//(15
-            bool cullByScreensize;//(16
-            bool linkWarpDestByLevelType;//(17
-            bool isBoss;//(18
+            isNonweaponMissile = 32768,
+            cullByScreensize = 65536,
+            linkWarpDestByLevelType = 131072,
+            isBoss = 262144,
             //19
-            bool takeResponsibilityOnKill;//(20
-            bool alwaysKnownForSounds;//(21
-            bool ignoreTargetOnRepeatDmg;//(22
-            bool bindToLevelArea;//(23
-            bool dontCollideWithDestructibles;//(24
-            bool blocksEverything;//(25
-            bool everyoneCanTarget;//(26
-            bool missilePlotArc;//(27
-            bool petDiesOnWarp;//28
-            bool missileIsGore;//(29
-            bool canAttackFriends;//(30
-            bool ignoreItemRequirements;//(31
-        }
-        struct Bitmask7
-        {
-            bool lowLodInTown;//(0
-            bool treasureClassBeforeRoom;//(1
-            bool taskGiverNoStartingIcon;//(2
-            bool assignGUID;//3
-            bool merchantDoesNotRefresh;//4
-            bool dontDepopulate;//(5
-            bool dontShrinkBones;//(6
-            //7
-            bool hasQuestInfo;//(8
-            bool multiplayerOnly;//(9
-            bool noSpin;//(10
-            bool npcGuildMaster;//(11
-            bool autoIdentifyAffixs;//(12
-            bool npcRespeccer;//(13
-            bool allowObjectStepping;//(14
-            bool alwaysUseFallback;//(15
-            bool canNotSpawnRandomLevelTreasure;//(16
-            bool xferMissileStats;//(17
-            bool specificToDifficulty;//(18
-            bool isFieldMissile;//(19
-            bool ignoreFuseMsStat;//(20
-            bool usesPetLevel;//(21
-        }
-        struct BitMask8
-        {
-            bool bounceOnUnitHit;//(0);//these are probably only for missiles.t.c
-            bool bounceOnBackGroundHit;//(1);
-            bool newDirectionOnBounce;//(2);
-            bool canNotRicochet;//(3)
-            bool reTargetOnBounce;//(4)
+            takeResponsibilityOnKill = 1048576,
+            alwaysKnownForSounds = 2097152,
+            ignoreTargetOnRepeatDmg = 4194304,
+            bindToLevelArea = 8388608,
+            dontCollideWithDestructibles = 16777216,
+            blocksEverything = 33554432,
+            everyoneCanTarget = 67108864,
+            missilePlotArc = 134217728,
+            petDiesOnWarp = 268435456,
+            missileIsGore = 536870912,
+            canAttackFriends = 1073741824,
+            ignoreItemRequirements = 2147483648
         }
 
-#pragma warning restore 0169
+        [FlagsAttribute]
+        public enum BitMask07 : uint
+        {
+            lowLodInTown = 1,
+            treasureClassBeforeRoom = 2,
+            taskGiverNoStartingIcon = 4,
+            assignGUID = 8,
+            merchantDoesNotRefresh = 16,
+            dontDepopulate = 32,
+            dontShrinkBones = 64,
+            //7
+            hasQuestInfo = 256,
+            multiplayerOnly = 512,
+            noSpin = 1024,
+            npcGuildMaster = 2048,
+            autoIdentifyAffixs = 4096,
+            npcRespeccer = 8192,
+            allowObjectStepping = 16384,
+            alwaysUseFallback = 32768,
+            canNotSpawnRandomLevelTreasure = 65536,
+            xferMissileStats = 131072,
+            specificToDifficulty = 262144,
+            isFieldMissile = 524288,
+            ignoreFuseMsStat = 1048576,
+            usesPetLevel = 2097152
+        }
+
+        [FlagsAttribute]
+        public enum BitMask08 : uint
+        {
+            bounceOnUnitHit = 1,//these are probably only for missiles.t.c
+            bounceOnBackGroundHit = 2,
+            newDirectionOnBounce = 4,
+            canNotRicochet = 8,
+            reTargetOnBounce = 16
+        }
     }
 }

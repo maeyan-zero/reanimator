@@ -403,6 +403,25 @@ namespace Reanimator
             return destBuffer;
         }
 
+        public void AppendToDat(byte[] uncompressed_buffer, bool do_compress, FileIndex index, bool write_index)
+        {
+            // New Entry
+            FileIndex new_index = index;
+            // Move pointer to the end of the stream.
+            if (DatFileOpen == false) OpenAccompanyingDat();
+            DataFile.Seek(0, SeekOrigin.End);
+            
+
+            if (do_compress == true)
+            {
+                byte[] compressed_buffer = new byte[uncompressed_buffer.Length];
+                uint len = (uint)compressed_buffer.Length;
+                compress(compressed_buffer, ref len, uncompressed_buffer, (uint)uncompressed_buffer.Length);
+                int i = 1;
+                //DataFile.Write(compressed_buffer, 0, len);
+            }
+        }
+
         public byte[] GenerateIndexFile()
         {
             byte[] buffer = new byte[1024];

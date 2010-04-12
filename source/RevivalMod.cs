@@ -394,12 +394,9 @@ namespace Reanimator
                                         
                                         //byte[] byte_buffer = new byte[buffer.Length];
 
-                                        //uint len = (uint)buffer.Length;
-
-                                        //byte[] compressed_buffer = new byte[byte_buffer.Length];
-
                                         //buffer.Read(byte_buffer, 0, (int)buffer.Length);
 
+                                        //index[pack.list_id].AppendToDat(byte_buffer, true, index[pack.list_id].FileTable[file.index_id], true);
                                         //compress(byte_buffer, ref len, compressed_buffer, (uint)byte_buffer.Length);
                                         
                                         //index[pack.list_id].DataFile.Seek(0, SeekOrigin.End);
@@ -504,19 +501,25 @@ namespace Reanimator
                             switch (attribute.id)
                             {
                                 case "bitmask01":
-                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask01), bitmask.id, true);
+                                    arg = (uint)Enum.Parse(typeof(Items.BitMask01), bitmask.id, true);
                                     break;
                                 case "bitmask02":
-                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask02), bitmask.id, true);
+                                    arg = (uint)Enum.Parse(typeof(Items.BitMask02), bitmask.id, true);
                                     break;
                                 case "bitmask03":
-                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask03), bitmask.id, true);
+                                    arg = (uint)Enum.Parse(typeof(Items.BitMask03), bitmask.id, true);
                                     break;
                                 case "bitmask04":
-                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask04), bitmask.id, true);
+                                    arg = (uint)Enum.Parse(typeof(Items.BitMask04), bitmask.id, true);
                                     break;
                                 case "bitmask05":
-                                    //arg = (uint)Enum.Parse(typeof(Items.BitMask05), bitmask.id, true);
+                                    arg = (uint)Enum.Parse(typeof(Items.BitMask05), bitmask.id, true);
+                                    break;
+                                case "bitmask06":
+                                    arg = (uint)Enum.Parse(typeof(Items.BitMask06), bitmask.id, true);
+                                    break;
+                                case "bitmask07":
+                                    arg = (uint)Enum.Parse(typeof(Items.BitMask07), bitmask.id, true);
                                     break;
                             }
                             result = value & arg;
