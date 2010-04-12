@@ -368,7 +368,6 @@ namespace Reanimator.Excel
       'on die hide model',25
       'selectable dead or dying',26
 	  'interactive',27
-	  'Merchant Does Not Refresh',28
       'HideDialogHead',28
 	  'collide bad',29
 	  'collide good',30
@@ -461,12 +460,15 @@ namespace Reanimator.Excel
       'blocks everything',25
       'everyone can target',26
       'missile plot arc',27
+      'Pet dies on Warp',28
       'missile is gore',29
 	  'Can Attack Friends',30
 	  'ignore item requirements',31*/
             public Int32 bitmask07;/**'low lod in town',0
 	  'treasure class before room',1
 	  'TaskGiver No Starting Icon',2
+      'Assign GUID',3
+      'Merchant Does Not Refresh',4
 	  'dont depopulate',5
       'don''t shrink bones',6
 	  'has quest info',8
@@ -507,6 +509,7 @@ namespace Reanimator.Excel
             public Int32 code1;
             public Int32 unknown41;
             public Int32 densityValueOverride;
+            [ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 minionPackSize;//intptr: points to the last section of the file.
             public float spinSpeed;
             public float maxTurnRate;
@@ -738,23 +741,23 @@ namespace Reanimator.Excel
             public Int32 props4;//intptr
             [ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 props5;//intptr
-            public Int32 props1AppliesToUnitype;
-            public Int32 props2AppliesToUnitype;
-            public Int32 props3AppliesToUnitype;
-            public Int32 props4AppliesToUnitype;
-            public Int32 props5AppliesToUnitype;
+            public Int32 props1AppliesToUnitype;//index
+            public Int32 props2AppliesToUnitype;//index
+            public Int32 props3AppliesToUnitype;//index
+            public Int32 props4AppliesToUnitype;//index
+            public Int32 props5AppliesToUnitype;//index
             [ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 perLevelProps1;//intptr
             [ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 perLevelProps2;//intptr
             [ExcelOutput(IsIntOffset = true, FieldNames = new String[] { "name1", "name2", "name3" }, DefaultIndex = 1)]
             public Int32 propsElite;//intptr
-            public Int32 affix1;
-            public Int32 affix2;
-            public Int32 affix3;
-            public Int32 affix4;
-            public Int32 affix5;
-            public Int32 affix6;
+            public Int32 affix1;//index
+            public Int32 affix2;//index
+            public Int32 affix3;//index
+            public Int32 affix4;//index
+            public Int32 affix5;//index
+            public Int32 affix6;//index
             public Int32 treasure;//index
             public Int32 championTreasure;//index
             public Int32 firstTimeTreasure;//index
@@ -1090,8 +1093,7 @@ namespace Reanimator.Excel
             onDieHideModel = 33554432,
             selectableDeadOrDying = 67108864,
             interactive = 134217728,
-            //merchantDoesNotRefresh = 268435456, //28
-            //hideDialogHead = 268435456, // 28
+            hideDialogHead = 268435456, // 28
             collideBad = 536870912,
             collideGood = 1073741824,
             modesIgnoreAI = 2147483648
@@ -1136,9 +1138,6 @@ namespace Reanimator.Excel
 
         struct BitMask5
         {
-            bool noRandomAffixes;//(1),
-            bool mustFaceMeleeTarget;//(5),
-            bool alwaysShowLabel;//(12);
             bool askQuestsForOperate;//(0
             bool askFactionForOperate;//(1
             bool askPvPCensorshipForOperate;//(2
@@ -1162,6 +1161,7 @@ namespace Reanimator.Excel
             bool wardrobePerUnit;//(20
             bool wardrobeSharesModelDef;//(21
             bool noWeaponModel;//(22
+            //23
             bool noDrop;//(24
             bool noDropExceptForDuplicates;//(25
             bool askQuestsForPickup;//(26
@@ -1174,8 +1174,6 @@ namespace Reanimator.Excel
 
         struct BitMask6
         {
-            bool hasQuestInfo;//(11),
-            bool multiplayerOnly;//(10);
             bool NoRandomAffixes;//(0
             bool canBeChampion;//(1
             bool noQualityDowngrade;//(2
@@ -1188,11 +1186,14 @@ namespace Reanimator.Excel
             bool faceAfterWarp;//(9
             bool neverAStartLocation;//(10
             bool alwaysShowLabel;//(11
+            //12
             bool undefined13;//(13 //no predefined name
+            //14
             bool isNonweaponMissile;//(15
             bool cullByScreensize;//(16
             bool linkWarpDestByLevelType;//(17
             bool isBoss;//(18
+            //19
             bool takeResponsibilityOnKill;//(20
             bool alwaysKnownForSounds;//(21
             bool ignoreTargetOnRepeatDmg;//(22
@@ -1201,6 +1202,7 @@ namespace Reanimator.Excel
             bool blocksEverything;//(25
             bool everyoneCanTarget;//(26
             bool missilePlotArc;//(27
+            bool petDiesOnWarp;//28
             bool missileIsGore;//(29
             bool canAttackFriends;//(30
             bool ignoreItemRequirements;//(31
@@ -1210,8 +1212,11 @@ namespace Reanimator.Excel
             bool lowLodInTown;//(0
             bool treasureClassBeforeRoom;//(1
             bool taskGiverNoStartingIcon;//(2
+            bool assignGUID;//3
+            bool merchantDoesNotRefresh;//4
             bool dontDepopulate;//(5
             bool dontShrinkBones;//(6
+            //7
             bool hasQuestInfo;//(8
             bool multiplayerOnly;//(9
             bool noSpin;//(10
