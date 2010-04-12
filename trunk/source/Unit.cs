@@ -104,7 +104,7 @@ namespace Reanimator
             public readonly List<int> WardrobeAppearanceGroups;			// 16 * wardrobeAppearanceGroupCount
 
             public int colorCount;									    // 4
-            public List<int> ColorPaletteIndicies;						// 8 * colorCount       Goes: Body, Hair, ??
+            public readonly List<int> ColorPaletteIndicies;				// 8 * colorCount       Goes: Body, Hair, ??
 
             // if (testBit(pUnit->bitField1, 0x10))
             public int wardrobeLayerCount;								// 16          This is the model appearance

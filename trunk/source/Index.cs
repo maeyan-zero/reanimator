@@ -33,6 +33,61 @@ namespace Reanimator
             UInt64 sourceLength
         );
 
+        /*
+             Decompresses the source buffer into the destination buffer.  sourceLen is
+           the byte length of the source buffer. Upon entry, destLen is the total
+           size of the destination buffer, which must be large enough to hold the
+           entire uncompressed data. (The size of the uncompressed data must have
+           been saved previously by the compressor and transmitted to the decompressor
+           by some mechanism outside the scope of this compression library.)
+           Upon exit, destLen is the actual size of the compressed buffer.
+             This function can be used to decompress a whole file at once if the
+           input file is mmap'ed.
+
+             uncompress returns Z_OK if success, Z_MEM_ERROR if there was not
+           enough memory, Z_BUF_ERROR if there was not enough room in the output
+           buffer, or Z_DATA_ERROR if the input data was corrupted or incomplete.
+        */
+
+        [DllImport("zlibwapi86.dll")]
+        private static extern int compress
+        (
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] destinationBuffer,
+            [MarshalAs(UnmanagedType.U4)]
+            ref UInt32 destinationLength,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] sourceBuffer,
+            [MarshalAs(UnmanagedType.U4)]
+            UInt32 sourceLength
+        );
+
+        [DllImport("zlibwapi64.dll")]
+        private static extern int compress
+        (
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] destinationBuffer,
+            [MarshalAs(UnmanagedType.U8)]
+            ref UInt64 destinationLength,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] sourceBuffer,
+            [MarshalAs(UnmanagedType.U8)]
+            UInt64 sourceLength
+        );
+
+        /*
+         Compresses the source buffer into the destination buffer.  sourceLen is
+       the byte length of the source buffer. Upon entry, destLen is the total
+       size of the destination buffer, which must be at least the value returned
+       by compressBound(sourceLen). Upon exit, destLen is the actual size of the
+       compressed buffer.
+         This function can be used to compress a whole file at once if the
+       input file is mmap'ed.
+         compress returns Z_OK if success, Z_MEM_ERROR if there was not
+       enough memory, Z_BUF_ERROR if there was not enough room in the output
+       buffer.
+        */
+
         static public readonly int LatestPatch = 10;
         static public readonly int LatestPatchLocalized = 11;
         static public readonly int ExcelTablesIndex = 2572;
