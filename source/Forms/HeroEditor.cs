@@ -647,7 +647,7 @@ namespace Reanimator.Forms
 
             text += "\n\n\n\n";
 
-            UnitAppearance appearance = _heroUnit.unitAppearance;
+            Unit.UnitAppearance appearance = _heroUnit.unitAppearance;
             text += "unknown1: " + appearance.unknown1 + "\n";
 
             if (appearance.unknown2 != null)
@@ -655,23 +655,6 @@ namespace Reanimator.Forms
                 foreach (byte val in appearance.unknown2)
                 {
                     text += "unknown2: " + (int)val + "\n";
-                }
-            }
-
-            if (appearance.unknownCount1s != null)
-            {
-                foreach (UnitAppearance.UnknownCount1_S count in appearance.unknownCount1s)
-                {
-                    text += "unknown1: " + count.unknown1 + "\n";
-                    text += "unknown2: " + count.unknown2 + "\n";
-
-                    if (count.unknownCount1s != null)
-                    {
-                        foreach (int val in count.unknownCount1s)
-                        {
-                            text += "unknownCount1s: " + val + "\n";
-                        }
-                    }
                 }
             }
 
