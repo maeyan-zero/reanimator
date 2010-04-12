@@ -66,17 +66,17 @@ namespace Reanimator
             public class EquippedItem
             {
                 // if (bitTest(bitField1, 0x0F))                                
-                // unknown;									        // 32               Haven't encountered - saw in ASM though.
+                // unknown;									            // 32                   Haven't encountered - saw in ASM though.
 
                 public int itemCode;									// 16
 
                 // if (bitTest(bitField1, 0x00)) // if (bitField1 & 0x01)
                 public int affixCount;								    // 3 bits
-                public List<int> affixCodes;						    // 32 bits * affixCount
+                public readonly List<int> AffixCodes;                   // 32 bits * affixCount
 
                 public EquippedItem()
                 {
-                    affixCodes = new List<int>();
+                    AffixCodes = new List<int>();
                 }
             };
 
@@ -103,8 +103,8 @@ namespace Reanimator
             public int wardrobeAppearanceGroupCount;					// 3
             public readonly List<int> WardrobeAppearanceGroups;			// 16 * wardrobeAppearanceGroupCount
 
-            public int unknownCount3;									// 4
-            public int[] unknownCount3s;						        // 8 * unknownCount3
+            public int colorCount;									    // 4
+            public List<int> ColorPaletteIndicies;						// 8 * colorCount       Goes: Body, Hair, ??
 
             // if (testBit(pUnit->bitField1, 0x10))
             public int wardrobeLayerCount;								// 16          This is the model appearance
@@ -115,6 +115,7 @@ namespace Reanimator
                 EquippedItems = new List<EquippedItem>();
                 WardrobeLayersHead = new List<int>();
                 WardrobeAppearanceGroups = new List<int>();
+                ColorPaletteIndicies = new List<int>();
                 WardrobeLayers = new List<ModelWardrobeLayer>();
             }
         };
@@ -975,7 +976,7 @@ namespace Reanimator
                     equippedItem.affixCount = _bitBuffer.ReadBits(3);
                     for (int j = 0; j < equippedItem.affixCount; j++)
                     {
-                        equippedItem.affixCodes.Add(_bitBuffer.ReadBits(32));
+                        equippedItem.AffixCodes.Add(_bitBuffer.ReadBits(32));
                     }
                 }
 
@@ -1006,11 +1007,10 @@ namespace Reanimator
                     appearance.WardrobeAppearanceGroups.Add(_bitBuffer.ReadBits(16));
                 }
 
-                appearance.unknownCount3 = _bitBuffer.ReadBits(4);
-                appearance.unknownCount3s = new int[appearance.unknownCount3];
-                for (int i = 0; i < appearance.unknownCount3; i++)
+                appearance.colorCount = _bitBuffer.ReadBits(4);
+                for (int i = 0; i < appearance.colorCount; i++)
                 {
-                    appearance.unknownCount3s[i] = _bitBuffer.ReadBits(8);
+                    appearance.ColorPaletteIndicies.Add(_bitBuffer.ReadBits(8));
                 }
             }
 
@@ -1526,11 +1526,11 @@ namespace Reanimator
 
                     if (use_00_FlagAlignment <= 0) continue;
 
-                    int affixCount = equippedItem.affixCodes.Count;
+                    int affixCount = equippedItem.AffixCodes.Count;
                     saveBuffer.WriteBits(affixCount, 3);
                     for (int j = 0; j < affixCount; j++)
                     {
-                        saveBuffer.WriteBits(equippedItem.affixCodes[j], 32);
+                        saveBuffer.WriteBits(equippedItem.AffixCodes[j], 32);
                     }
                 }
 
@@ -1557,10 +1557,11 @@ namespace Reanimator
                         saveBuffer.WriteBits(unit.unitAppearance.WardrobeAppearanceGroups[i], 16);
                     }
 
-                    saveBuffer.WriteBits(unit.unitAppearance.unknownCount3, 4);
-                    for (int i = 0; i < unit.unitAppearance.unknownCount3; i++)
+                    int colorPaletteCount = unit.unitAppearance.ColorPaletteIndicies.Count;
+                    saveBuffer.WriteBits(colorPaletteCount, 4);
+                    for (int i = 0; i < colorPaletteCount; i++)
                     {
-                        saveBuffer.WriteBits(unit.unitAppearance.unknownCount3s[i], 8);
+                        saveBuffer.WriteBits(unit.unitAppearance.ColorPaletteIndicies[i], 8);
                     }
                 }
 

@@ -658,14 +658,6 @@ namespace Reanimator.Forms
                 }
             }
 
-            if (appearance.unknownCount3s != null)
-            {
-                foreach (int val in appearance.unknownCount3s)
-                {
-                    text += "unknownCount3s: " + val + "\n";
-                }
-            }
-
             richTextBox2.Text = text;
         }
 
