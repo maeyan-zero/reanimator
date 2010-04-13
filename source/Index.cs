@@ -147,24 +147,24 @@ namespace Reanimator
             public class FileIndexStruct
             {
                 public UInt32 startToken;
-                public Int32 unknown1_1;
-                public Int32 unknown1_2;
-                public Int32 dataOffset;
-                public Int32 null1;
-                public Int32 uncompressedSize;
-                public Int32 compressedSize;
-                public Int32 null2;
-                public Int32 directoryArrayPosition;
-                public Int32 filenameArrayPosition;
-                public Int32 unknown2_1;
-                public Int32 unknown2_2;
-                public Int32 unknown2_3;
-                public Int32 unknown2_4;
-                public Int32 null3_1;
-                public Int32 null3_2;
-                public Int32 null3_3;
-                public Int32 first4BytesOfFile;
-                public Int32 second4BytesOfFile;
+                public Int32 unknown1_1;                    // 0    0x00
+                public Int32 unknown1_2;                    // 4    0x04
+                public Int32 dataOffset;                    // 8    0x08
+                public Int32 null1;                         // 12   0x0C
+                public Int32 uncompressedSize;              // 16   0x10
+                public Int32 compressedSize;                // 20   0x14
+                public Int32 null2;                         // 24   0x18
+                public Int32 directoryArrayPosition;        // 28   0x1C
+                public Int32 filenameArrayPosition;         // 32   0x20
+                public Int32 unknown2_1;                    // 36   0x24            Can't be null             .text:000000014004958B cmp     qword ptr [rdi+10h], 0 -> jz      loc_140049402   ; Jump if Zero
+                public Int32 unknown2_2;                    // 40   0x28
+                public Int32 unknown2_3;                    // 44   0x2C
+                public Int32 unknown2_4;                    // 48   0x30
+                public Int32 null3_1;                       // 52   0x34
+                public Int32 null3_2;                       // 56   0x38
+                public Int32 null3_3;                       // 60   0x3C
+                public Int32 first4BytesOfFile;             // 64   0x40
+                public Int32 second4BytesOfFile;            // 68   0x44
                 public UInt32 endToken;
             };
 
@@ -263,6 +263,10 @@ namespace Reanimator
             _buffer = FileTools.StreamToByteArray(file);
 
             Crypt.Decrypt(_buffer);
+
+#if DEBUG
+            FileTools.WriteFile(this.FileName + ".idx", _buffer);
+#endif
 
             structCount = BitConverter.ToInt32(_buffer, 4);
             fileCount = BitConverter.ToInt32(_buffer, 8);
@@ -456,6 +460,7 @@ namespace Reanimator
             }
 
             // file block
+            const UInt64 foo = 0xDEADBEEFDEADBEEF;
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
             i = 0;
             foreach (FileIndex fileIndex in this.fileTable)
@@ -463,9 +468,10 @@ namespace Reanimator
                 // this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
-                //offset += 4; // unknown  -  not required
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_1);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_2); // game freezes if not correct value
+
+                FileTools.WriteToBuffer(ref buffer, ref offset, foo);
+                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_1);
+                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_2); // game freezes if not correct value
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);

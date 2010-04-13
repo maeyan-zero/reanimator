@@ -101,7 +101,7 @@ namespace Reanimator.Forms
         {
             Unit unit = null;
 
-            String excelError = "You must have all excel tables loaded to use the Hero Editor!";
+            const string excelError = "You must have all excel tables loaded to use the Hero Editor!";
             if (excelTables == null)
             {
                 MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -124,11 +124,10 @@ namespace Reanimator.Forms
                 return null;
             }
 
-            BitBuffer bitBuffer = new BitBuffer(FileTools.StreamToByteArray(heroFile));
-            bitBuffer.DataByteOffset = 0x2028;
+            BitBuffer bitBuffer = new BitBuffer(FileTools.StreamToByteArray(heroFile)) {DataByteOffset = 0x2028};
 
             unit = new Unit(bitBuffer);
-            unit.ReadUnit(ref unit);
+            unit.ParseUnit();
 
             return unit;
         }
