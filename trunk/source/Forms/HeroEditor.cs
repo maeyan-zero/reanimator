@@ -647,7 +647,7 @@ namespace Reanimator.Forms
 
             text += "\n\n\n\n";
 
-            Unit.UnitAppearance appearance = _heroUnit.unitAppearance;
+            Unit.UnitAppearance appearance = _heroUnit.Appearance;
             text += "unknown1: " + appearance.unknown1 + "\n";
 
             if (appearance.unknown2 != null)
