@@ -1,0 +1,1316 @@
+<ui>
+  <widthbasis>1600</widthbasis>
+  <heightbasis>1200</heightbasis>
+  <ws_widthbasis>1920</ws_widthbasis>
+  <screen name="character selection">
+    <texture>char_create_atlas</texture>
+    <font>Upper_Font</font>
+    <fontsize>26</fontsize>
+    <x>0</x>
+    <y>0</y>
+    <width>1600</width>
+    <height>1200</height>
+    <ws_width>1920</ws_width>
+    <visible>0</visible>
+    <usescursor>1</usescursor>
+    <dynamic>1</dynamic>
+    <anim_category>close all</anim_category>    
+
+    <anim_relationship type="opens" onactivate="0">dashboard</anim_relationship>
+    <anim_relationship type="closes" onactivate="1">dashboard</anim_relationship>
+
+    <OnPostActivate>UICharacterSelectOnPostActivate</OnPostActivate>
+    <OnPostInactivate>UICharacterSelectOnPostInactivate</OnPostInactivate>
+    <tooltip name="character delete dialog">
+      <texture>main_atlas</texture>
+      <minwidth>300</minwidth>
+      <visible>0</visible>
+      <noscale>0</noscale>
+      <rendersection>Dialogs</rendersection>
+      <independentactivate>1</independentactivate>
+      <OnKeyDown>UIDeleteCharDialogOnKeyDown</OnKeyDown>
+      <OnKeyUp>UIEatMsgHandler</OnKeyUp>
+      <OnKeyChar>UIEatMsgHandler</OnKeyChar>
+      <OnRButtonDown>UIEatMsgHandler</OnRButtonDown>
+      <OnRButtonUp>UIEatMsgHandler</OnRButtonUp>
+      <OnLButtonDown>UIEatMsgHandler</OnLButtonDown>
+      <OnLButtonUp>UIEatMsgHandler</OnLButtonUp>
+      <OnMouseMove>UIEatMsgHandler</OnMouseMove>
+      <OnMouseOver>UIEatMsgHandler</OnMouseOver>
+      <OnPostActivate>UIInputOverridePushHead</OnPostActivate>
+      <OnPostInactivate>UIInputOverrideRemove</OnPostInactivate>
+      <flexborder>
+        <name>tooltip shadow</name>
+        <x>12</x>
+        <y>12</y>
+        <frameTL>gendropshadow_1_TL</frameTL>
+        <frameTM>gendropshadow_2_TM</frameTM>
+        <frameTR>gendropshadow_3_TR</frameTR>
+        <frameML>gendropshadow_4_ML</frameML>
+        <frameMM>gendropshadow_5_MM</frameMM>
+        <frameMR>gendropshadow_6_MR</frameMR>
+        <frameBL>gendropshadow_7_BL</frameBL>
+        <frameBM>gendropshadow_8_BM</frameBM>
+        <frameBR>gendropshadow_9_BR</frameBR>
+        <alpha>192</alpha>
+      </flexborder>
+      <flexborder>
+        <name>tooltip flexborder</name>
+        <frameTL>genericbox_1_TL</frameTL>
+        <frameTM>genericbox_2_TM</frameTM>
+        <frameTR>genericbox_3_TR</frameTR>
+        <frameML>genericbox_4_ML</frameML>
+        <frameMM>genericbox_5_MM</frameMM>
+        <frameMR>genericbox_6_MR</frameMR>
+        <frameBL>genericbox_7_BL</frameBL>
+        <frameBM>genericbox_8_BM</frameBM>
+        <frameBR>genericbox_9_BR</frameBR>
+      </flexborder>
+      <label name="delete dialog header">
+        <string>ui char select delete header</string>
+        <fontsize>40</fontsize>
+        <ttline>1</ttline>
+        <ttlineorder>1</ttlineorder>
+        <ttjustify>center</ttjustify>
+        <autosize>1</autosize>
+        <visible>1</visible>
+        <ttpaddingy>8</ttpaddingy>
+      </label>
+      <flexline>
+        <name>tt flexline</name>
+        <ttline>next</ttline>
+        <ttlineorder>1</ttlineorder>
+        <ttpaddingy>-8</ttpaddingy>
+        <horizontal>1</horizontal>
+        <lineframe>genericbox_2_TM</lineframe>
+      </flexline>
+      <label name="delete dialog text">
+        <string>ui char select delete</string>
+        <fontsize>24</fontsize>
+        <ttline>next</ttline>
+        <ttlineorder>1</ttlineorder>
+        <ttjustify>left</ttjustify>
+        <autosize>1</autosize>
+        <visible>1</visible>
+        <maxwidth>-1</maxwidth>
+        <wordwrap>1</wordwrap>
+      </label>
+      <editctrl name="character delete name">
+        <height>32</height>
+        <width>466</width>
+        <ttline>next</ttline>
+        <align>left</align>
+        <fontsize>32</fontsize>
+        <maxchars>24</maxchars>
+        <startwithfocus>1</startwithfocus>
+        <!--        <allowchars>0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'</allowchars>-->
+    <!--<disallowchars>!@#$%^*()-+_=[]\{}|;:,.?`~\"&apos;&amp;&lt;&gt;\\</disallowchars>
+        <disallowpathchars>1</disallowpathchars>	-->
+        <limit_to_space>0</limit_to_space>
+      </editctrl>
+      <flexline>
+        <name>tt flexline</name>
+        <ttline>next</ttline>
+        <ttlineorder>1</ttlineorder>
+        <horizontal>1</horizontal>
+        <lineframe>genericbox_8_BM</lineframe>
+      </flexline>
+      <button name="button dialog ok">
+        <texture>inventory_atlas</texture>
+        <rendersection>DialogMasks</rendersection>
+        <!--since it's from another texture, we need to make sure it draws on top-->
+        <frame>button_accept</frame>
+        <litframe>button_accept mouse</litframe>
+        <downframe>button_accept_lit</downframe>
+        <ttline>next</ttline>
+        <ttlineorder>1</ttlineorder>
+        <ttpaddingy>10</ttpaddingy>
+        <ttpaddingx>10</ttpaddingx>
+        <ttjustify>center</ttjustify>
+        <noscale>0</noscale>
+        <width>65</width>
+        <height>65</height>
+        <stretch>1</stretch>
+        <tooltipstring>accept</tooltipstring>
+        <OnLClick>OnCharacterDeleteOnOk</OnLClick>
+        <OnLClickSnd>PetDismiss</OnLClickSnd>
+        <OnKeyDown>OnCharacterDeleteOnOk</OnKeyDown>
+        <OnKeyDownSnd>PetDismiss</OnKeyDownSnd>
+        <OnLButtonClick>UIEatMsgHandler</OnLButtonClick>
+        <OnLButtonUp>UIEatMsgHandler</OnLButtonUp>
+        <OnRButtonDown>UIEatMsgHandler</OnRButtonDown>
+        <OnRButtonUp>UIEatMsgHandler</OnRButtonUp>
+      </button>
+      <button name="button dialog cancel">
+        <texture>inventory_atlas</texture>
+        <rendersection>DialogMasks</rendersection>
+        <!--since it's from another texture, we need to make sure it draws on top-->
+        <frame>button_cancel</frame>
+        <litframe>button_cancel mouse</litframe>
+        <downframe>button_cancel_lit</downframe>
+        <ttline>same</ttline>
+        <ttlineorder>2</ttlineorder>
+        <ttjustify>center</ttjustify>
+        <ttpaddingy>10</ttpaddingy>
+        <ttpaddingx>10</ttpaddingx>
+        <noscale>0</noscale>
+        <width>65</width>
+        <height>65</height>
+        <visible>0</visible>
+        <stretch>1</stretch>
+        <tooltipstring>cancel</tooltipstring>
+        <OnLClick>OnCharacterDeleteOnCancel</OnLClick>
+        <OnLClickSnd>ButtonReject</OnLClickSnd>
+        <OnKeyDown>OnCharacterDeleteOnCancel</OnKeyDown>
+        <OnKeyDownSnd>ButtonReject</OnKeyDownSnd>
+        <OnLButtonUp>UIEatMsgHandler</OnLButtonUp>
+        <OnRButtonDown>UIEatMsgHandler</OnRButtonDown>
+        <OnRButtonUp>UIEatMsgHandler</OnRButtonUp>
+      </button>
+    </tooltip>
+    <colorpicker name="color picker">
+      <frame>color_window</frame>
+      <visible>0</visible>
+      <independentactivate>1</independentactivate>
+      <width>180</width>
+      <height>320</height>
+      <ttxoffs>44</ttxoffs>
+      <gridoffx>19</gridoffx>
+      <gridoffy>25</gridoffy>
+      <gridcols>4</gridcols>
+      <gridrows>6</gridrows>
+      <cellsize>32</cellsize>     <!-- size of the side of a color square -->
+      <cellspacing>2</cellspacing>    <!-- spacing between color squares -->
+      <cellframe>color_swatch</cellframe>
+      <cellupframe>color_swatch_unselected</cellupframe>
+      <celldownframe>color_swatch_selected</celldownframe>
+      <OnPaint>UIColorPickerColorsOnPaint</OnPaint>
+      <OnLClick>UIColorPickerOnLClick</OnLClick>
+      <OnLClickSnd>CCScreenItemForward</OnLClickSnd>
+      <OnLButtonDown>UIColorPickerOnBtn</OnLButtonDown>
+      <OnRButtonDown>UIColorPickerOnBtn</OnRButtonDown>
+      <!--<OnLButtonUp>UIColorPickerOnBtn</OnLButtonUp>
+      <OnRButtonUp>UIColorPickerOnBtn</OnRButtonUp>-->
+      <button name="color picker accept">
+        <frame>color_button_accept</frame>
+        <litframe>color_button_accept mouse</litframe>
+        <downframe>color_button_accept_highlight</downframe>
+        <x>23</x>
+        <y>253</y>
+        <width>46</width>
+        <height>46</height>
+        <OnLClick>UIColorPickerAcceptOnClick</OnLClick>
+        <OnLClickSnd>ButtonAccept</OnLClickSnd>
+        <tooltipstring>accept</tooltipstring>
+      </button>
+      <button name="color picker cancel">
+        <frame>color_button_cancel</frame>
+        <litframe>color_button_cancel mouse</litframe>
+        <downframe>color_button_cancel_highlight</downframe>
+        <x_rel>83</x_rel>
+        <y_rel>0</y_rel>
+        <width>46</width>
+        <height>46</height>
+        <OnLClick>UIColorPickerCancelOnClick</OnLClick>
+        <OnLClickSnd>ButtonReject</OnLClickSnd>
+        <tooltipstring>cancel</tooltipstring>
+      </button>
+    </colorpicker>
+    <panel name="character select panel">
+      <frame>char select panel</frame>
+      <x>17</x>
+      <tgtx>-512</tgtx>
+      <y>8</y>
+      <width>512</width>
+      <height>1168</height>
+      <animtime>250</animtime>
+      <visible>1</visible>
+      <OnKeyDown>UICharacterSelectOnKeyDown</OnKeyDown>
+      <label>
+        <string>ui char select</string>
+        <x>6</x>
+        <y>-2</y>
+        <width>500</width>
+        <height>75</height>
+        <align>center</align>
+        <font>Upper_Font_Bold</font>
+        <fontsize>42</fontsize>
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+        <dropshadowred>180</dropshadowred>
+        <dropshadowgreen>180</dropshadowgreen>
+        <dropshadowblue>180</dropshadowblue>
+      </label>
+      <label name="account status">
+        <x>20</x>
+        <y>57</y>
+        <width>472</width>
+        <height>60</height>
+        <align>center</align>
+        <font>Upper_Font_Bold</font>
+        <autosize>0</autosize>
+        <autosizefont>1</autosizefont>
+        <!--<marquee increment="1">horiz</marquee>-->
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <dropshadowred>0</dropshadowred>
+        <dropshadowgreen>0</dropshadowgreen>
+        <dropshadowblue>0</dropshadowblue>
+      </label>
+      <!--<panel name="character select multiplayer panel">
+        <x>5</x>
+        <y>81</y>
+        <width>497</width>
+        <height>333</height>
+        <frame>cha select top panel</frame>
+        <independentactivate>1</independentactivate>
+        <visible>1</visible>
+      </panel>-->
+      <panel name="character panel 1">
+        <param>0</param>
+        <y>150</y>
+        <width>483</width>
+        <height>80</height>
+        <independentactivate>1</independentactivate>
+        <visible>1</visible>
+        <panel name="select panel">
+          <width>483</width>
+          <height>80</height>
+          <independentactivate>1</independentactivate>
+          <visible>0</visible>
+          <panel name="character select button back">
+            <frame>char select name btn</frame>
+            <x>115</x>
+            <y>2</y>
+            <width>96</width>
+            <height>80</height>
+          </panel>
+          <button name="character select button">
+            <x>115</x>
+            <y>2</y>
+            <width>368</width>
+            <height>80</height>
+            <font>Upper_Font</font>
+            <fontsize>30</fontsize>
+            <frame></frame>
+            <litframe>char select name btn highlight</litframe>
+            <downframe>char select name btn down</downframe>
+            <buttonstyle>radiobutton</buttonstyle>
+            <radioparentlevel>2</radioparentlevel>
+            <OnLClick>UICharacterSelectButtonOnClick</OnLClick>
+            <OnLDoubleClick>UICharacterSelectAcceptOnClick</OnLDoubleClick>
+            <OnLClickSnd>CharacterSelect</OnLClickSnd>
+            <label name="character name label">
+              <x>25</x>
+              <y>15</y>
+              <width>290</width>
+              <height>70</height>
+              <align>topleft</align>
+              <autosizefont>1</autosizefont>
+            </label>
+            <label name="character class label">
+              <x>25</x>
+              <y>0</y>
+              <width>290</width>
+              <height>70</height>
+              <fontsize>24</fontsize>
+              <align>bottomleft</align>
+              <autosizefont>1</autosizefont>
+              <red>191</red>
+              <green>181</green>
+              <blue>121</blue>
+            </label>
+            <button name="character delete btn">
+              <frame>char select delete btn</frame>
+              <litframe>char select delete btn mouse</litframe>
+              <downframe>char select delete btn</downframe>
+              <tooltipstring>ui char select delete tooltip</tooltipstring>
+              <x>320</x>
+              <y>37</y>
+              <width>38</width>
+              <height>38</height>
+              <independentactivate>1</independentactivate>
+              <OnLClick>OnCharacterDeleteClick</OnLClick>
+              <OnLClickSnd>ButtonAccept</OnLClickSnd>
+            </button>
+          </button>
+          <panel name="character select portrait backing">
+            <frame>char select portrait</frame>
+            <x>34</x>
+            <y>2</y>
+            <width>96</width>
+            <height>80</height>
+	    <rendersection>Bottom</rendersection>
+	    <panel name="character select portrait elite icon">
+	      <texture>guild_icons_atlas</texture>
+	      <frame>lg_icon_elite</frame>
+	      <x>11</x>
+	      <y>7</y>
+	      <width>70</width>
+	      <height>70</height>
+	      <stretch>1</stretch>
+	      <red>0</red>
+	      <green>0</green>
+	      <blue>0</blue>
+	      <alpha>140</alpha>
+	      <rendersection>UpOne</rendersection>
+	      <independentactivate>1</independentactivate>
+	    </panel>
+          </panel>
+
+
+
+          <panel name="character select portrait model">
+            <x>34</x>
+            <y>2</y>
+            <width>96</width>
+            <height>80</height>
+            <rendersection>MaskedModels</rendersection>
+            <OnPaint>UIPaperDollPaint</OnPaint>
+            <modelcam>1</modelcam>
+            <independentactivate>1</independentactivate>
+            <visible>0</visible>
+          </panel>
+          <panel name="character select portrait dead hardcore">
+            <frame>char select portrait dead hardcore</frame>
+            <x>34</x>
+            <y>2</y>
+            <width>96</width>
+            <height>80</height>
+            <independentactivate>1</independentactivate>
+            <visible>0</visible>
+          </panel>
+          <label name="character select level">
+            <x>10</x>
+            <y>10</y>
+            <width>68</width>
+            <height>68</height>
+            <align>bottomright</align>
+            <font>Upper_Font_Bold</font>
+            <fontsize>22</fontsize>
+            <visible>1</visible>
+            <alpha>128</alpha>
+            <rendersection>ItemText</rendersection>
+          </label>
+          <panel name="character select portrait frame">
+            <frame>char select portrait frame</frame>
+            <x>34</x>
+            <y>2</y>
+            <width>96</width>
+            <height>80</height>
+            <zdelta>-0.002</zdelta>
+            <rendersection>Masks</rendersection>
+          </panel>
+          <panel name="character select portrait mask">
+            <x>18</x>
+            <y>2</y>
+            <frame>char select portrait mask</frame>
+            <width>128</width>
+            <height>96</height>
+            <zdelta>-0.003</zdelta>
+            <rendersection>Masks</rendersection>
+          </panel>
+        </panel>
+        <panel name="create panel">
+          <independentactivate>1</independentactivate>
+          <visible>0</visible>
+          <width>483</width>
+          <height>80</height>
+          <button name="character create back">
+            <frame>char create name btn</frame>
+            <litframe>char create name btn mouse</litframe>
+            <downframe>char create name btn lit</downframe>  
+            <x>26</x>
+            <y>2</y>
+            <width>451</width>
+            <height>76</height>
+            <OnLClick>UICharacterSelectCreateOnClick</OnLClick>
+            <OnLClickSnd>CSScreenNewChar</OnLClickSnd>
+          </button>
+          <label>
+            <string>ui char select create new</string>
+            <x>130</x>
+            <y>10</y>
+            <width>342</width>
+            <height>64</height>
+            <align>center</align>
+            <font>Upper_Font_Bold</font>
+            <fontsize>30</fontsize>
+            <autosizefont>1</autosizefont>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <dropshadowred>180</dropshadowred>
+            <dropshadowgreen>180</dropshadowgreen>
+            <dropshadowblue>180</dropshadowblue>
+          </label>
+        </panel>
+      </panel>
+      <reference refname="character panel 1">
+        <name>character panel 2</name>
+        <param>1</param>
+        <y_rel>87</y_rel>
+        <tgty_rel>87</tgty_rel>
+      </reference>
+      <reference refname="character panel 1">
+        <name>character panel 3</name>
+        <param>2</param>
+        <y_rel>87</y_rel>
+        <tgty_rel>87</tgty_rel>
+      </reference>
+      <reference refname="character panel 1">
+        <name>character panel 4</name>
+        <param>3</param>
+        <y_rel>87</y_rel>
+        <tgty_rel>87</tgty_rel>
+      </reference>
+      <reference refname="character panel 1">
+        <name>character panel 5</name>
+        <param>4</param>
+        <y_rel>87</y_rel>
+        <tgty_rel>87</tgty_rel>
+      </reference>
+      <reference refname="character panel 1">
+        <name>character panel 6</name>
+        <param>5</param>
+        <y_rel>87</y_rel>
+        <tgty_rel>87</tgty_rel>
+      </reference>
+      <reference refname="character panel 1">
+        <name>character panel 7</name>
+        <param>6</param>
+        <y_rel>87</y_rel>
+        <tgty_rel>87</tgty_rel>
+      </reference>
+      <reference refname="character panel 1">
+        <name>character panel 8</name>
+        <param>7</param>
+        <y_rel>87</y_rel>
+        <tgty_rel>87</tgty_rel>
+      </reference>
+      <reference refname="character panel 1">
+        <name>character panel 9</name>
+        <param>8</param>
+        <y_rel>87</y_rel>
+        <tgty_rel>87</tgty_rel>
+      </reference>
+      <button name="character select up btn">
+        <frame>char select up btn</frame>
+        <downframe>char select up btn highlight</downframe>
+        <litframe>char select up mouse</litframe>
+        <x>122</x>
+        <y>107</y>
+        <width>272</width>
+        <height>40</height>
+        <param>0</param>
+        <independentactivate>1</independentactivate>
+        <OnLClick>UICharacterSelectScrollOnClick</OnLClick>
+      </button>
+      <button name="character select down btn">
+        <frame>char select down btn</frame>
+        <downframe>char select down btn highlight</downframe>
+        <litframe>char select down mouse</litframe>
+        <x>122</x>
+        <y>956</y>
+        <width>272</width>
+        <height>40</height>
+        <param>1</param>
+        <independentactivate>1</independentactivate>
+        <OnLClick>UICharacterSelectScrollOnClick</OnLClick>
+      </button>
+      <button name="character select cancel">
+        <frame>char select back btn</frame>
+        <downframe>char select back btn highlight</downframe>
+        <litframe>char select back mouse</litframe>
+        <x>28</x>
+        <y>1098</y>
+        <width>220</width>
+        <height>48</height>
+        <independentactivate>1</independentactivate>
+        <OnLClick>UICharacterSelectCancelOnClick</OnLClick>
+        <OnKeyDown>UICharacterSelectCancelOnClick</OnKeyDown>
+        <OnLClickSnd>CCScreenGoBack</OnLClickSnd>
+        <OnKeyDownSnd>CCScreenGoBack</OnKeyDownSnd>
+        <label>
+          <string>ui char select cancel</string>
+          <width>220</width>
+          <height>48</height>
+          <align>center</align>
+          <font>Upper_Font_Bold</font>
+          <fontsize>36</fontsize>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="character select accept">
+        <frame>char select play btn</frame>
+        <downframe>char select play btn highlight</downframe>
+        <litframe>char select play mouse</litframe>
+        <x>261</x>
+        <y>1098</y>
+        <width>220</width>
+        <height>48</height>
+        <OnLClick>UICharacterSelectAcceptOnClick</OnLClick>
+        <OnKeyDown>UICharacterSelectAcceptOnClick</OnKeyDown>
+        <OnLClickSnd>CCScreenAccept</OnLClickSnd>
+        <OnKeyDownSnd>CCScreenAccept</OnKeyDownSnd>
+        <label>
+          <string>ui char select accept</string>
+          <width>220</width>
+          <height>48</height>
+          <align>center</align>
+          <font>Upper_Font_Bold</font>
+          <fontsize>36</fontsize>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="nightmare btn">
+	<texture>guild_icons_atlas</texture>
+        <frame>nightmare mode btn</frame>
+        <downframe>nightmare mode btn lit</downframe>
+	<litframe>nightmare mode btn mouse</litframe>
+        <inactiveframe>nightmare mode btn dis</inactiveframe>
+        <independentactivate>1</independentactivate>
+        <x>43</x>
+        <y>1000</y>
+        <width>500</width>
+        <height>48</height>
+        <buttonstyle>checkbox</buttonstyle>
+        <OnLClick>UICharacterNightmareToggle</OnLClick>
+        <OnLClickSnd>NightmareButtonOn</OnLClickSnd>
+        <OnMouseLeave>UIClearHoverText</OnMouseLeave>
+        <label>
+          <string>ui char select nightmare</string>
+          <x>54</x>
+          <y>0</y>
+          <width>380</width>
+          <height>56</height>
+          <align>left</align>
+          <font>Upper_Font_Bold</font>
+          <fontsize>36</fontsize>
+          <autosizefont>1</autosizefont>
+          <red>125</red>
+          <green>125</green>
+          <blue>125</blue>
+          <selectedred>255</selectedred>
+          <selectedgreen>255</selectedgreen>
+          <selectedblue>0</selectedblue>
+          <disabledred>25</disabledred>
+          <disabledgreen>25</disabledgreen>
+          <disabledblue>25</disabledblue>
+          <OnPaint>UILabelOnPaintCheckParentButton</OnPaint>
+        </label>
+      </button>
+    </panel>
+    <panel name="character create panel">
+      <frame>char select panel</frame>
+      <x>17</x>
+      <tgtx>-512</tgtx>
+      <y>8</y>
+      <width>512</width>
+      <height>1168</height>
+      <animtime>250</animtime>
+      <visible>0</visible>
+      <independentactivate>1</independentactivate>
+      <anim_relationship type="opens" onactivate="0">character select panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="1">character select panel</anim_relationship>
+      <OnPostActivate>UICharacterCreateOnPostActivate</OnPostActivate>
+      <OnPostInactivate>UICharacterCreateOnPostActivate</OnPostInactivate>
+      <label>
+        <string>ui char create</string>
+        <x>6</x>
+        <y>0</y>
+        <width>500</width>
+        <height>75</height>
+        <align>center</align>
+        <font>Upper_Font_Bold</font>
+        <fontsize>42</fontsize>
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+        <dropshadowred>180</dropshadowred>
+        <dropshadowgreen>180</dropshadowgreen>
+        <dropshadowblue>180</dropshadowblue>
+      </label>
+      <panel name="char create bkg">
+        <frame>char create panel</frame>
+      </panel>
+      <label name="enter name label">
+        <string>ui char_create name label</string>
+        <red>191</red>
+        <green>181</green>
+        <blue>121</blue>
+        <x>42</x>
+        <y>126</y>
+        <width>496</width>
+        <height>32</height>
+        <fontsize>26</fontsize>
+        <align>topleft</align>
+      </label>
+      <button name="gem btn">
+        <frame>gem_clear</frame>
+        <downframe>gem</downframe>
+        <x>479</x>
+        <y>10</y>
+        <width>31</width>
+        <height>24</height>
+        <buttonstyle>checkbox</buttonstyle>
+        <OnLClick>UICharacterGemToggle</OnLClick>
+        <OnLClickSnd>ShinyPU</OnLClickSnd>
+      </button>
+      <label name="game mode label">
+        <string>ui char_create game mode</string>
+        <red>191</red>
+        <green>181</green>
+        <blue>121</blue>
+        <x>45</x>
+        <y>215</y>
+        <width>408</width>
+        <height>32</height>
+        <align>topleft</align>
+      </label>
+      <button name="hardcore btn">
+        <frame>hardcore btn</frame>
+        <downframe>hardcore btn lit</downframe>
+        <inactiveframe>hardcore btn dis</inactiveframe>
+        <x>420</x>
+        <y_rel>0</y_rel>
+        <width>48</width>
+        <height>48</height>
+        <buttonstyle>checkbox</buttonstyle>
+        <visible>1</visible>
+        <OnLClick>UICharacterHardcoreToggle</OnLClick>
+        <independentactivate>1</independentactivate>
+        <OnLClickSnd>CCScreenItemForward</OnLClickSnd>
+        <OnMouseHover>UICharacterHardcoreHover</OnMouseHover>
+        <OnMouseLeave>UIClearHoverText</OnMouseLeave>
+      </button>
+      <!--<button name="roleplay btn">
+	<texture>guild_icons_atlas</texture>
+        <frame>roleplay btn</frame>
+        <downframe>roleplay btn lit</downframe>
+        <inactiveframe>roleplay btn dis</inactiveframe>
+        <x>420</x>
+        <y_rel>0</y_rel>
+        <width>48</width>
+        <height>48</height>
+        <buttonstyle>checkbox</buttonstyle>
+        <visible>1</visible>
+        <OnLClick>UICharacterHardcoreToggle</OnLClick>
+        <independentactivate>1</independentactivate>
+        <OnLClickSnd>CCScreenItemForward</OnLClickSnd>
+        <OnMouseHover>UICharacterHardcoreHover</OnMouseHover>
+        <OnMouseLeave>UIClearHoverText</OnMouseLeave>
+      </button> -->
+      <button name="elite btn">
+	<texture>guild_icons_atlas</texture>
+        <frame>challenge mode btn</frame>
+        <litframe>challenge mode btn mouse</litframe>
+        <downframe>challenge mode btn lit</downframe>
+        <inactiveframe>challenge mode btn dis</inactiveframe>
+	<x_rel>-50</x_rel>
+        <y_rel>0</y_rel>
+        <width>48</width>
+        <height>48</height>
+        <buttonstyle>checkbox</buttonstyle>
+        <visible>1</visible>
+	<!--<rendersection>UpOne</rendersection>-->
+        <OnLClick>UICharacterEliteToggle</OnLClick>
+	<independentactivate>1</independentactivate>
+        <OnLClickSnd>CCScreenItemForward</OnLClickSnd>
+        <OnMouseHover>UICharacterEliteHover</OnMouseHover>
+        <OnMouseLeave>UIClearHoverText</OnMouseLeave>
+      </button>
+      <editctrl name="character create name">
+        <x>42</x>
+        <y>145</y>
+        <width>428</width>
+        <height>54</height>
+        <align>left</align>
+        <fontsize>32</fontsize>
+        <maxchars>24</maxchars>
+        <startwithfocus>1</startwithfocus>
+<!--        <allowchars>0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_'</allowchars>-->
+    <!--<disallowchars>!@#$%^*()-+_=[]\{}|;:,.?`~\"&apos;&amp;&lt;&gt;\\</disallowchars>
+        <disallowpathchars>1</disallowpathchars>	-->
+      </editctrl>
+      <panel name="character pick sex">
+        <x>45</x>
+        <y>284</y>
+        <width>350</width>
+        <height>65</height>
+        <button name="prev sex btn">
+          <frame>left arrow</frame>
+          <downframe>left arrow highlight</downframe>
+          <litframe>left arrow mouse</litframe>
+          <x>0</x>
+          <y>0</y>
+          <width>65</width>
+          <height>43</height>
+          <param>0</param>
+          <OnLClick>UICharacterAdjustSexOnClick</OnLClick>
+          <OnLClickSnd>CCScreenItemBackward</OnLClickSnd>
+        </button>
+        <label name="sex label">
+          <frame>text window</frame>
+          <x_rel>57</x_rel>
+          <width>320</width>
+          <height>48</height>
+          <align>center</align>
+        </label>
+        <button name="next sex btn">
+          <frame>right arrow</frame>
+          <downframe>right arrow highlight</downframe>
+          <litframe>right arrow mouse</litframe>
+          <x_rel>300</x_rel>
+          <y>0</y>
+          <width>65</width>
+          <height>43</height>
+          <param>1</param>
+          <OnLClick>UICharacterAdjustSexOnClick</OnLClick>
+          <OnLClickSnd>CCScreenItemForward</OnLClickSnd>
+        </button>
+      </panel>
+      <panel name="character pick class">
+        <x_rel>0</x_rel>
+        <y_rel>67</y_rel>
+        <width>350</width>
+        <height>65</height>
+        <button name="prev class btn">
+          <frame>left arrow</frame>
+          <downframe>left arrow highlight</downframe>
+          <litframe>left arrow mouse</litframe>
+          <x>0</x>
+          <y>0</y>
+          <width>65</width>
+          <height>43</height>
+          <param>-1</param>
+          <OnLClick>UICharacterAdjustClassOnClick</OnLClick>
+          <OnLClickSnd>CCScreenItemBackward</OnLClickSnd>
+        </button>
+        <label name="class label">
+          <frame>text window</frame>
+          <x_rel>57</x_rel>
+          <width>320</width>
+          <height>43</height>
+          <align>center</align>
+        </label>
+        <button name="next class btn">
+          <frame>right arrow</frame>
+          <downframe>right arrow highlight</downframe>
+          <litframe>right arrow mouse</litframe>
+          <x_rel>300</x_rel>
+          <y>0</y>
+          <width>65</width>
+          <height>43</height>
+          <param>1</param>
+          <OnLClick>UICharacterAdjustClassOnClick</OnLClick>
+          <OnLClickSnd>CCScreenItemForward</OnLClickSnd>
+        </button>
+      </panel>
+
+      <panel name="character adjust face">
+        <x>45</x>
+        <y_rel>67</y_rel>
+        <width>350</width>
+        <height>65</height>
+        <label name="adjust label">
+          <string>ui char_create face label</string>
+          <x>0</x>
+          <y>0</y>
+          <width>285</width>
+          <height>50</height>
+          <align>topleft</align>
+          <autosizefont>1</autosizefont>
+          <red>191</red>
+          <green>181</green>
+          <blue>121</blue>
+        </label>
+        <button name="adjust prev btn">
+          <frame>left arrow</frame>
+          <downframe>left arrow highlight</downframe>
+          <litframe>left arrow mouse</litframe>
+          <x>289</x>
+          <width>65</width>
+          <height>43</height>
+          <param>1</param>
+          <param2>0</param2>
+          <OnLClick>UICharacterAdjustOnClick</OnLClick>
+          <OnLClickSnd>CCScreenItemBackward</OnLClickSnd>
+        </button>
+        <button name="adjust next btn">
+          <frame>right arrow</frame>
+          <downframe>right arrow highlight</downframe>
+          <litframe>right arrow mouse</litframe>
+          <x>357</x>
+          <width>65</width>
+          <height>43</height>
+          <param>1</param>
+          <param2>1</param2>
+          <OnLClick>UICharacterAdjustOnClick</OnLClick>
+          <OnLClickSnd>CCScreenItemForward</OnLClickSnd>
+        </button>
+      </panel>
+      <panel name="character adjust hair">
+        <x_rel>0</x_rel>
+        <y_rel>67</y_rel>
+        <width>350</width>
+        <height>65</height>
+        <reference refname="adjust label">
+          <string>ui char_create hair label</string>
+        </reference>
+        <reference refname="adjust prev btn">
+          <param>2</param>
+        </reference>
+        <reference refname="adjust next btn">
+          <param>2</param>
+        </reference>
+      </panel>
+      <panel name="character adjust facial hair">
+        <x_rel>0</x_rel>
+        <y_rel>67</y_rel>
+        <width>350</width>
+        <height>65</height>
+        <reference refname="adjust label" name="adjust accessories label">
+          <string>ui char_create facial hair label</string>
+        </reference>
+        <reference refname="adjust prev btn">
+          <param>3</param>
+        </reference>
+        <reference refname="adjust next btn">
+          <param>3</param>
+        </reference>
+      </panel>
+      <panel name="character skin color">
+        <x_rel>0</x_rel>
+        <y_rel>67</y_rel>
+        <width>350</width>
+        <height>65</height>
+        <reference refname="adjust label">
+          <string>ui char_create skin color label</string>
+        </reference>
+        <button name="pick skin color btn">
+          <frame>choose button</frame>
+          <downframe>choose button highlight</downframe>
+          <litframe>choose button mouse</litframe>
+          <x>289</x>
+          <width>130</width>
+          <height>42</height>
+          <param>0</param>
+          <OnLClick>UIChooseColorOnClick</OnLClick>
+          <OnLClickSnd>CCScreenItemBackward</OnLClickSnd>
+          <label>
+            <string>ui char create choose</string>
+            <width>130</width>
+            <height>42</height>
+            <align>center</align>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <dropshadowred>180</dropshadowred>
+            <dropshadowgreen>180</dropshadowgreen>
+            <dropshadowblue>180</dropshadowblue>
+          </label>
+        </button>
+      </panel>
+      <panel name="character hair color">
+        <x_rel>0</x_rel>
+        <y_rel>67</y_rel>
+        <width>350</width>
+        <height>65</height>
+        <reference refname="adjust label">
+          <string>ui char_create hair color label</string>
+        </reference>
+        <button name="pick hair color btn">
+          <frame>choose button</frame>
+          <downframe>choose button highlight</downframe>
+          <litframe>choose button mouse</litframe>
+          <x>289</x>
+          <width>130</width>
+          <height>42</height>
+          <param>1</param>
+          <OnLClick>UIChooseColorOnClick</OnLClick>
+          <OnLClickSnd>CCScreenItemBackward</OnLClickSnd>
+          <label>
+            <string>ui char create choose</string>
+            <width>130</width>
+            <height>42</height>
+            <align>center</align>
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+            <dropshadowred>180</dropshadowred>
+            <dropshadowgreen>180</dropshadowgreen>
+            <dropshadowblue>180</dropshadowblue>
+          </label>
+        </button>
+      </panel>
+
+      <label name="height label">
+        <string>ui char_create height label</string>
+        <red>191</red>
+        <green>181</green>
+        <blue>121</blue>
+        <x>45</x>
+        <y>758</y>
+        <width>408</width>
+        <height>32</height>
+        <align>topleft</align>
+      </label>
+      <scrollbar name="height slider">
+        <x_rel>0</x_rel>
+        <y_rel>26</y_rel>
+        <OnScroll>UICharacterAdjustSize</OnScroll>
+        <param>1</param>
+        <minvalue>0</minvalue>
+        <maxvalue>255</maxvalue>
+        <thumbpadframe>slider thumbpad</thumbpadframe>
+        <button name="height slider left btn">
+          <frame>left arrow</frame>
+          <downframe>left arrow highlight</downframe>
+          <litframe>left arrow mouse</litframe>
+          <x>0</x>
+          <width>65</width>
+          <height>43</height>
+          <scrollcontrol inc="-5">parent</scrollcontrol>
+          <repeat>50</repeat>
+          <OnLButtonDownSnd>CCScreenItemBackward</OnLButtonDownSnd>
+        </button>
+        <panel name="slider bar background">
+          <frame>slider body</frame>
+          <x_rel>68</x_rel>
+          <width>288</width>
+          <height>43</height>
+        </panel>
+        <!--<panel name="slider bar mask">
+          <frame>slider bar mask</frame>
+          <x>55</x>
+          <y>0</y>
+          <zdelta>-0.001</zdelta>
+          <width>48</width>
+          <height>43</height>
+        </panel>-->
+        <bar name="slider bar">
+          <frame>slider bar</frame>
+          <x_rel>10</x_rel>
+          <y_rel>7</y_rel>
+          <width>246</width>
+          <height>33</height>
+        </bar>
+        <button name="height slider right btn">
+          <frame>right arrow</frame>
+          <downframe>right arrow highlight</downframe>
+          <litframe>right arrow mouse</litframe>
+          <x_rel>278</x_rel>
+          <width>65</width>
+          <height>43</height>
+          <scrollcontrol inc="5">parent</scrollcontrol>
+          <repeat>50</repeat>
+          <OnLButtonDownSnd>CCScreenItemForward</OnLButtonDownSnd>
+        </button>
+      </scrollbar>
+      <label name="weight label">
+        <string>ui char_create weight label</string>
+        <red>191</red>
+        <green>181</green>
+        <blue>121</blue>
+        <x>45</x>
+        <y>856</y>
+        <width>408</width>
+        <height>32</height>
+        <align>topleft</align>
+      </label>
+      <reference refname="height slider" name="weight slider">
+        <param>0</param>
+      </reference>
+      <button name="character create cancel">
+        <frame>char select back btn</frame>
+        <downframe>char select back btn highlight</downframe>
+        <litframe>char select back mouse</litframe>
+        <x>29</x>
+        <y>1099</y>
+        <width>220</width>
+        <height>48</height>
+        <OnLClick>UICharacterCreateCancelOnClick</OnLClick>
+        <OnKeyDown>UICharacterCreateCancelOnClick</OnKeyDown>
+        <OnLClickSnd>CCScreenGoBack</OnLClickSnd>
+        <OnKeyUpSnd>CCScreenGoBack</OnKeyUpSnd>
+        <label>
+          <string>cancel</string>
+          <width>220</width>
+          <height>48</height>
+          <align>center</align>
+          <font>Upper_Font_Bold</font>
+          <fontsize>30</fontsize>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="character create randomize">
+        <frame>char select back btn</frame>
+        <downframe>char select back btn highlight</downframe>
+        <litframe>char select back mouse</litframe>
+        <x_rel>230</x_rel>
+        <y_rel>0</y_rel>
+        <width>220</width>
+        <height>48</height>
+        <OnLClick>UICharacterCreateRandomizeOnClick</OnLClick>
+		    <OnLClickSnd>CCScreenRandomize</OnLClickSnd>
+        <label>
+          <string>ui char_create random button</string>
+          <width>220</width>
+          <height>48</height>
+          <align>center</align>
+          <font>Upper_Font_Bold</font>
+          <fontsize>30</fontsize>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="character create accept">
+        <frame>big button</frame>
+        <downframe>big button highlight</downframe>
+        <litframe>big button mouse</litframe>
+        <x>43</x>
+        <y>976</y>
+        <width>420</width>
+        <height>56</height>
+        <OnLClick>UICharacterCreateAcceptOnClick</OnLClick>
+        <OnKeyDown>UICharacterCreateAcceptOnClick</OnKeyDown>
+        <OnLClickSnd>CCScreenAccept</OnLClickSnd>
+        <OnKeyDownSnd>CCScreenAccept</OnKeyDownSnd>
+        <label>
+          <string>ui char_create accept button</string>
+          <width>390</width>
+          <height>64</height>
+          <align>center</align>
+          <font>Upper_Font_Bold</font>
+          <fontsize>36</fontsize>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="character create disable tutorial tips">
+        <downframe>color_button_accept</downframe>
+        <frame>color_button_blank</frame>
+        <!--<litframe>color_button_blank_mouse</litframe>-->
+        <x>43</x>
+        <y>1043</y>
+        <width>428</width>
+        <height>46</height>
+        <buttonstyle>checkbox</buttonstyle>
+        <OnLClick>UICharacterTutorialToggle</OnLClick>
+        <check_on_sound>ButtonAccept</check_on_sound>
+        <check_off_sound>ButtonReject</check_off_sound>
+        <label>
+          <string>ui char create diable tutorial tips</string>
+          <x>50</x>
+          <width>378</width>
+          <height>46</height>
+          <align>left</align>
+          <fontsize>28</fontsize>
+        </label>
+      </button>
+      </panel>
+    <panel name="extra buttons panel multiplayer">
+      <x>1320</x>
+      <ws_x>1640</ws_x>
+      <y>1044</y>
+      <width>248</width>
+      <height>136</height>
+      <frame>credits panel</frame>
+      <independentactivate>1</independentactivate>
+      <visible>0</visible>
+      <button name="manage account">
+        <frame>char select play btn</frame>
+        <downframe>char select play btn highlight</downframe>
+        <litframe>char select play mouse</litframe>
+        <x>14</x>
+        <y>29</y>
+        <width>220</width>
+        <height>48</height>
+        <OnLClick>UIManageAccountOnClick</OnLClick>
+	      <label>
+	        <string>ui_manage_account</string>
+	          <width>220</width>
+	          <height>48</height>
+	          <align>center</align>
+	          <fontsize>20</fontsize>
+	          <red>0</red>
+	          <green>0</green>
+	          <blue>0</blue>
+	          <dropshadowred>180</dropshadowred>
+          	<dropshadowgreen>180</dropshadowgreen>
+          	<dropshadowblue>180</dropshadowblue>
+				</label>
+    	</button>
+    </panel>
+    <panel name="extra buttons panel singleplayer">
+      <x>1320</x>
+      <ws_x>1648</ws_x>
+      <y>1044</y>
+      <width>248</width>
+      <height>136</height>
+      <xframe>credits panel</xframe>
+      <independentactivate>1</independentactivate>
+      <visible>0</visible>
+    </panel>
+    <panel name="player rotator panel">
+      <x>551</x>
+      <y>0</y>
+      <width>1049</width>
+      <height>1200</height>
+      <OnLButtonDown>UIModelPanelOnLButtonDown</OnLButtonDown>
+      <OnLButtonUp>UIModelPanelOnLButtonUp</OnLButtonUp>
+      <OnMouseMove>UICharacterCreateRotatePanelOnMouseMove</OnMouseMove>
+    </panel>
+    <label name="character create description">
+      <string>classdesc_guardian</string>
+      <wordwrap>1</wordwrap>
+      <font>Lower_Font</font>
+      <align>top</align>
+      <x>1225</x>
+      <ws_x>1525</ws_x>
+      <y>30</y>
+      <width>350</width>
+      <height>800</height>
+      <align>center</align>
+      <fontsize>24</fontsize>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+      <dropshadowred>0</dropshadowred>
+      <dropshadowgreen>0</dropshadowgreen>
+      <dropshadowblue>0</dropshadowblue>
+    </label>
+    <panel name="account time remaining panel">
+      <texture>main_atlas</texture>
+<!--      <frame>alt menu background</frame>-->
+      <x>556</x>
+      <y>1091</y>
+      <ws_x>716</ws_x>
+      <width>656</width>
+      <height>96</height>
+      <tgty>1201</tgty>
+      <animtime>300</animtime>
+      <visible>0</visible>
+      <independentactivate>1</independentactivate>
+      <usescursor onalt="1">1</usescursor>
+      <anim_category>close all</anim_category>
+      <anim_category>main panels UA</anim_category>
+      <OnActivateSnd>UIRadioCall</OnActivateSnd>
+      <label name="message label 1">
+        <x>50</x>
+        <y>-13</y>
+        <width>631</width>
+        <height>44</height>
+        <align>center</align>
+        <font>Upper_Font</font>
+        <fontsize>22</fontsize>
+        <autosize>0</autosize>
+        <autosizefont>1</autosizefont>
+      </label>
+      <label name="message label">
+        <x>50</x>
+        <y>23</y>
+        <width>631</width>
+        <height>44</height>
+        <wordwrap>1</wordwrap>
+        <align>center</align>
+        <font>Upper_Font</font>
+        <fontsize>22</fontsize>
+        <autosize>0</autosize>
+      </label>
+      <label name="message label 2">
+        <x>50</x>
+        <y>58</y>
+        <width>631</width>
+        <height>44</height>
+        <align>center</align>
+        <font>Upper_Font</font>
+        <fontsize>22</fontsize>
+<!--    <autosize>0</autosize>
+        <autosizefont>1</autosizefont>-->
+      </label>
+      <label name="message label 3">
+        <x>50</x>
+        <y>-38</y>
+        <width>631</width>
+        <height>44</height>
+        <align>center</align>
+        <font>Upper_Font</font>
+        <fontsize>22</fontsize>
+        <autosize>0</autosize>
+        <autosizefont>1</autosizefont>
+        <red>191</red>
+        <green>181</green>
+        <blue>121</blue>
+      </label>
+    </panel>
+    <panel name="rating logo" sku="hanbitsoft_korea_censor,hanbitsoft_korea_online,hanbitsoft_korea_beta">
+      <texture lang="Korean">ratings_atlas_korea</texture>
+      <rendersection>DialogModelOverlay</rendersection>
+      <x>1600</x>
+      <ws_x>1920</ws_x>
+      <y>0</y>
+      <noscale>1</noscale>
+
+      <visible>0</visible>
+      <independentactivate>1</independentactivate>
+      <fades>1</fades>
+      <param>0</param>     <!-- show every x second -->
+      <param2>3000</param2>   <!-- show for y milliseconds -->
+      <OnPostActivate>UICharSelectRatingLogoOnPostActivate</OnPostActivate>
+
+      <panel name="main rating">
+        <x>-179</x>
+        <y>25</y>
+        <frame>rating_18</frame>
+        <width>154</width>
+        <height>168</height>
+        <stretch>1</stretch>
+      </panel>
+      <panel name="sub rating 1">
+        <x_rel>5</x_rel>
+        <y_rel>170</y_rel>
+        <frame>rating_running_from_arrows</frame>
+        <width>70</width>
+        <height>72</height>
+        <stretch>1</stretch>
+      </panel>
+      <panel name="sub rating 2">
+        <x_rel>75</x_rel>
+        <y_rel>0</y_rel>
+        <frame>rating_lightning</frame>
+        <width>70</width>
+        <height>72</height>
+        <stretch>1</stretch>
+      </panel>
+    </panel>
+  </screen>
+</ui>
+
+

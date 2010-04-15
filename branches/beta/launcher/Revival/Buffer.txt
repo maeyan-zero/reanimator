@@ -1,0 +1,93 @@
+﻿<pack id="hellgate000">
+      <file id="tm_tech_heavy_helm_diffuse.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_diffuse.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_sillum.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_sillum.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_normal.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_normal.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_specular.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_specular.xml.cooked</data>
+        </replace>
+      </file>
+
+      <!--MALE ORDER ARMOUR HELM LOW-->
+      <file id="tm_tech_heavy_helm_color_mask.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_helm_color_mask.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_diffuse.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_helm_diffuse.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_sillum.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_helm_sillum.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_color_mask.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_helm_color_mask.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_diffuse.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_helm_diffuse.xml.cooked</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_sillum.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\low\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\low\tm_tech_heavy_helm_sillum.xml.cooked</data>
+        </replace>
+      </file>
+</pack>
+
+<pack id="playershigh000">
+      <!--ORDER HELM. MALE-->
+      <file id="tm_tech_heavy_helm.wm" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm.wm</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_color_mask.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_color_mask.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_diffuse.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_diffuse.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_sillum.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_sillum.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_normal.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_normal.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_normal_bc5.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_normal_bc5.dds</data>
+        </replace>
+      </file>
+      <file id="tm_tech_heavy_helm_specular.dds" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
+        <replace>
+          <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_helm_specular.dds</data>
+        </replace>
+      </file>
+</pack>

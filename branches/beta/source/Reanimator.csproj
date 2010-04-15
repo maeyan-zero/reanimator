@@ -1,0 +1,484 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8A8B82E9-BCC8-4550-9740-AC611E48F92A}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Reanimator</RootNamespace>
+    <AssemblyName>Reanimator</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetZone>LocalIntranet</TargetZone>
+    <GenerateManifests>false</GenerateManifests>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <NoWarn>1607</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BitBuffer.cs" />
+    <Compile Include="ClientPatcher.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Crypt.cs" />
+    <Compile Include="Forms\HeroEditorFunctions\Atlas_functions.cs" />
+    <Compile Include="Forms\HeroEditorFunctions\AttributesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\AttributesControl.Designer.cs">
+      <DependentUpon>AttributesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\BasicStatisticsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\BasicStatisticsControl.Designer.cs">
+      <DependentUpon>BasicStatisticsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CharacterSkillsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CharacterSkillsControl.Designer.cs">
+      <DependentUpon>CharacterSkillsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CharacterValuesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CharacterValuesControl.Designer.cs">
+      <DependentUpon>CharacterValuesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CompletePanelControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CompletePanelControl.Designer.cs">
+      <DependentUpon>CompletePanelControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\DefenseControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\DefenseControl.Designer.cs">
+      <DependentUpon>DefenseControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\FactionStandingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\FactionStandingsControl.Designer.cs">
+      <DependentUpon>FactionStandingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\ParentStatusControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\ParentStatusControl.Designer.cs">
+      <DependentUpon>ParentStatusControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\CreateCharacterSkillControlsAndBmps.cs">
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\GetImagesFromTextureFiles.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\XmlUtilities.cs" />
+    <Compile Include="Forms\ItemDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemDisplay.Designer.cs">
+      <DependentUpon>ItemDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ItemTransfer\InventoryHandler.cs" />
+    <Compile Include="Forms\ItemTransfer\ItemPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemTransfer\ItemPanel.Designer.cs">
+      <DependentUpon>ItemPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ItemTransfer\ItemTransferForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemTransfer\ItemTransferForm.Designer.cs">
+      <DependentUpon>ItemTransferForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ItemUtilities.cs" />
+    <Compile Include="Forms\ModificationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ModificationForm.Designer.cs">
+      <DependentUpon>ModificationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Havok.cs" />
+    <Compile Include="TableDataSet.cs" />
+    <Compile Include="ExcelTables.cs" />
+    <Compile Include="Export.cs" />
+    <Compile Include="Forms\CacheInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CacheInfo.Designer.cs">
+      <DependentUpon>CacheInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CSVSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CSVSelection.Designer.cs">
+      <DependentUpon>CSVSelection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ExcelTableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExcelTableForm.Designer.cs">
+      <DependentUpon>ExcelTableForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TablesLoaded.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TablesLoaded.Designer.cs">
+      <DependentUpon>TablesLoaded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditor.Designer.cs">
+      <DependentUpon>HeroEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MinigameControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\MinigameControl.Designer.cs">
+      <DependentUpon>MinigameControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TableForm.Designer.cs">
+      <DependentUpon>TableForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Options.Designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProgressForm.Designer.cs">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ThreadedFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UpdateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UpdateForm.Designer.cs">
+      <DependentUpon>UpdateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WayPointControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\WayPointControl.Designer.cs">
+      <DependentUpon>WayPointControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Index.cs" />
+    <Compile Include="IMdiChildBase.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="RevivalMod.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\CSVSelection.resx">
+      <DependentUpon>CSVSelection.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExcelTableForm.resx">
+      <DependentUpon>ExcelTableForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TablesLoaded.resx">
+      <DependentUpon>TablesLoaded.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditor.resx">
+      <DependentUpon>HeroEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TableForm.resx">
+      <DependentUpon>TableForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Options.resx">
+      <DependentUpon>Options.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProgressForm.resx">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Reanimator.resx">
+      <DependentUpon>Reanimator.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Forms\Reanimator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Reanimator.Designer.cs">
+      <DependentUpon>Reanimator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StringsFile.cs" />
+    <Compile Include="StringsTables.cs" />
+    <Compile Include="Unit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\CacheInfo.resx">
+      <DependentUpon>CacheInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\AttributesControl.resx">
+      <DependentUpon>AttributesControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\BasicStatisticsControl.resx">
+      <DependentUpon>BasicStatisticsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\CharacterSkillsControl.resx">
+      <DependentUpon>CharacterSkillsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\CharacterValuesControl.resx">
+      <DependentUpon>CharacterValuesControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\CompletePanelControl.resx">
+      <DependentUpon>CompletePanelControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\DefenseControl.resx">
+      <DependentUpon>DefenseControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\FactionStandingsControl.resx">
+      <DependentUpon>FactionStandingsControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\ParentStatusControl.resx">
+      <DependentUpon>ParentStatusControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemDisplay.resx">
+      <DependentUpon>ItemDisplay.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemTransfer\ItemPanel.resx">
+      <DependentUpon>ItemPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemTransfer\ItemTransferForm.resx">
+      <DependentUpon>ItemTransferForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MinigameControl.resx">
+      <DependentUpon>MinigameControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ModificationForm.resx">
+      <DependentUpon>ModificationForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ThreadedFormBase.resx">
+      <DependentUpon>ThreadedFormBase.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UpdateForm.resx">
+      <DependentUpon>UpdateForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WayPointControl.resx">
+      <DependentUpon>WayPointControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Resources\d_critical.png" />
+    <None Include="Resources\d_electric.png" />
+    <None Include="Resources\d_fire.png" />
+    <None Include="Resources\d_physical.png" />
+    <None Include="Resources\d_poison.png" />
+    <None Include="Resources\d_spectral.png" />
+    <None Include="Resources\f_armor.png" />
+    <None Include="Resources\f_gun.png" />
+    <None Include="Resources\f_magical.png" />
+    <None Include="Resources\f_mod.png" />
+    <None Include="Resources\f_sword.png" />
+    <None Include="Resources\k_beast.png" />
+    <None Include="Resources\k_demon.png" />
+    <None Include="Resources\k_necro.png" />
+    <None Include="Resources\k_spectral.png" />
+    <None Include="Resources\buttonSubstractNormal.png" />
+    <None Include="Resources\buttonSubstractHover.png" />
+    <None Include="Resources\buttonSubstractClicked.png" />
+    <None Include="Resources\buttonAddNormal.png" />
+    <None Include="Resources\buttonAddHover.png" />
+    <None Include="Resources\buttonAddClicked.png" />
+    <None Include="Resources\ruperts3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dlls\Excel\Excel.csproj">
+      <Project>{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}</Project>
+      <Name>Excel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\dlls\FileTools\FileTools.csproj">
+      <Project>{D6EC58F1-C9CF-44FA-897C-5886BF47F896}</Project>
+      <Name>FileTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UpdateChecker\UpdateChecker.csproj">
+      <Project>{84FFA630-84E2-4C38-9FBE-79EF33558818}</Project>
+      <Name>UpdateChecker</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inventory_bg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inventory_bg2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\inventory_bg1.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll"
+copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"
+copy "$(ProjectDir)\Resources\copyMyContentToTheExecutableFolder" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
