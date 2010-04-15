@@ -369,11 +369,7 @@ namespace Reanimator.Excel
             public float homeAfterUnitRadius;
             public float collidableAfterXSeconds;
             public float homeAfterXSeconds;
-            public Int32 bitmask08;/*'bounce on unit hit',0);
-      'bounce on background hit',1);
-      'New Direction on Bounce',2);
-      'cannot ricochet',3);
-      'retarget on bounce',4);*/
+            public Int32 bitmask08;
             public float impactCameraShakeDuration;
             public float impactCameraShakeMagnitude;
             public float impactCameraShakeDegrade;

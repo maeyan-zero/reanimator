@@ -27,7 +27,7 @@ namespace Reanimator.Forms
 
         private void checkedListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            pictureBox.Image = mod.Caption;
+            pictureBox.Image = mod.getCaption(checkedListBox.SelectedIndex);
             titleLabel.Text = mod.getTitle(checkedListBox.SelectedIndex);
             authorLabel.Text = mod.getAuthor(checkedListBox.SelectedIndex);
             versionLabel.Text = mod.getVersion(checkedListBox.SelectedIndex);
@@ -87,9 +87,14 @@ namespace Reanimator.Forms
                     for (int i = 0; i < mod.Length; i++)
                     {
                         checkedListBox.Items.Add(mod.getTitle(i), mod.getEnabled(i));
-                        if (mod.getEnabled(i))
+                        mod.setApply(i, mod.getEnabled(i));
+                        if (mod.getUsage(i) == "required")
                         {
                             checkedListBox.SetItemCheckState(i, CheckState.Indeterminate);
+                        }
+                        if (mod.getUsage(i) == "recommended")
+                        {
+                            checkedListBox.SetItemCheckState(i, CheckState.Checked);
                         }
                     }
                     checkedListBox.SelectedIndex = 0;

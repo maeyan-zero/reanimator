@@ -37,19 +37,24 @@
             this.installToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.revertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.itemTransferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enableHCCharacterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.characterCombo = new System.Windows.Forms.ComboBox();
             this.p_start = new System.Windows.Forms.PictureBox();
             this.p_openHomePage = new System.Windows.Forms.Panel();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.backupCharactersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p_start)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.Transparent;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.programToolStripMenuItem,
             this.toolsToolStripMenuItem,
@@ -66,7 +71,6 @@
             this.settingsToolStripMenuItem,
             this.toolStripSeparator2,
             this.exitToolStripMenuItem});
-            this.programToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.programToolStripMenuItem.Name = "programToolStripMenuItem";
             this.programToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.programToolStripMenuItem.Text = "Program";
@@ -96,8 +100,10 @@
             this.installToolStripMenuItem,
             this.revertToolStripMenuItem,
             this.toolStripSeparator1,
-            this.enableHCCharacterToolStripMenuItem});
-            this.toolsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.itemTransferToolStripMenuItem,
+            this.enableHCCharacterToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.backupCharactersToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -121,30 +127,26 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(188, 6);
             // 
+            // itemTransferToolStripMenuItem
+            // 
+            this.itemTransferToolStripMenuItem.Name = "itemTransferToolStripMenuItem";
+            this.itemTransferToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.itemTransferToolStripMenuItem.Text = "Item Transfer...";
+            this.itemTransferToolStripMenuItem.Click += new System.EventHandler(this.itemTransferToolStripMenuItem_Click);
+            // 
             // enableHCCharacterToolStripMenuItem
             // 
             this.enableHCCharacterToolStripMenuItem.Name = "enableHCCharacterToolStripMenuItem";
             this.enableHCCharacterToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.enableHCCharacterToolStripMenuItem.Text = "Enable HC Character...";
+            this.enableHCCharacterToolStripMenuItem.Text = "Enable Hardcore...";
+            this.enableHCCharacterToolStripMenuItem.Click += new System.EventHandler(this.enableHCCharacterToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
-            this.aboutToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.BackColor = System.Drawing.Color.Transparent;
-            this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.groupBox1.Location = new System.Drawing.Point(381, 39);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(49, 184);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "RSS Feed";
             // 
             // characterCombo
             // 
@@ -152,7 +154,7 @@
             this.characterCombo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.characterCombo.ForeColor = System.Drawing.Color.DarkOrange;
             this.characterCombo.FormattingEnabled = true;
-            this.characterCombo.Location = new System.Drawing.Point(474, 396);
+            this.characterCombo.Location = new System.Drawing.Point(472, 390);
             this.characterCombo.Name = "characterCombo";
             this.characterCombo.Size = new System.Drawing.Size(146, 21);
             this.characterCombo.TabIndex = 7;
@@ -163,7 +165,7 @@
             this.p_start.BackColor = System.Drawing.Color.Transparent;
             this.p_start.BackgroundImage = global::launcher.Properties.Resources.templar_normal;
             this.p_start.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.p_start.Location = new System.Drawing.Point(474, 224);
+            this.p_start.Location = new System.Drawing.Point(468, 214);
             this.p_start.Name = "p_start";
             this.p_start.Size = new System.Drawing.Size(146, 180);
             this.p_start.TabIndex = 13;
@@ -181,7 +183,47 @@
             this.p_openHomePage.Name = "p_openHomePage";
             this.p_openHomePage.Size = new System.Drawing.Size(223, 28);
             this.p_openHomePage.TabIndex = 16;
+            this.p_openHomePage.MouseLeave += new System.EventHandler(this.p_openHomePage_MouseLeave);
             this.p_openHomePage.Click += new System.EventHandler(this.p_homePageLink_Click);
+            this.p_openHomePage.MouseEnter += new System.EventHandler(this.p_openHomePage_MouseEnter);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 431);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(632, 22);
+            this.statusStrip1.TabIndex = 17;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.BackColor = System.Drawing.Color.Transparent;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.DarkOrange;
+            this.label1.Location = new System.Drawing.Point(476, 54);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(56, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "RSS Feed";
+            // 
+            // backupCharactersToolStripMenuItem
+            // 
+            this.backupCharactersToolStripMenuItem.CheckOnClick = true;
+            this.backupCharactersToolStripMenuItem.Name = "backupCharactersToolStripMenuItem";
+            this.backupCharactersToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.backupCharactersToolStripMenuItem.Text = "Backup Characters";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(188, 6);
             // 
             // Launcher
             // 
@@ -190,10 +232,11 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
             this.BackgroundImage = global::launcher.Properties.Resources.background4;
             this.ClientSize = new System.Drawing.Size(632, 453);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.p_openHomePage);
             this.Controls.Add(this.characterCombo);
             this.Controls.Add(this.p_start);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
@@ -207,6 +250,8 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.p_start)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,7 +262,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem programToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem installToolStripMenuItem;
@@ -229,6 +273,12 @@
         private System.Windows.Forms.ComboBox characterCombo;
         private System.Windows.Forms.PictureBox p_start;
         private System.Windows.Forms.Panel p_openHomePage;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem itemTransferToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem backupCharactersToolStripMenuItem;
 
     }
 }

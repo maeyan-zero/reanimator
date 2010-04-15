@@ -8,6 +8,7 @@
     <description>This is the base SP modification developed by the Revival team.</description>
     <url>http://www.hellgateaus.net</url>
     <type>required</type>
+    <image>revival.png</image>
     <pack id="hellgate000">
       <file id="gameglobals.txt.cooked" dir="data_common\excel\">
         <modify>
@@ -132,6 +133,23 @@
       </file>
       <file id="monsters.txt.cooked" dir="data\excel\">
         <modify>
+          <entity id="Shulgoth" value="437">
+            <attribute id="monsterQuality">
+              <replace>
+                <data>3</data>
+              </replace>
+            </attribute>
+            <attribute id="treasure">
+              <replace>
+                <data>328</data>
+              </replace>
+            </attribute>
+            <attribute id="championTreasure">
+              <replace>
+                <data>328</data>
+              </replace>
+            </attribute>
+          </entity>
           <entity id="Lollipop" value="849">
             <attribute id="npcInfo">
               <replace>
@@ -501,158 +519,13 @@
     </pack>
   </modification>
   <modification>
-    <title>Elite for Normal Mode</title>
-    <version>2.0</version>
-    <author>The Revival Team</author>
-    <description>Reduces elite mode characters difficulty to normal mode, while benefiting from additional multipliers.</description>
-    <url>http://www.hellgateaus.net</url>
-    <type>optional</type>
-    <pack id="hellgate000">
-      <file id="gameglobals.txt.cooked" dir="data_common\excel\">
-        <modify>
-          <entity id="EliteMonsterDamagePercent">
-            <attribute id="FloatValue">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="EliteMonsterSFXChancePercent">
-            <attribute id="FloatValue">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="ElitePlayerDamagePercent">
-            <attribute id="FloatValue">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="ElitePlayerSFXChancePercent">
-            <attribute id="FloatValue">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-          </entity>
-        </modify>
-      </file>
-    </pack>
-  </modification>
-  <modification>
-    <title>Purchasable Retrainers</title>
-    <version>2.0</version>
-    <author>The Revival Team</author>
-    <description>Allows retrainers to be purchased from all vendors.</description>
-    <url>http://www.hellgateaus.net</url>
-    <type>optional</type>
-    <pack id="hellgate000">
-      <file id="items.txt.cooked" dir="data\excel\">
-        <modify>
-          <entity id="Attribute_Retrainer">
-            <attribute id="BuyPriceMult">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-            <attribute id="BuyPriceAdd">
-              <replace>
-                <data>500,000</data>
-              </replace>
-            </attribute>
-            <attribute id="SellPriceMult">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-            <attribute id="SellPriceAdd">
-              <replace>
-                <data>500,000</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="Skill_Retrainer">
-            <attribute id="BuyPriceMult">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-            <attribute id="BuyPriceAdd">
-              <replace>
-                <data>750,000</data>
-              </replace>
-            </attribute>
-            <attribute id="SellPriceMult">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-            <attribute id="SellPriceAdd">
-              <replace>
-                <data>750,000</data>
-              </replace>
-            </attribute>
-          </entity>
-        </modify>
-      </file>
-      <file id="treasure.txt.cooked" dir="data\excel\">
-        <modify>
-          <entity id="Vendor_Wares">
-            <attribute id="Item6">
-              <replace>
-                <data>123</data>
-              </replace>
-            </attribute>
-          </entity>
-        </modify>
-      </file>
-    </pack>
-  </modification>
-  <modification>
-    <title>Auto Pickup Items</title>
-    <version>2.0</version>
-    <author>The Revival Team</author>
-    <description>Allows consumables &amp; quest items to be automatically picked up.</description>
-    <url>http://www.hellgateaus.net</url>
-    <type>optional</type>
-    <pack id="hellgate000">
-      <file id="items.txt.cooked" dir="data\excel\">
-        <modify>
-          <entity id="*" value="2-111">
-            <attribute id="autoPickupDistance">
-              <replace>
-                <data>4</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="*" value="120-177">
-            <attribute id="autoPickupDistance">
-              <replace>
-                <data>4</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="*" value="247-255">
-            <attribute id="autoPickupDistance">
-              <replace>
-                <data>4</data>
-              </replace>
-            </attribute>
-          </entity>
-        </modify>
-      </file>
-    </pack>
-  </modification>
-  <modification>
     <title>Hellgate: Ressurection Armor</title>
     <version>1.0</version>
     <author>The Revival Team</author>
     <description>Models taken from Hellgate: Ressurection</description>
     <url>http://www.hellgateaus.net</url>
-    <type>optional</type>
+    <type>recommended</type>
+    <image>ressurection.png</image>
     <pack id="hellgate000">
       <!--MALE ORDER MATERIALS-->
       <file id="tm_tech_heavy_diffuse.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
@@ -743,6 +616,155 @@
         <replace>
           <data>data\units\players\templar\templar_male_3p\tech_heavy\tm_tech_heavy_specular.dds</data>
         </replace>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Elite for Normal Mode</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Reduces elite mode characters difficulty to normal mode, while benefiting from additional multipliers.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <image>elite.png</image>
+    <pack id="hellgate000">
+      <file id="gameglobals.txt.cooked" dir="data_common\excel\">
+        <modify>
+          <entity id="EliteMonsterDamagePercent">
+            <attribute id="FloatValue">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="EliteMonsterSFXChancePercent">
+            <attribute id="FloatValue">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="ElitePlayerDamagePercent">
+            <attribute id="FloatValue">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="ElitePlayerSFXChancePercent">
+            <attribute id="FloatValue">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Purchasable Retrainers</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Allows retrainers to be purchased from all vendors.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <image>retrainers.png</image>
+    <pack id="hellgate000">
+      <file id="items.txt.cooked" dir="data\excel\">
+        <modify>
+          <entity id="Attribute_Retrainer">
+            <attribute id="BuyPriceMult">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="BuyPriceAdd">
+              <replace>
+                <data>500,000</data>
+              </replace>
+            </attribute>
+            <attribute id="SellPriceMult">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="SellPriceAdd">
+              <replace>
+                <data>500,000</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="Skill_Retrainer">
+            <attribute id="BuyPriceMult">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="BuyPriceAdd">
+              <replace>
+                <data>750,000</data>
+              </replace>
+            </attribute>
+            <attribute id="SellPriceMult">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="SellPriceAdd">
+              <replace>
+                <data>750,000</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+      <file id="treasure.txt.cooked" dir="data\excel\">
+        <modify>
+          <entity id="Vendor_Wares">
+            <attribute id="Item6">
+              <replace>
+                <data>123</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Auto Pickup Items</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Allows consumables &amp; quest items to be automatically picked up.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <image>pickup.png</image>
+    <pack id="hellgate000">
+      <file id="items.txt.cooked" dir="data\excel\">
+        <modify>
+          <entity id="*" value="2-111">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="120-177">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="247-255">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
       </file>
     </pack>
   </modification>

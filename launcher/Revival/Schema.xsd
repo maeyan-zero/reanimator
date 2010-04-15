@@ -10,6 +10,7 @@
   <xs:element name="integer" type="xs:integer"/>
   <xs:element name="float" type="xs:float"/>
   <xs:element name="string" type="xs:string"/>
+  <xs:element name="image" type="xs:string"/>
 
   <xs:attribute name="id" type="xs:string"/>
   <xs:attribute name="dir" type="xs:string"/>
@@ -94,7 +95,6 @@
       <xs:sequence>
         <xs:element ref="entity" maxOccurs="unbounded"/>
       </xs:sequence>
-      <xs:attribute ref="repack" use="optional"/>
     </xs:complexType>
   </xs:element>
 
@@ -147,6 +147,7 @@
         <xs:element ref="description" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="url" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="type" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="image" minOccurs="0" maxOccurs="1"/>
         <xs:element ref="pack" minOccurs="1" maxOccurs="unbounded"/>
       </xs:sequence>
     </xs:complexType>
