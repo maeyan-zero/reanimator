@@ -594,6 +594,11 @@ namespace Reanimator
             }
         }
 
+        public Image getCaption(int i)
+        {
+            return revival.modification[i].image;
+        }
+
         [XmlRoot("revival")]
         public class Revival
         {
@@ -654,6 +659,9 @@ namespace Reanimator
             [XmlElement(typeof(Pack))]
             public Pack[] pack;
 
+            [XmlIgnoreAttribute]
+            public Image image;
+            
             [XmlIgnoreAttribute]
             public bool apply;
 

@@ -311,7 +311,7 @@ namespace Reanimator.Forms
         UniqueMod = 17456
     };
 
-    enum ItemValueNames
+    public enum ItemValueNames
     {
         level,
         gold,

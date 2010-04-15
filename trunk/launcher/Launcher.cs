@@ -129,7 +129,7 @@ namespace launcher
                 if (characterCombo.SelectedIndex > 0)
                 {
                     string characterToLoad = _characterFolder + @"\" + characterCombo.SelectedItem + @".hg1";
-                    string arguments = "-singleplayer -load\"" + characterToLoad;
+                    string arguments = "-singleplayer -load\"" + characterToLoad +"\"";
 
                     Process.Start(Config.GameClientPath, arguments);
                 }
@@ -147,11 +147,13 @@ namespace launcher
         private void p_start_MouseEnter(object sender, EventArgs e)
         {
             p_start.BackgroundImage = Resources.templar_mouseOver;
+            toolStripStatusLabel1.Text = "Unlesh Hell!";
         }
 
         private void p_start_MouseLeave(object sender, EventArgs e)
         {
             p_start.BackgroundImage = Resources.templar_normal;
+            toolStripStatusLabel1.Text = "";
         }
 
         private void p_start_MouseDown(object sender, MouseEventArgs e)
@@ -174,6 +176,28 @@ namespace launcher
         {
             //minimizes the window to prevent multiple clicks on the launch/openHomePage button
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void p_openHomePage_MouseEnter(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "Visit it at http://www.hellgateaus.net";
+        }
+
+        private void p_openHomePage_MouseLeave(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "";
+        }
+
+        private void enableHCCharacterToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Hardcore hardcore = new Hardcore();
+            hardcore.ShowDialog();
+        }
+
+        private void itemTransferToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Transfer transfer = new Transfer();
+            transfer.ShowDialog();
         }
     }
 }
