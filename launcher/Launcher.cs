@@ -10,6 +10,7 @@ using System.IO;
 using Reanimator;
 using launcher.Properties;
 using System.Diagnostics;
+using Reanimator.Forms.ItemTransfer;
 
 namespace launcher
 {
@@ -97,6 +98,8 @@ namespace launcher
         {
             MessageBox.Show("HellgateAus.net Launcher 2038" + Environment.NewLine +
                             "Developed by Maeyan, Alex2069, Kite & Malachor." + Environment.NewLine +
+                            "Artwork by lexsoOr, Music by ..." + Environment.NewLine +
+                            Environment.NewLine +
                             "Visit us at " + _homepage + " " + Environment.NewLine +
                             "Contact maeyan.zero@gmail.com for info.",
                             "HellgateAus.net Launcher 2038", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -180,7 +183,7 @@ namespace launcher
 
         private void p_openHomePage_MouseEnter(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = "Visit it at http://www.hellgateaus.net";
+            toolStripStatusLabel1.Text = "Visit it at " + _homepage;
         }
 
         private void p_openHomePage_MouseLeave(object sender, EventArgs e)
@@ -196,8 +199,14 @@ namespace launcher
 
         private void itemTransferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Transfer transfer = new Transfer();
-            transfer.ShowDialog();
+         // ItemTransferForm transfer = new ItemTransferForm(ref tableDataSet, ref excelTables);
+            TableDataSet set = new TableDataSet();
+            Reanimator.Excel.ExcelTables tables = new Reanimator.Excel.ExcelTables(new byte[] {});
+            ItemTransferForm transfer = new ItemTransferForm(ref set, ref tables);
+            transfer.ShowDialog(this);
+            
+            //Transfer transfer = new Transfer();
+            //transfer.ShowDialog();
         }
     }
 }

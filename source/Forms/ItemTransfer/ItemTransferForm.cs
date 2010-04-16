@@ -123,7 +123,6 @@ namespace Reanimator.Forms.ItemTransfer
                 if (_characterUnit1.IsGood)
                 {
                     _itemHelpFunctions.LoadCharacterValues(_characterUnit1);
-                    //_itemHelpFunctions.PopulateItems(ref _characterUnit1);
 
                     gb_characterName1.Text = cb_selectCharacter1.SelectedItem.ToString();
                     int level = UnitHelpFunctions.GetSimpleValue(_characterUnit1, ItemValueNames.level.ToString()) - 8;
@@ -153,7 +152,6 @@ namespace Reanimator.Forms.ItemTransfer
                 if (_characterUnit2.IsGood)
                 {
                     _itemHelpFunctions.LoadCharacterValues(_characterUnit2);
-                    //_itemHelpFunctions.PopulateItems(ref _characterUnit2);
 
                     gb_characterName2.Text = cb_selectCharacter2.SelectedItem.ToString();
                     int level = UnitHelpFunctions.GetSimpleValue(_characterUnit2, ItemValueNames.level.ToString()) - 8;

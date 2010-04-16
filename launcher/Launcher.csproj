@@ -137,6 +137,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\dlls\Excel\Excel.csproj">
+      <Project>{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}</Project>
+      <Name>Excel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dlls\FileTools\FileTools.csproj">
       <Project>{D6EC58F1-C9CF-44FA-897C-5886BF47F896}</Project>
       <Name>FileTools</Name>
