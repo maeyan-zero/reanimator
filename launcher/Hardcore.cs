@@ -37,7 +37,7 @@ namespace launcher
                     bit_buffer.DataByteOffset = 0x2028;
 
                     Unit unit = new Unit(bit_buffer);
-                    unit.ReadUnit(ref unit);
+//unit.ReadUnit(ref unit);
 
                     characters.Add(unit);
 

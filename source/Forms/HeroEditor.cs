@@ -552,50 +552,52 @@ namespace Reanimator.Forms
         {
             _panel.GetSkillControls(_heroUnit);
 
-            int startIndex = _filePath.LastIndexOf("\\") + 1;
-            string characterName = _filePath.Substring(startIndex, _filePath.Length - startIndex - 4);
-            FileStream saveFile = new FileStream(characterName + ".hg1", FileMode.Create, FileAccess.ReadWrite);
-            _savedPath = saveFile.Name;
+            UnitHelpFunctions.SaveCharacterFile(_heroUnit, _filePath);
 
-            // main header
-            MainHeader mainHeader;
-            mainHeader.Flag = 0x484D4752; // "RGMH"
-            mainHeader.Version = 1;
-            mainHeader.DataOffset1 = 0x2028;
-            mainHeader.DataOffset2 = 0x2028;
-            byte[] data = FileTools.StructureToByteArray(mainHeader);
-            saveFile.Write(data, 0, data.Length);
+            //int startIndex = _filePath.LastIndexOf("\\") + 1;
+            //string characterName = _filePath.Substring(startIndex, _filePath.Length - startIndex - 4);
+            //FileStream saveFile = new FileStream(characterName + ".hg1", FileMode.Create, FileAccess.ReadWrite);
+            //_savedPath = saveFile.Name;
 
-            // hellgate string (is this needed?)
-            const string hellgateString = "Hellgate: London";
-            byte[] hellgateStringBytes = FileTools.StringToUnicodeByteArray(hellgateString);
-            saveFile.Seek(0x28, SeekOrigin.Begin);
-            saveFile.Write(hellgateStringBytes, 0, hellgateStringBytes.Length);
+            //// main header
+            //MainHeader mainHeader;
+            //mainHeader.Flag = 0x484D4752; // "RGMH"
+            //mainHeader.Version = 1;
+            //mainHeader.DataOffset1 = 0x2028;
+            //mainHeader.DataOffset2 = 0x2028;
+            //byte[] data = FileTools.StructureToByteArray(mainHeader);
+            //saveFile.Write(data, 0, data.Length);
 
-            // char name (not actually used in game though I don't think)  (is this needed?)
-            string charString = characterName;
-            byte[] charStringBytes = FileTools.StringToUnicodeByteArray(charString);
-            saveFile.Seek(0x828, SeekOrigin.Begin);
-            saveFile.Write(charStringBytes, 0, charStringBytes.Length);
+            //// hellgate string (is this needed?)
+            //const string hellgateString = "Hellgate: London";
+            //byte[] hellgateStringBytes = FileTools.StringToUnicodeByteArray(hellgateString);
+            //saveFile.Seek(0x28, SeekOrigin.Begin);
+            //saveFile.Write(hellgateStringBytes, 0, hellgateStringBytes.Length);
 
-            // no detail string (is this needed?)
-            const string noDetailString = "No detail";
-            byte[] noDetailStringBytes = FileTools.StringToUnicodeByteArray(noDetailString);
-            saveFile.Seek(0x1028, SeekOrigin.Begin);
-            saveFile.Write(noDetailStringBytes, 0, noDetailStringBytes.Length);
+            //// char name (not actually used in game though I don't think)  (is this needed?)
+            //string charString = characterName;
+            //byte[] charStringBytes = FileTools.StringToUnicodeByteArray(charString);
+            //saveFile.Seek(0x828, SeekOrigin.Begin);
+            //saveFile.Write(charStringBytes, 0, charStringBytes.Length);
 
-            // load char string (is this needed?)
-            const string loadCharacterString = "Load this Character";
-            byte[] loadCharacterStringBytes = FileTools.StringToUnicodeByteArray(loadCharacterString);
-            saveFile.Seek(0x1828, SeekOrigin.Begin);
-            saveFile.Write(loadCharacterStringBytes, 0, loadCharacterStringBytes.Length);
+            //// no detail string (is this needed?)
+            //const string noDetailString = "No detail";
+            //byte[] noDetailStringBytes = FileTools.StringToUnicodeByteArray(noDetailString);
+            //saveFile.Seek(0x1028, SeekOrigin.Begin);
+            //saveFile.Write(noDetailStringBytes, 0, noDetailStringBytes.Length);
 
-            // main character data
-            saveFile.Seek(0x2028, SeekOrigin.Begin);
-            byte[] saveData = _heroUnit.GenerateSaveData(charStringBytes);
-            saveFile.Write(saveData, 0, saveData.Length);
+            //// load char string (is this needed?)
+            //const string loadCharacterString = "Load this Character";
+            //byte[] loadCharacterStringBytes = FileTools.StringToUnicodeByteArray(loadCharacterString);
+            //saveFile.Seek(0x1828, SeekOrigin.Begin);
+            //saveFile.Write(loadCharacterStringBytes, 0, loadCharacterStringBytes.Length);
 
-            saveFile.Close();
+            //// main character data
+            //saveFile.Seek(0x2028, SeekOrigin.Begin);
+            //byte[] saveData = _heroUnit.GenerateSaveData(charStringBytes);
+            //saveFile.Write(saveData, 0, saveData.Length);
+
+            //saveFile.Close();
         }
 
         private void InitUnknownStatList()
@@ -733,7 +735,7 @@ namespace Reanimator.Forms
                         job = "Male Guardian";
                         break;
                     case (0x797A):
-                        job = "Feale Guardian";
+                        job = "Female Guardian";
                         break;
 
                     case (0x7678):
@@ -1380,7 +1382,7 @@ namespace Reanimator.Forms
                 fs.Close();
             }
 
-            XmlUtilities<Unit>.Serialize(unit, savePath + ".xml");
+            //XmlUtilities<Unit>.Serialize(unit, savePath + ".xml");
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -1573,6 +1575,24 @@ namespace Reanimator.Forms
             Unit.StatBlock.Stat affix = mod.Stats.GetStatByName(ItemValueNames.applied_affix.ToString());
             tb_modAttribute.Text = affix.Id.ToString();
             tb_modValue.Text = affix.values[0].Stat.ToString();
+        }
+
+        private void b_saveXML_Click(object sender, EventArgs e)
+        {
+            Unit unit = currentlyEditing_ComboBox.SelectedItem as Unit;
+            if (unit == null) return;
+
+            XmlUtilities<Unit>.Serialize(unit, @"F:\" + unit.Name + ".xml");
+        }
+
+        private void b_loadXML_Click(object sender, EventArgs e)
+        {
+            Unit unit = XmlUtilities<Unit>.Deserialize(@"F:\" + textBox1.Text + ".xml");
+
+            if (unit != null)
+            {
+                _heroUnit.Items.Add(unit);
+            }
         }
     }
 }

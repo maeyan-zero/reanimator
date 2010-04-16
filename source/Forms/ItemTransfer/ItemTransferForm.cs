@@ -13,6 +13,11 @@ namespace Reanimator.Forms.ItemTransfer
 {
     public partial class ItemTransferForm : Form
     {
+        const InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
+        const int INVENTORYWIDTH = 6;
+        const int INVENTORYHEIGHT = 6;
+        const int ITEMUNITSIZE = 40;
+
         string _characterFolder;
 
         ExcelTables _excelTables;
@@ -23,20 +28,19 @@ namespace Reanimator.Forms.ItemTransfer
         Unit _characterUnit1;
         Unit _characterUnit2;
 
-        Unit _selectedItemCharacter1;
-        ListBox _listBoxcharacter1;
+        //Unit _selectedItemCharacter1;
+        ItemPanel _characterItemPanel1;
 
-        Unit _selectedItemCharacter2;
-        ListBox _listBoxcharacter2;
+        //Unit _selectedItemCharacter2;
+        ItemPanel _characterItemPanel2;
 
-        InventoryHandler _characterInventory1;
-        InventoryHandler _characterInventory2;
-
-        ItemPanel _testPanel;
+        ItemPanel _eventSender;
 
         public ItemTransferForm(ref TableDataSet dataSet, ref ExcelTables excelTables)
         {
             InitializeComponent();
+
+            this.Text += " - Location: " + INVENTORYTYPE.ToString();
 
             _itemHelpFunctions = new UnitHelpFunctions(ref dataSet, ref excelTables);
 
@@ -44,18 +48,53 @@ namespace Reanimator.Forms.ItemTransfer
 
             _excelTables = excelTables;
 
-            _listBoxcharacter1 = lb_characterEquipment1;
-            _listBoxcharacter2 = lb_characterEquipment2;
-
             string[] characters = LoadCharacterNames();
-
-            _characterInventory1 = new InventoryHandler();
-            _characterInventory2 = new InventoryHandler();
 
             cb_selectCharacter1.DataSource = characters;
             cb_selectCharacter2.DataSource = characters.Clone();
 
-            _testPanel = new ItemPanel();
+            _characterItemPanel1 = new ItemPanel();
+            _characterItemPanel2 = new ItemPanel();
+
+            _characterItemPanel1.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
+            //_characterItemPanel1.ItemDoubleClicked_Event += new ItemPanel.ItemDoubleClicked(_characterItemPanel_ItemDoubleClicked_Event);
+            _characterItemPanel2.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
+            //_characterItemPanel2.ItemDoubleClicked_Event += new ItemPanel.ItemDoubleClicked(_characterItemPanel_ItemDoubleClicked_Event);
+
+            _characterItemPanel1.ItemUnitSize = ITEMUNITSIZE;
+            _characterItemPanel2.ItemUnitSize = ITEMUNITSIZE;
+
+            _characterItemPanel1.Size = new Size(INVENTORYWIDTH * ITEMUNITSIZE, INVENTORYHEIGHT * ITEMUNITSIZE);
+            _characterItemPanel2.Size = new Size(INVENTORYWIDTH * ITEMUNITSIZE, INVENTORYHEIGHT * ITEMUNITSIZE);
+
+            _characterItemPanel1.Location = new Point(16, 18);
+            _characterItemPanel2.Location = new Point(16, 18);
+
+            // use inventory panels, as a normal groupBox doesn't provide the option "AutoScroll"
+            p_inventory1.Controls.Add(_characterItemPanel1);
+            p_inventory2.Controls.Add(_characterItemPanel2);
+        }
+
+        //void _characterItemPanel_ItemDoubleClicked_Event(ItemPanel sender, InventoryItem item)
+        //{
+        //    _characterItemPanel_NewItemSelected_Event(sender, item);
+
+        //    b_transfer_Click(sender, null);
+
+        //}
+
+        void _characterItemPanel_NewItemSelected_Event(ItemPanel sender, InventoryItem item)
+        {
+            _eventSender = sender;
+
+            l_selectedItem.Text = item.Item.Name;
+
+            if (item.Quantity > 1)
+            {
+                l_selectedItem.Text += " (x" + item.Quantity.ToString() + ")";
+            }
+
+            l_selectedItem.Tag = item;
         }
 
         private string[] LoadCharacterNames()
@@ -79,17 +118,27 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                gb_characterName1.Text = cb_selectCharacter1.SelectedItem.ToString();
                 _characterUnit1 = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, _characterPath1);
-                _itemHelpFunctions.LoadCharacterValues(_characterUnit1);
-                //_itemHelpFunctions.PopulateItems(ref _characterUnit1);
 
-                InitInventory(_characterUnit1, lb_characterEquipment1, lb_characterInventory1, lb_characterStash1, lb_characterCube1);
+                if (_characterUnit1.IsGood)
+                {
+                    _itemHelpFunctions.LoadCharacterValues(_characterUnit1);
+                    //_itemHelpFunctions.PopulateItems(ref _characterUnit1);
 
-                _characterInventory1.Initialize(_characterUnit1.Items);
+                    gb_characterName1.Text = cb_selectCharacter1.SelectedItem.ToString();
+                    int level = UnitHelpFunctions.GetSimpleValue(_characterUnit1, ItemValueNames.level.ToString()) - 8;
+                    gb_characterName1.Text += " (Level " + level.ToString() + ")";
 
-                richTextBox1.Text = string.Empty;
-                richTextBox1.Text = _characterInventory1.ToString();
+                    InitInventory(_characterUnit1, _characterItemPanel1);
+                }
+                else
+                {
+                    MessageBox.Show("Error while parsing the character file!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("You cannot load the same character for trading!");
             }
         }
 
@@ -99,51 +148,40 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                gb_characterName2.Text = cb_selectCharacter2.SelectedItem.ToString();
                 _characterUnit2 = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, _characterPath2);
-                _itemHelpFunctions.LoadCharacterValues(_characterUnit2);
-                //_itemHelpFunctions.PopulateItems(ref _characterUnit2);
 
-                InitInventory(_characterUnit2, lb_characterEquipment2, lb_characterInventory2, lb_characterStash2, lb_characterCube2);
+                if (_characterUnit2.IsGood)
+                {
+                    _itemHelpFunctions.LoadCharacterValues(_characterUnit2);
+                    //_itemHelpFunctions.PopulateItems(ref _characterUnit2);
 
-                _characterInventory2.Initialize(_characterUnit2.Items);
+                    gb_characterName2.Text = cb_selectCharacter2.SelectedItem.ToString();
+                    int level = UnitHelpFunctions.GetSimpleValue(_characterUnit2, ItemValueNames.level.ToString()) - 8;
+                    gb_characterName2.Text += " (Level " + level.ToString() + ")";
+
+                    InitInventory(_characterUnit2, _characterItemPanel2);
+                }
+                else
+                {
+                    MessageBox.Show("Error while parsing the character file!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("You cannot load the same character for trading!");
             }
         }
 
-        private void InitInventory(Unit unit, ListBox equipped, ListBox inventory, ListBox stash, ListBox cube)
+        private void InitInventory(Unit unit, ItemPanel itemPanel)
         {
             try
             {
                 foreach (Unit item in unit.Items)
                 {
-                    if (item.inventoryType == (int)InventoryTypes.Inventory)
+                    if (item.inventoryType == (int)INVENTORYTYPE)
                     {
-                        inventory.Items.Add(item);
-
-                        int buttonUnitSize = 40;
-                        _testPanel.Location = new Point();
-                        _testPanel.Size = new Size(6 * buttonUnitSize, 24 * buttonUnitSize);
-                        tabPage9.Controls.Add(_testPanel);
-
-                        InventoryItem inv = new InventoryItem(item);
-                        inv.ButtonUnitSize = buttonUnitSize;
-                        _testPanel.AddItem(inv);
-                    }
-                    else if (item.inventoryType == (int)InventoryTypes.Stash)
-                    {
-                        stash.Items.Add(item);
-                    }
-                    else if (item.inventoryType == (int)InventoryTypes.Cube)
-                    {
-                        cube.Items.Add(item);
-                    }
-                    else if (item.inventoryType == (int)InventoryTypes.QuestRewards)
-                    {
-                        //do nothing, as trading quest rewards would be meaningless
-                    }
-                    else
-                    {
-                        equipped.Items.Add(item);
+                        InventoryItem iItem = new InventoryItem(item);
+                        itemPanel.AddItem(iItem, true);
                     }
                 }
             }
@@ -153,58 +191,94 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        private void b_transferToRight_Click(object sender, EventArgs e)
+        private void b_save_Click(object sender, EventArgs e)
         {
-            if (_selectedItemCharacter1 != null)
+            if(_characterUnit1 != null && _characterUnit2 != null)
             {
-                _characterInventory2.AddItem(_selectedItemCharacter1);
-                _listBoxcharacter2.Items.Add(_selectedItemCharacter1);
+                UnitHelpFunctions.SaveCharacterFile(_characterUnit1, _characterPath1);
+                UnitHelpFunctions.SaveCharacterFile(_characterUnit2, _characterPath2);
 
-                _characterInventory1.RemoveItem(_selectedItemCharacter1);
-                _listBoxcharacter1.Items.Remove(_selectedItemCharacter1);
+                MessageBox.Show("Saving successful!");
             }
         }
 
-        private void b_transferToLeft_Click(object sender, EventArgs e)
+        private void b_transfer_Click(object sender, EventArgs e)
         {
-            if (_selectedItemCharacter2 != null)
+            if (_characterUnit1 != null && _characterUnit2 != null)
             {
-                _characterInventory1.AddItem(_selectedItemCharacter2);
-                _listBoxcharacter1.Items.Add(_selectedItemCharacter2);
+                if (l_selectedItem.Tag != null)
+                {
+                    InventoryItem item = (InventoryItem)l_selectedItem.Tag;
 
-                _characterInventory2.RemoveItem(_selectedItemCharacter2);
-                _listBoxcharacter2.Items.Remove(_selectedItemCharacter2);
+                    if (_eventSender == _characterItemPanel1)
+                    {
+                        if (_characterItemPanel2.AddItem(item, false))
+                        {
+                            _characterUnit2.Items.Add(item.Item);
+                            _characterUnit1.Items.Remove(item.Item);
+                            _characterItemPanel1.RemoveItem(item);
+                        }
+                        else
+                        {
+                            MessageBox.Show("There is not enough free space!");
+                        }
+                        l_selectedItem.ResetText();
+                        l_selectedItem.Tag = null;
+                    }
+                    else
+                    {
+                        if (_characterItemPanel1.AddItem(item, false))
+                        {
+                            _characterUnit1.Items.Add(item.Item);
+                            _characterUnit2.Items.Remove(item.Item);
+                            _characterItemPanel2.RemoveItem(item);
+                        }
+                        else
+                        {
+                            MessageBox.Show("There is not enough free space!");
+                        }
+                        l_selectedItem.ResetText();
+                        l_selectedItem.Tag = null;
+                    }
+                }
             }
+            else
+            {
+                MessageBox.Show("You have to load two characters to transfere items!");
+            }
+        }
+
+        private void b_transferAll_Click(object sender, EventArgs e)
+        {
+            //ItemPanel buffer = new ItemPanel();
+
+            //for (int counter = 0; counter < _characterItemPanel1.Controls.Count; counter++)
+            //{
+            //    buffer.Controls.Add(_characterItemPanel1.Controls[counter]);
+            //    _characterItemPanel1.Controls.RemoveAt(counter);
+            //}
+
+            //for (int counter = 0; counter < _characterItemPanel2.Controls.Count; counter++)
+            //{
+            //    _characterItemPanel1.Controls.Add(_characterItemPanel2.Controls[counter]);
+            //    _characterItemPanel2.Controls.RemoveAt(counter);
+            //}
+
+            //for (int counter = 0; counter < buffer.Controls.Count; counter++)
+            //{
+            //    _characterItemPanel2.Controls.Add(buffer.Controls[counter]);
+            //    //buffer.Controls.RemoveAt(counter);
+            //}
         }
 
         private void b_delete_Click(object sender, EventArgs e)
         {
-            //needed?
-        }
+            InventoryItem item = (InventoryItem)l_selectedItem.Tag;
 
-        private void lb_character1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _selectedItemCharacter1 = (Unit)_listBoxcharacter1.SelectedItem;
-        }
+            _eventSender.RemoveItem(item);
 
-        private void lb_character2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _selectedItemCharacter2 = (Unit)_listBoxcharacter2.SelectedItem;
-        }
-
-        private void tc_character1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _listBoxcharacter1 = (ListBox)tc_character1.SelectedTab.Controls[0];
-        }
-
-        private void tc_character2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _listBoxcharacter2 = (ListBox)tc_character2.SelectedTab.Controls[0];
-        }
-
-        private void b_save_Click(object sender, EventArgs e)
-        {
-
+            l_selectedItem.ResetText();
+            l_selectedItem.Tag = null;
         }
     }
 }

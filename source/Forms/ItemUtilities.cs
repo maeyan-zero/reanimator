@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Reanimator.Excel;
 using System.Data;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Reanimator.Forms
 {
@@ -287,6 +288,63 @@ namespace Reanimator.Forms
             }
             return null;
         }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct MainHeader
+        {
+            public Int32 Flag;
+            public Int32 Version;
+            public Int32 DataOffset1;
+            public Int32 DataOffset2;
+        };
+
+        public static void SaveCharacterFile(Unit unit, string filePath)
+        {
+            int startIndex = filePath.LastIndexOf("\\") + 1;
+            string characterName = filePath.Substring(startIndex, filePath.Length - startIndex - 4);
+            FileStream saveFile = new FileStream(unit.Name + ".hg1", FileMode.Create, FileAccess.ReadWrite);
+            string savedPath = saveFile.Name;
+
+            // main header
+            MainHeader mainHeader;
+            mainHeader.Flag = 0x484D4752; // "RGMH"
+            mainHeader.Version = 1;
+            mainHeader.DataOffset1 = 0x2028;
+            mainHeader.DataOffset2 = 0x2028;
+            byte[] data = FileTools.StructureToByteArray(mainHeader);
+            saveFile.Write(data, 0, data.Length);
+
+            // hellgate string (is this needed?)
+            const string hellgateString = "Hellgate: London";
+            byte[] hellgateStringBytes = FileTools.StringToUnicodeByteArray(hellgateString);
+            saveFile.Seek(0x28, SeekOrigin.Begin);
+            saveFile.Write(hellgateStringBytes, 0, hellgateStringBytes.Length);
+
+            // char name (not actually used in game though I don't think)  (is this needed?)
+            string charString = unit.Name;
+            byte[] charStringBytes = FileTools.StringToUnicodeByteArray(charString);
+            saveFile.Seek(0x828, SeekOrigin.Begin);
+            saveFile.Write(charStringBytes, 0, charStringBytes.Length);
+
+            // no detail string (is this needed?)
+            const string noDetailString = "No detail";
+            byte[] noDetailStringBytes = FileTools.StringToUnicodeByteArray(noDetailString);
+            saveFile.Seek(0x1028, SeekOrigin.Begin);
+            saveFile.Write(noDetailStringBytes, 0, noDetailStringBytes.Length);
+
+            // load char string (is this needed?)
+            const string loadCharacterString = "Load this Character";
+            byte[] loadCharacterStringBytes = FileTools.StringToUnicodeByteArray(loadCharacterString);
+            saveFile.Seek(0x1828, SeekOrigin.Begin);
+            saveFile.Write(loadCharacterStringBytes, 0, loadCharacterStringBytes.Length);
+
+            // main character data
+            saveFile.Seek(0x2028, SeekOrigin.Begin);
+            byte[] saveData = unit.GenerateSaveData(charStringBytes);
+            saveFile.Write(saveData, 0, saveData.Length);
+
+            saveFile.Close();
+        }
     }
 
 
@@ -458,6 +516,7 @@ namespace Reanimator.Forms
     {
         Inventory = 19760,
         Stash = 28208,
+        //SharedStash = 26160,
         QuestRewards = 26928,
         Cube = 22577,
         CurrentWeaponSet = 25904
