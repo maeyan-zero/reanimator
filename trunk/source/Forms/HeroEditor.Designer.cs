@@ -219,6 +219,9 @@ namespace Reanimator.Forms
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
+            this.b_saveXML = new System.Windows.Forms.Button();
+            this.b_loadXML = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -2176,7 +2179,7 @@ namespace Reanimator.Forms
             this.currentlyEditing_ComboBox.FormattingEnabled = true;
             this.currentlyEditing_ComboBox.Location = new System.Drawing.Point(142, 6);
             this.currentlyEditing_ComboBox.Name = "currentlyEditing_ComboBox";
-            this.currentlyEditing_ComboBox.Size = new System.Drawing.Size(337, 21);
+            this.currentlyEditing_ComboBox.Size = new System.Drawing.Size(251, 21);
             this.currentlyEditing_ComboBox.TabIndex = 2;
             this.currentlyEditing_ComboBox.SelectedIndexChanged += new System.EventHandler(this.currentlyEditing_ComboBox_SelectedIndexChanged);
             // 
@@ -2201,14 +2204,14 @@ namespace Reanimator.Forms
             "8",
             "11",
             "13"});
-            this.comboBox1.Location = new System.Drawing.Point(586, 4);
+            this.comboBox1.Location = new System.Drawing.Point(500, 8);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(36, 21);
             this.comboBox1.TabIndex = 0;
             // 
             // saveAsData_Button
             // 
-            this.saveAsData_Button.Location = new System.Drawing.Point(485, 4);
+            this.saveAsData_Button.Location = new System.Drawing.Point(399, 6);
             this.saveAsData_Button.Name = "saveAsData_Button";
             this.saveAsData_Button.Size = new System.Drawing.Size(95, 23);
             this.saveAsData_Button.TabIndex = 5;
@@ -2246,11 +2249,41 @@ namespace Reanimator.Forms
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
+            // b_saveXML
+            // 
+            this.b_saveXML.Location = new System.Drawing.Point(891, 4);
+            this.b_saveXML.Name = "b_saveXML";
+            this.b_saveXML.Size = new System.Drawing.Size(75, 23);
+            this.b_saveXML.TabIndex = 11;
+            this.b_saveXML.Text = "SaveXML";
+            this.b_saveXML.UseVisualStyleBackColor = true;
+            this.b_saveXML.Click += new System.EventHandler(this.b_saveXML_Click);
+            // 
+            // b_loadXML
+            // 
+            this.b_loadXML.Location = new System.Drawing.Point(972, 4);
+            this.b_loadXML.Name = "b_loadXML";
+            this.b_loadXML.Size = new System.Drawing.Size(75, 23);
+            this.b_loadXML.TabIndex = 12;
+            this.b_loadXML.Text = "LoadXML";
+            this.b_loadXML.UseVisualStyleBackColor = true;
+            this.b_loadXML.Click += new System.EventHandler(this.b_loadXML_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(542, 8);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 13;
+            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1252, 817);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.b_loadXML);
+            this.Controls.Add(this.b_saveXML);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
@@ -2522,5 +2555,8 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TextBox tb_modValue;
         private System.Windows.Forms.TextBox tb_modAttribute;
         private System.Windows.Forms.Label label56;
+        private System.Windows.Forms.Button b_saveXML;
+        private System.Windows.Forms.Button b_loadXML;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }

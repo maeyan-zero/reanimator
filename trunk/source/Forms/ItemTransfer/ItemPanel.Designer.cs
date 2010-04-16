@@ -39,11 +39,11 @@
             this.DoubleBuffered = true;
             this.Name = "ItemPanel";
             this.Size = new System.Drawing.Size(240, 240);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ItemPanel_MouseMove);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
     }
 }

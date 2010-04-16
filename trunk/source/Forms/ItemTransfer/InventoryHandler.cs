@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Reanimator.Forms;
+using System.Drawing;
 
 namespace Reanimator.Forms.ItemTransfer
 {
@@ -19,8 +20,26 @@ namespace Reanimator.Forms.ItemTransfer
         const int maxInventoryHeight = 256;
 
         int cubeHeight = 6;
+
+        public int CubeHeight
+        {
+            get { return cubeHeight; }
+            set { cubeHeight = value; }
+        }
         int stashHeight = 100;
+
+        public int StashHeight
+        {
+            get { return stashHeight; }
+            set { stashHeight = value; }
+        }
         int inventoryHeight = 24;
+
+        public int InventoryHeight
+        {
+            get { return inventoryHeight; }
+            set { inventoryHeight = value; }
+        }
 
         bool[][,] _charInventory;
 
@@ -215,6 +234,54 @@ namespace Reanimator.Forms.ItemTransfer
             }
 
             return inv;
+        }
+    }
+
+    public class ItemInfo
+    {
+        Unit _item;
+        Size _itemSize;
+
+        public Point Location
+        {
+            get { return GetLocation(); }
+            set { SetLocation(value); }
+        }
+
+        public Size ItemSize
+        {
+            get { return _itemSize; }
+        }
+
+        public Unit Item
+        {
+            get { return _item; }
+            set { _item = value; }
+        }
+
+        public ItemInfo(Unit item)
+        {
+            _item = item;
+
+            int width = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.inventory_width.ToString());
+            int height = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.inventory_height.ToString());
+
+            _itemSize.Width = width;
+            _itemSize.Height = height;
+        }
+
+        private void SetLocation(Point point)
+        {
+            _item.inventoryPositionX = point.X;
+            _item.inventoryPositionY = point.Y;
+        }
+
+        private Point GetLocation()
+        {
+            int x = _item.inventoryPositionX;
+            int y = _item.inventoryPositionY;
+
+            return new Point(x, y);
         }
     }
 }
