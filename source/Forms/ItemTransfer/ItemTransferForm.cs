@@ -13,6 +13,15 @@ namespace Reanimator.Forms.ItemTransfer
 {
     public partial class ItemTransferForm : Form
     {
+        enum CharacterStatus
+        {
+            NotLoaded,
+            Loaded,
+            Modified,
+            Saved,
+            Error
+        }
+
         const InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
         const int INVENTORYWIDTH = 6;
         const int INVENTORYHEIGHT = 6;
@@ -30,9 +39,11 @@ namespace Reanimator.Forms.ItemTransfer
 
         //Unit _selectedItemCharacter1;
         ItemPanel _characterItemPanel1;
+        CharacterStatus _characterStatus1;
 
         //Unit _selectedItemCharacter2;
         ItemPanel _characterItemPanel2;
+        CharacterStatus _characterStatus2;
 
         ItemPanel _eventSender;
 
@@ -70,9 +81,45 @@ namespace Reanimator.Forms.ItemTransfer
             _characterItemPanel1.Location = new Point(16, 18);
             _characterItemPanel2.Location = new Point(16, 18);
 
+            SetCharacterStatus(_characterStatus1, CharacterStatus.NotLoaded, p_status1, l_status1);
+            SetCharacterStatus(_characterStatus2, CharacterStatus.NotLoaded, p_status2, l_status2);
+
             // use inventory panels, as a normal groupBox doesn't provide the option "AutoScroll"
             p_inventory1.Controls.Add(_characterItemPanel1);
             p_inventory2.Controls.Add(_characterItemPanel2);
+
+            EnableComboBoxes(true, true);
+        }
+
+        private void SetCharacterStatus(CharacterStatus originalCharacterStatus, CharacterStatus newCharacterStatus, Panel panel, Label label)
+        {
+            originalCharacterStatus = newCharacterStatus;
+
+            if (newCharacterStatus == CharacterStatus.Error)
+            {
+                panel.BackColor = Color.Red;
+                label.Text = "An error occured";
+            }
+            else if (newCharacterStatus == CharacterStatus.Loaded)
+            {
+                panel.BackColor = Color.Green;
+                label.Text = "Character loaded";
+            }
+            else if (newCharacterStatus == CharacterStatus.Modified)
+            {
+                panel.BackColor = Color.Orange;
+                label.Text = "Character was modified";
+            }
+            else if (newCharacterStatus == CharacterStatus.NotLoaded)
+            {
+                panel.BackColor = Color.Silver;
+                label.Text = "No character loaded";
+            }
+            else if (newCharacterStatus == CharacterStatus.Saved)
+            {
+                panel.BackColor = Color.Lime;
+                label.Text = "Character saved";
+            }
         }
 
         //void _characterItemPanel_ItemDoubleClicked_Event(ItemPanel sender, InventoryItem item)
@@ -128,6 +175,8 @@ namespace Reanimator.Forms.ItemTransfer
                     int level = UnitHelpFunctions.GetSimpleValue(_characterUnit1, ItemValueNames.level.ToString()) - 8;
                     gb_characterName1.Text += " (Level " + level.ToString() + ")";
 
+                    SetCharacterStatus(_characterStatus1, CharacterStatus.Loaded, p_status1, l_status1);
+
                     InitInventory(_characterUnit1, _characterItemPanel1);
                 }
                 else
@@ -157,6 +206,8 @@ namespace Reanimator.Forms.ItemTransfer
                     int level = UnitHelpFunctions.GetSimpleValue(_characterUnit2, ItemValueNames.level.ToString()) - 8;
                     gb_characterName2.Text += " (Level " + level.ToString() + ")";
 
+                    SetCharacterStatus(_characterStatus2, CharacterStatus.Loaded, p_status2, l_status2);
+
                     InitInventory(_characterUnit2, _characterItemPanel2);
                 }
                 else
@@ -172,6 +223,8 @@ namespace Reanimator.Forms.ItemTransfer
 
         private void InitInventory(Unit unit, ItemPanel itemPanel)
         {
+            itemPanel.Controls.Clear();
+
             try
             {
                 foreach (Unit item in unit.Items)
@@ -185,7 +238,7 @@ namespace Reanimator.Forms.ItemTransfer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "InitInventory");
+                MessageBox.Show(ex.Message, "InitInventory: " + unit.Name);
             }
         }
 
@@ -193,90 +246,176 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if(_characterUnit1 != null && _characterUnit2 != null)
             {
-                UnitHelpFunctions.SaveCharacterFile(_characterUnit1, _characterPath1);
-                UnitHelpFunctions.SaveCharacterFile(_characterUnit2, _characterPath2);
+                if (MessageBox.Show("Are you sure you want to save these changes?", "Warning!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    UnitHelpFunctions.SaveCharacterFile(_characterUnit1, _characterPath1);
+                    UnitHelpFunctions.SaveCharacterFile(_characterUnit2, _characterPath2);
 
-                MessageBox.Show("Saving successful!");
+                    MessageBox.Show("Saving successful!");
+                }
+
+                EnableComboBoxes(true, true);
+                SetCharacterStatus(_characterStatus1, CharacterStatus.Saved, p_status1, l_status1);
+                SetCharacterStatus(_characterStatus2, CharacterStatus.Saved, p_status2, l_status2);
             }
         }
 
         private void b_transfer_Click(object sender, EventArgs e)
         {
-            if (_characterUnit1 != null && _characterUnit2 != null)
+            try
             {
-                if (l_selectedItem.Tag != null)
+                if (_characterUnit1 != null && _characterUnit2 != null)
                 {
-                    InventoryItem item = (InventoryItem)l_selectedItem.Tag;
+                    if (l_selectedItem.Tag != null)
+                    {
+                        InventoryItem item = (InventoryItem)l_selectedItem.Tag;
 
-                    if (_eventSender == _characterItemPanel1)
-                    {
-                        if (_characterItemPanel2.AddItem(item, false))
+                        if (_eventSender == _characterItemPanel1)
                         {
-                            _characterUnit2.Items.Add(item.Item);
-                            _characterUnit1.Items.Remove(item.Item);
-                            _characterItemPanel1.RemoveItem(item);
+                            if (_characterItemPanel2.AddItem(item, false))
+                            {
+                                _characterUnit2.Items.Add(item.Item);
+                                _characterUnit1.Items.Remove(item.Item);
+                                _characterItemPanel1.RemoveItem(item);
+                            }
+                            else
+                            {
+                                MessageBox.Show("There is not enough free space!");
+                            }
+                            l_selectedItem.ResetText();
+                            l_selectedItem.Tag = null;
                         }
                         else
                         {
-                            MessageBox.Show("There is not enough free space!");
+                            if (_characterItemPanel1.AddItem(item, false))
+                            {
+                                _characterUnit1.Items.Add(item.Item);
+                                _characterUnit2.Items.Remove(item.Item);
+                                _characterItemPanel2.RemoveItem(item);
+                            }
+                            else
+                            {
+                                MessageBox.Show("There is not enough free space!");
+                            }
+                            l_selectedItem.ResetText();
+                            l_selectedItem.Tag = null;
                         }
-                        l_selectedItem.ResetText();
-                        l_selectedItem.Tag = null;
-                    }
-                    else
-                    {
-                        if (_characterItemPanel1.AddItem(item, false))
-                        {
-                            _characterUnit1.Items.Add(item.Item);
-                            _characterUnit2.Items.Remove(item.Item);
-                            _characterItemPanel2.RemoveItem(item);
-                        }
-                        else
-                        {
-                            MessageBox.Show("There is not enough free space!");
-                        }
-                        l_selectedItem.ResetText();
-                        l_selectedItem.Tag = null;
+
+                        EnableComboBoxes(false, false);
+                        SetCharacterStatus(_characterStatus1, CharacterStatus.Modified, p_status1, l_status1);
+                        SetCharacterStatus(_characterStatus2, CharacterStatus.Modified, p_status2, l_status2);
                     }
                 }
+                else
+                {
+                    MessageBox.Show("You have to load two characters to transfere items!");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("You have to load two characters to transfere items!");
+                EmergencyAbort();
             }
         }
 
         private void b_transferAll_Click(object sender, EventArgs e)
         {
-            //ItemPanel buffer = new ItemPanel();
+            try
+            {
+                if (_characterUnit1 != null && _characterUnit2 != null)
+                {
+                    List<Unit> tmpItem = new List<Unit>();
 
-            //for (int counter = 0; counter < _characterItemPanel1.Controls.Count; counter++)
-            //{
-            //    buffer.Controls.Add(_characterItemPanel1.Controls[counter]);
-            //    _characterItemPanel1.Controls.RemoveAt(counter);
-            //}
+                    for (int counter = 0; counter < _characterUnit1.Items.Count; counter++)
+                    {
+                        if (_characterUnit1.Items[counter].inventoryType == (int)INVENTORYTYPE)
+                        {
+                            tmpItem.Add(_characterUnit1.Items[counter]);
+                            _characterUnit1.Items.RemoveAt(counter);
 
-            //for (int counter = 0; counter < _characterItemPanel2.Controls.Count; counter++)
-            //{
-            //    _characterItemPanel1.Controls.Add(_characterItemPanel2.Controls[counter]);
-            //    _characterItemPanel2.Controls.RemoveAt(counter);
-            //}
+                            counter--;
+                        }
+                    }
 
-            //for (int counter = 0; counter < buffer.Controls.Count; counter++)
-            //{
-            //    _characterItemPanel2.Controls.Add(buffer.Controls[counter]);
-            //    //buffer.Controls.RemoveAt(counter);
-            //}
+                    for (int counter = 0; counter < _characterUnit2.Items.Count; counter++)
+                    {
+                        if (_characterUnit2.Items[counter].inventoryType == (int)INVENTORYTYPE)
+                        {
+                            _characterUnit1.Items.Add(_characterUnit2.Items[counter]);
+                            _characterUnit2.Items.RemoveAt(counter);
+
+                            counter--;
+                        }
+                    }
+
+                    _characterUnit2.Items.AddRange(tmpItem.ToArray());
+
+                    InitInventory(_characterUnit1, _characterItemPanel1);
+                    InitInventory(_characterUnit2, _characterItemPanel2);
+
+                    EnableComboBoxes(false, false);
+                    SetCharacterStatus(_characterStatus1, CharacterStatus.Modified, p_status1, l_status1);
+                    SetCharacterStatus(_characterStatus2, CharacterStatus.Modified, p_status2, l_status2);
+                }
+            }
+            catch (Exception ex)
+            {
+                EmergencyAbort();
+            }
         }
 
         private void b_delete_Click(object sender, EventArgs e)
         {
-            InventoryItem item = (InventoryItem)l_selectedItem.Tag;
+            try
+            {
+                InventoryItem item = (InventoryItem)l_selectedItem.Tag;
 
-            _eventSender.RemoveItem(item);
+                _eventSender.RemoveItem(item);
 
-            l_selectedItem.ResetText();
-            l_selectedItem.Tag = null;
+                l_selectedItem.ResetText();
+                l_selectedItem.Tag = null;
+
+                EnableComboBoxes(false, false);
+                SetCharacterStatus(_characterStatus1, CharacterStatus.Modified, p_status1, l_status1);
+                SetCharacterStatus(_characterStatus2, CharacterStatus.Modified, p_status2, l_status2);
+            }
+            catch (Exception ex)
+            {
+                EmergencyAbort();
+            }
+        }
+
+        private void EmergencyAbort()
+        {
+            SetCharacterStatus(_characterStatus1, CharacterStatus.Error, p_status1, l_status1);
+            SetCharacterStatus(_characterStatus2, CharacterStatus.Error, p_status2, l_status2);
+            MessageBox.Show("The trade window will now close to make sure that your savegames and items will not be harmed!", "Error while transfering your items!");
+            this.Close();
+        }
+
+        private void b_undoTransfer_Click(object sender, EventArgs e)
+        {
+            b_loadCharacter1_Click(null, null);
+            b_loadCharacter2_Click(null, null);
+
+            EnableComboBoxes(true, true);
+        }
+
+        private void EnableComboBoxes(bool enable1, bool enable2)
+        {
+            EnableComboBox1(enable1);
+            EnableComboBox2(enable2);
+        }
+
+        private void EnableComboBox1(bool enable)
+        {
+            cb_selectCharacter1.Enabled = enable;
+            b_loadCharacter1.Enabled = enable;
+        }
+
+        private void EnableComboBox2(bool enable)
+        {
+            cb_selectCharacter2.Enabled = enable;
+            b_loadCharacter2.Enabled = enable;
         }
     }
 }

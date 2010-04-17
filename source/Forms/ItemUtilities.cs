@@ -130,6 +130,8 @@ namespace Reanimator.Forms
             unit = new Unit(bitBuffer);
             unit.ParseUnit();
 
+            heroFile.Close();
+
             return unit;
         }
 
