@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
@@ -34,35 +32,35 @@ namespace Reanimator
             {
                 for (int col = 0; col < datagridview.Rows[row].Cells.Count; col++)
                 {
-                    if (selected[col] == true)
-                    {
-                        if (datagridview[col, row].Value != null)
-                        {
-                            string stringBuffer = datagridview[col, row].Value.ToString();
+                    if (!selected[col]) continue;
 
-                            if (stringBuffer.Contains(',') || stringBuffer.Contains('"'))
-                            {
-                                //stringBuffer = stringBuffer.Replace("\"", "\"\"");
-                                //stringBuffer = stringBuffer.Replace(",", "\",\"");
-                                stringBuffer = stringBuffer.Insert(0, "\"");
-                                stringBuffer = stringBuffer.Insert(stringBuffer.Length, "\"");
-                                csv.Write(stringBuffer);
-                            }
-                            else
-                            {
-                                csv.Write(datagridview[col, row].Value);
-                            }
-                        }
-                        if (col < datagridview.Rows[row].Cells.Count)
+                    if (datagridview[col, row].Value != null)
+                    {
+                        string stringBuffer = datagridview[col, row].Value.ToString();
+
+                        if (stringBuffer.Contains(',') || stringBuffer.Contains('"'))
                         {
-                            if (delimiter == "Commar")
-                            {
+                            //stringBuffer = stringBuffer.Replace("\"", "\"\"");
+                            //stringBuffer = stringBuffer.Replace(",", "\",\"");
+                            stringBuffer = stringBuffer.Insert(0, "\"");
+                            stringBuffer = stringBuffer.Insert(stringBuffer.Length, "\"");
+                            csv.Write(stringBuffer);
+                        }
+                        else
+                        {
+                            csv.Write(datagridview[col, row].Value);
+                        }
+                    }
+                    if (col < datagridview.Rows[row].Cells.Count)
+                    {
+                        switch (delimiter)
+                        {
+                            case "Commar":
                                 csv.Write(",");
-                            }
-                            else if (delimiter == "Tab")
-                            {
+                                break;
+                            case "Tab":
                                 csv.Write("\t");
-                            }
+                                break;
                         }
                     }
                 }
@@ -83,11 +81,10 @@ namespace Reanimator
                 sw.WriteLine();
 
                 int indexLength = 0;
-                int swapIndex = 0;
 
                 for (int i = 0; i < model.index.Count; i++)
                 {
-                    sw.WriteLine("g " + i.ToString());
+                    sw.WriteLine("g " + i);
                     foreach (Model.Coordinate coordinate in model.geometry[i].position)
                     {
                         sw.WriteLine("v " + coordinate.ToString());
@@ -101,6 +98,7 @@ namespace Reanimator
                         sw.WriteLine("vn " + coordinate.ToString());
                     }
                     // INDEX SWAP
+                    int swapIndex;
                     if (model.index.Count > 1)
                     {
                         if (i < model.index.Count - 1)
@@ -120,14 +118,14 @@ namespace Reanimator
                     foreach (Model.Triangle triangle in model.index[swapIndex].triangle)
                     {
                         sw.Write("f ");
-                        sw.Write((triangle.coordinate01 + 1 + indexLength).ToString() + "/");
-                        sw.Write((triangle.coordinate01 + 1 + indexLength).ToString() + "/");
-                        sw.Write((triangle.coordinate01 + 1 + indexLength).ToString() + " ");
-                        sw.Write((triangle.coordinate02 + 1 + indexLength).ToString() + "/");
-                        sw.Write((triangle.coordinate02 + 1 + indexLength).ToString() + "/");
-                        sw.Write((triangle.coordinate02 + 1 + indexLength).ToString() + " ");
-                        sw.Write((triangle.coordinate03 + 1 + indexLength).ToString() + "/");
-                        sw.Write((triangle.coordinate03 + 1 + indexLength).ToString() + "/");
+                        sw.Write((triangle.coordinate01 + 1 + indexLength) + "/");
+                        sw.Write((triangle.coordinate01 + 1 + indexLength) + "/");
+                        sw.Write((triangle.coordinate01 + 1 + indexLength) + " ");
+                        sw.Write((triangle.coordinate02 + 1 + indexLength) + "/");
+                        sw.Write((triangle.coordinate02 + 1 + indexLength) + "/");
+                        sw.Write((triangle.coordinate02 + 1 + indexLength) + " ");
+                        sw.Write((triangle.coordinate03 + 1 + indexLength) + "/");
+                        sw.Write((triangle.coordinate03 + 1 + indexLength) + "/");
                         sw.Write((triangle.coordinate03 + 1 + indexLength).ToString());
                         sw.WriteLine();
                     }

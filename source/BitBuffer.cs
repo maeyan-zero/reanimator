@@ -4,62 +4,62 @@ namespace Reanimator
 {
     public class BitBuffer
     {
-        byte[] data;
-        readonly int dataByteSize;
-        readonly int dataBitSize;
+        byte[] _data;
+        readonly int _dataByteSize;
+        readonly int _dataBitSize;
 
-        int dataByteOffset;
+        int _dataByteOffset;
         public int DataByteOffset
         {
             set
             {
-                if (value >= 0 && value <= dataByteSize)
+                if (value >= 0 && value <= _dataByteSize)
                 {
-                    dataByteOffset = value;
+                    _dataByteOffset = value;
                 }
             }
 
-            get { return dataByteOffset; }
+            get { return _dataByteOffset; }
         }
 
-        int dataBitOffset;
+        int _dataBitOffset;
         public int DataBitOffset
         {
             set
             {
-                if (value >= 0 && value <= dataBitSize)
+                if (value >= 0 && value <= _dataBitSize)
                 {
-                    dataBitOffset = value;
+                    _dataBitOffset = value;
                 }
             }
 
-            get { return dataBitOffset; }
+            get { return _dataBitOffset; }
         }
 
         public int Length
         {
-            get { return data.Length; }
+            get { return _data.Length; }
         }
 
         public BitBuffer()
         {
-            data = new byte[1024];
+            _data = new byte[1024];
         }
 
         public BitBuffer(byte[] dataIn)
         {
-            data = dataIn;
-            dataByteSize = dataIn.Length;
-            dataBitSize = dataByteSize * 8;
+            _data = dataIn;
+            _dataByteSize = dataIn.Length;
+            _dataBitSize = _dataByteSize * 8;
         }
 
         public int ReadBits(int bitCount)
         {
             int bitsToRead = bitCount;
-            int byteOffset = dataBitOffset >> 3;
-            int b = data[dataByteOffset + byteOffset];
+            int byteOffset = _dataBitOffset >> 3;
+            int b = _data[_dataByteOffset + byteOffset];
 
-            int offsetBitsInThisByte = dataBitOffset & 0x07;
+            int offsetBitsInThisByte = _dataBitOffset & 0x07;
             int bitsToUseFromByte = 0x08 - offsetBitsInThisByte;
 
             int bitOffset = bitCount;
@@ -80,7 +80,7 @@ namespace Reanimator
             {
                 int bitLevel = (i - 1) * 8;
 
-                b = data[dataByteOffset + byteOffset + i];
+                b = _data[_dataByteOffset + byteOffset + i];
                 int bitsRead = 0x08;
 
                 if (i == bytesStillToRead)
@@ -97,14 +97,14 @@ namespace Reanimator
                 bitsToRead -= bitsRead;
             }
 
-            dataBitOffset += bitCount;
+            _dataBitOffset += bitCount;
 
             return ret;
         }
 
         public void WriteBits(int value, int bitCount)
         {
-            WriteBits(value, bitCount, dataBitOffset, true);
+            WriteBits(value, bitCount, _dataBitOffset, true);
         }
 
         public void WriteBits(int value, int bitCount, int dataBitOffset)
@@ -115,11 +115,11 @@ namespace Reanimator
         public void WriteBits(int value, int bitCount, int dataBitOffset, bool setIncrementOffset)
         {
             int byteOffset = dataBitOffset >> 3;
-            if (byteOffset > data.Length - 10)
+            if (byteOffset > _data.Length - 10)
             {
-                byte[] newData = new byte[data.Length + 1024];
-                Buffer.BlockCopy(data, 0, newData, 0, data.Length);
-                data = newData;
+                byte[] newData = new byte[_data.Length + 1024];
+                Buffer.BlockCopy(_data, 0, newData, 0, _data.Length);
+                _data = newData;
             }
 
             int bitsToWrite = bitCount;
@@ -164,20 +164,20 @@ namespace Reanimator
                     bitsToWrite -= 8;
                 }
 
-                data[dataByteOffset + byteOffset] |= (byte)toWrite;
+                _data[_dataByteOffset + byteOffset] |= (byte)toWrite;
             }
 
             if (setIncrementOffset)
             {
-                this.dataBitOffset += bitCount;
+                _dataBitOffset += bitCount;
             }
         }
 
         public byte[] GetData()
         {
-            int byteCount = (dataBitOffset >> 3) + 1;
+            int byteCount = (_dataBitOffset >> 3) + 1;
             byte[] saveData = new byte[byteCount];
-            Buffer.BlockCopy(data, 0, saveData, 0, byteCount);
+            Buffer.BlockCopy(_data, 0, saveData, 0, byteCount);
             return saveData;
         }
     }
