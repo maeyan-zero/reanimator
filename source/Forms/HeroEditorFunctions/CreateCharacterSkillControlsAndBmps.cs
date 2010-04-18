@@ -236,7 +236,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "CreateClassSkills");
                 return null;
             }
         }

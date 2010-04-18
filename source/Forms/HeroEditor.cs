@@ -65,93 +65,6 @@ namespace Reanimator.Forms
             {
                 currentlyEditing_ComboBox.Items.Add(item);
             }
-            //bool canGetItemNames = true;
-            //DataTable itemsTable = _dataSet.GetExcelTable(27953);
-            //DataTable affixTable = _dataSet.GetExcelTable(30512);
-            //if (itemsTable != null && affixTable != null)
-            //{
-            //    if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
-            //        canGetItemNames = false;
-            //    if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") ||
-            //        !affixTable.Columns.Contains("magicNameString_string"))
-            //        canGetItemNames = false;
-            //}
-            //else
-            //{
-            //    canGetItemNames = false;
-            //}
-
-
-            //List<Unit> items = unit.Items;
-            //for (int i = 0; i < items.Count; i++)
-            //{
-            //    Unit item = items[i];
-            //    if (item == null) continue;
-
-
-            //    // assign default name
-            //    item.Name = "Item Id: " + item.itemCode;
-            //    if (!canGetItemNames)
-            //    {
-            //        currentlyEditing_ComboBox.Items.Add(item);
-            //        continue;
-            //    }
-
-
-            //    // get item name
-            //    DataRow[] itemsRows = itemsTable.Select(String.Format("code1 = '{0}'", item.itemCode));
-            //    if (itemsRows.Length == 0)
-            //    {
-            //        currentlyEditing_ComboBox.Items.Add(item);
-            //        continue;
-            //    }
-            //    item.Name = itemsRows[0]["String_string"] as String;
-
-
-            //    // does it have an affix/prefix
-            //    String affixString = String.Empty;
-            //    for (int s = 0; s < item.Stats.Length; s++)
-            //    {
-            //        // "applied_affix"
-            //        if (item.Stats[s].Id == 0x7438)
-            //        {
-            //            int affixCode = item.Stats[s].values[0].Stat;
-            //            DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
-            //            if (affixRows.Length > 0)
-            //            {
-            //                String replaceString = affixRows[0]["setNameString_string"] as String;
-            //                if (String.IsNullOrEmpty(replaceString))
-            //                {
-            //                    replaceString = affixRows[0]["magicNameString_string"] as String;
-            //                    if (String.IsNullOrEmpty(replaceString))
-            //                    {
-            //                        break;
-            //                    }
-            //                }
-
-            //                affixString = replaceString;
-            //            }
-            //        }
-
-            //        // "item_quality"
-            //        if (item.Stats[s].Id == 0x7832)
-            //        {
-            //            // is unique || is mutant then no affix
-            //            int itemQualityCode = item.Stats[s].values[0].Stat;
-            //            if (itemQualityCode == 13616 || itemQualityCode == 13360)
-            //            {
-            //                affixString = String.Empty;
-            //                break;
-            //            }
-            //        }
-            //    }
-
-            //    if (affixString.Length > 0)
-            //    {
-            //        item.Name = affixString.Replace("[item]", item.Name);
-            //    }
-            //    currentlyEditing_ComboBox.Items.Add(item);
-            //}
         }
 
         private void PopulateStats(Unit unit)
@@ -159,21 +72,10 @@ namespace Reanimator.Forms
             try
             {
                 stats_ListBox.Items.Clear();
-                //GenerateStatNameStrings(unit.Items);
 
                 for (int i = 0; i < unit.Stats.Length; i++)
                 {
                     Unit.StatBlock.Stat stat = unit.Stats[i];
-
-                    ////string txt = string.Empty;
-                    ////for (int counter = 0; counter < _excelTables.Count; counter++)
-                    ////{
-                    ////    txt += _excelTables.GetTableStringId(counter) + "\n";
-                    ////}
-                    ////MessageBox.Show(txt);
-
-                    //stat.Name = _statsTable.GetStringFromId(stat.Id);
-                    ////stat.Name = ((Stats)_excelTables.GetTable("stats")).GetStringFromId(stat.Id);
 
                     stats_ListBox.Items.Add(stat);
                 }
@@ -183,30 +85,6 @@ namespace Reanimator.Forms
                 MessageBox.Show(ex.Message, "PopulateStats");
             }
         }
-
-        //private string MapIdToString(Unit.StatBlock.Stat stat, int tableId, int lookupId)
-        //{
-        //    string value = string.Empty;
-
-        //    if (stat.values.Length != 0)
-        //    {
-        //        String select = String.Format("code = '{0}'", lookupId);
-        //        DataTable table = _dataSet.GetExcelTable(tableId);
-        //        DataRow[] row;
-
-        //        if (table != null)
-        //        {
-        //            row = table.Select(select);
-
-        //            if (row != null && row.Length != 0)
-        //            {
-        //                value = (string)row[0][1];
-        //            }
-        //        }
-        //    }
-
-        //    return value;
-        //}
 
         private void charStats_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1127,6 +1005,16 @@ namespace Reanimator.Forms
             List<string> itemValues = new List<string>();
             CheckItemValues(itemValues, _heroUnit.Items.ToArray());
             listBox2.DataSource = itemValues;
+
+            CheckItemValues(itemValues, new Unit[] { _heroUnit });
+
+            itemValues.Sort();
+
+            richTextBox3.Text = string.Empty;
+            foreach(string text in itemValues)
+            {
+                richTextBox3.Text += text + "\n";
+            }
         }
 
         private static void CheckItemValues(ICollection<String> values, IEnumerable<Unit> items)
@@ -1135,7 +1023,7 @@ namespace Reanimator.Forms
             {
                 foreach (Unit.StatBlock.Stat stat in item.Stats.stats)
                 {
-                    string val = stat.ToString();
+                    string val = stat.Name + " = " + stat.Id.ToString() + ",";
                     if (!values.Contains(val))
                     {
                         values.Add(val);
@@ -1454,8 +1342,12 @@ namespace Reanimator.Forms
         {
             Unit mod = (Unit)cb_availableMods.SelectedItem;
             Unit.StatBlock.Stat affix = mod.Stats.GetStatByName(ItemValueNames.applied_affix.ToString());
-            tb_modAttribute.Text = affix.Id.ToString();
-            tb_modValue.Text = affix.values[0].Stat.ToString();
+
+            if (affix != null)
+            {
+                tb_modAttribute.Text = affix.Id.ToString();
+                tb_modValue.Text = affix.values[0].Stat.ToString();
+            }
         }
 
         private void b_saveXML_Click(object sender, EventArgs e)
@@ -1474,6 +1366,11 @@ namespace Reanimator.Forms
             {
                 _heroUnit.Items.Add(unit);
             }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(richTextBox3.Text);
         }
     }
 }

@@ -69,7 +69,7 @@ namespace Reanimator.Forms
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "toolStripButton1_Click");
             }
         }
 

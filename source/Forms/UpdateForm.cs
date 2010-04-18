@@ -81,7 +81,7 @@ namespace Reanimator.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "GetModInfo");
             }
         }
 
@@ -109,7 +109,7 @@ namespace Reanimator.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "checker_GetWebsiteCompleteEvent");
             }
         }
 
@@ -122,7 +122,7 @@ namespace Reanimator.Forms
             catch (Exception ex)
             {
                 this.Invoke(uText, "Error downloading file!", true);
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "checker_FileDownloadCompleteEvent");
             }
         }
 
