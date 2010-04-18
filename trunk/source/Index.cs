@@ -211,10 +211,10 @@ namespace Reanimator
 
         static public Index[] LoadIndexFiles(string path)
         {
-            Index[] index = new Index[Index.FileNames.Length];
+            Index[] index = new Index[FileNames.Length];
             for (int i = 0; i < index.Length; i++)
             {
-                using (FileStream fs = new FileStream(path + Index.FileNames[i] + ".idx", FileMode.Open))
+                using (FileStream fs = new FileStream(path + FileNames[i] + ".idx", FileMode.Open))
                 {
                     index[i] = new Index(fs);
                 }
@@ -346,7 +346,7 @@ namespace Reanimator
             return true;
         }
 
-        public byte[] ReadDataFile(Index.FileIndex file)
+        public byte[] ReadDataFile(FileIndex file)
         {
             if (OpenAccompanyingDat() == false)
             {
@@ -398,16 +398,15 @@ namespace Reanimator
             // Move pointer to the end of the stream.
             if (DatFileOpen == false) OpenAccompanyingDat();
             DataFile.Seek(0, SeekOrigin.End);
-            
 
-            if (doCompress)
-            {
-                byte[] compressed_buffer = new byte[uncompressedBuffer.Length];
-                uint len = (uint)compressed_buffer.Length;
-                compress(compressed_buffer, ref len, uncompressedBuffer, (uint)uncompressedBuffer.Length);
-                int i = 1;
-                //DataFile.Write(compressed_buffer, 0, len);
-            }
+
+            if (!doCompress) return;
+
+            byte[] compressedBuffer = new byte[uncompressedBuffer.Length];
+            uint len = (uint)compressedBuffer.Length;
+            compress(compressedBuffer, ref len, uncompressedBuffer, (uint)uncompressedBuffer.Length);
+            int i = 1;
+            //DataFile.Write(compressed_buffer, 0, len);
         }
 
         public byte[] GenerateIndexFile()
@@ -435,7 +434,7 @@ namespace Reanimator
             // string data
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
             int i = 0;
-            foreach (String str in this.stringTable)
+            foreach (String str in stringTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
                 offset += 4; // unknown  -  not required
@@ -519,28 +518,27 @@ namespace Reanimator
         {
             for (int i = 0; i < FileTable.Length; i++)
             {
-                if (FileTable[i].DirectoryString.Contains(affix))
+                if (!FileTable[i].DirectoryString.Contains(affix)) continue;
+
+                string original = FileTable[i].DirectoryString.Remove(0, affix.Length);
+                for (int j = 0; j < stringTable.Length; j++)
                 {
-                    string original = FileTable[i].DirectoryString.Remove(0, affix.Length);
-                    for (int j = 0; j < stringTable.Length; j++)
+                    if (stringTable[j] == original)
                     {
-                        if (stringTable[j] == original)
-                        {
-                            FileTable[i].Directory = j;
-                            break;
-                        }
+                        FileTable[i].Directory = j;
+                        break;
                     }
                 }
             }
 
-            byte[] buffer = this.GenerateIndexFile();
+            byte[] buffer = GenerateIndexFile();
             Crypt.Encrypt(buffer);
 
             indexFile.Dispose();
 
             try
             {
-                FileStream fs = new FileStream(this.FileDirectory + "\\" + this.FileName + ".idx", FileMode.OpenOrCreate);
+                FileStream fs = new FileStream(FileDirectory + "\\" + this.FileName + ".idx", FileMode.OpenOrCreate);
                 fs.Flush();
                 fs.Write(buffer, 0, buffer.Length);
                 fs.Close();

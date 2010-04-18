@@ -302,50 +302,62 @@ namespace Reanimator.Forms
 
         public static void SaveCharacterFile(Unit unit, string filePath)
         {
-            int startIndex = filePath.LastIndexOf("\\") + 1;
-            string characterName = filePath.Substring(startIndex, filePath.Length - startIndex - 4);
-            FileStream saveFile = new FileStream(unit.Name + ".hg1", FileMode.Create, FileAccess.ReadWrite);
-            string savedPath = saveFile.Name;
+            DialogResult dr = DialogResult.Retry;
+            while (dr == DialogResult.Retry)
+            {
+                try
+                {
+                    using (FileStream saveFile = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
+                    {
+                        // main header
+                        MainHeader mainHeader;
+                        mainHeader.Flag = 0x484D4752; // "RGMH"
+                        mainHeader.Version = 1;
+                        mainHeader.DataOffset1 = 0x2028;
+                        mainHeader.DataOffset2 = 0x2028;
+                        byte[] data = FileTools.StructureToByteArray(mainHeader);
+                        saveFile.Write(data, 0, data.Length);
 
-            // main header
-            MainHeader mainHeader;
-            mainHeader.Flag = 0x484D4752; // "RGMH"
-            mainHeader.Version = 1;
-            mainHeader.DataOffset1 = 0x2028;
-            mainHeader.DataOffset2 = 0x2028;
-            byte[] data = FileTools.StructureToByteArray(mainHeader);
-            saveFile.Write(data, 0, data.Length);
+                        // hellgate string (is this needed?)
+                        const string hellgateString = "Hellgate: London";
+                        byte[] hellgateStringBytes = FileTools.StringToUnicodeByteArray(hellgateString);
+                        saveFile.Seek(0x28, SeekOrigin.Begin);
+                        saveFile.Write(hellgateStringBytes, 0, hellgateStringBytes.Length);
 
-            // hellgate string (is this needed?)
-            const string hellgateString = "Hellgate: London";
-            byte[] hellgateStringBytes = FileTools.StringToUnicodeByteArray(hellgateString);
-            saveFile.Seek(0x28, SeekOrigin.Begin);
-            saveFile.Write(hellgateStringBytes, 0, hellgateStringBytes.Length);
+                        // char name (not actually used in game though I don't think)  (is this needed?)
+                        string charString = unit.Name;
+                        byte[] charStringBytes = FileTools.StringToUnicodeByteArray(charString);
+                        saveFile.Seek(0x828, SeekOrigin.Begin);
+                        saveFile.Write(charStringBytes, 0, charStringBytes.Length);
 
-            // char name (not actually used in game though I don't think)  (is this needed?)
-            string charString = unit.Name;
-            byte[] charStringBytes = FileTools.StringToUnicodeByteArray(charString);
-            saveFile.Seek(0x828, SeekOrigin.Begin);
-            saveFile.Write(charStringBytes, 0, charStringBytes.Length);
+                        // no detail string (is this needed?)
+                        const string noDetailString = "No detail";
+                        byte[] noDetailStringBytes = FileTools.StringToUnicodeByteArray(noDetailString);
+                        saveFile.Seek(0x1028, SeekOrigin.Begin);
+                        saveFile.Write(noDetailStringBytes, 0, noDetailStringBytes.Length);
 
-            // no detail string (is this needed?)
-            const string noDetailString = "No detail";
-            byte[] noDetailStringBytes = FileTools.StringToUnicodeByteArray(noDetailString);
-            saveFile.Seek(0x1028, SeekOrigin.Begin);
-            saveFile.Write(noDetailStringBytes, 0, noDetailStringBytes.Length);
+                        // load char string (is this needed?)
+                        const string loadCharacterString = "Load this Character";
+                        byte[] loadCharacterStringBytes = FileTools.StringToUnicodeByteArray(loadCharacterString);
+                        saveFile.Seek(0x1828, SeekOrigin.Begin);
+                        saveFile.Write(loadCharacterStringBytes, 0, loadCharacterStringBytes.Length);
 
-            // load char string (is this needed?)
-            const string loadCharacterString = "Load this Character";
-            byte[] loadCharacterStringBytes = FileTools.StringToUnicodeByteArray(loadCharacterString);
-            saveFile.Seek(0x1828, SeekOrigin.Begin);
-            saveFile.Write(loadCharacterStringBytes, 0, loadCharacterStringBytes.Length);
+                        // main character data
+                        saveFile.Seek(0x2028, SeekOrigin.Begin);
+                        byte[] saveData = unit.GenerateSaveData(charStringBytes);
+                        saveFile.Write(saveData, 0, saveData.Length);
+                    }
 
-            // main character data
-            saveFile.Seek(0x2028, SeekOrigin.Begin);
-            byte[] saveData = unit.GenerateSaveData(charStringBytes);
-            saveFile.Write(saveData, 0, saveData.Length);
-
-            saveFile.Close();
+                    MessageBox.Show("Character saved successfully!", "Saved", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    dr = MessageBox.Show("Failed to save character file!Try again?\n\n" + e, "Error",
+                                         MessageBoxButtons.RetryCancel);
+                }
+            }
         }
     }
 

@@ -10,7 +10,7 @@ namespace Reanimator
     public partial class TableForm : ThreadedFormBase, IDisposable, IMdiChildBase
     {
         Index index;
-        StringsFile strings;
+        StringsFile _stringsFile;
         List<int> foundIndices;
         int currentSelection;
 
@@ -30,9 +30,9 @@ namespace Reanimator
             TableFormInit();
         }
 
-        public TableForm(StringsFile strs)
+        public TableForm(StringsFile stringsFile)
         {
-            strings = strs;
+            _stringsFile = stringsFile;
 
             TableFormInit();
         }
@@ -40,8 +40,8 @@ namespace Reanimator
         private void TableFormInit()
         {
             InitializeComponent();
-            this.dataGridView.CellContextMenuStripNeeded += new System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler(dataGridView_CellContextMenuStripNeeded);
-            this.dataGridView.RowHeadersVisible = false;
+            dataGridView.CellContextMenuStripNeeded += dataGridView_CellContextMenuStripNeeded;
+            dataGridView.RowHeadersVisible = false;
 
             //Initialize the DataGridViewColumn control
             IndexFileCheckBoxColumn.DefaultCellStyle.DataSourceNullValue = false;

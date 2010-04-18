@@ -552,6 +552,8 @@ namespace Reanimator.Forms
         {
             _panel.GetSkillControls(_heroUnit);
 
+            FileTools.SaveFileDiag("hg1", "HGL Character", _heroUnit.Name, Config.SaveDir);
+
             UnitHelpFunctions.SaveCharacterFile(_heroUnit, _filePath);
 
             //int startIndex = _filePath.LastIndexOf("\\") + 1;
