@@ -69,7 +69,7 @@ namespace Reanimator
                 // if (bitTest(bitField1, 0x0F))                                
                 // unknown;									            // 32                   Haven't encountered - saw in ASM though.
 
-                public int itemCode;									// 16
+                public int ItemCode;									// 16
 
                 // if (bitTest(bitField1, 0x00)) // if (bitField1 & 0x01)
                 public int affixCount;								    // 3
@@ -84,7 +84,7 @@ namespace Reanimator
             [Serializable]
             public class ModelWardrobeLayer
             {
-                public int itemCode;									// 16
+                public int ItemCode;									// 16
                 public int unknownBool;									// 1
                 public int unknownBoolValue;					    	// 2
             };
@@ -977,7 +977,7 @@ namespace Reanimator
                     return false;
                 }
 
-                equippedItem.itemCode = _bitBuffer.ReadBits(16);
+                equippedItem.ItemCode = _bitBuffer.ReadBits(16);
 
                 if (TestBit(heroUnit.bitField1, 0x00))
                 {
@@ -1030,7 +1030,7 @@ namespace Reanimator
                 {
                     UnitAppearance.ModelWardrobeLayer gear = new UnitAppearance.ModelWardrobeLayer();
 
-                    gear.itemCode = _bitBuffer.ReadBits(16);
+                    gear.ItemCode = _bitBuffer.ReadBits(16);
                     gear.unknownBool = _bitBuffer.ReadBits(1);
                     if (gear.unknownBool == 1)
                     {
@@ -1530,7 +1530,7 @@ namespace Reanimator
                 {
                     UnitAppearance.EquippedItem equippedItem = unit.Appearance.EquippedItems[i];
 
-                    saveBuffer.WriteBits(equippedItem.itemCode, 16);
+                    saveBuffer.WriteBits(equippedItem.ItemCode, 16);
 
                     if (use_00_FlagAlignment <= 0) continue;
 
@@ -1578,7 +1578,7 @@ namespace Reanimator
                     saveBuffer.WriteBits(unit.Appearance.wardrobeLayerCount, 16);
                     for (int i = 0; i < unit.Appearance.wardrobeLayerCount; i++)
                     {
-                        saveBuffer.WriteBits(unit.Appearance.WardrobeLayers[i].itemCode, 16);
+                        saveBuffer.WriteBits(unit.Appearance.WardrobeLayers[i].ItemCode, 16);
                         saveBuffer.WriteBits(unit.Appearance.WardrobeLayers[i].unknownBool, 1);
                         if (unit.Appearance.WardrobeLayers[i].unknownBool > 0)
                         {
