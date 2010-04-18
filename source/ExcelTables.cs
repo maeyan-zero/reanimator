@@ -24,17 +24,17 @@ namespace Reanimator.Excel
         {
             class TableIndexHelper
             {
-                public string StringId { get; set; }
-                public string FileName { get; set; }
-                public ExcelTable excelTable;
-                public Type type;
+                public string StringId { get; private set; }
+                public string FileName { get; private set; }
+                public ExcelTable ExcelTable;
+                public readonly Type Type;
 
-                public TableIndexHelper(string id, string name, ExcelTable table, Type t)
+                public TableIndexHelper(string stringId, String fileName, ExcelTable excelTable, Type type)
                 {
-                    StringId = id;
-                    FileName = name;
-                    excelTable = table;
-                    type = t;
+                    StringId = stringId;
+                    FileName = fileName;
+                    ExcelTable = excelTable;
+                    Type = type;
                 }
             }
 
@@ -81,14 +81,7 @@ namespace Reanimator.Excel
                 {
                     return id;
                 }
-                if (tableIndex.StringId == null)
-                {
-                    return tableIndex.FileName;
-                }
-                else
-                {
-                    return tableIndex.StringId;
-                }
+                return tableIndex.StringId ?? tableIndex.FileName;
             }
 
             public ExcelTable CreateTable(string id, byte[] buffer)
@@ -96,14 +89,14 @@ namespace Reanimator.Excel
                 TableIndexHelper tableIndex = GetTableIndex(id);
                 if (tableIndex != null)
                 {
-                    if (tableIndex.type == null)
+                    if (tableIndex.Type == null)
                     {
                         return new ExcelTables(null);
                     }
 
-                    tableIndex.excelTable = (ExcelTable)Activator.CreateInstance(tableIndex.type, buffer);
-                    tableIndex.excelTable.StringId = tableIndex.StringId;
-                    return tableIndex.excelTable;
+                    tableIndex.ExcelTable = (ExcelTable)Activator.CreateInstance(tableIndex.Type, buffer);
+                    tableIndex.ExcelTable.StringId = tableIndex.StringId;
+                    return tableIndex.ExcelTable;
                 }
 
                 return null;
@@ -112,7 +105,7 @@ namespace Reanimator.Excel
             public ExcelTable GetTable(string stringId)
             {
                 TableIndexHelper tableIndex = GetTableIndex(stringId);
-                return tableIndex != null ? tableIndex.excelTable : null;
+                return tableIndex != null ? tableIndex.ExcelTable : null;
             }
 
             public bool IsMythosTable(String stringId)
@@ -120,7 +113,7 @@ namespace Reanimator.Excel
                 TableIndexHelper tableIndex = GetTableIndex(stringId);
                 if (tableIndex != null)
                 {
-                    return tableIndex.type == null ? true : false;
+                    return tableIndex.Type == null ? true : false;
                 }
 
                 return false;
@@ -254,7 +247,7 @@ namespace Reanimator.Excel
             _excelTables.AddTable("MUSICCONDITIONS", null, typeof(MusicConditions));
             _excelTables.AddTable("MUSICGROOVELEVELS", null, typeof(MusicGrooveLevels));
             _excelTables.AddTable("MUSICGROOVELEVELTYPES", null, typeof(MusicGrooveLevelTypes));
-            _excelTables.AddTable("MUSIC_REF", "MUSICREF", typeof(Excel.MusicRef));
+            _excelTables.AddTable("MUSIC_REF", "MUSICREF", typeof(MusicRef));
             _excelTables.AddTable("MUSIC_SCRIPT_DEBUG", "MUSICSCRIPTDEBUG", typeof(MusicScriptDebug));
             _excelTables.AddTable("MUSICSTINGERS", null, typeof(MusicStingers));
             _excelTables.AddTable("MUSICSTINGERSETS", null, typeof(MusicStingerSets));
@@ -387,7 +380,7 @@ namespace Reanimator.Excel
             {
                 if (excelTable.code == tableId)
                 {
-                    return this.GetTable(excelTable.stringId);
+                    return GetTable(excelTable.stringId);
                 }
             }
 
@@ -404,7 +397,7 @@ namespace Reanimator.Excel
             get { return _loadedTables.Count; }
         }
 
-        public bool LoadTables(string folder, ProgressForm progress)
+        public void LoadTables(string folder, ProgressForm progress)
         {
             AllTablesLoaded = true;
 
@@ -494,7 +487,6 @@ namespace Reanimator.Excel
             }
 
             _loadedTables.Sort();
-            return true;
         }
     }
 }
