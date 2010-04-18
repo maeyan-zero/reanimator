@@ -1805,11 +1805,11 @@ namespace Reanimator
 
             if (stat.id == 25667) // difficulty_max
             {
-                int bp = 1;
+                //int bp = 1;
             }
             if (stat.id == 25155) // difficulty_current
             {
-                int bp = 1;
+                //int bp = 1;
             }
 
             saveBuffer.WriteBits(stat.id, 16);

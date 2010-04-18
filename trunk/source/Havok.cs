@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.IO;
+
+// "is never used" warning - driving me insane
+#pragma warning disable 169
 
 namespace Reanimator
 {
@@ -471,3 +472,5 @@ namespace Reanimator
         }
     }
 }
+
+#pragma warning restore 169

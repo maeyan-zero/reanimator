@@ -464,7 +464,6 @@ namespace Reanimator
                 {
                     uint value = Convert.ToUInt32(data_set.XlsDataSet.Tables[file].Rows[row][attribute.id]);
                     uint arg = 0;
-                    uint result = 0;
                     bool current = false;
 
                     // Need better logic for determining datatypes. This switch case seems cumbersome

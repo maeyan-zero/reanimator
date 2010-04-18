@@ -394,7 +394,7 @@ namespace Reanimator
         public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, FileIndex index, bool writeIndex)
         {
             // New Entry
-            FileIndex new_index = index;
+            FileIndex newIndex = index;
             // Move pointer to the end of the stream.
             if (DatFileOpen == false) OpenAccompanyingDat();
             DataFile.Seek(0, SeekOrigin.End);
@@ -405,7 +405,7 @@ namespace Reanimator
             byte[] compressedBuffer = new byte[uncompressedBuffer.Length];
             uint len = (uint)compressedBuffer.Length;
             compress(compressedBuffer, ref len, uncompressedBuffer, (uint)uncompressedBuffer.Length);
-            int i = 1;
+            //int i = 1;
             //DataFile.Write(compressed_buffer, 0, len);
         }
 
