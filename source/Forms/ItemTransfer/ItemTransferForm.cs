@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Reanimator.Excel;
@@ -311,7 +307,7 @@ namespace Reanimator.Forms.ItemTransfer
                     MessageBox.Show("You have to load two characters to transfere items!");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 EmergencyAbort();
             }
@@ -357,7 +353,7 @@ namespace Reanimator.Forms.ItemTransfer
                     SetCharacterStatus(_characterStatus2, CharacterStatus.Modified, p_status2, l_status2);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 EmergencyAbort();
             }
@@ -378,7 +374,7 @@ namespace Reanimator.Forms.ItemTransfer
                 SetCharacterStatus(_characterStatus1, CharacterStatus.Modified, p_status1, l_status1);
                 SetCharacterStatus(_characterStatus2, CharacterStatus.Modified, p_status2, l_status2);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 EmergencyAbort();
             }
