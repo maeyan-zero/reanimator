@@ -57,6 +57,7 @@ namespace Reanimator
         //Used for XMLSerialization
         public Unit()
         {
+            Init();
         }
 
         [Serializable]
@@ -301,6 +302,11 @@ namespace Reanimator
         public Unit(BitBuffer bb)
         {
             _bitBuffer = bb;
+            Init();
+        }
+
+        private void Init()
+        {
             PlayerFlags1 = new List<int>();
             PlayerFlags2 = new List<int>();
             _bitOffsets = new List<UnitBitOffsets>();
@@ -356,7 +362,7 @@ namespace Reanimator
 
         // if (testBit(unit->bitField1, 0x1B))
         private int _bitOffsetCount;                                    // 5            // only ever seen as 0 or 1 - alert if otherwise
-        private readonly List<UnitBitOffsets> _bitOffsets;                              // only seen with item end bit offset in it
+        private List<UnitBitOffsets> _bitOffsets;                                       // only seen with item end bit offset in it
 
         // if (testBit(unit->bitField1, 0x05)) // (bitField1 & 0x20)                    // haven't encountered file with this yet
         // ALERT
@@ -459,7 +465,7 @@ namespace Reanimator
         // if (testBit(pUnit->bitField1, 0x12))
         int _itemEndBitOffset;									        // 32           // bit offset to end of items block
         int _itemCount;										            // 10 
-        public readonly List<Unit> Items;                                               // each item is just a standard data block
+        public List<Unit> Items;                                                        // each item is just a standard data block
 
         // if (testBit(pUnit->bitField1, 0x1A))
         uint _weaponConfigFlag;                                         // 32           // must be 0x91103A74; always present

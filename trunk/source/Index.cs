@@ -88,9 +88,9 @@ namespace Reanimator
        buffer.
         */
 
-        static public readonly int LatestPatch = 10;
-        static public readonly int LatestPatchLocalized = 11;
-        static public readonly int ExcelTablesIndex = 2572;
+        public const int LatestPatch = 10;
+        public const int LatestPatchLocalized = 11;
+        public const int ExcelTablesIndex = 2572;
         static public readonly string[] FileNames = { "hellgate_bghigh000",
                                                      "hellgate_graphicshigh000", 
                                                      "hellgate_localized000", 
@@ -125,9 +125,7 @@ namespace Reanimator
         readonly byte[] _buffer;
         string[] stringTable;
         Int32[] stringTableUnknowns;
-        FileIndex[] fileTable;
 
-        bool modified;
         const string affix = "backup\\";
 
         FileStream indexFile;
@@ -209,13 +207,7 @@ namespace Reanimator
             }
         }
 
-        public FileIndex[] FileTable
-        {
-            get
-            {
-                return fileTable;
-            }
-        }
+        public FileIndex[] FileTable { get; private set; }
 
         static public Index[] LoadIndexFiles(string path)
         {
@@ -249,13 +241,7 @@ namespace Reanimator
             get { return datFile == null ? false : true; }
         }
 
-        public bool Modified
-        {
-            get
-            {
-                return modified;
-            }
-        }
+        public bool Modified { get; private set; }
 
         public Index(FileStream file)
         {
@@ -265,7 +251,7 @@ namespace Reanimator
             Crypt.Decrypt(_buffer);
 
 #if DEBUG
-            FileTools.WriteFile(this.FileName + ".idx", _buffer);
+            FileTools.WriteFile(FileName + ".idx", _buffer);
 #endif
 
             structCount = BitConverter.ToInt32(_buffer, 4);
@@ -285,13 +271,12 @@ namespace Reanimator
 
         void CheckForModifications()
         {
-            foreach (FileIndex file in fileTable)
+            foreach (FileIndex file in FileTable)
             {
-                if (file.DirectoryString.Contains(affix))
-                {
-                    modified = true;
-                    break;
-                }
+                if (!file.DirectoryString.Contains(affix)) continue;
+
+                Modified = true;
+                break;
             }
         }
 
@@ -301,12 +286,11 @@ namespace Reanimator
             stringTableUnknowns = new Int32[stringCount];
 
             int stringByteOffset = 24;
-            short stringLength = 0;
 
             for (int i = 0; i < stringTable.Length; i++)
             {
                 int bufferOffset = stringLengthOffset + (i * stringStructLength);
-                stringLength = BitConverter.ToInt16(_buffer, bufferOffset);
+                short stringLength = BitConverter.ToInt16(_buffer, bufferOffset);
 
                 stringTable[i] = FileTools.ByteArrayToStringAnsi(_buffer, stringByteOffset);
                 stringTableUnknowns[i] = BitConverter.ToInt32(_buffer, bufferOffset + sizeof(Int16));
@@ -317,7 +301,7 @@ namespace Reanimator
 
         void InitializeFileTable()
         {
-            fileTable = new FileIndex[fileCount];
+            FileTable = new FileIndex[fileCount];
 
             for (int i = 0; i < fileCount; i++)
             {
@@ -327,16 +311,16 @@ namespace Reanimator
                 fileIndex.DirectoryString = stringTable[fileIndex.Directory];
                 fileIndex.FileNameString = stringTable[fileIndex.FileName];
 
-                fileTable[i] = fileIndex;
+                FileTable[i] = fileIndex;
             }
         }
 
         public int Locate(String file, String dir)
         {
-            for (int i = 0; i < fileTable.Length; i++)
+            for (int i = 0; i < FileTable.Length; i++)
             {
-                int result1 = String.Compare(file, fileTable[i].FileNameString, true);
-                int result2 = String.Compare(dir, fileTable[i].DirectoryString, true);
+                int result1 = String.Compare(file, FileTable[i].FileNameString, true);
+                int result2 = String.Compare(dir, FileTable[i].DirectoryString, true);
                 if (result1 == 0 && result2 == 0)
                 {
                     return i;
@@ -407,7 +391,7 @@ namespace Reanimator
             return destBuffer;
         }
 
-        public void AppendToDat(byte[] uncompressed_buffer, bool do_compress, FileIndex index, bool write_index)
+        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, FileIndex index, bool writeIndex)
         {
             // New Entry
             FileIndex new_index = index;
@@ -416,11 +400,11 @@ namespace Reanimator
             DataFile.Seek(0, SeekOrigin.End);
             
 
-            if (do_compress == true)
+            if (doCompress)
             {
-                byte[] compressed_buffer = new byte[uncompressed_buffer.Length];
+                byte[] compressed_buffer = new byte[uncompressedBuffer.Length];
                 uint len = (uint)compressed_buffer.Length;
-                compress(compressed_buffer, ref len, uncompressed_buffer, (uint)uncompressed_buffer.Length);
+                compress(compressed_buffer, ref len, uncompressedBuffer, (uint)uncompressedBuffer.Length);
                 int i = 1;
                 //DataFile.Write(compressed_buffer, 0, len);
             }
@@ -463,7 +447,7 @@ namespace Reanimator
             const UInt64 foo = 0xDEADBEEFDEADBEEF;
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
             i = 0;
-            foreach (FileIndex fileIndex in this.fileTable)
+            foreach (FileIndex fileIndex in this.FileTable)
             {
                 // this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
@@ -500,7 +484,7 @@ namespace Reanimator
 
         public void AppendDirectorySuffix(int i)
         {
-            string dir = affix + stringTable[fileTable[i].Directory];
+            string dir = affix + stringTable[FileTable[i].Directory];
             int index = StringExists(dir);
             // If the directory doesn't exist, add it.
             if (index == -1)
@@ -508,18 +492,18 @@ namespace Reanimator
                 index = stringTable.Length;
                 string[] buffer = new string[index + 1];
                 stringTable.CopyTo(buffer, 0);
-                buffer[index] = affix + stringTable[fileTable[i].Directory];
+                buffer[index] = affix + stringTable[FileTable[i].Directory];
                 stringTable = buffer;
                 stringCount++;
             }
-            fileTable[i].Directory = index;
-            modified = true;
+            FileTable[i].Directory = index;
+            Modified = true;
         }
 
         public void RemoveDirectorySuffix(int i)
         {
-            string dir = fileTable[i].DirectoryString.Remove(0, affix.Length);
-            fileTable[i].Directory = StringExists(dir);
+            string dir = FileTable[i].DirectoryString.Remove(0, affix.Length);
+            FileTable[i].Directory = StringExists(dir);
         }
 
         public int StringExists(string s)
