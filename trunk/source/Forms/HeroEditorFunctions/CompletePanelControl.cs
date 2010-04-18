@@ -49,7 +49,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Initialize");
             }
         }
 
@@ -114,7 +114,10 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 #endregion
 
                 #region Attribute Controls
-                AddBinding(_values.CAttributes.nud_attributePoints, "stat_points", heroUnit, 0);
+                if (UnitHelpFunctions.GetSimpleValue(heroUnit, ItemValueNames.stat_points.ToString()) > 0)
+                {
+                    AddBinding(_values.CAttributes.nud_attributePoints, "stat_points", heroUnit, 0);
+                }
                 AddBinding(_values.CAttributes.nud_accuracy, "accuracy", heroUnit, 0);
                 AddBinding(_values.CAttributes.nud_stamina, "stamina", heroUnit, 0);
                 AddBinding(_values.CAttributes.nud_strength, "strength", heroUnit, 0);
@@ -139,7 +142,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
                 _values.CDefense.nud_armor.Enabled = false;
                 //AddBinding(_values.CDefense.nud_armor, "armor", heroUnit, 0);
-                AddBinding(_values.CDefense.nud_shields, "shield_buffer_cur", heroUnit, 0);
+                if (UnitHelpFunctions.GetSimpleValue(heroUnit, ItemValueNames.shield_buffer_cur.ToString()) > 0)
+                {
+                    AddBinding(_values.CDefense.nud_shields, "shield_buffer_cur", heroUnit, 0);
+                }
+
                 AddBinding(_values.CDefense.nud_shieldRecharge, "shield_buffer_regen", heroUnit, 0);
 
                 //Binding sfxBinding = AddFormatedBinding("sfx_defense_bonus", heroUnit);
@@ -223,7 +230,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "BindCharacterValuesToAttributeControls");
             }
         }
 

@@ -70,7 +70,7 @@ namespace Reanimator.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "GenerateUnitNameStrings");
             }
         }
 
@@ -105,12 +105,12 @@ namespace Reanimator.Forms
             const string excelError = "You must have all excel tables loaded to use the Hero Editor!";
             if (excelTables == null)
             {
-                MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(excelError, "OpenCharacterFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
             if (!excelTables.AllTablesLoaded)
             {
-                MessageBox.Show(excelError, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(excelError, "OpenCharacterFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
 
@@ -121,7 +121,7 @@ namespace Reanimator.Forms
             }
             catch (Exception e)
             {
-                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e, "OpenCharacterFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
 
@@ -385,145 +385,129 @@ namespace Reanimator.Forms
 
     public enum ItemValueNames
     {
-        level,
-        gold,
-        stat_points,
-        skill_points,
-
-        skill_right,
-        skill_left,
-        skill_level,
-        skill_shift_enabled,
-
-        holy_radius,
-        level_def_start,
-        level_def_return,
-
-        save_quest_state_1,
-        save_quest_state_2,
-        save_quest_state_3,
-        save_quest_state_4,
-        save_quest_state_5,
-
-        save_quest_status,
-        save_quest_version,
-        save_quest_data_version,
-
-        save_task_version,
-        save_task_count,
-
-        faction_score,
-        last_trigger,
-        player_visited_level_bitfield,
-
-        badge_reward_received,
-        no_tutorial_tips,
-
-        experience,
-        experience_prev,
-        experience_next,
-        achievement_progress,
-
-        quest_global_fix_flags,
-
-        hp_cur,
-        power_cur,
-
-        accuracy,
-        stamina,
-        strength,
-        willpower,
-
-        accuracy_feed,
-        stamina_feed,
-        strength_feed,
-        willpower_feed,
-
-        applied_affix,
-        attached_affix_hidden,
-
-        armor,
-        armor_buffer_max,
-        armor_buffer_regen,
-
-        critical_chance,
-        critical_mult,
-
-        base_dmg_max,
-        base_dmg_min,
-        damage_increment,
-        damage_increment_field,
-        damage_increment_radial,
-        damage_max,
-        damage_min,
-
-        energy_decrease_source,
-        energy_increase_source,
-        energy_max,
-
-        firing_error_max,
-        firing_error_decrease_source_weapon,
-        firing_error_increase_source_weapon,
-        firing_error_max_weapon,
-
-        hp_regen,
-
-        identified,
-
-        interrupt_attack,
-        item_augmented_count,
-
-        item_difficulty_spawned,
-        item_level_limit,
-        item_level_req,
-        item_lookup_group,
-        item_pickedup,
-
-        item_quality,
-        item_quantity,
-        item_quantity_max,
-
-        item_slots,
-        item_spawner_level,
-        item_upgraded_count,
-
-        level_req,
-        no_trade,
-
-        offer_id,
-        offweapon_melee_speed,
-        pet_damage_bonus,
-
-        power_cost_pct_skillgroup,
-        quest_reward,
-        reward_original_location,
-
-        sfx_attack,
-        sfx_attack_focus,
-        sfx_defense_bonus,
-        sfx_duration_in_ticks,
-        sfx_strength_pct,
-
-        shield_buffer_cur,
-        shield_buffer_max,
-        shield_buffer_regen,
-        shield_overload_pct,
-        shield_penetration_dir,
-        shields,
-
-        splash_increment,
-        unlimited_in_merchant_inventory,
-
-        inventory_width,
-        inventory_height,
-
-        power_max,
-
-        achievement_points_total,
-        achievement_points_cur,
-        played_time_in_seconds,
-        waypoint_flags,
-        minigame_category_needed
+        accuracy = 18224,
+        accuracy_feed = 16690,
+        achievement_points_cur = 24900,
+        achievement_points_total = 23108,
+        achievement_progress = 22852,
+        ai_change_attack = 20793,
+        ai_change_duration = 24889,
+        ai_last_attacker_id = 27186,
+        applied_affix = 29752,
+        armor = 18737,
+        armor_buffer_cur = 19761,
+        armor_buffer_max = 19505,
+        armor_buffer_regen = 20273,
+        attached_affix_hidden = 19512,
+        attack_rating = 25392,
+        badge_reward_received = 23107,
+        base_dmg_max = 25904,
+        base_dmg_min = 25648,
+        critical_chance = 12849,
+        critical_mult = 14385,
+        cube_known_recipes = 12869,
+        damage_increment = 27696,
+        damage_increment_field = 17473,
+        damage_increment_radial = 17729,
+        damage_max = 27440,
+        damage_min = 27184,
+        difficulty_max = 25667,
+        energy_decrease_source = 27970,
+        energy_increase_source = 29250,
+        energy_max = 28226,
+        experience = 13874,
+        experience_next = 14386,
+        experience_prev = 14130,
+        faction_score = 13622,
+        firing_error_decrease_source = 12610,
+        firing_error_decrease_source_weapon = 12866,
+        firing_error_increase_source = 12354,
+        firing_error_increase_source_weapon = 30529,
+        firing_error_max = 31297,
+        firing_error_max_weapon = 31041,
+        gold = 13618,
+        hp_cur = 13360,
+        hp_max = 13616,
+        hp_regen = 14384,
+        identified = 16951,
+        interrupt_attack = 17713,
+        inventory_height = 12595,
+        inventory_width = 12339,
+        item_augmented_count = 21315,
+        item_difficulty_spawned = 17989,
+        item_level_limit = 13123,
+        item_level_req = 28739,
+        item_look_group = 25401,
+        item_pickedup = 12357,
+        item_quality = 30770,
+        item_quantity = 21300,
+        item_quantity_max = 21044,
+        item_slots = 26163,
+        item_spawner_level = 28726,
+        item_upgraded_count = 21059,
+        last_trigger = 28982,
+        level = 12336,
+        level_def_return = 27700,
+        level_def_start = 27444,
+        level_req = 12848,
+        minigame_category_needed = 26180,
+        newest_headstone_unit_id = 27457,
+        no_trade = 24898,
+        no_tutorial_tips = 20548,
+        offerid = 27703,
+        offweapon_melee_speed = 29236,
+        pet_damage_bonus = 22081,
+        played_time_in_seconds = 26690,
+        player_visited_level_bitfield = 21061,
+        power_cost_pct_skillgroup = 17716,
+        power_cur = 16944,
+        power_max = 17200,
+        power_regen = 17456,
+        previous_weaponconfig = 17718,
+        quest_global_fix_flags = 31044,
+        quest_player_tracking = 24899,
+        quest_reward = 14657,
+        reward_original_location = 31286,
+        save_quest_data_version = 22596,
+        save_quest_hunt_version = 29497,
+        save_quest_state_1 = 30260,
+        save_quest_state_2 = 30516,
+        save_quest_state_3 = 30772,
+        save_quest_state_4 = 31028,
+        save_quest_state_5 = 31284,
+        save_quest_state_6 = 12341,
+        save_quest_state_7 = 12597,
+        save_quest_state_8 = 12853,
+        save_quest_state_9 = 13109,
+        save_quest_status = 17973,
+        save_quest_version = 18229,
+        save_task_count = 18741,
+        save_task_version = 18485,
+        sfx_attack = 28977,
+        sfx_attack_focus = 29251,
+        sfx_defense_bonus = 28721,
+        sfx_duration_in_ticks = 30769,
+        sfx_strength_pct = 12338,
+        shield_buffer_cur = 25137,
+        shield_buffer_max = 24881,
+        shield_buffer_regen = 25649,
+        shield_overload_pct = 26417,
+        shields = 23089,
+        skill_is_selected = 17204,
+        skill_level = 21043,
+        skill_points = 30004,
+        skill_right = 20787,
+        skill_shift_enabled = 28225,
+        splash_increment = 30515,
+        stamina = 19248,
+        stamina_feed = 17202,
+        stat_points = 14642,
+        strength = 21808,
+        strength_feed = 20274,
+        unlimited_in_merchant_inventory = 20536,
+        waypoint_flags = 20532,
+        willpower = 19760,
+        willpower_feed = 17458
     };
 
     enum InventoryTypes

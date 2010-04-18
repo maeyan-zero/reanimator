@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Reanimator
 {
@@ -298,6 +299,7 @@ namespace Reanimator
             internal int offset;                                        // 32           // only seen as offset to end of items bit offset
         }
 
+        [XmlIgnore]
         public bool IsGood { get; private set; }
         public Unit(BitBuffer bb)
         {
