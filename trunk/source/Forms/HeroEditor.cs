@@ -349,11 +349,11 @@ namespace Reanimator.Forms
 
         private void saveCharButton_Click(object sender, EventArgs e)
         {
+            String filePath = FileTools.SaveFileDiag("hg1", "HGL Character", _heroUnit.Name, Config.SaveDir);
+            if (String.IsNullOrEmpty(filePath)) return;
+
             _panel.GetSkillControls(_heroUnit);
-
-            FileTools.SaveFileDiag("hg1", "HGL Character", _heroUnit.Name, Config.SaveDir);
-
-            UnitHelpFunctions.SaveCharacterFile(_heroUnit, _filePath);
+            UnitHelpFunctions.SaveCharacterFile(_heroUnit, filePath);
         }
 
         private void InitUnknownStatList()
