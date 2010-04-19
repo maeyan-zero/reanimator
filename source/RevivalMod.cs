@@ -133,9 +133,9 @@ namespace Reanimator
                                     // Excel Table FileIndex
                                     Index.FileIndex fileIndex =
                                         index[Index.LatestPatch].FileTable[Index.ExcelTablesIndex];
-                                    if (String.IsNullOrEmpty(fileIndex.DirectoryString))
+                                    if (String.IsNullOrEmpty(fileIndex.DirectoryString) || !fileIndex.FileNameString.Contains("exceltables"))
                                     {
-                                        MessageBox.Show("File not found in data file!\nFile: " + file.id, "Error",
+                                        MessageBox.Show("File not found in data file!\nFile: exceltables.txt.cooked", "Error",
                                                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                                         continue;
                                     }
