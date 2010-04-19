@@ -366,10 +366,7 @@ namespace Reanimator
 
         public byte[] ReadDataFile(FileIndex file)
         {
-            if (OpenAccompanyingDat() == false)
-            {
-                return null;
-            }
+            if (!OpenAccompanyingDat()) return null;
 
             int result;
             byte[] destBuffer = new byte[file.UncompressedSize];
@@ -414,7 +411,16 @@ namespace Reanimator
             // New Entry
             //FileIndex newIndex = index;
             // Move pointer to the end of the stream.
-            if (DatFileOpen == false) OpenAccompanyingDat();
+            if (!DatFileOpen)
+            {
+                if (!OpenAccompanyingDat())
+                {
+                    MessageBox.Show("Failed to open accompanying dat file!\n" + FileName, "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
             DataFile.Seek(0, SeekOrigin.End);
 
             if (!doCompress) return;
