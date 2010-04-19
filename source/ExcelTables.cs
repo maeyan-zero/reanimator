@@ -133,7 +133,7 @@ namespace Reanimator.Excel
 
         }
 
-        public bool AllTablesLoaded { get; set; }
+        public bool AllTablesLoaded { get; private set; }
         readonly ExcelTableManagerManager _excelTables;
         readonly List<ExcelTable> _loadedTables;
 
@@ -356,7 +356,7 @@ namespace Reanimator.Excel
             ReadTables<ExcelTableTable>(data, ref offset, Count);
         }
 
-        public string GetTableStringId(int index)
+        private string GetTableStringId(int index)
         {
             return ((ExcelTableTable)tables[index]).stringId;
         }

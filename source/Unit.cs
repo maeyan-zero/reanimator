@@ -90,7 +90,7 @@ namespace Reanimator
                 public int unknownBoolValue;					    	// 2
             };
 
-            public int equippedItemCount;								// 3
+            internal int equippedItemCount;								// 3
             public readonly List<EquippedItem> EquippedItems;                                   // This only affects viewing from the select char screen
 
             public int unknown1;										// 16
@@ -99,17 +99,17 @@ namespace Reanimator
             public byte[] unknown2;										// non-standard read in again
 
             // if (bitTest(bitField1, 0x11))
-            public int wardrobeLayerHeadCount;							// 4
-            public readonly List<int> WardrobeLayersHead;				// 16 * wardrobeLayerHeadCount
+            internal int WardrobeLayerHeadCount;						// 4
+            public readonly List<int> WardrobeLayersHead;				// 16 * WardrobeLayerHeadCount
 
-            public int wardrobeAppearanceGroupCount;					// 3
-            public readonly List<int> WardrobeAppearanceGroups;			// 16 * wardrobeAppearanceGroupCount
+            internal int WardrobeAppearanceGroupCount;					// 3
+            public readonly List<int> WardrobeAppearanceGroups;			// 16 * WardrobeAppearanceGroupCount
 
-            public int colorCount;									    // 4
-            public readonly List<int> ColorPaletteIndicies;				// 8 * colorCount       Order: Body, Hair, ??
+            internal int ColorCount;									// 4
+            public readonly List<int> ColorPaletteIndicies;				// 8 * ColorCount       Order: Body, Hair, ??
 
             // if (testBit(pUnit->bitField1, 0x10))
-            public int wardrobeLayerCount;								// 16          This is the model appearance
+            internal int WardrobeLayerCount;							// 16          This is the model appearance
             public readonly List<ModelWardrobeLayer> WardrobeLayers;
 
             public UnitAppearance()
@@ -155,23 +155,23 @@ namespace Reanimator
                 [Serializable]
                 public class Attribute
                 {
-                    public int exists;										// 1 bit
+                    public int exists;										    // 1 bit
                     public int BitCount { get; set; }							// 6 bits
                     public int Unknown1 { get; set; }							// 2 bits
                     public int Unknown1_1 { get; set; }							// 1 bit		// if Unknown1 == 2
-                    public int skipTableId;            						// 1 bit		// if this is set, then don't read the table id below
+                    public int skipTableId;            						    // 1 bit		// if this is set, then don't read the table id below
                     public int TableId { get; set; }							// 16 bits		// this is the excel table id to use
 
                     public bool Exists
                     {
                         get { return exists == 1 ? true : false; }
-                        set { exists = (value == true) ? 1 : 0; }
+                        set { exists = value ? 1 : 0; }
                     }
 
                     public bool SkipTableId
                     {
                         get { return skipTableId == 1 ? true : false; }
-                        set { skipTableId = (value == true) ? 1 : 0; }
+                        set { skipTableId = value ? 1 : 0; }
                     }
                 };
 
@@ -187,9 +187,9 @@ namespace Reanimator
                     {
                         switch (index)
                         {
-                            case 0:  return Attribute1;
-                            case 1:  return Attribute2;
-                            case 2:  return Attribute3;
+                            case 0: return Attribute1;
+                            case 1: return Attribute2;
+                            case 2: return Attribute3;
                             default: return -1;
                         }
                     }
@@ -198,7 +198,7 @@ namespace Reanimator
 
                 public Values GetAttributeByAttributeId(int id)
                 {
-                    foreach (Values value in this.values)
+                    foreach (Values value in values)
                     {
                         if (value.Attribute1 == id)
                         {
@@ -295,8 +295,8 @@ namespace Reanimator
         [Serializable]
         private class UnitBitOffsets
         {
-            internal int index;                                         // 16           // only seen as 0x3030 ('00' in ascii - assuming as "0th" index) - alert if otherwise
-            internal int offset;                                        // 32           // only seen as offset to end of items bit offset
+            internal int Index;                                         // 16           // only seen as 0x3030 ('00' in ascii - assuming as "0th" index) - alert if otherwise
+            internal int Offset;                                        // 32           // only seen as offset to end of items bit offset
         }
 
         [XmlIgnore]
@@ -338,11 +338,11 @@ namespace Reanimator
         int _minorVersion;							    	            // 8
 
         int _bitFieldCount;									            // 8			// must be <= 2
-        public int bitField1;										    // 32
-        public int bitField2;										    // 32
+        int _bitField1;										            // 32
+        int _bitField2;										            // 32
 
         // if (testBit(unit->bitField1, 0x1D))
-        private int _bitCount;										    // 32			// of unit block
+        int _bitCount;										            // 32			// of entire unit block
 
         // if (testBit(unit->bitField1, 0x00))
         int _beginFlag;										            // 32			// must be "Flag" (67616C46h) or Can be "`4R+" ("60 34 52 2B", 2B523460h)
@@ -405,7 +405,7 @@ namespace Reanimator
             set
             {
                 if (value < 0 || value > 255) _characterHeight = 125;
-                else  _characterHeight = value;
+                else _characterHeight = value;
             }
         }
 
@@ -478,7 +478,8 @@ namespace Reanimator
         // if (testBit(unit->bitField1, 0x00))
         int _endFlag;											        // 32           // end of unit flag
 
-        [NonSerialized] readonly BitBuffer _bitBuffer;
+        [NonSerialized]
+        readonly BitBuffer _bitBuffer;
 
         ///////////////////// Function Definitions /////////////////////
 
@@ -517,27 +518,27 @@ namespace Reanimator
             unit._bitFieldCount = _bitBuffer.ReadBits(8);
             if (unit._bitFieldCount >= 1)
             {
-                unit.bitField1 = _bitBuffer.ReadBits(32);
+                unit._bitField1 = _bitBuffer.ReadBits(32);
             }
             if (unit._bitFieldCount == 2)
             {
-                unit.bitField2 = _bitBuffer.ReadBits(32);
+                unit._bitField2 = _bitBuffer.ReadBits(32);
             }
 
 
-            if (TestBit(unit.bitField1, 0x1D))
+            if (TestBit(unit._bitField1, 0x1D))
             {
                 unit._bitCount = _bitBuffer.ReadBits(32);
             }
 
 
-            if (TestBit(unit.bitField1, 0x00))
+            if (TestBit(unit._bitField1, 0x00))
             {
                 unit._beginFlag = _bitBuffer.ReadBits(32);
             }
 
 
-            if (TestBit(unit.bitField1, 0x1C))
+            if (TestBit(unit._bitField1, 0x1C))
             {
                 unit.timeStamp1 = _bitBuffer.ReadBits(32);
                 unit.timeStamp2 = _bitBuffer.ReadBits(32);
@@ -545,7 +546,7 @@ namespace Reanimator
             }
 
 
-            if (TestBit(unit.bitField1, 0x1F))
+            if (TestBit(unit._bitField1, 0x1F))
             {
                 unit.unknownCount1F = _bitBuffer.ReadBits(4) - 8;
                 unit.unknownCount1Fs = new UnknownCount1F_S[unit.unknownCount1F];
@@ -562,7 +563,7 @@ namespace Reanimator
             }
 
 
-            if (TestBit(unit.bitField2, 0x00))
+            if (TestBit(unit._bitField2, 0x00))
             {
                 unit._playerFlagCount1 = _bitBuffer.ReadBits(8);
                 for (int i = 0; i < unit._playerFlagCount1; i++)
@@ -572,7 +573,7 @@ namespace Reanimator
             }
 
 
-            if (TestBit(unit.bitField1, 0x1B))
+            if (TestBit(unit._bitField1, 0x1B))
             {
                 unit._bitOffsetCount = _bitBuffer.ReadBits(5);
                 if (unit._bitOffsetCount > 1)
@@ -586,11 +587,11 @@ namespace Reanimator
                 {
                     UnitBitOffsets bitOffsets = new UnitBitOffsets
                                                     {
-                                                        index = _bitBuffer.ReadBits(16),
-                                                        offset = _bitBuffer.ReadBits(32)
+                                                        Index = _bitBuffer.ReadBits(16),
+                                                        Offset = _bitBuffer.ReadBits(32)
                                                     };
 
-                    if (bitOffsets.index != 0x3030) // '00'
+                    if (bitOffsets.Index != 0x3030) // '00'
                     {
                         MessageBox.Show("Unexpected value for bitOffsets.index (!= 0x3030)!\nNot-Implemented cases. Please report this error and supply the offending file.",
                             "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -602,7 +603,7 @@ namespace Reanimator
             }
 
 
-            if (TestBit(unit.bitField1, 0x05))
+            if (TestBit(unit._bitField1, 0x05))
             {
                 MessageBox.Show(
                     "Unexpected bit case for unit._bitField1 (0x05 = true)!\nNot-Implemented cases. Please report this error and supply the offending file.",
@@ -621,18 +622,18 @@ namespace Reanimator
             unit.unitCode = _bitBuffer.ReadBits(16);
 
 
-            if (TestBit(unit.bitField1, 0x17))
+            if (TestBit(unit._bitField1, 0x17))
             {
                 unit.unitUniqueId = ReadNonStandardFunc();
             }
 
 
-            if (TestBit(unit.bitField1, 0x03) || TestBit(unit.bitField1, 0x01))
+            if (TestBit(unit._bitField1, 0x03) || TestBit(unit._bitField1, 0x01))
             {
                 unit.unknownBool_01_03 = _bitBuffer.ReadBits(1);
                 if (unit.unknownBool_01_03 > 0)
                 {
-                    if (TestBit(unit.bitField1, 0x02))
+                    if (TestBit(unit._bitField1, 0x02))
                     {
                         unit.unknown_02 = _bitBuffer.ReadBits(32);
                     }
@@ -645,7 +646,7 @@ namespace Reanimator
                 unit.unknown_01_03_4 = ReadNonStandardFunc();
             }
 
-            if (TestBit(unit.bitField1, 0x06))
+            if (TestBit(unit._bitField1, 0x06))
             {
                 unit.unknownBool_06 = _bitBuffer.ReadBits(1);
                 if (unit.unknownBool_01_03 != 1)
@@ -655,20 +656,20 @@ namespace Reanimator
             }
 
             // On items only I think - Usually 0x00
-            if (TestBit(unit.bitField1, 0x09))
+            if (TestBit(unit._bitField1, 0x09))
             {
                 unit.unknown_09 = _bitBuffer.ReadBits(8);
             }
 
             // On main character unit only
-            if (TestBit(unit.bitField1, 0x07))
+            if (TestBit(unit._bitField1, 0x07))
             {
                 unit.CharacterHeight = _bitBuffer.ReadBits(8);
                 unit.CharacterWidth = _bitBuffer.ReadBits(8);
             }
 
             // On main character unit only
-            if (TestBit(unit.bitField1, 0x08))
+            if (TestBit(unit._bitField1, 0x08))
             {
                 unit._charNameCount = _bitBuffer.ReadBits(8);
                 if (unit._charNameCount > 0)
@@ -682,7 +683,7 @@ namespace Reanimator
             }
 
             // On both the main char and on items - appears to be always zero for items
-            if (TestBit(unit.bitField1, 0x0A))
+            if (TestBit(unit._bitField1, 0x0A))
             {
                 unit._playerFlagCount2 = _bitBuffer.ReadBits(8);
                 if (unit._playerFlagCount2 > 0)
@@ -702,7 +703,7 @@ namespace Reanimator
             }
 
 
-            if (TestBit(unit.bitField1, 0x0D))
+            if (TestBit(unit._bitField1, 0x0D))
             {
                 unit.statBlock = new StatBlock();
                 if (!ReadStatBlock(ref unit.statBlock, true))
@@ -719,7 +720,7 @@ namespace Reanimator
             }
 
 
-            if (TestBit(unit.bitField1, 0x12))
+            if (TestBit(unit._bitField1, 0x12))
             {
                 unit._itemEndBitOffset = _bitBuffer.ReadBits(32);
                 unit._itemCount = _bitBuffer.ReadBits(10);
@@ -735,7 +736,7 @@ namespace Reanimator
             }
 
 
-            if (TestBit(unit.bitField1, 0x1A))
+            if (TestBit(unit._bitField1, 0x1A))
             {
                 unit._weaponConfigFlag = (uint)_bitBuffer.ReadBits(32);
                 if (unit._weaponConfigFlag != 0x91103A74)
@@ -793,7 +794,7 @@ namespace Reanimator
             }
 
 
-            if (TestBit(unit.bitField1, 0x00))
+            if (TestBit(unit._bitField1, 0x00))
             {
                 unit._endFlag = _bitBuffer.ReadBits(32);
                 if (unit._endFlag != unit._beginFlag && unit._endFlag != 0x2B523460)
@@ -862,10 +863,7 @@ namespace Reanimator
 
             for (int i = 0; i < statBlock.nameCount; i++)
             {
-                UnitStatName name = new UnitStatName();
-
-                name.unknown1 = _bitBuffer.ReadBits(16);
-                name.statBlock = new StatBlock();
+                UnitStatName name = new UnitStatName { unknown1 = _bitBuffer.ReadBits(16), statBlock = new StatBlock() };
 
                 if (!ReadStatBlock(ref name.statBlock, false))
                     return false;
@@ -884,9 +882,8 @@ namespace Reanimator
 
             for (int i = 0; i < unitStat.attributesCount; i++)
             {
-                StatBlock.Stat.Attribute exAtrib = new StatBlock.Stat.Attribute();
+                StatBlock.Stat.Attribute exAtrib = new StatBlock.Stat.Attribute { exists = _bitBuffer.ReadBits(1) };
 
-                exAtrib.exists = _bitBuffer.ReadBits(1);
                 if (exAtrib.exists != 1)
                     break;
 
@@ -946,15 +943,20 @@ namespace Reanimator
                 unitStat.values[i] = new StatBlock.Stat.Values();
                 for (int j = 0; j < unitStat.attributesCount; j++)
                 {
-                    if (unitStat.attributes[j].exists == 1)
+                    if (unitStat.attributes[j].exists != 1) continue;
+
+                    int extraAttribute = _bitBuffer.ReadBits(unitStat.attributes[j].BitCount);
+                    switch (j)
                     {
-                        int extraAttribute = _bitBuffer.ReadBits(unitStat.attributes[j].BitCount);
-                        if (j == 0)
+                        case 0:
                             unitStat.values[i].Attribute1 = extraAttribute;
-                        if (j == 1)
+                            break;
+                        case 1:
                             unitStat.values[i].Attribute2 = extraAttribute;
-                        if (j == 2)
+                            break;
+                        case 2:
                             unitStat.values[i].Attribute3 = extraAttribute;
+                            break;
                     }
                 }
 
@@ -971,7 +973,7 @@ namespace Reanimator
             {
                 UnitAppearance.EquippedItem equippedItem = new UnitAppearance.EquippedItem();
 
-                if (TestBit(heroUnit.bitField1, 0x0F))
+                if (TestBit(heroUnit._bitField1, 0x0F))
                 {
                     MessageBox.Show(
                         "Unexpected bitField1 value! (0x0F == true)\nNot-Implemented cases. Please report this warning and supply the offending file.",
@@ -981,7 +983,7 @@ namespace Reanimator
 
                 equippedItem.ItemCode = _bitBuffer.ReadBits(16);
 
-                if (TestBit(heroUnit.bitField1, 0x00))
+                if (TestBit(heroUnit._bitField1, 0x00))
                 {
                     equippedItem.affixCount = _bitBuffer.ReadBits(3);
                     for (int j = 0; j < equippedItem.affixCount; j++)
@@ -997,43 +999,45 @@ namespace Reanimator
             appearance.unknown1 = _bitBuffer.ReadBits(16);
 
 
-            if (TestBit(heroUnit.bitField1, 0x16))
+            if (TestBit(heroUnit._bitField1, 0x16))
             {
                 appearance.unknown2 = ReadNonStandardFunc();
             }
 
 
-            if (TestBit(heroUnit.bitField1, 0x11))
+            if (TestBit(heroUnit._bitField1, 0x11))
             {
-                appearance.wardrobeLayerHeadCount = _bitBuffer.ReadBits(4);
-                for (int i = 0; i < appearance.wardrobeLayerHeadCount; i++)
+                appearance.WardrobeLayerHeadCount = _bitBuffer.ReadBits(4);
+                for (int i = 0; i < appearance.WardrobeLayerHeadCount; i++)
                 {
                     appearance.WardrobeLayersHead.Add(_bitBuffer.ReadBits(16));
                 }
 
-                appearance.wardrobeAppearanceGroupCount = _bitBuffer.ReadBits(3);
-                for (int i = 0; i < appearance.wardrobeAppearanceGroupCount; i++)
+                appearance.WardrobeAppearanceGroupCount = _bitBuffer.ReadBits(3);
+                for (int i = 0; i < appearance.WardrobeAppearanceGroupCount; i++)
                 {
                     appearance.WardrobeAppearanceGroups.Add(_bitBuffer.ReadBits(16));
                 }
 
-                appearance.colorCount = _bitBuffer.ReadBits(4);
-                for (int i = 0; i < appearance.colorCount; i++)
+                appearance.ColorCount = _bitBuffer.ReadBits(4);
+                for (int i = 0; i < appearance.ColorCount; i++)
                 {
                     appearance.ColorPaletteIndicies.Add(_bitBuffer.ReadBits(8));
                 }
             }
 
 
-            if (TestBit(heroUnit.bitField1, 0x10))
+            if (TestBit(heroUnit._bitField1, 0x10))
             {
-                appearance.wardrobeLayerCount = _bitBuffer.ReadBits(16);
-                for (int i = 0; i < appearance.wardrobeLayerCount; i++)
+                appearance.WardrobeLayerCount = _bitBuffer.ReadBits(16);
+                for (int i = 0; i < appearance.WardrobeLayerCount; i++)
                 {
-                    UnitAppearance.ModelWardrobeLayer gear = new UnitAppearance.ModelWardrobeLayer();
+                    UnitAppearance.ModelWardrobeLayer gear = new UnitAppearance.ModelWardrobeLayer
+                                                                 {
+                                                                     ItemCode = _bitBuffer.ReadBits(16),
+                                                                     unknownBool = _bitBuffer.ReadBits(1)
+                                                                 };
 
-                    gear.ItemCode = _bitBuffer.ReadBits(16);
-                    gear.unknownBool = _bitBuffer.ReadBits(1);
                     if (gear.unknownBool == 1)
                     {
                         gear.unknownBoolValue = _bitBuffer.ReadBits(2);
@@ -1067,7 +1071,7 @@ namespace Reanimator
             return saveBuffer.GetData();
         }
 
-        private void WriteUnit(BitBuffer saveBuffer, Unit unit, bool isItem, byte[] charStringBytes)
+        private static void WriteUnit(BitBuffer saveBuffer, Unit unit, bool isItem, byte[] charStringBytes)
         {
             /***** Unit Header *****
              * majorVersion                                     16                  Should be 0xBF.
@@ -1301,33 +1305,33 @@ namespace Reanimator
 
 
             // temp "fix" until we know what they actually are and how sensitive it is for missing fields
-            if (TestBit(unit.bitField1, 0x01))
+            if (TestBit(unit._bitField1, 0x01))
                 useUnknown_01 = (1 << 0x01);
-            if (TestBit(unit.bitField1, 0x02))
+            if (TestBit(unit._bitField1, 0x02))
                 useUnknown_02 = (1 << 0x02);
-            if (TestBit(unit.bitField1, 0x03))
+            if (TestBit(unit._bitField1, 0x03))
                 useUnknown_03 = (1 << 0x03);
-            if (TestBit(unit.bitField1, 0x06))
+            if (TestBit(unit._bitField1, 0x06))
                 useUnknown_06 = (1 << 0x06);
-            if (TestBit(unit.bitField1, 0x09))
+            if (TestBit(unit._bitField1, 0x09))
                 useUnknown_09 = (1 << 0x09);
-            if (TestBit(unit.bitField1, 0x07))
+            if (TestBit(unit._bitField1, 0x07))
                 useUnknown_07 = (1 << 0x07);
-            if (TestBit(unit.bitField1, 0x08))
+            if (TestBit(unit._bitField1, 0x08))
                 useUnknown_08 = (1 << 0x08);
-            if (TestBit(unit.bitField1, 0x0A))
+            if (TestBit(unit._bitField1, 0x0A))
                 use_0A_CharacterFlags2 = (1 << 0x0A);
-            if (TestBit(unit.bitField1, 0x0D))
+            if (TestBit(unit._bitField1, 0x0D))
                 use_0D_Stats = (1 << 0x0D);
-            if (TestBit(unit.bitField1, 0x16))
+            if (TestBit(unit._bitField1, 0x16))
                 useUnknown_16 = (1 << 0x16);
-            if (TestBit(unit.bitField1, 0x11))
+            if (TestBit(unit._bitField1, 0x11))
                 useUnknown_11 = (1 << 0x11);
-            if (TestBit(unit.bitField1, 0x10))
+            if (TestBit(unit._bitField1, 0x10))
                 useUnknown_10 = (1 << 0x10);
-            if (TestBit(unit.bitField1, 0x12))
+            if (TestBit(unit._bitField1, 0x12))
                 use_12_Items = (1 << 0x12);
-            if (TestBit(unit.bitField1, 0x1A))
+            if (TestBit(unit._bitField1, 0x1A))
                 use_1A_Unknown = (1 << 0x1A);
 
 
@@ -1422,7 +1426,7 @@ namespace Reanimator
                 saveBuffer.WriteBits(bitOffsetsCount, 5);
                 for (int i = 0; i < bitOffsetsCount; i++)
                 {
-                    saveBuffer.WriteBits(unit._bitOffsets[i].index, 16);
+                    saveBuffer.WriteBits(unit._bitOffsets[i].Index, 16);
                     bitOffsetItemEndBitOffset = saveBuffer.DataBitOffset;
                     saveBuffer.WriteBits(0x00000000, 32);
                 }
@@ -1577,8 +1581,8 @@ namespace Reanimator
 
                 if (useUnknown_10 > 0)
                 {
-                    saveBuffer.WriteBits(unit.Appearance.wardrobeLayerCount, 16);
-                    for (int i = 0; i < unit.Appearance.wardrobeLayerCount; i++)
+                    saveBuffer.WriteBits(unit.Appearance.WardrobeLayerCount, 16);
+                    for (int i = 0; i < unit.Appearance.WardrobeLayerCount; i++)
                     {
                         saveBuffer.WriteBits(unit.Appearance.WardrobeLayers[i].ItemCode, 16);
                         saveBuffer.WriteBits(unit.Appearance.WardrobeLayers[i].unknownBool, 1);
@@ -1665,11 +1669,11 @@ namespace Reanimator
             }
 
             // temp
-            saveBuffer.WriteBits(unit.bitField1, 32, bitField1Offset);
-            saveBuffer.WriteBits(unit.bitField2, 32, bitField2Offset);
+            saveBuffer.WriteBits(unit._bitField1, 32, bitField1Offset);
+            saveBuffer.WriteBits(unit._bitField2, 32, bitField2Offset);
         }
 
-        private void WriteNonStandardFunc(byte[] byteArray, BitBuffer saveBuffer)
+        private static void WriteNonStandardFunc(byte[] byteArray, BitBuffer saveBuffer)
         {
             for (int i = 0; i < 8; i++)
             {
@@ -1677,7 +1681,7 @@ namespace Reanimator
             }
         }
 
-        private void WriteStatBlock(StatBlock statBlock, bool writeNameCount, BitBuffer saveBuffer)
+        private static void WriteStatBlock(StatBlock statBlock, bool writeNameCount, BitBuffer saveBuffer)
         {
             /***** Stat Block Header *****
              * _majorVersion                                     16                  Stat block header - Must be 0x000A.
@@ -1741,7 +1745,7 @@ namespace Reanimator
             }
         }
 
-        private void WriteStat(Unit.StatBlock.Stat stat, BitBuffer saveBuffer)
+        private static void WriteStat(StatBlock.Stat stat, BitBuffer saveBuffer)
         {
             /***** Stat Block *****
              * statId                                           16                  Stat ID from applicable excel table.
@@ -1874,18 +1878,23 @@ namespace Reanimator
             {
                 for (int j = 0; j < stat.attributes.Count; j++)
                 {
-                    if (stat.attributes[j].exists == 1)
-                    {
-                        int extraAttribute = 0;
-                        if (j == 0)
-                            extraAttribute = stat.values[i].Attribute1;
-                        else if (j == 1)
-                            extraAttribute = stat.values[i].Attribute2;
-                        else if (j == 2)
-                            extraAttribute = stat.values[i].Attribute3;
+                    if (stat.attributes[j].exists != 1) continue;
 
-                        saveBuffer.WriteBits(extraAttribute, stat.attributes[j].BitCount);
+                    int extraAttribute = 0;
+                    switch (j)
+                    {
+                        case 0:
+                            extraAttribute = stat.values[i].Attribute1;
+                            break;
+                        case 1:
+                            extraAttribute = stat.values[i].Attribute2;
+                            break;
+                        case 2:
+                            extraAttribute = stat.values[i].Attribute3;
+                            break;
                     }
+
+                    saveBuffer.WriteBits(extraAttribute, stat.attributes[j].BitCount);
                 }
 
                 saveBuffer.WriteBits(stat.values[i].Stat, stat.bitCount);
@@ -1894,10 +1903,7 @@ namespace Reanimator
 
         private static bool TestBit(int bitField, int bitOffset)
         {
-            if ((bitField & (1 << bitOffset)) == 0)
-                return false;
-
-            return true;
+            return (bitField & (1 << bitOffset)) != 0;
         }
     }
 }
