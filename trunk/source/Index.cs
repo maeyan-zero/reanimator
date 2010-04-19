@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace Reanimator
 {
@@ -205,15 +206,28 @@ namespace Reanimator
 
         public FileIndex[] FileTable { get; private set; }
 
-        static public Index[] LoadIndexFiles(string path)
+        static public Index[] LoadIndexFiles(String path)
         {
             Index[] index = new Index[FileNames.Length];
             for (int i = 0; i < index.Length; i++)
             {
-                using (FileStream fs = new FileStream(path + FileNames[i] + ".idx", FileMode.Open))
+                String filePath = String.Format("{0}{1}.idx", path, FileNames[i]);
+                if (!File.Exists(filePath))
                 {
-                    index[i] = new Index(fs);
+                    MessageBox.Show("Index file not found!\n\n" + filePath, "Warning", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Warning);
+                    continue;
                 }
+
+                try
+                {
+                    index[i] = new Index(filePath);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Unknown IO Error!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
             return index;
         }
@@ -239,10 +253,10 @@ namespace Reanimator
 
         public bool Modified { get; private set; }
 
-        public Index(FileStream file)
+        public Index(String filePath)
         {
-            _indexFile = file;
-            _buffer = FileTools.StreamToByteArray(file);
+            _indexFile = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
+            _buffer = FileTools.StreamToByteArray(_indexFile);
 
             Crypt.Decrypt(_buffer);
 
@@ -306,8 +320,8 @@ namespace Reanimator
                                               FileStruct =
                                                   (FileIndex.FileIndexStruct)
                                                   FileTools.ByteArrayToStructure(_buffer,
-                                                                                 typeof (FileIndex.FileIndexStruct),
-                                                                                 _fileDataOffset + i*FileStructLength)
+                                                                                 typeof(FileIndex.FileIndexStruct),
+                                                                                 _fileDataOffset + i * FileStructLength)
                                           };
                 fileIndex.DirectoryString = _stringTable[fileIndex.Directory];
                 fileIndex.FileNameString = _stringTable[fileIndex.FileName];
@@ -336,7 +350,10 @@ namespace Reanimator
             {
                 try
                 {
-                    DataFile = new FileStream(FileDirectory + FileName + ".dat", FileMode.Open);
+                    String filePath = String.Format("{0}{1}.dat", FileDirectory, FileName);
+                    if (!File.Exists(filePath)) return false;
+
+                    DataFile = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 }
                 catch (Exception)
                 {
@@ -361,7 +378,7 @@ namespace Reanimator
             if (file.CompressedSize > 0)
             {
                 byte[] srcBuffer = new byte[file.CompressedSize];
-                
+
                 DataFile.Read(srcBuffer, 0, srcBuffer.Length);
                 if (IntPtr.Size == 4)
                 {
@@ -409,13 +426,13 @@ namespace Reanimator
             {
                 UInt32 destinationLength = (UInt32)compressedBuffer.Length;
                 compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt32)uncompressedBuffer.Length);
-                len = (int) destinationLength;
+                len = (int)destinationLength;
             }
             else // x64
             {
                 UInt64 destinationLength = (UInt64)compressedBuffer.Length;
                 compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt64)uncompressedBuffer.Length);
-                len = (int) destinationLength;
+                len = (int)destinationLength;
             }
 
             FileTable[fileIndex].CompressedSize = len;
@@ -524,9 +541,9 @@ namespace Reanimator
             FileTable[i].Directory = StringExists(dir);
         }
 
-        public int StringExists(string s)
+        public int StringExists(String s)
         {
-            for (int i = 0; i < _stringTable.Length; i++ )
+            for (int i = 0; i < _stringTable.Length; i++)
                 if (_stringTable[i] == s)
                     return i;
 

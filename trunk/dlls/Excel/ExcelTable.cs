@@ -91,7 +91,7 @@ namespace Reanimator.Excel
 
         private readonly byte[] _stringsBytes;
         public Hashtable Strings { get; private set; }
-        
+
         protected readonly List<object> tables;
 
         private readonly int[] _tableIndicies;
@@ -558,79 +558,79 @@ namespace Reanimator.Excel
                 offset++;
                 continue;
                 ////////////// temp fix /////////////////
-/*
+                /*
 
-                int flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                if (!CheckFlag(flag, 0x6873796D))
-                {
-                    offset -= 4;
-                    break;
-                }
+                                int flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                                if (!CheckFlag(flag, 0x6873796D))
+                                {
+                                    offset -= 4;
+                                    break;
+                                }
 
-                int unknown1 = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                if (unknown1 == 0x00)
-                {
-                    break;
-                }
+                                int unknown1 = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                                if (unknown1 == 0x00)
+                                {
+                                    break;
+                                }
 
-                int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                // this is really lazy and I couldn't be bothered trying to figure out how to get a *non-zero terminated* string out of a byte array
-                byte[] temp = new byte[byteCount + 1];
-                Buffer.BlockCopy(data, offset, temp, 0, byteCount);
-                String str = FileTools.ByteArrayToStringAnsi(temp, 0);
-                offset += byteCount;
+                                int byteCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                                // this is really lazy and I couldn't be bothered trying to figure out how to get a *non-zero terminated* string out of a byte array
+                                byte[] temp = new byte[byteCount + 1];
+                                Buffer.BlockCopy(data, offset, temp, 0, byteCount);
+                                String str = FileTools.ByteArrayToStringAnsi(temp, 0);
+                                offset += byteCount;
 
-                int unknown2 = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                int type = FileTools.ByteArrayTo<Int32>(data, ref offset); // 0x39 = single, 0x41 = has properties, 0x3C = property
-                int unknown3 = FileTools.ByteArrayTo<Int32>(data, ref offset);  // usually 0x05
-                int unknown4 = FileTools.ByteArrayTo<Int32>(data, ref offset);  // always 0x00?
-                int unknown5 = FileTools.ByteArrayTo<Int32>(data, ref offset);  // usually 0x04
-                int unknown6 = FileTools.ByteArrayTo<Int32>(data, ref offset);  // always 0x00?
+                                int unknown2 = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                                int type = FileTools.ByteArrayTo<Int32>(data, ref offset); // 0x39 = single, 0x41 = has properties, 0x3C = property
+                                int unknown3 = FileTools.ByteArrayTo<Int32>(data, ref offset);  // usually 0x05
+                                int unknown4 = FileTools.ByteArrayTo<Int32>(data, ref offset);  // always 0x00?
+                                int unknown5 = FileTools.ByteArrayTo<Int32>(data, ref offset);  // usually 0x04
+                                int unknown6 = FileTools.ByteArrayTo<Int32>(data, ref offset);  // always 0x00?
 
-                if (type == 0x39)
-                {
-                    continue;
-                }
+                                if (type == 0x39)
+                                {
+                                    continue;
+                                }
 
-                int id = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                attributeCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                totalAttributeCount = attributeCount;
+                                int id = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                                attributeCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                                totalAttributeCount = attributeCount;
 
-                if (type == 0x41)
-                {
-                    int attributeCountAgain = FileTools.ByteArrayTo<Int32>(data, ref offset); // ??
-                }
-                else if (type == 0x3C)
-                {
-                    if (str == "dam")
-                    {
-                        blockCount += 2;
-                    }
-                    else if (str == "dur")
-                    {
-                        blockCount++;
-                    }
+                                if (type == 0x41)
+                                {
+                                    int attributeCountAgain = FileTools.ByteArrayTo<Int32>(data, ref offset); // ??
+                                }
+                                else if (type == 0x3C)
+                                {
+                                    if (str == "dam")
+                                    {
+                                        blockCount += 2;
+                                    }
+                                    else if (str == "dur")
+                                    {
+                                        blockCount++;
+                                    }
 
-                    const int blockSize = 4 * sizeof(Int32);
-                    if (attributeCount == 0)
-                    {
-                        offset += blockCount * blockSize;
-                        continue;
-                    }
+                                    const int blockSize = 4 * sizeof(Int32);
+                                    if (attributeCount == 0)
+                                    {
+                                        offset += blockCount * blockSize;
+                                        continue;
+                                    }
 
-                    attributeCount--;
-                }
-                else
-                {
-                    throw new NotImplementedException("type not implemented!\ntype = " + type);
-                }
+                                    attributeCount--;
+                                }
+                                else
+                                {
+                                    throw new NotImplementedException("type not implemented!\ntype = " + type);
+                                }
 
-                int endInt = FileTools.ByteArrayTo<Int32>(data, ref offset);
-                if (endInt != 0x00)
-                {
-                    int breakpoint = 1;
-                }
- */
+                                int endInt = FileTools.ByteArrayTo<Int32>(data, ref offset);
+                                if (endInt != 0x00)
+                                {
+                                    int breakpoint = 1;
+                                }
+                 */
             }
 
         }
@@ -901,7 +901,7 @@ namespace Reanimator.Excel
                     // TODO check if writing str increases the byteOffset by strCharCount or by str.Length!!!
                 }
             }
-            
+
             // sort index #1
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex1.Length);

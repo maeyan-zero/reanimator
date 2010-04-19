@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Reanimator;
@@ -16,10 +11,10 @@ namespace launcher
 {
     public partial class Launcher : Form
     {
-        string _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
-        List<string> _availableCharacters;
+        readonly String _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
+        readonly List<String> _availableCharacters;
 
-        string _homepage = "http://www.hellgateaus.net";
+        const String Homepage = "http://www.hellgateaus.net";
 
         public Launcher()
         {
@@ -44,48 +39,63 @@ namespace launcher
         {
             DialogResult result = MessageBox.Show("Are you sure you want to revert all modifications?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes) return;
+
+            bool changeMade = false;
+
+            try
             {
-                bool change_made = false;
-
-                try
+                for (int i = 0; i < Index.FileNames.Length; i++)
                 {
-                    for (int i = 0; i < Index.FileNames.Length; i++)
+                    String filePath = String.Format("{0}\\data\\{1}.idx", Config.HglDir, Index.FileNames[i]);
+                    if (!File.Exists(filePath))
                     {
-                        FileStream stream = new FileStream(Config.HglDir + "\\data\\" + Index.FileNames[i] + ".idx", FileMode.Open);
-                        Index index = new Index(stream);
-
-                        if (index.Modified)
-                        {
-                            if (index.Restore() == false)
-                            {
-                                throw new Exception("Problem cleaning file: " + Index.FileNames[i]);
-                            }
-                            change_made = true;
-                        }
-                        index.Dispose();
-                        stream.Dispose();
+                        MessageBox.Show("Index file not found!\n" + filePath, "Warning", MessageBoxButtons.OK,
+                                        MessageBoxIcon.Warning);
+                        continue;
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
 
-                if (change_made == true)
-                {
-                    MessageBox.Show("All modifications have been successfully removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Index index;
+                    try
+                    {
+                        index = new Index(filePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Failed to load index file!\n\n" + ex, "Error", MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                        continue;
+                    }
+
+                    if (index.Modified)
+                    {
+                        if (index.Restore() == false)
+                        {
+                            throw new Exception("Problem cleaning file: " + Index.FileNames[i]);
+                        }
+                        changeMade = true;
+                    }
+                    index.Dispose();
                 }
-                else
-                {
-                    MessageBox.Show("The installation already appears clean.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+            if (changeMade)
+            {
+                MessageBox.Show("All modifications have been successfully removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("The installation already appears clean.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -100,7 +110,7 @@ namespace launcher
                             "Developed by Maeyan, Alex2069, Kite & Malachor." + Environment.NewLine +
                             "Artwork by lexsoOr, Music by ..." + Environment.NewLine +
                             Environment.NewLine +
-                            "Visit us at " + _homepage + " " + Environment.NewLine +
+                            "Visit us at " + Homepage + " " + Environment.NewLine +
                             "Contact maeyan.zero@gmail.com for info.",
                             "HellgateAus.net Launcher 2038", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -131,8 +141,8 @@ namespace launcher
             {
                 if (characterCombo.SelectedIndex > 0)
                 {
-                    string characterToLoad = _characterFolder + @"\" + characterCombo.SelectedItem + @".hg1";
-                    string arguments = "-singleplayer -load\"" + characterToLoad +"\"";
+                    String characterToLoad = _characterFolder + @"\" + characterCombo.SelectedItem + @".hg1";
+                    String arguments = "-singleplayer -load\"" + characterToLoad + "\"";
 
                     Process.Start(Config.GameClientPath, arguments);
                 }
@@ -143,7 +153,7 @@ namespace launcher
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Failed to start game at:\n" + Config.GameClientPath + "\n\n" + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to start game at:\n" + Config.GameClientPath + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -172,18 +182,18 @@ namespace launcher
         private void p_homePageLink_Click(object sender, EventArgs e)
         {
             MinimizeWindow();
-            Process.Start(_homepage);
+            Process.Start(Homepage);
         }
 
         private void MinimizeWindow()
         {
             //minimizes the window to prevent multiple clicks on the launch/openHomePage button
-            this.WindowState = FormWindowState.Minimized;
+            WindowState = FormWindowState.Minimized;
         }
 
         private void p_openHomePage_MouseEnter(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = "Visit it at " + _homepage;
+            toolStripStatusLabel1.Text = "Visit it at " + Homepage;
         }
 
         private void p_openHomePage_MouseLeave(object sender, EventArgs e)
@@ -199,12 +209,12 @@ namespace launcher
 
         private void itemTransferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-         // ItemTransferForm transfer = new ItemTransferForm(ref tableDataSet, ref excelTables);
+            // ItemTransferForm transfer = new ItemTransferForm(ref tableDataSet, ref excelTables);
             TableDataSet set = new TableDataSet();
-            Reanimator.Excel.ExcelTables tables = new Reanimator.Excel.ExcelTables(new byte[] {});
+            Reanimator.Excel.ExcelTables tables = new Reanimator.Excel.ExcelTables(new byte[] { });
             ItemTransferForm transfer = new ItemTransferForm(ref set, ref tables);
             transfer.ShowDialog(this);
-            
+
             //Transfer transfer = new Transfer();
             //transfer.ShowDialog();
         }
