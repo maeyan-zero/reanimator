@@ -133,6 +133,13 @@ namespace Reanimator
                                     // Excel Table FileIndex
                                     Index.FileIndex fileIndex =
                                         index[Index.LatestPatch].FileTable[Index.ExcelTablesIndex];
+                                    if (String.IsNullOrEmpty(fileIndex.DirectoryString))
+                                    {
+                                        MessageBox.Show("File not found in data file!\nFile: " + file.id, "Error",
+                                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        continue;
+                                    }
+
                                     // Extract and initialize.
                                     excel_tables = new ExcelTables(index[Index.LatestPatch].ReadDataFile(fileIndex));
                                 }
@@ -563,42 +570,42 @@ namespace Reanimator
             }
         }
 
-        public string getTitle(int i)
+        public string GetTitle(int i)
         {
             return revival.modification[i].title;
         }
 
-        public string getVersion(int i)
+        public string GetVersion(int i)
         {
             return revival.modification[i].version;
         }
 
-        public string getAuthor(int i)
+        public string GetAuthor(int i)
         {
             return revival.modification[i].author;
         }
 
-        public string getUrl(int i)
+        public string GetUrl(int i)
         {
             return revival.modification[i].url;
         }
 
-        public string getUsage(int i)
+        public string GetUsage(int i)
         {
             return revival.modification[i].type;
         }
 
-        public string getDescription(int i)
+        public string GetDescription(int i)
         {
             return revival.modification[i].description;
         }
 
-        public bool getEnabled(int i)
+        public bool GetEnabled(int i)
         {
             return revival.modification[i].type == "required" ? true : false;
         }
 
-        public void setApply(int i, bool use)
+        public void SetApply(int i, bool use)
         {
             revival.modification[i].apply = use;
         }

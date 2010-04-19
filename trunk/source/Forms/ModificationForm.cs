@@ -20,12 +20,12 @@ namespace Reanimator.Forms
         private void checkedListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             pictureBox.Image = mod.getCaption(checkedListBox.SelectedIndex);
-            titleLabel.Text = mod.getTitle(checkedListBox.SelectedIndex);
-            authorLabel.Text = mod.getAuthor(checkedListBox.SelectedIndex);
-            versionLabel.Text = mod.getVersion(checkedListBox.SelectedIndex);
-            urlLabel.Text = mod.getUrl(checkedListBox.SelectedIndex);
-            typeLabel.Text = mod.getUsage(checkedListBox.SelectedIndex);
-            descriptionText.Text = mod.getDescription(checkedListBox.SelectedIndex);
+            titleLabel.Text = mod.GetTitle(checkedListBox.SelectedIndex);
+            authorLabel.Text = mod.GetAuthor(checkedListBox.SelectedIndex);
+            versionLabel.Text = mod.GetVersion(checkedListBox.SelectedIndex);
+            urlLabel.Text = mod.GetUrl(checkedListBox.SelectedIndex);
+            typeLabel.Text = mod.GetUsage(checkedListBox.SelectedIndex);
+            descriptionText.Text = mod.GetDescription(checkedListBox.SelectedIndex);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,11 +37,11 @@ namespace Reanimator.Forms
         {
             if (e.CurrentValue == CheckState.Checked)
             {
-                mod.setApply(checkedListBox.Items.Count - 1, true);
+                mod.SetApply(checkedListBox.Items.Count - 1, true);
             }
             else
             {
-                mod.setApply(checkedListBox.Items.Count - 1, false);
+                mod.SetApply(checkedListBox.Items.Count - 1, false);
             }
         }
 
@@ -82,13 +82,13 @@ namespace Reanimator.Forms
                 checkedListBox.Items.Clear();
                 for (int i = 0; i < mod.Length; i++)
                 {
-                    checkedListBox.Items.Add(mod.getTitle(i), mod.getEnabled(i));
-                    mod.setApply(i, mod.getEnabled(i));
-                    if (mod.getUsage(i) == "required")
+                    checkedListBox.Items.Add(mod.GetTitle(i), mod.GetEnabled(i));
+                    mod.SetApply(i, mod.GetEnabled(i));
+                    if (mod.GetUsage(i) == "required")
                     {
                         checkedListBox.SetItemCheckState(i, CheckState.Indeterminate);
                     }
-                    if (mod.getUsage(i) == "recommended")
+                    if (mod.GetUsage(i) == "recommended")
                     {
                         checkedListBox.SetItemCheckState(i, CheckState.Checked);
                     }
