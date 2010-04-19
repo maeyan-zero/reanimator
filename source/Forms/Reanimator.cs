@@ -189,30 +189,30 @@ namespace Reanimator
             }
         }
 
-        private void OpenFileIdx(string szFileName)
+        private void OpenFileIdx(String fileName)
         {
-            if (_indexFilesOpen.Contains(szFileName)) return;
+            if (_indexFilesOpen.Contains(fileName)) return;
 
-            FileStream indexFile;
+            Index index;
             try
             {
-                indexFile = new FileStream(szFileName, FileMode.Open);
+                index = new Index(fileName);
             }
             catch (Exception e)
             {
-                MessageBox.Show("Failed to open file: " + szFileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            Index index = new Index(indexFile);
+
             TableForm indexExplorer = new TableForm(index)
                                           {
-                                              dataGridView = {DataSource = index.FileTable}
+                                              dataGridView = {DataSource = index.FileTable},
+                                              MdiParent = this
                                           };
-            indexExplorer.Text += ": " + szFileName;
-            indexExplorer.MdiParent = this;
+            indexExplorer.Text += ": " + fileName;
             indexExplorer.Show();
 
-            _indexFilesOpen.Add(indexFile.Name);
+            _indexFilesOpen.Add(fileName);
 
             return;
         }
