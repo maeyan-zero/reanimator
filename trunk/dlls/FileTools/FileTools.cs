@@ -106,11 +106,10 @@ namespace Reanimator
                         continue;
                     }
 
-                    if (byteArray[i + j] != searchFor[j])
-                    {
-                        found = false;
-                        break;
-                    }
+                    if (byteArray[i + j] == searchFor[j]) continue;
+
+                    found = false;
+                    break;
                 }
 
                 if (found)
@@ -192,7 +191,7 @@ namespace Reanimator
 
             Buffer.BlockCopy(toWriteBytes, 0, buffer, offset, lengthToWrite);
 
-            if (insert && insertBuffer != null)
+            if (insert)
             {
                 Buffer.BlockCopy(insertBuffer, 0, buffer, offset + lengthToWrite, insertBuffer.Length);
             }
@@ -204,7 +203,7 @@ namespace Reanimator
         {
             for (int i = 0; i < destination.Length; i++)
             {
-                destination[i] = (T)FileTools.ByteArrayToStructure(binReader.ReadBytes(Marshal.SizeOf(typeof(T))), typeof(T), 0);
+                destination[i] = (T)ByteArrayToStructure(binReader.ReadBytes(Marshal.SizeOf(typeof(T))), typeof(T), 0);
             }
         }
 
@@ -217,7 +216,7 @@ namespace Reanimator
                 if (array[i] is IList<T>)
                 {
                     //Recursively convert nested arrays to string
-                    outputString += ArrayToStringGeneric<T>((IList<T>)array[i], delimeter);
+                    outputString += ArrayToStringGeneric((IList<T>)array[i], delimeter);
                 }
                 else
                 {

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Reanimator.Excel
@@ -13,7 +10,7 @@ namespace Reanimator.Excel
         {
             TableHeader header;
 
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelOutput(IsStringOffset = true)]
             public Int32 mode;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
             byte[] undefined1;
@@ -37,15 +34,15 @@ namespace Reanimator.Excel
             public Int32 clearStateEnd;//idx
             public Int32 doEvent;//bool
             public Int32 endEvent;//bool
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelOutput(IsStringOffset = true)]
             public Int32 doFunction;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
             public Int32[] undefined2;
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelOutput(IsStringOffset = true)]
             public Int32 clearFunction;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
             public Int32[] undefined3;
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelOutput(IsStringOffset = true)]
             public Int32 endFunction;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
             public Int32[] undefined4;

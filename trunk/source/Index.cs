@@ -110,60 +110,53 @@ namespace Reanimator
             public const UInt32 Info = 0x6867696F; // 'oigh'
         }
 
-        Int32 structCount;         // offset 4
-        Int32 fileCount;           // offset 8
-        Int32 stringCount;         // offset 16
-        Int32 characterCount;      // offset 20
+        Int32 _structCount;                     // offset 4
+        readonly Int32 _fileCount;              // offset 8
+        Int32 _stringCount;                     // offset 16
+        readonly Int32 _characterCount;         // offset 20
 
-        int stringDataOffset;
-        int stringLengthOffset;
-        int fileDataOffset;
+        readonly int _stringDataOffset;
+        readonly int _stringLengthOffset;
+        readonly int _fileDataOffset;
 
-        const int stringStructLength = 6;
-        const int fileStructLength = 80;
+        const int StringStructLength = 6;
+        const int FileStructLength = 80;
 
         readonly byte[] _buffer;
-        string[] stringTable;
-        Int32[] stringTableUnknowns;
+        string[] _stringTable;
+        Int32[] _stringTableUnknowns;
 
-        const string affix = "backup\\";
+        const string Affix = "backup\\";
 
-        FileStream indexFile;
-        FileStream datFile;
+        readonly FileStream _indexFile;
 
-        public FileStream DataFile
-        {
-            get
-            {
-                return datFile;
-            }
-        }
+        public FileStream DataFile { get; private set; }
 
         public class FileIndex
         {
             [StructLayout(LayoutKind.Sequential, Pack = 1)]
             public class FileIndexStruct
             {
-                public UInt32 startToken;
-                public Int32 unknown1_1;                    // 0    0x00
-                public Int32 unknown1_2;                    // 4    0x04
-                public Int32 dataOffset;                    // 8    0x08
-                public Int32 null1;                         // 12   0x0C
-                public Int32 uncompressedSize;              // 16   0x10
-                public Int32 compressedSize;                // 20   0x14
-                public Int32 null2;                         // 24   0x18
-                public Int32 directoryArrayPosition;        // 28   0x1C
-                public Int32 filenameArrayPosition;         // 32   0x20
-                public Int32 unknown2_1;                    // 36   0x24            Can't be null             .text:000000014004958B cmp     qword ptr [rdi+10h], 0 -> jz      loc_140049402   ; Jump if Zero
-                public Int32 unknown2_2;                    // 40   0x28
-                public Int32 unknown2_3;                    // 44   0x2C
-                public Int32 unknown2_4;                    // 48   0x30
-                public Int32 null3_1;                       // 52   0x34
-                public Int32 null3_2;                       // 56   0x38
-                public Int32 null3_3;                       // 60   0x3C
-                public Int32 first4BytesOfFile;             // 64   0x40
-                public Int32 second4BytesOfFile;            // 68   0x44
-                public UInt32 endToken;
+                public UInt32 StartToken;
+                public Int32 Unknown11;                     // 0    0x00
+                public Int32 Unknown12;                     // 4    0x04
+                public Int32 DataOffset;                    // 8    0x08
+                public Int32 Null1;                         // 12   0x0C
+                public Int32 UncompressedSize;              // 16   0x10
+                public Int32 CompressedSize;                // 20   0x14
+                public Int32 Null2;                         // 24   0x18
+                public Int32 DirectoryArrayPosition;        // 28   0x1C
+                public Int32 FilenameArrayPosition;         // 32   0x20
+                public Int32 Unknown21;                     // 36   0x24            Can't be null             .text:000000014004958B cmp     qword ptr [rdi+10h], 0 -> jz      loc_140049402   ; Jump if Zero
+                public Int32 Unknown22;                     // 40   0x28
+                public Int32 Unknown23;                     // 44   0x2C
+                public Int32 Unknown24;                     // 48   0x30
+                public Int32 Null31;                        // 52   0x34
+                public Int32 Null32;                        // 56   0x38
+                public Int32 Null33;                        // 60   0x3C
+                public Int32 First4BytesOfFile;             // 64   0x40
+                public Int32 Second4BytesOfFile;            // 68   0x44
+                public UInt32 EndToken;
             };
 
             [Browsable(false)]
@@ -171,33 +164,33 @@ namespace Reanimator
 
             public int DataOffset
             {
-                get { return FileStruct.dataOffset; }
-                set { FileStruct.dataOffset = value; }
+                get { return FileStruct.DataOffset; }
+                set { FileStruct.DataOffset = value; }
             }
 
             public int UncompressedSize
             {
-                get { return FileStruct.uncompressedSize; }
-                set { FileStruct.uncompressedSize = value; }
+                get { return FileStruct.UncompressedSize; }
+                set { FileStruct.UncompressedSize = value; }
             }
             public int CompressedSize
             {
-                get { return FileStruct.compressedSize; }
-                set { FileStruct.compressedSize = value; }
+                get { return FileStruct.CompressedSize; }
+                set { FileStruct.CompressedSize = value; }
             }
 
             [Browsable(false)]
             public int Directory
             {
-                get { return FileStruct.directoryArrayPosition; }
-                set { FileStruct.directoryArrayPosition = value; }
+                get { return FileStruct.DirectoryArrayPosition; }
+                set { FileStruct.DirectoryArrayPosition = value; }
             }
             public string DirectoryString { get; set; }
 
             [Browsable(false)]
             public int FileName
             {
-                get { return FileStruct.filenameArrayPosition; }
+                get { return FileStruct.FilenameArrayPosition; }
             }
             public string FileNameString { get; set; }
 
@@ -205,7 +198,7 @@ namespace Reanimator
             {
                 get
                 {
-                    return DirectoryString.Contains(affix);
+                    return DirectoryString.Contains(Affix);
                 }
             }
         }
@@ -229,26 +222,26 @@ namespace Reanimator
         {
             get
             {
-                int n = indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1;
-                return indexFile.Name.Substring(n, indexFile.Name.LastIndexOf('.') - n);
+                int n = _indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1;
+                return _indexFile.Name.Substring(n, _indexFile.Name.LastIndexOf('.') - n);
             }
         }
 
         public String FileDirectory
         {
-            get { return indexFile.Name.Substring(0, indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1); }
+            get { return _indexFile.Name.Substring(0, _indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1); }
         }
 
         public bool DatFileOpen
         {
-            get { return datFile == null ? false : true; }
+            get { return DataFile == null ? false : true; }
         }
 
         public bool Modified { get; private set; }
 
         public Index(FileStream file)
         {
-            indexFile = file;
+            _indexFile = file;
             _buffer = FileTools.StreamToByteArray(file);
 
             Crypt.Decrypt(_buffer);
@@ -257,14 +250,14 @@ namespace Reanimator
             FileTools.WriteFile(FileName + ".idx", _buffer);
 #endif
 
-            structCount = BitConverter.ToInt32(_buffer, 4);
-            fileCount = BitConverter.ToInt32(_buffer, 8);
-            stringCount = BitConverter.ToInt32(_buffer, 16);
-            characterCount = BitConverter.ToInt32(_buffer, 20);
+            _structCount = BitConverter.ToInt32(_buffer, 4);
+            _fileCount = BitConverter.ToInt32(_buffer, 8);
+            _stringCount = BitConverter.ToInt32(_buffer, 16);
+            _characterCount = BitConverter.ToInt32(_buffer, 20);
 
-            stringDataOffset = 24;
-            stringLengthOffset = stringDataOffset + characterCount + sizeof(UInt32);
-            fileDataOffset = stringLengthOffset + (stringStructLength * stringCount) + sizeof(UInt32);
+            _stringDataOffset = 24;
+            _stringLengthOffset = _stringDataOffset + _characterCount + sizeof(UInt32);
+            _fileDataOffset = _stringLengthOffset + (StringStructLength * _stringCount) + sizeof(UInt32);
 
             InitializeStringTable();
             InitializeFileTable();
@@ -276,7 +269,7 @@ namespace Reanimator
         {
             foreach (FileIndex file in FileTable)
             {
-                if (!file.DirectoryString.Contains(affix)) continue;
+                if (!file.DirectoryString.Contains(Affix)) continue;
 
                 Modified = true;
                 break;
@@ -285,18 +278,18 @@ namespace Reanimator
 
         void InitializeStringTable()
         {
-            stringTable = new String[stringCount];
-            stringTableUnknowns = new Int32[stringCount];
+            _stringTable = new String[_stringCount];
+            _stringTableUnknowns = new Int32[_stringCount];
 
             int stringByteOffset = 24;
 
-            for (int i = 0; i < stringTable.Length; i++)
+            for (int i = 0; i < _stringTable.Length; i++)
             {
-                int bufferOffset = stringLengthOffset + (i * stringStructLength);
+                int bufferOffset = _stringLengthOffset + (i * StringStructLength);
                 short stringLength = BitConverter.ToInt16(_buffer, bufferOffset);
 
-                stringTable[i] = FileTools.ByteArrayToStringAnsi(_buffer, stringByteOffset);
-                stringTableUnknowns[i] = BitConverter.ToInt32(_buffer, bufferOffset + sizeof(Int16));
+                _stringTable[i] = FileTools.ByteArrayToStringAnsi(_buffer, stringByteOffset);
+                _stringTableUnknowns[i] = BitConverter.ToInt32(_buffer, bufferOffset + sizeof(Int16));
 
                 stringByteOffset += stringLength + 1;
             }
@@ -304,15 +297,20 @@ namespace Reanimator
 
         void InitializeFileTable()
         {
-            FileTable = new FileIndex[fileCount];
+            FileTable = new FileIndex[_fileCount];
 
-            for (int i = 0; i < fileCount; i++)
+            for (int i = 0; i < _fileCount; i++)
             {
-                FileIndex fileIndex = new FileIndex();
-                fileIndex.FileStruct = (FileIndex.FileIndexStruct)FileTools.ByteArrayToStructure(_buffer, typeof(FileIndex.FileIndexStruct),
-                                                                                                        fileDataOffset + i * fileStructLength);
-                fileIndex.DirectoryString = stringTable[fileIndex.Directory];
-                fileIndex.FileNameString = stringTable[fileIndex.FileName];
+                FileIndex fileIndex = new FileIndex
+                                          {
+                                              FileStruct =
+                                                  (FileIndex.FileIndexStruct)
+                                                  FileTools.ByteArrayToStructure(_buffer,
+                                                                                 typeof (FileIndex.FileIndexStruct),
+                                                                                 _fileDataOffset + i*FileStructLength)
+                                          };
+                fileIndex.DirectoryString = _stringTable[fileIndex.Directory];
+                fileIndex.FileNameString = _stringTable[fileIndex.FileName];
 
                 FileTable[i] = fileIndex;
             }
@@ -334,11 +332,11 @@ namespace Reanimator
 
         public bool OpenAccompanyingDat()
         {
-            if (datFile == null)
+            if (DataFile == null)
             {
                 try
                 {
-                    datFile = new FileStream(FileDirectory + FileName + ".dat", FileMode.Open);
+                    DataFile = new FileStream(FileDirectory + FileName + ".dat", FileMode.Open);
                 }
                 catch (Exception)
                 {
@@ -356,15 +354,15 @@ namespace Reanimator
                 return null;
             }
 
-            int result = -1;
+            int result;
             byte[] destBuffer = new byte[file.UncompressedSize];
-            datFile.Seek(file.DataOffset, SeekOrigin.Begin);
+            DataFile.Seek(file.DataOffset, SeekOrigin.Begin);
 
             if (file.CompressedSize > 0)
             {
                 byte[] srcBuffer = new byte[file.CompressedSize];
                 
-                datFile.Read(srcBuffer, 0, srcBuffer.Length);
+                DataFile.Read(srcBuffer, 0, srcBuffer.Length);
                 if (IntPtr.Size == 4)
                 {
                     uint len = (uint)file.UncompressedSize;
@@ -383,7 +381,7 @@ namespace Reanimator
             }
             else
             {
-                result = datFile.Read(destBuffer, 0, file.UncompressedSize);
+                result = DataFile.Read(destBuffer, 0, file.UncompressedSize);
 
                 if (result != file.UncompressedSize)
                 {
@@ -394,7 +392,7 @@ namespace Reanimator
             return destBuffer;
         }
 
-        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, int file_index, bool writeIndex)
+        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, int fileIndex, bool writeIndex)
         {
             // New Entry
             //FileIndex newIndex = index;
@@ -402,20 +400,31 @@ namespace Reanimator
             if (DatFileOpen == false) OpenAccompanyingDat();
             DataFile.Seek(0, SeekOrigin.End);
 
-
             if (!doCompress) return;
 
             byte[] compressedBuffer = new byte[uncompressedBuffer.Length];
-            UInt64 len = (UInt64)compressedBuffer.Length;
-            compress(compressedBuffer, ref len, uncompressedBuffer, (UInt64)uncompressedBuffer.Length);
 
-            this.FileTable[file_index].CompressedSize = (int)len;
-            this.FileTable[file_index].DataOffset = (int)DataFile.Position;
-            this.FileTable[file_index].UncompressedSize = uncompressedBuffer.Length;
+            int len;
+            if (IntPtr.Size == 4) // x86
+            {
+                UInt32 destinationLength = (UInt32)compressedBuffer.Length;
+                compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt32)uncompressedBuffer.Length);
+                len = (int) destinationLength;
+            }
+            else // x64
+            {
+                UInt64 destinationLength = (UInt64)compressedBuffer.Length;
+                compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt64)uncompressedBuffer.Length);
+                len = (int) destinationLength;
+            }
+
+            FileTable[fileIndex].CompressedSize = len;
+            FileTable[fileIndex].DataOffset = (int)DataFile.Position;
+            FileTable[fileIndex].UncompressedSize = uncompressedBuffer.Length;
             //int i = 1;
-            DataFile.Write(compressedBuffer, 0, (int)len);
+            DataFile.Write(compressedBuffer, 0, len);
             DataFile.Close();
-            this.Modified = true;
+            Modified = true;
         }
 
         public byte[] GenerateIndexFile()
@@ -424,16 +433,17 @@ namespace Reanimator
             int offset = 0;
 
             // main header
+            const Int32 version = 4;
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Head);
-            FileTools.WriteToBuffer(ref buffer, ref offset, (Int32)4);
-            FileTools.WriteToBuffer(ref buffer, ref offset, this.fileCount);
+            FileTools.WriteToBuffer(ref buffer, ref offset, version);
+            FileTools.WriteToBuffer(ref buffer, ref offset, _fileCount);
 
             // string block
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
-            FileTools.WriteToBuffer(ref buffer, ref offset, this.stringCount);
+            FileTools.WriteToBuffer(ref buffer, ref offset, _stringCount);
             int stringByteCountOffset = offset;
             offset += 4;
-            foreach (String str in this.stringTable)
+            foreach (String str in _stringTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(str));
                 offset++; // \0
@@ -442,28 +452,28 @@ namespace Reanimator
 
             // string data
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
-            int i = 0;
-            foreach (String str in stringTable)
+            //int i = 0;
+            foreach (String str in _stringTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
                 offset += 4; // unknown  -  not required
-                //FileTools.WriteToBuffer(ref _buffer, ref offset, stringTableUnknowns[i]);
-                i++;
+                //FileTools.WriteToBuffer(ref _buffer, ref offset, _stringTableUnknowns[i]);
+                //i++;
             }
 
             // file block
             const UInt64 foo = 0xDEADBEEFDEADBEEF;
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
-            i = 0;
-            foreach (FileIndex fileIndex in this.FileTable)
+            //i = 0;
+            foreach (FileIndex fileIndex in FileTable)
             {
                 // this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
 
                 FileTools.WriteToBuffer(ref buffer, ref offset, foo);
-                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_1);
-                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown1_2); // game freezes if not correct value
+                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown11);
+                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown12); // game freezes if not correct value
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);
@@ -472,17 +482,17 @@ namespace Reanimator
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Directory);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileName);
                 //FileTools.WriteToBuffer(ref _buffer, ref offset, (UInt32)1); // game clears .idx and .dat if null
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_1);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_2);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_3);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.unknown2_4);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown21);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown22);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown23);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown24);
                 //offset += 12; // unknown  -  not required
                 offset += 12; // null
                 //offset += 8; // first 8 bytes  -  not required
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.first4BytesOfFile);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.second4BytesOfFile);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.First4BytesOfFile);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Second4BytesOfFile);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
-                i++;
+                //i++;
             }
 
             byte[] returnBuffer = new byte[offset];
@@ -492,17 +502,17 @@ namespace Reanimator
 
         public void AppendDirectorySuffix(int i)
         {
-            string dir = affix + stringTable[FileTable[i].Directory];
+            string dir = Affix + _stringTable[FileTable[i].Directory];
             int index = StringExists(dir);
             // If the directory doesn't exist, add it.
             if (index == -1)
             {
-                index = stringTable.Length;
+                index = _stringTable.Length;
                 string[] buffer = new string[index + 1];
-                stringTable.CopyTo(buffer, 0);
-                buffer[index] = affix + stringTable[FileTable[i].Directory];
-                stringTable = buffer;
-                stringCount++;
+                _stringTable.CopyTo(buffer, 0);
+                buffer[index] = Affix + _stringTable[FileTable[i].Directory];
+                _stringTable = buffer;
+                _stringCount++;
             }
             FileTable[i].Directory = index;
             Modified = true;
@@ -510,14 +520,14 @@ namespace Reanimator
 
         public void RemoveDirectorySuffix(int i)
         {
-            string dir = FileTable[i].DirectoryString.Remove(0, affix.Length);
+            string dir = FileTable[i].DirectoryString.Remove(0, Affix.Length);
             FileTable[i].Directory = StringExists(dir);
         }
 
         public int StringExists(string s)
         {
-            for (int i = 0; i < stringTable.Length; i++ )
-                if (stringTable[i] == s)
+            for (int i = 0; i < _stringTable.Length; i++ )
+                if (_stringTable[i] == s)
                     return i;
 
             return -1;
@@ -527,27 +537,26 @@ namespace Reanimator
         {
             for (int i = 0; i < FileTable.Length; i++)
             {
-                if (!FileTable[i].DirectoryString.Contains(affix)) continue;
+                if (!FileTable[i].DirectoryString.Contains(Affix)) continue;
 
-                string original = FileTable[i].DirectoryString.Remove(0, affix.Length);
-                for (int j = 0; j < stringTable.Length; j++)
+                string original = FileTable[i].DirectoryString.Remove(0, Affix.Length);
+                for (int j = 0; j < _stringTable.Length; j++)
                 {
-                    if (stringTable[j] == original)
-                    {
-                        FileTable[i].Directory = j;
-                        break;
-                    }
+                    if (_stringTable[j] != original) continue;
+
+                    FileTable[i].Directory = j;
+                    break;
                 }
             }
 
             byte[] buffer = GenerateIndexFile();
             Crypt.Encrypt(buffer);
 
-            indexFile.Dispose();
+            _indexFile.Dispose();
 
             try
             {
-                FileStream fs = new FileStream(FileDirectory + "\\" + this.FileName + ".idx", FileMode.OpenOrCreate);
+                FileStream fs = new FileStream(FileDirectory + "\\" + FileName + ".idx", FileMode.OpenOrCreate);
                 fs.Flush();
                 fs.Write(buffer, 0, buffer.Length);
                 fs.Close();
@@ -562,13 +571,13 @@ namespace Reanimator
 
         public void Dispose()
         {
-            if (indexFile != null)
+            if (_indexFile != null)
             {
-                indexFile.Dispose();
+                _indexFile.Dispose();
             }
-            if (datFile != null)
+            if (DataFile != null)
             {
-                datFile.Dispose();
+                DataFile.Dispose();
             }
         }
     }

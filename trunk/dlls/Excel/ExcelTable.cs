@@ -267,6 +267,10 @@ namespace Reanimator.Excel
             offset += Marshal.SizeOf(typeof(ExcelHeader));
             //Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", _excelHeader.Unknown161, _excelHeader.Unknown162, _excelHeader.Unknown163, _excelHeader.Unknown164, _excelHeader.Unknown165, _excelHeader.Unknown166, _excelHeader.Unknown321, _excelHeader.Unknown322));
 
+            if (_excelHeader.StructureId == 1234056220)
+            {
+                int bp = 1;
+            }
 
             // strings block
             token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);

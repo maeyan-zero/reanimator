@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Reanimator.Excel;
-using System.IO;
 
 namespace Reanimator.Forms
 {
@@ -38,7 +30,7 @@ namespace Reanimator.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void checkedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -68,41 +60,44 @@ namespace Reanimator.Forms
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Modification Files (*.mod, *.xml)|*.mod;*.xml|All Files (*.*)|*.*";
+            OpenFileDialog openFileDialog = new OpenFileDialog
+                                                {
+                                                    Filter =
+                                                        "Modification Files (*.mod, *.xml)|*.mod;*.xml|All Files (*.*)|*.*"
+                                                };
 
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml")))
+            if (openFileDialog.ShowDialog(this) != DialogResult.OK ||
+                (!openFileDialog.FileName.EndsWith("mod") && !openFileDialog.FileName.EndsWith("xml"))) return;
+
+            if (RevivalMod.Parse(openFileDialog.FileName))
             {
-                if (RevivalMod.Parse(openFileDialog.FileName))
+                if (mod == null)
                 {
-                    if (mod == null)
-                    {
-                        mod = new RevivalMod(openFileDialog.FileName);
-                    }
-                    else
-                    {
-                        mod.Append(new RevivalMod(openFileDialog.FileName));
-                    }
-                    checkedListBox.Items.Clear();
-                    for (int i = 0; i < mod.Length; i++)
-                    {
-                        checkedListBox.Items.Add(mod.getTitle(i), mod.getEnabled(i));
-                        mod.setApply(i, mod.getEnabled(i));
-                        if (mod.getUsage(i) == "required")
-                        {
-                            checkedListBox.SetItemCheckState(i, CheckState.Indeterminate);
-                        }
-                        if (mod.getUsage(i) == "recommended")
-                        {
-                            checkedListBox.SetItemCheckState(i, CheckState.Checked);
-                        }
-                    }
-                    checkedListBox.SelectedIndex = 0;
+                    mod = new RevivalMod(openFileDialog.FileName);
                 }
                 else
                 {
-                    MessageBox.Show("Invalid mod. Check syntax and try again.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    mod.Append(new RevivalMod(openFileDialog.FileName));
                 }
+                checkedListBox.Items.Clear();
+                for (int i = 0; i < mod.Length; i++)
+                {
+                    checkedListBox.Items.Add(mod.getTitle(i), mod.getEnabled(i));
+                    mod.setApply(i, mod.getEnabled(i));
+                    if (mod.getUsage(i) == "required")
+                    {
+                        checkedListBox.SetItemCheckState(i, CheckState.Indeterminate);
+                    }
+                    if (mod.getUsage(i) == "recommended")
+                    {
+                        checkedListBox.SetItemCheckState(i, CheckState.Checked);
+                    }
+                }
+                checkedListBox.SelectedIndex = 0;
+            }
+            else
+            {
+                MessageBox.Show("Invalid mod. Check syntax and try again.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
