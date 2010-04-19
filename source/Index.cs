@@ -172,15 +172,18 @@ namespace Reanimator
             public int DataOffset
             {
                 get { return FileStruct.dataOffset; }
+                set { FileStruct.dataOffset = value; }
             }
 
             public int UncompressedSize
             {
                 get { return FileStruct.uncompressedSize; }
+                set { FileStruct.uncompressedSize = value; }
             }
             public int CompressedSize
             {
                 get { return FileStruct.compressedSize; }
+                set { FileStruct.compressedSize = value; }
             }
 
             [Browsable(false)]
@@ -391,10 +394,10 @@ namespace Reanimator
             return destBuffer;
         }
 
-        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, FileIndex index, bool writeIndex)
+        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, int file_index, bool writeIndex)
         {
             // New Entry
-            FileIndex newIndex = index;
+            //FileIndex newIndex = index;
             // Move pointer to the end of the stream.
             if (DatFileOpen == false) OpenAccompanyingDat();
             DataFile.Seek(0, SeekOrigin.End);
@@ -403,10 +406,16 @@ namespace Reanimator
             if (!doCompress) return;
 
             byte[] compressedBuffer = new byte[uncompressedBuffer.Length];
-            uint len = (uint)compressedBuffer.Length;
-            compress(compressedBuffer, ref len, uncompressedBuffer, (uint)uncompressedBuffer.Length);
+            UInt64 len = (UInt64)compressedBuffer.Length;
+            compress(compressedBuffer, ref len, uncompressedBuffer, (UInt64)uncompressedBuffer.Length);
+
+            this.FileTable[file_index].CompressedSize = (int)len;
+            this.FileTable[file_index].DataOffset = (int)DataFile.Position;
+            this.FileTable[file_index].UncompressedSize = uncompressedBuffer.Length;
             //int i = 1;
-            //DataFile.Write(compressed_buffer, 0, len);
+            DataFile.Write(compressedBuffer, 0, (int)len);
+            DataFile.Close();
+            this.Modified = true;
         }
 
         public byte[] GenerateIndexFile()
