@@ -464,20 +464,23 @@ namespace Reanimator.Excel
                 catch (ExcelTableException e)
                 {
                     MessageBox.Show("Unexpected parsing error!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    AllTablesLoaded = false;
                 }
                 catch (BadHeaderFlag e)
                 {
                     MessageBox.Show("File data tokens not aligned!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    AllTablesLoaded = false;
                 }
                 catch (Exception e)
                 {
                     MessageBox.Show("Failed to open file for reading!\n\n" + filePath + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                finally
-                {
-                    Debug.WriteLine("Debug Output - File failed to parse: " + filePath);
                     AllTablesLoaded = false;
                 }
+                //finally
+                //{
+                //    Debug.WriteLine("Debug Output - File failed to parse: " + filePath);
+                //    AllTablesLoaded = false;
+                //}
             }
 
             _loadedTables.Sort();
