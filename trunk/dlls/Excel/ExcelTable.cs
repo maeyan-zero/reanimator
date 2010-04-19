@@ -9,7 +9,12 @@ namespace Reanimator.Excel
 {
     public class BadHeaderFlag : Exception
     {
-        public BadHeaderFlag(string message) : base(message) { }
+        public BadHeaderFlag(String message) : base(message) { }
+    }
+
+    public class ExcelTableException : Exception
+    {
+        public ExcelTableException(String message) : base(message) { }
     }
 
     public abstract class ExcelTable : IComparable
@@ -299,8 +304,10 @@ namespace Reanimator.Excel
             token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
             CheckFlag(token);
 
+#if DEBUG
             Hashtable hashTableUnknown1 = new Hashtable();
             Hashtable hashTableUnknown2 = new Hashtable();
+#endif
 
             if ((uint)_excelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
             {
@@ -417,7 +424,7 @@ namespace Reanimator.Excel
                         _rcshValue = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                         if (_rcshValue != 0x04)
                         {
-                            throw new Exception("_rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_rcshValue != 0x04)");
+                            throw new ExcelTableException("_rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_rcshValue != 0x04)");
                         }
                         //Debug.Write(String.Format("Has rcsh value = {0}\n", _rcshValue));
                     }
@@ -426,7 +433,7 @@ namespace Reanimator.Excel
                         _tyshValue = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                         if (_tyshValue != 0x02)
                         {
-                            throw new Exception("_tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_tyshValue != 0x02)");
+                            throw new ExcelTableException("_tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_tyshValue != 0x02)");
                         }
                         //Debug.Write(String.Format("Has tysh value = {0}\n", _tyshValue));
                     }
@@ -441,7 +448,7 @@ namespace Reanimator.Excel
                         _dnehValue = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                         if (_dnehValue != 0x00)
                         {
-                            throw new Exception("_dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_dnehValue != 0x02)");
+                            throw new ExcelTableException("_dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_dnehValue != 0x02)");
                         }
                         //Debug.Write(String.Format("Has dneh value = {0}\n", _dnehValue));
                     }
@@ -527,9 +534,9 @@ namespace Reanimator.Excel
 
         private static void ParseMyshTables(byte[] data, ref int offset)
         {
-            int totalAttributeCount = 0;
-            int attributeCount = 0;
-            int blockCount = 0;
+            //int totalAttributeCount = 0;
+            //int attributeCount = 0;
+            //int blockCount = 0;
             int flagCount = 0;
             while (offset < data.Length)
             {
@@ -547,7 +554,7 @@ namespace Reanimator.Excel
                 offset++;
                 continue;
                 ////////////// temp fix /////////////////
-
+/*
 
                 int flag = FileTools.ByteArrayTo<Int32>(data, ref offset);
                 if (!CheckFlag(flag, 0x6873796D))
@@ -619,6 +626,7 @@ namespace Reanimator.Excel
                 {
                     int breakpoint = 1;
                 }
+ */
             }
 
         }

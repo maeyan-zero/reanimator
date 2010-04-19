@@ -53,33 +53,25 @@ namespace Reanimator.Excel
                 }
             }
 
-            public string GetReplacement(string id)
+            public string GetReplacement(String stringId)
             {
-                TableIndexHelper tableIndex = GetTableIndex(id);
+                TableIndexHelper tableIndex = GetTableIndex(stringId);
+                if (tableIndex == null) return stringId;
 
-                if (tableIndex == null)
-                {
-                    return id;
-                }
-                if (tableIndex.FileName == null)
-                {
-                    return id;
-                }
-
-                return tableIndex.FileName;
+                return tableIndex.FileName ?? stringId;
             }
 
-            public string ResolveTableId(string id)
+            public string ResolveTableId(String stringId)
             {
-                TableIndexHelper tableIndex = GetTableIndex(id);
+                TableIndexHelper tableIndex = GetTableIndex(stringId);
 
                 if (tableIndex == null)
                 {
-                    return id;
+                    return stringId;
                 }
                 if (tableIndex.FileName == null)
                 {
-                    return id;
+                    return stringId;
                 }
                 return tableIndex.StringId ?? tableIndex.FileName;
             }
@@ -119,7 +111,7 @@ namespace Reanimator.Excel
                 return false;
             }
 
-            private TableIndexHelper GetTableIndex(string id)
+            private TableIndexHelper GetTableIndex(String id)
             {
                 foreach (TableIndexHelper tableIndex in _tables)
                 {
@@ -397,92 +389,94 @@ namespace Reanimator.Excel
             get { return _loadedTables.Count; }
         }
 
-        public void LoadTables(string folder, ProgressForm progress)
+        public void LoadTables(String folder, ProgressForm progress)
         {
+            if (String.IsNullOrEmpty(folder)) return;
+
             AllTablesLoaded = true;
 
             for (int i = 0; i < Count; i++)
             {
-                string stringId = GetTableStringId(i);
-                string fileName = _excelTables.GetReplacement(stringId);
+                String stringId = GetTableStringId(i);
+                String fileName = _excelTables.GetReplacement(stringId);
+                if (String.IsNullOrEmpty(fileName)) continue;
+
+
+                // add the base excel tables (this), but ovbviously, don't parse it again
                 if (fileName == "EXCELTABLES")
                 {
                     _loadedTables.Add(this);
                     continue;
                 }
 
+
                 // stop double loading issues with INVLOC/INVLOCIDX
-                if (stringId == "INVLOC")
+                if (stringId == "INVLOC") continue;
+
+
+                // get path to file
+                String filePath = String.Format("{0}\\{1}.txt.cooked", folder, fileName);
+                if (!File.Exists(filePath))
                 {
-                    continue;
+                    filePath = filePath.Replace("_common", "");
+                    if (!File.Exists(filePath))
+                    {
+                        if (!_excelTables.IsMythosTable(stringId))
+                        {
+                            MessageBox.Show("File not found!\n\n" + filePath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            Debug.WriteLine("Debug Output - File not found: " + fileName);
+                            AllTablesLoaded = false;
+                        }
+                        continue;
+                    }
                 }
 
-                string filePath = folder + "\\" + fileName + ".txt.cooked";
-                FileStream cookedFile;
 
-                string currentItem = fileName.ToLower() + ".txt.cooked";
-                progress.SetCurrentItemText(currentItem);
+                // update progress
+                if (progress != null)
+                {
+                    String currentItem = fileName.ToLower() + ".txt.cooked";
+                    progress.SetCurrentItemText(currentItem);
+                }
 
+
+                // parse file
                 try
                 {
-                    if (File.Exists(filePath))
+                    using (FileStream cookedFile = new FileStream(filePath, FileMode.Open))
                     {
-                        cookedFile = new FileStream(filePath, FileMode.Open);
-                    }
-                    else
-                    {
-                        filePath = filePath.Replace("_common", "");
-                        if (File.Exists(filePath))
+                        byte[] buffer = FileTools.StreamToByteArray(cookedFile);
+
+                        ExcelTable excelTable = _excelTables.CreateTable(stringId, buffer);
+                        if (excelTable != null)
                         {
-                            cookedFile = new FileStream(filePath, FileMode.Open);
+                            if (!excelTable.IsNull)
+                            {
+                                _loadedTables.Add(excelTable);
+                            }
                         }
                         else
                         {
-                            if (!_excelTables.IsMythosTable(stringId))
-                            {
-                                MessageBox.Show("File not found!\n\n" + filePath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                Debug.WriteLine("Debug Output - File not found: " + fileName);
-                                AllTablesLoaded = false;
-                            }
-                            continue;
+                            Debug.WriteLine("Debug Output - File does not have table definition: " + fileName);
                         }
                     }
                 }
-                catch (Exception)
+                catch (ExcelTableException e)
                 {
-                    MessageBox.Show("Failed to open file for reading!\n\n" + filePath, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Debug.WriteLine("Debug Output - File failed to open: " + filePath);
-                    AllTablesLoaded = false;
-                    continue;
+                    MessageBox.Show("Unexpected parsing error!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-                byte[] buffer = FileTools.StreamToByteArray(cookedFile);
-                try
+                catch (BadHeaderFlag e)
                 {
-                    //Debug.Write(stringId + "\n");
-                    ExcelTable excelTable = _excelTables.CreateTable(stringId, buffer);
-                    if (excelTable != null)
-                    {
-                        if (!excelTable.IsNull)
-                        {
-                            _loadedTables.Add(excelTable);
-                        }
-                    }
-                    else
-                    {
-                        Debug.WriteLine("Debug Output - File does not have table definition: " + fileName);
-                    }
-
+                    MessageBox.Show("File data tokens not aligned!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Failed to parse cooked file " + currentItem + "\n\n" + e.ToString(), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Failed to open file for reading!\n\n" + filePath + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-
-                if (cookedFile != null)
+                finally
                 {
-                    cookedFile.Dispose();
+                    Debug.WriteLine("Debug Output - File failed to parse: " + filePath);
+                    AllTablesLoaded = false;
                 }
             }
 
