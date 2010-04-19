@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Reanimator.Forms
@@ -11,15 +8,13 @@ namespace Reanimator.Forms
         delegate DialogResult ShowDialogCallback(CommonDialog dialog);
         protected DialogResult ShowDialog(CommonDialog dialog)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                ShowDialogCallback d = new ShowDialogCallback(ShowDialog);
-                return (DialogResult)this.Invoke(d, new Object[] { dialog });
+                ShowDialogCallback d = ShowDialog;
+                return (DialogResult)Invoke(d, new Object[] { dialog });
             }
-            else
-            {
-                return dialog.ShowDialog(this);
-            }
+
+            return dialog.ShowDialog(this);
         }
 
         // This function name and its conflic is intentional so as to ensure the correct function is used.
@@ -28,57 +23,55 @@ namespace Reanimator.Forms
         delegate DialogResult MessageBoxCallback1(string text);
         protected DialogResult MessageBox(string text)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                MessageBoxCallback1 d = new MessageBoxCallback1(MessageBox);
-                return (DialogResult)this.Invoke(d, new Object[] { text });
+                MessageBoxCallback1 d = MessageBox;
+                return (DialogResult)Invoke(d, new Object[] { text });
             }
-            else
-            {
-                return System.Windows.Forms.MessageBox.Show(text);
-            }
+
+            return System.Windows.Forms.MessageBox.Show(text);
         }
 
         delegate DialogResult MessageBoxCallback4(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon);
         protected DialogResult MessageBox(string text, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                MessageBoxCallback4 d = new MessageBoxCallback4(MessageBox);
-                return (DialogResult)this.Invoke(d, new Object[] { text, caption, buttons, icon });
+                MessageBoxCallback4 d = MessageBox;
+                return (DialogResult)Invoke(d, new Object[] { text, caption, buttons, icon });
             }
-            else
-            {
-                return System.Windows.Forms.MessageBox.Show(text, caption, buttons, icon);
-            }
+
+            return System.Windows.Forms.MessageBox.Show(text, caption, buttons, icon);
         }
 
         delegate void DisposeCallback();
         new protected void Dispose()
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                DisposeCallback d = new DisposeCallback(Dispose);
-                this.Invoke(d);
+                DisposeCallback d = Dispose;
+                Invoke(d);
             }
             else
             {
-                base.Dispose();
+                if (!IsDisposed)
+                {
+                    base.Dispose();
+                }
             }
         }
 
         private void InitializeComponent()
         {
-            this.SuspendLayout();
+            SuspendLayout();
             // 
             // ThreadedFormBase
             // 
-            this.ClientSize = new System.Drawing.Size(284, 264);
-            this.Name = "ThreadedFormBase";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
-            this.ResumeLayout(false);
-
+            ClientSize = new System.Drawing.Size(284, 264);
+            Name = "ThreadedFormBase";
+            ShowIcon = false;
+            ShowInTaskbar = false;
+            ResumeLayout(false);
         }
     }
 }

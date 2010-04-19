@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.Data;
 
@@ -14,9 +11,9 @@ namespace Reanimator.Excel
         {
             TableHeader header;
 
-            [ExcelTable.ExcelOutput(IsStringOffset = true)]
+            [ExcelOutput(IsStringOffset = true)]
             public Int32 name;
-            Int32 buffer;
+            Int32 _buffer;
             public Int32 intValue;
             public float floatValue;
         }
