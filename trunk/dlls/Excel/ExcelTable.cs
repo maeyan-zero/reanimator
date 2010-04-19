@@ -519,11 +519,11 @@ namespace Reanimator.Excel
         public int Count { get; private set; }
         public bool IsNull { get; private set; }
 
-        private static void CheckFlag(int flag)
+        private void CheckFlag(int flag)
         {
             if (!CheckFlag(flag, 0x68657863))
             {
-                throw new BadHeaderFlag("Unexpected header flag!");
+                throw new BadHeaderFlag("Unexpected header flag!\nStructure ID: " + _excelHeader.StructureId);
             }
         }
 
