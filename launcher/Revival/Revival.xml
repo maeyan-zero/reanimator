@@ -466,6 +466,11 @@
                 <data>7999</data>
               </replace>
             </attribute>
+            <attribute id="style">
+              <replace>
+                <data>1</data>
+              </replace>
+            </attribute>
             <attribute id="subscriberOnly">
               <replace>
                 <data>0</data>
