@@ -356,20 +356,29 @@ namespace Reanimator
                                     // If its a strings file, repack it
                                     if (file.repack == true)
                                     {
-                                        //FileStream buffer = new FileStream(revival.directory + "\\" + file.replace.data, FileMode.Open);
-                                        
-                                        //byte[] byte_buffer = new byte[buffer.Length];
+                                        FileStream buffer = new FileStream(revival.directory + "\\" + file.replace.data, FileMode.Open);
 
-                                        //buffer.Read(byte_buffer, 0, (int)buffer.Length);
+                                        byte[] byte_buffer = new byte[buffer.Length];
 
-                                        //index[pack.list_id].AppendToDat(byte_buffer, true, index[pack.list_id].FileTable[file.index_id], true);
-                                        //compress(byte_buffer, ref len, compressed_buffer, (uint)byte_buffer.Length);
-                                        
-                                        //index[pack.list_id].DataFile.Seek(0, SeekOrigin.End);
+                                        buffer.Read(byte_buffer, 0, (int)buffer.Length);
 
-                                        //index[pack.list_id].DataFile.Write(compressed_buffer, 0, compressed_buffer.Length);
+                                        if (file.index_id_patch >= 0)
+                                        {
+                                            if (file.id.Contains("xls.uni.cooked"))
+                                            {
+                                                index[Index.LatestPatchLocalized].AppendToDat(byte_buffer, true, file.index_id_patch, true);
+                                            }
+                                            else
+                                            {
+                                                index[Index.LatestPatch].AppendToDat(byte_buffer, true, file.index_id_patch, true);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            index[pack.list_id].AppendToDat(byte_buffer, true, file.index_id, true);
+                                        }
 
-                                        //buffer.Dispose();
+                                        buffer.Dispose();
                                     }
                                     // Replace copies the replacing file to the HGL dir.
                                     else
@@ -390,23 +399,14 @@ namespace Reanimator
                                 }
                                 
                                 // Modify the index if it isn't already
-                                if (index[pack.list_id].FileTable[file.index_id].Modified == false)
+                                if (index[pack.list_id].FileTable[file.index_id].Modified == false && file.repack == false)
                                 {
                                     index[pack.list_id].AppendDirectorySuffix(file.index_id);
 
                                     // Modify the patch index.
                                     if (file.index_id_patch >= 0)
                                     {
-                                        // Handle strings
-                                        if (file.id.Contains(".xls.uni.cooked") == true)
-                                        {
-                                            // change offsets
-                                            //index[Index.LatestPatchLocalized].AppendDirectorySuffix(file.index_id_patch);
-                                        }
-                                        else
-                                        {
-                                            index[Index.LatestPatch].AppendDirectorySuffix(file.index_id_patch);
-                                        }
+                                        index[Index.LatestPatch].AppendDirectorySuffix(file.index_id_patch);
                                     }
                                 }
                             }
