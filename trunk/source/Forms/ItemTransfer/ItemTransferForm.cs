@@ -7,17 +7,17 @@ using Reanimator.Excel;
 
 namespace Reanimator.Forms.ItemTransfer
 {
+    public enum CharacterStatus
+    {
+        NotLoaded,
+        Loaded,
+        Modified,
+        Saved,
+        Error
+    }
+
     public partial class ItemTransferForm : Form
     {
-        enum CharacterStatus
-        {
-            NotLoaded,
-            Loaded,
-            Modified,
-            Saved,
-            Error
-        }
-
         const InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
         const int INVENTORYWIDTH = 6;
         const int INVENTORYHEIGHT = 6;

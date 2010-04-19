@@ -1169,6 +1169,8 @@ namespace Reanimator.Forms
             if (unit == null) return;
 
             _heroUnit.Items.Add(unit);
+
+            MessageBox.Show("Item successfully loaded!");
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -1317,6 +1319,8 @@ namespace Reanimator.Forms
         {
             Unit unit = (Unit)((Button)sender).Tag;
 
+            currentlyEditing_ComboBox.SelectedItem = unit;
+
             ShowInvInfo(unit);
         }
 
@@ -1325,6 +1329,8 @@ namespace Reanimator.Forms
             ListBox view = (ListBox)sender;
 
             Unit unit = (Unit)view.SelectedItems[0];
+
+            currentlyEditing_ComboBox.SelectedItem = unit;
 
             ShowInvInfo(unit);
         }
@@ -1360,12 +1366,17 @@ namespace Reanimator.Forms
 
         private void b_loadXML_Click(object sender, EventArgs e)
         {
-            Unit unit = XmlUtilities<Unit>.Deserialize(@"F:\" + textBox1.Text + ".xml");
+            String filePath = FileTools.OpenFileDiag("xml", "XML", null);
+            if (String.IsNullOrEmpty(filePath)) return;
+
+            Unit unit = XmlUtilities<Unit>.Deserialize(filePath);
 
             if (unit != null)
             {
                 _heroUnit.Items.Add(unit);
             }
+
+            MessageBox.Show("Item successfully loaded!");
         }
 
         private void button6_Click(object sender, EventArgs e)

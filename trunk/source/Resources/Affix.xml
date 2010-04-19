@@ -1,0 +1,42 @@
+  <Stat>
+	<!-- ID of the entry in the STATS table -->
+	<id>29752</id>
+	<attributesCount>1</attributesCount>
+	<attributes>
+	  <Attribute>
+		<exists>1</exists>
+		<skipTableId>1</skipTableId>
+		<BitCount>4</BitCount>
+		<Unknown1>0</Unknown1>
+		<Unknown1_1>0</Unknown1_1>
+		<TableId>0</TableId>
+		<Exists>true</Exists>
+		<SkipTableId>true</SkipTableId>
+	  </Attribute>
+	</attributes>
+	<bitCount>32</bitCount>
+	<otherAttributeFlag>4</otherAttributeFlag>
+	<otherAttribute>
+	  <unknown1>0</unknown1>
+	  <unknown2>0</unknown2>
+	  <unknown3>1</unknown3>
+	</otherAttribute>
+	<skipResource>0</skipResource>
+	<!-- ID of the AFFIXES table -->
+	<resource>30512</resource>
+	<!-- has to be 1 if there are multiple different affixes on the item-->
+	<repeatFlag>1</repeatFlag>
+	<!-- the number of different affixes -->
+	<repeatCount>1</repeatCount>
+	<values>
+	  <Values>
+		<!-- needs to be incremented for every additional affix. Starts at 0 -->
+		<Attribute1>0</Attribute1>
+		<Attribute2>0</Attribute2>
+		<Attribute3>0</Attribute3>
+		<!-- ID of the affix in the AFFIX table -->
+		<Stat>6508353</Stat>
+	  </Values>
+	</values>
+	<Name>applied_affix</Name>
+  </Stat>

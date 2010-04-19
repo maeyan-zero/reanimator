@@ -169,6 +169,12 @@
     <Compile Include="Forms\ItemDisplay.Designer.cs">
       <DependentUpon>ItemDisplay.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ItemTransfer\CharacterShop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemTransfer\CharacterShop.Designer.cs">
+      <DependentUpon>CharacterShop.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ItemTransfer\InventoryHandler.cs" />
     <Compile Include="Forms\ItemTransfer\ItemPanel.cs">
       <SubType>UserControl</SubType>
@@ -370,6 +376,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemDisplay.resx">
       <DependentUpon>ItemDisplay.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemTransfer\CharacterShop.resx">
+      <DependentUpon>CharacterShop.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemTransfer\ItemPanel.resx">

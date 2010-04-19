@@ -129,6 +129,8 @@ namespace Reanimator.Forms
             this.button3 = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button6 = new System.Windows.Forms.Button();
+            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
             this.button5 = new System.Windows.Forms.Button();
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.unknownTabList = new System.Windows.Forms.TabPage();
@@ -222,8 +224,6 @@ namespace Reanimator.Forms
             this.b_saveXML = new System.Windows.Forms.Button();
             this.b_loadXML = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
-            this.button6 = new System.Windows.Forms.Button();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -1362,6 +1362,24 @@ namespace Reanimator.Forms
             this.tabPage2.Text = "Item values";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(492, 34);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(134, 23);
+            this.button6.TabIndex = 7;
+            this.button6.Text = "Copy to Clipboard";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // richTextBox3
+            // 
+            this.richTextBox3.Location = new System.Drawing.Point(632, 6);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.Size = new System.Drawing.Size(480, 731);
+            this.richTextBox3.TabIndex = 6;
+            this.richTextBox3.Text = "";
+            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(492, 5);
@@ -2279,24 +2297,6 @@ namespace Reanimator.Forms
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 13;
-            // 
-            // richTextBox3
-            // 
-            this.richTextBox3.Location = new System.Drawing.Point(632, 6);
-            this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(480, 731);
-            this.richTextBox3.TabIndex = 6;
-            this.richTextBox3.Text = "";
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(492, 34);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(134, 23);
-            this.button6.TabIndex = 7;
-            this.button6.Text = "Copy to Clipboard";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // HeroEditor
             // 
