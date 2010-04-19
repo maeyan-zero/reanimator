@@ -14,25 +14,68 @@ namespace Reanimator.Forms.ItemTransfer
     public partial class CharacterShop : Form
     {
         const InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
+        const int INVENTORYWIDTH = 6;
+        const int INVENTORYHEIGHT = 6;
+        const int ITEMUNITSIZE = 40;
 
         string _characterFolder;
 
         ExcelTables _excelTables;
+        TableDataSet _dataSet;
 
-        string _characterPath1;
-        Unit _characterUnit1;
+        string _characterPath;
+        Unit _characterUnit;
 
         UnitHelpFunctions _itemHelpFunctions;
 
-        //Unit _selectedItemCharacter1;
-        ItemPanel _characterItemPanel1;
-        CharacterStatus _characterStatus1;
+        InventoryItem _selectedItem;
+        ItemPanel _characterItemPanel;
+        CharacterStatus _characterStatus;
 
-        ItemPanel _eventSender;
-
-        public CharacterShop()
+        public CharacterShop(ref TableDataSet dataSet, ref ExcelTables excelTables)
         {
             InitializeComponent();
+
+            this.Text += " - Location: " + INVENTORYTYPE.ToString();
+
+            _itemHelpFunctions = new UnitHelpFunctions(ref dataSet, ref excelTables);
+
+            _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
+
+            _excelTables = excelTables;
+            _dataSet = dataSet;
+
+            string[] characters = LoadCharacterNames();
+
+            cb_selectCharacter.DataSource = characters;
+
+            _characterItemPanel = new ItemPanel();
+
+            _characterItemPanel.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
+
+            _characterItemPanel.ItemUnitSize = ITEMUNITSIZE;
+
+            _characterItemPanel.Size = new Size(INVENTORYWIDTH * ITEMUNITSIZE, INVENTORYHEIGHT * ITEMUNITSIZE);
+
+            _characterItemPanel.Location = new Point(16, 18);
+
+            SetCharacterStatus(_characterStatus, CharacterStatus.NotLoaded, p_status, l_status);
+
+            // use inventory panels, as a normal groupBox doesn't provide the option "AutoScroll"
+            p_inventory.Controls.Add(_characterItemPanel);
+        }
+
+        void _characterItemPanel_NewItemSelected_Event(ItemPanel sender, InventoryItem item)
+        {
+            _selectedItem = item;
+            l_selectedItem.Text = item.Item.Name;
+
+            if (item.Quantity > 1)
+            {
+                l_selectedItem.Text += " (x" + item.Quantity.ToString() + ")";
+            }
+
+            l_selectedItem.Tag = item;
         }
 
         private string[] LoadCharacterNames()
@@ -52,25 +95,112 @@ namespace Reanimator.Forms.ItemTransfer
 
         private void b_loadCharacter_Click(object sender, EventArgs e)
         {
-            _characterPath1 = _characterFolder + @"\" + cb_selectCharacter1.SelectedItem + ".hg1";
+            _characterPath = _characterFolder + @"\" + cb_selectCharacter.SelectedItem + ".hg1";
 
-            _characterUnit1 = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, _characterPath1);
+            _characterUnit = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, _characterPath);
 
-            if (_characterUnit1.IsGood)
+            if (_characterUnit != null && _characterUnit.IsGood)
             {
-                _itemHelpFunctions.LoadCharacterValues(_characterUnit1);
+                _itemHelpFunctions.LoadCharacterValues(_characterUnit);
 
-                gb_characterName1.Text = cb_selectCharacter1.SelectedItem.ToString();
-                int level = UnitHelpFunctions.GetSimpleValue(_characterUnit1, ItemValueNames.level.ToString()) - 8;
-                gb_characterName1.Text += " (Level " + level.ToString() + ")";
+                gb_characterName.Text = cb_selectCharacter.SelectedItem.ToString();
+                int level = UnitHelpFunctions.GetSimpleValue(_characterUnit, ItemValueNames.level.ToString()) - 8;
+                gb_characterName.Text += " (Level " + level.ToString() + ")";
 
-                //SetCharacterStatus(_characterStatus1, CharacterStatus.Loaded, p_status1, l_status1);
+                SetCharacterStatus(_characterStatus, CharacterStatus.Loaded, p_status, l_status);
 
-                //InitInventory(_characterUnit1, _characterItemPanel1);
+                InitInventory(_characterUnit, _characterItemPanel);
             }
             else
             {
-                MessageBox.Show("Error while parsing the character file!");
+                MessageBox.Show("Error while parsing the character file!", "b_loadCharacter_Click");
+            }
+        }
+
+        private void InitInventory(Unit unit, ItemPanel itemPanel)
+        {
+            itemPanel.Controls.Clear();
+
+            try
+            {
+                foreach (Unit item in unit.Items)
+                {
+                    if (item.inventoryType == (int)INVENTORYTYPE)
+                    {
+                        InventoryItem iItem = new InventoryItem(item);
+                        itemPanel.AddItem(iItem, true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "InitInventory: " + unit.Name);
+            }
+        }
+
+        private void b_save_Click(object sender, EventArgs e)
+        {
+            if (_characterUnit != null)
+            {
+                if (MessageBox.Show("Are you sure you want to save these changes?", "Warning!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    UnitHelpFunctions.SaveCharacterFile(_characterUnit, _characterPath);
+
+                    MessageBox.Show("Saving successful!");
+                }
+
+                SetCharacterStatus(_characterStatus, CharacterStatus.Saved, p_status, l_status);
+            }
+        }
+
+        private void EmergencyAbort()
+        {
+            SetCharacterStatus(_characterStatus, CharacterStatus.Error, p_status, l_status);
+            MessageBox.Show("The trade window will now close to ensure that your savegames and items will not be corrupted!", "Error while transfering your items!");
+            this.Close();
+        }
+
+        private void SetCharacterStatus(CharacterStatus originalCharacterStatus, CharacterStatus newCharacterStatus, Panel panel, Label label)
+        {
+            originalCharacterStatus = newCharacterStatus;
+
+            if (newCharacterStatus == CharacterStatus.Error)
+            {
+                panel.BackColor = Color.Red;
+                label.Text = "An error occured";
+            }
+            else if (newCharacterStatus == CharacterStatus.Loaded)
+            {
+                panel.BackColor = Color.Green;
+                label.Text = "Character loaded";
+            }
+            else if (newCharacterStatus == CharacterStatus.Modified)
+            {
+                panel.BackColor = Color.Orange;
+                label.Text = "Character was modified";
+            }
+            else if (newCharacterStatus == CharacterStatus.NotLoaded)
+            {
+                panel.BackColor = Color.Silver;
+                label.Text = "No character loaded";
+            }
+            else if (newCharacterStatus == CharacterStatus.Saved)
+            {
+                panel.BackColor = Color.Lime;
+                label.Text = "Character saved";
+            }
+        }
+
+        private void b_addAffix_Click(object sender, EventArgs e)
+        {
+            if (_characterUnit != null && _selectedItem != null)
+            {
+                Unit.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item, ItemValueNames.applied_affix.ToString());
+
+                if (value != null)
+                {
+                    MessageBox.Show(value.ToString());
+                }
             }
         }
     }

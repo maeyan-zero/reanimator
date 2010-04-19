@@ -816,5 +816,11 @@ namespace Reanimator
 
             tableForm.SaveButton();
         }
+
+        private void itemShopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CharacterShop shop = new CharacterShop(ref _tableDataSet, ref _excelTables);
+            shop.ShowDialog(this);
+        }
     }
 }

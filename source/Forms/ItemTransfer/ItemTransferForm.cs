@@ -163,7 +163,7 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 _characterUnit1 = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, _characterPath1);
 
-                if (_characterUnit1.IsGood)
+                if (_characterUnit1 != null && _characterUnit1.IsGood)
                 {
                     _itemHelpFunctions.LoadCharacterValues(_characterUnit1);
 
@@ -194,7 +194,7 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 _characterUnit2 = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, _characterPath2);
 
-                if (_characterUnit2.IsGood)
+                if (_characterUnit2 != null && _characterUnit2.IsGood)
                 {
                     _itemHelpFunctions.LoadCharacterValues(_characterUnit2);
 
@@ -384,7 +384,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             SetCharacterStatus(_characterStatus1, CharacterStatus.Error, p_status1, l_status1);
             SetCharacterStatus(_characterStatus2, CharacterStatus.Error, p_status2, l_status2);
-            MessageBox.Show("The trade window will now close to make sure that your savegames and items will not be harmed!", "Error while transfering your items!");
+            MessageBox.Show("The trade window will now close to ensure that your savegames and items will not be corrupted!", "Error while transfering your items!");
             this.Close();
         }
 
