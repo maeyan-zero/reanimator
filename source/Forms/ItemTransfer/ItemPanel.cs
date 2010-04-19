@@ -8,8 +8,6 @@ namespace Reanimator.Forms.ItemTransfer
     {
         public delegate void NewItemSelected(ItemPanel sender, InventoryItem item);
         public event NewItemSelected NewItemSelected_Event;
-        public delegate void ItemDoubleClicked(ItemPanel sender, InventoryItem item);
-        public event ItemDoubleClicked ItemDoubleClicked_Event;
 
         int _itemUnitSize = 40;
 

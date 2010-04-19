@@ -288,6 +288,7 @@
             this.Controls.Add(this.gb_characterName1);
             this.DoubleBuffered = true;
             this.Name = "ItemTransferForm";
+            this.ShowIcon = false;
             this.Text = "Trade Items";
             this.gb_characterName1.ResumeLayout(false);
             this.gb_characterName2.ResumeLayout(false);
