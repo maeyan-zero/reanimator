@@ -257,7 +257,7 @@ namespace Reanimator
         {
             _indexFile = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
             _buffer = FileTools.StreamToByteArray(_indexFile);
-
+            _indexFile.Close();
             Crypt.Decrypt(_buffer);
 
 #if DEBUG
@@ -494,9 +494,9 @@ namespace Reanimator
                 // final version will be similar to reading - dumping struct using MarshalAs
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
 
-                FileTools.WriteToBuffer(ref buffer, ref offset, foo);
-                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown11);
-                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown12); // game freezes if not correct value
+                //FileTools.WriteToBuffer(ref buffer, ref offset, foo);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown11);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown12); // game freezes if not correct value
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);
