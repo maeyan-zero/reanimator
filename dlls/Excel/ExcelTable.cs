@@ -804,13 +804,13 @@ namespace Reanimator.Excel
                                         const byte b = 0;
                                         fieldInfo.SetValue(table, b);
                                     }
-                                    else if (fieldInfo.FieldType != typeof(String))
+                                    else if (fieldInfo.FieldType == typeof(String))
                                     {
-                                        o = 0;
-                                        fieldInfo.SetValue(table, o);
+                                        fieldInfo.SetValue(table, String.Empty);
                                     }
                                     else
                                     {
+                                        o = 0;
                                         fieldInfo.SetValue(table, o);
                                     }
                                 }
