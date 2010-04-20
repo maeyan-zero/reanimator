@@ -276,12 +276,19 @@ namespace Reanimator.Excel
             public Int32 impactUnitToxic;//pchar
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 120)]
             byte[] unknown40;
+            [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
             public BitMask01 bitmask01;
+            [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
             public BitMask02 bitmask02;
+            [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
             public BitMask03 bitmask03;
+            [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
             public BitMask04 bitmask04;
+            [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
             public BitMask05 bitmask05;
+            [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
             public BitMask06 bitmask06;
+            [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
             public BitMask07 bitmask07;
             [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
             public Int32 String;

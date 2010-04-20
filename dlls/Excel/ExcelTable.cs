@@ -34,12 +34,9 @@ namespace Reanimator.Excel
             public String Table { get; set; }
             public int TableId { get; set; }
             public String Column { get; set; }
-        }
 
-        [AttributeUsage(AttributeTargets.Field)]
-        public class ExcelBitmaskAttribute : Attribute
-        {
-            uint bitmask;
+            public bool IsBitmask { get; set; }
+            public UInt32 DefaultBitmask { get; set; }
         }
 
         private abstract class FileTokens
@@ -541,7 +538,7 @@ namespace Reanimator.Excel
             //int totalAttributeCount = 0;
             //int attributeCount = 0;
             //int blockCount = 0;
-            int flagCount = 0;
+            //int flagCount = 0;
             while (offset < data.Length)
             {
                 ////////////// temp fix /////////////////
@@ -551,10 +548,10 @@ namespace Reanimator.Excel
                     //Debug.Write("mysh flagCount = " + flagCount + "\n");
                     break;
                 }
-                if (CheckFlag(f, 0x6873796D))
-                {
-                    flagCount++;
-                }
+                //if (CheckFlag(f, 0x6873796D))
+                //{
+                //    flagCount++;
+                //}
                 offset++;
                 continue;
                 ////////////// temp fix /////////////////
@@ -704,6 +701,7 @@ namespace Reanimator.Excel
                         // if the row we're on is less than the table count, then we have an already present value
                         if (tables.Count > row)
                         {
+                            // TODO This method means you must *not* delete existing rows. Doing so will mis-align all following rows!
                             fieldInfo.SetValue(table, fieldInfo.GetValue(tables[row]));
                         }
                         else // must be a new/added row
@@ -714,7 +712,20 @@ namespace Reanimator.Excel
                             }
                             else
                             {
-                                fieldInfo.SetValue(table, 0);
+                                if (fieldInfo.FieldType.BaseType == typeof(Array))
+                                {
+                                    Array arrayBase = (Array)fieldInfo.GetValue(tables[0]);
+                                    Array ar = (Array)Activator.CreateInstance(fieldInfo.FieldType, arrayBase.Length);
+                                    fieldInfo.SetValue(table, ar);
+                                }
+                                else if (fieldInfo.FieldType == typeof(String))
+                                {
+                                    fieldInfo.SetValue(table, String.Empty);
+                                }
+                                else
+                                {
+                                    fieldInfo.SetValue(table, 0);
+                                }
                             }
                         }
 
@@ -773,8 +784,47 @@ namespace Reanimator.Excel
                     }
                     else
                     {
-                        Object o = dr[dc];
-                        fieldInfo.SetValue(table, o);
+                        if (row < tables.Count)
+                        {
+                            Object o = dr[dc];
+                            fieldInfo.SetValue(table, o);
+                        }
+                        else
+                        {
+                            // TODO this section is just gross and needs to be done properly
+                            ExcelOutputAttribute excelOutputAttribute = GetExcelOutputAttribute(fieldInfo);
+                            if (excelOutputAttribute == null || !excelOutputAttribute.IsBitmask)
+                            {
+                                Object o = dr[dc];
+                                Type type = o.GetType();
+                                if (type == typeof(DBNull))
+                                {
+                                    if (fieldInfo.FieldType == typeof(byte))
+                                    {
+                                        const byte b = 0;
+                                        fieldInfo.SetValue(table, b);
+                                    }
+                                    else if (fieldInfo.FieldType != typeof(String))
+                                    {
+                                        o = 0;
+                                        fieldInfo.SetValue(table, o);
+                                    }
+                                    else
+                                    {
+                                        fieldInfo.SetValue(table, o);
+                                    }
+                                }
+                                else
+                                {
+                                    fieldInfo.SetValue(table, o);
+                                }
+                                
+                            }
+                            else
+                            {
+                                fieldInfo.SetValue(table, excelOutputAttribute.DefaultBitmask);
+                            }
+                        }
                     }
                     col++;
                 }
@@ -996,6 +1046,16 @@ namespace Reanimator.Excel
             return returnBuffer;
         }
 
+        public static ExcelOutputAttribute GetExcelOutputAttribute(FieldInfo fieldInfo)
+        {
+            foreach (Attribute attribute in fieldInfo.GetCustomAttributes(typeof(ExcelOutputAttribute), true))
+            {
+                return attribute as ExcelOutputAttribute;
+            }
+
+            return null;
+        }
+
         public String StringId { get; set; }
         public override string ToString()
         {
@@ -1005,16 +1065,6 @@ namespace Reanimator.Excel
         public int CompareTo(Object o)
         {
             return String.Compare(ToString(), o.ToString());
-        }
-
-        public virtual DataTable GetRowReferences()
-        {
-            return new DataTable();
-        }
-
-        public virtual DataTable GetColumnReferences()
-        {
-            return new DataTable();
         }
     }
 }

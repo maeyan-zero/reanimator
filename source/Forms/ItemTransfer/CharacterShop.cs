@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Reanimator.Excel;
@@ -18,7 +13,7 @@ namespace Reanimator.Forms.ItemTransfer
         const int INVENTORYHEIGHT = 6;
         const int ITEMUNITSIZE = 40;
 
-        string _characterFolder;
+        readonly string _characterFolder;
 
         ExcelTables _excelTables;
         TableDataSet _dataSet;
@@ -72,7 +67,7 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (item.Quantity > 1)
             {
-                l_selectedItem.Text += " (x" + item.Quantity.ToString() + ")";
+                l_selectedItem.Text += " (x" + item.Quantity + ")";
             }
 
             l_selectedItem.Tag = item;
@@ -164,43 +159,39 @@ namespace Reanimator.Forms.ItemTransfer
         {
             originalCharacterStatus = newCharacterStatus;
 
-            if (newCharacterStatus == CharacterStatus.Error)
+            switch (newCharacterStatus)
             {
-                panel.BackColor = Color.Red;
-                label.Text = "An error occured";
-            }
-            else if (newCharacterStatus == CharacterStatus.Loaded)
-            {
-                panel.BackColor = Color.Green;
-                label.Text = "Character loaded";
-            }
-            else if (newCharacterStatus == CharacterStatus.Modified)
-            {
-                panel.BackColor = Color.Orange;
-                label.Text = "Character was modified";
-            }
-            else if (newCharacterStatus == CharacterStatus.NotLoaded)
-            {
-                panel.BackColor = Color.Silver;
-                label.Text = "No character loaded";
-            }
-            else if (newCharacterStatus == CharacterStatus.Saved)
-            {
-                panel.BackColor = Color.Lime;
-                label.Text = "Character saved";
+                case CharacterStatus.Error:
+                    panel.BackColor = Color.Red;
+                    label.Text = "An error occured";
+                    break;
+                case CharacterStatus.Loaded:
+                    panel.BackColor = Color.Green;
+                    label.Text = "Character loaded";
+                    break;
+                case CharacterStatus.Modified:
+                    panel.BackColor = Color.Orange;
+                    label.Text = "Character was modified";
+                    break;
+                case CharacterStatus.NotLoaded:
+                    panel.BackColor = Color.Silver;
+                    label.Text = "No character loaded";
+                    break;
+                case CharacterStatus.Saved:
+                    panel.BackColor = Color.Lime;
+                    label.Text = "Character saved";
+                    break;
             }
         }
 
         private void b_addAffix_Click(object sender, EventArgs e)
         {
-            if (_characterUnit != null && _selectedItem != null)
-            {
-                Unit.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item, ItemValueNames.applied_affix.ToString());
+            if (_characterUnit == null || _selectedItem == null) return;
 
-                if (value != null)
-                {
-                    MessageBox.Show(value.ToString());
-                }
+            Unit.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item, ItemValueNames.applied_affix.ToString());
+            if (value != null)
+            {
+                MessageBox.Show(value.ToString());
             }
         }
     }

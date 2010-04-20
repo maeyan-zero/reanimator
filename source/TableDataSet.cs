@@ -165,7 +165,7 @@ namespace Reanimator
                 }
 
                 mainDataTable = _xlsDataSet.Tables.Add(excelTable.StringId);
-                object[] array = (object[]) excelTable.GetTableArray();
+                object[] array = (object[])excelTable.GetTableArray();
                 Type type = array[0].GetType();
                 List<ExcelTable.ExcelOutputAttribute> outputAttributes =
                     new List<ExcelTable.ExcelOutputAttribute>(type.GetFields().Length + 1);
@@ -175,23 +175,12 @@ namespace Reanimator
                 DataColumn indexColumn = mainDataTable.Columns.Add("Index");
                 indexColumn.AutoIncrement = true;
                 indexColumn.Unique = true;
-                mainDataTable.PrimaryKey = new[] {indexColumn};
+                mainDataTable.PrimaryKey = new[] { indexColumn };
                 outputAttributes.Add(null);
 
                 foreach (FieldInfo fieldInfo in type.GetFields())
                 {
-                    ExcelTable.ExcelOutputAttribute excelOutputAttribute = null;
-
-                    foreach (
-                        Attribute attribute in
-                            fieldInfo.GetCustomAttributes(typeof (ExcelTable.ExcelOutputAttribute), true))
-                    {
-                        excelOutputAttribute = attribute as ExcelTable.ExcelOutputAttribute;
-                        if (excelOutputAttribute != null)
-                        {
-                            break;
-                        }
-                    }
+                    ExcelTable.ExcelOutputAttribute excelOutputAttribute = ExcelTable.GetExcelOutputAttribute(fieldInfo);
 
                     if (excelOutputAttribute != null)
                     {
@@ -199,7 +188,7 @@ namespace Reanimator
 
                         if (excelOutputAttribute.IsStringOffset)
                         {
-                            DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, typeof (String));
+                            DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, typeof(String));
                             dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringOffset, true);
                             dataColumn.DefaultValue = String.Empty;
                             continue;
@@ -210,7 +199,7 @@ namespace Reanimator
                             dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringIndex, true);
                             outputAttributes.Add(null);
                             DataColumn dataColumnString = mainDataTable.Columns.Add(fieldInfo.Name + "_string",
-                                                                                    typeof (String));
+                                                                                    typeof(String));
                             dataColumnString.DefaultValue = String.Empty;
                             continue;
                         }
@@ -282,7 +271,7 @@ namespace Reanimator
                             }
                             else if (excelOutputAttribute.IsStringIndex)
                             {
-                                int valueInt = (int) value;
+                                int valueInt = (int)value;
                                 String stringValue = valueInt == -1
                                                          ? String.Empty
                                                          : excelTable.SecondaryStrings[valueInt];

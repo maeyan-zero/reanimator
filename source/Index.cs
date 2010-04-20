@@ -485,7 +485,7 @@ namespace Reanimator
             }
 
             // file block
-            const UInt64 foo = 0xDEADBEEFDEADBEEF;
+            //const UInt64 foo = 0xDEADBEEFDEADBEEF;
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
             //i = 0;
             foreach (FileIndex fileIndex in FileTable)
