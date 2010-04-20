@@ -955,37 +955,54 @@ namespace Reanimator.Excel
                 }
             }
 
+
+            // TODO have sort generation methods
+            // NOTE there is not always 4 arrays in a .t.c file, it depends on the table.
+            //      However there is still 4x tokens which is why we still just go through them all like this
+            //              the empty ones are just "blank" function calls
+
             // sort index #1
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex1.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex1));
+            /*FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
-            }
+            }*/
+
 
             // sort index #2
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex2.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex2));
+            /*FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
-            }
+            }*/
+
 
             // sort index #3
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex3.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex3));
+            /*FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
-            }
+            }*/
+
 
             // sort index #4
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex4.Length);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex4));
+            /*FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
-            }
+            }*/
 
 
             // weird unknown header chunks

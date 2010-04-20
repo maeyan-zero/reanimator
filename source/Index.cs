@@ -257,7 +257,7 @@ namespace Reanimator
         {
             _indexFile = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
             _buffer = FileTools.StreamToByteArray(_indexFile);
-            _indexFile.Close();
+            //_indexFile.Close(); this can't be closed here as it calling close on an FileStream calls Dispose on it as well. It's used in other places in the class.
             Crypt.Decrypt(_buffer);
 
 #if DEBUG
