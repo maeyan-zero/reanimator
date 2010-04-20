@@ -883,7 +883,10 @@ namespace Reanimator.Excel
             }
             else
             {
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(_tableIndicies));
+                for (int i = 0; i < dataTable.Rows.Count; i++)
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
+                }
             }
 
             // secondary string block
@@ -904,23 +907,35 @@ namespace Reanimator.Excel
 
             // sort index #1
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex1.Length);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex1));
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
+            }
 
             // sort index #2
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex2.Length);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex2));
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
+            }
 
             // sort index #3
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex3.Length);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex3));
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
+            }
 
             // sort index #4
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex4.Length);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex4));
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
+            }
 
 
             // weird unknown header chunks
