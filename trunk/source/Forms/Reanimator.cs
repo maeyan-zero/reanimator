@@ -822,5 +822,11 @@ namespace Reanimator
             CharacterShop shop = new CharacterShop(ref _tableDataSet, ref _excelTables);
             shop.ShowDialog(this);
         }
+
+        private void searchTablesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TableSearch search = new TableSearch(ref _tableDataSet, ref _excelTables);
+            search.ShowDialog(this);
+        }
     }
 }
