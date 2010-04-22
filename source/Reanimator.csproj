@@ -195,6 +195,12 @@
     <Compile Include="Forms\ModificationForm.Designer.cs">
       <DependentUpon>ModificationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\TableSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TableSearch.Designer.cs">
+      <DependentUpon>TableSearch.cs</DependentUpon>
+    </Compile>
     <Compile Include="Havok.cs" />
     <Compile Include="TableDataSet.cs" />
     <Compile Include="ExcelTables.cs" />
@@ -396,6 +402,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ModificationForm.resx">
       <DependentUpon>ModificationForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TableSearch.resx">
+      <DependentUpon>TableSearch.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ThreadedFormBase.resx">
