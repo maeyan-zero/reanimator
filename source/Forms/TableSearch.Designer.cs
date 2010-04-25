@@ -37,13 +37,13 @@
             this.tst_searchString = new System.Windows.Forms.ToolStripTextBox();
             this.tsb_search = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tspb_progress = new System.Windows.Forms.ToolStripProgressBar();
             this.clb_tablesToSearch = new System.Windows.Forms.CheckedListBox();
             this.b_checkAll = new System.Windows.Forms.Button();
             this.b_uncheckAll = new System.Windows.Forms.Button();
             this.l_position = new System.Windows.Forms.Label();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.l_nOfTables = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_foundTables)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -87,6 +87,7 @@
             // 
             // tsl_results
             // 
+            this.tsl_results.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.tsl_results.Name = "tsl_results";
             this.tsl_results.Size = new System.Drawing.Size(106, 22);
             this.tsl_results.Text = "No matches found";
@@ -94,7 +95,7 @@
             // tst_searchString
             // 
             this.tst_searchString.Name = "tst_searchString";
-            this.tst_searchString.Size = new System.Drawing.Size(100, 25);
+            this.tst_searchString.Size = new System.Drawing.Size(150, 25);
             // 
             // tsb_search
             // 
@@ -112,21 +113,20 @@
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tst_searchString,
-            this.tsb_search,
-            this.toolStripSeparator2,
-            this.toolStripLabel1,
-            this.toolStripSeparator1,
-            this.tsl_results});
+            this.tsl_results,
+            this.tspb_progress,
+            this.tsb_search});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(624, 25);
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripSeparator2
+            // tspb_progress
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.tspb_progress.Name = "tspb_progress";
+            this.tspb_progress.Size = new System.Drawing.Size(100, 22);
+            this.tspb_progress.Step = 1;
             // 
             // clb_tablesToSearch
             // 
@@ -134,14 +134,15 @@
             this.clb_tablesToSearch.FormattingEnabled = true;
             this.clb_tablesToSearch.Location = new System.Drawing.Point(12, 57);
             this.clb_tablesToSearch.Name = "clb_tablesToSearch";
-            this.clb_tablesToSearch.Size = new System.Drawing.Size(200, 379);
+            this.clb_tablesToSearch.Size = new System.Drawing.Size(200, 364);
+            this.clb_tablesToSearch.Sorted = true;
             this.clb_tablesToSearch.TabIndex = 8;
             // 
             // b_checkAll
             // 
             this.b_checkAll.Location = new System.Drawing.Point(12, 28);
             this.b_checkAll.Name = "b_checkAll";
-            this.b_checkAll.Size = new System.Drawing.Size(75, 23);
+            this.b_checkAll.Size = new System.Drawing.Size(94, 23);
             this.b_checkAll.TabIndex = 9;
             this.b_checkAll.Text = "Check all";
             this.b_checkAll.UseVisualStyleBackColor = true;
@@ -149,9 +150,9 @@
             // 
             // b_uncheckAll
             // 
-            this.b_uncheckAll.Location = new System.Drawing.Point(93, 28);
+            this.b_uncheckAll.Location = new System.Drawing.Point(118, 28);
             this.b_uncheckAll.Name = "b_uncheckAll";
-            this.b_uncheckAll.Size = new System.Drawing.Size(75, 23);
+            this.b_uncheckAll.Size = new System.Drawing.Size(94, 23);
             this.b_uncheckAll.TabIndex = 10;
             this.b_uncheckAll.Text = "Uncheck all";
             this.b_uncheckAll.UseVisualStyleBackColor = true;
@@ -169,22 +170,34 @@
             this.l_position.Text = "0/0";
             this.l_position.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // toolStripSeparator1
+            // label1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 424);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(135, 13);
+            this.label1.TabIndex = 12;
+            this.label1.Text = "Number of available tables:";
             // 
-            // toolStripLabel1
+            // l_nOfTables
             // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(97, 22);
-            this.toolStripLabel1.Text = "Wildcards: ?, %, *";
+            this.l_nOfTables.AutoSize = true;
+            this.l_nOfTables.Location = new System.Drawing.Point(150, 424);
+            this.l_nOfTables.MaximumSize = new System.Drawing.Size(62, 13);
+            this.l_nOfTables.MinimumSize = new System.Drawing.Size(62, 13);
+            this.l_nOfTables.Name = "l_nOfTables";
+            this.l_nOfTables.Size = new System.Drawing.Size(62, 13);
+            this.l_nOfTables.TabIndex = 13;
+            this.l_nOfTables.Text = "0";
+            this.l_nOfTables.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // TableSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 444);
+            this.Controls.Add(this.l_nOfTables);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.l_position);
             this.Controls.Add(this.b_uncheckAll);
             this.Controls.Add(this.b_checkAll);
@@ -198,6 +211,7 @@
             this.MaximizeBox = false;
             this.Name = "TableSearch";
             this.Text = "TableSearch";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.TableSearch_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_foundTables)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -216,12 +230,12 @@
         private System.Windows.Forms.ToolStripTextBox tst_searchString;
         private System.Windows.Forms.ToolStripButton tsb_search;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.CheckedListBox clb_tablesToSearch;
         private System.Windows.Forms.Button b_checkAll;
         private System.Windows.Forms.Button b_uncheckAll;
         private System.Windows.Forms.Label l_position;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripProgressBar tspb_progress;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label l_nOfTables;
     }
 }

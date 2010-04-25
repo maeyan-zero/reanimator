@@ -43,26 +43,29 @@ namespace Reanimator.Forms
                 Unit.StatBlock.Stat stat;
                 foreach (Unit unit in units)
                 {
-                    for (int counter = 0; counter < unit.Stats.Length; counter++)
+                    if(unit == null)
                     {
-                        stat = unit.Stats[counter];
-
-                        String name;
-                        if (hash.Contains(stat.id))
+                        for (int counter = 0; counter < unit.Stats.Length; counter++)
                         {
-                            name = (string)hash[stat.Id];
-                        }
-                        else
-                        {
-                            name = _statsTable.GetStringFromId(stat.id);
+                            stat = unit.Stats[counter];
 
-                            if (name != null)
+                            String name;
+                            if (hash.Contains(stat.id))
                             {
-                                hash.Add(stat.id, name);
+                                name = (string)hash[stat.Id];
                             }
-                        }
+                            else
+                            {
+                                name = _statsTable.GetStringFromId(stat.id);
 
-                        unit.Stats[counter].Name = name;
+                                if (name != null)
+                                {
+                                    hash.Add(stat.id, name);
+                                }
+                            }
+
+                            unit.Stats[counter].Name = name;
+                        }
                     }
 
                     GenerateUnitNameStrings(unit.Items.ToArray(), hash);

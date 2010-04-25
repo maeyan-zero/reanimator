@@ -77,6 +77,7 @@
             this.itemShopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cascadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,7 +104,6 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.searchTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -425,9 +425,9 @@
             this.applyModificationsToolStripMenuItem,
             this.tradeItemsToolStripMenuItem,
             this.itemShopToolStripMenuItem,
+            this.searchTablesToolStripMenuItem,
             this.toolStripSeparator9,
-            this.optionsToolStripMenuItem,
-            this.searchTablesToolStripMenuItem});
+            this.optionsToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
             this.toolsMenu.Size = new System.Drawing.Size(48, 20);
             this.toolsMenu.Text = "&Tools";
@@ -438,7 +438,7 @@
             this.bypassSecurityx64ToolStripMenuItem});
             this.clientPatchesToolStripMenuItem.Name = "clientPatchesToolStripMenuItem";
             this.clientPatchesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.clientPatchesToolStripMenuItem.Text = "Client Patches";
+            this.clientPatchesToolStripMenuItem.Text = "Client &Patches";
             // 
             // bypassSecurityx64ToolStripMenuItem
             // 
@@ -456,7 +456,7 @@
             this.regenerateRelationsToolStripMenuItem1});
             this.cacheInfoToolStripMenuItem.Name = "cacheInfoToolStripMenuItem";
             this.cacheInfoToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.cacheInfoToolStripMenuItem.Text = "Cache Info";
+            this.cacheInfoToolStripMenuItem.Text = "&Cache Info";
             // 
             // klToolStripMenuItem
             // 
@@ -490,21 +490,21 @@
             // 
             this.applyModificationsToolStripMenuItem.Name = "applyModificationsToolStripMenuItem";
             this.applyModificationsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.applyModificationsToolStripMenuItem.Text = "Apply Modifications";
+            this.applyModificationsToolStripMenuItem.Text = "&Apply Modifications";
             this.applyModificationsToolStripMenuItem.Click += new System.EventHandler(this.applyModificationsToolStripMenuItem_Click);
             // 
             // tradeItemsToolStripMenuItem
             // 
             this.tradeItemsToolStripMenuItem.Name = "tradeItemsToolStripMenuItem";
             this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.tradeItemsToolStripMenuItem.Text = "Trade Items";
+            this.tradeItemsToolStripMenuItem.Text = "&Trade Items";
             this.tradeItemsToolStripMenuItem.Click += new System.EventHandler(this.tradeItemsToolStripMenuItem_Click);
             // 
             // itemShopToolStripMenuItem
             // 
             this.itemShopToolStripMenuItem.Name = "itemShopToolStripMenuItem";
             this.itemShopToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.itemShopToolStripMenuItem.Text = "Item Shop";
+            this.itemShopToolStripMenuItem.Text = "&Item Shop";
             this.itemShopToolStripMenuItem.Click += new System.EventHandler(this.itemShopToolStripMenuItem_Click);
             // 
             // toolStripSeparator9
@@ -518,6 +518,13 @@
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            // 
+            // searchTablesToolStripMenuItem
+            // 
+            this.searchTablesToolStripMenuItem.Name = "searchTablesToolStripMenuItem";
+            this.searchTablesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.searchTablesToolStripMenuItem.Text = "&Search Tables";
+            this.searchTablesToolStripMenuItem.Click += new System.EventHandler(this.searchTablesToolStripMenuItem_Click);
             // 
             // windowsMenu
             // 
@@ -727,13 +734,6 @@
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
-            // 
-            // searchTablesToolStripMenuItem
-            // 
-            this.searchTablesToolStripMenuItem.Name = "searchTablesToolStripMenuItem";
-            this.searchTablesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.searchTablesToolStripMenuItem.Text = "Search Tables";
-            this.searchTablesToolStripMenuItem.Click += new System.EventHandler(this.searchTablesToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
