@@ -127,7 +127,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SimpleItemTransferForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SimpleItemTransferForm.Designer.cs">
       <DependentUpon>SimpleItemTransferForm.cs</DependentUpon>
