@@ -85,7 +85,7 @@
             // gb_characterName2
             // 
             this.gb_characterName2.Controls.Add(this.p_inventory2);
-            this.gb_characterName2.Location = new System.Drawing.Point(332, 79);
+            this.gb_characterName2.Location = new System.Drawing.Point(342, 79);
             this.gb_characterName2.Name = "gb_characterName2";
             this.gb_characterName2.Size = new System.Drawing.Size(280, 296);
             this.gb_characterName2.TabIndex = 2;
@@ -133,7 +133,7 @@
             // 
             // b_loadCharacter2
             // 
-            this.b_loadCharacter2.Location = new System.Drawing.Point(548, 12);
+            this.b_loadCharacter2.Location = new System.Drawing.Point(558, 12);
             this.b_loadCharacter2.Name = "b_loadCharacter2";
             this.b_loadCharacter2.Size = new System.Drawing.Size(64, 23);
             this.b_loadCharacter2.TabIndex = 9;
@@ -144,7 +144,7 @@
             // cb_selectCharacter2
             // 
             this.cb_selectCharacter2.FormattingEnabled = true;
-            this.cb_selectCharacter2.Location = new System.Drawing.Point(435, 12);
+            this.cb_selectCharacter2.Location = new System.Drawing.Point(445, 12);
             this.cb_selectCharacter2.Name = "cb_selectCharacter2";
             this.cb_selectCharacter2.Size = new System.Drawing.Size(107, 21);
             this.cb_selectCharacter2.TabIndex = 8;
@@ -171,7 +171,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(332, 15);
+            this.label2.Location = new System.Drawing.Point(342, 15);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(97, 13);
             this.label2.TabIndex = 12;
@@ -218,7 +218,7 @@
             this.groupBox1.Controls.Add(this.b_save);
             this.groupBox1.Location = new System.Drawing.Point(12, 381);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(600, 91);
+            this.groupBox1.Size = new System.Drawing.Size(610, 101);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options:";
@@ -253,7 +253,7 @@
             // l_status2
             // 
             this.l_status2.AutoSize = true;
-            this.l_status2.Location = new System.Drawing.Point(365, 49);
+            this.l_status2.Location = new System.Drawing.Point(375, 49);
             this.l_status2.Name = "l_status2";
             this.l_status2.Size = new System.Drawing.Size(104, 13);
             this.l_status2.TabIndex = 16;
@@ -262,7 +262,7 @@
             // p_status2
             // 
             this.p_status2.BackColor = System.Drawing.Color.Silver;
-            this.p_status2.Location = new System.Drawing.Point(335, 49);
+            this.p_status2.Location = new System.Drawing.Point(345, 49);
             this.p_status2.Name = "p_status2";
             this.p_status2.Size = new System.Drawing.Size(24, 24);
             this.p_status2.TabIndex = 15;
@@ -272,7 +272,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(624, 484);
+            this.ClientSize = new System.Drawing.Size(634, 494);
             this.Controls.Add(this.l_status2);
             this.Controls.Add(this.l_status1);
             this.Controls.Add(this.p_status2);
@@ -287,6 +287,8 @@
             this.Controls.Add(this.cb_selectCharacter1);
             this.Controls.Add(this.gb_characterName1);
             this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "ItemTransferForm";
             this.ShowIcon = false;
             this.Text = "Trade Items";
@@ -323,5 +325,7 @@
         private System.Windows.Forms.Label l_status1;
         private System.Windows.Forms.Label l_status2;
         private System.Windows.Forms.Panel p_status2;
+
+
     }
 }

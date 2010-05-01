@@ -356,7 +356,10 @@ namespace Reanimator
 
         private void LoadStringsTable(ProgressForm progress, StringsFile stringsFile)
         {
-            progress.SetCurrentItemText(stringsFile.Name);
+            if (progress != null)
+            {
+                progress.SetCurrentItemText(stringsFile.Name);
+            }
 
             if (_xlsDataSet.Tables.Contains(stringsFile.Name))
             {

@@ -803,7 +803,8 @@ namespace Reanimator
 
         private void tradeItemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ItemTransferForm transfer = new ItemTransferForm(ref _tableDataSet, ref _excelTables);
+            //ItemTransferForm transfer = new ItemTransferForm(ref _tableDataSet, ref _excelTables);
+            ComplexItemTransferForm transfer = new ComplexItemTransferForm(ref _tableDataSet, ref _excelTables);
             transfer.ShowDialog(this);
         }
 
