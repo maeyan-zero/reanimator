@@ -7,42 +7,49 @@ using Reanimator.Excel;
 
 namespace Reanimator.Forms.ItemTransfer
 {
-    public enum CharacterStatus
-    {
-        NotLoaded,
-        Loaded,
-        Modified,
-        Saved,
-        Error
-    }
+    //public enum CharacterStatus
+    //{
+    //    NotLoaded,
+    //    Loaded,
+    //    Modified,
+    //    Saved,
+    //    Error
+    //}
 
     public partial class ItemTransferForm : Form
     {
-        const InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
-        const int INVENTORYWIDTH = 6;
-        const int INVENTORYHEIGHT = 6;
-        const int ITEMUNITSIZE = 40;
+        protected const InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
+        protected const int INVENTORYWIDTH = 6;
+        protected const int INVENTORYHEIGHT = 6;
+        protected int ITEMUNITSIZE = 40;
 
-        string _characterFolder;
+        protected string _characterFolder;
 
-        ExcelTables _excelTables;
-        UnitHelpFunctions _itemHelpFunctions;
+        //ExcelTables _excelTables;
+        protected UnitHelpFunctions _itemHelpFunctions;
 
-        string _characterPath1;
-        string _characterPath2;
-        Unit _characterUnit1;
-        Unit _characterUnit2;
+        protected string _characterPath1;
+        protected string _characterPath2;
+        protected Unit _characterUnit1;
+        protected Unit _characterUnit2;
 
         //Unit _selectedItemCharacter1;
-        ItemPanel _characterItemPanel1;
-        CharacterStatus _characterStatus1;
+        protected ItemPanel _characterItemPanel1;
+        protected CharacterStatus _characterStatus1;
 
         //Unit _selectedItemCharacter2;
-        ItemPanel _characterItemPanel2;
-        CharacterStatus _characterStatus2;
+        protected ItemPanel _characterItemPanel2;
+        protected CharacterStatus _characterStatus2;
 
-        ItemPanel _eventSender;
+        protected ItemPanel _eventSender;
 
+        ExcelTables _excelTables;
+
+        /// <summary>
+        /// Use this constructor when starting the item transfer window from within Reanimator (additional item infos)
+        /// </summary>
+        /// <param name="dataSet">The dataset to use</param>
+        /// <param name="excelTables">The exceltables to use</param>
         public ItemTransferForm(ref TableDataSet dataSet, ref ExcelTables excelTables)
         {
             InitializeComponent();
@@ -85,74 +92,6 @@ namespace Reanimator.Forms.ItemTransfer
             p_inventory2.Controls.Add(_characterItemPanel2);
 
             EnableComboBoxes(true, true);
-        }
-
-        private void SetCharacterStatus(CharacterStatus originalCharacterStatus, CharacterStatus newCharacterStatus, Panel panel, Label label)
-        {
-            originalCharacterStatus = newCharacterStatus;
-
-            if (newCharacterStatus == CharacterStatus.Error)
-            {
-                panel.BackColor = Color.Red;
-                label.Text = "An error occured";
-            }
-            else if (newCharacterStatus == CharacterStatus.Loaded)
-            {
-                panel.BackColor = Color.Green;
-                label.Text = "Character loaded";
-            }
-            else if (newCharacterStatus == CharacterStatus.Modified)
-            {
-                panel.BackColor = Color.Orange;
-                label.Text = "Character was modified";
-            }
-            else if (newCharacterStatus == CharacterStatus.NotLoaded)
-            {
-                panel.BackColor = Color.Silver;
-                label.Text = "No character loaded";
-            }
-            else if (newCharacterStatus == CharacterStatus.Saved)
-            {
-                panel.BackColor = Color.Lime;
-                label.Text = "Character saved";
-            }
-        }
-
-        //void _characterItemPanel_ItemDoubleClicked_Event(ItemPanel sender, InventoryItem item)
-        //{
-        //    _characterItemPanel_NewItemSelected_Event(sender, item);
-
-        //    b_transfer_Click(sender, null);
-
-        //}
-
-        void _characterItemPanel_NewItemSelected_Event(ItemPanel sender, InventoryItem item)
-        {
-            _eventSender = sender;
-
-            l_selectedItem.Text = item.Item.Name;
-
-            if (item.Quantity > 1)
-            {
-                l_selectedItem.Text += " (x" + item.Quantity.ToString() + ")";
-            }
-
-            l_selectedItem.Tag = item;
-        }
-
-        private string[] LoadCharacterNames()
-        {
-            string[] characters = Directory.GetFiles(_characterFolder, "*.hg1");
-
-            for(int counter = 0; counter < characters.Length; counter++)
-            {
-                string charName = characters[counter].Replace(_characterFolder + @"\", string.Empty);
-                charName = charName.Replace(".hg1", string.Empty);
-
-                characters[counter] = charName;
-            }
-
-            return characters;
         }
 
         private void b_loadCharacter1_Click(object sender, EventArgs e)
@@ -214,27 +153,6 @@ namespace Reanimator.Forms.ItemTransfer
             else
             {
                 MessageBox.Show("You cannot load the same character for trading!");
-            }
-        }
-
-        private void InitInventory(Unit unit, ItemPanel itemPanel)
-        {
-            itemPanel.Controls.Clear();
-
-            try
-            {
-                foreach (Unit item in unit.Items)
-                {
-                    if (item.inventoryType == (int)INVENTORYTYPE)
-                    {
-                        InventoryItem iItem = new InventoryItem(item);
-                        itemPanel.AddItem(iItem, true);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "InitInventory: " + unit.Name);
             }
         }
 
@@ -380,20 +298,102 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        private void EmergencyAbort()
-        {
-            SetCharacterStatus(_characterStatus1, CharacterStatus.Error, p_status1, l_status1);
-            SetCharacterStatus(_characterStatus2, CharacterStatus.Error, p_status2, l_status2);
-            MessageBox.Show("The trade window will now close to ensure that your savegames and items will not be corrupted!", "Error while transfering your items!");
-            this.Close();
-        }
-
         private void b_undoTransfer_Click(object sender, EventArgs e)
         {
             b_loadCharacter1_Click(null, null);
             b_loadCharacter2_Click(null, null);
 
             EnableComboBoxes(true, true);
+        }
+
+
+        private void SetCharacterStatus(CharacterStatus originalCharacterStatus, CharacterStatus newCharacterStatus, Panel panel, Label label)
+        {
+            originalCharacterStatus = newCharacterStatus;
+
+            if (newCharacterStatus == CharacterStatus.Error)
+            {
+                panel.BackColor = Color.Red;
+                label.Text = "An error occured";
+            }
+            else if (newCharacterStatus == CharacterStatus.Loaded)
+            {
+                panel.BackColor = Color.Green;
+                label.Text = "Character loaded";
+            }
+            else if (newCharacterStatus == CharacterStatus.Modified)
+            {
+                panel.BackColor = Color.Orange;
+                label.Text = "Character was modified";
+            }
+            else if (newCharacterStatus == CharacterStatus.NotLoaded)
+            {
+                panel.BackColor = Color.Silver;
+                label.Text = "No character loaded";
+            }
+            else if (newCharacterStatus == CharacterStatus.Saved)
+            {
+                panel.BackColor = Color.Lime;
+                label.Text = "Character saved";
+            }
+        }
+
+        void _characterItemPanel_NewItemSelected_Event(ItemPanel sender, InventoryItem item)
+        {
+            _eventSender = sender;
+
+            l_selectedItem.Text = item.Item.Name;
+
+            if (item.Quantity > 1)
+            {
+                l_selectedItem.Text += " (x" + item.Quantity.ToString() + ")";
+            }
+
+            l_selectedItem.Tag = item;
+        }
+
+        private string[] LoadCharacterNames()
+        {
+            string[] characters = Directory.GetFiles(_characterFolder, "*.hg1");
+
+            for (int counter = 0; counter < characters.Length; counter++)
+            {
+                string charName = characters[counter].Replace(_characterFolder + @"\", string.Empty);
+                charName = charName.Replace(".hg1", string.Empty);
+
+                characters[counter] = charName;
+            }
+
+            return characters;
+        }
+
+        private void InitInventory(Unit unit, ItemPanel itemPanel)
+        {
+            itemPanel.Controls.Clear();
+
+            try
+            {
+                foreach (Unit item in unit.Items)
+                {
+                    if (item.inventoryType == (int)INVENTORYTYPE)
+                    {
+                        InventoryItem iItem = new InventoryItem(item);
+                        itemPanel.AddItem(iItem, true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "InitInventory: " + unit.Name);
+            }
+        }
+
+        private void EmergencyAbort()
+        {
+            SetCharacterStatus(_characterStatus1, CharacterStatus.Error, p_status1, l_status1);
+            SetCharacterStatus(_characterStatus2, CharacterStatus.Error, p_status2, l_status2);
+            MessageBox.Show("The trade window will now close to ensure that your savegames and items will not be corrupted!", "Error while transfering your items!");
+            this.Close();
         }
 
         private void EnableComboBoxes(bool enable1, bool enable2)

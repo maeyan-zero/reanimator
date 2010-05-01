@@ -6,6 +6,7 @@ using Reanimator;
 using launcher.Properties;
 using System.Diagnostics;
 using Reanimator.Forms.ItemTransfer;
+using launcher.Revival;
 
 namespace launcher
 {
@@ -14,7 +15,8 @@ namespace launcher
         readonly String _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
         readonly List<String> _availableCharacters;
 
-        const String Homepage = "http://www.hellgateaus.net";
+
+        const String HOMEPAGE = "http://www.hellgateaus.net";
 
         public Launcher()
         {
@@ -110,7 +112,7 @@ namespace launcher
                             "Developed by Maeyan, Alex2069, Kite & Malachor." + Environment.NewLine +
                             "Artwork by lexsoOr, Music by ..." + Environment.NewLine +
                             Environment.NewLine +
-                            "Visit us at " + Homepage + " " + Environment.NewLine +
+                            "Visit us at " + HOMEPAGE + " " + Environment.NewLine +
                             "Contact maeyan.zero@gmail.com for info.",
                             "HellgateAus.net Launcher 2038", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -182,7 +184,7 @@ namespace launcher
         private void p_homePageLink_Click(object sender, EventArgs e)
         {
             MinimizeWindow();
-            Process.Start(Homepage);
+            Process.Start(HOMEPAGE);
         }
 
         private void MinimizeWindow()
@@ -193,7 +195,7 @@ namespace launcher
 
         private void p_openHomePage_MouseEnter(object sender, EventArgs e)
         {
-            toolStripStatusLabel1.Text = "Visit it at " + Homepage;
+            toolStripStatusLabel1.Text = "Visit it at " + HOMEPAGE;
         }
 
         private void p_openHomePage_MouseLeave(object sender, EventArgs e)
@@ -209,14 +211,8 @@ namespace launcher
 
         private void itemTransferToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // ItemTransferForm transfer = new ItemTransferForm(ref tableDataSet, ref excelTables);
-            TableDataSet set = new TableDataSet();
-            Reanimator.Excel.ExcelTables tables = new Reanimator.Excel.ExcelTables(new byte[] { });
-            ItemTransferForm transfer = new ItemTransferForm(ref set, ref tables);
+            SimpleItemTransferForm transfer = new SimpleItemTransferForm();
             transfer.ShowDialog(this);
-
-            //Transfer transfer = new Transfer();
-            //transfer.ShowDialog();
         }
     }
 }

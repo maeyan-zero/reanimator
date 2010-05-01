@@ -43,29 +43,26 @@ namespace Reanimator.Forms
                 Unit.StatBlock.Stat stat;
                 foreach (Unit unit in units)
                 {
-                    if(unit == null)
+                    for (int counter = 0; counter < unit.Stats.Length; counter++)
                     {
-                        for (int counter = 0; counter < unit.Stats.Length; counter++)
+                        stat = unit.Stats[counter];
+
+                        String name;
+                        if (hash.Contains(stat.id))
                         {
-                            stat = unit.Stats[counter];
-
-                            String name;
-                            if (hash.Contains(stat.id))
-                            {
-                                name = (string)hash[stat.Id];
-                            }
-                            else
-                            {
-                                name = _statsTable.GetStringFromId(stat.id);
-
-                                if (name != null)
-                                {
-                                    hash.Add(stat.id, name);
-                                }
-                            }
-
-                            unit.Stats[counter].Name = name;
+                            name = (string)hash[stat.Id];
                         }
+                        else
+                        {
+                            name = _statsTable.GetStringFromId(stat.id);
+
+                            if (name != null)
+                            {
+                                hash.Add(stat.id, name);
+                            }
+                        }
+
+                        unit.Stats[counter].Name = name;
                     }
 
                     GenerateUnitNameStrings(unit.Items.ToArray(), hash);
@@ -99,6 +96,31 @@ namespace Reanimator.Forms
             }
 
             return value;
+        }
+
+        public static Unit OpenCharacterFile(string fileName)
+        {
+            Unit unit = null;
+
+            FileStream heroFile;
+            try
+            {
+                heroFile = new FileStream(fileName, FileMode.Open);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e, "OpenCharacterFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+
+            BitBuffer bitBuffer = new BitBuffer(FileTools.StreamToByteArray(heroFile)) { DataByteOffset = 0x2028 };
+
+            unit = new Unit(bitBuffer);
+            unit.ParseUnit();
+
+            heroFile.Close();
+
+            return unit;
         }
 
         public static Unit OpenCharacterFile(ref ExcelTables excelTables, string fileName)
@@ -280,6 +302,21 @@ namespace Reanimator.Forms
             return 0;
         }
 
+        public static int GetSimpleValue(Unit unit, int valueId)
+        {
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+
+                if (unitStats.Id == valueId)
+                {
+                    return unitStats.values[0].Stat;
+                }
+            }
+            //MessageBox.Show("Field \"" + valueName + "\" not present in unit " + unit.Name + "!");
+            return 0;
+        }
+
         public static Unit.StatBlock.Stat GetComplexValue(Unit unit, string valueName)
         {
             for (int counter = 0; counter < unit.Stats.Length; counter++)
@@ -366,7 +403,7 @@ namespace Reanimator.Forms
 
 
 
-    enum ItemQuality
+    public enum ItemQuality
     {
         Normal = 12336,
         NormalMod = 14384,
@@ -513,7 +550,7 @@ namespace Reanimator.Forms
         willpower_feed = 17458
     };
 
-    enum InventoryTypes
+    public enum InventoryTypes
     {
         Inventory = 19760,
         Stash = 28208,
