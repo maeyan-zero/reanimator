@@ -14,12 +14,25 @@ namespace Reanimator.Forms
 {
     public partial class HeroEditor : Form
     {
+        enum CharacterClass
+        {
+            Blademaster = 1,
+            Guardian = 3,
+
+            Evoker = 6,
+            Summoner = 8,
+
+            Marksman = 11,
+            Engineer = 13
+        }
+
         readonly Unit _heroUnit;
         readonly TableDataSet _dataSet;
         readonly ExcelTables _excelTables;
         readonly CompletePanelControl _panel;
         readonly String _filePath;
         readonly UnitHelpFunctions _itemFunctions;
+        CharacterClass _characterClass;
 
         public HeroEditor(Unit heroUnit, TableDataSet tableDataSet, String filePath)
         {
@@ -53,7 +66,7 @@ namespace Reanimator.Forms
 
             InitUnknownStatList();
 
-            int charClassId = 1;
+            int charClassId = (int)_characterClass;
             InitializeAttributeSkillPanel(charClassId);
 
             InitInventory();
@@ -482,44 +495,56 @@ namespace Reanimator.Forms
                 {
                     case (0x7679):
                         job = "Male Summoner";
+                        _characterClass = CharacterClass.Summoner;
                         break;
                     case (0x7579):
                         job = "Female Summoner";
+                        _characterClass = CharacterClass.Summoner;
                         break;
 
                     case (0x7A7A):
                         job = "Male Guardian";
+                        _characterClass = CharacterClass.Guardian;
                         break;
                     case (0x797A):
                         job = "Female Guardian";
+                        _characterClass = CharacterClass.Guardian;
                         break;
 
                     case (0x7678):
                         job = "Male Marksman";
+                        _characterClass = CharacterClass.Marksman;
                         break;
                     case (0x7578):
                         job = "Female Marksman";
+                        _characterClass = CharacterClass.Marksman;
                         break;
 
                     case (0x7879):
                         job = "Male Evoker";
+                        _characterClass = CharacterClass.Evoker;
                         break;
                     case (0x7779):
                         job = "Female Evoker";
+                        _characterClass = CharacterClass.Evoker;
                         break;
 
                     case (0x787A):
                         job = "Male Blademaster";
+                        _characterClass = CharacterClass.Blademaster;
                         break;
                     case (0x777A):
                         job = "Female Blademaster";
+                        _characterClass = CharacterClass.Blademaster;
                         break;
 
                     case (0x7878):
                         job = "Male Engineer";
+                        _characterClass = CharacterClass.Engineer;
                         break;
                     case (0x7778):
                         job = "Female Engineer";
+                        _characterClass = CharacterClass.Engineer;
                         break;
 
                     default:

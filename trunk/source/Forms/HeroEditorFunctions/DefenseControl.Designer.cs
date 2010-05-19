@@ -60,7 +60,7 @@
             // l_armor
             // 
             this.l_armor.AutoSize = true;
-            this.l_armor.BackColor = System.Drawing.Color.Transparent;
+            this.l_armor.BackColor = System.Drawing.Color.Black;
             this.l_armor.ForeColor = System.Drawing.Color.SteelBlue;
             this.l_armor.Location = new System.Drawing.Point(9, 112);
             this.l_armor.MaximumSize = new System.Drawing.Size(42, 13);
@@ -74,7 +74,7 @@
             // l_shields
             // 
             this.l_shields.AutoSize = true;
-            this.l_shields.BackColor = System.Drawing.Color.Transparent;
+            this.l_shields.BackColor = System.Drawing.Color.Black;
             this.l_shields.ForeColor = System.Drawing.Color.SteelBlue;
             this.l_shields.Location = new System.Drawing.Point(9, 58);
             this.l_shields.MaximumSize = new System.Drawing.Size(42, 13);
@@ -111,7 +111,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.BackColor = System.Drawing.Color.Transparent;
+            this.label10.BackColor = System.Drawing.Color.Black;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.SteelBlue;
             this.label10.Location = new System.Drawing.Point(57, 59);
@@ -123,7 +123,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Transparent;
+            this.label9.BackColor = System.Drawing.Color.Black;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
             this.label9.Location = new System.Drawing.Point(57, 42);
@@ -135,7 +135,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.Transparent;
+            this.label7.BackColor = System.Drawing.Color.Black;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
             this.label7.Location = new System.Drawing.Point(57, 95);
@@ -147,7 +147,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.BackColor = System.Drawing.Color.Black;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
             this.label6.Location = new System.Drawing.Point(80, 128);
@@ -159,7 +159,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.BackColor = System.Drawing.Color.Black;
             this.label5.ForeColor = System.Drawing.Color.Lime;
             this.label5.Location = new System.Drawing.Point(80, 261);
             this.label5.Name = "label5";
@@ -170,7 +170,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.BackColor = System.Drawing.Color.Black;
             this.label4.ForeColor = System.Drawing.Color.Violet;
             this.label4.Location = new System.Drawing.Point(80, 235);
             this.label4.Name = "label4";
@@ -181,7 +181,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.BackColor = System.Drawing.Color.Black;
             this.label3.ForeColor = System.Drawing.Color.DeepSkyBlue;
             this.label3.Location = new System.Drawing.Point(80, 209);
             this.label3.Name = "label3";
@@ -192,7 +192,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.BackColor = System.Drawing.Color.Black;
             this.label2.ForeColor = System.Drawing.Color.Red;
             this.label2.Location = new System.Drawing.Point(80, 183);
             this.label2.Name = "label2";
@@ -203,7 +203,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.BackColor = System.Drawing.Color.Black;
             this.label1.ForeColor = System.Drawing.Color.DarkGray;
             this.label1.Location = new System.Drawing.Point(80, 156);
             this.label1.Name = "label1";
