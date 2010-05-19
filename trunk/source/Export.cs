@@ -11,7 +11,6 @@ namespace Reanimator
         {
             StringWriter csv = new StringWriter();
 
-            /*
             // column headers
             for (int col = 0; col < datagridview.Rows[0].Cells.Count; col++)
             {
@@ -25,7 +24,6 @@ namespace Reanimator
                }
             }
             csv.Write(Environment.NewLine);
-            */
 
             // rows
             for (int row = 0; row < datagridview.Rows.Count - 1; row++)
