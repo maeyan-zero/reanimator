@@ -265,12 +265,6 @@
     <Compile Include="Forms\ThreadedFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UpdateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UpdateForm.Designer.cs">
-      <DependentUpon>UpdateForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\WayPointControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -415,10 +409,6 @@
       <DependentUpon>ThreadedFormBase.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UpdateForm.resx">
-      <DependentUpon>UpdateForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\WayPointControl.resx">
       <DependentUpon>WayPointControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -476,10 +466,6 @@
     <ProjectReference Include="..\dlls\FileTools\FileTools.csproj">
       <Project>{D6EC58F1-C9CF-44FA-897C-5886BF47F896}</Project>
       <Name>FileTools</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UpdateChecker\UpdateChecker.csproj">
-      <Project>{84FFA630-84E2-4C38-9FBE-79EF33558818}</Project>
-      <Name>UpdateChecker</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

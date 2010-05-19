@@ -16,13 +16,15 @@ namespace Reanimator.Forms.ItemTransfer
                 /// <summary>
         /// Use this constructor when starting the item transfer window from within Reanimator (additional item infos)
         /// </summary>
-        /// <param name="dataSet">THe dataset to use</param>
-        /// <param name="excelTables">the exceltables to use</param>
+        /// <param name="dataSet">The dataset to use</param>
+        /// <param name="excelTables">The exceltables to use</param>
         public ComplexItemTransferForm(ref TableDataSet dataSet, ref ExcelTables excelTables) : base()
         {
             _itemHelpFunctions = new UnitHelpFunctions(ref dataSet, ref excelTables);
 
             _excelTables = excelTables;
+
+            EnableButtons(false);
         }
 
         protected override void b_loadCharacter1_Click(object sender, EventArgs e)
@@ -54,6 +56,8 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 MessageBox.Show("You cannot load the same character for trading!");
             }
+
+            CheckAndSetButtonStatus();
         }
 
         protected override void b_loadCharacter2_Click(object sender, EventArgs e)
@@ -84,6 +88,20 @@ namespace Reanimator.Forms.ItemTransfer
             else
             {
                 MessageBox.Show("You cannot load the same character for trading!");
+            }
+
+            CheckAndSetButtonStatus();
+        }
+
+        private void CheckAndSetButtonStatus()
+        {
+            if (_characterUnit1 != null && _characterUnit2 != null)
+            {
+                EnableButtons(true);
+            }
+            else
+            {
+                EnableButtons(false);
             }
         }
 
