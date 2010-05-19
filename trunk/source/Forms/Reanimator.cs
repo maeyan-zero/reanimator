@@ -31,49 +31,70 @@ namespace Reanimator
 
         private void CheckEnvironment()
         {
-            if (Directory.Exists(Config.HglDir) == false)
+            if (!Config.DatUnpacked)
             {
-                MessageBox.Show("It looks like your using Reanimator for the first time. Please set your Hellgate: London directory.");
-                DialogResult result = _options.ShowDialog();
-            }
-            if (Config.DatUnpacked == false)
-            {
-                int[] unpack = new int[] { Index.LatestPatch, Index.LatestPatchLocalized };
-
-                DialogResult result = MessageBox.Show("To use Reanimator, you must extract files from the latest patch 1.2. Continue?", "Initialization", MessageBoxButtons.OKCancel);
-
-                if (result == DialogResult.OK)
+                try
                 {
-                    foreach (int dat in unpack)
+                    MessageBox.Show("Welcome to the Reanimator installation wizard. First, select your HGL directory.", "Installation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    FolderBrowserDialog folder = new FolderBrowserDialog();
+                    folder.SelectedPath = Config.HglDir;
+                    folder.ShowDialog();
+
+                    Config.HglDir = folder.SelectedPath;
+
+                    if (Config.DatUnpacked == false)
                     {
-                        Index index = new Index(Config.HglDir + "//data//" + Index.FileNames[dat] + ".idx");
+                        int[] unpack = new int[] { Index.LatestPatch, Index.LatestPatchLocalized };
 
-                        if (index == null)
-                        {
-                            MessageBox.Show("Please check you have your directory set correctly and have the latest patch installed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            continue;
-                        }
+                        DialogResult result = MessageBox.Show("To use Reanimator, you must extract files from the latest patch 1.2. Continue?", "Initialization", MessageBoxButtons.OKCancel);
 
-                        foreach (Index.FileIndex file in index.FileTable)
+                        if (result == DialogResult.OK)
                         {
-                            if (file.DirectoryString.Contains("excel"))
+                            foreach (int dat in unpack)
                             {
-                                
-                                string directory = Config.HglDir + "\\Reanimator\\" + file.DirectoryString;
-                                string filename = directory + file.FileNameString;
-                                if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-                                FileStream stream = new FileStream(@filename, FileMode.Create);
-                                byte[] buffer = index.ReadDataFile(file);
-                                stream.Write(buffer, 0, buffer.Length);
-                                stream.Close();
+                                Index index = new Index(Config.HglDir + "//data//" + Index.FileNames[dat] + ".idx");
+
+                                if (index == null)
+                                {
+                                    MessageBox.Show("Please check you have your directory set correctly and have the latest patch installed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    throw new Exception("Dir error");
+                                }
+
+                                if (index.Modified)
+                                {
+                                    MessageBox.Show("Your index file is modified. Please restore it and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    throw new Exception("Index error");
+                                }
+
+                                foreach (Index.FileIndex file in index.FileTable)
+                                {
+                                    if (file.DirectoryString.Contains("excel"))
+                                    {
+                                        string directory = Config.HglDir + "\\Reanimator\\" + file.DirectoryString;
+                                        string filename = directory + file.FileNameString;
+                                        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+                                        FileStream stream = new FileStream(@filename, FileMode.Create);
+                                        byte[] buffer = index.ReadDataFile(file);
+                                        stream.Write(buffer, 0, buffer.Length);
+                                        stream.Close();
+                                    }
+                                }
+
+                                index.Dispose();
                             }
+
+                            Config.DatUnpacked = true;
+                            Config.DataDirsRoot = Config.HglDir + "\\Reanimator\\";
+
+                            MessageBox.Show("Installation success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
-
-                        index.Dispose();
                     }
-
-                    Config.DatUnpacked = true;
-                    Config.DataDirsRoot = Config.HglDir + "\\Reanimator\\";
+                }
+                catch
+                {
+                    Config.DatUnpacked = false;
+                    MessageBox.Show("An error occured during the installation.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -820,6 +841,13 @@ namespace Reanimator
         {
             TableSearch search = new TableSearch(ref _tableDataSet, ref _excelTables);
             search.ShowDialog(this);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Reanimator by the Revival Team (c) 2009-2010" + Environment.NewLine
+                + "Credits: Maeyan, Alex2069, Kite & Malachor" + Environment.NewLine
+                + "For more info visit us at: http://www.hellgateaus.net", "Credits", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

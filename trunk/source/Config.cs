@@ -61,6 +61,12 @@ namespace Reanimator
             set { SetValue("HglDir", value); }
         }
 
+        public static bool Installed
+        {
+            get { return GetValue("Installed", false); }
+            set { SetValue("Installed", value); }
+        }
+
         public static string SaveDir
         {
             get { return GetValue("SaveDir", String.Format(@"C:\Users\{0}\Documents\My Games\Hellgate\Save\Singleplayer", Environment.UserName)); }

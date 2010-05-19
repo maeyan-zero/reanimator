@@ -40,7 +40,6 @@
             this.stringsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modificationFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modelFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.havokFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -161,8 +160,7 @@
             this.cookedFileToolStripMenuItem,
             this.stringsFileToolStripMenuItem,
             this.modificationFileToolStripMenuItem,
-            this.modelFileToolStripMenuItem,
-            this.havokFileToolStripMenuItem});
+            this.modelFileToolStripMenuItem});
             this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
@@ -181,6 +179,7 @@
             // 
             // characterFileToolStripMenuItem
             // 
+            this.characterFileToolStripMenuItem.Enabled = false;
             this.characterFileToolStripMenuItem.Name = "characterFileToolStripMenuItem";
             this.characterFileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
                         | System.Windows.Forms.Keys.O)));
@@ -206,6 +205,7 @@
             // 
             // modificationFileToolStripMenuItem
             // 
+            this.modificationFileToolStripMenuItem.Enabled = false;
             this.modificationFileToolStripMenuItem.Name = "modificationFileToolStripMenuItem";
             this.modificationFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.modificationFileToolStripMenuItem.Text = "Modification File...";
@@ -213,17 +213,11 @@
             // 
             // modelFileToolStripMenuItem
             // 
+            this.modelFileToolStripMenuItem.Enabled = false;
             this.modelFileToolStripMenuItem.Name = "modelFileToolStripMenuItem";
             this.modelFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.modelFileToolStripMenuItem.Text = "Model File...";
             this.modelFileToolStripMenuItem.Click += new System.EventHandler(this.modelFileToolStripMenuItem_Click);
-            // 
-            // havokFileToolStripMenuItem
-            // 
-            this.havokFileToolStripMenuItem.Name = "havokFileToolStripMenuItem";
-            this.havokFileToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
-            this.havokFileToolStripMenuItem.Text = "Havok File...";
-            this.havokFileToolStripMenuItem.Click += new System.EventHandler(this.havokFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -501,6 +495,7 @@
             // 
             // itemShopToolStripMenuItem
             // 
+            this.itemShopToolStripMenuItem.Enabled = false;
             this.itemShopToolStripMenuItem.Name = "itemShopToolStripMenuItem";
             this.itemShopToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.itemShopToolStripMenuItem.Text = "&Item Shop";
@@ -594,6 +589,7 @@
             // 
             // contentsToolStripMenuItem
             // 
+            this.contentsToolStripMenuItem.Enabled = false;
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
             this.contentsToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
@@ -601,6 +597,7 @@
             // 
             // indexToolStripMenuItem
             // 
+            this.indexToolStripMenuItem.Enabled = false;
             this.indexToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("indexToolStripMenuItem.Image")));
             this.indexToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
@@ -609,6 +606,7 @@
             // 
             // searchToolStripMenuItem
             // 
+            this.searchToolStripMenuItem.Enabled = false;
             this.searchToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("searchToolStripMenuItem.Image")));
             this.searchToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
@@ -624,7 +622,8 @@
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
-            this.aboutToolStripMenuItem.Text = "&About ... ...";
+            this.aboutToolStripMenuItem.Text = "&About ...";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // toolStrip
             // 
@@ -734,10 +733,11 @@
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "Reanimator";
-            this.Text = "Reanimator 2038";
+            this.Text = "Reanimator";
             this.Load += new System.EventHandler(this.Reanimator_Load);
             this.ResizeEnd += new System.EventHandler(this.Reanimator_ResizeEnd);
             this.menuStrip.ResumeLayout(false);
@@ -821,7 +821,6 @@
         private System.Windows.Forms.ToolStripMenuItem showExcelTablesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem applyModificationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modelFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem havokFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tradeItemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem itemShopToolStripMenuItem;
