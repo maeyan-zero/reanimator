@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace Reanimator.Excel
 {
@@ -28,8 +29,9 @@ namespace Reanimator.Excel
             public byte AppearanceHeightMax;
             public byte AppearanceWeightMin;
             public byte AppearanceWeightMax;
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-            Int32[] undefined2;
+            //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+            public Int32 undefined2;
+            public Single undefined3;
             public Int32 State;//idx
             public float MoneyChanceMultiplier;
             public float MoneyAmountMultiplier;
@@ -53,7 +55,6 @@ namespace Reanimator.Excel
             public Int32 MinionQuality;//idx
             public Int32 ShowLabel;//bool
             public Int32 TreasureClass;//idx
-
         }
 
         public MonsterQuality(byte[] data) : base(data) { }

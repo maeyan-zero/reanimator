@@ -176,6 +176,7 @@
     <Compile Include="PlayerRace.cs" />
     <Compile Include="Procs.cs" />
     <Compile Include="Properties.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quest.cs" />
     <Compile Include="QuestCast.cs" />
     <Compile Include="QuestState.cs" />
@@ -233,9 +234,6 @@
       <Project>{D6EC58F1-C9CF-44FA-897C-5886BF47F896}</Project>
       <Name>FileTools</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
