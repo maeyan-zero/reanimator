@@ -35,7 +35,7 @@
             // l_controlMenuName
             // 
             this.l_controlMenuName.AutoSize = true;
-            this.l_controlMenuName.BackColor = System.Drawing.Color.Transparent;
+            this.l_controlMenuName.BackColor = System.Drawing.Color.Black;
             this.l_controlMenuName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.l_controlMenuName.ForeColor = System.Drawing.Color.White;
             this.l_controlMenuName.Location = new System.Drawing.Point(5, 4);
@@ -47,17 +47,18 @@
             // 
             // b_minimizeMaximize
             // 
+            this.b_minimizeMaximize.BackColor = System.Drawing.Color.Black;
             this.b_minimizeMaximize.BackgroundImage = global::Reanimator.Properties.Resources.panelButton_maximize_small;
             this.b_minimizeMaximize.FlatAppearance.BorderSize = 0;
-            this.b_minimizeMaximize.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.b_minimizeMaximize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.b_minimizeMaximize.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.b_minimizeMaximize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.b_minimizeMaximize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.b_minimizeMaximize.Location = new System.Drawing.Point(232, 3);
             this.b_minimizeMaximize.Name = "b_minimizeMaximize";
             this.b_minimizeMaximize.Size = new System.Drawing.Size(19, 18);
             this.b_minimizeMaximize.TabIndex = 25;
             this.b_minimizeMaximize.Tag = "header";
-            this.b_minimizeMaximize.UseVisualStyleBackColor = true;
+            this.b_minimizeMaximize.UseVisualStyleBackColor = false;
             this.b_minimizeMaximize.Click += new System.EventHandler(this.b_minimizeMaximize_Click);
             // 
             // ParentStatusControl

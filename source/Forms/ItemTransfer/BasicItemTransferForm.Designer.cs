@@ -68,6 +68,7 @@
             // p_inventory1
             // 
             this.p_inventory1.AutoScroll = true;
+            this.p_inventory1.BackColor = System.Drawing.Color.Black;
             this.p_inventory1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.p_inventory1.Location = new System.Drawing.Point(3, 16);
             this.p_inventory1.Name = "p_inventory1";
@@ -196,6 +197,7 @@
             // p_inventory2
             // 
             this.p_inventory2.AutoScroll = true;
+            this.p_inventory2.BackColor = System.Drawing.Color.Black;
             this.p_inventory2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.p_inventory2.Location = new System.Drawing.Point(3, 16);
             this.p_inventory2.Name = "p_inventory2";

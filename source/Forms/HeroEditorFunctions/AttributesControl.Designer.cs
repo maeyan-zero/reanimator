@@ -56,12 +56,12 @@
             // 
             // b_strengthAdd
             // 
-            this.b_strengthAdd.BackColor = System.Drawing.Color.Transparent;
+            this.b_strengthAdd.BackColor = System.Drawing.Color.Black;
             this.b_strengthAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("b_strengthAdd.BackgroundImage")));
             this.b_strengthAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.b_strengthAdd.FlatAppearance.BorderSize = 0;
-            this.b_strengthAdd.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.b_strengthAdd.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.b_strengthAdd.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.b_strengthAdd.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.b_strengthAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.b_strengthAdd.Location = new System.Drawing.Point(219, 77);
             this.b_strengthAdd.Name = "b_strengthAdd";
@@ -73,7 +73,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.BackColor = System.Drawing.Color.Black;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
             this.label6.Location = new System.Drawing.Point(57, 156);
@@ -85,7 +85,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.BackColor = System.Drawing.Color.Transparent;
+            this.label5.BackColor = System.Drawing.Color.Black;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
             this.label5.Location = new System.Drawing.Point(57, 117);
@@ -97,7 +97,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.BackColor = System.Drawing.Color.Black;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
             this.label4.Location = new System.Drawing.Point(57, 78);
@@ -109,7 +109,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.BackColor = System.Drawing.Color.Black;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(57, 39);
@@ -120,12 +120,12 @@
             // 
             // b_accuracyAdd
             // 
-            this.b_accuracyAdd.BackColor = System.Drawing.Color.Transparent;
+            this.b_accuracyAdd.BackColor = System.Drawing.Color.Black;
             this.b_accuracyAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("b_accuracyAdd.BackgroundImage")));
             this.b_accuracyAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.b_accuracyAdd.FlatAppearance.BorderSize = 0;
-            this.b_accuracyAdd.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.b_accuracyAdd.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.b_accuracyAdd.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.b_accuracyAdd.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.b_accuracyAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.b_accuracyAdd.Location = new System.Drawing.Point(219, 38);
             this.b_accuracyAdd.Name = "b_accuracyAdd";
@@ -253,7 +253,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.BackColor = System.Drawing.Color.Black;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.SteelBlue;
             this.label2.Location = new System.Drawing.Point(132, 5);
@@ -265,12 +265,12 @@
             // 
             // b_willpowerSubstract
             // 
-            this.b_willpowerSubstract.BackColor = System.Drawing.Color.Transparent;
+            this.b_willpowerSubstract.BackColor = System.Drawing.Color.Black;
             this.b_willpowerSubstract.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("b_willpowerSubstract.BackgroundImage")));
             this.b_willpowerSubstract.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.b_willpowerSubstract.FlatAppearance.BorderSize = 0;
-            this.b_willpowerSubstract.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.b_willpowerSubstract.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.b_willpowerSubstract.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.b_willpowerSubstract.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.b_willpowerSubstract.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.b_willpowerSubstract.Location = new System.Drawing.Point(193, 155);
             this.b_willpowerSubstract.Name = "b_willpowerSubstract";
@@ -281,12 +281,12 @@
             // 
             // b_willpowerAdd
             // 
-            this.b_willpowerAdd.BackColor = System.Drawing.Color.Transparent;
+            this.b_willpowerAdd.BackColor = System.Drawing.Color.Black;
             this.b_willpowerAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("b_willpowerAdd.BackgroundImage")));
             this.b_willpowerAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.b_willpowerAdd.FlatAppearance.BorderSize = 0;
-            this.b_willpowerAdd.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.b_willpowerAdd.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.b_willpowerAdd.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.b_willpowerAdd.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.b_willpowerAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.b_willpowerAdd.Location = new System.Drawing.Point(219, 155);
             this.b_willpowerAdd.Name = "b_willpowerAdd";
@@ -297,12 +297,12 @@
             // 
             // b_staminaSubstract
             // 
-            this.b_staminaSubstract.BackColor = System.Drawing.Color.Transparent;
+            this.b_staminaSubstract.BackColor = System.Drawing.Color.Black;
             this.b_staminaSubstract.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("b_staminaSubstract.BackgroundImage")));
             this.b_staminaSubstract.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.b_staminaSubstract.FlatAppearance.BorderSize = 0;
-            this.b_staminaSubstract.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.b_staminaSubstract.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.b_staminaSubstract.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.b_staminaSubstract.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.b_staminaSubstract.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.b_staminaSubstract.Location = new System.Drawing.Point(193, 116);
             this.b_staminaSubstract.Name = "b_staminaSubstract";
@@ -313,12 +313,12 @@
             // 
             // b_staminaAdd
             // 
-            this.b_staminaAdd.BackColor = System.Drawing.Color.Transparent;
+            this.b_staminaAdd.BackColor = System.Drawing.Color.Black;
             this.b_staminaAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("b_staminaAdd.BackgroundImage")));
             this.b_staminaAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.b_staminaAdd.FlatAppearance.BorderSize = 0;
-            this.b_staminaAdd.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.b_staminaAdd.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.b_staminaAdd.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.b_staminaAdd.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.b_staminaAdd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.b_staminaAdd.Location = new System.Drawing.Point(219, 116);
             this.b_staminaAdd.Name = "b_staminaAdd";
@@ -329,12 +329,12 @@
             // 
             // b_strengthSubstract
             // 
-            this.b_strengthSubstract.BackColor = System.Drawing.Color.Transparent;
+            this.b_strengthSubstract.BackColor = System.Drawing.Color.Black;
             this.b_strengthSubstract.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("b_strengthSubstract.BackgroundImage")));
             this.b_strengthSubstract.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.b_strengthSubstract.FlatAppearance.BorderSize = 0;
-            this.b_strengthSubstract.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.b_strengthSubstract.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.b_strengthSubstract.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.b_strengthSubstract.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.b_strengthSubstract.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.b_strengthSubstract.Location = new System.Drawing.Point(193, 77);
             this.b_strengthSubstract.Name = "b_strengthSubstract";
@@ -345,12 +345,12 @@
             // 
             // b_accuracySubstract
             // 
-            this.b_accuracySubstract.BackColor = System.Drawing.Color.Transparent;
+            this.b_accuracySubstract.BackColor = System.Drawing.Color.Black;
             this.b_accuracySubstract.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("b_accuracySubstract.BackgroundImage")));
             this.b_accuracySubstract.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.b_accuracySubstract.FlatAppearance.BorderSize = 0;
-            this.b_accuracySubstract.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
-            this.b_accuracySubstract.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.b_accuracySubstract.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
+            this.b_accuracySubstract.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             this.b_accuracySubstract.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.b_accuracySubstract.Location = new System.Drawing.Point(193, 38);
             this.b_accuracySubstract.Name = "b_accuracySubstract";

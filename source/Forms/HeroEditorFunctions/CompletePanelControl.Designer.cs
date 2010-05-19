@@ -103,7 +103,7 @@
             // l_characterClass
             // 
             this.l_characterClass.AutoSize = true;
-            this.l_characterClass.BackColor = System.Drawing.Color.Transparent;
+            this.l_characterClass.BackColor = System.Drawing.Color.Black;
             this.l_characterClass.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.l_characterClass.ForeColor = System.Drawing.Color.White;
             this.l_characterClass.Location = new System.Drawing.Point(186, 38);
@@ -115,7 +115,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.BackColor = System.Drawing.Color.Transparent;
+            this.label9.BackColor = System.Drawing.Color.Black;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
             this.label9.Location = new System.Drawing.Point(306, 74);
@@ -154,7 +154,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.Transparent;
+            this.label8.BackColor = System.Drawing.Color.Black;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.label8.Location = new System.Drawing.Point(128, 74);
@@ -166,7 +166,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.BackColor = System.Drawing.Color.Transparent;
+            this.label7.BackColor = System.Drawing.Color.Black;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.label7.Location = new System.Drawing.Point(128, 56);
@@ -178,7 +178,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
+            this.label6.BackColor = System.Drawing.Color.Black;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.label6.Location = new System.Drawing.Point(128, 38);
@@ -202,7 +202,7 @@
             // p_attributePanel
             // 
             this.p_attributePanel.AutoScroll = true;
-            this.p_attributePanel.BackColor = System.Drawing.Color.Transparent;
+            this.p_attributePanel.BackColor = System.Drawing.Color.Black;
             this.p_attributePanel.Location = new System.Drawing.Point(123, 115);
             this.p_attributePanel.Name = "p_attributePanel";
             this.p_attributePanel.Size = new System.Drawing.Size(276, 560);
@@ -210,7 +210,7 @@
             // 
             // p_skillPanel
             // 
-            this.p_skillPanel.BackColor = System.Drawing.Color.Transparent;
+            this.p_skillPanel.BackColor = System.Drawing.Color.Black;
             this.p_skillPanel.Location = new System.Drawing.Point(418, 0);
             this.p_skillPanel.Name = "p_skillPanel";
             this.p_skillPanel.Size = new System.Drawing.Size(802, 746);

@@ -191,12 +191,6 @@
     <Compile Include="Forms\ItemTransfer\ItemPanel.Designer.cs">
       <DependentUpon>ItemPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ItemTransfer\ItemTransferForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ItemTransfer\ItemTransferForm.Designer.cs">
-      <DependentUpon>ItemTransferForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ItemUtilities.cs" />
     <Compile Include="Forms\ModificationForm.cs">
       <SubType>Form</SubType>
@@ -403,10 +397,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemTransfer\ItemPanel.resx">
       <DependentUpon>ItemPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ItemTransfer\ItemTransferForm.resx">
-      <DependentUpon>ItemTransferForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MinigameControl.resx">
