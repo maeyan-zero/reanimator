@@ -33,10 +33,10 @@ namespace Reanimator
             _currentVersionInfos.installedVersion.link = "http://www.hellgateaus.net/forum/viewtopic.php?f=47&t=1279&p=18796#p18796";
             _currentVersionInfos.saveFolder = @"C:\";
 
+            CheckEnvironment();
             InitializeComponent();
         }
 
-        /*
         private void CheckEnvironment()
         {
             if (Directory.Exists(Config.HglDir) == false)
@@ -46,14 +46,45 @@ namespace Reanimator
             }
             if (Config.DatUnpacked == false)
             {
+                int[] unpack = new int[] { Index.LatestPatch, Index.LatestPatchLocalized };
+
                 DialogResult result = MessageBox.Show("To use Reanimator, you must extract files from the latest patch 1.2. Continue?", "Initialization", MessageBoxButtons.OKCancel);
+
                 if (result == DialogResult.OK)
                 {
-                    // Extract DAT appropriatly
+                    foreach (int dat in unpack)
+                    {
+                        Index index = new Index(Config.HglDir + "//data//" + Index.FileNames[dat] + ".idx");
+
+                        if (index == null)
+                        {
+                            MessageBox.Show("Please check you have your directory set correctly and have the latest patch installed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            continue;
+                        }
+
+                        foreach (Index.FileIndex file in index.FileTable)
+                        {
+                            if (file.DirectoryString.Contains("excel"))
+                            {
+                                
+                                string directory = Config.HglDir + "\\Reanimator\\" + file.DirectoryString;
+                                string filename = directory + file.FileNameString;
+                                if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+                                FileStream stream = new FileStream(@filename, FileMode.Create);
+                                byte[] buffer = index.ReadDataFile(file);
+                                stream.Write(buffer, 0, buffer.Length);
+                                stream.Close();
+                            }
+                        }
+
+                        index.Dispose();
+                    }
+
+                    Config.DatUnpacked = true;
+                    Config.DataDirsRoot = Config.HglDir + "\\Reanimator\\";
                 }
             }
         }
-         * */
 
         private void ShowNewForm(object sender, EventArgs e)
         {
