@@ -49,6 +49,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                     //"\t- wsinventory_atlas.xml\n" +
                     //"\t- wsinventory_atlas.png\n",
                     "Files not found!");
+
                     return;
                 }
             }

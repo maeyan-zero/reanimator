@@ -203,5 +203,14 @@ namespace Reanimator.Forms.ItemTransfer
             cb_selectCharacter2.Enabled = enable;
             b_loadCharacter2.Enabled = enable;
         }
+
+        protected void EnableButtons(bool enable)
+        {
+            b_transfer.Enabled = enable;
+            b_transferAll.Enabled = enable;
+            b_delete.Enabled = enable;
+            b_save.Enabled = enable;
+            b_undoTransfer.Enabled = enable;
+        }
     }
 }

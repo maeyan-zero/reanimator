@@ -14,24 +14,16 @@ namespace Reanimator
     {
         private readonly Options _options;
         private readonly List<string> _indexFilesOpen;
-        private readonly UpdateCheckerParams _currentVersionInfos;
         private ExcelTables _excelTables;
         private TablesLoaded _tablesLoaded;
         private TableDataSet _tableDataSet;
         private StringsTables _stringsTables;
-        private UpdateForm _updateForm;
         private int _childFormNumber;
 
         public Reanimator()
         {
             _options = new Options();
             _indexFilesOpen = new List<string>();
-
-            _currentVersionInfos = new UpdateCheckerParams();
-            _currentVersionInfos.installedVersion.name = "Test";
-            _currentVersionInfos.installedVersion.version.CurrentVersion = "1_0_0";
-            _currentVersionInfos.installedVersion.link = "http://www.hellgateaus.net/forum/viewtopic.php?f=47&t=1279&p=18796#p18796";
-            _currentVersionInfos.saveFolder = @"C:\";
 
             CheckEnvironment();
             InitializeComponent();
@@ -755,37 +747,6 @@ namespace Reanimator
             {
                 _tablesLoaded.Hide();
             }
-        }
-
-        private void CheckForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (_updateForm == null)
-            {
-                _updateForm = new UpdateForm(_currentVersionInfos)
-                                 {
-                                     StartPosition = FormStartPosition.CenterScreen,
-                                     MdiParent = this
-                                 };
-            }
-
-            _updateForm.Show();
-
-            //foreach (NewMod mod in mods)
-            //{
-            //    // if the mod file defines its own extension use that one)
-            //    extension = mod.extension == null ? extension : mod.extension;
-
-            //    // might also want to check if the mod is the most up-to-date one (compared to possible other mods)
-            //    if (!File.Exists(folder + mod.name + "_" + mod.version.CurrentVersion + extension) && !installedVersion.IsNewestVersion(mod))
-            //    {
-            //        Console.WriteLine("Newer version found! Downloading file to " + folder + "...");
-            //        UpdateChecker.DownloadFile(mod, folder, extension);
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine("You already have the newest version installed or downloaded!");
-            //    }
-            //}
         }
 
         private void applyModificationsToolStripMenuItem_Click(object sender, EventArgs e)
