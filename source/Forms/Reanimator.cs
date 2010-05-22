@@ -22,11 +22,19 @@ namespace Reanimator
 
         public Reanimator()
         {
-            _options = new Options();
-            _indexFilesOpen = new List<string>();
+            try
+            {
+                _options = new Options();
+                _indexFilesOpen = new List<string>();
 
-            CheckEnvironment();
-            InitializeComponent();
+                CheckEnvironment();
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "Reanimator");
+                MessageBox.Show(ex.Message, "Reanimator");
+            }
         }
 
         private void CheckEnvironment()
@@ -91,9 +99,10 @@ namespace Reanimator
                         }
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
                     Config.DatUnpacked = false;
+                    ExceptionLogger.LogException(ex, "CheckEnvironment");
                     MessageBox.Show("An error occured during the installation.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -107,92 +116,127 @@ namespace Reanimator
 
         private void OpenFile(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-                                                {
-                                                    Filter =
-                                                        "HGL Files (*.idx, *.hg1, *.cooked)|*.idx;*.hg1;*.cooked|All Files (*.*)|*.*"
-                                                };
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                                                    {
+                                                        Filter =
+                                                            "HGL Files (*.idx, *.hg1, *.cooked)|*.idx;*.hg1;*.cooked|All Files (*.*)|*.*"
+                                                    };
 
-            if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
+                if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
 
-            if (openFileDialog.FileName.EndsWith("idx"))
-            {
-                OpenFileIdx(openFileDialog.FileName);
+                if (openFileDialog.FileName.EndsWith("idx"))
+                {
+                    OpenFileIdx(openFileDialog.FileName);
+                }
+                else if (openFileDialog.FileName.EndsWith("hg1"))
+                {
+                    OpenFileHg1(openFileDialog.FileName);
+                }
+                else if (openFileDialog.FileName.EndsWith("xls.uni.cooked"))
+                {
+                    OpenFileStrings(openFileDialog.FileName);
+                }
+                else if (openFileDialog.FileName.EndsWith("cooked"))
+                {
+                    OpenFileCooked(openFileDialog.FileName);
+                }
+                else if (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml"))
+                {
+                    OpenFileMod(openFileDialog.FileName);
+                }
             }
-            else if (openFileDialog.FileName.EndsWith("hg1"))
+            catch (Exception ex)
             {
-                OpenFileHg1(openFileDialog.FileName);
-            }
-            else if (openFileDialog.FileName.EndsWith("xls.uni.cooked"))
-            {
-                OpenFileStrings(openFileDialog.FileName);
-            }
-            else if (openFileDialog.FileName.EndsWith("cooked"))
-            {
-                OpenFileCooked(openFileDialog.FileName);
-            }
-            else if (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml"))
-            {
-                OpenFileMod(openFileDialog.FileName);
+                ExceptionLogger.LogException(ex, "OpenFile");
             }
         }
 
         private void OpenIndexFile(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-                                                {
-                                                    Filter = "Index Files (*.idx)|*.idx|All Files (*.*)|*.*",
-                                                    InitialDirectory = Config.HglDir + "\\Data"
-                                                };
-
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("idx"))
+            try
             {
-                OpenFileIdx(openFileDialog.FileName);
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                                                    {
+                                                        Filter = "Index Files (*.idx)|*.idx|All Files (*.*)|*.*",
+                                                        InitialDirectory = Config.HglDir + "\\Data"
+                                                    };
+
+                if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("idx"))
+                {
+                    OpenFileIdx(openFileDialog.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "OpenIndexFile");
             }
         }
 
         private void OpenCharacterFile(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-                                                {
-                                                    Filter = "Character Files (*.hg1)|*.hg1|All Files (*.*)|*.*",
-                                                    InitialDirectory =
-                                                        Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
-                                                        "\\My Games\\Hellgate\\Save\\Singleplayer"
-                                                };
-
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("hg1"))
+            try
             {
-                OpenFileHg1(openFileDialog.FileName);
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                                                    {
+                                                        Filter = "Character Files (*.hg1)|*.hg1|All Files (*.*)|*.*",
+                                                        InitialDirectory =
+                                                            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+                                                            "\\My Games\\Hellgate\\Save\\Singleplayer"
+                                                    };
+
+                if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("hg1"))
+                {
+                    OpenFileHg1(openFileDialog.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "OpenCharacterFile");
             }
         }
 
         private void OpenCookedFile(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-                                                {
-                                                    Filter = "Cooked Files (*.cooked)|*.cooked|All Files (*.*)|*.*",
-                                                    InitialDirectory = Config.DataDirsRoot
-                                                };
-
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
+            try
             {
-                OpenFileCooked(openFileDialog.FileName);
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                                                    {
+                                                        Filter = "Cooked Files (*.cooked)|*.cooked|All Files (*.*)|*.*",
+                                                        InitialDirectory = Config.DataDirsRoot
+                                                    };
+
+                if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
+                {
+                    OpenFileCooked(openFileDialog.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "OpenCookedFile");
             }
         }
 
         private void StringsFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-                                                {
-                                                    Filter =
-                                                        "Strings Files (*.xls.uni.cooked)|*.xls.uni.cooked|All Files (*.*)|*.*",
-                                                    InitialDirectory = Config.DataDirsRoot
-                                                };
-
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
+            try
             {
-                OpenFileStrings(openFileDialog.FileName);
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                                                    {
+                                                        Filter =
+                                                            "Strings Files (*.xls.uni.cooked)|*.xls.uni.cooked|All Files (*.*)|*.*",
+                                                        InitialDirectory = Config.DataDirsRoot
+                                                    };
+
+                if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
+                {
+                    OpenFileStrings(openFileDialog.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "StringsFileToolStripMenuItem_Click");
             }
         }
 
@@ -226,9 +270,10 @@ namespace Reanimator
 
                 return;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show(e.Message);
+                ExceptionLogger.LogException(ex, "OpenFileMod");
+                MessageBox.Show(ex.Message);
                 return;
             }
         }
@@ -242,9 +287,10 @@ namespace Reanimator
             {
                 index = new Index(fileName);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExceptionLogger.LogException(ex, "OpenFileIdx");
+                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -263,40 +309,54 @@ namespace Reanimator
 
         private void OpenFileHg1(string fileName)
         {
-            // TODO give some sort of decent error or something
-            if (_excelTables == null) return;
+            try
+            {
+                // TODO give some sort of decent error or something
+                if (_excelTables == null) return;
 
-            Unit heroUnit = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, fileName);
+                Unit heroUnit = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, fileName);
 
-            HeroEditor heroEditor = new HeroEditor(heroUnit, _tableDataSet, fileName)
-                                        {
-                                            Text = "Hero Editor: " + fileName,
-                                            MdiParent = this
-                                        };
-            heroEditor.Show();
+                HeroEditor heroEditor = new HeroEditor(heroUnit, _tableDataSet, fileName)
+                                            {
+                                                Text = "Hero Editor: " + fileName,
+                                                MdiParent = this
+                                            };
+                heroEditor.Show();
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "OpenFileHg1");
+            }
         }
 
         private void OpenFileCooked(String fileName)
         {
-            // TODO give some sort of decent error or something
-            if (_excelTables == null) return;
-
-            int indexStart = fileName.LastIndexOf("\\") + 1;
-            int indexEnd = fileName.LastIndexOf(".txt");
-            string name = fileName.Substring(indexStart, indexEnd - indexStart);
-
-            ExcelTable excelTable = _excelTables.GetTable(name);
-            if (excelTable == null)
+            try
             {
-                return;
-            }
+                // TODO give some sort of decent error or something
+                if (_excelTables == null) return;
 
-            ExcelTableForm etf = new ExcelTableForm(excelTable, _tableDataSet)
-                                     {
-                                         Text = "Excel Table: " + fileName,
-                                         MdiParent = this
-                                     };
-            etf.Show();
+                int indexStart = fileName.LastIndexOf("\\") + 1;
+                int indexEnd = fileName.LastIndexOf(".txt");
+                string name = fileName.Substring(indexStart, indexEnd - indexStart);
+
+                ExcelTable excelTable = _excelTables.GetTable(name);
+                if (excelTable == null)
+                {
+                    return;
+                }
+
+                ExcelTableForm etf = new ExcelTableForm(excelTable, _tableDataSet)
+                                         {
+                                             Text = "Excel Table: " + fileName,
+                                             MdiParent = this
+                                         };
+                etf.Show();
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "OpenFileCooked");
+            }
         }
 
         private void OpenFileStrings(String fileName)
@@ -318,24 +378,32 @@ namespace Reanimator
                 indexExplorer.Text += ": " + fileName;
                 indexExplorer.Show();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show("Failed to open file!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExceptionLogger.LogException(ex, "OpenFileStrings");
+                MessageBox.Show("Failed to open file!\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog
-                                                {
-                                                    Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
-                                                    InitialDirectory =
-                                                        Environment.GetFolderPath(Environment.SpecialFolder.Personal)
-                                                };
-
-            if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+            try
             {
-                //string fileName = saveFileDialog.FileName;
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                                                    {
+                                                        Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+                                                        InitialDirectory =
+                                                            Environment.GetFolderPath(Environment.SpecialFolder.Personal)
+                                                    };
+
+                if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    //string fileName = saveFileDialog.FileName;
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "SaveAsToolStripMenuItem_Click");
             }
         }
 
@@ -445,168 +513,217 @@ namespace Reanimator
 
         private void Reanimator_Load(object sender, EventArgs e)
         {
-            Height = Config.ClientHeight;
-            Width = Config.ClientWidth;
-            Show();
-            Refresh();
+            try
+            {
+                Height = Config.ClientHeight;
+                Width = Config.ClientWidth;
+                Show();
+                Refresh();
 
-            ProgressForm progress = new ProgressForm(LoadTables, null);
-            progress.Disposed += delegate { LoadAndDisplayCurrentlyLoadedExcelTables(); };
-            progress.ShowDialog(this);
+                ProgressForm progress = new ProgressForm(LoadTables, null);
+                progress.Disposed += delegate { LoadAndDisplayCurrentlyLoadedExcelTables(); };
+                progress.ShowDialog(this);
 
-            GenerateCache(false);
+                GenerateCache(false);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "Reanimator_Load");
+                MessageBox.Show(ex.Message, "Reanimator_Load");
+            }
         }
 
         private void LoadAndDisplayCurrentlyLoadedExcelTables()
         {
-            _tablesLoaded = new TablesLoaded(_tableDataSet) {MdiParent = this};
-            int loadedTableCount = 0;
-
-            if (_excelTables != null)
+            try
             {
-                foreach (ExcelTable et in _excelTables.GetLoadedTables())
-                {
-                    _tablesLoaded.AddItem(et);
-                }
-                loadedTableCount += _excelTables.LoadedTableCount;
-            }
+                _tablesLoaded = new TablesLoaded(_tableDataSet) { MdiParent = this };
+                int loadedTableCount = 0;
 
-            if (_stringsTables != null)
+                if (_excelTables != null)
+                {
+                    foreach (ExcelTable et in _excelTables.GetLoadedTables())
+                    {
+                        _tablesLoaded.AddItem(et);
+                    }
+                    loadedTableCount += _excelTables.LoadedTableCount;
+                }
+
+                if (_stringsTables != null)
+                {
+                    foreach (StringsFile sf in _stringsTables.GetLoadedTables())
+                    {
+                        _tablesLoaded.AddItem(sf);
+                    }
+                    loadedTableCount += _stringsTables.Count;
+                }
+
+                if (loadedTableCount <= 0) return;
+
+                _tablesLoaded.Text = "Currently Loaded Tables [" + loadedTableCount + "]";
+                _tablesLoaded.Show();
+            }
+            catch (Exception ex)
             {
-                foreach (StringsFile sf in _stringsTables.GetLoadedTables())
-                {
-                    _tablesLoaded.AddItem(sf);
-                }
-                loadedTableCount += _stringsTables.Count;
+                ExceptionLogger.LogException(ex, "LoadAndDisplayCurrentlyLoadedExcelTables");
+                MessageBox.Show(ex.Message, "LoadAndDisplayCurrentlyLoadedExcelTables");
             }
-
-            if (loadedTableCount <= 0) return;
-
-            _tablesLoaded.Text = "Currently Loaded Tables [" + loadedTableCount + "]";
-            _tablesLoaded.Show();
         }
 
         private void LoadTables(ProgressForm progress, Object var)
         {
-            // begin loading in dataSet.dat right away
-            Thread loadTableDataSet = new Thread(() => { _tableDataSet = new TableDataSet(); });
-            loadTableDataSet.Start();
-
-
-            // read in .t.c files
-            string excelFilePath = Config.DataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked";
             try
             {
-                using (FileStream excelFile = new FileStream(excelFilePath, FileMode.Open))
-                {
-                    _excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
-                }
-
-                progress.ConfigBar(0, _excelTables.Count, 1);
-                progress.SetLoadingText("Loading in excel tables (" + _excelTables.Count + ")...");
-                _excelTables.LoadTables(Config.DataDirsRoot + "\\data_common\\excel\\", progress);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(
-                    "Failed to load exceltables!\nPlease ensure your directories are set correctly.\nTools > Options\n\nFile: \n" +
-                    excelFilePath + "\n\n" + e, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
+                // begin loading in dataSet.dat right away
+                Thread loadTableDataSet = new Thread(() => { _tableDataSet = new TableDataSet(); });
+                loadTableDataSet.Start();
 
 
-            // read in strings files
-            if (_excelTables != null)
-            {
+                // read in .t.c files
+                string excelFilePath = Config.DataDirsRoot + "\\data_common\\excel\\exceltables.txt.cooked";
                 try
                 {
-                    StringsFiles stringsFiles = (StringsFiles) _excelTables.GetTable("STRING_FILES");
-                    if (stringsFiles != null)
+                    using (FileStream excelFile = new FileStream(excelFilePath, FileMode.Open))
                     {
-                        progress.SetLoadingText("Loading in strings files (" + stringsFiles.Count + ")...");
-                        progress.ConfigBar(0, stringsFiles.Count, 1);
-                        _stringsTables = new StringsTables();
-                        _stringsTables.LoadStringsTables(progress, stringsFiles);
+                        _excelTables = new ExcelTables(FileTools.StreamToByteArray(excelFile));
+                    }
+
+                    progress.ConfigBar(0, _excelTables.Count, 1);
+                    progress.SetLoadingText("Loading in excel tables (" + _excelTables.Count + ")...");
+                    _excelTables.LoadTables(Config.DataDirsRoot + "\\data_common\\excel\\", progress);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLogger.LogException(ex, "LoadTables - read t.c file");
+                    MessageBox.Show(
+                        "Failed to load exceltables!\nPlease ensure your directories are set correctly.\nTools > Options\n\nFile: \n" +
+                        excelFilePath + "\n\n" + ex, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+
+
+                // read in strings files
+                if (_excelTables != null)
+                {
+                    try
+                    {
+                        StringsFiles stringsFiles = (StringsFiles)_excelTables.GetTable("STRING_FILES");
+                        if (stringsFiles != null)
+                        {
+                            progress.SetLoadingText("Loading in strings files (" + stringsFiles.Count + ")...");
+                            progress.ConfigBar(0, stringsFiles.Count, 1);
+                            _stringsTables = new StringsTables();
+                            _stringsTables.LoadStringsTables(progress, stringsFiles);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ExceptionLogger.LogException(ex, "LoadTables - read strings file");
+                        MessageBox.Show(
+                            "Failed to load in string tables!\nPlease ensure your directories are set correctly.\n\n" +
+                            ex, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
-                catch (Exception e)
+
+
+                // wait for the cache to finish loading in if it hasn't already
+                progress.SetStyle(ProgressBarStyle.Marquee);
+                progress.SetLoadingText("Loading table cache data...");
+                progress.SetCurrentItemText("Please wait...");
+                while (loadTableDataSet.ThreadState == ThreadState.Running)
                 {
-                    MessageBox.Show(
-                        "Failed to load in string tables!\nPlease ensure your directories are set correctly.\n\n" +
-                        e, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    Thread.Sleep(50);
                 }
+
+                _tableDataSet.ExcelTables = _excelTables;
+                _tableDataSet.StringsTables = _stringsTables;
             }
-
-
-            // wait for the cache to finish loading in if it hasn't already
-            progress.SetStyle(ProgressBarStyle.Marquee);
-            progress.SetLoadingText("Loading table cache data...");
-            progress.SetCurrentItemText("Please wait...");
-            while (loadTableDataSet.ThreadState == ThreadState.Running)
+            catch (Exception ex)
             {
-                Thread.Sleep(50);
+                ExceptionLogger.LogException(ex, "LoadTables");
+                MessageBox.Show(ex.Message, "LoadTables");
             }
-
-            _tableDataSet.ExcelTables = _excelTables;
-            _tableDataSet.StringsTables = _stringsTables;
         }
 
         private void CacheTables(ProgressForm progress, Object var)
         {
-            List<ExcelTable> loadedTables = var as List<ExcelTable>;
-            if (loadedTables == null)
+            try
             {
-                return;
+                List<ExcelTable> loadedTables = var as List<ExcelTable>;
+                if (loadedTables == null)
+                {
+                    return;
+                }
+
+
+                progress.SetLoadingText("First use table caching...");
+                progress.ConfigBar(0, loadedTables.Count, 1);
+                foreach (ExcelTable excelTable in loadedTables)
+                {
+                    progress.SetCurrentItemText("Caching: " + excelTable.StringId);
+                    ProgressForm tableProgress = new ProgressForm(CacheExcelTable, excelTable) { StartPosition = FormStartPosition.CenterScreen };
+                    tableProgress.ShowDialog();
+                }
+
+
+                progress.SetLoadingText("Caching strings tables (" + _stringsTables.Count + ")...");
+                progress.ConfigBar(0, _stringsTables.Count, 1);
+                foreach (StringsFile stringsFile in _stringsTables.GetLoadedTables())
+                {
+                    _tableDataSet.LoadTable(progress, stringsFile);
+                }
+
+
+                GenerateRelations(progress, loadedTables);
+
+
+                progress.SetLoadingText("Saving cache data...");
+                progress.SetCurrentItemText("Please wait...");
+                _tableDataSet.SaveDataSet();
             }
-
-
-            progress.SetLoadingText("First use table caching...");
-            progress.ConfigBar(0, loadedTables.Count, 1);
-            foreach (ExcelTable excelTable in loadedTables)
+            catch (Exception ex)
             {
-                progress.SetCurrentItemText("Caching: " + excelTable.StringId);
-                ProgressForm tableProgress = new ProgressForm(CacheExcelTable, excelTable)
-                                                 {StartPosition = FormStartPosition.CenterScreen};
-                tableProgress.ShowDialog();
+                ExceptionLogger.LogException(ex, "CacheTables");
+                MessageBox.Show(ex.Message, "CacheTables");
             }
-
-
-            progress.SetLoadingText("Caching strings tables (" + _stringsTables.Count + ")...");
-            progress.ConfigBar(0, _stringsTables.Count, 1);
-            foreach (StringsFile stringsFile in _stringsTables.GetLoadedTables())
-            {
-                _tableDataSet.LoadTable(progress, stringsFile);
-            }
-
-
-            GenerateRelations(progress, loadedTables);
-
-
-            progress.SetLoadingText("Saving cache data...");
-            progress.SetCurrentItemText("Please wait...");
-            _tableDataSet.SaveDataSet();
         }
 
         private void CacheExcelTable(ProgressForm progress, Object var)
         {
-            ExcelTable excelTable = var as ExcelTable;
-            _tableDataSet.LoadTable(progress, excelTable);
+            try
+            {
+                ExcelTable excelTable = var as ExcelTable;
+                _tableDataSet.LoadTable(progress, excelTable);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "CacheExcelTable");
+                MessageBox.Show(ex.Message, "CacheExcelTable");
+            }
         }
 
         private void GenerateRelations(ProgressForm progress, Object var)
         {
-            List<ExcelTable> loadedTables = var as List<ExcelTable>;
-            if (loadedTables == null)
+            try
             {
-                return;
-            }
+                List<ExcelTable> loadedTables = var as List<ExcelTable>;
+                if (loadedTables == null)
+                {
+                    return;
+                }
 
-            progress.SetLoadingText("Generating table relations...");
-            progress.ConfigBar(0, loadedTables.Count, 1);
-            _tableDataSet.ClearRelations();
-            foreach (ExcelTable excelTable in loadedTables)
+                progress.SetLoadingText("Generating table relations...");
+                progress.ConfigBar(0, loadedTables.Count, 1);
+                _tableDataSet.ClearRelations();
+                foreach (ExcelTable excelTable in loadedTables)
+                {
+                    progress.SetCurrentItemText(excelTable.StringId);
+                    _tableDataSet.GenerateRelations(excelTable);
+                }
+            }
+            catch (Exception ex)
             {
-                progress.SetCurrentItemText(excelTable.StringId);
-                _tableDataSet.GenerateRelations(excelTable);
+                ExceptionLogger.LogException(ex, "GenerateRelations");
+                MessageBox.Show(ex.Message, "GenerateRelations");
             }
         }
 
@@ -652,9 +769,10 @@ namespace Reanimator
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 MessageBox.Show("Export of this form not supported at this time.");
+                ExceptionLogger.LogException(ex, "CSVToolStripMenuItem_Click");
             }
         }
 
@@ -675,8 +793,9 @@ namespace Reanimator
                     File.WriteAllBytes(openFileDialog.FileName.Insert(openFileDialog.FileName.Length - 4, "-patched"), hglexe.Buffer);
                     MessageBox.Show("Patch successfully applied!");
                 }
-                catch
+                catch(Exception ex)
                 {
+                    ExceptionLogger.LogException(ex, "BypassSecurityx64ToolStripMenuItem_Click");
                     MessageBox.Show("Problem Applying Patch. :(");
                 }
             }
@@ -708,139 +827,209 @@ namespace Reanimator
 
         private void GenerateCache(bool manualRequest)
         {
-            if (_excelTables == null) return;
+            try
+            {
+                if (_excelTables == null) return;
 
-            DialogResult dr = DialogResult.No;
+                DialogResult dr = DialogResult.No;
 
-            bool partialGeneration = false;
-            if (!File.Exists(Config.CacheFilePath) || _tableDataSet.LoadedTableCount == 0)
-            {
-                dr = MessageBox.Show("Reanimator has detected no cached table data.\nDo you wish to generate it now? (this may take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            }
-            else if (manualRequest)
-            {
-                dr = MessageBox.Show("Are you sure you wish to regenerate the cache? (this will take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            }
-            else if (_tableDataSet.LoadedTableCount < _excelTables.LoadedTableCount + _stringsTables.Count)
-            {
-                dr = MessageBox.Show("Reanimator has detected that not all tables have been cached.\nDo you wish to generate the remaining now? (this may take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                partialGeneration = true;
-            }
-
-            if (dr == DialogResult.Yes)
-            {
-                if (!partialGeneration)
+                bool partialGeneration = false;
+                if (!File.Exists(Config.CacheFilePath) || _tableDataSet.LoadedTableCount == 0)
                 {
-                    _tableDataSet.ClearDataSet();
+                    dr = MessageBox.Show("Reanimator has detected no cached table data.\nDo you wish to generate it now? (this may take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 }
-                ProgressForm cachingProgress = new ProgressForm(CacheTables, _excelTables.GetLoadedTables());
-                cachingProgress.ShowDialog(this);
-            }
-            else if (_tableDataSet.RegenerateRelations && _excelTables != null && _tableDataSet.LoadedTableCount > 0)
-            {
-                dr = MessageBox.Show("Reanimator has detected your table relations are out of date.\nDo you wish to regenerate them?", "Regenerate Relations", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                else if (manualRequest)
+                {
+                    dr = MessageBox.Show("Are you sure you wish to regenerate the cache? (this will take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                }
+                else if (_tableDataSet.LoadedTableCount < _excelTables.LoadedTableCount + _stringsTables.Count)
+                {
+                    dr = MessageBox.Show("Reanimator has detected that not all tables have been cached.\nDo you wish to generate the remaining now? (this may take a few minutes)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    partialGeneration = true;
+                }
+
                 if (dr == DialogResult.Yes)
                 {
-                    ProgressForm progress = new ProgressForm(GenerateRelations, _excelTables.GetLoadedTables());
-                    progress.ShowDialog(this);
-                    _tableDataSet.SaveDataSet();
+                    if (!partialGeneration)
+                    {
+                        _tableDataSet.ClearDataSet();
+                    }
+                    ProgressForm cachingProgress = new ProgressForm(CacheTables, _excelTables.GetLoadedTables());
+                    cachingProgress.ShowDialog(this);
                 }
+                else if (_tableDataSet.RegenerateRelations && _excelTables != null && _tableDataSet.LoadedTableCount > 0)
+                {
+                    dr = MessageBox.Show("Reanimator has detected your table relations are out of date.\nDo you wish to regenerate them?", "Regenerate Relations", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dr == DialogResult.Yes)
+                    {
+                        ProgressForm progress = new ProgressForm(GenerateRelations, _excelTables.GetLoadedTables());
+                        progress.ShowDialog(this);
+                        _tableDataSet.SaveDataSet();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "GenerateCache");
             }
         }
 
         private void RegenerateRelationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_excelTables == null) return;
+            try
+            {
+                if (_excelTables == null) return;
 
-            ProgressForm progress = new ProgressForm(GenerateRelations, _excelTables.GetLoadedTables());
-            progress.ShowDialog(this);
+                ProgressForm progress = new ProgressForm(GenerateRelations, _excelTables.GetLoadedTables());
+                progress.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "RegenerateRelationsToolStripMenuItem_Click");
+            }
         }
 
         private void ShowExcelTablesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (showExcelTablesToolStripMenuItem.Checked)
+            try
             {
-                _tablesLoaded.StartPosition = FormStartPosition.Manual;
-                _tablesLoaded.Location = new Point(0, 0);
-                _tablesLoaded.Show();
+                if (showExcelTablesToolStripMenuItem.Checked)
+                {
+                    _tablesLoaded.StartPosition = FormStartPosition.Manual;
+                    _tablesLoaded.Location = new Point(0, 0);
+                    _tablesLoaded.Show();
+                }
+                else
+                {
+                    _tablesLoaded.Hide();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _tablesLoaded.Hide();
+                ExceptionLogger.LogException(ex, "ShowExcelTablesToolStripMenuItem_Click");
             }
         }
 
         private void applyModificationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ModificationForm modificationForm = new ModificationForm();
-            modificationForm.ShowDialog();
+            try
+            {
+                ModificationForm modificationForm = new ModificationForm();
+                modificationForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "applyModificationsToolStripMenuItem_Click");
+            }
         }
 
         private void modelFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-                                                {
-                                                    Filter = "Model Files (*.am)|*.am|All Files (*.*)|*.*",
-                                                    InitialDirectory = Config.HglDir
-                                                };
-
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("am") || openFileDialog.FileName.EndsWith("m")))
+            try
             {
-                FileStream stream = new FileStream(@openFileDialog.FileName, FileMode.Open);
-                Model model = new Model(new BinaryReader(stream));
-                stream.Close();
-                stream = new FileStream(@"d:\out.obj", FileMode.OpenOrCreate);
-                stream.Flush();
-                string exportedModel = Export.Asset.ToObj(model);
-                System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-                byte[] buffer = encoding.GetBytes(exportedModel);
-                stream.Write(buffer, 0, buffer.Length);
-                stream.Close();
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                                                    {
+                                                        Filter = "Model Files (*.am)|*.am|All Files (*.*)|*.*",
+                                                        InitialDirectory = Config.HglDir
+                                                    };
+
+                if (openFileDialog.ShowDialog(this) == DialogResult.OK && (openFileDialog.FileName.EndsWith("am") || openFileDialog.FileName.EndsWith("m")))
+                {
+                    FileStream stream = new FileStream(@openFileDialog.FileName, FileMode.Open);
+                    Model model = new Model(new BinaryReader(stream));
+                    stream.Close();
+                    stream = new FileStream(@"d:\out.obj", FileMode.OpenOrCreate);
+                    stream.Flush();
+                    string exportedModel = Export.Asset.ToObj(model);
+                    System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+                    byte[] buffer = encoding.GetBytes(exportedModel);
+                    stream.Write(buffer, 0, buffer.Length);
+                    stream.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "modelFileToolStripMenuItem_Click");
             }
         }
 
         private void havokFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
-                                                {
-                                                    Filter = "Havok Files (*.hkx)|*.hkx|All Files (*.*)|*.*",
-                                                    InitialDirectory = Config.HglDir
-                                                };
+            try
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog
+                                                    {
+                                                        Filter = "Havok Files (*.hkx)|*.hkx|All Files (*.*)|*.*",
+                                                        InitialDirectory = Config.HglDir
+                                                    };
 
-            if (openFileDialog.ShowDialog(this) != DialogResult.OK || (!openFileDialog.FileName.EndsWith("hkx"))) return;
+                if (openFileDialog.ShowDialog(this) != DialogResult.OK || (!openFileDialog.FileName.EndsWith("hkx"))) return;
 
-            FileStream stream = new FileStream(@openFileDialog.FileName, FileMode.Open);
-            //Havok havok = new Havok(new BinaryReader(stream));
-            stream.Close();
+                FileStream stream = new FileStream(@openFileDialog.FileName, FileMode.Open);
+                //Havok havok = new Havok(new BinaryReader(stream));
+                stream.Close();
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "havokFileToolStripMenuItem_Click");
+            }
         }
 
         private void tradeItemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //ItemTransferForm transfer = new ItemTransferForm(ref _tableDataSet, ref _excelTables);
-            ComplexItemTransferForm transfer = new ComplexItemTransferForm(ref _tableDataSet, ref _excelTables);
-            transfer.ShowDialog(this);
+            try
+            {
+                //ItemTransferForm transfer = new ItemTransferForm(ref _tableDataSet, ref _excelTables);
+                ComplexItemTransferForm transfer = new ComplexItemTransferForm(ref _tableDataSet, ref _excelTables);
+                transfer.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "tradeItemsToolStripMenuItem_Click");
+            }
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TableForm tableForm = ActiveMdiChild as TableForm;
+            try
+            {
+                TableForm tableForm = ActiveMdiChild as TableForm;
 
-            if (tableForm == null) return;
-            if (!tableForm.IsIndexFile) return;
+                if (tableForm == null) return;
+                if (!tableForm.IsIndexFile) return;
 
-            tableForm.SaveButton();
+                tableForm.SaveButton();
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "saveToolStripMenuItem_Click");
+            }
         }
 
         private void itemShopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            CharacterShop shop = new CharacterShop(ref _tableDataSet, ref _excelTables);
-            shop.ShowDialog(this);
+            try
+            {
+                CharacterShop shop = new CharacterShop(ref _tableDataSet, ref _excelTables);
+                shop.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "itemShopToolStripMenuItem_Click");
+            }
         }
 
         private void searchTablesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TableSearch search = new TableSearch(ref _tableDataSet, ref _excelTables);
-            search.ShowDialog(this);
+            try
+            {
+                TableSearch search = new TableSearch(ref _tableDataSet, ref _excelTables);
+                search.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "searchTablesToolStripMenuItem_Click");
+            }
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

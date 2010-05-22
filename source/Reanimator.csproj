@@ -109,6 +109,7 @@
     <Compile Include="ClientPatcher.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Crypt.cs" />
+    <Compile Include="ExceptionLogger.cs" />
     <Compile Include="Forms\HeroEditorFunctions\Atlas_functions.cs" />
     <Compile Include="Forms\HeroEditorFunctions\AttributesControl.cs">
       <SubType>UserControl</SubType>
