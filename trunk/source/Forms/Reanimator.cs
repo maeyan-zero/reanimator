@@ -43,7 +43,7 @@ namespace Reanimator
             {
                 try
                 {
-                    MessageBox.Show("Welcome to the Reanimator installation wizard. First, select your HGL directory.", "Installation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("It looks like your using Reanimator for the first time. Please locate your HGL installation.", "Installation", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     FolderBrowserDialog folder = new FolderBrowserDialog();
                     folder.SelectedPath = Config.HglDir;
@@ -55,55 +55,52 @@ namespace Reanimator
                     {
                         int[] unpack = new int[] { Index.LatestPatch, Index.LatestPatchLocalized };
 
-                        DialogResult result = MessageBox.Show("To use Reanimator, you must extract files from the latest patch 1.2. Continue?", "Initialization", MessageBoxButtons.OKCancel);
-
-                        if (result == DialogResult.OK)
+                        foreach (int dat in unpack)
                         {
-                            foreach (int dat in unpack)
+                            Index index = new Index(Config.HglDir + "//data//" + Index.FileNames[dat] + ".idx");
+
+                            if (index == null)
                             {
-                                Index index = new Index(Config.HglDir + "//data//" + Index.FileNames[dat] + ".idx");
-
-                                if (index == null)
-                                {
-                                    MessageBox.Show("Please check you have your directory set correctly and have the latest patch installed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    throw new Exception("Dir error");
-                                }
-
-                                if (index.Modified)
-                                {
-                                    MessageBox.Show("Your index file is modified. Please restore it and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    throw new Exception("Index error");
-                                }
-
-                                foreach (Index.FileIndex file in index.FileTable)
-                                {
-                                    if (file.DirectoryString.Contains("excel"))
-                                    {
-                                        string directory = Config.HglDir + "\\Reanimator\\" + file.DirectoryString;
-                                        string filename = directory + file.FileNameString;
-                                        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-                                        FileStream stream = new FileStream(@filename, FileMode.Create);
-                                        byte[] buffer = index.ReadDataFile(file);
-                                        stream.Write(buffer, 0, buffer.Length);
-                                        stream.Close();
-                                    }
-                                }
-
-                                index.Dispose();
+                                MessageBox.Show("Please check you have your directory set correctly and have the latest patch installed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                throw new Exception("Dir error");
                             }
 
-                            Config.DatUnpacked = true;
-                            Config.DataDirsRoot = Config.HglDir + "\\Reanimator\\";
+                            if (index.Modified)
+                            {
+                                MessageBox.Show("Your index file is modified. Please restore it and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                throw new Exception("Index error");
+                            }
 
-                            MessageBox.Show("Installation success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            foreach (Index.FileIndex file in index.FileTable)
+                            {
+                                if (file.DirectoryString.Contains("excel"))
+                                {
+                                    string directory = Config.HglDir + "\\Reanimator\\" + file.DirectoryString;
+                                    string filename = directory + file.FileNameString;
+                                    if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+                                    FileStream stream = new FileStream(@filename, FileMode.Create);
+                                    byte[] buffer = index.ReadDataFile(file);
+                                    stream.Write(buffer, 0, buffer.Length);
+                                    stream.Close();
+                                }
+                            }
+
+                            index.Dispose();
                         }
+
+                        Config.DatUnpacked = true;
+                        Config.DataDirsRoot = Config.HglDir + "\\Reanimator\\";
+
+                        MessageBox.Show("Installation success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
+
                 }
                 catch(Exception ex)
                 {
                     Config.DatUnpacked = false;
                     ExceptionLogger.LogException(ex, "CheckEnvironment");
                     MessageBox.Show("An error occured during the installation.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
                 }
             }
         }

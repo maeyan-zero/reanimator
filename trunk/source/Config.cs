@@ -75,7 +75,7 @@ namespace Reanimator
 
         public static bool DataDirsRootChecked
         {
-            get { return GetValue("DataDirsRootChecked", true); }
+            get { return GetValue("DataDirsRootChecked", false); }
             set { SetValue("DataDirsRootChecked", value); }
         }
 
