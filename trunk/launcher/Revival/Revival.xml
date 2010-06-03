@@ -731,31 +731,116 @@
     </pack>
   </modification>
   <modification>
-    <title>Auto Pickup Items</title>
+    <title>Auto Pickup Consumables</title>
     <version>2.0</version>
     <author>The Revival Team</author>
-    <description>Allows consumables &amp; quest items to be automatically picked up.</description>
+    <description>Allows consumables to be automatically picked up.</description>
     <url>http://www.hellgateaus.net</url>
     <type>optional</type>
     <image>pickup.png</image>
     <pack id="hellgate000">
       <file id="items.txt.cooked" dir="data\excel\">
         <modify>
-          <entity id="*" value="2-111">
+          <entity id="*" value="2-7">
             <attribute id="autoPickupDistance">
               <replace>
                 <data>4</data>
               </replace>
             </attribute>
           </entity>
-          <entity id="*" value="120-177">
+          <entity id="*" value="10-15">
             <attribute id="autoPickupDistance">
               <replace>
                 <data>4</data>
               </replace>
             </attribute>
           </entity>
-          <entity id="*" value="247-255">
+          <entity id="*" value="79-111">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="178-183">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="185-206">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="208-240">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="242-245">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="247-251">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Auto Pickup Quest Items</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Allows quest items to be automatically picked up.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <image>pickup.png</image>
+    <pack id="hellgate000">
+      <file id="items.txt.cooked" dir="data\excel\">
+        <modify>
+          <entity id="*" value="8-9">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="16-78">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="112-177">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="246">
+            <attribute id="autoPickupDistance">
+              <replace>
+                <data>4</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="252-256">
             <attribute id="autoPickupDistance">
               <replace>
                 <data>4</data>
