@@ -956,7 +956,7 @@ namespace Reanimator.Excel
             inheritsDirection = 16384,
             canNotBeDismantled = 32768,
             canNotBeUpgraded = 65536,
-            canNotBeAugmentedtaskGiver = 131072,
+            canNotBeAugmented = 131072,
             canNotBeDeModded = 262144,
             ignoreSellWithInventoryConfirm = 524288,
             wardrobePerUnit = 1048576,
