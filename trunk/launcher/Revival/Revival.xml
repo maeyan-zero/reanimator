@@ -851,4 +851,172 @@
       </file>
     </pack>
   </modification>
+  <modification>
+    <title>Increased Sniper Rifle Fire Rate 34</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Increases sniper rifle fire rate to 34 rpm.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="default">
+      <file id="items.txt.cooked">
+        <modify>
+          <entity id="SniperRifle_Mk1" value="393">
+            <attribute id="cdTicks">
+              <replace>
+                <data>4571</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="396-402">
+            <attribute id="cdTicks">
+              <replace>
+                <data>4571</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Increased Sniper Rifle Fire Rate 38</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Increases sniper rifle fire rate to 38 rpm.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="default">
+      <file id="items.txt.cooked">
+        <modify>
+          <entity id="SniperRifle_Mk1" value="393">
+            <attribute id="cdTicks">
+              <replace>
+                <data>4044</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="396-402">
+            <attribute id="cdTicks">
+              <replace>
+                <data>4044</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Increased Sniper Rifle Fire Rate 46</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Increases sniper rifle fire rate to 46 rpm.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="default">
+      <file id="items.txt.cooked">
+        <modify>
+          <entity id="SniperRifle_Mk1" value="393">
+            <attribute id="cdTicks">
+              <replace>
+                <data>3413</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="396-402">
+            <attribute id="cdTicks">
+              <replace>
+                <data>3413</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Decreased Sniper Rifle Aim Error 12</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Decreases sniper rifle aim error by 12 percent.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="default">
+      <file id="items.txt.cooked">
+        <modify>
+          <entity id="SniperRifle_Mk1" value="393">
+            <attribute id="firingErrorMax">
+              <replace>
+                <data>350</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="396-402">
+            <attribute id="cdTicks">
+              <replace>
+                <data>350</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Decreased Sniper Rifle Aim Error 25</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Decreases sniper rifle aim error by 25 percent.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="default">
+      <file id="items.txt.cooked">
+        <modify>
+          <entity id="SniperRifle_Mk1" value="393">
+            <attribute id="firingErrorMax">
+              <replace>
+                <data>300</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="396-402">
+            <attribute id="cdTicks">
+              <replace>
+                <data>300</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Decreased Sniper Rifle Aim Error 50</title>
+    <version>2.0</version>
+    <author>The Revival Team</author>
+    <description>Decreases sniper rifle aim error by 50 percent.</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>optional</type>
+    <pack id="default">
+      <file id="items.txt.cooked">
+        <modify>
+          <entity id="SniperRifle_Mk1" value="393">
+            <attribute id="firingErrorMax">
+              <replace>
+                <data>200</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="*" value="396-402">
+            <attribute id="cdTicks">
+              <replace>
+                <data>200</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+    </pack>
+  </modification>
 </revival>
