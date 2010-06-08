@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\bg2.jpg" />
+    <None Include="Revival\Schema.xsd" />
     <Content Include="Revival\data\uix\xml\inventory_screen.xml" />
     <Content Include="Revival\mod.xml" />
     <Content Include="Revival\Buffer.txt" />

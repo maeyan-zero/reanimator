@@ -280,7 +280,7 @@
     <Compile Include="Index.cs" />
     <Compile Include="IMdiChildBase.cs" />
     <Compile Include="Model.cs" />
-    <Compile Include="RevivalMod.cs" />
+    <Compile Include="Modification.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\CSVSelection.resx">

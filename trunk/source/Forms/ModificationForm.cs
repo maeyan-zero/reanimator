@@ -5,7 +5,7 @@ namespace Reanimator.Forms
 {
     public partial class ModificationForm : Form
     {
-        RevivalMod mod;
+        Modification revival;
         
         public ModificationForm()
         {
@@ -19,13 +19,15 @@ namespace Reanimator.Forms
 
         private void checkedListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            pictureBox.Image = mod.getCaption(checkedListBox.SelectedIndex);
-            titleLabel.Text = mod.GetTitle(checkedListBox.SelectedIndex);
-            authorLabel.Text = mod.GetAuthor(checkedListBox.SelectedIndex);
-            versionLabel.Text = mod.GetVersion(checkedListBox.SelectedIndex);
-            urlLabel.Text = mod.GetUrl(checkedListBox.SelectedIndex);
-            typeLabel.Text = mod.GetUsage(checkedListBox.SelectedIndex);
-            descriptionText.Text = mod.GetDescription(checkedListBox.SelectedIndex);
+            int i = checkedListBox.SelectedIndex;
+
+            pictureBox.Image = revival.content[i].png;
+            titleLabel.Text = revival.content[i].title;
+            authorLabel.Text = revival.content[i].author;
+            versionLabel.Text = revival.content[i].version;
+            urlLabel.Text = revival.content[i].url;
+            typeLabel.Text = revival.content[i].type;
+            descriptionText.Text = revival.content[i].description;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -35,36 +37,37 @@ namespace Reanimator.Forms
 
         private void checkedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            if (e.CurrentValue == CheckState.Checked)
+            if (e.CurrentValue == CheckState.Checked ||
+                e.CurrentValue == CheckState.Indeterminate)
             {
-                mod.SetApply(checkedListBox.Items.Count - 1, true);
+                revival.content[e.Index].apply = false;
             }
             else
             {
-                mod.SetApply(checkedListBox.Items.Count - 1, false);
+                revival.content[e.Index].apply = true;
             }
         }
 
         private void continueButton_Click(object sender, EventArgs e)
         {
-            ProgressForm progressForm = new ProgressForm(mod.ModifyExcelFiles, null);
+            ProgressForm progressForm = new ProgressForm(revival.Apply, null);
             progressForm.ShowDialog(this);
             progressForm.Dispose();
 
-            progressForm = new ProgressForm(mod.SaveToDisk, null);
+            progressForm = new ProgressForm(revival.Save, null);
             progressForm.ShowDialog(this);
             progressForm.Dispose();
 
-            mod.Dispose();
+            revival.Dispose();
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
-                                                {
-                                                    Filter =
-                                                        "Modification Files (*.zip, *.xml)|*.zip;*.xml|All Files (*.*)|*.*"
-                                                };
+            {
+                Filter =
+                    "Modification Files (*.zip, *.xml)|*.zip;*.xml|All Files (*.*)|*.*"
+            };
 
             if (openFileDialog.ShowDialog(this) != DialogResult.OK ||
                 (!openFileDialog.FileName.EndsWith("xml") &&
@@ -86,28 +89,28 @@ namespace Reanimator.Forms
                 System.IO.Directory.SetCurrentDirectory(Config.HglDir + "\\modpacks" + modname);
             }
 
-            if (RevivalMod.Parse(openFileDialog.FileName))
+            if (Modification.Parse(openFileDialog.FileName))
             {
-                if (mod == null)
-                {
-                    mod = new RevivalMod(openFileDialog.FileName);
-                }
+                if (revival == null)
+                    revival = new Modification(openFileDialog.FileName);
                 else
-                {
-                    mod.Append(new RevivalMod(openFileDialog.FileName));
-                }
+                    revival.Add(openFileDialog.FileName);
+
                 checkedListBox.Items.Clear();
-                for (int i = 0; i < mod.Length; i++)
+
+                for (int i = 0; i < revival.content.Length; i++)
                 {
-                    checkedListBox.Items.Add(mod.GetTitle(i), mod.GetEnabled(i));
-                    mod.SetApply(i, mod.GetEnabled(i));
-                    if (mod.GetUsage(i) == "required")
+                    checkedListBox.Items.Add(revival.content[i].title, revival.content[i].apply);
+
+                    if (revival.content[i].type == "required")
                     {
                         checkedListBox.SetItemCheckState(i, CheckState.Indeterminate);
+                        revival.content[i].apply = true;
                     }
-                    if (mod.GetUsage(i) == "recommended")
+                    if (revival.content[i].type == "recommended")
                     {
                         checkedListBox.SetItemCheckState(i, CheckState.Checked);
+                        revival.content[i].apply = true;
                     }
                 }
                 checkedListBox.SelectedIndex = 0;
@@ -120,8 +123,7 @@ namespace Reanimator.Forms
 
         public new void Close()
         {
-            mod.Dispose();
-            Dispose();
+            revival.Dispose();
         }
     }
 }

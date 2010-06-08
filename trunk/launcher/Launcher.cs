@@ -43,55 +43,11 @@ namespace launcher
 
             if (result != DialogResult.Yes) return;
 
-            bool changeMade = false;
-
-            try
+            foreach (String f in Directory.GetFiles(Config.HglDir + "\\data\\backup"))
             {
-                for (int i = 0; i < Index.FileNames.Length; i++)
-                {
-                    String filePath = String.Format("{0}\\data\\{1}.idx", Config.HglDir, Index.FileNames[i]);
-                    if (!File.Exists(filePath))
-                    {
-                        MessageBox.Show("Index file not found!\n" + filePath, "Warning", MessageBoxButtons.OK,
-                                        MessageBoxIcon.Warning);
-                        continue;
-                    }
-
-                    Index index;
-                    try
-                    {
-                        index = new Index(filePath);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Failed to load index file!\n\n" + ex, "Error", MessageBoxButtons.OK,
-                                        MessageBoxIcon.Error);
-                        continue;
-                    }
-
-                    if (index.Modified)
-                    {
-                        if (index.Restore() == false)
-                        {
-                            throw new Exception("Problem cleaning file: " + Index.FileNames[i]);
-                        }
-                        changeMade = true;
-                    }
-                    index.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
-            if (changeMade)
-            {
-                MessageBox.Show("All modifications have been successfully removed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("The installation already appears clean.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                int i = f.LastIndexOf("\\");
+                String filename = f.Substring(i, f.Length - i);
+                File.Copy(f, Config.HglDir + "\\data" + filename, true);
             }
         }
 
