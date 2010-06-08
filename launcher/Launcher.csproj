@@ -63,6 +63,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -127,6 +131,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="SimpleItemTransferForm.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="SimpleItemTransferForm.Designer.cs">
       <DependentUpon>SimpleItemTransferForm.cs</DependentUpon>
@@ -147,11 +152,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\background.png" />
-    <None Include="Resources\templar_mouseOver.png" />
-    <None Include="Resources\templar_normal.png" />
-    <None Include="Resources\background_old.png" />
-    <None Include="Resources\background41.png" />
+    <None Include="Resources\bg2.jpg" />
     <Content Include="Revival\data\uix\xml\inventory_screen.xml" />
     <Content Include="Revival\Revival.xml" />
     <Content Include="Revival\Buffer.txt" />

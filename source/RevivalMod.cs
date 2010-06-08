@@ -29,14 +29,19 @@ namespace Reanimator
             revival = Deserialize(path);
             revival.directory = path.Substring(0, path.LastIndexOf("\\"));
             index = Index.LoadIndexFiles(Config.HglDir + "\\data\\");
-            if (System.IO.File.Exists(revival.directory + "\\caption.png"))
-            {
-                revival.image = Image.FromFile(revival.directory + "\\caption.png");
-            }
             data_set = new TableDataSet();
             excel_list = new List<ExcelTable>();
             loaded_excel_list = new List<String>();
             saved_excel_list = new List<String>();
+
+            foreach (Modification mod in revival.modification)
+            {
+                String image = System.IO.Directory.GetCurrentDirectory() + "\\" + mod.image;
+                if (System.IO.File.Exists(image))
+                {
+                    mod.png = Image.FromFile(image);
+                }
+            }
         }
 
         public void Append(RevivalMod mod)
@@ -56,7 +61,7 @@ namespace Reanimator
         {
             try
             {
-                FileStream xsdStream = new FileStream("Schema.xsd", FileMode.Open);
+                FileStream xsdStream = new FileStream("schema.xsd", FileMode.Open);
                 XmlSchema xmlSchema = XmlSchema.Read(xsdStream, null);
                 XmlReaderSettings xmlReaderSettings = new XmlReaderSettings()
                 {
@@ -450,12 +455,7 @@ namespace Reanimator
             {
                 if (!indx.Modified) continue;
 
-                using (FileStream fs = new FileStream(Config.HglDir + "\\data\\" + indx.FileName + ".idx", FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                {
-                    byte[] buffer = indx.GenerateIndexFile();
-                    Crypt.Encrypt(buffer);
-                    fs.Write(buffer, 0, buffer.Length);
-                }
+                indx.WriteIndex();
             }
         }
 
@@ -610,17 +610,9 @@ namespace Reanimator
             revival.modification[i].apply = use;
         }
 
-        public Image Caption
-        {
-            get
-            {
-                return revival.image;
-            }
-        }
-
         public Image getCaption(int i)
         {
-            return revival.modification[i].image;
+            return revival.modification[i].png;
         }
 
         [XmlRoot("revival")]
@@ -631,9 +623,6 @@ namespace Reanimator
 
             [XmlIgnoreAttribute]
             public String directory;
-
-            [XmlIgnoreAttribute]
-            public Image image;
 
             public MyEnumerator GetEnumerator()
             {
@@ -683,8 +672,11 @@ namespace Reanimator
             [XmlElement(typeof(Pack))]
             public Pack[] pack;
 
+            [XmlElement]
+            public String image;
+
             [XmlIgnoreAttribute]
-            public Image image;
+            public Image png;
 
             [XmlIgnoreAttribute]
             public bool apply;
@@ -939,7 +931,15 @@ namespace Reanimator
 
         public void Dispose()
         {
+            foreach (Index i in index)
+            {
+                i.Dispose();
+            }
 
+            foreach (Modification m in revival)
+            {
+                m.png.Dispose();
+            }
         }
     }
 }

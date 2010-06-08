@@ -61,7 +61,7 @@
             this.checkedListBox.Location = new System.Drawing.Point(10, 19);
             this.checkedListBox.Name = "checkedListBox";
             this.checkedListBox.ScrollAlwaysVisible = true;
-            this.checkedListBox.Size = new System.Drawing.Size(426, 139);
+            this.checkedListBox.Size = new System.Drawing.Size(387, 214);
             this.checkedListBox.TabIndex = 1;
             this.checkedListBox.SelectedIndexChanged += new System.EventHandler(this.checkedListBox_SelectedIndexChanged);
             this.checkedListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_ItemCheck);
@@ -72,7 +72,7 @@
             this.addToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(468, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(434, 24);
             this.menuStrip1.TabIndex = 9;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -108,42 +108,39 @@
             this.groupBox1.Controls.Add(this.authorLabel);
             this.groupBox1.Controls.Add(this.versionLabel);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(9, 31);
+            this.groupBox1.Location = new System.Drawing.Point(12, 31);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(449, 181);
+            this.groupBox1.Size = new System.Drawing.Size(410, 181);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Description";
             // 
             // descriptionText
             // 
-            this.descriptionText.BackColor = System.Drawing.SystemColors.ScrollBar;
             this.descriptionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.descriptionText.Location = new System.Drawing.Point(169, 108);
             this.descriptionText.Multiline = true;
             this.descriptionText.Name = "descriptionText";
             this.descriptionText.ReadOnly = true;
-            this.descriptionText.Size = new System.Drawing.Size(267, 61);
+            this.descriptionText.Size = new System.Drawing.Size(228, 62);
             this.descriptionText.TabIndex = 22;
             // 
             // typeLabel
             // 
             this.typeLabel.AutoSize = true;
-            this.typeLabel.Location = new System.Drawing.Point(249, 88);
+            this.typeLabel.Location = new System.Drawing.Point(223, 88);
             this.typeLabel.Name = "typeLabel";
-            this.typeLabel.Size = new System.Drawing.Size(53, 13);
+            this.typeLabel.Size = new System.Drawing.Size(0, 13);
             this.typeLabel.TabIndex = 21;
-            this.typeLabel.Text = "typeLabel";
             // 
             // titleLabel
             // 
             this.titleLabel.AutoSize = true;
             this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleLabel.Location = new System.Drawing.Point(247, 19);
+            this.titleLabel.Location = new System.Drawing.Point(221, 19);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(65, 17);
+            this.titleLabel.Size = new System.Drawing.Size(0, 17);
             this.titleLabel.TabIndex = 17;
-            this.titleLabel.Text = "titleLabel";
             // 
             // label1
             // 
@@ -158,11 +155,10 @@
             // urlLabel
             // 
             this.urlLabel.AutoSize = true;
-            this.urlLabel.Location = new System.Drawing.Point(249, 72);
+            this.urlLabel.Location = new System.Drawing.Point(223, 72);
             this.urlLabel.Name = "urlLabel";
-            this.urlLabel.Size = new System.Drawing.Size(44, 13);
+            this.urlLabel.Size = new System.Drawing.Size(0, 13);
             this.urlLabel.TabIndex = 20;
-            this.urlLabel.Text = "urlLabel";
             // 
             // label2
             // 
@@ -194,20 +190,18 @@
             // authorLabel
             // 
             this.authorLabel.AutoSize = true;
-            this.authorLabel.Location = new System.Drawing.Point(248, 55);
+            this.authorLabel.Location = new System.Drawing.Point(222, 55);
             this.authorLabel.Name = "authorLabel";
-            this.authorLabel.Size = new System.Drawing.Size(63, 13);
+            this.authorLabel.Size = new System.Drawing.Size(0, 13);
             this.authorLabel.TabIndex = 19;
-            this.authorLabel.Text = "authorLabel";
             // 
             // versionLabel
             // 
             this.versionLabel.AutoSize = true;
-            this.versionLabel.Location = new System.Drawing.Point(248, 38);
+            this.versionLabel.Location = new System.Drawing.Point(222, 38);
             this.versionLabel.Name = "versionLabel";
-            this.versionLabel.Size = new System.Drawing.Size(67, 13);
+            this.versionLabel.Size = new System.Drawing.Size(0, 13);
             this.versionLabel.TabIndex = 18;
-            this.versionLabel.Text = "versionLabel";
             // 
             // label3
             // 
@@ -224,9 +218,9 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.checkedListBox);
-            this.groupBox2.Location = new System.Drawing.Point(9, 218);
+            this.groupBox2.Location = new System.Drawing.Point(12, 218);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(449, 173);
+            this.groupBox2.Size = new System.Drawing.Size(410, 251);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Available";
@@ -235,9 +229,9 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(9, 397);
+            this.button1.Location = new System.Drawing.Point(12, 477);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(449, 23);
+            this.button1.Size = new System.Drawing.Size(410, 23);
             this.button1.TabIndex = 13;
             this.button1.Text = "INSTALL";
             this.button1.UseVisualStyleBackColor = true;
@@ -247,17 +241,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(468, 432);
+            this.ClientSize = new System.Drawing.Size(434, 512);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
-            this.HelpButton = true;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(476, 459);
+            this.MaximumSize = new System.Drawing.Size(450, 550);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(476, 459);
+            this.MinimumSize = new System.Drawing.Size(450, 550);
             this.Name = "ModificationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Revival Modifications";
