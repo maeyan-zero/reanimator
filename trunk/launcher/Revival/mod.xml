@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <revival xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.hellgateaus.net schema.xsd">
+         xsi:schemaLocation="http://www.hellgateaus.net schema.xsd"
+         xsi:noNamespaceSchemaLocation="schema.xsd">
   <modification>
     <title>Revival SP modification</title>
     <version>2.0</version>
@@ -517,13 +518,170 @@
     </pack>
   </modification>
   <modification>
-    <title>Hellgate: Ressurection Armor</title>
-    <version>1.0</version>
+    <title>Expanded Storage</title>
+    <version>2.0</version>
     <author>The Revival Team</author>
-    <description>Models taken from Hellgate: Ressurection</description>
+    <description>Adds 3 tabs to both inventory(with 24 rows) and stash(with 250 rows).</description>
     <url>http://www.hellgateaus.net</url>
     <type>recommended</type>
-    <image>ressurection.png</image>
+    <image>storage.png</image>
+    <pack id="hellgate000">
+      <file id="inventory.txt.cooked" dir="data_common\excel\">
+        <modify>
+          <entity id="goggles" value="1">
+            <attribute id="dynamic">
+              <replace>
+                <data>536870948</data>
+              </replace>
+            </attribute>
+            <attribute id="types1">
+              <replace>
+                <data>16</data>
+              </replace>
+            </attribute>
+            <attribute id="types2">
+              <replace>
+                <data>-74</data>
+              </replace>
+            </attribute>
+            <attribute id="height">
+              <replace>
+                <data>24</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="biggrid" value="10">
+            <attribute id="types1">
+              <replace>
+                <data>18</data>
+              </replace>
+            </attribute>
+            <attribute id="types2">
+              <replace>
+                <data>-74</data>
+              </replace>
+            </attribute>
+            <attribute id="types3">
+              <replace>
+                <data>305</data>
+              </replace>
+            </attribute>
+            <attribute id="height">
+              <replace>
+                <data>24</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="smallgrid" value="11">
+            <attribute id="dynamic">
+              <replace>
+                <data>536870948</data>
+              </replace>
+            </attribute>
+            <attribute id="types1">
+              <replace>
+                <data>17</data>
+              </replace>
+            </attribute>
+            <attribute id="types2">
+              <replace>
+                <data>-74</data>
+              </replace>
+            </attribute>
+            <attribute id="height">
+              <replace>
+                <data>24</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="trade" value="18">
+            <attribute id="dynamic">
+              <replace>
+                <data>271581188</data>
+              </replace>
+            </attribute>
+            <attribute id="types1">
+              <replace>
+                <data>17</data>
+              </replace>
+            </attribute>
+            <attribute id="types2">
+              <replace>
+                <data>-74</data>
+              </replace>
+            </attribute>
+            <attribute id="height">
+              <replace>
+                <data>250</data>
+              </replace>
+            </attribute>
+            <attribute id="tradeLocation">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="returnStuckItemsToStandardLoc">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="stash" value="26">
+            <attribute id="height">
+              <replace>
+                <data>250</data>
+              </replace>
+            </attribute>
+          </entity>
+          <entity id="extra_stash" value="53">
+            <attribute id="dynamic">
+              <replace>
+                <data>271581188</data>
+              </replace>
+            </attribute>
+            <attribute id="types1">
+              <replace>
+                <data>16</data>
+              </replace>
+            </attribute>
+            <attribute id="types2">
+              <replace>
+                <data>-74</data>
+              </replace>
+            </attribute>
+            <attribute id="height">
+              <replace>
+                <data>250</data>
+              </replace>
+            </attribute>
+            <attribute id="playerPutRestricted">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+            <attribute id="playerTakeRestricted">
+              <replace>
+                <data>0</data>
+              </replace>
+            </attribute>
+          </entity>
+        </modify>
+      </file>
+      <file id="inventory_screen.xml" dir="data\uix\xml\">
+        <replace>
+          <data>data\uix\xml\expandedstorage\inventory_screen.xml</data>
+        </replace>
+      </file>
+    </pack>
+  </modification>
+  <modification>
+    <title>Hellgate: Resurrection Armor</title>
+    <version>1.0</version>
+    <author>The Revival Team</author>
+    <description>Models taken from Hellgate: Resurrection</description>
+    <url>http://www.hellgateaus.net</url>
+    <type>recommended</type>
+    <image>resurrection.png</image>
     <pack id="hellgate000">
       <!--MALE ORDER MATERIALS-->
       <file id="tm_tech_heavy_diffuse.xml.cooked" dir="data\units\players\templar\templar_male_3p\tech_heavy\">
@@ -1019,160 +1177,4 @@
       </file>
     </pack>
   </modification>
-  <modification>
-    <title>Expanded Storage</title>
-    <version>2.0</version>
-    <author>The Revival Team</author>
-    <description>Adds 3 tabs to both inventory(with 24 rows) and stash(with 250 rows).</description>
-    <url>http://www.hellgateaus.net</url>
-    <type>optional</type>
-    <pack id="sp_hellgate_1.10.180.3416_1.18074.70.4256">
-      <file id="inventory.txt.cooked" dir="data_common\excel\">
-        <modify>
-          <entity id="goggles" value="1">
-            <attribute id="dynamic">
-              <replace>
-                <data>536870948</data>
-              </replace>
-            </attribute>
-            <attribute id="types1">
-              <replace>
-                <data>16</data>
-              </replace>
-            </attribute>
-            <attribute id="types2">
-              <replace>
-                <data>-74</data>
-              </replace>
-            </attribute>
-            <attribute id="height">
-              <replace>
-                <data>24</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="biggrid" value="10">
-            <attribute id="types1">
-              <replace>
-                <data>18</data>
-              </replace>
-            </attribute>
-            <attribute id="types2">
-              <replace>
-                <data>-74</data>
-              </replace>
-            </attribute>
-            <attribute id="types3">
-              <replace>
-                <data>305</data>
-              </replace>
-            </attribute>
-            <attribute id="height">
-              <replace>
-                <data>24</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="smallgrid" value="11">
-            <attribute id="dynamic">
-              <replace>
-                <data>536870948</data>
-              </replace>
-            </attribute>
-            <attribute id="types1">
-              <replace>
-                <data>17</data>
-              </replace>
-            </attribute>
-            <attribute id="types2">
-              <replace>
-                <data>-74</data>
-              </replace>
-            </attribute>
-            <attribute id="height">
-              <replace>
-                <data>24</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="trade" value="18">
-            <attribute id="dynamic">
-              <replace>
-                <data>271581188</data>
-              </replace>
-            </attribute>
-            <attribute id="types1">
-              <replace>
-                <data>17</data>
-              </replace>
-            </attribute>
-            <attribute id="types2">
-              <replace>
-                <data>-74</data>
-              </replace>
-            </attribute>
-            <attribute id="height">
-              <replace>
-                <data>250</data>
-              </replace>
-            </attribute>
-            <attribute id="tradeLocation">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-            <attribute id="returnStuckItemsToStandardLoc">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="stash" value="26">
-            <attribute id="height">
-              <replace>
-                <data>250</data>
-              </replace>
-            </attribute>
-          </entity>
-          <entity id="extra_stash" value="53">
-            <attribute id="dynamic">
-              <replace>
-                <data>271581188</data>
-              </replace>
-            </attribute>
-            <attribute id="types1">
-              <replace>
-                <data>16</data>
-              </replace>
-            </attribute>
-            <attribute id="types2">
-              <replace>
-                <data>-74</data>
-              </replace>
-            </attribute>
-            <attribute id="height">
-              <replace>
-                <data>250</data>
-              </replace>
-            </attribute>
-            <attribute id="playerPutRestricted">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-            <attribute id="playerTakeRestricted">
-              <replace>
-                <data>0</data>
-              </replace>
-            </attribute>
-          </entity>
-        </modify>
-      </file>
-      <file id="inventory_screen.xml" dir="data\uix\xml\">
-        <replace>
-          <data>data\uix\xml\expandedstorage\inventory_screen.xml</data>
-        </replace>
-      </file>
-    </pack>
-  </modification
 </revival>
