@@ -22,19 +22,11 @@ namespace Reanimator
 
         public Reanimator()
         {
-            try
-            {
-                _options = new Options();
-                _indexFilesOpen = new List<string>();
+            _options = new Options();
+            _indexFilesOpen = new List<string>();
 
-                CheckEnvironment();
-                InitializeComponent();
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "Reanimator");
-                MessageBox.Show(ex.Message, "Reanimator");
-            }
+            CheckEnvironment();
+            InitializeComponent();
         }
 
         private void CheckEnvironment()
@@ -100,7 +92,6 @@ namespace Reanimator
                     Config.DatUnpacked = false;
                     ExceptionLogger.LogException(ex, "CheckEnvironment");
                     MessageBox.Show("An error occured during the installation.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.Close();
                 }
             }
         }

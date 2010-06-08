@@ -60,37 +60,9 @@ namespace launcher.Properties {
             }
         }
         
-        internal static System.Drawing.Bitmap background {
+        internal static System.Drawing.Bitmap bg2 {
             get {
-                object obj = ResourceManager.GetObject("background", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap background_old {
-            get {
-                object obj = ResourceManager.GetObject("background_old", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap background4 {
-            get {
-                object obj = ResourceManager.GetObject("background4", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap templar_mouseOver {
-            get {
-                object obj = ResourceManager.GetObject("templar_mouseOver", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap templar_normal {
-            get {
-                object obj = ResourceManager.GetObject("templar_normal", resourceCulture);
+                object obj = ResourceManager.GetObject("bg2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

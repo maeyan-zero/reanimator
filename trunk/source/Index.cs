@@ -129,9 +129,19 @@ namespace Reanimator
 
         const string Affix = "backup\\";
 
-        readonly FileStream _indexFile;
+        FileStream _indexFile;
 
-        public FileStream DataFile { get; private set; }
+        public FileStream DataFile { get; set; }
+
+        public void WriteIndex()
+        {
+            byte[] buffer = this.GenerateIndexFile();
+            Crypt.Encrypt(buffer);
+            _indexFile.Seek(0, SeekOrigin.Begin);
+            _indexFile.Write(buffer, 0, buffer.Length);
+        }
+
+
 
         public class FileIndex
         {
@@ -353,7 +363,7 @@ namespace Reanimator
                     String filePath = String.Format("{0}{1}.dat", FileDirectory, FileName);
                     if (!File.Exists(filePath)) return false;
 
-                    DataFile = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                    DataFile = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
                 }
                 catch (Exception)
                 {

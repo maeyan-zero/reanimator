@@ -63,11 +63,28 @@ namespace Reanimator.Forms
             OpenFileDialog openFileDialog = new OpenFileDialog
                                                 {
                                                     Filter =
-                                                        "Modification Files (*.mod, *.xml)|*.mod;*.xml|All Files (*.*)|*.*"
+                                                        "Modification Files (*.zip, *.xml)|*.zip;*.xml|All Files (*.*)|*.*"
                                                 };
 
             if (openFileDialog.ShowDialog(this) != DialogResult.OK ||
-                (!openFileDialog.FileName.EndsWith("mod") && !openFileDialog.FileName.EndsWith("xml"))) return;
+                (!openFileDialog.FileName.EndsWith("xml") &&
+                    !openFileDialog.FileName.EndsWith("zip"))) return;
+
+            if (openFileDialog.FileName.EndsWith("zip"))
+            {
+                using (Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile(openFileDialog.FileName))
+                {
+                    zip.ExtractAll(Config.HglDir + "\\modpacks\\", Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
+                }
+                
+                int lastof1 = openFileDialog.FileName.LastIndexOf("\\");
+                int lastof2 = openFileDialog.FileName.LastIndexOf(".");
+                int length = lastof2 - lastof1;
+                string modname = openFileDialog.FileName.Substring(lastof1, length);
+
+                openFileDialog.FileName = Config.HglDir + "\\modpacks" + modname + "\\mod.xml";
+                System.IO.Directory.SetCurrentDirectory(Config.HglDir + "\\modpacks" + modname);
+            }
 
             if (RevivalMod.Parse(openFileDialog.FileName))
             {
@@ -99,6 +116,12 @@ namespace Reanimator.Forms
             {
                 MessageBox.Show("Invalid mod. Check syntax and try again.", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public new void Close()
+        {
+            mod.Dispose();
+            Dispose();
         }
     }
 }

@@ -128,7 +128,7 @@ namespace launcher
                 _availableCharacters[i] = _availableCharacters[i].Replace(_characterFolder + @"\", string.Empty).Replace(".hg1", string.Empty);
             }
 
-            characterCombo.DataSource = _availableCharacters;
+            //characterCombo.DataSource = _availableCharacters;
         }
 
         private void p_start_Click(object sender, EventArgs e)
@@ -141,14 +141,14 @@ namespace launcher
         {
             try
             {
-                if (characterCombo.SelectedIndex > 0)
-                {
-                    String characterToLoad = _characterFolder + @"\" + characterCombo.SelectedItem + @".hg1";
-                    String arguments = "-singleplayer -load\"" + characterToLoad + "\"";
+                //if (characterCombo.SelectedIndex > 0)
+                //{
+                //    String characterToLoad = _characterFolder + @"\" + characterCombo.SelectedItem + @".hg1";
+                //    String arguments = "-singleplayer -load\"" + characterToLoad + "\"";
 
-                    Process.Start(Config.GameClientPath, arguments);
-                }
-                else
+                //    Process.Start(Config.GameClientPath, arguments);
+                //}
+                //else
                 {
                     Process.Start(Config.GameClientPath, "-singleplayer\"");
                 }
@@ -157,28 +157,6 @@ namespace launcher
             {
                 MessageBox.Show("Failed to start game at:\n" + Config.GameClientPath + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void p_start_MouseEnter(object sender, EventArgs e)
-        {
-            p_start.BackgroundImage = Resources.templar_mouseOver;
-            toolStripStatusLabel1.Text = "Unlesh Hell!";
-        }
-
-        private void p_start_MouseLeave(object sender, EventArgs e)
-        {
-            p_start.BackgroundImage = Resources.templar_normal;
-            toolStripStatusLabel1.Text = "";
-        }
-
-        private void p_start_MouseDown(object sender, MouseEventArgs e)
-        {
-            p_start.BackgroundImage = Resources.templar_normal;
-        }
-
-        private void p_start_MouseUp(object sender, MouseEventArgs e)
-        {
-            p_start.BackgroundImage = Resources.templar_mouseOver;
         }
 
         private void p_homePageLink_Click(object sender, EventArgs e)
@@ -213,6 +191,16 @@ namespace launcher
         {
             SimpleItemTransferForm transfer = new SimpleItemTransferForm();
             transfer.ShowDialog(this);
+        }
+
+        private void label1_MouseEnter(object sender, EventArgs e)
+        {
+            unleshHell.ForeColor = System.Drawing.Color.DarkOrange;
+        }
+
+        private void unleshHell_MouseLeave(object sender, EventArgs e)
+        {
+            unleshHell.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
         }
     }
 }
