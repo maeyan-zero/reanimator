@@ -124,7 +124,6 @@
     <None Include="Revival\data\uix\loading.dds" />
     <None Include="Revival\data\uix\main_new_atlas.dds" />
     <None Include="Revival\data\uix\nonwsloading.dds" />
-    <None Include="Revival\Schema.xsd" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -154,8 +153,10 @@
   <ItemGroup>
     <None Include="Resources\bg2.jpg" />
     <Content Include="Revival\data\uix\xml\inventory_screen.xml" />
-    <Content Include="Revival\Revival.xml" />
+    <Content Include="Revival\mod.xml" />
     <Content Include="Revival\Buffer.txt" />
+    <Content Include="Revival\revival.png" />
+    <Content Include="Revival\storage.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Revival\data\background\_advertisements\" />

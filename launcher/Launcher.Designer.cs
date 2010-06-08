@@ -83,6 +83,7 @@
             this.uninstallModsToolStripMenuItem.Name = "uninstallModsToolStripMenuItem";
             this.uninstallModsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.uninstallModsToolStripMenuItem.Text = "Uninstall Mods...";
+            this.uninstallModsToolStripMenuItem.Click += new System.EventHandler(this.revertToolStripMenuItem_Click);
             // 
             // programToolStripMenuItem
             // 
