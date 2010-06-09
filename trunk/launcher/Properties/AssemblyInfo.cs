@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("launcher")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Hellgateaus.net Launcher")]
+[assembly: AssemblyDescription("New improved Hellgate launcher from Hellgateaus.net")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("launcher")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCompany("The Revival Team")]
+[assembly: AssemblyProduct("Launcher 2038")]
+[assembly: AssemblyCopyright("Copyright © The Revival Team 2010")]
+[assembly: AssemblyTrademark("Double Edged Software")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 

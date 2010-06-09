@@ -66,5 +66,12 @@ namespace launcher.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        internal static System.Drawing.Icon HGL_icon {
+            get {
+                object obj = ResourceManager.GetObject("HGL_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

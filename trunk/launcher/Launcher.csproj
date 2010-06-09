@@ -9,9 +9,10 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>launcher</RootNamespace>
-    <AssemblyName>launcher</AssemblyName>
+    <AssemblyName>Launcher</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>Resources\HGL_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -153,6 +154,8 @@
   <ItemGroup>
     <None Include="Resources\bg2.jpg" />
     <None Include="Revival\Schema.xsd" />
+    <None Include="Resources\ico.bmp" />
+    <None Include="Resources\HGL_icon.ico" />
     <Content Include="Revival\data\uix\xml\inventory_screen.xml" />
     <Content Include="Revival\mod.xml" />
     <Content Include="Revival\Buffer.txt" />
