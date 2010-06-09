@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Reanimator")]
 [assembly: AssemblyDescription("The ultimate Hellgate London modification toolset")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Revival Team")]
+[assembly: AssemblyCompany("The Revival Team")]
 [assembly: AssemblyProduct("Reanimator")]
 [assembly: AssemblyCopyright("Copyright © Revival Team 2009-2010")]
 [assembly: AssemblyTrademark("http://www.hellgateaus.net")]
