@@ -40,7 +40,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             _skillIconPanel.MakeTransparent(Color.White);
         }
 
-        public Bitmap GetSkillPanelBmp(ref DataTable skillTable, int characterClassId)
+        public Bitmap GetSkillPanelBmp(ref DataTable skillTable, int characterClassId, bool forceRecreate)
         {
             _skillTable = skillTable;
             int generalSkillTableId = 0;
@@ -54,7 +54,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             select = "skillTab = '" + generalSkillTableId + "'";
             DataRow[] generalSkills = _skillTable.Select(select);
 
-            if (!File.Exists(bmpPath))
+            if (!File.Exists(bmpPath) || forceRecreate)
             {
                 if(!Directory.Exists(folder))
                 {
@@ -349,7 +349,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
 
             Label = new Label();
-            Label.BackColor = Color.Transparent;
+            //Label.BackColor = Color.Transparent;
+            Label.BackColor = Color.Black;
             Label.ForeColor = Color.White;
             Label.TextAlign = ContentAlignment.TopCenter;
             Label.MaximumSize = new Size(56, 22);

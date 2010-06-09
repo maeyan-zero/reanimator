@@ -212,5 +212,19 @@ namespace Reanimator.Forms.ItemTransfer
             b_save.Enabled = enable;
             b_undoTransfer.Enabled = enable;
         }
+
+        private void b_tradeFrom2To1_Click(object sender, EventArgs e)
+        {
+            AddEntryIfNotPresent(_characterUnit2, ItemValueNames.gold);
+        }
+
+        private void AddEntryIfNotPresent(Unit unit, ItemValueNames itemValueNames)
+        {
+            if (UnitHelpFunctions.GetSimpleValue(unit, itemValueNames.ToString()) == 0)
+            {
+                List<Unit.StatBlock.Stat> stat = new List<Unit.StatBlock.Stat>();
+                stat.AddRange(unit.statBlock.stats);
+            }
+        }
     }
 }

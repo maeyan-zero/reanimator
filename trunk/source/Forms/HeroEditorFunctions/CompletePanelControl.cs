@@ -29,7 +29,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             try
             {
                 CreateCharacterSkillControlsAndBmps skillImage = new CreateCharacterSkillControlsAndBmps();
-                Bitmap skillBackground = skillImage.GetSkillPanelBmp(ref skillTable, characterClassId);
+                Bitmap skillBackground = skillImage.GetSkillPanelBmp(ref skillTable, characterClassId, true);
                 _controls = skillImage.SkillControls;
 
                 p_attributePanel.Controls.Add(_values);

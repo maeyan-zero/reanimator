@@ -332,6 +332,7 @@
             this.b_tradeFrom2To1.TabIndex = 35;
             this.b_tradeFrom2To1.Text = "<<";
             this.b_tradeFrom2To1.UseVisualStyleBackColor = true;
+            this.b_tradeFrom2To1.Click += new System.EventHandler(this.b_tradeFrom2To1_Click);
             // 
             // l_palladium1
             // 

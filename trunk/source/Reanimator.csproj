@@ -484,7 +484,10 @@
     <None Include="Resources\inventory_bg1.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\attributePanelBg.png" />
+    <None Include="Resources\attributePanel.png" />
     <Content Include="Resources\icon3.ico" />
+    <None Include="Resources\skillPanelBg.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

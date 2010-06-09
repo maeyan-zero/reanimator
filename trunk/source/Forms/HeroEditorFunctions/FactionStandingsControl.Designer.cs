@@ -585,6 +585,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.nud_templarFaction);
             this.Controls.Add(this.richTextBox1);
+            this.DoubleBuffered = true;
             this.Name = "FactionStandingsControl";
             this.Size = new System.Drawing.Size(256, 732);
             ((System.ComponentModel.ISupportInitialize)(this.nud_factionWithTheBrothers)).EndInit();

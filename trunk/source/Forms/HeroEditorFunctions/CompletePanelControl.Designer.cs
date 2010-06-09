@@ -202,7 +202,8 @@
             // p_attributePanel
             // 
             this.p_attributePanel.AutoScroll = true;
-            this.p_attributePanel.BackColor = System.Drawing.Color.Black;
+            this.p_attributePanel.BackColor = System.Drawing.SystemColors.Control;
+            this.p_attributePanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.p_attributePanel.Location = new System.Drawing.Point(123, 115);
             this.p_attributePanel.Name = "p_attributePanel";
             this.p_attributePanel.Size = new System.Drawing.Size(276, 560);
@@ -210,7 +211,8 @@
             // 
             // p_skillPanel
             // 
-            this.p_skillPanel.BackColor = System.Drawing.Color.Black;
+            this.p_skillPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.p_skillPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.p_skillPanel.Location = new System.Drawing.Point(418, 0);
             this.p_skillPanel.Name = "p_skillPanel";
             this.p_skillPanel.Size = new System.Drawing.Size(802, 746);
@@ -220,7 +222,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Reanimator.Properties.Resources.completePanel_small;
+            this.BackgroundImage = global::Reanimator.Properties.Resources.attributePanel;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Controls.Add(this.p_skillPanel);
             this.Controls.Add(this.p_attributePanel);
             this.Controls.Add(this.nud_nextExp);
@@ -251,11 +254,11 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Panel p_attributePanel;
-        private System.Windows.Forms.Panel p_skillPanel;
         public System.Windows.Forms.NumericUpDown nud_nextExp;
         public System.Windows.Forms.NumericUpDown nud_currentExp;
         public System.Windows.Forms.Label l_characterClass;
         public System.Windows.Forms.NumericUpDown nud_level;
         public System.Windows.Forms.TextBox tb_charakterName;
+        private System.Windows.Forms.Panel p_skillPanel;
     }
 }

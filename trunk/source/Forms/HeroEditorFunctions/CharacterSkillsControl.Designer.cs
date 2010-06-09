@@ -127,12 +127,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
+            this.BackgroundImage = global::Reanimator.Properties.Resources.skillPanelBg;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.nud_availableSkillPoints);
+            this.DoubleBuffered = true;
             this.Name = "CharacterSkillsControl";
             this.Size = new System.Drawing.Size(802, 746);
             ((System.ComponentModel.ISupportInitialize)(this.nud_availableSkillPoints)).EndInit();

@@ -21,17 +21,24 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             //characterClassID = 3;
             Bitmap skillPanelImage = (Bitmap)Bitmap.FromFile(Directory.GetCurrentDirectory() + @"\images\" + characterClassID + ".bmp");
-            skillPanelImage.MakeTransparent(Color.White);
-            this.BackgroundImage = skillPanelImage;
-            this.BackgroundImageLayout = ImageLayout.Stretch;
+
+            SetBackground(skillPanelImage);
         }
 
         public void SetBackground(Bitmap skillBackground)
         {
-            Bitmap skillPanelImage = skillBackground;
-            skillPanelImage.MakeTransparent(Color.White);
-            this.BackgroundImage = skillPanelImage;
-            this.BackgroundImageLayout = ImageLayout.Stretch;
+            this.BackgroundImage = global::Reanimator.Properties.Resources.skillPanelBg;
+            skillBackground.MakeTransparent(Color.White);
+
+            Bitmap bg = (Bitmap)this.BackgroundImage;
+            Graphics g = Graphics.FromImage(bg);
+
+            g.DrawImage(skillBackground, new Point());
+
+            g.Dispose();
+
+            this.BackgroundImage = bg;
+            //this.BackgroundImageLayout = ImageLayout.Stretch;
         }
 
         private void numericUpDown4_ValueChanged(object sender, EventArgs e)

@@ -84,19 +84,19 @@
             // configutationToolStripMenuItem
             // 
             this.configutationToolStripMenuItem.Name = "configutationToolStripMenuItem";
-            this.configutationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.configutationToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
             this.configutationToolStripMenuItem.Text = "Options...";
             this.configutationToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(122, 6);
             // 
             // exitToolStripMenuItem1
             // 
             this.exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
-            this.exitToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem1.Size = new System.Drawing.Size(125, 22);
             this.exitToolStripMenuItem1.Text = "Exit";
             this.exitToolStripMenuItem1.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -136,6 +136,7 @@
             this.itemTransferToolStripMenuItem1.Name = "itemTransferToolStripMenuItem1";
             this.itemTransferToolStripMenuItem1.Size = new System.Drawing.Size(162, 22);
             this.itemTransferToolStripMenuItem1.Text = "Item Transfer...";
+            this.itemTransferToolStripMenuItem1.Click += new System.EventHandler(this.itemTransferToolStripMenuItem1_Click);
             // 
             // aboutToolStripMenuItem1
             // 
@@ -255,7 +256,7 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 340);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 342);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.statusStrip1.Size = new System.Drawing.Size(624, 22);
@@ -289,7 +290,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(23)))), ((int)(((byte)(23)))), ((int)(((byte)(23)))));
             this.BackgroundImage = global::launcher.Properties.Resources.bg2;
-            this.ClientSize = new System.Drawing.Size(624, 362);
+            this.ClientSize = new System.Drawing.Size(624, 364);
             this.Controls.Add(this.unleshHell);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.p_openHomePage);
