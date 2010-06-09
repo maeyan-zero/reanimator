@@ -74,6 +74,20 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap attributePanel {
+            get {
+                object obj = ResourceManager.GetObject("attributePanel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap attributePanelBg {
+            get {
+                object obj = ResourceManager.GetObject("attributePanelBg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap attributeSubs_small {
             get {
                 object obj = ResourceManager.GetObject("attributeSubs_small", resourceCulture);
@@ -273,6 +287,13 @@ namespace Reanimator.Properties {
         internal static System.Drawing.Bitmap ruperts3 {
             get {
                 object obj = ResourceManager.GetObject("ruperts3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap skillPanelBg {
+            get {
+                object obj = ResourceManager.GetObject("skillPanelBg", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
