@@ -14,45 +14,21 @@ namespace Reanimator
 {
     public class Modification : IDisposable
     {
-        Index[] _index;               // The Hellgate London index & data files.
-        Revival _revival;             // The base modifications class. Contains many mods.
+        Index[] _index;              // The Hellgate London index & data files.
+        Revival _revival;            // The base modifications class. Contains many mods.
         ExcelTables excelTables;     // The "Excel" relational data sets.
         TableDataSet dataSet = new TableDataSet();
         List<ExcelTable> excel_list = new List<ExcelTable>();    // Excel files.
         List<String> loaded_excel_list = new List<String>();     // Loaded Excel files.
         List<String> saved_excel_list = new List<String>();      // Saved Excel files.
+        
         public Content[] content { get { return _revival.modification; } }
+        public int Length { get { return (_revival.modification == null) ? 0 : _revival.modification.Length; } }
+        public bool InstallIsClean { get { foreach (Index i in _index) { if (i.Modified) return false; } return true; } }
 
-        public Modification(string path)
+        public Modification()
         {
-            _index = Index.LoadIndexFiles(Config.HglDir + "\\data\\");
-            _revival = Open(path);
-        }
-        Revival Open(string path)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Revival));
-            TextReader reader = new StreamReader(path);
-            Revival revival = (Revival)serializer.Deserialize(reader);
-            reader.Close();
-
-            return revival;
-        }
-        public bool Add(string path)
-        {
-            try
-            {
-                Revival buffer = Open(path);
-                Content[] content = buffer.modification;
-                int current = _revival.modification.Length;
-                int extra = content.Length;
-                Array.Resize(ref _revival.modification, current + extra);
-                Array.Copy(content, 0, _revival.modification, current, extra);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _revival = new Revival();
         }
         public static bool Parse(string path)
         {
@@ -84,20 +60,41 @@ namespace Reanimator
                 return false;
             }
         }
+        public void Open(ProgressForm progress, Object argument)
+        {
+            int i = ((string)argument).LastIndexOf("\\") + 1;
+            string s = ((string)argument).Substring(i);
+            progress.SetLoadingText("Parsing modification:");
+            progress.SetCurrentItemText(s);
+
+            _index = Index.LoadIndexFiles(Config.HglDir + "\\data\\");
+            XmlSerializer serializer = new XmlSerializer(typeof(Revival));
+            TextReader reader = new StreamReader((string)argument);
+            _revival = (Revival)serializer.Deserialize(reader);
+            reader.Close();
+        }
+        public void Add(ProgressForm progress, Object argument)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Revival));
+            TextReader reader = new StreamReader((string)argument);
+            Revival buffer =(Revival)serializer.Deserialize(reader);;
+            Content[] content = buffer.modification;
+            int current = _revival.modification.Length;
+            int extra = content.Length;
+            Array.Resize(ref _revival.modification, current + extra);
+            Array.Copy(content, 0, _revival.modification, current, extra);
+        }
         public void Apply(ProgressForm progress, Object argument)
         {
             foreach (Content modification in _revival.modification)
             {
-                // Only continue if the modification has been enabled through the GUI.
                 if (!modification.apply) continue;
-
                 foreach (Pack pack in modification)
                 {
                     // Find the index indice.
                     for (int i = 0; i < Index.FileNames.Length; i++)
                     {
                         if (pack.id != Index.FileNames[i]) continue;
-
                         pack.list_id = i;
                         break;
                     }
@@ -106,9 +103,6 @@ namespace Reanimator
                     {
                         try
                         {
-                            //////
-                            // Excel file.
-                            //
                             if (file.id.Contains(".txt.cooked"))
                             {
                                 // Has ExcelTables interface been initialized?
@@ -117,7 +111,8 @@ namespace Reanimator
                                     // Excel Table FileIndex
                                     Index.FileIndex fileIndex =
                                         _index[Index.LatestPatch].FileTable[Index.ExcelTablesIndex];
-                                    if (String.IsNullOrEmpty(fileIndex.DirectoryString) || !fileIndex.FileNameString.Contains("exceltables"))
+                                    if (String.IsNullOrEmpty(fileIndex.DirectoryString) ||
+                                        !fileIndex.FileNameString.Contains("exceltables"))
                                     {
                                         MessageBox.Show("File not found in data file!\nFile: exceltables.txt.cooked", "Error",
                                                         MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -158,6 +153,14 @@ namespace Reanimator
                                     else
                                     {
                                         throw new Exception("Could not locate file: " + file.id);
+                                    }
+                                }
+                                else
+                                {
+                                    if (file.table_ref == null)
+                                    {
+                                        file.table_ref = excelTables.TableManager.ResolveTableId(file.id.Replace(".txt.cooked",
+                                                                                                     ""));
                                     }
                                 }
                             }
@@ -389,7 +392,7 @@ namespace Reanimator
                                 // Replace copies the replacing file to the HGL dir.
                                 else
                                 {
-                                    string source = Config.HglDir + "\\data" + "\\" + file.replace.data;
+                                    string source = Directory.GetCurrentDirectory() + "\\" + file.replace.data;
                                     string destination = Config.HglDir + "\\" +
                                                          _index[pack.list_id].FileTable[file.index_id].
                                                              DirectoryString;
@@ -421,7 +424,10 @@ namespace Reanimator
                         }
                         catch (Exception e)
                         {
-                            MessageBox.Show(e.ToString());
+                            if (e.ToString() == "Source file not found")
+                                MessageBox.Show("File not found: " + file.id, "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            else
+                                MessageBox.Show(e.ToString());
                         }
                     }
                 }
@@ -434,6 +440,19 @@ namespace Reanimator
                 if (!indx.Modified) continue;
 
                 indx.WriteIndex();
+            }
+        }
+        public void Unzip(ProgressForm progress, Object argument)
+        {
+            int i = ((string)argument).LastIndexOf("\\") + 1;
+            string s = ((string)argument).Substring(i);
+            progress.SetLoadingText("Uncompressing modification.");
+            progress.SetCurrentItemText(s);
+
+            using (Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile((string)argument))
+            {
+                zip.ExtractAll(Config.HglDir + "\\modpacks\\",
+                    Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
             }
         }
         void Manipulate(TableDataSet dataSet, String t, Attribute a, int r)
@@ -566,14 +585,6 @@ namespace Reanimator
         }
         public class Content
         {
-            Content()
-            {
-                String path = System.IO.Directory.GetCurrentDirectory() + "\\" + image;
-                if (System.IO.File.Exists(path))
-                {
-                    png = Image.FromFile(path);
-                }
-            }
             [XmlElement]
             public string title;
             [XmlElement]

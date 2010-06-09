@@ -39,6 +39,14 @@ namespace Reanimator.Excel
             public UInt32 DefaultBitmask { get; set; }
         }
 
+        public class ListValues
+        {
+            public int list_id;
+            public int index_id;
+            public int index_id_patch;
+            public string table_ref;
+        }
+
         private abstract class FileTokens
         {
             public const Int32 StartOfBlock = 0x68657863;      // 'cxeh'

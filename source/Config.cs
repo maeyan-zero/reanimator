@@ -61,6 +61,12 @@ namespace Reanimator
             set { SetValue("HglDir", value); }
         }
 
+        public static bool IndexBackupCreated
+        {
+            get { return GetValue("IndexBackup", false); }
+            set { SetValue("IndexBackup", value); }
+        }
+
         public static bool Installed
         {
             get { return GetValue("Installed", false); }
