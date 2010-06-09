@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://www.hellgateaus.net schema.xsd"
          xsi:noNamespaceSchemaLocation="schema.xsd">
   <modification>
-    <title>Revival SP modification</title>
+    <title>Revival SP Modification</title>
     <version>2.0</version>
     <author>The Revival Team</author>
-    <description>This is the base SP modification developed by the Revival team.</description>
+    <description>This is the base SP modification.</description>
     <url>http://www.hellgateaus.net</url>
     <type>required</type>
     <image>revival.png</image>
@@ -675,7 +675,7 @@
     </pack>
   </modification>
   <modification>
-    <title>Hellgate: Resurrection Armor</title>
+    <title>Hellgate: Resurrection Armour</title>
     <version>1.0</version>
     <author>The Revival Team</author>
     <description>Models taken from Hellgate: Resurrection</description>

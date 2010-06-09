@@ -5,6 +5,7 @@ using System.IO;
 using Reanimator;
 using launcher.Properties;
 using System.Diagnostics;
+using Reanimator.Forms;
 using Reanimator.Forms.ItemTransfer;
 using launcher.Revival;
 
@@ -14,7 +15,7 @@ namespace launcher
     {
         readonly String _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
         readonly List<String> _availableCharacters;
-
+        ModificationForm modForm;
 
         const String HOMEPAGE = "http://www.hellgateaus.net";
 
@@ -27,27 +28,33 @@ namespace launcher
         private void installToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(Config.HglDir))
-            {
-                Reanimator.Forms.ModificationForm modForm = new Reanimator.Forms.ModificationForm();
-                modForm.ShowDialog();
-            }
+                modForm = new ModificationForm();
             else
-            {
                 MessageBox.Show("Can't locate Hellgate: London directory. Check settings and try again.");
-            }
         }
 
         private void revertToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to revert all modifications?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (result != DialogResult.Yes) return;
-
-            foreach (String f in Directory.GetFiles(Config.HglDir + "\\data\\backup"))
+            if (Config.IndexBackupCreated)
             {
-                int i = f.LastIndexOf("\\");
-                String filename = f.Substring(i, f.Length - i);
-                File.Copy(f, Config.HglDir + "\\data" + filename, true);
+                DialogResult result = MessageBox.Show("Are you sure you want to revert all modifications?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result != DialogResult.Yes) return;
+
+                foreach (String f in Directory.GetFiles(Config.HglDir + "\\data\\backup"))
+                {
+                    int i = f.LastIndexOf("\\");
+                    String filename = f.Substring(i, f.Length - i);
+                    File.Copy(f, Config.HglDir + "\\data" + filename, true);
+                }
+
+                MessageBox.Show("Modifications uninstalled.", "Success",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("No backup state found. You must first install modifications.", "Information",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -66,7 +73,7 @@ namespace launcher
         {
             MessageBox.Show("HellgateAus.net Launcher 2038" + Environment.NewLine +
                             "Developed by Maeyan, Alex2069, Kite & Malachor." + Environment.NewLine +
-                            "Artwork by lexsoOr, Music by ..." + Environment.NewLine +
+                            "Artwork by ArtmanPhil." + Environment.NewLine +
                             Environment.NewLine +
                             "Visit us at " + HOMEPAGE + " " + Environment.NewLine +
                             "Contact maeyan.zero@gmail.com for info.",
@@ -151,7 +158,7 @@ namespace launcher
 
         private void label1_MouseEnter(object sender, EventArgs e)
         {
-            unleshHell.ForeColor = System.Drawing.Color.DarkOrange;
+            unleshHell.ForeColor = System.Drawing.Color.White;
         }
 
         private void unleshHell_MouseLeave(object sender, EventArgs e)

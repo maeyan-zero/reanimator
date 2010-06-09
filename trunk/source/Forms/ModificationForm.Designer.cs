@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.checkedListBox = new System.Windows.Forms.CheckedListBox();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.descriptionText = new System.Windows.Forms.TextBox();
@@ -46,7 +44,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.menuStrip1.SuspendLayout();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -61,27 +60,10 @@
             this.checkedListBox.Location = new System.Drawing.Point(10, 19);
             this.checkedListBox.Name = "checkedListBox";
             this.checkedListBox.ScrollAlwaysVisible = true;
-            this.checkedListBox.Size = new System.Drawing.Size(387, 214);
+            this.checkedListBox.Size = new System.Drawing.Size(387, 229);
             this.checkedListBox.TabIndex = 1;
-            this.checkedListBox.SelectedIndexChanged += new System.EventHandler(this.checkedListBox_SelectedIndexChanged);
-            this.checkedListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox_ItemCheck);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(434, 24);
-            this.menuStrip1.TabIndex = 9;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // addToolStripMenuItem
-            // 
-            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
-            this.addToolStripMenuItem.Text = "Add...";
-            this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
+            this.checkedListBox.SelectedIndexChanged += new System.EventHandler(this.itemList_SelectedIndexChanged);
+            this.checkedListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.itemList_ItemCheck);
             // 
             // pictureBox
             // 
@@ -108,7 +90,7 @@
             this.groupBox1.Controls.Add(this.authorLabel);
             this.groupBox1.Controls.Add(this.versionLabel);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(12, 31);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(410, 181);
             this.groupBox1.TabIndex = 11;
@@ -128,7 +110,7 @@
             // typeLabel
             // 
             this.typeLabel.AutoSize = true;
-            this.typeLabel.Location = new System.Drawing.Point(223, 88);
+            this.typeLabel.Location = new System.Drawing.Point(216, 88);
             this.typeLabel.Name = "typeLabel";
             this.typeLabel.Size = new System.Drawing.Size(0, 13);
             this.typeLabel.TabIndex = 21;
@@ -137,7 +119,7 @@
             // 
             this.titleLabel.AutoSize = true;
             this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleLabel.Location = new System.Drawing.Point(221, 19);
+            this.titleLabel.Location = new System.Drawing.Point(216, 19);
             this.titleLabel.Name = "titleLabel";
             this.titleLabel.Size = new System.Drawing.Size(0, 17);
             this.titleLabel.TabIndex = 17;
@@ -155,7 +137,7 @@
             // urlLabel
             // 
             this.urlLabel.AutoSize = true;
-            this.urlLabel.Location = new System.Drawing.Point(223, 72);
+            this.urlLabel.Location = new System.Drawing.Point(216, 72);
             this.urlLabel.Name = "urlLabel";
             this.urlLabel.Size = new System.Drawing.Size(0, 13);
             this.urlLabel.TabIndex = 20;
@@ -190,7 +172,7 @@
             // authorLabel
             // 
             this.authorLabel.AutoSize = true;
-            this.authorLabel.Location = new System.Drawing.Point(222, 55);
+            this.authorLabel.Location = new System.Drawing.Point(216, 55);
             this.authorLabel.Name = "authorLabel";
             this.authorLabel.Size = new System.Drawing.Size(0, 13);
             this.authorLabel.TabIndex = 19;
@@ -198,7 +180,7 @@
             // versionLabel
             // 
             this.versionLabel.AutoSize = true;
-            this.versionLabel.Location = new System.Drawing.Point(222, 38);
+            this.versionLabel.Location = new System.Drawing.Point(216, 38);
             this.versionLabel.Name = "versionLabel";
             this.versionLabel.Size = new System.Drawing.Size(0, 13);
             this.versionLabel.TabIndex = 18;
@@ -218,9 +200,9 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.checkedListBox);
-            this.groupBox2.Location = new System.Drawing.Point(12, 218);
+            this.groupBox2.Location = new System.Drawing.Point(12, 199);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(410, 251);
+            this.groupBox2.Size = new System.Drawing.Size(410, 272);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Available";
@@ -229,47 +211,66 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(12, 477);
+            this.button1.Location = new System.Drawing.Point(143, 477);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(410, 23);
+            this.button1.Size = new System.Drawing.Size(148, 23);
             this.button1.TabIndex = 13;
-            this.button1.Text = "INSTALL";
+            this.button1.Text = "Install";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.continueButton_Click);
+            this.button1.Click += new System.EventHandler(this.install_Click);
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.Location = new System.Drawing.Point(12, 477);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(125, 23);
+            this.button2.TabIndex = 14;
+            this.button2.Text = "Add";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.add_Click);
+            // 
+            // button3
+            // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.Location = new System.Drawing.Point(297, 477);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(125, 23);
+            this.button3.TabIndex = 15;
+            this.button3.Text = "Done";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.cancel_Click);
             // 
             // ModificationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 512);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(450, 550);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(450, 550);
             this.Name = "ModificationForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Revival Modifications";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.CheckedListBox checkedListBox;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBox;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -285,5 +286,7 @@
         private System.Windows.Forms.TextBox descriptionText;
         private System.Windows.Forms.Label typeLabel;
         private System.Windows.Forms.Label urlLabel;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }

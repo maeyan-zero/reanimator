@@ -29,9 +29,16 @@
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configutationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.installModsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uninstallModsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.itemTransferToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -55,18 +62,51 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolsToolStripMenuItem1});
+            this.fileToolStripMenuItem,
+            this.toolsToolStripMenuItem1,
+            this.aboutToolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(624, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.configutationToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.exitToolStripMenuItem1});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // configutationToolStripMenuItem
+            // 
+            this.configutationToolStripMenuItem.Name = "configutationToolStripMenuItem";
+            this.configutationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.configutationToolStripMenuItem.Text = "Options...";
+            this.configutationToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
+            // 
+            // exitToolStripMenuItem1
+            // 
+            this.exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
+            this.exitToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem1.Text = "Exit";
+            this.exitToolStripMenuItem1.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // toolsToolStripMenuItem1
             // 
             this.toolsToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.installModsToolStripMenuItem,
-            this.uninstallModsToolStripMenuItem});
+            this.uninstallModsToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.itemTransferToolStripMenuItem1});
             this.toolsToolStripMenuItem1.Name = "toolsToolStripMenuItem1";
             this.toolsToolStripMenuItem1.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem1.Text = "Tools";
@@ -84,6 +124,25 @@
             this.uninstallModsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.uninstallModsToolStripMenuItem.Text = "Uninstall Mods...";
             this.uninstallModsToolStripMenuItem.Click += new System.EventHandler(this.revertToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(159, 6);
+            // 
+            // itemTransferToolStripMenuItem1
+            // 
+            this.itemTransferToolStripMenuItem1.Enabled = false;
+            this.itemTransferToolStripMenuItem1.Name = "itemTransferToolStripMenuItem1";
+            this.itemTransferToolStripMenuItem1.Size = new System.Drawing.Size(162, 22);
+            this.itemTransferToolStripMenuItem1.Text = "Item Transfer...";
+            // 
+            // aboutToolStripMenuItem1
+            // 
+            this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem1.Text = "About";
+            this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // programToolStripMenuItem
             // 
@@ -198,6 +257,7 @@
             // 
             this.statusStrip1.Location = new System.Drawing.Point(0, 340);
             this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.statusStrip1.Size = new System.Drawing.Size(624, 22);
             this.statusStrip1.TabIndex = 17;
             this.statusStrip1.Text = "statusStrip1";
@@ -212,14 +272,15 @@
             // 
             this.unleshHell.AutoSize = true;
             this.unleshHell.BackColor = System.Drawing.Color.Transparent;
-            this.unleshHell.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.unleshHell.Font = new System.Drawing.Font("Times New Roman", 32F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.unleshHell.ForeColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.unleshHell.Location = new System.Drawing.Point(425, 288);
+            this.unleshHell.Location = new System.Drawing.Point(368, 281);
             this.unleshHell.Name = "unleshHell";
-            this.unleshHell.Size = new System.Drawing.Size(178, 36);
+            this.unleshHell.Size = new System.Drawing.Size(244, 49);
             this.unleshHell.TabIndex = 18;
             this.unleshHell.Text = "Unleash Hell";
             this.unleshHell.MouseLeave += new System.EventHandler(this.unleshHell_MouseLeave);
+            this.unleshHell.Click += new System.EventHandler(this.p_start_Click);
             this.unleshHell.MouseEnter += new System.EventHandler(this.label1_MouseEnter);
             // 
             // Launcher
@@ -272,6 +333,13 @@
         private System.Windows.Forms.ToolStripMenuItem installModsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uninstallModsToolStripMenuItem;
         private System.Windows.Forms.Label unleshHell;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem itemTransferToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem configutationToolStripMenuItem;
 
     }
 }
