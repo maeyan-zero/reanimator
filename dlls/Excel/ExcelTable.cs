@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Collections;
 using System.Data;
+using System.Diagnostics;
 
 namespace Reanimator.Excel
 {
@@ -272,10 +273,10 @@ namespace Reanimator.Excel
             offset += Marshal.SizeOf(typeof(ExcelHeader));
             //Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", _excelHeader.Unknown161, _excelHeader.Unknown162, _excelHeader.Unknown163, _excelHeader.Unknown164, _excelHeader.Unknown165, _excelHeader.Unknown166, _excelHeader.Unknown321, _excelHeader.Unknown322));
 
-            if (_excelHeader.StructureId == 1234056220)
+            /*if (_excelHeader.StructureId == 1234056220)
             {
                 int bp = 1;
-            }
+            }*/
 
             // strings block
             token = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
@@ -481,16 +482,20 @@ namespace Reanimator.Excel
                 int byteCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
                 if (byteCount != 0)
                 {
-                    if (_excelHeader.StructureId == 0x1F9DDC98)         // Only seen in unittypes.txt.cooked so far.
-                    {                                                       // This block reading method is the same as first seen below in the states.txt.cooked,
-                        // but there is no data in the previous block for unittypes.txt.cooked.
-                        int blockCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);
-                        byteCount = (byteCount << 2) * blockCount;                              // No idea where they drempt this up,
+                    if (_excelHeader.StructureId == 0x1F9DDC98)                                 // Only seen in unittypes.txt.cooked so far.
+                    {                                                                           // This block reading method is the same as first seen below in the states.txt.cooked,
+                        int blockCount = FileTools.ByteArrayTo<Int32>(excelData, ref offset);   // but there is no data in the previous block for unittypes.txt.cooked.
+                        byteCount = (byteCount << 2) * blockCount;
+                        Debug.Write(String.Format("Has weird block .Length = {0}\n", byteCount));
                     }
                     DataBlock = new byte[byteCount];
                     Buffer.BlockCopy(excelData, offset, DataBlock, 0, byteCount);
                     offset += byteCount;
-                    //Debug.Write(String.Format("Has data block .Length = {0}\n", byteCount));
+                    Debug.Write(String.Format("Has data block .Length = {0}\n", byteCount));
+
+#if DEBUG
+                  //  FileTools.WriteFile(@"C:\blah\" + this.StringId + ".txt", 
+#endif
                 }
             }
 

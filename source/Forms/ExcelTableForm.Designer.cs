@@ -39,8 +39,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.regenTable = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tstb_sortCriteria = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -89,7 +89,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(684, 571);
+            this.tabPage2.Size = new System.Drawing.Size(720, 555);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Index Arrays";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -111,7 +111,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(684, 571);
+            this.tabPage3.Size = new System.Drawing.Size(720, 555);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Strings";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -157,6 +157,11 @@
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // tstb_sortCriteria
+            // 
+            this.tstb_sortCriteria.Name = "tstb_sortCriteria";
+            this.tstb_sortCriteria.Size = new System.Drawing.Size(160, 25);
+            // 
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -166,11 +171,6 @@
             this.toolStripButton1.Size = new System.Drawing.Size(32, 22);
             this.toolStripButton1.Text = "Sort";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
-            // 
-            // tstb_sortCriteria
-            // 
-            this.tstb_sortCriteria.Name = "tstb_sortCriteria";
-            this.tstb_sortCriteria.Size = new System.Drawing.Size(160, 25);
             // 
             // ExcelTableForm
             // 
@@ -183,6 +183,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "ExcelTableForm";
             this.Text = "ExcelTable";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ExcelTableForm_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();

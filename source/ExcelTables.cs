@@ -453,11 +453,12 @@ namespace Reanimator.Excel
                             if (!excelTable.IsNull)
                             {
                                 _loadedTables.Add(excelTable);
+                                Debug.WriteLine("Excel Table Parsed: " + stringId);
                             }
                         }
                         else
                         {
-                            Debug.WriteLine("Debug Output - File does not have table definition: " + fileName);
+                            Debug.WriteLine("File does not have table definition: " + fileName);
                         }
                     }
 

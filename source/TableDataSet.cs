@@ -305,7 +305,7 @@ namespace Reanimator
                     Debug.Write("hashTableCounts.Count = " + hashTableCounts.Count + "\n");
                 }
 #endif
-                _xlsDataTables.Add(mainTableName, mainDataTable);
+                //_xlsDataTables.Add(mainTableName, mainDataTable);
             }
 
 
