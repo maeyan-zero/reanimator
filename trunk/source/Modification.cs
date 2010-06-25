@@ -553,7 +553,7 @@ namespace Reanimator
             catch (Exception e)
             {
                 MessageBox.Show("There was a problem modifying the form: " + t + "\n" +
-                    "Column: " + a.id + ". Check syntax and try again.",
+                    "Column: " + a.id + ". Check syntax and try again.\n\n" + e,
                     "Problem", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }

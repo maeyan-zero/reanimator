@@ -25,7 +25,7 @@ namespace Reanimator.Forms.ItemTransfer
 
         InventoryItem _selectedItem;
         ItemPanel _characterItemPanel;
-        CharacterStatus _characterStatus;
+        CharacterStatus _characterStatus = 0;
 
         public CharacterShop(ref TableDataSet dataSet, ref ExcelTables excelTables)
         {

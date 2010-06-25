@@ -24,6 +24,7 @@ namespace Reanimator.Forms
         readonly ExcelTable _excelTable;
         readonly StringsFile _stringsFile;
         readonly TableDataSet _tableDataSet;
+        private bool _dataChanged;
         DataView _dataView;
 
         public ExcelTableForm(Object table, TableDataSet tableDataSet)
@@ -31,22 +32,59 @@ namespace Reanimator.Forms
             _excelTable = table as ExcelTable;
             _stringsFile = table as StringsFile;
             _tableDataSet = tableDataSet;
+            _dataChanged = false;
 
             Init();
 
             ProgressForm progress = new ProgressForm(LoadTable, table);
             progress.ShowDialog(this);
+            dataGridView.CellValueChanged += new DataGridViewCellEventHandler(dataGridView_CellValueChanged);
 
             //UseDataView();
         }
 
+        void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            _dataChanged = true;
+        }
+
+        private void ExcelTableForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!_dataChanged) return;
+
+            DialogResult dr = MessageBox.Show("Table data has been changed.\nDo you wish to save changes to the cache?", "Question",
+                            MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+            if (dr == DialogResult.No) return;
+
+            if (dr == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            ProgressForm progress = new ProgressForm(SaveTable, _tableDataSet);
+            progress.SetStyle(ProgressBarStyle.Marquee);
+            progress.ShowDialog(this);
+        }
+
+        private static void SaveTable(ProgressForm progressBar, object o)
+        {
+            TableDataSet tableDataSet = o as TableDataSet;
+            if (tableDataSet == null) return;
+
+            progressBar.SetLoadingText("Please Wait...");
+            progressBar.SetCurrentItemText("Saving updated cache data...");
+            tableDataSet.SaveDataSet();
+        }
+
         private void UseDataView()
         {
-            String temp = this.dataGridView.DataMember;
+            String temp = dataGridView.DataMember;
             DataTable dataTable = _tableDataSet.XlsDataSet.Tables[temp];
             _dataView = dataTable.DefaultView;
-            this.dataGridView.DataMember = null;
-            this.dataGridView.DataSource = _dataView;
+            dataGridView.DataMember = null;
+            dataGridView.DataSource = _dataView;
         }
 
         private void Init()
@@ -237,22 +275,46 @@ namespace Reanimator.Forms
 
         private void regenTable_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Todo");
-
-            // TODO this section is buggy/incomplete regarding table relations
-            /*
+            // make sure we're trying to rebuild an excel table, and that it's actually in the dataset
             if (_excelTable == null) return;
-
             if (!_tableDataSet.XlsDataSet.Tables.Contains(_excelTable.StringId)) return;
 
+            // remove from view or die, lol
             dataGridView.DataMember = null;
+            dataGridView.DataSource = null;
             listBox1.DataSource = null;
-            _tableDataSet.XlsDataSet.Tables.Remove(_excelTable.StringId);
+            
+            // remove and reload
+            DataTable dt = _tableDataSet.XlsDataSet.Tables[_excelTable.StringId];
+            if (dt.ChildRelations.Count != 0)
+            {
+                dt.ChildRelations.Clear();
+            }
+            if (dt.ParentRelations.Count != 0)
+            {
+                //MessageBox.Show("Warning - Has Parent Relations!\nTest Me!", "Warning", MessageBoxButtons.OK,
+                //                MessageBoxIcon.Exclamation);
+                dt.ParentRelations.Clear();
+            }
 
+            _tableDataSet.XlsDataSet.Tables.Remove(_excelTable.StringId);
             _tableDataSet.LoadTable(null, _excelTable);
+            _tableDataSet.GenerateRelations(_excelTable);
+
+            // display updated table
+            MessageBox.Show("Table regenerated!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // todo: when adding new columns the window will need to be close/reopened to show the changes
+            // the dataGridView is storing its own little cache or something - 
+            dataGridView.Refresh();
+            dataGridView.DataSource = _tableDataSet.XlsDataSet;
             dataGridView.DataMember = _excelTable.StringId;
             listBox1.DataSource = _excelTable.SecondaryStrings;
-            */
+            _dataChanged = true;
+
+            MessageBox.Show(
+                "Attention: Currently a bug exists such that you must close this form and re-open it to see any changes for the regeneration.\nDoing so will ask if you wish to apply your changes to the cache data.\n\nAlso of note is the you can't edit any cells until you close the window - FIX ME.",
+                "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
     }
 

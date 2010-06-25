@@ -20,7 +20,9 @@ namespace Reanimator.Excel
             public Int32 code;
             public Int32 rarity;
             public Int32 nameColor;//idx
+            [ExcelTable.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
             public Int32 displayNameStringKey;//stridx
+            [ExcelTable.ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
             public Int32 championFormatStringKey;//stridx
             public Int32 pickProperName;//bool
             public Int32 type;
