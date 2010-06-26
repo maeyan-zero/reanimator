@@ -351,7 +351,7 @@ namespace Reanimator.Excel
             public Int32 powerMax;
             public Int32 experience;
             public Int32 attackRating;
-            [ExcelOutput(IsIntOffset = true)]
+            [ExcelOutput(IsIntOffset = true, IsSingleIntValue = true)]
             public Int32 luckBonus;//intptr
             public Int32 luckChanceToSpawn;
             public Int32 roomPopulatePass;
