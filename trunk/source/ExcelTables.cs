@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Windows.Forms;
@@ -453,6 +454,17 @@ namespace Reanimator.Excel
                             if (!excelTable.IsNull)
                             {
                                 _loadedTables.Add(excelTable);
+                                if (excelTable.DataBlock != null)
+                                {
+                                    FileTools.WriteFile(@"C:\blah\" + stringId + ".dat", excelTable.DataBlock);
+
+                                    if (stringId == "MONSTER_QUALITY")
+                                    {
+                                        String write = excelTable.DataBlock.Aggregate(String.Empty, (current, b) => current + (b.ToString("X") + " "));
+                                        FileTools.WriteFile(@"C:\blah\" + stringId + ".txt",
+                                                            FileTools.StringToASCIIByteArray(write));
+                                    }
+                                }
                                 Debug.WriteLine("Excel Table Parsed: " + stringId);
                             }
                         }

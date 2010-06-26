@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -6,7 +7,6 @@ using System.Windows.Forms;
 using Reanimator.Excel;
 using System.Runtime.InteropServices;
 using System.Reflection;
-using System.IO;
 
 namespace Reanimator.Forms
 {
@@ -24,28 +24,35 @@ namespace Reanimator.Forms
         readonly ExcelTable _excelTable;
         readonly StringsFile _stringsFile;
         readonly TableDataSet _tableDataSet;
+        readonly Hashtable _bitmasks;
+        private DataTable _dataTable;
         private bool _dataChanged;
-        DataView _dataView;
+        private bool _selectedIndexChange;
+        private DataView _dataView;
 
         public ExcelTableForm(Object table, TableDataSet tableDataSet)
         {
             _excelTable = table as ExcelTable;
             _stringsFile = table as StringsFile;
             _tableDataSet = tableDataSet;
+            _bitmasks = new Hashtable();
             _dataChanged = false;
+            _selectedIndexChange = false;
 
             Init();
 
             ProgressForm progress = new ProgressForm(LoadTable, table);
             progress.ShowDialog(this);
-            dataGridView.CellValueChanged += new DataGridViewCellEventHandler(dataGridView_CellValueChanged);
+            _dataTable.RowChanged += (sender, e) => { _dataChanged = true; };
 
-            //UseDataView();
-        }
+            // make it look pretty
+            rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
+            rows_ListBox.SelectedIndex = 0;
 
-        void dataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            _dataChanged = true;
+            // fixes mouse scroll wheel
+            // todo: this is dodgy and causes focused elements within the layoutpanel to lose focus (e.g. a text box) - rather anoying
+            rows_LayoutPanel.Click += (sender, e) => rows_LayoutPanel.Focus();
+            rows_LayoutPanel.MouseEnter += (sender, e) => rows_LayoutPanel.Focus();
         }
 
         private void ExcelTableForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -96,7 +103,7 @@ namespace Reanimator.Forms
             dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
             dataGridView.DataSource = _tableDataSet.XlsDataSet;
             dataGridView.DataMember = null;
-           // dataGridView.DataSource = _dataView;
+            // dataGridView.DataSource = _dataView;
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -105,7 +112,7 @@ namespace Reanimator.Forms
             {
                 _dataView.Sort = tstb_sortCriteria.Text;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "toolStripButton1_Click");
             }
@@ -113,28 +120,39 @@ namespace Reanimator.Forms
 
         private void LoadTable(ProgressForm progress, Object var)
         {
-            // this merely checks the table is already in the dataset
-            // if not - then it will load it in
+            // table tab
+            dataGridView.SuspendLayout();
             _tableDataSet.LoadTable(progress, var);
-
             if (_stringsFile != null)
             {
                 dataGridView.DataMember = _stringsFile.Name;
-                return;
+                _dataTable = _tableDataSet.XlsDataSet.Tables[_stringsFile.Name];
             }
-
-            if (_excelTable != null)
+            else if (_excelTable != null)
             {
                 dataGridView.DataMember = _excelTable.StringId;
-                listBox1.DataSource = _excelTable.SecondaryStrings;
+                _dataTable = _tableDataSet.XlsDataSet.Tables[_excelTable.StringId];
             }
             else
             {
+                dataGridView.ResumeLayout();
                 return;
             }
+            dataGridView.ResumeLayout();
 
-            // generate the table index data source
-            // TODO is there a better way?
+
+            // strings tab
+            listBox1.SuspendLayout();
+            if (_excelTable.SecondaryStrings != null)
+            {
+                listBox1.DataSource = _excelTable.SecondaryStrings;
+            }
+            listBox1.ResumeLayout();
+
+
+            // table sort index tab
+            dataGridView2.SuspendLayout();
+            // TODO do better
             // TODO remove me once unknowns no longer unknowns
             List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
             int[][] intArrays = { _excelTable.TableIndicies, _excelTable.SortIndex1, _excelTable.SortIndex2, _excelTable.SortIndex3, _excelTable.SortIndex4 };
@@ -147,14 +165,12 @@ namespace Reanimator.Forms
 
                 for (int j = 0; j < intArrays[i].Length; j++)
                 {
-                    TableIndexDataSource tds;
-
                     if (tdsList.Count <= j)
                     {
                         tdsList.Add(new TableIndexDataSource());
                     }
 
-                    tds = tdsList[j];
+                    TableIndexDataSource tds = tdsList[j];
                     switch (i)
                     {
                         case 0:
@@ -178,29 +194,133 @@ namespace Reanimator.Forms
                     }
                 }
             }
-
             dataGridView2.DataSource = tdsList.ToArray();
+            dataGridView2.ResumeLayout();
 
-            if (intArrays[4] == null)
+
+            // list view tab
+            int rowCount = _dataTable.Rows.Count;
+            Object[] rows = new Object[rowCount];
+            int row = 0;
+            foreach (DataRow dr in _dataTable.Rows)
             {
-                dataGridView2.Columns.RemoveAt(3);
+                rows[row++] = dr[0] + ": " + dr[1];
             }
-            if (intArrays[3] == null)
+            rows_ListBox.SuspendLayout();
+            rows_ListBox.Items.AddRange(rows);
+            rows_ListBox.SelectedIndexChanged += rows_ListBox_SelectedIndexChanged;
+            rows_ListBox.ResumeLayout();
+
+            rows_LayoutPanel.SuspendLayout();
+            int column = 0;
+            TextBox relationTextBox = null;
+            foreach (DataColumn dc in _dataTable.Columns)
             {
-                dataGridView2.Columns.RemoveAt(2);
+                new Label { Text = dc.ColumnName, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft};
+
+                if (dc.ExtendedProperties.ContainsKey(ExcelTable.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelTable.ColumnTypeKeys.IsBitmask])
+                {
+                    CheckedListBox clb = new CheckedListBox
+                                             {
+                                                 Parent = rows_LayoutPanel,
+                                                 AutoSize = true,
+                                                 Dock = DockStyle.Fill,
+                                                 MultiColumn = false,
+                                                 Name = dc.ColumnName
+                                             };
+
+                    clb.ItemCheck += clb_ItemCheck;
+                    _bitmasks.Add(dc.ColumnName, clb);
+
+                    Type cellType = dc.DataType;
+                    foreach (Enum type in Enum.GetValues(cellType))
+                    {
+                        clb.Items.Add(type, false);
+                    }
+                }
+                else
+                {
+                    TextBox tb = new TextBox { Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill};
+                    tb.DataBindings.Add("Text", _dataTable, dc.ColumnName);
+
+                    if (dc.ExtendedProperties.ContainsKey(ExcelTable.ColumnTypeKeys.IsRelationGenerated) && (bool)dc.ExtendedProperties[ExcelTable.ColumnTypeKeys.IsRelationGenerated] || column == 0)
+                    {
+                        tb.ReadOnly = true;
+                        if (relationTextBox != null)
+                            relationTextBox.TextChanged +=
+                                (sender, e) =>
+                                    {
+                                        tb.ResetText();
+                                    };
+                    }
+
+                    if ((dc.ExtendedProperties.ContainsKey(ExcelTable.ColumnTypeKeys.IsStringIndex) && (bool)dc.ExtendedProperties[ExcelTable.ColumnTypeKeys.IsStringIndex]) ||
+                        (dc.ExtendedProperties.ContainsKey(ExcelTable.ColumnTypeKeys.IsStringId) && (bool)dc.ExtendedProperties[ExcelTable.ColumnTypeKeys.IsStringId]))
+                    {
+                        relationTextBox = tb;
+                    }
+                    else
+                    {
+                        relationTextBox = null;
+                    }
+                }
+                
+                column++;
             }
-            if (intArrays[2] == null)
+
+            new Label {Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill};
+            rows_LayoutPanel.ResumeLayout();
+        }
+
+        void clb_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            if (_selectedIndexChange) return;
+
+            CheckedListBox clb = sender as CheckedListBox;
+            if (clb == null) return;
+
+            DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
+            uint value = (uint) dr[clb.Name];
+            value ^= (uint) ((1 << (e.Index))*(e.NewValue == CheckState.Checked ? 1 : 0));
+            dr[clb.Name] = value;
+        }
+
+        static void UpdateCheckedListBox(CheckedListBox clb, DataRow dr, DataColumn dc)
+        {
+            uint value = (uint) dr[dc];
+            for (int i = 0; i < clb.Items.Count; i++)
             {
-                dataGridView2.Columns.RemoveAt(1);
+                clb.SetItemChecked(i, ((1 << i) & value) > 0 ? true : false);
             }
-            if (intArrays[1] == null)
+        }
+
+        void rows_ListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _selectedIndexChange = true;
+
+            rows_LayoutPanel.SuspendLayout();
+            BindingContext[_dataTable].Position = rows_ListBox.SelectedIndex;
+
+            foreach (DataColumn dc in _dataTable.Columns)
             {
-                dataGridView2.Columns.RemoveAt(0);
+                if (dc.ExtendedProperties.ContainsKey(ExcelTable.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelTable.ColumnTypeKeys.IsBitmask])
+                {
+                    CheckedListBox clb = _bitmasks[dc.ColumnName] as CheckedListBox;
+                    if (clb == null) continue;
+
+                    DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
+                    UpdateCheckedListBox(clb, dr, dc);
+                }
             }
+
+            rows_LayoutPanel.ResumeLayout();
+
+            _selectedIndexChange = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             /*DataTable affixTable = xlsDataSet.Tables["AFFIXES"];
             EnumerableRowCollection<DataRow> query = from affix in affixTable.AsEnumerable()
                                                      where affix.Field<string>("affix").CompareTo("-1") != 0
@@ -250,9 +370,7 @@ namespace Reanimator.Forms
             {
                 String savePath = FileTools.SaveFileDiag(StringsFile.FileExtention, "Strings Cooked",
                                                          _stringsFile.Name.ToLower(),
-                                                         _stringsFile.FilePath.Substring(0,
-                                                                                         _stringsFile.FilePath.
-                                                                                             LastIndexOf(@"\")));
+                                                         _stringsFile.FilePath.Substring(0, _stringsFile.FilePath.LastIndexOf(@"\")));
                 if (String.IsNullOrEmpty(savePath)) return;
 
                 byte[] stringsFileData = _stringsFile.GenerateStringsFile(table);
@@ -265,7 +383,7 @@ namespace Reanimator.Forms
 
                 saveResults = FileTools.WriteFile(savePath, stringsFileData);
             }
-            
+
             if (saveResults)
             {
                 MessageBox.Show("File saved Successfully!", "Completed", MessageBoxButtons.OK,
@@ -283,7 +401,7 @@ namespace Reanimator.Forms
             dataGridView.DataMember = null;
             dataGridView.DataSource = null;
             listBox1.DataSource = null;
-            
+
             // remove and reload
             DataTable dt = _tableDataSet.XlsDataSet.Tables[_excelTable.StringId];
             if (dt.ChildRelations.Count != 0)
@@ -292,8 +410,8 @@ namespace Reanimator.Forms
             }
             if (dt.ParentRelations.Count != 0)
             {
-                //MessageBox.Show("Warning - Has Parent Relations!\nTest Me!", "Warning", MessageBoxButtons.OK,
-                //                MessageBoxIcon.Exclamation);
+                MessageBox.Show("Warning - Has Parent Relations!\nTest Me!\n\nPossible cache dataset relations issue!", "Warning", MessageBoxButtons.OK,
+                                MessageBoxIcon.Exclamation);
                 dt.ParentRelations.Clear();
             }
 

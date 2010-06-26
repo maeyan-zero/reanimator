@@ -203,6 +203,18 @@ namespace Reanimator
                             dataColumnString.DefaultValue = String.Empty;
                             continue;
                         }
+                        if (excelOutputAttribute.IsStringId)
+                        {
+                            DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
+                            dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringId, true);
+                            continue;
+                        }
+                        if (excelOutputAttribute.IsBitmask)
+                        {
+                            DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
+                            dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsBitmask, true);
+                            continue;
+                        }
                     }
                     else
                     {
@@ -280,6 +292,17 @@ namespace Reanimator
                                 baseRow[col] = stringValue;
                                 col++;
                             }
+                            /*else if (excelOutputAttribute.IsIntOffset && excelOutputAttribute.IsSingleIntValue)
+                            {
+                                int valueInt = (int)value;
+                                int valueOffset = valueInt + sizeof (Int32);
+                                if (excelTable.DataBlock.Length < valueOffset)
+                                {
+                                    value = FileTools.ByteArrayToInt32(excelTable.DataBlock, valueOffset);
+                                    baseRow[col] = value;
+                                    col++;
+                                }
+                            }*/
                             else
                             {
                                 baseRow[col] = value;

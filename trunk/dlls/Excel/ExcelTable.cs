@@ -27,6 +27,8 @@ namespace Reanimator.Excel
             public bool IsStringIndex { get; set; }
 
             public bool IsIntOffset { get; set; }
+            public bool IsSingleIntValue { get; set; }
+            public String[] FieldNames { get; set; }
             //public String[] FieldNames { get; set; }
             //public int DefaultIndex { get; set; }
 
@@ -38,6 +40,26 @@ namespace Reanimator.Excel
 
             public bool IsBitmask { get; set; }
             public UInt32 DefaultBitmask { get; set; }
+        }
+
+        public class PtrFields
+        {
+            private String _fieldName;
+            private int _byteCount;
+
+            public PtrFields(String fieldName, int byteCount)
+            {
+                _fieldName = fieldName;
+                _byteCount = byteCount;
+            }
+        }
+
+        public class LuckBonus : PtrFields
+        {
+            public LuckBonus() : base("LuckBonus", 4)
+            {
+            }
+
         }
 
         public class ListValues
@@ -64,6 +86,7 @@ namespace Reanimator.Excel
             public const String IsStringId = "IsStringId";
             public const String IsRelationGenerated = "IsRelationGenerated";
             public const String IsTableIndex = "IsTableIndex";
+            public const String IsBitmask = "IsBitmask";
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -117,7 +140,7 @@ namespace Reanimator.Excel
         // mysh
         private readonly Int32 _dnehValue;
 
-        private byte[] DataBlock { get; set; }
+        public byte[] DataBlock { get; set; }
         private byte[] FinalBytes { get; set; }
 
         protected ExcelTable(byte[] excelData)
@@ -494,7 +517,7 @@ namespace Reanimator.Excel
                     Debug.Write(String.Format("Has data block .Length = {0}\n", byteCount));
 
 #if DEBUG
-                  //  FileTools.WriteFile(@"C:\blah\" + this.StringId + ".txt", 
+      //              FileTools.WriteFile(@"C:\blah\" + this.StringId + ".dat", DataBlock);
 #endif
                 }
             }
