@@ -1,5 +1,5 @@
 #summary This page describes the structure of an IDX file.
-#labels Phase-Implementation,Featured
+#labels Phase-Implementation
 
 = Introduction =
 
