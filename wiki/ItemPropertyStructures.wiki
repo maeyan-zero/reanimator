@@ -1,5 +1,5 @@
 #summary Describes data structures associated with item types.
-#labels Phase-Implementation,Featured
+#labels Phase-Implementation
 
 = Introduction =
 
