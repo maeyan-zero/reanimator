@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -16,6 +16,11 @@
     <GenerateManifests>false</GenerateManifests>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -42,6 +47,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PlatformTarget>x64</PlatformTarget>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,6 +57,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,6 +68,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <NoWarn>1607</NoWarn>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -69,6 +77,7 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -78,6 +87,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -86,6 +96,7 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
@@ -110,8 +121,156 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitBuffer.cs" />
+    <Compile Include="ExcelDefinitions\Achievements.cs" />
+    <Compile Include="ExcelDefinitions\Act.cs" />
+    <Compile Include="ExcelDefinitions\Affixes.cs" />
+    <Compile Include="ExcelDefinitions\AffixTypes.cs" />
+    <Compile Include="ExcelDefinitions\AiBehaviour.cs" />
+    <Compile Include="ExcelDefinitions\AiCommonState.cs" />
+    <Compile Include="ExcelDefinitions\AiInit.cs" />
+    <Compile Include="ExcelDefinitions\AiStart.cs" />
+    <Compile Include="ExcelDefinitions\AnimationCondition.cs" />
+    <Compile Include="ExcelDefinitions\AnimationGroups.cs" />
+    <Compile Include="ExcelDefinitions\AnimationStance.cs" />
+    <Compile Include="ExcelDefinitions\BackGroundSounds.cs" />
+    <Compile Include="ExcelDefinitions\BackGroundSounds2D.cs" />
+    <Compile Include="ExcelDefinitions\BackGroundSounds3D.cs" />
+    <Compile Include="ExcelDefinitions\BadgeRewards.cs" />
+    <Compile Include="ExcelDefinitions\Bones.cs" />
+    <Compile Include="ExcelDefinitions\BookMarks.cs" />
+    <Compile Include="ExcelDefinitions\BudgetsModel.cs" />
+    <Compile Include="ExcelDefinitions\BudgetTextureMips.cs" />
+    <Compile Include="ExcelDefinitions\CharacterClass.cs" />
+    <Compile Include="ExcelDefinitions\ChatInstancedChannels.cs" />
+    <Compile Include="ExcelDefinitions\ColorSets.cs" />
+    <Compile Include="ExcelDefinitions\ConditionFunctions.cs" />
+    <Compile Include="ExcelDefinitions\DamageEffects.cs" />
+    <Compile Include="ExcelDefinitions\DamageTypes.cs" />
+    <Compile Include="ExcelDefinitions\Dialog.cs" />
+    <Compile Include="ExcelDefinitions\Difficulty.cs" />
+    <Compile Include="ExcelDefinitions\Display.cs" />
+    <Compile Include="ExcelDefinitions\EffectsFiles.cs" />
+    <Compile Include="ExcelDefinitions\EffectsIndex.cs" />
+    <Compile Include="ExcelDefinitions\EffectsShaders.cs" />
+    <Compile Include="ExcelDefinitions\Faction.cs" />
+    <Compile Include="ExcelDefinitions\FactionStanding.cs" />
+    <Compile Include="ExcelDefinitions\Filter.cs" />
+    <Compile Include="ExcelDefinitions\Font.cs" />
+    <Compile Include="ExcelDefinitions\FontColor.cs" />
+    <Compile Include="ExcelDefinitions\FootSteps.cs" />
+    <Compile Include="ExcelDefinitions\GameGlobals.cs" />
+    <Compile Include="ExcelDefinitions\Global.cs" />
+    <Compile Include="ExcelDefinitions\GlobalThemes.cs" />
+    <Compile Include="ExcelDefinitions\InitDb.cs" />
+    <Compile Include="ExcelDefinitions\Interact.cs" />
+    <Compile Include="ExcelDefinitions\InteractMenu.cs" />
+    <Compile Include="ExcelDefinitions\Inventory.cs" />
+    <Compile Include="ExcelDefinitions\InventoryTypes.cs" />
+    <Compile Include="ExcelDefinitions\InvLoc.cs" />
+    <Compile Include="ExcelDefinitions\ItemLevels.cs" />
+    <Compile Include="ExcelDefinitions\ItemLookGroups.cs" />
+    <Compile Include="ExcelDefinitions\ItemLooks.cs" />
+    <Compile Include="ExcelDefinitions\ItemQuality.cs" />
+    <Compile Include="ExcelDefinitions\Items.cs" />
+    <Compile Include="ExcelDefinitions\Language.cs" />
+    <Compile Include="ExcelDefinitions\Levels.cs" />
+    <Compile Include="ExcelDefinitions\LevelScaling.cs" />
+    <Compile Include="ExcelDefinitions\LevelsDrlgChoice.cs" />
+    <Compile Include="ExcelDefinitions\LevelsDrlgs.cs" />
+    <Compile Include="ExcelDefinitions\LevelsEnv.cs" />
+    <Compile Include="ExcelDefinitions\LevelsFilePath.cs" />
+    <Compile Include="ExcelDefinitions\LevelsRoomIndex.cs" />
+    <Compile Include="ExcelDefinitions\LevelsRules.cs" />
+    <Compile Include="ExcelDefinitions\LevelsThemes.cs" />
+    <Compile Include="ExcelDefinitions\LoadingTips.cs" />
+    <Compile Include="ExcelDefinitions\MaterialsCollision.cs" />
+    <Compile Include="ExcelDefinitions\MaterialsGlobal.cs" />
+    <Compile Include="ExcelDefinitions\MeleeWeapons.cs" />
+    <Compile Include="ExcelDefinitions\MonLevel.cs" />
+    <Compile Include="ExcelDefinitions\MonScaling.cs" />
+    <Compile Include="ExcelDefinitions\MonsterNames.cs" />
+    <Compile Include="ExcelDefinitions\MonsterNameTypes.cs" />
+    <Compile Include="ExcelDefinitions\MonsterQuality.cs" />
+    <Compile Include="ExcelDefinitions\MovieLists.cs" />
+    <Compile Include="ExcelDefinitions\Movies.cs" />
+    <Compile Include="ExcelDefinitions\MovieSubTitles.cs" />
+    <Compile Include="ExcelDefinitions\Music.cs" />
+    <Compile Include="ExcelDefinitions\MusicConditions.cs" />
+    <Compile Include="ExcelDefinitions\MusicGrooveLevels.cs" />
+    <Compile Include="ExcelDefinitions\MusicGrooveLevelTypes.cs" />
+    <Compile Include="ExcelDefinitions\MusicRef.cs" />
+    <Compile Include="ExcelDefinitions\MusicScriptDebug.cs" />
+    <Compile Include="ExcelDefinitions\MusicStingers.cs" />
+    <Compile Include="ExcelDefinitions\MusicStingerSets.cs" />
+    <Compile Include="ExcelDefinitions\Npc.cs" />
+    <Compile Include="ExcelDefinitions\ObjectTriggers.cs" />
+    <Compile Include="ExcelDefinitions\Offer.cs" />
+    <Compile Include="ExcelDefinitions\Palettes.cs" />
+    <Compile Include="ExcelDefinitions\PlayerLevels.cs" />
+    <Compile Include="ExcelDefinitions\PlayerRace.cs" />
+    <Compile Include="ExcelDefinitions\Procs.cs" />
+    <Compile Include="ExcelDefinitions\Properties.cs" />
+    <Compile Include="ExcelDefinitions\Quest.cs" />
+    <Compile Include="ExcelDefinitions\QuestCast.cs" />
+    <Compile Include="ExcelDefinitions\QuestState.cs" />
+    <Compile Include="ExcelDefinitions\QuestStatus.cs" />
+    <Compile Include="ExcelDefinitions\QuestTemplate.cs" />
+    <Compile Include="ExcelDefinitions\RareNames.cs" />
+    <Compile Include="ExcelDefinitions\RecipeLists.cs" />
+    <Compile Include="ExcelDefinitions\Recipes.cs" />
+    <Compile Include="ExcelDefinitions\Region.cs" />
+    <Compile Include="ExcelDefinitions\SkillEventTypes.cs" />
+    <Compile Include="ExcelDefinitions\SkillGroups.cs" />
+    <Compile Include="ExcelDefinitions\Skills.cs" />
+    <Compile Include="ExcelDefinitions\SkillTabs.cs" />
+    <Compile Include="ExcelDefinitions\Sku.cs" />
+    <Compile Include="ExcelDefinitions\SoundBuses.cs" />
+    <Compile Include="ExcelDefinitions\SoundMixStates.cs" />
+    <Compile Include="ExcelDefinitions\SoundMixStateValues.cs" />
+    <Compile Include="ExcelDefinitions\Sounds.cs" />
+    <Compile Include="ExcelDefinitions\SoundVidCas.cs" />
+    <Compile Include="ExcelDefinitions\SoundVideoCasets.cs" />
+    <Compile Include="ExcelDefinitions\SpawnClass.cs" />
+    <Compile Include="ExcelDefinitions\StateEventTypes.cs" />
+    <Compile Include="ExcelDefinitions\StateLighting.cs" />
+    <Compile Include="ExcelDefinitions\States.cs" />
+    <Compile Include="ExcelDefinitions\Stats.cs" />
+    <Compile Include="ExcelDefinitions\StatsFunc.cs" />
+    <Compile Include="ExcelDefinitions\StringsFiles.cs" />
+    <Compile Include="ExcelDefinitions\SubLevel.cs" />
+    <Compile Include="ExcelDefinitions\Tag.cs" />
+    <Compile Include="ExcelDefinitions\Tasks.cs" />
+    <Compile Include="ExcelDefinitions\TextureTypes.cs" />
+    <Compile Include="ExcelDefinitions\Treasure.cs" />
+    <Compile Include="ExcelDefinitions\UIComponent.cs" />
+    <Compile Include="ExcelDefinitions\UnitEvents.cs" />
+    <Compile Include="ExcelDefinitions\UnitModeGroups.cs" />
+    <Compile Include="ExcelDefinitions\UnitModes.cs" />
+    <Compile Include="ExcelDefinitions\UnitTypes.cs" />
+    <Compile Include="ExcelDefinitions\Wardrobe.cs" />
+    <Compile Include="ExcelDefinitions\WardrobeAppearanceGroup.cs" />
+    <Compile Include="ExcelDefinitions\WardrobeBlendOp.cs" />
+    <Compile Include="ExcelDefinitions\WardrobeBody.cs" />
+    <Compile Include="ExcelDefinitions\WardrobeModel.cs" />
+    <Compile Include="ExcelDefinitions\WardrobeModelGroup.cs" />
+    <Compile Include="ExcelDefinitions\WardrobePart.cs" />
+    <Compile Include="ExcelDefinitions\WardrobeTextureSet.cs" />
+    <Compile Include="ExcelDefinitions\WardrobeTextureSetGroup.cs" />
+    <Compile Include="ExcelDefinitions\Weather.cs" />
+    <Compile Include="ExcelDefinitions\WeatherSets.cs" />
+    <Compile Include="ExcelFile.cs" />
+    <Compile Include="DataFile.cs" />
+    <Compile Include="ExcelDefinitions\ExcelTables.cs" />
+    <Compile Include="ExcelFileDef.cs" />
+    <Compile Include="FileTools.cs" />
+    <Compile Include="StringsFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StringsFileDef.cs" />
+    <Compile Include="TableFiles.cs" />
     <Compile Include="ClientPatcher.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Crc32.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="ExceptionLogger.cs" />
     <Compile Include="Forms\HeroEditorFunctions\Atlas_functions.cs" />
@@ -212,7 +371,6 @@
     </Compile>
     <Compile Include="Havok.cs" />
     <Compile Include="TableDataSet.cs" />
-    <Compile Include="ExcelTables.cs" />
     <Compile Include="Export.cs" />
     <Compile Include="Forms\CacheInfo.cs">
       <SubType>Form</SubType>
@@ -342,8 +500,6 @@
     <Compile Include="Forms\Reanimator.Designer.cs">
       <DependentUpon>Reanimator.cs</DependentUpon>
     </Compile>
-    <Compile Include="StringsFile.cs" />
-    <Compile Include="StringsTables.cs" />
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -443,6 +599,11 @@
     <None Include="Resources\ruperts3.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
@@ -458,21 +619,16 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
       <Visible>False</Visible>
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\dlls\Excel\Excel.csproj">
-      <Project>{00EE8BAB-A17B-4B0B-9A54-B10AED8D0549}</Project>
-      <Name>Excel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\dlls\FileTools\FileTools.csproj">
-      <Project>{D6EC58F1-C9CF-44FA-897C-5886BF47F896}</Project>
-      <Name>FileTools</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\inventory_bg.png" />
@@ -489,6 +645,7 @@
     <Content Include="Resources\icon3.ico" />
     <None Include="Resources\skillPanelBg.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

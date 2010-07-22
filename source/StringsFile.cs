@@ -1,110 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Data;
 
 namespace Reanimator
 {
-    public class StringsFile
+    public partial class StringsFile : DataFile
     {
-        // general structures/const stuffs
-#pragma warning disable 169, 649
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class StringsHeader
-        {
-            public Int32 Header;
-            public Int32 Version;
-            public Int32 Count;
-        }
-#pragma warning restore 169, 649
-
-        private abstract class FileTokens
-        {
-            public const Int32 Header = 0x68667374;
-        }
-        private const Int32 Version = 6;
-        private const int MaxAttributes = 4;
-
-
-        // public access stuffs
-        public class StringBlock
-        {
-            public Int32 ReferenceId { get; set; }
-            public Int32 Unknown { get; set; }
-            public String StringId { get; set; }
-            public Int32 Reserved;
-            public String String { get; set; }
-            public Int32 AttributeCount;
-            public String Attribute1 { get; set; }
-            public String Attribute2 { get; set; }
-            public String Attribute3 { get; set; }
-            public String Attribute4 { get; set; }
-
-            public StringBlock()
-            {
-                StringId = String.Empty;
-                String = String.Empty;
-                Attribute1 = String.Empty;
-                Attribute2 = String.Empty;
-                Attribute3 = String.Empty;
-                Attribute4 = String.Empty;
-            }
-        }
-
-        readonly byte[] _fileData;
-        readonly StringsHeader _stringsHeader;
+        private StringsHeader _stringsHeader;
         public List<StringBlock> StringsTable { get; private set; }
-        public String Name { get; set; }
-        public bool IsGood { get; private set; }
-        public String FilePath { get; set; }
-        public const String FileExtention = "xls.uni.cooked";
 
-        public StringsFile(byte[] data)
+        public StringsFile(String stringId, Type type)
+            : base(stringId, type)
         {
-            FilePath = String.Empty;
-            IsGood = false;
-            _fileData = data;
+            IsStringsFile = true;
+        }
+
+        override public String ToString()
+        {
+            return StringId;
+        }
+
+        public override string FileExtension
+        {
+            get { return FileExtention; }
+        }
+
+        public override string SaveTitle
+        {
+            get { return "Strings Cooked"; }
+        }
+
+        public override bool ParseData(byte[] data)
+        {
+            _data = data;
             int offset = 0;
             StringsTable = new List<StringBlock>();
 
-            _stringsHeader = FileTools.ByteArrayToStructure(_fileData, typeof(StringsHeader), 0) as StringsHeader;
-            if (_stringsHeader == null) return;
+            _stringsHeader = FileTools.ByteArrayToStructure(_data, typeof(StringsHeader), 0) as StringsHeader;
+            if (_stringsHeader == null) return false;
 
             offset += Marshal.SizeOf(_stringsHeader);
 
             bool attributeCountMessageShown = false;
             for (int i = 0; i < _stringsHeader.Count; i++)
             {
-                StringBlock stringBlock = new StringBlock();
+                StringBlock stringBlock = new StringBlock
+                                              {
+                                                  ReferenceId = FileTools.ByteArrayToInt32(_data, offset)
+                                              };
 
-                stringBlock.ReferenceId = FileTools.ByteArrayToInt32(_fileData, offset);
                 offset += sizeof(Int32);
 
-                stringBlock.Unknown = FileTools.ByteArrayToInt32(_fileData, offset);
+                stringBlock.Unknown = FileTools.ByteArrayToInt32(_data, offset);
                 offset += sizeof(Int32);
 
-                int count = FileTools.ByteArrayToInt32(_fileData, offset);
+                int count = FileTools.ByteArrayToInt32(_data, offset);
                 offset += sizeof(Int32);
-                stringBlock.StringId = FileTools.ByteArrayToStringAnsi(_fileData, offset);
+                stringBlock.StringId = FileTools.ByteArrayToStringAnsi(_data, offset);
                 offset += count + 1;
 
-                stringBlock.Reserved = FileTools.ByteArrayToInt32(_fileData, offset);
+                stringBlock.Reserved = FileTools.ByteArrayToInt32(_data, offset);
                 offset += sizeof(Int32);
 
-                count = FileTools.ByteArrayToInt32(_fileData, offset);
+                count = FileTools.ByteArrayToInt32(_data, offset);
                 offset += sizeof(Int32);
-                stringBlock.String = FileTools.ByteArrayToStringUnicode(_fileData, offset);
+                stringBlock.String = FileTools.ByteArrayToStringUnicode(_data, offset);
                 offset += count;
 
-                stringBlock.AttributeCount = FileTools.ByteArrayToInt32(_fileData, offset);
+                stringBlock.AttributeCount = FileTools.ByteArrayToInt32(_data, offset);
                 offset += sizeof(Int32);
 
                 if (stringBlock.AttributeCount > MaxAttributes)
                 {
                     if (!attributeCountMessageShown)
                     {
-                        MessageBox.Show("Unexpected Attribute Count!\n\nCount: " + stringBlock.AttributeCount, "Warning",
+                        MessageBox.Show("Unexpected Attribute Count!\n\nCount: \n\nPlease report this message." + stringBlock.AttributeCount, "Warning",
                                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         attributeCountMessageShown = true;
                     }
@@ -112,22 +84,22 @@ namespace Reanimator
 
                 for (int j = 0; j < stringBlock.AttributeCount; j++)
                 {
-                    count = FileTools.ByteArrayToInt32(_fileData, offset);
+                    count = FileTools.ByteArrayToInt32(_data, offset);
                     offset += sizeof(Int32);
 
                     switch (j)
                     {
                         case 0:
-                            stringBlock.Attribute1 = FileTools.ByteArrayToStringUnicode(_fileData, offset);
+                            stringBlock.Attribute1 = FileTools.ByteArrayToStringUnicode(_data, offset);
                             break;
                         case 1:
-                            stringBlock.Attribute2 = FileTools.ByteArrayToStringUnicode(_fileData, offset);
+                            stringBlock.Attribute2 = FileTools.ByteArrayToStringUnicode(_data, offset);
                             break;
                         case 2:
-                            stringBlock.Attribute3 = FileTools.ByteArrayToStringUnicode(_fileData, offset);
+                            stringBlock.Attribute3 = FileTools.ByteArrayToStringUnicode(_data, offset);
                             break;
                         case 3:
-                            stringBlock.Attribute4 = FileTools.ByteArrayToStringUnicode(_fileData, offset);
+                            stringBlock.Attribute4 = FileTools.ByteArrayToStringUnicode(_data, offset);
                             break;
                     }
 
@@ -137,27 +109,17 @@ namespace Reanimator
                 StringsTable.Add(stringBlock);
             }
 
-            if (offset != _fileData.Length)
+            if (offset != _data.Length)
             {
                 MessageBox.Show("Incomplete file parsing!\n\n" + FilePath, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                IsGood = false;
-                return;
+                return false;
             }
 
             IsGood = true;
+            return true;
         }
 
-        public StringBlock[] GetFileTable()
-        {
-            return StringsTable.ToArray();
-        }
-
-        override public String ToString()
-        {
-            return Name;
-        }
-
-        internal byte[] GenerateStringsFile(DataTable table)
+        public  override byte[] GenerateFile(DataTable table)
         {
             /***** Strings File *****
              * FileToken                                    Int32                   0x68667374 ('tsfh').

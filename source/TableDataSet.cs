@@ -4,10 +4,8 @@ using System.Data;
 using System.Diagnostics;
 using Reanimator.Forms;
 using System.IO;
-using Reanimator.Excel;
 using System.Collections;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Formatters;
@@ -17,25 +15,14 @@ namespace Reanimator
 {
     public class TableDataSet : IDisposable
     {
-        private const String TableVersion = "1.0.6";
+        private const String TableVersion = "1.1.2";
         private const String RelationsVersion = "1.0.0";
         private const String TableVersionKey = "TableVersion";
         private const String RelationsVersionKey = "RelationsVersion";
 
-        DataSet _xlsDataSet;
-        readonly Hashtable _xlsDataTables;
+        private DataSet _xlsDataSet;
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        class TableIndexDataSource
-        {
-            public int Unknowns1 { get; set; }
-            public int Unknowns2 { get; set; }
-            public int Unknowns3 { get; set; }
-            public int Unknowns4 { get; set; }
-        };
-
-        public ExcelTables ExcelTables { get; set; }
-        public StringsTables StringsTables { get; set; }
+        public TableFiles TableFiles { get; set; }
         public bool RegenerateRelations { get; private set; }
 
         public TableDataSet()
@@ -43,64 +30,69 @@ namespace Reanimator
             RegenerateRelations = true;
             LoadDataSet();
             _xlsDataSet.RemotingFormat = SerializationFormat.Binary;
-            _xlsDataTables = new Hashtable();
         }
 
         private void LoadDataSet()
         {
-            if (File.Exists(Config.CacheFilePath))
+            Directory.CreateDirectory(Config.CacheFilePath.Substring(0, Config.CacheFilePath.LastIndexOf(@"\") + 1));
+
+            if (!File.Exists(Config.CacheFilePath))
             {
-                try
+                _xlsDataSet = new DataSet("xlsDataSet") { Locale = new CultureInfo("en-us", true) };
+                return;
+            }
+
+            try
+            {
+                using (FileStream fs = new FileStream(Config.CacheFilePath, FileMode.Open, FileAccess.Read))
                 {
-                    using (FileStream fs = new FileStream(Config.CacheFilePath, FileMode.Open, FileAccess.Read))
+                    BinaryFormatter bf = new BinaryFormatter { TypeFormat = FormatterTypeStyle.XsdString };
+                    _xlsDataSet = bf.Deserialize(fs) as DataSet;
+                    if (_xlsDataSet != null)
                     {
+                        bool isTableUpToDate = false;
+                        String loadedCurrentVersion = _xlsDataSet.ExtendedProperties[TableVersionKey] as String;
+                        String loadedRelationsVersion =
+                            _xlsDataSet.ExtendedProperties[RelationsVersionKey] as String;
 
-                        BinaryFormatter bf = new BinaryFormatter { TypeFormat = FormatterTypeStyle.XsdString };
-                        _xlsDataSet = bf.Deserialize(fs) as DataSet;
-                        if (_xlsDataSet != null)
+                        if (loadedCurrentVersion != null)
                         {
-                            bool isTableUpToDate = false;
-                            String loadedCurrentVersion = _xlsDataSet.ExtendedProperties[TableVersionKey] as String;
-                            String loadedRelationsVersion = _xlsDataSet.ExtendedProperties[RelationsVersionKey] as String;
-
-                            if (loadedCurrentVersion != null)
+                            if (loadedCurrentVersion.CompareTo(TableVersion) == 0)
                             {
-                                if (loadedCurrentVersion.CompareTo(TableVersion) == 0)
-                                {
-                                    isTableUpToDate = true;
-                                }
+                                isTableUpToDate = true;
                             }
+                        }
 
-                            if (loadedRelationsVersion != null)
+                        if (loadedRelationsVersion != null)
+                        {
+                            if (loadedRelationsVersion.CompareTo(RelationsVersion) == 0)
                             {
-                                if (loadedRelationsVersion.CompareTo(RelationsVersion) == 0)
-                                {
-                                    RegenerateRelations = false;
-                                }
-                                else
-                                {
-                                    ClearRelations();
-                                }
+                                RegenerateRelations = false;
                             }
                             else
                             {
                                 ClearRelations();
                             }
-
-                            if (isTableUpToDate) return;
-
-                            MessageBox.Show("The loaded dataset cache is out of date and must be regnerated before it can be used again!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
+                        else
+                        {
+                            ClearRelations();
+                        }
+
+                        if (isTableUpToDate) return;
+
+                        MessageBox.Show(
+                            "The loaded dataset cache is out of date and must be regnerated before it can be used again!",
+                            "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        _xlsDataSet = new DataSet("xlsDataSet") { Locale = new CultureInfo("en-us", true) };
                     }
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Failed to load table cache!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
-
-            Directory.CreateDirectory(Config.CacheFilePath.Substring(0, Config.CacheFilePath.LastIndexOf(@"\") + 1));
-            _xlsDataSet = new DataSet("xlsDataSet") { Locale = new CultureInfo("en-us", true) };
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to load table cache!\n\n" + e, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
         }
 
         public void SaveDataSet()
@@ -138,258 +130,244 @@ namespace Reanimator
 
         public void LoadTable(ProgressForm progress, Object var)
         {
-            StringsFile stringsFile = var as StringsFile;
-            if (stringsFile != null)
-            {
-                LoadStringsTable(progress, stringsFile);
-            }
+            DataFile dataFile = var as DataFile;
+            if (dataFile == null) return;
 
-            ExcelTable excelTable = var as ExcelTable;
-            if (excelTable != null)
+            if (dataFile.IsStringsFile)
             {
-                LoadExcelTable(progress, excelTable);
+                LoadStringsTable(progress, dataFile as StringsFile);
             }
-
+            else if (dataFile.IsExcelFile)
+            {
+                LoadExcelTable(progress, dataFile as ExcelFile);
+            }
         }
 
-        private void LoadExcelTable(ProgressForm progress, ExcelTable excelTable)
+        private void LoadExcelTable(ProgressForm progress, ExcelFile dataFile)
         {
             // load in main data table
-            String mainTableName = excelTable.StringId;
+            String mainTableName = dataFile.StringId;
             DataTable mainDataTable = _xlsDataSet.Tables[mainTableName];
-            if (mainDataTable == null)
+            if (mainDataTable != null) return;
+
+            if (progress != null)
             {
-                if (progress != null)
-                {
-                    progress.SetLoadingText("Cache generation of table data... " + mainTableName);
-                }
-
-                mainDataTable = _xlsDataSet.Tables.Add(excelTable.StringId);
-                object[] array = (object[])excelTable.GetTableArray();
-                Type type = array[0].GetType();
-                List<ExcelTable.ExcelOutputAttribute> outputAttributes =
-                    new List<ExcelTable.ExcelOutputAttribute>(type.GetFields().Length + 1);
-
-                #region generate_columns
-
-                DataColumn indexColumn = mainDataTable.Columns.Add("Index");
-                indexColumn.AutoIncrement = true;
-                indexColumn.Unique = true;
-                mainDataTable.PrimaryKey = new[] { indexColumn };
-                outputAttributes.Add(null);
-
-                foreach (FieldInfo fieldInfo in type.GetFields())
-                {
-                    ExcelTable.ExcelOutputAttribute excelOutputAttribute = ExcelTable.GetExcelOutputAttribute(fieldInfo);
-
-                    if (excelOutputAttribute != null)
-                    {
-                        outputAttributes.Add(excelOutputAttribute);
-
-                        if (excelOutputAttribute.IsStringOffset)
-                        {
-                            DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, typeof(String));
-                            dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringOffset, true);
-                            dataColumn.DefaultValue = String.Empty;
-                            continue;
-                        }
-                        if (excelOutputAttribute.IsStringIndex)
-                        {
-                            DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
-                            dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringIndex, true);
-                            outputAttributes.Add(null);
-                            DataColumn dataColumnString = mainDataTable.Columns.Add(fieldInfo.Name + "_string",
-                                                                                    typeof(String));
-                            dataColumnString.DefaultValue = String.Empty;
-                            continue;
-                        }
-                        if (excelOutputAttribute.IsStringId)
-                        {
-                            DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
-                            dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsStringId, true);
-                            continue;
-                        }
-                        if (excelOutputAttribute.IsBitmask)
-                        {
-                            DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
-                            dataColumn.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsBitmask, true);
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        outputAttributes.Add(null);
-                    }
-
-                    mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
-                }
-
-                #endregion
-
-                if (progress != null)
-                {
-                    progress.ConfigBar(0, array.Length, 1);
-                }
-
-                #region generate_rows
-
-                int row = 1;
-                object[] baseRow = new object[outputAttributes.Count];
-
-#if DEBUG
-                Hashtable hashtableStrings = new Hashtable();
-                Hashtable hashTableCounts = new Hashtable();
-#endif
-
-                foreach (Object table in array)
-                {
-                    if (progress != null)
-                    {
-                        progress.SetCurrentItemText("Row " + row + " of " + array.Length);
-                    }
-                    int col = 1;
-
-                    foreach (FieldInfo fieldInfo in type.GetFields())
-                    {
-                        Object value = fieldInfo.GetValue(table);
-                        ExcelTable.ExcelOutputAttribute excelOutputAttribute = outputAttributes[col];
-
-                        if (excelOutputAttribute != null)
-                        {
-                            if (excelOutputAttribute.IsStringOffset)
-                            {
-                                int valueInt = (int)value;
-#if DEBUG
-                                if (valueInt != -1)
-                                {
-                                    if (hashtableStrings.ContainsKey(valueInt))
-                                    {
-                                        if (!hashTableCounts.ContainsKey(valueInt))
-                                        {
-                                            hashTableCounts.Add(valueInt, 1);
-                                        }
-
-                                        hashTableCounts[valueInt] = ((int)hashTableCounts[valueInt]) + 1;
-                                    }
-                                    else
-                                    {
-                                        hashtableStrings.Add(valueInt, excelTable.Strings[valueInt]);
-                                    }
-
-                                }
-#endif
-                                baseRow[col] = excelTable.Strings[valueInt];
-                                col++;
-                            }
-                            else if (excelOutputAttribute.IsStringIndex)
-                            {
-                                int valueInt = (int)value;
-                                String stringValue = valueInt == -1
-                                                         ? String.Empty
-                                                         : excelTable.SecondaryStrings[valueInt];
-                                baseRow[col] = value;
-                                col++;
-                                baseRow[col] = stringValue;
-                                col++;
-                            }
-                            /*else if (excelOutputAttribute.IsIntOffset && excelOutputAttribute.IsSingleIntValue)
-                            {
-                                int valueInt = (int)value;
-                                int valueOffset = valueInt + sizeof (Int32);
-                                if (excelTable.DataBlock.Length < valueOffset)
-                                {
-                                    value = FileTools.ByteArrayToInt32(excelTable.DataBlock, valueOffset);
-                                    baseRow[col] = value;
-                                    col++;
-                                }
-                            }*/
-                            else
-                            {
-                                baseRow[col] = value;
-                                col++;
-                            }
-                        }
-                        else
-                        {
-                            baseRow[col] = value;
-                            col++;
-                        }
-                    }
-
-                    mainDataTable.Rows.Add(baseRow);
-                    row++;
-                }
-
-                #endregion
-
-#if DEBUG
-                if (hashTableCounts.Count != 0)
-                {
-                    Debug.Write("hashTableCounts.Count = " + hashTableCounts.Count + "\n");
-                }
-#endif
-                //_xlsDataTables.Add(mainTableName, mainDataTable);
+                progress.SetLoadingText("Cache generation of table data... " + mainTableName);
             }
 
+            mainDataTable = _xlsDataSet.Tables.Add(dataFile.StringId);
+            List<Object> array = dataFile.Rows;
+            Type type = array[0].GetType();
+            List<ExcelFile.ExcelOutputAttribute> outputAttributes =
+                new List<ExcelFile.ExcelOutputAttribute>(type.GetFields().Length + 1);
 
-            // generate the table index data source
-            // TODO is there a better way?
-            // TODO get rid of me
-            List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
-            int[][] intArrays = { excelTable.TableIndicies, excelTable.SortIndex1, excelTable.SortIndex2, excelTable.SortIndex3, excelTable.SortIndex4 };
-            for (int i = 0; i < intArrays.Length; i++)
+            #region generate_columns
+
+            DataColumn indexColumn = mainDataTable.Columns.Add("Index");
+            indexColumn.AutoIncrement = true;
+            indexColumn.Unique = true;
+            mainDataTable.PrimaryKey = new[] { indexColumn };
+            outputAttributes.Add(null);
+
+            foreach (FieldInfo fieldInfo in type.GetFields())
             {
-                if (intArrays[i] == null)
+                ExcelFile.ExcelOutputAttribute excelOutputAttribute = ExcelFile.GetExcelOutputAttribute(fieldInfo);
+
+                if (excelOutputAttribute == null)
                 {
+                    outputAttributes.Add(null);
+                    mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
                     continue;
                 }
 
-                for (int j = 0; j < intArrays[i].Length; j++)
-                {
-                    if (tdsList.Count <= j)
-                    {
-                        tdsList.Add(new TableIndexDataSource());
-                    }
+                outputAttributes.Add(excelOutputAttribute);
 
-                    TableIndexDataSource tds = tdsList[j];
-                    switch (i)
+                if (excelOutputAttribute.IsStringOffset)
+                {
+                    DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, typeof(String));
+                    dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsStringOffset, true);
+                    dataColumn.DefaultValue = String.Empty;
+                }
+                else
+                {
+                    DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
+
+                    if (excelOutputAttribute.IsStringIndex)
                     {
-                        case 0:
-                            // should we still use the "official" one?
-                            // or leave as autogenerated - has anyone ever seen it NOT be ascending from 0?
-                            // TODO
-                            // dataGridView[i, j].Value = intArrays[i][j];
-                            break;
-                        case 1:
-                            tds.Unknowns1 = intArrays[i][j];
-                            break;
-                        case 2:
-                            tds.Unknowns2 = intArrays[i][j];
-                            break;
-                        case 3:
-                            tds.Unknowns3 = intArrays[i][j];
-                            break;
-                        case 4:
-                            tds.Unknowns4 = intArrays[i][j];
-                            break;
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsStringIndex, true);
+                        outputAttributes.Add(null);
+                        DataColumn dataColumnString = mainDataTable.Columns.Add(fieldInfo.Name + "_string",
+                                                                                typeof(String));
+                        dataColumnString.DefaultValue = String.Empty;
+                    }
+                    else if (excelOutputAttribute.IsStringId)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsStringId, true);
+                    }
+                    else if (excelOutputAttribute.IsBitmask)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsBitmask, true);
+                    }
+                    else if (excelOutputAttribute.IsBool)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsBool, true);
+                    }
+                    else if (excelOutputAttribute.IsIntOffset)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsIntOffset, true);
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IntOffsetType, excelOutputAttribute.IntOffsetType);
                     }
                 }
             }
+
+            #endregion
+
+            const int updateRate = 50;
+            if (progress != null)
+            {
+                progress.ConfigBar(0, array.Count / updateRate, 1);
+            }
+
+            #region generate_rows
+
+            int row = 1;
+            object[] baseRow = new object[outputAttributes.Count];
+
+#if DEBUG
+            Hashtable hashtableStrings = new Hashtable();
+            Hashtable hashTableCounts = new Hashtable();
+#endif
+
+            foreach (Object table in array)
+            {
+                if (progress != null && row % updateRate == 0)
+                {
+                    progress.SetCurrentItemText("Row " + row + " of " + array.Count);
+                }
+                int col = 1;
+
+                foreach (FieldInfo fieldInfo in type.GetFields())
+                {
+                    Object value = fieldInfo.GetValue(table);
+                    ExcelFile.ExcelOutputAttribute excelOutputAttribute = outputAttributes[col];
+
+                    if (excelOutputAttribute == null)
+                    {
+                        baseRow[col] = value;
+                        col++;
+                        continue;
+                    }
+
+                    if (excelOutputAttribute.IsStringOffset)
+                    {
+                        int valueInt = (int)value;
+#if DEBUG
+                        if (valueInt != -1)
+                        {
+                            if (hashtableStrings.ContainsKey(valueInt))
+                            {
+                                if (!hashTableCounts.ContainsKey(valueInt))
+                                {
+                                    hashTableCounts.Add(valueInt, 1);
+                                }
+
+                                hashTableCounts[valueInt] = ((int)hashTableCounts[valueInt]) + 1;
+                            }
+                            else
+                            {
+                                hashtableStrings.Add(valueInt, dataFile.Strings[valueInt]);
+                            }
+                        }
+#endif
+                        baseRow[col] = dataFile.Strings[valueInt];
+                        col++;
+                    }
+                    else if (excelOutputAttribute.IsStringIndex)
+                    {
+                        int valueInt = (int)value;
+                        String stringValue = valueInt == -1 ? String.Empty : dataFile.SecondaryStrings[valueInt];
+
+                        baseRow[col] = value;
+                        col++;
+
+                        baseRow[col] = stringValue;
+                        col++;
+                    }
+                    else
+                    {
+                        baseRow[col] = value;
+                        col++;
+                    }
+
+                    if (excelOutputAttribute.IsIntOffset && excelOutputAttribute.IntOffsetType != null)
+                    {
+                        int valueInt = (int)value;
+                        if (valueInt != 0 && valueInt < dataFile.DataBlock.Length)
+                        {
+                            ParseIntOffset(valueInt, excelOutputAttribute.IntOffsetType, dataFile.DataBlock);
+                        }
+                    }
+                }
+
+                mainDataTable.Rows.Add(baseRow);
+                row++;
+            }
+
+            #endregion
+
+#if DEBUG
+            if (hashTableCounts.Count != 0)
+            {
+                Debug.Write("hashTableCounts.Count = " + hashTableCounts.Count + "\n");
+            }
+#endif
+            //_xlsDataTables.Add(mainTableName, mainDataTable);
+
+        }
+
+        private void ParseIntOffset(int offset, Type type, byte[] dataBlock)
+        {
+            ExcelFile.IntValueType intValueType = Activator.CreateInstance(type) as ExcelFile.IntValueType;
+            if (intValueType == null) return;
+
+            intValueType.ParseBlock(dataBlock, offset);
+            if (!intValueType.IsGood)
+            {
+                Debug.Write("if (!intValueType.IsGood)");
+            }
+
+            /*
+            int header = FileTools.ByteArrayToInt32(dataBlock, offset);
+            offset += sizeof (Int32);
+
+            if (header != 0x1A)
+            {
+                Debug.Assert(header != 0x1A);
+                return;
+            }
+
+            if (type == typeof(ExcelTable.SingleInt32))
+            {
+                Int32 value = FileTools.ByteArrayToInt32(dataBlock, offset);
+                ExcelTable.SingleInt32 si32 = new ExcelTable.SingleInt32(value);
+            }*/
         }
 
         private void LoadStringsTable(ProgressForm progress, StringsFile stringsFile)
         {
+            // if already done, can't do again
+            if (_xlsDataSet.Tables.Contains(stringsFile.StringId)) return;
+
+
+            // update progress
             if (progress != null)
             {
-                progress.SetCurrentItemText(stringsFile.Name);
+                progress.SetCurrentItemText(stringsFile.StringId);
             }
 
-            if (_xlsDataSet.Tables.Contains(stringsFile.Name))
-            {
-                return;
-            }
 
-            DataTable dt = _xlsDataSet.Tables.Add(stringsFile.Name);
+            // generate datatable
+            DataTable dt = _xlsDataSet.Tables.Add(stringsFile.StringId);
             foreach (StringsFile.StringBlock stringsBlock in stringsFile.StringsTable)
             {
                 if (dt.Columns.Count == 0)
@@ -415,9 +393,13 @@ namespace Reanimator
             _xlsDataSet.Relations.Clear();
         }
 
-        public void GenerateRelations(ExcelTable excelTable)
+        public void GenerateRelations(DataFile dataFile)
         {
-            object[] array = (object[])excelTable.GetTableArray();
+            // todo: temp fix
+            ExcelFile excelTable = dataFile as ExcelFile;
+            if (excelTable == null) return;
+
+            List<Object> array = dataFile.Rows;
             Type type = array[0].GetType();
             int col;
 
@@ -429,9 +411,9 @@ namespace Reanimator
             {
                 DataColumn dc = mainDataTable.Columns[col];
 
-                if (!dc.ExtendedProperties.Contains(ExcelTable.ColumnTypeKeys.IsRelationGenerated)) continue;
+                if (!dc.ExtendedProperties.Contains(ExcelFile.ColumnTypeKeys.IsRelationGenerated)) continue;
 
-                if ((bool)dc.ExtendedProperties[ExcelTable.ColumnTypeKeys.IsRelationGenerated])
+                if ((bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsRelationGenerated])
                 {
                     mainDataTable.Columns.Remove(dc);
                 }
@@ -441,11 +423,11 @@ namespace Reanimator
             // regenerate relations
             foreach (FieldInfo fieldInfo in type.GetFields())
             {
-                ExcelTable.ExcelOutputAttribute excelOutputAttribute = null;
+                ExcelFile.ExcelOutputAttribute excelOutputAttribute = null;
 
-                foreach (Attribute attribute in fieldInfo.GetCustomAttributes(typeof(ExcelTable.ExcelOutputAttribute), true))
+                foreach (Attribute attribute in fieldInfo.GetCustomAttributes(typeof(ExcelFile.ExcelOutputAttribute), true))
                 {
-                    excelOutputAttribute = attribute as ExcelTable.ExcelOutputAttribute;
+                    excelOutputAttribute = attribute as ExcelFile.ExcelOutputAttribute;
                     if (excelOutputAttribute != null)
                     {
                         break;
@@ -463,14 +445,14 @@ namespace Reanimator
                         {
                             DataColumn dcParent = dtStrings.Columns["ReferenceId"];
 
-                            String relationName = String.Format("{0}_{1}_{2}", excelTable.StringId, dcChild.ColumnName, ExcelTable.ColumnTypeKeys.IsStringId);
+                            String relationName = String.Format("{0}_{1}_{2}", excelTable.StringId, dcChild.ColumnName, ExcelFile.ColumnTypeKeys.IsStringId);
                             // parent and child are swapped here for StringId relations
                             DataRelation relation = new DataRelation(relationName, dcChild, dcParent, false);
                             _xlsDataSet.Relations.Add(relation);
 
                             DataColumn dcString = mainDataTable.Columns.Add(dcChild.ColumnName + "_string", typeof(String));
                             dcString.SetOrdinal(col + 1);
-                            dcString.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsRelationGenerated, true);
+                            dcString.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsRelationGenerated, true);
                             // need to use MIN (and thus Child) for cases of strings with same reference id (e.g. Items; SINGULAR and PLURAL, etc)
                             dcString.Expression = "MIN(Child(" + relationName + ").String)";
                             col++;
@@ -488,13 +470,13 @@ namespace Reanimator
                         {
                             DataColumn dcParent = dt.Columns["Index"];
 
-                            String relationName = excelTable.StringId + dcChild.ColumnName + ExcelTable.ColumnTypeKeys.IsTableIndex;
+                            String relationName = excelTable.StringId + dcChild.ColumnName + ExcelFile.ColumnTypeKeys.IsTableIndex;
                             DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
                             _xlsDataSet.Relations.Add(relation);
 
                             DataColumn dcString = mainDataTable.Columns.Add(dcChild.ColumnName + "_string", typeof(String), String.Format("Parent({0}).{1}", relationName, excelOutputAttribute.Column));
                             dcString.SetOrdinal(col + 1);
-                            dcString.ExtendedProperties.Add(ExcelTable.ColumnTypeKeys.IsRelationGenerated, true);
+                            dcString.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsRelationGenerated, true);
                             col++;
                         }
                     }

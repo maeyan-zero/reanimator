@@ -57,7 +57,7 @@ namespace Reanimator
 
         public static string HglDir
         {
-            get { return GetValue("HglDir", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
+            get { return GetValue("HglDir", @"C:\Program Files\Flagship Studios\Hellgate London"); }
             set { SetValue("HglDir", value); }
         }
 
@@ -87,7 +87,7 @@ namespace Reanimator
 
         public static string DataDirsRoot
         {
-            get { return GetValue("DataDirsRoot", "C:\\Program Files\\Flagship Studios\\Hellgate London"); }
+            get { return GetValue("DataDirsRoot", @"C:\Program Files\Flagship Studios\Hellgate London"); }
             set { SetValue("DataDirsRoot", value); }
         }
 
@@ -105,7 +105,7 @@ namespace Reanimator
 
         public static string GameClientPath
         {
-            get { return GetValue("GameClientPath", "C:\\Program Files\\Flagship Studios\\Hellgate London\\SP_x64\\hellgate_sp_dx9_x64.exe"); }
+            get { return GetValue("GameClientPath", @"C:\Program Files\Flagship Studios\Hellgate London\SP_x64\hellgate_sp_dx9_x64.exe"); }
             set { SetValue("GameClientPath", value); }
         }
 
@@ -115,10 +115,10 @@ namespace Reanimator
             set { SetValue("CacheFilePath", value); }
         }
 
-        public static bool DatUnpacked
+        public static string DatLastUnpacked
         {
-            get { return GetValue("DatUnpacked", false); }
-            set { SetValue("DatUnpacked", value); }
+            get { return GetValue("DatLastUnpacked", "Never"); }
+            set { SetValue("DatLastUnpacked", value); }
         }
     }
 }

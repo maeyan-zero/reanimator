@@ -1,28 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Reanimator.Excel;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Reanimator.Forms.ItemTransfer
 {
     public class ComplexItemTransferForm : BasicItemTransferForm
     {
-        ExcelTables _excelTables;
+        TableFiles _tableFiles;
         UnitHelpFunctions _itemHelpFunctions;
 
                 /// <summary>
         /// Use this constructor when starting the item transfer window from within Reanimator (additional item infos)
         /// </summary>
         /// <param name="dataSet">The dataset to use</param>
-        /// <param name="excelTables">The exceltables to use</param>
-        public ComplexItemTransferForm(ref TableDataSet dataSet, ref ExcelTables excelTables) : base()
+        /// <param name="tableFiles">The exceltables to use</param>
+        public ComplexItemTransferForm(TableDataSet dataSet, TableFiles tableFiles)
         {
-            _itemHelpFunctions = new UnitHelpFunctions(ref dataSet, ref excelTables);
+            _itemHelpFunctions = new UnitHelpFunctions(dataSet, tableFiles);
 
-            _excelTables = excelTables;
+            _tableFiles = tableFiles;
 
             EnableButtons(false);
         }
@@ -33,7 +29,7 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                _characterUnit1 = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, _characterPath1);
+                _characterUnit1 = UnitHelpFunctions.OpenCharacterFile(_tableFiles, _characterPath1);
 
                 if (_characterUnit1 != null && _characterUnit1.IsGood)
                 {
@@ -66,7 +62,7 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                _characterUnit2 = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, _characterPath2);
+                _characterUnit2 = UnitHelpFunctions.OpenCharacterFile(_tableFiles, _characterPath2);
 
                 if (_characterUnit2 != null && _characterUnit2.IsGood)
                 {

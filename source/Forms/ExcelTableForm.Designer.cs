@@ -30,13 +30,13 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExcelTableForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tableDataPage = new System.Windows.Forms.TabPage();
+            this.tableData_DataGridView = new System.Windows.Forms.DataGridView();
+            this.indexArraysPage = new System.Windows.Forms.TabPage();
+            this.indexArrays_DataGridView = new System.Windows.Forms.DataGridView();
+            this.stringsPage = new System.Windows.Forms.TabPage();
+            this.strings_ListBox = new System.Windows.Forms.ListBox();
+            this.rowViewPage = new System.Windows.Forms.TabPage();
             this.rows_LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.rows_ListBox = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -45,12 +45,12 @@
             this.tstb_sortCriteria = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
-            this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            this.tabPage3.SuspendLayout();
-            this.tabPage4.SuspendLayout();
+            this.tableDataPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).BeginInit();
+            this.indexArraysPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.indexArrays_DataGridView)).BeginInit();
+            this.stringsPage.SuspendLayout();
+            this.rowViewPage.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,87 +59,87 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tableDataPage);
+            this.tabControl1.Controls.Add(this.indexArraysPage);
+            this.tabControl1.Controls.Add(this.stringsPage);
+            this.tabControl1.Controls.Add(this.rowViewPage);
             this.tabControl1.Location = new System.Drawing.Point(12, 8);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(728, 581);
             this.tabControl1.TabIndex = 4;
             // 
-            // tabPage1
+            // tableDataPage
             // 
-            this.tabPage1.Controls.Add(this.dataGridView);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(720, 555);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Table Data";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tableDataPage.Controls.Add(this.tableData_DataGridView);
+            this.tableDataPage.Location = new System.Drawing.Point(4, 22);
+            this.tableDataPage.Name = "tableDataPage";
+            this.tableDataPage.Padding = new System.Windows.Forms.Padding(3);
+            this.tableDataPage.Size = new System.Drawing.Size(720, 555);
+            this.tableDataPage.TabIndex = 0;
+            this.tableDataPage.Text = "Table Data";
+            this.tableDataPage.UseVisualStyleBackColor = true;
             // 
-            // dataGridView
+            // tableData_DataGridView
             // 
-            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(714, 549);
-            this.dataGridView.TabIndex = 1;
+            this.tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableData_DataGridView.Location = new System.Drawing.Point(3, 3);
+            this.tableData_DataGridView.Name = "tableData_DataGridView";
+            this.tableData_DataGridView.Size = new System.Drawing.Size(714, 549);
+            this.tableData_DataGridView.TabIndex = 1;
             // 
-            // tabPage2
+            // indexArraysPage
             // 
-            this.tabPage2.Controls.Add(this.dataGridView2);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(720, 555);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Index Arrays";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.indexArraysPage.Controls.Add(this.indexArrays_DataGridView);
+            this.indexArraysPage.Location = new System.Drawing.Point(4, 22);
+            this.indexArraysPage.Name = "indexArraysPage";
+            this.indexArraysPage.Padding = new System.Windows.Forms.Padding(3);
+            this.indexArraysPage.Size = new System.Drawing.Size(720, 555);
+            this.indexArraysPage.TabIndex = 1;
+            this.indexArraysPage.Text = "Index Arrays";
+            this.indexArraysPage.UseVisualStyleBackColor = true;
             // 
-            // dataGridView2
+            // indexArrays_DataGridView
             // 
-            this.dataGridView2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.indexArrays_DataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(-4, 0);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(688, 566);
-            this.dataGridView2.TabIndex = 0;
+            this.indexArrays_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.indexArrays_DataGridView.Location = new System.Drawing.Point(-4, 0);
+            this.indexArrays_DataGridView.Name = "indexArrays_DataGridView";
+            this.indexArrays_DataGridView.Size = new System.Drawing.Size(688, 566);
+            this.indexArrays_DataGridView.TabIndex = 0;
             // 
-            // tabPage3
+            // stringsPage
             // 
-            this.tabPage3.Controls.Add(this.listBox1);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(720, 555);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Strings";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.stringsPage.Controls.Add(this.strings_ListBox);
+            this.stringsPage.Location = new System.Drawing.Point(4, 22);
+            this.stringsPage.Name = "stringsPage";
+            this.stringsPage.Padding = new System.Windows.Forms.Padding(3);
+            this.stringsPage.Size = new System.Drawing.Size(720, 555);
+            this.stringsPage.TabIndex = 2;
+            this.stringsPage.Text = "Strings";
+            this.stringsPage.UseVisualStyleBackColor = true;
             // 
-            // listBox1
+            // strings_ListBox
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 6);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(211, 563);
-            this.listBox1.TabIndex = 0;
+            this.strings_ListBox.FormattingEnabled = true;
+            this.strings_ListBox.Location = new System.Drawing.Point(6, 6);
+            this.strings_ListBox.Name = "strings_ListBox";
+            this.strings_ListBox.Size = new System.Drawing.Size(211, 563);
+            this.strings_ListBox.TabIndex = 0;
             // 
-            // tabPage4
+            // rowViewPage
             // 
-            this.tabPage4.Controls.Add(this.rows_LayoutPanel);
-            this.tabPage4.Controls.Add(this.rows_ListBox);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(720, 555);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "tabPage4";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.rowViewPage.Controls.Add(this.rows_LayoutPanel);
+            this.rowViewPage.Controls.Add(this.rows_ListBox);
+            this.rowViewPage.Location = new System.Drawing.Point(4, 22);
+            this.rowViewPage.Name = "rowViewPage";
+            this.rowViewPage.Padding = new System.Windows.Forms.Padding(3);
+            this.rowViewPage.Size = new System.Drawing.Size(720, 555);
+            this.rowViewPage.TabIndex = 3;
+            this.rowViewPage.Text = "Row View";
+            this.rowViewPage.UseVisualStyleBackColor = true;
             // 
             // rows_LayoutPanel
             // 
@@ -228,12 +228,12 @@
             this.Text = "ExcelTable";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ExcelTableForm_FormClosing);
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
-            this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
+            this.tableDataPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).EndInit();
+            this.indexArraysPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.indexArrays_DataGridView)).EndInit();
+            this.stringsPage.ResumeLayout(false);
+            this.rowViewPage.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -244,18 +244,18 @@
         #endregion
 
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.DataGridView dataGridView2;
-        public System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.TabPage tableDataPage;
+        private System.Windows.Forms.TabPage indexArraysPage;
+        private System.Windows.Forms.DataGridView indexArrays_DataGridView;
+        public System.Windows.Forms.DataGridView tableData_DataGridView;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.TabPage stringsPage;
+        private System.Windows.Forms.ListBox strings_ListBox;
         private System.Windows.Forms.Button regenTable;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripTextBox tstb_sortCriteria;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage rowViewPage;
         private System.Windows.Forms.ListBox rows_ListBox;
         private System.Windows.Forms.TableLayoutPanel rows_LayoutPanel;
     }

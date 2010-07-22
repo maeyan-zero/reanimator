@@ -7,8 +7,6 @@ namespace Reanimator
 {
     public class Model
     {
-        String _modelID;
-
         Int32 type;
         Int32 minorVersion;
         Int32 majorVersion;
@@ -17,16 +15,12 @@ namespace Reanimator
         List<Index> _index;
         List<Table> _indexMap;
         List<Geometry> _geometry;
+#pragma warning disable 169
         Reserved _reserved;
+#pragma warning restore 169
         Footer _footer;
 
-        public string id
-        {
-            get
-            {
-                return _modelID;
-            }
-        }
+        public string Id { get; private set; }
 
         public List<Index> index
         {
@@ -46,7 +40,7 @@ namespace Reanimator
 
         public Model(BinaryReader binReader)
         {
-            _modelID = "model";
+            Id = "model";
             _index = new List<Index>();
             _indexMap = new List<Table>();
             _geometry = new List<Geometry>();
@@ -85,40 +79,43 @@ namespace Reanimator
 
         Index GetIndex(BinaryReader binReader)
         {
-            Index index = new Index();
-            index.zone = (Zone)binReader.ReadUInt32();
-            index.unknown02 = binReader.ReadUInt32();
-            index.unknown03 = binReader.ReadUInt32();
-            index.unknown04 = binReader.ReadUInt32();
+            Index getIndex = new Index
+            {
+                zone = (Zone) binReader.ReadUInt32(),
+                unknown02 = binReader.ReadUInt32(),
+                unknown03 = binReader.ReadUInt32(),
+                unknown04 = binReader.ReadUInt32()
+            };
             binReader.ReadBytes(12); // nulls
-            index.triangle = GetTriangles(binReader);
+            getIndex.triangle = GetTriangles(binReader);
             binReader.ReadBytes(8); // nulls
-            index.triangles = binReader.ReadUInt16();
-            index.positions = binReader.ReadUInt16();
-            index.unknown05 = binReader.ReadUInt16();
+            getIndex.triangles = binReader.ReadUInt16();
+            getIndex.positions = binReader.ReadUInt16();
+            getIndex.unknown05 = binReader.ReadUInt16();
             binReader.ReadBytes(8); // nulls
-            index.diffuse = GetString(binReader);
-            index.normal = GetString(binReader);
-            index.glow = GetString(binReader);
-            index.specular = GetString(binReader);
-            index.light = GetString(binReader);
+            getIndex.diffuse = GetString(binReader);
+            getIndex.normal = GetString(binReader);
+            getIndex.glow = GetString(binReader);
+            getIndex.specular = GetString(binReader);
+            getIndex.light = GetString(binReader);
             binReader.ReadBytes(38); // nulls
             binReader.ReadBytes(8);// Another 8 nulls... this shouldnt be according to old code
-            return index;
+
+            return getIndex;
         }
 
         Geometry GetGeometry(BinaryReader binReader)
         {
-            Geometry geometry = new Geometry();
-            geometry.unknown01 = binReader.ReadUInt32();
-            geometry.coordinates = binReader.ReadUInt32();
-            geometry.detail = (Detail)binReader.ReadUInt32();
+            Geometry getGeometry = new Geometry();
+            getGeometry.unknown01 = binReader.ReadUInt32();
+            getGeometry.coordinates = binReader.ReadUInt32();
+            getGeometry.detail = (Detail)binReader.ReadUInt32();
             binReader.ReadBytes(8); // nulls
-            geometry.unknown04 = binReader.ReadUInt32();
-            geometry.position = GetCoordinates(binReader, geometry.detail);
-            geometry.uv = GetUVs(binReader);
-            if (geometry.detail != Detail.Simple) geometry.normal = GetCoordinates(binReader, geometry.detail);
-            return geometry;
+            getGeometry.unknown04 = binReader.ReadUInt32();
+            getGeometry.position = GetCoordinates(binReader, getGeometry.detail);
+            getGeometry.uv = GetUVs(binReader);
+            if (getGeometry.detail != Detail.Simple) getGeometry.normal = GetCoordinates(binReader, getGeometry.detail);
+            return getGeometry;
         }
 
         Reserved GetReserved(BinaryReader binReader)

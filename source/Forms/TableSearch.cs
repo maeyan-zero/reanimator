@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Reanimator.Excel;
 using System.Diagnostics;
 using System.Threading;
 
@@ -14,21 +9,23 @@ namespace Reanimator.Forms
 {
     public partial class TableSearch : Form
     {
-        Thread _searchThread;
-        bool _started;
-        TableDataSet _dataSet;
-        ExcelTables _excelTables;
-        List<DataTable> _tables;
-        int _index;
+        private Thread _searchThread;
+        private bool _started;
 
-        public TableSearch(ref TableDataSet dataSet, ref ExcelTables excelTables )
+        private readonly TableDataSet _dataSet;
+        private readonly List<DataTable> _tables;
+        private int _index;
+
+        private TableFiles _tableFiles;
+
+        public TableSearch(TableDataSet dataSet, TableFiles tableFiles)
         {
             InitializeComponent();
 
             _started = false;
 
             _dataSet = dataSet;
-            _excelTables = excelTables;
+            _tableFiles = tableFiles;
             _tables = new List<DataTable>();
 
             l_nOfTables.Text = _dataSet.XlsDataSet.Tables.Count.ToString();

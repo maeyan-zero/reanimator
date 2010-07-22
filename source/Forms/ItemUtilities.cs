@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
 using System.Windows.Forms;
-using Reanimator.Excel;
 using System.Data;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -13,20 +10,20 @@ namespace Reanimator.Forms
 {
     public class UnitHelpFunctions
     {
-        TableDataSet _dataSet;
-        ExcelTables _excelTables;
-        Stats _statsTable;
+        private readonly TableDataSet _dataSet;
+        private readonly TableFiles _tableFiles;
+        private readonly ExcelFile _statsTable;
 
-        public UnitHelpFunctions(ref TableDataSet dataSet, ref ExcelTables excelTables)
+        public UnitHelpFunctions(TableDataSet dataSet, TableFiles tableFiles)
         {
             _dataSet = dataSet;
-            _excelTables = excelTables;
-            _statsTable = _excelTables.GetTable("stats") as Stats;
+            _tableFiles = tableFiles;
+            _statsTable = _tableFiles["STATS"] as ExcelFile;
         }
 
         public void LoadCharacterValues(Unit unit)
         {
-            GenerateUnitNameStrings(new Unit[] { unit }, null);
+            GenerateUnitNameStrings(new[] { unit }, null);
 
             PopulateItems(unit);
         }
@@ -123,17 +120,17 @@ namespace Reanimator.Forms
             return unit;
         }
 
-        public static Unit OpenCharacterFile(ref ExcelTables excelTables, string fileName)
+        public static Unit OpenCharacterFile(TableFiles tableFiles, string fileName)
         {
             Unit unit = null;
 
             const string excelError = "You must have all excel tables loaded to use the Hero Editor!";
-            if (excelTables == null)
+            if (tableFiles == null)
             {
                 MessageBox.Show(excelError, "OpenCharacterFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
-            if (!excelTables.AllTablesLoaded)
+            if (!tableFiles.AllExcelFilesLoaded || !tableFiles.AllStringsFilesLoaded)
             {
                 MessageBox.Show(excelError, "OpenCharacterFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;

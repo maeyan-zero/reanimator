@@ -2,42 +2,41 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
-using Reanimator.Excel;
 
 namespace Reanimator.Forms.ItemTransfer
 {
     public partial class CharacterShop : Form
     {
-        const InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
-        const int INVENTORYWIDTH = 6;
-        const int INVENTORYHEIGHT = 6;
-        const int ITEMUNITSIZE = 40;
+        private const InventoryTypes InventoryType = InventoryTypes.Cube;
+        private const int InventoryWidth = 6;
+        private const int InventoryHeight = 6;
+        private const int ItemUnitSize = 40;
 
-        readonly string _characterFolder;
+        private readonly string _characterFolder;
 
-        ExcelTables _excelTables;
-        TableDataSet _dataSet;
+        private TableFiles _tableFiles;
+        private TableDataSet _dataSet;
 
-        string _characterPath;
-        Unit _characterUnit;
+        private string _characterPath;
+        private Unit _characterUnit;
 
-        UnitHelpFunctions _itemHelpFunctions;
+        private readonly UnitHelpFunctions _itemHelpFunctions;
 
-        InventoryItem _selectedItem;
-        ItemPanel _characterItemPanel;
-        CharacterStatus _characterStatus = 0;
+        private InventoryItem _selectedItem;
+        private readonly ItemPanel _characterItemPanel;
+        private CharacterStatus CharacterStatus = 0;
 
-        public CharacterShop(ref TableDataSet dataSet, ref ExcelTables excelTables)
+        public CharacterShop(TableDataSet dataSet, TableFiles tableFiles)
         {
             InitializeComponent();
 
-            this.Text += " - Location: " + INVENTORYTYPE.ToString();
+            this.Text += " - Location: " + InventoryType;
 
-            _itemHelpFunctions = new UnitHelpFunctions(ref dataSet, ref excelTables);
+            _itemHelpFunctions = new UnitHelpFunctions(dataSet, tableFiles);
 
             _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
 
-            _excelTables = excelTables;
+            _tableFiles = tableFiles;
             _dataSet = dataSet;
 
             string[] characters = LoadCharacterNames();
@@ -45,16 +44,12 @@ namespace Reanimator.Forms.ItemTransfer
             cb_selectCharacter.DataSource = characters;
 
             _characterItemPanel = new ItemPanel();
-
-            _characterItemPanel.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
-
-            _characterItemPanel.ItemUnitSize = ITEMUNITSIZE;
-
-            _characterItemPanel.Size = new Size(INVENTORYWIDTH * ITEMUNITSIZE, INVENTORYHEIGHT * ITEMUNITSIZE);
-
+            _characterItemPanel.NewItemSelected_Event += _characterItemPanel_NewItemSelected_Event;
+            _characterItemPanel.ItemUnitSize = ItemUnitSize;
+            _characterItemPanel.Size = new Size(InventoryWidth * ItemUnitSize, InventoryHeight * ItemUnitSize);
             _characterItemPanel.Location = new Point(16, 18);
 
-            SetCharacterStatus(_characterStatus, CharacterStatus.NotLoaded, p_status, l_status);
+            SetCharacterStatus(CharacterStatus, CharacterStatus.NotLoaded, p_status, l_status);
 
             // use inventory panels, as a normal groupBox doesn't provide the option "AutoScroll"
             p_inventory.Controls.Add(_characterItemPanel);
@@ -92,7 +87,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             _characterPath = _characterFolder + @"\" + cb_selectCharacter.SelectedItem + ".hg1";
 
-            _characterUnit = UnitHelpFunctions.OpenCharacterFile(ref _excelTables, _characterPath);
+            _characterUnit = UnitHelpFunctions.OpenCharacterFile(_tableFiles, _characterPath);
 
             if (_characterUnit != null && _characterUnit.IsGood)
             {
@@ -102,7 +97,7 @@ namespace Reanimator.Forms.ItemTransfer
                 int level = UnitHelpFunctions.GetSimpleValue(_characterUnit, ItemValueNames.level.ToString()) - 8;
                 gb_characterName.Text += " (Level " + level.ToString() + ")";
 
-                SetCharacterStatus(_characterStatus, CharacterStatus.Loaded, p_status, l_status);
+                SetCharacterStatus(CharacterStatus, CharacterStatus.Loaded, p_status, l_status);
 
                 InitInventory(_characterUnit, _characterItemPanel);
             }
@@ -120,7 +115,7 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 foreach (Unit item in unit.Items)
                 {
-                    if (item.inventoryType == (int)INVENTORYTYPE)
+                    if (item.inventoryType == (int)InventoryType)
                     {
                         InventoryItem iItem = new InventoryItem(item);
                         itemPanel.AddItem(iItem, true);
@@ -144,13 +139,13 @@ namespace Reanimator.Forms.ItemTransfer
                     MessageBox.Show("Saving successful!");
                 }
 
-                SetCharacterStatus(_characterStatus, CharacterStatus.Saved, p_status, l_status);
+                SetCharacterStatus(CharacterStatus, CharacterStatus.Saved, p_status, l_status);
             }
         }
 
         private void EmergencyAbort()
         {
-            SetCharacterStatus(_characterStatus, CharacterStatus.Error, p_status, l_status);
+            SetCharacterStatus(CharacterStatus, CharacterStatus.Error, p_status, l_status);
             MessageBox.Show("The trade window will now close to ensure that your savegames and items will not be corrupted!", "Error while transfering your items!");
             this.Close();
         }

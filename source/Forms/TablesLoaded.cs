@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Reanimator.Excel;
-using System.IO;
 
 namespace Reanimator.Forms
 {
     public partial class TablesLoaded : Form
     {
-        TableDataSet tableDataSet;
+        private readonly TableDataSet _tableDataSet;
 
         public TablesLoaded(TableDataSet xlsDataSet)
         {
             InitializeComponent();
-            tableDataSet = xlsDataSet;
+            _tableDataSet = xlsDataSet;
             loadedTables_ListBox.Sorted = true;
         }
 
@@ -29,37 +22,38 @@ namespace Reanimator.Forms
 
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            Object table = loadedTables_ListBox.SelectedItem;
-            if (table != null)
+            DataFile dataFile = loadedTables_ListBox.SelectedItem as DataFile;
+            if (dataFile == null) return;
+
+            ExcelTableForm etf = new ExcelTableForm(dataFile, _tableDataSet)
             {
-                ExcelTableForm etf = new ExcelTableForm(table, tableDataSet);
-                etf.Text = "Table: " + table;
-                etf.MdiParent = this.MdiParent;
-                etf.Show();
-            }
+                Text = "Table: " + dataFile,
+                MdiParent = MdiParent
+            };
+            etf.Show();
         }
 
         private void TablesLoaded_LocationChanged(object sender, EventArgs e)
         {
-            Size parentSize = this.MdiParent.ClientSize;
-            Point location = this.Location;
-            int distance = 10;
+            Size parentSize = MdiParent.ClientSize;
+            Point location = Location;
+            const int distance = 10;
 
             if (location.X <= distance)
             {
-                this.Location = new Point(0, this.Location.Y);
+                Location = new Point(0, Location.Y);
             }
-            else if (parentSize.Width - this.Width - location.X - 4 <= distance)
+            else if (parentSize.Width - Width - location.X - 4 <= distance)
             {
-                this.Location = new Point(parentSize.Width - this.Width - 4, this.Location.Y);
+                Location = new Point(parentSize.Width - Width - 4, Location.Y);
             }
             if (location.Y <= distance)
             {
-                this.Location = new Point(this.Location.X, 0);
+                Location = new Point(Location.X, 0);
             }
-            else if (parentSize.Height - this.Height - location.Y - 76 <= distance)
+            else if (parentSize.Height - Height - location.Y - 76 <= distance)
             {
-                this.Location = new Point(this.Location.X, parentSize.Height - this.Height - 76);
+                Location = new Point(Location.X, parentSize.Height - Height - 76);
             }
         }
     }

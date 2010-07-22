@@ -14,14 +14,13 @@ namespace Reanimator
             // column headers
             for (int col = 0; col < datagridview.Rows[0].Cells.Count; col++)
             {
-                if (selected[col] == true)
+                if (!selected[col]) continue;
+
+                csv.Write(datagridview.Columns[col].Name);
+                if (col < datagridview.Rows[0].Cells.Count)
                 {
-                    csv.Write(datagridview.Columns[col].Name);
-                    if (col < datagridview.Rows[0].Cells.Count)
-                    {
-                        csv.Write("\t");
-                    }
-               }
+                    csv.Write("\t");
+                }
             }
             csv.Write(Environment.NewLine);
 
@@ -75,7 +74,7 @@ namespace Reanimator
                 StringWriter sw = new StringWriter();
 
                 sw.WriteLine("# OBJ Export Test");
-                sw.WriteLine("o " + model.id);
+                sw.WriteLine("o " + model.Id);
                 sw.WriteLine();
 
                 int indexLength = 0;
