@@ -1,40 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Windows.Forms;
 using Reanimator.Forms.ItemTransfer;
 using Reanimator;
 using Reanimator.Forms;
 using System.IO;
-using Reanimator.Excel;
+using StringsFile = Reanimator.StringsFile;
 
 namespace launcher.Revival
 {
     public partial class SimpleItemTransferForm : BasicItemTransferForm
     {
-        TableDataSet _tableDataset;
-        UnitHelpFunctionsSimple _itemHelpFunctions;
+        private TableDataSet _tableDataset;
+        private UnitHelpFunctionsSimple _itemHelpFunctions;
 
         /// <summary>
         /// Use this constructor when starting the item transfer window from within the launcher (no additional item infos)
         /// </summary>
         public SimpleItemTransferForm()
         {
-            string fileName = "strings_items";
+            const string fileName = "strings_items";
             StringsFile itemNameLookupFile = LoadStringFile(fileName);
 
             _tableDataset = new TableDataSet();
             _tableDataset.LoadTable(null, itemNameLookupFile);
 
-            _itemHelpFunctions = new UnitHelpFunctionsSimple(ref _tableDataset);
+            _itemHelpFunctions = new UnitHelpFunctionsSimple(_tableDataset);
         }
 
         private StringsFile LoadStringFile(string fileName)
         {
+            MessageBox.Show("Warning - FIXME\n\nProbably doesn't work\n\nprivate StringsFile LoadStringFile(string fileName)\nin SimpleItemTransferForm.cs");
+
             String baseDataDir = Config.DataDirsRoot + @"\data\excel\strings\english\";
             const string fileExtension = ".xls.uni.cooked";
 
@@ -51,22 +49,15 @@ namespace launcher.Revival
 
             try
             {
-                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
+                byte[] data = File.ReadAllBytes(path);
+
+                StringsFile stringsFile = new StringsFile(fileName, typeof(StringsFile))
                 {
-                    StringsFile stringsFile = new StringsFile(FileTools.StreamToByteArray(fs))
-                    {
-                        Name = fileName,
-                        FilePath = path
-                    };
-                    fs.Close();
+                    FilePath = path
+                };
+                stringsFile.ParseData(data);
 
-                    if (!stringsFile.IsGood)
-                    {
-                        return null;
-                    }
-
-                    return stringsFile;
-                }
+                return !stringsFile.IsGood ? null : stringsFile;
             }
             catch (Exception ex)
             {

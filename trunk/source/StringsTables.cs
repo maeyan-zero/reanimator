@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Reanimator.Excel;
 using System.IO;
 using Reanimator.Forms;
 
@@ -44,11 +43,11 @@ namespace Reanimator
                 {
                     using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
                     {
-                        StringsFile stringsFile = new StringsFile(FileTools.StreamToByteArray(fs))
+                        StringsFile stringsFile = new StringsFile(stringTable.name, null)
                                                       {
-                                                          Name = stringTable.name,
                                                           FilePath = path
                                                       };
+                        stringsFile.ParseData(FileTools.StreamToByteArray(fs));
                         if (stringsFile.IsGood)
                         {
                             _stringsFiles.Add(stringsFile);

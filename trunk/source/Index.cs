@@ -89,21 +89,22 @@ namespace Reanimator
        buffer.
         */
 
+        public const int Base000 = 9;
         public const int LatestPatch = 10;
         public const int LatestPatchLocalized = 11;
         public const int ExcelTablesIndex = 2572;
-        static public readonly string[] FileNames = { "hellgate_bghigh000",
-                                                     "hellgate_graphicshigh000", 
-                                                     "hellgate_localized000", 
-                                                     "hellgate_movies000",
-                                                     "hellgate_movieshigh000",
-                                                     "hellgate_movieslow000",
-                                                     "hellgate_playershigh000",
-                                                     "hellgate_sound000",
-                                                     "hellgate_soundmusic000",
-                                                     "hellgate000",
-                                                     "sp_hellgate_1.10.180.3416_1.18074.70.4256",
-                                                     "sp_hellgate_localized_1.10.180.3416_1.18074.70.4256" };
+        static public readonly string[] FileNames = { "hellgate_bghigh000",                                     // 0
+                                                     "hellgate_graphicshigh000",                                // 1
+                                                     "hellgate_localized000",                                   // 2
+                                                     "hellgate_movies000",                                      // 3
+                                                     "hellgate_movieshigh000",                                  // 4
+                                                     "hellgate_movieslow000",                                   // 5
+                                                     "hellgate_playershigh000",                                 // 6
+                                                     "hellgate_sound000",                                       // 7
+                                                     "hellgate_soundmusic000",                                  // 8
+                                                     "hellgate000",                                             // 9
+                                                     "sp_hellgate_1.10.180.3416_1.18074.70.4256",               // 10
+                                                     "sp_hellgate_localized_1.10.180.3416_1.18074.70.4256" };   // 11
         struct Token
         {
             public const UInt32 Head = 0x6867696E; // 'nigh'

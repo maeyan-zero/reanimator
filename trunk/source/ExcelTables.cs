@@ -9,7 +9,7 @@ using Reanimator.Forms;
 
 namespace Reanimator.Excel
 {
-    public class ExcelTables : ExcelTable
+    public class ExcelTables : ExcelFile
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class ExcelTableTable
@@ -27,10 +27,10 @@ namespace Reanimator.Excel
             {
                 public string StringId { get; private set; }
                 public string FileName { get; private set; }
-                public ExcelTable ExcelTable;
+                public ExcelFile ExcelTable;
                 public readonly Type Type;
 
-                public TableIndexHelper(string stringId, String fileName, ExcelTable excelTable, Type type)
+                public TableIndexHelper(string stringId, String fileName, ExcelFile excelTable, Type type)
                 {
                     StringId = stringId;
                     FileName = fileName;
@@ -77,7 +77,7 @@ namespace Reanimator.Excel
                 return tableIndex.StringId ?? tableIndex.FileName;
             }
 
-            public ExcelTable CreateTable(string id, byte[] buffer)
+            public ExcelFile CreateTable(string id, byte[] buffer)
             {
                 TableIndexHelper tableIndex = GetTableIndex(id);
                 if (tableIndex != null)
@@ -87,7 +87,7 @@ namespace Reanimator.Excel
                         return new ExcelTables(null);
                     }
 
-                    tableIndex.ExcelTable = (ExcelTable)Activator.CreateInstance(tableIndex.Type, buffer);
+                    tableIndex.ExcelTable = (ExcelFile)Activator.CreateInstance(tableIndex.Type, buffer);
                     tableIndex.ExcelTable.StringId = tableIndex.StringId;
                     return tableIndex.ExcelTable;
                 }
@@ -95,7 +95,7 @@ namespace Reanimator.Excel
                 return null;
             }
 
-            public ExcelTable GetTable(string stringId)
+            public ExcelFile GetTable(string stringId)
             {
                 TableIndexHelper tableIndex = GetTableIndex(stringId);
                 return tableIndex != null ? tableIndex.ExcelTable : null;
@@ -136,7 +136,7 @@ namespace Reanimator.Excel
 
         public bool AllTablesLoaded { get; private set; }
         readonly ExcelTableManagerManager _excelTables;
-        readonly List<ExcelTable> _loadedTables;
+        readonly List<ExcelFile> _loadedTables;
 
         public ExcelTableManagerManager TableManager
         {
@@ -155,7 +155,7 @@ namespace Reanimator.Excel
             }
 
             StringId = "EXCELTABLES";
-            _loadedTables = new List<ExcelTable>();
+            _loadedTables = new List<ExcelFile>();
 
             _excelTables = new ExcelTableManagerManager();
             _excelTables.AddTable("ACHIEVEMENTS", null, typeof(Achievements));
@@ -362,12 +362,12 @@ namespace Reanimator.Excel
             return ((ExcelTableTable)tables[index]).stringId;
         }
 
-        public ExcelTable GetTable(string stringId)
+        public ExcelFile GetTable(string stringId)
         {
             return _excelTables.GetTable(stringId);
         }
 
-        public ExcelTable GetTable(int tableId)
+        public ExcelFile GetTable(int tableId)
         {
             foreach (ExcelTableTable excelTable in tables)
             {
@@ -380,7 +380,7 @@ namespace Reanimator.Excel
             return null;
         }
 
-        public List<ExcelTable> GetLoadedTables()
+        public List<ExcelFile> GetLoadedTables()
         {
             return _loadedTables;
         }
@@ -448,7 +448,7 @@ namespace Reanimator.Excel
                     {
                         byte[] buffer = FileTools.StreamToByteArray(cookedFile);
 
-                        ExcelTable excelTable = _excelTables.CreateTable(stringId, buffer);
+                        ExcelFile excelTable = _excelTables.CreateTable(stringId, buffer);
                         if (excelTable != null)
                         {
                             if (!excelTable.IsNull)

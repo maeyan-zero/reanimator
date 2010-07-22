@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
 using System.Windows.Forms;
-using Reanimator.Excel;
 using System.Data;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -13,15 +9,17 @@ namespace Reanimator.Forms
 {
     public class UnitHelpFunctionsSimple
     {
-        TableDataSet _dataSet;
-        DataTable _itemNames;
-        List<ExcelTable> _excelTables;
+        private TableDataSet _dataSet;
+        private DataTable _itemNames;
+        private List<ExcelFile> _excelTables;
 
-        public UnitHelpFunctionsSimple(ref TableDataSet dataSet)
+        public UnitHelpFunctionsSimple(TableDataSet dataSet)
         {
+            // todo: FIXME
+            // does this even work/make sense??
             _dataSet = dataSet;
             _itemNames = _dataSet.XlsDataSet.Tables[0];
-            _excelTables = new List<ExcelTable>();
+            _excelTables = new List<ExcelFile>();
 
             string excelTableFolder = Config.DataDirsRoot + "\\data_common\\excel\\";
 
@@ -292,7 +290,7 @@ namespace Reanimator.Forms
             }
         }
 
-        public ExcelTable LoadSpecificTable(String folder, string fileName, string stringId)
+        public ExcelFile LoadSpecificTable(String folder, string fileName, string stringId)
         {
             String filePath = String.Format("{0}\\{1}.txt.cooked", folder, fileName);
 
@@ -311,10 +309,11 @@ namespace Reanimator.Forms
                 {
                     byte[] buffer = FileTools.StreamToByteArray(cookedFile);
 
-                    ExcelTable excelTable = new ExcelTables.ExcelTableManagerManager().CreateTable(stringId, buffer);
+                    // todo: FIXME
+                    ExcelFile excelTable = null;// new ExcelTables.ExcelTableManagerManager().CreateTable(stringId, buffer);
                     if (excelTable != null)
                     {
-                        if (!excelTable.IsNull)
+                        if (!excelTable.IsGood)
                         {
                             return excelTable;
                         }
@@ -322,14 +321,15 @@ namespace Reanimator.Forms
                     MessageBox.Show(string.Format("Error parsing the file {0}!", filePath));
                 }
             }
-            catch (ExcelTableException e)
+                // todo: FIXME
+            /*catch (ExcelTableException e)
             {
                 MessageBox.Show("Unexpected parsing error!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (BadHeaderFlag e)
             {
                 MessageBox.Show("File data tokens not aligned!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            }*/
             catch (Exception e)
             {
                 MessageBox.Show("Failed to open file for reading!\n\n" + filePath + "\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
