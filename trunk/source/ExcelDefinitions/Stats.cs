@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -34,28 +35,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 accrueToTypes1;
         public Int32 accrueToTypes2;
         public Int32 unitType;
-        public Int32 bitMask1;/*1 bit cur
-	2 bit modlist
-	3 bit vector
-	4 bit float
-	6 bit accrue
-	7 bit accrue once only
-	8 bit combat
-	9 bit directdmg
-	10 bit send
-	11 bit sendall
-	12 bit save
-	14 bit no max/cur when dead
-	15 bit state monitors c
-	16 bit state monitors s
-	17 bit transfer
-	18 bit transfer to misile
-	19 bit calc rider
-	20 bit calc
-	21 bit update database
-	22 bit don't transfer to nonweapon missile */
+        [ExcelOutput(IsBitmask = true)]
+        public Stats.Bitmask1 bitmask1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] undefined5;
+        [ExcelOutput(IsBool = true)]
         public Int32 player;//bool
         public Int32 monster;
         public Int32 missile;
@@ -110,5 +94,35 @@ namespace Reanimator.ExcelDefinitions
         public string versionFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] undefined12;
+    }
+
+    public abstract class Stats
+    {
+        [FlagsAttribute]
+        public enum Bitmask1 : uint
+        {
+            cur = 1,
+            modlist = 2,
+            vector = 4,
+            float_ = 8,
+            // = 16,
+            accrue = 32,
+            accrueOnceOnly = 64,
+            combat = 128,
+            directDmg = 256,
+            send = 512,
+            sendAll = 1024,
+            save = 2048,
+            // = 4096,
+            noMaxCurWhenDead = 8192,
+            stateMonitorsC = 16384,
+            stateMonitorsS = 32768,
+            transfer = 65536,
+            transferToMissile = 131072,
+            calcRider = 262144,
+            calc = 524288,
+            updateDatabase = 1048576,
+            dontTranferToNonWeaponMissile = 2097152
+        }
     }
 }

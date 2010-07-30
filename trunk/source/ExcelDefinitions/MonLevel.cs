@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -35,6 +36,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 dexterity;
         public Int32 strength;
         public Int32 statPoints;
-        public Int32 itemLevel;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 itemLevel;
     }
 }

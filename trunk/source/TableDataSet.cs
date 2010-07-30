@@ -15,7 +15,7 @@ namespace Reanimator
 {
     public class TableDataSet : IDisposable
     {
-        private const String TableVersion = "1.1.2";
+        private const String TableVersion = "1.1.3";
         private const String RelationsVersion = "1.0.0";
         private const String TableVersionKey = "TableVersion";
         private const String RelationsVersionKey = "RelationsVersion";
@@ -235,12 +235,6 @@ namespace Reanimator
             int row = 1;
             object[] baseRow = new object[outputAttributes.Count];
 
-#if DEBUG
-            Hashtable hashtableStrings = new Hashtable();
-            Hashtable hashTableCounts = new Hashtable();
-#endif
-            
-
             foreach (Object table in array)
             {
                 if (progress != null && row % updateRate == 0)
@@ -282,7 +276,19 @@ namespace Reanimator
                     else if (excelOutputAttribute.IsIntOffset)
                     {
                         int valueInt = (int)value;
+#if DEBUG
                         baseRow[col] = valueInt;
+#else
+                        if (valueInt > 0)
+                        {
+                            baseRow[col] = dataFile.ParseIntOffset(valueInt);
+                        }
+                        else
+                        {
+                            baseRow[col] = valueInt;
+                        }
+#endif
+
                         col++;
                     }
                     else
@@ -299,13 +305,7 @@ namespace Reanimator
             #endregion
 
 #if DEBUG
-            if (hashTableCounts.Count != 0)
-            {
-                Debug.Write("hashTableCounts.Count = " + hashTableCounts.Count + "\n");
-            }
-#endif
-            if (dataFile.HasDataBlock)
-            //if (false)
+        if (dataFile.HasDataBlock)
             {
                 dataFile.ParseDataBlock(mainDataTable);
 
@@ -329,34 +329,7 @@ namespace Reanimator
                     }
                 }
             }
-        }
-
-        private void ParseIntOffset(int offset, Type type, byte[] dataBlock)
-        {
-            ExcelFile.IntValueType intValueType = Activator.CreateInstance(type) as ExcelFile.IntValueType;
-            if (intValueType == null) return;
-
-            intValueType.ParseBlock(dataBlock, offset);
-            if (!intValueType.IsGood)
-            {
-                Debug.Write("if (!intValueType.IsGood)");
-            }
-
-            /*
-            int header = FileTools.ByteArrayToInt32(dataBlock, offset);
-            offset += sizeof (Int32);
-
-            if (header != 0x1A)
-            {
-                Debug.Assert(header != 0x1A);
-                return;
-            }
-
-            if (type == typeof(ExcelTable.SingleInt32))
-            {
-                Int32 value = FileTools.ByteArrayToInt32(dataBlock, offset);
-                ExcelTable.SingleInt32 si32 = new ExcelTable.SingleInt32(value);
-            }*/
+#endif
         }
 
         private void LoadStringsTable(ProgressForm progress, StringsFile stringsFile)

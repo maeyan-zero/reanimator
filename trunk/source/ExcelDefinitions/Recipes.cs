@@ -53,9 +53,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 ingredient6MinQuantity;
         public Int32 ingredient6MaxQuantity;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public Int32[] craftResult;
+        Int32[] craftResult;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public Int32[] treasureResult;
+        Int32[] treasureResult;
         public Int32 mustPlaceInInvSlot;
         public Int32 canBeLearned;//can be learned bit 0, can spawn bit 1
         public Int32 spawnLevelMin;

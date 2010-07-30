@@ -11,6 +11,7 @@ namespace Reanimator.ExcelDefinitions
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String skill;
+
         public Int32 code;
         Int32 buffer;
         [ExcelOutput(IsBitmask = true)]
@@ -178,7 +179,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 bonusSkillScript4;
         [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 20)]
-        public Int32 skillVar0;//from here down are all intptr
+        public Int32 skillVar0;
         [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 21)]
         public Int32 skillVar1;
         [ExcelOutput(IsIntOffset = true)]
@@ -198,7 +199,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 skillVar9;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 rangeMultScript;//(gets div by 100)//never used?
+        public Int32 rangeMultScript;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 cost;
         [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 3)]
