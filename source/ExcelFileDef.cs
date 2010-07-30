@@ -43,6 +43,7 @@ namespace Reanimator
 
             public bool IsIntOffset { get; set; }
             public Type IntOffsetType { get; set; }
+            public int IntOffsetOrder { get; set; }
             public String[] FieldNames { get; set; }
             //public String[] FieldNames { get; set; }
             //public int DefaultIndex { get; set; }
@@ -185,6 +186,7 @@ namespace Reanimator
             public const String IsBool = "IsBool";
             public const String IsIntOffset = "IsIntOffset";
             public const String IntOffsetType = "IntOffsetType";
+            public const String IntOffsetOrder = "IntOffsetOrder";
         }
     }
 }

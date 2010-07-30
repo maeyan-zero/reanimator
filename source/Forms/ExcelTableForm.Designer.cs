@@ -39,11 +39,16 @@
             this.rowViewPage = new System.Windows.Forms.TabPage();
             this.rows_LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.rows_ListBox = new System.Windows.Forms.ListBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.regenTable = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tstb_sortCriteria = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.index1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.index2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.index3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.index4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.defaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tableDataPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).BeginInit();
@@ -63,10 +68,10 @@
             this.tabControl1.Controls.Add(this.indexArraysPage);
             this.tabControl1.Controls.Add(this.stringsPage);
             this.tabControl1.Controls.Add(this.rowViewPage);
-            this.tabControl1.Location = new System.Drawing.Point(12, 8);
+            this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(728, 581);
+            this.tabControl1.Size = new System.Drawing.Size(728, 577);
             this.tabControl1.TabIndex = 4;
             // 
             // tableDataPage
@@ -75,7 +80,7 @@
             this.tableDataPage.Location = new System.Drawing.Point(4, 22);
             this.tableDataPage.Name = "tableDataPage";
             this.tableDataPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tableDataPage.Size = new System.Drawing.Size(720, 555);
+            this.tableDataPage.Size = new System.Drawing.Size(720, 551);
             this.tableDataPage.TabIndex = 0;
             this.tableDataPage.Text = "Table Data";
             this.tableDataPage.UseVisualStyleBackColor = true;
@@ -85,7 +90,7 @@
             this.tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableData_DataGridView.Location = new System.Drawing.Point(3, 3);
             this.tableData_DataGridView.Name = "tableData_DataGridView";
-            this.tableData_DataGridView.Size = new System.Drawing.Size(714, 549);
+            this.tableData_DataGridView.Size = new System.Drawing.Size(714, 545);
             this.tableData_DataGridView.TabIndex = 1;
             // 
             // indexArraysPage
@@ -94,7 +99,7 @@
             this.indexArraysPage.Location = new System.Drawing.Point(4, 22);
             this.indexArraysPage.Name = "indexArraysPage";
             this.indexArraysPage.Padding = new System.Windows.Forms.Padding(3);
-            this.indexArraysPage.Size = new System.Drawing.Size(720, 555);
+            this.indexArraysPage.Size = new System.Drawing.Size(720, 551);
             this.indexArraysPage.TabIndex = 1;
             this.indexArraysPage.Text = "Index Arrays";
             this.indexArraysPage.UseVisualStyleBackColor = true;
@@ -116,7 +121,7 @@
             this.stringsPage.Location = new System.Drawing.Point(4, 22);
             this.stringsPage.Name = "stringsPage";
             this.stringsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.stringsPage.Size = new System.Drawing.Size(720, 555);
+            this.stringsPage.Size = new System.Drawing.Size(720, 551);
             this.stringsPage.TabIndex = 2;
             this.stringsPage.Text = "Strings";
             this.stringsPage.UseVisualStyleBackColor = true;
@@ -136,7 +141,7 @@
             this.rowViewPage.Location = new System.Drawing.Point(4, 22);
             this.rowViewPage.Name = "rowViewPage";
             this.rowViewPage.Padding = new System.Windows.Forms.Padding(3);
-            this.rowViewPage.Size = new System.Drawing.Size(720, 555);
+            this.rowViewPage.Size = new System.Drawing.Size(720, 551);
             this.rowViewPage.TabIndex = 3;
             this.rowViewPage.Text = "Row View";
             this.rowViewPage.UseVisualStyleBackColor = true;
@@ -167,33 +172,15 @@
             this.rows_ListBox.Size = new System.Drawing.Size(186, 537);
             this.rows_ListBox.TabIndex = 0;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(471, 1);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(65, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // regenTable
-            // 
-            this.regenTable.Location = new System.Drawing.Point(281, 1);
-            this.regenTable.Name = "regenTable";
-            this.regenTable.Size = new System.Drawing.Size(125, 23);
-            this.regenTable.TabIndex = 6;
-            this.regenTable.Text = "Regenerate This Table";
-            this.regenTable.UseVisualStyleBackColor = true;
-            this.regenTable.Click += new System.EventHandler(this.regenTable_Click);
-            // 
             // toolStrip1
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tstb_sortCriteria,
-            this.toolStripButton1});
+            this.toolStripDropDownButton1,
+            this.toolStripButton1,
+            this.toolStripButton2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 592);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(752, 25);
@@ -204,6 +191,52 @@
             // 
             this.tstb_sortCriteria.Name = "tstb_sortCriteria";
             this.tstb_sortCriteria.Size = new System.Drawing.Size(160, 25);
+            this.tstb_sortCriteria.Text = "Search";
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.index1ToolStripMenuItem,
+            this.index2ToolStripMenuItem,
+            this.index3ToolStripMenuItem,
+            this.index4ToolStripMenuItem,
+            this.defaultToolStripMenuItem});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(41, 22);
+            this.toolStripDropDownButton1.Text = "Sort";
+            // 
+            // index1ToolStripMenuItem
+            // 
+            this.index1ToolStripMenuItem.Name = "index1ToolStripMenuItem";
+            this.index1ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.index1ToolStripMenuItem.Text = "Index 1";
+            // 
+            // index2ToolStripMenuItem
+            // 
+            this.index2ToolStripMenuItem.Name = "index2ToolStripMenuItem";
+            this.index2ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.index2ToolStripMenuItem.Text = "Index 2";
+            // 
+            // index3ToolStripMenuItem
+            // 
+            this.index3ToolStripMenuItem.Name = "index3ToolStripMenuItem";
+            this.index3ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.index3ToolStripMenuItem.Text = "Index 3";
+            // 
+            // index4ToolStripMenuItem
+            // 
+            this.index4ToolStripMenuItem.Name = "index4ToolStripMenuItem";
+            this.index4ToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.index4ToolStripMenuItem.Text = "Index 4";
+            // 
+            // defaultToolStripMenuItem
+            // 
+            this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
+            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.defaultToolStripMenuItem.Text = "Default";
             // 
             // toolStripButton1
             // 
@@ -211,9 +244,19 @@
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(32, 22);
-            this.toolStripButton1.Text = "Sort";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripButton1.Size = new System.Drawing.Size(70, 22);
+            this.toolStripButton1.Text = "Regenerate";
+            this.toolStripButton1.Click += new System.EventHandler(this.regenTable_Click);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(44, 22);
+            this.toolStripButton2.Text = "Dump";
+            this.toolStripButton2.Click += new System.EventHandler(this.dump_Click);
             // 
             // ExcelTableForm
             // 
@@ -221,8 +264,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(752, 617);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.regenTable);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.tabControl1);
             this.Name = "ExcelTableForm";
             this.Text = "ExcelTable";
@@ -248,15 +289,20 @@
         private System.Windows.Forms.TabPage indexArraysPage;
         private System.Windows.Forms.DataGridView indexArrays_DataGridView;
         public System.Windows.Forms.DataGridView tableData_DataGridView;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabPage stringsPage;
         private System.Windows.Forms.ListBox strings_ListBox;
-        private System.Windows.Forms.Button regenTable;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripTextBox tstb_sortCriteria;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.TabPage rowViewPage;
         private System.Windows.Forms.ListBox rows_ListBox;
         private System.Windows.Forms.TableLayoutPanel rows_LayoutPanel;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripMenuItem index1ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem index2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem index3ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem index4ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem defaultToolStripMenuItem;
     }
 }

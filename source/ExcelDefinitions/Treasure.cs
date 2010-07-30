@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -30,7 +31,8 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] unknown04;
         public float noDrop;
-        public Int32 levelBoost;//pointer
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
+        public Int32 levelBoost;
         public float moneyChanceMultiplier;
         public float moneyLuckChanceMultiplier;
         public float moneyAmountMultiplier;
@@ -77,10 +79,26 @@ namespace Reanimator.ExcelDefinitions
         public Int32 value8;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8804)]
         byte[] unknown13;
-        public Int32 spawnCondition;/** bitmask: 'create for all players in level',0 - 'required usable by operator',1 
-            'required usable by spawner',2 - 'subscriber only',3 - 'max slots',4 - 'results not required',5
-            'stack treasure',6 - 'multiplayer only',7 - 'single player only',8 */
+        [ExcelOutput(IsBitmask = true)]
+        public Treasure.Bitmask01 spawnCondition;
         public Int32 spawnFromMonsterUnitType;
         public Int32 spawnFromLevelTheme;
+    }
+
+    public abstract class Treasure
+    {
+        [FlagsAttribute]
+        public enum Bitmask01 : uint
+        {
+            createForAllPlayersInLevel = 1,
+            requiredUsableByOperator = 2, 
+            requiredUsableBySpawner = 4,
+            subscriberOnly = 8,
+            maxSlots = 16,
+            resultsNotRequired = 32,
+            stackTreasure = 64,
+            multiplayerOnly = 128,
+            singlePlayerOnly = 256
+        };
     }
 }

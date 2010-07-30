@@ -32,7 +32,7 @@ namespace Reanimator
 
         private static void CheckEnvironment()
         {
-            const string lastUnpacked = "1.0";
+            const string lastUnpacked = "1.1";
             if (Config.DatLastUnpacked == lastUnpacked) return;
 
             try
@@ -725,7 +725,7 @@ namespace Reanimator
             if (openFileDialog.ShowDialog(this) != DialogResult.OK || !openFileDialog.FileName.EndsWith("exe")) return;
 
 
-            ClientPatcher hglexe = new ClientPatcher(File.ReadAllBytes(openFileDialog.FileName));
+            Patches hglexe = new Patches(File.ReadAllBytes(openFileDialog.FileName));
             try
             {
                 hglexe.ApplyHardcorePatch();

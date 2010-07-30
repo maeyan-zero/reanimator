@@ -67,6 +67,45 @@ namespace Reanimator
             return csv.ToString();
         }
 
+        static public string CSV(string[,] data)
+        {
+            StringWriter csv = new StringWriter();
+            string delimiter = ",";
+
+            for (int x = 0; x < data.GetLength(0); x++)
+            {
+                for (int y = 0; y < data.GetLength(1); y++)
+                {
+                    csv.Write(data[x, y]);
+
+                    if (y != data.GetLength(1) - 1)
+                        csv.Write(delimiter);
+                    else
+                        csv.WriteLine();
+                }
+            }
+            return csv.ToString();
+        }
+
+        static public string CSVPart(int[] data)
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                string delimiter = ",";
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sw.Write(data[i]);
+                    if (i != data.Length - 1)
+                        sw.Write(delimiter);
+                    else
+                        sw.WriteLine();
+                }
+
+                return sw.ToString();
+            }
+        }
+
         static public class Asset
         {
             public static string ToObj(Model model)

@@ -268,9 +268,8 @@
     </Compile>
     <Compile Include="StringsFileDef.cs" />
     <Compile Include="TableFiles.cs" />
-    <Compile Include="ClientPatcher.cs" />
+    <Compile Include="Patches.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Crc32.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="ExceptionLogger.cs" />
     <Compile Include="Forms\HeroEditorFunctions\Atlas_functions.cs" />
@@ -369,7 +368,6 @@
     <Compile Include="Forms\TableSearch.Designer.cs">
       <DependentUpon>TableSearch.cs</DependentUpon>
     </Compile>
-    <Compile Include="Havok.cs" />
     <Compile Include="TableDataSet.cs" />
     <Compile Include="Export.cs" />
     <Compile Include="Forms\CacheInfo.cs">

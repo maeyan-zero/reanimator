@@ -1,10 +1,10 @@
 ﻿namespace Reanimator
 {
-    class ClientPatcher
+    class Patches
     {
         public byte[] Buffer { get; private set; }
 
-        public ClientPatcher(byte[] byteArray)
+        public Patches(byte[] byteArray)
         {
             Buffer = byteArray;
         }

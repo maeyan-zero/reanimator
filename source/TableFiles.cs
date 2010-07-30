@@ -380,27 +380,6 @@ namespace Reanimator
                     {
                         DataFiles.Add(excelFile.StringId, excelFile);
                         mapItem.LoadedFile = excelFile;
-#if DEBUG
-                        if (_debugAll)
-                        {
-                            ExcelFile ef = excelFile as ExcelFile;
-                            if (ef.DataBlock != null)
-                            {
-                                FileTools.WriteFile(@"C:\blah\" + stringId + ".dat", ef.DataBlock);
-
-                                if (stringId == "MONSTER_QUALITY")
-                                {
-                                    String write = ef.DataBlock.Aggregate(String.Empty,
-                                                                                  (current, b) =>
-                                                                                  current +
-                                                                                  (b.ToString("X") + " "));
-                                    FileTools.WriteFile(@"C:\blah\" + stringId + ".txt",
-                                                        FileTools.StringToASCIIByteArray(write));
-                                }
-                            }
-                            Debug.WriteLine("Excel Table Parsed: " + stringId);
-                        }
-#endif
                     }
 
                     continue;
