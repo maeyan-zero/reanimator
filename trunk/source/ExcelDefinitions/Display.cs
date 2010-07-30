@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -35,9 +36,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32 ctrl2;
         public Int32 ctrl3;
         public Int32 ctrl4;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
         public Int32 val1;//intptr
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
         public Int32 val2;//intptr
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 3)]
         public Int32 val3;//intptr
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 4)]
         public Int32 val4;//intptr
         public Int32 toolTipArea;
         public Int32 toolTipText;//stridx

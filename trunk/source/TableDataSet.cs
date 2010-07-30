@@ -188,6 +188,13 @@ namespace Reanimator
                     dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsStringOffset, true);
                     dataColumn.DefaultValue = String.Empty;
                 }
+                else if (excelOutputAttribute.IsIntOffset)
+                {
+                    DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, typeof(String));
+                    dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsIntOffset, true);
+                    dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IntOffsetOrder, excelOutputAttribute.IntOffsetOrder);
+                    dataColumn.DefaultValue = String.Empty;
+                }
                 else
                 {
                     DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
@@ -212,11 +219,6 @@ namespace Reanimator
                     {
                         dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsBool, true);
                     }
-                    else if (excelOutputAttribute.IsIntOffset)
-                    {
-                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsIntOffset, true);
-                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IntOffsetType, excelOutputAttribute.IntOffsetType);
-                    }
                 }
             }
 
@@ -237,6 +239,7 @@ namespace Reanimator
             Hashtable hashtableStrings = new Hashtable();
             Hashtable hashTableCounts = new Hashtable();
 #endif
+            
 
             foreach (Object table in array)
             {
@@ -261,24 +264,7 @@ namespace Reanimator
                     if (excelOutputAttribute.IsStringOffset)
                     {
                         int valueInt = (int)value;
-#if DEBUG
-                        if (valueInt != -1)
-                        {
-                            if (hashtableStrings.ContainsKey(valueInt))
-                            {
-                                if (!hashTableCounts.ContainsKey(valueInt))
-                                {
-                                    hashTableCounts.Add(valueInt, 1);
-                                }
 
-                                hashTableCounts[valueInt] = ((int)hashTableCounts[valueInt]) + 1;
-                            }
-                            else
-                            {
-                                hashtableStrings.Add(valueInt, dataFile.Strings[valueInt]);
-                            }
-                        }
-#endif
                         baseRow[col] = dataFile.Strings[valueInt];
                         col++;
                     }
@@ -293,19 +279,16 @@ namespace Reanimator
                         baseRow[col] = stringValue;
                         col++;
                     }
+                    else if (excelOutputAttribute.IsIntOffset)
+                    {
+                        int valueInt = (int)value;
+                        baseRow[col] = valueInt;
+                        col++;
+                    }
                     else
                     {
                         baseRow[col] = value;
                         col++;
-                    }
-
-                    if (excelOutputAttribute.IsIntOffset && excelOutputAttribute.IntOffsetType != null)
-                    {
-                        int valueInt = (int)value;
-                        if (valueInt != 0 && valueInt < dataFile.DataBlock.Length)
-                        {
-                            ParseIntOffset(valueInt, excelOutputAttribute.IntOffsetType, dataFile.DataBlock);
-                        }
                     }
                 }
 
@@ -321,8 +304,31 @@ namespace Reanimator
                 Debug.Write("hashTableCounts.Count = " + hashTableCounts.Count + "\n");
             }
 #endif
-            //_xlsDataTables.Add(mainTableName, mainDataTable);
+            if (dataFile.HasDataBlock)
+            //if (false)
+            {
+                dataFile.ParseDataBlock(mainDataTable);
 
+                foreach (DataRow dr in mainDataTable.Rows)
+                {
+                    for (int c = 0; c < mainDataTable.Columns.Count; c++)
+                    {
+                        if (mainDataTable.Columns[c].ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsIntOffset))
+                        {
+                            int i = int.Parse((string)dr[c]);
+                            if (i != 0)
+                            {
+                                object v = dataFile.DataBlock[int.Parse((string)dr[c])];
+                                dr[c] = v;
+                                if (v == null)
+                                {
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void ParseIntOffset(int offset, Type type, byte[] dataBlock)

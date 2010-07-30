@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -16,11 +17,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 slotStat;//idx
         public Int32 maxSlotStat;//idx
         public Int32 unknown;
-        public Int32 bitmask;/*dynamic-0, onesize-1, grid, wardrobe, autopickup-5, pet slot-6, don''t save-7, resurrectable-8, 
-link deaths-9, equip location-11, use in random armor-12, offhand wardrobe-13, store-14, merchant warehouse-15, skills check on ultimate owner-16,
-skills check on control unit-17, destroy pet on level change-19, known only when stash open-20, stash location-21, remove from inventory on owner death-22,
-cannot accept no drop items-23, cannot accept no trade items-24, cannot dismantle items-25, weaponconfig location-26,
-free on size change-27, enable cache location-28, disable cache location-29 */
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public Inventory.Bitmask01 bitmask;
         public Int32 types0;//these reference unitTypes
         public Int32 types1;
         public Int32 types2;
@@ -78,8 +76,49 @@ free on size change-27, enable cache location-28, disable cache location-29 */
         public Int32 rewardLocation;//bool
         public Int32 serverOnlyLocation;//bool
         public Int32 cursorLocation;//bool
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
         public Int32 playerPutRestricted;//intptr
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
         public Int32 playerTakeRestricted;//intptr
         public Int32 invLocFallbackOnLoadError;//idx
+    }
+
+    
+    public abstract class Inventory
+    {
+        [FlagsAttribute]
+        public enum Bitmask01 : uint
+        {
+            dynamic = 1,
+            onesize = 2,
+            grid = 4,
+            wardrobe = 8,
+            // 5?
+            autopickup = 32,
+            petSlot = 64,
+            dontSav = 128,
+            resurrectable = 256, 
+            linkDeaths = 512,
+            // 10
+            equipLocation = 2048,
+            useInRandomArmor = 4096,
+            offhandWardrobe = 8192,
+            store = 16384,
+            merchantWarehouse = 32768,
+            skillsCheckOnUltimateOwner = 65536,
+            skillsCheckOnControlUnit = 131072,
+            // 19
+            destroyPetOnLevelChange = 524288,
+            knownOnlyWhenStashOpen = 1048576,
+            stashLocation = 2097152,
+            removeFromInventoryOnOwnerDeath = 4194304,
+            cannotAcceptNoDropItems = 8388608,
+            cannotAcceptNoTradeItems = 16777216,
+            cannotDismantleItems = 33554432,
+            weaponconfigLocation = 67108864,
+            freeOnSizeChange = 134217728,
+            enableCacheLocation = 268435456,
+            disableCacheLocation = 536870912
+        }
     }
 }

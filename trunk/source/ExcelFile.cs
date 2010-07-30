@@ -36,7 +36,9 @@ namespace Reanimator
         public int[] SortIndex3 { get { return _sortIndicies[2]; } }
         public int[] SortIndex4 { get { return _sortIndicies[3]; } }
 
-        public byte[] DataBlock { get; set; }
+        private byte[] _dataBlock { get; set; }
+        public Hashtable DataBlock { get; private set; }
+        public bool HasDataBlock { get { return _dataBlock != null ? true : false; } }
         public byte[] FinalBytes { get; set; }
 
         // func defs etc
@@ -202,7 +204,7 @@ namespace Reanimator
             SecondaryStrings = new List<String>();
             _sortIndicies = new int[4][];
             int offset = 0;
-
+            DataBlock = new Hashtable();
 
             // main header
             int token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
@@ -285,7 +287,7 @@ namespace Reanimator
                 {
                     offset += sizeof(Int32);
                 }
-
+#if DEBUG
                 if (_excelDebugAll)
                 {
                     foreach (TableHeader tableHeader in from table in Rows
@@ -323,8 +325,8 @@ namespace Reanimator
                                     "(" + ((int)hashTableUnknown2[key]) + ")\n");
                     }
                 }
+#endif
             }
-
 
             // secondary string block
             token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
@@ -427,13 +429,13 @@ namespace Reanimator
                         byteCount = (byteCount << 2) * blockCount;
                         Debug.Write(String.Format("Has weird block .Length = {0}\n", byteCount));
                     }
-                    DataBlock = new byte[byteCount];
-                    Buffer.BlockCopy(_data, offset, DataBlock, 0, byteCount);
+                    _dataBlock = new byte[byteCount];
+                    Buffer.BlockCopy(_data, offset, _dataBlock, 0, byteCount);
                     offset += byteCount;
                     Debug.Write(String.Format("Has data block .Length = {0}\n", byteCount));
 
 #if DEBUG
-                    if (_excelDebugAll) FileTools.WriteFile(@"C:\blah\" + this.StringId + ".dat", DataBlock);
+                    if (_excelDebugAll) FileTools.WriteFile(@"C:\blah\" + this.StringId + ".dat", _dataBlock);
 #endif
                 }
             }
@@ -477,6 +479,93 @@ namespace Reanimator
             if (!CheckFlag(flag, 0x68657863))
             {
                 throw new Exception("Unexpected header flag!\nStructure ID: " + _excelHeader.StructureId);
+            }
+        }
+
+        public void ParseDataBlock(DataTable dt)
+        {
+            int[] columns;
+            List<int> length = new List<int>();
+            int last = 1;
+
+            // Retrieve the ordinals of IntOffset columns.
+            int count = 0;
+
+            foreach (DataColumn dc in dt.Columns)
+            {
+                if (dc.ExtendedProperties.Contains(ExcelFile.ColumnTypeKeys.IsIntOffset) && dc.ExtendedProperties.Contains(ExcelFile.ColumnTypeKeys.IntOffsetOrder))
+                {
+                    int i = (int)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IntOffsetOrder];
+                    if (i == 0) continue;
+                    count++;
+                }
+            }
+
+            // Retrieve the ordinals of IntOffset columns.
+            columns = new int[count];
+
+            foreach (DataColumn dc in dt.Columns)
+            {
+                if (dc.ExtendedProperties.Contains(ExcelFile.ColumnTypeKeys.IsIntOffset) && dc.ExtendedProperties.Contains(ExcelFile.ColumnTypeKeys.IntOffsetOrder))
+                {
+                    int i = (int)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IntOffsetOrder];
+                    if (i == 0) continue;
+                    columns[i - 1] = dc.Ordinal;
+                }
+            }
+
+            // Calculate the length of each cell.
+            foreach (DataRow dr in dt.Rows)
+            {
+                foreach (int c in columns)
+                {
+                    int val = int.Parse((string)dr[c]);
+                    if (val == 0) continue; // Skip if there is no data.
+                    if (val == 1) continue; // Skip first cell, only passes once.
+                    int i = val - last;
+                    length.Add(i);
+                    last = val;
+                }
+            }
+            // Get length of last cell.. required.
+            int lc = _dataBlock.Length - last;
+            length.Add(lc);
+
+            // Populates the grid resolving the IntPtrs
+            int cur = 0;
+
+            DataBlock = new Hashtable();
+
+            for (int r = 0; r < dt.Rows.Count; r++)
+            {
+                // Add the rest of the columns.
+                for (int c = 0; c < columns.Length; c++)
+                {
+                    int val = int.Parse(((string)dt.Rows[r][columns[c]]));
+                    if (val == 0) continue; // Skip if there is no data.
+
+                    if (length[cur] < 0) // There are about 5 cases where the length is a negative integer.
+                    {                    // Need this while we work out whats going on.
+                        cur++;
+                        //grid[r + 1, c + 1] = "ERROR";
+                        continue;
+                    }
+
+                    byte[] buffer = new byte[length[cur]];
+                    Array.Copy(_dataBlock, val, buffer, 0, buffer.Length);
+
+                    int[] ibuffer = FileTools.ByteArrayToInt32Array(buffer, 0, buffer.Length / sizeof(int));
+                    string csv = "";
+                    for (int i = 0; i < ibuffer.Length; i++)
+                    {
+                        csv += ibuffer[i].ToString();
+                        if (i < ibuffer.Length - 1)
+                            csv += ",";
+                    }
+
+                    DataBlock.Add(val, csv);
+                    cur++;
+                }
             }
         }
 
@@ -955,12 +1044,12 @@ namespace Reanimator
 
             // data block 1
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            if (DataBlock != null)
+            if (_dataBlock != null)
             {
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, DataBlock.Length);
-                if (DataBlock.Length > 0)
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dataBlock.Length);
+                if (_dataBlock.Length > 0)
                 {
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, DataBlock);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dataBlock);
                 }
             }
             else

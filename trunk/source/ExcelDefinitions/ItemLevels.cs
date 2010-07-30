@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -26,7 +27,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 levelRequirement;
         public Int32 itemLevelMin;
         public Int32 itemLevelMax;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
         public Int32 buyPriceBase;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
         public Int32 sellPriceBase;
         public Int32 augmentCostCommon;
         public Int32 augmentCostRare;

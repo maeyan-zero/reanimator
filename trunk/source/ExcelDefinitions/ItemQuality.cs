@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -12,16 +13,23 @@ namespace Reanimator.ExcelDefinitions
         public String quality;
         public Int32 code;
         public Int32 craftingBreakdownTreasure;
+        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 displayName;
+        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 displayNameWithItemFormat;
+        [ExcelOutput(IsBool = true)]
         public Int32 showBaseDesc;
         public Int32 randomlyNamed;
+        [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
         public Int32 baseDescFormatString;
         public Int32 unknown01;
         public Int32 nameColor;
         public Int32 bkgdColor;
+        [ExcelOutput(IsBool = true)]
         public Int32 doTransactionLogging;
+        [ExcelOutput(IsBool = true)]
         public Int32 changeItemClassToMatchRequiredQualityOnly;
+        [ExcelOutput(IsBool = true)]
         public Int32 always_identified;
         public float price_multiplier;
         public float recipe_quantity_multiplier;
@@ -52,12 +60,19 @@ namespace Reanimator.ExcelDefinitions
         public Int32 suffixCount;
         public float procChance;
         public float luckProbMod;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
         public Int32 affix1Chance;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
         public Int32 affix1Type1Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 3)]
         public Int32 affix1Type2Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 4)]
         public Int32 affix1Type3Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 5)]
         public Int32 affix1Type4Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 6)]
         public Int32 affix1Type5Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 7)]
         public Int32 affix1Type6Weight;
         public Int32 affix1Type1;
         public Int32 affix1Type2;
@@ -65,12 +80,19 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affix1Type4;
         public Int32 affix1Type5;
         public Int32 affix1Type6;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 8)]
         public Int32 affix2Chance;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 9)]
         public Int32 affix2Type1Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 10)]
         public Int32 affix2Type2Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 11)]
         public Int32 affix2Type3Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 12)]
         public Int32 affix2Type4Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 13)]
         public Int32 affix2Type5Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 14)]
         public Int32 affix2Type6Weight;
         public Int32 affix2Type1;
         public Int32 affix2Type2;
@@ -78,12 +100,19 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affix2Type4;
         public Int32 affix2Type5;
         public Int32 affix2Type6;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 15)]
         public Int32 affix3Chance;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 16)]
         public Int32 affix3Type1Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 17)]
         public Int32 affix3Type2Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 18)]
         public Int32 affix3Type3Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 19)]
         public Int32 affix3Type4Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 20)]
         public Int32 affix3Type5Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 21)]
         public Int32 affix3Type6Weight;
         public Int32 affix3Type1;
         public Int32 affix3Type2;
@@ -91,12 +120,19 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affix3Type4;
         public Int32 affix3Type5;
         public Int32 affix3Type6;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 22)]
         public Int32 affix4Chance;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 23)]
         public Int32 affix4Type1Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 24)]
         public Int32 affix4Type2Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 25)]
         public Int32 affix4Type3Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 26)]
         public Int32 affix4Type4Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 27)]
         public Int32 affix4Type5Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 28)]
         public Int32 affix4Type6Weight;
         public Int32 affix4Type1;
         public Int32 affix4Type2;
@@ -104,12 +140,19 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affix4Type4;
         public Int32 affix4Type5;
         public Int32 affix4Type6;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 29)]
         public Int32 affix5Chance;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 30)]
         public Int32 affix5Type1Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 31)]
         public Int32 affix5Type2Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 32)]
         public Int32 affix5Type3Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 33)]
         public Int32 affix5Type4Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 34)]
         public Int32 affix5Type5Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 35)]
         public Int32 affix5Type6Weight;
         public Int32 affix5Type1;
         public Int32 affix5Type2;
@@ -117,12 +160,19 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affix5Type4;
         public Int32 affix5Type5;
         public Int32 affix5Type6;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 36)]
         public Int32 affix6Chance;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 37)]
         public Int32 affix6Type1Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 38)]
         public Int32 affix6Type2Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 39)]
         public Int32 affix6Type3Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 40)]
         public Int32 affix6Type4Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 41)]
         public Int32 affix6Type5Weight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 42)]
         public Int32 affix6Type6Weight;
         public Int32 affix6Type1;
         public Int32 affix6Type2;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,26 +9,27 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 affix;
         public Int32 unknown02;
+        [ExcelOutput(IsBool = true)]
         public Int32 alwaysApply;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
         public Int32 qualityNameString;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
         public Int32 setNameString;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
         public Int32 magicNameString;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
         public Int32 replaceNameString;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
         public Int32 flavorText;
         public Int32 unknown03;
         public Int32 nameColor;
         public Int32 gridColor;
         public Int32 dom;
         public Int32 code;
-        [ExcelFile.ExcelOutput(IsTableIndex = true, TableId = 0x7530 /*AFFIXTYPES*/, Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableId = 0x7530, Column = "AffixType")]
         public Int32 affixType1;
         public Int32 affixType2;
         public Int32 affixType3;
@@ -35,7 +37,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affixType5;
         public Int32 affixType6;
         public Int32 suffix;
-        [ExcelFile.ExcelOutput(IsStringIndex = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 group;
         public Int32 style;
         public Int32 useWhenAugmenting;
@@ -48,7 +50,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 allowTypes4;
         public Int32 allowTypes5;
         public Int32 allowTypes6;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
         public Int32 groupWeight;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
         public Int32 weight;
         public Int32 luckWeight;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
@@ -58,9 +62,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 state;
         public Int32 saveState;
         public Int32 buyPriceMulti;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 5)]
         public Int32 buyPriceAdd;
         public Int32 sellPriceMulti;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 4)]
         public Int32 sellPriceAdd;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 3)]
         public Int32 cond;
         public Int32 itemLevel;
         public Int32 prop1Cond;
@@ -69,11 +76,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 prop4Cond;
         public Int32 prop5Cond;
         public Int32 prop6Cond;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 6)]
         public Int32 property1;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 7)]
         public Int32 property2;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 8)]
         public Int32 property3;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 9)]
         public Int32 property4;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 10)]
         public Int32 property5;
+        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 11)]
         public Int32 property6;
         public Int32 onlyOnItemsRequiringUnitType;
     }
