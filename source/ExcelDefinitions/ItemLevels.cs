@@ -27,9 +27,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 levelRequirement;
         public Int32 itemLevelMin;
         public Int32 itemLevelMax;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceBase;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceBase;
         public Int32 augmentCostCommon;
         public Int32 augmentCostRare;

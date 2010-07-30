@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -11,10 +12,11 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public Int32[] undefined;
-        public Int32 dontDisplayInEditor;//bool
-        public Int32 highLander;//bool //is this supposed to be "there can be only one" highlander?
-
+        Int32[] undefined;
+        [ExcelOutput(IsBool = true)]
+        public Int32 dontDisplayInEditor;
+        [ExcelOutput(IsBool = true)]
+        public Int32 highLander;//is this supposed to be "there can be only one" highlander?
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string environment;
         public Int32 envPriority;

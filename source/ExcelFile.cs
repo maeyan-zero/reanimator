@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.IO;
 using Reanimator.ExcelDefinitions;
 
 namespace Reanimator
@@ -289,8 +290,7 @@ namespace Reanimator
                 }
 #if DEBUG
                 if (_excelDebugAll)
-                {
-                    foreach (TableHeader tableHeader in from table in Rows
+                {                    foreach (TableHeader tableHeader in from table in Rows
                                                         let type = table.GetType()
                                                         let fieldInfo = type.GetField("header", BindingFlags.NonPublic | BindingFlags.Instance)
                                                         where fieldInfo != null
@@ -569,6 +569,152 @@ namespace Reanimator
             }
         }
 
+        public string ParseIntOffset(int index)
+        {
+            int cur = index;
+            StringWriter csv = new StringWriter();
+            bool parsing = true;
+            List<int> ilist = new List<int>();
+
+            while (parsing)
+            {
+                int icase = FileTools.ByteArrayToInt32(_dataBlock, cur);
+                cur += sizeof(int);
+                csv.Write(icase.ToString());
+                
+                switch (icase)
+                {
+                    case 2:
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // int value between 270-370
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // 0
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        break;
+
+
+
+                    // simple integer
+                    case 1:
+                    case 3:
+                    case 4:
+                    case 14:
+                    case 26:
+                    case 516:
+                    case 527:
+                    case 700:
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // int value
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        break;
+
+
+
+                    // tokens
+                    case 320:
+                    case 339:
+                    case 347:
+                    case 358: // items
+                    case 399: // items
+                    case 388: // items
+                    case 369: // items
+                    case 426: // only on (8)healthpack and (9)powerpack. pick up condition
+                    case 437: // only used in skills tabl
+                    case 448:
+                    case 470:
+                    case 481:
+                    
+                    case 538: // affixes
+                    case 709:
+                    case 711:
+                    case 712:
+                        csv.Write(",");
+                        break;
+
+
+
+                    // bitmasks
+                    case 666:
+                    case 667:
+                    case 669:
+                    case 673:
+                    case 674:
+                    case 680:
+                    case 683:
+                    case 687:
+                    case 688:
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // int bitmask
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        break;
+
+
+                    // functions
+                    case 707:
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // Boolean? 1/0
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur));  // 714
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        break;
+                    // random range?
+                    case 708: // 26,3,26
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // 26
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // 3
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        break;
+                    case 710: // 26,26,3
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // 26
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // 26
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // 3
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        csv.Write(FileTools.ByteArrayToInt32(_dataBlock, cur)); // value
+                        cur += sizeof(int);
+                        csv.Write(",");
+                        break;
+
+                    case 0:
+                    case 6: // appears twice in skills. weird. no null termination
+                        parsing = false;
+                        break;
+                    default:
+                        parsing = false;
+                        Console.WriteLine("Unhandled case: {0}", icase);
+                        break;
+                }
+            }
+
+            return csv.ToString();
+        }
+
         private static bool CheckFlag(int flag, int to)
         {
             return flag == to ? true : false;
@@ -689,6 +835,9 @@ namespace Reanimator
             int stringsByteCount = 0;
             int stringsByteOffset = byteOffset;
             byte[] stringBytes = null;
+            byte[] intBytes = null;
+            int intByteCount = 0;
+            int intByteOffset;
             byteOffset += sizeof(Int32);
 
 
@@ -793,9 +942,39 @@ namespace Reanimator
                             }
                             else
                             {
+
                                 fieldInfo.SetValue(table, stringsByteCount);
                                 FileTools.WriteToBuffer(ref stringBytes, ref stringsByteCount, FileTools.StringToASCIIByteArray(s));
                                 stringsByteCount++; // \0
+                            }
+                        }
+                    }
+                    // if its a int offset, convert the csv to a byte array-add it to the buffer and set value as offset
+                    else if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsIntOffset))
+                    {
+                        if ((bool)dc.ExtendedProperties[ColumnTypeKeys.IsIntOffset])
+                        {
+                            if (intBytes == null)
+                            {
+                                byte b = 0;
+                                intBytes = new byte[1024];
+                                FileTools.WriteToBuffer(ref intBytes, ref intByteCount, b);
+                            }
+
+                            String s = dr[dc] as String;
+                            if (s == "0" || s.Length == 0)
+                            {
+                                fieldInfo.SetValue(table, 0);
+                            }
+                            else
+                            {
+                                fieldInfo.SetValue(table, intByteCount);
+                                string[] explode = s.Split(',');
+
+                                foreach (string part in explode)
+                                {
+                                    FileTools.WriteToBuffer(ref intBytes, ref intByteCount, int.Parse(part));
+                                }
                             }
                         }
                     }
@@ -1044,12 +1223,14 @@ namespace Reanimator
 
             // data block 1
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            if (_dataBlock != null)
+            if (intBytes != null)
             {
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dataBlock.Length);
-                if (_dataBlock.Length > 0)
+                byte[] tmp = new byte[intByteCount];
+                Array.Copy(intBytes, tmp, intByteCount);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
+                if (intByteCount > 0)
                 {
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dataBlock);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, tmp);
                 }
             }
             else

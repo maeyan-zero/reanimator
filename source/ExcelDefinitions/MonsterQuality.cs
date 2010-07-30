@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -14,10 +15,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 code;
         public Int32 rarity;
         public Int32 nameColor;//idx
-        [ExcelFile.ExcelOutputAttribute(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 displayNameStringKey;//stridx
-        [ExcelFile.ExcelOutputAttribute(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
         public Int32 championFormatStringKey;//stridx
+        [ExcelOutput(IsBool = true)]
         public Int32 pickProperName;//bool
         public Int32 type;
         public Int32 undefined1;
@@ -34,28 +36,29 @@ namespace Reanimator.ExcelDefinitions
         public Int32 TreasureLevelBoost;
         public float HealthMultiplier;
         public float ToHitMultiplier;
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 MinionPackSize;//intptr
-        [ExcelFile.ExcelOutputAttribute(IsIntOffset = true, IntOffsetType = typeof(ExcelFile.PropData))]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 prop1;//intptr
-        [ExcelFile.ExcelOutputAttribute(IsIntOffset = true, IntOffsetType = typeof(ExcelFile.PropData))]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 prop2;//intptr
-        [ExcelFile.ExcelOutputAttribute(IsIntOffset = true, IntOffsetType = typeof(ExcelFile.PropData))]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 prop3;//intptr
         public Int32 AffixCount;
         public Int32 AffixType1;//idx
         public Int32 AffixType2;//idx
         public Int32 AffixType3;//idx
-        [ExcelFile.ExcelOutputAttribute(IsIntOffset = true, IntOffsetType = typeof(ExcelFile.SingleUInt32))]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 AffixProbability1;//intptr
-        [ExcelFile.ExcelOutputAttribute(IsIntOffset = true, IntOffsetType = typeof(ExcelFile.SingleUInt32))]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 AffixProbability2;//intptr
-        [ExcelFile.ExcelOutputAttribute(IsIntOffset = true, IntOffsetType = typeof(ExcelFile.SingleUInt32))]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 AffixProbability3;//intptr
         public Int32 experienceMultiplier;
         public Int32 luckMultiplier;
         public Int32 MonsterQualityDowngrade;//idx
         public Int32 MinionQuality;//idx
-        [ExcelFile.ExcelOutputAttribute(IsBool = true)]
+        [ExcelOutput(IsBool = true)]
         public Int32 ShowLabel;//bool
         public Int32 TreasureClass;//idx
     }

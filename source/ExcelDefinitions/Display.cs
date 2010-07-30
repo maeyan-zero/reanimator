@@ -13,6 +13,7 @@ namespace Reanimator.ExcelDefinitions
         public string key;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string exampleDescription;
+
         public Int32 rider;//bool
         public Int32 rule1;
         public Int32 rule2;
@@ -36,13 +37,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32 ctrl2;
         public Int32 ctrl3;
         public Int32 ctrl4;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 val1;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 val2;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 3)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 val3;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 4)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 val4;//intptr
         public Int32 toolTipArea;
         public Int32 toolTipText;//stridx
