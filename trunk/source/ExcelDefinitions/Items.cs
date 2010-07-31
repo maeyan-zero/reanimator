@@ -372,7 +372,8 @@ namespace Reanimator.ExcelDefinitions
         public float homeAfterUnitRadius;
         public float collidableAfterXSeconds;
         public float homeAfterXSeconds;
-        public Int32 bitmask08;
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public Items.BitMask08 bitmask08;
         public float impactCameraShakeDuration;
         public float impactCameraShakeMagnitude;
         public float impactCameraShakeDegrade;
