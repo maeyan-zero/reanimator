@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -26,21 +27,8 @@ namespace Reanimator.ExcelDefinitions
         public float maxRange;
         public Int32 rollOffType;
         public Int32 reverbSend;
-        public Int32 bitmask;/*0 bit nonblock
-	        1 bit stream
-	        2 bit 3D
-	        3 bit unk
-	        4 bit loops
-	        5 bit cancutoff
-	        6 bit highlander
-	        7 bit group highlander
-	        8 bit software
-	        9 bit head relative
-	        10 bit is music
-	        11 bit don't randomize start
-	        12 bit don't crossfade variations
-	        13 bit unk
-	        14 bit load at startup*/
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public Sounds.BitMask01 bitmask01;
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 directory;//pchar
         public Int32 undefined5;
@@ -160,5 +148,39 @@ namespace Reanimator.ExcelDefinitions
         public Int32 effects;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
         public Int32[] undefined46;
+    }
+
+    public abstract class Sounds
+    {
+        [FlagsAttribute]
+        public enum BitMask01 : uint
+        {
+            nonblock = 1,
+            stream = 2,
+            is3D = 4,//it is in fact called just 3D, but that isn't liked.
+            unk01 = 8,
+            loops = 16,
+            canCutoff = 32,
+            highlander = 64,
+            groupHighlander = 128,
+            software = 256,
+            headRelative = 512,
+            isMusic = 1024,
+            dontRandomizeStart = 2048,
+            dontCrossfadeVariations = 4096,
+            unk02 = 8192,
+            loadAtStartup = 16384,
+            useGlobalLights = 32768,
+            backupTransSpecular = 65536,
+            emitsGpuParticles = 131072,
+            isScreenEffect = 262144,
+            loadAllTechniques = 524288,
+            receiveRain = 1048576,
+            oneParticleSystem = 2097152,
+            usesPortals = 4194304,
+            requiresHavokFx = 8388608,
+            directionalInSH = 16777216,
+            emissivediffuse = 33554432
+        }
     }
 }
