@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -26,7 +27,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 comboFilterFunction1;
         public Int32 clientOnly;//bool
         public Int32 serverOnly;//bool
-        public Int32 bitMask1;/* bit uses force new, 0
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public StateEventTypes.BitMask01 bitmask01;
+        /*public Int32 bitMask1;/* bit uses force new, 0
 	bit uses first person, 1
 	bit uses add to center, 2
 	bit uses control unit only, 3
@@ -56,5 +59,28 @@ namespace Reanimator.ExcelDefinitions
         public Int32 applyToAppearanceOverride;//bool
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknown2;
+    }
+    public abstract class StateEventTypes
+    {
+        [FlagsAttribute]
+        public enum BitMask01 : uint
+        {
+            usesForceNew = 1,
+            usesFirstPerson = 2,
+            usesAddToCenter = 4,
+            usesControlUnitOnly = 8,
+            usesFloat = 16,
+            usesOwnedByControl = 32,
+            usesSetImmediately = 64,
+            usesClearImmediately = 128,
+            usesNotControlUnit = 256,
+            usesOnWeapons = 512,
+            usesIgnoreCamera = 1024,
+            usesOnClear = 2048,
+            unknown = 4096,
+            reapplyOnAppearanceLoad = 8192,
+            usesShareDuration = 16384,
+            usesCheckConditionOnWeapons = 32768
+        }
     }
 }
