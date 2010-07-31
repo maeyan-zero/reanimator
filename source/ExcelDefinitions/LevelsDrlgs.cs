@@ -42,7 +42,7 @@ namespace Reanimator.ExcelDefinitions
         public float overrideChampionChance;
         public float championZoneRadius;
         public float markerSpawnChance;
-        public Int32 monsterRoomDensity;
+        public float monsterRoomDensity;
         public Int32 roomMonsterChance;
         public Int32 critterRoomDensity;
         public Int32 critterSpawnClass;//idx
