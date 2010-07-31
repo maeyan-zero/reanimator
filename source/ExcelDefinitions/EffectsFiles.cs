@@ -21,7 +21,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 undefined2;
         public Int32 undefined3;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public EffectsFiles.BitMask01 bitmask01;
+        public SkillEventTypes.BitMask01 bitmask01;
         public Int32 vertexFormat;
         public Int32 techniqueGroup;
         public Int32 sBranchDepthUS;
