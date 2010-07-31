@@ -182,11 +182,16 @@ namespace Reanimator
 
                 outputAttributes.Add(excelOutputAttribute);
 
+
                 if (excelOutputAttribute.IsStringOffset)
                 {
                     DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, typeof(String));
                     dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsStringOffset, true);
                     dataColumn.DefaultValue = String.Empty;
+                    if (excelOutputAttribute.SortId > 0)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortId, excelOutputAttribute.SortId);
+                    }
                 }
                 else if (excelOutputAttribute.IsIntOffset)
                 {
@@ -198,6 +203,11 @@ namespace Reanimator
                 else
                 {
                     DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
+
+                    if (excelOutputAttribute.SortId > 0)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortId, excelOutputAttribute.SortId);
+                    }
 
                     if (excelOutputAttribute.IsStringIndex)
                     {
@@ -241,6 +251,7 @@ namespace Reanimator
                 {
                     progress.SetCurrentItemText("Row " + row + " of " + array.Count);
                 }
+
                 int col = 1;
 
                 foreach (FieldInfo fieldInfo in type.GetFields())
@@ -250,8 +261,7 @@ namespace Reanimator
 
                     if (excelOutputAttribute == null)
                     {
-                        baseRow[col] = value;
-                        col++;
+                        baseRow[col++] = value;
                         continue;
                     }
 
@@ -259,42 +269,32 @@ namespace Reanimator
                     {
                         int valueInt = (int)value;
 
-                        baseRow[col] = dataFile.Strings[valueInt];
-                        col++;
+                        baseRow[col++] = dataFile.Strings[valueInt];
                     }
                     else if (excelOutputAttribute.IsStringIndex)
                     {
                         int valueInt = (int)value;
                         String stringValue = valueInt == -1 ? String.Empty : dataFile.SecondaryStrings[valueInt];
 
-                        baseRow[col] = value;
-                        col++;
-
-                        baseRow[col] = stringValue;
-                        col++;
+                        baseRow[col++] = value;
+                        baseRow[col++] = stringValue;
                     }
                     else if (excelOutputAttribute.IsIntOffset)
                     {
                         int valueInt = (int)value;
-#if DEBUG
-                        baseRow[col] = valueInt;
-#else
+
                         if (valueInt > 0)
                         {
-                            baseRow[col] = dataFile.ParseIntOffset(valueInt);
+                            baseRow[col++] = dataFile.ParseIntOffset(valueInt);
                         }
                         else
                         {
-                            baseRow[col] = valueInt;
+                            baseRow[col++] = 0;
                         }
-#endif
-
-                        col++;
                     }
                     else
                     {
-                        baseRow[col] = value;
-                        col++;
+                        baseRow[col++] = value;
                     }
                 }
 
@@ -303,33 +303,6 @@ namespace Reanimator
             }
 
             #endregion
-
-#if DEBUG
-        if (dataFile.HasDataBlock)
-            {
-                dataFile.ParseDataBlock(mainDataTable);
-
-                foreach (DataRow dr in mainDataTable.Rows)
-                {
-                    for (int c = 0; c < mainDataTable.Columns.Count; c++)
-                    {
-                        if (mainDataTable.Columns[c].ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsIntOffset))
-                        {
-                            int i = int.Parse((string)dr[c]);
-                            if (i != 0)
-                            {
-                                object v = dataFile.DataBlock[int.Parse((string)dr[c])];
-                                dr[c] = v;
-                                if (v == null)
-                                {
-                                    continue;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-#endif
         }
 
         private void LoadStringsTable(ProgressForm progress, StringsFile stringsFile)

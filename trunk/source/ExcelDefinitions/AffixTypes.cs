@@ -13,7 +13,6 @@ namespace Reanimator.ExcelDefinitions
 
         [ExcelFile.ExcelOutput(IsTableIndex = true, TableId = 0x3330 /*FONTCOLORS*/, Column = "Color")]
         public Int32 NameColor;
-
         public Int32 DownGrade;//idx
         public Int32 Required;//bool
     }

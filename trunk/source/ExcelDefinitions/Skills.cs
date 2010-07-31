@@ -178,9 +178,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 bonusSkillScript3;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 bonusSkillScript4;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 20)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 skillVar0;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 21)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 skillVar1;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 skillVar2;
@@ -202,69 +202,69 @@ namespace Reanimator.ExcelDefinitions
         public Int32 rangeMultScript;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 cost;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 3)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 coolDownPercentChange;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 7)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsTransferOnAttack;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 8)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsSkillEvent;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 9)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsSkillEventServer;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 10)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsSkillEventServerPostProcess;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 4)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsServerPostLaunch;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 5)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsServerPostLaunchPost;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 6)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsPostLaunch;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnStateSet;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 16)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsServerOnStateSet;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 17)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsServerOnStateSetPost;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 18)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnStateSetPost;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 19)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnPulseServerOnly;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnDeSelectServerOnly;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnPulse;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 11)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnLevelChange;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 12)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnSkillStart;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 13)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 statsScriptOnTarget;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 scriptFromScriptEvents;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 selectCost;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 startCondition;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 startConditionOntarget;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 14)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 stateDurationInTicks;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 15)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 stateDurationBonus;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 26)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 activatorCondition;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 27)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 activatorConditionOnTarget;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 eventChance;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 22)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 eventParam0;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 23)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 eventParam1;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 24)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 eventParam2;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 eventParam3;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 25)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 infoScript;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 stateRemovedServer;

@@ -104,19 +104,6 @@ namespace Reanimator.Forms
             tableData_DataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
             tableData_DataGridView.DataSource = _tableDataSet.XlsDataSet;
             tableData_DataGridView.DataMember = null;
-            // dataGridView.DataSource = _dataView;
-        }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                _dataView.Sort = tstb_sortCriteria.Text;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "toolStripButton1_Click");
-            }
         }
 
         private void LoadTable(ProgressForm progress, Object var)
@@ -192,14 +179,6 @@ namespace Reanimator.Forms
                         clb.Items.Add(type, false);
                     }
                 }
-                //else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsIntOffset) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsIntOffset])
-                //{
-                //    TextBox tb = new TextBox { Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill };
-                //    tb.DataBindings.Add("Text", _dataTable, dc.ColumnName);
-
-                //    // Transform the IntPtr stuff
-                //    //IntOffset[] io = GetIntOffset(_dataTable);
-                //}
                 else
                 {
                     TextBox tb = new TextBox { Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill};
@@ -304,8 +283,6 @@ namespace Reanimator.Forms
             indexArrays_DataGridView.ResumeLayout();
         }
 
-        
-
         void DoIntOffsetType(DataColumn dc)
         {
             Type type = dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IntOffsetType] as Type;
@@ -323,28 +300,6 @@ namespace Reanimator.Forms
                 nud.ValueChanged += nud_ValueChanged;
                 _specialControls.Add(dc.ColumnName, nud);
             }
-
-        }
-
-        
-
-        void DumpOffsetData(DataTable dt)
-        {
- 
-
-            SaveFileDialog sfd = new SaveFileDialog();
-            DialogResult result = sfd.ShowDialog();
-
-            //if (result == DialogResult.OK)
-            //{
-            //    using (FileStream fs = new FileStream(@sfd.FileName, FileMode.Create))
-            //    {
-            //        System.Text.ASCIIEncoding export = new System.Text.ASCIIEncoding();
-            //        byte[] buffer = export.GetBytes(Export.CSV(grid));
-            //        fs.Write(buffer, 0, buffer.Length);
-            //    }
-            //}
-
         }
 
         void nud_ValueChanged(object sender, EventArgs e)
@@ -481,11 +436,6 @@ namespace Reanimator.Forms
             MessageBox.Show(
                 "Attention: Currently a bug exists such that you must close this form and re-open it to see any changes for the regeneration.\nDoing so will ask if you wish to apply your changes to the cache data.\n\nAlso of note is the you can't edit any cells until you close the window - FIX ME.",
                 "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
-
-        private void dump_Click(object sender, EventArgs e)
-        {
-            DumpOffsetData(_dataTable);
         }
     }
 
