@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -12,7 +13,17 @@ namespace Reanimator.ExcelDefinitions
         public string name;
 
         public Int32 code;
-        public Int32 bitmask;/*0 bit beta account can play
-	1 bit non_subscriber account can play*/
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public Act.BitMask01 bitmask01;
+
+        public abstract class Act
+        {
+            [FlagsAttribute]
+            public enum BitMask01 : uint
+            {
+                betaAccountCanPlay = 1,
+                nonSubScriberAccountCanPlay = 2
+            }
+        }
     }
 }
