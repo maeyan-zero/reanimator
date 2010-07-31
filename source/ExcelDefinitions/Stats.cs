@@ -35,8 +35,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 accrueToTypes1;
         public Int32 accrueToTypes2;
         public Int32 unitType;
-        [ExcelOutput(IsBitmask = true)]
-        public Stats.Bitmask1 bitmask1;
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public Stats.BitMask01 bitmask01;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] undefined5;
         [ExcelOutput(IsBool = true)]
@@ -99,30 +99,30 @@ namespace Reanimator.ExcelDefinitions
     public abstract class Stats
     {
         [FlagsAttribute]
-        public enum Bitmask1 : uint
+        public enum BitMask01 : uint
         {
-            cur = 1,
-            modlist = 2,
-            vector = 4,
-            float_ = 8,
-            // = 16,
-            accrue = 32,
-            accrueOnceOnly = 64,
-            combat = 128,
-            directDmg = 256,
-            send = 512,
-            sendAll = 1024,
-            save = 2048,
-            // = 4096,
-            noMaxCurWhenDead = 8192,
-            stateMonitorsC = 16384,
-            stateMonitorsS = 32768,
-            transfer = 65536,
-            transferToMissile = 131072,
-            calcRider = 262144,
-            calc = 524288,
-            updateDatabase = 1048576,
-            dontTranferToNonWeaponMissile = 2097152
+            cur = 2,
+            modList = 4,
+            vector = 8,
+            Float = 16,
+            // = 32,
+            accrue = 64,
+            accrueOnceOnly = 128,
+            combat = 256,
+            directDmg = 512,
+            send = 1024,
+            sendAll = 2048,
+            save = 4096,
+            // = 8192,
+            noMaxCurWhenDead = 16384,
+            stateMonitorsC = 32768,
+            stateMonitorsS = 65536,
+            transfer = 131072,
+            transferToMissile = 262144,
+            calcRider = 524288,
+            calc = 1048576,
+            updateDatabase = 2097152,
+            dontTranferToNonWeaponMissile = 4194304
         }
     }
 }
