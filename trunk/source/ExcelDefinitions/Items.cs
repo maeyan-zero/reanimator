@@ -682,7 +682,7 @@ namespace Reanimator.ExcelDefinitions
         public float meleeRangeDesired;
         public float maxAutoMapRadius;
         public float fuse;
-        public float clientMinimumLifetime;
+        public Int32 clientMinimumLifetime;
         public float rangeBase;
         public float rangeDesiredMult;
         public float force;
@@ -721,8 +721,8 @@ namespace Reanimator.ExcelDefinitions
         public float meleeMin;
         public float meleeMax;
         public float walkAndRunDelta;
-        public float rangeMin;
-        public float rangeMax;
+        public Int32 rangeMin;
+        public Int32 rangeMax;
         public Int32 decoyMonster;//index
         public Int32 havokShape;
         public Int32 missileHitUnit;//index
