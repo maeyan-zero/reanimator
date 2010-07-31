@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -61,34 +62,49 @@ namespace Reanimator.ExcelDefinitions
         public Int32 assocState1;            // always -1
         public Int32 assocState2;            // always -1
         public Int32 assocState3;            // always -1
-        public Int32 bitMask1;/*bit execute attack script melee, 0
-	bit execute attack script ranged, 1
-	bit execute skill script on remove, 2
-	bit execute script on source, 3
-	bit pulse on client too, 4*/
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public States.BitMask01 bitmask01;
         public Int32 gameFlag;
-        public Int32 bitMask2;/*bit stacks, 1
-	bit stacks per source, 2
-	bit send to all, 3
-	bit send to self, 4
-	bit send stats, 5
-	bit client needs duration, 6
-	bit client only, 7
-	bit execute parent events,8
-	bit trigger notarget on set,9
-	bit save position on set, 10
-	bit save with unit, 11
-	bit flag for load, 12
-	but sharing mod state, 13
-	bit used in hellgate, 14
-	bit used in tugboat, 15
-	bit is bad, 16
-	bit pulse on source, 17
-	bit on change repaint item ui, 18
-	bit save in unitfile header, 19
-	bit update chat server on change, 20
-	bit trigger digest save, 22*/
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public States.BitMask02 bitmask02;
         Int32 unknown48;            // always 0
         Int32 unknown49;            // always 0
+    }
+    public abstract class States
+    {
+        [FlagsAttribute]
+        public enum BitMask01 : uint
+        {
+            executeAttackScriptMelee = 1,
+            executeAttackScriptRanged = 2,
+            executeSkillScriptOnRemove = 4,
+            executeScriptOnSource = 8,
+            pulseOnClientToo = 16
+        }
+        [FlagsAttribute]
+        public enum BitMask02 : uint
+        {
+            stacks = 2,
+            stacksPerSource = 4,
+            sendToAll = 8,
+            sendToSelf = 16,
+            sendStats = 32,
+            clientNeedsDuration = 64,
+            clientOnly = 128,
+            executeParentEvents = 256,
+            triggerNotargetOnSet = 512,
+            savePositionOnSet = 1024,
+            saveWithUnit = 2048,
+            flagForLoad = 4096,
+            sharingModState = 8192,
+            usedInHellgate = 16384,
+            usedInTugboat = 32768,
+            isBad = 65536,
+            pulseOnSource = 131072,
+            onChangeRepaintItemUi = 262144,
+            saveInUnitfileHeader = 524288,
+            updateChatServerOnChange = 1048576,
+            triggerDigestSave = 2097152
+        }
     }
 }
