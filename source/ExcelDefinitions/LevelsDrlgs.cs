@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,13 +9,14 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string drlgRuleSet;
         public Int32 drlgDisplayName;//stridx
         public Int32 undefined1;
-        [ExcelFile.ExcelOutputAttribute(IsStringIndex = true)]
+        [ExcelFile.ExcelOutputAttribute(IsStringIndex = true, SortId = 2)]//This indexes by unique style value
         public Int32 style;
         public Int32 theme0;
         public Int32 theme1;
@@ -38,6 +40,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 theme19;
         public Int32 weatherSet;//idx
         public Int32 environment;//idx
+        [ExcelOutput(IsBool = true)]
         public Int32 populateAllVisible;//bool
         public float overrideChampionChance;
         public float championZoneRadius;
@@ -53,8 +56,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 randomStateRateMin;
         public Int32 randomStateRateMax;
         public Int32 randomStateRateDuration;
+        [ExcelOutput(IsBool = true)]
         public Int32 havokFx;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 forceDrawAllRooms;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 isOutDoors;//bool
 
     }

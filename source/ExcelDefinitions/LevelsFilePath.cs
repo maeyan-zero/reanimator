@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -7,7 +8,10 @@ namespace Reanimator.ExcelDefinitions
     class LevelsFilePathRow
     {
         ExcelFile.TableHeader header;
-
+        /*code is supposed to be the index, however, it appears that it's in
+         reverse, ie the four digits are reverse what is displayed. entry #9 is first, but 
+         it's SF01, yet if they're reversed, 10FS. #34 is 2nd CR01, or 10RC.
+         On another note, for some reason only the first 3 digits of code are displayed*/
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
         public string code;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
