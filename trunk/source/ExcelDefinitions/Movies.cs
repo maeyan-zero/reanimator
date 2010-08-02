@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,6 +9,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
@@ -57,15 +59,25 @@ namespace Reanimator.ExcelDefinitions
         public Int32 regionList29;
         public Int32 regionList30;
         public Int32 regionList31;
+        [ExcelOutput(IsBool = true)]
         public Int32 loops;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 useInCredits;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 wideScreenOnly;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 canPause;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 noSkip;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 noSkipFirstTime;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 putInMainPakFile;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 forceAllowHighQuality;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 onlyWithCensoredSku;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 disAllowInCensoredSku;//bool
         public float creditMovieDisplayedInSeconds;
     }

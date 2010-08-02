@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class LevelsThemesRow
     {
         ExcelFile.TableHeader header;
-
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]

@@ -8,12 +8,13 @@ namespace Reanimator.ExcelDefinitions
     class LevelsRow
     {
         ExcelFile.TableHeader header;
-
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string levelName;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         byte[] reserved;
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 bitfieldIndex;
         public Int32 unknown1;

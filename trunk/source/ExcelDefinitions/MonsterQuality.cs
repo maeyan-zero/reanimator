@@ -9,9 +9,11 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string quality;
 
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 rarity;
         public Int32 nameColor;//idx
