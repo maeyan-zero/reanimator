@@ -4,6 +4,7 @@ using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
+    // TODO: what are SortId 2 & 4?
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class AffixesRow
     {
@@ -51,9 +52,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 allowTypes4;
         public Int32 allowTypes5;
         public Int32 allowTypes6;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 groupWeight;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 weight;
         public Int32 luckWeight;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
@@ -63,12 +64,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 state;
         public Int32 saveState;
         public Int32 buyPriceMulti;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 5)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceAdd;
         public Int32 sellPriceMulti;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 4)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceAdd;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 3)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 cond;
         public Int32 itemLevel;
         public Int32 prop1Cond;
@@ -77,17 +78,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 prop4Cond;
         public Int32 prop5Cond;
         public Int32 prop6Cond;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 6)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 property1;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 7)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 property2;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 8)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 property3;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 9)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 property4;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 10)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 property5;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 11)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 property6;
         public Int32 onlyOnItemsRequiringUnitType;
     }

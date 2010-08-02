@@ -8,6 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class ActRow
     {
         ExcelFile.TableHeader header;
+
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;

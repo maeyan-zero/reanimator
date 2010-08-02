@@ -67,58 +67,66 @@ namespace Reanimator.ExcelDefinitions
         public Int32 allowskilllevel2;//idx
         public Int32 allowskilllevel3;//idx
         public Int32 weaponIndex;//idx
-        public Int32 physicallyInContainer;//bool
-        public Int32 tradeLocation;//bool
-        public Int32 returnStuckItemsToStandardLoc;//bool
-        public Int32 standardLocation;//bool
-        public Int32 onPersonLocation;//bool
-        public Int32 allowedHotkeySourceLocation;//bool
-        public Int32 rewardLocation;//bool
-        public Int32 serverOnlyLocation;//bool
-        public Int32 cursorLocation;//bool
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
-        public Int32 playerPutRestricted;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
-        public Int32 playerTakeRestricted;//intptr
+        [ExcelOutput(IsBool = true)]
+        public Int32 physicallyInContainer;
+        [ExcelOutput(IsBool = true)]
+        public Int32 tradeLocation;
+        [ExcelOutput(IsBool = true)]
+        public Int32 returnStuckItemsToStandardLoc;
+        [ExcelOutput(IsBool = true)]
+        public Int32 standardLocation;
+        [ExcelOutput(IsBool = true)]
+        public Int32 onPersonLocation;
+        [ExcelOutput(IsBool = true)]
+        public Int32 allowedHotkeySourceLocation;
+        [ExcelOutput(IsBool = true)]
+        public Int32 rewardLocation;
+        [ExcelOutput(IsBool = true)]
+        public Int32 serverOnlyLocation;
+        [ExcelOutput(IsBool = true)]
+        public Int32 cursorLocation;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 playerPutRestricted;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 playerTakeRestricted;
         public Int32 invLocFallbackOnLoadError;//idx
-    }
 
-    
-    public abstract class Inventory
-    {
-        [FlagsAttribute]
-        public enum Bitmask01 : uint
+        public abstract class Inventory
         {
-            dynamic = 1,
-            onesize = 2,
-            grid = 4,
-            wardrobe = 8,
-            // 5?
-            autopickup = 32,
-            petSlot = 64,
-            dontSav = 128,
-            resurrectable = 256, 
-            linkDeaths = 512,
-            // 10
-            equipLocation = 2048,
-            useInRandomArmor = 4096,
-            offhandWardrobe = 8192,
-            store = 16384,
-            merchantWarehouse = 32768,
-            skillsCheckOnUltimateOwner = 65536,
-            skillsCheckOnControlUnit = 131072,
-            // 19
-            destroyPetOnLevelChange = 524288,
-            knownOnlyWhenStashOpen = 1048576,
-            stashLocation = 2097152,
-            removeFromInventoryOnOwnerDeath = 4194304,
-            cannotAcceptNoDropItems = 8388608,
-            cannotAcceptNoTradeItems = 16777216,
-            cannotDismantleItems = 33554432,
-            weaponconfigLocation = 67108864,
-            freeOnSizeChange = 134217728,
-            enableCacheLocation = 268435456,
-            disableCacheLocation = 536870912
+            [FlagsAttribute]
+            public enum Bitmask01 : uint
+            {
+                dynamic = 1,
+                onesize = 2,
+                grid = 4,
+                wardrobe = 8,
+                // 5?
+                autopickup = 32,
+                petSlot = 64,
+                dontSav = 128,
+                resurrectable = 256,
+                linkDeaths = 512,
+                // 10
+                equipLocation = 2048,
+                useInRandomArmor = 4096,
+                offhandWardrobe = 8192,
+                store = 16384,
+                merchantWarehouse = 32768,
+                skillsCheckOnUltimateOwner = 65536,
+                skillsCheckOnControlUnit = 131072,
+                // 19
+                destroyPetOnLevelChange = 524288,
+                knownOnlyWhenStashOpen = 1048576,
+                stashLocation = 2097152,
+                removeFromInventoryOnOwnerDeath = 4194304,
+                cannotAcceptNoDropItems = 8388608,
+                cannotAcceptNoTradeItems = 16777216,
+                cannotDismantleItems = 33554432,
+                weaponconfigLocation = 67108864,
+                freeOnSizeChange = 134217728,
+                enableCacheLocation = 268435456,
+                disableCacheLocation = 536870912
+            }
         }
     }
 }

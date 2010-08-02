@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,17 +9,23 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-
-        public Int32 playRightLeft;//bool
-        public Int32 playLegs;//bool
-        public Int32 onlyPlaySubGroups;//bool
-        public Int32 showInHammer;//bool
-        public Int32 copyFootSteps;//bool
+        [ExcelOutput(IsBool = true)]
+        public Int32 playRightLeft;
+        [ExcelOutput(IsBool = true)]
+        public Int32 playLegs;
+        [ExcelOutput(IsBool = true)]
+        public Int32 onlyPlaySubGroups;
+        [ExcelOutput(IsBool = true)]
+        public Int32 showInHammer;
+        [ExcelOutput(IsBool = true)]
+        public Int32 copyFootSteps;
         public Int32 defaultStance;//idx
         public Int32 defaultStanceInTown;//idx
-        public Int32 canStartSkillWithLeftweapon;//bool
+        [ExcelOutput(IsBool = true)]
+        public Int32 canStartSkillWithLeftweapon;
         public float secondsToHoldStanceInTown;
         public Int32 undefined;
         public Int32 fallback;//idx

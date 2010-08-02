@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,15 +9,20 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
-
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 damageType;
-        public Int32 codeSfxDurationInMS;//intptr
-        public Int32 codeSfxEffect;//intptr
-        public Int32 conditional;//intptr
-        public Int32 missileStats;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 codeSfxDurationInMS;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 codeSfxEffect;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 conditional;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 missileStats;
         public Int32 invulnerableState;//idx
         public Int32 attackersProhibitingState;//idx
         public Int32 defendersProhibitingState;//idx
@@ -27,15 +33,24 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fieldMissile;//idx
         public Int32 executeSkill;//idx
         public Int32 executeSkillOnTarget;//idx
-        public Int32 noRollIfParentDmgTypeSuccess;//bool
-        public Int32 noRollNeeded;//bool
-        public Int32 mustBeCrit;//bool
-        public Int32 monsterMustDie;//bool
-        public Int32 requiresNoDamage;//bool
-        public Int32 doesNotRequireDamage;//bool
-        public Int32 dontUseUltimateAttacker;//bool
-        public Int32 dontUseSfxDefense;//bool
-        public Int32 useOverrideStats;//bool
+        [ExcelOutput(IsBool = true)]
+        public Int32 noRollIfParentDmgTypeSuccess;
+        [ExcelOutput(IsBool = true)]
+        public Int32 noRollNeeded;
+        [ExcelOutput(IsBool = true)]
+        public Int32 mustBeCrit;
+        [ExcelOutput(IsBool = true)]
+        public Int32 monsterMustDie;
+        [ExcelOutput(IsBool = true)]
+        public Int32 requiresNoDamage;
+        [ExcelOutput(IsBool = true)]
+        public Int32 doesNotRequireDamage;
+        [ExcelOutput(IsBool = true)]
+        public Int32 dontUseUltimateAttacker;
+        [ExcelOutput(IsBool = true)]
+        public Int32 dontUseSfxDefense;
+        [ExcelOutput(IsBool = true)]
+        public Int32 useOverrideStats;
         public Int32 PlayerVsMonsterScalingIndex;
         public Int32 attackStat;//idx
         public Int32 attackLocalStat;//idx

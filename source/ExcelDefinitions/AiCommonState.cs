@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -7,23 +9,10 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
+        [ExcelOutput(SortId = 2)]
         public short code;
     }
-
-    // todo: FIXME
-    /*
-        public string GetStringFromId(int id)
-        {
-            foreach (AiCommonStateTable aiCommonStateTable in tables)
-            {
-                if (aiCommonStateTable.code == id)
-                {
-                    return aiCommonStateTable.stat;
-                }
-            }
-
-            return "NOT FOUND";
-        }*/
 }

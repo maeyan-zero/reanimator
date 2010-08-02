@@ -10,7 +10,7 @@ namespace Reanimator.ExcelDefinitions
         ExcelFile.TableHeader header;
 
         [ExcelOutput(IsStringOffset = true, SortId = 1)]
-        public Int32 name;//pchar: pointer to relevant text in the front of the file.
+        public Int32 name;
         Int32 buffer1;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 folder;//pchar
@@ -312,7 +312,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown41;
         public Int32 densityValueOverride;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 minionPackSize;//intptr: points to the last section of the file.
+        public Int32 minionPackSize;
         public float spinSpeed;
         public float maxTurnRate;
         public Int32 unitType;//index
@@ -341,8 +341,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 minSpawnLevel;
         public Int32 maxSpawnLevel;
         public Int32 maxLevel;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
-        public Int32 fixedLevel;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 fixedLevel;
         public Int32 hpMin;
         public Int32 hpMax;
         public Int32 powerMax;
@@ -381,25 +381,25 @@ namespace Reanimator.ExcelDefinitions
         public Int32 maximumImpactFrequency;
         public Int32 onlyCollideWithUnitType;//index
         public Int32 questDescription;//index
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 6)]
-        public Int32 pickUpCondition;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 pickUpCondition;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknownBytes04;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 scriptOnUse;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 17)]
-        public Int32 stackSize;//intptr
+        public Int32 scriptOnUse;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 stackSize;
         public Int32 maxPickUp;
         public Int32 baseCost;
         public Int32 realWorldCost;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 4)]
-        public Int32 buyPriceMult;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 5)]
-        public Int32 buyPriceAdd;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 2)]
-        public Int32 sellPriceMult;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 3)]
-        public Int32 sellPriceAdd;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 buyPriceMult;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 buyPriceAdd;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 sellPriceMult;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 sellPriceAdd;
         public Int32 inventoryWardrobe;//index
         public Int32 characterScreenWardrobe;      // always -1
         public Int32 characterScreenState;      // always -1
@@ -443,10 +443,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 dmgType;//index
         public Int32 weaponDamageScale;
         public Int32 dontUseWeaponDamage;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 7)]
-        public Int32 minBaseDmg;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 8)]
-        public Int32 maxBaseDmg;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 minBaseDmg;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 maxBaseDmg;
         public Int32 sfxAttackFocus;
         public Int32 sfxUknown1;
         public Int32 sfxUknown2;
@@ -530,27 +530,27 @@ namespace Reanimator.ExcelDefinitions
         public Int32 startingStrength;
         public Int32 startingStamina;
         public Int32 startingWillpower;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 9)]
-        public Int32 props1;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 10)]
-        public Int32 props2;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 11)]
-        public Int32 props3;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 12)]
-        public Int32 props4;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 16)]
-        public Int32 props5;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 props1;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 props2;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 props3;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 props4;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 props5;
         public Int32 props1AppliesToUnitype;//index
         public Int32 props2AppliesToUnitype;//index
         public Int32 props3AppliesToUnitype;//index
         public Int32 props4AppliesToUnitype;//index
         public Int32 props5AppliesToUnitype;//index
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 13)]
-        public Int32 perLevelProps1;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 14)]
-        public Int32 perLevelProps2;//intptr
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 15)]
-        public Int32 propsElite;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 perLevelProps1;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 perLevelProps2;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 propsElite;
         public Int32 affix1;//index
         public Int32 affix2;//index
         public Int32 affix3;//index
