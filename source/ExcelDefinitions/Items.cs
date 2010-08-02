@@ -9,7 +9,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true, SortId = 1)]
         public Int32 name;//pchar: pointer to relevant text in the front of the file.
         Int32 buffer1;
         [ExcelOutput(IsStringOffset = true)]
@@ -307,6 +307,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 paperdollColorset;//index
         public Int32 respawnChance;
         public Int32 respawnSpawnclass;//index
+        [ExcelOutput(SortId = 2)]
         public Int32 code1;
         public Int32 unknown41;
         public Int32 densityValueOverride;
@@ -961,7 +962,7 @@ namespace Reanimator.ExcelDefinitions
             informQuestsOnPickup = 134217728,
             examinable = 268435456,
             informQuestsToUse = 536870912,
-            consumeWhenUsed = 1073741824,
+            consumeWhenUsed = 1073741824,   
             immuneToCritical = 2147483648
         }
 

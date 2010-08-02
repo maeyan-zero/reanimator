@@ -42,14 +42,14 @@ namespace Reanimator
         public bool HasDataBlock { get { return _dataBlock != null ? true : false; } }
         public byte[] FinalBytes { get; set; }
 
-        byte[] _extra = new byte[] { 10, 0, 2, 6,
+        byte[] _extra = new byte[] {
+                        10, 0, 2, 6,
                         0, 100, 218, 0,
                         17, 9, 0, 0,
                         0, 25, 55, 64,
                         4, 1, 0, 0,
                         64, 230, 13, 16,
-                        81, 0, 0, 0,
-                        0 };
+                        81, 0, 0, 0, 0 };
 
         // func defs etc
         public ExcelFile(String stringId, Type type)
