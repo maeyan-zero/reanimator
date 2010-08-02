@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -9,9 +10,10 @@ namespace Reanimator.ExcelDefinitions
         ExcelFile.TableHeader header;
 
         Int32 undefined;
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
         [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 nameString;
@@ -54,6 +56,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 rewardTreasureClass;//idx
         public Int32 rewardXP;
         public Int32 rewardSkill;//idx
-        public Int32 rewardScript;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 rewardScript;
     }
 }

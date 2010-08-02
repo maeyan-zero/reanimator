@@ -9,7 +9,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true, SortId = 1)]
         public Int32 affix;
         public Int32 unknown02;
         [ExcelOutput(IsBool = true)]
@@ -28,6 +28,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 nameColor;
         public Int32 gridColor;
         public Int32 dom;
+        [ExcelOutput(SortId = 3)]
         public Int32 code;
         [ExcelOutput(IsTableIndex = true, TableId = 0x7530, Column = "AffixType")]
         public Int32 affixType1;
