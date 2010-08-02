@@ -15,7 +15,7 @@ namespace Reanimator
 {
     public class TableDataSet : IDisposable
     {
-        private const String TableVersion = "1.1.4";
+        private const String TableVersion = "1.1.5";
         private const String RelationsVersion = "1.0.0";
         private const String TableVersionKey = "TableVersion";
         private const String RelationsVersionKey = "RelationsVersion";

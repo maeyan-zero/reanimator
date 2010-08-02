@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,11 +9,14 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public Int32 interaction;//index
-        public Int32 stringTitle;//stridx
-        public Int32 stringToolTip;//stridx
+        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        public Int32 stringTitle;
+        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        public Int32 stringToolTip;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string frameIcon;
         public Int32 menuButton;

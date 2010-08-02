@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,6 +9,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string Color;
         public byte blue;
@@ -15,6 +17,5 @@ namespace Reanimator.ExcelDefinitions
         public byte red;
         public byte alpha;
         public Int32 fontColor;//index
-
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,9 +9,9 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-
         public Int32 maleUnit0;
         public Int32 maleUnit1;
         public Int32 maleUnit2;
@@ -19,7 +20,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 maleUnit5;
         public Int32 maleUnit6;
         public Int32 maleUnit7;
-        public Int32 maleEnabled;//bool
+        [ExcelOutput(IsBool = true)]
+        public Int32 maleEnabled;
         public Int32 femaleUnit0;
         public Int32 femaleUnit1;
         public Int32 femaleUnit2;
@@ -28,10 +30,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32 femaleUnit5;
         public Int32 femaleUnit6;
         public Int32 femaleUnit7;
-        public Int32 femaleEnabled;//bool
+        [ExcelOutput(IsBool = true)]
+        public Int32 femaleEnabled;
         public Int32 unitVersionToGetSkillRespec;
-        public Int32 stringOneLetterCode;//stridx
-        public Int32 Default;//bool
+        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        public Int32 stringOneLetterCode;
+        [ExcelOutput(IsBool = true)]
+        public Int32 Default;
         public Int32 scrapItemClassSpecial;//idx
     }
 }

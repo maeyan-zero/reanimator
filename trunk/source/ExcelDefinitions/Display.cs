@@ -9,25 +9,36 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string key;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string exampleDescription;
-
-        public Int32 rider;//bool
+        [ExcelOutput(IsBool = true)]
+        public Int32 rider;
         public Int32 rule1;
         public Int32 rule2;
         public Int32 rule3;
-        public Int32 inclUnitInCond1;//bool
-        public Int32 inclUnitInCond2;//bool
-        public Int32 inclUnitInCond3;//bool
-        public Int32 displayCondition1;//intptr
-        public Int32 displayCondition2;//intptr
-        public Int32 displayCondition3;//intptr
-        public Int32 newLine;//bool
-        public Int32 formatString;//stridx
-        public Int32 formatShort;//stridx
-        public Int32 decripShort;//stridx
+        [ExcelOutput(IsBool = true)]
+        public Int32 inclUnitInCond1;
+        [ExcelOutput(IsBool = true)]
+        public Int32 inclUnitInCond2;
+        [ExcelOutput(IsBool = true)]
+        public Int32 inclUnitInCond3;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 displayCondition1;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 displayCondition2;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 displayCondition3;
+        [ExcelOutput(IsBool = true)]
+        public Int32 newLine;
+        [ExcelOutput(IsStringId = true, Table = "Strings_DisplayFormat")]
+        public Int32 formatString;
+        [ExcelOutput(IsStringId = true, Table = "Strings_DisplayFormat")]
+        public Int32 formatShort;
+        [ExcelOutput(IsStringId = true, Table = "Strings_DisplayFormat")]
+        public Int32 decripShort;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string iconFrame;
         public Int32 ctrlStat;//idx
@@ -38,15 +49,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 ctrl3;
         public Int32 ctrl4;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 val1;//intptr
+        public Int32 val1;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 val2;//intptr
+        public Int32 val2;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 val3;//intptr
+        public Int32 val3;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 val4;//intptr
+        public Int32 val4;
         public Int32 toolTipArea;
+        [ExcelOutput(IsStringId = true, Table = "Strings_DisplayFormat")]
         public Int32 toolTipText;//stridx
-        public Int32 color;//intptr
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 color;
     }
 }

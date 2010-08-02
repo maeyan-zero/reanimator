@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,15 +9,17 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string systemName;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string localPath;
-
-        public Int32 bold;//bool
-        public Int32 italic;//bool
+        [ExcelOutput(IsBool = true)]
+        public Int32 bold;
+        [ExcelOutput(IsBool = true)]
+        public Int32 italic;
         public Int32 fontSize;
         public Int32 sizeInTexture;
         public Int32 undefined1;

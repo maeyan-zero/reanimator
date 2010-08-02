@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -7,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class AiBehaviourRow
     {
         ExcelFile.TableHeader header;
-
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 60)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
@@ -35,17 +36,25 @@ namespace Reanimator.ExcelDefinitions
         public float param3Default;
         public float param4Default;
         public float param5Default;
-
         public Int32 functionOld;
-        public Int32 usesSkill1;//bool
-        public Int32 usesSkill2;//bool
-        public Int32 usesState;//bool
-        public Int32 usesStat;//bool
-        public Int32 usesSound;//bool
-        public Int32 usesMonster;//bool
-        public Int32 usesString;//bool
-        public Int32 canBranch;//bool
-        public Int32 forceExitBranch;//bool
+        [ExcelOutput(IsBool = true)]
+        public Int32 usesSkill1;
+        [ExcelOutput(IsBool = true)]
+        public Int32 usesSkill2;
+        [ExcelOutput(IsBool = true)]
+        public Int32 usesState;
+        [ExcelOutput(IsBool = true)]
+        public Int32 usesStat;
+        [ExcelOutput(IsBool = true)]
+        public Int32 usesSound;
+        [ExcelOutput(IsBool = true)]
+        public Int32 usesMonster;
+        [ExcelOutput(IsBool = true)]
+        public Int32 usesString;
+        [ExcelOutput(IsBool = true)]
+        public Int32 canBranch;
+        [ExcelOutput(IsBool = true)]
+        public Int32 forceExitBranch;
         public Int32 timerIndex;
         public Int32 usesOnce;
         public Int32 usesRun;

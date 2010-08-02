@@ -11,7 +11,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 skip;//bool
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
         public string criteria;
-
         public Int32 rangeLow;
         public Int32 rangeHigh;
         public float numMin;
