@@ -12,22 +12,22 @@ namespace Reanimator.ExcelDefinitions
 
         [ExcelOutput(IsStringOffset = true, SortId = 1)]
         public Int32 affix;
-        public Int32 unknown02;
+        Int32 unknown02;
         [ExcelOutput(IsBool = true)]
         public Int32 alwaysApply;
         [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
-        public Int32 qualityNameString;
+        Int32 qualityNameString;
         [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
         public Int32 setNameString;
         [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
         public Int32 magicNameString;
         [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
-        public Int32 replaceNameString;
+        Int32 replaceNameString;
         [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
-        public Int32 flavorText;
+        Int32 flavorText;
         public Int32 unknown03;
-        public Int32 nameColor;
-        public Int32 gridColor;
+        Int32 nameColor;
+        Int32 gridColor;
         public Int32 dom;
         [ExcelOutput(SortId = 3)]
         public Int32 code;
@@ -56,13 +56,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32 groupWeight;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 weight;
-        public Int32 luckWeight;
+        Int32 luckWeight;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         Int32[] unknown04;
         public Int32 colorSet;
         public Int32 colorSetPriority;
         public Int32 state;
-        public Int32 saveState;
+        Int32 saveState;
         public Int32 buyPriceMulti;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceAdd;
@@ -72,12 +72,12 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 cond;
         public Int32 itemLevel;
-        public Int32 prop1Cond;
-        public Int32 prop2Cond;
-        public Int32 prop3Cond;
-        public Int32 prop4Cond;
-        public Int32 prop5Cond;
-        public Int32 prop6Cond;
+        Int32 prop1Cond;
+        Int32 prop2Cond;
+        Int32 prop3Cond;
+        Int32 prop4Cond;
+        Int32 prop5Cond;
+        Int32 prop6Cond;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 property1;
         [ExcelOutput(IsIntOffset = true)]

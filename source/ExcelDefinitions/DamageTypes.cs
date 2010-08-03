@@ -29,6 +29,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 invulnerableSfxState;
         public Int32 thornsState;
         public Int32 vulnerabilityInPVPTugboat;
-        public Int32 vulnerabilityInPVPHellgate;
+        Int32 vulnerabilityInPVPHellgate;
     }
 }

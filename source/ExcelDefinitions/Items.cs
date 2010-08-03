@@ -65,34 +65,34 @@ namespace Reanimator.ExcelDefinitions
         public Int32 lightmap;//pchar
         Int32 buffer18;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource1;//pchar
+        Int32 overrideSource1;//pchar
         Int32 buffer19;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest1;//pchar
+        Int32 overrideDest1;//pchar
         Int32 buffer20;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource2;//pchar
+        Int32 overrideSource2;//pchar
         Int32 buffer21;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest2;//pchar
+        Int32 overrideDest2;//pchar
         Int32 buffer22;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource3;//pchar
+        Int32 overrideSource3;//pchar
         Int32 buffer23;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest3;//pchar
+        Int32 overrideDest3;//pchar
         Int32 buffer24;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource4;//pchar
+        Int32 overrideSource4;//pchar
         Int32 buffer25;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest4;//pchar
+        Int32 overrideDest4;//pchar
         Int32 buffer26;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource5;//pchar
+        Int32 overrideSource5;//pchar
         Int32 buffer27;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest5;//pchar
+        Int32 overrideDest5;//pchar
         Int32 buffer28;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 particleFolder;//pchar
@@ -102,10 +102,10 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] buffer30;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 triggerString1;//pchar
+        Int32 triggerString1;//pchar
         Int32 buffer31;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 triggerString2;//pchar
+        Int32 triggerString2;//pchar
         Int32 buffer32;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 charSelectFont;//pchar
@@ -295,10 +295,10 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
         public Int32 additionalDescription;
         [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
-        public Int32 additionalRaceDescription;
+        Int32 additionalRaceDescription;
         [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
         public Int32 analyze;
-        public Int32 recipeList;//index
+        Int32 recipeList;//index
         public Int32 recipeSingleUse;//index
         public Int32 paperdollBackgroundLevel;//index
         public Int32 paperdollWeapon1;
@@ -306,17 +306,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 paperdollSkill;//index
         public Int32 paperdollColorset;//index
         public Int32 respawnChance;
-        public Int32 respawnSpawnclass;//index
+        Int32 respawnSpawnclass;//index
         [ExcelOutput(SortId = 2)]
         public Int32 code1;
-        public Int32 unknown41;
+        Int32 unknown41;
         public Int32 densityValueOverride;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 minionPackSize;
         public float spinSpeed;
         public float maxTurnRate;
         public Int32 unitType;//index
-        public Int32 unitTypeForLeveling;//index
+        Int32 unitTypeForLeveling;//index
         public Int32 preferedByUnitType;//index
         public Int32 family;//index
         public Int32 censorClassNoHumans;//index
@@ -400,16 +400,16 @@ namespace Reanimator.ExcelDefinitions
         public Int32 sellPriceMult;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceAdd;
-        public Int32 inventoryWardrobe;//index
-        public Int32 characterScreenWardrobe;      // always -1
-        public Int32 characterScreenState;      // always -1
-        public Int32 wardrobeBody;      // always -1
-        public Int32 wardrobeFallback;      // always -1
-        public Int32 wardrobeUnkown1;      // always -1
-        public Int32 wardrobeMip;      // always 0
-        public Int32 wardrobeAppearanceGroup;      // always -1
-        public Int32 wardrobeAppearanceGroup1st;      // always -1
-        public Int32 startingStance;      // always -1
+        public Int32 inventoryWardrobe;
+        public Int32 characterScreenWardrobe;
+        public Int32 characterScreenState;
+        Int32 wardrobeBody;
+        Int32 wardrobeFallback;
+        Int32 wardrobeUnkown1;
+        Int32 wardrobeMip;
+        public Int32 wardrobeAppearanceGroup;
+        public Int32 wardrobeAppearanceGroup1st;
+        public Int32 startingStance;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknownBytes06;
         public Int32 containerUnitType1;
@@ -540,11 +540,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 props4;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 props5;
-        public Int32 props1AppliesToUnitype;//index
-        public Int32 props2AppliesToUnitype;//index
-        public Int32 props3AppliesToUnitype;//index
-        public Int32 props4AppliesToUnitype;//index
-        public Int32 props5AppliesToUnitype;//index
+        Int32 props1AppliesToUnitype;//index
+        Int32 props2AppliesToUnitype;//index
+        Int32 props3AppliesToUnitype;//index
+        Int32 props4AppliesToUnitype;//index
+        Int32 props5AppliesToUnitype;//index
         [ExcelOutput(IsIntOffset = true)]
         public Int32 perLevelProps1;
         [ExcelOutput(IsIntOffset = true)]
@@ -573,21 +573,21 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fieldMissile;//index
         public Int32 skillHitUnit;//index
         public Int32 skillHitBackground;//index
-        public Int32 skillMissed1;
-        public Int32 skillMissed2;
-        public Int32 skillMissed3;
-        public Int32 skillMissed4;
-        public Int32 skillMissed5;
-        public Int32 skillMissed6;
-        public Int32 skillMissed7;
-        public Int32 skillMissed8;
-        public Int32 skillMissed9;
-        public Int32 skillMissed10;
-        public Int32 skillMissed11;
-        public Int32 skillMissed12;
-        public Int32 skillMissed13;
-        public Int32 skillMissed14;
-        public Int32 skillMissed15;
+        Int32 skillMissed1;
+        Int32 skillMissed2;
+        Int32 skillMissed3;
+        Int32 skillMissed4;
+        Int32 skillMissed5;
+        Int32 skillMissed6;
+        Int32 skillMissed7;
+        Int32 skillMissed8;
+        Int32 skillMissed9;
+        Int32 skillMissed10;
+        Int32 skillMissed11;
+        Int32 skillMissed12;
+        Int32 skillMissed13;
+        Int32 skillMissed14;
+        Int32 skillMissed15;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknownBytes20;
         public Int32 skillOnFuse;//index
@@ -769,12 +769,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 levelThemeRequired;//index
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknownBytes25;
-        public Int32 undefined1;
-        public Int32 undefined2;
-        public Int32 undefined3;
+        Int32 undefined1;
+        Int32 undefined2;
+        Int32 undefined3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 88)]
         byte[] unknownBytes26;
-        public Int32 undefined4;
+        Int32 undefined4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 48)]
         byte[] unknownBytes27;
     }

@@ -20,33 +20,33 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 codeSfxEffect;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 conditional;
+        Int32 conditional;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 missileStats;
         public Int32 invulnerableState;//idx
-        public Int32 attackersProhibitingState;//idx
-        public Int32 defendersProhibitingState;//idx
-        public Int32 attackerRequiresState;//idx
-        public Int32 defenderRequiresState;//idx
+        Int32 attackersProhibitingState;//idx
+        Int32 defendersProhibitingState;//idx
+        Int32 attackerRequiresState;//idx
+        Int32 defenderRequiresState;//idx
         public Int32 sfxState;//idx
         public Int32 missileToAttach;//idx
         public Int32 fieldMissile;//idx
         public Int32 executeSkill;//idx
-        public Int32 executeSkillOnTarget;//idx
+        Int32 executeSkillOnTarget;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 noRollIfParentDmgTypeSuccess;
         [ExcelOutput(IsBool = true)]
-        public Int32 noRollNeeded;
+        Int32 noRollNeeded;
         [ExcelOutput(IsBool = true)]
-        public Int32 mustBeCrit;
+        Int32 mustBeCrit;
         [ExcelOutput(IsBool = true)]
-        public Int32 monsterMustDie;
+        Int32 monsterMustDie;
         [ExcelOutput(IsBool = true)]
-        public Int32 requiresNoDamage;
+        Int32 requiresNoDamage;
         [ExcelOutput(IsBool = true)]
         public Int32 doesNotRequireDamage;
         [ExcelOutput(IsBool = true)]
-        public Int32 dontUseUltimateAttacker;
+        Int32 dontUseUltimateAttacker;
         [ExcelOutput(IsBool = true)]
         public Int32 dontUseSfxDefense;
         [ExcelOutput(IsBool = true)]

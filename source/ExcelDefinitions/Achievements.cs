@@ -22,15 +22,15 @@ namespace Reanimator.ExcelDefinitions
         [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 detailsString;
         [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
-        public Int32 rewardTypeString;
+        Int32 rewardTypeString;
         public Int32 revealCondition;
         public Int32 revealValue;
-        public Int32 revealParentAchievement;//idx
+        Int32 revealParentAchievement;
         public Int32 playerClass;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined2;
         public Int32 type;
-        public Int32 notActiveTillParentComplete;//idx
+        Int32 notActiveTillParentComplete;
         public Int32 completeNumber;
         public Int32 param1;
         public Int32 unitType0;
@@ -53,10 +53,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 level;//idx
         public Int32 stat;//idx
         public Int32 rewardAchievementPoints;
-        public Int32 rewardTreasureClass;//idx
+        Int32 rewardTreasureClass;//idx
         public Int32 rewardXP;
-        public Int32 rewardSkill;//idx
+        Int32 rewardSkill;//idx
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 rewardScript;
+        Int32 rewardScript;
     }
 }

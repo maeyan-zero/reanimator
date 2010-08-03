@@ -17,16 +17,16 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 displayString;
         public Int32 unitTypeStartStanding1;
-        public Int32 levelDefStartStanding1;
+        Int32 levelDefStartStanding1;
         public Int32 startStanding1;
         public Int32 unitTypeStartStanding2;
         public Int32 levelDefStartStanding2;
         public Int32 startStanding2;
-        public Int32 unitTypeStartStanding3;
-        public Int32 levelDefStartStanding3;
-        public Int32 startStanding3;
-        public Int32 unitTypeStartStanding4;
-        public Int32 levelDefStartStanding4;
-        public Int32 startStanding4;
+        Int32 unitTypeStartStanding3;
+        Int32 levelDefStartStanding3;
+        Int32 startStanding3;
+        Int32 unitTypeStartStanding4;
+        Int32 levelDefStartStanding4;
+        Int32 startStanding4;
     }
 }
