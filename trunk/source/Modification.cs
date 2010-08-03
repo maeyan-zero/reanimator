@@ -369,23 +369,25 @@ namespace Reanimator
 
                                     buffer.Read(byteBuffer, 0, (int)buffer.Length);
 
-                                    if (file.index_id_patch >= 0)
-                                    {
-                                        if (file.id.Contains("xls.uni.cooked"))
-                                        {
-                                            _index[Index.LatestPatchLocalized].AppendToDat(byteBuffer, true,
-                                                                                          file.index_id_patch, true);
-                                        }
-                                        else
-                                        {
-                                            _index[Index.LatestPatch].AppendToDat(byteBuffer, true,
-                                                                                 file.index_id_patch, true);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        _index[pack.list_id].AppendToDat(byteBuffer, true, file.index_id, true);
-                                    }
+                                // TODO: fix me
+ 
+                                    //if (file.index_id_patch >= 0)
+                                    //{
+                                    //    if (file.id.Contains("xls.uni.cooked"))
+                                    //    {
+                                    //        _index[Index.LatestPatchLocalized].AppendToDat(byteBuffer, true,
+                                    //                                                      file.index_id_patch, true);
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        _index[Index.LatestPatch].AppendToDat(byteBuffer, true,
+                                    //                                             file.index_id_patch, true);
+                                    //    }
+                                    //}
+                                    //else
+                                    //{
+                                    //    _index[pack.list_id].AppendToDat(byteBuffer, true, file.index_id, true);
+                                    //}
 
                                     buffer.Dispose();
                                 }

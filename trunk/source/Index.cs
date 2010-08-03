@@ -268,25 +268,17 @@ namespace Reanimator
         {
             _indexFile = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
             _buffer = FileTools.StreamToByteArray(_indexFile);
-            //_indexFile.Close(); this can't be closed here as it calling close on an FileStream calls Dispose on it as well. It's used in other places in the class.
             Crypt.Decrypt(_buffer);
-
-#if DEBUG
-            FileTools.WriteFile(FileName + ".idx", _buffer);
-#endif
-
             _structCount = BitConverter.ToInt32(_buffer, 4);
             _fileCount = BitConverter.ToInt32(_buffer, 8);
             _stringCount = BitConverter.ToInt32(_buffer, 16);
             _characterCount = BitConverter.ToInt32(_buffer, 20);
-
             _stringDataOffset = 24;
             _stringLengthOffset = _stringDataOffset + _characterCount + sizeof(UInt32);
             _fileDataOffset = _stringLengthOffset + (StringStructLength * _stringCount) + sizeof(UInt32);
 
             InitializeStringTable();
             InitializeFileTable();
-
             CheckForModifications();
         }
 
@@ -417,7 +409,7 @@ namespace Reanimator
             return destBuffer;
         }
 
-        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, int fileIndex, bool writeIndex)
+        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, FileIndex file, bool writeIndex)
         {
             // New Entry
             //FileIndex newIndex = index;
@@ -452,9 +444,9 @@ namespace Reanimator
                 len = (int)destinationLength;
             }
 
-            FileTable[fileIndex].CompressedSize = len;
-            FileTable[fileIndex].DataOffset = (int)DataFile.Position;
-            FileTable[fileIndex].UncompressedSize = uncompressedBuffer.Length;
+            file.CompressedSize = len;
+            file.DataOffset = (int)DataFile.Position;
+            file.UncompressedSize = uncompressedBuffer.Length;
             //int i = 1;
             DataFile.Write(compressedBuffer, 0, len);
             DataFile.Close();

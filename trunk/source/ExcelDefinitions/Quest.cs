@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -13,14 +14,15 @@ namespace Reanimator.ExcelDefinitions
 
         public Int32 code;
         public Int32 style;
+        [ExcelOutput(IsStringId = true, Table = "Strings_Quest")]
         public Int32 nameStringKey;//idx
         public Int32 subscriberOnly;//bool
-        public Int32 multiplayerOnly;//bool
+        Int32 multiplayerOnly;//bool
         public Int32 startingQuestCheat;
-        public Int32 questCheatCompleted;
+        Int32 questCheatCompleted;
         public Int32 closeOnComplete;
         public Int32 repeatable;
-        public Int32 hideQuestLog;
+        Int32 hideQuestLog;
         public Int32 repeatRateInSeconds;
         public Int32 skipActivateFanfare;
         public Int32 skipCompleteFanfare;
@@ -45,12 +47,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 castRewarder;//idx
         public Int32 levelRewarderNpc;//idx
         public Int32 giverItem;//idx
-        public Int32 giverItemMonster;//idx
-        public Int32 giverItemLevel;//idx
+        Int32 giverItemMonster;//idx
+        Int32 giverItemLevel;//idx
         public float giverItemDropRate;
         public Int32 level;
         public Int32 levelNightmare;
-        public Int32 undefined1;
+        Int32 undefined1;
         public float experienceMultiplier;
         public float moneyMultiplier;
         public Int32 statPoints;
@@ -70,7 +72,7 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         public Int32[] undefined4;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-        public string CompleteFunction;
+        string CompleteFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         public Int32[] undefined5;
         public Int32 warpToOpenOnActivate;//idx
@@ -83,9 +85,9 @@ namespace Reanimator.ExcelDefinitions
         public string versionFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         public Int32[] undefined6;
-        public Int32 removeOnJoinGame;
+        Int32 removeOnJoinGame;
         public Int32 beatGameOnComplete;
-        public Int32 undefined7;
+        Int32 undefined7;
         public Int32 weight;
         public float radius;
         public float height;
@@ -95,37 +97,45 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         public Int32[] levelDestinations;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-        public string layoutAdventure;
+        string layoutAdventure;
         public Int32 objectAdventure;//idx
         public Int32 treasureRoomClass;//idx
         public Int32 template;//idx
+        //[ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 descriptionDialog;//idx
+        //[ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 inCompleteDialog;//idx
+        //[ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 completeDialog;//idx
+        //[ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 rewardDialog;//idx
-        public Int32 unavailableDialog;//idx
+        Int32 unavailableDialog;//idx
+        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 acceptButtonText;//stridx
-        public float timeLimit;
+        float timeLimit;
         public Int32 objectiveMonster;//idx
         public Int32 objectiveUnitType;//idx
         public Int32 objectiveObject;//idx
-        public Int32 disableSpawning;//bool
+        Int32 disableSpawning;//bool
         public Int32 objectiveCount;
         public float collectDropRate;
         public Int32 collectItem;//idx
         public float explorePercent;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        public string spawnNodeLabel;
+        string spawnNodeLabel;
         public Int32 spawnCount;
+        [ExcelOutput(IsStringId = true, Table = "Strings_Names")]
         public Int32 nameOverrideStringKey;//stridx
+        [ExcelOutput(IsStringId = true, Table = "Strings_Names")]
         public Int32 nameInLogOverrideStringKey;//stridx
         public Int32 logOverrideState;//idx
+        [ExcelOutput(IsStringId = true, Table = "Strings_Quest")]
         public Int32 logOverrideString;//stridx
         public Int32 subLevelTypeTruthOld;
         public Int32 subLevelTypeTruthNew;
         public Int32 questStateAdvanceToAtSubLevelTrut;//idx
         public Int32 monsterBoss;//idx
         public Int32 globalthemeRequired;//idx
-        public Int32 undefined8;
+        Int32 undefined8;
     }
 }

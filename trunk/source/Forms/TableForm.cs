@@ -430,9 +430,41 @@ namespace Reanimator
             {
                 index.AppendDirectorySuffix(row.Index);
             }
+        }
 
-            
+        private void replaceSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReplaceFiles(GetSelectedFiles());
+        }
 
+        private void replaceCheckedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReplaceFiles(GetCheckedFiles());
+        }
+
+        void ReplaceFiles(Index.FileIndex[] files)
+        {
+            foreach (Index.FileIndex file in files)
+            {
+                OpenFileDialog fileDialog = new OpenFileDialog();
+                fileDialog.ShowDialog();
+
+                if (fileDialog.FileName == "") continue;
+
+                using (FileStream buffer = new FileStream(fileDialog.FileName, FileMode.Open))
+                {
+                    try
+                    {
+                        byte[] byteBuffer = new byte[buffer.Length];
+                        buffer.Read(byteBuffer, 0, (int)buffer.Length);
+                        index.AppendToDat(byteBuffer, true, file, true);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Caught a problem replacing a file.");
+                    }
+                }
+            }
         }
     }
 }
