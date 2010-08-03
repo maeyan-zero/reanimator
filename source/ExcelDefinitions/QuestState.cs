@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,16 +9,24 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
 
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 quest;//idx
+        [ExcelOutput(IsBool = true)]
         public Int32 activateWithQuest;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 restorePoint;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 showLogOnActivate;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 showLogOnComplete;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 autoTrackOnComplete;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 dontShowQuickMessageOnUpdate;//bool
         public Int32 logUnitType0;//idx
         public Int32 logString0;//stridx;

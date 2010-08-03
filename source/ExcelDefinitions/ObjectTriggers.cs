@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,6 +9,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public Int32 clearTrigger;//idx
@@ -23,8 +25,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 allowsInvalidDestination;
         public Int32 stateBlocking;//idx
         public Int32 stateOpen;//idx
+        [ExcelOutput(IsBool = true)]
         public Int32 deadCanTrigger;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 ghostCanTrigger;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 hardCoreDeadCanTrigger;//bool;
         public Int32 undefined2;
     }

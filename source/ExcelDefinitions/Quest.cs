@@ -9,14 +9,18 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
 
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 style;
         [ExcelOutput(IsStringId = true, Table = "Strings_Quest")]
         public Int32 nameStringKey;//idx
+        [ExcelOutput(IsBool = true)]
         public Int32 subscriberOnly;//bool
+        [ExcelOutput(IsBool = true)]
         Int32 multiplayerOnly;//bool
         public Int32 startingQuestCheat;
         Int32 questCheatCompleted;
@@ -41,11 +45,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32[] levelsPreLoadedWith;
         public Int32 startingItemsTreasureClass;//idx
         public Int32 removeStartingItemsOnComplete;
+        [ExcelOutput(SortId = 3)]
         public Int32 offerReward;//idx
         public Int32 castGiver;//idx
         public Int32 levelStoryQuestStartsIn;//idx
         public Int32 castRewarder;//idx
         public Int32 levelRewarderNpc;//idx
+        [ExcelOutput(SortId = 4)]
         public Int32 giverItem;//idx
         Int32 giverItemMonster;//idx
         Int32 giverItemLevel;//idx
@@ -116,6 +122,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 objectiveMonster;//idx
         public Int32 objectiveUnitType;//idx
         public Int32 objectiveObject;//idx
+        [ExcelOutput(IsBool = true)]
         Int32 disableSpawning;//bool
         public Int32 objectiveCount;
         public float collectDropRate;

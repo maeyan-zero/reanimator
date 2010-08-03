@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -11,12 +12,18 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
 
+        [ExcelOutput(IsBool = true)]
         public Int32 suffix;//bool
         public Int32 level;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
         public string code;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public Int32[] types;
+        public Int32 types1;
+        public Int32 types2;
+        public Int32 types3;
+        public Int32 types4;
+        public Int32 types5;
+        public Int32 types6;
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 cond;//intptr
     }
 }
