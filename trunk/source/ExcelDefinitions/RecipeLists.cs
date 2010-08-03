@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,12 +9,23 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string recipeList;
 
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public Int32[] recipes;
+        public Int32 recipes1;
+        public Int32 recipes2;
+        public Int32 recipes3;
+        public Int32 recipes4;
+        public Int32 recipes5;
+        public Int32 recipes6;
+        public Int32 recipes7;
+        public Int32 recipes8;
+        public Int32 recipes9;
+        public Int32 recipes10;
+        [ExcelOutput(IsBool = true)]
         public Int32 randomlySelectable;//bool
         public Int32 randomSelectWeight;
 

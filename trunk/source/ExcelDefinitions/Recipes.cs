@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -8,16 +9,23 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string recipe;
 
         public Int32 String;
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
-        public Int32 cubeRecipe;
-        public Int32 alwaysKnown;
-        public Int32 dontRequireExactIngredients;
-        public Int32 allowInRandomSingleUse;
-        public Int32 removeOnLoad;
+        [ExcelOutput(IsBool = true)]
+        public Int32 cubeRecipe;//is actually a single bit, but changed to bool for display purposes
+        [ExcelOutput(IsBool = true)]
+        public Int32 alwaysKnown;//as above
+        [ExcelOutput(IsBool = true)]
+        public Int32 dontRequireExactIngredients;//as above
+        [ExcelOutput(IsBool = true)]
+        public Int32 allowInRandomSingleUse;//as above
+        [ExcelOutput(IsBool = true)]
+        public Int32 removeOnLoad;//as above
         public Int32 weight;
         public Int32 experienceEarned;
         public Int32 goldReward;
@@ -57,8 +65,19 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
         Int32[] treasureResult;
         public Int32 mustPlaceInInvSlot;
-        public Int32 canBeLearned;//can be learned bit 0, can spawn bit 1
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public Recipes.BitMask01 bitmask;
         public Int32 spawnLevelMin;
         public Int32 spawnLevelMax;
+    }
+    public abstract class Recipes
+    {
+
+        [FlagsAttribute]
+        public enum BitMask01 : uint
+        {
+            canBeLearned = 1,
+            canSpawn = 2
+        }
     }
 }

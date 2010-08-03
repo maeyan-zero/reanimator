@@ -9,9 +9,11 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String skill;
 
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
         Int32 buffer;
         [ExcelOutput(IsBitmask = true)]
@@ -145,6 +147,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 levelsOfRequiredSkills2;
         public Int32 levelsOfRequiredSkills3;
         public Int32 levelsOfRequiredSkills4;
+        [ExcelOutput(IsBool = true)]
         public Int32 bOnlyRequireOne;//bool
         public Int32 bUsesCraftingPoints;
         public Int32 weaponLocation1;
