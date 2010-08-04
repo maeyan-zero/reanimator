@@ -31,17 +31,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 dom;
         [ExcelOutput(SortId = 3)]
         public Int32 code;
-        [ExcelOutput(TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType1;
-        [ExcelOutput(TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType2;
-        [ExcelOutput(TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType3;
-        [ExcelOutput(TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType4;
-        [ExcelOutput(TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType5;
-        [ExcelOutput(TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType6;
         public Int32 suffix;
         [ExcelOutput(IsStringIndex = true)]
@@ -51,17 +51,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 spawn;
         public Int32 minLevel;
         public Int32 maxLevel;
-        [ExcelOutput(TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes1;
-        [ExcelOutput(TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes2;
-        [ExcelOutput(TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes3;
-        [ExcelOutput(TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes4;
-        [ExcelOutput(TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes5;
-        [ExcelOutput(TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes6;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 groupWeight;

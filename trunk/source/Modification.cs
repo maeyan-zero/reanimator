@@ -117,7 +117,10 @@ namespace Reanimator
         {
             try
             {
-                string tableName = _tableDataSet.TableFiles.GetStringIdFromFileName(file.id);
+                int p = file.id.IndexOf(ExcelFile.FileExtention) - 1;
+                string fileName = file.id.Remove(p);
+                string tableName = _tableDataSet.TableFiles.GetStringIdFromFileName(fileName);
+
                 DataTable table = _tableDataSet.XlsDataSet.Tables[tableName];
                 ExcelFile excel = _tableDataSet.TableFiles.GetExcelTableFromId(tableName);
 
@@ -133,27 +136,35 @@ namespace Reanimator
                         //determine the range/recursion if any
                         if (entity.id.Equals("*"))
                         {
-                            if (entity.value.Contains("-"))
+                            if (entity.value != null)
                             {
-                                int idx = entity.value.IndexOf('-');
-                                int len = entity.value.Length - idx - 1;
-                                min = Convert.ToInt32(entity.value.Substring(0, idx));
-                                max = Convert.ToInt32(entity.value.Substring(idx + 1, len));
+                                if (entity.value.Contains("-"))
+                                {
+                                    int idx = entity.value.IndexOf('-');
+                                    int len = entity.value.Length - idx - 1;
+                                    min = Convert.ToInt32(entity.value.Substring(0, idx));
+                                    max = Convert.ToInt32(entity.value.Substring(idx + 1, len));
+                                }
+                                else
+                                {
+                                    min = 0;
+                                    max = table.Rows.Count - 1; // TODO fix this up. notice that same use is used twice
+                                }
                             }
                             else
                             {
                                 min = 0;
-                                max = table.Rows.Count;
+                                max = table.Rows.Count - 1;
                             }
                         }
                         else
                         {
                             min = Convert.ToInt32(entity.value);
-                            max = min + 1;
+                            max = min;
                         }
 
                         //main loop, alters the dataset
-                        for (int i = min; i < max; i++)
+                        for (int i = min; i <= max; i++)
                         {
                             object obj = null;
                             string c = attribute.id;
@@ -167,15 +178,15 @@ namespace Reanimator
                                     break;
                                 case "multiply":
                                     if (type.Equals(typeof(int)))
-                                        obj = (int)dataRow[c] * (int)obj;
+                                        obj = (int)dataRow[c] * Convert.ToInt32(attribute.divide.data);
                                     else if (type.Equals(typeof(float)))
-                                        obj = (float)dataRow[c] * (float)obj;
+                                        obj = (float)dataRow[c] * Convert.ToSingle(attribute.divide.data);
                                     break;
                                 case "divide":
                                     if (type.Equals(typeof(int)))
-                                        obj = (int)dataRow[c] / (int)obj;
+                                        obj = (int)dataRow[c] / Convert.ToInt32(attribute.divide.data);
                                     else if (type.Equals(typeof(float)))
-                                        obj = (float)dataRow[c] / (float)obj;
+                                        obj = (float)dataRow[c] / Convert.ToSingle(attribute.divide.data);
                                     break;
                                 case "bitwise":
                                     foreach (Bitwise bitwise in attribute.bitwise)
@@ -183,11 +194,10 @@ namespace Reanimator
                                         uint bit = (uint)Enum.Parse(type, bitwise.id, true);
                                         uint mask = (uint)dataRow[c];
                                         bool flick = bitwise.switch_data;
-
-                                        if (flick != ((mask & bit) == 0 ))
-                                        {
-                                            dataRow[c] = (mask ^= bit);
-                                        }
+                                        if (flick != ((mask & bit) == 0))
+                                            obj = (mask ^= bit);
+                                        else
+                                            obj = mask;
                                     }
                                     break;
                                 case "recursive":
@@ -208,7 +218,8 @@ namespace Reanimator
                                     }
                                     break;
                             }
-                            table.Rows[i][attribute.id] = obj;
+
+                            dataRow[c] = obj;
                         }
                         //end main loop
                     }
