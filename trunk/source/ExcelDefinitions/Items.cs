@@ -777,267 +777,267 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 48)]
         byte[] unknownBytes27;
-    }
 
-    public abstract class Items
-    {
-        [FlagsAttribute]
-        public enum BitMask01 : uint
+        public abstract class Items
         {
-            spawn = 1,
-            spawnAtMerchant = 2,
-            forceIgnoresScale = 4,
-            impactOnFuse = 8,
-            impactOnFree = 16,
-            impactOnHitUnit = 32,
-            impactOnHitBackground = 64,
-            havokIgnoresDirection = 128,
-            damagesOnFuse = 256,
-            hitsUnits = 512,
-            killOnUnitHit = 1024,
-            hitsBackground = 2048,
-            noRayCollision = 4096,
-            killOnBackground = 8192,
-            stickOnHit = 16384,
-            stickOnInit = 32768,
-            sync = 65536,
-            clientOnly = 131072,
-            serverOnly = 262144,
-            useSourceVel = 524288,
-            mustHit = 1048576,
-            prioritizeTarget = 2097152,
-            trailEffectsUseProjectile = 4194304,
-            impactEffectsUseProjectile = 8388608,
-            destroyOtherMissiles = 16777216,
-            dontHitSkillTarget = 33554432,
-            flipFaceDirection = 67108864,
-            dontUseRangeForSkill = 134217728,
-            pullsTarget = 268435456,
-            damagesOnHitUnit = 536870912,
-            pulsesStatsOnHitUnit = 1073741824,
-            damagesOnHitBackground = 2147483648
-        }
+            [FlagsAttribute]
+            public enum BitMask01 : uint
+            {
+                spawn = 1,
+                spawnAtMerchant = 2,
+                forceIgnoresScale = 4,
+                impactOnFuse = 8,
+                impactOnFree = 16,
+                impactOnHitUnit = 32,
+                impactOnHitBackground = 64,
+                havokIgnoresDirection = 128,
+                damagesOnFuse = 256,
+                hitsUnits = 512,
+                killOnUnitHit = 1024,
+                hitsBackground = 2048,
+                noRayCollision = 4096,
+                killOnBackground = 8192,
+                stickOnHit = 16384,
+                stickOnInit = 32768,
+                sync = 65536,
+                clientOnly = 131072,
+                serverOnly = 262144,
+                useSourceVel = 524288,
+                mustHit = 1048576,
+                prioritizeTarget = 2097152,
+                trailEffectsUseProjectile = 4194304,
+                impactEffectsUseProjectile = 8388608,
+                destroyOtherMissiles = 16777216,
+                dontHitSkillTarget = 33554432,
+                flipFaceDirection = 67108864,
+                dontUseRangeForSkill = 134217728,
+                pullsTarget = 268435456,
+                damagesOnHitUnit = 536870912,
+                pulsesStatsOnHitUnit = 1073741824,
+                damagesOnHitBackground = 2147483648
+            }
 
-        [FlagsAttribute]
-        public enum BitMask02 : uint
-        {
-            alwaysCheckForCollisions = 1,
-            setShapePercentages = 2,
-            useSourceAppearance = 4,
-            dontTransferRidersFromOwner = 8,
-            dontTransferDamagesOnClient = 16,
-            missileIgnorePostLaunch = 32,
-            attacksLocationOnHitUnit = 64,
-            dontDeactivateWithRoom = 128,
-            angerOthersOnDamaged = 256,
-            angerOthersOnDeath = 512,
-            alwaysFaceSkillTarget = 1024,
-            setRopeEndWithNoTarget = 2048,
-            forceDrawDirectionToMoveDirection = 4096,
-            questNameColor = 8192,
-            doNotSortWeapons = 16384,
-            ignoresEquipClassReqs = 32768,
-            doNotUseSorceForToHit = 65536,
-            angleWhilePathing = 131072,
-            dontAddWardrobeLayer = 262144,
-            dontUseContainerAppearance = 524288,
-            subscriberOnly = 1048576,
-            computeLevelRequirement = 2097152,
-            dontFattenCollision = 4194304,
-            automapSave = 8388608,
-            requiresCanOperateToBeKnown = 16777216,
-            forceFreeOnRoomReset = 33554432,
-            canReflect = 67108864,
-            selectTargetIgnoresAimPos = 134217728,
-            canMeleeAboveHeight = 268435456,
-            getFlavorTextFromQuest = 536870912,
-            unIdentifiedNameFromBaseRow = 1073741824,
-            noRandomProperName = 2147483648
-        }
+            [FlagsAttribute]
+            public enum BitMask02 : uint
+            {
+                alwaysCheckForCollisions = 1,
+                setShapePercentages = 2,
+                useSourceAppearance = 4,
+                dontTransferRidersFromOwner = 8,
+                dontTransferDamagesOnClient = 16,
+                missileIgnorePostLaunch = 32,
+                attacksLocationOnHitUnit = 64,
+                dontDeactivateWithRoom = 128,
+                angerOthersOnDamaged = 256,
+                angerOthersOnDeath = 512,
+                alwaysFaceSkillTarget = 1024,
+                setRopeEndWithNoTarget = 2048,
+                forceDrawDirectionToMoveDirection = 4096,
+                questNameColor = 8192,
+                doNotSortWeapons = 16384,
+                ignoresEquipClassReqs = 32768,
+                doNotUseSorceForToHit = 65536,
+                angleWhilePathing = 131072,
+                dontAddWardrobeLayer = 262144,
+                dontUseContainerAppearance = 524288,
+                subscriberOnly = 1048576,
+                computeLevelRequirement = 2097152,
+                dontFattenCollision = 4194304,
+                automapSave = 8388608,
+                requiresCanOperateToBeKnown = 16777216,
+                forceFreeOnRoomReset = 33554432,
+                canReflect = 67108864,
+                selectTargetIgnoresAimPos = 134217728,
+                canMeleeAboveHeight = 268435456,
+                getFlavorTextFromQuest = 536870912,
+                unIdentifiedNameFromBaseRow = 1073741824,
+                noRandomProperName = 2147483648
+            }
 
-        [FlagsAttribute]
-        public enum BitMask03 : uint
-        {
-            noNameModifications = 1,
-            preLoad = 2,
-            ignoreInDat = 4,
-            ignoreSavedStates = 8,
-            drawUsingCutUpWardrobe = 16,
-            isGood = 32,
-            isNpc = 64,
-            canNotBeMoved = 128,
-            noLevel = 256,
-            usesSkills = 512,
-            autoPickup = 1024,
-            trigger = 2048,
-            dieOnClientTrigger = 4096,
-            neverDestroyDead = 8192,
-            collideWhenDead = 16384,
-            startDead = 32768,
-            givesLoot = 65536,
-            dontTriggerByProximity = 131072,
-            triggerOnEnterRoom = 262144,
-            destructible = 524288,
-            inAir = 1048576,
-            wallWalk = 2097152,
-            startInTownIdle = 4194304,
-            onDieDestroy = 8388608,
-            onDieEndDestroy = 16777216,
-            onDieHideModel = 33554432,
-            selectableDeadOrDying = 67108864,
-            interactive = 134217728,
-            hideDialogHead = 268435456, // 28
-            collideBad = 536870912,
-            collideGood = 1073741824,
-            modesIgnoreAI = 2147483648
-        }
+            [FlagsAttribute]
+            public enum BitMask03 : uint
+            {
+                noNameModifications = 1,
+                preLoad = 2,
+                ignoreInDat = 4,
+                ignoreSavedStates = 8,
+                drawUsingCutUpWardrobe = 16,
+                isGood = 32,
+                isNpc = 64,
+                canNotBeMoved = 128,
+                noLevel = 256,
+                usesSkills = 512,
+                autoPickup = 1024,
+                trigger = 2048,
+                dieOnClientTrigger = 4096,
+                neverDestroyDead = 8192,
+                collideWhenDead = 16384,
+                startDead = 32768,
+                givesLoot = 65536,
+                dontTriggerByProximity = 131072,
+                triggerOnEnterRoom = 262144,
+                destructible = 524288,
+                inAir = 1048576,
+                wallWalk = 2097152,
+                startInTownIdle = 4194304,
+                onDieDestroy = 8388608,
+                onDieEndDestroy = 16777216,
+                onDieHideModel = 33554432,
+                selectableDeadOrDying = 67108864,
+                interactive = 134217728,
+                hideDialogHead = 268435456, // 28
+                collideBad = 536870912,
+                collideGood = 1073741824,
+                modesIgnoreAI = 2147483648
+            }
 
-        [FlagsAttribute]
-        public enum BitMask04 : uint
-        {
-            dontPath = 1,
-            snapToPathnodeOnCreate = 2,
-            unTargetable = 4,
-            FaceDuringInteraction = 8,
-            noSync = 16,
-            canNotTurn = 32,
-            turnNeckInsteadOfBody = 64,
-            merchant = 128,
-            merchantSharedInventory = 256,
-            trader = 512,
-            tradesman = 1024,
-            gambler = 2048,
-            mapVendor = 4096,
-            godQuestMessanger = 8192,
-            trainer = 16384,
-            healer = 32768,
-            graveKeeper = 65536,
-            taskGiver = 131072,
-            canUpgradeItems = 262144,
-            canAugmentItems = 524288,
-            autoIdentifiesInventory = 1048576,
-            npcDungeonWarp = 2097152,
-            PvPSignerUpper = 4194304,
-            foreman = 8388608,
-            transporter = 16777216,
-            showsPortrait = 33554432,
-            petGetsStatPointsPerLevel = 67108864,
-            ignoresSkillPowerCost = 134217728,
-            checkRadiusWhenPathing = 268435456,
-            checkHeightWhenPathing = 536870912,
-            questImportantInfo = 1073741824,
-            ignoresToHit = 2147483648
-        }
+            [FlagsAttribute]
+            public enum BitMask04 : uint
+            {
+                dontPath = 1,
+                snapToPathnodeOnCreate = 2,
+                unTargetable = 4,
+                FaceDuringInteraction = 8,
+                noSync = 16,
+                canNotTurn = 32,
+                turnNeckInsteadOfBody = 64,
+                merchant = 128,
+                merchantSharedInventory = 256,
+                trader = 512,
+                tradesman = 1024,
+                gambler = 2048,
+                mapVendor = 4096,
+                godQuestMessanger = 8192,
+                trainer = 16384,
+                healer = 32768,
+                graveKeeper = 65536,
+                taskGiver = 131072,
+                canUpgradeItems = 262144,
+                canAugmentItems = 524288,
+                autoIdentifiesInventory = 1048576,
+                npcDungeonWarp = 2097152,
+                PvPSignerUpper = 4194304,
+                foreman = 8388608,
+                transporter = 16777216,
+                showsPortrait = 33554432,
+                petGetsStatPointsPerLevel = 67108864,
+                ignoresSkillPowerCost = 134217728,
+                checkRadiusWhenPathing = 268435456,
+                checkHeightWhenPathing = 536870912,
+                questImportantInfo = 1073741824,
+                ignoresToHit = 2147483648
+            }
 
-        [FlagsAttribute]
-        public enum BitMask05 : uint
-        {
-            askQuestsForOperate = 1,
-            askFactionForOperate = 2,
-            askPvPCensorshipForOperate = 4,
-            structural = 8,
-            askQuestsForKnown = 16,
-            askQuestsForVisible = 32,
-            informQuestsOnInit = 64,
-            informQuestsOfLootDrop = 128,
-            informQuestsOnDeath = 256,
-            noTrade = 512,
-            flagRoomAsNoSpawn = 1024,
-            monitorPlayerApproach = 2048,
-            monitorApproachClearLOS = 4096,
-            canFizzle = 8192,
-            inheritsDirection = 16384,
-            canNotBeDismantled = 32768,
-            canNotBeUpgraded = 65536,
-            canNotBeAugmented = 131072,
-            canNotBeDeModded = 262144,
-            ignoreSellWithInventoryConfirm = 524288,
-            wardrobePerUnit = 1048576,
-            wardrobeSharesModelDef = 2097152,
-            noWeaponModel = 4194304,
-            //23
-            noDrop = 16777216,
-            noDropExceptForDuplicates = 33554432,
-            askQuestsForPickup = 67108864,
-            informQuestsOnPickup = 134217728,
-            examinable = 268435456,
-            informQuestsToUse = 536870912,
-            consumeWhenUsed = 1073741824,   
-            immuneToCritical = 2147483648
-        }
+            [FlagsAttribute]
+            public enum BitMask05 : uint
+            {
+                askQuestsForOperate = 1,
+                askFactionForOperate = 2,
+                askPvPCensorshipForOperate = 4,
+                structural = 8,
+                askQuestsForKnown = 16,
+                askQuestsForVisible = 32,
+                informQuestsOnInit = 64,
+                informQuestsOfLootDrop = 128,
+                informQuestsOnDeath = 256,
+                noTrade = 512,
+                flagRoomAsNoSpawn = 1024,
+                monitorPlayerApproach = 2048,
+                monitorApproachClearLOS = 4096,
+                canFizzle = 8192,
+                inheritsDirection = 16384,
+                canNotBeDismantled = 32768,
+                canNotBeUpgraded = 65536,
+                canNotBeAugmented = 131072,
+                canNotBeDeModded = 262144,
+                ignoreSellWithInventoryConfirm = 524288,
+                wardrobePerUnit = 1048576,
+                wardrobeSharesModelDef = 2097152,
+                noWeaponModel = 4194304,
+                _undefined1 = 8388608,
+                noDrop = 16777216,
+                noDropExceptForDuplicates = 33554432,
+                askQuestsForPickup = 67108864,
+                informQuestsOnPickup = 134217728,
+                examinable = 268435456,
+                informQuestsToUse = 536870912,
+                consumeWhenUsed = 1073741824,
+                immuneToCritical = 2147483648
+            }
 
-        [FlagsAttribute]
-        public enum BitMask06 : uint
-        {
-            NoRandomAffixes = 1,
-            canBeChampion = 2,
-            noQualityDowngrade = 4,
-            noDrawOnInit = 8,
-            mustFaceMeleeTarget = 16,
-            dontDestroyIfVelocityIsZero = 32,
-            ignoreInteractDistance = 64,
-            operateRequiresGoodQuestStatus = 128,
-            reverseArriveDirection = 256,
-            faceAfterWarp = 512,
-            neverAStartLocation = 1024,
-            alwaysShowLabel = 2048,
-            //12
-            undefined13 = 8192, //no predefined name
-            //14
-            isNonweaponMissile = 32768,
-            cullByScreensize = 65536,
-            linkWarpDestByLevelType = 131072,
-            isBoss = 262144,
-            //19
-            takeResponsibilityOnKill = 1048576,
-            alwaysKnownForSounds = 2097152,
-            ignoreTargetOnRepeatDmg = 4194304,
-            bindToLevelArea = 8388608,
-            dontCollideWithDestructibles = 16777216,
-            blocksEverything = 33554432,
-            everyoneCanTarget = 67108864,
-            missilePlotArc = 134217728,
-            petDiesOnWarp = 268435456,
-            missileIsGore = 536870912,
-            canAttackFriends = 1073741824,
-            ignoreItemRequirements = 2147483648
-        }
+            [FlagsAttribute]
+            public enum BitMask06 : uint
+            {
+                NoRandomAffixes = 1,
+                canBeChampion = 2,
+                noQualityDowngrade = 4,
+                noDrawOnInit = 8,
+                mustFaceMeleeTarget = 16,
+                dontDestroyIfVelocityIsZero = 32,
+                ignoreInteractDistance = 64,
+                operateRequiresGoodQuestStatus = 128,
+                reverseArriveDirection = 256,
+                faceAfterWarp = 512,
+                neverAStartLocation = 1024,
+                alwaysShowLabel = 2048,
+                _undefined1 = 4096,//12
+                _undefined2 = 8192, //no predefined name
+                _undefined3 = 16384,//14
+                isNonweaponMissile = 32768,
+                cullByScreensize = 65536,
+                linkWarpDestByLevelType = 131072,
+                isBoss = 262144,
+                _undefined4 = 524288,//19
+                takeResponsibilityOnKill = 1048576,
+                alwaysKnownForSounds = 2097152,
+                ignoreTargetOnRepeatDmg = 4194304,
+                bindToLevelArea = 8388608,
+                dontCollideWithDestructibles = 16777216,
+                blocksEverything = 33554432,
+                everyoneCanTarget = 67108864,
+                missilePlotArc = 134217728,
+                petDiesOnWarp = 268435456,
+                missileIsGore = 536870912,
+                canAttackFriends = 1073741824,
+                ignoreItemRequirements = 2147483648
+            }
 
-        [FlagsAttribute]
-        public enum BitMask07 : uint
-        {
-            lowLodInTown = 1,
-            treasureClassBeforeRoom = 2,
-            taskGiverNoStartingIcon = 4,
-            assignGUID = 8,
-            merchantDoesNotRefresh = 16,
-            dontDepopulate = 32,
-            dontShrinkBones = 64,
-            //7
-            hasQuestInfo = 256,
-            multiplayerOnly = 512,
-            noSpin = 1024,
-            npcGuildMaster = 2048,
-            autoIdentifyAffixs = 4096,
-            npcRespeccer = 8192,
-            allowObjectStepping = 16384,
-            alwaysUseFallback = 32768,
-            canNotSpawnRandomLevelTreasure = 65536,
-            xferMissileStats = 131072,
-            specificToDifficulty = 262144,
-            isFieldMissile = 524288,
-            ignoreFuseMsStat = 1048576,
-            usesPetLevel = 2097152
-        }
+            [FlagsAttribute]
+            public enum BitMask07 : uint
+            {
+                lowLodInTown = 1,
+                treasureClassBeforeRoom = 2,
+                taskGiverNoStartingIcon = 4,
+                assignGUID = 8,
+                merchantDoesNotRefresh = 16,
+                dontDepopulate = 32,
+                dontShrinkBones = 64,
+                _undefined1 = 128,//7
+                hasQuestInfo = 256,
+                multiplayerOnly = 512,
+                noSpin = 1024,
+                npcGuildMaster = 2048,
+                autoIdentifyAffixs = 4096,
+                npcRespeccer = 8192,
+                allowObjectStepping = 16384,
+                alwaysUseFallback = 32768,
+                canNotSpawnRandomLevelTreasure = 65536,
+                xferMissileStats = 131072,
+                specificToDifficulty = 262144,
+                isFieldMissile = 524288,
+                ignoreFuseMsStat = 1048576,
+                usesPetLevel = 2097152
+            }
 
-        [FlagsAttribute]
-        public enum BitMask08 : uint
-        {
-            bounceOnUnitHit = 1,//these are probably only for missiles.t.c
-            bounceOnBackGroundHit = 2,
-            newDirectionOnBounce = 4,
-            canNotRicochet = 8,
-            reTargetOnBounce = 16
+            [FlagsAttribute]
+            public enum BitMask08 : uint
+            {
+                bounceOnUnitHit = 1,//these are probably only for missiles.t.c
+                bounceOnBackGroundHit = 2,
+                newDirectionOnBounce = 4,
+                canNotRicochet = 8,
+                reTargetOnBounce = 16
+            }
         }
     }
 }

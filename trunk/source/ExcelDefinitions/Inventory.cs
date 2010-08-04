@@ -100,13 +100,13 @@ namespace Reanimator.ExcelDefinitions
                 onesize = 2,
                 grid = 4,
                 wardrobe = 8,
-                // 5?
+                _undefined1 = 16, //5
                 autopickup = 32,
                 petSlot = 64,
                 dontSav = 128,
                 resurrectable = 256,
                 linkDeaths = 512,
-                // 10
+                _undefined2 = 1024,// 10
                 equipLocation = 2048,
                 useInRandomArmor = 4096,
                 offhandWardrobe = 8192,
@@ -114,7 +114,7 @@ namespace Reanimator.ExcelDefinitions
                 merchantWarehouse = 32768,
                 skillsCheckOnUltimateOwner = 65536,
                 skillsCheckOnControlUnit = 131072,
-                // 19
+                _undefined3 = 262144,// 19
                 destroyPetOnLevelChange = 524288,
                 knownOnlyWhenStashOpen = 1048576,
                 stashLocation = 2097152,

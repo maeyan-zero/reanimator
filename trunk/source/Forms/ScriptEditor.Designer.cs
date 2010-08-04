@@ -48,7 +48,7 @@
             this.groupBox1.Controls.Add(this.textBox);
             this.groupBox1.Location = new System.Drawing.Point(237, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(387, 429);
+            this.groupBox1.Size = new System.Drawing.Size(535, 538);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Editor";
@@ -67,7 +67,7 @@
             this.textBox.Multiline = true;
             this.textBox.Name = "textBox";
             this.textBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox.Size = new System.Drawing.Size(374, 403);
+            this.textBox.Size = new System.Drawing.Size(522, 512);
             this.textBox.TabIndex = 0;
             // 
             // groupBox2
@@ -81,7 +81,7 @@
             this.groupBox2.Controls.Add(this.availableCombo);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(219, 429);
+            this.groupBox2.Size = new System.Drawing.Size(219, 538);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Scripts";
@@ -89,7 +89,7 @@
             // newButton
             // 
             this.newButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.newButton.Location = new System.Drawing.Point(7, 375);
+            this.newButton.Location = new System.Drawing.Point(7, 484);
             this.newButton.Name = "newButton";
             this.newButton.Size = new System.Drawing.Size(96, 23);
             this.newButton.TabIndex = 8;
@@ -100,7 +100,7 @@
             // applyCheckedButton
             // 
             this.applyCheckedButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.applyCheckedButton.Location = new System.Drawing.Point(117, 400);
+            this.applyCheckedButton.Location = new System.Drawing.Point(117, 509);
             this.applyCheckedButton.Name = "applyCheckedButton";
             this.applyCheckedButton.Size = new System.Drawing.Size(96, 23);
             this.applyCheckedButton.TabIndex = 6;
@@ -111,7 +111,7 @@
             // applyCurrentButton
             // 
             this.applyCurrentButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.applyCurrentButton.Location = new System.Drawing.Point(117, 375);
+            this.applyCurrentButton.Location = new System.Drawing.Point(117, 484);
             this.applyCurrentButton.Name = "applyCurrentButton";
             this.applyCurrentButton.Size = new System.Drawing.Size(96, 23);
             this.applyCurrentButton.TabIndex = 5;
@@ -122,7 +122,7 @@
             // saveButton
             // 
             this.saveButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.saveButton.Location = new System.Drawing.Point(6, 400);
+            this.saveButton.Location = new System.Drawing.Point(6, 509);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(96, 23);
             this.saveButton.TabIndex = 7;
@@ -137,7 +137,7 @@
             this.availableCombo.FormattingEnabled = true;
             this.availableCombo.Location = new System.Drawing.Point(7, 20);
             this.availableCombo.Name = "availableCombo";
-            this.availableCombo.Size = new System.Drawing.Size(206, 349);
+            this.availableCombo.Size = new System.Drawing.Size(206, 454);
             this.availableCombo.TabIndex = 0;
             this.availableCombo.SelectedIndexChanged += new System.EventHandler(this.availableCombo_SelectedIndexChanged);
             // 
@@ -145,7 +145,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(636, 453);
+            this.ClientSize = new System.Drawing.Size(784, 562);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "ScriptEditor";

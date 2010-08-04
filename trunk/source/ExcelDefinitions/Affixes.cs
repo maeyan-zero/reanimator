@@ -47,7 +47,9 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsStringIndex = true)]
         public Int32 group;
         public Int32 style;
+        [ExcelOutput(IsBool = true)]
         public Int32 useWhenAugmenting;
+        [ExcelOutput(IsBool = true)]
         public Int32 spawn;
         public Int32 minLevel;
         public Int32 maxLevel;
@@ -101,6 +103,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 property5;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 property6;
+        //[ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
         public Int32 onlyOnItemsRequiringUnitType;
     }
 }
