@@ -97,7 +97,7 @@ namespace Reanimator
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog
                 {
-                    Filter = "HGL Files (*.idx, *.hg1, *.cooked)|*.idx;*.hg1;*.cooked|All Files (*.*)|*.*"
+                    Filter = "HGL Files (*.idx, *.cooked)|*.idx;*.cooked|All Files (*.*)|*.*"
                 };
 
                 if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
@@ -108,7 +108,7 @@ namespace Reanimator
                 }
                 else if (openFileDialog.FileName.EndsWith("hg1"))
                 {
-                    OpenFileHg1(openFileDialog.FileName);
+                    //OpenFileHg1(openFileDialog.FileName);
                 }
                 else if (openFileDialog.FileName.EndsWith("xls.uni.cooked"))
                 {
@@ -120,7 +120,7 @@ namespace Reanimator
                 }
                 else if (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml"))
                 {
-                    OpenFileMod(openFileDialog.FileName);
+                    //OpenFileMod(openFileDialog.FileName);
                 }
             }
             catch (Exception ex)
@@ -978,6 +978,20 @@ namespace Reanimator
             MessageBox.Show("Reanimator by the Revival Team (c) 2009-2010" + Environment.NewLine
                 + "Credits: Maeyan, Alex2069, Kite & Malachor" + Environment.NewLine
                 + "For more info visit us at: http://www.hellgateaus.net", "Credits", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void scriptEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ScriptEditor scriptEditor = new ScriptEditor(_tableDataSet);
+                scriptEditor.MdiParent = this;
+                scriptEditor.Show();
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "scriptEditorToolStripMenuItem_Click");
+            }
         }
     }
 }

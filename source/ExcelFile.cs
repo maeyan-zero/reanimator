@@ -778,7 +778,6 @@ namespace Reanimator
             const int zeroValue = 0;
             byte[] buffer = new byte[1024];
             int byteOffset = 0;
-
             byte[] intBytes = null;
             int intByteCount = 0;
 

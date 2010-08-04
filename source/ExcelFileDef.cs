@@ -52,7 +52,7 @@ namespace Reanimator
             public bool IsStringId { get; set; }
             public bool IsTableIndex { get; set; }
             public String Table { get; set; }
-            public int TableId { get; set; }
+            public string TableId { get; set; }
             public String Column { get; set; }
             public int SortId { get; set; }
 

@@ -410,7 +410,7 @@ namespace Reanimator
                             col++;
                         }
                     }
-                    else if (excelOutputAttribute.IsTableIndex)
+                    else if (excelOutputAttribute.TableId != "")
                     {
                         DataTable dt = GetExcelTable(excelOutputAttribute.TableId);
                         if (dt == null && excelOutputAttribute.Table != null)
@@ -444,6 +444,15 @@ namespace Reanimator
             if (excelTables == null) return null;
 
             DataRow[] rows = excelTables.Select(String.Format("code = '{0}'", code));
+            return rows.Length == 0 ? null : _xlsDataSet.Tables[rows[0][1].ToString()];
+        }
+
+        public DataTable GetExcelTable(string code)
+        {
+            DataTable excelTables = _xlsDataSet.Tables["EXCELTABLES"];
+            if (excelTables == null) return null;
+
+            DataRow[] rows = excelTables.Select(code);
             return rows.Length == 0 ? null : _xlsDataSet.Tables[rows[0][1].ToString()];
         }
 

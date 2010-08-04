@@ -14,17 +14,17 @@ namespace Reanimator.ExcelDefinitions
         public String quality;
         [ExcelOutput(SortId = 2)]
         public Int32 code;
-        public Int32 craftingBreakdownTreasure;
+        Int32 craftingBreakdownTreasure;
         [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 displayName;
         [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
         public Int32 displayNameWithItemFormat;
         [ExcelOutput(IsBool = true)]
         public Int32 showBaseDesc;
-        public Int32 randomlyNamed;
+        Int32 randomlyNamed;
         [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
         public Int32 baseDescFormatString;
-        public Int32 unknown01;
+        Int32 unknown01;
         public Int32 nameColor;
         public Int32 bkgdColor;
         [ExcelOutput(IsBool = true)]
@@ -35,12 +35,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 always_identified;
         public float price_multiplier;
         public float recipe_quantity_multiplier;
-        public Int32 unknown02;
-        public Int32 minLevel;
+        Int32 unknown02;
+        Int32 minLevel;
         public Int32 rarity;
         public Int32 vendorRarity;
         public Int32 luckRarity;
-        public Int32 lookGroup;
+        Int32 lookGroup;
         public Int32 state;
         public Int32 flippySound;
         public Int32 usable;
@@ -53,15 +53,15 @@ namespace Reanimator.ExcelDefinitions
         public Int32 dismantleResultSound;
         public Int32 downgrade;
         public Int32 upgrade;
-        public Int32 prefixName;
-        public Int32 prefixType;
-        public Int32 prefixCount;
-        public Int32 force;
-        public Int32 suffixName;
-        public Int32 suffixType;
-        public Int32 suffixCount;
+        Int32 prefixName;
+        Int32 prefixType;
+        Int32 prefixCount;
+        Int32 force;
+        Int32 suffixName;
+        Int32 suffixType;
+        Int32 suffixCount;
         public float procChance;
-        public float luckProbMod;
+        float luckProbMod;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 affix1Chance;
         [ExcelOutput(IsIntOffset = true)]

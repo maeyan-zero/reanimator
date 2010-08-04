@@ -8,28 +8,24 @@ using System.Windows.Forms;
 using System.Drawing;
 using Reanimator.ExcelDefinitions;
 using Reanimator.Forms;
+using System.Data;
 
 namespace Reanimator
 {
     public class Modification : IDisposable
     {
-        private Index[] _index;                                                 // The Hellgate London index & data files.
-        private Revival _revival;                                               // The base modifications class. Contains many mods.
-        private TableFiles _tableFiles;                                         // The "Excel" relational data sets.
-        private readonly TableDataSet _tableDataSet = new TableDataSet();
-        private readonly List<ExcelFile> _excelList = new List<ExcelFile>();    // Excel files.
-        private readonly List<String> _loadedExcelList = new List<String>();    // Loaded Excel files.
-        private readonly List<String> _savedExcelList = new List<String>();     // Saved Excel files.
+        TableDataSet _tableDataSet;
+        List<string> _changedTables;
+        Revival _revival;
+        Index[] _indexFiles;
 
-        public Content[] content { get { return _revival.modification; } }
-        public int Length { get { return (_revival.modification == null) ? 0 : _revival.modification.Length; } }
-        public bool InstallIsClean { get { foreach (Index i in _index) { if (i.Modified) return false; } return true; } }
-
-        public Modification()
+        public Modification(TableDataSet tableDataSet)
         {
+            _tableDataSet = tableDataSet;
+            _changedTables = new List<string>();
             _revival = new Revival();
+            _indexFiles = new Index[Index.FileNames.Length];
         }
-
         public static bool Parse(string path)
         {
             try
@@ -67,7 +63,7 @@ namespace Reanimator
             progress.SetLoadingText("Parsing modification:");
             progress.SetCurrentItemText(s);
 
-            _index = Index.LoadIndexFiles(Config.HglDir + "\\data\\");
+            //_index = Index.LoadIndexFiles(Config.HglDir + "\\data\\");
             XmlSerializer serializer = new XmlSerializer(typeof(Revival));
             TextReader reader = new StreamReader((string)argument);
             _revival = (Revival)serializer.Deserialize(reader);
@@ -86,363 +82,23 @@ namespace Reanimator
         }
         public void Apply(ProgressForm progress, Object argument)
         {
-            foreach (Content modification in _revival.modification)
+            foreach (Content mod in _revival.modification)
             {
-                if (!modification.apply) continue;
-
-                foreach (Pack pack in modification)
+                //if (!mod.apply) continue;
+                foreach (Pack pack in mod.pack)
                 {
-                    // Find the index indice.
-                    for (int i = 0; i < Index.FileNames.Length; i++)
+                    foreach (File file in pack.file)
                     {
-                        if (pack.id != Index.FileNames[i]) continue;
-                        pack.list_id = i;
-                        break;
-                    }
-
-                    foreach (File file in pack)
-                    {
-                        try
-                        {
-                            if (file.id.Contains(".txt.cooked"))
-                            {
-                                // Has ExcelTables interface been initialized?
-                                if (_tableFiles == null)
-                                {
-                                    // Excel Table FileIndex
-                                    Index.FileIndex fileIndex =
-                                        _index[Index.LatestPatch].FileTable[Index.ExcelTablesIndex];
-                                    if (String.IsNullOrEmpty(fileIndex.DirectoryString) ||
-                                        !fileIndex.FileNameString.Contains("exceltables"))
-                                    {
-                                        MessageBox.Show("File not found in data file!\nFile: exceltables.txt.cooked", "Error",
-                                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        continue;
-                                    }
-
-                                    // Extract and initialize.
-                                    _tableFiles = new TableFiles();
-                                    if (!_tableFiles.ParseSingleExcelData("EXCELTABLES", _index[Index.LatestPatch].ReadDataFile(fileIndex)))
-                                    {
-                                        throw new Exception("Failed to parse exceltables data!");
-                                    }
-                                }
-
-                                // Has file been extracted yet?
-                                if (_loadedExcelList.Contains(file.id) == false)
-                                {
-                                    // Find the index indice.
-                                    file.index_id_patch = _index[Index.LatestPatch].Locate(file.id, file.dir);
-
-                                    if (file.index_id_patch == -1)
-                                    {
-                                        throw new Exception("Could not locate file: " + file.id);
-                                    }
-
-                                    // Resolve the correct table reference.
-                                    file.table_ref = _tableFiles.GetStringIdFromFileName(file.id.Replace(".txt.cooked", ""));
-
-                                    // Reference the file index
-                                    Index.FileIndex fileIndex = _index[Index.LatestPatch].FileTable[file.index_id_patch];
-                                    // Extract the file
-                                    if (!_tableFiles.ParseSingleExcelData(file.table_ref, _index[Index.LatestPatch].ReadDataFile(fileIndex)))
-                                    {
-                                        throw new Exception("Failed to parse excel table data!\n\nString ID: " + file.table_ref);
-                                    }
-                                    _excelList.Add(_tableFiles[file.table_ref] as ExcelFile);
-
-                                    // Record the file has been loaded
-                                    _loadedExcelList.Add(file.id);
-                                    // Record the indice
-                                    file.list_id = _loadedExcelList.Count - 1;
-                                    // Add the table to the data set
-                                    _tableDataSet.LoadTable(progress, _excelList[file.list_id]);
-                                }
-                                else
-                                {
-                                    if (file.table_ref == null)
-                                    {
-                                        file.table_ref = _tableFiles.GetStringIdFromFileName(file.id.Replace(".txt.cooked", ""));
-                                    }
-                                }
-                            }
-
-                            //////
-                            // Strings file.
-                            //
-
-                            //if (file.id.Contains("xls.uni.cooked") == true)
-                            //{
-                            //    if (loaded_string_list.Contains(file.id) == false)
-                            //    {
-                            //        // Find the index indice.
-                            //        file.index_id_patch = index[Index.LatestPatchLocalized].Locate(file.id, file.dir);
-
-                            //        if (file.index_id_patch != -1)
-                            //        {
-                            //            // Reference the file index
-                            //            Index.FileIndex file_index = index[Index.LatestPatchLocalized].FileTable[file.index_id_patch];
-                            //            // Extract the strings file
-                            //            string_list.Add(new StringsFile(index[Index.LatestPatchLocalized].ReadDataFile(file_index)));
-                            //            // Record the file has been loaded
-                            //            loaded_string_list.Add(file.id);
-                            //            // Record the indice
-                            //            file.list_id = loaded_string_list.Count - 1;
-                            //            // Add the table to the data set
-                            //            data_set.LoadTable(progress, string_list[file.list_id]);
-                            //        }
-                            //        else
-                            //        {
-                            //            throw new Exception("Could not locate file: " + file.id);
-                            //        }
-                            //    }
-                            //}
-
-                            //////
-                            // Modify the files.
-                            //
-                            if (file.modify == null) continue;
-
-                            // Only Excel files can be modified
-                            if (!file.id.Contains(".txt.cooked"))
-                            {
-                                throw new Exception("Only excel files can be 'modified'");
-                            }
-
-                            foreach (Entity entity in file.modify)
-                            {
-                                foreach (Attribute attribute in entity)
-                                {
-                                    // It's a wildcard
-                                    if (entity.id == "*")
-                                    {
-                                        // If a value is specified, then a range has been defined
-                                        if (entity.value != null)
-                                        {
-                                            // Feed the values through the Logic function
-                                            if (entity.value.Contains("-"))
-                                            {
-                                                int indexVal = entity.value.IndexOf('-');
-                                                int startVal =
-                                                    Convert.ToInt32(entity.value.Substring(0, indexVal));
-                                                int lastVal =
-                                                    Convert.ToInt32(entity.value.Substring(indexVal + 1,
-                                                                                           entity.value.
-                                                                                               Length -
-                                                                                           (indexVal + 1)));
-
-                                                for (int i = startVal; i <= lastVal; i++)
-                                                {
-                                                    Manipulate(_tableDataSet, file.table_ref, attribute, i);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                throw new Exception(
-                                                    "Syntax Error. Value must be null or a range when using a wildcard.");
-                                            }
-                                        }
-                                        // Modify all rows.
-                                        else
-                                        {
-                                            for (int i = 0;
-                                                 i < _tableDataSet.XlsDataSet.Tables[file.table_ref].Rows.Count;
-                                                 i++)
-                                            {
-                                                Manipulate(_tableDataSet, file.table_ref, attribute, i);
-                                            }
-                                        }
-                                    }
-                                    // It's a specific row. ie. 3
-                                    else
-                                    {
-                                        Manipulate(_tableDataSet, file.table_ref, attribute,
-                                              Convert.ToInt32(entity.value));
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            MessageBox.Show(e.ToString());
-                        }
+                        progress.SetLoadingText("Modifying: " + file.id);
+                        Manipulate(file);
+                        _changedTables.Add(file.table_ref);
                     }
                 }
             }
         }
-
         public void Save(ProgressForm progress, Object argument)
         {
-            progress.SetLoadingText("Modifying and Saving all files.");
 
-            foreach (Content modification in _revival.modification)
-            {
-                if (!modification.apply) continue;
-
-                foreach (Pack pack in modification)
-                {
-                    foreach (File file in pack)
-                    {
-                        try
-                        {
-                            // Get the file's index relative to its base index class. Another index may be required
-                            // for its location in the patch file. This index is stored in file.index_id_patch if it
-                            // exists.
-                            file.index_id = _index[pack.list_id].Locate(file.id, file.dir);
-
-                            if (file.id.Contains(".xls.uni.cooked") == false)
-                            {
-                                file.index_id_patch = _index[Index.LatestPatch].Locate(file.id, file.dir);
-                            }
-                            else
-                            {
-                                file.index_id_patch = _index[Index.LatestPatchLocalized].Locate(file.id, file.dir);
-                            }
-
-                            // Update the progress bar.
-                            progress.SetCurrentItemText(file.id);
-
-                            // Modified files are dumped from memory.
-                            if (file.modify != null)
-                            {
-                                // Excel Files.
-                                if (file.id.Contains("txt.cooked"))
-                                {
-                                    // Been saved yet?
-                                    if (_savedExcelList.Contains(file.id) == false && file.table_ref != null)
-                                    {
-                                        string dir = Config.HglDir + "\\" +
-                                                     _index[Index.LatestPatch].FileTable[file.index_id_patch].
-                                                         DirectoryString;
-
-                                        string filename = _tableFiles.GetFileNameFromStringId(file.id);
-
-                                        byte[] excelBytes = _excelList[file.list_id].GenerateFile(_tableDataSet.XlsDataSet.Tables[file.id]);
-
-                                        if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-
-                                        using (
-                                            FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate,
-                                                                           FileAccess.ReadWrite))
-                                        {
-                                            fs.Write(excelBytes, 0, excelBytes.Length);
-                                            _savedExcelList.Add(file.id);
-                                        }
-                                    }
-                                }
-
-                                //
-                                // String Files.
-                                //
-
-                                //if (file.id.Contains("xls.uni.cooked") == true)
-                                //{
-                                //    // Been saved yet?
-                                //    if (saved_excel_list.Contains(file.id) == false && file.table_ref != null)
-                                //    {
-                                //        string dir = Config.HglDir + "\\" + index[Index.LatestPatch].FileTable[file.index_id_patch].DirectoryString;
-                                //        string filename = excel_tables.TableManager.GetReplacement(file.id);
-
-                                //        byte[] excel_bytes = excel_list[file.list_id].GenerateExcelFile(data_set.XlsDataSet);
-
-                                //        if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-
-                                //        using (FileStream fs = new FileStream(dir + filename, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                                //        {
-                                //            fs.Write(excel_bytes, 0, excel_bytes.Length);
-                                //            saved_excel_list.Add(file.id);
-                                //        }
-                                //    }
-                                //}
-                            }
-
-
-                            if (file.replace != null)
-                            {
-                                // If its a strings file, repack it
-                                if (file.repack)
-                                {
-                                    FileStream buffer = new FileStream(
-                                        Config.HglDir + "\\data" + "\\" + file.replace.data, FileMode.Open);
-
-                                    byte[] byteBuffer = new byte[buffer.Length];
-
-                                    buffer.Read(byteBuffer, 0, (int)buffer.Length);
-
-                                // TODO: fix me
- 
-                                    //if (file.index_id_patch >= 0)
-                                    //{
-                                    //    if (file.id.Contains("xls.uni.cooked"))
-                                    //    {
-                                    //        _index[Index.LatestPatchLocalized].AppendToDat(byteBuffer, true,
-                                    //                                                      file.index_id_patch, true);
-                                    //    }
-                                    //    else
-                                    //    {
-                                    //        _index[Index.LatestPatch].AppendToDat(byteBuffer, true,
-                                    //                                             file.index_id_patch, true);
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-                                    //    _index[pack.list_id].AppendToDat(byteBuffer, true, file.index_id, true);
-                                    //}
-
-                                    buffer.Dispose();
-                                }
-                                // Replace copies the replacing file to the HGL dir.
-                                else
-                                {
-                                    string source = Directory.GetCurrentDirectory() + "\\" + file.replace.data;
-                                    string destination = Config.HglDir + "\\" +
-                                                         _index[pack.list_id].FileTable[file.index_id].
-                                                             DirectoryString;
-
-                                    if (System.IO.File.Exists(source) == false)
-                                    {
-                                        throw new Exception("Source file not found");
-                                    }
-                                    if (Directory.Exists(destination) == false)
-                                    {
-                                        Directory.CreateDirectory(destination);
-                                    }
-                                    System.IO.File.Copy(source, destination + file.id, true);
-                                }
-                            }
-
-                            // Modify the index if it isn't already
-                            if (_index[pack.list_id].FileTable[file.index_id].Modified == false &&
-                                file.repack == false)
-                            {
-                                _index[pack.list_id].AppendDirectorySuffix(file.index_id);
-
-                                // Modify the patch index.
-                                if (file.index_id_patch >= 0)
-                                {
-                                    _index[Index.LatestPatch].AppendDirectorySuffix(file.index_id_patch);
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            if (e.ToString() == "Source file not found")
-                                MessageBox.Show("File not found: " + file.id, "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            else
-                                MessageBox.Show(e.ToString());
-                        }
-                    }
-                }
-
-            }
-
-            // Save the modified index files
-            foreach (Index indx in _index)
-            {
-                if (!indx.Modified) continue;
-
-                indx.WriteIndex();
-            }
         }
         public void Unzip(ProgressForm progress, Object argument)
         {
@@ -457,106 +113,111 @@ namespace Reanimator
                     Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
             }
         }
-        void Manipulate(TableDataSet dataSet, String t, Attribute a, int r)
+        public bool Manipulate(File file)
         {
             try
             {
-                if (a.replace != null)
+                string tableName = _tableDataSet.TableFiles.GetStringIdFromFileName(file.id);
+                DataTable table = _tableDataSet.XlsDataSet.Tables[tableName];
+                ExcelFile excel = _tableDataSet.TableFiles.GetExcelTableFromId(tableName);
+
+                foreach (Entity entity in file.modify.entity)
                 {
-                    Type type = dataSet.XlsDataSet.Tables[t].Rows[r][a.id].GetType();
-
-                    if (type == typeof(Int32))
-                        dataSet.XlsDataSet.Tables[t].Rows[r][a.id] =
-                            Convert.ToInt32(a.replace.data);
-                    else if (type == typeof(UInt32))
-                        dataSet.XlsDataSet.Tables[t].Rows[r][a.id] =
-                            Convert.ToUInt32(a.replace.data);
-                    else if (type == typeof(float))
-                        dataSet.XlsDataSet.Tables[t].Rows[r][a.id] =
-                            Convert.ToSingle(a.replace.data);
-                    else if (type == typeof(string))
-                        dataSet.XlsDataSet.Tables[t].Rows[r][a.id] =
-                            a.replace.data;
-                }
-
-                if (a.divide != null)
-                {
-                    Type type = dataSet.XlsDataSet.Tables[t].Rows[r][a.id].GetType();
-
-                    if (type == typeof(Int32))
-                        dataSet.XlsDataSet.Tables[t].Rows[r][a.id] =
-                            Convert.ToInt32(dataSet.XlsDataSet.Tables[t].Rows[r][a.id]) /
-                            Convert.ToInt32(a.divide.data);
-                    else if (type == typeof(float))
-                        dataSet.XlsDataSet.Tables[t].Rows[r][a.id] =
-                            Convert.ToSingle(dataSet.XlsDataSet.Tables[t].Rows[r][a.id]) /
-                            Convert.ToSingle(a.divide.data);
-                }
-
-                if (a.multiply != null)
-                {
-                    Type type = dataSet.XlsDataSet.Tables[t].Rows[r][a.id].GetType();
-
-                    if (type == typeof(Int32))
-                        dataSet.XlsDataSet.Tables[t].Rows[r][a.id] =
-                            Convert.ToInt32(dataSet.XlsDataSet.Tables[t].Rows[r][a.id]) /
-                            Convert.ToInt32(a.divide.data);
-                    else if (type == typeof(float))
-                        dataSet.XlsDataSet.Tables[t].Rows[r][a.id] =
-                            Convert.ToSingle(dataSet.XlsDataSet.Tables[t].Rows[r][a.id]) /
-                            Convert.ToSingle(a.divide.data);
-                }
-
-                if (a.bitwise != null)
-                {
-                    uint arg = 0;
-                    bool current = false;
-                    uint value = Convert.ToUInt32(dataSet.XlsDataSet.Tables[t].Rows[r][a.id]);
-
-                    for (int j = 0; j < a.bitwise.Length; j++)
+                    foreach (Attribute attribute in entity)
                     {
-                        foreach (Bitwise bitmask in a.bitwise)
+                        int min;
+                        int max;
+                        int last = 0; //for recursive function
+                        string function = attribute.GetFunctionString();
+
+                        //determine the range/recursion if any
+                        if (entity.id.Equals("*"))
                         {
-                            switch (a.id)
+                            if (entity.value.Contains("-"))
                             {
-                                case "bitmask01":
-                                    arg = (uint)Enum.Parse(typeof(Items.BitMask01), bitmask.id, true);
+                                int idx = entity.value.IndexOf('-');
+                                int len = entity.value.Length - idx - 1;
+                                min = Convert.ToInt32(entity.value.Substring(0, idx));
+                                max = Convert.ToInt32(entity.value.Substring(idx + 1, len));
+                            }
+                            else
+                            {
+                                min = 0;
+                                max = table.Rows.Count;
+                            }
+                        }
+                        else
+                        {
+                            min = Convert.ToInt32(entity.value);
+                            max = min + 1;
+                        }
+
+                        //main loop, alters the dataset
+                        for (int i = min; i < max; i++)
+                        {
+                            object obj = null;
+                            string c = attribute.id;
+                            Type type = table.Columns[attribute.id].DataType;
+                            DataRow dataRow = table.Rows[i];
+
+                            switch (function)
+                            {
+                                case "replace":
+                                    obj = attribute.replace.data;
                                     break;
-                                case "bitmask02":
-                                    arg = (uint)Enum.Parse(typeof(Items.BitMask02), bitmask.id, true);
+                                case "multiply":
+                                    if (type.Equals(typeof(int)))
+                                        obj = (int)dataRow[c] * (int)obj;
+                                    else if (type.Equals(typeof(float)))
+                                        obj = (float)dataRow[c] * (float)obj;
                                     break;
-                                case "bitmask03":
-                                    arg = (uint)Enum.Parse(typeof(Items.BitMask03), bitmask.id, true);
+                                case "divide":
+                                    if (type.Equals(typeof(int)))
+                                        obj = (int)dataRow[c] / (int)obj;
+                                    else if (type.Equals(typeof(float)))
+                                        obj = (float)dataRow[c] / (float)obj;
                                     break;
-                                case "bitmask04":
-                                    arg = (uint)Enum.Parse(typeof(Items.BitMask04), bitmask.id, true);
+                                case "bitwise":
+                                    foreach (Bitwise bitwise in attribute.bitwise)
+                                    {
+                                        uint bit = (uint)Enum.Parse(type, bitwise.id, true);
+                                        uint mask = (uint)dataRow[c];
+                                        bool flick = bitwise.switch_data;
+
+                                        if (flick != ((mask & bit) == 0 ))
+                                        {
+                                            dataRow[c] = (mask ^= bit);
+                                        }
+                                    }
                                     break;
-                                case "bitmask05":
-                                    arg = (uint)Enum.Parse(typeof(Items.BitMask05), bitmask.id, true);
-                                    break;
-                                case "bitmask06":
-                                    arg = (uint)Enum.Parse(typeof(Items.BitMask06), bitmask.id, true);
-                                    break;
-                                case "bitmask07":
-                                    arg = (uint)Enum.Parse(typeof(Items.BitMask07), bitmask.id, true);
+                                case "recursive":
+                                    if (i.Equals(min)) //first time only
+                                    {
+                                        last = Convert.ToInt32(attribute.recursive.data);
+                                        if (type.Equals(typeof(int)))
+                                            obj = Convert.ToInt32(attribute.recursive.data);
+                                        else if (type.Equals(typeof(float)))
+                                            obj = Convert.ToSingle(attribute.recursive.data);
+                                    }
+                                    else
+                                    {
+                                        if (type.Equals(typeof(int)))
+                                            obj = last + Convert.ToInt32(attribute.recursive.step);
+                                        else if (type.Equals(typeof(float)))
+                                            obj = last + Convert.ToSingle(attribute.recursive.step);
+                                    }
                                     break;
                             }
-
-                            // Is the current value on or off?
-                            if ((value & arg) > 0)
-                                current = true;
-                            // Does the current value need to be inversed?
-                            if (current != bitmask.switch_data)
-                                dataSet.XlsDataSet.Tables[t].Rows[r][a.id] = (value ^= arg);
+                            table.Rows[i][attribute.id] = obj;
                         }
+                        //end main loop
                     }
                 }
+                return true;
             }
-            catch (Exception e)
+            catch
             {
-                MessageBox.Show("There was a problem modifying the form: " + t + "\n" +
-                    "Column: " + a.id + ". Check syntax and try again.\n\n" + e,
-                    "Problem", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return false;
             }
         }
 
@@ -626,7 +287,10 @@ namespace Reanimator
                     return false;
             }
 
-            public MyEnumerator GetEnumerator() { return new MyEnumerator(this); }
+            public MyEnumerator GetEnumerator()
+            { 
+                return new MyEnumerator(this);
+            }
 
             public class MyEnumerator
             {
@@ -642,7 +306,10 @@ namespace Reanimator
                     nIndex++;
                     return (nIndex < collection.pack.GetLength(0));
                 }
-                public Pack Current { get { return (collection.pack[nIndex]); } }
+                public Pack Current
+                {
+                    get { return (collection.pack[nIndex]); }
+                }
             }
         }
         public class Pack
@@ -767,6 +434,28 @@ namespace Reanimator
             public Multiply multiply;
             [XmlElement(typeof(Bitwise))]
             public Bitwise[] bitwise;
+            [XmlElement(typeof(Recursive))]
+            public Recursive recursive;
+
+            public Type GetFunction()
+            {
+                if (replace != null) return typeof(Replace);
+                if (divide != null) return typeof(Divide);
+                if (multiply != null) return typeof(Multiply);
+                if (bitwise != null) return typeof(Bitwise);
+                if (recursive != null) return typeof(Recursive);
+                else return null;
+            }
+
+            public string GetFunctionString()
+            {
+                if (replace != null) return "replace";
+                if (divide != null) return "divide";
+                if (multiply != null) return "multiply";
+                if (bitwise != null) return "bitwise";
+                if (recursive != null) return "recursive";
+                else return null;
+            }
         }
         public class Bitwise
         {
@@ -790,11 +479,16 @@ namespace Reanimator
             [XmlElement("data")]
             public string data;
         }
-
+        public class Recursive
+        {
+            [XmlAttribute]
+            public int step;
+            [XmlElement("data")]
+            public string data;
+        }
         public void Dispose()
         {
-            foreach (Index i in _index)
-                i.Dispose();
+
         }
     }
 }
