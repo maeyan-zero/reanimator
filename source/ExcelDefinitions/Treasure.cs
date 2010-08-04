@@ -11,12 +11,19 @@ namespace Reanimator.ExcelDefinitions
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string treasureClass;
-        public Int32 allowUnitTypes1;
-        public Int32 allowUnitTypes2;
-        public Int32 allowUnitTypes3;
-        public Int32 allowUnitTypes4;
-        public Int32 allowUnitTypes5;
-        public Int32 allowUnitTypes6;
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        Int32 allowUnitTypes1;
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        Int32 allowUnitTypes2;
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        Int32 allowUnitTypes3;
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        Int32 allowUnitTypes4;
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        Int32 allowUnitTypes5;
+        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        Int32 allowUnitTypes6;
+        [ExcelOutput(IsTableIndex = true, TableId = "GLOBAL_THEMES", Column = "name")]
         public Int32 globalThemeRequired;
         public Int32 unknown02;
         public Int32 pickTypes;
@@ -81,8 +88,8 @@ namespace Reanimator.ExcelDefinitions
         byte[] unknown13;
         [ExcelOutput(IsBitmask = true)]
         public Treasure.Bitmask01 spawnCondition;
-        public Int32 spawnFromMonsterUnitType;
-        public Int32 spawnFromLevelTheme;
+        Int32 spawnFromMonsterUnitType;
+        Int32 spawnFromLevelTheme;
     }
 
     public abstract class Treasure

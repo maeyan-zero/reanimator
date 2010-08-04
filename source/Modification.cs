@@ -12,7 +12,7 @@ using System.Data;
 
 namespace Reanimator
 {
-    public class Modification : IDisposable
+    public class Modification
     {
         TableDataSet _tableDataSet;
         List<string> _changedTables;
@@ -496,10 +496,6 @@ namespace Reanimator
             public int step;
             [XmlElement("data")]
             public string data;
-        }
-        public void Dispose()
-        {
-
         }
     }
 }

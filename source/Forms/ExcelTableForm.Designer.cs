@@ -41,6 +41,8 @@
             this.rows_ListBox = new System.Windows.Forms.ListBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tableDataPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).BeginInit();
@@ -133,7 +135,7 @@
             this.rowViewPage.Location = new System.Drawing.Point(4, 22);
             this.rowViewPage.Name = "rowViewPage";
             this.rowViewPage.Padding = new System.Windows.Forms.Padding(3);
-            this.rowViewPage.Size = new System.Drawing.Size(744, 559);
+            this.rowViewPage.Size = new System.Drawing.Size(744, 562);
             this.rowViewPage.TabIndex = 3;
             this.rowViewPage.Text = "Row View";
             this.rowViewPage.UseVisualStyleBackColor = true;
@@ -169,10 +171,12 @@
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.toolStripSeparator1,
+            this.toolStripButton2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 592);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.toolStrip1.Size = new System.Drawing.Size(752, 25);
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
@@ -183,9 +187,24 @@
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(70, 22);
-            this.toolStripButton1.Text = "Regenerate";
+            this.toolStripButton1.Size = new System.Drawing.Size(47, 22);
+            this.toolStripButton1.Text = "Reload";
             this.toolStripButton1.Click += new System.EventHandler(this.regenTable_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(39, 22);
+            this.toolStripButton2.Text = "Dupe";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // ExcelTableForm
             // 
@@ -225,5 +244,7 @@
         private System.Windows.Forms.ListBox rows_ListBox;
         private System.Windows.Forms.TableLayoutPanel rows_LayoutPanel;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }

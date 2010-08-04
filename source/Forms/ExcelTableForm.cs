@@ -174,6 +174,7 @@ namespace Reanimator.Forms
                     _specialControls.Add(dc.ColumnName, clb);
 
                     Type cellType = dc.DataType;
+
                     foreach (Enum type in Enum.GetValues(cellType))
                     {
                         clb.Items.Add(type, false);
@@ -436,6 +437,23 @@ namespace Reanimator.Forms
             MessageBox.Show(
                 "Attention: Currently a bug exists such that you must close this form and re-open it to see any changes for the regeneration.\nDoing so will ask if you wish to apply your changes to the cache data.\n\nAlso of note is the you can't edit any cells until you close the window - FIX ME.",
                 "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        private void toolStripButton2_Click(object sender, EventArgs e)
+        {
+            int tableView = 0;
+            if (tabControl1.SelectedIndex == tableView)
+            {
+                DataGridViewSelectedRowCollection dataRows = tableData_DataGridView.SelectedRows;
+                foreach (DataGridViewRow dataRow in dataRows)
+                {
+                    DataRow copiedRow = (dataRow.DataBoundItem as DataRowView).Row;
+                    DataRow newRow = _dataTable.NewRow();
+                    newRow.ItemArray = copiedRow.ItemArray;
+                    newRow[0] = _dataTable.Rows.Count;
+                    _dataTable.Rows.Add(newRow);
+                }
+            }
         }
     }
 
