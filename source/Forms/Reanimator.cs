@@ -447,40 +447,40 @@ namespace Reanimator
             _options.ShowDialog(this);
         }
 
-        //private void ClientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
-        //{
-        //    OpenFileDialog openFileDialog = new OpenFileDialog();
-        //    openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-        //    openFileDialog.InitialDirectory = Config.hglDir + "\\SP_x64";
-        //    if (openFileDialog.ShowDialog(this) != DialogResult.OK)
-        //    {
-        //        return;
-        //    }
+        private void ClientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Config.HglDir + "\\SP_x64";
+            if (openFileDialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
 
-        //    FileStream clientFile;
-        //    try
-        //    {
-        //        clientFile = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return;
-        //    }
+            FileStream clientFile;
+            try
+            {
+                clientFile = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite);
+            }
+            catch (Exception)
+            {
+                return;
+            }
 
-        //    ClientPatcher clientPatcher = new ClientPatcher(FileTools.StreamToByteArray(clientFile));
-        //    if (clientPatcher.ApplyHardcorePatch())
-        //    {
-        //        FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
-        //        fileOut.Write(clientPatcher.Buffer, 0, clientPatcher.Buffer.Length);
-        //        fileOut.Dispose();
-        //        MessageBox.Show("Hardcore patch applied!");
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-        //    clientFile.Dispose();
-        //}
+            Patches clientPatcher = new Patches(FileTools.StreamToByteArray(clientFile));
+            if (clientPatcher.ApplyHardcorePatch())
+            {
+                FileStream fileOut = new FileStream(openFileDialog.FileName + ".patched.exe", FileMode.Create);
+                fileOut.Write(clientPatcher.Buffer, 0, clientPatcher.Buffer.Length);
+                fileOut.Dispose();
+                MessageBox.Show("Hardcore patch applied!");
+            }
+            else
+            {
+                MessageBox.Show("Failed to apply Hardcore patch!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            clientFile.Dispose();
+        }
 
         private void Reanimator_ResizeEnd(object sender, EventArgs e)
         {

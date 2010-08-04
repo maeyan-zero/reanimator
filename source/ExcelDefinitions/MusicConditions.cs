@@ -18,10 +18,10 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//seems to be by name and numerical value. CG_1-5_* is before CG_11-15_* in the index, but not in the table data.
 
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition1;//intptr
         public Int32 percentChance1;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass1;//intptr
         public Int32 useConditionCode1;//idx
         public Int32 groove1;//idx
@@ -36,10 +36,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown1_9;
         public Int32 unknown1_10;
         public Int32 unknown1_11;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition2;//intptr
         public Int32 percentChance2;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass2;//intptr
         public Int32 useConditionCode2;//idx
         public Int32 groove2;//idx
@@ -54,10 +54,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown2_9;
         public Int32 unknown2_10;
         public Int32 unknown2_11;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition3;//intptr
         public Int32 percentChance3;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass3;//intptr
         public Int32 useConditionCode3;//idx
         public Int32 groove3;//idx
@@ -72,10 +72,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown3_9;
         public Int32 unknown3_10;
         public Int32 unknown3_11;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition4;//intptr
         public Int32 percentChance4;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass4;//intptr
         public Int32 useConditionCode4;//idx
         public Int32 groove4;//idx
@@ -90,10 +90,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown4_9;
         public Int32 unknown4_10;
         public Int32 unknown4_11;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition5;//intptr
         public Int32 percentChance5;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass5;//intptr
         public Int32 useConditionCode5;//idx
         public Int32 groove5;//idx
@@ -108,10 +108,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown5_9;
         public Int32 unknown5_10;
         public Int32 unknown5_11;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition6;//intptr
         public Int32 percentChance6;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass6;//intptr
         public Int32 useConditionCode6;//idx
         public Int32 groove6;//idx
@@ -126,10 +126,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown6_9;
         public Int32 unknown6_10;
         public Int32 unknown6_11;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition7;//intptr
         public Int32 percentChance7;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass7;//intptr
         public Int32 useConditionCode7;//idx
         public Int32 groove7;//idx
@@ -144,10 +144,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown7_9;
         public Int32 unknown7_10;
         public Int32 unknown7_11;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition8;//intptr
         public Int32 percentChance8;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass8;//intptr
         public Int32 useConditionCode8;//idx
         public Int32 groove8;//idx
@@ -162,10 +162,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown8_9;
         public Int32 unknown8_10;
         public Int32 unknown8_11;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition9;//intptr
         public Int32 percentChance9;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass9;//intptr
         public Int32 useConditionCode9;//idx
         public Int32 groove9;//idx
@@ -180,10 +180,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown9_9;
         public Int32 unknown9_10;
         public Int32 unknown9_11;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 condition10;//intptr
         public Int32 percentChance10;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 characterClass10;//intptr
         public Int32 useConditionCode10;//idx
         public Int32 groove10;//idx

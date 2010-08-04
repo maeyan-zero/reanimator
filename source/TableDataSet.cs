@@ -449,11 +449,7 @@ namespace Reanimator
 
         public DataTable GetExcelTable(string code)
         {
-            DataTable excelTables = _xlsDataSet.Tables["EXCELTABLES"];
-            if (excelTables == null) return null;
-
-            DataRow[] rows = excelTables.Select(code);
-            return rows.Length == 0 ? null : _xlsDataSet.Tables[rows[0][1].ToString()];
+            return _xlsDataSet.Tables[code];
         }
 
         public DataSet XlsDataSet
