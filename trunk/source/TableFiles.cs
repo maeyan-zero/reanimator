@@ -564,6 +564,16 @@ namespace Reanimator
                     select DataFiles[excelTable.StringId] as ExcelFile).FirstOrDefault();
         }
 
+        public ExcelFile GetExcelTableFromId(string tableId)
+        {
+            ExcelFile excelTables = DataFiles["EXCELTABLES"] as ExcelFile;
+            if (excelTables == null) return null;
+
+            return (from ExcelTablesRow excelTable in excelTables.Rows
+                    where excelTable.StringId == tableId
+                    select DataFiles[excelTable.StringId] as ExcelFile).FirstOrDefault();
+        }
+
         public String GetStringIdFromFileName(String fileName)
         {
             if (String.IsNullOrEmpty(fileName)) return null;

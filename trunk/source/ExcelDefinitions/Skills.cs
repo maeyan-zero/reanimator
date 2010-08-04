@@ -9,11 +9,9 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String skill;
 
-        [ExcelOutput(SortId = 2)]
         public Int32 code;
         Int32 buffer;
         [ExcelOutput(IsBitmask = true)]
@@ -35,9 +33,9 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String effectStringFunction;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 192)]
-        public String skillBonusFunction;//doesn't appear to be used
+        String skillBonusFunction;//doesn't appear to be used
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 192)]
-        public String accumulationStringFunction;//doesn't appear to be used
+        String accumulationStringFunction;//doesn't appear to be used
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknown1;
         [ExcelOutput(IsStringId = true, Table = "Strings_Skills")]
@@ -45,14 +43,14 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsStringId = true, Table = "Strings_Skills")]
         public Int32 effectString;//stridx
         [ExcelOutput(IsStringId = true, Table = "Strings_Skills")]
-        public Int32 skillBonusString;//stridx
+        Int32 skillBonusString;//stridx
         [ExcelOutput(IsStringId = true, Table = "Strings_Skills")]
-        public Int32 accumulationString;//stridx
+        Int32 accumulationString;//stridx
         [ExcelOutput(IsStringId = true, Table = "Strings_Skills")]
         public Int32 stringAfterRequiredWeapon;//stridx
-        public Int32 skillsToAccumulate1;
-        public Int32 skillsToAccumulate2;
-        public Int32 skillsToAccumulate3;
+        Int32 skillsToAccumulate1;
+        Int32 skillsToAccumulate2;
+        Int32 skillsToAccumulate3;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String events;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
@@ -91,7 +89,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 level15;
         public Int32 maxLevel;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-        public String summonedAi;
+        String summonedAi;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknown4;
         public Int32 summonedInvLocation1;
@@ -107,38 +105,38 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown5;
         public Int32 priority;
-        public Int32 requiredStats1;
-        public Int32 requiredStats2;
-        public Int32 requiredStatValuesA1;//these seem to be unused
-        public Int32 requiredStatValuesA2;
-        public Int32 requiredStatValuesA3;
-        public Int32 requiredStatValuesA4;
-        public Int32 requiredStatValuesA5;
-        public Int32 requiredStatValuesA6;
-        public Int32 requiredStatValuesA7;
-        public Int32 requiredStatValuesA8;
-        public Int32 requiredStatValuesA9;
-        public Int32 requiredStatValuesA10;
-        public Int32 requiredStatValuesA11;
-        public Int32 requiredStatValuesA12;
-        public Int32 requiredStatValuesA13;
-        public Int32 requiredStatValuesA14;
-        public Int32 requiredStatValuesA15;
-        public Int32 requiredStatValuesB1;
-        public Int32 requiredStatValuesB2;
-        public Int32 requiredStatValuesB3;
-        public Int32 requiredStatValuesB4;
-        public Int32 requiredStatValuesB5;
-        public Int32 requiredStatValuesB6;
-        public Int32 requiredStatValuesB7;
-        public Int32 requiredStatValuesB8;
-        public Int32 requiredStatValuesB9;
-        public Int32 requiredStatValuesB10;
-        public Int32 requiredStatValuesB11;
-        public Int32 requiredStatValuesB12;
-        public Int32 requiredStatValuesB13;
-        public Int32 requiredStatValuesB14;
-        public Int32 requiredStatValuesB15;
+        Int32 requiredStats1;
+        Int32 requiredStats2;
+        Int32 requiredStatValuesA1;//these seem to be unused
+        Int32 requiredStatValuesA2;
+        Int32 requiredStatValuesA3;
+        Int32 requiredStatValuesA4;
+        Int32 requiredStatValuesA5;
+        Int32 requiredStatValuesA6;
+        Int32 requiredStatValuesA7;
+        Int32 requiredStatValuesA8;
+        Int32 requiredStatValuesA9;
+        Int32 requiredStatValuesA10;
+        Int32 requiredStatValuesA11;
+        Int32 requiredStatValuesA12;
+        Int32 requiredStatValuesA13;
+        Int32 requiredStatValuesA14;
+        Int32 requiredStatValuesA15;
+        Int32 requiredStatValuesB1;
+        Int32 requiredStatValuesB2;
+        Int32 requiredStatValuesB3;
+        Int32 requiredStatValuesB4;
+        Int32 requiredStatValuesB5;
+        Int32 requiredStatValuesB6;
+        Int32 requiredStatValuesB7;
+        Int32 requiredStatValuesB8;
+        Int32 requiredStatValuesB9;
+        Int32 requiredStatValuesB10;
+        Int32 requiredStatValuesB11;
+        Int32 requiredStatValuesB12;
+        Int32 requiredStatValuesB13;
+        Int32 requiredStatValuesB14;
+        Int32 requiredStatValuesB15;
         public Int32 requiredSkills1;
         public Int32 requiredSkills2;
         public Int32 requiredSkills3;
@@ -148,8 +146,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 levelsOfRequiredSkills3;
         public Int32 levelsOfRequiredSkills4;
         [ExcelOutput(IsBool = true)]
-        public Int32 bOnlyRequireOne;//bool
-        public Int32 bUsesCraftingPoints;
+        Int32 bOnlyRequireOne;
+        [ExcelOutput(IsBool = true)]
+        Int32 bUsesCraftingPoints;
         public Int32 weaponLocation1;
         public Int32 weaponLocation2;
         public Int32 fallBackSkills1;
@@ -166,21 +165,21 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknown7;
         public Int32 modeOverride;//idx
-        public Int32 bonusSkills0;
-        public Int32 bonusSkills1;
-        public Int32 bonusSkills2;
-        public Int32 bonusSkills3;
-        public Int32 bonusSkills4;
+        Int32 bonusSkills0;
+        Int32 bonusSkills1;
+        Int32 bonusSkills2;
+        Int32 bonusSkills3;
+        Int32 bonusSkills4;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 bonusSkillScript0;
+        Int32 bonusSkillScript0;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 bonusSkillScript1;
+        Int32 bonusSkillScript1;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 bonusSkillScript2;
+        Int32 bonusSkillScript2;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 bonusSkillScript3;
+        Int32 bonusSkillScript3;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 bonusSkillScript4;
+        Int32 bonusSkillScript4;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 skillVar0;
         [ExcelOutput(IsIntOffset = true)]
@@ -202,15 +201,15 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 skillVar9;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 rangeMultScript;
+        Int32 rangeMultScript;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 cost;
+        Int32 cost;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 coolDownPercentChange;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsTransferOnAttack;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 statsSkillEvent;
+        Int32 statsSkillEvent;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsSkillEventServer;
         [ExcelOutput(IsIntOffset = true)]
@@ -222,7 +221,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsPostLaunch;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 statsOnStateSet;
+        Int32 statsOnStateSet;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsServerOnStateSet;
         [ExcelOutput(IsIntOffset = true)]
@@ -232,9 +231,9 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnPulseServerOnly;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 statsOnDeSelectServerOnly;
+        Int32 statsOnDeSelectServerOnly;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 statsOnPulse;
+        Int32 statsOnPulse;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnLevelChange;
         [ExcelOutput(IsIntOffset = true)]
@@ -242,9 +241,9 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsScriptOnTarget;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 scriptFromScriptEvents;
+        Int32 scriptFromScriptEvents;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 selectCost;
+        Int32 selectCost;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 startCondition;
         [ExcelOutput(IsIntOffset = true)]
@@ -258,7 +257,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 activatorConditionOnTarget;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 eventChance;
+        Int32 eventChance;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 eventParam0;
         [ExcelOutput(IsIntOffset = true)]
@@ -270,25 +269,25 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 infoScript;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 stateRemovedServer;
+        Int32 stateRemovedServer;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 powerCostScript;
+        Int32 powerCostScript;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 coolDownSkillScript;
-        public Int32 skillOnpulse;//idx
-        public Int32 selectCheckStat;//idx
+        Int32 coolDownSkillScript;
+        Int32 skillOnpulse;//idx
+        Int32 selectCheckStat;//idx
         public Int32 startFunc;
         public Int32 targetFunc;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown8;
-        public Int32 givesSkill;//idx
+        Int32 givesSkill;//idx
         public Int32 extraSkillToTurnOn;//idx
         public Int32 playerInputOverride;
         public Int32 requiresUnitType;//idx
         public Int32 requiresWeaponUnitType;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown9;
-        public Int32 fuseMissilesOnStateClear;//idx
+        Int32 fuseMissilesOnStateClear;//idx
         public Int32 requiresState;//idx
         public Int32 prohibitingState0;//idx
         public Int32 prohibitingState1;//idx
@@ -307,7 +306,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 coolDownMinPercent;
         public Int32 activatorKey;
         public Int32 activateMode;//idx
-        public Int32 activateSkill;//idx
+        Int32 activateSkill;//idx
         public Int32 activatePriority;
         public float rangeMin;
         public float rangeMax;
@@ -317,15 +316,15 @@ namespace Reanimator.ExcelDefinitions
         public float weaponRangeMultiplier;
         public float impactForwardBias;
         public float modeSpeed;
-        public Int32 damageTypeOverride;//idx
-        public float damageMultiplier;
+        Int32 damageTypeOverride;//idx
+        float damageMultiplier;
         public Int32 maxExtraSpreadBullets;
         public Int32 spreadBulletMultiplier;
         public float reflectiveLifeTimeInSeconds;
         public float Param1;
         public float Param2;
         public Int32 usage;
-        public Int32 family;
+        Int32 family;
         public Int32 unitEventTrigger0;
         public Int32 unitEventTrigger1;
         public Int32 unitEventTrigger2;
@@ -336,7 +335,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 linkedLevelSkill0;
         public Int32 linkedLevelSkill1;
         public Int32 linkedLevelSkill2;
-        public Int32 skillParent;
+        Int32 skillParent;
         public Int32 fieldMissile;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknown11;

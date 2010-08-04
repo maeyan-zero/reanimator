@@ -34,15 +34,15 @@ namespace Reanimator.ExcelDefinitions
         public Int32 completeNumber;
         public Int32 param1;
         public Int32 unitType0;
-        public Int32 unitType1;
-        public Int32 unitType2;
-        public Int32 unitType3;
-        public Int32 unitType4;
-        public Int32 unitType5;
-        public Int32 unitType6;
-        public Int32 unitType7;
-        public Int32 unitType8;
-        public Int32 unitType9;
+        Int32 unitType1;
+        Int32 unitType2;
+        Int32 unitType3;
+        Int32 unitType4;
+        Int32 unitType5;
+        Int32 unitType6;
+        Int32 unitType7;
+        Int32 unitType8;
+        Int32 unitType9;
         public Int32 questTaskComplete;//idx
         public Int32 randomQuests;
         public Int32 monster;//idx
