@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<file id="TREASURE">
+		<!--BEAST OF ABBADON-->
+		<entity id="364">
+			<attribute id="NoDrop">90</attribute>
+		</entity>
+		<!--FIEND-->
+		<entity id="331">
+			<attribute id="NoDrop">90</attribute>
+		</entity>
+	</file>
+</modification>

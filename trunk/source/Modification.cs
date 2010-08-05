@@ -16,14 +16,14 @@ namespace Reanimator
     {
         TableDataSet _tableDataSet;
         List<string> _changedTables;
-        Revival _revival;
+        Root _revival;
         Index[] _indexFiles;
 
         public Modification(TableDataSet tableDataSet)
         {
             _tableDataSet = tableDataSet;
             _changedTables = new List<string>();
-            _revival = new Revival();
+            _revival = new Root();
             _indexFiles = new Index[Index.FileNames.Length];
         }
         public static bool Parse(string path)
@@ -64,36 +64,18 @@ namespace Reanimator
             progress.SetCurrentItemText(s);
 
             //_index = Index.LoadIndexFiles(Config.HglDir + "\\data\\");
-            XmlSerializer serializer = new XmlSerializer(typeof(Revival));
+            XmlSerializer serializer = new XmlSerializer(typeof(Root));
             TextReader reader = new StreamReader((string)argument);
-            _revival = (Revival)serializer.Deserialize(reader);
+            _revival = (Root)serializer.Deserialize(reader);
             reader.Close();
-        }
-        public void Add(ProgressForm progress, Object argument)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Revival));
-            TextReader reader = new StreamReader((string)argument);
-            Revival buffer = (Revival)serializer.Deserialize(reader); ;
-            Content[] content = buffer.modification;
-            int current = _revival.modification.Length;
-            int extra = content.Length;
-            Array.Resize(ref _revival.modification, current + extra);
-            Array.Copy(content, 0, _revival.modification, current, extra);
         }
         public void Apply(ProgressForm progress, Object argument)
         {
-            foreach (Content mod in _revival.modification)
+            foreach (File file in _revival.files)
             {
-                //if (!mod.apply) continue;
-                foreach (Pack pack in mod.pack)
-                {
-                    foreach (File file in pack.file)
-                    {
-                        progress.SetLoadingText("Modifying: " + file.id);
-                        Manipulate(file);
-                        _changedTables.Add(file.table_ref);
-                    }
-                }
+                progress.SetLoadingText("Modifying: " + file.ID);
+                Manipulate(file);
+                _changedTables.Add(file.ID);
             }
         }
         public void Save(ProgressForm progress, Object argument)
@@ -117,111 +99,149 @@ namespace Reanimator
         {
             try
             {
-                int p = file.id.IndexOf(ExcelFile.FileExtention) - 1;
-                string fileName = file.id.Remove(p);
-                string tableName = _tableDataSet.TableFiles.GetStringIdFromFileName(fileName);
+                DataTable table = _tableDataSet.XlsDataSet.Tables[file.ID];
+                ExcelFile excel = _tableDataSet.TableFiles.GetExcelTableFromId(file.ID);
 
-                DataTable table = _tableDataSet.XlsDataSet.Tables[tableName];
-                ExcelFile excel = _tableDataSet.TableFiles.GetExcelTableFromId(tableName);
-
-                foreach (Entity entity in file.modify.entity)
+                foreach (Entity entity in file.Entities)
                 {
-                    foreach (Attribute attribute in entity)
+                    foreach (Attribute attribute in entity.Attributes)
                     {
-                        int min;
-                        int max;
+                        int step = 0;
+                        int min = 1;
+                        int max = 0;
                         int last = 0; //for recursive function
-                        string function = attribute.GetFunctionString();
+                        string function;
+                        int[] list;
 
-                        //determine the range/recursion if any
-                        if (entity.id.Equals("*"))
+                        //determine the range
+                        if (entity.ID.Contains(","))
                         {
-                            if (entity.value != null)
+                            string[] explode = entity.ID.Split(',');
+                            list = new int[explode.Length];
+
+                            for (int i = 0; i < list.Length; i++)
                             {
-                                if (entity.value.Contains("-"))
-                                {
-                                    int idx = entity.value.IndexOf('-');
-                                    int len = entity.value.Length - idx - 1;
-                                    min = Convert.ToInt32(entity.value.Substring(0, idx));
-                                    max = Convert.ToInt32(entity.value.Substring(idx + 1, len));
-                                }
-                                else
-                                {
-                                    min = 0;
-                                    max = table.Rows.Count - 1; // TODO fix this up. notice that same use is used twice
-                                }
-                            }
-                            else
-                            {
-                                min = 0;
-                                max = table.Rows.Count - 1;
+                                list[i] = Convert.ToInt32(explode[i]);
                             }
                         }
                         else
                         {
-                            min = Convert.ToInt32(entity.value);
-                            max = min;
+                            if (entity.ID.Contains("*"))
+                            {
+                                min = 0;
+                                max = table.Rows.Count - 1;
+                            }
+                            else if (entity.ID.Contains("-"))
+                            {
+                                int idx = entity.ID.IndexOf('-');
+                                int len = entity.ID.Length - idx - 1;
+                                min = Convert.ToInt32(entity.ID.Substring(0, idx));
+                                max = Convert.ToInt32(entity.ID.Substring(idx + 1, len));
+                            }
+                            else
+                            {
+                                min = Convert.ToInt32(entity.ID);
+                                max = Convert.ToInt32(entity.ID);
+                            }
+
+                            int listlen = max - min + 1;
+                            list = new int[listlen];
+                            int i = 0;
+
+                            for (int row = min; row <= max; row++)
+                            {
+                                list[i++] = row;
+                            }
+                        }
+
+                        //determine function
+                        if (attribute.Bit != null)
+                        {
+                            function = "bitwise";
+                        }
+                        else if (attribute.Operation == null)
+                        {
+                            function = "replace";
+                        }
+                        else if (attribute.Operation.Contains("*"))
+                        {
+                            function = "multiply";
+                        }
+                        else if (attribute.Operation.Contains("/"))
+                        {
+                            function = "divide";
+                        }
+                        else if (attribute.Operation.Contains("+"))
+                        {
+                            string s = attribute.Operation.Remove(0);
+                            step = Convert.ToInt32(s);
+                            function = "recursive";
+                        }
+                        else if (attribute.Operation.Contains("-"))
+                        {
+                            step = Convert.ToInt32(attribute.Operation);
+                            function = "recursive";
+                        }
+                        else
+                        {
+                            continue; // syntax error
                         }
 
                         //main loop, alters the dataset
-                        for (int i = min; i <= max; i++)
+                        foreach (int row in list)
                         {
                             object obj = null;
-                            string c = attribute.id;
-                            Type type = table.Columns[attribute.id].DataType;
-                            DataRow dataRow = table.Rows[i];
+                            string col = attribute.ID;
+                            Type type = table.Columns[col].DataType;
+                            DataRow dataRow = table.Rows[row];
 
                             switch (function)
                             {
                                 case "replace":
-                                    obj = attribute.replace.data;
+                                    obj = attribute.Value;
                                     break;
+
                                 case "multiply":
                                     if (type.Equals(typeof(int)))
-                                        obj = (int)dataRow[c] * Convert.ToInt32(attribute.divide.data);
+                                        obj = (int)dataRow[col] * Convert.ToInt32(attribute.Value);
                                     else if (type.Equals(typeof(float)))
-                                        obj = (float)dataRow[c] * Convert.ToSingle(attribute.divide.data);
+                                        obj = (float)dataRow[col] * Convert.ToSingle(attribute.Value);
                                     break;
+
                                 case "divide":
                                     if (type.Equals(typeof(int)))
-                                        obj = (int)dataRow[c] / Convert.ToInt32(attribute.divide.data);
+                                        obj = (int)dataRow[col] / Convert.ToInt32(attribute.Value);
                                     else if (type.Equals(typeof(float)))
-                                        obj = (float)dataRow[c] / Convert.ToSingle(attribute.divide.data);
+                                        obj = (float)dataRow[col] / Convert.ToSingle(attribute.Value);
                                     break;
+
                                 case "bitwise":
-                                    foreach (Bitwise bitwise in attribute.bitwise)
-                                    {
-                                        uint bit = (uint)Enum.Parse(type, bitwise.id, true);
-                                        uint mask = (uint)dataRow[c];
-                                        bool flick = bitwise.switch_data;
-                                        if (flick != ((mask & bit) == 0))
-                                            obj = (mask ^= bit);
-                                        else
-                                            obj = mask;
-                                    }
-                                    break;
-                                case "recursive":
-                                    if (i.Equals(min)) //first time only
-                                    {
-                                        last = Convert.ToInt32(attribute.recursive.data);
-                                        if (type.Equals(typeof(int)))
-                                            obj = Convert.ToInt32(attribute.recursive.data);
-                                        else if (type.Equals(typeof(float)))
-                                            obj = Convert.ToSingle(attribute.recursive.data);
-                                    }
+                                    uint bit = (uint)Enum.Parse(type, attribute.Bit, true);
+                                    uint mask = (uint)dataRow[col];
+                                    bool flick = Convert.ToBoolean(attribute.Value);
+                                    if (flick != ((mask & bit) == 1))
+                                        obj = mask ^= bit;
                                     else
+                                        obj = mask;
+                                    break;
+
+                                case "recursive":
+                                    if (row.Equals(min) == false)
+                                    {
+                                        last += step;
+                                        if (type.Equals(typeof(int)))
+                                            obj = last;
+                                    }
+                                    else //first time only
                                     {
                                         if (type.Equals(typeof(int)))
-                                            obj = last + Convert.ToInt32(attribute.recursive.step);
-                                        else if (type.Equals(typeof(float)))
-                                            obj = last + Convert.ToSingle(attribute.recursive.step);
+                                            obj = Convert.ToInt32(attribute.Value);
+                                        last = (int)obj;
                                     }
                                     break;
                             }
-
-                            dataRow[c] = obj;
-                        }
-                        //end main loop
+                            dataRow[col] = obj;
+                        } //end main loop
                     }
                 }
                 return true;
@@ -232,270 +252,44 @@ namespace Reanimator
             }
         }
 
-        [XmlRoot("revival")]
-        public class Revival
+        [XmlRoot("modification")]
+        public class Root
         {
-            [XmlElement(typeof(Content))]
-            public Content[] modification;
-
-            public MyEnumerator GetEnumerator() { return new MyEnumerator(this); }
-
-            public class MyEnumerator
-            {
-                int nIndex;
-                Revival collection;
-                public MyEnumerator(Revival coll)
-                {
-                    collection = coll;
-                    nIndex = -1;
-                }
-                public bool MoveNext()
-                {
-                    nIndex++;
-                    return (nIndex < collection.modification.GetLength(0));
-                }
-                public Content Current { get { return (collection.modification[nIndex]); } }
-            }
+            [XmlElement("file", typeof(File))]
+            public File[] files { get; set; }
         }
-        public class Content
-        {
-            [XmlElement]
-            public string title;
-            [XmlElement]
-            public string version;
-            [XmlElement]
-            public string author;
-            [XmlElement]
-            public string description;
-            [XmlElement]
-            public string url;
-            [XmlElement]
-            public string type;
-            [XmlElement(typeof(Pack))]
-            public Pack[] pack;
-            [XmlElement]
-            public String image;
 
-            [XmlIgnoreAttribute]
-            public Image png;
-            [XmlIgnoreAttribute]
-            public bool apply;
-
-            public string GetListDescription()
-            {
-                return "Title: " + title + Environment.NewLine +
-                    "Version: " + version + Environment.NewLine +
-                    "Url: " + url + Environment.NewLine +
-                    "Type: " + type + Environment.NewLine +
-                    "Description: " + description;
-            }
-
-            public bool GetListEnable()
-            {
-                if (type == "required")
-                    return true;
-                else
-                    return false;
-            }
-
-            public MyEnumerator GetEnumerator()
-            { 
-                return new MyEnumerator(this);
-            }
-
-            public class MyEnumerator
-            {
-                int nIndex;
-                Content collection;
-                public MyEnumerator(Content coll)
-                {
-                    collection = coll;
-                    nIndex = -1;
-                }
-                public bool MoveNext()
-                {
-                    nIndex++;
-                    return (nIndex < collection.pack.GetLength(0));
-                }
-                public Pack Current
-                {
-                    get { return (collection.pack[nIndex]); }
-                }
-            }
-        }
-        public class Pack
-        {
-            [XmlAttribute]
-            public string id;
-            [XmlElement(typeof(File))]
-            public File[] file;
-
-            [XmlIgnoreAttribute]
-            public int list_id;
-
-            public MyEnumerator GetEnumerator() { return new MyEnumerator(this); }
-
-            public class MyEnumerator
-            {
-                int nIndex;
-                Pack collection;
-                public MyEnumerator(Pack coll)
-                {
-                    collection = coll;
-                    nIndex = -1;
-                }
-                public bool MoveNext()
-                {
-                    nIndex++;
-                    return (nIndex < collection.file.GetLength(0));
-                }
-                public File Current { get { return (collection.file[nIndex]); } }
-            }
-        }
         public class File
         {
-            [XmlAttribute]
-            public string id;
-            [XmlAttribute]
-            public string dir;
-            [XmlAttribute]
-            public bool repack;
-            [XmlElement(typeof(Modify))]
-            public Modify modify;
-            [XmlElement(typeof(Replace))]
-            public Replace replace;
+            [XmlAttribute("id")]
+            public string ID { get; set; }
 
-            [XmlIgnoreAttribute]
-            public int list_id;
-            [XmlIgnoreAttribute]
-            public int index_id;
-            [XmlIgnoreAttribute]
-            public int index_id_patch;
-            [XmlIgnoreAttribute]
-            public string table_ref;
+            [XmlElement("entity", typeof(Entity))]
+            public Entity[] Entities { get; set; }
         }
-        public class Modify
-        {
-            [XmlElement(typeof(Entity))]
-            public Entity[] entity;
-            [XmlAttribute]
-            public bool repack;
 
-            public MyEnumerator GetEnumerator() { return new MyEnumerator(this); }
-
-            public class MyEnumerator
-            {
-                int nIndex;
-                Modify collection;
-                public MyEnumerator(Modify coll)
-                {
-                    collection = coll;
-                    nIndex = -1;
-                }
-                public bool MoveNext()
-                {
-                    nIndex++;
-                    return (nIndex < collection.entity.GetLength(0));
-                }
-                public Entity Current { get { return (collection.entity[nIndex]); } }
-            }
-        }
         public class Entity
         {
-            [XmlAttribute]
-            public string id;
-            [XmlAttribute]
-            public string value;
-            [XmlElement(typeof(Attribute))]
-            public Attribute[] attribute;
+            [XmlAttribute("id")]
+            public string ID { get; set; }
 
-            [XmlIgnoreAttribute]
-            public int min;
-            [XmlIgnoreAttribute]
-            public int max;
-
-            public MyEnumerator GetEnumerator() { return new MyEnumerator(this); }
-
-            public class MyEnumerator
-            {
-                int nIndex;
-                Entity collection;
-                public MyEnumerator(Entity coll)
-                {
-                    collection = coll;
-                    nIndex = -1;
-                }
-                public bool MoveNext()
-                {
-                    nIndex++;
-                    return (nIndex < collection.attribute.GetLength(0));
-                }
-                public Attribute Current { get { return (collection.attribute[nIndex]); } }
-            }
+            [XmlElement("attribute", typeof(Attribute))]
+            public Attribute[] Attributes { get; set; }
         }
+
         public class Attribute
         {
-            [XmlAttribute]
-            public string id;
-            [XmlElement(typeof(Replace))]
-            public Replace replace;
-            [XmlElement(typeof(Divide))]
-            public Divide divide;
-            [XmlElement(typeof(Multiply))]
-            public Multiply multiply;
-            [XmlElement(typeof(Bitwise))]
-            public Bitwise[] bitwise;
-            [XmlElement(typeof(Recursive))]
-            public Recursive recursive;
+            [XmlAttribute("id")]
+            public string ID { get; set; }
 
-            public Type GetFunction()
-            {
-                if (replace != null) return typeof(Replace);
-                if (divide != null) return typeof(Divide);
-                if (multiply != null) return typeof(Multiply);
-                if (bitwise != null) return typeof(Bitwise);
-                if (recursive != null) return typeof(Recursive);
-                else return null;
-            }
+            [XmlAttribute("bit")]
+            public string Bit { get; set; }
 
-            public string GetFunctionString()
-            {
-                if (replace != null) return "replace";
-                if (divide != null) return "divide";
-                if (multiply != null) return "multiply";
-                if (bitwise != null) return "bitwise";
-                if (recursive != null) return "recursive";
-                else return null;
-            }
-        }
-        public class Bitwise
-        {
-            [XmlAttribute]
-            public string id;
-            [XmlElement("switch")]
-            public bool switch_data;
-        }
-        public class Replace
-        {
-            [XmlElement("data")]
-            public string data;
-        }
-        public class Divide
-        {
-            [XmlElement("data")]
-            public string data;
-        }
-        public class Multiply
-        {
-            [XmlElement("data")]
-            public string data;
-        }
-        public class Recursive
-        {
-            [XmlAttribute]
-            public int step;
-            [XmlElement("data")]
-            public string data;
+            [XmlAttribute("param")]
+            public string Operation { get; set; }
+
+            [XmlText]
+            public string Value { get; set; }
         }
     }
 }

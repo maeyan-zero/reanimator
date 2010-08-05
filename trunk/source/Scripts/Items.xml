@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<file id="ITEMS">
+		<!--FOR ALL ITEMS-->
+		<!--UNLOCK SUBSCRIBER & MULTIPLAYER ITEMS, REMOVE NO TRADE-->
+		<!--Notes: There are no cases when you will want to alter these values.-->
+		<entity id="*">
+			<attribute id="bitmask02" bit="SubscriberOnly">false</attribute>
+			<attribute id="bitmask05" bit="NoTrade">false</attribute>
+			<attribute id="bitmask07" bit="MultiplayerOnly">false</attribute>
+		</entity>
+		<!--SKILL RETRAINER-->
+		<!--ATTRIBUTE RETRAINER-->
+		<entity id="15,265">
+			<attribute id="Quality">5</attribute>
+			<attribute id="bitmask05" bit="NoDrop">true</attribute>
+			<attribute id="fixedLevel">26,55,0</attribute>
+		</entity>
+		<!--MANTRAWRAITH, ZOMBOT AND COKOMOKO-->
+		<entity id="178-183">
+			<attribute id="bitmask05" bit="NoDropExceptForDuplicates">true</attribute>
+		</entity>
+		<!--WARTS PEG LEG-->
+		<!--Notes: Warts leg equipable by all factions.-->
+		<entity id="735">
+			<attribute id="containerUnitType1">1</attribute>
+		</entity>
+	</file>
+</modification>

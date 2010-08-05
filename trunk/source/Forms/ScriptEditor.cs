@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Reanimator.Forms
 {
@@ -17,7 +18,7 @@ namespace Reanimator.Forms
         List<string> _availableFiles;
         int _currentTable = -1;
 
-        public string ScriptDir { get { return Config.HglDir + "\\Reanimator\\Scripts"; } }
+        public string ScriptDir { get { return Config.ScriptDir; } }
         public string Filter { get { return "Xml Files (*.xml)|*.xml|All Files (*.*)|*.*"; } }
 
         public ScriptEditor(TableDataSet tableDataSet)
@@ -40,6 +41,7 @@ namespace Reanimator.Forms
                 string[] filenames = FileTools.FileNameFromPath(_availableFiles.ToArray());
                 availableCombo.Items.AddRange(filenames);
             }
+            SetTabs(textBox);
         }
 
         private void availableCombo_SelectedIndexChanged(object sender, EventArgs e)
@@ -182,6 +184,20 @@ namespace Reanimator.Forms
         private void ScriptEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
             savePrompt();
+        }
+
+        static class NativeMethods
+        {
+            [DllImport("user32.dll")]
+            public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, ref int lParam);
+        }
+
+        static void SetTabs(TextBox box)
+        {
+            //EM_SETTABSTOPS - http://msdn.microsoft.com/en-us/library/bb761663%28VS.85%29.aspx
+            int lParam = 16;  //Set tab size to 4 spaces
+            NativeMethods.SendMessage(box.Handle, 0x00CB, new IntPtr(1), ref lParam);
+            box.Invalidate();
         }
     }
 }
