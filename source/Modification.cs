@@ -193,7 +193,19 @@ namespace Reanimator
                             object obj = null;
                             string col = attribute.ID;
                             Type type = table.Columns[col].DataType;
-                            DataRow dataRow = table.Rows[row];
+                            DataRow dataRow;
+
+                            //if required add new row 
+                            if (row >= table.Rows.Count)
+                            {
+                                dataRow = table.NewRow();
+                                dataRow[0] = row;
+                                table.Rows.Add(dataRow);
+                            }
+                            else
+                            {
+                                dataRow = table.Rows[row];
+                            }
 
                             switch (function)
                             {
