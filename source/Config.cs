@@ -120,5 +120,11 @@ namespace Reanimator
             get { return GetValue("DatLastUnpacked", "Never"); }
             set { SetValue("DatLastUnpacked", value); }
         }
+
+        public static string ScriptDir
+        {
+            get { return GetValue("ScriptDir", @"C:\Program Files\Flagship Studios\Hellgate London\Reanimator\Scripts"); }
+            set { SetValue("ScriptDir", value); }
+        }
     }
 }

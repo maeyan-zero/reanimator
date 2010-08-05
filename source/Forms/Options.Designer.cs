@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.pathSettings_GroupBox = new System.Windows.Forms.GroupBox();
+            this.scriptButton = new System.Windows.Forms.Button();
+            this.scriptDirText = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.gameClientPath_Button = new System.Windows.Forms.Button();
             this.gameClientPath_TextBox = new System.Windows.Forms.TextBox();
             this.gameClientPath_Label = new System.Windows.Forms.Label();
@@ -45,6 +48,9 @@
             // 
             // pathSettings_GroupBox
             // 
+            this.pathSettings_GroupBox.Controls.Add(this.scriptButton);
+            this.pathSettings_GroupBox.Controls.Add(this.scriptDirText);
+            this.pathSettings_GroupBox.Controls.Add(this.label1);
             this.pathSettings_GroupBox.Controls.Add(this.gameClientPath_Button);
             this.pathSettings_GroupBox.Controls.Add(this.gameClientPath_TextBox);
             this.pathSettings_GroupBox.Controls.Add(this.gameClientPath_Label);
@@ -57,10 +63,36 @@
             this.pathSettings_GroupBox.Controls.Add(this.hglDir_TextBox);
             this.pathSettings_GroupBox.Location = new System.Drawing.Point(12, 12);
             this.pathSettings_GroupBox.Name = "pathSettings_GroupBox";
-            this.pathSettings_GroupBox.Size = new System.Drawing.Size(413, 198);
+            this.pathSettings_GroupBox.Size = new System.Drawing.Size(413, 250);
             this.pathSettings_GroupBox.TabIndex = 0;
             this.pathSettings_GroupBox.TabStop = false;
             this.pathSettings_GroupBox.Text = "Path Settings";
+            // 
+            // scriptButton
+            // 
+            this.scriptButton.Location = new System.Drawing.Point(329, 221);
+            this.scriptButton.Name = "scriptButton";
+            this.scriptButton.Size = new System.Drawing.Size(75, 23);
+            this.scriptButton.TabIndex = 13;
+            this.scriptButton.Text = "Browse";
+            this.scriptButton.UseVisualStyleBackColor = true;
+            this.scriptButton.Click += new System.EventHandler(this.scriptButton_Click);
+            // 
+            // scriptDirText
+            // 
+            this.scriptDirText.Location = new System.Drawing.Point(10, 224);
+            this.scriptDirText.Name = "scriptDirText";
+            this.scriptDirText.Size = new System.Drawing.Size(313, 20);
+            this.scriptDirText.TabIndex = 12;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 208);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "Script Path";
             // 
             // gameClientPath_Button
             // 
@@ -158,7 +190,7 @@
             // 
             // ok_Button
             // 
-            this.ok_Button.Location = new System.Drawing.Point(349, 216);
+            this.ok_Button.Location = new System.Drawing.Point(341, 268);
             this.ok_Button.Name = "ok_Button";
             this.ok_Button.Size = new System.Drawing.Size(75, 23);
             this.ok_Button.TabIndex = 1;
@@ -171,7 +203,7 @@
             this.AcceptButton = this.ok_Button;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(437, 247);
+            this.ClientSize = new System.Drawing.Size(437, 302);
             this.ControlBox = false;
             this.Controls.Add(this.ok_Button);
             this.Controls.Add(this.pathSettings_GroupBox);
@@ -205,6 +237,9 @@
         private System.Windows.Forms.Button gameClientPath_Button;
 
         private System.Windows.Forms.Button ok_Button;
+        private System.Windows.Forms.Button scriptButton;
+        private System.Windows.Forms.TextBox scriptDirText;
+        private System.Windows.Forms.Label label1;
 
     }
 }

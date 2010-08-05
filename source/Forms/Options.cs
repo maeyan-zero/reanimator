@@ -76,6 +76,7 @@ namespace Reanimator.Forms
             dataDir_Button.Enabled = !Config.DataDirsRootChecked;
             dataDir_TextBox.Enabled = !Config.DataDirsRootChecked;
             gameClientPath_TextBox.Text = Config.GameClientPath;
+            scriptDirText.Text = Config.ScriptDir;
         }
 
         private void gameClientPath_Button_Click(object sender, EventArgs e)
@@ -91,6 +92,21 @@ namespace Reanimator.Forms
                 Config.GameClientPath = openFileDialog.FileName;
                 gameClientPath_TextBox.Text = openFileDialog.FileName;
             }
+        }
+
+        private void scriptButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog
+            {
+                Description =
+                    "Locate the Reanimator script directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London\\Reanimator\\Scripts",
+                SelectedPath = Config.ScriptDir
+            };
+
+            if (folderBrowserDialogue.ShowDialog(this) != DialogResult.OK) return;
+
+            Config.ScriptDir = folderBrowserDialogue.SelectedPath;
+            scriptDirText.Text = Config.ScriptDir;
         }
     }
 }

@@ -648,10 +648,24 @@
     <None Include="Resources\inventory_bg1.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Scripts\Config.ini" />
     <None Include="Resources\attributePanelBg.png" />
     <None Include="Resources\attributePanel.png" />
+    <Content Include="Scripts\AffixTypes.xml" />
+    <Content Include="Scripts\FontColors.xml" />
+    <Content Include="Scripts\GameGlobals.xml" />
+    <Content Include="Scripts\Inventory.xml" />
+    <Content Include="Scripts\ItemLevels.xml" />
+    <Content Include="Scripts\ItemQuality.xml" />
+    <Content Include="Scripts\Items.xml" />
+    <Content Include="Scripts\Monsters.xml" />
+    <Content Include="Scripts\Recipies.xml" />
     <Content Include="Resources\icon3.ico" />
+    <Content Include="Scripts\Skills.xml" />
+    <Content Include="Scripts\StringFiles.xml" />
+    <Content Include="Scripts\Treasure.xml" />
     <None Include="Resources\skillPanelBg.png" />
+    <None Include="Scripts\Strings_Revival.csv" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

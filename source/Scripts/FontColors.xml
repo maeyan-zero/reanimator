@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<file id="FONTCOLORS">
+		<!--DOUBLE EDGED-->
+		<entity id="157">
+			<attribute id="Color">double edged</attribute>
+			<attribute id="blue">255</attribute>
+			<attribute id="green">255</attribute>
+			<attribute id="red">255</attribute>
+			<attribute id="alpha">255</attribute>
+			<attribute id="fontColor">-1</attribute>
+		</entity>
+		<!--MUTANT-->
+		<entity id="158">
+			<attribute id="Color">mythic</attribute>
+			<attribute id="blue">255</attribute>
+			<attribute id="green">255</attribute>
+			<attribute id="red">255</attribute>
+			<attribute id="alpha">255</attribute>
+			<attribute id="fontColor">-1</attribute>
+		</entity>
+	</file>
+</modification>

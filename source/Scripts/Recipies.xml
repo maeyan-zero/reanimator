@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<file id="RECIPIES">
+		<entity id="*" value="1-18">
+			<attribute id="AlwaysKnown">1</attribute>
+			<attribute id="CubeRecipe">1</attribute>
+		</entity>
+		<!--ENABLE CONSUMABLE RECIPES-->
+		<entity id="42-79">
+			<attribute id="AlwaysKnown">1</attribute>
+			<attribute id="CubeRecipe">1</attribute>
+		</entity>
+		<!--HIDE BROKEN PET RECIPES-->
+		<entity id="80-82">
+			<attribute id="CubeRecipe">0</attribute>
+		</entity>
+		<!--FIX CONFLICTING RECIPES-->
+		<!--GLOVES-->
+		<entity id="11">
+			<attribute id="ingredient4ItemQuality">0</attribute>
+		</entity>
+		<!--TORSO-->
+		<entity id="15">
+			<attribute id="ingredient5ItemQuality">2</attribute>
+		</entity>
+		<!--SHIELD-->
+		<entity id="16">
+			<attribute id="ingredient5ItemQuality">0</attribute>
+		</entity>
+		<!--FOCUS ITEM-->
+		<entity id="17">
+			<attribute id="ingredient5ItemQuality">2</attribute>
+		</entity>
+	</file>
+</modification>
