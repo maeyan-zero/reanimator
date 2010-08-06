@@ -235,17 +235,18 @@ namespace Reanimator
                                     break;
 
                                 case "recursive":
-                                    if (row.Equals(min) == false)
+                                    if (row.Equals(min))//first time only
+                                    {
+                                        if (type.Equals(typeof(int)))
+                                        {
+                                            obj = Convert.ToInt32(attribute.Value);
+                                            last = (int)obj;
+                                        }
+                                    }
+                                    else 
                                     {
                                         last += step;
-                                        if (type.Equals(typeof(int)))
-                                            obj = last;
-                                    }
-                                    else //first time only
-                                    {
-                                        if (type.Equals(typeof(int)))
-                                            obj = Convert.ToInt32(attribute.Value);
-                                        last = (int)obj;
+                                        obj = last;
                                     }
                                     break;
                             }
