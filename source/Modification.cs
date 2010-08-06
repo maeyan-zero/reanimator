@@ -195,17 +195,14 @@ namespace Reanimator
                             Type type = table.Columns[col].DataType;
                             DataRow dataRow;
 
-                            //if required add new row 
-                            if (row >= table.Rows.Count)
+                            //add blank/reserved rows if required
+                            while (row >= table.Rows.Count)
                             {
                                 dataRow = table.NewRow();
-                                dataRow[0] = row;
                                 table.Rows.Add(dataRow);
                             }
-                            else
-                            {
-                                dataRow = table.Rows[row];
-                            }
+
+                            dataRow = table.Rows[row];
 
                             switch (function)
                             {
