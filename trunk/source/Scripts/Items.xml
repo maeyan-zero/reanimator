@@ -26,12 +26,11 @@
 			<attribute id="containerUnitType1">1</attribute>
 		</entity>
 		<!--NEW REVIVAL ITEMS-->
-    <!--Notes: Offset some room between FSS stuff.-->
-    <entity id="1895-1904" />
 		<!--SWORD OF MAEYAN-->
 		<!--Notes: This is a nice high level sword, unique level 55 based on YongKwang sword. -->
-    <entity id="1905">
-      <attribute id="name">sword of maeyan</attribute>
-    </entity>
+		<entity id="1905">
+			<attribute id="name">sword of maeyan</attribute>
+			<attribute id="fixedLevel">26,55,0</attribute>
+		</entity>
 	</file>
 </modification>
