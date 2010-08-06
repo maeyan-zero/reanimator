@@ -16,7 +16,7 @@
 		</entity>
 		<!--CUBE FIX-->
 		<!--Notes: Cube doesn't work as intended without.-->
-		<entity id="Cube" value="55">
+		<entity id="55">
 			<attribute id="playerPutRestricted">0</attribute>
 			<attribute id="playerTakeRestricted">0</attribute>
 		</entity>
