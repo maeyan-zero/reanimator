@@ -17,7 +17,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 undefined2;
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 lqExtension; //pchar
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         public Int32 undefined3a;
         public Int32 undefined3b;
         public Int32 pickType;//unk
@@ -34,7 +33,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 directory;//pchar
         public Int32 undefined5;
         public Int32 fileName1;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined6a;
         Int32 undefined6b;
         public Int32 undefined6c;//information
@@ -44,9 +42,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined6g;
         public float weight1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined7;
+        Int32[] undefined7;
         public Int32 fileName2;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined8a;
         Int32 undefined8b;
         public Int32 undefined8c;//information
@@ -56,9 +53,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined8g;
         public float weight2;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined9;
+        Int32[] undefined9;
         public Int32 fileName3;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined10a;
         Int32 undefined10b;
         public Int32 undefined10c;//information
@@ -68,9 +64,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined10g;
         public float weight3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined11;
+        Int32[] undefined11;
         public Int32 fileName4;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined12a;
         Int32 undefined12b;
         public Int32 undefined12c;//information
@@ -80,9 +75,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined12g;
         public float weight4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined13;
+        Int32[] undefined13;
         public Int32 fileName5;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined14a;
         Int32 undefined14b;
         public Int32 undefined14c;//information
@@ -92,9 +86,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined14g;
         public float weight5;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined15;
+        Int32[] undefined15;
         public Int32 fileName6;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined16a;
         Int32 undefined16b;
         public Int32 undefined16c;//information
@@ -104,9 +97,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined16g;
         public float weight6;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined17;
+        Int32[] undefined17;
         public Int32 fileName7;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined18a;
         Int32 undefined18b;
         public Int32 undefined18c;//information
@@ -116,9 +108,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined18g;
         public float weight7;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined19;
+        Int32[] undefined19;
         public Int32 fileName8;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined20a;
         Int32 undefined20b;
         public Int32 undefined20c;//information
@@ -128,9 +119,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined20g;
         public float weight8;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined21;
+        Int32[] undefined21;
         public Int32 fileName9;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined22a;
         Int32 undefined22b;
         public Int32 undefined22c;//information
@@ -140,9 +130,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined22g;
         public float weight9;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined23;
+        Int32[] undefined23;
         public Int32 fileName10;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined24a;
         Int32 undefined24b;
         public Int32 undefined24c;//information
@@ -152,9 +141,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined24g;
         public float weight10;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined25;
+        Int32[] undefined25;
         public Int32 fileName11;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined26a;
         Int32 undefined26b;
         public Int32 undefined26c;//information
@@ -164,9 +152,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined26g;
         public float weight11;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined27;
+        Int32[] undefined27;
         public Int32 fileName12;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined28a;
         Int32 undefined28b;
         public Int32 undefined28c;//information
@@ -178,7 +165,6 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         public Int32[] undefined29;
         public Int32 fileName13;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined30a;
         Int32 undefined30b;
         public Int32 undefined30c;//information
@@ -188,9 +174,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined30g;
         public float weight13;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined31;
+        Int32[] undefined31;
         public Int32 fileName14;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32 undefined32a;
         Int32 undefined32b;
         public Int32 undefined32c;//information
@@ -200,12 +185,12 @@ namespace Reanimator.ExcelDefinitions
         Int32 undefined32g;
         public float weight14;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined33;
+        Int32[] undefined33;
         public Int32 freqVar;
         public Int32 undefined34;
         public Int32 volVar;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public Int32[] undefined35;
+        Int32[] undefined35;
         public Int32 maxWithInRad;
         public float radius;
         public Int32 hardwarePriority;
@@ -231,17 +216,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 vcas8;
         public Int32 musicRef;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public Int32[] undefined44;
+        Int32[] undefined44;
         public Int32 stingerRef;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public Int32[] undefined45;
+        Int32[] undefined45;
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 effects;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public Int32[] undefined46;
+        Int32[] undefined46;
         public Int32 undefined46d;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
-        public Int32[] undefined47;
+        Int32[] undefined47;
     }
 
     public abstract class Sounds

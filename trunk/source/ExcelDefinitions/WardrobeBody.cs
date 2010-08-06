@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -10,8 +11,12 @@ namespace Reanimator.ExcelDefinitions
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public Int32[] layers;
+        public Int32 layers1;
+        public Int32 layers2;
+        public Int32 layers3;
+        public Int32 layers4;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+        Int32[] layersUnused;
         public Int32 Base;//idx
         public Int32 head;//idx
         public Int32 hair;//idx
@@ -20,9 +25,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 hairColorTexture;//idx
         public byte skinColor;
         public byte hairColor;
-        public short undefined;
+        short undefined;
+        [ExcelOutput(IsBool = true)]
         public Int32 randomize;//bool
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] randomLayerSets;
+        public Int32 randomLayerSets1;
+        public Int32 randomLayerSets2;
+        public Int32 randomLayerSets3;
+        Int32 randomLayerSets4;
     }
 }

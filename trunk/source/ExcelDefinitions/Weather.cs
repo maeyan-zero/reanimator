@@ -13,6 +13,6 @@ namespace Reanimator.ExcelDefinitions
 
         public Int32 state;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] themes;
+        Int32[] themes;
     }
 }

@@ -9,6 +9,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string treasureClass;
         [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]

@@ -9,9 +9,11 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
+        [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
 
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 type;
         public Int32 assocStat1;
