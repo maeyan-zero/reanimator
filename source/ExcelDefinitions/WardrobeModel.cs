@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        public Int32 undefined1;
+        Int32 undefined1;
         public Int32 modelGroup;//idx;
         public Int32 appearanceGroup;//idx;
         public Int32 appearanceGroup2;//idx;
@@ -17,13 +17,13 @@ namespace Reanimator.ExcelDefinitions
         public string fileName;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string defaultMaterial;
-        public Int32 undefined3;
+        Int32 undefined3;
         public Int32 partGroup;
-        public Int32 undefinedBool1;
-        public Int32 undefinedBool2;
-        public Int32 undefinedBool3;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public Int32[] undefined4;
+        Int32 undefinedBool1;
+        Int32 undefinedBool2;
+        Int32 undefinedBool3;
+        Int32 undefined4;
+        Int32 undefined5;
         public float boxMinX;
         public float boxMinY;
         public float boxMinZ;

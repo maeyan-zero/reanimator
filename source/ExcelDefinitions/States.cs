@@ -9,9 +9,10 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
+        [ExcelFile.ExcelOutput(IsStringOffset = true, SortId = 1)]
         public Int32 name;
         Int32 buffer;
+        [ExcelOutput(SortId = 2)]
         public Int32 code;
         Int32 buffer1;              // always 0
         [ExcelFile.ExcelOutput(IsStringOffset = true)]

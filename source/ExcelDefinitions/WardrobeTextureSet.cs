@@ -26,9 +26,9 @@ namespace Reanimator.ExcelDefinitions
         public string colorMask;
         public short undefined1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        public Int32[] undefinedBool;
+        Int32[] undefinedBool;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public Int32[] undefinedInt;
+        Int32[] undefinedInt;
         public Int32 sizeDiffuseW;//Width
         public Int32 sizeDiffuseH;//Height
         public Int32 sizeNormalW;
@@ -39,7 +39,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 sizeLightMapH;
         public Int32 sizeColorMaskW;
         public Int32 sizeColorMaskH;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public Int32[] undefined2;
+        Int32 undefined2;
+        Int32 undefined2a;
     }
 }
