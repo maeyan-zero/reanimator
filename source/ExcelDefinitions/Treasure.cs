@@ -91,22 +91,22 @@ namespace Reanimator.ExcelDefinitions
         public Treasure.Bitmask01 spawnCondition;
         Int32 spawnFromMonsterUnitType;
         Int32 spawnFromLevelTheme;
-    }
 
-    public abstract class Treasure
-    {
-        [FlagsAttribute]
-        public enum Bitmask01 : uint
+        public abstract class Treasure
         {
-            createForAllPlayersInLevel = 1,
-            requiredUsableByOperator = 2, 
-            requiredUsableBySpawner = 4,
-            subscriberOnly = 8,
-            maxSlots = 16,
-            resultsNotRequired = 32,
-            stackTreasure = 64,
-            multiplayerOnly = 128,
-            singlePlayerOnly = 256
-        };
+            [FlagsAttribute]
+            public enum Bitmask01 : uint
+            {
+                createForAllPlayersInLevel = 1,
+                requiredUsableByOperator = 2,
+                requiredUsableBySpawner = 4,
+                subscriberOnly = 8,
+                maxSlots = 16,
+                resultsNotRequired = 32,
+                stackTreasure = 64,
+                multiplayerOnly = 128,
+                singlePlayerOnly = 256
+            };
+        }
     }
 }
