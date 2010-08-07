@@ -71,7 +71,7 @@ namespace Reanimator
         }
         public void Apply(ProgressForm progress, Object argument)
         {
-            foreach (File file in _revival.files)
+            foreach (File file in _revival.Files)
             {
                 progress.SetLoadingText("Modifying: " + file.ID);
                 Manipulate(file);
@@ -228,7 +228,8 @@ namespace Reanimator
                                     uint bit = (uint)Enum.Parse(type, attribute.Bit, true);
                                     uint mask = (uint)dataRow[col];
                                     bool flick = Convert.ToBoolean(attribute.Value);
-                                    if (flick != ((mask & bit) == 1))
+                                    bool current = (mask & bit) > 0;
+                                    if (flick != current)
                                         obj = mask ^= bit;
                                     else
                                         obj = mask;
@@ -266,7 +267,7 @@ namespace Reanimator
         public class Root
         {
             [XmlElement("file", typeof(File))]
-            public File[] files { get; set; }
+            public File[] Files { get; set; }
         }
 
         public class File

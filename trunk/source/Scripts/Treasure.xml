@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <modification>
 	<file id="TREASURE">
-		<!--BEAST OF ABBADON-->
-		<entity id="364">
-			<attribute id="NoDrop">90</attribute>
-		</entity>
-		<!--FIEND-->
-		<entity id="331">
-			<attribute id="NoDrop">90</attribute>
-		</entity>
+    <!--REMOVE SUBSCRIBER AND MUTIPLAYER ONLY BITS-->
+    <!--Notes: Changing this section will only prevent Treasure classes from working at all.-->
+    <entity id="422-509">
+      <attribute id="spawnCondition" bit="multiplayerOnly">false</attribute>
+      <attribute id="spawnCondition" bit="subscriberOnly">false</attribute>
+    </entity>
+    <!--ADD CLASS THAT HAS A 1/100 CHANCE TO DROP A UNIQUE-->
+    <!--Notes: To be associated with Unique/Epic/Boss monster rarities.-->
+    <entity id="531">
+      <attribute id="treasureClass">unique item chance</attribute>
+      <attribute id="globalThemeRequired">-1</attribute>
+      <attribute id="pickTypes">0</attribute>
+      <attribute id="picks">1</attribute>
+      <attribute id="undefined03">1</attribute>
+      <attribute id="noDrop">99</attribute>
+      <attribute id="levelBoost">710,26,3,26,5,3,33,0</attribute>
+      <!--ITEM QUALITY-->
+      <attribute id="item1m">4</attribute>
+      <!--UNIQUE-->
+      <attribute id="item1">5</attribute>
+      <attribute id="value1">1</attribute>
+      <!--<attribute id="spawnCondition" bit="requiredUsableBySpawner">true</attribute>-->
+    </entity>
 	</file>
 </modification>

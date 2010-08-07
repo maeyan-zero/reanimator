@@ -659,6 +659,7 @@
     <Content Include="Scripts\ItemQuality.xml" />
     <Content Include="Scripts\Items.xml" />
     <Content Include="Scripts\Monsters.xml" />
+    <Content Include="Scripts\MonsterQuality.xml" />
     <Content Include="Scripts\Recipies.xml" />
     <Content Include="Resources\icon3.ico" />
     <Content Include="Scripts\Skills.xml" />

@@ -25,6 +25,12 @@
 		<entity id="735">
 			<attribute id="containerUnitType1">1</attribute>
 		</entity>
+    <!--BOSS ITEMS-->
+    <!--Notes: Mutant items are items that drop from bosses.-->
+    <!--Notes: Was previously Legendary, now are Unique items.-->
+    <entity id="286,292,317,336,344,355,401,425,432,437,469,601,604,620,628,637,661,678,703,708,745,754,758,760,768,799,813,836,858">
+      <attribute id="itemQuality">5</attribute>
+    </entity>
 		<!--NEW REVIVAL ITEMS-->
 		<!--SWORD OF MAEYAN-->
 		<!--Notes: This is a nice high level sword, unique level 55 based on YongKwang sword. -->
@@ -32,5 +38,6 @@
 			<attribute id="name">sword of maeyan</attribute>
 			<attribute id="fixedLevel">26,55,0</attribute>
 		</entity>
+    <!--SHIELD OF MAEYAN-->
 	</file>
 </modification>
