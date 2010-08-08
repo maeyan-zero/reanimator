@@ -9,28 +9,6 @@ namespace Reanimator
 {
     public static class FileTools
     {
-        public static string[] FileNameFromPath(string[] paths)
-        {
-            string[] filenames = new string[paths.Length];
-            for (int i = 0; i < filenames.Length; i++)
-            {
-                int j = paths[i].LastIndexOf("\\");
-                string filename = paths[i].Remove(0, j + 1);
-                j = filename.LastIndexOf(".");
-                filenames[i] = filename.Remove(j, filename.Length - j);
-            }
-            return filenames;
-        }
-
-        public static string FileNameFromPath(string path)
-        {
-            int j = path.LastIndexOf("\\");
-            string filename = path.Remove(0, j + 1);
-            j = filename.LastIndexOf(".");
-            filename = filename.Remove(j, filename.Length - j);
-            return filename;
-        }
-
         public static byte[] StreamToByteArray(Stream stream)
         {
             if (stream == null) return null;

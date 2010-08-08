@@ -455,6 +455,30 @@ namespace Reanimator.Forms
                 }
             }
         }
+
+        private void copyScriptLabel_Click(object sender, EventArgs e)
+        {
+            int tableView = 0;
+            if (tabControl1.SelectedIndex == tableView)
+            {
+                using (StringWriter sw = new StringWriter())
+                {
+                    DataGridViewSelectedRowCollection dataRows = tableData_DataGridView.SelectedRows;
+                    foreach (DataGridViewRow dataRow in dataRows)
+                    {
+                        sw.Write("<entity id=\"" + dataRow.Index + "\">\n");
+                        foreach (DataGridViewCell dataCell in dataRow.Cells)
+                        {
+                            if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Equals("Index")) continue;
+                            if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Contains("_string")) continue;
+                            sw.Write("\t<attribute id=\"" + _dataTable.Columns[dataCell.ColumnIndex].Caption + "\">" + dataCell.Value.ToString() + "</attribute>\n");
+                        }
+                        sw.Write("</entity>\n");
+                    }
+                    Clipboard.SetText(sw.ToString());
+                }
+            }
+        }
     }
 
     public static class ExtensionMethods

@@ -269,6 +269,7 @@
     <Compile Include="Forms\ScriptEditor.Designer.cs">
       <DependentUpon>ScriptEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="PathTools.cs" />
     <Compile Include="StringsFile.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -648,27 +649,31 @@
     <None Include="Resources\inventory_bg1.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\Config.ini" />
+    <None Include="Scripts\Revival\Config.ini" />
     <None Include="Resources\attributePanelBg.png" />
     <None Include="Resources\attributePanel.png" />
-    <Content Include="Scripts\AffixTypes.xml" />
-    <Content Include="Scripts\FontColors.xml" />
-    <Content Include="Scripts\GameGlobals.xml" />
-    <Content Include="Scripts\Inventory.xml" />
-    <Content Include="Scripts\ItemLevels.xml" />
-    <Content Include="Scripts\ItemQuality.xml" />
-    <Content Include="Scripts\Items.xml" />
-    <Content Include="Scripts\Monsters.xml" />
-    <Content Include="Scripts\MonsterQuality.xml" />
-    <Content Include="Scripts\Recipies.xml" />
+    <Content Include="Scripts\Revival\Base\AffixTypes.xml" />
+    <Content Include="Scripts\Revival\Base\FontColors.xml" />
+    <Content Include="Scripts\Revival\Base\GameGlobals.xml" />
+    <Content Include="Scripts\Revival\Base\Inventory.xml" />
+    <Content Include="Scripts\Revival\Base\ItemLevels.xml" />
+    <Content Include="Scripts\Revival\Base\ItemQuality.xml" />
+    <Content Include="Scripts\Revival\Base\Items.xml" />
+    <Content Include="Scripts\Revival\Base\Monsters.xml" />
+    <Content Include="Scripts\Revival\Base\MonsterQuality.xml" />
+    <Content Include="Scripts\Revival\Base\Recipies.xml" />
     <Content Include="Resources\icon3.ico" />
-    <Content Include="Scripts\Skills.xml" />
-    <Content Include="Scripts\StringFiles.xml" />
-    <Content Include="Scripts\Treasure.xml" />
+    <Content Include="Scripts\Revival\Base\Skills.xml" />
+    <Content Include="Scripts\Revival\Base\StringFiles.xml" />
+    <Content Include="Scripts\Revival\Base\Treasure.xml" />
     <None Include="Resources\skillPanelBg.png" />
-    <None Include="Scripts\Strings_Revival.csv" />
+    <None Include="Scripts\Revival\Base\Strings_Revival.csv" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Scripts\Revival\Retrainers\" />
+    <Folder Include="Scripts\Revival\Sniper\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

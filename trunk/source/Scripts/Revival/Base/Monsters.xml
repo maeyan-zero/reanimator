@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<file id="MONSTERS">
+		<!--SHULGOTH-->
+		<entity id="437">
+			<attribute id="monsterQuality">3</attribute>
+			<attribute id="treasure">328</attribute>
+			<attribute id="championTreasure">328</attribute>
+		</entity>
+		<!--DIALOGE FIXES-->
+		<!--Note: This section reverts dialoge back to states nurfed by FSS.-->
+		<!--Lollipop-->
+		<entity id="849">
+			<attribute id="npcInfo">77</attribute>
+		</entity>
+		<!--RobSomeone-->
+		<!--Petrus-->
+		<entity id="889,877">
+			<attribute id="npcInfo">37</attribute>
+		</entity>
+		<!--Patrick-->
+		<entity id="834">
+			<attribute id="npcInfo">8</attribute>
+		</entity>
+		<!--George-->
+		<entity id="830">
+			<attribute id="npcInfo">80</attribute>
+		</entity>
+		<!--Gilmour-->
+		<entity id="845">
+			<attribute id="npcInfo">61</attribute>
+		</entity>
+		<!--Tyndall-->
+		<entity id="890">
+			<attribute id="npcInfo">67</attribute>
+		</entity>
+		<!--TechSmith101-->
+		<entity id="965">
+			<attribute id="npcInfo">92</attribute>
+		</entity>
+		<!--Tinker-->
+		<entity id="873">
+			<attribute id="npcInfo">43</attribute>
+		</entity>
+		<!--Holloway-->
+		<entity id="841">
+			<attribute id="npcInfo">58</attribute>
+		</entity>
+		<!--Wilde-->
+		<entity id="863">
+			<attribute id="npcInfo">39</attribute>
+		</entity>
+		<!--Russo-->
+		<!--Stamp-->
+		<entity id="896,894">
+			<attribute id="npcInfo">41</attribute>
+		</entity>
+		<!--Angel-->
+		<!--Abigail-->
+		<!--Emma-->
+		<!--Joy-->
+		<entity id="898,826,847,864">
+			<attribute id="npcInfo">30</attribute>
+		</entity>
+		<!--Salus-->
+		<!--Sarah-->
+		<entity id="855,874">
+			<attribute id="npcInfo">28</attribute>
+		</entity>
+		<!--Cornwall-->
+		<entity id="888">
+			<attribute id="npcInfo">31</attribute>
+		</entity>
+	</file>
+</modification>

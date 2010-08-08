@@ -781,6 +781,8 @@ namespace Reanimator
                 {
                     dr = MessageBox.Show("Are you sure you wish to regenerate the cache? (this will take a minute)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 }
+
+
                 else if (_tableDataSet.LoadedTableCount < _tableFiles.LoadedFileCount)
                 {
                     dr = MessageBox.Show("Reanimator has detected that not all tables have been generated.\nDo you wish to generate the remaining now? (this may take a minute)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
@@ -814,7 +816,7 @@ namespace Reanimator
         }
 
         private void RegenerateRelationsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+        { 
             try
             {
                 if (_tableFiles == null) return;
