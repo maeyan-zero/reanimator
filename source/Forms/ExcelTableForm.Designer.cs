@@ -43,6 +43,8 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.copyScriptLabel = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tableDataPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).BeginInit();
@@ -173,7 +175,9 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton1,
             this.toolStripSeparator1,
-            this.toolStripButton2});
+            this.toolStripButton2,
+            this.toolStripSeparator2,
+            this.copyScriptLabel});
             this.toolStrip1.Location = new System.Drawing.Point(0, 592);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -205,6 +209,21 @@
             this.toolStripButton2.Size = new System.Drawing.Size(39, 22);
             this.toolStripButton2.Text = "Dupe";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // copyScriptLabel
+            // 
+            this.copyScriptLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.copyScriptLabel.Image = ((System.Drawing.Image)(resources.GetObject("copyScriptLabel.Image")));
+            this.copyScriptLabel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.copyScriptLabel.Name = "copyScriptLabel";
+            this.copyScriptLabel.Size = new System.Drawing.Size(86, 22);
+            this.copyScriptLabel.Text = "Copy as Script";
+            this.copyScriptLabel.Click += new System.EventHandler(this.copyScriptLabel_Click);
             // 
             // ExcelTableForm
             // 
@@ -246,5 +265,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton copyScriptLabel;
     }
 }

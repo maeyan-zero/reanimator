@@ -9,6 +9,7 @@ using System.Drawing;
 using Reanimator.ExcelDefinitions;
 using Reanimator.Forms;
 using System.Data;
+using System.Linq;
 
 namespace Reanimator
 {
@@ -301,6 +302,69 @@ namespace Reanimator
 
             [XmlText]
             public string Value { get; set; }
+        }
+
+        public class Pack
+        {
+            const string ConfigFileName = "config.ini";
+            public string Path { get; set; }
+            public string Title { get; set; }
+            public string Config { get; set; } // config.ini
+            public List<Package> Packages { get; set; } // contains many packages
+
+            public Pack(string path)
+            {
+                Path = path;
+                Title = PathTools.DirectoriesFromPath(Path);
+                Config = Path + "\\" + ConfigFileName;
+                Packages = new List<Package>();
+
+                if (!System.IO.File.Exists(Config))
+                {
+                    System.IO.File.Create(Config);
+                }
+
+                string[] packages = Directory.GetDirectories(Path).Where(subDir => (!subDir.Contains("."))).ToArray();
+                
+                foreach (string packagePath in packages)
+                {
+                    Packages.Add(new Package(packagePath));
+                }
+            }
+        }
+
+        public class Package
+        {
+            public string Path { get; set; }
+            public string Title { get; set; }
+            public List<Script> Scripts { get; set; }
+
+            public Package(string path)
+            {
+                Path = path;
+                Title = PathTools.DirectoriesFromPath(Path);
+                Scripts = new List<Script>();
+
+                string[] scripts = Directory.GetFiles(Path);
+
+                foreach (string scriptPath in scripts)
+                {
+                    Scripts.Add(new Script(scriptPath));
+                }
+            }
+        }
+
+        public class Script
+        {
+            public string Path { get; set; }
+            public string Title { get; set; }
+            public Root Root { get; set; }
+
+            public Script(string path)
+            {
+                Path = path;
+                Title = PathTools.FileNameFromPath(Path);
+            }
         }
     }
 }

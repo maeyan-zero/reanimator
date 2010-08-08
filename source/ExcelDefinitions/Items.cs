@@ -551,18 +551,28 @@ namespace Reanimator.ExcelDefinitions
         public Int32 perLevelProps2;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 propsElite;
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
         public Int32 affix1;//index
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
         public Int32 affix2;//index
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
         public Int32 affix3;//index
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
         public Int32 affix4;//index
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
         public Int32 affix5;//index
+        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
         public Int32 affix6;//index
+        [ExcelOutput(IsTableIndex = true, TableId = "TREASURE", Column = "treasureClass")]
         public Int32 treasure;//index
+        [ExcelOutput(IsTableIndex = true, TableId = "TREASURE", Column = "treasureClass")]
         public Int32 championTreasure;//index
+        [ExcelOutput(IsTableIndex = true, TableId = "TREASURE", Column = "treasureClass")]
         public Int32 firstTimeTreasure;//index
         public Int32 inventory;//index
         public Int32 recipeIngredientInvLoc;//index
         public Int32 recipeResultInvLoc;//index
+        [ExcelOutput(IsTableIndex = true, TableId = "TREASURE", Column = "treasureClass")]
         public Int32 startingTreasure;//index
         public Int32 invWidth;
         public Int32 invHeight;
