@@ -18,7 +18,7 @@
 		<!--ADD DOUBLE EDGED LEVELMOD-->
 		<entity id="12">
 			<attribute id="AffixType">double edged levelmod</attribute>
-			<attribute id="NameColor">46</attribute>
+			<attribute id="NameColor">47</attribute>
 			<attribute id="DownGrade">-1</attribute>
 			<attribute id="Required">0</attribute>
 		</entity>

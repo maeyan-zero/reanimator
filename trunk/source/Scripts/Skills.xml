@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<modification>
-	<file id="SKILLS">
-		<entity id="*">
-			<attribute id="AugmentCostRare" op="/">2</attribute>
-			<attribute id="AugmentCostLegendary" op="/">2</attribute>
-		</entity>
-	</file>
-</modification>

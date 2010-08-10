@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<modification>
-	<file id="GAME_GLOBALS">
-		<!--REDUCE LUCK TUGBOAT-->
-		<entity id="55">
-			<attribute id="intValue">10000</attribute>
-		</entity>
-	</file>
-</modification>
