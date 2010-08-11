@@ -57,7 +57,7 @@
             this.statusBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showExcelTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scriptEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scriptsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newPackageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newScriptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -111,7 +111,7 @@
             this.fileMenu,
             this.editMenu,
             this.viewMenu,
-            this.fileToolStripMenuItem,
+            this.scriptsMenu,
             this.toolsMenu,
             this.windowsMenu,
             this.helpMenu});
@@ -356,19 +356,19 @@
             this.scriptEditorToolStripMenuItem.Text = "Script Editor";
             this.scriptEditorToolStripMenuItem.Click += new System.EventHandler(this.scriptEditorToolStripMenuItem_Click);
             // 
-            // fileToolStripMenuItem
+            // scriptsMenu
             // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scriptsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newGroupToolStripMenuItem,
             this.newPackageToolStripMenuItem,
             this.newScriptToolStripMenuItem,
             this.toolStripSeparator7,
             this.applyCurrentToolStripMenuItem,
             this.applySelectedToolStripMenuItem});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.fileToolStripMenuItem.Text = "Scripts";
-            this.fileToolStripMenuItem.Visible = false;
+            this.scriptsMenu.Name = "scriptsMenu";
+            this.scriptsMenu.Size = new System.Drawing.Size(54, 20);
+            this.scriptsMenu.Text = "Scripts";
+            this.scriptsMenu.Visible = false;
             // 
             // newGroupToolStripMenuItem
             // 
@@ -702,7 +702,6 @@
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "Reanimator";
@@ -785,7 +784,7 @@
         private System.Windows.Forms.ToolStripMenuItem scriptEditorToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButtonSE;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scriptsMenu;
         private System.Windows.Forms.ToolStripMenuItem newGroupToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newPackageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newScriptToolStripMenuItem;
