@@ -15,18 +15,18 @@ namespace Reanimator.ExcelDefinitions
         public string name;
         [ExcelOutput(SortId = 2)]
         public Int32 code;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelFile.ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 nameString;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelFile.ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 descripFormatString;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelFile.ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 detailsString;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelFile.ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         Int32 rewardTypeString;
         public Int32 revealCondition; //? "Real Condition". Table doesnt exist? 
         public Int32 revealValue;
         Int32 revealParentAchievement;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         public Int32 playerClass;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined2;
@@ -34,7 +34,7 @@ namespace Reanimator.ExcelDefinitions
         Int32 notActiveTillParentComplete;
         public Int32 completeNumber;
         public Int32 param1;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         public Int32 unitType0;
         Int32 unitType1;
         Int32 unitType2;
@@ -45,22 +45,22 @@ namespace Reanimator.ExcelDefinitions
         Int32 unitType7;
         Int32 unitType8;
         Int32 unitType9;
-        [ExcelOutput(IsTableIndex = true, TableId = "QUEST", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST", Column = "name")]
         public Int32 questTaskComplete;
         public Int32 randomQuests;
-        [ExcelOutput(IsTableIndex = true, TableId = "MONSTERS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS", Column = "name")]
         public Int32 monster;
-        [ExcelOutput(IsTableIndex = true, TableId = "OBJECTS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS", Column = "name")]
         public Int32 Object;
-        [ExcelOutput(IsTableIndex = true, TableId = "ITEMS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
         public Int32 item;
-        [ExcelOutput(IsTableIndex = true, TableId = "ITEM_QUALITY", Column = "quality")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY", Column = "quality")]
         public Int32 quality;
-        [ExcelOutput(IsTableIndex = true, TableId = "SKILLS", Column = "skill")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS", Column = "skill")]
         public Int32 skill;
-        [ExcelOutput(IsTableIndex = true, TableId = "LEVEL", Column = "levelName")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL", Column = "levelName")]
         public Int32 level;
-        [ExcelOutput(IsTableIndex = true, TableId = "STATS", Column = "stat")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS", Column = "stat")]
         public Int32 stat;
         public Int32 rewardAchievementPoints;
         Int32 rewardTreasureClass;//idx

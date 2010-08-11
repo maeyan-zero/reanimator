@@ -14,7 +14,7 @@ namespace Reanimator.ExcelDefinitions
         public string name;
         [ExcelOutput(SortId = 2)]
         public Int32 code;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 displayString;
         public Int32 unitTypeStartStanding1;
         Int32 levelDefStartStanding1;

@@ -56,36 +56,6 @@ namespace Reanimator.Forms
             rows_LayoutPanel.MouseEnter += (sender, e) => rows_LayoutPanel.Focus();
         }
 
-        private void ExcelTableForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (!_dataChanged) return;
-
-            DialogResult dr = MessageBox.Show("Table data has been changed.\nDo you wish to save changes to the cache?", "Question",
-                            MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-
-            if (dr == DialogResult.No) return;
-
-            if (dr == DialogResult.Cancel)
-            {
-                e.Cancel = true;
-                return;
-            }
-
-            ProgressForm progress = new ProgressForm(SaveTable, _tableDataSet);
-            progress.SetStyle(ProgressBarStyle.Marquee);
-            progress.ShowDialog(this);
-        }
-
-        private static void SaveTable(ProgressForm progressBar, object o)
-        {
-            TableDataSet tableDataSet = o as TableDataSet;
-            if (tableDataSet == null) return;
-
-            progressBar.SetLoadingText("Please Wait...");
-            progressBar.SetCurrentItemText("Saving updated cache data...");
-            tableDataSet.SaveDataSet();
-        }
-
         private void UseDataView()
         {
             String temp = tableData_DataGridView.DataMember;
@@ -421,7 +391,6 @@ namespace Reanimator.Forms
 
             _tableDataSet.XlsDataSet.Tables.Remove(_dataFile.StringId);
             _tableDataSet.LoadTable(null, _dataFile);
-            _tableDataSet.GenerateRelations(_dataFile);
 
             // display updated table
             MessageBox.Show("Table regenerated!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -442,41 +411,40 @@ namespace Reanimator.Forms
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             int tableView = 0;
-            if (tabControl1.SelectedIndex == tableView)
+            if (tabControl1.SelectedIndex != tableView) return;
+
+            DataGridViewSelectedRowCollection dataRows = tableData_DataGridView.SelectedRows;
+            foreach (DataGridViewRow dataRow in dataRows)
             {
-                DataGridViewSelectedRowCollection dataRows = tableData_DataGridView.SelectedRows;
-                foreach (DataGridViewRow dataRow in dataRows)
-                {
-                    DataRow copiedRow = (dataRow.DataBoundItem as DataRowView).Row;
-                    DataRow newRow = _dataTable.NewRow();
-                    newRow.ItemArray = copiedRow.ItemArray;
-                    newRow[0] = _dataTable.Rows.Count;
-                    _dataTable.Rows.Add(newRow);
-                }
+                DataRow copiedRow = (dataRow.DataBoundItem as DataRowView).Row;
+                DataRow newRow = _dataTable.NewRow();
+                newRow.ItemArray = copiedRow.ItemArray;
+                newRow[0] = _dataTable.Rows.Count;
+                _dataTable.Rows.Add(newRow);
             }
         }
 
         private void copyScriptLabel_Click(object sender, EventArgs e)
         {
             int tableView = 0;
-            if (tabControl1.SelectedIndex == tableView)
+            if (tabControl1.SelectedIndex != tableView) return;
+
+            using (StringWriter sw = new StringWriter())
             {
-                using (StringWriter sw = new StringWriter())
+                DataGridViewSelectedRowCollection dataRows = tableData_DataGridView.SelectedRows;
+                foreach (DataGridViewRow dataRow in dataRows)
                 {
-                    DataGridViewSelectedRowCollection dataRows = tableData_DataGridView.SelectedRows;
-                    foreach (DataGridViewRow dataRow in dataRows)
+                    sw.Write("<entity id=\"" + dataRow.Index + "\">\n");
+                    foreach (DataGridViewCell dataCell in dataRow.Cells)
                     {
-                        sw.Write("<entity id=\"" + dataRow.Index + "\">\n");
-                        foreach (DataGridViewCell dataCell in dataRow.Cells)
-                        {
-                            if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Equals("Index")) continue;
-                            if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Contains("_string")) continue;
-                            sw.Write("\t<attribute id=\"" + _dataTable.Columns[dataCell.ColumnIndex].Caption + "\">" + dataCell.Value.ToString() + "</attribute>\n");
-                        }
-                        sw.Write("</entity>\n");
+                        if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Equals("Index")) continue;
+                        if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Contains("_string")) continue;
+                        sw.Write("\t<attribute id=\"" + _dataTable.Columns[dataCell.ColumnIndex].Caption + "\">" + dataCell.Value.ToString() + "</attribute>\n");
                     }
-                    Clipboard.SetText(sw.ToString());
+                    sw.Write("</entity>\n");
                 }
+
+                Clipboard.SetText(sw.ToString());
             }
         }
     }

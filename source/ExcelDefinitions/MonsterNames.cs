@@ -15,7 +15,7 @@ namespace Reanimator.ExcelDefinitions
 
         [ExcelOutput(SortId = 2)]
         public Int32 code;
-        [ExcelFile.ExcelOutput(IsStringId = true, Table = "Strings_Names")]
+        [ExcelFile.ExcelOutput(IsStringId = true, TableStringId = "Strings_Names")]
         public Int32 stringKey;//stridx
         public Int32 monsterNameType;//idx
         [ExcelOutput(IsBool = true)]

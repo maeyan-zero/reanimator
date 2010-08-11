@@ -67,11 +67,6 @@
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.clientPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bypassSecurityx64ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cacheInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.klToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showCacheInfoToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.regenerateCacheToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.regenerateRelationsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tradeItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -409,7 +404,6 @@
             // 
             this.toolsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clientPatchesToolStripMenuItem,
-            this.cacheInfoToolStripMenuItem,
             this.tradeItemsToolStripMenuItem,
             this.searchTablesToolStripMenuItem,
             this.toolStripSeparator9,
@@ -423,7 +417,7 @@
             this.clientPatchesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bypassSecurityx64ToolStripMenuItem});
             this.clientPatchesToolStripMenuItem.Name = "clientPatchesToolStripMenuItem";
-            this.clientPatchesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.clientPatchesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.clientPatchesToolStripMenuItem.Text = "&Patches";
             // 
             // bypassSecurityx64ToolStripMenuItem
@@ -433,68 +427,29 @@
             this.bypassSecurityx64ToolStripMenuItem.Text = "Hardcore Mode [x64 DX9]";
             this.bypassSecurityx64ToolStripMenuItem.Click += new System.EventHandler(this.BypassSecurityx64ToolStripMenuItem_Click);
             // 
-            // cacheInfoToolStripMenuItem
-            // 
-            this.cacheInfoToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.klToolStripMenuItem,
-            this.showCacheInfoToolStripMenuItem1,
-            this.regenerateCacheToolStripMenuItem,
-            this.regenerateRelationsToolStripMenuItem1});
-            this.cacheInfoToolStripMenuItem.Name = "cacheInfoToolStripMenuItem";
-            this.cacheInfoToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.cacheInfoToolStripMenuItem.Text = "&Cache Info";
-            // 
-            // klToolStripMenuItem
-            // 
-            this.klToolStripMenuItem.Name = "klToolStripMenuItem";
-            this.klToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.klToolStripMenuItem.Text = "Show Cache Info [old]";
-            this.klToolStripMenuItem.Click += new System.EventHandler(this.CacheToolStripMenuItem_Click);
-            // 
-            // showCacheInfoToolStripMenuItem1
-            // 
-            this.showCacheInfoToolStripMenuItem1.Name = "showCacheInfoToolStripMenuItem1";
-            this.showCacheInfoToolStripMenuItem1.Size = new System.Drawing.Size(191, 22);
-            this.showCacheInfoToolStripMenuItem1.Text = "Show Cache Info";
-            this.showCacheInfoToolStripMenuItem1.Click += new System.EventHandler(this.ShowCacheInfoToolStripMenuItem_Click);
-            // 
-            // regenerateCacheToolStripMenuItem
-            // 
-            this.regenerateCacheToolStripMenuItem.Name = "regenerateCacheToolStripMenuItem";
-            this.regenerateCacheToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.regenerateCacheToolStripMenuItem.Text = "Regenerate Cache";
-            this.regenerateCacheToolStripMenuItem.Click += new System.EventHandler(this.GenerateCacheToolStripMenuItem_Click);
-            // 
-            // regenerateRelationsToolStripMenuItem1
-            // 
-            this.regenerateRelationsToolStripMenuItem1.Name = "regenerateRelationsToolStripMenuItem1";
-            this.regenerateRelationsToolStripMenuItem1.Size = new System.Drawing.Size(191, 22);
-            this.regenerateRelationsToolStripMenuItem1.Text = "Regenerate Relations";
-            this.regenerateRelationsToolStripMenuItem1.Click += new System.EventHandler(this.RegenerateRelationsToolStripMenuItem_Click);
-            // 
             // tradeItemsToolStripMenuItem
             // 
             this.tradeItemsToolStripMenuItem.Name = "tradeItemsToolStripMenuItem";
-            this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.tradeItemsToolStripMenuItem.Text = "&Trade Items";
             this.tradeItemsToolStripMenuItem.Click += new System.EventHandler(this.tradeItemsToolStripMenuItem_Click);
             // 
             // searchTablesToolStripMenuItem
             // 
             this.searchTablesToolStripMenuItem.Name = "searchTablesToolStripMenuItem";
-            this.searchTablesToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.searchTablesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.searchTablesToolStripMenuItem.Text = "&Search Tables";
             this.searchTablesToolStripMenuItem.Click += new System.EventHandler(this.searchTablesToolStripMenuItem_Click);
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(143, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(149, 6);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -772,11 +727,6 @@
         private System.Windows.Forms.ToolStripMenuItem cSVToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clientPatchesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bypassSecurityx64ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cacheInfoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem klToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showCacheInfoToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem regenerateCacheToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem regenerateRelationsToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem showExcelTablesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tradeItemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;

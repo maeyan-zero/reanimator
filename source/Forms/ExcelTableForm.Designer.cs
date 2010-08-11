@@ -234,7 +234,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "ExcelTableForm";
             this.Text = "ExcelTable";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ExcelTableForm_FormClosing);
+            //this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ExcelTableForm_FormClosing);
             this.tabControl1.ResumeLayout(false);
             this.tableDataPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).EndInit();

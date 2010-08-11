@@ -770,14 +770,14 @@ namespace Reanimator.Forms
             //save currently selected item
             _currentlySelectedItem = unit;
 
-            DataTable items = _dataSet.GetExcelTable(27953);
+            DataTable items = _dataSet.GetExcelTableFromCode(27953);
             DataRow[] itemRow = items.Select("code1 = '" + unit.unitCode + "'");
 
             if (itemRow.Length > 0)
             {
                 int value = (int)itemRow[0]["unitType"];
 
-                DataTable unitTypes = _dataSet.GetExcelTable(21040);
+                DataTable unitTypes = _dataSet.GetExcelTableFromCode(21040);
                 DataRow[] unitRow = unitTypes.Select("Index = '" + value + "'");
 
                 if (unitRow.Length > 0)
@@ -1148,7 +1148,7 @@ namespace Reanimator.Forms
         #region SKILLPANEL
         private void InitializeAttributeSkillPanel(int characterClass)
         {
-            DataTable table = _dataSet.GetExcelTable(27952);
+            DataTable table = _dataSet.GetExcelTableFromCode(27952);
             _panel.Initialize(ref table, characterClass, _heroUnit);
 
             tp_characterValues.Controls.Add(_panel);

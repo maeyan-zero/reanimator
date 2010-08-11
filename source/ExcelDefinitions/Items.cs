@@ -286,17 +286,17 @@ namespace Reanimator.ExcelDefinitions
         public Items.BitMask06 bitmask06;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask07 bitmask07;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 String;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 typeDescription;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 flavorText;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 additionalDescription;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         Int32 additionalRaceDescription;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 analyze;
         Int32 recipeList;//index
         public Int32 recipeSingleUse;//index
@@ -551,28 +551,28 @@ namespace Reanimator.ExcelDefinitions
         public Int32 perLevelProps2;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 propsElite;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix1;//index
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix2;//index
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix3;//index
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix4;//index
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix5;//index
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix6;//index
-        [ExcelOutput(IsTableIndex = true, TableId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
         public Int32 treasure;//index
-        [ExcelOutput(IsTableIndex = true, TableId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
         public Int32 championTreasure;//index
-        [ExcelOutput(IsTableIndex = true, TableId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
         public Int32 firstTimeTreasure;//index
         public Int32 inventory;//index
         public Int32 recipeIngredientInvLoc;//index
         public Int32 recipeResultInvLoc;//index
-        [ExcelOutput(IsTableIndex = true, TableId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
         public Int32 startingTreasure;//index
         public Int32 invWidth;
         public Int32 invHeight;

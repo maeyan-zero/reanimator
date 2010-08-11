@@ -16,7 +16,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 style;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Quest")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Quest")]
         public Int32 nameStringKey;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 subscriberOnly;//bool
@@ -107,16 +107,16 @@ namespace Reanimator.ExcelDefinitions
         public Int32 objectAdventure;//idx
         public Int32 treasureRoomClass;//idx
         public Int32 template;//idx
-        //[ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 descriptionDialog;//idx
-        //[ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 inCompleteDialog;//idx
-        //[ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 completeDialog;//idx
-        //[ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 rewardDialog;//idx
         Int32 unavailableDialog;//idx
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 acceptButtonText;//stridx
         float timeLimit;
         public Int32 objectiveMonster;//idx
@@ -131,12 +131,12 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         string spawnNodeLabel;
         public Int32 spawnCount;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Names")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Names")]
         public Int32 nameOverrideStringKey;//stridx
-        [ExcelOutput(IsStringId = true, Table = "Strings_Names")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Names")]
         public Int32 nameInLogOverrideStringKey;//stridx
         public Int32 logOverrideState;//idx
-        [ExcelOutput(IsStringId = true, Table = "Strings_Quest")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Quest")]
         public Int32 logOverrideString;//stridx
         public Int32 subLevelTypeTruthOld;
         public Int32 subLevelTypeTruthNew;
