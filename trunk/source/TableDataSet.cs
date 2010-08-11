@@ -1,161 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using Reanimator.Forms;
-using System.IO;
-using System.Collections;
 using System.Reflection;
-using System.Windows.Forms;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization.Formatters;
 using System.Globalization;
 
 namespace Reanimator
 {
     public class TableDataSet : IDisposable
     {
-        private const String TableVersion = "1.1.5";
-        private const String RelationsVersion = "1.0.0";
-        private const String TableVersionKey = "TableVersion";
-        private const String RelationsVersionKey = "RelationsVersion";
-
-        private DataSet _xlsDataSet;
-
+        public DataSet XlsDataSet { get; private set; }
         public TableFiles TableFiles { get; set; }
         public bool RegenerateRelations { get; private set; }
 
         public TableDataSet()
         {
             RegenerateRelations = true;
-            LoadDataSet();
-            _xlsDataSet.RemotingFormat = SerializationFormat.Binary;
-        }
-
-        private void LoadDataSet()
-        {
-            Directory.CreateDirectory(Config.CacheFilePath.Substring(0, Config.CacheFilePath.LastIndexOf(@"\") + 1));
-
-            if (!File.Exists(Config.CacheFilePath))
+            XlsDataSet = new DataSet("xlsDataSet")
             {
-                _xlsDataSet = new DataSet("xlsDataSet") { Locale = new CultureInfo("en-us", true) };
-                return;
-            }
-
-            try
-            {
-                using (FileStream fs = new FileStream(Config.CacheFilePath, FileMode.Open, FileAccess.Read))
-                {
-                    BinaryFormatter bf = new BinaryFormatter { TypeFormat = FormatterTypeStyle.XsdString };
-                    _xlsDataSet = bf.Deserialize(fs) as DataSet;
-                    if (_xlsDataSet != null)
-                    {
-                        bool isTableUpToDate = false;
-                        String loadedCurrentVersion = _xlsDataSet.ExtendedProperties[TableVersionKey] as String;
-                        String loadedRelationsVersion =
-                            _xlsDataSet.ExtendedProperties[RelationsVersionKey] as String;
-
-                        if (loadedCurrentVersion != null)
-                        {
-                            if (loadedCurrentVersion.CompareTo(TableVersion) == 0)
-                            {
-                                isTableUpToDate = true;
-                            }
-                        }
-
-                        if (loadedRelationsVersion != null)
-                        {
-                            if (loadedRelationsVersion.CompareTo(RelationsVersion) == 0)
-                            {
-                                RegenerateRelations = false;
-                            }
-                            else
-                            {
-                                ClearRelations();
-                            }
-                        }
-                        else
-                        {
-                            ClearRelations();
-                        }
-
-                        if (isTableUpToDate) return;
-
-                        MessageBox.Show(
-                            "The loaded dataset cache is out of date and must be regnerated before it can be used again!",
-                            "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        _xlsDataSet = new DataSet("xlsDataSet") { Locale = new CultureInfo("en-us", true) };
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Failed to load table cache!\n\n" + e, "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-            }
-        }
-
-        public void SaveDataSet()
-        {
-            using (FileStream fs = new FileStream(Config.CacheFilePath, FileMode.Create, FileAccess.ReadWrite))
-            {
-                BinaryFormatter bf = new BinaryFormatter { TypeFormat = FormatterTypeStyle.XsdString };
-                if (_xlsDataSet.ExtendedProperties.Contains(TableVersionKey))
-                {
-                    _xlsDataSet.ExtendedProperties[TableVersionKey] = TableVersion;
-                }
-                else
-                {
-                    _xlsDataSet.ExtendedProperties.Add(TableVersionKey, TableVersion);
-                }
-                if (_xlsDataSet.ExtendedProperties.Contains(RelationsVersionKey))
-                {
-                    _xlsDataSet.ExtendedProperties[RelationsVersionKey] = RelationsVersion;
-                }
-                else
-                {
-                    _xlsDataSet.ExtendedProperties.Add(RelationsVersionKey, RelationsVersion);
-                }
-                bf.Serialize(fs, _xlsDataSet);
-                fs.Close();
-            }
+                Locale = new CultureInfo("en-us", true),
+                RemotingFormat = SerializationFormat.Binary
+            };
         }
 
         public void ClearDataSet()
         {
-            _xlsDataSet.Clear();
-            _xlsDataSet.Relations.Clear();
-            _xlsDataSet.Tables.Clear();
+            XlsDataSet.Clear();
+            XlsDataSet.Relations.Clear();
+            XlsDataSet.Tables.Clear();
         }
 
-        public void LoadTable(ProgressForm progress, Object var)
+        public DataTable LoadTable(ProgressForm progress, Object var)
         {
             DataFile dataFile = var as DataFile;
-            if (dataFile == null) return;
+            if (dataFile == null) return null;
 
+            DataTable dataTable = null;
             if (dataFile.IsStringsFile)
             {
-                LoadStringsTable(progress, dataFile as StringsFile);
+                dataTable = LoadStringsTable(progress, dataFile as StringsFile);
             }
             else if (dataFile.IsExcelFile)
             {
-                LoadExcelTable(progress, dataFile as ExcelFile);
+                dataTable = LoadExcelTable(progress, dataFile as ExcelFile);
             }
+
+            return dataTable;
         }
 
-        private void LoadExcelTable(ProgressForm progress, ExcelFile dataFile)
+        private DataTable LoadExcelTable(ProgressForm progress, ExcelFile dataFile)
         {
             // load in main data table
             String mainTableName = dataFile.StringId;
-            DataTable mainDataTable = _xlsDataSet.Tables[mainTableName];
-            if (mainDataTable != null) return;
+            DataTable mainDataTable = XlsDataSet.Tables[mainTableName];
+            if (mainDataTable != null) return mainDataTable;
 
             if (progress != null)
             {
                 progress.SetLoadingText("Cache generation of table data... " + mainTableName);
             }
 
-            mainDataTable = _xlsDataSet.Tables.Add(dataFile.StringId);
+            mainDataTable = XlsDataSet.Tables.Add(dataFile.StringId);
             List<Object> array = dataFile.Rows;
             Type type = array[0].GetType();
             List<ExcelFile.ExcelOutputAttribute> outputAttributes =
@@ -303,12 +208,16 @@ namespace Reanimator
             }
 
             #endregion
+
+            _GenerateRelations(progress, dataFile);
+            return mainDataTable;
         }
 
-        private void LoadStringsTable(ProgressForm progress, StringsFile stringsFile)
+        private DataTable LoadStringsTable(ProgressForm progress, StringsFile stringsFile)
         {
             // if already done, can't do again
-            if (_xlsDataSet.Tables.Contains(stringsFile.StringId)) return;
+            DataTable dataTable = XlsDataSet.Tables[stringsFile.StringId];
+            if (XlsDataSet.Tables.Contains(stringsFile.StringId)) return dataTable;
 
 
             // update progress
@@ -319,7 +228,7 @@ namespace Reanimator
 
 
             // generate datatable
-            DataTable dt = _xlsDataSet.Tables.Add(stringsFile.StringId);
+            DataTable dt = XlsDataSet.Tables.Add(stringsFile.StringId);
             foreach (StringsFile.StringBlock stringsBlock in stringsFile.StringsTable)
             {
                 if (dt.Columns.Count == 0)
@@ -338,16 +247,24 @@ namespace Reanimator
                 dt.Rows.Add(stringsBlock.ReferenceId, stringsBlock.Unknown, stringsBlock.StringId, stringsBlock.Reserved,
                     stringsBlock.String, stringsBlock.Attribute1, stringsBlock.Attribute2, stringsBlock.Attribute3, stringsBlock.Attribute4);
             }
+
+            return dt;
         }
 
         public void ClearRelations()
         {
-            _xlsDataSet.Relations.Clear();
+            XlsDataSet.Relations.Clear();
         }
 
-        public void GenerateRelations(DataFile dataFile)
+        private DataTable _LoadRelatedTable(ProgressForm progress, String tableId)
         {
-            // todo: temp fix
+            DataFile dataFile = TableFiles.DataFiles[tableId] as DataFile;
+            return dataFile == null ? null : LoadTable(progress, dataFile);
+        }
+
+        private void _GenerateRelations(ProgressForm progress, DataFile dataFile)
+        {
+            // StringsFile doesn't have/need relations as yet, no point going further with them
             ExcelFile excelTable = dataFile as ExcelFile;
             if (excelTable == null) return;
 
@@ -356,7 +273,7 @@ namespace Reanimator
             int col;
 
             String mainTableName = excelTable.StringId;
-            DataTable mainDataTable = _xlsDataSet.Tables[mainTableName];
+            DataTable mainDataTable = XlsDataSet.Tables[mainTableName];
 
             // remove all extra generated columns on this table
             for (col = 0; col < mainDataTable.Columns.Count; col++)
@@ -392,7 +309,9 @@ namespace Reanimator
 
                     if (excelOutputAttribute.IsStringId)
                     {
-                        DataTable dtStrings = _xlsDataSet.Tables[excelOutputAttribute.Table];
+                        DataTable dtStrings = XlsDataSet.Tables[excelOutputAttribute.TableStringId] ??
+                                              _LoadRelatedTable(progress, excelOutputAttribute.TableStringId);
+
                         if (dtStrings != null)
                         {
                             DataColumn dcParent = dtStrings.Columns["ReferenceId"];
@@ -400,7 +319,7 @@ namespace Reanimator
                             String relationName = String.Format("{0}_{1}_{2}", excelTable.StringId, dcChild.ColumnName, ExcelFile.ColumnTypeKeys.IsStringId);
                             // parent and child are swapped here for StringId relations
                             DataRelation relation = new DataRelation(relationName, dcChild, dcParent, false);
-                            _xlsDataSet.Relations.Add(relation);
+                            XlsDataSet.Relations.Add(relation);
 
                             DataColumn dcString = mainDataTable.Columns.Add(dcChild.ColumnName + "_string", typeof(String));
                             dcString.SetOrdinal(col + 1);
@@ -410,13 +329,10 @@ namespace Reanimator
                             col++;
                         }
                     }
-                    else if (excelOutputAttribute.TableId != "")
+                    else if (!String.IsNullOrEmpty(excelOutputAttribute.TableStringId))
                     {
-                        DataTable dt = GetExcelTable(excelOutputAttribute.TableId);
-                        if (dt == null && excelOutputAttribute.Table != null)
-                        {
-                            dt = _xlsDataSet.Tables[excelOutputAttribute.Table];
-                        }
+                        DataTable dt = XlsDataSet.Tables[excelOutputAttribute.TableStringId] ??
+                                       _LoadRelatedTable(progress, excelOutputAttribute.TableStringId);
 
                         if (dt != null)
                         {
@@ -424,7 +340,7 @@ namespace Reanimator
 
                             String relationName = excelTable.StringId + dcChild.ColumnName + ExcelFile.ColumnTypeKeys.IsTableIndex;
                             DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
-                            _xlsDataSet.Relations.Add(relation);
+                            XlsDataSet.Relations.Add(relation);
 
                             DataColumn dcString = mainDataTable.Columns.Add(dcChild.ColumnName + "_string", typeof(String), String.Format("Parent({0}).{1}", relationName, excelOutputAttribute.Column));
                             dcString.SetOrdinal(col + 1);
@@ -438,37 +354,40 @@ namespace Reanimator
             }
         }
 
-        public DataTable GetExcelTable(int code)
+        public DataTable GetExcelTableFromCode(int code)
         {
-            DataTable excelTables = _xlsDataSet.Tables["EXCELTABLES"];
+            String stringId = GetExcelTableStringIdFromCode(code);
+            return GetExcelTableFromStringId(stringId);
+        }
+
+        public DataTable GetExcelTableFromStringId(String stringId)
+        {
+            if (stringId == null) return null;
+
+            return XlsDataSet.Tables[stringId] ?? _LoadRelatedTable(null, stringId);
+        }
+
+        public String GetExcelTableStringIdFromCode(int code)
+        {
+            DataTable excelTables = XlsDataSet.Tables["EXCELTABLES"];
             if (excelTables == null) return null;
 
             DataRow[] rows = excelTables.Select(String.Format("code = '{0}'", code));
-            return rows.Length == 0 ? null : _xlsDataSet.Tables[rows[0][1].ToString()];
-        }
-
-        public DataTable GetExcelTable(string code)
-        {
-            return _xlsDataSet.Tables[code];
-        }
-
-        public DataSet XlsDataSet
-        {
-            get { return _xlsDataSet; }
+            return rows[0][1].ToString();
         }
 
         public int LoadedTableCount
         {
-            get { return _xlsDataSet.Tables.Count; }
+            get { return XlsDataSet.Tables.Count; }
         }
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            if (_xlsDataSet != null)
+            if (XlsDataSet != null)
             {
-                _xlsDataSet.Dispose();
+                XlsDataSet.Dispose();
             }
         }
 

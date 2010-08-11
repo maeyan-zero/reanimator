@@ -12,19 +12,19 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string treasureClass;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         Int32 allowUnitTypes1;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         Int32 allowUnitTypes2;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         Int32 allowUnitTypes3;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         Int32 allowUnitTypes4;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         Int32 allowUnitTypes5;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         Int32 allowUnitTypes6;
-        [ExcelOutput(IsTableIndex = true, TableId = "GLOBAL_THEMES", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES", Column = "name")]
         public Int32 globalThemeRequired;
         public Int32 unknown02;
         public Int32 pickTypes;

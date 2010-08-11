@@ -13,9 +13,9 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public Int32 interaction;//index
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 stringTitle;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 stringToolTip;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string frameIcon;

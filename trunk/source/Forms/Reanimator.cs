@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.IO;
 using Reanimator.Forms;
-using System.Threading;
 using Reanimator.Forms.ItemTransfer;
 
 namespace Reanimator
@@ -14,9 +13,9 @@ namespace Reanimator
     public partial class Reanimator : Form
     {
         private readonly Options _options;
-        private readonly List<string> _indexFilesOpen;
+        private readonly List<String> _indexFilesOpen;
         private TablesLoaded _tablesLoaded;
-        private TableDataSet _tableDataSet;
+        private readonly TableDataSet _tableDataSet;
         private int _childFormNumber;
         private readonly TableFiles _tableFiles;
 
@@ -25,6 +24,7 @@ namespace Reanimator
             _options = new Options();
             _indexFilesOpen = new List<string>();
             _tableFiles = new TableFiles();
+            _tableDataSet = new TableDataSet();
 
             CheckEnvironment();
             InitializeComponent();
@@ -500,8 +500,6 @@ namespace Reanimator
                 ProgressForm progress = new ProgressForm(LoadTables, null);
                 progress.Disposed += delegate { LoadAndDisplayCurrentlyLoadedExcelTables(); };
                 progress.ShowDialog(this);
-
-                GenerateCache(false);
             }
             catch (Exception ex)
             {
@@ -538,17 +536,12 @@ namespace Reanimator
         {
             try
             {
-                // begin loading in dataSet.dat right away
-                Thread loadTableDataSetThread = new Thread(() => { _tableDataSet = new TableDataSet(); });
-                loadTableDataSetThread.Start();
-
-
                 // check exists
                 String excelFilePath = String.Format("{0}{1}exceltables.{2}", Config.DataDirsRoot, ExcelFile.FolderPath, ExcelFile.FileExtention);
                 if (!File.Exists(excelFilePath))
                 {
                     MessageBox.Show(excelFilePath + " not found!\nPlease ensure your directories are set correctly:\nTools > Options", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    WaitForCacheLoad(progress, loadTableDataSetThread);
+                    //WaitForCacheLoad(progress, loadTableDataSetThread);
                     return;
                 }
 
@@ -587,90 +580,13 @@ namespace Reanimator
 
 
                 // wait for the cache to finish loading in if it hasn't already
-                WaitForCacheLoad(progress, loadTableDataSetThread);
+                //WaitForCacheLoad(progress, loadTableDataSetThread);
                 _tableDataSet.TableFiles = _tableFiles;
             }
             catch (Exception ex)
             {
                 ExceptionLogger.LogException(ex, "LoadTables");
                 MessageBox.Show(ex.Message, "LoadTables");
-            }
-        }
-
-        private static void WaitForCacheLoad(ProgressForm progress, Thread loadTableDataSet)
-        {
-            progress.SetStyle(ProgressBarStyle.Marquee);
-            progress.SetLoadingText("Loading table cache data...");
-            progress.SetCurrentItemText("Please wait...");
-
-            while (loadTableDataSet.ThreadState == ThreadState.Running)
-            {
-                Thread.Sleep(50);
-            }
-        }
-
-        private void CacheTables(ProgressForm progress, Object var)
-        {
-            try
-            {
-                TableFiles tableFiles = var as TableFiles;
-                if (tableFiles == null) return;
-
-                progress.SetLoadingText("First use table caching...");
-                progress.ConfigBar(0, tableFiles.LoadedFileCount, 1);
-                foreach (DataFile dataFile in from DictionaryEntry de in _tableFiles.DataFiles
-                                              select de.Value as DataFile)
-                {
-                    _tableDataSet.LoadTable(progress, dataFile);
-                }
-
-                GenerateRelations(progress, tableFiles);
-
-                progress.SetLoadingText("Saving cache data...");
-                progress.SetCurrentItemText("Please wait...");
-                _tableDataSet.SaveDataSet();
-
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "CacheTables");
-                MessageBox.Show(ex.Message, "CacheTables");
-            }
-        }
-
-        private void GenerateRelations(ProgressForm progress, Object var)
-        {
-            try
-            {
-                TableFiles tableFiles = var as TableFiles;
-                if (tableFiles == null) return;
-
-
-                // set progress
-                if (progress != null)
-                {
-                    progress.SetLoadingText("Generating table relations...");
-                    progress.ConfigBar(0, tableFiles.LoadedFileCount, 1);
-                }
-
-
-                // generate relations
-                _tableDataSet.ClearRelations();
-                foreach (DataFile dataFile in from DictionaryEntry de in _tableFiles.DataFiles
-                                              select de.Value as DataFile)
-                {
-                    if (progress != null)
-                    {
-                        progress.SetCurrentItemText(dataFile.StringId);
-                    }
-
-                    _tableDataSet.GenerateRelations(dataFile);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "GenerateRelations");
-                MessageBox.Show(ex.Message, "GenerateRelations");
             }
         }
 
@@ -737,96 +653,6 @@ namespace Reanimator
             {
                 ExceptionLogger.LogException(ex, "BypassSecurityx64ToolStripMenuItem_Click");
                 MessageBox.Show("Problem Applying Patch. :(");
-            }
-        }
-
-        private void CacheToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CacheInfo info = new CacheInfo(@"cache\") { MdiParent = this };
-            info.Show();
-        }
-
-        private void ShowCacheInfoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (File.Exists(Config.CacheFilePath))
-            {
-                FileInfo fileInfo = new FileInfo(Config.CacheFilePath);
-                MessageBox.Show("Your cache file is using " + fileInfo.Length + " bytes", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                MessageBox.Show("You have no cache saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void GenerateCacheToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            GenerateCache(true);
-        }
-
-        private void GenerateCache(bool manualRequest)
-        {
-            try
-            {
-                if (_tableFiles == null) return;
-
-                DialogResult dr = DialogResult.No;
-
-                bool partialGeneration = false;
-                if (!File.Exists(Config.CacheFilePath) || _tableDataSet.LoadedTableCount == 0)
-                {
-                    dr = MessageBox.Show("Reanimator has detected no cached table data.\nDo you wish to generate it now? (this may take a minute)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                }
-                else if (manualRequest)
-                {
-                    dr = MessageBox.Show("Are you sure you wish to regenerate the cache? (this will take a minute)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                }
-
-
-                else if (_tableDataSet.LoadedTableCount < _tableFiles.LoadedFileCount)
-                {
-                    dr = MessageBox.Show("Reanimator has detected that not all tables have been generated.\nDo you wish to generate the remaining now? (this may take a minute)", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    partialGeneration = true;
-                }
-
-                if (dr == DialogResult.Yes)
-                {
-                    if (!partialGeneration)
-                    {
-                        _tableDataSet.ClearDataSet();
-                    }
-                    ProgressForm cachingProgress = new ProgressForm(CacheTables, _tableFiles);
-                    cachingProgress.ShowDialog(this);
-                }
-                else if (_tableDataSet.RegenerateRelations && _tableDataSet.LoadedTableCount > 0)
-                {
-                    dr = MessageBox.Show("Reanimator has detected your table relations are out of date.\nDo you wish to regenerate them?", "Regenerate Relations", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (dr == DialogResult.Yes)
-                    {
-                        ProgressForm progress = new ProgressForm(GenerateRelations, _tableFiles);
-                        progress.ShowDialog(this);
-                        _tableDataSet.SaveDataSet();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "GenerateCache");
-            }
-        }
-
-        private void RegenerateRelationsToolStripMenuItem_Click(object sender, EventArgs e)
-        { 
-            try
-            {
-                if (_tableFiles == null) return;
-
-                ProgressForm progress = new ProgressForm(GenerateRelations, _tableFiles);
-                progress.ShowDialog(this);
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "RegenerateRelationsToolStripMenuItem_Click");
             }
         }
 

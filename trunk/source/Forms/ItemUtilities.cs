@@ -78,7 +78,7 @@ namespace Reanimator.Forms
             if (stat.values.Length != 0)
             {
                 String select = String.Format("code = '{0}'", lookupId);
-                DataTable table = _dataSet.GetExcelTable(tableId);
+                DataTable table = _dataSet.GetExcelTableFromCode(tableId);
                 DataRow[] row;
 
                 if (table != null)
@@ -160,8 +160,8 @@ namespace Reanimator.Forms
         private void PopulateItems(Unit unit)
         {
             bool canGetItemNames = true;
-            DataTable itemsTable = _dataSet.GetExcelTable(27953);
-            DataTable affixTable = _dataSet.GetExcelTable(30512);
+            DataTable itemsTable = _dataSet.GetExcelTableFromCode(27953);
+            DataTable affixTable = _dataSet.GetExcelTableFromCode(30512);
             if (itemsTable != null && affixTable != null)
             {
                 if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))

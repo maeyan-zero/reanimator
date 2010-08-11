@@ -15,15 +15,15 @@ namespace Reanimator.ExcelDefinitions
         Int32 unknown02;
         [ExcelOutput(IsBool = true)]
         public Int32 alwaysApply;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
         Int32 qualityNameString;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
         public Int32 setNameString;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
         public Int32 magicNameString;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
         Int32 replaceNameString;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
         Int32 flavorText;
         public Int32 unknown03;
         Int32 nameColor;
@@ -31,17 +31,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 dom;
         [ExcelOutput(SortId = 3)]
         public Int32 code;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType1;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType2;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType3;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType4;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType5;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType6;
         public Int32 suffix;
         [ExcelOutput(IsStringIndex = true)]
@@ -53,17 +53,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 spawn;
         public Int32 minLevel;
         public Int32 maxLevel;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes1;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes2;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes3;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes4;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes5;
-        [ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         public Int32 allowTypes6;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 groupWeight;

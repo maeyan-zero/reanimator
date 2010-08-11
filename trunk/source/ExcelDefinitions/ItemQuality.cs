@@ -15,19 +15,19 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 2)]
         public Int32 code;
         Int32 craftingBreakdownTreasure;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 displayName;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 displayNameWithItemFormat;
         [ExcelOutput(IsBool = true)]
         public Int32 showBaseDesc;
         Int32 randomlyNamed;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 baseDescFormatString;
         Int32 unknown01;
-        [ExcelOutput(IsTableIndex = true, TableId = "FONTCOLORS", Column = "Color")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS", Column = "Color")]
         public Int32 nameColor;
-        [ExcelOutput(IsTableIndex = true, TableId = "FONTCOLORS", Column = "Color")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS", Column = "Color")]
         public Int32 bkgdColor;
         [ExcelOutput(IsBool = true)]
         public Int32 doTransactionLogging;
@@ -46,14 +46,14 @@ namespace Reanimator.ExcelDefinitions
         public Int32 state;
         public Int32 flippySound;
         public Int32 usable;
-        [ExcelOutput(IsTableIndex = true, TableId = "ITEM_QUALITY", Column = "quality")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY", Column = "quality")]
         public Int32 scrapQuality;
         public Int32 isSpecialScrapQuality;
         public Int32 scrapQualityDefault;
         public Int32 extraScrapChance;
-        [ExcelOutput(IsTableIndex = true, TableId = "ITEMS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
         public Int32 extraScrapItem;
-        [ExcelOutput(IsTableIndex = true, TableId = "ITEM_QUALITY", Column = "quality")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY", Column = "quality")]
         public Int32 extraScrapQuality;
         public Int32 dismantleResultSound;
         public Int32 downgrade;
@@ -81,17 +81,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affix1Type5Weight;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 affix1Type6Weight;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affix1Type1;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affix1Type2;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affix1Type3;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affix1Type4;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affix1Type5;
-        [ExcelOutput(IsTableIndex = true, TableId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affix1Type6;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 affix2Chance;

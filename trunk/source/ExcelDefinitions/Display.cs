@@ -33,11 +33,11 @@ namespace Reanimator.ExcelDefinitions
         Int32 displayCondition3;
         [ExcelOutput(IsBool = true)]
         public Int32 newLine;
-        [ExcelOutput(IsStringId = true, Table = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
         public Int32 formatString;
-        [ExcelOutput(IsStringId = true, Table = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
         Int32 formatShort;
-        [ExcelOutput(IsStringId = true, Table = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
         Int32 decripShort;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         string iconFrame;
@@ -57,7 +57,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 val4;
         Int32 toolTipArea;
-        [ExcelOutput(IsStringId = true, Table = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
         public Int32 toolTipText;//stridx
         [ExcelOutput(IsIntOffset = true)]
         public Int32 color;

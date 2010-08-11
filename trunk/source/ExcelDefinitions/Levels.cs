@@ -21,11 +21,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 defaultSubLevel;
         public Int32 previousLevel;
         public Int32 nextLevel;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 levelDisplayName;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 floorSuffixName;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 finalSuffixFloorName;
         [ExcelOutput(IsBool = true)]
         public Int32 town;
@@ -102,9 +102,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 partySizeRecommended;
         public Int32 questSpawnClass;
         public Int32 interactableSpawnClass;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 stringEnter;//stridx
-        [ExcelOutput(IsStringId = true, Table = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 stringLeave;//stridx
         public float championSpawnChancePercentAtEachSpawnL;//L == Level?
         public float uniqueMonsterChancePercent;

@@ -17,9 +17,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 code;
         public Int32 rarity;
         public Int32 nameColor;//idx
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 displayNameStringKey;//stridx
-        [ExcelOutput(IsStringId = true, Table = "Strings_Affix")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
         public Int32 championFormatStringKey;//stridx
         [ExcelOutput(IsBool = true)]
         public Int32 pickProperName;//bool

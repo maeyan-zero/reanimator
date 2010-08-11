@@ -14,9 +14,9 @@ namespace Reanimator.ExcelDefinitions
         public string name;
         [ExcelOutput(SortId = 2)]
         public Int32 code;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 displayString;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 displayStringNumbers;
         public Int32 minScore;
         public Int32 maxScore;

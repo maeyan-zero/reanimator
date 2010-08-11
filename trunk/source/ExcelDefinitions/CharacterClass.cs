@@ -33,7 +33,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBool = true)]
         public Int32 femaleEnabled;
         public Int32 unitVersionToGetSkillRespec;
-        [ExcelOutput(IsStringId = true, Table = "Strings_Strings")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 stringOneLetterCode;
         [ExcelOutput(IsBool = true)]
         public Int32 Default;
