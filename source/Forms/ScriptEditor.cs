@@ -67,7 +67,8 @@ namespace Reanimator.Forms
             {
                 UpdateTreeView();
             }
-            //Reanimator.Menu.MenuItems["Scripts"].Visible = true;
+            Reanimator form = (Reanimator)MdiParent;
+            form.MainMenuStrip.Items["scriptsMenu"].Visible = true;
         }
 
         private void availableCombo_SelectedIndexChanged(object sender, EventArgs e)
@@ -209,7 +210,8 @@ namespace Reanimator.Forms
         private void ScriptEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
             savePrompt();
-            MdiParent.Menu.MenuItems["Scripts"].Visible = false;
+            Reanimator form = (Reanimator)MdiParent;
+            form.MainMenuStrip.Items["scriptsMenu"].Visible = false;
         }
 
         static class NativeMethods
