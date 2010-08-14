@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<file id="STATS_FUNC">
+	<!--POWER REGEN 2 PER POINT IN WILLPOWER INSTEAD OF 3-->
+	<!-- because of << in this formula I've used <CDATA[]]> format, and I have no idea if it will work-->
+	<entity id="4">
+			<attribute id="formula"><!CDATA[power_regen + ((willpower << power_max.shift) / 30)]]></attribute>
+		</entity>
+	<!--TRIPLE STRENGTH BONUS TO MELEE DAMAGE-->
+	<entity id="21">
+			<attribute id="formula">strength * 3</attribute>
+		</entity>
+	</file>
+</modification>

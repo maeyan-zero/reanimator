@@ -71,5 +71,18 @@
 		<entity id="888">
 			<attribute id="npcInfo">31</attribute>
 		</entity>
+		<!--DECREASING SHIELD OVERLOAD TO 100%-->
+		<entity id="596,597,598,600,601,602,603,604,605,606,607,608,609,610">
+			<attribute id="props1">26,100,669,490733568,0</attribute>
+		</entity>
+		<entity id="451,452,453,454,455,456,457,458,459,460,461,462">
+			<attribute id="props1">26,256,669,2936012800,26,100,669,490733568,0</attribute>
+		</entity>
+		<entity id="540,541,542,543,544,545">
+			<attribute id="props1">26,100,669,490733568,0</attribute>
+		</entity>
+		<entity id="347,348,349,350,353,355">
+			<attribute id="props1">26,1,669,603979776,26,100,673,490733568,0</attribute>
+		</entity>
 	</file>
 </modification>

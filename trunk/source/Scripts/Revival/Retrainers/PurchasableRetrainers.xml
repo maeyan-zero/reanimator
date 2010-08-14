@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<file id="ITEMS">
+		<!--SKILL RETRAINER-->
+		<!--ATTRIBUTE RETRAINER-->
+		<entity id="15,265">
+			<attribute id="buyPriceAdd">26,100000,0</attribute>
+			<attribute id="sellPriceAdd">26,100000,0</attribute>
+		</entity>
+	</file>
+</modification>
