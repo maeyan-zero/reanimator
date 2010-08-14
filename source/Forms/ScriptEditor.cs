@@ -15,8 +15,9 @@ namespace Reanimator.Forms
     {
         UTF8Encoding _encoding; //used for string to byte[]
         TableDataSet _tableDataSet;
-        List<Modification.Pack> _pack;
+        List<Modification.Package> _pack;
         Modification.Script _script;
+
 
         public string ScriptDir { get { return Config.ScriptDir; } }
         public string Filter { get { return "Xml Files (*.xml)|*.xml|All Files (*.*)|*.*"; } }
@@ -26,13 +27,13 @@ namespace Reanimator.Forms
             InitializeComponent();
             _encoding = new System.Text.UTF8Encoding();
             _tableDataSet = tableDataSet;
-            _pack = new List<Modification.Pack>();
+            _pack = new List<Modification.Package>();
 
             string[] packs = Directory.GetDirectories(Config.ScriptDir).Where(subDir => (!subDir.Contains("."))).ToArray();
 
             foreach (string packPath in packs)
             {
-                _pack.Add(new Modification.Pack(packPath));
+                //_pack.Add(new Modification.Package(packPath));
             }
 
             SetTabs(textBox);
@@ -44,12 +45,12 @@ namespace Reanimator.Forms
             for (int i = 0; i < _pack.Count; i++)
             {
                 treeView.Nodes.Add(_pack[i].Title);
-                for (int j = 0; j < _pack[i].Packages.Count; j++)
+                for (int j = 0; j < _pack[i].Pack.Length; j++)
                 {
-                    treeView.Nodes[i].Nodes.Add(_pack[i].Packages[j].Title);
-                    for (int k = 0; k < _pack[i].Packages[j].Scripts.Count; k++)
+                    treeView.Nodes[i].Nodes.Add(_pack[i].Pack[j].Title);
+                    for (int k = 0; k < _pack[i].Pack[j].Scripts.Length; k++)
                     {
-                        treeView.Nodes[i].Nodes[j].Nodes.Add(_pack[i].Packages[j].Scripts[k].Title);
+                        //treeView.Nodes[i].Nodes[j].Nodes.Add(_pack[i].Pack[j].Scripts[k].Title);
                     }
                 }
                 treeView.Nodes[i].Nodes.Add("config.ini");
@@ -166,10 +167,10 @@ namespace Reanimator.Forms
                     {
                         byte[] buffer = _encoding.GetBytes(textBox.Text);
 
-                        using (FileStream fileStream = new FileStream(@_script.Path, FileMode.Create))
-                        {
-                            fileStream.Write(buffer, 0, buffer.Length);
-                        }
+                        //using (FileStream fileStream = new FileStream(@_script.Path, FileMode.Create))
+                        //{
+                        //    fileStream.Write(buffer, 0, buffer.Length);
+                        //}
                         return true;
                     }
                 }
@@ -181,30 +182,26 @@ namespace Reanimator.Forms
             return false; // its modified but not saved
         }
 
-        private void apply(int i)
+        public void apply(string str)
         {
+            bool okay = savePrompt();
+            if (okay)
+            {
+                if (str == "current")
+                {
+                    //_script.
+                }
+                else if (str == "checked")
+                {
 
+                }
+            }
             //Modification modification = new Modification(_tableDataSet);
             //string path = _availableFiles[i];
             //ProgressForm progress = new ProgressForm(modification.Open, path);
             //progress.ShowDialog();
             //progress = new ProgressForm(modification.Apply, modification);
             //progress.ShowDialog();
-        }
-
-        private void applyCurrentButton_Click(object sender, EventArgs e)
-        {
-            bool okay = savePrompt();
-            //if (okay) apply(availableCombo.SelectedIndex);
-        }
-
-        private void applyCheckedButton_Click(object sender, EventArgs e)
-        {
-            //foreach (int i in availableCombo.CheckedIndices)
-            //{
-            //    bool okay = savePrompt();
-            //    if (okay) apply(i);
-            //}
         }
 
         private void ScriptEditor_FormClosing(object sender, FormClosingEventArgs e)
@@ -242,14 +239,14 @@ namespace Reanimator.Forms
                 int script = e.Node.Index;
                 int package = e.Node.Parent.Index;
                 int group = e.Node.Parent.Parent.Index;
-                string path = _pack[group].Packages[package].Scripts[script].Path;
+                string path = _pack[group].Pack[package].Scripts[script].Path;
 
                 using (FileStream fileStream = new FileStream(@path, FileMode.Open))
                 {
                     byte[] buffer = new byte[fileStream.Length];
                     fileStream.Read(buffer, 0, (int)fileStream.Length);
                     textBox.Text = _encoding.GetString(buffer);
-                    _script = _pack[group].Packages[package].Scripts[script];
+                    _script = _pack[group].Pack[package].Scripts[script];
                 }
             }
             else if (e.Node.Level == 1 && e.Node.Text == "config.ini")

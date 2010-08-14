@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<package>
+  <pack id="base">
+    <title>Revival SP Modification</title>
+    <version>2.0</version>
+    <author>Maeyan, Malachor and The Revival Team</author>
+    <website>http://www.hellgateaus.net</website>
+    <notes>The base package for Revival SP modification</notes>
+    <type>required</type>
+  </pack>
+  <pack id="retainers">
+    <title>Purchaseable Retrainers</title>
+    <version>2.0</version>
+    <author>Maeyan, Malachor and The Revival Team</author>
+    <website>http://www.hellgateaus.net</website>
+    <notes>The base package for Revival SP modification</notes>
+    <type>optional</type>
+  </pack>
+  <pack id="sniper">
+    <title>Improved Sniper Rifles</title>
+    <version>2.0</version>
+    <author>Malachor</author>
+    <website>http://www.hellgateaus.net</website>
+    <notes>The base package for Revival SP modification</notes>
+    <type>optional</type>
+  </pack>
+</package>
