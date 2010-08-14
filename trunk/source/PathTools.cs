@@ -33,12 +33,15 @@ namespace Reanimator
             return directories;
         }
 
-        public static string FileNameFromPath(string path)
+        public static string FileNameFromPath(string path, bool hideExtentsion)
         {
             int j = path.LastIndexOf("\\");
             string filename = path.Remove(0, j + 1);
-            //j = filename.LastIndexOf(".");
-            //filename = filename.Remove(j, filename.Length - j);
+            if (hideExtentsion == true)
+            {
+                j = filename.LastIndexOf(".");
+                filename = filename.Remove(j, filename.Length - j);
+            }
             return filename;
         }
 

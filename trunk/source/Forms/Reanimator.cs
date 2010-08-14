@@ -227,14 +227,14 @@ namespace Reanimator
             try
             {
                 // Check the XML is valid before declaring an object
-                bool pass = Modification.Parse(fileName);
+                bool pass = true;// Modification.Parse(fileName);
 
                 if (pass)
                 {
                     //Mod revivalMod = new Mod(szFileName, index);
-                    ModificationForm modificationForm = new ModificationForm();
+                    //ModificationForm modificationForm = new ModificationForm();
                     //modificationForm.MdiParent = this;
-                    modificationForm.ShowDialog();
+                    //modificationForm.ShowDialog();
                 }
                 else
                 {
@@ -681,7 +681,7 @@ namespace Reanimator
         {
             try
             {
-                ModificationForm modificationForm = new ModificationForm();
+                ModificationForm modificationForm = new ModificationForm(_tableDataSet);
                 modificationForm.ShowDialog();
             }
             catch (Exception ex)
@@ -819,6 +819,16 @@ namespace Reanimator
             catch (Exception ex)
             {
                 ExceptionLogger.LogException(ex, "scriptEditorToolStripMenuItem_Click");
+            }
+        }
+
+        private void applyCurrentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScriptEditor scriptEditor = ActiveMdiChild as ScriptEditor;
+
+            if (scriptEditor != null)
+            {
+                //scriptEditor.app
             }
         }
     }

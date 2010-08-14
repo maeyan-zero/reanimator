@@ -16,87 +16,146 @@ namespace Reanimator
     public class Modification
     {
         TableDataSet _tableDataSet;
-        List<string> _changedTables;
-        Root _revival;
-        Index[] _indexFiles;
+        List<Index> _index;
+
+        public List<Package> ModPackage { get; set; }
+        public string ModPackPath { get { return Config.HglDir + "\\modpacks\\"; } }
 
         public Modification(TableDataSet tableDataSet)
         {
             _tableDataSet = tableDataSet;
-            _changedTables = new List<string>();
-            _revival = new Root();
-            _indexFiles = new Index[Index.FileNames.Length];
-        }
-        public static bool Parse(string path)
-        {
-            try
-            {
-                FileStream xsdStream = new FileStream("schema.xsd", FileMode.Open);
-                XmlSchema xmlSchema = XmlSchema.Read(xsdStream, null);
-                XmlReaderSettings xmlReaderSettings = new XmlReaderSettings()
-                {
-                    ValidationType = ValidationType.Schema,
-                    ProhibitDtd = false
-                };
-                xmlReaderSettings.Schemas.Add(xmlSchema);
-                FileStream xmlStream = new FileStream(path, FileMode.Open);
-                XmlReader xmlReader = XmlReader.Create(xmlStream, xmlReaderSettings);
-
-                // Parse the document
-                using (xmlReader) while (xmlReader.Read()) { }
-
-                xsdStream.Close();
-                xmlStream.Close();
-
-                return true;
-            }
-            catch
-            {
-                MessageBox.Show("Either the schema.xsd could not be found, or there is a syntax error in the modification.",
-                    "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
+            ModPackage = new List<Package>();
         }
         public void Open(ProgressForm progress, Object argument)
         {
-            int i = ((string)argument).LastIndexOf("\\") + 1;
-            string s = ((string)argument).Substring(i);
-            progress.SetLoadingText("Parsing modification:");
-            progress.SetCurrentItemText(s);
+            // Unzip the package
+            string path = argument as string;
+            bool unzipResult = Unzip(path);
+            if (!unzipResult) return;
 
-            //_index = Index.LoadIndexFiles(Config.HglDir + "\\data\\");
-            XmlSerializer serializer = new XmlSerializer(typeof(Root));
-            TextReader reader = new StreamReader((string)argument);
-            _revival = (Root)serializer.Deserialize(reader);
-            reader.Close();
+            string modDir = PathTools.FileNameFromPath(path, true) + "\\";
+            path = ModPackPath + modDir + "Config.xml";
+
+            // Open the Config file
+            try
+            {
+                using (TextReader textReader = new StreamReader(path))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(Package));
+                    Package package = serializer.Deserialize(textReader) as Package;
+                    ModPackage.Add(package);
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "Modification.Open");
+                return;
+            }
+
+            Package casePackage = ModPackage.Last();
+            if (casePackage == null) return;
+
+            // Parse each pack
+            foreach (Pack pack in casePackage.Pack)
+            {
+                pack.Apply = (pack.Type == "required" || pack.Type == "recommended") ? true : false;
+                pack.Path = ModPackPath + modDir + pack.Dir + "\\";
+                string imagePath = pack.Path + "preview.png";
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    pack.Image = Image.FromFile(imagePath);
+                }
+
+                string repackDir = pack.Path + "repack\\";
+                if (Directory.Exists(repackDir))
+                {
+                    pack.Repack = Directory.GetFiles(repackDir, "*", SearchOption.AllDirectories);
+                    for (int i = 0; i < pack.Repack.Length; i++)
+                    {
+                        pack.Repack[i] = pack.Repack[i].Remove(0, repackDir.Length);
+                    }
+                }
+
+                string unpackDir = pack.Path + "unpack\\";
+                if (Directory.Exists(unpackDir))
+                {
+                    pack.Unpack = Directory.GetFiles(unpackDir, "*", SearchOption.AllDirectories);
+                    for (int i = 0; i < pack.Unpack.Length; i++)
+                    {
+                        pack.Unpack[i] = pack.Unpack[i].Remove(0, unpackDir.Length);
+                    }
+                }
+
+                string scriptDir = pack.Path + "scripts\\";
+                if (!Directory.Exists(scriptDir)) continue; // no scripts? continue
+                string[] scripts = Directory.GetFiles(scriptDir, "*.xml");
+                pack.Scripts = new Script[scripts.Length];
+
+                for (int i = 0; i < scripts.Length; i++)
+                {
+                    // Open the script file
+                    try
+                    {
+                        using (TextReader textReader = new StreamReader(scripts[i]))
+                        {
+                            XmlSerializer serializer = new XmlSerializer(typeof(Script));
+                            Script script = serializer.Deserialize(textReader) as Script;
+                            pack.Scripts[i] = script;
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        ExceptionLogger.LogException(exception, "Modification.Open");
+                        return;
+                    }
+                }
+            }
         }
         public void Apply(ProgressForm progress, Object argument)
         {
-            foreach (File file in _revival.Files)
+            foreach (Index index in _index)
             {
-                progress.SetLoadingText("Modifying: " + file.ID);
-                Manipulate(file);
-                _changedTables.Add(file.ID);
+
+            }
+
+            foreach (Package package in ModPackage)
+            {
+                foreach (Pack pack in package.Pack)
+                {
+                    if (!pack.Apply) continue;
+                    
+                    //repack files
+
+                    //unpack files
+
+                    //manipulate files
+
+                }
             }
         }
         public void Save(ProgressForm progress, Object argument)
         {
 
         }
-        public void Unzip(ProgressForm progress, Object argument)
+        private bool Unzip(string path)
         {
-            int i = ((string)argument).LastIndexOf("\\") + 1;
-            string s = ((string)argument).Substring(i);
-            progress.SetLoadingText("Uncompressing modification.");
-            progress.SetCurrentItemText(s);
-
-            using (Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile((string)argument))
+            try
             {
-                zip.ExtractAll(Config.HglDir + "\\modpacks\\",
-                    Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
+                using (Ionic.Zip.ZipFile zipFile = new Ionic.Zip.ZipFile(path))
+                {
+                    zipFile.ExtractAll(ModPackPath, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "Modification.Unzip");
+                return false;
             }
         }
-        public bool Manipulate(File file)
+        private bool Manipulate(File file)
         {
             try
             {
@@ -254,23 +313,71 @@ namespace Reanimator
                             }
                             dataRow[col] = obj;
                         } //end main loop
-                    }
-                }
+                    } //attribute
+                } //entity
+
                 return true;
             }
-            catch
+            catch (Exception exception)
             {
+                ExceptionLogger.LogException(exception, "Modification.Manipulate");
                 return false;
             }
         }
 
+        [XmlRoot("package")]
+        public class Package
+        {
+            [XmlElement("pack", typeof(Pack))]
+            public Pack[] Pack { get; set; }
+
+            [XmlIgnore]
+            public string Path { get; set; }
+            [XmlIgnore]
+            public string Title { get; set; }
+            [XmlIgnore]
+            public string Config { get; set; } // config.xml
+        }
+        public class Pack
+        {
+            [XmlAttribute("id")]
+            public string Dir { get; set; }
+
+            [XmlElement("title")]
+            public string Title { get; set; }
+            [XmlElement("version")]
+            public string Version { get; set; }
+            [XmlElement("author")]
+            public string Author { get; set; }
+            [XmlElement("website")]
+            public string Website { get; set; }
+            [XmlElement("notes")]
+            public string Notes { get; set; }
+            [XmlElement("type")]
+            public string Type { get; set; }
+
+            [XmlIgnore]
+            public Image Image;
+            [XmlIgnore]
+            public bool Apply { get; set; }
+            [XmlIgnore]
+            public string Path { get; set; }
+            [XmlIgnore]
+            public Script[] Scripts { get; set; }
+            [XmlIgnore]
+            public string[] Repack { get; set; }
+            [XmlIgnore]
+            public string[] Unpack { get; set; }
+        }
         [XmlRoot("modification")]
-        public class Root
+        public class Script
         {
             [XmlElement("file", typeof(File))]
             public File[] Files { get; set; }
-        }
 
+            [XmlIgnore]
+            public string Path { get; set; }
+        }
         public class File
         {
             [XmlAttribute("id")]
@@ -279,7 +386,6 @@ namespace Reanimator
             [XmlElement("entity", typeof(Entity))]
             public Entity[] Entities { get; set; }
         }
-
         public class Entity
         {
             [XmlAttribute("id")]
@@ -288,7 +394,6 @@ namespace Reanimator
             [XmlElement("attribute", typeof(Attribute))]
             public Attribute[] Attributes { get; set; }
         }
-
         public class Attribute
         {
             [XmlAttribute("id")]
@@ -302,69 +407,6 @@ namespace Reanimator
 
             [XmlText]
             public string Value { get; set; }
-        }
-
-        public class Pack
-        {
-            const string ConfigFileName = "config.ini";
-            public string Path { get; set; }
-            public string Title { get; set; }
-            public string Config { get; set; } // config.ini
-            public List<Package> Packages { get; set; } // contains many packages
-
-            public Pack(string path)
-            {
-                Path = path;
-                Title = PathTools.DirectoriesFromPath(Path);
-                Config = Path + "\\" + ConfigFileName;
-                Packages = new List<Package>();
-
-                if (!System.IO.File.Exists(Config))
-                {
-                    System.IO.File.Create(Config);
-                }
-
-                string[] packages = Directory.GetDirectories(Path).Where(subDir => (!subDir.Contains("."))).ToArray();
-                
-                foreach (string packagePath in packages)
-                {
-                    Packages.Add(new Package(packagePath));
-                }
-            }
-        }
-
-        public class Package
-        {
-            public string Path { get; set; }
-            public string Title { get; set; }
-            public List<Script> Scripts { get; set; }
-
-            public Package(string path)
-            {
-                Path = path;
-                Title = PathTools.DirectoriesFromPath(Path);
-                Scripts = new List<Script>();
-
-                string[] scripts = Directory.GetFiles(Path);
-
-                foreach (string scriptPath in scripts)
-                {
-                    Scripts.Add(new Script(scriptPath));
-                }
-            }
-        }
-
-        public class Script
-        {
-            public string Path { get; set; }
-            public string Title { get; set; }
-            public Root Root { get; set; }
-
-            public Script(string path)
-            {
-                Path = path;
-                Title = PathTools.FileNameFromPath(Path);
-            }
         }
     }
 }

@@ -489,7 +489,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -654,6 +653,7 @@
     <None Include="Resources\attributePanelBg.png" />
     <None Include="Resources\attributePanel.png" />
     <Content Include="Scripts\Revival\Base\AffixTypes.xml" />
+    <Content Include="Scripts\Revival\Config.xml" />
     <Content Include="Scripts\Revival\Base\FontColors.xml" />
     <Content Include="Scripts\Revival\Base\GameGlobals.xml" />
     <Content Include="Scripts\Revival\Base\Inventory.xml" />
@@ -672,6 +672,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Folder Include="Scripts\Revival\Base\Repack\" />
+    <Folder Include="Scripts\Revival\Base\Unpack\" />
     <Folder Include="Scripts\Revival\Retrainers\" />
     <Folder Include="Scripts\Revival\Sniper\" />
   </ItemGroup>

@@ -970,7 +970,8 @@ namespace Reanimator
                             }
                             else
                             {
-                                fieldInfo.SetValue(table, excelOutputAttribute.DefaultBitmask);
+                                Object o = dr[dc];
+                                fieldInfo.SetValue(table, o);
                             }
                         }
                     }

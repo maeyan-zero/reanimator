@@ -2,16 +2,22 @@
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using System.Collections.Generic;
 namespace Reanimator.Forms
 {
     public partial class ModificationForm : Form
     {
-        Modification revival;// = new Modification();
+        TableDataSet _tableDataSet;
+        Modification _modification;
+        List<Modification.Package> _package;
         
-        public ModificationForm()
+        public ModificationForm(TableDataSet tableDataset)
         {
+            _tableDataSet = tableDataset;
+            _modification = new Modification(_tableDataSet);
             InitializeComponent();
-            add_Click(this, null);
+
+            add_Click(this, null); // automatically asks user for a file
         }
         private void itemList_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -80,45 +86,21 @@ namespace Reanimator.Forms
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                Filter =
-                    "Modification Files (*.zip, *.xml)|*.zip;*.xml|All Files (*.*)|*.*"
+                Filter = "Modification Files (*.zip)|*.zip;|All Files (*.*)|*.*"
             };
 
-            if (openFileDialog.ShowDialog(this) != DialogResult.OK ||
-                (!openFileDialog.FileName.EndsWith("xml") &&
-                    !openFileDialog.FileName.EndsWith("zip"))) return;
+            if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
+            if (!openFileDialog.FileName.EndsWith("zip")) return;
 
-            if (openFileDialog.FileName.EndsWith("zip"))
-            {
-                ProgressForm progressForm = new ProgressForm(revival.Unzip, openFileDialog.FileName);
-                progressForm.ShowDialog(this);
-                progressForm.Dispose();
+            ProgressForm progressForm = new ProgressForm(_modification.Open, openFileDialog.FileName);
+            progressForm.ShowDialog(this);
+            progressForm.Dispose();
 
-                int lastof1 = openFileDialog.FileName.LastIndexOf("\\");
-                int lastof2 = openFileDialog.FileName.LastIndexOf(".");
-                int length = lastof2 - lastof1;
-                string modname = openFileDialog.FileName.Substring(lastof1, length);
-                openFileDialog.FileName = Config.HglDir + "\\modpacks" + modname + "\\mod.xml";
-                System.IO.Directory.SetCurrentDirectory(Config.HglDir + "\\modpacks" + modname);
-            }
-
-            //if (revival.Length == 0)
-            //{
-            //    ProgressForm progressForm = new ProgressForm(revival.Open, openFileDialog.FileName);
-            //    progressForm.SetStyle(ProgressBarStyle.Continuous);
-            //    progressForm.ShowDialog(this);
-            //    progressForm.Dispose();
-            //}
-            //else
-            //{
-            //    ProgressForm progressForm = new ProgressForm(revival.Add, openFileDialog.FileName);
-            //    progressForm.ShowDialog(this);
-            //    progressForm.Dispose();
-            //}
+            _package = _modification.ModPackage;
 
             checkedListBox.Items.Clear();
 
-            //for (int i = 0; i < revival.content.Length; i++)
+            //for (int i = 0; i < _package.Count; i++)
             //{
             //    checkedListBox.Items.Add(revival.content[i].title, revival.content[i].apply);
 
