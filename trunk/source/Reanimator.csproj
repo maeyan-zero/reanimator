@@ -649,34 +649,12 @@
     <None Include="Resources\inventory_bg1.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\Revival\Config.ini" />
     <None Include="Resources\attributePanelBg.png" />
     <None Include="Resources\attributePanel.png" />
-    <Content Include="Scripts\Revival\Base\AffixTypes.xml" />
-    <Content Include="Scripts\Revival\Config.xml" />
-    <Content Include="Scripts\Revival\Base\FontColors.xml" />
-    <Content Include="Scripts\Revival\Base\GameGlobals.xml" />
-    <Content Include="Scripts\Revival\Base\Inventory.xml" />
-    <Content Include="Scripts\Revival\Base\ItemLevels.xml" />
-    <Content Include="Scripts\Revival\Base\ItemQuality.xml" />
-    <Content Include="Scripts\Revival\Base\Items.xml" />
-    <Content Include="Scripts\Revival\Base\Monsters.xml" />
-    <Content Include="Scripts\Revival\Base\MonsterQuality.xml" />
-    <Content Include="Scripts\Revival\Base\Recipies.xml" />
     <Content Include="Resources\icon3.ico" />
-    <Content Include="Scripts\Revival\Base\Skills.xml" />
-    <Content Include="Scripts\Revival\Base\StringFiles.xml" />
-    <Content Include="Scripts\Revival\Base\Treasure.xml" />
     <None Include="Resources\skillPanelBg.png" />
-    <None Include="Scripts\Revival\Base\Strings_Revival.csv" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Scripts\Revival\Base\Repack\" />
-    <Folder Include="Scripts\Revival\Base\Unpack\" />
-    <Folder Include="Scripts\Revival\Retrainers\" />
-    <Folder Include="Scripts\Revival\Sniper\" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
