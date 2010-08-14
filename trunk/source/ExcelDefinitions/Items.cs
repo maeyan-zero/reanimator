@@ -473,7 +473,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 meleeWeapon;//index                            // 122  0x0000000000000770  XLS_ReadIndex
         public Int32 cdTicks;                                       // 131  0x0000000000000774  XLS_ReadInt32
         public float approxDps;                                     // 132  0x0000000000000778  XLS_ReadFloat
-        [ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
         public Int32 tooltipDamageString;//stridx                   // 137  0x000000000000077C  XLS_ReadStringIndex
         public Int32 requiredAffixGroups1;                          // 126  0x0000000000000780  XLS_ReadIntArray,8
         public Int32 requiredAffixGroups2;                          // 126  0x0000000000000784
