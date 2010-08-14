@@ -25,13 +25,17 @@ namespace Reanimator.Forms
         public ScriptEditor(TableDataSet tableDataSet)
         {
             InitializeComponent();
+            SetTabs(textBox);
             _encoding = new System.Text.UTF8Encoding();
             _tableDataSet = tableDataSet;
             _modification = new Modification(_tableDataSet);
             _package = _modification.ModPackage;
-            _modification.Open(Config.ScriptDir);
 
-            SetTabs(textBox);
+            string[] modPackPaths = Directory.GetDirectories(Config.ScriptDir).Where(subDir => (!subDir.Contains("."))).ToArray();
+            foreach (string path in modPackPaths)
+            {
+                _modification.Open(path);
+            }
         }
 
         private void UpdateTreeView()

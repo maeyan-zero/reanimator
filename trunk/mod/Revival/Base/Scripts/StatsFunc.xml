@@ -4,7 +4,7 @@
 	<!--POWER REGEN 2 PER POINT IN WILLPOWER INSTEAD OF 3-->
 	<!-- because of << in this formula I've used <CDATA[]]> format, and I have no idea if it will work-->
 	<entity id="4">
-			<attribute id="formula"><!CDATA[power_regen + ((willpower << power_max.shift) / 30)]]></attribute>
+			<attribute id="formula"><![CDATA[power_regen + ((willpower << power_max.shift) / 30)]]></attribute>
 		</entity>
 	<!--TRIPLE STRENGTH BONUS TO MELEE DAMAGE-->
 	<entity id="21">
