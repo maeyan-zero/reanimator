@@ -12,10 +12,12 @@ namespace Reanimator
         public DataSet XlsDataSet { get; private set; }
         public TableFiles TableFiles { get; set; }
         public bool RegenerateRelations { get; private set; }
+        private bool _excelDataTableLoaded;
 
         public TableDataSet()
         {
             RegenerateRelations = true;
+            _excelDataTableLoaded = false;
             XlsDataSet = new DataSet("xlsDataSet")
             {
                 Locale = new CultureInfo("en-us", true),
@@ -34,6 +36,13 @@ namespace Reanimator
         {
             DataFile dataFile = var as DataFile;
             if (dataFile == null) return null;
+
+            if (!_excelDataTableLoaded)
+            {
+                _excelDataTableLoaded = true; // need to set this before _LoadRelatedTable else stack overflow
+                DataTable excelDataTable = _LoadRelatedTable(progress, "EXCELTABLES");
+                if (excelDataTable == null) _excelDataTableLoaded = false;
+            }
 
             DataTable dataTable = null;
             if (dataFile.IsStringsFile)
@@ -258,6 +267,11 @@ namespace Reanimator
 
         private DataTable _LoadRelatedTable(ProgressForm progress, String tableId)
         {
+            if (tableId == null) return null;
+
+            DataTable dataTable = XlsDataSet.Tables[tableId];
+            if (dataTable != null) return dataTable;
+
             DataFile dataFile = TableFiles.DataFiles[tableId] as DataFile;
             return dataFile == null ? null : LoadTable(progress, dataFile);
         }
@@ -329,14 +343,25 @@ namespace Reanimator
                             col++;
                         }
                     }
-                    else if (!String.IsNullOrEmpty(excelOutputAttribute.TableStringId))
+                    else if (!String.IsNullOrEmpty(excelOutputAttribute.TableStringId) || excelOutputAttribute.TableIndex >= 0)
                     {
-                        DataTable dt = XlsDataSet.Tables[excelOutputAttribute.TableStringId] ??
-                                       _LoadRelatedTable(progress, excelOutputAttribute.TableStringId);
+                        String tableStringId = excelOutputAttribute.TableStringId;
+                        if (excelOutputAttribute.TableIndex >= 0)
+                        {
+                            tableStringId = GetExcelTableStringIdFromIndex(excelOutputAttribute.TableIndex);
+                        }
+
+                        DataTable dt = XlsDataSet.Tables[tableStringId] ?? _LoadRelatedTable(progress, tableStringId);
 
                         if (dt != null)
                         {
                             DataColumn dcParent = dt.Columns["Index"];
+
+                            // if no column name set, assume first column (n.b. not index=0 as that's the "Index" column)
+                            if (String.IsNullOrEmpty(excelOutputAttribute.Column))
+                            {
+                                excelOutputAttribute.Column = dt.Columns[1].ColumnName;
+                            }
 
                             String relationName = excelTable.StringId + dcChild.ColumnName + ExcelFile.ColumnTypeKeys.IsTableIndex;
                             DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
@@ -373,7 +398,16 @@ namespace Reanimator
             if (excelTables == null) return null;
 
             DataRow[] rows = excelTables.Select(String.Format("code = '{0}'", code));
-            return rows[0][1].ToString();
+            return rows.Length == 0 ? null : rows[0][1].ToString();
+        }
+
+        public String GetExcelTableStringIdFromIndex(int index)
+        {
+            DataTable excelTables = XlsDataSet.Tables["EXCELTABLES"];
+            if (excelTables == null) return null;
+
+            DataRow[] rows = excelTables.Select(String.Format("index = {0}", index));
+            return rows.Length == 0 ? null : rows[0][1].ToString();
         }
 
         public int LoadedTableCount
