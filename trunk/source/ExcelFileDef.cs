@@ -52,13 +52,20 @@ namespace Reanimator
             public bool IsStringId { get; set; }
             public bool IsTableIndex { get; set; }
             public String TableStringId { get; set; }
+            public int TableIndex { get; set; }
             public String Column { get; set; }
+
             public int SortId { get; set; }
 
             public bool IsBitmask { get; set; }
             public UInt32 DefaultBitmask { get; set; }
 
             public bool IsBool { get; set; }
+
+            public ExcelOutputAttribute()
+            {
+                TableIndex = -1;
+            }
         }
 
         public abstract class IntValueType
