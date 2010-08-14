@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<file id="QUEST">
+		<entity id="245">
+			<attribute id="style">1</attribute>
+			<attribute id="subscriberOnly">0</attribute>
+			<attribute id="offerReward">208</attribute>
+		</entity>
+	</file>
+</modification>

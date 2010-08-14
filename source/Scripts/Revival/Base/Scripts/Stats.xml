@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<file id="STATS">
+	<!--DECREASED SHIELD REGEN DELAY-->
+	<entity id="111">
+			<attribute id="regenDelayOnDec">50</attribute>
+			<attribute id="regenDelayMonster">50</attribute>
+		</entity>
+	</file>
+</modification>
