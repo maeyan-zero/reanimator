@@ -821,15 +821,5 @@ namespace Reanimator
                 ExceptionLogger.LogException(ex, "scriptEditorToolStripMenuItem_Click");
             }
         }
-
-        private void applyCurrentToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ScriptEditor scriptEditor = ActiveMdiChild as ScriptEditor;
-
-            if (scriptEditor != null)
-            {
-                //scriptEditor.app
-            }
-        }
     }
 }
