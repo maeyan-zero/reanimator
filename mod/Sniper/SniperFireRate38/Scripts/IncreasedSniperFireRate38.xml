@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <modification>
-	<file id="ITEMS">
-		<!--sniper rifle fire rate increase to 38 rpm-->
-		<entity id="393">
-            <attribute id="cdTicks">4044</attribute>
-          </entity>
-          <entity id="396-402">
-            <attribute id="cdTicks">4044</attribute>
-          </entity>
-	</file>
+  <file id="ITEMS">
+    <!--sniper rifle fire rate increase to 38 rpm-->
+    <entity id="393">
+      <attribute id="cdTicks">4044</attribute>
+    </entity>
+    <entity id="396-402">
+      <attribute id="cdTicks">4044</attribute>
+    </entity>
+  </file>
 </modification>

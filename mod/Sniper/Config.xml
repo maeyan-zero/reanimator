@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <package>
   <pack id="SniperAccuracy12">
     <title>Improved Sniper Rifle Accuracy 12</title>
@@ -17,7 +17,7 @@
     <type>optional</type>
   </pack>
   <pack id="SniperAccuracy50">
-    <title>Improved Sniper Rifle Accuracy</title>
+    <title>Improved Sniper Rifle Accuracy 50</title>
     <version>2.0</version>
     <author>Malachor</author>
     <website>http://www.hellgateaus.net</website>

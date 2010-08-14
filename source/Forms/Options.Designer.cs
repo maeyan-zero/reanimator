@@ -90,9 +90,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(7, 208);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 13);
+            this.label1.Size = new System.Drawing.Size(53, 13);
             this.label1.TabIndex = 11;
-            this.label1.Text = "Script Path";
+            this.label1.Text = "Mod Path";
             // 
             // gameClientPath_Button
             // 

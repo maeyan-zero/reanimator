@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <modification>
-	<file id="ITEMS">
-		<!--sniper rifle max firing error decrease by 25%-->
-		<entity id="393">
-            <attribute id="firingErrorMax">300</attribute>
-          </entity>
-          <entity id="396-402">
-            <attribute id="firingErrorMax">300</attribute>
-          </entity>
-	</file>
+  <file id="ITEMS">
+    <!--sniper rifle max firing error decrease by 25pc-->
+    <entity id="393">
+      <attribute id="firingErrorMax">300</attribute>
+    </entity>
+    <entity id="396-402">
+      <attribute id="firingErrorMax">300</attribute>
+    </entity>
+  </file>
 </modification>

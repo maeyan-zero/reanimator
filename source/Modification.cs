@@ -69,7 +69,7 @@ namespace Reanimator
             foreach (Pack pack in casePackage.Pack)
             {
                 pack.Apply = (pack.Type == "required" || pack.Type == "recommended") ? true : false;
-                pack.Path = ModPackPath + modDir + "\\" + pack.Dir + "\\";
+                pack.Path = casePackage.Path + "\\" + pack.Dir + "\\";
                 string imagePath = pack.Path + "preview.png";
 
                 if (System.IO.File.Exists(imagePath))
@@ -97,7 +97,7 @@ namespace Reanimator
                     }
                 }
 
-                string scriptDir = pack.Path + "scripts\\";
+                string scriptDir = pack.Path + "Scripts\\";
                 if (!Directory.Exists(scriptDir)) continue; // no scripts? continue
                 string[] scripts = Directory.GetFiles(scriptDir, "*.xml");
                 pack.Scripts = new Script[scripts.Length];
