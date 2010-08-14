@@ -92,11 +92,11 @@ namespace Reanimator.Forms
             if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
             if (!openFileDialog.FileName.EndsWith("zip")) return;
 
-            ProgressForm progressForm = new ProgressForm(_modification.Open, openFileDialog.FileName);
-            progressForm.ShowDialog(this);
-            progressForm.Dispose();
+            //ProgressForm progressForm = new ProgressForm(_modification.Open, openFileDialog.FileName);
+            //progressForm.ShowDialog(this);
+            //progressForm.Dispose();
 
-            _package = _modification.ModPackage;
+            //_package = _modification.ModPackage;
 
             checkedListBox.Items.Clear();
 

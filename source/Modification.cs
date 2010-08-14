@@ -26,20 +26,28 @@ namespace Reanimator
             _tableDataSet = tableDataSet;
             ModPackage = new List<Package>();
         }
-        public void Open(ProgressForm progress, Object argument)
+        public void Open(string path)
         {
-            // Unzip the package
-            string path = argument as string;
-            bool unzipResult = Unzip(path);
-            if (!unzipResult) return;
+            string modDir;
 
-            string modDir = PathTools.FileNameFromPath(path, true) + "\\";
-            path = ModPackPath + modDir + "Config.xml";
+            if (path.EndsWith("zip"))
+            {
+                bool unzipResult = Unzip(path);
+                if (!unzipResult) return;
+                modDir = PathTools.FileNameFromPath(path, true);
+                path = ModPackPath + modDir;
+            }
+            else
+            {
+                modDir = PathTools.FileNameFromPath(path, false);
+            }
+
+            string configPath = path + "\\Config.xml";
 
             // Open the Config file
             try
             {
-                using (TextReader textReader = new StreamReader(path))
+                using (TextReader textReader = new StreamReader(configPath))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(Package));
                     Package package = serializer.Deserialize(textReader) as Package;
@@ -54,12 +62,14 @@ namespace Reanimator
 
             Package casePackage = ModPackage.Last();
             if (casePackage == null) return;
+            casePackage.Title = modDir;
+            casePackage.Path = path;
 
             // Parse each pack
             foreach (Pack pack in casePackage.Pack)
             {
                 pack.Apply = (pack.Type == "required" || pack.Type == "recommended") ? true : false;
-                pack.Path = ModPackPath + modDir + pack.Dir + "\\";
+                pack.Path = ModPackPath + modDir + "\\" + pack.Dir + "\\";
                 string imagePath = pack.Path + "preview.png";
 
                 if (System.IO.File.Exists(imagePath))
@@ -101,7 +111,9 @@ namespace Reanimator
                         {
                             XmlSerializer serializer = new XmlSerializer(typeof(Script));
                             Script script = serializer.Deserialize(textReader) as Script;
+                            script.Title = PathTools.FileNameFromPath(scripts[i], false);
                             pack.Scripts[i] = script;
+                            script.Path = scripts[i];
                         }
                     }
                     catch (Exception exception)
@@ -114,25 +126,28 @@ namespace Reanimator
         }
         public void Apply(ProgressForm progress, Object argument)
         {
-            foreach (Index index in _index)
-            {
+            Script script = argument as Script;
+            if (script == null) return;
 
+            foreach (File file in script.Files)
+            {
+                Manipulate(file);
             }
 
-            foreach (Package package in ModPackage)
-            {
-                foreach (Pack pack in package.Pack)
-                {
-                    if (!pack.Apply) continue;
+            //foreach (Package package in ModPackage)
+            //{
+            //    foreach (Pack pack in package.Pack)
+            //    {
+            //        if (!pack.Apply) continue;
                     
-                    //repack files
+            //        //repack files
 
-                    //unpack files
+            //        //unpack files
 
-                    //manipulate files
+            //        //manipulate files
 
-                }
-            }
+            //    }
+            //}
         }
         public void Save(ProgressForm progress, Object argument)
         {
@@ -374,6 +389,9 @@ namespace Reanimator
         {
             [XmlElement("file", typeof(File))]
             public File[] Files { get; set; }
+
+            [XmlIgnore]
+            public string Title { get; set; }
 
             [XmlIgnore]
             public string Path { get; set; }

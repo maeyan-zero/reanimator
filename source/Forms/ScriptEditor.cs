@@ -15,9 +15,9 @@ namespace Reanimator.Forms
     {
         UTF8Encoding _encoding; //used for string to byte[]
         TableDataSet _tableDataSet;
-        List<Modification.Package> _pack;
+        Modification _modification;
+        List<Modification.Package> _package;
         Modification.Script _script;
-
 
         public string ScriptDir { get { return Config.ScriptDir; } }
         public string Filter { get { return "Xml Files (*.xml)|*.xml|All Files (*.*)|*.*"; } }
@@ -27,14 +27,9 @@ namespace Reanimator.Forms
             InitializeComponent();
             _encoding = new System.Text.UTF8Encoding();
             _tableDataSet = tableDataSet;
-            _pack = new List<Modification.Package>();
-
-            string[] packs = Directory.GetDirectories(Config.ScriptDir).Where(subDir => (!subDir.Contains("."))).ToArray();
-
-            foreach (string packPath in packs)
-            {
-                //_pack.Add(new Modification.Package(packPath));
-            }
+            _modification = new Modification(_tableDataSet);
+            _package = _modification.ModPackage;
+            _modification.Open(Config.ScriptDir);
 
             SetTabs(textBox);
         }
@@ -42,18 +37,21 @@ namespace Reanimator.Forms
         private void UpdateTreeView()
         {
             treeView.BeginUpdate();
-            for (int i = 0; i < _pack.Count; i++)
+            for (int i = 0; i < _package.Count; i++)
             {
-                treeView.Nodes.Add(_pack[i].Title);
-                for (int j = 0; j < _pack[i].Pack.Length; j++)
+                treeView.Nodes.Add(_package[i].Title);
+                for (int j = 0; j < _package[i].Pack.Length; j++)
                 {
-                    treeView.Nodes[i].Nodes.Add(_pack[i].Pack[j].Title);
-                    for (int k = 0; k < _pack[i].Pack[j].Scripts.Length; k++)
+                    treeView.Nodes[i].Nodes.Add(_package[i].Pack[j].Title);
+                    if (_package[i].Pack[j].Scripts != null)
                     {
-                        //treeView.Nodes[i].Nodes[j].Nodes.Add(_pack[i].Pack[j].Scripts[k].Title);
+                        for (int k = 0; k < _package[i].Pack[j].Scripts.Length; k++)
+                        {
+                            treeView.Nodes[i].Nodes[j].Nodes.Add(_package[i].Pack[j].Scripts[k].Title);
+                        }
                     }
                 }
-                treeView.Nodes[i].Nodes.Add("config.ini");
+                treeView.Nodes[i].Nodes.Add("Config.xml");
             }
             treeView.EndUpdate();
         }
@@ -69,7 +67,6 @@ namespace Reanimator.Forms
                 UpdateTreeView();
             }
             Reanimator form = (Reanimator)MdiParent;
-            form.MainMenuStrip.Items["scriptsMenu"].Visible = true;
         }
 
         private void availableCombo_SelectedIndexChanged(object sender, EventArgs e)
@@ -207,8 +204,6 @@ namespace Reanimator.Forms
         private void ScriptEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
             savePrompt();
-            Reanimator form = (Reanimator)MdiParent;
-            form.MainMenuStrip.Items["scriptsMenu"].Visible = false;
         }
 
         static class NativeMethods
@@ -239,20 +234,20 @@ namespace Reanimator.Forms
                 int script = e.Node.Index;
                 int package = e.Node.Parent.Index;
                 int group = e.Node.Parent.Parent.Index;
-                string path = _pack[group].Pack[package].Scripts[script].Path;
+                string path = _package[group].Pack[package].Scripts[script].Path;
 
                 using (FileStream fileStream = new FileStream(@path, FileMode.Open))
                 {
                     byte[] buffer = new byte[fileStream.Length];
                     fileStream.Read(buffer, 0, (int)fileStream.Length);
                     textBox.Text = _encoding.GetString(buffer);
-                    _script = _pack[group].Pack[package].Scripts[script];
+                    _script = _package[group].Pack[package].Scripts[script];
                 }
             }
-            else if (e.Node.Level == 1 && e.Node.Text == "config.ini")
+            else if (e.Node.Level == 1 && e.Node.Text == "Config.xml")
             {
                 int group = e.Node.Parent.Index;
-                string path = _pack[group].Path + "\\config.ini";
+                string path = _package[group].Path + "\\Config.xml";
 
                 using (FileStream fileStream = new FileStream(@path, FileMode.Open))
                 {
@@ -261,6 +256,13 @@ namespace Reanimator.Forms
                     textBox.Text = _encoding.GetString(buffer);
                 }
             }
+        }
+
+        private void applyButton_Click(object sender, EventArgs e)
+        {
+            ProgressForm progressForm = new ProgressForm(_modification.Apply, _script);
+            progressForm.ShowDialog(this);
+            progressForm.Dispose();
         }
     }
 }
