@@ -1,179 +1,91 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <modification>
-	<file id="ITEMS">
-		<!--FOR ALL ITEMS-->
-		<!--UNLOCK SUBSCRIBER & MULTIPLAYER ITEMS, REMOVE NO TRADE-->
-		<!--Notes: There are no cases when you will want to alter these values.-->
-		<entity id="*">
-			<attribute id="bitmask02" bit="SubscriberOnly">false</attribute>
-			<attribute id="bitmask05" bit="NoTrade">false</attribute>
-			<attribute id="bitmask07" bit="MultiplayerOnly">false</attribute>
-		</entity>
-		<!--SKILL RETRAINER-->
-		<!--ATTRIBUTE RETRAINER-->
-		<entity id="15,265">
-			<attribute id="Quality">5</attribute>
-			<attribute id="bitmask05" bit="NoDrop">true</attribute>
-			<attribute id="fixedLevel">26,55,0</attribute>
-		</entity>
-		<!--MANTRAWRAITH, ZOMBOT AND COKOMOKO-->
-		<entity id="178-183">
-			<attribute id="bitmask05" bit="NoDropExceptForDuplicates">true</attribute>
-		</entity>
-		<!--WARTS PEG LEG-->
-		<!--Notes: Warts leg equipable by all factions.-->
-		<entity id="735">
-			<attribute id="containerUnitType1">1</attribute>
-		</entity>
+  <file id="ITEMS">
+    <!--FOR ALL ITEMS-->
+    <!--UNLOCK SUBSCRIBER & MULTIPLAYER ITEMS, REMOVE NO TRADE-->
+    <!--Notes: There are no cases when you will want to alter these values.-->
+    <entity id="*">
+      <attribute id="bitmask02" bit="SubscriberOnly">false</attribute>
+      <attribute id="bitmask05" bit="NoTrade">false</attribute>
+      <attribute id="bitmask07" bit="MultiplayerOnly">false</attribute>
+    </entity>
+    <!--SKILL RETRAINER-->
+    <!--ATTRIBUTE RETRAINER-->
+    <entity id="15,265">
+      <attribute id="itemQuality">5</attribute>
+      <attribute id="bitmask05" bit="NoDrop">true</attribute>
+      <attribute id="fixedLevel">26,55,0</attribute>
+    </entity>
+    <!--MANTRAWRAITH, ZOMBOT AND COKOMOKO-->
+    <entity id="178-183">
+      <attribute id="bitmask05" bit="NoDropExceptForDuplicates">true</attribute>
+    </entity>
+    <!--WARTS PEG LEG-->
+    <!--Notes: Warts leg equipable by all factions.-->
+    <entity id="735">
+      <attribute id="containerUnitType1">1</attribute>
+    </entity>
     <!--BOSS ITEMS-->
     <!--Notes: Mutant items are items that drop from bosses.-->
     <!--Notes: Was previously Legendary, now are Unique items.-->
     <entity id="286,292,317,336,344,355,401,425,432,437,469,601,604,620,628,637,661,678,703,708,745,754,758,760,768,799,813,836,858">
       <attribute id="itemQuality">5</attribute>
     </entity>
-		<!--NEW REVIVAL ITEMS-->
-		<!--SWORD OF MAEYAN-->
-		<!--Notes: This is a nice high level sword, unique level 55 based on YongKwang sword. -->
-		<entity id="1905">
-			<attribute id="name">sword of maeyan</attribute>
-			<attribute id="folder">weapons\yongkwang</attribute>
-			<attribute id="appearance">yongkwang_mesh</attribute>
-			<attribute id="diffuse">yongkwang_diffuse.tga</attribute>
-			<attribute id="normal">yongkwang_normal.tga</attribute>
-			<attribute id="specular">yongkwang_specular.tga</attribute>
-			<attribute id="lightmap">yongkwang_glow.tga</attribute>
-			<attribute id="pickupFunction">PickupAddToInventory</attribute>
-			<attribute id="tooltipDamageIcon">damageicon_phys_local</attribute>
-			<attribute id="bitmask01">0</attribute>
-			<attribute id="bitmask02">1075838976</attribute>
-			<attribute id="bitmask03">1</attribute>
-			<attribute id="bitmask04">33554432</attribute>
-			<attribute id="bitmask05">271581184</attribute>
-			<attribute id="bitmask06">1</attribute>
-			<attribute id="bitmask07">0</attribute>
-			<attribute id="String">7739</attribute>
-			<attribute id="typeDescription">415</attribute>
-			<attribute id="flavorText">7740</attribute>
-			<attribute id="code1">23122</attribute>
-			<attribute id="unitType">44</attribute>
-			<attribute id="preferedByUnitType">63</attribute>
-			<attribute id="rarity">10</attribute>
-			<attribute id="spawnChance">100</attribute>
-			<attribute id="level">10</attribute>
-			<attribute id="quality">5</attribute>
-			<attribute id="maxLevel">16</attribute>
-			<attribute id="fixedLevel">26,16,0</attribute>
-			<attribute id="baseCost">10</attribute>
-			<attribute id="buyPriceMult">26,100,708,26,250,3,98,26,1,399,26,15,358,388,0</attribute>
-			<attribute id="buyPriceAdd">26,3,0</attribute>
-			<attribute id="sellPriceMult">26,100,708,26,250,3,98,26,1,399,26,15,358,388,0</attribute>
-			<attribute id="sellPriceAdd">0</attribute>
-			<attribute id="containerUnitType1">63</attribute>
-			<attribute id="containerUnitType2">104</attribute>
-			<attribute id="animGroup">10</attribute>
-			<attribute id="meleeWeapon">10</attribute>
-			<attribute id="approxDps">25</attribute>
-			<attribute id="tooltipDamageString">4629</attribute>
-			<attribute id="minBaseDmg">26,42,0</attribute>
-			<attribute id="maxBaseDmg">26,55,0</attribute>
-			<attribute id="dmgIncrement">65</attribute>
-			<attribute id="radialDmgIncrement">90</attribute>
-			<attribute id="fieldDmgIncrement">15</attribute>
-			<attribute id="criticalPct">3</attribute>
-			<attribute id="criticalMult">150</attribute>
-			<attribute id="interruptAttackPct">100</attribute>
-			<attribute id="props1">26,100,26,100,2,280,0,0</attribute>
-			<attribute id="props2">0</attribute>
-			<attribute id="props3">26,80,669,490733568,0</attribute>
-			<attribute id="props4">0</attribute>
-			<attribute id="props5">0</attribute>
-			<attribute id="perLevelProps1">0</attribute>
-			<attribute id="perLevelProps2">26,25,2,370,0,26,20,2,367,0,0</attribute>
-			<attribute id="propsElite">0</attribute>
-			<attribute id="affix1">51</attribute>
-			<attribute id="affix2">90</attribute>
-			<attribute id="affix3">170</attribute>
-			<attribute id="affix4">827</attribute>
-			<attribute id="affix5">869</attribute>
-			<attribute id="affix6">-1</attribute>
-			<attribute id="inventory">2</attribute>
-			<attribute id="invWidth">1</attribute>
-			<attribute id="invHeight">3</attribute>
-			<attribute id="qualityName">1</attribute>
-			<attribute id="startingskills1">325</attribute>
-			<attribute id="flippySound">5311</attribute>
-			<attribute id="invPickUpSound">5466</attribute>
-			<attribute id="invPutDownSound">5470</attribute>
-			<attribute id="invEquipSound">5266</attribute>
-			<attribute id="pickUpSound">5466</attribute>
-			<attribute id="cantUseSound">5321</attribute>
-			<attribute id="cantFireSound">1314</attribute>
-			<attribute id="CantUseSound">5321</attribute>
-			<attribute id="scale">1</attribute>
-			<attribute id="weaponScale">1</attribute>
-			<attribute id="scaleDelta">0</attribute>
-			<attribute id="scaleMultiplier">1</attribute>
-			<attribute id="ragdollForceMultiplier">1</attribute>
-			<attribute id="rangeDesiredMult">0.8</attribute>
-			<attribute id="missileArcHeight">2</attribute>
-			<attribute id="missileArcDelta">0.5</attribute>
-		</entity>
-    <!--SHIELD OF MAEYAN-->
-	<!--INCREASED STACK SIZE OF SCRAP TO 50,000-->
-		<entity id="112-116">
-			<attribute id="stackSize">26,50000,0</attribute>
-		</entity>
-	<!--INCREASED STACK SIZE OF CONSUMABLES TO 100-->
-	<!--None of the fawkes items have been changed-->
-		<entity id="2,3,4,5,6,10,11,12,13,14,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,247,248,249,250,251">
-			<attribute id="stackSize">26,100,0</attribute>
-		</entity>
-	<!--INCREASED STACK SIZE OF LOW YIELD WARHEAD QUEST ITEM TO 20-->
-		<entity id=149">
-			<attribute id="stackSize">26,20,0</attribute>
-		</entity>
-		<!--DECREASED SHIELD OVERLOAD HALVED TO A MAX OF 100%-->
-		<entity id="276">
-			<attribute id="props3">26,100,673,490733568,0</attribute>
-		</entity>
-		<entity id="572,585,587,588,651,653,654,674,675,676">
-			<attribute id="props3">26,55,673,490733568,0</attribute>
-		</entity>
-		<entity id="589,591,592,593,602,604,622,624,625,673,670,671,672,673">
-			<attribute id="props3">26,50,673,490733568,0</attribute>
-		</entity>
-		<entity id="594,677,678,679">
-			<attribute id="props3">26,25,673,490733568,0</attribute>
-		</entity>
-		<entity id="595,597,958,599,601,616,617,618,632,634,635,637,638">
-			<attribute id="props3">26,45,673,490733568,0</attribute>
-		</entity>
-		<entity id="605,607,608,619,620,621,643,645">
-			<attribute id="props3">26,60,673,490733568,0</attribute>
-		</entity>
-		<entity id="609,611,612,613,615,626,628,629,630,631,655,656,657,658,666,668,669">
-			<attribute id="props3">26,40,673,490733568,0</attribute>
-		</entity>
-		<entity id="639, 641,642">
-			<attribute id="props3">26,30,673,490733568,0</attribute>
-		</entity>
-		<entity id="646,648,650">
-			<attribute id="props3">26,45,669,490733568,26,200,669,3137339392,26,45,669,3158310912,26,275,669,3154116608,0</attribute>
-		</entity>
-		<entity id="649">
-			<attribute id="props3">26,45,669,490733568,26,200,669,3137339392,26,30,669,3158310912,26,400,669,3154116608,0</attribute>
-		</entity>
-		<entity id="659,661,662,663,665">
-			<attribute id="props3">26,35,673,490733568,0</attribute>
-		</entity>
-		<entity id="735">
-			<attribute id="props3">26,60,673,490733568,0</attribute>
-		</entity>
-		<entity id="788,791,794,897,900">
-			<attribute id="props1">26,100,26,100,2,278,0,26,100,26,30,2,341,0,26,100,669,490733568,0</attribute>
-		</entity>
-		<entity id="898">
-			<attribute id="props1">26,100,26,100,2,278,0,26,50,26,30,2,341,0,26,100,669,490733568,0</attribute>
-		</entity>
-	</file>
+    <!--INCREASED STACK SIZE OF SCRAP TO 50,000-->
+    <entity id="112-116">
+      <attribute id="stackSize">26,50000,0</attribute>
+    </entity>
+    <!--INCREASED STACK SIZE OF CONSUMABLES TO 100-->
+    <!--None of the fawkes items have been changed-->
+    <entity id="2,3,4,5,6,10,11,12,13,14,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,247,248,249,250,251">
+      <attribute id="stackSize">26,100,0</attribute>
+    </entity>
+    <!--INCREASED STACK SIZE OF LOW YIELD WARHEAD QUEST ITEM TO 20-->
+    <entity id="149">
+      <attribute id="stackSize">26,20,0</attribute>
+    </entity>
+    <!--DECREASED SHIELD OVERLOAD HALVED TO A MAX OF 100%-->
+    <entity id="276">
+      <attribute id="props3">26,100,673,490733568,0</attribute>
+    </entity>
+    <entity id="572,585,587,588,651,653,654,674,675,676">
+      <attribute id="props3">26,55,673,490733568,0</attribute>
+    </entity>
+    <entity id="589,591,592,593,602,604,622,624,625,673,670,671,672,673">
+      <attribute id="props3">26,50,673,490733568,0</attribute>
+    </entity>
+    <entity id="594,677,678,679">
+      <attribute id="props3">26,25,673,490733568,0</attribute>
+    </entity>
+    <entity id="595,597,958,599,601,616,617,618,632,634,635,637,638">
+      <attribute id="props3">26,45,673,490733568,0</attribute>
+    </entity>
+    <entity id="605,607,608,619,620,621,643,645">
+      <attribute id="props3">26,60,673,490733568,0</attribute>
+    </entity>
+    <entity id="609,611,612,613,615,626,628,629,630,631,655,656,657,658,666,668,669">
+		  <attribute id="props3">26,40,673,490733568,0</attribute>
+    </entity>
+    <entity id="639, 641,642">
+      <attribute id="props3">26,30,673,490733568,0</attribute>
+    </entity>
+    <entity id="646,648,650">
+      <attribute id="props3">26,45,669,490733568,26,200,669,3137339392,26,45,669,3158310912,26,275,669,3154116608,0</attribute>
+    </entity>
+    <entity id="649">
+      <attribute id="props3">26,45,669,490733568,26,200,669,3137339392,26,30,669,3158310912,26,400,669,3154116608,0</attribute>
+    </entity>
+    <entity id="659,661,662,663,665">
+      <attribute id="props3">26,35,673,490733568,0</attribute>
+    </entity>
+    <entity id="735">
+      <attribute id="props3">26,60,673,490733568,0</attribute>
+    </entity>
+    <entity id="788,791,794,897,900">
+      <attribute id="props1">26,100,26,100,2,278,0,26,100,26,30,2,341,0,26,100,669,490733568,0</attribute>
+    </entity>
+    <entity id="898">
+      <attribute id="props1">26,100,26,100,2,278,0,26,50,26,30,2,341,0,26,100,669,490733568,0</attribute>
+    </entity>
+  </file>
 </modification>
