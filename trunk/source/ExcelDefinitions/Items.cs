@@ -4,11 +4,11 @@ using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
-    // size = 0x0000000000000DB8
+    // size = 0x0000000000000DB8 (not including header)
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class ItemsRow
     {
-        ExcelFile.TableHeader header;                               // 
+        ExcelFile.TableHeader header;                               // ReadOrder   OffsetFromHeader     ReadFunction
 
         [ExcelOutput(IsStringOffset = true, SortId = 1)]
         public Int32 name;//pchar                                   // 1    0x0000000000000000  XLS_ReadCharPtr1
@@ -42,9 +42,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 buffer10;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 killedParticle;//pchar                         // 26   0x0000000000000050  XLS_ReadCharPtr2
-        Int32 buffer11;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        byte[] unknown01;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+        byte[] unknown00;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 fizzleParticle;//pchar                         // 27   0x0000000000000060  XLS_ReadCharPtr1
         Int32 buffer12;
@@ -67,34 +66,34 @@ namespace Reanimator.ExcelDefinitions
         public Int32 lightmap;//pchar                               // 9    0x0000000000000090  XLS_ReadCharPtr2
         Int32 buffer18;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource1;//pchar                               // 10   0x0000000000000098  XLS_ReadCharPtr2
+        public Int32 overrideSource1;//pchar                        // 10   0x0000000000000098  XLS_ReadCharPtr2
         Int32 buffer19;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest1;//pchar                                 // 15   0x00000000000000A0  XLS_ReadCharPtr2
+        public Int32 overrideDest1;//pchar                          // 15   0x00000000000000A0  XLS_ReadCharPtr2
         Int32 buffer20;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource2;//pchar                               // 11   0x00000000000000A8  XLS_ReadCharPtr2
+        public Int32 overrideSource2;//pchar                        // 11   0x00000000000000A8  XLS_ReadCharPtr2
         Int32 buffer21;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest2;//pchar                                 // 16   0x00000000000000B0  XLS_ReadCharPtr2
+        public Int32 overrideDest2;//pchar                          // 16   0x00000000000000B0  XLS_ReadCharPtr2
         Int32 buffer22;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource3;//pchar                               // 12   0x00000000000000B8  XLS_ReadCharPtr2
+        public Int32 overrideSource3;//pchar                        // 12   0x00000000000000B8  XLS_ReadCharPtr2
         Int32 buffer23;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest3;//pchar                                 // 17   0x00000000000000C0  XLS_ReadCharPtr2
+        public Int32 overrideDest3;//pchar                          // 17   0x00000000000000C0  XLS_ReadCharPtr2
         Int32 buffer24;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource4;//pchar                               // 13   0x00000000000000C8  XLS_ReadCharPtr2
+        public Int32 overrideSource4;//pchar                        // 13   0x00000000000000C8  XLS_ReadCharPtr2
         Int32 buffer25;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest4;//pchar                                 // 18   0x00000000000000D0  XLS_ReadCharPtr2
+        public Int32 overrideDest4;//pchar                          // 18   0x00000000000000D0  XLS_ReadCharPtr2
         Int32 buffer26;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource5;//pchar                               // 14   0x00000000000000D8  XLS_ReadCharPtr2
+        public Int32 overrideSource5;//pchar                        // 14   0x00000000000000D8  XLS_ReadCharPtr2
         Int32 buffer27;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest5;//pchar                                 // 19   0x00000000000000E0  XLS_ReadCharPtr2
+        public Int32 overrideDest5;//pchar                          // 19   0x00000000000000E0  XLS_ReadCharPtr2
         Int32 buffer28;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 particleFolder;//pchar                         // 21   0x00000000000000E8  XLS_ReadCharPtr1
@@ -102,7 +101,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsStringOffset = true)]
         public Int32 pickupFunction;//pchar                         // 259  0x00000000000000F0  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        byte[] buffer30;
+        byte[] unknown01;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 triggerString1;//pchar                         // 411  0x0000000000000100  XLS_ReadCharPtr1
         Int32 buffer31;
@@ -280,7 +279,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 impactUnitToxic;//pchar                        // 450  0x00000000000004E8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 116)]
         byte[] unknown40;
-        public Int32 unknown;                                       // ???  0x0000000000000560  ??? Appears to be Int32, but not seen in code?
+        public Int32 itemBaseIndex;                                 // ???  0x0000000000000560  ??? Appears to be Int32, but not seen in code?
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask01 bitmask01;                           // 56   0x0000000000000564  XLS_ReadBitmask
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
@@ -342,7 +341,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 censorClassNoHumans;//index                    // 39   0x00000000000005E4  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 censorClassNoGore;//index                      // 40   0x00000000000005E8  XLS_ReadIndex
-        public Int32 sex;                                           // 41   0x00000000000005EC  XLS_ReadInt32_0
+        public Int32 sex;                                           // 41   0x00000000000005EC  XLS_ReadInternalIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x8C)]
         public Int32 race;//index                                   // 42   0x00000000000005F0  XLS_ReadIndex
         public Int32 rarity;                                        // 107  0x00000000000005F4  XLS_ReadInt32
@@ -379,8 +378,8 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 luckBonus;//intptr                             // 102  0x0000000000000654  XLS_ReadIntPtr
         public Int32 luckChanceToSpawn;                             // 103  0x0000000000000658  XLS_ReadInt32
-        public Int32 roomPopulatePass;                              // 58   0x000000000000065C  XLS_ReadInt32_0
-        public Int32 weaponBoneIndex;                               // 57   0x0000000000000660  XLS_ReadInt32_0
+        public Int32 roomPopulatePass;                              // 58   0x000000000000065C  XLS_ReadInternalIndex
+        public Int32 weaponBoneIndex;                               // 57   0x0000000000000660  XLS_ReadInternalIndex
         public Int32 requiresAffixOrSuffix;                         // 108  0x0000000000000664  XLS_ReadInt32
         public float autoPickupDistance;                            // 86   0x0000000000000668  XLS_ReadFloat
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
@@ -442,11 +441,11 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
         public Int32 characterScreenState;                          // 112  0x0000000000000704  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x5F)]
-        Int32 wardrobeBody;                                         // 113  0x0000000000000708  XLS_ReadIndex
+        public Int32 wardrobeBody;                                  // 113  0x0000000000000708  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
-        Int32 wardrobeFallback;                                     // 114  0x000000000000070C  XLS_ReadIndex
-        Int32 null0;                                                // 115  0x0000000000000710  XLS_ReadInt32
-        Int32 wardrobeMip;                                          // 118  0x0000000000000714  XLS_ReadInt32
+        public Int32 wardrobeFallback;                              // 114  0x000000000000070C  XLS_ReadIndex
+        public Int32 null0;                                         // 115  0x0000000000000710  XLS_ReadInt32
+        public Int32 wardrobeMip;                                   // 118  0x0000000000000714  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x56)]
         public Int32 wardrobeAppearanceGroup;                       // 116  0x0000000000000718  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x56)]
@@ -455,9 +454,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32 startingStance;                                // 120  0x0000000000000720  XLS_ReadIndex
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknownBytes06;
-        public Int32 containerUnitType1;                            // 261  0x0000000000000738  XLS_Unknown_1,4         .text:00000001402E92DF mov     dword ptr [rsp+0A8h+var_88], 4
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        public Int32 containerUnitType1;                            // 261  0x0000000000000738  XLS_ReadUNITTYPEIndexArray,4
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 containerUnitType2;                            // 261  0x000000000000073C
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 containerUnitType3;// always 0                 // 261  0x0000000000000740
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 containerUnitType4;// but we could use them    // 261  0x0000000000000744
         public Int32 firingErrorIncrease;                           // 127  0x0000000000000748  XLS_ReadInt32
         public Int32 firingErrorDecrease;                           // 128  0x000000000000074C  XLS_ReadInt32
@@ -636,10 +639,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 startingTreasure;//index                       // 232  0x0000000000000A04  XLS_ReadIndex,65
         public Int32 invWidth;                                      // 256  0x0000000000000A08  XLS_ReadInt32
         public Int32 invHeight;                                     // 257  0x0000000000000A0C  XLS_ReadInt32
-        public Int64 qualities;                                     // 123  0x0000000000000A10  XLS_Unknown - I think this reads 8 bytes (64 bits); input = 0x40 = 64
+        public Int64 qualities;                                     // 123  0x0000000000000A10  XLS_ReadBits - I think this reads 8 bytes (64 bits); input = 0x40 = 64
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x43)]
         public Int32 requiredQuality;//index                        // 124  0x0000000000000A18  XLS_ReadIndex
-        public Int32 qualityName;                                   // 125  0x0000000000000A1C  XLS_ReadInt32_0
+        public Int32 qualityName;                                   // 125  0x0000000000000A1C  XLS_ReadInternalIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x6E)]
         public Int32 fieldMissile;//index                           // 84   0x0000000000000A20  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
@@ -884,8 +887,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 requiresItemOfUnitType1;//index                // 66   0x0000000000000CCC  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x65)]
         public Int32 spawnTreasureClassInLevel;//index              // 67   0x0000000000000CD0  XLS_ReadIndex
-        public Int32 oneWayVisualPortalDir;                         // 410  0x0000000000000CD4  XLS_ReadInt32_0
-        public Int32 warpResolveTime;                               // 473  0x0000000000000CD8  XLS_ReadInt32_0
+        public Int32 oneWayVisualPortalDir;                         // 410  0x0000000000000CD4  XLS_ReadInternalIndex
+        public Int32 warpResolveTime;                               // 473  0x0000000000000CD8  XLS_ReadInternalIndex
         public float labelScale;                                    // 413  0x0000000000000CDC  XLS_ReadFloat
         public float labelForwardOffset;                            // 414  0x0000000000000CE0  XLS_ReadFloat
         public float heightpercent;                                 // 469  0x0000000000000CE4  XLS_ReadFloat_0 ??
