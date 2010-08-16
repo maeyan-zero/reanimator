@@ -1018,26 +1018,26 @@ namespace Reanimator
                     FileTools.WriteToBuffer(ref buffer, ref byteOffset, strCharCount);
                     byte[] strBytes = FileTools.StringToASCIIByteArray(str);
                     FileTools.WriteToBuffer(ref buffer, ref byteOffset, strBytes);
+                    byteOffset++; // +1 for \0
                 }
             }
 
             // generate and sort the indicies
             foreach (DataColumn dc in dataTable.Columns)
             {
-                if (dc.ExtendedProperties.Contains(ColumnTypeKeys.SortId))
+                if (!dc.ExtendedProperties.Contains(ColumnTypeKeys.SortId)) continue;
+
+                int sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortId] - 1;
+                string ctype = dc.DataType == typeof(string) ? "''" : "0";  // modify the expr depending on data type
+                string expr = dc.ColumnName + " <> " + ctype;
+                string sort =  dc.ColumnName + " ASC";
+                DataRow[] sortedTable = dataTable.Select(expr, sort);
+
+                _sortIndicies[sortId] = new int[sortedTable.Length];
+
+                for (int i = 0; i < sortedTable.Length; i++)
                 {
-                    int sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortId] - 1;
-                    string ctype = dc.DataType == typeof(string) ? "''" : "0";  // modify the expr depending on data type
-                    string expr = dc.ColumnName + " <> " + ctype;
-                    string sort =  dc.ColumnName + " ASC";
-                    DataRow[] sortedTable = dataTable.Select(expr, sort);
-
-                    _sortIndicies[sortId] = new int[sortedTable.Length];
-
-                    for (int i = 0; i < sortedTable.Length; i++)
-                    {
-                        _sortIndicies[sortId][i] = (int)sortedTable[i][0];
-                    }
+                    _sortIndicies[sortId][i] = (int)sortedTable[i][0];
                 }
             }
 

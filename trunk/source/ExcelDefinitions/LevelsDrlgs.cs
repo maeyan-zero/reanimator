@@ -9,14 +9,14 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        //[ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string drlgRuleSet;
         public Int32 drlgDisplayName;//stridx
         public Int32 undefined1;
-        [ExcelFile.ExcelOutputAttribute(SortId = 2)]//This indexes by unique style value
+        //[ExcelFile.ExcelOutputAttribute(SortId = 2)]//This indexes by unique style value
         public Int32 style;
         public Int32 theme0;
         public Int32 theme1;
