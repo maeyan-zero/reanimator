@@ -16,7 +16,7 @@ namespace Reanimator.ExcelDefinitions
         public string drlgRuleSet;
         public Int32 drlgDisplayName;//stridx
         public Int32 undefined1;
-        [ExcelFile.ExcelOutputAttribute(IsStringIndex = true, SortId = 2)]//This indexes by unique style value
+        [ExcelFile.ExcelOutputAttribute(SortId = 2)]//This indexes by unique style value
         public Int32 style;
         public Int32 theme0;
         public Int32 theme1;
