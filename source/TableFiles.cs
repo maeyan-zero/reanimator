@@ -434,7 +434,7 @@ namespace Reanimator
         private bool DoManualTables(ProgressForm progress)
         {
             String folderPath = Config.DataDirsRoot + ExcelFile.FolderPath;
-            String folderPathTCv4 = Config.DataDirsRoot + @"tcv4" + ExcelFile.FolderPath;
+            String folderPathTCv4 = Config.DataDirsRoot + @"\tcv4" + ExcelFile.FolderPath;
 
             foreach (DictionaryEntry de in TableMap)
             {

@@ -611,23 +611,23 @@ namespace Reanimator.ExcelDefinitions
         public Int32 perLevelProps2;                                // 219  0x00000000000009CC  XLS_ReadIntPtr
         [ExcelOutput(IsIntOffset = true)]
         public Int32 propsElite;                                    // 217  0x00000000000009D0  XLS_ReadIntPtr
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix1;//index                                 // 220  0x00000000000009D4  XLS_ReadIntArray,6
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix2;//index                                 // 220  0x00000000000009D8
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix3;//index                                 // 220  0x00000000000009DC
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix4;//index                                 // 220  0x00000000000009E0
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix5;//index                                 // 220  0x00000000000009E4
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix6;//index                                 // 220  0x00000000000009E8
-        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure;//index                               // 104  0x00000000000009EC  XLS_ReadIndex,65
-        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 championTreasure;//index                       // 105  0x00000000000009F0  XLS_ReadIndex,65
-        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 firstTimeTreasure;//index                      // 106  0x00000000000009F4  XLS_ReadIndex,65
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x0A)]
         public Int32 inventory;//index                              // 229  0x00000000000009F8  XLS_ReadIndex

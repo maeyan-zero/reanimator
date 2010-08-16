@@ -38,7 +38,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 accrueToTypes2;
         public Int32 unitType;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public Stats.BitMask01 bitmask01;
+        public BitMask01 bitmask01;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] undefined5;
         [ExcelOutput(IsBool = true)]
@@ -97,34 +97,31 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] undefined12;
 
-        public abstract class StatsTCv4
+        [FlagsAttribute]
+        public enum BitMask01 : uint
         {
-            [FlagsAttribute]
-            public enum BitMask01 : uint
-            {
-                cur = 2,
-                modList = 4,
-                vector = 8,
-                Float = 16,
-                _undefined1 = 32,
-                accrue = 64,
-                accrueOnceOnly = 128,
-                combat = 256,
-                directDmg = 512,
-                send = 1024,
-                sendAll = 2048,
-                save = 4096,
-                _undefined2 = 8192,
-                noMaxCurWhenDead = 16384,
-                stateMonitorsC = 32768,
-                stateMonitorsS = 65536,
-                transfer = 131072,
-                transferToMissile = 262144,
-                calcRider = 524288,
-                calc = 1048576,
-                updateDatabase = 2097152,
-                dontTranferToNonWeaponMissile = 4194304
-            }
+            cur = 2,
+            modList = 4,
+            vector = 8,
+            Float = 16,
+            _undefined1 = 32,
+            accrue = 64,
+            accrueOnceOnly = 128,
+            combat = 256,
+            directDmg = 512,
+            send = 1024,
+            sendAll = 2048,
+            save = 4096,
+            _undefined2 = 8192,
+            noMaxCurWhenDead = 16384,
+            stateMonitorsC = 32768,
+            stateMonitorsS = 65536,
+            transfer = 131072,
+            transferToMissile = 262144,
+            calcRider = 524288,
+            calc = 1048576,
+            updateDatabase = 2097152,
+            dontTranferToNonWeaponMissile = 4194304
         }
     }
 }
