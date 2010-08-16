@@ -434,26 +434,40 @@ namespace Reanimator
         private bool DoManualTables(ProgressForm progress)
         {
             String folderPath = Config.DataDirsRoot + ExcelFile.FolderPath;
+            String folderPathTCv4 = Config.DataDirsRoot + @"tcv4" + ExcelFile.FolderPath;
 
             foreach (DictionaryEntry de in TableMap)
             {
                 MapItem mapItem = de.Value as MapItem;
                 if (mapItem == null) continue;
-                if (!mapItem.ManualLoad) continue;
+                if (!mapItem.ManualLoad && !mapItem.IsTCv4) continue;
 
 
                 // get path to file
                 String stringId = de.Key as String;
-                String filePath = String.Format("{0}{1}.{2}", folderPath, stringId, ExcelFile.FileExtention);
+                String fileName = mapItem.NameReplace ?? stringId;
+                Debug.Assert(stringId != null);
+                String filePath = mapItem.IsTCv4 ?
+                                    String.Format("{0}{1}.{2}", folderPathTCv4, fileName.Replace("_TCv4", ""), ExcelFile.FileExtention) :
+                                    String.Format("{0}{1}.{2}", folderPath,     fileName,                      ExcelFile.FileExtention);
+
                 if (!File.Exists(filePath))
                 {
                     filePath = filePath.Replace("_common", "");
                     if (!File.Exists(filePath))
                     {
                         String msg = "Excel file not found!\n\n" + filePath;
-                        MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         Debug.WriteLine(msg);
-                        AllExcelFilesLoaded = false;
+
+                        // doesn't matter if they don't load
+                        MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (!mapItem.IsTCv4)
+                        {
+                            // for release, uncomment me, and remove above - for testing, we want to know if the TC files aren't loading/found
+                            //MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            AllExcelFilesLoaded = false;
+                        }
+
                         continue;
                     }
                 }
