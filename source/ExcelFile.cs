@@ -55,7 +55,7 @@ namespace Reanimator
         public ExcelFile(String stringId, Type type)
             : base(stringId, type)
         {
-            _excelDebugAll = false;
+            _excelDebugAll = true;
             IsExcelFile = true;
         }
 
@@ -1016,7 +1016,8 @@ namespace Reanimator
                     String str = SecondaryStrings[i];
                     Int32 strCharCount = str.Length + 1; // +1 for \0
                     FileTools.WriteToBuffer(ref buffer, ref byteOffset, strCharCount);
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, str);
+                    byte[] strBytes = FileTools.StringToASCIIByteArray(str);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, strBytes);
                 }
             }
 
