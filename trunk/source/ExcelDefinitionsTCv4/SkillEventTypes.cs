@@ -21,9 +21,9 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string paramDesc4;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public SkillEventTypes.BitMask01 bitmask01;
+        public SkillEventTypesRow.BitMask01 bitmask01;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public SkillEventTypes.BitMask02 bitmask02;
+        public SkillEventTypesRow.BitMask02 bitmask02;
         public Int32 attachmentTable;//tbl
         [ExcelOutput(IsBool = true)]
         public Int32 paramContainsCount;//bool
@@ -78,57 +78,5 @@ namespace Reanimator.ExcelDefinitions
         public Int32 eventStringFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
         byte[] undefined1;
-    }
-    public abstract class SkillEventTypes
-    {
-        [FlagsAttribute]
-        public enum BitMask01 : uint
-        {
-            usesLaserTurns = 1,
-            usesRequiresTarget = 2,
-            usesForceNew = 4,
-            usesLaserSeeksSurfaces = 8,
-            usesFaceTarget = 16,
-            usesUseUnitTarget = 32,
-            usesUseEventOffset = 64,
-            usesLoop = 128,
-            usesUseEventOffsetAbsolute = 256,
-            usesPlaceOnTarget = 512,
-            unknown = 1024,
-            usesTransferStats = 2048,
-            usesWhenTargetInRange = 4096,
-            usesAddToCenter = 8192,
-            uses360Targeting = 16384,
-            usesPlaceOnSkillTarget = 32768,
-            usesUseAiTarget = 65536,
-            usesUseOffhandWeapon = 131072,
-            usesFloat = 262144,
-            usesDontValidateTarget = 524288,
-            usesRandomFiringDirection = 1048576,
-            usesAutoaimProjectile = 2097152,
-            usesTargetWeapon = 4194304,
-            unkA = 8388608,
-            unkB = 16777216,
-            usesUseHolyRadiusForRange = 33554432,
-            unkC = 67108864,
-            unkD = 134217728,
-            unkE = 268435456,
-            usesLaserAttacksLocation = 536870912,
-            usesAtNextCooldown = 1073741824,
-            usesAimWithWeapon = 2147483648
-        }
-        [FlagsAttribute]
-        public enum BitMask02 : uint
-        {
-            usesAimWithWeaponZero = 1,
-            unk01 = 2,
-            unk02 = 4,
-            unk03 = 8,
-            unk04 = 16,
-            usesUseUltimateOwner = 32,
-            unk05 = 64,
-            unk06 = 128,
-            usesIncludeInUiCount = 256
-        }
     }
 }

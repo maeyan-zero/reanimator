@@ -43,14 +43,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 havokSliceType;
         public Int32 roomVersion;
         public float nodeBuffer;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        //Int32[] tcv4_1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined1;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string reverbEnvironment;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 68)]
-        //Int32[] tcv4_2;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined2;
         public Int32 backGroundSound;//idx

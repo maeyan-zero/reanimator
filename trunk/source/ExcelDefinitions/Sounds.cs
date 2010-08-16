@@ -28,7 +28,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 rollOffType;
         public Int32 reverbSend;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public Sounds.BitMask01 bitmask01;
+        public BitMask01 bitmask01;
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 directory;//pchar
         public Int32 undefined5;
@@ -228,38 +228,35 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32[] undefined47;
 
-        public abstract class Sounds
+        [FlagsAttribute]
+        public enum BitMask01 : uint
         {
-            [FlagsAttribute]
-            public enum BitMask01 : uint
-            {
-                nonblock = 1,
-                stream = 2,
-                is3D = 4,//it is in fact called just 3D, but that isn't liked.
-                unk01 = 8,
-                loops = 16,
-                canCutoff = 32,
-                highlander = 64,
-                groupHighlander = 128,
-                software = 256,
-                headRelative = 512,
-                isMusic = 1024,
-                dontRandomizeStart = 2048,
-                dontCrossfadeVariations = 4096,
-                unk02 = 8192,
-                loadAtStartup = 16384,
-                useGlobalLights = 32768,
-                backupTransSpecular = 65536,
-                emitsGpuParticles = 131072,
-                isScreenEffect = 262144,
-                loadAllTechniques = 524288,
-                receiveRain = 1048576,
-                oneParticleSystem = 2097152,
-                usesPortals = 4194304,
-                requiresHavokFx = 8388608,
-                directionalInSH = 16777216,
-                emissivediffuse = 33554432
-            }
+            nonblock = 1,
+            stream = 2,
+            is3D = 4,//it is in fact called just 3D, but that isn't liked.
+            unk01 = 8,
+            loops = 16,
+            canCutoff = 32,
+            highlander = 64,
+            groupHighlander = 128,
+            software = 256,
+            headRelative = 512,
+            isMusic = 1024,
+            dontRandomizeStart = 2048,
+            dontCrossfadeVariations = 4096,
+            unk02 = 8192,
+            loadAtStartup = 16384,
+            useGlobalLights = 32768,
+            backupTransSpecular = 65536,
+            emitsGpuParticles = 131072,
+            isScreenEffect = 262144,
+            loadAllTechniques = 524288,
+            receiveRain = 1048576,
+            oneParticleSystem = 2097152,
+            usesPortals = 4194304,
+            requiresHavokFx = 8388608,
+            directionalInSH = 16777216,
+            emissivediffuse = 33554432
         }
     }
 }
