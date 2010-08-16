@@ -5,7 +5,7 @@ using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 namespace Reanimator.ExcelDefinitions
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class SoundsRow
+    class SoundsTCv4Row
     {
         ExcelFile.TableHeader header;
 

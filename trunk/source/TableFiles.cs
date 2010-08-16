@@ -25,6 +25,7 @@ namespace Reanimator
 
         private class MapItem
         {
+            public bool IsTCv4 { get; set; }
             public String NameReplace { get; set; }
             public Type RowType { get; set; }
             public bool IsEmpty { get; set; }
@@ -191,6 +192,36 @@ namespace Reanimator
                 {"WARDROBE_TEXTURESET_GROUP", new MapItem {RowType = typeof (WardrobeTextureSetGroupRow)}},
                 {"WEATHER", new MapItem {RowType = typeof (WeatherRow)}},
                 {"WEATHER_SETS", new MapItem {RowType = typeof (WeatherSetsRow)}},
+
+                
+                // TCv4
+                {"ACHIEVEMENTS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (AchievementsTCv4Row)}},
+                {"ACT_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (ActTCv4Row)}},
+                {"AFFIXES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (AffixesTCv4Row)}},
+                {"BACKGROUNDSOUNDS2D_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (BackGroundSounds2DTCv4Row)}},
+                {"CHARACTER_CLASS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (CharacterClassTCv4Row)}},
+                {"DAMAGETYPES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (DamageTypesTCv4Row)}},
+                {"INVENTORY_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (InventoryTCv4Row)}},
+                {"ITEM_LOOKS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (ItemLooksTCv4Row)}},
+                {"ITEM_QUALITY_TCv4", new MapItem {IsTCv4 = true, NameReplace = "ITEMQUALITY", RowType = typeof (ItemQualityTCv4Row)}},
+                {"ITEMS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (ItemsTCv4Row)}},
+                {"LEVEL_TCv4", new MapItem {IsTCv4 = true, NameReplace = "LEVELS", RowType = typeof (LevelsTCv4Row)}},
+                {"LEVEL_SCALING_TCv4", new MapItem {IsTCv4 = true, NameReplace = "LEVELSCALING", RowType = typeof (LevelScalingTCv4Row)}},
+                {"ROOM_INDEX_TCv4", new MapItem {IsTCv4 = true, NameReplace = "LEVELS_ROOM_INDEX", RowType = typeof (LevelsRoomIndexTCv4Row)}},
+                {"PLAYERLEVELS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (PlayerLevelsTCv4Row)}},
+                {"PROPERTIES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (PropertiesTCv4Row)}},
+                {"RECIPES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (RecipesTCv4Row)}},
+                {"SKILLS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (SkillsTCv4Row)}},
+                {"SKILLEVENTTYPES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (SkillEventTypesTCv4Row)}},
+                {"SKILLTABS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (SkillTabsTCv4Row)}},
+                {"SOUND_MIXSTATES_TCv4", new MapItem {IsTCv4 = true, NameReplace = "SOUNDMIXSTATES", RowType = typeof (SoundMixStatesTCv4Row)}},
+                {"SOUNDS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (SoundsTCv4Row)}},
+                {"STATS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (StatsTCv4Row)}},
+                {"TREASURE_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (TreasureTCv4Row)}},
+                {"UNITMODE_GROUPS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (UnitModeGroupsTCv4Row)}},
+                {"UNITMODES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (UnitModesTCv4Row)}},
+                {"UNITTYPES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (UnitTypesTCv4Row)}},
+                {"WARDROBE_LAYER_TCv4", new MapItem {IsTCv4 = true, NameReplace = "WARDROBE", RowType = typeof (WardrobeTCv4Row)}},
 
 
                 // Empty Excel files

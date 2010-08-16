@@ -122,6 +122,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitBuffer.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Achievements.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Act.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Affixes.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\BackGroundSounds2D.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\CharacterClass.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\DamageEffects.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\DamageTypes.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Inventory.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\ItemLooks.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\ItemQuality.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Items.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Levels.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\LevelScaling.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\LevelsRoomIndex.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\PlayerLevels.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Properties.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Recipes.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\SkillEventTypes.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Skills.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\SkillTabs.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\SoundMixStates.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Sounds.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Stats.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Treasure.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\UnitModeGroups.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\UnitModes.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\UnitTypes.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Wardrobe.cs" />
     <Compile Include="ExcelDefinitions\Achievements.cs" />
     <Compile Include="ExcelDefinitions\Act.cs" />
     <Compile Include="ExcelDefinitions\Affixes.cs" />
