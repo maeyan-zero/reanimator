@@ -5,7 +5,7 @@ using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 namespace Reanimator.ExcelDefinitions
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class StatsRow
+    class StatsTCv4Row
     {
         ExcelFile.TableHeader header;
 
@@ -96,35 +96,35 @@ namespace Reanimator.ExcelDefinitions
         public string versionFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] undefined12;
+    }
 
-        public abstract class StatsTCv4
+    public abstract class Stats
+    {
+        [FlagsAttribute]
+        public enum BitMask01 : uint
         {
-            [FlagsAttribute]
-            public enum BitMask01 : uint
-            {
-                cur = 2,
-                modList = 4,
-                vector = 8,
-                Float = 16,
-                _undefined1 = 32,
-                accrue = 64,
-                accrueOnceOnly = 128,
-                combat = 256,
-                directDmg = 512,
-                send = 1024,
-                sendAll = 2048,
-                save = 4096,
-                _undefined2 = 8192,
-                noMaxCurWhenDead = 16384,
-                stateMonitorsC = 32768,
-                stateMonitorsS = 65536,
-                transfer = 131072,
-                transferToMissile = 262144,
-                calcRider = 524288,
-                calc = 1048576,
-                updateDatabase = 2097152,
-                dontTranferToNonWeaponMissile = 4194304
-            }
+            cur = 2,
+            modList = 4,
+            vector = 8,
+            Float = 16,
+            _undefined1 = 32,
+            accrue = 64,
+            accrueOnceOnly = 128,
+            combat = 256,
+            directDmg = 512,
+            send = 1024,
+            sendAll = 2048,
+            save = 4096,
+            _undefined2 = 8192,
+            noMaxCurWhenDead = 16384,
+            stateMonitorsC = 32768,
+            stateMonitorsS = 65536,
+            transfer = 131072,
+            transferToMissile = 262144,
+            calcRider = 524288,
+            calc = 1048576,
+            updateDatabase = 2097152,
+            dontTranferToNonWeaponMissile = 4194304
         }
     }
 }

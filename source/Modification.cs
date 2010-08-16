@@ -326,7 +326,7 @@ namespace Reanimator
                                     }
                                     break;
                             }
-                            dataRow[col] = obj;
+                            dataRow[col] = obj ?? String.Empty;
                         } //end main loop
                     } //attribute
                 } //entity

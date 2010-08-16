@@ -6,7 +6,7 @@ namespace Reanimator.ExcelDefinitions
 {
     // size = 0x0000000000000DB8 (not including header)
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public class ItemsRow
+    public class ItemsTCv4Row
     {
         ExcelFile.TableHeader header;                               // ReadOrder   OffsetFromHeader     ReadFunction
 

@@ -276,7 +276,6 @@ namespace Reanimator
                 {
                     TableIndicies[i] = FileTools.ByteArrayTo<Int32>(_data, ref offset);
                     int size = FileTools.ByteArrayTo<Int32>(_data, ref offset);
-
                     byte[] extra = new byte[size];
                     Buffer.BlockCopy(_data, offset, extra, 0, size);
                     offset += size;
@@ -841,6 +840,10 @@ namespace Reanimator
                                 {
                                     fieldInfo.SetValue(table, String.Empty);
                                 }
+                                else if (fieldInfo.FieldType == typeof(Int32))
+                                {
+                                    fieldInfo.SetValue(table, -1);
+                                }
                                 else
                                 {
                                     fieldInfo.SetValue(table, 0);
@@ -1000,8 +1003,8 @@ namespace Reanimator
 
                 if ((uint)_excelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
                 {
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _extra.Length);
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _extra);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _extraIndexData[i].Length);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _extraIndexData[i]);
                 }
             }
 
