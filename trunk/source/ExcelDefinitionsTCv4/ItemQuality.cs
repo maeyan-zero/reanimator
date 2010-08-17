@@ -42,6 +42,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 rarity;
         public Int32 vendorRarity;
         public Int32 luckRarity;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_1;
         Int32 lookGroup;
         public Int32 state;
         public Int32 flippySound;
@@ -65,6 +67,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 suffixName;
         Int32 suffixType;
         Int32 suffixCount;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_2;
         public float procChance;
         float luckProbMod;
         [ExcelOutput(IsIntOffset = true)]
@@ -195,5 +199,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affix6Type6;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String badgeFrame;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_3;
     }
 }

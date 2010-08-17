@@ -16,6 +16,8 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 displayString;//stridx
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCv4;
         [ExcelOutput(IsBool = true)]
         public Int32 drawOnlyKnown;//bool
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]

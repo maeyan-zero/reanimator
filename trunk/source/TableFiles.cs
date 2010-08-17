@@ -199,6 +199,7 @@ namespace Reanimator
                 {"ACT_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (ActTCv4Row)}},
                 {"AFFIXES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (AffixesTCv4Row)}},
                 {"BACKGROUNDSOUNDS2D_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (BackGroundSounds2DTCv4Row)}},
+                {"BADGE_REWARDS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (BadgeRewardsTCv4Row)}},
                 {"CHARACTER_CLASS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (CharacterClassTCv4Row)}},
                 {"DAMAGE_EFFECTS_TCv4", new MapItem {IsTCv4 = true, NameReplace = "DAMAGEEFFECTS", RowType = typeof (DamageEffectsTCv4Row)}},
                 {"DAMAGETYPES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (DamageTypesTCv4Row)}},
@@ -500,7 +501,8 @@ namespace Reanimator
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to parse excel file!\n\n" + filePath + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //MessageBox.Show("Failed to parse excel file!\n\n" + filePath + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExceptionLogger.LogException(ex, "DoManualTables");
                 }
 
                 AllExcelFilesLoaded = false;
