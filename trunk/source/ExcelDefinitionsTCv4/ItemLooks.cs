@@ -17,6 +17,10 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string name;
         public Int32 wardrobe;//idx;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+        Int32[] TCV4_1;
         public Int32 undefined2;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
+        Int32[] TCV4_2;
     }
 }

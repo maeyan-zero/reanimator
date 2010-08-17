@@ -16,7 +16,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 code;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Act.BitMask01 bitmask01;
-        [ExcelOutput(Exclude = true)]
         public Int32 TCV4_1;
 
         public abstract class Act

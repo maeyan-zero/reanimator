@@ -12,10 +12,8 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-
         [ExcelOutput(IsBool = true)]
         public Int32 outDoor;//bool;
-
         [ExcelOutput(IsBool = true)]
         public Int32 outDoorVisibility;//bool;
         [ExcelOutput(IsBool = true)]
@@ -43,14 +41,16 @@ namespace Reanimator.ExcelDefinitions
         public Int32 havokSliceType;
         public Int32 roomVersion;
         public float nodeBuffer;
+        [ExcelOutput(Exclude = true)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        Int32[] tcv4_1;
+        Int32[] TCV4_1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined1;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string reverbEnvironment;
+        [ExcelOutput(Exclude = true)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 68)]
-        Int32[] tcv4_2;
+        Int32[] TCV4_2;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined2;
         public Int32 backGroundSound;//idx

@@ -23,6 +23,12 @@ namespace Reanimator.ExcelDefinitions
         public float maxSilentTime;
         public float fadeIn;
         public float fadeOut;
+        Int32 TCV4_1;
+        Int32 TCV4_2;
+        Int32 TCV4_3;
+        Int32 TCV4_4;
+        Int32 TCV4_5;
         public Int32 sound;//idx
+        Int32 TCV4_6;
     }
 }

@@ -31,20 +31,22 @@ namespace Reanimator.ExcelDefinitions
         public Int32 dom;
         [ExcelOutput(SortId = 3)]
         public Int32 code;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType1;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType2;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType4;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType5;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType6;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] TCV4;
         public Int32 suffix;
-        [ExcelOutput(IsStringIndex = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]
@@ -53,20 +55,18 @@ namespace Reanimator.ExcelDefinitions
         public Int32 spawn;
         public Int32 minLevel;
         public Int32 maxLevel;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes1;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes2;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes4;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes5;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes6;
-        [ExcelOutput(IsIntOffset = true)]
-        public Int32 groupWeight;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 weight;
         Int32 luckWeight;
@@ -76,9 +76,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 colorSetPriority;
         public Int32 state;
         Int32 saveState;
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceMulti;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceAdd;
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceMulti;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceAdd;
@@ -103,27 +105,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 property5;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 property6;
-        //[ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
+        public Int32 TCv4_1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyOnItemsRequiringUnitType;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_1;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_2;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_3;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_4;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_5;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_6;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_7;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_8;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_9;
-        //[ExcelOutput(Exclude = true)]
-        //public Int32 TCV4_10;
+        public Int32 TCv4_2;
     }
 }

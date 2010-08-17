@@ -547,10 +547,10 @@ namespace Reanimator
                 {
                     case 2:
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // int value between 270-370
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // int value between 270-370
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 0
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 0
                         cur += sizeof(int);
                         csv.Write(",");
                         break;
@@ -565,7 +565,7 @@ namespace Reanimator
                     case 527:
                     case 700:
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // int value
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // int value
                         cur += sizeof(int);
                         csv.Write(",");
                         break;
@@ -602,7 +602,7 @@ namespace Reanimator
                     case 687:
                     case 688:
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // int bitmask
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // int bitmask
                         cur += sizeof(int);
                         csv.Write(",");
                         break;
@@ -610,47 +610,47 @@ namespace Reanimator
                     // functions
                     case 707:
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // Boolean? 1/0
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // Boolean? 1/0
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur));  // 714
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur));  // 714
                         cur += sizeof(int);
                         csv.Write(",");
                         break;
                     // random range?
                     case 708: // 26,3,26
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 26
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 26
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 3
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 3
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
                         cur += sizeof(int);
                         csv.Write(",");
                         break;
                     case 710: // 26,26,3
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 26
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 26
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 26
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 26
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur));  // value
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 3
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // 3
                         cur += sizeof(int);
                         csv.Write(",");
-                        csv.Write((uint)FileTools.ByteArrayToInt32(_dataBlock, cur)); // value
+                        csv.Write((int)FileTools.ByteArrayToInt32(_dataBlock, cur)); // value
                         cur += sizeof(int);
                         csv.Write(",");
                         break;
@@ -928,7 +928,7 @@ namespace Reanimator
 
                                 foreach (string part in explode)
                                 {
-                                    FileTools.WriteToBuffer(ref intBytes, ref intByteCount, uint.Parse(part));
+                                    FileTools.WriteToBuffer(ref intBytes, ref intByteCount, int.Parse(part));
                                 }
                             }
                         }
