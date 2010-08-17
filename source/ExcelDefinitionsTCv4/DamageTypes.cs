@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
@@ -29,6 +30,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 invulnerableSfxState;
         public Int32 thornsState;
         public Int32 vulnerabilityInPVPTugboat;
-        Int32 vulnerabilityInPVPHellgate;
+        public Int32 vulnerabilityInPVPHellgate;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_1;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_2;
     }
 }

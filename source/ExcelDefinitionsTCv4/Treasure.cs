@@ -39,11 +39,17 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] unknown04;
         public float noDrop;
-        [ExcelOutput(IsIntOffset = true, IntOffsetOrder = 1)]
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_1;
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 levelBoost;
         public float moneyChanceMultiplier;
         public float moneyLuckChanceMultiplier;
         public float moneyAmountMultiplier;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_2;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_3;
         public Int32 item1m;/*this isn't actually defined, but it determines the type of object in item1, whether it's a specific item(01), a unit type(02),
             another treasure class(03), an item quality(04), or something else yet to be determined.*/
         public Int32 item1;

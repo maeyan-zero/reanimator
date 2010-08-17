@@ -19,6 +19,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 unknown;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Inventory.Bitmask01 bitmask;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_1;
         public Int32 types0;//these reference unitTypes
         public Int32 types1;
         public Int32 types2;
