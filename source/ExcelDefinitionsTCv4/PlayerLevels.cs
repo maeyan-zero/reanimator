@@ -25,6 +25,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 deathExperiencePenaltyPercent;
         public Int32 restartHealthPercent;
         public Int32 restartPowerPercent;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCv4;
         public Int32 restartShieldPercent;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 prop1;//intptr
@@ -37,5 +39,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 spellSlot1;//idx
         public Int32 spellSlot2;//idx
         public Int32 spellSlot3;//idx
+
     }
 }

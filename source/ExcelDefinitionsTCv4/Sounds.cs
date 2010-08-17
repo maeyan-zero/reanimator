@@ -224,9 +224,19 @@ namespace Reanimator.ExcelDefinitions
         public Int32 effects;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined46;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_1;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_2;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_3;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_4;
         public Int32 undefined46d;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32[] undefined47;
+
+
 
         public abstract class Sounds
         {

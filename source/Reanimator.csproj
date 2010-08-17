@@ -126,6 +126,7 @@
     <Compile Include="ExcelDefinitionsTCv4\Act.cs" />
     <Compile Include="ExcelDefinitionsTCv4\Affixes.cs" />
     <Compile Include="ExcelDefinitionsTCv4\BackGroundSounds2D.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\BadgeRewards.cs" />
     <Compile Include="ExcelDefinitionsTCv4\CharacterClass.cs" />
     <Compile Include="ExcelDefinitionsTCv4\DamageEffects.cs" />
     <Compile Include="ExcelDefinitionsTCv4\DamageTypes.cs" />
