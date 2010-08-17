@@ -13,5 +13,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 PlayerAttackMonsterExp;
         public Int32 MonsterAttackPlayerDmg;
         public Int32 PlayerAttackPlayerDmg;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
+        Int32[] TCv4_1;
     }
 }

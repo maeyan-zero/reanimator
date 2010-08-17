@@ -24,6 +24,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 detailsString;                                                             // 5        0x0000000000000050      XLS_ReadStringIndex
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 rewardTypeString;                                                          // 6        0x0000000000000054      XLS_ReadStringIndex
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        Int32[] TCV4_1;
         public Int32 revealCondition;                                                           // 7        0x0000000000000058      XLS_ReadInternalIndex             .text:00000001402F0AAF mov     dword ptr [rsp+58h+var_30], 5        (Default = Always)
         public Int32 revealValue;                                                               // 8        0x000000000000005C      XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableIndex = 0xB4)]
@@ -76,12 +78,18 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST")]
         public Int32 questTaskComplete;                                                         // 23       0x00000000000000C4      XLS_ReadIndex,0xA5
         public Int32 randomQuests;                                                              // 24       0x00000000000000C8      XLS_ReadInt32
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCv4_2;
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster;                                                                   // 16       0x00000000000000CC      XLS_ReadIndex,0x73
         [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 Object;                                                                    // 17       0x00000000000000D0      XLS_ReadIndex,0x77
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
-        public Int32 item;                                                                      // 18       0x00000000000000D4      XLS_ReadIndex,0x63
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCv4_3;
+        //[ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
+        //public Int32 item;                                                                      // 18       0x00000000000000D4      XLS_ReadIndex,0x63
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] TCV4_4;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 quality;                                                                   // 19       0x00000000000000D8      XLS_ReadIndex,0x43
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
@@ -93,7 +101,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 rewardAchievementPoints;                                                   // 25       0x00000000000000E8      XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x65)]
         Int32 rewardTreasureClass;//idx                                                         // 26       0x00000000000000EC      XLS_ReadIndex,0x65
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCv4_5;
         public Int32 rewardXP;                                                                  // 27       0x00000000000000F0      XLS_ReadInt32
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCv4_6;
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         Int32 rewardSkill;//idx                                                                 // 28       0x00000000000000F4      XLS_ReadIndex,0x29
         [ExcelOutput(IsIntOffset = true)]

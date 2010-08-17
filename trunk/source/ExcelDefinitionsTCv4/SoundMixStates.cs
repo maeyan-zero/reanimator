@@ -14,6 +14,8 @@ namespace Reanimator.ExcelDefinitions
         public string name;
 
         public Int32 priority;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        Int32[] TCv4_1;
         public Int32 values1;
         public Int32 values2;
         public Int32 values3;
@@ -22,6 +24,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 values6;
         public Int32 values7;
         public Int32 values8;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+        Int32[] TCv4_2;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 33)]
+        Int32[] TCv4_3;
         public float fadeInTimeInSeconds;
         public Int32 undefined1;
         public float fadeOutTimeInSeconds;
@@ -30,6 +36,5 @@ namespace Reanimator.ExcelDefinitions
         public string reverbOverRide;
         public Int32 undefined3;
         public Int32 undefined4;
-        public Int32 undefined5;
     }
 }
