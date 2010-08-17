@@ -85,12 +85,12 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 cond;
         public Int32 itemLevel;
-        Int32 prop1Cond;
-        Int32 prop2Cond;
-        Int32 prop3Cond;
-        Int32 prop4Cond;
-        Int32 prop5Cond;
-        Int32 prop6Cond;
+        public Int32 prop1Cond;
+        public Int32 prop2Cond;
+        public Int32 prop3Cond;
+        public Int32 prop4Cond;
+        public Int32 prop5Cond;
+        public Int32 prop6Cond;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 property1;
         [ExcelOutput(IsIntOffset = true)]
@@ -105,5 +105,25 @@ namespace Reanimator.ExcelDefinitions
         public Int32 property6;
         //[ExcelOutput(IsTableIndex = true, TableId = "UNITTYPES", Column = "type")]
         public Int32 onlyOnItemsRequiringUnitType;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_1;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_2;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_3;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_4;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_5;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_6;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_7;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_8;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_9;
+        //[ExcelOutput(Exclude = true)]
+        //public Int32 TCV4_10;
     }
 }

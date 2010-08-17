@@ -200,6 +200,7 @@ namespace Reanimator
                 {"AFFIXES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (AffixesTCv4Row)}},
                 {"BACKGROUNDSOUNDS2D_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (BackGroundSounds2DTCv4Row)}},
                 {"CHARACTER_CLASS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (CharacterClassTCv4Row)}},
+                {"DAMAGE_EFFECTS_TCv4", new MapItem {IsTCv4 = true, NameReplace = "DAMAGEEFFECTS", RowType = typeof (DamageEffectsTCv4Row)}},
                 {"DAMAGETYPES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (DamageTypesTCv4Row)}},
                 {"INVENTORY_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (InventoryTCv4Row)}},
                 {"ITEM_LOOKS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (ItemLooksTCv4Row)}},

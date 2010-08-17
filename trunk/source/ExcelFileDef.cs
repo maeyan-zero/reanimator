@@ -49,6 +49,8 @@ namespace Reanimator
             //public int DefaultIndex { get; set; }
 
 
+            public bool Exclude { get; set; }
+
             public bool IsStringId { get; set; }
             public bool IsTableIndex { get; set; }
             public String TableStringId { get; set; }

@@ -12,7 +12,6 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
-
         [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 type;
@@ -85,6 +84,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 sfStat4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] undefined10;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_1;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_2;
         public Int32 checkAgainstTypes1;
         public Int32 checkAgainstTypes2;
         public Int32 reqFailString;//stridx
@@ -96,5 +99,9 @@ namespace Reanimator.ExcelDefinitions
         public string versionFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] undefined12;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_3;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_4;
     }
 }

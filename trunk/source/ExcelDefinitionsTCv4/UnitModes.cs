@@ -34,12 +34,16 @@ namespace Reanimator.ExcelDefinitions
         public Int32 clearAi;//bool
         [ExcelOutput(IsBool = true)]
         public Int32 clearSkill;//bool
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_1;
         public Int32 clearState;//idx
         public Int32 clearStateEnd;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 doEvent;//bool
         [ExcelOutput(IsBool = true)]
         public Int32 endEvent;//bool
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_2;
         [ExcelFile.ExcelOutputAttribute(IsStringOffset = true)]
         public Int32 doFunction;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
@@ -106,5 +110,9 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBool = true)]
         public Int32 playOnInventoryModel;//bool
         Int32 undefined5;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_3;
+        [ExcelOutput(Exclude = true)]
+        public Int32 TCV4_4;
     }
 }
