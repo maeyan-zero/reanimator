@@ -28,6 +28,8 @@ namespace Reanimator.ExcelDefinitions
         public Skills.Bitmask06 bitmask6;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
         public Int32 displayName;//stridx
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
+        Int32[] TCv4_1;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String descriptionStringFunction;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
@@ -61,11 +63,14 @@ namespace Reanimator.ExcelDefinitions
         public String smallIcon;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknown2;
+        public Int32 TCv4_2;
         public Int32 iconColor;
         public Int32 iconBackgroundColor;
         public Int32 skillTab;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 124)]
         byte[] unknown3;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
+        Int32[] TCv4_3;
         public Int32 skillGroup1;
         public Int32 skillGroup2;
         public Int32 skillGroup3;
@@ -87,6 +92,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 level13;
         public Int32 level14;
         public Int32 level15;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 15)]
+        Int32[] TCv4_4;
         public Int32 maxLevel;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         String summonedAi;
@@ -104,6 +111,8 @@ namespace Reanimator.ExcelDefinitions
         public float powerCostPerLevel;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown5;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
+        Int32[] TCv4_5;
         public Int32 priority;
         Int32 requiredStats1;
         Int32 requiredStats2;
@@ -137,6 +146,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 requiredStatValuesB13;
         Int32 requiredStatValuesB14;
         Int32 requiredStatValuesB15;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
+        Int32[] TCv4_6;
         public Int32 requiredSkills1;
         public Int32 requiredSkills2;
         public Int32 requiredSkills3;
@@ -274,6 +285,8 @@ namespace Reanimator.ExcelDefinitions
         Int32 powerCostScript;
         [ExcelOutput(IsIntOffset = true)]
         Int32 coolDownSkillScript;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
+        Int32[] TCv4_7;
         Int32 skillOnpulse;//idx
         Int32 selectCheckStat;//idx
         public Int32 startFunc;
@@ -295,6 +308,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 prohibitingState3;//idx
         public Int32 stateOnSelect;//idx
         public Int32 clearStateOnSelect;//idx
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+        Int32[] TCv4_8;
         public Int32 holdTicks;
         public Int32 holdWithMode;//idx
         public Int32 warmUpTicks;
@@ -337,8 +352,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 linkedLevelSkill2;
         Int32 skillParent;
         public Int32 fieldMissile;
+        public Int32 TCv4_9;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknown11;
+        public Int32 TCv4_10;
 
         public abstract class Skills
         {

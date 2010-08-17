@@ -12,6 +12,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string recipe;
+        [ExcelOutput(Exclude = true)]
         public Int32 String;
         [ExcelOutput(SortId = 2)]
         public Int32 code;
@@ -28,7 +29,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 weight;
         Int32 experienceEarned;
         Int32 goldReward;
+        public Int32 TCv4_1;
         public Int32 resultQualityModifiesIngredientQuantity;
+        public Int32 TCv4_2;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
         public Int32 ingredient1ItemClass;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
@@ -87,6 +90,12 @@ namespace Reanimator.ExcelDefinitions
         public Recipes.BitMask01 bitmask;
         Int32 spawnLevelMin;
         Int32 spawnLevelMax;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+        Int32[] TCV4_3;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 146)]
+        Int32[] TCV4_4;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+        Int32[] TCV4_5;
 
         public abstract class Recipes
         {
