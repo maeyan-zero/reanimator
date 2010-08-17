@@ -138,7 +138,6 @@
     <Compile Include="ExcelDefinitionsTCv4\LevelScaling.cs" />
     <Compile Include="ExcelDefinitionsTCv4\LevelsRoomIndex.cs" />
     <Compile Include="ExcelDefinitionsTCv4\PlayerLevels.cs" />
-    <Compile Include="ExcelDefinitionsTCv4\Properties.cs" />
     <Compile Include="ExcelDefinitionsTCv4\Recipes.cs" />
     <Compile Include="ExcelDefinitionsTCv4\SkillEventTypes.cs" />
     <Compile Include="ExcelDefinitionsTCv4\Skills.cs" />

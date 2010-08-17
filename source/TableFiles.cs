@@ -211,7 +211,7 @@ namespace Reanimator
                 {"LEVEL_SCALING_TCv4", new MapItem {IsTCv4 = true, NameReplace = "LEVELSCALING", RowType = typeof (LevelScalingTCv4Row)}},
                 {"ROOM_INDEX_TCv4", new MapItem {IsTCv4 = true, NameReplace = "LEVELS_ROOM_INDEX", RowType = typeof (LevelsRoomIndexTCv4Row)}},
                 {"PLAYERLEVELS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (PlayerLevelsTCv4Row)}},
-                {"PROPERTIES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (PropertiesTCv4Row)}},
+                {"PROPS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (LevelsRoomIndexTCv4Row)}},
                 {"RECIPES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (RecipesTCv4Row)}},
                 {"SKILLS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (SkillsTCv4Row)}},
                 {"SKILLEVENTTYPES_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (SkillEventTypesTCv4Row)}},
