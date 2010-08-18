@@ -90,6 +90,13 @@ namespace Reanimator
             return Marshal.PtrToStringAnsi(bytePtr);
         }
 
+        public static String ByteArrayToStringAnsi(byte[] byteArray, ref int offset, int len)
+        {
+            IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
+            offset += len;
+            return Marshal.PtrToStringAnsi(bytePtr, len);
+        }
+
         public static String ByteArrayToStringUnicode(byte[] byteArray, int offset)
         {
             IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
