@@ -30,13 +30,19 @@ namespace Reanimator
             CheckEnvironment();
             InitializeComponent();
 
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
-
-
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\");
+            /*
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\monster\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\proc\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\quest\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\templar\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\");
+             */
 
         }
 
@@ -49,7 +55,7 @@ namespace Reanimator
             {
                 byte[] data = File.ReadAllBytes(fileInfo.FullName);
 
-                if (fileInfo.FullName.Contains("targetingdevice.xml.cooked"))
+                if (fileInfo.FullName.Contains("orbilezapcorpse.xml"))
                 {
                     int bp = 0;
                 }

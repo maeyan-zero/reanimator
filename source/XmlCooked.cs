@@ -216,6 +216,7 @@ namespace Reanimator
             Bitmask105 = (1 << 5),
             Bitmask106 = (1 << 6),
             Bitmask107 = (1 << 7),
+            Bitmask108 = (1 << 8),              // found in fragblaster.xml.cooked (Start Mode Weapon: item_equipped_idle) - note: assumed to be with bitmask as with rest
             Bitmask109 = (1 << 9),              // found in fellhordediggerball.xml.cooked (Fire Missile: Fell Horde Digger Ball)
             Bitmask111 = (1 << 11),             // found in minionmeleeattack2.xml.cooked (Add Attachment: weapons\HolyFire\Grenade impact.xml) - note: assumed to be with bitmask as with rest
             Bitmask112 = (1 << 12),
@@ -227,26 +228,30 @@ namespace Reanimator
             Bitmask119 = (1 << 19),             // found in blink.xml.cooked, same with cansexplode.xml.cooked            doesn't appear to do anything in file though...
             Bitmask120 = (1 << 20),
             IntValue121 = (1 << 21),            // found in physicalmirvmissile.xml.cooked (Fire Missile Nova = 1048576 (0x100000); is it a bitmask with above??)
+            Bitmask123 = (1 << 23),             // found in throwsword.xml.cooked (State - Set: dont_draw_quick) - note: assumed to be with bitmask as with rest
+            Bitmask124 = (1 << 24),             // found in firebeetles.xml (Add Attachment: FireBeetlesGunFire w\Condition1 = "Stat In Range") - note: assumed to be with bitmask as with rest
             Bitmask125 = (1 << 25),             // found in fiendpriesthellgatelaser.xml.cooked (Fire Laser: Fiend Priest Hellgate Heal) - seen with 104,106 i.e. is bitmask with rest
             IntValue126 = (1 << 26),            // found in chocolatefogdamagefield.xml.cooked (State - Set on Targets in Range: on_chocolate_fog; is it a bitmask with above??)
+            Bitmask129 = (1 << 29),             // found in airmeleeattack.xml.cooked (Do Melee Item Events) - note: assumed to be with bitmask as with rest
             Bitmask130 = (1 << 30)              // found in meteor.xml.cooked (Fire Laser)
         }
 
         [FlagsAttribute]
         private enum BitField2 : uint
         {
-            _Undefined200 = (1 << 0),
-            IntValue201 = (1 << 1),             // found in townportal.xml.cooked
-            IntValue202 = (1 << 2),
-            IntValue203 = (1 << 3),
-            IntValue204 = (1 << 4),             // found in summonreapoer.xml.cooked (Spawn Minion: reaper_pet)
+            // note: assumed these are all the same bitfield (they appear to be)
+            BitField200 = (1 << 0),             // found in cannonguns.xml.cooked (Fire Missile: Cannon Gun)
+            BitField201 = (1 << 1),             // found in townportal.xml.cooked
+            BitField202 = (1 << 2),
+            BitField203 = (1 << 3),
+            BitField204 = (1 << 4),             // found in summonreapoer.xml.cooked (Spawn Minion: reaper_pet)
             _Undefined205 = (1 << 5),
-            _Undefined206 = (1 << 6),
-            Unknown207 = (1 << 7),              // found in blink.xml.cooked (PlayerTeleportToSafety) and corpseheal.xml.cooked (State - Set on Targets in Range)
-            IntValue208 = (1 << 8),             // found in townportal.xml.cooked
-            _Undefined209 = (1 << 9),
+            BitField206 = (1 << 6),             // found in vampirepistolheal.xml.cooked (Heal Partially)
+            BitField207 = (1 << 7),              // found in blink.xml.cooked (PlayerTeleportToSafety) and corpseheal.xml.cooked (State - Set on Targets in Range)
+            BitField208 = (1 << 8),             // found in townportal.xml.cooked
+            IntValue209 = (1 << 9),   
+            FloatValue211 = (1 << 11),          // found in arc lasher.xml.cooked (Fire Laser: Arc Lasher) - note: assumed to *not* be with above bitfield values...
             FloatValue210 = (1 << 10),
-            FloatValue211 = (1 << 11),
             FloatValue212 = (1 << 12),
             FloatValue213 = (1 << 13),          // found in bloodlink.xml.cooked (GiveLifeToCompanion)
             FloatValue214 = (1 << 14),          // found in bloodlink.xml.cooked (GiveLifeToCompanion)
@@ -294,6 +299,7 @@ namespace Reanimator
                 _TestField1(bitField1, BitField1.Bitmask105) ||
                 _TestField1(bitField1, BitField1.Bitmask106) ||
                 _TestField1(bitField1, BitField1.Bitmask107) ||
+                _TestField1(bitField1, BitField1.Bitmask108) ||
                 _TestField1(bitField1, BitField1.Bitmask109) ||
                 _TestField1(bitField1, BitField1.Bitmask111) ||
                 _TestField1(bitField1, BitField1.Bitmask112) ||
@@ -304,11 +310,14 @@ namespace Reanimator
                 _TestField1(bitField1, BitField1.Bitmask118) ||
                 _TestField1(bitField1, BitField1.Bitmask119) ||
                 _TestField1(bitField1, BitField1.Bitmask120) ||
+                _TestField1(bitField1, BitField1.Bitmask123) ||
+                _TestField1(bitField1, BitField1.Bitmask124) ||
                 _TestField1(bitField1, BitField1.Bitmask125) ||
+                _TestField1(bitField1, BitField1.Bitmask129) ||
                 _TestField1(bitField1, BitField1.Bitmask130)
                 )
             {
-                _DoBitmask(data, ref offset, dataElement, "Bitmask1");
+                _DoBitmask(data, ref offset, dataElement, "Bitfield1");
             }
             //if (_TestField1(bitField1, BitField1.IntValue104) || _TestField1(bitField1, BitField1.IntValue130))
             //{
@@ -353,10 +362,7 @@ namespace Reanimator
             //}
 
 
-            if (_TestField2(bitField2, BitField2._Undefined200) ||
-                _TestField2(bitField2, BitField2._Undefined205) ||
-                _TestField2(bitField2, BitField2._Undefined206) ||
-                _TestField2(bitField2, BitField2._Undefined209) ||
+            if (_TestField2(bitField2, BitField2._Undefined205) ||
                 _TestField2(bitField2, BitField2._Undefined219) ||
                 _TestField2(bitField2, BitField2._Undefined220) ||
                 _TestField2(bitField2, BitField2._Undefined222) ||
@@ -366,24 +372,30 @@ namespace Reanimator
                 _DoInt(data, ref offset, dataElement, "IntValue202");
             }
 
-            if (_TestField2(bitField2, BitField2.IntValue201) ||
-                _TestField2(bitField2, BitField2.IntValue202) ||
-                _TestField2(bitField2, BitField2.IntValue204) ||
-                _TestField2(bitField2, BitField2.IntValue203) ||
-                _TestField2(bitField2, BitField2.Unknown207) ||
-                _TestField2(bitField2, BitField2.IntValue208))
+            if (_TestField2(bitField2, BitField2.BitField200) ||
+                _TestField2(bitField2, BitField2.BitField201) ||
+                _TestField2(bitField2, BitField2.BitField202) ||
+                _TestField2(bitField2, BitField2.BitField203) ||
+                _TestField2(bitField2, BitField2.BitField204) ||
+                _TestField2(bitField2, BitField2.BitField206) ||
+                _TestField2(bitField2, BitField2.BitField207) ||
+                _TestField2(bitField2, BitField2.BitField208))
             {
-                _DoInt(data, ref offset, dataElement, "IntValue201Unknown207IntValue208");
+                _DoInt(data, ref offset, dataElement, "Bitfield2");
             }
-            if (_TestField2(bitField2, BitField2.IntValue202))      // is this with the above bitmask values?
+            if (_TestField2(bitField2, BitField2.BitField202))      // is this with the above bitmask values?
             {
                 //_DoInt(data, ref offset, dataElement, "IntValue202");
             }
-            if (_TestField2(bitField2, BitField2.IntValue204))      // is this with the above bitmask values?
+            if (_TestField2(bitField2, BitField2.BitField204))      // is this with the above bitmask values?
             {
                 //_DoInt(data, ref offset, dataElement, "IntValue204");
             }
 
+            if (_TestField2(bitField2, BitField2.IntValue209))
+            {
+                _DoInt(data, ref offset, dataElement, "IntValue209");
+            }
             if (_TestField2(bitField2, BitField2.FloatValue210))
             {
                 _DoFloat(data, ref offset, dataElement, "FloatValue210");
@@ -505,9 +517,14 @@ namespace Reanimator
                  * 0x06FF          11011111111      10
                  */
 
+                // todo: figure out this section properly
                 if (footerToken == 0xFF)       // if 0xFF, seems to have 1.0f             // seen in spectralzap.xml.cooked (Skill - Start When Target Killed: Spectral_Nova) & seen in beacon.xml.cooked (Skill - Do: Beacon_Mastery)
                 {
-                    _DoFloat(data, ref offset, footerElement, "footerToken_floatValue");
+                    _DoFloat(data, ref offset, footerElement, "footerToken_floatValue0x00FF");
+                }
+                else if (footerToken == 0x7F && unknownToken0 == 0x01)
+                {
+                    _DoFloat(data, ref offset, footerElement, "footerToken_floatValue0x01FF");
                 }
 
                 // 0x02 + 0x04 = 0x06      --->       0x01 + 0x04 = 0x5             // i.e. it's a bitfield     // todo: fix me
@@ -517,6 +534,8 @@ namespace Reanimator
                     unknownToken0 == 0x12 ||        //    0x12, seems to be 0x00000009          // seen in fiendpriestheal.xml.cooked (Fire Laser: Fiend Priest Heal)
                     unknownToken0 == 0x14 ||        //    0x14, seems to be 0x0000000C          // seen in vampirecurseheal.xml.cooked (State - Set: vampire_curse_healing w/Condition1="Is Alive" & Run Script on Self  w/Condition1="Is Alive")
                     unknownToken0 == 0x16 ||        //    0x16, seems to be 0x0000000D
+                    unknownToken0 == 0x20 ||        //    0x16, seems to be 0x00000010          // seen in playeronhithealthhalf.xml.cooked (Add Attachment: StateLowHeal)
+                    unknownToken0 == 0x36 ||        //    0x16, seems to be 0x0000001D          // seen in jumpslam.xml.cooked (Add Attachment: JumpAttackStartup)
                     unknownToken0 == 0x44 ||        //    0x44, seems to be 0x00000024
                     unknownToken0 == 0x10)          //    0x10, seems to be 0x00000008          // seen in meteor.xml.cooked (Add Attachment: SkillMeteorMiddle)
                 {
@@ -524,7 +543,7 @@ namespace Reanimator
                     element.SetAttribute("unknownToken0", unknownToken0.ToString());
                 }
 
-                else if (unknownToken0 != 0x00)
+                else if (unknownToken0 != 0x00 && unknownToken0 != 0x01)
                 {
                     Debug.Assert(false, "unexpected footer unknownToken0 == 0x" + unknownToken0.ToString("X2"));
                 }
