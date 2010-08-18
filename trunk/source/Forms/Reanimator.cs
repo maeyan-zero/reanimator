@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -28,6 +29,36 @@ namespace Reanimator
 
             CheckEnvironment();
             InitializeComponent();
+
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
+
+
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\");
+
+        }
+
+        private static void _DoFolder(String folderDir)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
+            FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
+
+            foreach (FileInfo fileInfo in files)
+            {
+                byte[] data = File.ReadAllBytes(fileInfo.FullName);
+
+                if (fileInfo.FullName.Contains("targetingdevice.xml.cooked"))
+                {
+                    int bp = 0;
+                }
+
+                XmlCooked xmlCooked = new XmlCooked();
+                Debug.Assert(xmlCooked.ParseData(data));
+
+                xmlCooked.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+            }
         }
 
         private static void CheckEnvironment()
