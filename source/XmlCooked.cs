@@ -46,19 +46,19 @@ namespace Reanimator
              * *remaining based on token*
              * 
              * =Token=		=Followed By=
-             *  00 00		4 bytes (Int32?  Or UInt32 because 00 07 appears to have -1?)
-             *  00 01		4 bytes (Float)
-             *  00 02		1 byte  (Str Length (NOT inc \0) - if != 0, string WITH \0)
+             *  00 00       4 bytes (Int32?  Or UInt32 because 00 07 appears to have -1?)
+             *  00 01       4 bytes (Float)
+             *  00 02       1 byte  (Str Length (NOT inc \0) - if != 0, string WITH \0)
              *  00 06       4 bytes (Float)
-             *  00 07		4 bytes (Int32?  Or possibly an array with -1 = end?)
-             *  01 0B		8 bytes	(Null Int32?,  32 bit Bitmask)
-             *  02 0C		8 bytes	(Int32 index?,  Int32 value?)
-             *  03 00		2 bytes	(ShortInt?)
-             *  03 09		4 bytes	(Int32?)
+             *  00 07       4 bytes (Int32?  Or possibly an array with -1 = end?)
+             *  01 0B       8 bytes	(Null Int32?,  32 bit Bitmask)
+             *  02 0C       8 bytes	(Int32 index?,  Int32 value?)
+             *  03 00       2 bytes	(ShortInt?)
+             *  03 09       4 bytes	(Int32?)
              *  05 00       2 bytes (??)
-             *  08 03		8 bytes	(Int32??,  Int32??)
+             *  08 03       8 bytes	(Int32??,  Int32??)
              *  09 03       4 bytes (Int32)
-             *  0A 03		8 bytes	(Int32??,  Int32??)
+             *  0A 03       8 bytes	(Int32??,  Int32??)
              *  C0 00       2 bytes (??)
              *  
              *  // extras found in particle effects
@@ -187,12 +187,12 @@ namespace Reanimator
             parentElement.AppendChild(xmlElement);
 
             /* Seen as 0x05 and 0x07
-             * If 0x07, then has a float part with it (seen usually with loop-type sections), then like 0x05 as per normal.
+             * If 0x07, then has a float part with it (seen usually with loop-type sections - I'm assuming a delay time between loops), then like 0x05 as per normal.
              */
             if (branchToken == 0x07)
             {
                 float f = FileTools.ByteArrayTo<float>(data, ref offset);
-                xmlElement.SetAttribute("fTime", f.ToString("F5"));
+                xmlElement.SetAttribute("fDelay", f.ToString("F5"));
             }
 
             int elementCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
@@ -208,17 +208,28 @@ namespace Reanimator
         private enum BitField1 : uint
         {
             TypeString100 = (1 << 0),
+            // is this entire thing a bit mask???  - todo: test me
+            Bitmask101 = (1 << 1),              // found in hellgatedeath.xml.cooked (Fire Lasers to All) with Bitmask115 as well - note: so far, is *assumed* with same bitmask as rest
+            Bitmask102 = (1 << 2),              // found in orbilezapcorpse.xml.cooked (State - Remove Target and Set State: orbile_angry) - note: assumed to be with bitmask as with rest
             Bitmask103 = (1 << 3),
-            IntValue104 = (1 << 4),             // found in spectralzap.xml.cooked (Fire Laser) - is it a bitmask with 103 and 106??
+            Bitmask104 = (1 << 4),              // found in spectralzap.xml.cooked (Fire Laser) - 104,5,6 all found set in furylightningzap.xml.cooked (Fire Laser)
+            Bitmask105 = (1 << 5),
             Bitmask106 = (1 << 6),
-            IntValue107 = (1 << 7),
-            Unknown112 = (1 << 12),
-            IntValue114 = (1 << 14),            // found in explodingbarrelexplode.xml.cooked (Fire Missile Gibs)
-            IntValue116 = (1 << 16),
+            Bitmask107 = (1 << 7),
+            Bitmask109 = (1 << 9),              // found in fellhordediggerball.xml.cooked (Fire Missile: Fell Horde Digger Ball)
+            Bitmask111 = (1 << 11),             // found in minionmeleeattack2.xml.cooked (Add Attachment: weapons\HolyFire\Grenade impact.xml) - note: assumed to be with bitmask as with rest
+            Bitmask112 = (1 << 12),
+            Bitmask114 = (1 << 14),             // found in explodingbarrelexplode.xml.cooked (Fire Missile Gibs)
+            Bitmask115 = (1 << 15),
+            Bitmask116 = (1 << 16),
+            Bitmask117 = (1 << 17),             // found in nanobotsdeath.xml.cooked (State - Clear: nanobots_attack) - note: assumed to be with bitmask as with rest
+            Bitmask118 = (1 << 18),             // found in masterfiendmeleespin.xml.cooked - note: assumed to be with bitmask as with rest
             Bitmask119 = (1 << 19),             // found in blink.xml.cooked, same with cansexplode.xml.cooked            doesn't appear to do anything in file though...
             Bitmask120 = (1 << 20),
-            IntValue121 = (1 << 21),             // found in physicalmirvmissile.xml.cooked (Fire Missile Nova = 1048576 (0x100000); is it a bitmask with above??)
-            IntValue130 = (1 << 30)             // found in meteor.xml.cooked (Fire Laser)
+            IntValue121 = (1 << 21),            // found in physicalmirvmissile.xml.cooked (Fire Missile Nova = 1048576 (0x100000); is it a bitmask with above??)
+            Bitmask125 = (1 << 25),             // found in fiendpriesthellgatelaser.xml.cooked (Fire Laser: Fiend Priest Hellgate Heal) - seen with 104,106 i.e. is bitmask with rest
+            IntValue126 = (1 << 26),            // found in chocolatefogdamagefield.xml.cooked (State - Set on Targets in Range: on_chocolate_fog; is it a bitmask with above??)
+            Bitmask130 = (1 << 30)              // found in meteor.xml.cooked (Fire Laser)
         }
 
         [FlagsAttribute]
@@ -274,31 +285,53 @@ namespace Reanimator
             {
                 _DoByteString(data, ref offset, dataElement, "TypeString100");
             }
-            if (_TestField1(bitField1, BitField1.Bitmask103) || _TestField1(bitField1, BitField1.IntValue107) ||
-                _TestField1(bitField1, BitField1.Bitmask106) || _TestField1(bitField1, BitField1.IntValue114) ||
-                _TestField1(bitField1, BitField1.Bitmask120) || _TestField1(bitField1, BitField1.IntValue116) ||
-                _TestField1(bitField1, BitField1.Bitmask119))
+            // yes, this is gross, but it was the slow accumulation throughout testing
+            // todo: once testing finished it'll probably be easier to mask it out with TypeString100 and do a single compare or something
+            if (_TestField1(bitField1, BitField1.Bitmask101) ||
+                _TestField1(bitField1, BitField1.Bitmask102) ||
+                _TestField1(bitField1, BitField1.Bitmask103) ||
+                _TestField1(bitField1, BitField1.Bitmask104) ||
+                _TestField1(bitField1, BitField1.Bitmask105) ||
+                _TestField1(bitField1, BitField1.Bitmask106) ||
+                _TestField1(bitField1, BitField1.Bitmask107) ||
+                _TestField1(bitField1, BitField1.Bitmask109) ||
+                _TestField1(bitField1, BitField1.Bitmask111) ||
+                _TestField1(bitField1, BitField1.Bitmask112) ||
+                _TestField1(bitField1, BitField1.Bitmask114) ||
+                _TestField1(bitField1, BitField1.Bitmask115) ||
+                _TestField1(bitField1, BitField1.Bitmask116) ||
+                _TestField1(bitField1, BitField1.Bitmask117) ||
+                _TestField1(bitField1, BitField1.Bitmask118) ||
+                _TestField1(bitField1, BitField1.Bitmask119) ||
+                _TestField1(bitField1, BitField1.Bitmask120) ||
+                _TestField1(bitField1, BitField1.Bitmask125) ||
+                _TestField1(bitField1, BitField1.Bitmask130)
+                )
             {
                 _DoBitmask(data, ref offset, dataElement, "Bitmask1");
             }
-            if (_TestField1(bitField1, BitField1.IntValue104) || _TestField1(bitField1, BitField1.IntValue130))
-            {
-                _DoInt(data, ref offset, dataElement, "IntValue104");
-            }
-            if (_TestField1(bitField1, BitField1.IntValue107))
+            //if (_TestField1(bitField1, BitField1.IntValue104) || _TestField1(bitField1, BitField1.IntValue130))
+            //{
+                //_DoInt(data, ref offset, dataElement, "IntValue104");
+            //}
+            if (_TestField1(bitField1, BitField1.Bitmask107))
             {
                 //_DoInt(data, ref offset, dataElement, "IntValue107");
             }
-            if (_TestField1(bitField1, BitField1.Unknown112))
+            if (_TestField1(bitField1, BitField1.Bitmask109))
+            {
+                //_DoInt(data, ref offset, dataElement, "IntValue109");
+            }
+            if (_TestField1(bitField1, BitField1.Bitmask112))
             {
                 //_DoShort(data, ref offset, dataElement, "ShortValue112");
-                dataElement.SetAttribute("Unknown112", "true");
+               // dataElement.SetAttribute("Unknown112", "true");
             }
-            if (_TestField1(bitField1, BitField1.IntValue114))
+            if (_TestField1(bitField1, BitField1.Bitmask114))
             {
                 //_DoInt(data, ref offset, dataElement, "IntValue114");
             }
-            if (_TestField1(bitField1, BitField1.IntValue116))
+            if (_TestField1(bitField1, BitField1.Bitmask116))
             {
                // _DoInt(data, ref offset, dataElement, "IntValue116");
             }
@@ -306,10 +339,18 @@ namespace Reanimator
             {
                 _DoInt(data, ref offset, dataElement, "IntValue121");
             }
-            if (_TestField1(bitField1, BitField1.IntValue130))
+          //  if (_TestField1(bitField1, BitField1.IntValue125))  // is this with the bitfield above??
+          //  {
+                //_DoInt(data, ref offset, dataElement, "IntValue125");
+          //  }
+            if (_TestField1(bitField1, BitField1.IntValue126))  // is this with the bitfield above??
             {
-                //_DoInt(data, ref offset, dataElement, "IntValue130");
+                _DoInt(data, ref offset, dataElement, "IntValue126");
             }
+            //if (_TestField1(bitField1, BitField1.IntValue130))
+          // {
+                //_DoInt(data, ref offset, dataElement, "IntValue130");
+            //}
 
 
             if (_TestField2(bitField2, BitField2._Undefined200) ||
@@ -434,12 +475,14 @@ namespace Reanimator
                 _DoByteString(data, ref offset, footerElement, "Condition1");
 
                 // first seen as "sfx_electrical" in drainlife.xml.cooked
-                _DoByteString(data, ref offset, footerElement, "Condition2SFX");
+                // seen in fiendpriesthellgatelaser.xml.cooked: Condition1 = "Does Not Have State", Condition2State = "hellball_hidden"   i.e. is a state check?
+                _DoByteString(data, ref offset, footerElement, "Condition2State");
 
                 _DoByteString(data, ref offset, footerElement, "Condition3");
 
                 // first seen as "Spectral_Nova" in spectralzap.xml.cooked
-                _DoByteString(data, ref offset, footerElement, "Condition4Skill");
+                // also in fiendpriestheal.xml.cooked (w\Condition1 = "Has Skill Level", Condition2SFX = "increase_healing_source", Condition4DoSkill = "Increase_Healing")
+                _DoByteString(data, ref offset, footerElement, "Condition4DoSkill");        // I think this is the "if - *do this*" part
 
                 _DoByteString(data, ref offset, footerElement, "Condition5");
 
@@ -467,9 +510,11 @@ namespace Reanimator
                     _DoFloat(data, ref offset, footerElement, "footerToken_floatValue");
                 }
 
+                // 0x02 + 0x04 = 0x06      --->       0x01 + 0x04 = 0x5             // i.e. it's a bitfield     // todo: fix me
                 if (unknownToken0 == 0x02 ||        // if 0x02, seems to be 0x00000001
                     unknownToken0 == 0x04 ||        //    0x04, seems to be 0x00000004          // seen in turretrepair.xml.cooked (Run Script on Targets in Range w/Condition1="Is Alive"??)
                     unknownToken0 == 0x06 ||        //    0x06, seems to be 0x00000005          // seen in scatter.xml.cooked (Add Attachment: ScatterCabalist)
+                    unknownToken0 == 0x12 ||        //    0x12, seems to be 0x00000009          // seen in fiendpriestheal.xml.cooked (Fire Laser: Fiend Priest Heal)
                     unknownToken0 == 0x14 ||        //    0x14, seems to be 0x0000000C          // seen in vampirecurseheal.xml.cooked (State - Set: vampire_curse_healing w/Condition1="Is Alive" & Run Script on Self  w/Condition1="Is Alive")
                     unknownToken0 == 0x16 ||        //    0x16, seems to be 0x0000000D
                     unknownToken0 == 0x44 ||        //    0x44, seems to be 0x00000024
