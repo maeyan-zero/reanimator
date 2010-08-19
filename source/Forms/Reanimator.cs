@@ -60,10 +60,11 @@ namespace Reanimator
                     int bp = 0;
                 }
 
-                XmlCooked xmlCooked = new XmlCooked();
-                Debug.Assert(xmlCooked.ParseData(data));
+                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+                //XmlCookedBase xmlCooked = new XmlCookedBase();
+                Debug.Assert(xmlCookedFile.ParseData(data));
 
-                xmlCooked.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+                xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
             }
         }
 
