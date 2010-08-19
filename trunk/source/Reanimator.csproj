@@ -475,7 +475,10 @@
     <Compile Include="Modification.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlCooked.cs" />
+    <Compile Include="XmlCookedBase.cs" />
+    <Compile Include="XmlCookedFile.cs" />
+    <Compile Include="XmlCookedSkill.cs" />
+    <Compile Include="XmlCookedState.cs" />
     <EmbeddedResource Include="Forms\CSVSelection.resx">
       <DependentUpon>CSVSelection.cs</DependentUpon>
       <SubType>Designer</SubType>
