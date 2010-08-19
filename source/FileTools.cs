@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -79,6 +80,7 @@ namespace Reanimator
 
         public static T ByteArrayTo<T>(byte[] byteArray, ref int offset)
         {
+            Debug.Assert(offset < byteArray.Length);
             IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
             offset += Marshal.SizeOf(typeof(T));
             return (T)Marshal.PtrToStructure(bytePtr, typeof(T));
