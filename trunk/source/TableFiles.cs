@@ -207,7 +207,7 @@ namespace Reanimator
                 {"ITEM_LOOKS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (ItemLooksTCv4Row)}},
                 {"ITEM_QUALITY_TCv4", new MapItem {IsTCv4 = true, NameReplace = "ITEMQUALITY", RowType = typeof (ItemQualityTCv4Row)}},
                 {"ITEMS_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (ItemsTCv4Row)}},
-                //{"MATERIALS_COLLISION_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (MaterialsCollisionTCv4Row)}},
+                {"MATERIALS_COLLISION_TCv4", new MapItem {IsTCv4 = true, RowType = typeof (MaterialsCollisionTCv4Row)}},
                 {"LEVEL_TCv4", new MapItem {IsTCv4 = true, NameReplace = "LEVELS", RowType = typeof (LevelsTCv4Row)}},
                 {"LEVEL_SCALING_TCv4", new MapItem {IsTCv4 = true, NameReplace = "LEVELSCALING", RowType = typeof (LevelScalingTCv4Row)}},
                 {"ROOM_INDEX_TCv4", new MapItem {IsTCv4 = true, NameReplace = "LEVELS_ROOM_INDEX", RowType = typeof (LevelsRoomIndexTCv4Row)}},

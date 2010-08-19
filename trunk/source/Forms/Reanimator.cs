@@ -61,7 +61,6 @@ namespace Reanimator
                 }
 
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();
-                //XmlCookedBase xmlCooked = new XmlCookedBase();
                 Debug.Assert(xmlCookedFile.ParseData(data));
 
                 xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
