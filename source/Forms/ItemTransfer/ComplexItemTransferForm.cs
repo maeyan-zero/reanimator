@@ -10,7 +10,7 @@ namespace Reanimator.Forms.ItemTransfer
         TableFiles _tableFiles;
         UnitHelpFunctions _itemHelpFunctions;
 
-                /// <summary>
+        /// <summary>
         /// Use this constructor when starting the item transfer window from within Reanimator (additional item infos)
         /// </summary>
         /// <param name="dataSet">The dataset to use</param>
@@ -30,7 +30,6 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                CreateBackup(_characterPath1);
                 _characterUnit1 = UnitHelpFunctions.OpenCharacterFile(_tableFiles, _characterPath1);
 
                 if (_characterUnit1 != null && _characterUnit1.IsGood)
@@ -64,7 +63,6 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                CreateBackup(_characterPath2);
                 _characterUnit2 = UnitHelpFunctions.OpenCharacterFile(_tableFiles, _characterPath2);
 
                 if (_characterUnit2 != null && _characterUnit2.IsGood)
@@ -111,6 +109,9 @@ namespace Reanimator.Forms.ItemTransfer
 
         protected override void b_save_Click(object sender, EventArgs e)
         {
+            CreateBackup(_characterPath1);
+            CreateBackup(_characterPath2
+                );
             if(_characterUnit1 != null && _characterUnit2 != null)
             {
                 if (MessageBox.Show("Are you sure you want to save these changes?", "Warning!", MessageBoxButtons.YesNo) == DialogResult.Yes)
