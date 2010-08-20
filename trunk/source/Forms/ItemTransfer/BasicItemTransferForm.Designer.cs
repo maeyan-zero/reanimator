@@ -238,6 +238,7 @@
             this.cb_selectCharacter2.Name = "cb_selectCharacter2";
             this.cb_selectCharacter2.Size = new System.Drawing.Size(107, 21);
             this.cb_selectCharacter2.TabIndex = 22;
+            this.cb_selectCharacter2.SelectedIndexChanged += new System.EventHandler(this.cb_selectCharacter2_SelectedIndexChanged);
             // 
             // b_loadCharacter1
             // 
@@ -266,6 +267,7 @@
             this.cb_selectCharacter1.Name = "cb_selectCharacter1";
             this.cb_selectCharacter1.Size = new System.Drawing.Size(107, 21);
             this.cb_selectCharacter1.TabIndex = 19;
+            this.cb_selectCharacter1.SelectedIndexChanged += new System.EventHandler(this.cb_selectCharacter1_SelectedIndexChanged);
             // 
             // gb_characterName1
             // 

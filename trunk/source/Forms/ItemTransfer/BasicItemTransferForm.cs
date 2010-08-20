@@ -7,23 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Reanimator.Forms.ItemTransfer
 {
-    public enum CharacterStatus
-    {
-        NotLoaded,
-        Loaded,
-        Modified,
-        Saved,
-        Error
-    }
-
     public abstract partial class BasicItemTransferForm : Form
     {
-        protected const InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
+        bool _enableItemPreview = false;
+        bool _enablePalladiumTrading = false;
+
+        protected InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
         protected const int INVENTORYWIDTH = 6;
-        protected const int INVENTORYHEIGHT = 6;
+        protected int INVENTORYHEIGHT = 6;
         protected int ITEMUNITSIZE = 40;
 
         protected string _characterFolder;
@@ -45,6 +40,20 @@ namespace Reanimator.Forms.ItemTransfer
 
         public BasicItemTransferForm()
         {
+            if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "trading.xml")))
+            {
+                ItemTradingOptions options = XmlUtilities<ItemTradingOptions>.Deserialize("trading.xml");
+                INVENTORYTYPE = options.InventoryToUse;
+                INVENTORYHEIGHT = options.InventoryHeight;
+                _enableItemPreview = options.EnableItemPreview;
+                _enablePalladiumTrading = options.EnablePalladiumTrading;
+            }
+            //ItemTradingOptions options2 = new ItemTradingOptions();
+            //options2.EnableItemPreview = true;
+            //options2.InventoryHeight = 6;
+            //options2.InventoryToUse = InventoryTypes.Inventory;
+            //XmlUtilities<ItemTradingOptions>.Serialize(options2, "trading.xml");
+
             InitializeComponent();
 
             this.Text += " - Location: " + INVENTORYTYPE.ToString();
@@ -237,7 +246,7 @@ namespace Reanimator.Forms.ItemTransfer
             string captionText = "Warning!";
             string messageText = "Using the Item Trading function may corrupt your character savegames!" + Environment.NewLine +
                                  "Make sure to unequip all weapons and shields from the three weapon slots (F1 - F3) before continuing and create backups of all characters you're going to trade with!" + Environment.NewLine + Environment.NewLine +
-                                 "If you notice some strange behavior when starting the game with a character you traded with (e.g. weapon slots not displaying the weapons you place in them) IMMEDIATELY quite the game and DO NOT load any other characters!";
+                                 "If you notice some strange behavior when starting the game with a character you traded with (e.g. weapon slots not displaying the weapons you place in them) IMMEDIATELY quit the game and DO NOT load any other characters!";
 
             if (caption != null && caption != string.Empty)
             {
@@ -250,6 +259,67 @@ namespace Reanimator.Forms.ItemTransfer
             }
 
             MessageBox.Show(messageText, captionText, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+        }
+
+        private void cb_selectCharacter1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_enableItemPreview)
+            {
+                b_loadCharacter1_Click(sender, e);
+            }
+        }
+
+        private void cb_selectCharacter2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_enableItemPreview)
+            {
+                b_loadCharacter1_Click(sender, e);
+            }
+        }
+    }
+
+        public enum CharacterStatus
+    {
+        NotLoaded,
+        Loaded,
+        Modified,
+        Saved,
+        Error
+    }
+
+    [XmlRoot("ItemTradingOptions")]
+    public class ItemTradingOptions
+    {
+        bool _enableItemPreview;
+        bool _enablePalladiumTrading;
+        InventoryTypes _inventoryToUse;
+        int _inventoryHeight;
+
+        [XmlAttribute("ItemPreview")]
+        public bool EnableItemPreview
+        {
+            get { return _enableItemPreview; }
+            set { _enableItemPreview = value; }
+        }
+
+        public bool EnablePalladiumTrading
+        {
+            get { return _enablePalladiumTrading; }
+            set { _enablePalladiumTrading = value; }
+        }
+
+        [XmlElement("InventoryToUse")]
+        public InventoryTypes InventoryToUse
+        {
+            get { return _inventoryToUse; }
+            set { _inventoryToUse = value; }
+        }
+
+        [XmlElement("InventoryHeight")]
+        public int InventoryHeight
+        {
+            get { return _inventoryHeight; }
+            set { _inventoryHeight = value; }
         }
     }
 }
