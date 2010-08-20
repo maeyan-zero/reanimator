@@ -787,6 +787,8 @@ namespace Reanimator
             {
                 //ItemTransferForm transfer = new ItemTransferForm(_tableDataSet, _tableFiles);
                 ComplexItemTransferForm transfer = new ComplexItemTransferForm(_tableDataSet, _tableFiles);
+                //Displays a warning message before opening the item trading window.
+                transfer.DisplayWarningMessage(null, null);
                 transfer.ShowDialog(this);
             }
             catch (Exception ex)

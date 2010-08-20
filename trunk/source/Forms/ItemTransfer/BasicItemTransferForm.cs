@@ -226,5 +226,30 @@ namespace Reanimator.Forms.ItemTransfer
                 stat.AddRange(unit.statBlock.stats);
             }
         }
+
+        /// <summary>
+        /// Displays a warning message when starting up Reanimator
+        /// </summary>
+        /// <param name="caption">The caption of the warning window. If set to null or string.Empty, a default caption will be dispalyed</param>
+        /// <param name="message">The message of the warning window. If set to null or string.Empty, a default message will be dispalyed</param>
+        public void DisplayWarningMessage(string caption, string message)
+        {
+            string captionText = "Warning!";
+            string messageText = "Using the Item Trading function may corrupt your character savegames!" + Environment.NewLine +
+                                 "Make sure to unequip all weapons and shields from the three weapon slots (F1 - F3) before continuing and create backups of all characters you're going to trade with!" + Environment.NewLine + Environment.NewLine +
+                                 "If you notice some strange behavior when starting the game with a character you traded with (e.g. weapon slots not displaying the weapons you place in them) IMMEDIATELY quite the game and DO NOT load any other characters!";
+
+            if (caption != null && caption != string.Empty)
+            {
+                captionText = caption;
+            }
+
+            if (caption != null && caption != string.Empty)
+            {
+                captionText = caption;
+            }
+
+            MessageBox.Show(messageText, captionText, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+        }
     }
 }
