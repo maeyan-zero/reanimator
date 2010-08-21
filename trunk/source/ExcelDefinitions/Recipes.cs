@@ -29,59 +29,61 @@ namespace Reanimator.ExcelDefinitions
         Int32 experienceEarned;
         Int32 goldReward;
         public Int32 resultQualityModifiesIngredientQuantity;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 ingredient1ItemClass;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 ingredient1UnitType;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY", Column = "quality")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 ingredient1ItemQuality;
         public Int32 ingredient1MinQuantity;
         public Int32 ingredient1MaxQuantity;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 ingredient2ItemClass;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 ingredient2UnitType;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY", Column = "quality")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 ingredient2ItemQuality;
         public Int32 ingredient2MinQuantity;
         public Int32 ingredient2MaxQuantity;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 ingredient3ItemClass;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 ingredient3UnitType;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY", Column = "quality")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 ingredient3ItemQuality;
         public Int32 ingredient3MinQuantity;
         public Int32 ingredient3MaxQuantity;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 ingredient4ItemClass;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 ingredient4UnitType;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY", Column = "quality")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 ingredient4ItemQuality;
         public Int32 ingredient4MinQuantity;
         public Int32 ingredient4MaxQuantity;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 ingredient5ItemClass;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 ingredient5UnitType;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY", Column = "quality")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 ingredient5ItemQuality;
         public Int32 ingredient5MinQuantity;
         public Int32 ingredient5MaxQuantity;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 ingredient6ItemClass;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 ingredient6UnitType;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY", Column = "quality")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 ingredient6ItemQuality;
         public Int32 ingredient6MinQuantity;
         public Int32 ingredient6MaxQuantity;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
         Int32[] craftResult;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        Int32[] treasureResult;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
+        public Int32 treasureResult;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
+        Int32[] treasureResult_2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
         public Int32 mustPlaceInInvSlot;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Recipes.BitMask01 bitmask;

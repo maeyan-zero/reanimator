@@ -21,11 +21,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 defaultSubLevel;
         public Int32 previousLevel;
         public Int32 nextLevel;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 levelDisplayName;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 floorSuffixName;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 finalSuffixFloorName;
         [ExcelOutput(IsBool = true)]
         public Int32 town;
@@ -102,9 +102,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 partySizeRecommended;
         public Int32 questSpawnClass;
         public Int32 interactableSpawnClass;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 stringEnter;//stridx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 stringLeave;//stridx
         public float championSpawnChancePercentAtEachSpawnL;//L == Level?
         public float uniqueMonsterChancePercent;
@@ -138,7 +138,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 worldMapConnectIDs7;
         public Int32 worldMapConnectIDs8;
         public Int32 adventureChancePercent;
-        [ExcelOutput(IsIntOffset = true)]
+        //[ExcelOutput(IsIntOffset = true)]
         public Int32 numAdventures;
         [ExcelOutput(IsBool = true)]
         public Int32 enableRoomReset;
@@ -153,5 +153,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 allowOverworldTravel;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknown4;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
+        Int32[] TCv4;
     }
 }

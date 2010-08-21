@@ -146,6 +146,17 @@ namespace Reanimator
                 }
             }
 
+            if (dataFile.IsExcelFile)
+            {
+                if ((uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
+                {
+                    DataColumn indiceDataCol = mainDataTable.Columns.Add("indiceData");
+                    indiceDataCol.DataType = typeof(string);
+                    indiceDataCol.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsIndiceData, true);
+                    outputAttributes.Add(null);
+                }
+            }
+
             #endregion
 
             const int updateRate = 50;
@@ -209,6 +220,15 @@ namespace Reanimator
                     else
                     {
                         baseRow[col++] = value;
+                    }
+                }
+
+                if (dataFile.IsExcelFile)
+                {
+                    if ((uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
+                    {
+                        int i = row - 1;
+                        baseRow[col++] = Export.CSVPart<byte>(((ExcelFile)dataFile).ExtraIndexData[i]);
                     }
                 }
 
