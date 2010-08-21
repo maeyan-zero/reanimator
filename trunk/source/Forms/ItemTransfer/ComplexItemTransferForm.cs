@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing;
 
 namespace Reanimator.Forms.ItemTransfer
 {
@@ -21,7 +22,16 @@ namespace Reanimator.Forms.ItemTransfer
 
             _tableFiles = tableFiles;
 
-            EnableButtons(false);
+            //preload the tables
+            dataSet.GetExcelTableFromStringId("ITEMS");
+            dataSet.GetExcelTableFromStringId("AFFIXES");
+
+            //adding the character names triggers the cb_selectCharacter1_SelectedIndexChanged event which will load the first character
+            string[] characters = LoadCharacterNames();
+            cb_selectCharacter1.DataSource = characters;
+            cb_selectCharacter2.DataSource = characters.Clone();
+
+            EnableTradingControls(false);
         }
 
         protected override void b_loadCharacter1_Click(object sender, EventArgs e)
@@ -46,12 +56,20 @@ namespace Reanimator.Forms.ItemTransfer
                 }
                 else
                 {
-                    MessageBox.Show("Error while parsing the character file!");
+                    _characterPath1 = null;
+                    _characterUnit1 = null;
+                    _characterItemPanel1.Controls.Clear();
+                    SetCharacterStatus(_characterStatus1, CharacterStatus.Error, p_status1, l_status1);
+                    //MessageBox.Show("Error while parsing the character file!");
                 }
             }
             else
             {
-                MessageBox.Show("You cannot load the same character for trading!");
+                _characterPath1 = null;
+                _characterUnit1 = null;
+                _characterItemPanel1.Controls.Clear();
+                SetCharacterStatus(_characterStatus1, CharacterStatus.AlreadyLoaded, p_status1, l_status1);
+                SameCharacterSelected();
             }
 
             CheckAndSetButtonStatus();
@@ -79,39 +97,58 @@ namespace Reanimator.Forms.ItemTransfer
                 }
                 else
                 {
-                    MessageBox.Show("Error while parsing the character file!");
+                    _characterPath2 = null;
+                    _characterUnit2 = null;
+                    _characterItemPanel2.Controls.Clear();
+                    SetCharacterStatus(_characterStatus2, CharacterStatus.Error, p_status2, l_status2);
+                    //MessageBox.Show("Error while parsing the character file!");
                 }
             }
             else
             {
-                MessageBox.Show("You cannot load the same character for trading!");
+                _characterPath2 = null;
+                _characterUnit2 = null;
+                _characterItemPanel2.Controls.Clear();
+                SetCharacterStatus(_characterStatus2, CharacterStatus.AlreadyLoaded, p_status2, l_status2);
+                SameCharacterSelected();
             }
 
             CheckAndSetButtonStatus();
         }
 
+        private void SameCharacterSelected()
+        {
+            if (!_enableItemPreview)
+            {
+                MessageBox.Show("You cannot load the same character for trading!");
+            }
+            else
+            {
+                EnableTradingControls(false);
+            }
+        }
+
         private void CreateBackup(string characterPath)
         {
-            File.Copy(characterPath, characterPath + ".ItemTradingBackup");
+            File.Copy(characterPath, characterPath + ".ItemTradingBackup", true);
         }
 
         private void CheckAndSetButtonStatus()
         {
-            if (_characterUnit1 != null && _characterUnit2 != null)
+            if (_characterUnit1 != null && _characterUnit2 != null && _characterUnit1 != _characterUnit2)
             {
-                EnableButtons(true);
+                EnableTradingControls(true);
             }
             else
             {
-                EnableButtons(false);
+                EnableTradingControls(false);
             }
         }
 
         protected override void b_save_Click(object sender, EventArgs e)
         {
             CreateBackup(_characterPath1);
-            CreateBackup(_characterPath2
-                );
+            CreateBackup(_characterPath2);
             if(_characterUnit1 != null && _characterUnit2 != null)
             {
                 if (MessageBox.Show("Are you sure you want to save these changes?", "Warning!", MessageBoxButtons.YesNo) == DialogResult.Yes)
