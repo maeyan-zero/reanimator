@@ -463,7 +463,7 @@ namespace Reanimator
                         Debug.WriteLine(msg);
 
                         // doesn't matter if they don't load
-//MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         if (!mapItem.IsTCv4)
                         {
                             // for release, uncomment me, and remove above - for testing, we want to know if the TC files aren't loading/found
