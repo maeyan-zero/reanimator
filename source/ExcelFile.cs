@@ -836,26 +836,6 @@ namespace Reanimator
                             }
                         }
                     }
-                    else if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsIndiceData))
-                    {
-                        String s = dr[dc] as String;
-
-                        if (s != "0" && s.Length != 0)
-                        {
-                            string[] explode = s.Split(',');
-
-                            int i = 0;
-                            byte[] array = new byte[explode.Length];
-
-                            foreach (string part in explode)
-                            {
-                                byte b = byte.Parse(part, System.Globalization.NumberStyles.HexNumber);
-                                array[i] = b;
-                                i++;
-                            }
-                            ExtraIndexData[row] = array;
-                        }
-                    }
                     else
                     {
                         if (row < Rows.Count)
@@ -902,6 +882,33 @@ namespace Reanimator
                         }
                     }
                     col++;
+                }
+
+                // this is for the extra indice data that is stored in the items, missiles, monsters, objects, players tables.
+
+                if (IsExcelFile)
+                {
+                    if ((uint)(FileExcelHeader.StructureId) == 0x887988C4) // items, missiles, monsters, objects, players
+                    {
+                        int lastCol = dataTable.Columns.Count - 1;
+                        String s = dr[lastCol] as String;
+
+                        if (s != "0" && s.Length != 0)
+                        {
+                            string[] explode = s.Split(',');
+
+                            int i = 0;
+                            byte[] array = new byte[explode.Length];
+
+                            foreach (string part in explode)
+                            {
+                                byte b = byte.Parse(part, System.Globalization.NumberStyles.HexNumber);
+                                array[i] = b;
+                                i++;
+                            }
+                            ExtraIndexData[row] = array;
+                        }
+                    }
                 }
 
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, table);
