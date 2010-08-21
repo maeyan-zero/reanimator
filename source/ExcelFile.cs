@@ -16,14 +16,13 @@ namespace Reanimator
         private readonly bool _excelDebugAll;
 
         // file vars - order is approx order found in file
-        private ExcelHeader _excelHeader;
+        public ExcelHeader FileExcelHeader { get; private set; }
 
         private byte[] _stringsBytes;
+
         public Hashtable Strings { get; private set; }
-
         public int[] TableIndicies { get; private set; }
-        private List<byte[]> _extraIndexData;
-
+        public List<byte[]> ExtraIndexData { get; private set; }
         public List<String> SecondaryStrings { get; private set; }
 
         private Int32 _rcshValue;
@@ -41,15 +40,6 @@ namespace Reanimator
         public Hashtable DataBlock { get; private set; }
         public bool HasDataBlock { get { return _dataBlock != null ? true : false; } }
         public byte[] FinalBytes { get; set; }
-
-        byte[] _extra = new byte[] {
-                        10, 0, 2, 6,
-                        0, 100, 218, 0,
-                        17, 9, 0, 0,
-                        0, 25, 55, 64,
-                        4, 1, 0, 0,
-                        64, 230, 13, 16,
-                        81, 0, 0, 0, 0 };
 
         // func defs etc
         public ExcelFile(String stringId, Type type)
@@ -220,9 +210,9 @@ namespace Reanimator
             int token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
             CheckExcelFlag(token);
 
-            _excelHeader = (ExcelHeader)FileTools.ByteArrayToStructure(_data, typeof(ExcelHeader), offset);
+            FileExcelHeader = (ExcelHeader)FileTools.ByteArrayToStructure(_data, typeof(ExcelHeader), offset);
             offset += Marshal.SizeOf(typeof(ExcelHeader));
-            if (_excelDebugAll) Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", _excelHeader.Unknown161, _excelHeader.Unknown162, _excelHeader.Unknown163, _excelHeader.Unknown164, _excelHeader.Unknown165, _excelHeader.Unknown166, _excelHeader.Unknown321, _excelHeader.Unknown322));
+            if (_excelDebugAll) Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", FileExcelHeader.Unknown161, FileExcelHeader.Unknown162, FileExcelHeader.Unknown163, FileExcelHeader.Unknown164, FileExcelHeader.Unknown165, FileExcelHeader.Unknown166, FileExcelHeader.Unknown321, FileExcelHeader.Unknown322));
 
 
             // strings block
@@ -267,10 +257,10 @@ namespace Reanimator
             token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
             CheckExcelFlag(token);
 
-            if ((uint)_excelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
+            if ((uint)FileExcelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
             {
                 TableIndicies = new int[Count];
-                _extraIndexData = new List<byte[]>();
+                ExtraIndexData = new List<byte[]>();
 
                 for (int i = 0; i < Count; i++)
                 {
@@ -279,7 +269,7 @@ namespace Reanimator
                     byte[] extra = new byte[size];
                     Buffer.BlockCopy(_data, offset, extra, 0, size);
                     offset += size;
-                    _extraIndexData.Add(extra);
+                    ExtraIndexData.Add(extra);
                 }
             }
             else
@@ -388,7 +378,7 @@ namespace Reanimator
                 int byteCount = FileTools.ByteArrayTo<Int32>(_data, ref offset);
                 if (byteCount != 0)
                 {
-                    if (_excelHeader.StructureId == 0x1F9DDC98)                                 // Only seen in unittypes.txt.cooked so far.
+                    if (FileExcelHeader.StructureId == 0x1F9DDC98)                                 // Only seen in unittypes.txt.cooked so far.
                     {                                                                           // This block reading method is the same as first seen below in the states.txt.cooked,
                         int blockCount = FileTools.ByteArrayTo<Int32>(_data, ref offset);   // but there is no data in the previous block for unittypes.txt.cooked.
                         byteCount = (byteCount << 2) * blockCount;
@@ -439,94 +429,7 @@ namespace Reanimator
         {
             if (!CheckFlag(flag, 0x68657863))
             {
-                throw new Exception("Unexpected header flag!\nStructure ID: " + _excelHeader.StructureId);
-            }
-        }
-
-        public void ParseDataBlock(DataTable dt)
-        {
-            int[] columns;
-            List<int> length = new List<int>();
-            int last = 1;
-
-            // Retrieve the ordinals of IntOffset columns.
-            int count = 0;
-
-            foreach (DataColumn dc in dt.Columns)
-            {
-                if (dc.ExtendedProperties.Contains(ExcelFile.ColumnTypeKeys.IsIntOffset) && dc.ExtendedProperties.Contains(ExcelFile.ColumnTypeKeys.IntOffsetOrder))
-                {
-                    int i = (int)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IntOffsetOrder];
-                    if (i == 0) continue;
-                    count++;
-                }
-            }
-
-            // Retrieve the ordinals of IntOffset columns.
-            columns = new int[count];
-
-            foreach (DataColumn dc in dt.Columns)
-            {
-                if (dc.ExtendedProperties.Contains(ExcelFile.ColumnTypeKeys.IsIntOffset) && dc.ExtendedProperties.Contains(ExcelFile.ColumnTypeKeys.IntOffsetOrder))
-                {
-                    int i = (int)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IntOffsetOrder];
-                    if (i == 0) continue;
-                    columns[i - 1] = dc.Ordinal;
-                }
-            }
-
-            // Calculate the length of each cell.
-            foreach (DataRow dr in dt.Rows)
-            {
-                foreach (int c in columns)
-                {
-                    int val = int.Parse((string)dr[c]);
-                    if (val == 0) continue; // Skip if there is no data.
-                    if (val == 1) continue; // Skip first cell, only passes once.
-                    int i = val - last;
-                    length.Add(i);
-                    last = val;
-                }
-            }
-            // Get length of last cell.. required.
-            int lc = _dataBlock.Length - last;
-            length.Add(lc);
-
-            // Populates the grid resolving the IntPtrs
-            int cur = 0;
-
-            DataBlock = new Hashtable();
-
-            for (int r = 0; r < dt.Rows.Count; r++)
-            {
-                // Add the rest of the columns.
-                for (int c = 0; c < columns.Length; c++)
-                {
-                    int val = int.Parse(((string)dt.Rows[r][columns[c]]));
-                    if (val == 0) continue; // Skip if there is no data.
-
-                    if (length[cur] < 0) // There are about 5 cases where the length is a negative integer.
-                    {                    // Need this while we work out whats going on.
-                        cur++;
-                        //grid[r + 1, c + 1] = "ERROR";
-                        continue;
-                    }
-
-                    byte[] buffer = new byte[length[cur]];
-                    Array.Copy(_dataBlock, val, buffer, 0, buffer.Length);
-
-                    int[] ibuffer = FileTools.ByteArrayToInt32Array(buffer, 0, buffer.Length / sizeof(int));
-                    string csv = "";
-                    for (int i = 0; i < ibuffer.Length; i++)
-                    {
-                        csv += ibuffer[i].ToString();
-                        if (i < ibuffer.Length - 1)
-                            csv += ",";
-                    }
-
-                    DataBlock.Add(val, csv);
-                    cur++;
-                }
+                throw new Exception("Unexpected header flag!\nStructure ID: " + FileExcelHeader.StructureId);
             }
         }
 
@@ -782,7 +685,7 @@ namespace Reanimator
 
             // File Header
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, _excelHeader);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileExcelHeader);
 
             // Strings Block
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
@@ -933,6 +836,26 @@ namespace Reanimator
                             }
                         }
                     }
+                    else if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsIndiceData))
+                    {
+                        String s = dr[dc] as String;
+
+                        if (s != "0" && s.Length != 0)
+                        {
+                            string[] explode = s.Split(',');
+
+                            int i = 0;
+                            byte[] array = new byte[explode.Length];
+
+                            foreach (string part in explode)
+                            {
+                                byte b = byte.Parse(part, System.Globalization.NumberStyles.HexNumber);
+                                array[i] = b;
+                                i++;
+                            }
+                            ExtraIndexData[row] = array;
+                        }
+                    }
                     else
                     {
                         if (row < Rows.Count)
@@ -1001,10 +924,10 @@ namespace Reanimator
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
 
-                if ((uint)_excelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
+                if ((uint)FileExcelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
                 {
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _extraIndexData[i].Length);
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, _extraIndexData[i]);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, ExtraIndexData[i].Length);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, ExtraIndexData[i]);
                 }
             }
 
@@ -1099,6 +1022,20 @@ namespace Reanimator
             Buffer.BlockCopy(buffer, 0, returnBuffer, 0, byteOffset);
 
             return returnBuffer;
+        }
+
+        public void DumpExtraIndiceData()
+        {
+            using (TextWriter stream = new StreamWriter(@"extradump.txt"))
+            {
+                int i = 0;
+                foreach (byte[] array in ExtraIndexData)
+                {
+                    int[] intArray = FileTools.ByteArrayToInt32Array(array, 0, array.Length);
+                    stream.WriteLine(Export.CSVPart(intArray));
+                    i++;
+                }
+            }
         }
 
         public static ExcelOutputAttribute GetExcelOutputAttribute(FieldInfo fieldInfo)

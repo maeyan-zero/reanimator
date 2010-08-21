@@ -447,6 +447,11 @@ namespace Reanimator.Forms
                 Clipboard.SetText(sw.ToString());
             }
         }
+
+        private void toolStripButton3_Click(object sender, EventArgs e)
+        {
+            _excelFile.DumpExtraIndiceData();
+        }
     }
 
     public static class ExtensionMethods

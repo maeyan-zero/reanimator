@@ -87,7 +87,7 @@ namespace Reanimator
             return csv.ToString();
         }
 
-        static public string CSVPart(int[] data)
+        static public string CSVPart<T>(T[] data)
         {
             using (StringWriter sw = new StringWriter())
             {
@@ -95,11 +95,18 @@ namespace Reanimator
 
                 for (int i = 0; i < data.Length; i++)
                 {
-                    sw.Write(data[i]);
+                    if (typeof(T) == typeof(byte))
+                    {
+                        object obj = data[i];
+                        byte b = (byte)obj;
+                        sw.Write(b.ToString("X2"));
+                    }
+                    else
+                    {
+                        sw.Write((T)data[i]);
+                    }
                     if (i != data.Length - 1)
                         sw.Write(delimiter);
-                    else
-                        sw.WriteLine();
                 }
 
                 return sw.ToString();

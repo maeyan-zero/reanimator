@@ -11,7 +11,7 @@ namespace Reanimator
         public const String FileExtention = "txt.cooked";
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private struct ExcelHeader
+        public struct ExcelHeader
         {
             public Int32 StructureId;   // This is the id used to determine what structure to use to read the table block.
             public Int32 Unknown321;    // This is how the game reads this in...
@@ -187,6 +187,7 @@ namespace Reanimator
 
         public abstract class ColumnTypeKeys
         {
+            public const String IsIndiceData = "IsIndiceData";
             public const String IsStringOffset = "IsStringOffset";
             public const String IsStringIndex = "IsStringIndex";
             public const String IsStringId = "IsStringId";

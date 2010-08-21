@@ -133,10 +133,13 @@
     <Compile Include="ExcelDefinitionsTCv4\Inventory.cs" />
     <Compile Include="ExcelDefinitionsTCv4\ItemLooks.cs" />
     <Compile Include="ExcelDefinitionsTCv4\ItemQuality.cs" />
-    <Compile Include="ExcelDefinitionsTCv4\Items.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\Items.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ExcelDefinitionsTCv4\Levels.cs" />
     <Compile Include="ExcelDefinitionsTCv4\LevelScaling.cs" />
     <Compile Include="ExcelDefinitionsTCv4\LevelsRoomIndex.cs" />
+    <Compile Include="ExcelDefinitionsTCv4\MaterialsCollision.cs" />
     <Compile Include="ExcelDefinitionsTCv4\PlayerLevels.cs" />
     <Compile Include="ExcelDefinitionsTCv4\Recipes.cs" />
     <Compile Include="ExcelDefinitionsTCv4\SkillEventTypes.cs" />
