@@ -13,8 +13,9 @@ namespace Reanimator.Forms.ItemTransfer
 {
     public abstract partial class BasicItemTransferForm : Form
     {
-        bool _enableItemPreview = false;
-        bool _enablePalladiumTrading = false;
+        protected bool _enableItemPreview = false;
+        protected bool _enablePalladiumTrading = false;
+        protected bool _backupCharacters = false;
 
         protected InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
         protected const int INVENTORYWIDTH = 6;
@@ -47,23 +48,21 @@ namespace Reanimator.Forms.ItemTransfer
                 INVENTORYHEIGHT = options.InventoryHeight;
                 _enableItemPreview = options.EnableItemPreview;
                 _enablePalladiumTrading = options.EnablePalladiumTrading;
+                _backupCharacters = options.BackupCharacters;
             }
             //ItemTradingOptions options2 = new ItemTradingOptions();
             //options2.EnableItemPreview = true;
+            //options2.EnablePalladiumTrading = true;
+            //options2.BackupCharacters = true;
             //options2.InventoryHeight = 6;
             //options2.InventoryToUse = InventoryTypes.Inventory;
-            //XmlUtilities<ItemTradingOptions>.Serialize(options2, "trading.xml");
+            //XmlUtilities<ItemTradingOptions>.Serialize(options2, "trading2.xml");
 
             InitializeComponent();
 
             this.Text += " - Location: " + INVENTORYTYPE.ToString();
 
-            _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
-
-            string[] characters = LoadCharacterNames();
-
-            cb_selectCharacter1.DataSource = characters;
-            cb_selectCharacter2.DataSource = characters.Clone();
+            _characterFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games\\Hellgate\\Save\\Singleplayer");
 
             _characterItemPanel1 = new ItemPanel();
             _characterItemPanel2 = new ItemPanel();
@@ -89,6 +88,11 @@ namespace Reanimator.Forms.ItemTransfer
             p_inventory1.Controls.Add(_characterItemPanel1);
             p_inventory2.Controls.Add(_characterItemPanel2);
 
+            //moved to complex form
+            //string[] characters = LoadCharacterNames();
+            //cb_selectCharacter1.DataSource = characters;
+            //cb_selectCharacter2.DataSource = characters.Clone();
+
             EnableComboBoxes(true, true);
         }
 
@@ -113,7 +117,7 @@ namespace Reanimator.Forms.ItemTransfer
             if (newCharacterStatus == CharacterStatus.Error)
             {
                 panel.BackColor = Color.Red;
-                label.Text = "An error occured";
+                label.Text = "Error loading the character";
             }
             else if (newCharacterStatus == CharacterStatus.Loaded)
             {
@@ -134,6 +138,11 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 panel.BackColor = Color.Lime;
                 label.Text = "Character saved";
+            }
+            else if (newCharacterStatus == CharacterStatus.AlreadyLoaded)
+            {
+                panel.BackColor = Color.Red;
+                label.Text = "Character already loaded";
             }
         }
 
@@ -213,13 +222,25 @@ namespace Reanimator.Forms.ItemTransfer
             b_loadCharacter2.Enabled = enable;
         }
 
-        protected void EnableButtons(bool enable)
+        protected void EnableTradingControls(bool enable)
         {
             b_transfer.Enabled = enable;
             b_transferAll.Enabled = enable;
             b_delete.Enabled = enable;
             b_save.Enabled = enable;
             b_undoTransfer.Enabled = enable;
+
+            if (_enablePalladiumTrading)
+            {
+                EnablePalladiumControls(enable);
+            }
+        }
+
+        protected void EnablePalladiumControls(bool enable)
+        {
+            nud_palladium.Enabled = enable;
+            b_tradeFrom1To2.Enabled = enable;
+            b_tradeFrom2To1.Enabled = enable;
         }
 
         private void b_tradeFrom2To1_Click(object sender, EventArgs e)
@@ -273,7 +294,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if (_enableItemPreview)
             {
-                b_loadCharacter1_Click(sender, e);
+                b_loadCharacter2_Click(sender, e);
             }
         }
     }
@@ -284,7 +305,8 @@ namespace Reanimator.Forms.ItemTransfer
         Loaded,
         Modified,
         Saved,
-        Error
+        Error,
+        AlreadyLoaded
     }
 
     [XmlRoot("ItemTradingOptions")]
@@ -294,14 +316,16 @@ namespace Reanimator.Forms.ItemTransfer
         bool _enablePalladiumTrading;
         InventoryTypes _inventoryToUse;
         int _inventoryHeight;
+        bool _backupCharacters;
 
-        [XmlAttribute("ItemPreview")]
+        [XmlElement("EnableItemPreview")]
         public bool EnableItemPreview
         {
             get { return _enableItemPreview; }
             set { _enableItemPreview = value; }
         }
 
+        [XmlElement("EnablePalladiumTrading")]
         public bool EnablePalladiumTrading
         {
             get { return _enablePalladiumTrading; }
@@ -320,6 +344,13 @@ namespace Reanimator.Forms.ItemTransfer
         {
             get { return _inventoryHeight; }
             set { _inventoryHeight = value; }
+        }
+
+        [XmlElement("BackupCharacters")]
+        public bool BackupCharacters
+        {
+          get { return _backupCharacters; }
+          set { _backupCharacters = value; }
         }
     }
 }

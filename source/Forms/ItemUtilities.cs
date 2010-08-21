@@ -160,11 +160,11 @@ namespace Reanimator.Forms
         private void PopulateItems(Unit unit)
         {
             bool canGetItemNames = true;
-            DataTable itemsTable = _dataSet.GetExcelTableFromCode(27953);
-            DataTable affixTable = _dataSet.GetExcelTableFromCode(30512);
+            DataTable itemsTable = _dataSet.GetExcelTableFromStringId("ITEMS");
+            DataTable affixTable = _dataSet.GetExcelTableFromStringId("AFFIXES");
             if (itemsTable != null && affixTable != null)
             {
-                if (!itemsTable.Columns.Contains("code1") || !itemsTable.Columns.Contains("String_string"))
+                if (!itemsTable.Columns.Contains("code") || !itemsTable.Columns.Contains("String_string"))
                     canGetItemNames = false;
                 if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") ||
                     !affixTable.Columns.Contains("magicNameString_string"))
@@ -196,7 +196,7 @@ namespace Reanimator.Forms
 
 
                 // get item name
-                DataRow[] itemsRows = itemsTable.Select(String.Format("code1 = '{0}'", item.unitCode));
+                DataRow[] itemsRows = itemsTable.Select(String.Format("code = '{0}'", item.unitCode));
                 if (itemsRows.Length == 0)
                 {
                     continue;
@@ -209,7 +209,7 @@ namespace Reanimator.Forms
                 for (int s = 0; s < item.Stats.Length; s++)
                 {
                     // "applied_affix"
-                    if (item.Stats[s].Id == 0x7438)
+                    if (item.Stats[s].Id == (int)ItemValueNames.applied_affix)
                     {
                         int affixCode = item.Stats[s].values[0].Stat;
                         DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
@@ -230,11 +230,11 @@ namespace Reanimator.Forms
                     }
 
                     // "item_quality"
-                    if (item.Stats[s].Id == 0x7832)
+                    if (item.Stats[s].Id == (int)ItemValueNames.item_quality)
                     {
                         // is unique || is mutant then no affix
                         int itemQualityCode = item.Stats[s].values[0].Stat;
-                        if (itemQualityCode == 13616 || itemQualityCode == 13360)
+                        if (itemQualityCode == (int)ItemQuality.Unique || itemQualityCode == (int)ItemQuality.Mutant)
                         {
                             affixString = String.Empty;
                             break;
