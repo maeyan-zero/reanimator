@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace Reanimator.Forms.ItemTransfer
 {
@@ -9,6 +12,8 @@ namespace Reanimator.Forms.ItemTransfer
         public delegate void NewItemSelected(ItemPanel sender, InventoryItem item);
         public event NewItemSelected NewItemSelected_Event;
 
+        PreviewManager _manager;
+        bool _displayItemIcons;
         int _itemUnitSize = 40;
 
         public int ItemUnitSize
@@ -19,11 +24,13 @@ namespace Reanimator.Forms.ItemTransfer
 
         public InventoryItem _previewItem;
 
-        public ItemPanel()
+        public ItemPanel(bool displayItemIcons)
         {
             InitializeComponent();
             _previewItem = null;
+            _displayItemIcons = displayItemIcons;
             this.Controls.Add(_previewItem);
+            _manager = new PreviewManager();
         }
 
         private void RegisterItemEvents(InventoryItem item)
@@ -54,6 +61,16 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 RegisterItemEvents(item);
                 item.ButtonUnitSize = _itemUnitSize;
+
+                if (_displayItemIcons && _manager.ImagesAvailable)
+                {
+                    Image img = _manager.GetImage(item.Item.Name);
+                    if (img != null)
+                    {
+                        item.BackgroundImage = img;
+                    }
+                }
+
                 this.Controls.Add(item);
 
                 return true;
@@ -170,6 +187,11 @@ namespace Reanimator.Forms.ItemTransfer
             //}
         }
 
+        //public void Dispose()
+        //{
+        //    _manager.Dispose();
+        //}
+
         //void item_DoubleClick(object sender, EventArgs e)
         //{
         //    InventoryItem item = (InventoryItem)sender;
@@ -224,7 +246,8 @@ namespace Reanimator.Forms.ItemTransfer
         Unit _item;
         int _quantity;
         bool _displayNamesAndQuantity;
-        bool _displayImages;
+        bool _displayItemIcons;
+        string _baseItem;
 
         public int Quantity
         {
@@ -282,16 +305,10 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        public bool DisplayNamesAndQuantity
+        public string BaseItem
         {
-            get { return _displayNamesAndQuantity; }
-            set { _displayNamesAndQuantity = value; }
-        }
-
-        public bool DisplayImages
-        {
-            get { return _displayImages; }
-            set { _displayImages = value; }
+            get { return _baseItem; }
+            set { _baseItem = value; }
         }
 
         public InventoryItem()
@@ -299,30 +316,28 @@ namespace Reanimator.Forms.ItemTransfer
         {
         }
 
-        public InventoryItem(Unit item)
+        public InventoryItem(Unit item, bool displayNamesAndQuantity)//, string baseItem)
             : base()
         {
             _item = item;
-            _displayNamesAndQuantity = true;
+            _displayNamesAndQuantity = displayNamesAndQuantity;
+
+        //_baseItem = baseItem;
+            //_displayNamesAndQuantity = true;
+            //_displayImages = true;
 
             InitButton(item);
 
+            //List<NameToImage> l = new List<NameToImage>();
+            //NameToImage im = new NameToImage();
+            //im.ImagePath = @"F:\test.png";
+            //im.ItemName = "ABC";
+            //l.Add(im);
+            //XmlUtilities<List<NameToImage>>.Serialize(l, "imageMapping.xml");
+
+            this.BackgroundImageLayout = ImageLayout.Stretch;
             Position = new Point(_item.inventoryPositionX, _item.inventoryPositionY);
-
-            //if (_displayImages)
-            //{
-            //    LoadImage(_item.Name);
-            //}
         }
-
-        //private void LoadImage(string itemName)
-        //{
-        //    if (itemName == "Personal Relocation Device")
-        //    {
-        //        this.BackgroundImageLayout = ImageLayout.Stretch;
-        //        this.BackgroundImage = Bitmap.FromFile(@"F:\townportal.png");
-        //    }
-        //}
 
         public void InitButton(Unit item)
         {
@@ -336,7 +351,6 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_displayNamesAndQuantity)
             {
-
                 if (_quantity > 0)
                 {
                     this.Text += _quantity.ToString() + "x ";
@@ -399,5 +413,90 @@ namespace Reanimator.Forms.ItemTransfer
 
             this.FlatAppearance.BorderColor = color;
         }
+
+        //protected override void Dispose(bool disposing)
+        //{
+        //    _item = null;
+
+        //    base.Dispose(disposing);
+        //}
+    }
+
+    public class PreviewManager
+    {
+        List<NameToImage> _images;
+        const string _configPath = "imageMapping.xml";
+
+        public PreviewManager()
+        {
+            _images = XmlUtilities<List<NameToImage>>.Deserialize(_configPath);
+        }
+
+        public Image GetImage(string itemName)
+        {
+            NameToImage name = _images.Find(tmp => tmp.ItemName.Contains(itemName));
+
+            if (name != null)
+            {
+                return name.GetImage();
+            }
+
+            return null;
+        }
+
+        public bool ImagesAvailable
+        {
+            get
+            {
+                return _images != null;
+            }
+        }
+
+        //public void Dispose()
+        //{
+        //    if (_images != null)
+        //    {
+        //        foreach (NameToImage image in _images)
+        //        {
+        //            image.Dispose();
+        //        }
+        //    }
+        //}
+    }
+
+    public class NameToImage
+    {
+        string _itemName;
+        string _imagePath;
+        Image _image;
+
+        [XmlElement("ItemName")]
+        public string ItemName
+        {
+            get { return _itemName; }
+            set { _itemName = value; }
+        }
+
+        [XmlElement("ImagePath")]
+        public string ImagePath
+        {
+            get { return _imagePath; }
+            set { _imagePath = value; }
+        }
+
+        public Image GetImage()
+        {
+            if (_image == null)
+            {
+                _image = Bitmap.FromFile(_imagePath);
+            }
+
+            return _image;
+        }
+
+        //public void Dispose()
+        //{
+        //    _image.Dispose();
+        //}
     }
 }

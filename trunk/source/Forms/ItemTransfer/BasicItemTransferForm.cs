@@ -17,6 +17,7 @@ namespace Reanimator.Forms.ItemTransfer
         protected bool _enablePalladiumTrading = false;
         protected bool _backupCharacters = false;
         protected bool _displayItemIcons = false;
+        protected bool _displayNamesAndQuantity = false;
 
         protected InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
         protected const int INVENTORYWIDTH = 6;
@@ -51,6 +52,7 @@ namespace Reanimator.Forms.ItemTransfer
                 _enablePalladiumTrading = options.EnablePalladiumTrading;
                 _backupCharacters = options.BackupCharacters;
                 _displayItemIcons = options.DisplayItemIcons;
+                _displayNamesAndQuantity = options.DisplayNamesAndQuantity;
             }
             //ItemTradingOptions options2 = new ItemTradingOptions();
             //options2.EnableItemPreview = true;
@@ -66,8 +68,8 @@ namespace Reanimator.Forms.ItemTransfer
 
             _characterFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games\\Hellgate\\Save\\Singleplayer");
 
-            _characterItemPanel1 = new ItemPanel();
-            _characterItemPanel2 = new ItemPanel();
+            _characterItemPanel1 = new ItemPanel(_displayItemIcons);
+            _characterItemPanel2 = new ItemPanel(_displayItemIcons);
 
             _characterItemPanel1.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
             //_characterItemPanel1.ItemDoubleClicked_Event += new ItemPanel.ItemDoubleClicked(_characterItemPanel_ItemDoubleClicked_Event);
@@ -187,7 +189,7 @@ namespace Reanimator.Forms.ItemTransfer
                 {
                     if (item.inventoryType == (int)INVENTORYTYPE)
                     {
-                        InventoryItem iItem = new InventoryItem(item);
+                        InventoryItem iItem = new InventoryItem(item, _displayNamesAndQuantity);
                         itemPanel.AddItem(iItem, true);
                     }
                 }
@@ -320,6 +322,7 @@ namespace Reanimator.Forms.ItemTransfer
         int _inventoryHeight;
         bool _backupCharacters;
         bool _displayItemIcons;
+        bool _displayNamesAndQuantity;
 
         [XmlElement("EnableItemPreview")]
         public bool EnableItemPreview
@@ -361,6 +364,13 @@ namespace Reanimator.Forms.ItemTransfer
         {
             get { return _displayItemIcons; }
             set { _displayItemIcons = value; }
+        }
+
+        [XmlElement("DisplayNamesAndQuantity")]
+        public bool DisplayNamesAndQuantity
+        {
+            get { return _displayNamesAndQuantity; }
+            set { _displayNamesAndQuantity = value; }
         }
     }
 }
