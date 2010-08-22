@@ -117,7 +117,7 @@ namespace Reanimator
             catch (Exception ex)
             {
                 Config.DatLastUnpacked = "Never";
-                ExceptionLogger.LogException(ex, "CheckEnvironment");
+                ExceptionLogger.LogException(ex, "CheckEnvironment", false);
                 MessageBox.Show("An error occured during the installation.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -162,7 +162,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "OpenFile");
+                ExceptionLogger.LogException(ex, "OpenFile", false);
             }
         }
 
@@ -183,7 +183,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "OpenIndexFile");
+                ExceptionLogger.LogException(ex, "OpenIndexFile", false);
             }
         }
 
@@ -204,7 +204,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "OpenCharacterFile");
+                ExceptionLogger.LogException(ex, "OpenCharacterFile", false);
             }
         }
 
@@ -225,7 +225,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "OpenCookedFile");
+                ExceptionLogger.LogException(ex, "OpenCookedFile", false);
             }
         }
 
@@ -246,7 +246,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "StringsFileToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "StringsFileToolStripMenuItem_Click", false);
             }
         }
 
@@ -282,7 +282,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "OpenFileMod");
+                ExceptionLogger.LogException(ex, "OpenFileMod", false);
                 MessageBox.Show(ex.Message);
                 return;
             }
@@ -299,7 +299,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "OpenFileIdx");
+                ExceptionLogger.LogException(ex, "OpenFileIdx", false);
                 MessageBox.Show("Failed to open file: " + fileName + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -331,7 +331,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "OpenFileHg1");
+                ExceptionLogger.LogException(ex, "OpenFileHg1", false);
             }
         }
 
@@ -361,7 +361,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "OpenFileCooked");
+                ExceptionLogger.LogException(ex, "OpenFileCooked", false);
             }
         }
 
@@ -394,7 +394,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "OpenFileCooked");
+                ExceptionLogger.LogException(ex, "OpenFileCooked", false);
             }
         }
 
@@ -540,7 +540,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "Reanimator_Load");
+                ExceptionLogger.LogException(ex, "Reanimator_Load", false);
                 MessageBox.Show(ex.Message, "Reanimator_Load");
             }
         }
@@ -564,8 +564,8 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "LoadAndDisplayCurrentlyLoadedExcelTables");
-                MessageBox.Show(ex.Message, "LoadAndDisplayCurrentlyLoadedExcelTables");
+                ExceptionLogger.LogException(ex, "LoadAndDisplayCurrentlyLoadedExcelTables", false);
+                //MessageBox.Show(ex.Message, "LoadAndDisplayCurrentlyLoadedExcelTables");
             }
         }
 
@@ -594,7 +594,7 @@ namespace Reanimator
                 }
                 catch (Exception ex)
                 {
-                    ExceptionLogger.LogException(ex, "LoadTables - read t.c file");
+                    ExceptionLogger.LogException(ex, "LoadTables - read t.c file", false);
                     MessageBox.Show(
                         "Failed to read exceltables.txt.cooked!\nPlease ensure your directories are set correctly.\nTools > Options\n\nFile: \n" +
                         excelFilePath + "\n\n" + ex, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -622,8 +622,8 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "LoadTables");
-                MessageBox.Show(ex.Message, "LoadTables");
+                ExceptionLogger.LogException(ex, "LoadTables", false);
+                //MessageBox.Show(ex.Message, "LoadTables");
             }
         }
 
@@ -664,7 +664,7 @@ namespace Reanimator
             catch (Exception ex)
             {
                 MessageBox.Show("Export of this form not supported at this time or unknown error!\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                ExceptionLogger.LogException(ex, "CSVToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "CSVToolStripMenuItem_Click", false);
             }
         }
 
@@ -688,7 +688,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "BypassSecurityx64ToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "BypassSecurityx64ToolStripMenuItem_Click", false);
                 MessageBox.Show("Problem Applying Patch. :(");
             }
         }
@@ -710,7 +710,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "ShowExcelTablesToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "ShowExcelTablesToolStripMenuItem_Click", false);
             }
         }
 
@@ -723,7 +723,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "applyModificationsToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "applyModificationsToolStripMenuItem_Click", false);
             }
         }
 
@@ -754,7 +754,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "modelFileToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "modelFileToolStripMenuItem_Click", false);
             }
         }
 
@@ -777,7 +777,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "havokFileToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "havokFileToolStripMenuItem_Click", false);
             }
         }
 
@@ -785,6 +785,8 @@ namespace Reanimator
         {
             try
             {
+                //MessageBox.Show("Tables are being loaded. This may take a few seconds!");
+
                 //ItemTransferForm transfer = new ItemTransferForm(_tableDataSet, _tableFiles);
                 ComplexItemTransferForm transfer = new ComplexItemTransferForm(_tableDataSet, _tableFiles);
                 //Displays a warning message before opening the item trading window.
@@ -793,7 +795,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "tradeItemsToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "tradeItemsToolStripMenuItem_Click", false);
             }
         }
 
@@ -810,7 +812,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "saveToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "saveToolStripMenuItem_Click", false);
             }
         }
 
@@ -823,7 +825,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "itemShopToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "itemShopToolStripMenuItem_Click", false);
             }
         }
 
@@ -836,7 +838,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "searchTablesToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "searchTablesToolStripMenuItem_Click", false);
             }
         }
 
@@ -857,7 +859,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "scriptEditorToolStripMenuItem_Click");
+                ExceptionLogger.LogException(ex, "scriptEditorToolStripMenuItem_Click", false);
             }
         }
     }

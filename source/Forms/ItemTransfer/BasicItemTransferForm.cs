@@ -16,6 +16,7 @@ namespace Reanimator.Forms.ItemTransfer
         protected bool _enableItemPreview = false;
         protected bool _enablePalladiumTrading = false;
         protected bool _backupCharacters = false;
+        protected bool _displayItemIcons = false;
 
         protected InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
         protected const int INVENTORYWIDTH = 6;
@@ -49,6 +50,7 @@ namespace Reanimator.Forms.ItemTransfer
                 _enableItemPreview = options.EnableItemPreview;
                 _enablePalladiumTrading = options.EnablePalladiumTrading;
                 _backupCharacters = options.BackupCharacters;
+                _displayItemIcons = options.DisplayItemIcons;
             }
             //ItemTradingOptions options2 = new ItemTradingOptions();
             //options2.EnableItemPreview = true;
@@ -317,6 +319,7 @@ namespace Reanimator.Forms.ItemTransfer
         InventoryTypes _inventoryToUse;
         int _inventoryHeight;
         bool _backupCharacters;
+        bool _displayItemIcons;
 
         [XmlElement("EnableItemPreview")]
         public bool EnableItemPreview
@@ -351,6 +354,13 @@ namespace Reanimator.Forms.ItemTransfer
         {
           get { return _backupCharacters; }
           set { _backupCharacters = value; }
+        }
+
+        [XmlElement("DisplayItemIcons")]
+        public bool DisplayItemIcons
+        {
+            get { return _displayItemIcons; }
+            set { _displayItemIcons = value; }
         }
     }
 }
