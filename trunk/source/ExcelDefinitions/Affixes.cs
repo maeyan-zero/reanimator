@@ -44,7 +44,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", Column = "AffixType")]
         public Int32 affixType6;
         public Int32 suffix;
-        [ExcelOutput(IsStringIndex = true)]
+        //[ExcelOutput(IsStringIndex = true)]
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]

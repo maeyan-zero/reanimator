@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace Reanimator
 {
@@ -87,30 +89,113 @@ namespace Reanimator
             return csv.ToString();
         }
 
-        static public string CSVPart<T>(T[] data)
+        static public string ArrayToCSV<T>(T[] data, string castAs)
         {
             using (StringWriter sw = new StringWriter())
             {
-                string delimiter = ",";
+                const string delimiter = ",";
 
                 for (int i = 0; i < data.Length; i++)
                 {
-                    if (typeof(T) == typeof(byte))
+                    object obj = data[i];
+
+                    switch (castAs)
                     {
-                        object obj = data[i];
-                        byte b = (byte)obj;
-                        sw.Write(b.ToString("X2"));
+                        case "hex":
+                            if (Marshal.SizeOf(typeof(T)) == sizeof(byte))
+                            {
+                                sw.Write(Convert.ToByte(obj).ToString("X2"));
+                            }
+                            else if (Marshal.SizeOf(typeof(T)) == sizeof(int))
+                            {
+                                sw.Write(Convert.ToUInt32(obj).ToString("X4"));
+                            }
+                            break;
+                        case "signed":
+                            if (Marshal.SizeOf(typeof(T)) == sizeof(byte))
+                            {
+                                sw.Write(Convert.ToChar(obj).ToString());
+                            }
+                            else if (Marshal.SizeOf(typeof(T)) == sizeof(int))
+                            {
+                                sw.Write(Convert.ToInt64(obj).ToString());
+                            }
+                            break;
+                        case "unsigned":
+                            if (Marshal.SizeOf(typeof(T)) == sizeof(byte))
+                            {
+                                sw.Write(Convert.ToByte(obj).ToString());
+                            }
+                            else if (Marshal.SizeOf(typeof(T)) == sizeof(int))
+                            {
+                                sw.Write(Convert.ToUInt32(obj).ToString());
+                            }
+                            break;
                     }
-                    else
-                    {
-                        sw.Write((T)data[i]);
-                    }
-                    if (i != data.Length - 1)
-                        sw.Write(delimiter);
+
+                    if (i != data.Length - 1) sw.Write(delimiter);
                 }
 
                 return sw.ToString();
             }
+        }
+
+        static public byte[] CSVtoArray(string data, string castAs, Type type)
+        {
+            string[] explode = data.Split(',');
+            List<byte> list = new List<byte>();
+            byte[] array = null;
+
+            foreach (string part in explode)
+            {
+                switch (castAs)
+                {
+                    case "hex":
+                        if (type == typeof(byte))
+                        {
+                            byte b = byte.Parse(part, System.Globalization.NumberStyles.HexNumber);
+                            array = new byte[] { b };
+                        }
+                        else if (type == typeof(uint))
+                        {
+                            uint i = uint.Parse(part, System.Globalization.NumberStyles.HexNumber);
+                            array = BitConverter.GetBytes(i);
+                        }
+                        break;
+                    case "signed":
+                        if (type == typeof(byte))
+                        {
+                            char c = char.Parse(part);
+                            byte b = Convert.ToByte(c);
+                            array = new byte[] { b };
+                        }
+                        else if (type == typeof(uint))
+                        {
+                            int i = int.Parse(part);
+                            array = BitConverter.GetBytes(i);
+                        }
+                        break;
+                    case "unsigned":
+                        if (type == typeof(byte))
+                        {
+                            byte b = byte.Parse(part);
+                            array = new byte[] { b };
+                        }
+                        else if (type == typeof(uint))
+                        {
+                            uint i = uint.Parse(part);
+                            array = BitConverter.GetBytes(i);
+                        }
+                        break;
+                }
+
+                foreach (byte b in array)
+                {
+                    list.Add(b);
+                }
+            }
+
+            return list.ToArray();
         }
 
         static public class Asset

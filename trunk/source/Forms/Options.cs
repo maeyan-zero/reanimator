@@ -77,6 +77,7 @@ namespace Reanimator.Forms
             dataDir_TextBox.Enabled = !Config.DataDirsRootChecked;
             gameClientPath_TextBox.Text = Config.GameClientPath;
             scriptDirText.Text = Config.ScriptDir;
+            intPtrTypeCombo.SelectedItem = Config.IntPtrCast;
         }
 
         private void gameClientPath_Button_Click(object sender, EventArgs e)
@@ -107,6 +108,11 @@ namespace Reanimator.Forms
 
             Config.ScriptDir = folderBrowserDialogue.SelectedPath;
             scriptDirText.Text = Config.ScriptDir;
+        }
+
+        private void intPtrTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Config.IntPtrCast = intPtrTypeCombo.Text;
         }
     }
 }
