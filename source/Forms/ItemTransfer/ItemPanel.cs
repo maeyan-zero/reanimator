@@ -429,7 +429,10 @@ namespace Reanimator.Forms.ItemTransfer
 
         public PreviewManager()
         {
-            _images = XmlUtilities<List<NameToImage>>.Deserialize(_configPath);
+            if (File.Exists(_configPath))
+            {
+                _images = XmlUtilities<List<NameToImage>>.Deserialize(_configPath);
+            }
         }
 
         public Image GetImage(string itemName)
