@@ -126,5 +126,11 @@ namespace Reanimator
             get { return GetValue("ScriptDir", @"C:\Program Files\Flagship Studios\Hellgate London\Reanimator\Scripts"); }
             set { SetValue("ScriptDir", value); }
         }
+
+        public static string IntPtrCast
+        {
+            get { return GetValue("IntPtrCast", "hex"); }
+            set { SetValue("IntPtrCast", value); }
+        }
     }
 }

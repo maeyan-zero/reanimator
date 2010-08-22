@@ -43,7 +43,15 @@
             this.hglDir_Button = new System.Windows.Forms.Button();
             this.hglDir_TextBox = new System.Windows.Forms.TextBox();
             this.ok_Button = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.intPtrTypeCombo = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.pathSettings_GroupBox.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // pathSettings_GroupBox
@@ -61,9 +69,9 @@
             this.pathSettings_GroupBox.Controls.Add(this.hglDir_Label);
             this.pathSettings_GroupBox.Controls.Add(this.hglDir_Button);
             this.pathSettings_GroupBox.Controls.Add(this.hglDir_TextBox);
-            this.pathSettings_GroupBox.Location = new System.Drawing.Point(12, 12);
+            this.pathSettings_GroupBox.Location = new System.Drawing.Point(6, 6);
             this.pathSettings_GroupBox.Name = "pathSettings_GroupBox";
-            this.pathSettings_GroupBox.Size = new System.Drawing.Size(413, 250);
+            this.pathSettings_GroupBox.Size = new System.Drawing.Size(419, 258);
             this.pathSettings_GroupBox.TabIndex = 0;
             this.pathSettings_GroupBox.TabStop = false;
             this.pathSettings_GroupBox.Text = "Path Settings";
@@ -190,7 +198,7 @@
             // 
             // ok_Button
             // 
-            this.ok_Button.Location = new System.Drawing.Point(341, 268);
+            this.ok_Button.Location = new System.Drawing.Point(351, 314);
             this.ok_Button.Name = "ok_Button";
             this.ok_Button.Size = new System.Drawing.Size(75, 23);
             this.ok_Button.TabIndex = 1;
@@ -198,15 +206,70 @@
             this.ok_Button.UseVisualStyleBackColor = true;
             this.ok_Button.Click += new System.EventHandler(this.okButton_Click);
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(444, 296);
+            this.tabControl1.TabIndex = 2;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.pathSettings_GroupBox);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(436, 270);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Paths";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.label2);
+            this.tabPage2.Controls.Add(this.intPtrTypeCombo);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(436, 270);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Display";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // intPtrTypeCombo
+            // 
+            this.intPtrTypeCombo.FormattingEnabled = true;
+            this.intPtrTypeCombo.Items.AddRange(new object[] {
+            "hex",
+            "signed",
+            "unsigned"});
+            this.intPtrTypeCombo.Location = new System.Drawing.Point(124, 20);
+            this.intPtrTypeCombo.Name = "intPtrTypeCombo";
+            this.intPtrTypeCombo.Size = new System.Drawing.Size(121, 21);
+            this.intPtrTypeCombo.TabIndex = 0;
+            this.intPtrTypeCombo.SelectedIndexChanged += new System.EventHandler(this.intPtrTypeCombo_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(15, 23);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(94, 13);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Cast IntPtr data as";
+            // 
             // Options
             // 
             this.AcceptButton = this.ok_Button;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(437, 302);
+            this.ClientSize = new System.Drawing.Size(463, 344);
             this.ControlBox = false;
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.ok_Button);
-            this.Controls.Add(this.pathSettings_GroupBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Options";
@@ -215,6 +278,10 @@
             this.Load += new System.EventHandler(this.Options_Load);
             this.pathSettings_GroupBox.ResumeLayout(false);
             this.pathSettings_GroupBox.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -240,6 +307,11 @@
         private System.Windows.Forms.Button scriptButton;
         private System.Windows.Forms.TextBox scriptDirText;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox intPtrTypeCombo;
 
     }
 }
