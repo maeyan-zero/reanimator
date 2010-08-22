@@ -148,7 +148,6 @@ namespace Reanimator.Forms.ItemTransfer
                 }
             }
 
-
             return false;
         }
 
@@ -224,6 +223,8 @@ namespace Reanimator.Forms.ItemTransfer
         int _size = 40;
         Unit _item;
         int _quantity;
+        bool _displayNamesAndQuantity;
+        bool _displayImages;
 
         public int Quantity
         {
@@ -281,6 +282,18 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
+        public bool DisplayNamesAndQuantity
+        {
+            get { return _displayNamesAndQuantity; }
+            set { _displayNamesAndQuantity = value; }
+        }
+
+        public bool DisplayImages
+        {
+            get { return _displayImages; }
+            set { _displayImages = value; }
+        }
+
         public InventoryItem()
             : base()
         {
@@ -290,11 +303,26 @@ namespace Reanimator.Forms.ItemTransfer
             : base()
         {
             _item = item;
+            _displayNamesAndQuantity = true;
 
             InitButton(item);
 
             Position = new Point(_item.inventoryPositionX, _item.inventoryPositionY);
+
+            //if (_displayImages)
+            //{
+            //    LoadImage(_item.Name);
+            //}
         }
+
+        //private void LoadImage(string itemName)
+        //{
+        //    if (itemName == "Personal Relocation Device")
+        //    {
+        //        this.BackgroundImageLayout = ImageLayout.Stretch;
+        //        this.BackgroundImage = Bitmap.FromFile(@"F:\townportal.png");
+        //    }
+        //}
 
         public void InitButton(Unit item)
         {
@@ -306,12 +334,16 @@ namespace Reanimator.Forms.ItemTransfer
 
             _quantity = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.item_quantity.ToString());
 
-            if (_quantity > 0)
+            if (_displayNamesAndQuantity)
             {
-                this.Text += _quantity.ToString() + "x ";
-            }
 
-            this.Text += _item.Name;
+                if (_quantity > 0)
+                {
+                    this.Text += _quantity.ToString() + "x ";
+                }
+
+                this.Text += _item.Name;
+            }
 
             SetButtonSize();
             SetRarityColor();

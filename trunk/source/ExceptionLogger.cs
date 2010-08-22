@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using Reanimator.Forms;
 using System.Xml.Serialization;
+using System.Windows.Forms;
 
 namespace Reanimator
 {
@@ -134,7 +135,14 @@ namespace Reanimator
 
         private ExceptionLogger()
         {
-            _exceptions = new List<ExceptionFormat>();
+            if(File.Exists(FILENAME))
+            {
+                _exceptions = XmlUtilities<List<ExceptionFormat>>.Deserialize(FILENAME);
+            }
+            else
+            {
+                _exceptions = new List<ExceptionFormat>();
+            }
         }
 
         //public static ExceptionLogger GetInstance()
@@ -149,24 +157,34 @@ namespace Reanimator
 
         public static void LogException(Exception exception)
         {
-            LogException(exception, "Not specified", FILENAME, "");
+            LogException(exception, "Not specified", FILENAME, "", true);
         }
 
-        public static void LogException(Exception exception, string functionName)
+        public static void LogException(Exception exception, bool logSilent)
         {
-            LogException(exception, functionName, FILENAME, "");
+            LogException(exception, "Not specified", FILENAME, "", logSilent);
         }
 
-        public static void LogException(Exception exception, string functionName, string customMessage)
+        public static void LogException(Exception exception, string functionName, bool logSilent)
         {
-            LogException(exception, functionName, FILENAME, customMessage);
+            LogException(exception, functionName, FILENAME, "", logSilent);
         }
 
-        public static void LogException(Exception exception, string functionName, string fileName, string customMessage)
+        public static void LogException(Exception exception, string functionName, string customMessage, bool logSilent)
+        {
+            LogException(exception, functionName, FILENAME, customMessage, logSilent);
+        }
+
+        public static void LogException(Exception exception, string functionName, string fileName, string customMessage, bool logSilent)
         {
             if (_logger == null)
             {
                 _logger = new ExceptionLogger();
+            }
+
+            if (!logSilent)
+            {
+                MessageBox.Show(exception.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             _exceptions.Add(new ExceptionFormat(exception, functionName, customMessage));

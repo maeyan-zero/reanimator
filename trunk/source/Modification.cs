@@ -56,7 +56,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "Modification.Open");
+                ExceptionLogger.LogException(ex, "Modification.Open", false);
                 return;
             }
 
@@ -118,7 +118,7 @@ namespace Reanimator
                     }
                     catch (Exception exception)
                     {
-                        ExceptionLogger.LogException(exception, "Modification.Open");
+                        ExceptionLogger.LogException(exception, "Modification.Open", false);
                         return;
                     }
                 }
@@ -166,7 +166,7 @@ namespace Reanimator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "Modification.Unzip");
+                ExceptionLogger.LogException(ex, "Modification.Unzip", false);
                 return false;
             }
         }
@@ -335,7 +335,7 @@ namespace Reanimator
             }
             catch (Exception exception)
             {
-                ExceptionLogger.LogException(exception, "Modification.Manipulate");
+                ExceptionLogger.LogException(exception, "Modification.Manipulate", false);
                 return false;
             }
         }
