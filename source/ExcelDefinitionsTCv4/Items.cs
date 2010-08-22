@@ -10,309 +10,299 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;                               // ReadOrder   OffsetFromHeader     ReadFunction
 
-        //[ExcelOutput(IsStringOffset = true, SortId = 1)]
+        [ExcelOutput(IsStringOffset = true, SortId = 1)]
         public Int32 name;//pchar                                   // 1    0x0000000000000000  XLS_ReadCharPtr1
         Int32 buffer1;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 folder;//pchar                                 // 2    0x0000000000000008  XLS_ReadCharPtr1
         Int32 buffer2;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 appearance;//pchar                             // 3    0x0000000000000010  XLS_ReadCharPtr1
         Int32 buffer3;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 appearenceFirst;//pchar                        // 4    0x0000000000000018  XLS_ReadCharPtr1
         Int32 buffer4;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 icon;//pchar                                   // 5    0x0000000000000020  XLS_ReadCharPtr1
         Int32 buffer5;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 holyRadius;//pchar                             // 20   0x0000000000000028  XLS_ReadCharPtr1
         Int32 buffer6;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 tinyHitParticle;//pchar                        // 22   0x0000000000000030  XLS_ReadCharPtr2
         Int32 buffer7;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 lightHitParticle;//pchar                       // 23   0x0000000000000038  XLS_ReadCharPtr2
         Int32 buffer8;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 mediumHitParticle;//pchar                      // 24   0x0000000000000040  XLS_ReadCharPtr2
         Int32 buffer9;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 hardHitParticle;//pchar                        // 25   0x0000000000000048  XLS_ReadCharPtr2
         Int32 buffer10;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 killedParticle;//pchar                         // 26   0x0000000000000050  XLS_ReadCharPtr2
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown00;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 fizzleParticle;//pchar                         // 27   0x0000000000000060  XLS_ReadCharPtr1
         Int32 buffer12;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 reflectParticle;//pchar                        // 28   0x0000000000000068  XLS_ReadCharPtr1
         Int32 buffer13;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 restoreVitalsParticle;//pchar                  // 29   0x0000000000000070  XLS_ReadCharPtr1
         Int32 buffer14;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 diffuse;//pchar                                // 6    0x0000000000000078  XLS_ReadCharPtr2
         Int32 buffer15;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 normal;//pchar                                 // 7    0x0000000000000080  XLS_ReadCharPtr2
         Int32 buffer16;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 specular;//pchar                               // 8    0x0000000000000088  XLS_ReadCharPtr2
         Int32 buffer17;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 lightmap;//pchar                               // 9    0x0000000000000090  XLS_ReadCharPtr2
         Int32 buffer18;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideSource1;//pchar                        // 10   0x0000000000000098  XLS_ReadCharPtr2
         Int32 buffer19;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideDest1;//pchar                          // 15   0x00000000000000A0  XLS_ReadCharPtr2
         Int32 buffer20;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideSource2;//pchar                        // 11   0x00000000000000A8  XLS_ReadCharPtr2
         Int32 buffer21;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideDest2;//pchar                          // 16   0x00000000000000B0  XLS_ReadCharPtr2
         Int32 buffer22;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideSource3;//pchar                        // 12   0x00000000000000B8  XLS_ReadCharPtr2
         Int32 buffer23;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideDest3;//pchar                          // 17   0x00000000000000C0  XLS_ReadCharPtr2
         Int32 buffer24;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideSource4;//pchar                        // 13   0x00000000000000C8  XLS_ReadCharPtr2
         Int32 buffer25;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideDest4;//pchar                          // 18   0x00000000000000D0  XLS_ReadCharPtr2
         Int32 buffer26;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideSource5;//pchar                        // 14   0x00000000000000D8  XLS_ReadCharPtr2
         Int32 buffer27;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideDest5;//pchar                          // 19   0x00000000000000E0  XLS_ReadCharPtr2
         Int32 buffer28;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 particleFolder;//pchar                         // 21   0x00000000000000E8  XLS_ReadCharPtr1
         Int32 buffer29;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 pickupFunction;//pchar                         // 259  0x00000000000000F0  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown01;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 triggerString1;//pchar                         // 411  0x0000000000000100  XLS_ReadCharPtr1
         Int32 buffer31;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 triggerString2;//pchar                         // 412  0x0000000000000108  XLS_ReadCharPtr1
         Int32 buffer32;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 charSelectFont;//pchar                         // 47   0x0000000000000110  XLS_ReadCharPtr1
         Int32 buffer33;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 tooltipDamageIcon;//pchar                      // 136  0x0000000000000118  XLS_ReadCharPtr1
         Int32 buffer34;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 damagingMeleeParticle;//pchar                  // 30   0x0000000000000120  XLS_ReadCharPtr1
         Int32 buffer35;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 muzzleFlash;//pchar                            // 417  0x0000000000000128  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown02;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 mfDefault;//pchar                              // 418  0x0000000000000138  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown03;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 mfPhysical;//pchar                             // 424  0x0000000000000148  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown04;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 mfFire;//pchar                                 // 422  0x0000000000000158  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown05;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 mfElectric;//pchar                             // 423  0x0000000000000168  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown06;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 mfSpectral;//pchar                             // 421  0x0000000000000178  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown07;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 mfToxic;//pchar                                // 419  0x0000000000000188  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] unknown08;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 mfPoison;//pchar                               // 420  0x00000000000001A8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
         byte[] unknown09;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 trailSlashRopeNoTarget;//pchar                 // 433  0x0000000000000200  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown10;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 trailDefault;//pchar                           // 434  0x0000000000000210  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown11;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 trailPhysical;//pchar                          // 440  0x0000000000000220  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown12;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 trailFire;//pchar                              // 438  0x0000000000000230  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown13;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 trailElectric;//pchar                          // 439  0x0000000000000240  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown14;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 trailSpectral;//pchar                          // 437  0x0000000000000250  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown15;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 trailToxic;//pchar                             // 435  0x0000000000000260  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] unknown16;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 trailPoison;//pchar                            // 436  0x0000000000000280  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
         byte[] unknown17;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 projectileSlashRopeWithTarget;//pchar          // 425  0x00000000000002D8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown18;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 projDefault;//pchar                            // 426  0x00000000000002E8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown19;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 projPhysical;//pchar                           // 432  0x00000000000002F8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown20;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 projFire;//pchar                               // 430  0x0000000000000308  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown21;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 projElectric;//pchar                           // 431  0x0000000000000318  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown22;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 projSpectral;//pchar                           // 429  0x0000000000000328  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown23;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 projToxic;//pchar                              // 427  0x0000000000000338  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] unknown24;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 projPoison;//pchar                             // 428  0x0000000000000358  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 84)]
         byte[] unknown25;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impactWall;//pchar                             // 441  0x00000000000003B0  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown26;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impWallDefault;//pchar                         // 442  0x00000000000003C0  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown27;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impWallPhysical;//pchar                        // 447  0x00000000000003D0  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown28;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impWallFire;//pchar                            // 445  0x00000000000003E0  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown29;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impWallElectric;//pchar                        // 446  0x00000000000003F0  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown30;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impWallSpectral;//pchar                        // 444  0x0000000000000400  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown31;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impWallToxic;//pchar                           // 443  0x0000000000000410  XLS_ReadCharPtr1
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        //byte[] unknown32;
-
-        //[ExcelOutput(IsStringOffset = true)]
-        //private Int32 impWallPoison;//pchar // unknown!!
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 116)]
         byte[] unknown32;                                           // 0x0000000000000414 to 0x0000000000000487
-        
-        //public Int32 stealthRevealDuration;                         // 182  0x0000000000000266  XLS_Unknown_0   - is this a 3-byte reading function??
-        //public Int32 stealthRevealRadius;                           // 183  0x0000000000000269  XLS_Unknown_0
-
-
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impactUnit;//pchar                             // 448  0x0000000000000488  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown34;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impactUnitDefault;//pchar                      // 449  0x0000000000000498  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown35;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impactUnitPhysical;//pchar                     // 454  0x00000000000004A8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown36;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impactUnitFire;//pchar                         // 452  0x00000000000004B8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown37;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impactUnitElectric;//pchar                     // 453  0x00000000000004C8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown38;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impactUnitSpectral;//pchar                     // 451  0x00000000000004D8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown39;
-        //[ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true)]
         public Int32 impactUnitToxic;//pchar                        // 450  0x00000000000004E8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 116)]
         byte[] unknown40;
         public Int32 baseRow;                                 // ???  0x0000000000000560  ??? Appears to be Int32, but not seen in code?
-        //[ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask01 bitmask01;                           // 56   0x0000000000000564  XLS_ReadBitmask
-        //[ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask02 bitmask02;                           // 56   0x0000000000000568
-        //[ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask03 bitmask03;                           // 56   0x000000000000056C
-        //[ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask04 bitmask04;                           // 56   0x0000000000000570
-        //[ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask05 bitmask05;                           // 56   0x0000000000000574
-        //[ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask06 bitmask06;                           // 56   0x0000000000000578
-        //[ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask07 bitmask07;                           // 56   0x000000000000057C
-        //[ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask08 bitmask08;
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 String;                                        // 375  0x0000000000000580  XLS_ReadStringIndex
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 typeDescription;                               // 378  0x0000000000000584  XLS_ReadStringIndex
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 flavorText;                                    // 379  0x0000000000000588  XLS_ReadStringIndex
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 additionalDescription;                         // 380  0x000000000000058C  XLS_ReadStringIndex
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 additionalRaceDescription;                     // 381  0x0000000000000590  XLS_ReadStringIndex
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 additionalRaceBonusDescription;
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 analyze;                                       // 382  0x0000000000000594  XLS_ReadStringIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x6D)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x6D)]
         public Int32 recipeList;//index                                    // 62   0x0000000000000598  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x6C)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x6C)]
         public Int32 recipeSingleUse;//index                        // 63   0x000000000000059C  XLS_ReadIndex
         public Int32 recipesToSellByUnittype1;
         public Int32 recipesToSellByUnittype2;
@@ -322,59 +312,59 @@ namespace Reanimator.ExcelDefinitions
         public Int32 recipesToSellByNotUnittype3;
         public Int32 recipePane;
         public Int32 merchantNotAvailableTillQuestTaskComplete;
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x69)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x69)]
         public Int32 paperdollBackgroundLevel;//index               // 43   0x00000000000005A0  XLS_ReadIndex
         public Int32 paperdollWeapon1;                              // 44   0x00000000000005A4  XLS_ReadIntArray,2
         public Int32 paperdollWeapon2;                              // 44   0x00000000000005A8
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 paperdollSkill;//index                         // 45   0x00000000000005AC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x08)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x08)]
         public Int32 paperdollColorset;//index                      // 46   0x00000000000005B0  XLS_ReadIndex
         public Int32 respawnChance;                                 // 35   0x00000000000005B4  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x90)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x90)]
         public Int32 respawnSpawnClass;//index                             // 34   0x00000000000005B8  XLS_ReadIndex,90
         public Int32 respawnMonsterClass;
         public Int32 respawnRadius;
-        //[ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortId = 2)]
         public Int32 code;                                          // 32   0x00000000000005BC  XLS_ReadCode
         Int32 unknown41;
         public Int32 densityValueOverride;                          // 54   0x00000000000005C4  XLS_ReadInt32
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 minionPackSize;                                // 55   0x00000000000005C8  XLS_ReadIntPtr
         public Int32 respawnPeriod;
         public Int32 petExecuteSkillByOwner;
         public float spinSpeed;                                     // 303  0x00000000000005CC  XLS_ReadFloat
         public float maxTurnRate;                                   // 304  0x00000000000005D0  XLS_ReadFloat
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 unitType;//index                               // 33   0x00000000000005D4  XLS_ReadIndex,17
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 unitTypeForLeveling;//index                           // 36   0x00000000000005D8  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 preferedByUnitType;//index                     // 37   0x00000000000005DC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 family;//index                                 // 38   0x00000000000005E0  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 censorClassNoHumans;//index                    // 39   0x00000000000005E4  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 censorClassNoGore;//index                      // 40   0x00000000000005E8  XLS_ReadIndex
         public Int32 sex;                                           // 41   0x00000000000005EC  XLS_ReadInternalIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x8C)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x8C)]
         public Int32 race;//index                                   // 42   0x00000000000005F0  XLS_ReadIndex
         public Int32 rarity;                                        // 107  0x00000000000005F4  XLS_ReadInt32
         public Int32 spawnChance;                                   // 109  0x00000000000005F8  XLS_ReadInt32
         public Int32 minMonsterExperienceLevel;                     // 88   0x00000000000005FC  XLS_ReadInt32
         public Int32 level;                                         // 89   0x0000000000000600  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x72)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x72)]
         public Int32 monsterQuality;//index                         // 48   0x0000000000000604  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 monsterClassAtUniqueQuality;//index            // 49   0x0000000000000608  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 monsterClassAtChampionQuality;//index          // 50   0x000000000000060C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 minionClass;//index                            // 52   0x0000000000000610  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x75)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x75)]
         public Int32 monsterNameType;//index                        // 53   0x0000000000000614  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x43)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x43)]
         public Int32 itemQuality;//index                            // 51   0x0000000000000618  XLS_ReadIndex
         public Int32 angerRange;                                    // 416  0x000000000000061C  XLS_ReadInt32
         public Int32 baseLevel;                                     // 90   0x0000000000000620  XLS_ReadInt32
@@ -386,36 +376,36 @@ namespace Reanimator.ExcelDefinitions
         public Int32 maxSpawnLevel;                                 // 95   0x0000000000000634  XLS_ReadInt32       .text:00000001402E7A4C mov     dword ptr [rsp+0A8h+var_88], 186A0h (186A0h = 100,000....)
         public Int32 maxLevel;                                      // 96   0x0000000000000638  XLS_ReadInt32
         public Int32 maxRank;
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 fixedLevel;//intptr                            // 97   0x000000000000063C  XLS_ReadIntPtr
         public Int32 hpMin;                                         // 98   0x0000000000000640  XLS_ReadInt32
         public Int32 hpMax;                                         // 99   0x0000000000000644  XLS_ReadInt32
         public Int32 powerMax;                                      // 100  0x0000000000000648  XLS_ReadInt32
         public Int32 experience;                                    // 101  0x000000000000064C  XLS_ReadInt32
         public Int32 attackRating;                                  // 143  0x0000000000000650  XLS_ReadInt32
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 luckBonus;//intptr                             // 102  0x0000000000000654  XLS_ReadIntPtr
         public Int32 luckChanceToSpawn;                             // 103  0x0000000000000658  XLS_ReadInt32
         public Int32 roomPopulatePass;                              // 58   0x000000000000065C  XLS_ReadInternalIndex
         public Int32 weaponBoneIndex;                               // 57   0x0000000000000660  XLS_ReadInternalIndex
         public Int32 requiresAffixOrSuffix;                         // 108  0x0000000000000664  XLS_ReadInt32
         public float autoPickupDistance;                            // 86   0x0000000000000668  XLS_ReadFloat
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
         public Int32 pickupPullState;//index                        // 87   0x000000000000066C  XLS_ReadIndex
         public float extraDyingTimeInSeconds;                       // 70   0x0000000000000670  XLS_ReadFloat
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x40)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x40)]
         public Int32 npcInfo;//index                                // 71   0x0000000000000674  XLS_ReadIndex
         public Int32 balanceTestCount;                              // 72   0x0000000000000678  XLS_ReadInt32
         public Int32 balanceTestGroup;                              // 73   0x000000000000067C  XLS_ReadInt32
         public Int32 merchantStartingPane;                          // 59   0x0000000000000680  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x6B)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x6B)]
         public Int32 merchantFactionType;//index                    // 60   0x0000000000000684  XLS_ReadIndex
         public Int32 merchantFactionValueNeeded;                    // 61   0x0000000000000688  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x99)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x99)]
         public Int32 questRequirement;//index                       // 64   0x000000000000068C  XLS_ReadIndex
         public float noSpawnRadius;                                 // 65   0x0000000000000690  XLS_ReadFloat
         public float monitorApproachRadius;                         // 68   0x0000000000000694  XLS_ReadFloat
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x1B)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x1B)]
         public Int32 tasksGeneratedStat;//index                     // 69   0x0000000000000698  XLS_ReadIndex,1B       text:00000001402E7392 mov     dword ptr [rsp+0A8h+var_88], 1Bh      0x1B == 27 (27 = STATS table)
         public float serverMissileOffset;                           // 119  0x000000000000069C  XLS_ReadFloat
         public float homingTurnAngleRadians;                        // 74   0x00000000000006A0  XLS_ReadFloat
@@ -423,63 +413,63 @@ namespace Reanimator.ExcelDefinitions
         public float homeAfterUnitRadius;                           // 76   0x00000000000006A8  XLS_ReadFloat
         public float collidableAfterXSeconds;                       // 77   0x00000000000006AC  XLS_ReadFloat
         public float homeAfterXSeconds;                             // 78   0x00000000000006B0  XLS_ReadFloat
-        //[ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask09 bitmask09;                           // 85   0x00000000000006B4  XLS_ReadBitmask
         public float impactCameraShakeDuration;                     // 80   0x00000000000006B8  XLS_ReadFloat
         public float impactCameraShakeMagnitude;                    // 81   0x00000000000006BC  XLS_ReadFloat
         public float impactCameraShakeDegrade;                      // 82   0x00000000000006C0  XLS_ReadFloat
         public Int32 maximumImpactFrequency;                        // 83   0x00000000000006C4  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 onlyCollideWithUnitType;//index                // 79   0x00000000000006C8  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x35)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x35)]
         public Int32 questDescription;//index                       // 260  0x00000000000006CC  XLS_ReadIndex
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 pickUpCondition;                               // 258  0x00000000000006D0  XLS_ReadIntPtr
         public Int32 useCondition;
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 scriptOnUse;                                   // 248  0x00000000000006D8  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 stackSize;                                     // 227  0x00000000000006DC  XLS_ReadIntPtr
         public Int32 initScriptClient;
         public Int32 maxPickUp;                                     // 228  0x00000000000006E0  XLS_ReadInt32
         public Int32 baseCost;                                      // 221  0x00000000000006E4  XLS_ReadInt32
         public Int32 pvpPointCost;                                 // 222  0x00000000000006E8  XLS_ReadInt32
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceMult;                                  // 223  0x00000000000006EC  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceAdd;                                   // 224  0x00000000000006F0  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceMult;                                 // 225  0x00000000000006F4  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceAdd;                                  // 226  0x00000000000006F8  XLS_ReadIntPtr
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x5E)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x5E)]
         public Int32 inventoryWardrobe;                             // 110  0x00000000000006FC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x5E)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x5E)]
         public Int32 characterScreenWardrobe;                       // 111  0x0000000000000700  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
         public Int32 characterScreenState;                          // 112  0x0000000000000704  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x5F)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x5F)]
         public Int32 wardrobeBody;                                  // 113  0x0000000000000708  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 wardrobeFallback;                              // 114  0x000000000000070C  XLS_ReadIndex
         public Int32 null0;                                         // 115  0x0000000000000710  XLS_ReadInt32
         public Int32 wardrobeMip;                                   // 118  0x0000000000000714  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x56)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x56)]
         public Int32 wardrobeAppearanceGroup;                       // 116  0x0000000000000718  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x56)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x56)]
         public Int32 wardrobeAppearanceGroup1st;                    // 117  0x000000000000071C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x24)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x24)]
         public Int32 startingStance;                                // 120  0x0000000000000720  XLS_ReadIndex
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknownBytes06;
         public Int32 summonedInvLoc;
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 containerUnitType1;                            // 261  0x0000000000000738  XLS_ReadUNITTYPEIndexArray,4
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 containerUnitType2;                            // 261  0x000000000000073C
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 containerUnitType3;// always 0                 // 261  0x0000000000000740
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 containerUnitType4;// but we could use them    // 261  0x0000000000000744
         public Int32 firingErrorIncrease;                           // 127  0x0000000000000748  XLS_ReadInt32
         public Int32 firingErrorDecrease;                           // 128  0x000000000000074C  XLS_ReadInt32
@@ -487,16 +477,16 @@ namespace Reanimator.ExcelDefinitions
         public Int32 accuracyBase;                                  // 130  0x0000000000000754  XLS_ReadInt32
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknownBytes07;
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x18)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x18)]
         public Int32 refillHotKey;//index                           // 262  0x0000000000000768  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x25)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x25)]
         public Int32 animGroup;//index                              // 121  0x000000000000076C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x60)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x60)]
         public Int32 meleeWeapon;//index                            // 122  0x0000000000000770  XLS_ReadIndex
         public Int32 cdTicks;                                       // 131  0x0000000000000774  XLS_ReadInt32
         public Int32 duration;
         public float approxDps;                                     // 132  0x0000000000000778  XLS_ReadFloat
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
         public Int32 tooltipDamageString;//stridx                   // 137  0x000000000000077C  XLS_ReadStringIndex
         public Int32 requiredAffixGroups1;                          // 126  0x0000000000000780  XLS_ReadIntArray,8
         public Int32 requiredAffixGroups2;                          // 126  0x0000000000000784
@@ -506,21 +496,21 @@ namespace Reanimator.ExcelDefinitions
         public Int32 requiredAffixGroups6;                          // 126  0x0000000000000794
         public Int32 requiredAffixGroups7;                          // 126  0x0000000000000798
         public Int32 requiredAffixGroups8;                          // 126  0x000000000000079C
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 spawnMonsterClass;//index                      // 133  0x00000000000007A0  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
         public Int32 safeState;//index                              // 134  0x00000000000007A4  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillGhost;//index                             // 135  0x00000000000007A8  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillRef;//index                               // 233  0x00000000000007AC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x1E)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x1E)]
         public Int32 dmgType;//index                                // 138  0x00000000000007B0  XLS_ReadIndex
         public Int32 weaponDamageScale;                             // 142  0x00000000000007B4  XLS_ReadInt32
         public Int32 dontUseWeaponDamage;                           // 141  0x00000000000007B8  XLS_ReadInt32
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 minBaseDmg;                                    // 139  0x00000000000007BC  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 maxBaseDmg;                                    // 140  0x00000000000007C0  XLS_ReadIntPtr
         public Int32 sfxAttackPctFocus;                             // 144  0x00000000000007C4  XLS_ReadInt32
         public Int32 sfxUknown1;
@@ -606,76 +596,76 @@ namespace Reanimator.ExcelDefinitions
         public Int32 startingStamina;                               // 205  0x0000000000000998  XLS_ReadInt32
         public Int32 startingWillpower;                             // 206  0x000000000000099C  XLS_ReadInt32
         public Int32 recipeProps;
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 props1;                                        // 207  0x00000000000009A0  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 props2;                                        // 208  0x00000000000009A4  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 props3;                                        // 209  0x00000000000009A8  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 props4;                                        // 210  0x00000000000009AC  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 props5;                                        // 211  0x00000000000009B0  XLS_ReadIntPtr
         public Int32 skillProps1;
         public Int32 skillProps2;
         public Int32 skillProps3;
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 props1AppliesToUnitype;//index                 // 212  0x00000000000009B4  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 props2AppliesToUnitype;//index                 // 213  0x00000000000009B8  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 props3AppliesToUnitype;//index                 // 214  0x00000000000009BC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 props4AppliesToUnitype;//index                 // 215  0x00000000000009C0  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 props5AppliesToUnitype;//index                 // 216  0x00000000000009C4  XLS_ReadIndex
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 perLevelProps1;                                // 218  0x00000000000009C8  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 perLevelProps2;                                // 219  0x00000000000009CC  XLS_ReadIntPtr
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 propsElite;                                    // 217  0x00000000000009D0  XLS_ReadIntPtr
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix1;//index                                 // 220  0x00000000000009D4  XLS_ReadIntArray,6
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix2;//index                                 // 220  0x00000000000009D8
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix3;//index                                 // 220  0x00000000000009DC
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix4;//index                                 // 220  0x00000000000009E0
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix5;//index                                 // 220  0x00000000000009E4
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES", Column = "affix")]
         public Int32 affix6;//index                                 // 220  0x00000000000009E8
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 36)]
-        public byte[] undefinedP;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
+        byte[] undefinedP;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
         public Int32 treasure;//index                               // 104  0x00000000000009EC  XLS_ReadIndex,65
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
         public Int32 championTreasure;//index                       // 105  0x00000000000009F0  XLS_ReadIndex,65
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
         public Int32 firstTimeTreasure;//index                      // 106  0x00000000000009F4  XLS_ReadIndex,65
         public Int32 craftingTreasure;
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x0A)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x0A)]
         public Int32 inventory;//index                              // 229  0x00000000000009F8  XLS_ReadIndex
         public Int32 craftingInventory;
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x18)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x18)]
         public Int32 recipeIngredientInvLoc;//index                 // 230  0x00000000000009FC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x18)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x18)]
         public Int32 recipeResultInvLoc;//index                     // 231  0x0000000000000A00  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE", Column = "treasureClass")]
         public Int32 startingTreasure;//index                       // 232  0x0000000000000A04  XLS_ReadIndex,65
         public Int32 invWidth;                                      // 256  0x0000000000000A08  XLS_ReadInt32
         public Int32 invHeight;                                     // 257  0x0000000000000A0C  XLS_ReadInt32
         public Int64 qualities;                                     // 123  0x0000000000000A10  XLS_ReadBits - I think this reads 8 bytes (64 bits); input = 0x40 = 64
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x43)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x43)]
         public Int32 requiredQuality;//index                        // 124  0x0000000000000A18  XLS_ReadIndex
         public Int32 qualityName;                                   // 125  0x0000000000000A1C  XLS_ReadInternalIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x6E)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x6E)]
         public Int32 fieldMissile;//index                           // 84   0x0000000000000A20  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillHitUnit;//index                           // 391  0x0000000000000A24  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillHitBackground;//index                     // 392  0x0000000000000A28  XLS_ReadIndex
         Int32 skillMissed1;                                         // 393  0x0000000000000A2C  XLS_ReadIntArray,0F
         Int32 skillMissed2;                                         // 393  0x0000000000000A30
@@ -694,9 +684,9 @@ namespace Reanimator.ExcelDefinitions
         Int32 skillMissed15;                                        // 393  0x0000000000000A64
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknownBytes20;                                      // 0x0000000000000A68 to 0x0000000000000A6C
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillOnFuse;//index                            // 394  0x0000000000000A6C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillOnDamageRepeat;//index                    // 395  0x0000000000000A70  XLS_ReadIndex
         public Int32 startingskills1;                               // 234  0x0000000000000A74  XLS_ReadIntArray,0C
         public Int32 startingskills2;                               // 234  0x0000000000000A78
@@ -710,120 +700,120 @@ namespace Reanimator.ExcelDefinitions
         public Int32 startingskills10;                              // 234  0x0000000000000A98
         public Int32 startingskills11;                              // 234  0x0000000000000A9C
         public Int32 startingskills12;                              // 234  0x0000000000000AA0
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 unitDieBeginSkill;//index                      // 235  0x0000000000000AA4  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 unitDieBeginSkillClient;//index                // 236  0x0000000000000AA8  XLS_ReadIndex
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 scriptOnUnitDieEnd;//intptr                    // 237  0x0000000000000AAC  XLS_ReadIntPtr
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 unitDieEndSkill;//index                        // 238  0x0000000000000AB0  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 deadSkill;//index                              // 239  0x0000000000000AB4  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 kickSkill;//index                              // 240  0x0000000000000AB8  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 rightSkill;//index                             // 241  0x0000000000000ABC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 initSkill;//index                              // 242  0x0000000000000AC0  XLS_ReadIndex
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefinedTCV4_1;
         public Int32 classSkill;
         public Int32 raceSkill;
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillLevelActive;//index                       // 243  0x0000000000000AC4  XLS_ReadIndex
         public Int32 initState1;                                    // 244  0x0000000000000AC8  XLS_ReadIntArray,4
         public Int32 initState2;                                    // 244  0x0000000000000ACC
         public Int32 initState3;                                    // 244  0x0000000000000AD0
         public Int32 initState4;                                    // 244  0x0000000000000AD4        
         public Int32 initStateTicks;                                // 245  0x0000000000000AD8  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
         public Int32 dyingState;//index                             // 246  0x0000000000000ADC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillWhenUsed;//index                          // 247  0x0000000000000AE0  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
         public Int32 SkillTab;//index                               // 249  0x0000000000000AE4  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
         public Int32 SkillTab2;//index                              // 250  0x0000000000000AE8  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
         public Int32 SkillTab3;//index                              // 251  0x0000000000000AEC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
         public Int32 SkillTab4;//index                              // 252  0x0000000000000AF0  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
         public Int32 SkillTab5;//index                              // 253  0x0000000000000AF4  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
         public Int32 SkillTab6;//index                              // 254  0x0000000000000AF8  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
         public Int32 SkillTab7;//index                              // 255  0x0000000000000AFC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x49)]
         public Int32 levelUpState;//index                           // 263  0x0000000000000B00  XLS_ReadIndex
         public Int32 rankUpState;
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 sounds;//index                                 // 264  0x0000000000000B04  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 flippySound;//index                            // 265  0x0000000000000B08  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 invPickUpSound;//index                         // 266  0x0000000000000B0C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 invPutDownSound;//index                        // 267  0x0000000000000B10  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 invEquipSound;//index                          // 268  0x0000000000000B14  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 pickUpSound;//index                            // 269  0x0000000000000B18  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 useSound;//index                               // 270  0x0000000000000B1C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 cantUseSound;//index                           // 271  0x0000000000000B20  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 cantFireSound;//index                          // 272  0x0000000000000B24  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 blockSound;//index                             // 273  0x0000000000000B28  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 getHit0;//index                                // 274  0x0000000000000B2C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 getHit1;//index                                // 275  0x0000000000000B30  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 getHit2;//index                                // 276  0x0000000000000B34  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 getHit3;//index                                // 277  0x0000000000000B38  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 getHit4;//index                                // 278  0x0000000000000B3C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 getHit5;//index                                // 279  0x0000000000000B40  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 interactSound;//index                          // 280  0x0000000000000B44  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 damagingSound;//index                          // 281  0x0000000000000B48  XLS_ReadIndex
         public Int32 musicOverride;
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
         public Int32 forwardFootStepLeft;//index                    // 282  0x0000000000000B4C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
         public Int32 forwardFootStepRight;//index                   // 283  0x0000000000000B50  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
         public Int32 backwardFootStepLeft;//index                   // 284  0x0000000000000B54  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
         public Int32 backwardFootStepRight;//index                  // 285  0x0000000000000B58  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
         public Int32 firstPersonJumpFootStep;//index                // 286  0x0000000000000B5C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x3F)]
         public Int32 firstPersonLandFootStep;//index                // 287  0x0000000000000B60  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 outOfManaSound;//index                         // 288  0x0000000000000B64  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 inventoryFullSound;//index                     // 289  0x0000000000000B68  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 cantSound;//index                              // 292  0x0000000000000B6C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 CantUseSound;//index                           // 290  0x0000000000000B70  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 cantUseYetSound;//index                        // 291  0x0000000000000B74  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 cantCastSound;//index                          // 293  0x0000000000000B78  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 cantCastYetSound;//index                       // 294  0x0000000000000B7C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 cantCastHereSound;//index                      // 295  0x0000000000000B80  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x14)]
         public Int32 lockedSound;//index                            // 296  0x0000000000000B84  XLS_ReadIndex
         public float pathingCollisionRadius;                        // 299  0x0000000000000B88  XLS_ReadFloat
         public float collisionRadius;                               // 297  0x0000000000000B8C  XLS_ReadFloat
@@ -888,14 +878,14 @@ namespace Reanimator.ExcelDefinitions
         public float walkAndRunDelta;                               // 342  0x0000000000000C74  XLS_ReadFloat
         public Int32 rangeMin;                                      // 326  0x0000000000000C78  XLS_ReadInt32
         public Int32 rangeMax;                                      // 327  0x0000000000000C7C  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
         public Int32 decoyMonster;//index                           // 415  0x0000000000000C80  XLS_ReadIndex
         public Int32 havokShape;                                    // 374  0x0000000000000C84  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x6E)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x6E)]
         public Int32 missileHitUnit;//index                         // 388  0x0000000000000C88  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x6E)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x6E)]
         public Int32 missileHitBackground;//index                   // 389  0x0000000000000C8C  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x6E)]
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x6E)]
         public Int32 missileOnFreeOrFuse;//index                    // 390  0x0000000000000C90  XLS_ReadIndex
         public Int32 missielOnMissed;
         public Int32 missileTag;                                    // 400  0x0000000000000C94  XLS_ReadInt32
@@ -904,81 +894,81 @@ namespace Reanimator.ExcelDefinitions
         public Int32 repeatDamageImmediately;                       // 398  0x0000000000000CA0  XLS_ReadInt32
         public Int32 serverSrcDamage;                               // 399  0x0000000000000CA4  XLS_ReadInt32
         public Int32 blockGhosts;                                   // 401  0x0000000000000CA8  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
-        public Int32 monster;//index                                // 402  0x0000000000000CAC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x76)]
-        public Int32 triggerType;//index                            // 403  0x0000000000000CB0  XLS_ReadIndex
-        public Int32 triggerSound;
-        public Int32 operatorStatesTriggerProhibited;               // 404  0x0000000000000CB4  XLS_ReadIntArray,01
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x68)]
-        public Int32 sublevelDest;//index                           // 405  0x0000000000000CB8  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x99)]
-        public Int32 operateRequiredQuest;//index                   // 406  0x0000000000000CBC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x9A)]
-        public Int32 operateRequiredQuestState;//index              // 407  0x0000000000000CC0  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x97)]
-        public Int32 operateRequiredQuestStateValue;//index         // 408  0x0000000000000CC4  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x97)]
-        public Int32 operateProhibitedQuestStateValue;//index       // 409  0x0000000000000CC8  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        public Int32 requiresItemOfUnitType1;//index                // 66   0x0000000000000CCC  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x65)]
-        public Int32 spawnTreasureClassInLevel;//index              // 67   0x0000000000000CD0  XLS_ReadIndex
-        public Int32 oneWayVisualPortalDir;                         // 410  0x0000000000000CD4  XLS_ReadInternalIndex
-        public Int32 warpResolveTime;                               // 473  0x0000000000000CD8  XLS_ReadInternalIndex
-        public float labelScale;                                    // 413  0x0000000000000CDC  XLS_ReadFloat
-        public float labelForwardOffset;                            // 414  0x0000000000000CE0  XLS_ReadFloat
-        public float heightpercent;                                 // 469  0x0000000000000CE4  XLS_ReadFloat_0 ??
-        public float weightPercent;                                 // 470  0x0000000000000CE8  XLS_ReadFloat_0 ??
-        public Int32 hasAppearanceShape;//bool                      // 459  0x0000000000000CEC  XLS_ReadInt32,0B
-        public byte apperanceHeightMin;                             // 460  0x0000000000000CF0  XLS_ReadByte
-        public byte appearanceHeightMax;                            // 461  0x0000000000000CF1  XLS_ReadByte
-        public byte appearanceWeightMin;                            // 462  0x0000000000000CF2  XLS_ReadByte
-        public byte appearanceWeightMax;                            // 463  0x0000000000000CF3  XLS_ReadByte
-        public Int32 appearanceUseLineBounds;//bool                 // 464  0x0000000000000CF4  XLS_ReadInt32,0B
-        public byte appearanceShortSkinny;                          // 465  0x0000000000000CF5  XLS_ReadByte
-        public byte appearanceTallSkinny;                           // 466  0x0000000000000CF6  XLS_ReadByte
-        public byte appearanceShortFat;                             // 467  0x0000000000000CF7  XLS_ReadByte
-        public byte appearanceTallFat;                              // 468  0x0000000000000CF8  XLS_ReadByte
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x08)]
-        public Int32 colorSet;//index                               // 31   0x0000000000000CFC  XLS_ReadIndex
-        public Int32 corpseExplodePoints;                           // 471  0x0000000000000D00  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        public Int32 requiredAttackerUnitType;//index               // 472  0x0000000000000D04  XLS_ReadIndex
-       // [ExcelOutput(IsTableIndex = true, TableIndex = 0x84)]
-        public Int32 startingLevelArea;//index                      // 474  0x0000000000000D08  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x84)]
-        public Int32 warpToLevelArea;//index                        // 476  0x0000000000000D0C  XLS_ReadIndex
-        public Int32 warpToFloor;                                   // 477  0x0000000000000D10  XLS_ReadInt32
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0xA7)]
-        public Int32 globalThemeRequired;//index                    // 478  0x0000000000000D14  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x55)]
-        public Int32 levelThemeRequired;//index                     // 479  0x0000000000000D18  XLS_ReadIndex
-        //[ExcelOutput(IsTableIndex = true, TableIndex = 0x21)]
-        public Int32 modeGroupOnClient;//index                      // 475  0x0000000000000D1C  XLS_ReadIndex
-        public Int32 cameraTarget;                                         // 455  0x0000000000000D20  XLS_ReadInt32
-        public Int32 null2;                                         // 456  0x0000000000000D24  XLS_ReadInt32
-        public Int32 null3;                                         // 457  0x0000000000000D28  XLS_ReadInt32
-        public Int32 cameraEye;
-        public Int32 null4;
-        public Int32 null5;
-        public Int32 RMTAvailable;
-        public Int32 realWorldCost;
-        public Int32 RMTBadges;
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x73)]
+        Int32 monster;//index                                // 402  0x0000000000000CAC  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x76)]
+        Int32 triggerType;//index                            // 403  0x0000000000000CB0  XLS_ReadIndex
+        Int32 triggerSound;
+        Int32 operatorStatesTriggerProhibited;               // 404  0x0000000000000CB4  XLS_ReadIntArray,01
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x68)]
+        Int32 sublevelDest;//index                           // 405  0x0000000000000CB8  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x99)]
+        Int32 operateRequiredQuest;//index                   // 406  0x0000000000000CBC  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x9A)]
+        Int32 operateRequiredQuestState;//index              // 407  0x0000000000000CC0  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x97)]
+        Int32 operateRequiredQuestStateValue;//index         // 408  0x0000000000000CC4  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x97)]
+        Int32 operateProhibitedQuestStateValue;//index       // 409  0x0000000000000CC8  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        Int32 requiresItemOfUnitType1;//index                // 66   0x0000000000000CCC  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x65)]
+        Int32 spawnTreasureClassInLevel;//index              // 67   0x0000000000000CD0  XLS_ReadIndex
+        Int32 oneWayVisualPortalDir;                         // 410  0x0000000000000CD4  XLS_ReadInternalIndex
+        Int32 warpResolveTime;                               // 473  0x0000000000000CD8  XLS_ReadInternalIndex
+        float labelScale;                                    // 413  0x0000000000000CDC  XLS_ReadFloat
+        float labelForwardOffset;                            // 414  0x0000000000000CE0  XLS_ReadFloat
+        float heightpercent;                                 // 469  0x0000000000000CE4  XLS_ReadFloat_0 ??
+        float weightPercent;                                 // 470  0x0000000000000CE8  XLS_ReadFloat_0 ??
+        Int32 hasAppearanceShape;//bool                      // 459  0x0000000000000CEC  XLS_ReadInt32,0B
+        byte apperanceHeightMin;                             // 460  0x0000000000000CF0  XLS_ReadByte
+        byte appearanceHeightMax;                            // 461  0x0000000000000CF1  XLS_ReadByte
+        byte appearanceWeightMin;                            // 462  0x0000000000000CF2  XLS_ReadByte
+        byte appearanceWeightMax;                            // 463  0x0000000000000CF3  XLS_ReadByte
+        Int32 appearanceUseLineBounds;//bool                 // 464  0x0000000000000CF4  XLS_ReadInt32,0B
+        byte appearanceShortSkinny;                          // 465  0x0000000000000CF5  XLS_ReadByte
+        byte appearanceTallSkinny;                           // 466  0x0000000000000CF6  XLS_ReadByte
+        byte appearanceShortFat;                             // 467  0x0000000000000CF7  XLS_ReadByte
+        byte appearanceTallFat;                              // 468  0x0000000000000CF8  XLS_ReadByte
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x08)]
+        Int32 colorSet;//index                               // 31   0x0000000000000CFC  XLS_ReadIndex
+        Int32 corpseExplodePoints;                           // 471  0x0000000000000D00  XLS_ReadInt32
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
+        Int32 requiredAttackerUnitType;//index               // 472  0x0000000000000D04  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x84)]
+        Int32 startingLevelArea;//index                      // 474  0x0000000000000D08  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x84)]
+        Int32 warpToLevelArea;//index                        // 476  0x0000000000000D0C  XLS_ReadIndex
+        Int32 warpToFloor;                                   // 477  0x0000000000000D10  XLS_ReadInt32
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0xA7)]
+        Int32 globalThemeRequired;//index                    // 478  0x0000000000000D14  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x55)]
+        Int32 levelThemeRequired;//index                     // 479  0x0000000000000D18  XLS_ReadIndex
+        [ExcelOutput(IsTableIndex = true, TableIndex = 0x21)]
+        Int32 modeGroupOnClient;//index                      // 475  0x0000000000000D1C  XLS_ReadIndex
+        Int32 cameraTarget;                                         // 455  0x0000000000000D20  XLS_ReadInt32
+        Int32 null2;                                         // 456  0x0000000000000D24  XLS_ReadInt32
+        Int32 null3;                                         // 457  0x0000000000000D28  XLS_ReadInt32
+        Int32 cameraEye;
+        Int32 null4;
+        Int32 null5;
+        Int32 RMTAvailable;
+        Int32 realWorldCost;
+        Int32 RMTBadges;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
         byte[] undefined2_1;
-        public Int32 RMTTangibility;
-        public Int32 RMTPricing;
-        public Int32 undefined1_1;
-        public Int32 undefined1_2;
-        public Int32 undefined1_3;
+        Int32 RMTTangibility;
+        Int32 RMTPricing;
+        Int32 undefined1_1;
+        Int32 undefined1_2;
+        Int32 undefined1_3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 88)]
         byte[] undefined2_2;
-        public Int32 undefined1_4;
-        public Int32 undefined1_5;
-        public Int32 setStateOnHit;
-        public Int32 durationMSStateOnHit;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 52)]
+        Int32 undefined1_4;
+        Int32 undefined1_5;
+        Int32 setStateOnHit;
+        Int32 durationMSStateOnHit;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)] // add 4
         byte[] undefined2_3;
 
         public abstract class Items

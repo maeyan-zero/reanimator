@@ -146,15 +146,12 @@ namespace Reanimator
                 }
             }
 
-            if (dataFile.IsExcelFile)
+            if ((uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0x887988C4 || (uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0xE08E6C41) // items, missiles, monsters, objects, players
             {
-                if ((uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
-                {
-                    DataColumn indiceDataCol = mainDataTable.Columns.Add("indiceData");
-                    indiceDataCol.DataType = typeof(string);
-                    indiceDataCol.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsIndiceData, true);
-                    outputAttributes.Add(null);
-                }
+                DataColumn indiceDataCol = mainDataTable.Columns.Add("indiceData");
+                indiceDataCol.DataType = typeof(string);
+                indiceDataCol.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsIndiceData, true);
+                outputAttributes.Add(null);
             }
 
             #endregion
@@ -223,13 +220,10 @@ namespace Reanimator
                     }
                 }
 
-                if (dataFile.IsExcelFile)
+                if ((uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0x887988C4 || (uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0xE08E6C41) // items, missiles, monsters, objects, players
                 {
-                    if ((uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
-                    {
-                        int i = row - 1;
-                        baseRow[col++] = Export.ArrayToCSV<byte>(((ExcelFile)dataFile).ExtraIndexData[i], "hex");
-                    }
+                    int i = row - 1;
+                    baseRow[col++] = Export.ArrayToCSV<byte>(((ExcelFile)dataFile).ExtraIndexData[i], "hex");
                 }
 
                 mainDataTable.Rows.Add(baseRow);
