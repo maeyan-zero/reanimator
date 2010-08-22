@@ -43,7 +43,7 @@ namespace Reanimator.Forms.ItemTransfer
 
             cb_selectCharacter.DataSource = characters;
 
-            _characterItemPanel = new ItemPanel();
+            _characterItemPanel = new ItemPanel(false);
             _characterItemPanel.NewItemSelected_Event += _characterItemPanel_NewItemSelected_Event;
             _characterItemPanel.ItemUnitSize = ItemUnitSize;
             _characterItemPanel.Size = new Size(InventoryWidth * ItemUnitSize, InventoryHeight * ItemUnitSize);
@@ -117,7 +117,7 @@ namespace Reanimator.Forms.ItemTransfer
                 {
                     if (item.inventoryType == (int)InventoryType)
                     {
-                        InventoryItem iItem = new InventoryItem(item);
+                        InventoryItem iItem = new InventoryItem(item, true);
                         itemPanel.AddItem(iItem, true);
                     }
                 }

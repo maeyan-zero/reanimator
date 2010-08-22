@@ -305,5 +305,13 @@ namespace Reanimator.Forms.ItemTransfer
 
             EnableComboBoxes(true, true);
         }
+
+        //protected override void Dispose(bool disposing)
+        //{
+        //    _characterItemPanel1.Dispose();
+        //    _characterItemPanel2.Dispose();
+
+        //    base.Dispose(disposing);
+        //}
     }
 }
