@@ -243,10 +243,13 @@ namespace Reanimator
             token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
             CheckExcelFlag(token);
 
+
             Count = FileTools.ByteArrayTo<Int32>(_data, ref offset);
             for (int i = 0; i < Count; i++)
             {
                 Object table = FileTools.ByteArrayToStructure(data, DataType, offset);
+                int size = Marshal.SizeOf(DataType);
+                size = size;
                 offset += Marshal.SizeOf(DataType);
 
                 Rows.Add(table);
@@ -257,7 +260,7 @@ namespace Reanimator
             token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
             CheckExcelFlag(token);
 
-            if ((uint)FileExcelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
+            if ((uint)FileExcelHeader.StructureId == 0x887988C4 || (uint)FileExcelHeader.StructureId == 0xE08E6C41) // items, missiles, monsters, objects, players (includes tcv4 version)
             {
                 TableIndicies = new int[Count];
                 ExtraIndexData = new List<byte[]>();
@@ -849,7 +852,14 @@ namespace Reanimator
                     if (!String.IsNullOrEmpty(s))
                     {
                         byte[] array = Export.CSVtoArray(s, Config.IntPtrCast, typeof(byte));
-                        ExtraIndexData[row] = array;
+                        if (ExtraIndexData.Count <= row)
+                        {
+                            ExtraIndexData.Add(array);
+                        }
+                        else
+                        {
+                            ExtraIndexData[row] = array;
+                        }
                     }
                 }
 
