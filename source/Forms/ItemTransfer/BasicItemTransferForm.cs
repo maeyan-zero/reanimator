@@ -179,7 +179,7 @@ namespace Reanimator.Forms.ItemTransfer
             return characters;
         }
 
-        protected void InitInventory(Unit unit, ItemPanel itemPanel)
+        protected virtual void InitInventory(Unit unit, ItemPanel itemPanel)
         {
             itemPanel.Controls.Clear();
 
@@ -189,7 +189,8 @@ namespace Reanimator.Forms.ItemTransfer
                 {
                     if (item.inventoryType == (int)INVENTORYTYPE)
                     {
-                        InventoryItem iItem = new InventoryItem(item, _displayNamesAndQuantity);
+                        InventoryItem iItem = new InventoryItem(item, 0);
+                        iItem.InitButton(true);
                         itemPanel.AddItem(iItem, true);
                     }
                 }

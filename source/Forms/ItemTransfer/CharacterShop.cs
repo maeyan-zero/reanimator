@@ -117,7 +117,8 @@ namespace Reanimator.Forms.ItemTransfer
                 {
                     if (item.inventoryType == (int)InventoryType)
                     {
-                        InventoryItem iItem = new InventoryItem(item, true);
+                        InventoryItem iItem = new InventoryItem(item, 0);
+                        iItem.InitButton(false);
                         itemPanel.AddItem(iItem, true);
                     }
                 }

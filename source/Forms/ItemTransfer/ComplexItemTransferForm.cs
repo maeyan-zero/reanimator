@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
+using System.Data;
 
 namespace Reanimator.Forms.ItemTransfer
 {
@@ -10,6 +11,7 @@ namespace Reanimator.Forms.ItemTransfer
     {
         TableFiles _tableFiles;
         UnitHelpFunctions _itemHelpFunctions;
+        DataTable _items;
 
         /// <summary>
         /// Use this constructor when starting the item transfer window from within Reanimator (additional item infos)
@@ -23,7 +25,7 @@ namespace Reanimator.Forms.ItemTransfer
             _tableFiles = tableFiles;
 
             //preload the tables
-            dataSet.GetExcelTableFromStringId("ITEMS");
+            _items = dataSet.GetExcelTableFromStringId("ITEMS");
             dataSet.GetExcelTableFromStringId("AFFIXES");
 
             //adding the character names triggers the cb_selectCharacter1_SelectedIndexChanged event which will load the first character
@@ -73,6 +75,36 @@ namespace Reanimator.Forms.ItemTransfer
             }
 
             CheckAndSetButtonStatus();
+        }
+
+        protected override void InitInventory(Unit unit, ItemPanel itemPanel)
+        {
+            itemPanel.Controls.Clear();
+
+            try
+            {
+                foreach (Unit item in unit.Items)
+                {
+                    if (item.inventoryType == (int)INVENTORYTYPE)
+                    {
+                        DataRow[] itemsRows = _items.Select(String.Format("code = '{0}'", item.unitCode));
+                        if (itemsRows.Length == 0)
+                        {
+
+                        }
+                        int unitType = (int)itemsRows[0]["unitType"];
+                        //string unitType = (string)itemsRows[0]["unitType_string"];
+
+                        InventoryItem iItem = new InventoryItem(item, unitType);
+                        iItem.InitButton(_displayNamesAndQuantity);
+                        itemPanel.AddItem(iItem, true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "InitInventory: " + unit.Name);
+            }
         }
 
         protected override void b_loadCharacter2_Click(object sender, EventArgs e)

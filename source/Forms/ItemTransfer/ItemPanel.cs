@@ -62,9 +62,9 @@ namespace Reanimator.Forms.ItemTransfer
                 RegisterItemEvents(item);
                 item.ButtonUnitSize = _itemUnitSize;
 
-                if (_displayItemIcons && _manager.ImagesAvailable)
+                if (_displayItemIcons)// && _manager.ImagesAvailable)
                 {
-                    Image img = _manager.GetImage(item.Item.Name);
+                    Image img = _manager.GetImage(item.UnitType);
                     if (img != null)
                     {
                         item.BackgroundImage = img;
@@ -246,8 +246,9 @@ namespace Reanimator.Forms.ItemTransfer
         Unit _item;
         int _quantity;
         bool _displayNamesAndQuantity;
+        int _unitType;
         bool _displayItemIcons;
-        string _baseItem;
+        string _unitTypeString;
 
         public int Quantity
         {
@@ -264,7 +265,7 @@ namespace Reanimator.Forms.ItemTransfer
             set
             {
                 _item = value;
-                InitButton(value);
+                InitButton(_displayNamesAndQuantity);
             }
         }
 
@@ -305,10 +306,16 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        public string BaseItem
+        public string UnitTypeString
         {
-            get { return _baseItem; }
-            set { _baseItem = value; }
+            get { return _unitTypeString; }
+            set { _unitTypeString = value; }
+        }
+
+        public int UnitType
+        {
+            get { return _unitType; }
+            set { _unitType = value; }
         }
 
         public InventoryItem()
@@ -316,41 +323,39 @@ namespace Reanimator.Forms.ItemTransfer
         {
         }
 
-        public InventoryItem(Unit item, bool displayNamesAndQuantity)//, string baseItem)
+        public InventoryItem(Unit item, int unitType)//, string baseItem)
             : base()
         {
             _item = item;
-            _displayNamesAndQuantity = displayNamesAndQuantity;
-
-        //_baseItem = baseItem;
-            //_displayNamesAndQuantity = true;
-            //_displayImages = true;
-
-            InitButton(item);
-
-            //List<NameToImage> l = new List<NameToImage>();
-            //NameToImage im = new NameToImage();
-            //im.ImagePath = @"F:\test.png";
-            //im.ItemName = "ABC";
-            //l.Add(im);
-            //XmlUtilities<List<NameToImage>>.Serialize(l, "imageMapping.xml");
+            _unitType = unitType;
 
             this.BackgroundImageLayout = ImageLayout.Stretch;
             Position = new Point(_item.inventoryPositionX, _item.inventoryPositionY);
         }
 
-        public void InitButton(Unit item)
+        public InventoryItem(Unit item, string unitTypeString)//, string baseItem)
+            : base()
+        {
+            _item = item;
+            _unitTypeString = unitTypeString;
+
+            this.BackgroundImageLayout = ImageLayout.Stretch;
+            Position = new Point(_item.inventoryPositionX, _item.inventoryPositionY);
+        }
+
+        public void InitButton(bool displayNameAndQuantity)
         {
             this.FlatStyle = FlatStyle.Flat;
             this.FlatAppearance.BorderSize = 4;
             this.BackColor = Color.Transparent;
             this.ForeColor = Color.White;
             this.Text = string.Empty;
-
-            _quantity = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.item_quantity.ToString());
+            _displayNamesAndQuantity = displayNameAndQuantity;
 
             if (_displayNamesAndQuantity)
             {
+                _quantity = UnitHelpFunctions.GetSimpleValue(_item, ItemValueNames.item_quantity.ToString());
+
                 if (_quantity > 0)
                 {
                     this.Text += _quantity.ToString() + "x ";
@@ -422,84 +427,170 @@ namespace Reanimator.Forms.ItemTransfer
         //}
     }
 
+    //public class PreviewManager
+    //{
+    //    List<NameToImage> _images;
+    //    const string _configPath = "imageMapping.xml";
+
+    //    public PreviewManager()
+    //    {
+    //        if (File.Exists(_configPath))
+    //        {
+    //            _images = XmlUtilities<List<NameToImage>>.Deserialize(_configPath);
+    //        }
+    //    }
+
+    //    public Image GetImage(string itemName)
+    //    {
+    //        NameToImage name = _images.Find(tmp => tmp.ItemName.Contains(itemName));
+
+    //        if (name != null)
+    //        {
+    //            return name.GetImage();
+    //        }
+
+    //        return null;
+    //    }
+
+    //    public Image GetImage(int unitType)
+    //    {
+    //        NameToImage name = _images.Find(tmp => tmp.UnitType == unitType);
+
+    //        if (name != null)
+    //        {
+    //            return name.GetImage();
+    //        }
+
+    //        return null;
+    //    }
+
+    //    public bool ImagesAvailable
+    //    {
+    //        get
+    //        {
+    //            return _images != null;
+    //        }
+    //    }
+
+    //    //public void Dispose()
+    //    //{
+    //    //    if (_images != null)
+    //    //    {
+    //    //        foreach (NameToImage image in _images)
+    //    //        {
+    //    //            image.Dispose();
+    //    //        }
+    //    //    }
+    //    //}
+    //}
+
+
+    //public class NameToImage
+    //{
+    //    int _unitType;
+    //    string _itemName;
+    //    string _imagePath;
+    //    Image _image;
+
+    //    [XmlElement("ItemName")]
+    //    public string ItemName
+    //    {
+    //        get { return _itemName; }
+    //        set { _itemName = value; }
+    //    }
+
+    //    [XmlElement("ImagePath")]
+    //    public string ImagePath
+    //    {
+    //        get { return _imagePath; }
+    //        set { _imagePath = value; }
+    //    }
+
+    //    [XmlElement("UnitType")]
+    //    public int UnitType
+    //    {
+    //        get { return _unitType; }
+    //        set { _unitType = value; }
+    //    }
+
+    //    public Image GetImage()
+    //    {
+    //        if (_image == null)
+    //        {
+    //            _image = Bitmap.FromFile(_imagePath);
+    //        }
+
+    //        return _image;
+    //    }
+
+    //    //public void Dispose()
+    //    //{
+    //    //    _image.Dispose();
+    //    //}
+    //}
+
     public class PreviewManager
     {
-        List<NameToImage> _images;
-        const string _configPath = "imageMapping.xml";
+        List<ImageHolder> _imageHolder;
 
         public PreviewManager()
         {
-            if (File.Exists(_configPath))
-            {
-                _images = XmlUtilities<List<NameToImage>>.Deserialize(_configPath);
-            }
+            _imageHolder = new List<ImageHolder>();
         }
 
-        public Image GetImage(string itemName)
+        public Image GetImage(int unitType)
         {
-            NameToImage name = _images.Find(tmp => tmp.ItemName.Contains(itemName));
+            ImageHolder image = _imageHolder.Find(tmp => tmp.UnitType == unitType);
 
-            if (name != null)
+            if (image != null)
             {
-                return name.GetImage();
+                return image.Image;
             }
 
+            image = new ImageHolder();
+            if(image.Load("items", unitType))
+            {
+                _imageHolder.Add(image);
+                return image.Image;
+            }
             return null;
         }
-
-        public bool ImagesAvailable
-        {
-            get
-            {
-                return _images != null;
-            }
-        }
-
-        //public void Dispose()
-        //{
-        //    if (_images != null)
-        //    {
-        //        foreach (NameToImage image in _images)
-        //        {
-        //            image.Dispose();
-        //        }
-        //    }
-        //}
     }
 
-    public class NameToImage
+    public class ImageHolder
     {
-        string _itemName;
-        string _imagePath;
+        int _unitType;
         Image _image;
 
-        [XmlElement("ItemName")]
-        public string ItemName
+        public int UnitType
         {
-            get { return _itemName; }
-            set { _itemName = value; }
+          get { return _unitType; }
+          set { _unitType = value; }
         }
 
-        [XmlElement("ImagePath")]
-        public string ImagePath
+        public Image Image
         {
-            get { return _imagePath; }
-            set { _imagePath = value; }
+          get { return _image; }
+          set { _image = value; }
         }
 
-        public Image GetImage()
+        public ImageHolder()
         {
-            if (_image == null)
+        }
+
+        public bool Load(string folder, int unitType)
+        {
+            _unitType = unitType;
+            string filePath = Path.Combine(folder, _unitType + ".png");
+
+            if (File.Exists(filePath))
             {
-                _image = Bitmap.FromFile(_imagePath);
+                _image = Image.FromFile(filePath);
+                return true;
             }
 
-            return _image;
+            return false;
         }
-
-        //public void Dispose()
-        //{
-        //    _image.Dispose();
-        //}
     }
+
 }
