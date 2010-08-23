@@ -649,21 +649,21 @@ namespace Reanimator.ExcelDefinitions
         public Int32 skillHitUnit;//index                           // 391  0x0000000000000A24  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillHitBackground;//index                     // 392  0x0000000000000A28  XLS_ReadIndex
-        Int32 skillMissed1;                                         // 393  0x0000000000000A2C  XLS_ReadIntArray,0F
-        Int32 skillMissed2;                                         // 393  0x0000000000000A30
-        Int32 skillMissed3;                                         // 393  0x0000000000000A34
-        Int32 skillMissed4;                                         // 393  0x0000000000000A38
-        Int32 skillMissed5;                                         // 393  0x0000000000000A3C
-        Int32 skillMissed6;                                         // 393  0x0000000000000A40
-        Int32 skillMissed7;                                         // 393  0x0000000000000A44
-        Int32 skillMissed8;                                         // 393  0x0000000000000A48
-        Int32 skillMissed9;                                         // 393  0x0000000000000A4C
-        Int32 skillMissed10;                                        // 393  0x0000000000000A50
-        Int32 skillMissed11;                                        // 393  0x0000000000000A54
-        Int32 skillMissed12;                                        // 393  0x0000000000000A58
-        Int32 skillMissed13;                                        // 393  0x0000000000000A5C
-        Int32 skillMissed14;                                        // 393  0x0000000000000A60
-        Int32 skillMissed15;                                        // 393  0x0000000000000A64
+        public Int32 skillMissed1;                                         // 393  0x0000000000000A2C  XLS_ReadIntArray,0F
+        public Int32 skillMissed2;                                         // 393  0x0000000000000A30
+        public Int32 skillMissed3;                                         // 393  0x0000000000000A34
+        public Int32 skillMissed4;                                         // 393  0x0000000000000A38
+        public Int32 skillMissed5;                                         // 393  0x0000000000000A3C
+        public Int32 skillMissed6;                                         // 393  0x0000000000000A40
+        public Int32 skillMissed7;                                         // 393  0x0000000000000A44
+        public Int32 skillMissed8;                                         // 393  0x0000000000000A48
+        public Int32 skillMissed9;                                         // 393  0x0000000000000A4C
+        public Int32 skillMissed10;                                        // 393  0x0000000000000A50
+        public Int32 skillMissed11;                                        // 393  0x0000000000000A54
+        public Int32 skillMissed12;                                        // 393  0x0000000000000A58
+        public Int32 skillMissed13;                                        // 393  0x0000000000000A5C
+        public Int32 skillMissed14;                                        // 393  0x0000000000000A60
+        public Int32 skillMissed15;                                        // 393  0x0000000000000A64
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknownBytes20;                                      // 0x0000000000000A68 to 0x0000000000000A6C
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]

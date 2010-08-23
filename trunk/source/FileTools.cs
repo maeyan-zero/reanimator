@@ -80,7 +80,7 @@ namespace Reanimator
 
         public static T ByteArrayTo<T>(byte[] byteArray, ref int offset)
         {
-            Debug.Assert(offset < byteArray.Length);
+            Debug.Assert(offset < byteArray.Length, "Error: offset < byteArray.Length");
             IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
             offset += Marshal.SizeOf(typeof(T));
             return (T)Marshal.PtrToStructure(bytePtr, typeof(T));

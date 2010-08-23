@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -136,13 +137,11 @@ namespace Reanimator
 
         public void WriteIndex()
         {
-            byte[] buffer = this.GenerateIndexFile();
+            byte[] buffer = GenerateIndexFile();
             Crypt.Encrypt(buffer);
             _indexFile.Seek(0, SeekOrigin.Begin);
             _indexFile.Write(buffer, 0, buffer.Length);
         }
-
-
 
         public class FileIndex
         {
@@ -284,12 +283,9 @@ namespace Reanimator
 
         void CheckForModifications()
         {
-            foreach (FileIndex file in FileTable)
+            if (FileTable.Any(file => file.DirectoryString.Contains(Affix)))
             {
-                if (!file.DirectoryString.Contains(Affix)) continue;
-
                 Modified = true;
-                break;
             }
         }
 
@@ -318,14 +314,12 @@ namespace Reanimator
 
             for (int i = 0; i < _fileCount; i++)
             {
+                int offset = _fileDataOffset + i*FileStructLength;
                 FileIndex fileIndex = new FileIndex
-                                          {
-                                              FileStruct =
-                                                  (FileIndex.FileIndexStruct)
-                                                  FileTools.ByteArrayToStructure(_buffer,
-                                                                                 typeof(FileIndex.FileIndexStruct),
-                                                                                 _fileDataOffset + i * FileStructLength)
-                                          };
+                {
+                    FileStruct = (FileIndex.FileIndexStruct)FileTools.ByteArrayToStructure(_buffer,
+                            typeof(FileIndex.FileIndexStruct), offset),
+                };
                 fileIndex.DirectoryString = _stringTable[fileIndex.Directory];
                 fileIndex.FileNameString = _stringTable[fileIndex.FileName];
 

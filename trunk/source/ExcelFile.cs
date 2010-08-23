@@ -720,7 +720,6 @@ namespace Reanimator
                         continue;
                     }
 
-
                     // get the applicable column
                     DataColumn dc = dataTable.Columns[col];
                     while (dc != null)

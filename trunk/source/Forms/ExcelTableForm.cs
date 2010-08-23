@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Reflection;
@@ -84,9 +85,38 @@ namespace Reanimator.Forms
 
             // table tab
             tableData_DataGridView.SuspendLayout();
-            _tableDataSet.LoadTable(progress, var);
-            tableData_DataGridView.DataMember = _dataFile.StringId;
-            _dataTable = _tableDataSet.XlsDataSet.Tables[_dataFile.StringId];
+            _dataTable = _tableDataSet.LoadTable(progress, dataFile);
+            if (_dataTable == null)
+            {
+                MessageBox.Show("Failed to load DataTable!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            // need to manually populate columns due to fillweight = 100 by default (overflow crap; 655 * 100 > max int)
+            if (_dataTable.Columns.Count > 655)
+            {
+                tableData_DataGridView.AutoGenerateColumns = false;
+                DataGridViewColumn[] columns = new DataGridViewColumn[_dataTable.Columns.Count];
+
+                int i = 0;
+                foreach (DataGridViewTextBoxColumn dataGridViewColumn in
+                    from DataColumn dataColumn in _dataTable.Columns
+                    select new DataGridViewTextBoxColumn
+                    {
+                        Name = dataColumn.ColumnName,
+                        FillWeight = 1,
+                        DataPropertyName = dataColumn.ColumnName
+                    })
+                {
+                    columns[i++] = dataGridViewColumn;
+                }
+
+                tableData_DataGridView.Columns.AddRange(columns);
+                tableData_DataGridView.DataMember = _dataFile.StringId;
+            }
+            else
+            {
+                tableData_DataGridView.DataMember = _dataFile.StringId;
+            }
             tableData_DataGridView.ResumeLayout();
 
 
