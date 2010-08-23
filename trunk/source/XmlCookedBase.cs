@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -8,45 +9,84 @@ namespace Reanimator
 {
     abstract class XmlCookedBase
     {
-        /*
         private class XmlUnknownElement
         {
-            private short _token;
+            public UInt32 Value { get; private set; }
+            public ushort Token { get; private set; }
+            public Object[] Objects { get; private set; }
 
-            public XmlUnknownElement(short token)
+            public XmlUnknownElement(UInt32 value, ushort token, params object[] objects)
             {
-                _token = token;
+                Value = value;
+                Token = token;
+                Objects = objects;
             }
-        }*
-         */
+        }
 
         public XmlDocument XmlDoc { get; private set; }
-        protected readonly List<Object> DataElements;
+
+        private readonly List<XmlUnknownElement> _unknownArray;
 
         protected byte[] Data;
-        protected int Offset;
+        protected int ReadOffset;
+        protected int WriteOffset;
 
         protected XmlCookedBase()
         {
             XmlDoc = new XmlDocument();
-            DataElements = new List<Object>();
-            
-            Data = null;
-            Offset = 0;
+            _unknownArray = new List<XmlUnknownElement>();
         }
 
+        protected abstract bool CookDataSegment(byte[] buffer);
         protected abstract bool ParseDataSegment(XmlElement dataElement);
+
+        public byte[] Cook()
+        {
+            byte[] buffer = new byte[1024];
+            WriteOffset = 0;
+
+            FileTools.WriteToBuffer(ref buffer, ref WriteOffset, XmlCookedFile.FileHeadToken);     // 'CO0k'
+            FileTools.WriteToBuffer(ref buffer, ref WriteOffset, XmlCookedFile.RequiredVersion);   // 8
+
+            foreach (XmlUnknownElement xmlUnknownElement in _unknownArray)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref WriteOffset, xmlUnknownElement.Value);
+                FileTools.WriteToBuffer(ref buffer, ref WriteOffset, xmlUnknownElement.Token);
+
+                foreach (Object obj in xmlUnknownElement.Objects)
+                {
+                    if (obj == null) // string from 0x0200
+                    {
+                        WriteOffset++;
+                        continue;
+                    }
+                    FileTools.WriteToBuffer(ref buffer, ref WriteOffset, obj);
+                }
+            }
+
+            FileTools.WriteToBuffer(ref buffer, ref WriteOffset, XmlCookedFile.DataSegmentToken);   // 'DATA'
+
+            if (!CookDataSegment(buffer)) return null;
+
+            byte[] data = new byte[WriteOffset];
+            Buffer.BlockCopy(buffer, 0, data, 0, WriteOffset);
+
+            return data;
+        }
+
+        public String Blah;
 
         public bool ParseData(byte[] data)
         {
             if (data == null) return false;
             Data = data;
+            ReadOffset = 0;
 
-            int fileHeadToken = FileTools.ByteArrayTo<Int32>(Data, ref Offset);
-            if (fileHeadToken != 0x6B304F43) return false;  // 'CO0k'
+            int fileHeadToken = FileTools.ByteArrayTo<Int32>(Data, ref ReadOffset);
+            if (fileHeadToken != XmlCookedFile.FileHeadToken) return false;  // 'CO0k'
 
-            int version = FileTools.ByteArrayTo<Int32>(Data, ref Offset);
-            if (version != 0x08) return false;
+            int version = FileTools.ByteArrayTo<Int32>(Data, ref ReadOffset);
+            if (version != XmlCookedFile.RequiredVersion) return false;
 
             XmlElement mainElement = XmlDoc.CreateElement("CO0k");
             XmlDoc.AppendChild(mainElement);
@@ -87,27 +127,27 @@ namespace Reanimator
             XmlElement unknownArray = XmlDoc.CreateElement("unknownArray");
             mainElement.AppendChild(unknownArray);
 
-            while (Offset < Data.Length)
+            while (ReadOffset < Data.Length)
             {
-                uint unknown = FileTools.ByteArrayTo<UInt32>(Data, ref Offset);
+                uint unknown = FileTools.ByteArrayTo<UInt32>(Data, ref ReadOffset);
 
-                if (unknown == 0x41544144) break;     // 'DATA'
+                if (unknown == XmlCookedFile.DataSegmentToken) break;     // 'DATA'
 
-                ushort token = FileTools.ByteArrayTo<ushort>(Data, ref Offset);
+                ushort token = FileTools.ByteArrayTo<ushort>(Data, ref ReadOffset);
 
                 XmlElement arrayElement = XmlDoc.CreateElement("0x" + unknown.ToString("X8"));
                 arrayElement.SetAttribute("token", "0x" + token.ToString("X4"));
                 unknownArray.AppendChild(arrayElement);
 
-                XmlElement element;
                 switch (token)
                 {
                     case 0x0200:    // skills
                         String str = ReadByteString(arrayElement, "str", false);
                         if (str != null)
                         {
-                            Offset++; // need to include \0 as it isn't included in the strLen byte for some reason
+                            ReadOffset++; // need to include \0 as it isn't included in the strLen byte for some reason
                         }
+                        _AddUnknown(unknown, token, str);
 
                         break;
 
@@ -115,7 +155,8 @@ namespace Reanimator
                     //case 0x0005:
                     //case 0x00C0:
                     //case 0x008D: // found in particle effects
-                        ReadShort(arrayElement, "short");
+                        short srt = ReadShort(arrayElement, "short");
+                        _AddUnknown(unknown, token, srt);
                         break;
 
                     case 0x0000:    // skills
@@ -123,30 +164,35 @@ namespace Reanimator
                     case 0x0700:    // skills
                     case 0x0903:    // skills
                     //case 0x0A00:   // particle effects
-                        ReadInt32(arrayElement, "int");
+                        int int0 = ReadInt32(arrayElement, "int");
+                        _AddUnknown(unknown, token, int0);
                         break;
 
                     case 0x0100:    // skills
                     //case 0x0600:
                     ////case 0x0500: // found in particle effects
-                        ReadFloat(arrayElement, "float");
+                        float f = ReadFloat(arrayElement, "float");
+                        _AddUnknown(unknown, token, f);
                         break;
 
                     case 0x0B01:    // skills
-                        ReadInt32(arrayElement, "int");
-                        ReadBitField(arrayElement, "bitmask");
+                        int int1 = ReadInt32(arrayElement, "int");
+                        UInt32 bitfield = ReadBitField(arrayElement, "bitField");
+                        _AddUnknown(unknown, token, int1, bitfield);
                         break;
 
                     case 0x0308:    // skills
                     case 0x030A:    // skills
                     ////case 0x0106: // found in particle effects
-                        ReadInt32(arrayElement, "int1");
-                        ReadInt32(arrayElement, "int2");
+                        int int2 = ReadInt32(arrayElement, "int1");
+                        int int3 = ReadInt32(arrayElement, "int2");
+                        _AddUnknown(unknown, token, int2, int3);
                         break;
 
                     case 0x0C02:    // skills
-                        ReadInt32(arrayElement, "index");
-                        ReadInt32(arrayElement, "int");
+                        int int4 = ReadInt32(arrayElement, "index");
+                        int int5 = ReadInt32(arrayElement, "int");
+                        _AddUnknown(unknown, token, int4, int5);
                         break;
 
                     default:
@@ -162,9 +208,9 @@ namespace Reanimator
 
             if (!ParseDataSegment(dataElement)) return false;
 
-            if (Offset != Data.Length)
+            if (ReadOffset != Data.Length)
             {
-                MessageBox.Show("Entire file not parsed!\noffset != data.Length\n\noffset = " + Offset +
+                MessageBox.Show("Entire file not parsed!\noffset != data.Length\n\noffset = " + ReadOffset +
                                 "\ndata.Length = " + Data.Length, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
@@ -172,9 +218,14 @@ namespace Reanimator
             return true;
         }
 
+        private void _AddUnknown(UInt32 unknown, ushort token, params Object[] objects)
+        {
+            _unknownArray.Add(new XmlUnknownElement(unknown, token, objects));
+        }
+
         protected Int32 ReadInt32(XmlNode parentNode, String elementName)
         {
-            Int32 value = FileTools.ByteArrayTo<Int32>(Data, ref Offset);
+            Int32 value = FileTools.ByteArrayTo<Int32>(Data, ref ReadOffset);
 
             XmlElement element = XmlDoc.CreateElement(elementName);
             element.InnerText = value.ToString();
@@ -186,7 +237,7 @@ namespace Reanimator
 
         protected float ReadFloat(XmlNode parentNode, String elementName)
         {
-            float value = FileTools.ByteArrayTo<float>(Data, ref Offset);
+            float value = FileTools.ByteArrayTo<float>(Data, ref ReadOffset);
 
             XmlElement element = XmlDoc.CreateElement(elementName);
             element.InnerText = value.ToString("F5");
@@ -197,7 +248,7 @@ namespace Reanimator
 
         private short ReadShort(XmlNode parentNode, String elementName)
         {
-            short value = FileTools.ByteArrayTo<short>(Data, ref Offset);
+            short value = FileTools.ByteArrayTo<short>(Data, ref ReadOffset);
 
             XmlElement element = XmlDoc.CreateElement(elementName);
             element.InnerText = value.ToString();
@@ -209,7 +260,7 @@ namespace Reanimator
 
         protected UInt32 ReadBitField(XmlNode parentNode, String elementName)
         {
-            UInt32 value = FileTools.ByteArrayTo<UInt32>(Data, ref Offset);
+            UInt32 value = FileTools.ByteArrayTo<UInt32>(Data, ref ReadOffset);
 
             XmlElement element = XmlDoc.CreateElement(elementName);
             element.InnerText = Convert.ToString(value, 2).PadLeft(32, '0');
@@ -222,7 +273,7 @@ namespace Reanimator
         protected String ReadByteString(XmlNode parentNode, String elementName, bool mustExist)
         {
             String value = null;
-            byte strLen = FileTools.ByteArrayTo<byte>(Data, ref Offset);
+            byte strLen = FileTools.ByteArrayTo<byte>(Data, ref ReadOffset);
             if (strLen == 0xFF || strLen == 0x00)
             {
                 if (mustExist)
@@ -232,7 +283,7 @@ namespace Reanimator
             }
             else
             {
-                value = FileTools.ByteArrayToStringAnsi(Data, ref Offset, strLen);
+                value = FileTools.ByteArrayToStringAnsi(Data, ref ReadOffset, strLen);
             }
 
             if (value == null) return null;
@@ -246,17 +297,64 @@ namespace Reanimator
 
         protected String ReadZeroString(XmlNode parentNode, String elementName)
         {
-            Int32 strLen = FileTools.ByteArrayTo<Int32>(Data, ref Offset);
+            Int32 strLen = FileTools.ByteArrayTo<Int32>(Data, ref ReadOffset);
             Debug.Assert(strLen != 0);
 
-            String value = FileTools.ByteArrayToStringAnsi(Data, Offset);
-            Offset += strLen;
+            String value = FileTools.ByteArrayToStringAnsi(Data, ReadOffset);
+            ReadOffset += strLen;
 
             XmlElement element = XmlDoc.CreateElement(elementName);
             element.InnerText = value;
             parentNode.AppendChild(element);
 
             return value;
+        }
+
+        protected void WriteByteString(ref byte[] buffer, String str, bool mustExist)
+        {
+            WriteByteString(ref buffer, str, mustExist, false);
+        }
+
+        protected void WriteByteString(ref byte[] buffer, String str, bool mustExist, bool use255)
+        {
+            Byte strLen = 0;
+            if (str != null)
+            {
+                strLen = (byte)str.Length;
+            }
+
+            if (strLen != 0)
+            {
+                byte[] strBytes = FileTools.StringToASCIIByteArray(str);
+                FileTools.WriteToBuffer(ref buffer, ref WriteOffset, strLen);
+                FileTools.WriteToBuffer(ref buffer, ref WriteOffset, strBytes);
+            }
+            else
+            {
+                if (mustExist)
+                {
+                    if (use255)
+                    {
+                        strLen = 0xFF;
+                    }
+
+                    FileTools.WriteToBuffer(ref buffer, ref WriteOffset, strLen);
+                }
+            }
+        }
+
+        protected void WriteZeroString(ref byte[] buffer, String str)
+        {
+            Int32 strLen = str.Length;
+            FileTools.WriteToBuffer(ref buffer, ref WriteOffset, strLen+1); // +1 for \0
+            byte[] strBytes = FileTools.StringToASCIIByteArray(str);
+            FileTools.WriteToBuffer(ref buffer, ref WriteOffset, strBytes);
+            WriteOffset++; // \0
+        }
+
+        protected static bool HasChildNode(XmlNode xmlNode, String nodeName)
+        {
+            return xmlNode != null && xmlNode.ChildNodes.Cast<XmlNode>().Any(node => node.Name == nodeName);
         }
     }
 }
