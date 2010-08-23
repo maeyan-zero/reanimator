@@ -21,20 +21,27 @@ namespace Reanimator.ExcelDefinitions
         public Int32 defaultSubLevel;
         public Int32 previousLevel;
         public Int32 nextLevel;
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 levelDisplayName;
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 floorSuffixName;
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 finalSuffixFloorName;
+        public Int32 automapWidth;
+        public Int32 automapHeight;
+        public float visibilityTileSize;
+        [ExcelOutput(IsBool = true)]
+        public Int32 clientDiscardRooms;
         [ExcelOutput(IsBool = true)]
         public Int32 town;
+        [ExcelOutput(IsBool = true)]
+        public Int32 RTS;
         [ExcelOutput(IsBool = true)]
         public Int32 alwaysActive;
         [ExcelOutput(IsBool = true)]
         public Int32 startingLocation;
-        public Int32 unknown2;
         public Int32 levelRestartRedirect;//index
+        public Int32 unknown2;
         [ExcelOutput(IsBool = true)]
         public Int32 portalAndRecallLoc;
         [ExcelOutput(IsBool = true)]
@@ -57,6 +64,8 @@ namespace Reanimator.ExcelDefinitions
         public float CameraDollyScale;
         public float minZ;
         public float maxZ;
+        public Int32 Contoured;
+        public float VisibilityDistanceScale;
         public float visibilityOpacity;
         public float fixedOrientation;
         [ExcelOutput(IsBool = true)]
@@ -64,7 +73,11 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBool = true)]
         public Int32 allowRandomOrientation;
         public Int32 hellriftChancePercent;
-        public Int32 hellriftSubLevel;//index
+        public Int32 hellriftSubLevel1;//index
+        public Int32 hellriftSubLevel2;//index
+        public Int32 hellriftSubLevel3;//index
+        public Int32 hellriftSubLevel4;//index
+        public Int32 hellriftSubLevel5;//index
         public Int32 madLibs;//index
         public Int32 properNames;//index
         public Int32 adjectives;//index
@@ -102,11 +115,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 partySizeRecommended;
         public Int32 questSpawnClass;
         public Int32 interactableSpawnClass;
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 stringEnter;//stridx
-        //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 stringLeave;//stridx
-        public float championSpawnChancePercentAtEachSpawnL;//L == Level?
+        public float championSpawnChancePercentAtEachSpawnLocation;
         public float uniqueMonsterChancePercent;
         public Int32 mapX;
         public Int32 mapY;
@@ -115,10 +128,10 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBool = true)]
         public Int32 firstLevelCheating;
         public Int32 playerExpLevel;
-        public Int32 startingGold;
         public Int32 bonusStartingTreasure;//idx
         public Int32 sequenceNumber;
-        public Int32 blank;//?idx
+        public Int32 startingGold;
+        public Int32 act;//?idx
         public Int32 worldMapRow;
         public Int32 worldMapCol;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
@@ -138,7 +151,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 worldMapConnectIDs7;
         public Int32 worldMapConnectIDs8;
         public Int32 adventureChancePercent;
-        //[ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 numAdventures;
         [ExcelOutput(IsBool = true)]
         public Int32 enableRoomReset;
@@ -151,9 +164,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 scriptPlayerEnterLevel;
         [ExcelOutput(IsBool = true)]
         public Int32 allowOverworldTravel;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknown4;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        Int32[] TCv4;
     }
 }
