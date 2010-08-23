@@ -238,7 +238,6 @@ namespace Reanimator
                 offset += stringsBytesCount;
             }
 
-
             // tables block
             token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
             CheckExcelFlag(token);
@@ -248,10 +247,7 @@ namespace Reanimator
             for (int i = 0; i < Count; i++)
             {
                 Object table = FileTools.ByteArrayToStructure(data, DataType, offset);
-                int size = Marshal.SizeOf(DataType);
-                size = size;
                 offset += Marshal.SizeOf(DataType);
-
                 Rows.Add(table);
             }
 
@@ -381,7 +377,7 @@ namespace Reanimator
                 int byteCount = FileTools.ByteArrayTo<Int32>(_data, ref offset);
                 if (byteCount != 0)
                 {
-                    if (FileExcelHeader.StructureId == 0x1F9DDC98)                                 // Only seen in unittypes.txt.cooked so far.
+                    if (FileExcelHeader.StructureId == 0x1F9DDC98 || FileExcelHeader.StructureId == 1558484169)                                 // Only seen in unittypes.txt.cooked so far.
                     {                                                                           // This block reading method is the same as first seen below in the states.txt.cooked,
                         int blockCount = FileTools.ByteArrayTo<Int32>(_data, ref offset);   // but there is no data in the previous block for unittypes.txt.cooked.
                         byteCount = (byteCount << 2) * blockCount;
