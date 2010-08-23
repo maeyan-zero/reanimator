@@ -146,7 +146,7 @@ namespace Reanimator
                 }
             }
 
-            if ((uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0x887988C4 || (uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0xE08E6C41) // items, missiles, monsters, objects, players
+            if ((uint)(dataFile).FileExcelHeader.StructureId == 0x887988C4 || (uint)(dataFile).FileExcelHeader.StructureId == 0xE08E6C41) // items, missiles, monsters, objects, players
             {
                 DataColumn indiceDataCol = mainDataTable.Columns.Add("indiceData");
                 indiceDataCol.DataType = typeof(string);
@@ -180,6 +180,25 @@ namespace Reanimator
                 {
                     Object value = fieldInfo.GetValue(table);
                     ExcelFile.ExcelOutputAttribute excelOutputAttribute = outputAttributes[col];
+
+                    /*
+                    if (fieldInfo.Name == "code")
+                    {
+                        int val = 0;
+                        if (fieldInfo.FieldType == typeof(Int16))
+                        {
+                            Int16 asdf = (Int16) value;
+                            val = asdf;
+                        }   
+                        else
+                        {
+                            val = (Int32) value;
+                        }
+                        if (val == 26641 || val == 29201)
+                        {
+                            int bp = 0;
+                        }
+                    }*/
 
                     if (excelOutputAttribute == null)
                     {
@@ -272,11 +291,6 @@ namespace Reanimator
             }
 
             return dt;
-        }
-
-        public void ClearRelations()
-        {
-            XlsDataSet.Relations.Clear();
         }
 
         private DataTable _LoadRelatedTable(ProgressForm progress, String tableId)

@@ -22,9 +22,9 @@ namespace Reanimator
         public TableForm(Index idx)
         {
             index = idx;
-            if (!index.OpenAccompanyingDat())
+            if (!index.OpenDatForReading())
             {
-                MessageBox("Unable to open accompanying data file:\n" + index.FileName + ".dat\nYou will be unable to extract any files.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox("Unable to open accompanying data file:\n" + index.FileNameWithoutExtension + ".dat\nYou will be unable to extract any files.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             TableFormInit();
@@ -209,7 +209,7 @@ namespace Reanimator
             else if (dr == DialogResult.Yes)
             {
                 keepPath = true;
-                extractToPath += @"\" + index.FileName;
+                extractToPath += @"\" + index.FileNameWithoutExtension;
             }
 
             progressBar.ConfigBar(0, files.Length, 1);
@@ -380,7 +380,7 @@ namespace Reanimator
         {
             byte[] saveData = index.GenerateIndexFile();
             Crypt.Encrypt(saveData);
-            FileStream fOut = new FileStream(index.FileDirectory + index.FileName + ".new.idx", FileMode.Create);
+            FileStream fOut = new FileStream(index.FileDirectory + index.FileNameWithoutExtension + ".new.idx", FileMode.Create);
             fOut.Write(saveData, 0, saveData.Length);
             fOut.Dispose();
         }
@@ -428,7 +428,7 @@ namespace Reanimator
 
             foreach (DataGridViewRow row in selectedRows)
             {
-                index.AppendDirectorySuffix(row.Index);
+                index.AddDirectoryPrefix(row.Index);
             }
         }
 

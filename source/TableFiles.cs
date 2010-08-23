@@ -502,7 +502,7 @@ namespace Reanimator
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show("Failed to parse excel file!\n\n" + filePath + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to parse excel file!\n\n" + filePath + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ExceptionLogger.LogException(ex, "DoManualTables", false);
                 }
 

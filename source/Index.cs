@@ -9,34 +9,7 @@ namespace Reanimator
 {
     public class Index : IDisposable
     {
-        [DllImport("zlibwapi86.dll")]
-        private static extern int uncompress
-        (
-            [MarshalAs(UnmanagedType.LPArray)]
-            Byte[] destinationBuffer,
-            [MarshalAs(UnmanagedType.U4)]
-            ref UInt32 destinationLength,
-            [MarshalAs(UnmanagedType.LPArray)]
-            Byte[] sourceBuffer,
-            [MarshalAs(UnmanagedType.U4)]
-            UInt32 sourceLength
-        );
-
-        [DllImport("zlibwapi64.dll")]
-        private static extern int uncompress
-        (
-            [MarshalAs(UnmanagedType.LPArray)]
-            Byte[] destinationBuffer,
-            [MarshalAs(UnmanagedType.U8)]
-            ref UInt64 destinationLength,
-            [MarshalAs(UnmanagedType.LPArray)]
-            Byte[] sourceBuffer,
-            [MarshalAs(UnmanagedType.U8)]
-            UInt64 sourceLength
-        );
-
-        /*
-             Decompresses the source buffer into the destination buffer.  sourceLen is
+        /* Decompresses the source buffer into the destination buffer.  sourceLen is
            the byte length of the source buffer. Upon entry, destLen is the total
            size of the destination buffer, which must be large enough to hold the
            entire uncompressed data. (The size of the uncompressed data must have
@@ -52,6 +25,45 @@ namespace Reanimator
         */
 
         [DllImport("zlibwapi86.dll")]
+        private static extern int uncompress
+        (
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] destinationBuffer,
+            [MarshalAs(UnmanagedType.U4)]
+            ref UInt32 destinationLength,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] sourceBuffer,
+            [MarshalAs(UnmanagedType.U4)]
+            UInt32 sourceLength
+        );
+
+        [DllImport("zlibwapi64.dll")]
+        private static extern int uncompress
+        (
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] destinationBuffer,
+            [MarshalAs(UnmanagedType.U8)]
+            ref UInt64 destinationLength,
+            [MarshalAs(UnmanagedType.LPArray)]
+            Byte[] sourceBuffer,
+            [MarshalAs(UnmanagedType.U8)]
+            UInt64 sourceLength
+        );
+
+
+        /* Compresses the source buffer into the destination buffer.  sourceLen is
+           the byte length of the source buffer. Upon entry, destLen is the total
+           size of the destination buffer, which must be at least the value returned
+           by compressBound(sourceLen). Upon exit, destLen is the actual size of the
+           compressed buffer.
+             This function can be used to compress a whole file at once if the
+           input file is mmap'ed.
+             compress returns Z_OK if success, Z_MEM_ERROR if there was not
+           enough memory, Z_BUF_ERROR if there was not enough room in the output
+           buffer.
+        */
+
+        [DllImport("zlibwapi86.dll")]
         private static extern int compress
         (
             [MarshalAs(UnmanagedType.LPArray)]
@@ -77,23 +89,10 @@ namespace Reanimator
             UInt64 sourceLength
         );
 
-        /*
-         Compresses the source buffer into the destination buffer.  sourceLen is
-       the byte length of the source buffer. Upon entry, destLen is the total
-       size of the destination buffer, which must be at least the value returned
-       by compressBound(sourceLen). Upon exit, destLen is the actual size of the
-       compressed buffer.
-         This function can be used to compress a whole file at once if the
-       input file is mmap'ed.
-         compress returns Z_OK if success, Z_MEM_ERROR if there was not
-       enough memory, Z_BUF_ERROR if there was not enough room in the output
-       buffer.
-        */
 
         public const int Base000 = 9;
         public const int LatestPatch = 10;
         public const int LatestPatchLocalized = 11;
-        public const int ExcelTablesIndex = 2572;
         static public readonly string[] FileNames = { "hellgate_bghigh000",                                     // 0
                                                      "hellgate_graphicshigh000",                                // 1
                                                      "hellgate_localized000",                                   // 2
@@ -106,72 +105,66 @@ namespace Reanimator
                                                      "hellgate000",                                             // 9
                                                      "sp_hellgate_1.10.180.3416_1.18074.70.4256",               // 10
                                                      "sp_hellgate_localized_1.10.180.3416_1.18074.70.4256" };   // 11
-        struct Token
+        public const UInt32 TokenHead = 0x6867696E; // 'nigh'
+        public const UInt32 TokenSect = 0x68677073; // 'spgh'
+        public const UInt32 TokenInfo = 0x6867696F; // 'oigh'
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private class FileHeader
         {
-            public const UInt32 Head = 0x6867696E; // 'nigh'
-            public const UInt32 Sect = 0x68677073; // 'spgh'
-            public const UInt32 Info = 0x6867696F; // 'oigh'
+            public UInt32 FileToken;
+            public UInt32 FileVersion;
+            public Int32 FileCount;
         }
 
-        Int32 _structCount;                     // offset 4
-        readonly Int32 _fileCount;              // offset 8
-        Int32 _stringCount;                     // offset 16
-        readonly Int32 _characterCount;         // offset 20
-
-        readonly int _stringDataOffset;
-        readonly int _stringLengthOffset;
-        readonly int _fileDataOffset;
-
-        const int StringStructLength = 6;
-        const int FileStructLength = 80;
-
-        readonly byte[] _buffer;
-        string[] _stringTable;
-        Int32[] _stringTableUnknowns;
-
-        const string Affix = "backup\\";
-
-        FileStream _indexFile;
-
-        public FileStream DataFile { get; set; }
-
-        public void WriteIndex()
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private class StringsHeader
         {
-            byte[] buffer = GenerateIndexFile();
-            Crypt.Encrypt(buffer);
-            _indexFile.Seek(0, SeekOrigin.Begin);
-            _indexFile.Write(buffer, 0, buffer.Length);
+            public UInt32 StringsToken;
+            public Int32 StringsCount;
+            public Int32 StringByteCount;
         }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private class StringDetailsStruct
+        {
+            public short StringLength;
+            public UInt32 Unknown;
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public class FileDetailsStruct
+        {
+            public UInt32 StartToken;
+            public Int32 Unknown11;                     // 0    0x00
+            public Int32 Unknown12;                     // 4    0x04
+            public Int32 DataOffset;                    // 8    0x08
+            public Int32 Null1;                         // 12   0x0C
+            public Int32 UncompressedSize;              // 16   0x10
+            public Int32 CompressedSize;                // 20   0x14
+            public Int32 Null2;                         // 24   0x18
+            public Int32 DirectoryArrayIndex;        // 28   0x1C
+            public Int32 FilenameArrayIndex;         // 32   0x20
+            public Int32 Unknown21;                     // 36   0x24            Can't be null             .text:000000014004958B cmp     qword ptr [rdi+10h], 0 -> jz      loc_140049402   ; Jump if Zero
+            public Int32 Unknown22;                     // 40   0x28
+            public Int32 Unknown23;                     // 44   0x2C
+            public Int32 Unknown24;                     // 48   0x30
+            public Int32 Null31;                        // 52   0x34
+            public Int32 Null32;                        // 56   0x38
+            public Int32 Null33;                        // 60   0x3C
+            public Int32 First4BytesOfFile;             // 64   0x40
+            public Int32 Second4BytesOfFile;            // 68   0x44
+            public UInt32 EndToken;
+        }
+
 
         public class FileIndex
         {
-            [StructLayout(LayoutKind.Sequential, Pack = 1)]
-            public class FileIndexStruct
-            {
-                public UInt32 StartToken;
-                public Int32 Unknown11;                     // 0    0x00
-                public Int32 Unknown12;                     // 4    0x04
-                public Int32 DataOffset;                    // 8    0x08
-                public Int32 Null1;                         // 12   0x0C
-                public Int32 UncompressedSize;              // 16   0x10
-                public Int32 CompressedSize;                // 20   0x14
-                public Int32 Null2;                         // 24   0x18
-                public Int32 DirectoryArrayPosition;        // 28   0x1C
-                public Int32 FilenameArrayPosition;         // 32   0x20
-                public Int32 Unknown21;                     // 36   0x24            Can't be null             .text:000000014004958B cmp     qword ptr [rdi+10h], 0 -> jz      loc_140049402   ; Jump if Zero
-                public Int32 Unknown22;                     // 40   0x28
-                public Int32 Unknown23;                     // 44   0x2C
-                public Int32 Unknown24;                     // 48   0x30
-                public Int32 Null31;                        // 52   0x34
-                public Int32 Null32;                        // 56   0x38
-                public Int32 Null33;                        // 60   0x3C
-                public Int32 First4BytesOfFile;             // 64   0x40
-                public Int32 Second4BytesOfFile;            // 68   0x44
-                public UInt32 EndToken;
-            };
+            [Browsable(false)]
+            public FileDetailsStruct FileStruct { get; set; }
 
             [Browsable(false)]
-            public FileIndexStruct FileStruct { get; set; }
+            public Index InIndex { get; set; }
 
             public int DataOffset
             {
@@ -193,164 +186,168 @@ namespace Reanimator
             [Browsable(false)]
             public int Directory
             {
-                get { return FileStruct.DirectoryArrayPosition; }
-                set { FileStruct.DirectoryArrayPosition = value; }
+                get { return FileStruct.DirectoryArrayIndex; }
+                set { FileStruct.DirectoryArrayIndex = value; }
             }
             public string DirectoryString { get; set; }
 
             [Browsable(false)]
             public int FileName
             {
-                get { return FileStruct.FilenameArrayPosition; }
+                get { return FileStruct.FilenameArrayIndex; }
             }
             public string FileNameString { get; set; }
 
             public bool Modified
             {
-                get
-                {
-                    return DirectoryString.Contains(Affix);
-                }
+                get { return DirectoryString.Contains(BackupPrefix); }
             }
         }
 
+        private byte[] _data;
+        private FileHeader _indexHeader;
+        private StringsHeader _stringsHeader;
+        private StringDetailsStruct[] _stringsDetails;
+        private String[] _stringTable;
+        private FileDetailsStruct[] _filesDetails;
         public FileIndex[] FileTable { get; private set; }
 
-        static public Index[] LoadIndexFiles(String path)
-        {
-            Index[] index = new Index[FileNames.Length];
-            for (int i = 0; i < index.Length; i++)
-            {
-                String filePath = String.Format("{0}{1}.idx", path, FileNames[i]);
-                if (!File.Exists(filePath))
-                {
-                    MessageBox.Show("Index file not found!\n\n" + filePath, "Warning", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Warning);
-                    continue;
-                }
+        public String FilePath { get; private set; }
+        public String FileDirectory { get { return Path.GetDirectoryName(FilePath); } }
+        public String FileNameWithoutExtension { get { return Path.GetFileNameWithoutExtension(FilePath); } }
 
-                try
-                {
-                    index[i] = new Index(filePath);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Unknown IO Error!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+        public bool DatFileOpen { get { return DataFile == null ? false : true; } }
+        public FileStream DataFile { get; set; }
 
-            }
-            return index;
-        }
-
-        public String FileName
+        public const string BackupPrefix = @"backup";
+        private bool _checkedForModified;
+        public bool Modified
         {
             get
             {
-                int n = _indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1;
-                return _indexFile.Name.Substring(n, _indexFile.Name.LastIndexOf('.') - n);
+                if (_checkedForModified) return Modified;
+
+                _checkedForModified = true;
+                return FileTable.Any(file => file.DirectoryString.Contains(BackupPrefix));
             }
+
+            private set { Modified = value; }
         }
 
-        public String FileDirectory
+        public bool ParseData(byte[] data, String filePath)
         {
-            get { return _indexFile.Name.Substring(0, _indexFile.Name.LastIndexOfAny("\\".ToCharArray()) + 1); }
-        }
+            if (data == null) return false;
 
-        public bool DatFileOpen
-        {
-            get { return DataFile == null ? false : true; }
-        }
+            _data = data;
+            FilePath = filePath;
+            Crypt.Decrypt(_data);
 
-        public bool Modified { get; private set; }
 
-        public Index(String filePath)
-        {
-            _indexFile = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
-            _buffer = FileTools.StreamToByteArray(_indexFile);
-            Crypt.Decrypt(_buffer);
-            _structCount = BitConverter.ToInt32(_buffer, 4);
-            _fileCount = BitConverter.ToInt32(_buffer, 8);
-            _stringCount = BitConverter.ToInt32(_buffer, 16);
-            _characterCount = BitConverter.ToInt32(_buffer, 20);
-            _stringDataOffset = 24;
-            _stringLengthOffset = _stringDataOffset + _characterCount + sizeof(UInt32);
-            _fileDataOffset = _stringLengthOffset + (StringStructLength * _stringCount) + sizeof(UInt32);
 
-            InitializeStringTable();
-            InitializeFileTable();
-            CheckForModifications();
-        }
+            ////// file header //////
+            int offset = 0;
+            _indexHeader = (FileHeader)FileTools.ByteArrayToStructure(_data, typeof(FileHeader), offset);
+            offset += Marshal.SizeOf(typeof(FileHeader));
 
-        void CheckForModifications()
-        {
-            if (FileTable.Any(file => file.DirectoryString.Contains(Affix)))
+            if (_indexHeader.FileToken != TokenHead)
             {
-                Modified = true;
+                String msg = String.Format(
+                    "Unexpected file type!\nExpected FileToken = 0x{0:X8}\n\nProvided = 0x{1:X8}", TokenHead,
+                    _indexHeader.FileToken);
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-        }
-
-        void InitializeStringTable()
-        {
-            _stringTable = new String[_stringCount];
-            _stringTableUnknowns = new Int32[_stringCount];
-
-            int stringByteOffset = 24;
-
-            for (int i = 0; i < _stringTable.Length; i++)
+            if (_indexHeader.FileVersion != 0x04)
             {
-                int bufferOffset = _stringLengthOffset + (i * StringStructLength);
-                short stringLength = BitConverter.ToInt16(_buffer, bufferOffset);
-
-                _stringTable[i] = FileTools.ByteArrayToStringAnsi(_buffer, stringByteOffset);
-                _stringTableUnknowns[i] = BitConverter.ToInt32(_buffer, bufferOffset + sizeof(Int16));
-
-                stringByteOffset += stringLength + 1;
+                String msg = String.Format(
+                    "Unexpected file version!\nExpected FileVersion = 4\n\nProvided = {0}", _indexHeader.FileVersion);
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
-        }
 
-        void InitializeFileTable()
-        {
-            FileTable = new FileIndex[_fileCount];
 
-            for (int i = 0; i < _fileCount; i++)
+
+            ////// strings table //////
+            _stringsHeader = (StringsHeader)FileTools.ByteArrayToStructure(_data, typeof(StringsHeader), offset);
+            offset += Marshal.SizeOf(typeof(StringsHeader));
+
+            if (_stringsHeader.StringsToken != TokenSect)
             {
-                int offset = _fileDataOffset + i*FileStructLength;
+                String msg = String.Format(
+                    "Unexpected strings token!\nExpected StringsToken = 0x{0:X8}\n\nProvided = 0x{1:X8}", TokenSect,
+                    _stringsHeader.StringsToken);
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            _stringTable = new String[_stringsHeader.StringsCount];
+            for (int i = 0; i < _stringsHeader.StringsCount; i++)
+            {
+                _stringTable[i] = FileTools.ByteArrayToStringAnsi(_data, offset);
+                offset += _stringTable[i].Length + 1; // +1 for \0
+            }
+
+
+
+            ////// strings details //////
+            UInt32 stringsDetailsToken = FileTools.ByteArrayTo<UInt32>(_data, ref offset);
+            if (stringsDetailsToken != TokenSect)
+            {
+                String msg = String.Format(
+                    "Unexpected strings details token!\nExpected stringsDetailsToken = 0x{0:X8}\n\nProvided = 0x{1:X8}", TokenSect,
+                    stringsDetailsToken);
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            _stringsDetails = FileTools.ByteArrayToArray<StringDetailsStruct>(_data, ref offset, _stringsHeader.StringsCount);
+
+
+
+            ////// files details //////
+            UInt32 filesToken = FileTools.ByteArrayTo<UInt32>(_data, ref offset);
+            if (filesToken != TokenSect)
+            {
+                String msg = String.Format(
+                    "Unexpected files token!\nExpected filesToken = 0x{0:X8}\n\nProvided = 0x{1:X8}", TokenSect,
+                    filesToken);
+                MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            _filesDetails = FileTools.ByteArrayToArray<FileDetailsStruct>(_data, ref offset, _indexHeader.FileCount);
+
+
+
+            ////// do files //////
+            FileTable = new FileIndex[_indexHeader.FileCount];
+            for (int i = 0; i < _indexHeader.FileCount; i++)
+            {
                 FileIndex fileIndex = new FileIndex
                 {
-                    FileStruct = (FileIndex.FileIndexStruct)FileTools.ByteArrayToStructure(_buffer,
-                            typeof(FileIndex.FileIndexStruct), offset),
+                    FileStruct = _filesDetails[i],
+                    InIndex = this
                 };
+
                 fileIndex.DirectoryString = _stringTable[fileIndex.Directory];
                 fileIndex.FileNameString = _stringTable[fileIndex.FileName];
 
                 FileTable[i] = fileIndex;
             }
+
+            return true;
         }
 
-        public int Locate(String file, String dir)
-        {
-            for (int i = 0; i < FileTable.Length; i++)
-            {
-                int result1 = String.Compare(file, FileTable[i].FileNameString, true);
-                int result2 = String.Compare(dir, FileTable[i].DirectoryString, true);
-                if (result1 == 0 && result2 == 0)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        public bool OpenAccompanyingDat()
+        public bool OpenDatForReading()
         {
             if (DataFile == null)
             {
                 try
                 {
-                    String filePath = String.Format("{0}{1}.dat", FileDirectory, FileName);
+                    String filePath = String.Format(@"{0}\{1}.dat", FileDirectory, FileNameWithoutExtension);
                     if (!File.Exists(filePath)) return false;
 
-                    DataFile = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite);
+                    DataFile = new FileStream(filePath, FileMode.Open, FileAccess.Read);
                 }
                 catch (Exception)
                 {
@@ -363,7 +360,7 @@ namespace Reanimator
 
         public byte[] ReadDataFile(FileIndex file)
         {
-            if (!OpenAccompanyingDat()) return null;
+            if (!OpenDatForReading()) return null;
 
             int result;
             byte[] destBuffer = new byte[file.UncompressedSize];
@@ -410,9 +407,9 @@ namespace Reanimator
             // Move pointer to the end of the stream.
             if (!DatFileOpen)
             {
-                if (!OpenAccompanyingDat())
+                if (!OpenDatForReading())
                 {
-                    MessageBox.Show("Failed to open accompanying dat file!\n" + FileName, "Error",
+                    MessageBox.Show("Failed to open accompanying dat file!\n" + FileNameWithoutExtension, "Error",
                                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -452,15 +449,17 @@ namespace Reanimator
             byte[] buffer = new byte[1024];
             int offset = 0;
 
-            // main header
+            ////// main header //////
             const Int32 version = 4;
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Head);
+            FileTools.WriteToBuffer(ref buffer, ref offset, TokenHead);
             FileTools.WriteToBuffer(ref buffer, ref offset, version);
-            FileTools.WriteToBuffer(ref buffer, ref offset, _fileCount);
+            FileTools.WriteToBuffer(ref buffer, ref offset, _indexHeader.FileCount);
 
-            // string block
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
-            FileTools.WriteToBuffer(ref buffer, ref offset, _stringCount);
+
+
+            ////// string block //////
+            FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, _stringsHeader.StringsCount);
             int stringByteCountOffset = offset;
             offset += 4;
             foreach (String str in _stringTable)
@@ -470,26 +469,30 @@ namespace Reanimator
             }
             FileTools.WriteToBuffer(ref buffer, stringByteCountOffset, (UInt32)(offset - stringByteCountOffset - sizeof(UInt32)));
 
-            // string data
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
+
+
+            ////// string data //////
+            FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
             //int i = 0;
             foreach (String str in _stringTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
-                offset += 4; // unknown  -  not required
+                offset += 4; // unknown  -  not required apparently
                 //FileTools.WriteToBuffer(ref _buffer, ref offset, _stringTableUnknowns[i]);
                 //i++;
             }
 
-            // file block
+
+
+            ////// file block //////
             //const UInt64 foo = 0xDEADBEEFDEADBEEF;
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
             //i = 0;
             foreach (FileIndex fileIndex in FileTable)
             {
                 // this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
-                FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
+                FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
 
                 //FileTools.WriteToBuffer(ref buffer, ref offset, foo);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown11);
@@ -511,7 +514,7 @@ namespace Reanimator
                 //offset += 8; // first 8 bytes  -  not required
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.First4BytesOfFile);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Second4BytesOfFile);
-                FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
+                FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
                 //i++;
             }
 
@@ -520,37 +523,60 @@ namespace Reanimator
             return returnBuffer;
         }
 
-        public void AppendDirectorySuffix(int i)
+        public void AddDirectoryPrefix(int i)
         {
-            string dir = Affix + _stringTable[FileTable[i].Directory];
+            String dir = BackupPrefix + @"\" + _stringTable[FileTable[i].Directory];
             int index = StringExists(dir);
-            // If the directory doesn't exist, add it.
+
+            // if the directory doesn't exist, add it.
             if (index == -1)
             {
                 index = _stringTable.Length;
-                string[] buffer = new string[index + 1];
+
+                String[] buffer = new String[index + 1];
                 _stringTable.CopyTo(buffer, 0);
-                buffer[index] = Affix + _stringTable[FileTable[i].Directory];
+                buffer[index] = BackupPrefix + @"\" + _stringTable[FileTable[i].Directory];
+
                 _stringTable = buffer;
-                _stringCount++;
+                _stringsHeader.StringsCount++;
             }
+
             FileTable[i].Directory = index;
             Modified = true;
         }
 
+        private int StringExists(String str)
+        {
+            for (int i = 0; i < _stringTable.Length; i++)
+            {
+                if (_stringTable[i] == str)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        public override string ToString()
+        {
+            return FileNameWithoutExtension;
+        }
+
+        public void Dispose()
+        {
+            if (DataFile != null)
+            {
+                DataFile.Dispose();
+            }
+        }
+
+        // todo: why are these here?
+        /*
         public void RemoveDirectorySuffix(int i)
         {
             string dir = FileTable[i].DirectoryString.Remove(0, Affix.Length);
             FileTable[i].Directory = StringExists(dir);
-        }
-
-        public int StringExists(String s)
-        {
-            for (int i = 0; i < _stringTable.Length; i++)
-                if (_stringTable[i] == s)
-                    return i;
-
-            return -1;
         }
 
         public bool Restore()
@@ -576,7 +602,7 @@ namespace Reanimator
 
             try
             {
-                FileStream fs = new FileStream(FileDirectory + "\\" + FileName + ".idx", FileMode.OpenOrCreate);
+                FileStream fs = new FileStream(FileDirectory + "\\" + GetFileNameWithoutExtension + ".idx", FileMode.OpenOrCreate);
                 fs.Flush();
                 fs.Write(buffer, 0, buffer.Length);
                 fs.Close();
@@ -589,16 +615,19 @@ namespace Reanimator
             }
         }
 
-        public void Dispose()
+        public int Locate(String file, String dir)
         {
-            if (_indexFile != null)
+            for (int i = 0; i < FileTable.Length; i++)
             {
-                _indexFile.Dispose();
+                int result1 = String.Compare(file, FileTable[i].FileNameString, true);
+                int result2 = String.Compare(dir, FileTable[i].DirectoryString, true);
+                if (result1 == 0 && result2 == 0)
+                {
+                    return i;
+                }
             }
-            if (DataFile != null)
-            {
-                DataFile.Dispose();
-            }
+            return -1;
         }
+         */
     }
 }

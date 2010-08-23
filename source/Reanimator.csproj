@@ -295,6 +295,12 @@
     <Compile Include="ExcelDefinitions\ExcelTables.cs" />
     <Compile Include="ExcelFileDef.cs" />
     <Compile Include="FileTools.cs" />
+    <Compile Include="Forms\FileExplorer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FileExplorer.Designer.cs">
+      <DependentUpon>FileExplorer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ScriptEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -489,6 +495,9 @@
     <EmbeddedResource Include="Forms\ExcelTableForm.resx">
       <DependentUpon>ExcelTableForm.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FileExplorer.resx">
+      <DependentUpon>FileExplorer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TablesLoaded.resx">
       <DependentUpon>TablesLoaded.cs</DependentUpon>

@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Reanimator
 {
     class XmlCookedFile
     {
+        public const UInt32 FileHeadToken = 0x6B304F43;
+        public const Int32 RequiredVersion = 8;
+        public const UInt32 DataSegmentToken = 0x41544144;
+
         private XmlCookedBase _xmlCooked;
 
         public XmlCookedFile()
@@ -48,6 +53,19 @@ namespace Reanimator
             if (_xmlCooked.XmlDoc == null || String.IsNullOrEmpty(path)) return;
 
             _xmlCooked.XmlDoc.Save(path);
+        }
+
+        public void SaveXmlCooked(String path)
+        {
+            if (_xmlCooked.XmlDoc == null || String.IsNullOrEmpty(path)) return;
+
+            byte[] data = _xmlCooked.Cook();
+            File.WriteAllBytes(path, data);
+        }
+
+        public String Blah()
+        {
+            return _xmlCooked.Blah;
         }
     }
 }

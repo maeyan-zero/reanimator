@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Reanimator
         private readonly TableDataSet _tableDataSet;
         private int _childFormNumber;
         private readonly TableFiles _tableFiles;
+        private readonly FileExplorer _fileExplorer;
 
         public Reanimator()
         {
@@ -30,7 +32,11 @@ namespace Reanimator
             CheckEnvironment();
             InitializeComponent();
 
+            _fileExplorer = new FileExplorer { MdiParent = this };
+
             /*
+            tw = new StreamWriter(@"C:\asdf.txt");
+            //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
             _DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
             _DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
             _DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
@@ -42,30 +48,48 @@ namespace Reanimator
             _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\");
             _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
             _DoFolder(@"D:\Games\Hellgate London\data\skills\");
+            tw.Close();
+           // this.Close();
              */
-
         }
+        /*
+        private TextWriter tw;
 
-        private static void _DoFolder(String folderDir)
+        private void _DoFolder(String folderDir)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
             FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
 
+            XmlCookedFile xmlAdrenaline = null;
+
             foreach (FileInfo fileInfo in files)
             {
-                byte[] data = File.ReadAllBytes(fileInfo.FullName);
+                XmlCookedFile xmlCookedFile = new XmlCookedFile();
 
-                if (fileInfo.FullName.Contains("orbilezapcorpse.xml"))
+                byte[] data = File.ReadAllBytes(fileInfo.FullName);
+                if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
                 {
+                    xmlAdrenaline = xmlCookedFile;
                     int bp = 0;
                 }
 
-                XmlCookedFile xmlCookedFile = new XmlCookedFile();
                 Debug.Assert(xmlCookedFile.ParseData(data));
 
                 xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+
+                String blah = xmlCookedFile.Blah();
+                if (blah != null)
+                {
+                    tw.WriteLine(fileInfo.FullName);
+                    tw.WriteLine(blah);
+                }
             }
-        }
+
+            if (xmlAdrenaline != null)
+            {
+               // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
+            }
+        }*/
 
         private static void CheckEnvironment()
         {
@@ -85,7 +109,11 @@ namespace Reanimator
 
                 foreach (int dat in unpack)
                 {
-                    Index index = new Index(Config.HglDir + @"\data\" + Index.FileNames[dat] + ".idx");
+                    String indexPath = Config.HglDir + @"\data\" + Index.FileNames[dat] + ".idx";
+                    byte[] indexData = File.ReadAllBytes(indexPath);
+
+                    Index index = new Index();
+                    index.ParseData(indexData, indexPath);
 
                     if (index.Modified)
                     {
@@ -292,10 +320,12 @@ namespace Reanimator
         {
             if (_indexFilesOpen.Contains(fileName)) return;
 
-            Index index;
+            Index index = new Index();
             try
             {
-                index = new Index(fileName);
+                byte[] indexData = File.ReadAllBytes(fileName);
+
+                index.ParseData(indexData, fileName);
             }
             catch (Exception ex)
             {
@@ -339,10 +369,7 @@ namespace Reanimator
         {
             try
             {
-                // todo: is there a better/"normal" way to do this?
-                int indexStart = fileName.LastIndexOf("\\") + 1;
-                int indexEnd = fileName.LastIndexOf(".txt");
-                string name = fileName.Substring(indexStart, indexEnd - indexStart);
+                String name = Path.GetFileNameWithoutExtension(fileName);
 
                 DataFile excelTable = _tableFiles.GetTableFromFileName(name.ToUpper());
                 // todo: Add check for file differing from what's in dataset, and open as new file if different etc
@@ -371,10 +398,8 @@ namespace Reanimator
             // copy-paste for most part
             try
             {
-                // todo: is there a better/"normal" way to do this?
-                int indexStart = fileName.LastIndexOf("\\") + 1;
-                int indexEnd = fileName.LastIndexOf(".xls");
-                string name = fileName.Substring(indexStart, indexEnd - indexStart);
+                String name = Path.GetFileNameWithoutExtension(fileName);
+
 
                 // todo: this doesn't work 100% as string IDs are stored with each first letter capitalized
                 DataFile excelTable = _tableFiles.GetTableFromFileName(name);
@@ -533,6 +558,10 @@ namespace Reanimator
                 Width = Config.ClientWidth;
                 Show();
                 Refresh();
+
+                ProgressForm fileExplorerProgress = new ProgressForm(_fileExplorer.LoadIndexFiles, null);
+                fileExplorerProgress.Disposed += delegate { _fileExplorer.Show(); };
+                fileExplorerProgress.ShowDialog(this);
 
                 ProgressForm progress = new ProgressForm(LoadTables, null);
                 progress.Disposed += delegate { LoadAndDisplayCurrentlyLoadedExcelTables(); };

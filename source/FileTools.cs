@@ -86,6 +86,29 @@ namespace Reanimator
             return (T)Marshal.PtrToStructure(bytePtr, typeof(T));
         }
 
+        public static T[] ByteArrayToArray<T>(byte[] byteArray, ref int offset, int count)
+        {
+            Debug.Assert(offset <= byteArray.Length, "Error: offset > byteArray.Length");
+
+            int sizeOfT = Marshal.SizeOf(typeof (T));
+            int sizeOfBuffer = sizeOfT*count;
+
+            Debug.Assert(offset + sizeOfBuffer <= byteArray.Length, "Error: offset + sizeOfBuffer > byteArray.Length");
+
+            IntPtr buffer = Marshal.AllocCoTaskMem(sizeOfBuffer);
+            Marshal.Copy(byteArray, offset, buffer, sizeOfBuffer);
+            offset += sizeOfBuffer;
+
+            T[] obj = new T[count];
+            for (int i = 0, bufferOffset = 0; i < count; i++, bufferOffset += sizeOfT)
+            {
+                obj[i] = (T)Marshal.PtrToStructure(new IntPtr(buffer.ToInt32() + bufferOffset), typeof(T));
+            }
+
+            Marshal.FreeCoTaskMem(buffer);
+            return obj;
+        }
+
         public static String ByteArrayToStringAnsi(byte[] byteArray, int offset)
         {
             IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
