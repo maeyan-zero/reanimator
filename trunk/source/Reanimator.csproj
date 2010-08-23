@@ -677,12 +677,6 @@
     <None Include="Resources\inventory_bg.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\inventory_bg2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\inventory_bg1.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\attributePanelBg.png" />
     <None Include="Resources\attributePanel.png" />
     <Content Include="Resources\icon3.ico" />
