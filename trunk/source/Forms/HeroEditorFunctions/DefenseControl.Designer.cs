@@ -381,7 +381,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Reanimator.Properties.Resources.defense_small;
+            //this.BackgroundImage = global::Reanimator.Properties.Resources.defense_small;
             this.Controls.Add(this.l_armor);
             this.Controls.Add(this.l_shields);
             this.Controls.Add(this.nud_shieldRecharge);

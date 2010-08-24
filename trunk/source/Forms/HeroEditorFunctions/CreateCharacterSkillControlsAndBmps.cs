@@ -339,11 +339,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
             this._id = id;
             this._name = name;
 
-            AddButton = CreateSkillButton(Resources.buttonAddNormal, Resources.buttonAddHover, Resources.buttonAddClicked, "Add Button");
+            //AddButton = CreateSkillButton(Resources.buttonAddNormal, Resources.buttonAddHover, Resources.buttonAddClicked, "Add Button");
             AddButton.Location = new Point(70, 4);
             AddButton.Click += new EventHandler(_addButton_Click);
 
-            SubsButton = CreateSkillButton(Resources.buttonSubstractNormal, Resources.buttonSubstractHover, Resources.buttonSubstractClicked, "Substract Button");
+            //SubsButton = CreateSkillButton(Resources.buttonSubstractNormal, Resources.buttonSubstractHover, Resources.buttonSubstractClicked, "Substract Button");
             SubsButton.Location = new Point(70, 34);
             SubsButton.Click += new EventHandler(_subsButton_Click);
 

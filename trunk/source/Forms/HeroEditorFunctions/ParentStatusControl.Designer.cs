@@ -48,7 +48,7 @@
             // b_minimizeMaximize
             // 
             this.b_minimizeMaximize.BackColor = System.Drawing.Color.Black;
-            this.b_minimizeMaximize.BackgroundImage = global::Reanimator.Properties.Resources.panelButton_maximize_small;
+            //this.b_minimizeMaximize.BackgroundImage = global::Reanimator.Properties.Resources.panelButton_maximize_small;
             this.b_minimizeMaximize.FlatAppearance.BorderSize = 0;
             this.b_minimizeMaximize.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             this.b_minimizeMaximize.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;

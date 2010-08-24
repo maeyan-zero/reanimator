@@ -498,6 +498,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FileExplorer.resx">
       <DependentUpon>FileExplorer.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TablesLoaded.resx">
       <DependentUpon>TablesLoaded.cs</DependentUpon>
@@ -628,28 +629,6 @@
       <DependentUpon>WayPointControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Resources\d_critical.png" />
-    <None Include="Resources\d_electric.png" />
-    <None Include="Resources\d_fire.png" />
-    <None Include="Resources\d_physical.png" />
-    <None Include="Resources\d_poison.png" />
-    <None Include="Resources\d_spectral.png" />
-    <None Include="Resources\f_armor.png" />
-    <None Include="Resources\f_gun.png" />
-    <None Include="Resources\f_magical.png" />
-    <None Include="Resources\f_mod.png" />
-    <None Include="Resources\f_sword.png" />
-    <None Include="Resources\k_beast.png" />
-    <None Include="Resources\k_demon.png" />
-    <None Include="Resources\k_necro.png" />
-    <None Include="Resources\k_spectral.png" />
-    <None Include="Resources\buttonSubstractNormal.png" />
-    <None Include="Resources\buttonSubstractHover.png" />
-    <None Include="Resources\buttonSubstractClicked.png" />
-    <None Include="Resources\buttonAddNormal.png" />
-    <None Include="Resources\buttonAddHover.png" />
-    <None Include="Resources\buttonAddClicked.png" />
-    <None Include="Resources\ruperts3.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -682,8 +661,6 @@
     <None Include="Resources\Settings.ico" />
     <None Include="Resources\MixedMediaFile.ico" />
     <None Include="Resources\Image_File.ico" />
-    <None Include="Resources\attributePanelBg.png" />
-    <None Include="Resources\attributePanel.png" />
     <None Include="Resources\327_Options.ico" />
     <None Include="Resources\AudioFile.ico" />
     <None Include="Resources\folder.ico" />
@@ -696,7 +673,6 @@
     <None Include="Resources\generic_picture.ico" />
     <None Include="Resources\GenericMovieClip.ico" />
     <Content Include="Resources\icon3.ico" />
-    <None Include="Resources\skillPanelBg.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -709,7 +685,6 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll"
-copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"
-copy "$(ProjectDir)\Resources\copyMyContentToTheExecutableFolder" "$(TargetDir)"</PostBuildEvent>
+copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"</PostBuildEvent>
   </PropertyGroup>
 </Project>

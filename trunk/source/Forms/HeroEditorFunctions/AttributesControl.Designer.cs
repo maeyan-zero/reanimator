@@ -363,7 +363,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Reanimator.Properties.Resources.attribute_small;
+            //this.BackgroundImage = global::Reanimator.Properties.Resources.attribute_small;
             this.Controls.Add(this.b_willpowerSubstract);
             this.Controls.Add(this.b_willpowerAdd);
             this.Controls.Add(this.b_staminaSubstract);
