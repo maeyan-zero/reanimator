@@ -649,6 +649,8 @@ namespace Reanimator
             if (String.IsNullOrEmpty(fileName)) return null;
 
             String stringId = GetStringIdFromFileName(fileName);
+            if (stringId == null) return null;
+
             return DataFiles[stringId] as DataFile;
         }
     }
