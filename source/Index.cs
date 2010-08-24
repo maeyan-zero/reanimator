@@ -240,7 +240,25 @@ namespace Reanimator
 
             _data = data;
             FilePath = filePath;
-            Crypt.Decrypt(_data);
+
+
+
+            ////// check if encrypted //////
+            UInt32 fileHeadToken = BitConverter.ToUInt32(_data, 0);
+            if (fileHeadToken != TokenHead)
+            {
+                Crypt.Decrypt(_data);
+
+                try
+                {
+                    File.WriteAllBytes(filePath, _data);
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Failed to save decrypted file!\nPlease ensure file is not read only.\n\n" + e, "Warning", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Warning);
+                }
+            }
 
 
 
@@ -334,8 +352,6 @@ namespace Reanimator
 
                 FileTable[i] = fileIndex;
             }
-
-            File.WriteAllBytes(@"C:\index1.idx", _data);
 
             return true;
         }
