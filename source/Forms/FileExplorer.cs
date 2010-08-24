@@ -6,11 +6,20 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Reanimator.Properties;
 
 namespace Reanimator.Forms
 {
     public partial class FileExplorer : Form
     {
+        private static readonly Icon[] Icons = {Resources.Generic_Document, Resources.folder, Resources.folder_open};
+        private enum IconIndex : int
+        {
+            GenericDocument,
+            Folder,
+            FolderOpen
+        }
+
         private static readonly Color BackupColor = Color.IndianRed;
         private static readonly Color NoEditColor = Color.DimGray;
 
@@ -24,6 +33,27 @@ namespace Reanimator.Forms
             public Index.FileIndex FileIndex;
             public bool IsFolder;
             public bool IsBackup;
+            public bool CanEdit;
+        }
+
+        private class NodeSorter : IComparer
+        {
+            public int Compare(Object objX, Object objY)
+            {
+                TreeNode treeNodeX = (TreeNode)objX;
+                TreeNode treeNodeY = (TreeNode)objY;
+
+                NodeObject nodeObjectX = (NodeObject)treeNodeX.Tag;
+                NodeObject nodeObjectY = (NodeObject)treeNodeY.Tag;
+
+                if (nodeObjectX != null && nodeObjectY != null)
+                {
+                    if (nodeObjectX.IsFolder && !nodeObjectY.IsFolder) return -1;
+                    if (!nodeObjectX.IsFolder && nodeObjectY.IsFolder) return 1;
+                }
+
+                return treeNodeX.Text.CompareTo(treeNodeY.Text);
+            }
         }
 
         public FileExplorer()
@@ -46,16 +76,32 @@ namespace Reanimator.Forms
 
             files_treeView.BeginUpdate();
 
+
+            // load icons
+            ImageList imageList = new ImageList {ColorDepth = ColorDepth.Depth32Bit};
+            foreach (Icon icon in Icons)
+            {
+                imageList.Images.Add(icon);
+            }
+            files_treeView.ImageList = imageList;
+            files_treeView.SelectedImageIndex = -1;
+
+            
+            // load index files
             foreach (int idxIndex in IndexOpen)
             {
                 String indexPath = Path.Combine(Path.Combine(Config.HglDir, "data"), Index.FileNames[idxIndex] + ".idx");
                 if (!File.Exists(indexPath)) continue;
 
+
+                // update progress
                 if (progressForm != null)
                 {
                     progressForm.SetCurrentItemText("Loading " + Index.FileNames[idxIndex] + "...");
                 }
 
+
+                // read in/parse index file
                 byte[] indexData = File.ReadAllBytes(indexPath);
                 Index index = new Index();
                 if (!index.ParseData(indexData, indexPath))
@@ -66,11 +112,27 @@ namespace Reanimator.Forms
                 }
                 _indexFiles.Add(index);
 
+
+                // parse file index array
                 foreach (Index.FileIndex file in index.FileTable)
                 {
-                    NodeObject nodeObject = new NodeObject {Index = index};
+                    NodeObject nodeObject = new NodeObject { Index = index };
                     String[] nodeKeys = file.DirectoryString.Split('\\');
                     TreeNode treeNode = null;
+
+
+                    // can we edit the file via. Reanimator?
+                    if ((nodeKeys.Contains(XmlCookedSkill.RootFolder) && file.FileNameString.EndsWith(XmlCookedFile.FileExtention)) ||
+                        file.FileNameString.EndsWith(ExcelFile.FileExtention) ||
+                        file.FileNameString.EndsWith("txt"))
+                    {
+                        nodeObject.CanEdit = true;
+                    }
+
+                    if (nodeKeys.Contains("_environments"))
+                    {
+                        int bp = 0;
+                    }
 
                     foreach (string nodeKey in nodeKeys.Where(nodeKey => !String.IsNullOrEmpty(nodeKey)))
                     {
@@ -91,14 +153,8 @@ namespace Reanimator.Forms
                     }
                     Debug.Assert(treeNode != null);
 
-                    if (treeNode.Parent != null)
-                    {
-                        if (treeNode.Parent.Tag == null)
-                        {
-                            treeNode.Parent.Tag = new NodeObject { IsFolder = true };
-                        }
-                    }
 
+                    // have we already added the file? if so, remove it for updated version
                     String key = file.DirectoryString + file.FileNameString;
                     if (_fileTable.Contains(key))
                     {
@@ -107,69 +163,72 @@ namespace Reanimator.Forms
 
                         // is it the same index?
                         if (nodeObj.Index.FilePath == index.FilePath) continue;
-                        
-                        // from a newer index
+
+                        // no, it's from a newer index
                         treeNode.Nodes.Remove(fileNode);
                         _fileTable.Remove(key);
                     }
 
-                    nodeObject.FileIndex = file;
 
+                    // add file/node
                     TreeNode node = treeNode.Nodes.Add(key, file.FileNameString);
                     node.Tag = nodeObject;
-                    node.ForeColor = NoEditColor;
                     _fileTable.Add(key, node);
 
+
+                    // final nodeObject setups
+                    nodeObject.FileIndex = file;
                     if (nodeObject.IsBackup)
                     {
                         node.ForeColor = BackupColor;
                     }
-                    else if (file.DirectoryString.Contains("skills") && file.FileNameString.Contains(".xml.cooked"))
+                    else if (!nodeObject.CanEdit)
                     {
-                        node.ForeColor = Color.Black;
-                    }
-                    else if (file.DirectoryString.Contains("excel") && file.FileNameString.Contains(".txt.cooked"))
-                    {
-                        node.ForeColor = Color.Black;
+                        node.ForeColor = NoEditColor;
                     }
                 }
             }
 
+
+            // aesthetics etc
+            foreach (TreeNode treeNode in files_treeView.Nodes)
+            {
+                if (treeNode.Index == 0)
+                {
+                    files_treeView.SelectedNode = treeNode;
+                }
+
+                treeNode.Expand();
+                _FlagFolderNodes(treeNode);
+            }
+            files_treeView.TreeViewNodeSorter = new NodeSorter();
             files_treeView.Sort();
 
-            // expand highest nodes & select first for aesthetics
-            foreach (TreeNode expandNode in files_treeView.Nodes)
-            {
-                if (expandNode.Index == 0)
-                {
-                    files_treeView.SelectedNode = expandNode;
-                }
-
-                expandNode.Expand();
-            }
-
             files_treeView.EndUpdate();
-
-            /*
-             * treeView1.TreeViewNodeSorter = new NodeSorter();
-
-            class NodeSorter : IComparer
-            {
-                public int Compare(object x, object y)
-                {
-                    TreeNode nodeX = (TreeNode)x;
-                    TreeNode nodeY = (TreeNode)y;
-                    return nodeX.Text.CompareTo(nodeY.Text);
-                }
-            }
-             */
         }
 
-        private void _FilesTreeViewAfterSelect(object sender, TreeViewEventArgs e)
+        private static void _FlagFolderNodes(TreeNode treeNode)
+        {
+            if (treeNode.Nodes.Count <= 0) return;
+
+            if (treeNode.Tag == null)
+            {
+                treeNode.Tag = new NodeObject { IsFolder = true };
+                treeNode.ImageIndex = (int)IconIndex.Folder;
+                treeNode.SelectedImageIndex = treeNode.ImageIndex;
+            }
+
+            foreach (TreeNode childNode in treeNode.Nodes)
+            {
+                _FlagFolderNodes(childNode);
+            }
+        }
+
+        private void _FilesTreeViewAfterSelect(Object sender, TreeViewEventArgs e)
         {
             TreeView treeView = (TreeView)sender;
             TreeNode selectedNode = treeView.SelectedNode;
-            NodeObject nodeObject = (NodeObject) selectedNode.Tag;
+            NodeObject nodeObject = (NodeObject)selectedNode.Tag;
 
             textBox1.DataBindings.Clear();
             textBox2.DataBindings.Clear();
@@ -230,9 +289,34 @@ namespace Reanimator.Forms
             }
         }
 
-        private void _FilesTreeViewDoubleClick(object sender, EventArgs e)
+        private void _FilesTreeViewDoubleClick(Object sender, EventArgs e)
         {
-            MessageBox.Show("Todo");
+            TreeView treeView = (TreeView)sender;
+            TreeNode selectedNode = treeView.SelectedNode;
+            NodeObject nodeObject = (NodeObject)selectedNode.Tag;
+            Debug.Assert(nodeObject != null);
+
+            if (nodeObject.IsFolder || !nodeObject.CanEdit) return;
+
+            Index.FileIndex fileIndex = nodeObject.FileIndex;
+
+            if (fileIndex.FileNameString.EndsWith(ExcelFile.FileExtention) || fileIndex.FileNameString.EndsWith(StringsFile.FileExtention))
+            {
+
+            }
+            else if (fileIndex.FileNameString.EndsWith(XmlCookedFile.FileExtention))
+            {
+
+            }
+            else if (fileIndex.FileNameString.EndsWith(".txt"))
+            {
+
+            }
+            else
+            {
+                MessageBox.Show("Unexpected editable file!\n(this shouldn't happen - please report this)", "Warning",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void _RevertFileButtonClick(object sender, EventArgs e)
@@ -248,6 +332,18 @@ namespace Reanimator.Forms
         private void _ExtractPatchButtonClick(object sender, EventArgs e)
         {
             MessageBox.Show("Todo");
+        }
+
+        private void _FilesTreeViewAfterExpand(object sender, TreeViewEventArgs e)
+        {
+            e.Node.ImageIndex = (int)IconIndex.FolderOpen;
+            e.Node.SelectedImageIndex = e.Node.ImageIndex;
+        }
+
+        private void _FilesTreeViewAfterCollapse(object sender, TreeViewEventArgs e)
+        {
+            e.Node.ImageIndex = (int)IconIndex.Folder;
+            e.Node.SelectedImageIndex = e.Node.ImageIndex;
         }
     }
 }
