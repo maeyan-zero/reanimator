@@ -60,6 +60,13 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Icon _327_Options {
+            get {
+                object obj = ResourceManager.GetObject("_327_Options", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap attribute_small {
             get {
                 object obj = ResourceManager.GetObject("attribute_small", resourceCulture);
@@ -92,6 +99,13 @@ namespace Reanimator.Properties {
             get {
                 object obj = ResourceManager.GetObject("attributeSubs_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon AudioFile {
+            get {
+                object obj = ResourceManager.GetObject("AudioFile", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -235,6 +249,76 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Icon folder {
+            get {
+                object obj = ResourceManager.GetObject("folder", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon Folder_Back {
+            get {
+                object obj = ResourceManager.GetObject("Folder_Back", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon folder_open {
+            get {
+                object obj = ResourceManager.GetObject("folder_open", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon Folder_stuffed {
+            get {
+                object obj = ResourceManager.GetObject("Folder_stuffed", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon font {
+            get {
+                object obj = ResourceManager.GetObject("font", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon Generic_Application {
+            get {
+                object obj = ResourceManager.GetObject("Generic_Application", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon Generic_Document {
+            get {
+                object obj = ResourceManager.GetObject("Generic_Document", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon generic_picture {
+            get {
+                object obj = ResourceManager.GetObject("generic_picture", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon GenericMovieClip {
+            get {
+                object obj = ResourceManager.GetObject("GenericMovieClip", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon Image_File {
+            get {
+                object obj = ResourceManager.GetObject("Image_File", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap inventory_bg1 {
             get {
                 object obj = ResourceManager.GetObject("inventory_bg1", resourceCulture);
@@ -270,6 +354,13 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Icon MixedMediaFile {
+            get {
+                object obj = ResourceManager.GetObject("MixedMediaFile", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap panelButton_maximize_small {
             get {
                 object obj = ResourceManager.GetObject("panelButton_maximize_small", resourceCulture);
@@ -291,6 +382,13 @@ namespace Reanimator.Properties {
             }
         }
         
+        internal static System.Drawing.Icon Settings {
+            get {
+                object obj = ResourceManager.GetObject("Settings", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap skillPanelBg {
             get {
                 object obj = ResourceManager.GetObject("skillPanelBg", resourceCulture);
@@ -302,6 +400,20 @@ namespace Reanimator.Properties {
             get {
                 object obj = ResourceManager.GetObject("statistics_small", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon XAML_file {
+            get {
+                object obj = ResourceManager.GetObject("XAML_file", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon zippedFile {
+            get {
+                object obj = ResourceManager.GetObject("zippedFile", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

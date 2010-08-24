@@ -28,7 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.noEditorKey_label = new System.Windows.Forms.Label();
+            this.backupKey_label = new System.Windows.Forms.Label();
             this.files_treeView = new System.Windows.Forms.TreeView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -48,17 +52,19 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.backupKey_label = new System.Windows.Forms.Label();
-            this.noEditorKey_label = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.tableLayoutPanel3.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -83,6 +89,44 @@
             this.splitContainer1.SplitterDistance = 260;
             this.splitContainer1.TabIndex = 2;
             // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Controls.Add(this.noEditorKey_label, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.backupKey_label, 0, 1);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 601);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(250, 45);
+            this.tableLayoutPanel3.TabIndex = 3;
+            // 
+            // noEditorKey_label
+            // 
+            this.noEditorKey_label.AutoSize = true;
+            this.noEditorKey_label.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.noEditorKey_label.Location = new System.Drawing.Point(3, 0);
+            this.noEditorKey_label.Name = "noEditorKey_label";
+            this.noEditorKey_label.Size = new System.Drawing.Size(244, 22);
+            this.noEditorKey_label.TabIndex = 4;
+            this.noEditorKey_label.Text = "File has no editor";
+            this.noEditorKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // backupKey_label
+            // 
+            this.backupKey_label.AutoSize = true;
+            this.backupKey_label.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.backupKey_label.Location = new System.Drawing.Point(3, 22);
+            this.backupKey_label.Name = "backupKey_label";
+            this.backupKey_label.Size = new System.Drawing.Size(244, 23);
+            this.backupKey_label.TabIndex = 0;
+            this.backupKey_label.Text = "File is backed up";
+            this.backupKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // files_treeView
             // 
             this.files_treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -92,6 +136,8 @@
             this.files_treeView.Name = "files_treeView";
             this.files_treeView.Size = new System.Drawing.Size(250, 592);
             this.files_treeView.TabIndex = 1;
+            this.files_treeView.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterCollapse);
+            this.files_treeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterExpand);
             this.files_treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterSelect);
             this.files_treeView.DoubleClick += new System.EventHandler(this._FilesTreeViewDoubleClick);
             // 
@@ -317,43 +363,31 @@
             this.textBox4.Size = new System.Drawing.Size(296, 20);
             this.textBox4.TabIndex = 10;
             // 
-            // tableLayoutPanel3
+            // contextMenuStrip1
             // 
-            this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel3.ColumnCount = 1;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Controls.Add(this.noEditorKey_label, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.backupKey_label, 0, 1);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 601);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(250, 45);
-            this.tableLayoutPanel3.TabIndex = 3;
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.toolStripMenuItem1});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(133, 54);
             // 
-            // backupKey_label
+            // editToolStripMenuItem
             // 
-            this.backupKey_label.AutoSize = true;
-            this.backupKey_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.backupKey_label.Location = new System.Drawing.Point(3, 22);
-            this.backupKey_label.Name = "backupKey_label";
-            this.backupKey_label.Size = new System.Drawing.Size(244, 23);
-            this.backupKey_label.TabIndex = 0;
-            this.backupKey_label.Text = "File is backed up";
-            this.backupKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
+            this.editToolStripMenuItem.Text = "Edit";
             // 
-            // noEditorKey_label
+            // toolStripSeparator1
             // 
-            this.noEditorKey_label.AutoSize = true;
-            this.noEditorKey_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.noEditorKey_label.Location = new System.Drawing.Point(3, 0);
-            this.noEditorKey_label.Name = "noEditorKey_label";
-            this.noEditorKey_label.Size = new System.Drawing.Size(244, 22);
-            this.noEditorKey_label.TabIndex = 4;
-            this.noEditorKey_label.Text = "File has no editor";
-            this.noEditorKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(129, 6);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
+            this.toolStripMenuItem1.Text = "Extract to...";
             // 
             // FileExplorer
             // 
@@ -367,14 +401,15 @@
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel3.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -404,6 +439,10 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Label backupKey_label;
         private System.Windows.Forms.Label noEditorKey_label;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
 
     }
 }

@@ -7,6 +7,7 @@ namespace Reanimator
 {
     class XmlCookedFile
     {
+        public const String FileExtention = "xml.cooked";
         public const UInt32 FileHeadToken = 0x6B304F43;
         public const Int32 RequiredVersion = 8;
         public const UInt32 DataSegmentToken = 0x41544144;

@@ -677,8 +677,24 @@
     <None Include="Resources\inventory_bg.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\zippedFile.ico" />
+    <None Include="Resources\XAML_file.ico" />
+    <None Include="Resources\Settings.ico" />
+    <None Include="Resources\MixedMediaFile.ico" />
+    <None Include="Resources\Image_File.ico" />
     <None Include="Resources\attributePanelBg.png" />
     <None Include="Resources\attributePanel.png" />
+    <None Include="Resources\327_Options.ico" />
+    <None Include="Resources\AudioFile.ico" />
+    <None Include="Resources\folder.ico" />
+    <None Include="Resources\Folder_Back.ico" />
+    <None Include="Resources\folder_open.ico" />
+    <None Include="Resources\Folder_stuffed.ico" />
+    <None Include="Resources\font.ico" />
+    <None Include="Resources\Generic_Application.ico" />
+    <None Include="Resources\Generic_Document.ico" />
+    <None Include="Resources\generic_picture.ico" />
+    <None Include="Resources\GenericMovieClip.ico" />
     <Content Include="Resources\icon3.ico" />
     <None Include="Resources\skillPanelBg.png" />
   </ItemGroup>

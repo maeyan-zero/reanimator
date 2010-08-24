@@ -90,8 +90,8 @@ namespace Reanimator
         {
             Debug.Assert(offset <= byteArray.Length, "Error: offset > byteArray.Length");
 
-            int sizeOfT = Marshal.SizeOf(typeof (T));
-            int sizeOfBuffer = sizeOfT*count;
+            int sizeOfT = Marshal.SizeOf(typeof(T));
+            int sizeOfBuffer = sizeOfT * count;
 
             Debug.Assert(offset + sizeOfBuffer <= byteArray.Length, "Error: offset + sizeOfBuffer > byteArray.Length");
 

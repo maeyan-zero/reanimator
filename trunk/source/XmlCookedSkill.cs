@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -11,6 +9,7 @@ namespace Reanimator
 {
     class XmlCookedSkill : XmlCookedBase
     {
+        public const String RootFolder = "skills";
         private const Byte SkillDataTokenBasic = 0x04;
         private const Byte SkillDataTokenString = 0x05;
 
