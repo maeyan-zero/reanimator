@@ -22,40 +22,30 @@ namespace Reanimator.Forms.ItemTransfer
             set { _itemUnitSize = value; }
         }
 
-        public InventoryItem _previewItem;
+        //public InventoryItem _previewItem;
 
         public ItemPanel(bool displayItemIcons)
         {
             InitializeComponent();
-            _previewItem = null;
+            //_previewItem = null;
             _displayItemIcons = displayItemIcons;
-            this.Controls.Add(_previewItem);
+            //this.Controls.Add(_previewItem);
             _manager = new PreviewManager();
         }
 
         private void RegisterItemEvents(InventoryItem item)
         {
             item.Click += new EventHandler(item_Click);
-            //item.DoubleClick += new EventHandler(item_DoubleClick);
-
-            //item.MouseDown += new MouseEventHandler(item_MouseDown);
-            //item.MouseUp += new MouseEventHandler(item_MouseUp);
-            //item.MouseMove += new MouseEventHandler(item_MouseMove);
         }
 
         private void UnregisterItemEvents(InventoryItem item)
         {
             item.Click -= new EventHandler(item_Click);
-            //item.DoubleClick -= new EventHandler(item_DoubleClick);
-
-            //item.MouseDown -= new MouseEventHandler(item_MouseDown);
-            //item.MouseUp -= new MouseEventHandler(item_MouseUp);
-            //item.MouseMove -= new MouseEventHandler(item_MouseMove);
         }
 
         public bool AddItem(InventoryItem item, bool isOnInit)
         {
-            _previewItem = null;
+            //_previewItem = null;
 
             if (isOnInit)
             {
@@ -64,7 +54,7 @@ namespace Reanimator.Forms.ItemTransfer
 
                 if (_displayItemIcons)// && _manager.ImagesAvailable)
                 {
-                    Image img = _manager.GetImage(item.UnitType);
+                    Image img = _manager.GetImage(new Size(item.Size.Width / _itemUnitSize, item.Size.Height / _itemUnitSize), item.ImagePath);
                     if (img != null)
                     {
                         item.BackgroundImage = img;
@@ -131,7 +121,7 @@ namespace Reanimator.Forms.ItemTransfer
 
         public void PreviewItem(InventoryItem item)
         {
-            _previewItem = item;
+            //_previewItem = item;
         }
 
         private bool IsRoomAvailable(InventoryItem item)
@@ -172,70 +162,9 @@ namespace Reanimator.Forms.ItemTransfer
         {
             InventoryItem item = (InventoryItem)sender;
 
-            //if (_previewItem == item) // leave the control where it is
-            //{
-            //    if (!OverlapsWithOtherControls(item) && !OutOfScreen(item))
-            //    {
-            //        //_previewItem = _preview;
-            //        _previewItem = null;
-            //    }
-            //}
-            //else // set the movable control to the selected control
-            //{
-                NewItemSelected_Event(this, item);
-                _previewItem = item;
-            //}
+            NewItemSelected_Event(this, item);
+            //_previewItem = item;
         }
-
-        //public void Dispose()
-        //{
-        //    _manager.Dispose();
-        //}
-
-        //void item_DoubleClick(object sender, EventArgs e)
-        //{
-        //    InventoryItem item = (InventoryItem)sender;
-        //    ItemDoubleClicked_Event(this, item);
-        //}
-
-        //private void item_MouseMove(object sender, MouseEventArgs e)
-        //{
-        //    if (_mouseIsDraggingItem)
-        //    {
-        //        Point oldLoc = _previewItem.Position;
-
-        //        int x = e.X / _itemUnitSize;
-        //        int y = e.Y / _itemUnitSize;
-
-        //        _previewItem.Position = new Point(x, y);
-
-        //        if (OutOfScreen(_previewItem) == true)
-        //        {
-        //            _previewItem.Position = oldLoc;
-        //        }
-        //    }
-        //}
-
-        //bool _mouseIsDraggingItem;
-        //private void item_MouseDown(object sender, MouseEventArgs e)
-        //{
-        //    InventoryItem item = (InventoryItem)sender;
-        //    _previewItem = item;
-        //    NewItemSelected_Event(this, item);
-
-        //    if (_previewItem != null)
-        //    {
-        //        _mouseIsDraggingItem = true;
-        //    }
-        //}
-
-        //private void item_MouseUp(object sender, MouseEventArgs e)
-        //{
-        //    if (_previewItem != null)
-        //    {
-        //        _mouseIsDraggingItem = false;
-        //    }
-        //}
     }
 
 
@@ -247,8 +176,7 @@ namespace Reanimator.Forms.ItemTransfer
         int _quantity;
         bool _displayNamesAndQuantity;
         int _unitType;
-        bool _displayItemIcons;
-        string _unitTypeString;
+        string _imagePath;
 
         public int Quantity
         {
@@ -306,10 +234,10 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        public string UnitTypeString
+        public string ImagePath
         {
-            get { return _unitTypeString; }
-            set { _unitTypeString = value; }
+            get { return _imagePath; }
+            set { _imagePath = value; }
         }
 
         public int UnitType
@@ -333,11 +261,11 @@ namespace Reanimator.Forms.ItemTransfer
             Position = new Point(_item.inventoryPositionX, _item.inventoryPositionY);
         }
 
-        public InventoryItem(Unit item, string unitTypeString)//, string baseItem)
+        public InventoryItem(Unit item, string imagePath)//, string baseItem)
             : base()
         {
             _item = item;
-            _unitTypeString = unitTypeString;
+            _imagePath = imagePath;
 
             this.BackgroundImageLayout = ImageLayout.Stretch;
             Position = new Point(_item.inventoryPositionX, _item.inventoryPositionY);
@@ -532,6 +460,7 @@ namespace Reanimator.Forms.ItemTransfer
     public class PreviewManager
     {
         List<ImageHolder> _imageHolder;
+        string _basePath = @"E:\Flagship Studios\Hellgate London\Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items";
 
         public PreviewManager()
         {
@@ -547,8 +476,26 @@ namespace Reanimator.Forms.ItemTransfer
                 return image.Image;
             }
 
-            image = new ImageHolder();
+            image = new ImageHolder(new Size(8, 8));
             if(image.Load("items", unitType))
+            {
+                _imageHolder.Add(image);
+                return image.Image;
+            }
+            return null;
+        }
+
+        public Image GetImage(Size size, string imagePath)
+        {
+            ImageHolder image = _imageHolder.Find(tmp => tmp.ImagePath == imagePath);
+
+            if (image != null)
+            {
+                return image.Image;
+            }
+
+            image = new ImageHolder(size);
+            if (image.Load(_basePath, imagePath))
             {
                 _imageHolder.Add(image);
                 return image.Image;
@@ -559,8 +506,16 @@ namespace Reanimator.Forms.ItemTransfer
 
     public class ImageHolder
     {
+        Size _size;
+        string _imagePath;
         int _unitType;
         Image _image;
+
+        public string ImagePath
+        {
+            get { return _imagePath; }
+            set { _imagePath = value; }
+        }
 
         public int UnitType
         {
@@ -574,8 +529,9 @@ namespace Reanimator.Forms.ItemTransfer
           set { _image = value; }
         }
 
-        public ImageHolder()
+        public ImageHolder(Size size)
         {
+            _size = size;
         }
 
         public bool Load(string folder, int unitType)
@@ -590,6 +546,42 @@ namespace Reanimator.Forms.ItemTransfer
             }
 
             return false;
+        }
+
+        public bool Load(string folder, string imagePath)
+        {
+            _imagePath = imagePath;
+            string filePath = Path.Combine(folder, imagePath) + ".dds";
+
+            if (File.Exists(filePath))
+            {
+                Bitmap bmp = DevIL.DevIL.LoadBitmap(filePath);
+                if (_size.Height != _size.Width)
+                {
+                    //_image = bmp;
+                    _image = CropImage(bmp, _size);
+                }
+                else
+                {
+                    _image = bmp;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        private Image CropImage(Bitmap bmp, Size size)
+        {
+            int sizeX = size.Width * 68;
+            int sizeY = size.Height * 68;
+
+            int posX = (256 - sizeX) / 2;
+            int posY = (256 - sizeY) / 2;
+
+            Rectangle rect = new Rectangle(posX, posY, sizeX, sizeY);
+            Bitmap bmpCrop = bmp.Clone(rect, bmp.PixelFormat);
+            return (Image)bmpCrop;
         }
     }
 

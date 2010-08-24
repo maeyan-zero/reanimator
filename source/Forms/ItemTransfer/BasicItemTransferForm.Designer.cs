@@ -57,10 +57,23 @@
             this.l_palladium1 = new System.Windows.Forms.Label();
             this.l_palladium2 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.ts_debugControl = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.tscb_area = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.tstb_height = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.tscb_displayNames = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.tscb_gender = new System.Windows.Forms.ToolStripComboBox();
+            this.cb_isMale = new System.Windows.Forms.CheckBox();
+            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
+            this.tscb_itemIcons = new System.Windows.Forms.ToolStripComboBox();
             this.groupBox1.SuspendLayout();
             this.gb_characterName2.SuspendLayout();
             this.gb_characterName1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud_palladium)).BeginInit();
+            this.ts_debugControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // b_transfer
@@ -372,11 +385,125 @@
             this.label5.TabIndex = 38;
             this.label5.Text = "Palladium";
             // 
+            // ts_debugControl
+            // 
+            this.ts_debugControl.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ts_debugControl.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.ts_debugControl.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
+            this.tscb_area,
+            this.toolStripLabel2,
+            this.tstb_height,
+            this.toolStripLabel5,
+            this.tscb_displayNames,
+            this.toolStripLabel4,
+            this.tscb_itemIcons,
+            this.toolStripLabel3,
+            this.tscb_gender});
+            this.ts_debugControl.Location = new System.Drawing.Point(0, 489);
+            this.ts_debugControl.Name = "ts_debugControl";
+            this.ts_debugControl.Size = new System.Drawing.Size(634, 25);
+            this.ts_debugControl.TabIndex = 40;
+            this.ts_debugControl.Text = "toolStrip1";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(34, 22);
+            this.toolStripLabel1.Text = "Area:";
+            // 
+            // tscb_area
+            // 
+            this.tscb_area.Items.AddRange(new object[] {
+            "Stash",
+            "Cube",
+            "Inventory"});
+            this.tscb_area.Name = "tscb_area";
+            this.tscb_area.Size = new System.Drawing.Size(75, 25);
+            this.tscb_area.Text = "Inventory";
+            this.tscb_area.SelectedIndexChanged += new System.EventHandler(this.tscb_area_SelectedIndexChanged);
+            // 
+            // toolStripLabel2
+            // 
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(46, 22);
+            this.toolStripLabel2.Text = "Height:";
+            // 
+            // tstb_height
+            // 
+            this.tstb_height.Name = "tstb_height";
+            this.tstb_height.Size = new System.Drawing.Size(24, 25);
+            this.tstb_height.Text = "6";
+            this.tstb_height.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tstb_height.TextChanged += new System.EventHandler(this.tstb_height_TextChanged);
+            // 
+            // toolStripLabel4
+            // 
+            this.toolStripLabel4.Name = "toolStripLabel4";
+            this.toolStripLabel4.Size = new System.Drawing.Size(65, 22);
+            this.toolStripLabel4.Text = "Item icons:";
+            // 
+            // tscb_displayNames
+            // 
+            this.tscb_displayNames.Items.AddRange(new object[] {
+            "true",
+            "false"});
+            this.tscb_displayNames.Name = "tscb_displayNames";
+            this.tscb_displayNames.Size = new System.Drawing.Size(75, 25);
+            this.tscb_displayNames.Text = "true";
+            this.tscb_displayNames.Click += new System.EventHandler(this.tscb_displayNames_Click);
+            // 
+            // toolStripLabel3
+            // 
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(48, 22);
+            this.toolStripLabel3.Text = "Gender:";
+            // 
+            // tscb_gender
+            // 
+            this.tscb_gender.DropDownWidth = 75;
+            this.tscb_gender.Items.AddRange(new object[] {
+            "male",
+            "female"});
+            this.tscb_gender.Name = "tscb_gender";
+            this.tscb_gender.Size = new System.Drawing.Size(75, 25);
+            this.tscb_gender.Text = "female";
+            this.tscb_gender.SelectedIndexChanged += new System.EventHandler(this.tscb_gender_SelectedIndexChanged);
+            // 
+            // cb_isMale
+            // 
+            this.cb_isMale.AutoSize = true;
+            this.cb_isMale.Location = new System.Drawing.Point(298, 79);
+            this.cb_isMale.Name = "cb_isMale";
+            this.cb_isMale.Size = new System.Drawing.Size(49, 17);
+            this.cb_isMale.TabIndex = 41;
+            this.cb_isMale.Text = "Male";
+            this.cb_isMale.UseVisualStyleBackColor = true;
+            this.cb_isMale.CheckedChanged += new System.EventHandler(this.useMaleArmor_CheckedChanged);
+            // 
+            // toolStripLabel5
+            // 
+            this.toolStripLabel5.Name = "toolStripLabel5";
+            this.toolStripLabel5.Size = new System.Drawing.Size(72, 22);
+            this.toolStripLabel5.Text = "Item names:";
+            // 
+            // tscb_itemIcons
+            // 
+            this.tscb_itemIcons.Items.AddRange(new object[] {
+            "true",
+            "false"});
+            this.tscb_itemIcons.Name = "tscb_itemIcons";
+            this.tscb_itemIcons.Size = new System.Drawing.Size(75, 25);
+            this.tscb_itemIcons.Text = "true";
+            this.tscb_itemIcons.Click += new System.EventHandler(this.tscb_itemIcons_Click);
+            // 
             // BasicItemTransferForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 514);
+            this.Controls.Add(this.cb_isMale);
+            this.Controls.Add(this.ts_debugControl);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.l_palladium2);
             this.Controls.Add(this.l_palladium1);
@@ -407,6 +534,8 @@
             this.gb_characterName2.ResumeLayout(false);
             this.gb_characterName1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nud_palladium)).EndInit();
+            this.ts_debugControl.ResumeLayout(false);
+            this.ts_debugControl.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -443,6 +572,18 @@
         private System.Windows.Forms.Label l_palladium1;
         private System.Windows.Forms.Label l_palladium2;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+        protected System.Windows.Forms.ToolStripComboBox tscb_gender;
+        protected System.Windows.Forms.ToolStripComboBox tscb_area;
+        protected System.Windows.Forms.ToolStripTextBox tstb_height;
+        protected System.Windows.Forms.CheckBox cb_isMale;
+        protected System.Windows.Forms.ToolStrip ts_debugControl;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel4;
+        protected System.Windows.Forms.ToolStripComboBox tscb_displayNames;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel5;
+        protected System.Windows.Forms.ToolStripComboBox tscb_itemIcons;
 
     }
 }

@@ -23,6 +23,7 @@ namespace Reanimator.Forms.ItemTransfer
         protected const int INVENTORYWIDTH = 6;
         protected int INVENTORYHEIGHT = 6;
         protected int ITEMUNITSIZE = 40;
+        protected bool _debug = false;
 
         protected string _characterFolder;
 
@@ -53,6 +54,7 @@ namespace Reanimator.Forms.ItemTransfer
                 _backupCharacters = options.BackupCharacters;
                 _displayItemIcons = options.DisplayItemIcons;
                 _displayNamesAndQuantity = options.DisplayNamesAndQuantity;
+                _debug = options.Debug;
             }
             //ItemTradingOptions options2 = new ItemTradingOptions();
             //options2.EnableItemPreview = true;
@@ -79,8 +81,7 @@ namespace Reanimator.Forms.ItemTransfer
             _characterItemPanel1.ItemUnitSize = ITEMUNITSIZE;
             _characterItemPanel2.ItemUnitSize = ITEMUNITSIZE;
 
-            _characterItemPanel1.Size = new Size(INVENTORYWIDTH * ITEMUNITSIZE, INVENTORYHEIGHT * ITEMUNITSIZE);
-            _characterItemPanel2.Size = new Size(INVENTORYWIDTH * ITEMUNITSIZE, INVENTORYHEIGHT * ITEMUNITSIZE);
+            SetPanelSize();
 
             _characterItemPanel1.Location = new Point(16, 18);
             _characterItemPanel2.Location = new Point(16, 18);
@@ -98,6 +99,12 @@ namespace Reanimator.Forms.ItemTransfer
             //cb_selectCharacter2.DataSource = characters.Clone();
 
             EnableComboBoxes(true, true);
+        }
+
+        protected void SetPanelSize()
+        {
+            _characterItemPanel1.Size = new Size(INVENTORYWIDTH * ITEMUNITSIZE, INVENTORYHEIGHT * ITEMUNITSIZE);
+            _characterItemPanel2.Size = new Size(INVENTORYWIDTH * ITEMUNITSIZE, INVENTORYHEIGHT * ITEMUNITSIZE);
         }
 
         protected abstract void b_loadCharacter1_Click(object sender, EventArgs e);
@@ -302,9 +309,21 @@ namespace Reanimator.Forms.ItemTransfer
                 b_loadCharacter2_Click(sender, e);
             }
         }
+
+        protected abstract void useMaleArmor_CheckedChanged(object sender, EventArgs e);
+
+        protected abstract void tscb_area_SelectedIndexChanged(object sender, EventArgs e);
+
+        protected abstract void tstb_height_TextChanged(object sender, EventArgs e);
+
+        protected abstract void tscb_gender_SelectedIndexChanged(object sender, EventArgs e);
+
+        protected abstract void tscb_displayNames_Click(object sender, EventArgs e);
+
+        protected abstract void tscb_itemIcons_Click(object sender, EventArgs e);
     }
 
-        public enum CharacterStatus
+    public enum CharacterStatus
     {
         NotLoaded,
         Loaded,
@@ -324,6 +343,14 @@ namespace Reanimator.Forms.ItemTransfer
         bool _backupCharacters;
         bool _displayItemIcons;
         bool _displayNamesAndQuantity;
+        bool _debug;
+
+        [XmlElement("Debug")]
+        public bool Debug
+        {
+            get { return _debug; }
+            set { _debug = value; }
+        }
 
         [XmlElement("EnableItemPreview")]
         public bool EnableItemPreview

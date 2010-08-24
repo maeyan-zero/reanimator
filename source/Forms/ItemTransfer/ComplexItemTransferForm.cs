@@ -12,6 +12,13 @@ namespace Reanimator.Forms.ItemTransfer
         TableFiles _tableFiles;
         UnitHelpFunctions _itemHelpFunctions;
         DataTable _items;
+        bool _isMale = false;
+
+        public bool IsMale
+        {
+            get { return _isMale; }
+            set { _isMale = value; }
+        }
 
         /// <summary>
         /// Use this constructor when starting the item transfer window from within Reanimator (additional item infos)
@@ -33,7 +40,30 @@ namespace Reanimator.Forms.ItemTransfer
             cb_selectCharacter1.DataSource = characters;
             cb_selectCharacter2.DataSource = characters.Clone();
 
+            if (_debug)
+            {
+                InitDebugControls();
+            }
+            ts_debugControl.Enabled = _debug;
+            ts_debugControl.Visible = _debug;
+
             EnableTradingControls(false);
+        }
+
+        private void InitDebugControls()
+        {
+            tscb_area.Text = INVENTORYTYPE.ToString();
+            if (_isMale)
+            {
+                tscb_gender.Text = "male";
+            }
+            else
+            {
+                tscb_gender.Text = "female";
+            }
+            tstb_height.Text = INVENTORYHEIGHT.ToString();
+            tscb_displayNames.Text = _displayNamesAndQuantity.ToString();
+            tscb_itemIcons.Text = _displayItemIcons.ToString();
         }
 
         protected override void b_loadCharacter1_Click(object sender, EventArgs e)
@@ -93,9 +123,25 @@ namespace Reanimator.Forms.ItemTransfer
 
                         }
                         int unitType = (int)itemsRows[0]["unitType"];
+                        string folder = (string)itemsRows[0]["folder"] + @"\icons";
+                        string name = (string)itemsRows[0]["name"];
                         //string unitType = (string)itemsRows[0]["unitType_string"];
 
-                        InventoryItem iItem = new InventoryItem(item, unitType);
+                        string itemPath = Path.Combine(folder, name);
+
+                        if(itemPath.StartsWith("armor"))
+                        {
+                            if (_isMale)
+                            {
+                                itemPath += "_m";
+                            }
+                            else
+                            {
+                                itemPath += "_f";
+                            }
+                        }
+
+                        InventoryItem iItem = new InventoryItem(item, itemPath);
                         iItem.InitButton(_displayNamesAndQuantity);
                         itemPanel.AddItem(iItem, true);
                     }
@@ -345,5 +391,74 @@ namespace Reanimator.Forms.ItemTransfer
 
         //    base.Dispose(disposing);
         //}
+
+        protected override void useMaleArmor_CheckedChanged(object sender, EventArgs e)
+        {
+            _isMale = cb_isMale.Checked;
+        }
+        
+        protected override void tscb_area_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tscb_area.SelectedItem.ToString() == "Cube")
+            {
+                INVENTORYTYPE = InventoryTypes.Cube;
+            }
+            else if (tscb_area.SelectedItem.ToString() == "Inventory")
+            {
+                INVENTORYTYPE = InventoryTypes.Inventory;
+            }
+            else if (tscb_area.SelectedItem.ToString() == "Stash")
+            {
+                INVENTORYTYPE = InventoryTypes.Stash;
+            }
+        }
+
+        protected override void tstb_height_TextChanged(object sender, EventArgs e)
+        {
+            int value;
+            bool valid = int.TryParse(tstb_height.Text, out value);
+
+            if (valid)
+            {
+                INVENTORYHEIGHT = value;
+                SetPanelSize();
+            }
+        }
+
+        protected override void tscb_gender_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tscb_gender.SelectedItem.ToString() == "male")
+            {
+                _isMale = true;
+            }
+            else
+            {
+                _isMale = false;
+            }
+        }
+
+        protected override void tscb_displayNames_Click(object sender, EventArgs e)
+        {
+            if (tscb_displayNames.SelectedItem.ToString() == "true")
+            {
+                _displayNamesAndQuantity = true;
+            }
+            else
+            {
+                _displayNamesAndQuantity = false;
+            }
+        }
+
+        protected override void tscb_itemIcons_Click(object sender, EventArgs e)
+        {
+            if (tscb_itemIcons.SelectedItem.ToString() == "true")
+            {
+                _displayItemIcons = true;
+            }
+            else
+            {
+                _displayItemIcons = false;
+            }
+        }
     }
 }
