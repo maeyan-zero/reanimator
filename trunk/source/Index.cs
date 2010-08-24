@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Windows.Forms;
+using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
 namespace Reanimator
 {
@@ -143,10 +144,9 @@ namespace Reanimator
             public Int32 UncompressedSize;              // 16   0x10
             public Int32 CompressedSize;                // 20   0x14
             public Int32 Null2;                         // 24   0x18
-            public Int32 DirectoryArrayIndex;        // 28   0x1C
-            public Int32 FilenameArrayIndex;         // 32   0x20
-            public Int32 Unknown21;                     // 36   0x24            Can't be null             .text:000000014004958B cmp     qword ptr [rdi+10h], 0 -> jz      loc_140049402   ; Jump if Zero
-            public Int32 Unknown22;                     // 40   0x28
+            public Int32 DirectoryArrayIndex;           // 28   0x1C
+            public Int32 FilenameArrayIndex;            // 32   0x20
+            public FILETIME FileTime;                   // 36   0x24            Can't be null             .text:000000014004958B cmp     qword ptr [rdi+10h], 0 -> jz      loc_140049402   ; Jump if Zero
             public Int32 Unknown23;                     // 44   0x2C
             public Int32 Unknown24;                     // 48   0x30
             public Int32 Null31;                        // 52   0x34
@@ -335,6 +335,8 @@ namespace Reanimator
                 FileTable[i] = fileIndex;
             }
 
+            File.WriteAllBytes(@"C:\index1.idx", _data);
+
             return true;
         }
 
@@ -505,8 +507,7 @@ namespace Reanimator
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Directory);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileName);
                 //FileTools.WriteToBuffer(ref _buffer, ref offset, (UInt32)1); // game clears .idx and .dat if null
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown21);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown22);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FileTime);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown23);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown24);
                 //offset += 12; // unknown  -  not required
