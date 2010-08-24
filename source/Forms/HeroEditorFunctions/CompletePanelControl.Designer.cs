@@ -222,7 +222,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Reanimator.Properties.Resources.attributePanel;
+            //this.BackgroundImage = global::Reanimator.Properties.Resources.attributePanel;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Controls.Add(this.p_skillPanel);
             this.Controls.Add(this.p_attributePanel);

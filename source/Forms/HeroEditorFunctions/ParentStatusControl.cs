@@ -44,7 +44,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             if (_isMaximized)
             {
-                b_minimizeMaximize.BackgroundImage = Resources.panelButton_minimize_small;
+                //b_minimizeMaximize.BackgroundImage = Resources.panelButton_minimize_small;
                 this.Size = _minimizedSize;
 
                 foreach (Control control in this.Controls)
@@ -58,7 +58,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
             else
             {
-                b_minimizeMaximize.BackgroundImage = Resources.panelButton_maximize_small;
+                //b_minimizeMaximize.BackgroundImage = Resources.panelButton_maximize_small;
                 this.Size = _maximizedSize;
 
                 foreach (Control control in this.Controls)

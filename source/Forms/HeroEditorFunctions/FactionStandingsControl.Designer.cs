@@ -551,7 +551,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Reanimator.Properties.Resources.faction_small;
+            //this.BackgroundImage = global::Reanimator.Properties.Resources.faction_small;
             this.Controls.Add(this.label12);
             this.Controls.Add(this.nud_factionWithTheBrothers);
             this.Controls.Add(this.richTextBox11);
