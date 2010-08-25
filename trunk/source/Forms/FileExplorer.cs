@@ -129,10 +129,10 @@ namespace Reanimator.Forms
                 String[] nodeKeys = file.DirectoryString.Split('\\');
                 TreeNode treeNode = null;
 
-
                 // can we edit the file via. Reanimator?
                 if ((nodeKeys.Contains(XmlCookedSkill.RootFolder) && file.FileNameString.EndsWith(XmlCookedFile.FileExtention)) ||
                     file.FileNameString.EndsWith(ExcelFile.FileExtention) ||
+                    file.FileNameString.EndsWith(StringsFile.FileExtention) ||
                     file.FileNameString.EndsWith("txt"))
                 {
                     nodeObject.CanEdit = true;
@@ -161,7 +161,7 @@ namespace Reanimator.Forms
 
 
                 // have we already added the file? if so, remove it for updated version
-                String key = file.DirectoryString + file.FileNameString;
+                String key = file.DirectoryString.Replace(Index.BackupPrefix + @"\", "") + file.FileNameString;
                 if (_fileTable.Contains(key))
                 {
                     TreeNode fileNode = (TreeNode)_fileTable[key];
@@ -357,7 +357,12 @@ namespace Reanimator.Forms
             Hashtable indexToWrite = new Hashtable();
             if (!_ExtractFiles(selectedNode, ref overwrite, indexToWrite)) return;
 
-            if (indexToWrite.Count == 0) return;
+            if (indexToWrite.Count == 0)
+            {
+                MessageBox.Show("File(s) extracted sucessfully!\nNo index files require modifications.", "Complete",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             DialogResult writeIdx = MessageBox.Show("Files extracted sucessfully!\nSave modified index file(s)?", "Question", MessageBoxButtons.YesNo,
                                                     MessageBoxIcon.Question);
             if (writeIdx == DialogResult.No) return;
@@ -374,7 +379,7 @@ namespace Reanimator.Forms
 
         private static bool _ExtractFiles(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite)
         {
-            if (treeNode == null)return false;
+            if (treeNode == null) return false;
 
             NodeObject nodeObject = (NodeObject) treeNode.Tag;
             if (nodeObject.IsFolder)
@@ -389,7 +394,9 @@ namespace Reanimator.Forms
             }
 
             Index.FileIndex fileIndex = nodeObject.FileIndex;
-            String filePath = Path.Combine(Config.HglDir, Path.Combine(fileIndex.DirectoryString, fileIndex.FileNameString));
+            String hglPath = Path.Combine(fileIndex.DirectoryString.Replace(Index.BackupPrefix + @"\", ""),
+                                         fileIndex.FileNameString);
+            String filePath = Path.Combine(Config.HglDir, hglPath);
             bool fileExists = File.Exists(filePath);
             if (fileExists && overwrite == DialogResult.None)
             {
@@ -398,7 +405,7 @@ namespace Reanimator.Forms
                 if (overwrite == DialogResult.Cancel) return false;
             }
 
-            if (fileExists && overwrite == DialogResult.No) return false;
+            if (fileExists && overwrite == DialogResult.No) return true;
 
             DialogResult extractDialogResult = DialogResult.Retry;
             while (extractDialogResult == DialogResult.Retry)
@@ -423,8 +430,12 @@ namespace Reanimator.Forms
                 break;
             }
 
-            // todo: add check for it?
-            fileIndex.InIndex.PatchOutFile(fileIndex);
+            // don't patch out string files
+            if (fileIndex.FileNameString.EndsWith(StringsFile.FileExtention)) return true;
+
+            // only add index to list if it needs to be
+            if (!fileIndex.InIndex.PatchOutFile(fileIndex)) return true;
+
             String fileIndexKey = fileIndex.InIndex.FileNameWithoutExtension;
             if (!indexToWrite.ContainsKey(fileIndexKey))
             {
