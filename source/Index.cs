@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Windows.Forms;
-using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
 namespace Reanimator
 {
@@ -146,7 +145,7 @@ namespace Reanimator
             public Int32 Null2;                         // 24   0x18
             public Int32 DirectoryArrayIndex;           // 28   0x1C
             public Int32 FilenameArrayIndex;            // 32   0x20
-            public FILETIME FileTime;                   // 36   0x24            Can't be null             .text:000000014004958B cmp     qword ptr [rdi+10h], 0 -> jz      loc_140049402   ; Jump if Zero
+            public UInt64 FileTime;                     // 36   0x24        can't be null - is a FILETIME (using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME)
             public Int32 Unknown23;                     // 44   0x2C
             public Int32 Unknown24;                     // 48   0x30
             public Int32 Null31;                        // 52   0x34
@@ -249,15 +248,16 @@ namespace Reanimator
             {
                 Crypt.Decrypt(_data);
 
-                try
-                {
-                    File.WriteAllBytes(filePath, _data);
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("Failed to save decrypted file!\nPlease ensure file is not read only.\n\n" + e, "Warning", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Warning);
-                }
+                // todo: having issues - game randomly clearing .dat if decrypted??
+                //try
+                //{
+                //    File.WriteAllBytes(filePath, _data);
+                //}
+                //catch (Exception e)
+                //{
+                //    MessageBox.Show("Failed to save decrypted file!\nPlease ensure file is not read only.\n\n" + e, "Warning", MessageBoxButtons.OK,
+                //                    MessageBoxIcon.Warning);
+                //}
             }
 
 
