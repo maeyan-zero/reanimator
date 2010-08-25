@@ -558,7 +558,6 @@ namespace Reanimator.Forms.ItemTransfer
                 Bitmap bmp = DevIL.DevIL.LoadBitmap(filePath);
                 if (_size.Height != _size.Width)
                 {
-                    //_image = bmp;
                     _image = CropImage(bmp, _size);
                 }
                 else
