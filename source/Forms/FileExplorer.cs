@@ -247,7 +247,7 @@ namespace Reanimator.Forms
                 revertFile_button.Enabled = false;
                 revertFile_label.Text = "Folder elements can't be backed-up/restored.";
                 extract_label.Text = "Extract this folder and all files & folders within it.";
-                extractPatch_label.Text = "Extract this folder and all files & folders within it, and then patch the index to force the game to load the extracted files over the .dat.\n\nWarning: Not all files can be safely patched; use with caution.";
+                extractPatch_label.Text = "Extract this folder and all files & folders within it, and then patch the index to force the game to load the extracted files over the .dat.\nNote: Non-patchable files (e.g. sounds) wont be patched out and will only be extracted.";
 
                 return;
             }
@@ -430,8 +430,11 @@ namespace Reanimator.Forms
                 break;
             }
 
-            // don't patch out string files
-            if (fileIndex.FileNameString.EndsWith(StringsFile.FileExtention)) return true;
+            // don't patch out string files or music/movie files
+            if (fileIndex.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                fileIndex.FileNameString.EndsWith(".ogg") ||
+                fileIndex.FileNameString.EndsWith(".mp2") ||
+                fileIndex.FileNameString.EndsWith(".bik")) return true;
 
             // only add index to list if it needs to be
             if (!fileIndex.InIndex.PatchOutFile(fileIndex)) return true;
