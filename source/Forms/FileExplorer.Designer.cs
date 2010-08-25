@@ -44,6 +44,7 @@
             this.extractPatch_button = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.fileTime_textBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.fileSize_textBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -52,12 +53,11 @@
             this.fileCompressed_textBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.loadingLocation_textBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.label8 = new System.Windows.Forms.Label();
-            this.fileTime_textBox = new System.Windows.Forms.TextBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -131,9 +131,11 @@
             // 
             // files_treeView
             // 
+            this.files_treeView.AllowDrop = true;
             this.files_treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.files_treeView.ContextMenuStrip = this.contextMenuStrip1;
             this.files_treeView.Location = new System.Drawing.Point(3, 3);
             this.files_treeView.Name = "files_treeView";
             this.files_treeView.Size = new System.Drawing.Size(250, 592);
@@ -291,6 +293,14 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(442, 122);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
+            // fileTime_textBox
+            // 
+            this.fileTime_textBox.Location = new System.Drawing.Point(143, 99);
+            this.fileTime_textBox.Name = "fileTime_textBox";
+            this.fileTime_textBox.ReadOnly = true;
+            this.fileTime_textBox.Size = new System.Drawing.Size(200, 20);
+            this.fileTime_textBox.TabIndex = 12;
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -368,6 +378,17 @@
             this.loadingLocation_textBox.Size = new System.Drawing.Size(296, 20);
             this.loadingLocation_textBox.TabIndex = 10;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label8.Location = new System.Drawing.Point(3, 96);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(134, 26);
+            this.label8.TabIndex = 11;
+            this.label8.Text = "Index File Time";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -393,25 +414,6 @@
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(132, 22);
             this.toolStripMenuItem1.Text = "Extract to...";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label8.Location = new System.Drawing.Point(3, 96);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(134, 26);
-            this.label8.TabIndex = 11;
-            this.label8.Text = "File Time";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // fileTime_textBox
-            // 
-            this.fileTime_textBox.Location = new System.Drawing.Point(143, 99);
-            this.fileTime_textBox.Name = "fileTime_textBox";
-            this.fileTime_textBox.ReadOnly = true;
-            this.fileTime_textBox.Size = new System.Drawing.Size(200, 20);
-            this.fileTime_textBox.TabIndex = 12;
             // 
             // FileExplorer
             // 

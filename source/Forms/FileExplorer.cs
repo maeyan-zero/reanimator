@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using Reanimator.Properties;
 
@@ -333,7 +332,105 @@ namespace Reanimator.Forms
 
         private void _ExtractPatchButtonClick(object sender, EventArgs e)
         {
-            MessageBox.Show("Todo");
+            TreeNode selectedNode = files_treeView.SelectedNode;
+            if (selectedNode == null) return;
+
+            NodeObject nodeObject = (NodeObject)selectedNode.Tag;
+
+            DialogResult dialogResult = MessageBox.Show(
+                nodeObject.IsFolder ? "Extract & Patch out this folder and its contents?" : "Extract & Patch out this file?",
+                "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.No) return;
+
+            ProgressForm progressForm = new ProgressForm(_DoExtractPatch, selectedNode);
+            progressForm.SetLoadingText("Patching and Extracting files...");
+            progressForm.SetStyle(ProgressBarStyle.Marquee);
+            progressForm.Show();
+        }
+
+        private static void _DoExtractPatch(ProgressForm progressForm, Object param)
+        {
+            // todo: add proper progress counter, etc?
+            progressForm.SetCurrentItemText("Extracting file(s)...");
+            TreeNode selectedNode = (TreeNode) param;
+            DialogResult overwrite = DialogResult.None;
+            Hashtable indexToWrite = new Hashtable();
+            if (!_ExtractFiles(selectedNode, ref overwrite, indexToWrite)) return;
+
+            if (indexToWrite.Count == 0) return;
+            DialogResult writeIdx = MessageBox.Show("Files extracted sucessfully!\nSave modified index file(s)?", "Question", MessageBoxButtons.YesNo,
+                                                    MessageBoxIcon.Question);
+            if (writeIdx == DialogResult.No) return;
+
+            progressForm.SetCurrentItemText("Saving modified index file(s)...");
+            foreach (Index idx in
+                from DictionaryEntry indexDictionary in indexToWrite select (Index)indexDictionary.Value)
+            {
+                File.WriteAllBytes(idx.FilePath, idx.GenerateIndexFile());
+            }
+            MessageBox.Show("Modified index file(s) saved sucessfully!", "Saved", MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);            
+        }
+
+        private static bool _ExtractFiles(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite)
+        {
+            if (treeNode == null)return false;
+
+            NodeObject nodeObject = (NodeObject) treeNode.Tag;
+            if (nodeObject.IsFolder)
+            {
+                foreach (TreeNode node in treeNode.Nodes)
+                {
+                    _ExtractFiles(node, ref overwrite, indexToWrite);
+                    if (overwrite == DialogResult.Cancel) return false;
+                }
+
+                return true;
+            }
+
+            Index.FileIndex fileIndex = nodeObject.FileIndex;
+            String filePath = Path.Combine(Config.HglDir, Path.Combine(fileIndex.DirectoryString, fileIndex.FileNameString));
+            bool fileExists = File.Exists(filePath);
+            if (fileExists && overwrite == DialogResult.None)
+            {
+                overwrite = MessageBox.Show("An extract file already exists, do you wish to overwrite the file, and all following?\n\nFile: " + filePath,
+                    "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (overwrite == DialogResult.Cancel) return false;
+            }
+
+            if (fileExists && overwrite == DialogResult.No) return false;
+
+            DialogResult extractDialogResult = DialogResult.Retry;
+            while (extractDialogResult == DialogResult.Retry)
+            {
+                byte[] fileBytes = fileIndex.InIndex.ReadDataFile(fileIndex);
+                if (fileBytes == null)
+                {
+                    extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
+                                                   MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+
+                    if (extractDialogResult == DialogResult.Abort)
+                    {
+                        overwrite = DialogResult.Cancel;
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                File.WriteAllBytes(filePath, fileBytes);
+                break;
+            }
+
+            // todo: add check for it?
+            fileIndex.InIndex.PatchOutFile(fileIndex);
+            String fileIndexKey = fileIndex.InIndex.FileNameWithoutExtension;
+            if (!indexToWrite.ContainsKey(fileIndexKey))
+            {
+                indexToWrite.Add(fileIndexKey, fileIndex.InIndex);
+            }
+            return true;
         }
 
         private void _FilesTreeViewAfterExpand(object sender, TreeViewEventArgs e)

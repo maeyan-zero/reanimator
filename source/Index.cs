@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -220,17 +221,22 @@ namespace Reanimator
 
         public const string BackupPrefix = @"backup";
         private bool _checkedForModified;
+        private bool _modified;
         public bool Modified
         {
             get
             {
-                if (_checkedForModified) return Modified;
+                if (_checkedForModified) return _modified;
 
                 _checkedForModified = true;
-                return FileTable.Any(file => file.DirectoryString.Contains(BackupPrefix));
+                _modified = FileTable.Any(file => file.DirectoryString.Contains(BackupPrefix));
+                return _modified;
             }
 
-            private set { Modified = value; }
+            private set
+            {
+                _modified = value;
+            }
         }
 
         public bool ParseData(byte[] data, String filePath)
@@ -247,17 +253,6 @@ namespace Reanimator
             if (fileHeadToken != TokenHead)
             {
                 Crypt.Decrypt(_data);
-
-                // todo: having issues - game randomly clearing .dat if decrypted??
-                //try
-                //{
-                //    File.WriteAllBytes(filePath, _data);
-                //}
-                //catch (Exception e)
-                //{
-                //    MessageBox.Show("Failed to save decrypted file!\nPlease ensure file is not read only.\n\n" + e, "Warning", MessageBoxButtons.OK,
-                //                    MessageBoxIcon.Warning);
-                //}
             }
 
 
@@ -542,7 +537,19 @@ namespace Reanimator
 
         public void AddDirectoryPrefix(int i)
         {
-            String dir = BackupPrefix + @"\" + _stringTable[FileTable[i].Directory];
+            FileIndex fileIndex = FileTable[i];
+            PatchOutFile(fileIndex);
+        }
+
+        public void PatchOutFile(FileIndex fileIndex)
+        {
+            Debug.Assert(fileIndex != null);
+
+            // has it already be patched out?
+            if (fileIndex.DirectoryString.Contains(BackupPrefix)) return;
+
+            // does the back dir exist?
+            String dir = BackupPrefix + @"\" + _stringTable[fileIndex.Directory];
             int index = StringExists(dir);
 
             // if the directory doesn't exist, add it.
@@ -552,13 +559,13 @@ namespace Reanimator
 
                 String[] buffer = new String[index + 1];
                 _stringTable.CopyTo(buffer, 0);
-                buffer[index] = BackupPrefix + @"\" + _stringTable[FileTable[i].Directory];
+                buffer[index] = BackupPrefix + @"\" + _stringTable[fileIndex.Directory];
 
                 _stringTable = buffer;
                 _stringsHeader.StringsCount++;
             }
 
-            FileTable[i].Directory = index;
+            fileIndex.Directory = index;
             Modified = true;
         }
 
