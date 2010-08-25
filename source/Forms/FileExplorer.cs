@@ -332,30 +332,53 @@ namespace Reanimator.Forms
 
         private void _ExtractPatchButtonClick(object sender, EventArgs e)
         {
-            TreeNode selectedNode = files_treeView.SelectedNode;
-            if (selectedNode == null) return;
+            TreeNode selectedNodes = new TreeNode();
+            TreeNodeCollection nodes = files_treeView.Nodes;
+            foreach (TreeNode node in nodes)
+            {
+                _AddCheckedNodes(node, selectedNodes);
+            }
 
-            NodeObject nodeObject = (NodeObject)selectedNode.Tag;
+            if (selectedNodes.Nodes.Count == 0) return;
 
             DialogResult dialogResult = MessageBox.Show(
-                nodeObject.IsFolder ? "Extract & Patch out this folder and its contents?" : "Extract & Patch out this file?",
+                "Extract & Patch out the selected file/s?",
                 "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No) return;
 
-            ProgressForm progressForm = new ProgressForm(_DoExtractPatch, selectedNode);
+            ProgressForm progressForm = new ProgressForm(_DoExtractPatch, selectedNodes);
             progressForm.SetLoadingText("Patching and Extracting files...");
             progressForm.SetStyle(ProgressBarStyle.Marquee);
             progressForm.Show();
+        }
+
+        private void _AddCheckedNodes(TreeNode caseNode, TreeNode nodeCollection)
+        {
+            foreach (TreeNode node in caseNode.Nodes)
+            {
+                NodeObject nodeObject = node.Tag as NodeObject;
+                if (node.Checked && !nodeObject.IsFolder)
+                {
+                    TreeNode nodeClone = (TreeNode)node.Clone();
+                    nodeCollection.Nodes.Add(nodeClone);
+                }
+                //recursive call
+                _AddCheckedNodes(node, nodeCollection);
+            }
         }
 
         private static void _DoExtractPatch(ProgressForm progressForm, Object param)
         {
             // todo: add proper progress counter, etc?
             progressForm.SetCurrentItemText("Extracting file(s)...");
-            TreeNode selectedNode = (TreeNode) param;
+            TreeNode selectedNodes = (TreeNode) param;
             DialogResult overwrite = DialogResult.None;
             Hashtable indexToWrite = new Hashtable();
-            if (!_ExtractFiles(selectedNode, ref overwrite, indexToWrite)) return;
+
+            foreach (TreeNode node in selectedNodes.Nodes)
+            {
+                if (!_ExtractFiles(node, ref overwrite, indexToWrite)) return;
+            }
 
             if (indexToWrite.Count == 0)
             {
@@ -381,18 +404,7 @@ namespace Reanimator.Forms
         {
             if (treeNode == null) return false;
 
-            NodeObject nodeObject = (NodeObject) treeNode.Tag;
-            if (nodeObject.IsFolder)
-            {
-                foreach (TreeNode node in treeNode.Nodes)
-                {
-                    _ExtractFiles(node, ref overwrite, indexToWrite);
-                    if (overwrite == DialogResult.Cancel) return false;
-                }
-
-                return true;
-            }
-
+            NodeObject nodeObject = treeNode.Tag as NodeObject;
             Index.FileIndex fileIndex = nodeObject.FileIndex;
             String hglPath = Path.Combine(fileIndex.DirectoryString.Replace(Index.BackupPrefix + @"\", ""),
                                          fileIndex.FileNameString);
@@ -466,12 +478,19 @@ namespace Reanimator.Forms
 
         private void files_treeView_AfterCheck(object sender, TreeViewEventArgs e)
         {
-            if (e.Node.Nodes.Count > 0)
+            files_treeView.AfterCheck -= files_treeView_AfterCheck;
+            // NOTE: even after disabling the check event, the performance is exactly the same.
+            // This is only left here for the meantime for demonstrative/debugging purposes.
+            _CheckChildNodes(e.Node);
+            files_treeView.AfterCheck += files_treeView_AfterCheck;
+        }
+
+        private void _CheckChildNodes(TreeNode parentNode)
+        {
+            foreach (TreeNode childNode in parentNode.Nodes)
             {
-                foreach (TreeNode node in e.Node.Nodes)
-                {
-                    node.Checked = e.Node.Checked;
-                }
+                childNode.Checked = parentNode.Checked;
+                _CheckChildNodes(childNode);
             }
         }
     }
