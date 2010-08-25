@@ -486,7 +486,7 @@ namespace Reanimator.Forms
 
     public static class ExtensionMethods
     {
-        public static void DoubleBuffered(this DataGridView dgv, bool setting)
+        public static void DoubleBuffered(this Object dgv, bool setting)
         {
             Type dgvType = dgv.GetType();
             PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
