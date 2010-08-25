@@ -463,5 +463,16 @@ namespace Reanimator.Forms
         {
             files_treeView.EndUpdate();
         }
+
+        private void files_treeView_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Nodes.Count > 0)
+            {
+                foreach (TreeNode node in e.Node.Nodes)
+                {
+                    node.Checked = e.Node.Checked;
+                }
+            }
+        }
     }
 }
