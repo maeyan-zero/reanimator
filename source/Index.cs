@@ -541,12 +541,12 @@ namespace Reanimator
             PatchOutFile(fileIndex);
         }
 
-        public void PatchOutFile(FileIndex fileIndex)
+        public bool PatchOutFile(FileIndex fileIndex)
         {
             Debug.Assert(fileIndex != null);
 
             // has it already be patched out?
-            if (fileIndex.DirectoryString.Contains(BackupPrefix)) return;
+            if (fileIndex.DirectoryString.Contains(BackupPrefix)) return false;
 
             // does the back dir exist?
             String dir = BackupPrefix + @"\" + _stringTable[fileIndex.Directory];
@@ -567,6 +567,7 @@ namespace Reanimator
 
             fileIndex.Directory = index;
             Modified = true;
+            return true;
         }
 
         private int StringExists(String str)
