@@ -1,4 +1,5 @@
-﻿namespace Reanimator.Forms.ItemTransfer
+﻿using System.Drawing;
+namespace Reanimator.Forms.ItemTransfer
 {
     partial class ItemPanel
     {
@@ -36,6 +37,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Reanimator.Properties.Resources.inventory_bg1;
+            //this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\inventory_bg1.png");
             this.DoubleBuffered = true;
             this.Name = "ItemPanel";
             this.Size = new System.Drawing.Size(240, 240);

@@ -1,4 +1,5 @@
-﻿namespace Reanimator.Forms.HeroEditorFunctions
+﻿using System.Drawing;
+namespace Reanimator.Forms.HeroEditorFunctions
 {
     partial class AttributesControl
     {
@@ -364,6 +365,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             //this.BackgroundImage = global::Reanimator.Properties.Resources.attribute_small;
+            this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\attribute_small.png");
             this.Controls.Add(this.b_willpowerSubstract);
             this.Controls.Add(this.b_willpowerAdd);
             this.Controls.Add(this.b_staminaSubstract);

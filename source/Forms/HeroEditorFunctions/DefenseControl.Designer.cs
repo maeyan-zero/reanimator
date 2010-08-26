@@ -1,4 +1,5 @@
-﻿namespace Reanimator.Forms.HeroEditorFunctions
+﻿using System.Drawing;
+namespace Reanimator.Forms.HeroEditorFunctions
 {
     partial class DefenseControl
     {
@@ -382,6 +383,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             //this.BackgroundImage = global::Reanimator.Properties.Resources.defense_small;
+            this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\defense_small.png");
             this.Controls.Add(this.l_armor);
             this.Controls.Add(this.l_shields);
             this.Controls.Add(this.nud_shieldRecharge);

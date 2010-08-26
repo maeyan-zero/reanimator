@@ -32,6 +32,10 @@ namespace Reanimator
             CheckEnvironment();
             InitializeComponent();
 
+#if DEBUG
+            characterFileToolStripMenuItem.Visible = true;
+#endif
+
             _fileExplorer = new FileExplorer(_indexFiles) { MdiParent = this };
 
             /*

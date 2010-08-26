@@ -1,4 +1,5 @@
-﻿namespace Reanimator.Forms.HeroEditorFunctions
+﻿using System.Drawing;
+namespace Reanimator.Forms.HeroEditorFunctions
 {
     partial class BasicStatisticsControl
     {
@@ -413,6 +414,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             //this.BackgroundImage = global::Reanimator.Properties.Resources.statistics_small;
+            this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\statistics_small.png");
             this.Controls.Add(this.nud_powerRecharge);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.l_power);

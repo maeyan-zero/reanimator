@@ -1,4 +1,5 @@
-﻿namespace Reanimator.Forms.HeroEditorFunctions
+﻿using System.Drawing;
+namespace Reanimator.Forms.HeroEditorFunctions
 {
     partial class CharacterSkillsControl
     {
@@ -128,6 +129,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             //this.BackgroundImage = global::Reanimator.Properties.Resources.skillPanelBg;
+            this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\skillPanelBg.png");
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);

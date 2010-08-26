@@ -16,7 +16,10 @@ namespace Reanimator.Forms.HeroEditorFunctions
             InitializeComponent();
 
             this.SetLabelText("ATTRIBUTES");
-            this.MaximizedSize = this.BackgroundImage.Size;
+            if (this.BackgroundImage != null)
+            {
+                this.MaximizedSize = this.BackgroundImage.Size;
+            }
         }
 
         private void b_accuracyAdd_Click(object sender, EventArgs e)
