@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Reanimator.Properties;
 
@@ -34,6 +35,17 @@ namespace Reanimator.Forms
             public bool IsFolder;
             public bool IsBackup;
             public bool CanEdit;
+            public List<NodeObject> Siblings;
+
+            public void AddSibling(NodeObject siblingNodeObject)
+            {
+                if (Siblings == null)
+                {
+                    Siblings = new List<NodeObject>();
+                }
+
+                Siblings.Add(siblingNodeObject);
+            }
         }
 
         private class NodeSorter : IComparer
@@ -124,19 +136,26 @@ namespace Reanimator.Forms
         private void _ParseIndexFile(Index index)
         {
             // loop files
-            foreach (Index.FileIndex file in index.FileTable)
+            foreach (Index.FileIndex currFile in index.FileTable)
             {
-                NodeObject nodeObject = new NodeObject { Index = index };
-                String[] nodeKeys = file.DirectoryString.Split('\\');
-                TreeNode treeNode = null;
+                NodeObject currNodeObject = new NodeObject { Index = index, FileIndex = currFile };
+                String[] nodeKeys = currFile.DirectoryString.Split('\\');
+                TreeNode currTreeNode = null;
+
+
+                if (currFile.FileNameString == "affixes.txt.cooked")
+                {
+                    int bp = 0;
+                }
+
 
                 // can we edit the file via. Reanimator?
-                if ((nodeKeys.Contains(XmlCookedSkill.RootFolder) && file.FileNameString.EndsWith(XmlCookedFile.FileExtention)) ||
-                    file.FileNameString.EndsWith(ExcelFile.FileExtention) ||
-                    file.FileNameString.EndsWith(StringsFile.FileExtention) ||
-                    file.FileNameString.EndsWith("txt"))
+                if ((nodeKeys.Contains(XmlCookedSkill.RootFolder) && currFile.FileNameString.EndsWith(XmlCookedFile.FileExtention)) ||
+                    currFile.FileNameString.EndsWith(ExcelFile.FileExtention) ||
+                    currFile.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                    currFile.FileNameString.EndsWith("txt"))
                 {
-                    nodeObject.CanEdit = true;
+                    currNodeObject.CanEdit = true;
                 }
 
 
@@ -145,51 +164,81 @@ namespace Reanimator.Forms
                 {
                     if (nodeKey == Index.BackupPrefix)
                     {
-                        nodeObject.IsBackup = true;
+                        currNodeObject.IsBackup = true;
                         continue;
                     }
 
-                    if (treeNode == null)
+                    if (currTreeNode == null)
                     {
-                        treeNode = files_treeView.Nodes[nodeKey] ?? files_treeView.Nodes.Add(nodeKey, nodeKey);
+                        currTreeNode = files_treeView.Nodes[nodeKey] ?? files_treeView.Nodes.Add(nodeKey, nodeKey);
                     }
                     else
                     {
-                        treeNode = treeNode.Nodes[nodeKey] ?? treeNode.Nodes.Add(nodeKey, nodeKey);
+                        currTreeNode = currTreeNode.Nodes[nodeKey] ?? currTreeNode.Nodes.Add(nodeKey, nodeKey);
                     }
                 }
-                Debug.Assert(treeNode != null);
+                Debug.Assert(currTreeNode != null);
 
+                
 
-                // have we already added the file? if so, remove it for updated version
-                String key = file.DirectoryString.Replace(Index.BackupPrefix + @"\", "") + file.FileNameString;
+                // have we already added the file? if so, check file time etc
+                String key = currFile.DirectoryString.Replace(Index.BackupPrefix + @"\", "") + currFile.FileNameString;
                 if (_fileTable.Contains(key))
                 {
-                    TreeNode fileNode = (TreeNode)_fileTable[key];
-                    NodeObject nodeObj = (NodeObject)fileNode.Tag;
+                    // get the already added/original node
+                    TreeNode origTreeNode = (TreeNode)_fileTable[key];
+                    NodeObject origNodeObject = (NodeObject)origTreeNode.Tag;
 
-                    // is it a newer file?
-                    if (nodeObj.FileIndex.FileStruct.FileTime > file.FileStruct.FileTime) continue;
+                    // do backup checks first as they'll "override" the FileTime values (i.e. file not found causes game to go to older version)
+                    // if currFile IS a backup, and orig is NOT, then add to Siblings as game will be loading orig over "backup" anyways
+                    if (currNodeObject.IsBackup && !origNodeObject.IsBackup)
+                    {
+                        origNodeObject.AddSibling(currNodeObject);
+                        continue;
+                    }
 
-                    // no, it's from a newer index
-                    treeNode.Nodes.Remove(fileNode);
-                    _fileTable.Remove(key);
+                    // if curr is NOT a backup, but orig IS, then we want to update (i.e. don't care about FileTime; as above)
+                    // OR if orig is older than curr, we also want to update/re-arrange NodeObjects, etc
+                    if (!currNodeObject.IsBackup && origNodeObject.IsBackup ||
+                        origNodeObject.FileIndex.FileStruct.FileTime < currFile.FileStruct.FileTime)
+                    {
+                        // set the Siblings list to the updated NodeObject and null out other
+                        if (origNodeObject.Siblings != null)
+                        {
+                            currNodeObject.Siblings = origNodeObject.Siblings;
+                            origNodeObject.Siblings = null;
+                        }
+                        // add the "orig" (now old) to the curr NodeObject.Siblings list
+                        currNodeObject.AddSibling(origNodeObject);
+                        // update TreeNode.Tag to point to new (curr) NodeObject
+                        origTreeNode.Tag = currNodeObject;
+
+                        continue;
+                    }
+
+                    // if curr is older (or equal to; hellgate000 has duplicates) than the orig, then add this to the Siblings list (i.e. orig is newer)
+                    if (origNodeObject.FileIndex.FileStruct.FileTime >= currFile.FileStruct.FileTime)
+                    {
+                        origNodeObject.AddSibling(currNodeObject);
+                        continue;
+                    }
+
+                    Debug.Assert(false, "End of 'if (_fileTable.Contains(key))'", "wtf??\n\nThis shouldn't happen, please report this.");
                 }
 
 
                 // add file/node
-                TreeNode node = treeNode.Nodes.Add(key, file.FileNameString);
-                node.Tag = nodeObject;
+                TreeNode node = currTreeNode.Nodes.Add(key, currFile.FileNameString);
+                node.Tag = currNodeObject;
                 _fileTable.Add(key, node);
 
 
                 // final nodeObject setups
-                nodeObject.FileIndex = file;
-                if (nodeObject.IsBackup)
+                if (currNodeObject.IsBackup)
                 {
                     node.ForeColor = BackupColor;
                 }
-                else if (!nodeObject.CanEdit)
+                else if (!currNodeObject.CanEdit)
                 {
                     node.ForeColor = NoEditColor;
                 }
@@ -407,6 +456,12 @@ namespace Reanimator.Forms
         {
             if (treeNode == null) return false;
 
+            if (treeNode.Text == "affixes.txt.cooked")
+            {
+                int bp = 0;
+            }
+
+            // loop through for folders, etc
             NodeObject nodeObject = (NodeObject) treeNode.Tag;
             if (nodeObject.IsFolder)
             {
@@ -418,8 +473,10 @@ namespace Reanimator.Forms
                 return true;
             }
 
+
             // make sure we want to extract this file
             if (!treeNode.Checked) return true;
+
 
             // get path
             Index fileIndex = nodeObject.Index;
@@ -427,6 +484,7 @@ namespace Reanimator.Forms
             String filePath = extractPatchArgs.KeepPath
                                   ? Path.Combine(extractPatchArgs.ExtractRoot, treeNode.FullPath)
                                   : Path.Combine(extractPatchArgs.ExtractRoot, file.FileNameString);
+
 
             // does it exist?
             bool fileExists = File.Exists(filePath);
@@ -437,6 +495,7 @@ namespace Reanimator.Forms
                 if (overwrite == DialogResult.Cancel) return false;
             }
             if (fileExists && overwrite == DialogResult.No) return true;
+
 
             // save file
             DialogResult extractDialogResult = DialogResult.Retry;
@@ -462,8 +521,10 @@ namespace Reanimator.Forms
                 break;
             }
 
+
             // are we patching?
             if (!extractPatchArgs.PatchFiles) return true;
+
 
             // don't patch out string files or music/movie files
             if (file.FileNameString.EndsWith(StringsFile.FileExtention) ||
@@ -471,10 +532,31 @@ namespace Reanimator.Forms
                 file.FileNameString.EndsWith(".mp2") ||
                 file.FileNameString.EndsWith(".bik")) return true;
 
+
+            // is this file located else where? (i.e. does it have Siblings)
+            String fileIndexKey;
+            if (nodeObject.Siblings != null && nodeObject.Siblings.Count > 0)
+            {
+                // this file has siblings - loop through
+                foreach (Index.FileIndex siblingFileIndex in
+                    nodeObject.Siblings.Select(siblingNodeObject => siblingNodeObject.FileIndex).Where(fileIndex.PatchOutFile))
+                {
+                    fileIndexKey = siblingFileIndex.InIndex.FileNameWithoutExtension;
+                    if (!indexToWrite.ContainsKey(fileIndexKey))
+                    {
+                        indexToWrite.Add(fileIndexKey, siblingFileIndex.InIndex);
+                    }
+                }
+            }
+
+
+            // now patch the curr file as well
             // only add index to list if it needs to be
             if (!fileIndex.PatchOutFile(file)) return true;
 
-            String fileIndexKey = fileIndex.FileNameWithoutExtension;
+
+            // add index to indexToWrite list
+            fileIndexKey = fileIndex.FileNameWithoutExtension;
             if (!indexToWrite.ContainsKey(fileIndexKey))
             {
                 indexToWrite.Add(fileIndexKey, file.InIndex);
@@ -542,6 +624,59 @@ namespace Reanimator.Forms
                     _CheckChildNodes(childNode);
                 }
             }
+        }
+
+        private void _FilterApplyButtonClick(object sender, EventArgs e)
+        {
+            MessageBox.Show("todo");
+            _DoApplyFilter();
+        }
+
+        private void _FilterResetButtonClick(object sender, EventArgs e)
+        {
+            MessageBox.Show("todo");
+            filter_textBox.Text = "*.*";
+            _DoApplyFilter();
+        }
+
+        //TreeView filteredTreeView = new TreeView();
+        //List<TreeNode> filterNodes = new List<TreeNode>();
+        private void _DoApplyFilter()
+        {
+           // String filterText = ".*heal.*";
+           // if (String.IsNullOrEmpty(filterText)) return;
+
+           // foreach (TreeNode treeNode in files_treeView.Nodes)
+           // {
+           //     _ApplyFilter(treeNode, filterText);
+           // }
+
+           // if (filterNodes.Count <= 0) return;
+
+           // ////files_treeView.BeginUpdate();
+           // //foreach (TreeNode removeNode in filterNodes)
+           // //{
+           // //    removeNode.Remove();
+           // //}
+           //// files_treeView.EndUpdate();
+        }
+
+        private void _ApplyFilter(TreeNode treeNode, String filterText)
+        {
+            //NodeObject nodeObject = (NodeObject) treeNode.Tag;
+            //if (nodeObject.IsFolder)
+            //{
+            //    foreach (TreeNode childNode in treeNode.Nodes)
+            //    {
+            //        _ApplyFilter(childNode, filterText);
+            //    }
+
+            //    return;
+            //}
+
+            //if (!Regex.IsMatch(treeNode.Text, filterText)) return;
+
+            ////filterNodes.Add(treeNode);
         }
     }
 }
