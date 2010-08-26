@@ -56,12 +56,12 @@ namespace Reanimator.Forms
             }
         }
 
-        public FileExplorer()
+        public FileExplorer(List<Index> indexFiles)
         {
             InitializeComponent();
             files_treeView.DoubleBuffered(true);
 
-            _indexFiles = new List<Index>();
+            _indexFiles = indexFiles;
             _fileTable = new Hashtable();
             backupKey_label.ForeColor = BackupColor;
             noEditorKey_label.ForeColor = NoEditColor;
