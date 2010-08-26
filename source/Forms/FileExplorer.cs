@@ -240,16 +240,10 @@ namespace Reanimator.Forms
             if (nodeObject.IsFolder) // if is a folder
             {
                 fileName_textBox.Text = selectedNode.Text;
-                fileSize_textBox.Text = "NA";
-                fileCompressed_textBox.Text = "NA";
-                loadingLocation_textBox.Text = "NA";
-                fileTime_textBox.Text = "NA";
-
-                
-                extract_label.Text = "Extract this folder and all files & folders within it.";
-                extractPatch_label.Text = "Extract this folder and all files & folders within it, and then patch the index to force the game to load the extracted files over the .dat.\nNote: Non-patchable files (e.g. sounds) wont be patched out and will only be extracted.";
-
-                revertFile_label.Text = "Folder elements can't be backed-up/restored.";
+                fileSize_textBox.Text = String.Empty;
+                fileCompressed_textBox.Text = String.Empty;
+                loadingLocation_textBox.Text = String.Empty;
+                fileTime_textBox.Text = String.Empty;
 
                 return;
             }
@@ -261,17 +255,6 @@ namespace Reanimator.Forms
             fileSize_textBox.DataBindings.Add("Text", fileIndex, "UncompressedSize");
             fileCompressed_textBox.DataBindings.Add("Text", fileIndex, "CompressedSize");
             fileTime_textBox.Text = (DateTime.FromFileTime((long)fileIndex.FileStruct.FileTime)).ToString();
-
-            if (nodeObject.IsBackup)
-            {
-                revertFile_button.Enabled = true;
-                revertFile_label.Text = "Restore this file to its original state so the game loads from the .dat as originally.";
-            }
-            else
-            {
-                revertFile_button.Enabled = false;
-                revertFile_label.Text = "This file is neither modified nor patched out.";
-            }
 
             if (fileIndex.Modified)
             {
@@ -529,19 +512,23 @@ namespace Reanimator.Forms
         private void _FilesTreeViewAfterCheck(object sender, TreeViewEventArgs e)
         {
             files_treeView.AfterCheck -= _FilesTreeViewAfterCheck;
-            files_treeView.BeginUpdate();
+            //files_treeView.BeginUpdate();
 
-            /* note: even after disabling the check event, the performance is exactly the same.
+            /* note: even after disabling the check event, the performance is still the same.
              * This is only left here for the meantime for demonstrative/debugging purposes.
+             * >> Alex tested this and found it to be siginifcantly better with event removed - debug vs release compiles maybe?
              * 
-             * After much testing - it isn't the looping/events/function calls causing the lag
+             * After much testing - it isn't the looping/events/function calls causing the lag (at least, not the most siginificant)
              * it's the .Checked setter that seriously kills it (.Checked getter has no issues)
+             * 
+             * Also, Begin/End Update - while it might help on excessivly large amounts of check boxes,
+             * on only small nodes it causes a huge noticable lag... (wtf?)
              * 
              * todo: possibly investigate reflection and private state member modification
              */
             _CheckChildNodes(e.Node);
 
-            files_treeView.EndUpdate();
+            //files_treeView.EndUpdate();
             files_treeView.AfterCheck += _FilesTreeViewAfterCheck;
         }
 
