@@ -186,7 +186,7 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this._SaveToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -202,7 +202,7 @@
             this.cSVToolStripMenuItem.Name = "cSVToolStripMenuItem";
             this.cSVToolStripMenuItem.Size = new System.Drawing.Size(104, 22);
             this.cSVToolStripMenuItem.Text = "CSV...";
-            this.cSVToolStripMenuItem.Click += new System.EventHandler(this.CSVToolStripMenuItem_Click);
+            this.cSVToolStripMenuItem.Click += new System.EventHandler(this._ExportCSVToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -335,14 +335,14 @@
             this.showExcelTablesToolStripMenuItem.Name = "showExcelTablesToolStripMenuItem";
             this.showExcelTablesToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.showExcelTablesToolStripMenuItem.Text = "&ExcelTables";
-            this.showExcelTablesToolStripMenuItem.Click += new System.EventHandler(this.ShowExcelTablesToolStripMenuItem_Click);
+            this.showExcelTablesToolStripMenuItem.Click += new System.EventHandler(this._ShowExcelTablesToolStripMenuItem_Click);
             // 
             // scriptEditorToolStripMenuItem
             // 
             this.scriptEditorToolStripMenuItem.Name = "scriptEditorToolStripMenuItem";
             this.scriptEditorToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.scriptEditorToolStripMenuItem.Text = "Script Editor";
-            this.scriptEditorToolStripMenuItem.Click += new System.EventHandler(this.scriptEditorToolStripMenuItem_Click);
+            this.scriptEditorToolStripMenuItem.Click += new System.EventHandler(this._ScriptEditorToolStripMenuItem_Click);
             // 
             // toolsMenu
             // 
@@ -370,21 +370,21 @@
             this.bypassSecurityx64ToolStripMenuItem.Name = "bypassSecurityx64ToolStripMenuItem";
             this.bypassSecurityx64ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.bypassSecurityx64ToolStripMenuItem.Text = "Hardcore Mode [x64 DX9]";
-            this.bypassSecurityx64ToolStripMenuItem.Click += new System.EventHandler(this.BypassSecurityx64ToolStripMenuItem_Click);
+            this.bypassSecurityx64ToolStripMenuItem.Click += new System.EventHandler(this._HardcoreModex64DX9ToolStripMenuItem_Click);
             // 
             // tradeItemsToolStripMenuItem
             // 
             this.tradeItemsToolStripMenuItem.Name = "tradeItemsToolStripMenuItem";
             this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.tradeItemsToolStripMenuItem.Text = "&Trade Items";
-            this.tradeItemsToolStripMenuItem.Click += new System.EventHandler(this.tradeItemsToolStripMenuItem_Click);
+            this.tradeItemsToolStripMenuItem.Click += new System.EventHandler(this._TradeItemsToolStripMenuItem_Click);
             // 
             // searchTablesToolStripMenuItem
             // 
             this.searchTablesToolStripMenuItem.Name = "searchTablesToolStripMenuItem";
             this.searchTablesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.searchTablesToolStripMenuItem.Text = "&Search Tables";
-            this.searchTablesToolStripMenuItem.Click += new System.EventHandler(this.searchTablesToolStripMenuItem_Click);
+            this.searchTablesToolStripMenuItem.Click += new System.EventHandler(this._SearchTablesToolStripMenuItem_Click);
             // 
             // toolStripSeparator9
             // 
@@ -501,7 +501,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.aboutToolStripMenuItem.Text = "&About ...";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this._AboutToolStripMenuItem_Click);
             // 
             // toolStrip
             // 
@@ -547,7 +547,7 @@
             this.saveToolStripButton.Name = "saveToolStripButton";
             this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.saveToolStripButton.Text = "Save";
-            this.saveToolStripButton.Click += new System.EventHandler(this.SaveToolStripButton_Click);
+            this.saveToolStripButton.Click += new System.EventHandler(this._SaveToolStripButton_Click);
             // 
             // toolStripSeparator1
             // 
@@ -562,7 +562,7 @@
             this.toolStripButtonSE.Name = "toolStripButtonSE";
             this.toolStripButtonSE.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonSE.Text = "Script Editor";
-            this.toolStripButtonSE.Click += new System.EventHandler(this.scriptEditorToolStripMenuItem_Click);
+            this.toolStripButtonSE.Click += new System.EventHandler(this._ScriptEditorToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -599,7 +599,7 @@
             this.installModificationsToolStripMenuItem.Name = "installModificationsToolStripMenuItem";
             this.installModificationsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.installModificationsToolStripMenuItem.Text = "Install Modifications";
-            this.installModificationsToolStripMenuItem.Click += new System.EventHandler(this.applyModificationsToolStripMenuItem_Click);
+            this.installModificationsToolStripMenuItem.Click += new System.EventHandler(this._ApplyModificationsToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
@@ -613,8 +613,8 @@
             this.MainMenuStrip = this.menuStrip;
             this.Name = "Reanimator";
             this.Text = "Reanimator";
-            this.Load += new System.EventHandler(this.Reanimator_Load);
-            this.ResizeEnd += new System.EventHandler(this.Reanimator_ResizeEnd);
+            this.Load += new System.EventHandler(this._Reanimator_Load);
+            this.ResizeEnd += new System.EventHandler(this._Reanimator_ResizeEnd);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.toolStrip.ResumeLayout(false);
