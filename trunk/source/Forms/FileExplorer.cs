@@ -24,8 +24,6 @@ namespace Reanimator.Forms
         private static readonly Color NoEditColor = Color.DimGray;
 
         private static readonly String[] IndexQueryStrings = { "hellgate*.dat", "sp_hellgate*.dat" };
-
-        private static readonly int[] IndexOpen = { Index.Base000, Index.LatestPatch, Index.LatestPatchLocalized };
         private readonly List<Index> _indexFiles;
         private readonly Hashtable _fileTable;
 
@@ -82,7 +80,6 @@ namespace Reanimator.Forms
             if (progressForm != null)
             {
                 progressForm.SetLoadingText("Loading game file system...");
-                progressForm.ConfigBar(1, IndexOpen.Length, 1);
             }
 
             String idxFilesRoot = Path.Combine(Config.HglDir, "data");
@@ -90,6 +87,10 @@ namespace Reanimator.Forms
             {
                 String[] datFiles = Directory.GetFiles(idxFilesRoot, queryString);
                 if (datFiles.Length == 0) continue;
+                if (progressForm != null)
+                {
+                    progressForm.ConfigBar(1, datFiles.Length, 1);
+                }
 
                 foreach (String idxFile in datFiles.Select(datFile => datFile.Replace(".dat", ".idx")))
                 {
@@ -244,10 +245,11 @@ namespace Reanimator.Forms
                 loadingLocation_textBox.Text = "NA";
                 fileTime_textBox.Text = "NA";
 
-                revertFile_button.Enabled = false;
-                revertFile_label.Text = "Folder elements can't be backed-up/restored.";
+                
                 extract_label.Text = "Extract this folder and all files & folders within it.";
                 extractPatch_label.Text = "Extract this folder and all files & folders within it, and then patch the index to force the game to load the extracted files over the .dat.\nNote: Non-patchable files (e.g. sounds) wont be patched out and will only be extracted.";
+
+                revertFile_label.Text = "Folder elements can't be backed-up/restored.";
 
                 return;
             }
@@ -303,15 +305,15 @@ namespace Reanimator.Forms
 
             if (fileIndex.FileNameString.EndsWith(ExcelFile.FileExtention) || fileIndex.FileNameString.EndsWith(StringsFile.FileExtention))
             {
-
+                MessageBox.Show("todo");
             }
             else if (fileIndex.FileNameString.EndsWith(XmlCookedFile.FileExtention))
             {
-
+                MessageBox.Show("todo");
             }
             else if (fileIndex.FileNameString.EndsWith(".txt"))
             {
-
+                MessageBox.Show("todo");
             }
             else
             {
@@ -320,74 +322,93 @@ namespace Reanimator.Forms
             }
         }
 
-        private void _RevertFileButtonClick(object sender, EventArgs e)
+        private class ExtractPatchArgs
         {
-            MessageBox.Show("Todo");
+            public bool KeepPath;
+            public bool PatchFiles;
+            public String ExtractRoot;
         }
 
         private void _ExtractButtonClick(object sender, EventArgs e)
         {
-            MessageBox.Show("Todo");
-        }
+            // where do we want to save it
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog {SelectedPath = Config.HglDir};
+            if (folderBrowserDialog.ShowDialog(this) != DialogResult.OK) return;
 
-        private void _ExtractPatchButtonClick(object sender, EventArgs e)
-        {
-            TreeNode selectedNodes = new TreeNode();
-            TreeNodeCollection nodes = files_treeView.Nodes;
-            foreach (TreeNode node in nodes)
+            // do we want to keep the directory structure?
+            bool keepPath = false;
+            DialogResult dr = MessageBox.Show("Keep directory structure?", "Path", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (dr == DialogResult.Cancel) return;
+
+            if (dr == DialogResult.Yes)
             {
-                _AddCheckedNodes(node, selectedNodes);
+                keepPath = true;
             }
 
-            if (selectedNodes.Nodes.Count == 0) return;
-
-            DialogResult dialogResult = MessageBox.Show(
-                "Extract & Patch out the selected file/s?",
-                "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialogResult == DialogResult.No) return;
-
-            ProgressForm progressForm = new ProgressForm(_DoExtractPatch, selectedNodes);
+            ExtractPatchArgs extractPatchArgs = new ExtractPatchArgs
+                                                    {
+                                                        KeepPath = keepPath,
+                                                        PatchFiles = false,
+                                                        ExtractRoot = folderBrowserDialog.SelectedPath
+                                                    };
+            ProgressForm progressForm = new ProgressForm(_DoExtractPatch, extractPatchArgs);
             progressForm.SetLoadingText("Patching and Extracting files...");
             progressForm.SetStyle(ProgressBarStyle.Marquee);
             progressForm.Show();
         }
 
-        private void _AddCheckedNodes(TreeNode caseNode, TreeNode nodeCollection)
+        private void _ExtractPatchButtonClick(object sender, EventArgs e)
         {
-            foreach (TreeNode node in caseNode.Nodes)
+            DialogResult dialogResult = MessageBox.Show(
+                "Extract & Patch out the selected file's?",
+                "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (dialogResult == DialogResult.No) return;
+
+            ExtractPatchArgs extractPatchArgs = new ExtractPatchArgs
             {
-                NodeObject nodeObject = node.Tag as NodeObject;
-                if (node.Checked && !nodeObject.IsFolder)
-                {
-                    TreeNode nodeClone = (TreeNode)node.Clone();
-                    nodeCollection.Nodes.Add(nodeClone);
-                }
-                //recursive call
-                _AddCheckedNodes(node, nodeCollection);
-            }
+                KeepPath = true,
+                PatchFiles = true,
+                ExtractRoot = Config.HglDir
+            };
+            ProgressForm progressForm = new ProgressForm(_DoExtractPatch, extractPatchArgs);
+            progressForm.SetLoadingText("Patching and Extracting files...");
+            progressForm.SetStyle(ProgressBarStyle.Marquee);
+            progressForm.Show();
         }
 
-        private static void _DoExtractPatch(ProgressForm progressForm, Object param)
+        private void _DoExtractPatch(ProgressForm progressForm, Object param)
         {
             // todo: add proper progress counter, etc?
             progressForm.SetCurrentItemText("Extracting file(s)...");
-            TreeNode selectedNodes = (TreeNode) param;
+            ExtractPatchArgs extractPatchArgs = (ExtractPatchArgs) param;
             DialogResult overwrite = DialogResult.None;
             Hashtable indexToWrite = new Hashtable();
 
-            foreach (TreeNode node in selectedNodes.Nodes)
+            // might as well just loop all nodes - slower finding and cloning them; using the .Checked setter is the killer
+            if (files_treeView.Nodes.Cast<TreeNode>().Any(node => !_ExtractPatchFile(node, ref overwrite, indexToWrite, extractPatchArgs)))
             {
-                if (!_ExtractFiles(node, ref overwrite, indexToWrite)) return;
+                if (overwrite != DialogResult.Cancel)
+                {
+                    MessageBox.Show("Unexpected error, extraction process terminated!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+
+                return;
+            }
+
+            // are we patching?
+            if (!extractPatchArgs.PatchFiles)
+            {
+                MessageBox.Show("File(s) extracted sucessfully!", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
 
             if (indexToWrite.Count == 0)
             {
-                MessageBox.Show("File(s) extracted sucessfully!\nNo index files require modifications.", "Complete",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("File(s) extracted sucessfully!\nNo index files require modifications.", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            DialogResult writeIdx = MessageBox.Show("Files extracted sucessfully!\nSave modified index file(s)?", "Question", MessageBoxButtons.YesNo,
-                                                    MessageBoxIcon.Question);
+
+            DialogResult writeIdx = MessageBox.Show("Files extracted sucessfully!\nSave modified index file(s)?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (writeIdx == DialogResult.No) return;
 
             progressForm.SetCurrentItemText("Saving modified index file(s)...");
@@ -396,19 +417,35 @@ namespace Reanimator.Forms
             {
                 File.WriteAllBytes(idx.FilePath, idx.GenerateIndexFile());
             }
-            MessageBox.Show("Modified index file(s) saved sucessfully!", "Saved", MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);            
+            MessageBox.Show("Modified index file(s) saved sucessfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);            
         }
 
-        private static bool _ExtractFiles(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite)
+        private static bool _ExtractPatchFile(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite, ExtractPatchArgs extractPatchArgs)
         {
             if (treeNode == null) return false;
 
-            NodeObject nodeObject = treeNode.Tag as NodeObject;
-            Index.FileIndex fileIndex = nodeObject.FileIndex;
-            String hglPath = Path.Combine(fileIndex.DirectoryString.Replace(Index.BackupPrefix + @"\", ""),
-                                         fileIndex.FileNameString);
-            String filePath = Path.Combine(Config.HglDir, hglPath);
+            NodeObject nodeObject = (NodeObject) treeNode.Tag;
+            if (nodeObject.IsFolder)
+            {
+                foreach (TreeNode childNode in treeNode.Nodes)
+                {
+                    if (!_ExtractPatchFile(childNode, ref overwrite, indexToWrite, extractPatchArgs)) return false;
+                }
+
+                return true;
+            }
+
+            // make sure we want to extract this file
+            if (!treeNode.Checked) return true;
+
+            // get path
+            Index fileIndex = nodeObject.Index;
+            Index.FileIndex file = nodeObject.FileIndex;
+            String filePath = extractPatchArgs.KeepPath
+                                  ? Path.Combine(extractPatchArgs.ExtractRoot, treeNode.FullPath)
+                                  : Path.Combine(extractPatchArgs.ExtractRoot, file.FileNameString);
+
+            // does it exist?
             bool fileExists = File.Exists(filePath);
             if (fileExists && overwrite == DialogResult.None)
             {
@@ -416,13 +453,13 @@ namespace Reanimator.Forms
                     "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (overwrite == DialogResult.Cancel) return false;
             }
-
             if (fileExists && overwrite == DialogResult.No) return true;
 
+            // save file
             DialogResult extractDialogResult = DialogResult.Retry;
             while (extractDialogResult == DialogResult.Retry)
             {
-                byte[] fileBytes = fileIndex.InIndex.ReadDataFile(fileIndex);
+                byte[] fileBytes = nodeObject.Index.ReadDataFile(file);
                 if (fileBytes == null)
                 {
                     extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
@@ -442,21 +479,34 @@ namespace Reanimator.Forms
                 break;
             }
 
+            // are we patching?
+            if (!extractPatchArgs.PatchFiles) return true;
+
             // don't patch out string files or music/movie files
-            if (fileIndex.FileNameString.EndsWith(StringsFile.FileExtention) ||
-                fileIndex.FileNameString.EndsWith(".ogg") ||
-                fileIndex.FileNameString.EndsWith(".mp2") ||
-                fileIndex.FileNameString.EndsWith(".bik")) return true;
+            if (file.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                file.FileNameString.EndsWith(".ogg") ||
+                file.FileNameString.EndsWith(".mp2") ||
+                file.FileNameString.EndsWith(".bik")) return true;
 
             // only add index to list if it needs to be
-            if (!fileIndex.InIndex.PatchOutFile(fileIndex)) return true;
+            if (!fileIndex.PatchOutFile(file)) return true;
 
-            String fileIndexKey = fileIndex.InIndex.FileNameWithoutExtension;
+            String fileIndexKey = fileIndex.FileNameWithoutExtension;
             if (!indexToWrite.ContainsKey(fileIndexKey))
             {
-                indexToWrite.Add(fileIndexKey, fileIndex.InIndex);
+                indexToWrite.Add(fileIndexKey, file.InIndex);
             }
             return true;
+        }
+
+        private void _PackPatchButtonClick(object sender, EventArgs e)
+        {
+            MessageBox.Show("todo");
+        }
+
+        private void _RevertRestoreButtonClick(object sender, EventArgs e)
+        {
+            MessageBox.Show("Todo");
         }
 
         private void _FilesTreeViewAfterExpand(object sender, TreeViewEventArgs e)
@@ -476,21 +526,34 @@ namespace Reanimator.Forms
             files_treeView.EndUpdate();
         }
 
-        private void files_treeView_AfterCheck(object sender, TreeViewEventArgs e)
+        private void _FilesTreeViewAfterCheck(object sender, TreeViewEventArgs e)
         {
-            files_treeView.AfterCheck -= files_treeView_AfterCheck;
-            // NOTE: even after disabling the check event, the performance is exactly the same.
-            // This is only left here for the meantime for demonstrative/debugging purposes.
+            files_treeView.AfterCheck -= _FilesTreeViewAfterCheck;
+            files_treeView.BeginUpdate();
+
+            /* note: even after disabling the check event, the performance is exactly the same.
+             * This is only left here for the meantime for demonstrative/debugging purposes.
+             * 
+             * After much testing - it isn't the looping/events/function calls causing the lag
+             * it's the .Checked setter that seriously kills it (.Checked getter has no issues)
+             * 
+             * todo: possibly investigate reflection and private state member modification
+             */
             _CheckChildNodes(e.Node);
-            files_treeView.AfterCheck += files_treeView_AfterCheck;
+
+            files_treeView.EndUpdate();
+            files_treeView.AfterCheck += _FilesTreeViewAfterCheck;
         }
 
-        private void _CheckChildNodes(TreeNode parentNode)
+        private static void _CheckChildNodes(TreeNode parentNode)
         {
             foreach (TreeNode childNode in parentNode.Nodes)
             {
                 childNode.Checked = parentNode.Checked;
-                _CheckChildNodes(childNode);
+                if (childNode.Nodes.Count > 0)
+                {
+                    _CheckChildNodes(childNode);
+                }
             }
         }
     }

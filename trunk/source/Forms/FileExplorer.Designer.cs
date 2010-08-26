@@ -40,12 +40,14 @@
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.revertFile_label = new System.Windows.Forms.Label();
             this.extractPatch_label = new System.Windows.Forms.Label();
             this.extract_label = new System.Windows.Forms.Label();
-            this.revertFile_button = new System.Windows.Forms.Button();
-            this.revertFile_label = new System.Windows.Forms.Label();
             this.extract_button = new System.Windows.Forms.Button();
             this.extractPatch_button = new System.Windows.Forms.Button();
+            this.packPatch_button = new System.Windows.Forms.Button();
+            this.packPatch_label = new System.Windows.Forms.Label();
+            this.revertFile_button = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.fileTime_textBox = new System.Windows.Forms.TextBox();
@@ -141,11 +143,11 @@
             this.files_treeView.Name = "files_treeView";
             this.files_treeView.Size = new System.Drawing.Size(250, 592);
             this.files_treeView.TabIndex = 1;
-            this.files_treeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.files_treeView_AfterCheck);
+            this.files_treeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterCheck);
             this.files_treeView.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterCollapse);
-            this.files_treeView.DoubleClick += new System.EventHandler(this._FilesTreeViewDoubleClick);
-            this.files_treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterSelect);
             this.files_treeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterExpand);
+            this.files_treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterSelect);
+            this.files_treeView.DoubleClick += new System.EventHandler(this._FilesTreeViewDoubleClick);
             // 
             // contextMenuStrip1
             // 
@@ -180,7 +182,7 @@
             this.groupBox2.Controls.Add(this.tableLayoutPanel1);
             this.groupBox2.Location = new System.Drawing.Point(3, 157);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(454, 245);
+            this.groupBox2.Size = new System.Drawing.Size(454, 348);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
@@ -193,77 +195,71 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.99548F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.00452F));
-            this.tableLayoutPanel1.Controls.Add(this.extractPatch_label, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.extract_label, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.revertFile_button, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.revertFile_label, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.extract_button, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.extractPatch_button, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.revertFile_label, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.extractPatch_label, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.extract_label, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.extract_button, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.extractPatch_button, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.packPatch_button, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.packPatch_label, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.revertFile_button, 0, 3);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 19);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(442, 220);
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(442, 323);
             this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // revertFile_label
+            // 
+            this.revertFile_label.AutoSize = true;
+            this.revertFile_label.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.revertFile_label.Location = new System.Drawing.Point(140, 240);
+            this.revertFile_label.Name = "revertFile_label";
+            this.revertFile_label.Size = new System.Drawing.Size(299, 83);
+            this.revertFile_label.TabIndex = 9;
+            this.revertFile_label.Text = "Re-Patch necessary index files to have the game to load original unmodified check" +
+                "ed files/folders.";
+            this.revertFile_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // extractPatch_label
             // 
             this.extractPatch_label.AutoSize = true;
             this.extractPatch_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extractPatch_label.Location = new System.Drawing.Point(140, 146);
+            this.extractPatch_label.Location = new System.Drawing.Point(140, 80);
             this.extractPatch_label.Name = "extractPatch_label";
-            this.extractPatch_label.Size = new System.Drawing.Size(299, 74);
+            this.extractPatch_label.Size = new System.Drawing.Size(299, 80);
             this.extractPatch_label.TabIndex = 5;
-            this.extractPatch_label.Text = "label7";
+            this.extractPatch_label.Text = "Extract checked files/folders to game data location, then patch necessary index f" +
+                "iles forcing the game to load extracted files.\r\nNote: Non-patchable files (e.g. " +
+                "sounds) wont be patch out automaticlly.";
             this.extractPatch_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // extract_label
             // 
             this.extract_label.AutoSize = true;
             this.extract_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extract_label.Location = new System.Drawing.Point(140, 73);
+            this.extract_label.Location = new System.Drawing.Point(140, 0);
             this.extract_label.Name = "extract_label";
-            this.extract_label.Size = new System.Drawing.Size(299, 73);
+            this.extract_label.Size = new System.Drawing.Size(299, 80);
             this.extract_label.TabIndex = 4;
-            this.extract_label.Text = "label6";
+            this.extract_label.Text = "Extract checked files/folders to a selected location.";
             this.extract_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // revertFile_button
-            // 
-            this.revertFile_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.revertFile_button.Location = new System.Drawing.Point(3, 3);
-            this.revertFile_button.Name = "revertFile_button";
-            this.revertFile_button.Size = new System.Drawing.Size(131, 67);
-            this.revertFile_button.TabIndex = 0;
-            this.revertFile_button.Text = "Revert File State";
-            this.revertFile_button.UseVisualStyleBackColor = true;
-            this.revertFile_button.Click += new System.EventHandler(this._RevertFileButtonClick);
-            // 
-            // revertFile_label
-            // 
-            this.revertFile_label.AutoSize = true;
-            this.revertFile_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.revertFile_label.Location = new System.Drawing.Point(140, 0);
-            this.revertFile_label.Name = "revertFile_label";
-            this.revertFile_label.Size = new System.Drawing.Size(299, 73);
-            this.revertFile_label.TabIndex = 3;
-            this.revertFile_label.Text = "label5";
-            this.revertFile_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // extract_button
             // 
             this.extract_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.extract_button.Location = new System.Drawing.Point(3, 76);
+            this.extract_button.Location = new System.Drawing.Point(3, 3);
             this.extract_button.Name = "extract_button";
-            this.extract_button.Size = new System.Drawing.Size(131, 67);
+            this.extract_button.Size = new System.Drawing.Size(131, 74);
             this.extract_button.TabIndex = 2;
-            this.extract_button.Text = "Extract";
+            this.extract_button.Text = "Extract to...";
             this.extract_button.UseVisualStyleBackColor = true;
             this.extract_button.Click += new System.EventHandler(this._ExtractButtonClick);
             // 
@@ -272,13 +268,51 @@
             this.extractPatch_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.extractPatch_button.Location = new System.Drawing.Point(3, 149);
+            this.extractPatch_button.Location = new System.Drawing.Point(3, 83);
             this.extractPatch_button.Name = "extractPatch_button";
-            this.extractPatch_button.Size = new System.Drawing.Size(131, 68);
+            this.extractPatch_button.Size = new System.Drawing.Size(131, 74);
             this.extractPatch_button.TabIndex = 1;
             this.extractPatch_button.Text = "Extract and Patch Index";
             this.extractPatch_button.UseVisualStyleBackColor = true;
             this.extractPatch_button.Click += new System.EventHandler(this._ExtractPatchButtonClick);
+            // 
+            // packPatch_button
+            // 
+            this.packPatch_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.packPatch_button.Location = new System.Drawing.Point(3, 163);
+            this.packPatch_button.Name = "packPatch_button";
+            this.packPatch_button.Size = new System.Drawing.Size(131, 74);
+            this.packPatch_button.TabIndex = 6;
+            this.packPatch_button.Text = "Pack and Patch Index";
+            this.packPatch_button.UseVisualStyleBackColor = true;
+            this.packPatch_button.Click += new System.EventHandler(this._PackPatchButtonClick);
+            // 
+            // packPatch_label
+            // 
+            this.packPatch_label.AutoSize = true;
+            this.packPatch_label.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.packPatch_label.Location = new System.Drawing.Point(140, 160);
+            this.packPatch_label.Name = "packPatch_label";
+            this.packPatch_label.Size = new System.Drawing.Size(299, 80);
+            this.packPatch_label.TabIndex = 7;
+            this.packPatch_label.Text = "Pack checked files/folders into (custom?) dat file(s?), then patch necessary inde" +
+                "x files to have the game load the files from the packed .dat.";
+            this.packPatch_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // revertFile_button
+            // 
+            this.revertFile_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.revertFile_button.Location = new System.Drawing.Point(3, 243);
+            this.revertFile_button.Name = "revertFile_button";
+            this.revertFile_button.Size = new System.Drawing.Size(131, 77);
+            this.revertFile_button.TabIndex = 8;
+            this.revertFile_button.Text = "Revert and Restore";
+            this.revertFile_button.UseVisualStyleBackColor = true;
+            this.revertFile_button.Click += new System.EventHandler(this._RevertRestoreButtonClick);
             // 
             // groupBox1
             // 
@@ -459,10 +493,8 @@
         private System.Windows.Forms.TextBox loadingLocation_textBox;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button revertFile_button;
         private System.Windows.Forms.Button extractPatch_button;
         private System.Windows.Forms.Button extract_button;
-        private System.Windows.Forms.Label revertFile_label;
         private System.Windows.Forms.Label extractPatch_label;
         private System.Windows.Forms.Label extract_label;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
@@ -474,6 +506,10 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox fileTime_textBox;
+        private System.Windows.Forms.Button packPatch_button;
+        private System.Windows.Forms.Label packPatch_label;
+        private System.Windows.Forms.Label revertFile_label;
+        private System.Windows.Forms.Button revertFile_button;
 
     }
 }
