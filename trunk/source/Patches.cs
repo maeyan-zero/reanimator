@@ -23,6 +23,36 @@
 .text:0000000140205BA7
 .text:0000000140205BAC                 test    rax, rax							    // 48 85 C0
              */
+
+            // SPx86 (UnPacked.exe)
+            /*
+..rest:00486BC9 ; =============== S U B R O U T I N E =======================================
+..rest:00486BC9
+..rest:00486BC9
+..rest:00486BC9 sub_486BC9      proc near               ; CODE XREF: sub_486E89+C3p
+..rest:00486BC9                                         ; sub_48789B+5Fp ...
+..rest:00486BC9                 cmp     dword_A2D0AC, 1
+..rest:00486BD0                 push    esi
+..rest:00486BD1                 jz      short loc_486BFE
+..rest:00486BD3                 call    sub_431844
+..rest:00486BD8                 mov     esi, eax
+..rest:00486BDA                 test    esi, esi
+..rest:00486BDC                 jz      short loc_486BFE
+..rest:00486BDE                 mov     eax, offset dword_B1EC78
+..rest:00486BE3                 mov     ecx, esi
+..rest:00486BE5                 call    sub_428033
+..rest:00486BEA                 test    eax, eax
+..rest:00486BEC                 jz      short loc_486BFE
+..rest:00486BEE                 mov     eax, esi
+..rest:00486BF0                 call    sub_42809F
+..rest:00486BF5                 test    eax, eax
+..rest:00486BF7                 jz      short loc_486BFE
+..rest:00486BF9                 xor     eax, eax
+..rest:00486BFB                 inc     eax
+..rest:00486BFC                 pop     esi
+..rest:00486BFD                 retn
+             */
+
             byte[] firstCheck = {   0x48, 0x83, 0xEC, 0x20,
                                     0xE8, 0x90, 0x90, 0x90, 0x90,
                                     0x85, 0xC0,
@@ -54,6 +84,23 @@
 .text:00000001401A9844 test    eax, eax                                             // 85 C0
 .text:00000001401A9846 jnz     short loc_1401A988C                                  // 75 44
             */
+
+            // SPx86
+            /*
+..rest:0043976E                 jnz     short loc_43979A
+..rest:00439770                 mov     edx, [ebp+var_52C]
+..rest:00439776                 push    offset dword_B1EC78
+..rest:0043977B                 call    sub_566E51
+..rest:00439780                 test    eax, eax
+..rest:00439782                 pop     ecx
+..rest:00439783                 jz      loc_4398E9
+..rest:00439789                 push    edi
+..rest:0043978A                 mov     eax, esi
+..rest:0043978C                 call    sub_43FC6B
+..rest:00439791                 test    eax, eax
+..rest:00439793                 pop     ecx
+..rest:00439794                 jz      loc_4398E
+             */
             byte[] secondAndThirdChecks = {   0x83, 0xF8, 0x01,
                                               0x75, 0x65,
                                               0x48, 0x8D, 0x15, 0x90, 0x90, 0x90, 0x90,
