@@ -1,4 +1,5 @@
-﻿namespace Reanimator.Forms.HeroEditorFunctions
+﻿using System.Drawing;
+namespace Reanimator.Forms.HeroEditorFunctions
 {
     partial class CompletePanelControl
     {
@@ -223,6 +224,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             //this.BackgroundImage = global::Reanimator.Properties.Resources.attributePanel;
+            this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\attributePanel.png");
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Controls.Add(this.p_skillPanel);
             this.Controls.Add(this.p_attributePanel);

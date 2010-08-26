@@ -771,7 +771,7 @@ namespace Reanimator.Forms
             _currentlySelectedItem = unit;
 
             DataTable items = _dataSet.GetExcelTableFromCode(27953);
-            DataRow[] itemRow = items.Select("code1 = '" + unit.unitCode + "'");
+            DataRow[] itemRow = items.Select("code = '" + unit.unitCode + "'");
 
             if (itemRow.Length > 0)
             {

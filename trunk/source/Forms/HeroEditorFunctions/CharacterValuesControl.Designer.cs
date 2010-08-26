@@ -1,4 +1,5 @@
-﻿namespace Reanimator.Forms.HeroEditorFunctions
+﻿using System.Drawing;
+namespace Reanimator.Forms.HeroEditorFunctions
 {
     partial class CharacterValuesControl
     {
@@ -36,6 +37,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             //this.BackgroundImage = global::Reanimator.Properties.Resources.attributePanelBg;
+            this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\attributePanelBg.png");
             this.Name = "CharacterValuesControl";
             this.Size = new System.Drawing.Size(276, 560);
             this.ResumeLayout(false);

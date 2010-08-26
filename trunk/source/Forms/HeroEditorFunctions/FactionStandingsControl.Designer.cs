@@ -1,4 +1,5 @@
-﻿namespace Reanimator.Forms.HeroEditorFunctions
+﻿using System.Drawing;
+namespace Reanimator.Forms.HeroEditorFunctions
 {
     partial class FactionStandingsControl
     {
@@ -552,6 +553,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             //this.BackgroundImage = global::Reanimator.Properties.Resources.faction_small;
+            this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\faction_small.png");
             this.Controls.Add(this.label12);
             this.Controls.Add(this.nud_factionWithTheBrothers);
             this.Controls.Add(this.richTextBox11);

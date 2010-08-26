@@ -60,6 +60,7 @@
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.clientPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bypassSecurityx64ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.installModificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tradeItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -88,7 +89,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.installModificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.characterFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -140,7 +141,8 @@
             this.openToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.indexFileToolStripMenuItem,
             this.cookedFileToolStripMenuItem,
-            this.stringsFileToolStripMenuItem});
+            this.stringsFileToolStripMenuItem,
+            this.characterFileToolStripMenuItem});
             this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
@@ -154,7 +156,7 @@
             this.indexFileToolStripMenuItem.Name = "indexFileToolStripMenuItem";
             this.indexFileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.indexFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.indexFileToolStripMenuItem.Text = "Index File...";
+            this.indexFileToolStripMenuItem.Text = "&Index File...";
             this.indexFileToolStripMenuItem.Click += new System.EventHandler(this.OpenIndexFile);
             // 
             // cookedFileToolStripMenuItem
@@ -163,14 +165,14 @@
             this.cookedFileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift)
                         | System.Windows.Forms.Keys.O)));
             this.cookedFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.cookedFileToolStripMenuItem.Text = "Cooked File...";
+            this.cookedFileToolStripMenuItem.Text = "&Cooked File...";
             this.cookedFileToolStripMenuItem.Click += new System.EventHandler(this.OpenCookedFile);
             // 
             // stringsFileToolStripMenuItem
             // 
             this.stringsFileToolStripMenuItem.Name = "stringsFileToolStripMenuItem";
             this.stringsFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.stringsFileToolStripMenuItem.Text = "Strings File...";
+            this.stringsFileToolStripMenuItem.Text = "&Strings File...";
             this.stringsFileToolStripMenuItem.Click += new System.EventHandler(this.StringsFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
@@ -371,6 +373,13 @@
             this.bypassSecurityx64ToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.bypassSecurityx64ToolStripMenuItem.Text = "Hardcore Mode [x64 DX9]";
             this.bypassSecurityx64ToolStripMenuItem.Click += new System.EventHandler(this._HardcoreModex64DX9ToolStripMenuItem_Click);
+            // 
+            // installModificationsToolStripMenuItem
+            // 
+            this.installModificationsToolStripMenuItem.Name = "installModificationsToolStripMenuItem";
+            this.installModificationsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.installModificationsToolStripMenuItem.Text = "&Install Modifications";
+            this.installModificationsToolStripMenuItem.Click += new System.EventHandler(this._ApplyModificationsToolStripMenuItem_Click);
             // 
             // tradeItemsToolStripMenuItem
             // 
@@ -594,12 +603,13 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // installModificationsToolStripMenuItem
+            // characterFileToolStripMenuItem
             // 
-            this.installModificationsToolStripMenuItem.Name = "installModificationsToolStripMenuItem";
-            this.installModificationsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.installModificationsToolStripMenuItem.Text = "Install Modifications";
-            this.installModificationsToolStripMenuItem.Click += new System.EventHandler(this._ApplyModificationsToolStripMenuItem_Click);
+            this.characterFileToolStripMenuItem.Name = "characterFileToolStripMenuItem";
+            this.characterFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.characterFileToolStripMenuItem.Text = "C&haracter File";
+            this.characterFileToolStripMenuItem.Visible = false;
+            this.characterFileToolStripMenuItem.Click += new System.EventHandler(this.OpenCharacterFile);
             // 
             // Reanimator
             // 
@@ -687,6 +697,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonSE;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem installModificationsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem characterFileToolStripMenuItem;
     }
 }
 

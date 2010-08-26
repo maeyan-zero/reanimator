@@ -306,6 +306,9 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 if (_characterUnit1 != null && _characterUnit2 != null)
                 {
+                    l_selectedItem.ResetText();
+                    l_selectedItem.Tag = null;
+
                     List<Unit> tmpItem = new List<Unit>();
 
                     for (int counter = 0; counter < _characterUnit1.Items.Count; counter++)

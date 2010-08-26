@@ -28,6 +28,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         public void SetBackground(Bitmap skillBackground)
         {
             //this.BackgroundImage = global::Reanimator.Properties.Resources.skillPanelBg;
+            this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\skillPanelBg.png");
             skillBackground.MakeTransparent(Color.White);
 
             Bitmap bg = (Bitmap)this.BackgroundImage;
