@@ -89,58 +89,57 @@ namespace Reanimator
             return csv.ToString();
         }
 
-        static public string ArrayToCSV<T>(T[] data, string castAs)
+        static public string ArrayToCSV(byte[] data, string castAs, int castLen)
         {
             using (StringWriter sw = new StringWriter())
             {
-                const string delimiter = ",";
+                string delimiter = ",";
+                int noValues = data.Length;
 
-                for (int i = 0; i < data.Length; i++)
+                for (int i = 0; i < data.Length; i = i + castLen)
                 {
-                    object obj = data[i];
-
                     switch (castAs)
                     {
                         case "hex":
-                            if (Marshal.SizeOf(typeof(T)) == sizeof(byte))
+                            if (castLen == sizeof(byte))
                             {
-                                sw.Write(Convert.ToByte(obj).ToString("X2"));
+                                sw.Write(data[i].ToString("X2"));
                             }
-                            else if (Marshal.SizeOf(typeof(T)) == sizeof(int))
+                            if (castLen == sizeof(int))
                             {
-                                sw.Write(Convert.ToUInt32(obj).ToString("X4"));
+                                sw.Write(BitConverter.ToUInt32(data, i).ToString("X2"));
                             }
                             break;
                         case "signed":
-                            if (Marshal.SizeOf(typeof(T)) == sizeof(byte))
+                            if (castLen == sizeof(byte))
                             {
-                                sw.Write(Convert.ToChar(obj).ToString());
+                                sw.Write(Convert.ToChar(data[i]).ToString());
                             }
-                            else if (Marshal.SizeOf(typeof(T)) == sizeof(int))
+                            if (castLen == sizeof(int))
                             {
-                                sw.Write(Convert.ToInt64(obj).ToString());
+                                sw.Write(BitConverter.ToInt32(data, i).ToString());
                             }
                             break;
                         case "unsigned":
-                            if (Marshal.SizeOf(typeof(T)) == sizeof(byte))
+                            if (castLen == sizeof(byte))
                             {
-                                sw.Write(Convert.ToByte(obj).ToString());
+                                sw.Write(data[i].ToString());
                             }
-                            else if (Marshal.SizeOf(typeof(T)) == sizeof(int))
+                            if (castLen == sizeof(int))
                             {
-                                sw.Write(Convert.ToUInt32(obj).ToString());
+                                sw.Write(BitConverter.ToUInt32(data, i).ToString());
                             }
                             break;
                     }
 
-                    if (i != data.Length - 1) sw.Write(delimiter);
+                    if (i != data.Length - castLen) sw.Write(delimiter);
                 }
 
                 return sw.ToString();
             }
         }
 
-        static public byte[] CSVtoArray(string data, string castAs, Type type)
+        static public byte[] CSVtoArray(string data, string castAs, int castLen)
         {
             string[] explode = data.Split(',');
             List<byte> list = new List<byte>();
@@ -151,37 +150,37 @@ namespace Reanimator
                 switch (castAs)
                 {
                     case "hex":
-                        if (type == typeof(byte))
+                        if (castLen == sizeof(byte))
                         {
                             byte b = byte.Parse(part, System.Globalization.NumberStyles.HexNumber);
                             array = new byte[] { b };
                         }
-                        else if (type == typeof(uint))
+                        if (castLen == sizeof(int))
                         {
                             uint i = uint.Parse(part, System.Globalization.NumberStyles.HexNumber);
                             array = BitConverter.GetBytes(i);
                         }
                         break;
                     case "signed":
-                        if (type == typeof(byte))
+                        if (castLen == sizeof(byte))
                         {
                             char c = char.Parse(part);
                             byte b = Convert.ToByte(c);
                             array = new byte[] { b };
                         }
-                        else if (type == typeof(uint))
+                        if (castLen == sizeof(int))
                         {
                             int i = int.Parse(part);
                             array = BitConverter.GetBytes(i);
                         }
                         break;
                     case "unsigned":
-                        if (type == typeof(byte))
+                        if (castLen == sizeof(byte))
                         {
                             byte b = byte.Parse(part);
                             array = new byte[] { b };
                         }
-                        else if (type == typeof(uint))
+                        if (castLen == sizeof(int))
                         {
                             uint i = uint.Parse(part);
                             array = BitConverter.GetBytes(i);

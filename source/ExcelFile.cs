@@ -434,24 +434,20 @@ namespace Reanimator
 
         public string ParseIntOffset(int index)
         {
-            uint i;
-            int cur = index;
+            int i;
+            int len = 0;
             bool parsing = true;
-            List<uint> list = new List<uint>();
-
+            
             while (parsing)
             {
-                i = FileTools.ByteArrayTo<uint>(_dataBlock, ref cur);
-                list.Add(i);
+                i = FileTools.ByteArrayTo<int>(_dataBlock, index + len);
+                len += sizeof(int) * 1;
                 
                 switch (i)
                 {
                     case 2:
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
+                        len += sizeof(int) * 2;
                         break;
-
-                    // simple integer
                     case 1:
                     case 3:
                     case 4:
@@ -460,10 +456,8 @@ namespace Reanimator
                     case 516:
                     case 527:
                     case 700:
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
+                        len += sizeof(int) * 1;
                         break;
-
-                    // tokens
                     case 320:
                     case 339:
                     case 347:
@@ -476,14 +470,11 @@ namespace Reanimator
                     case 448:
                     case 470:
                     case 481:
-                    
                     case 538: // affixes
                     case 709:
                     case 711:
                     case 712:
                         break;
-
-                    // bitmasks
                     case 666:
                     case 667:
                     case 669:
@@ -493,28 +484,16 @@ namespace Reanimator
                     case 683:
                     case 687:
                     case 688:
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
+                        len += sizeof(int) * 1;
                         break;
-
-                    // functions
                     case 707:
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
+                        len += sizeof(int) * 2;
                         break;
-                    // random range?
                     case 708: // 26,3,26
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
+                        len += sizeof(int) * 4;
                         break;
                     case 710: // 26,26,3
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
-                        list.Add(FileTools.ByteArrayTo<uint>(_dataBlock, ref cur));
+                        len += sizeof(int) * 6;
                         break;
                     case 0:
                     case 6: // appears twice in skills. weird. it acts as a terminator
@@ -526,8 +505,9 @@ namespace Reanimator
                         break;
                 }
             }
-
-            return Export.ArrayToCSV<uint>(list.ToArray(), Config.IntPtrCast);
+            byte[] buffer = new byte[len];
+            Array.Copy(_dataBlock, index, buffer, 0, len);
+            return Export.ArrayToCSV(buffer, Config.IntPtrCast, sizeof(int));
         }
 
         private static bool CheckFlag(int flag, int to)
@@ -785,7 +765,7 @@ namespace Reanimator
                             else
                             {
                                 fieldInfo.SetValue(table, intByteCount);
-                                byte[] array = Export.CSVtoArray(s, Config.IntPtrCast, typeof(uint));
+                                byte[] array = Export.CSVtoArray(s, Config.IntPtrCast, sizeof(int));
                                 FileTools.WriteToBuffer(ref intBytes, ref intByteCount, array);
                             }
                         }
@@ -846,7 +826,7 @@ namespace Reanimator
 
                     if (!String.IsNullOrEmpty(s))
                     {
-                        byte[] array = Export.CSVtoArray(s, Config.IntPtrCast, typeof(byte));
+                        byte[] array = Export.CSVtoArray(s, "hex", sizeof(byte));
                         if (ExtraIndexData.Count <= row)
                         {
                             ExtraIndexData.Add(array);
@@ -985,8 +965,7 @@ namespace Reanimator
                 int i = 0;
                 foreach (byte[] array in ExtraIndexData)
                 {
-                    int[] intArray = FileTools.ByteArrayToInt32Array(array, 0, array.Length);
-                    stream.WriteLine(Export.ArrayToCSV(intArray, "hex"));
+                    stream.WriteLine(Export.ArrayToCSV(array, "hex", sizeof(byte)));
                     i++;
                 }
             }
