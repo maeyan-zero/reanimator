@@ -90,22 +90,6 @@ namespace Reanimator
             UInt64 sourceLength
         );
 
-
-        public const int Base000 = 9;
-        public const int LatestPatch = 10;
-        public const int LatestPatchLocalized = 11;
-        static public readonly string[] FileNames = { "hellgate_bghigh000",                                     // 0
-                                                     "hellgate_graphicshigh000",                                // 1
-                                                     "hellgate_localized000",                                   // 2
-                                                     "hellgate_movies000",                                      // 3
-                                                     "hellgate_movieshigh000",                                  // 4
-                                                     "hellgate_movieslow000",                                   // 5
-                                                     "hellgate_playershigh000",                                 // 6
-                                                     "hellgate_sound000",                                       // 7
-                                                     "hellgate_soundmusic000",                                  // 8
-                                                     "hellgate000",                                             // 9
-                                                     "sp_hellgate_1.10.180.3416_1.18074.70.4256",               // 10
-                                                     "sp_hellgate_localized_1.10.180.3416_1.18074.70.4256" };   // 11
         public const UInt32 TokenHead = 0x6867696E; // 'nigh'
         public const UInt32 TokenSect = 0x68677073; // 'spgh'
         public const UInt32 TokenInfo = 0x6867696F; // 'oigh'
@@ -595,64 +579,5 @@ namespace Reanimator
                 DataFile.Dispose();
             }
         }
-
-        // todo: why are these here?
-        /*
-        public void RemoveDirectorySuffix(int i)
-        {
-            string dir = FileTable[i].DirectoryString.Remove(0, Affix.Length);
-            FileTable[i].Directory = StringExists(dir);
-        }
-
-        public bool Restore()
-        {
-            for (int i = 0; i < FileTable.Length; i++)
-            {
-                if (!FileTable[i].DirectoryString.Contains(Affix)) continue;
-
-                string original = FileTable[i].DirectoryString.Remove(0, Affix.Length);
-                for (int j = 0; j < _stringTable.Length; j++)
-                {
-                    if (_stringTable[j] != original) continue;
-
-                    FileTable[i].Directory = j;
-                    break;
-                }
-            }
-
-            byte[] buffer = GenerateIndexFile();
-            Crypt.Encrypt(buffer);
-
-            _indexFile.Dispose();
-
-            try
-            {
-                FileStream fs = new FileStream(FileDirectory + "\\" + GetFileNameWithoutExtension + ".idx", FileMode.OpenOrCreate);
-                fs.Flush();
-                fs.Write(buffer, 0, buffer.Length);
-                fs.Close();
-                return true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-                return false;
-            }
-        }
-
-        public int Locate(String file, String dir)
-        {
-            for (int i = 0; i < FileTable.Length; i++)
-            {
-                int result1 = String.Compare(file, FileTable[i].FileNameString, true);
-                int result2 = String.Compare(dir, FileTable[i].DirectoryString, true);
-                if (result1 == 0 && result2 == 0)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-         */
     }
 }
