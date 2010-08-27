@@ -37,6 +37,7 @@
             this.indexFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cookedFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stringsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.characterFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,7 +90,6 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.characterFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -175,6 +175,14 @@
             this.stringsFileToolStripMenuItem.Text = "&Strings File...";
             this.stringsFileToolStripMenuItem.Click += new System.EventHandler(this.StringsFileToolStripMenuItem_Click);
             // 
+            // characterFileToolStripMenuItem
+            // 
+            this.characterFileToolStripMenuItem.Name = "characterFileToolStripMenuItem";
+            this.characterFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.characterFileToolStripMenuItem.Text = "C&haracter File";
+            this.characterFileToolStripMenuItem.Visible = false;
+            this.characterFileToolStripMenuItem.Click += new System.EventHandler(this.OpenCharacterFile);
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -188,7 +196,7 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this._SaveToolStripMenuItem_Click);
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this._SaveToolStripButton_Click);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -602,14 +610,6 @@
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
-            // 
-            // characterFileToolStripMenuItem
-            // 
-            this.characterFileToolStripMenuItem.Name = "characterFileToolStripMenuItem";
-            this.characterFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.characterFileToolStripMenuItem.Text = "C&haracter File";
-            this.characterFileToolStripMenuItem.Visible = false;
-            this.characterFileToolStripMenuItem.Click += new System.EventHandler(this.OpenCharacterFile);
             // 
             // Reanimator
             // 
