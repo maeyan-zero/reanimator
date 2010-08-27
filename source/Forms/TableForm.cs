@@ -223,7 +223,7 @@ namespace Reanimator
                 {
                     try
                     {
-                        byte[] buffer = index.ReadDataFile(file);
+                        byte[] buffer = index.ReadDatFile(file);
 
                         string keepPathString = "\\";
                         if (keepPath)
