@@ -194,9 +194,9 @@
             this.files_treeView.TabIndex = 1;
             this.files_treeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterCheck);
             this.files_treeView.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterCollapse);
-            this.files_treeView.DoubleClick += new System.EventHandler(this._FilesTreeViewDoubleClick);
-            this.files_treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterSelect);
             this.files_treeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterExpand);
+            this.files_treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeViewAfterSelect);
+            this.files_treeView.DoubleClick += new System.EventHandler(this._FilesTreeViewDoubleClick);
             // 
             // contextMenuStrip1
             // 

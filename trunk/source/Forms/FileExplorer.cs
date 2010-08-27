@@ -13,12 +13,17 @@ namespace Reanimator.Forms
 {
     public partial class FileExplorer : Form
     {
-        private static readonly Icon[] Icons = { Resources.Generic_Document, Resources.folder, Resources.folder_open };
+        private const String ReanimatorIndex = "sp_hellgate_reanimator";
+
+        private static readonly Icon[] Icons = { Resources.GenericDocument, Resources.Folder, Resources.FolderOpen, Resources.XMLFile, Resources.AudioFile, Resources.MediaFile };
         private enum IconIndex
         {
             GenericDocument,
             Folder,
-            FolderOpen
+            FolderOpen,
+            XMLFile,
+            AudioFile,
+            MediaFile
         }
 
         private static readonly Color BackupColor = Color.IndianRed;
@@ -31,7 +36,7 @@ namespace Reanimator.Forms
         private class NodeObject
         {
             public Index Index;
-            public Index.FileIndex FileIndex;
+            public Index.FileEntry FileIndex;
             public bool IsFolder;
             public bool IsBackup;
             public bool CanEdit;
@@ -136,27 +141,17 @@ namespace Reanimator.Forms
         private void _ParseIndexFile(Index index)
         {
             // loop files
-            foreach (Index.FileIndex currFile in index.FileTable)
+            foreach (Index.FileEntry currFile in index.FileTable)
             {
                 NodeObject currNodeObject = new NodeObject { Index = index, FileIndex = currFile };
                 String[] nodeKeys = currFile.DirectoryString.Split('\\');
                 TreeNode currTreeNode = null;
 
 
-                if (currFile.FileNameString == "affixes.txt.cooked")
-                {
-                    int bp = 0;
-                }
-
-
-                // can we edit the file via. Reanimator?
-                if ((nodeKeys.Contains(XmlCookedSkill.RootFolder) && currFile.FileNameString.EndsWith(XmlCookedFile.FileExtention)) ||
-                    currFile.FileNameString.EndsWith(ExcelFile.FileExtention) ||
-                    currFile.FileNameString.EndsWith(StringsFile.FileExtention) ||
-                    currFile.FileNameString.EndsWith("txt"))
-                {
-                    currNodeObject.CanEdit = true;
-                }
+                //if (currFile.FileNameString == "affixes.txt.cooked")
+                //{
+                //    int bp = 0;
+                //}
 
 
                 // set up folders and get applicable root folder
@@ -179,7 +174,6 @@ namespace Reanimator.Forms
                 }
                 Debug.Assert(currTreeNode != null);
 
-                
 
                 // have we already added the file? if so, check file time etc
                 String key = currFile.DirectoryString.Replace(Index.BackupPrefix + @"\", "") + currFile.FileNameString;
@@ -229,8 +223,34 @@ namespace Reanimator.Forms
 
                 // add file/node
                 TreeNode node = currTreeNode.Nodes.Add(key, currFile.FileNameString);
-                node.Tag = currNodeObject;
-                _fileTable.Add(key, node);
+
+
+                // do some pretty icon stuffs and other file-type checks
+                if (currFile.FileNameString.EndsWith(XmlCookedFile.FileExtention))
+                {
+                    node.ImageIndex = (int)IconIndex.XMLFile;
+
+                    // we can only edit skills xml.cooked at the moment
+                    if (nodeKeys.Contains(XmlCookedSkill.RootFolder))
+                    {
+                        currNodeObject.CanEdit = true;
+                    }
+                }
+                else if (currFile.FileNameString.EndsWith(ExcelFile.FileExtention) ||
+                    currFile.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                    currFile.FileNameString.EndsWith("txt"))
+                {
+                    currNodeObject.CanEdit = true;
+                }
+                else if (currFile.FileNameString.EndsWith("mp2") || currFile.FileNameString.EndsWith("ogg"))
+                {
+                    node.ImageIndex = (int)IconIndex.AudioFile;
+                }
+                else if (currFile.FileNameString.EndsWith("bik"))
+                {
+                    node.ImageIndex = (int)IconIndex.MediaFile;
+                }
+                node.SelectedImageIndex = node.ImageIndex;
 
 
                 // final nodeObject setups
@@ -242,6 +262,9 @@ namespace Reanimator.Forms
                 {
                     node.ForeColor = NoEditColor;
                 }
+
+                node.Tag = currNodeObject;
+                _fileTable.Add(key, node);
             }
 
 
@@ -297,7 +320,7 @@ namespace Reanimator.Forms
                 return;
             }
 
-            Index.FileIndex fileIndex = nodeObject.FileIndex;
+            Index.FileEntry fileIndex = nodeObject.FileIndex;
             Debug.Assert(fileIndex != null);
 
             fileName_textBox.DataBindings.Add("Text", fileIndex, "FileNameString");
@@ -333,7 +356,7 @@ namespace Reanimator.Forms
 
             if (nodeObject.IsFolder || !nodeObject.CanEdit) return;
 
-            Index.FileIndex fileIndex = nodeObject.FileIndex;
+            Index.FileEntry fileIndex = nodeObject.FileIndex;
 
             if (fileIndex.FileNameString.EndsWith(ExcelFile.FileExtention) || fileIndex.FileNameString.EndsWith(StringsFile.FileExtention))
             {
@@ -456,10 +479,10 @@ namespace Reanimator.Forms
         {
             if (treeNode == null) return false;
 
-            if (treeNode.Text == "affixes.txt.cooked")
-            {
-                int bp = 0;
-            }
+            //if (treeNode.Text == "affixes.txt.cooked")
+            //{
+            //    int bp = 0;
+            //}
 
             // loop through for folders, etc
             NodeObject nodeObject = (NodeObject) treeNode.Tag;
@@ -480,7 +503,7 @@ namespace Reanimator.Forms
 
             // get path
             Index fileIndex = nodeObject.Index;
-            Index.FileIndex file = nodeObject.FileIndex;
+            Index.FileEntry file = nodeObject.FileIndex;
             String filePath = extractPatchArgs.KeepPath
                                   ? Path.Combine(extractPatchArgs.ExtractRoot, treeNode.FullPath)
                                   : Path.Combine(extractPatchArgs.ExtractRoot, file.FileNameString);
@@ -538,7 +561,7 @@ namespace Reanimator.Forms
             if (nodeObject.Siblings != null && nodeObject.Siblings.Count > 0)
             {
                 // this file has siblings - loop through
-                foreach (Index.FileIndex siblingFileIndex in
+                foreach (Index.FileEntry siblingFileIndex in
                     nodeObject.Siblings.Select(siblingNodeObject => siblingNodeObject.FileIndex).Where(fileIndex.PatchOutFile))
                 {
                     fileIndexKey = siblingFileIndex.InIndex.FileNameWithoutExtension;
@@ -566,7 +589,149 @@ namespace Reanimator.Forms
 
         private void _PackPatchButtonClick(object sender, EventArgs e)
         {
-            MessageBox.Show("todo");
+            //// get our custom index - or create if doesn't exist
+            //Index packIndex = _indexFiles.FirstOrDefault(index => index.FileNameWithoutExtension == "sp_hellgate_reanimator");
+            //if (packIndex == null)
+            //{
+            //    String indexPath = String.Format(@"data\{0}.idx", ReanimatorIndex);
+            //    indexPath = Path.Combine(Config.HglDir, indexPath);
+            //    try
+            //    {
+            //        File.Create(indexPath);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show("Failed to create custom index file!\n\n" + ex, "Error", MessageBoxButtons.OK,
+            //                        MessageBoxIcon.Error);
+            //        return;
+            //    }
+
+            //    packIndex = new Index(indexPath);
+            //}
+
+            //ProgressForm progressForm = new ProgressForm(_DoPackPatch, packIndex);
+            //progressForm.SetLoadingText("Packing and Patching files...");
+            //progressForm.SetStyle(ProgressBarStyle.Marquee);
+            //progressForm.Show();
+        }
+        
+        private void _DoPackPatch(ProgressForm progressForm, Object param)
+        {
+            //Index packIndex = (Index)param;
+            //Debug.Assert(packIndex != null);
+
+
+            //// find/check which files exist
+            //progressForm.SetCurrentItemText("Finding file(s)...");
+            //List<TreeNode> packFiles = new List<TreeNode>();
+            //if (files_treeView.Nodes.Cast<TreeNode>().Any(treeNode => !_PatchPackCheckFiles(treeNode, packFiles)))
+            //{
+            //    MessageBox.Show("Pack and Patching process aborted!", "Notice", MessageBoxButtons.OK,
+            //                    MessageBoxIcon.Information);
+            //    return;
+            //}
+
+            //if (packFiles.Count <= 0)
+            //{
+            //    MessageBox.Show("No files found for packing!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            //    return;
+            //}
+
+
+            //// update pack index
+            //progressForm.SetCurrentItemText("Updating index and packing file(s)...");
+            //if (!packIndex.BeginDatWriting())
+            //{
+            //    MessageBox.Show("Failed to open .dat file for writing!", "Error", MessageBoxButtons.OK,
+            //                    MessageBoxIcon.Error);
+            //    return;
+            //}
+
+            //// todo: this needs to be rewritten looks/feels gross shuffling the fileEntry around like this
+            //foreach (TreeNode packNode in packFiles)
+            //{
+            //    NodeObject packObject = (NodeObject) packNode.Tag;
+
+            //    // does the file exist in the packIndex - if not, add
+            //    Index.FileEntry fileEntry = packIndex.GetFileFromIndex(packNode.FullPath);
+            //    if (fileEntry == null)
+            //    {
+            //        if (packObject.FileIndex == null)
+            //        {
+            //            // todo: add yes/no continue/cancel etc
+            //            MessageBox.Show("Unable to add file to index; file has no base.\n" + packNode.FullPath, "Error",
+            //                            MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            //            continue;
+            //        }
+
+            //        fileEntry = packIndex.AddFileToIndex(packObject.FileIndex);
+            //    }
+
+            //    // update fileTime to now - ensures it will override older versions
+            //    fileEntry.FileStruct.FileTime = DateTime.Now.ToFileTime();
+
+            //    String filePath = Path.Combine(Config.HglDir, packNode.FullPath);
+            //    byte[] fileData;
+            //    try
+            //    {
+            //        fileData = File.ReadAllBytes(filePath);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        // todo: add yes/no continue/cancel etc
+            //        MessageBox.Show("Failed to read in file for packing!\n\n" + ex, "Error", MessageBoxButtons.OK,
+            //                        MessageBoxIcon.Error);
+            //        continue;
+            //    }
+
+            //    if (!packIndex.AddFileToDat(fileData, fileEntry, true))
+            //    {
+            //        MessageBox.Show("Failed pack file!\n" + packNode.FullPath, "Error", MessageBoxButtons.OK,
+            //                        MessageBoxIcon.Exclamation);
+            //    }
+            //}
+
+            //packIndex.EndDatAccess();
+            
+            
+            //// write index
+            //progressForm.SetCurrentItemText("Writing index...");
+            //try
+            //{
+            //    File.WriteAllBytes(packIndex.FilePath, packIndex.GenerateIndexFile());
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Failed to write updated index file!\n\n" + ex, "Error", MessageBoxButtons.OK,
+            //                    MessageBoxIcon.Error);
+            //    return;
+            //}
+
+            //MessageBox.Show("File packing and index/dat writing completed!", "Sucess", MessageBoxButtons.OK,
+            //                MessageBoxIcon.Information);
+        }
+
+        private static bool _PatchPackCheckFiles(TreeNode treeNode, List<TreeNode> packFiles)
+        {
+            //NodeObject nodeObject = (NodeObject) treeNode.Tag;
+
+            //if (nodeObject.IsFolder)
+            //{
+            //    return treeNode.Nodes.Cast<TreeNode>().All(childNode => _PatchPackCheckFiles(childNode, packFiles));
+            //}
+
+            //if (!treeNode.Checked) return true;
+
+            //String filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
+            //if (!File.Exists(filePath))
+            //{
+            //    DialogResult dialogResult = MessageBox.Show("A checked file was not found for packing:\n" + filePath + "\n\nIgnore missing checked files and continue?", "Warning",
+            //                                                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //    return dialogResult == DialogResult.Yes;
+            //}
+
+            //packFiles.Add(treeNode);
+            return true;
         }
 
         private void _RevertRestoreButtonClick(object sender, EventArgs e)
@@ -628,15 +793,24 @@ namespace Reanimator.Forms
 
         private void _FilterApplyButtonClick(object sender, EventArgs e)
         {
-            MessageBox.Show("todo");
-            _DoApplyFilter();
+           // MessageBox.Show("todo");
+            //_DoApplyFilter();
+
+            //byte[] asdf = GetFileBytes(@"data\ai\carnagorpet.xml.cooked");
         }
 
         private void _FilterResetButtonClick(object sender, EventArgs e)
         {
-            MessageBox.Show("todo");
-            filter_textBox.Text = "*.*";
-            _DoApplyFilter();
+            //MessageBox.Show("todo");
+            //filter_textBox.Text = "*.*";
+            //_DoApplyFilter();
+
+
+
+            //Index idx = _indexFiles.FirstOrDefault(i => i.FileNameWithoutExtension == "hellgate000");
+            //Debug.Assert(idx != null);
+
+            //File.WriteAllBytes(idx.FilePath, idx.GenerateIndexFile());
         }
 
         //TreeView filteredTreeView = new TreeView();
@@ -677,6 +851,16 @@ namespace Reanimator.Forms
             //if (!Regex.IsMatch(treeNode.Text, filterText)) return;
 
             ////filterNodes.Add(treeNode);
+        }
+
+        public byte[] GetFileBytes(String filePath)
+        {
+            TreeNode treeNode = (TreeNode) _fileTable[filePath];
+            if (treeNode == null) return null;
+
+            NodeObject nodeObject = (NodeObject) treeNode.Tag;
+
+            return nodeObject.Index.ReadDataFile(nodeObject.FileIndex);
         }
     }
 }

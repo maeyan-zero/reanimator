@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Reanimator
 {
     public class Index : IDisposable
     {
+        #region ZLibImports
         /* Decompresses the source buffer into the destination buffer.  sourceLen is
            the byte length of the source buffer. Upon entry, destLen is the total
            size of the destination buffer, which must be large enough to hold the
@@ -89,6 +91,7 @@ namespace Reanimator
             [MarshalAs(UnmanagedType.U8)]
             UInt64 sourceLength
         );
+        #endregion
 
         public const UInt32 TokenHead = 0x6867696E; // 'nigh'
         public const UInt32 TokenSect = 0x68677073; // 'spgh'
@@ -121,8 +124,8 @@ namespace Reanimator
         public class FileDetailsStruct
         {
             public UInt32 StartToken;
-            public Int32 Unknown11;                     // 0    0x00
-            public Int32 Unknown12;                     // 4    0x04
+            public Int32 FolderPathHash;                // 0    0x00        this value is the same for all files that have the same folder path
+            public Int32 FileNameHash;                  // 4    0x04        as above, but with file name
             public Int32 DataOffset;                    // 8    0x08
             public Int32 Null1;                         // 12   0x0C
             public Int32 UncompressedSize;              // 16   0x10
@@ -130,9 +133,9 @@ namespace Reanimator
             public Int32 Null2;                         // 24   0x18
             public Int32 DirectoryArrayIndex;           // 28   0x1C
             public Int32 FilenameArrayIndex;            // 32   0x20
-            public UInt64 FileTime;                     // 36   0x24        can't be null - is a FILETIME (using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME)
-            public Int32 Unknown23;                     // 44   0x2C
-            public Int32 Unknown24;                     // 48   0x30
+            public Int64 FileTime;                      // 36   0x24        can't be null - is a FILETIME (using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME)
+            public Int32 Unknown23;                     // 44   0x2C        this and following unknown are the same for files that have the same compressed and uncompressed sizes
+            public Int32 Unknown24;                     // 48   0x30        however they're different for different files with the same sizes...
             public Int32 Null31;                        // 52   0x34
             public Int32 Null32;                        // 56   0x38
             public Int32 Null33;                        // 60   0x3C
@@ -142,7 +145,7 @@ namespace Reanimator
         }
 
 
-        public class FileIndex
+        public class FileEntry
         {
             [Browsable(false)]
             public FileDetailsStruct FileStruct { get; set; }
@@ -167,24 +170,72 @@ namespace Reanimator
                 set { FileStruct.CompressedSize = value; }
             }
 
+            public String FolderPathHash
+            {
+                get { return FileStruct.FolderPathHash.ToString("X8"); }
+            }
+            public String FileNameHash
+            {
+                get { return FileStruct.FileNameHash.ToString("X8"); }
+            }
+
+            public String Unknown23
+            {
+                get { return FileStruct.Unknown23.ToString("X8"); }
+            }
+            public String Unknown24
+            {
+                get { return FileStruct.Unknown24.ToString("X8"); }
+            }
+
             [Browsable(false)]
             public int Directory
             {
                 get { return FileStruct.DirectoryArrayIndex; }
                 set { FileStruct.DirectoryArrayIndex = value; }
             }
-            public string DirectoryString { get; set; }
+
+            private String _directoryString;
+            public String DirectoryString
+            {
+                get { return _directoryString; }
+
+                set
+                {
+                    _directoryString = value;
+                    GenerateFullPath();
+                }
+            }
 
             [Browsable(false)]
             public int FileName
             {
                 get { return FileStruct.FilenameArrayIndex; }
             }
-            public string FileNameString { get; set; }
+
+            private String _fileNameString;
+            public String FileNameString
+            {
+                get { return _fileNameString; }
+
+                set
+                {
+                    _fileNameString = value;
+                    GenerateFullPath();
+                }
+            }
+
+            public String FullPath;
+            private void GenerateFullPath()
+            {
+                if (_directoryString == null || _fileNameString == null) return;
+
+                FullPath = _directoryString + _fileNameString;
+            }
 
             public bool Modified
             {
-                get { return DirectoryString.Contains(BackupPrefix); }
+                get { return DirectoryString != null && DirectoryString.Contains(BackupPrefix); }
             }
         }
 
@@ -192,16 +243,17 @@ namespace Reanimator
         private FileHeader _indexHeader;
         private StringsHeader _stringsHeader;
         private StringDetailsStruct[] _stringsDetails;
-        private String[] _stringTable;
+        private readonly List<String> _stringTable = new List<String>();
         private FileDetailsStruct[] _filesDetails;
-        public FileIndex[] FileTable { get; private set; }
+        public FileEntry[] FileTable { get; private set; }
+        public List<FileEntry> Files { get; private set; }
 
         public String FilePath { get; private set; }
         public String FileDirectory { get { return Path.GetDirectoryName(FilePath); } }
         public String FileNameWithoutExtension { get { return Path.GetFileNameWithoutExtension(FilePath); } }
 
-        public bool DatFileOpen { get { return DataFile == null ? false : true; } }
-        public FileStream DataFile { get; set; }
+        public bool DatFileOpen { get { return DatFile == null ? false : true; } }
+        public FileStream DatFile { get; set; }
 
         public const string BackupPrefix = @"backup";
         private bool _checkedForModified;
@@ -221,6 +273,18 @@ namespace Reanimator
             {
                 _modified = value;
             }
+        }
+
+        public Index()
+        {
+            FilePath = null;
+            Files = new List<FileEntry>();
+        }
+
+        public Index(String filePath)
+        {
+            FilePath = filePath;
+            Files = new List<FileEntry>();
         }
 
         public bool ParseData(byte[] data, String filePath)
@@ -277,13 +341,13 @@ namespace Reanimator
                 return false;
             }
 
-            _stringTable = new String[_stringsHeader.StringsCount];
+            String[] stringTable = new String[_stringsHeader.StringsCount];
             for (int i = 0; i < _stringsHeader.StringsCount; i++)
             {
-                _stringTable[i] = FileTools.ByteArrayToStringAnsi(_data, offset);
-                offset += _stringTable[i].Length + 1; // +1 for \0
+                stringTable[i] = FileTools.ByteArrayToStringAnsi(_data, offset);
+                offset += stringTable[i].Length + 1; // +1 for \0
             }
-
+            _stringTable.AddRange(stringTable);
 
 
             ////// strings details //////
@@ -317,34 +381,95 @@ namespace Reanimator
 
 
             ////// do files //////
-            FileTable = new FileIndex[_indexHeader.FileCount];
+            FileTable = new FileEntry[_indexHeader.FileCount];
             for (int i = 0; i < _indexHeader.FileCount; i++)
             {
-                FileIndex fileIndex = new FileIndex
+                FileEntry fileEntry = new FileEntry
                 {
                     FileStruct = _filesDetails[i],
                     InIndex = this
                 };
 
-                fileIndex.DirectoryString = _stringTable[fileIndex.Directory];
-                fileIndex.FileNameString = _stringTable[fileIndex.FileName];
+                fileEntry.DirectoryString = _stringTable[fileEntry.Directory];
+                fileEntry.FileNameString = _stringTable[fileEntry.FileName];
 
-                FileTable[i] = fileIndex;
+                FileTable[i] = fileEntry;
+                Files.Add(fileEntry);
             }
 
             return true;
         }
 
-        public bool OpenDatForReading()
+        public FileEntry GetFileFromIndex(String filePath)
         {
-            if (DataFile == null)
+            return String.IsNullOrEmpty(filePath) ? null : FileTable.FirstOrDefault(fileIndex => fileIndex.FullPath == filePath);
+        }
+
+        public FileEntry AddFileToIndex(FileEntry baseEntry)
+        {
+            Debug.Assert(baseEntry != null);
+
+            // easy-clone the file details struct
+            byte[] cloneData = FileTools.StructureToByteArray(baseEntry.FileStruct);
+            FileDetailsStruct fileDetailsStruct = FileTools.ByteArrayTo<FileDetailsStruct>(cloneData, 0);
+
+            FileEntry newFileEntry = new FileEntry {FileStruct = fileDetailsStruct, InIndex = this };
+
+            // update directory and file name string index offsets
+            // todo: should we even allow these to be null/empty??
+            if (!String.IsNullOrEmpty(baseEntry.DirectoryString))
+            {
+                // remove the backup string if present
+                String directoryString = baseEntry.DirectoryString.Replace(BackupPrefix + @"\", "");
+
+                int directoryIndex = _GetStringIndex(directoryString);
+                if (directoryIndex == -1)
+                {
+                    directoryIndex = _AddString(directoryString);
+                }
+
+                newFileEntry.FileStruct.DirectoryArrayIndex = directoryIndex;
+                // todo: update DirectoryString as well? Do we really need to?
+            }
+            if (!String.IsNullOrEmpty(baseEntry.FileNameString))
+            {
+                int fileNameIndex = _GetStringIndex(baseEntry.FileNameString);
+                if (fileNameIndex == -1)
+                {
+                    fileNameIndex = _AddString(baseEntry.FileNameString);
+                }
+
+                newFileEntry.FileStruct.FilenameArrayIndex = fileNameIndex;
+                // todo: update FileNameString as well? Do we really need to?
+            }
+
+            // add and return
+            Files.Add(newFileEntry);
+            return newFileEntry;
+        }
+
+        public bool BeginDatReading()
+        {
+            return OpenDat(FileAccess.Read);
+        }
+
+        public bool BeginDatWriting()
+        {
+            if (DatFile != null) DatFile.Close();
+
+            return OpenDat(FileAccess.ReadWrite);
+        }
+
+        public bool OpenDat(FileAccess fileAccess)
+        {
+            if (DatFile == null)
             {
                 try
                 {
                     String filePath = String.Format(@"{0}\{1}.dat", FileDirectory, FileNameWithoutExtension);
                     if (!File.Exists(filePath)) return false;
 
-                    DataFile = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                    DatFile = new FileStream(filePath, FileMode.Open, fileAccess);
                 }
                 catch (Exception)
                 {
@@ -355,19 +480,38 @@ namespace Reanimator
             return true;
         }
 
-        public byte[] ReadDataFile(FileIndex file)
+        public void EndDatAccess()
         {
-            if (!OpenDatForReading()) return null;
+            if (DatFile != null)
+            {
+                DatFile.Close();
+            }
+        }
+
+        public bool AddFileToDat(byte[] fileData, FileEntry fileEntry, bool removeOld)
+        {
+            Debug.Assert(fileData != null);
+            Debug.Assert(fileEntry != null);
+            if (DatFile == null) return false;
+
+
+
+            return true;
+        }
+
+        public byte[] ReadDataFile(FileEntry file)
+        {
+            if (!BeginDatReading()) return null;
 
             int result;
             byte[] destBuffer = new byte[file.UncompressedSize];
-            DataFile.Seek(file.DataOffset, SeekOrigin.Begin);
+            DatFile.Seek(file.DataOffset, SeekOrigin.Begin);
 
             if (file.CompressedSize > 0)
             {
                 byte[] srcBuffer = new byte[file.CompressedSize];
 
-                DataFile.Read(srcBuffer, 0, srcBuffer.Length);
+                DatFile.Read(srcBuffer, 0, srcBuffer.Length);
                 if (IntPtr.Size == 4)
                 {
                     uint len = (uint)file.UncompressedSize;
@@ -386,7 +530,7 @@ namespace Reanimator
             }
             else
             {
-                result = DataFile.Read(destBuffer, 0, file.UncompressedSize);
+                result = DatFile.Read(destBuffer, 0, file.UncompressedSize);
 
                 if (result != file.UncompressedSize)
                 {
@@ -397,22 +541,11 @@ namespace Reanimator
             return destBuffer;
         }
 
-        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, FileIndex file, bool writeIndex)
+        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, FileEntry file, bool writeIndex)
         {
-            // New Entry
-            //FileIndex newIndex = index;
-            // Move pointer to the end of the stream.
-            if (!DatFileOpen)
-            {
-                if (!OpenDatForReading())
-                {
-                    MessageBox.Show("Failed to open accompanying dat file!\n" + FileNameWithoutExtension, "Error",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
+            if (DatFile == null) return;
 
-            DataFile.Seek(0, SeekOrigin.End);
+            DatFile.Seek(0, SeekOrigin.End);
 
             if (!doCompress) return;
 
@@ -433,11 +566,10 @@ namespace Reanimator
             }
 
             file.CompressedSize = len;
-            file.DataOffset = (int)DataFile.Position;
+            file.DataOffset = (int)DatFile.Position;
             file.UncompressedSize = uncompressedBuffer.Length;
             //int i = 1;
-            DataFile.Write(compressedBuffer, 0, len);
-            DataFile.Close();
+            DatFile.Write(compressedBuffer, 0, len);
             Modified = true;
         }
 
@@ -456,7 +588,7 @@ namespace Reanimator
 
             ////// string block //////
             FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
-            FileTools.WriteToBuffer(ref buffer, ref offset, _stringsHeader.StringsCount);
+            FileTools.WriteToBuffer(ref buffer, ref offset, _stringTable.Count);
             int stringByteCountOffset = offset;
             offset += 4;
             foreach (String str in _stringTable)
@@ -485,15 +617,15 @@ namespace Reanimator
             //const UInt64 foo = 0xDEADBEEFDEADBEEF;
             FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
             //i = 0;
-            foreach (FileIndex fileIndex in FileTable)
+            foreach (FileEntry fileIndex in FileTable)
             {
                 // this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
                 FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
 
                 //FileTools.WriteToBuffer(ref buffer, ref offset, foo);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown11);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown12); // game freezes if not correct value
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FolderPathHash);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FileNameHash); // game freezes if not correct value
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);
@@ -501,17 +633,13 @@ namespace Reanimator
                 offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Directory);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileName);
-                //FileTools.WriteToBuffer(ref _buffer, ref offset, (UInt32)1); // game clears .idx and .dat if null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FileTime);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown23);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown24);
-                //offset += 12; // unknown  -  not required
                 offset += 12; // null
-                //offset += 8; // first 8 bytes  -  not required
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.First4BytesOfFile);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Second4BytesOfFile);
                 FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
-                //i++;
             }
 
             byte[] returnBuffer = new byte[offset];
@@ -519,52 +647,73 @@ namespace Reanimator
             return returnBuffer;
         }
 
-        public void AddDirectoryPrefix(int i)
+        public bool PatchOutFile(int i)
         {
-            FileIndex fileIndex = FileTable[i];
-            PatchOutFile(fileIndex);
+            if (i < 0 || i > FileTable.Length) return false;
+
+            FileEntry fileIndex = FileTable[i];
+            return PatchOutFile(fileIndex);
         }
 
-        public bool PatchOutFile(FileIndex fileIndex)
+        public bool PatchOutFile(FileEntry fileEntry)
         {
-            Debug.Assert(fileIndex != null);
+            Debug.Assert(fileEntry != null);
 
             // has it already be patched out?
-            if (fileIndex.DirectoryString.Contains(BackupPrefix)) return false;
+            if (fileEntry.DirectoryString.Contains(BackupPrefix)) return false;
 
-            // does the back dir exist?
-            String dir = BackupPrefix + @"\" + _stringTable[fileIndex.Directory];
-            int index = StringExists(dir);
+            // does the backup dir exist?
+            String dir = BackupPrefix + @"\" + _stringTable[fileEntry.Directory];
+            int index = _GetStringIndex(dir);
 
             // if the directory doesn't exist, add it.
             if (index == -1)
             {
-                index = _stringTable.Length;
-
-                String[] buffer = new String[index + 1];
-                _stringTable.CopyTo(buffer, 0);
-                buffer[index] = BackupPrefix + @"\" + _stringTable[fileIndex.Directory];
-
-                _stringTable = buffer;
-                _stringsHeader.StringsCount++;
+                index = _stringTable.Count;
+                _stringTable.Add(dir);
             }
 
-            fileIndex.Directory = index;
+            fileEntry.Directory = index;
             Modified = true;
             return true;
         }
 
-        private int StringExists(String str)
+        public bool PatchInFile(FileEntry fileEntry)
         {
-            for (int i = 0; i < _stringTable.Length; i++)
-            {
-                if (_stringTable[i] == str)
-                {
-                    return i;
-                }
-            }
+            Debug.Assert(fileEntry != null);
 
-            return -1;
+            // does it even need to be patched in?
+            if (!fileEntry.DirectoryString.Contains(BackupPrefix)) return false;
+
+            // does the original dir exist?
+            Debug.Assert(false, "todo");
+            //String dir = BackupPrefix + @"\" + _stringTable[fileEntry.Directory];
+            //int index = _GetStringIndex(dir);
+
+            //// if the directory doesn't exist, add it.
+            //if (index == -1)
+            //{
+            //    index = _stringTable.Count;
+            //    _stringTable.Add(dir);
+            //}
+
+            //fileEntry.Directory = index;
+            //Modified = true;);
+            return true;
+        }
+
+        private int _GetStringIndex(String str)
+        {
+            if (String.IsNullOrEmpty(str)) return -1;
+
+            return _stringTable.IndexOf(str);
+        }
+
+        private int _AddString(String str)
+        {
+            int index = _stringTable.Count;
+            _stringTable.Add(str);
+            return index;
         }
 
         public override string ToString()
@@ -574,9 +723,9 @@ namespace Reanimator
 
         public void Dispose()
         {
-            if (DataFile != null)
+            if (DatFile != null)
             {
-                DataFile.Dispose();
+                DatFile.Dispose();
             }
         }
     }
