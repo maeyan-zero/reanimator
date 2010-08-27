@@ -771,19 +771,7 @@ namespace Reanimator
 
         private void _SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                TableForm tableForm = ActiveMdiChild as TableForm;
 
-                if (tableForm == null) return;
-                if (!tableForm.IsIndexFile) return;
-
-                tableForm.SaveButton();
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_SaveToolStripMenuItem_Click", false);
-            }
         }
 
         private void _ItemShopToolStripMenuItem_Click(object sender, EventArgs e)

@@ -31,6 +31,7 @@ namespace Reanimator.Forms
             _modification = new Modification(_tableDataSet);
             _package = _modification.ModPackage;
 
+            if (!Directory.Exists(Config.ScriptDir)) Directory.CreateDirectory(Config.ScriptDir);
             string[] modPackPaths = Directory.GetDirectories(Config.ScriptDir).Where(subDir => (!subDir.Contains("."))).ToArray();
             foreach (string path in modPackPaths)
             {
