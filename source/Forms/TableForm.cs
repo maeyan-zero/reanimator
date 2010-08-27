@@ -22,7 +22,7 @@ namespace Reanimator
         public TableForm(Index idx)
         {
             index = idx;
-            if (!index.OpenDatForReading())
+            if (!index.OpenDat(FileAccess.Read))
             {
                 MessageBox("Unable to open accompanying data file:\n" + index.FileNameWithoutExtension + ".dat\nYou will be unable to extract any files.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
@@ -42,6 +42,7 @@ namespace Reanimator
             InitializeComponent();
             dataGridView.CellContextMenuStripNeeded += dataGridView_CellContextMenuStripNeeded;
             dataGridView.RowHeadersVisible = false;
+            dataGridView.AllowUserToOrderColumns = true;
 
             //Initialize the DataGridViewColumn control
             IndexFileCheckBoxColumn.DefaultCellStyle.DataSourceNullValue = false;
@@ -60,14 +61,14 @@ namespace Reanimator
         /// Returns a list of items that were checked in the DataGridView
         /// </summary>
         /// <returns>A list of all checked items</returns>
-        public Index.FileIndex[] GetCheckedFiles()
+        public Index.FileEntry[] GetCheckedFiles()
         {
             int counter = 0;
             //A list of checked files
-            List<Index.FileIndex> fileIndex = new List<Index.FileIndex>();
+            List<Index.FileEntry> fileIndex = new List<Index.FileEntry>();
 
             //Get the data bound to the DataGridView
-            Index.FileIndex[] index = (Index.FileIndex[])this.dataGridView.DataSource;
+            Index.FileEntry[] index = (Index.FileEntry[])this.dataGridView.DataSource;
 
             //Iterate through the Rows and check if the checkBoxes were checked 
             foreach (DataGridViewRow row in this.dataGridView.Rows)
@@ -93,11 +94,11 @@ namespace Reanimator
             return fileIndex.ToArray();
         }
 
-        public Index.FileIndex[] GetSelectedFiles()
+        public Index.FileEntry[] GetSelectedFiles()
         {
             int counter = 0;
-            List<Index.FileIndex> fileIndex = new List<Index.FileIndex>();
-            Index.FileIndex[] index = (Index.FileIndex[])this.dataGridView.DataSource;
+            List<Index.FileEntry> fileIndex = new List<Index.FileEntry>();
+            Index.FileEntry[] index = (Index.FileEntry[])this.dataGridView.DataSource;
 
             foreach (DataGridViewRow row in this.dataGridView.Rows)
             {
@@ -175,14 +176,14 @@ namespace Reanimator
             ExtractFiles(index.FileTable);
         }
 
-        private void ExtractFiles(Index.FileIndex[] files)
+        private void ExtractFiles(Index.FileEntry[] files)
         {
             new ProgressForm(DoExtractFiles, files).ShowDialog(this);
         }
 
         private void DoExtractFiles(ProgressForm progressBar, Object param)
         {
-            Index.FileIndex[] files = param as Index.FileIndex[];
+            Index.FileEntry[] files = param as Index.FileEntry[];
             if (param == null)
             {
                 return;
@@ -216,7 +217,7 @@ namespace Reanimator
             progressBar.SetLoadingText("Extracting files to... " + extractToPath);
 
             int filesSaved = 0;
-            foreach (Index.FileIndex file in files)
+            foreach (Index.FileEntry file in files)
             {
                 while (true)
                 {
@@ -423,12 +424,15 @@ namespace Reanimator
         {
             if (!IsIndexFile) return;
 
-            Index.FileIndex[] filesIndex = dataGridView.DataSource as Index.FileIndex[];
+            Index.FileEntry[] filesIndex = dataGridView.DataSource as Index.FileEntry[];
             DataGridViewSelectedRowCollection selectedRows = dataGridView.SelectedRows;
 
             foreach (DataGridViewRow row in selectedRows)
             {
-                index.AddDirectoryPrefix(row.Index);
+                if (!index.PatchOutFile(row.Index))
+                {
+                    MessageBox("Filed to patch out file!");
+                }
             }
         }
 
@@ -442,9 +446,16 @@ namespace Reanimator
             ReplaceFiles(GetCheckedFiles());
         }
 
-        void ReplaceFiles(Index.FileIndex[] files)
+        void ReplaceFiles(Index.FileEntry[] files)
         {
-            foreach (Index.FileIndex file in files)
+            if (!index.BeginDatWriting())
+            {
+                MessageBox("Failed to open accompanying dat file!\n" + index.FileNameWithoutExtension, "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            foreach (Index.FileEntry file in files)
             {
                 OpenFileDialog fileDialog = new OpenFileDialog();
                 fileDialog.ShowDialog();
@@ -465,6 +476,7 @@ namespace Reanimator
                     }
                 }
             }
+            index.EndDatAccess();
         }
     }
 }

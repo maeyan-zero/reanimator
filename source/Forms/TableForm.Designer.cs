@@ -39,6 +39,8 @@
             this.extractSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractCheckedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.extractAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.replaceSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.replaceCheckedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkAll_Button = new System.Windows.Forms.Button();
             this.selectAll_Button = new System.Windows.Forms.Button();
@@ -47,8 +49,6 @@
             this.searchResults_Label = new System.Windows.Forms.Label();
             this.b_prev = new System.Windows.Forms.Button();
             this.b_next = new System.Windows.Forms.Button();
-            this.replaceSelectedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.replaceCheckedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -142,6 +142,20 @@
             this.extractAllToolStripMenuItem.Text = "Extract All...";
             this.extractAllToolStripMenuItem.Click += new System.EventHandler(this.extractAllToolStripMenuItem_Click);
             // 
+            // replaceSelectedToolStripMenuItem
+            // 
+            this.replaceSelectedToolStripMenuItem.Name = "replaceSelectedToolStripMenuItem";
+            this.replaceSelectedToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.replaceSelectedToolStripMenuItem.Text = "Replace Selected...";
+            this.replaceSelectedToolStripMenuItem.Click += new System.EventHandler(this.replaceSelectedToolStripMenuItem_Click);
+            // 
+            // replaceCheckedToolStripMenuItem
+            // 
+            this.replaceCheckedToolStripMenuItem.Name = "replaceCheckedToolStripMenuItem";
+            this.replaceCheckedToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.replaceCheckedToolStripMenuItem.Text = "Replace Checked...";
+            this.replaceCheckedToolStripMenuItem.Click += new System.EventHandler(this.replaceCheckedToolStripMenuItem_Click);
+            // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
@@ -221,20 +235,6 @@
             this.b_next.Text = ">>";
             this.b_next.UseVisualStyleBackColor = true;
             this.b_next.Click += new System.EventHandler(this.b_next_Click);
-            // 
-            // replaceSelectedToolStripMenuItem
-            // 
-            this.replaceSelectedToolStripMenuItem.Name = "replaceSelectedToolStripMenuItem";
-            this.replaceSelectedToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
-            this.replaceSelectedToolStripMenuItem.Text = "Replace Selected...";
-            this.replaceSelectedToolStripMenuItem.Click += new System.EventHandler(this.replaceSelectedToolStripMenuItem_Click);
-            // 
-            // replaceCheckedToolStripMenuItem
-            // 
-            this.replaceCheckedToolStripMenuItem.Name = "replaceCheckedToolStripMenuItem";
-            this.replaceCheckedToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
-            this.replaceCheckedToolStripMenuItem.Text = "Replace Checked...";
-            this.replaceCheckedToolStripMenuItem.Click += new System.EventHandler(this.replaceCheckedToolStripMenuItem_Click);
             // 
             // TableForm
             // 

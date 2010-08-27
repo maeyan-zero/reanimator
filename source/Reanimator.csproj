@@ -676,6 +676,8 @@
     <None Include="Resources\Generic_Document.ico" />
     <None Include="Resources\generic_picture.ico" />
     <None Include="Resources\GenericMovieClip.ico" />
+    <None Include="Resources\Annotate_QuestionBlue.ico" />
+    <None Include="Resources\Annotate_QuestionRed.ico" />
     <Content Include="Resources\icon3.ico" />
   </ItemGroup>
   <ItemGroup />

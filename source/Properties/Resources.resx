@@ -281,38 +281,38 @@
         NP6jSJTj/wKKBgNOaR0/RwAAAABJRU5ErkJggg==
 </value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="AudioFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AudioFile.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Folder_Back" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="FolderBack" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Folder_Back.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="folder_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="FolderOpen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\folder_open.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Folder_stuffed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="FolderStuffed" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Folder_stuffed.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="font" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Font" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\font.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="GenericMovieClip" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="MediaFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GenericMovieClip.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Generic_Application" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="GenericApplication" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Generic_Application.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Generic_Document" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="GenericDocument" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Generic_Document.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="generic_picture" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="GenericPicture" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\generic_picture.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Image_File" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ImageFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Image_File.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MixedMediaFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -321,13 +321,20 @@
   <data name="Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="XAML_file" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="XMLFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\XAML_file.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="zippedFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="ZippedFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\zippedFile.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="_327_Options" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Options" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\327_Options.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="QuestionBlue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Annotate_QuestionBlue.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QuestionRed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Annotate_QuestionRed.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
