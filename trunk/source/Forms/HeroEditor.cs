@@ -411,7 +411,7 @@ namespace Reanimator.Forms
             }
             text += "unknownBool_01_03: " + _heroUnit.unknownBool_01_03 + "\n";
             text += "unknownBool_06: " + _heroUnit.unknownBool_06 + "\n";
-            text += "unknownBool1: " + _heroUnit.unknownBool1 + "\n";
+            text += "unknownBool1: " + _heroUnit.isDead + "\n";
             text += "unknownCount1F: " + _heroUnit.unknownCount1F + "\n";
             text += "unitType: " + _heroUnit.unitType + "\n";
 

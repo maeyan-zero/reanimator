@@ -432,7 +432,10 @@ namespace Reanimator
         int _playerFlagCount2;								            // 8            // count of flags PlayerFlags2
         public List<int> PlayerFlags2 { get; set; }				        // 16  * _playerFlagCount2
 
-        public int unknownBool1;									    // 1    		// as above - alert if != 0
+        /// <summary>
+        /// Does NOT influence HC dead! If the character died right before saving this flag is set to 1
+        /// </summary>
+        public int isDead;									    // 1    		// as above - alert if != 0
 
         // if (testBit(bitField1, 0x0D))
         public StatBlock statBlock;
@@ -696,12 +699,7 @@ namespace Reanimator
             }
 
 
-            unit.unknownBool1 = _bitBuffer.ReadBits(1);
-            if (unit.unknownBool1 != 0)
-            {
-                return false;
-            }
-
+            unit.isDead = _bitBuffer.ReadBits(1);
 
             if (TestBit(unit._bitField1, 0x0D))
             {
@@ -1518,7 +1516,7 @@ namespace Reanimator
                 saveBuffer.WriteBits(bitField1, 32, bitField1Offset);
             }
 
-            saveBuffer.WriteBits(unit.unknownBool1, 1);
+            saveBuffer.WriteBits(unit.isDead, 1);
 
             if (use_0D_Stats > 0)
             {

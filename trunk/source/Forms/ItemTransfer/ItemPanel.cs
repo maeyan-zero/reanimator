@@ -274,7 +274,7 @@ namespace Reanimator.Forms.ItemTransfer
         public void InitButton(bool displayNameAndQuantity)
         {
             this.FlatStyle = FlatStyle.Flat;
-            this.FlatAppearance.BorderSize = 4;
+            this.FlatAppearance.BorderSize = 3;
             this.BackColor = Color.Transparent;
             this.ForeColor = Color.White;
             this.Text = string.Empty;
