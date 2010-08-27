@@ -36,7 +36,7 @@ namespace Reanimator.Forms
         private class NodeObject
         {
             public Index Index;
-            public Index.FileEntry FileIndex;
+            public Index.FileEntry FileEntry;
             public bool IsFolder;
             public bool IsBackup;
             public bool CanEdit;
@@ -50,6 +50,26 @@ namespace Reanimator.Forms
                 }
 
                 Siblings.Add(siblingNodeObject);
+            }
+
+            public NodeObject GetYoungestChild()
+            {
+                if (Siblings == null || Siblings.Count == 0 || FileEntry == null)
+                {
+                    return this;
+                }
+
+                NodeObject returnObject = this;
+                foreach (NodeObject siblingObject in Siblings)
+                {
+                    // if sibiling.FileTime > this.FileTime - i.e. sibling has bigger date; is newer
+                    if (siblingObject.FileEntry != null && siblingObject.FileEntry.FileStruct.FileTime > FileEntry.FileStruct.FileTime)
+                    {
+                        returnObject = siblingObject;
+                    }
+                }
+
+                return returnObject;
             }
         }
 
@@ -143,7 +163,7 @@ namespace Reanimator.Forms
             // loop files
             foreach (Index.FileEntry currFile in index.FileTable)
             {
-                NodeObject currNodeObject = new NodeObject { Index = index, FileIndex = currFile };
+                NodeObject currNodeObject = new NodeObject { Index = index, FileEntry = currFile };
                 String[] nodeKeys = currFile.DirectoryString.Split('\\');
                 TreeNode currTreeNode = null;
 
@@ -194,7 +214,7 @@ namespace Reanimator.Forms
                     // if curr is NOT a backup, but orig IS, then we want to update (i.e. don't care about FileTime; as above)
                     // OR if orig is older than curr, we also want to update/re-arrange NodeObjects, etc
                     if (!currNodeObject.IsBackup && origNodeObject.IsBackup ||
-                        origNodeObject.FileIndex.FileStruct.FileTime < currFile.FileStruct.FileTime)
+                        origNodeObject.FileEntry.FileStruct.FileTime < currFile.FileStruct.FileTime)
                     {
                         // set the Siblings list to the updated NodeObject and null out other
                         if (origNodeObject.Siblings != null)
@@ -211,7 +231,7 @@ namespace Reanimator.Forms
                     }
 
                     // if curr is older (or equal to; hellgate000 has duplicates) than the orig, then add this to the Siblings list (i.e. orig is newer)
-                    if (origNodeObject.FileIndex.FileStruct.FileTime >= currFile.FileStruct.FileTime)
+                    if (origNodeObject.FileEntry.FileStruct.FileTime >= currFile.FileStruct.FileTime)
                     {
                         origNodeObject.AddSibling(currNodeObject);
                         continue;
@@ -320,7 +340,7 @@ namespace Reanimator.Forms
                 return;
             }
 
-            Index.FileEntry fileIndex = nodeObject.FileIndex;
+            Index.FileEntry fileIndex = nodeObject.FileEntry;
             Debug.Assert(fileIndex != null);
 
             fileName_textBox.DataBindings.Add("Text", fileIndex, "FileNameString");
@@ -356,7 +376,7 @@ namespace Reanimator.Forms
 
             if (nodeObject.IsFolder || !nodeObject.CanEdit) return;
 
-            Index.FileEntry fileIndex = nodeObject.FileIndex;
+            Index.FileEntry fileIndex = nodeObject.FileEntry;
 
             if (fileIndex.FileNameString.EndsWith(ExcelFile.FileExtention) || fileIndex.FileNameString.EndsWith(StringsFile.FileExtention))
             {
@@ -503,7 +523,7 @@ namespace Reanimator.Forms
 
             // get path
             Index fileIndex = nodeObject.Index;
-            Index.FileEntry file = nodeObject.FileIndex;
+            Index.FileEntry file = nodeObject.FileEntry;
             String filePath = extractPatchArgs.KeepPath
                                   ? Path.Combine(extractPatchArgs.ExtractRoot, treeNode.FullPath)
                                   : Path.Combine(extractPatchArgs.ExtractRoot, file.FileNameString);
@@ -524,7 +544,7 @@ namespace Reanimator.Forms
             DialogResult extractDialogResult = DialogResult.Retry;
             while (extractDialogResult == DialogResult.Retry)
             {
-                byte[] fileBytes = nodeObject.Index.ReadDataFile(file);
+                byte[] fileBytes = nodeObject.Index.ReadDatFile(file);
                 if (fileBytes == null)
                 {
                     extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
@@ -562,7 +582,7 @@ namespace Reanimator.Forms
             {
                 // this file has siblings - loop through
                 foreach (Index.FileEntry siblingFileIndex in
-                    nodeObject.Siblings.Select(siblingNodeObject => siblingNodeObject.FileIndex).Where(fileIndex.PatchOutFile))
+                    nodeObject.Siblings.Select(siblingNodeObject => siblingNodeObject.FileEntry).Where(fileIndex.PatchOutFile))
                 {
                     fileIndexKey = siblingFileIndex.InIndex.FileNameWithoutExtension;
                     if (!indexToWrite.ContainsKey(fileIndexKey))
@@ -796,7 +816,7 @@ namespace Reanimator.Forms
            // MessageBox.Show("todo");
             //_DoApplyFilter();
 
-            //byte[] asdf = GetFileBytes(@"data\ai\carnagorpet.xml.cooked");
+            //byte[] asdf = GetFileBytes(@"data\ai\carnagorpet.xml.cooked", true);
         }
 
         private void _FilterResetButtonClick(object sender, EventArgs e)
@@ -853,14 +873,32 @@ namespace Reanimator.Forms
             ////filterNodes.Add(treeNode);
         }
 
-        public byte[] GetFileBytes(String filePath)
+        public byte[] GetFileBytes(String filePath, bool getLatestVersion)
         {
+            if (String.IsNullOrEmpty(filePath)) return null;
+
+            if (filePath[0] == '\\')
+            {
+                filePath = filePath.Replace(@"\data", "data");
+            }
+
             TreeNode treeNode = (TreeNode) _fileTable[filePath];
             if (treeNode == null) return null;
 
             NodeObject nodeObject = (NodeObject) treeNode.Tag;
+            if (getLatestVersion)
+            {
+                nodeObject = nodeObject.GetYoungestChild();
+            }
 
-            return nodeObject.Index.ReadDataFile(nodeObject.FileIndex);
+            Index idx = nodeObject.Index;
+            Debug.Assert(idx != null);
+
+            idx.BeginDatReading();
+            byte[] fileBytes = idx.ReadDatFile(nodeObject.FileEntry);
+            idx.EndDatAccess();
+
+            return fileBytes;
         }
     }
 }

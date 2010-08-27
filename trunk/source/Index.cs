@@ -413,7 +413,7 @@ namespace Reanimator
             byte[] cloneData = FileTools.StructureToByteArray(baseEntry.FileStruct);
             FileDetailsStruct fileDetailsStruct = FileTools.ByteArrayTo<FileDetailsStruct>(cloneData, 0);
 
-            FileEntry newFileEntry = new FileEntry {FileStruct = fileDetailsStruct, InIndex = this };
+            FileEntry newFileEntry = new FileEntry { FileStruct = fileDetailsStruct, InIndex = this };
 
             // update directory and file name string index offsets
             // todo: should we even allow these to be null/empty??
@@ -490,18 +490,73 @@ namespace Reanimator
 
         public bool AddFileToDat(byte[] fileData, FileEntry fileEntry, bool removeOld)
         {
-            Debug.Assert(fileData != null);
-            Debug.Assert(fileEntry != null);
-            if (DatFile == null) return false;
+            Debug.Assert(DatFile != null && fileData != null && fileEntry != null);
+
+            try
+            {
+                DatFile.Seek(0, SeekOrigin.End);
+
+                byte[] writeBuffer;
+                int writeLength;
+                if (fileEntry.CompressedSize > 0)
+                {
+                    writeBuffer = new byte[fileData.Length];
+
+                    if (IntPtr.Size == 4) // x86
+                    {
+                        UInt32 destinationLength = (UInt32)writeBuffer.Length;
+                        compress(writeBuffer, ref destinationLength, fileData, (UInt32)fileData.Length);
+                        writeLength = (int)destinationLength;
+                    }
+                    else // x64
+                    {
+                        UInt64 destinationLength = (UInt64)writeBuffer.Length;
+                        compress(writeBuffer, ref destinationLength, fileData, (UInt64)fileData.Length);
+                        writeLength = (int)destinationLength;
+                    }
+
+                    fileEntry.CompressedSize = writeLength;
+                }
+                else
+                {
+                    writeBuffer = fileData;
+                    fileEntry.CompressedSize = 0;
+                    writeLength = fileData.Length;
+                }
+
+                fileEntry.DataOffset = (int)DatFile.Position;
+                fileEntry.UncompressedSize = fileData.Length;
+                DatFile.Write(writeBuffer, 0, writeLength);
+
+                if (removeOld && fileEntry.DataOffset >= 0)
+                {
+                    return RemoveFileFromDat(fileEntry);
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                String errorMsg = String.Format("Failed to write file to .dat!\nFile: {0}\n\n{1}", fileEntry.FileName, e);
+                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                return false;
+            }
+        }
+
+        public bool RemoveFileFromDat(FileEntry fileEntry)
+        {
+            if (fileEntry.DataOffset < 0) return true;
+
 
 
 
             return true;
         }
 
-        public byte[] ReadDataFile(FileEntry file)
+        public byte[] ReadDatFile(FileEntry file)
         {
-            if (!BeginDatReading()) return null;
+            Debug.Assert(DatFile != null);
 
             int result;
             byte[] destBuffer = new byte[file.UncompressedSize];
@@ -543,34 +598,34 @@ namespace Reanimator
 
         public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, FileEntry file, bool writeIndex)
         {
-            if (DatFile == null) return;
+            //Debug.Assert(DatFile != null);
 
-            DatFile.Seek(0, SeekOrigin.End);
+            //DatFile.Seek(0, SeekOrigin.End);
 
-            if (!doCompress) return;
+            //if (!doCompress) return;
 
-            byte[] compressedBuffer = new byte[uncompressedBuffer.Length];
+            //byte[] compressedBuffer = new byte[uncompressedBuffer.Length];
 
-            int len;
-            if (IntPtr.Size == 4) // x86
-            {
-                UInt32 destinationLength = (UInt32)compressedBuffer.Length;
-                compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt32)uncompressedBuffer.Length);
-                len = (int)destinationLength;
-            }
-            else // x64
-            {
-                UInt64 destinationLength = (UInt64)compressedBuffer.Length;
-                compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt64)uncompressedBuffer.Length);
-                len = (int)destinationLength;
-            }
+            //int len;
+            //if (IntPtr.Size == 4) // x86
+            //{
+            //    UInt32 destinationLength = (UInt32)compressedBuffer.Length;
+            //    compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt32)uncompressedBuffer.Length);
+            //    len = (int)destinationLength;
+            //}
+            //else // x64
+            //{
+            //    UInt64 destinationLength = (UInt64)compressedBuffer.Length;
+            //    compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt64)uncompressedBuffer.Length);
+            //    len = (int)destinationLength;
+            //}
 
-            file.CompressedSize = len;
-            file.DataOffset = (int)DatFile.Position;
-            file.UncompressedSize = uncompressedBuffer.Length;
-            //int i = 1;
-            DatFile.Write(compressedBuffer, 0, len);
-            Modified = true;
+            //file.CompressedSize = len;
+            //file.DataOffset = (int)DatFile.Position;
+            //file.UncompressedSize = uncompressedBuffer.Length;
+            ////int i = 1;
+            //DatFile.Write(compressedBuffer, 0, len);
+            //Modified = true;
         }
 
         public byte[] GenerateIndexFile()
