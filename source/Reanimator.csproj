@@ -318,7 +318,7 @@
       <DependentUpon>ScriptEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="PathTools.cs" />
-    <Compile Include="ProcessApi.cs" />
+    <Compile Include="MemoryReader.cs" />
     <Compile Include="StringsFile.cs">
       <SubType>Code</SubType>
     </Compile>
