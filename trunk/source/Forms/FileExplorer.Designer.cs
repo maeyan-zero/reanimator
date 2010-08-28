@@ -334,7 +334,7 @@
             this.packPatch_button.Name = "packPatch_button";
             this.packPatch_button.Size = new System.Drawing.Size(122, 74);
             this.packPatch_button.TabIndex = 6;
-            this.packPatch_button.Text = "Pack and Patch Index";
+            this.packPatch_button.Text = "Pack and Patch Custom Dat";
             this.packPatch_button.UseVisualStyleBackColor = true;
             this.packPatch_button.Click += new System.EventHandler(this._PackPatchButtonClick);
             // 
@@ -346,8 +346,8 @@
             this.packPatch_label.Name = "packPatch_label";
             this.packPatch_label.Size = new System.Drawing.Size(282, 80);
             this.packPatch_label.TabIndex = 7;
-            this.packPatch_label.Text = "Pack checked files/folders into (custom?) dat file(s?), then patch necessary inde" +
-                "x files to have the game load the files from the packed .dat.";
+            this.packPatch_label.Text = "Pack checked files/folders into a custom dat/idx to have the game load the files " +
+                "from an isolated .dat.";
             this.packPatch_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // revertFile_button
