@@ -9,8 +9,7 @@ namespace Reanimator
     class Patches
     {
         public Hashtable AvailablePatches { get; private set; }
-
-        IntPtr openProcess;
+        MemoryReader memoryReader;
 
         string[] processList = 
         {
@@ -22,10 +21,12 @@ namespace Reanimator
 
         public Patches()
         {
+            memoryReader = new MemoryReader();
+
             Hashtable HardcoreMode_dx9_x64 = new Hashtable();
-            HardcoreMode_dx9_x64.Add(0x140205BA5, (byte)0x6E);
-            HardcoreMode_dx9_x64.Add(0x1401A9838, (byte)0x75);
-            HardcoreMode_dx9_x64.Add(0x1401A9846, (byte)0x74);
+            HardcoreMode_dx9_x64.Add((long)0x140205BA5, (byte)0x6E);
+            HardcoreMode_dx9_x64.Add((long)0x1401A9838, (byte)0x75);
+            HardcoreMode_dx9_x64.Add((long)0x1401A9846, (byte)0x74);
 
             Hashtable HardcoreMode = new Hashtable();
             HardcoreMode.Add("hellgate_sp_dx9_x64", HardcoreMode_dx9_x64);
@@ -36,20 +37,16 @@ namespace Reanimator
 
         public Process OpenProcess()
         {
-            Process[] result = null;
-            foreach (string processName in processList)
+            Process[] processes = null;
+            foreach (string application in processList)
             {
-                result = Process.GetProcessesByName(processName);
-                if (result.Length == 1) break;
+                processes = Process.GetProcessesByName(application);
+                if (processes.Length == 1) break;
             }
-
-            if (result.Length == 0) return null;
-
-            Process hellgateProcess = result[0];
-            openProcess = ProcessApi.OpenProcess(
-                ProcessApi.PROCESS_ALL_ACCESS, 1, (uint)hellgateProcess.Id);
-
-            return hellgateProcess;
+            if (processes.Length != 1) return null;
+            memoryReader.Open(processes[0]);
+            memoryReader.EnableDebuggerPrivileges();
+            return processes[0];
         }
 
         public bool ApplyPatches(string[] patches, string client)
@@ -63,16 +60,9 @@ namespace Reanimator
 
                 foreach (DictionaryEntry instruction in patchVersion)
                 {
-                    long laddress = (long)instruction.Key;
-                    byte bvalue = (byte)instruction.Value;
-
-                    IntPtr address = new IntPtr(laddress);
-                    byte[] value = new byte[] { bvalue };
-                    uint length = (uint)value.Length;
-                    IntPtr nothing = IntPtr.Zero;
-                    byte[] memory = new byte[4];
-                    ProcessApi.ReadProcessMemory(openProcess, address, memory, 4, out nothing);
-                    ProcessApi.WriteProcessMemory(openProcess, address, value, length, out nothing);
+                    long address = (long)instruction.Key;
+                    byte value = (byte)instruction.Value;
+                    memoryReader.WriteByte(address, value);
                 }
             }
 
@@ -81,7 +71,7 @@ namespace Reanimator
 
         public void CloseHandle()
         {
-            ProcessApi.CloseHandle(openProcess);
+            memoryReader.Close();
         }
 
         public byte[] Buffer { get; private set; }
@@ -113,7 +103,7 @@ namespace Reanimator
 ..rest:00486BC9
 ..rest:00486BC9 sub_486BC9      proc near               ; CODE XREF: sub_486E89+C3p
 ..rest:00486BC9                                         ; sub_48789B+5Fp ...
-..rest:00486BC9                 cmp     dword_A2D0AC, 1
+..rest:00486BC9                cmp     dword_A2D0AC, 1
 ..rest:00486BD0                 push    esi
 ..rest:00486BD1                 jz      short loc_486BFE
 ..rest:00486BD3                 call    sub_431844
