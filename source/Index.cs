@@ -93,6 +93,19 @@ namespace Reanimator
         );
         #endregion
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private class DatHeader
+        {
+            public UInt32 DatHead = 0x68676461;
+            public Int32 Version = 4;
+            public Int32 Unknown1 = 1;
+            public Int32 Unknown2 = 0;
+            public Int32 Unknown3 = 0;
+            public Int32 Unknown4 = 0x00001154;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 488)]
+            public byte[] hashKeys;
+        }
+
         public const UInt32 TokenHead = 0x6867696E; // 'nigh'
         public const UInt32 TokenSect = 0x68677073; // 'spgh'
         public const UInt32 TokenInfo = 0x6867696F; // 'oigh'
@@ -237,6 +250,9 @@ namespace Reanimator
             {
                 get { return DirectoryString != null && DirectoryString.Contains(BackupPrefix); }
             }
+
+            [Browsable(false)]
+            public int TempDatOffset { get; set; }
         }
 
         private byte[] _data;
@@ -245,7 +261,7 @@ namespace Reanimator
         private StringDetailsStruct[] _stringsDetails;
         private readonly List<String> _stringTable = new List<String>();
         private FileDetailsStruct[] _filesDetails;
-        public FileEntry[] FileTable { get; private set; }
+        //public FileEntry[] FileTable { get; private set; }
         public List<FileEntry> Files { get; private set; }
 
         public String FilePath { get; private set; }
@@ -265,7 +281,7 @@ namespace Reanimator
                 if (_checkedForModified) return _modified;
 
                 _checkedForModified = true;
-                _modified = FileTable.Any(file => file.DirectoryString.Contains(BackupPrefix));
+                _modified = Files.Any(file => file.DirectoryString.Contains(BackupPrefix));
                 return _modified;
             }
 
@@ -289,7 +305,7 @@ namespace Reanimator
 
         public bool ParseData(byte[] data, String filePath)
         {
-            if (data == null) return false;
+            if (data == null || data.Length == 0) return false;
 
             _data = data;
             FilePath = filePath;
@@ -381,7 +397,7 @@ namespace Reanimator
 
 
             ////// do files //////
-            FileTable = new FileEntry[_indexHeader.FileCount];
+            //FileTable = new FileEntry[_indexHeader.FileCount];
             for (int i = 0; i < _indexHeader.FileCount; i++)
             {
                 FileEntry fileEntry = new FileEntry
@@ -393,7 +409,7 @@ namespace Reanimator
                 fileEntry.DirectoryString = _stringTable[fileEntry.Directory];
                 fileEntry.FileNameString = _stringTable[fileEntry.FileName];
 
-                FileTable[i] = fileEntry;
+                //FileTable[i] = fileEntry;
                 Files.Add(fileEntry);
             }
 
@@ -402,7 +418,7 @@ namespace Reanimator
 
         public FileEntry GetFileFromIndex(String filePath)
         {
-            return String.IsNullOrEmpty(filePath) ? null : FileTable.FirstOrDefault(fileIndex => fileIndex.FullPath == filePath);
+            return String.IsNullOrEmpty(filePath) ? null : Files.FirstOrDefault(fileIndex => fileIndex.FullPath == filePath);
         }
 
         public FileEntry AddFileToIndex(FileEntry baseEntry)
@@ -429,7 +445,7 @@ namespace Reanimator
                 }
 
                 newFileEntry.FileStruct.DirectoryArrayIndex = directoryIndex;
-                // todo: update DirectoryString as well? Do we really need to?
+                newFileEntry.DirectoryString = directoryString;
             }
             if (!String.IsNullOrEmpty(baseEntry.FileNameString))
             {
@@ -440,7 +456,7 @@ namespace Reanimator
                 }
 
                 newFileEntry.FileStruct.FilenameArrayIndex = fileNameIndex;
-                // todo: update FileNameString as well? Do we really need to?
+                newFileEntry.FileNameString = baseEntry.FileNameString;
             }
 
             // add and return
@@ -467,9 +483,21 @@ namespace Reanimator
                 try
                 {
                     String filePath = String.Format(@"{0}\{1}.dat", FileDirectory, FileNameWithoutExtension);
-                    if (!File.Exists(filePath)) return false;
 
-                    DatFile = new FileStream(filePath, FileMode.Open, fileAccess);
+                    // open if exists
+                    if (File.Exists(filePath))
+                    {
+                        DatFile = new FileStream(filePath, FileMode.Open, fileAccess);
+                        return true;
+                    }
+
+                    // can we write to it?
+                    if (fileAccess == FileAccess.Read) return false;
+
+                    // create new dat and add header
+                    DatFile = new FileStream(filePath, FileMode.Create, fileAccess);
+                    DatHeader datHeader = new DatHeader();
+                    DatFile.Write(FileTools.StructureToByteArray(datHeader), (int)DatFile.Length, Marshal.SizeOf(datHeader));
                 }
                 catch (Exception)
                 {
@@ -488,73 +516,202 @@ namespace Reanimator
             }
         }
 
-        public bool AddFileToDat(byte[] fileData, FileEntry fileEntry, bool removeOld)
+        public void AddFileToDat(byte[] fileData, FileEntry fileEntry)
         {
             Debug.Assert(DatFile != null && fileData != null && fileEntry != null);
 
+            DatFile.Seek(0, SeekOrigin.End);
+
+            byte[] writeBuffer;
+            int writeLength;
+            if (fileEntry.CompressedSize > 0)
+            {
+                writeBuffer = new byte[fileData.Length];
+
+                if (IntPtr.Size == 4) // x86
+                {
+                    UInt32 destinationLength = (UInt32)writeBuffer.Length;
+                    compress(writeBuffer, ref destinationLength, fileData, (UInt32)fileData.Length);
+                    writeLength = (int)destinationLength;
+                }
+                else // x64
+                {
+                    UInt64 destinationLength = (UInt64)writeBuffer.Length;
+                    compress(writeBuffer, ref destinationLength, fileData, (UInt64)fileData.Length);
+                    writeLength = (int)destinationLength;
+                }
+
+                fileEntry.CompressedSize = writeLength;
+            }
+            else
+            {
+                writeBuffer = fileData;
+                fileEntry.CompressedSize = 0;
+                writeLength = fileData.Length;
+            }
+
+            fileEntry.DataOffset = (int)DatFile.Position;
+            fileEntry.UncompressedSize = fileData.Length;
+            DatFile.Write(writeBuffer, 0, writeLength);
+        }
+
+        // note: this function does shit all exception checking
+        // todo: "complete" me
+        public void RebuildDatFile()
+        {
+            Debug.Assert(DatFile != null);
+
+            // easiest way to remove orphan data blocks to just extract
+            // all known files then delete and remake it
+            const String tempDir = "temp";
+
+            // extract/save each file in temp dir (no point decompressing them)
             try
             {
-                DatFile.Seek(0, SeekOrigin.End);
-
-                byte[] writeBuffer;
-                int writeLength;
-                if (fileEntry.CompressedSize > 0)
+                foreach (FileEntry fileEntry in Files)
                 {
-                    writeBuffer = new byte[fileData.Length];
-
-                    if (IntPtr.Size == 4) // x86
-                    {
-                        UInt32 destinationLength = (UInt32)writeBuffer.Length;
-                        compress(writeBuffer, ref destinationLength, fileData, (UInt32)fileData.Length);
-                        writeLength = (int)destinationLength;
-                    }
-                    else // x64
-                    {
-                        UInt64 destinationLength = (UInt64)writeBuffer.Length;
-                        compress(writeBuffer, ref destinationLength, fileData, (UInt64)fileData.Length);
-                        writeLength = (int)destinationLength;
-                    }
-
-                    fileEntry.CompressedSize = writeLength;
+                    byte[] fileData = _ReadDatFile(fileEntry, false);
+                    String filePath = Path.Combine(tempDir, fileEntry.FullPath);
+                    Directory.CreateDirectory(filePath);
+                    File.WriteAllBytes(filePath, fileData);
                 }
-                else
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to write temp files!\n\n" + e, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                _DeleteTempDir(tempDir);
+                return;
+            }
+
+            // save our current index,  close our dat, and make a backup just in case
+            String datPath = DatFile.Name;
+            DatFile.Close();
+            if (!_MoveFile(datPath, datPath + ".bak"))
+            {
+                _DeleteTempDir(tempDir);
+                return;
+            }
+
+
+            // create new dat and add our files
+            if (!BeginDatWriting())
+            {
+                MessageBox.Show("Failed to create dat for writing!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _MoveFile(datPath + ".bak", datPath);
+                _DeleteTempDir(tempDir);
+                return;
+            }
+
+            try
+            {
+                foreach (FileEntry fileEntry in Files)
                 {
-                    writeBuffer = fileData;
-                    fileEntry.CompressedSize = 0;
-                    writeLength = fileData.Length;
+                    String filePath = Path.Combine(tempDir, fileEntry.FullPath);
+                    byte[] fileBytes = File.ReadAllBytes(filePath);
+
+                    fileEntry.TempDatOffset = (int)DatFile.Length;
+                    DatFile.Write(fileBytes, (int)DatFile.Length, fileBytes.Length);
                 }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("An error occured while merging dat files!\n\n" + e, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                DatFile.Close();
+                _DeleteTempFile(datPath);
+                _MoveFile(datPath + ".bak", datPath);
+                _DeleteTempDir(tempDir);
+                return;
+            }
 
-                fileEntry.DataOffset = (int)DatFile.Position;
-                fileEntry.UncompressedSize = fileData.Length;
-                DatFile.Write(writeBuffer, 0, writeLength);
+            // dat has been rebuilt - apply the DatOffset values
+            foreach (FileEntry fileEntry in Files)
+            {
+                fileEntry.DataOffset = fileEntry.TempDatOffset;
+            }
+        }
 
-                if (removeOld && fileEntry.DataOffset >= 0)
-                {
-                    return RemoveFileFromDat(fileEntry);
-                }
+        // these 3 functions look a little exccessive, but they're:
+        // "let the user know" if something has failed functions
+        // as well as "clean-up" functions
+        private static void _DeleteTempDir(String tempDir)
+        {
+            try
+            {
+                Directory.Delete(tempDir, true);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to delete temp dir!\n\n" + e, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
 
+        private static bool _MoveFile(String moveFrom, String moveTo)
+        {
+            try
+            {
+                File.Move(moveFrom, moveTo);
                 return true;
             }
             catch (Exception e)
             {
-                String errorMsg = String.Format("Failed to write file to .dat!\nFile: {0}\n\n{1}", fileEntry.FileName, e);
-                MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                MessageBox.Show("Failed to move temp files!\n\n" + e, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
                 return false;
             }
         }
 
-        public bool RemoveFileFromDat(FileEntry fileEntry)
+        private static void _DeleteTempFile(String tempFilePath)
         {
-            if (fileEntry.DataOffset < 0) return true;
-
-
-
-
-            return true;
+            try
+            {
+                File.Delete(tempFilePath);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to delete temp idx!\n\n" + e, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
         }
 
+        // todo: finish me... haven't needed it yet
+        //public bool RemoveFileFromDat(FileEntry fileEntry)
+        //{
+        //    Debug.Assert(DatFile != null && fileEntry != null && DatFile.CanWrite);
+
+        //    if (fileEntry.DataOffset < 0) return true;
+
+        //    int byteCount = fileEntry.CompressedSize > 0 ? fileEntry.CompressedSize : fileEntry.UncompressedSize;
+        //    if (byteCount <= 0) return true;
+
+        //    try
+        //    {
+        //        // create new temp .dat file
+        //        String tempPath = fileEntry.FullPath + ".temp";
+        //        FileStream tempDat = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite);
+        //        tempDat.W
+
+        //        DatFile.Seek(fileEntry.DataOffset, SeekOrigin.Begin);
+
+        //        return true;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        String errorMsg = String.Format("Failed to delete file to .dat!\nFile: {0}\n\n{1}", fileEntry.FileName, e);
+        //        MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+        //        return false;
+        //    }
+        //}
+
         public byte[] ReadDatFile(FileEntry file)
+        {
+            return _ReadDatFile(file, true);
+        }
+
+        private byte[] _ReadDatFile(FileEntry file, bool decompress)
         {
             Debug.Assert(DatFile != null);
 
@@ -562,7 +719,7 @@ namespace Reanimator
             byte[] destBuffer = new byte[file.UncompressedSize];
             DatFile.Seek(file.DataOffset, SeekOrigin.Begin);
 
-            if (file.CompressedSize > 0)
+            if (file.CompressedSize > 0 && decompress)
             {
                 byte[] srcBuffer = new byte[file.CompressedSize];
 
@@ -585,47 +742,14 @@ namespace Reanimator
             }
             else
             {
-                result = DatFile.Read(destBuffer, 0, file.UncompressedSize);
+                // if NOT decompressing, and file IS compressed (CompressedSize > 0), then read the compressed size
+                int readLength = !decompress && file.CompressedSize > 0 ? file.CompressedSize : file.UncompressedSize;
 
-                if (result != file.UncompressedSize)
-                {
-                    return null;
-                }
+                result = DatFile.Read(destBuffer, 0, readLength);
+                if (result != file.UncompressedSize) return null;
             }
 
             return destBuffer;
-        }
-
-        public void AppendToDat(byte[] uncompressedBuffer, bool doCompress, FileEntry file, bool writeIndex)
-        {
-            //Debug.Assert(DatFile != null);
-
-            //DatFile.Seek(0, SeekOrigin.End);
-
-            //if (!doCompress) return;
-
-            //byte[] compressedBuffer = new byte[uncompressedBuffer.Length];
-
-            //int len;
-            //if (IntPtr.Size == 4) // x86
-            //{
-            //    UInt32 destinationLength = (UInt32)compressedBuffer.Length;
-            //    compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt32)uncompressedBuffer.Length);
-            //    len = (int)destinationLength;
-            //}
-            //else // x64
-            //{
-            //    UInt64 destinationLength = (UInt64)compressedBuffer.Length;
-            //    compress(compressedBuffer, ref destinationLength, uncompressedBuffer, (UInt64)uncompressedBuffer.Length);
-            //    len = (int)destinationLength;
-            //}
-
-            //file.CompressedSize = len;
-            //file.DataOffset = (int)DatFile.Position;
-            //file.UncompressedSize = uncompressedBuffer.Length;
-            ////int i = 1;
-            //DatFile.Write(compressedBuffer, 0, len);
-            //Modified = true;
         }
 
         public byte[] GenerateIndexFile()
@@ -637,7 +761,7 @@ namespace Reanimator
             const Int32 version = 4;
             FileTools.WriteToBuffer(ref buffer, ref offset, TokenHead);
             FileTools.WriteToBuffer(ref buffer, ref offset, version);
-            FileTools.WriteToBuffer(ref buffer, ref offset, _indexHeader.FileCount);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Files.Count);
 
 
 
@@ -657,29 +781,36 @@ namespace Reanimator
 
             ////// string data //////
             FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
-            //int i = 0;
+            int i = 0;
             foreach (String str in _stringTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
-                offset += 4; // unknown  -  not required apparently
-                //FileTools.WriteToBuffer(ref _buffer, ref offset, _stringTableUnknowns[i]);
-                //i++;
+
+                // while the stringsDetails.Uknown isn't required by the game - let's not just zero it out
+                if (_stringsDetails == null || i >= _stringsDetails.Length)
+                {
+                    offset += 4; // leave new strings as null - doesn't really matter though
+                    continue;
+                }
+
+                FileTools.WriteToBuffer(ref buffer, ref offset, _stringsDetails[i].Unknown);
+                i++;
             }
 
 
 
             ////// file block //////
-            //const UInt64 foo = 0xDEADBEEFDEADBEEF;
-            FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
+            const UInt32 foo = 0;
             //i = 0;
-            foreach (FileEntry fileIndex in FileTable)
+            FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
+            foreach (FileEntry fileIndex in Files)
             {
-                // this looks gross, but is just for testing
+                // todo: this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
                 FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
-
                 //FileTools.WriteToBuffer(ref buffer, ref offset, foo);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FolderPathHash);
+                //FileTools.WriteToBuffer(ref buffer, ref offset, foo);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FolderPathHash); // tested with 0xDEADBEEF and 0x00000000, game didn't care
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FileNameHash); // game freezes if not correct value
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
                 offset += 4; // null
@@ -697,6 +828,7 @@ namespace Reanimator
                 FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
             }
 
+            // get final buffer of correct size
             byte[] returnBuffer = new byte[offset];
             Buffer.BlockCopy(buffer, 0, returnBuffer, 0, returnBuffer.Length);
             return returnBuffer;
@@ -704,9 +836,9 @@ namespace Reanimator
 
         public bool PatchOutFile(int i)
         {
-            if (i < 0 || i > FileTable.Length) return false;
+            if (i < 0 || i > Files.Count) return false;
 
-            FileEntry fileIndex = FileTable[i];
+            FileEntry fileIndex = Files[i];
             return PatchOutFile(fileIndex);
         }
 

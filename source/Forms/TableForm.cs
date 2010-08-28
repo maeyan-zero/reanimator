@@ -173,7 +173,7 @@ namespace Reanimator
 
         private void extractAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExtractFiles(index.FileTable);
+            //ExtractFiles(index.FileTable);
         }
 
         private void ExtractFiles(Index.FileEntry[] files)
@@ -448,35 +448,35 @@ namespace Reanimator
 
         void ReplaceFiles(Index.FileEntry[] files)
         {
-            if (!index.BeginDatWriting())
-            {
-                MessageBox("Failed to open accompanying dat file!\n" + index.FileNameWithoutExtension, "Error",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            //if (!index.BeginDatWriting())
+            //{
+            //    MessageBox("Failed to open accompanying dat file!\n" + index.FileNameWithoutExtension, "Error",
+            //                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
 
-            foreach (Index.FileEntry file in files)
-            {
-                OpenFileDialog fileDialog = new OpenFileDialog();
-                fileDialog.ShowDialog();
+            //foreach (Index.FileEntry file in files)
+            //{
+            //    OpenFileDialog fileDialog = new OpenFileDialog();
+            //    fileDialog.ShowDialog();
 
-                if (fileDialog.FileName == "") continue;
+            //    if (fileDialog.FileName == "") continue;
 
-                using (FileStream buffer = new FileStream(fileDialog.FileName, FileMode.Open))
-                {
-                    try
-                    {
-                        byte[] byteBuffer = new byte[buffer.Length];
-                        buffer.Read(byteBuffer, 0, (int)buffer.Length);
-                        index.AppendToDat(byteBuffer, true, file, true);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Caught a problem replacing a file.");
-                    }
-                }
-            }
-            index.EndDatAccess();
+            //    using (FileStream buffer = new FileStream(fileDialog.FileName, FileMode.Open))
+            //    {
+            //        try
+            //        {
+            //            byte[] byteBuffer = new byte[buffer.Length];
+            //            buffer.Read(byteBuffer, 0, (int)buffer.Length);
+            //            index.AppendToDat(byteBuffer, true, file, true);
+            //        }
+            //        catch
+            //        {
+            //            Console.WriteLine("Caught a problem replacing a file.");
+            //        }
+            //    }
+            //}
+            //index.EndDatAccess();
         }
     }
 }

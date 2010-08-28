@@ -332,7 +332,7 @@ namespace Reanimator
 
             TableForm indexExplorer = new TableForm(index)
             {
-                dataGridView = { DataSource = index.FileTable },
+                dataGridView = { DataSource = index.Files.ToArray() },
                 MdiParent = this
             };
             indexExplorer.Text += ": " + fileName;

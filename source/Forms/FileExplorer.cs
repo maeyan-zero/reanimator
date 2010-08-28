@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Reanimator.Properties;
 
@@ -13,7 +12,7 @@ namespace Reanimator.Forms
 {
     public partial class FileExplorer : Form
     {
-        private const String ReanimatorIndex = "sp_hellgate_reanimator";
+        private const String ReanimatorIndex = "sp_hellgate_1337";
 
         private static readonly Icon[] Icons = { Resources.GenericDocument, Resources.Folder, Resources.FolderOpen, Resources.XMLFile, Resources.AudioFile, Resources.MediaFile };
         private enum IconIndex
@@ -21,13 +20,14 @@ namespace Reanimator.Forms
             GenericDocument,
             Folder,
             FolderOpen,
-            XMLFile,
+            XmlFile,
             AudioFile,
             MediaFile
         }
 
         private static readonly Color BackupColor = Color.IndianRed;
         private static readonly Color NoEditColor = Color.DimGray;
+        private static readonly Color BaseColor = Color.Black;
 
         private static readonly String[] IndexQueryStrings = { "hellgate*.dat", "sp_hellgate*.dat" };
         private readonly List<Index> _indexFiles;
@@ -161,7 +161,7 @@ namespace Reanimator.Forms
         private void _ParseIndexFile(Index index)
         {
             // loop files
-            foreach (Index.FileEntry currFile in index.FileTable)
+            foreach (Index.FileEntry currFile in index.Files)
             {
                 NodeObject currNodeObject = new NodeObject { Index = index, FileEntry = currFile };
                 String[] nodeKeys = currFile.DirectoryString.Split('\\');
@@ -248,7 +248,7 @@ namespace Reanimator.Forms
                 // do some pretty icon stuffs and other file-type checks
                 if (currFile.FileNameString.EndsWith(XmlCookedFile.FileExtention))
                 {
-                    node.ImageIndex = (int)IconIndex.XMLFile;
+                    node.ImageIndex = (int)IconIndex.XmlFile;
 
                     // we can only edit skills xml.cooked at the moment
                     if (nodeKeys.Contains(XmlCookedSkill.RootFolder))
@@ -346,7 +346,7 @@ namespace Reanimator.Forms
             fileName_textBox.DataBindings.Add("Text", fileIndex, "FileNameString");
             fileSize_textBox.DataBindings.Add("Text", fileIndex, "UncompressedSize");
             fileCompressed_textBox.DataBindings.Add("Text", fileIndex, "CompressedSize");
-            fileTime_textBox.Text = (DateTime.FromFileTime((long)fileIndex.FileStruct.FileTime)).ToString();
+            fileTime_textBox.Text = (DateTime.FromFileTime(fileIndex.FileStruct.FileTime)).ToString();
 
             if (fileIndex.Modified)
             {
@@ -397,71 +397,126 @@ namespace Reanimator.Forms
             }
         }
 
-        private class ExtractPatchArgs
+        private class ExtractPackPatchArgs
         {
-            public bool KeepPath;
+            public bool KeepStructure;
             public bool PatchFiles;
-            public String ExtractRoot;
+            public String RootDir;
+            public List<TreeNode> CheckedNodes;
+            public Index PackIndex;
         }
 
         private void _ExtractButtonClick(object sender, EventArgs e)
         {
+            // make sure we have at least 1 checked file
+            List<TreeNode> checkedNodes = new List<TreeNode>();
+            if (_GetCheckedNodes(files_treeView.Nodes, checkedNodes) == 0)
+            {
+                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                return;
+            }
+
             // where do we want to save it
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog {SelectedPath = Config.HglDir};
             if (folderBrowserDialog.ShowDialog(this) != DialogResult.OK) return;
 
             // do we want to keep the directory structure?
-            bool keepPath = false;
-            DialogResult dr = MessageBox.Show("Keep directory structure?", "Path", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-            if (dr == DialogResult.Cancel) return;
+            DialogResult drKeepStructure = MessageBox.Show("Keep directory structure?", "Path", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (drKeepStructure == DialogResult.Cancel) return;
 
-            if (dr == DialogResult.Yes)
+            ExtractPackPatchArgs extractPatchArgs = new ExtractPackPatchArgs
             {
-                keepPath = true;
-            }
+                KeepStructure = (drKeepStructure == DialogResult.Yes),
+                PatchFiles = false,
+                RootDir = folderBrowserDialog.SelectedPath,
+                CheckedNodes = checkedNodes
+            };
 
-            ExtractPatchArgs extractPatchArgs = new ExtractPatchArgs
-                                                    {
-                                                        KeepPath = keepPath,
-                                                        PatchFiles = false,
-                                                        ExtractRoot = folderBrowserDialog.SelectedPath
-                                                    };
             ProgressForm progressForm = new ProgressForm(_DoExtractPatch, extractPatchArgs);
-            progressForm.SetLoadingText("Patching and Extracting files...");
-            progressForm.SetStyle(ProgressBarStyle.Marquee);
+            progressForm.SetLoadingText(String.Format("Extracting files... ({0})", checkedNodes.Count));
             progressForm.Show();
         }
 
         private void _ExtractPatchButtonClick(object sender, EventArgs e)
         {
+            // make sure we have at least 1 checked file
+            List<TreeNode> checkedNodes = new List<TreeNode>();
+            if (_GetCheckedNodes(files_treeView.Nodes, checkedNodes) == 0)
+            {
+                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                return;
+            }
+
             DialogResult dialogResult = MessageBox.Show(
-                "Extract & Patch out the selected file's?",
+                "Extract & Patch out checked file's?",
                 "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.No) return;
 
-            ExtractPatchArgs extractPatchArgs = new ExtractPatchArgs
+            ExtractPackPatchArgs extractPatchArgs = new ExtractPackPatchArgs
             {
-                KeepPath = true,
+                KeepStructure = true,
                 PatchFiles = true,
-                ExtractRoot = Config.HglDir
+                RootDir = Config.HglDir,
+                CheckedNodes = checkedNodes
             };
+
             ProgressForm progressForm = new ProgressForm(_DoExtractPatch, extractPatchArgs);
-            progressForm.SetLoadingText("Patching and Extracting files...");
-            progressForm.SetStyle(ProgressBarStyle.Marquee);
+            progressForm.SetLoadingText(String.Format("Extracting and Patching files... ({0})", checkedNodes.Count));
             progressForm.Show();
+        }
+
+        private static int _GetCheckedNodes(TreeNodeCollection nodes, ICollection<TreeNode> checkedNodes)
+        {
+            Debug.Assert(checkedNodes != null);
+
+            foreach (TreeNode childNode in nodes)
+            {
+                // if folder, check children
+                if (childNode.Nodes.Count > 0)
+                {
+                    _GetCheckedNodes(childNode.Nodes, checkedNodes);
+                    continue;
+                }
+
+                if (!childNode.Checked) continue;
+
+                checkedNodes.Add(childNode);
+            }
+
+            return checkedNodes.Count;
         }
 
         private void _DoExtractPatch(ProgressForm progressForm, Object param)
         {
-            // todo: add proper progress counter, etc?
-            progressForm.SetCurrentItemText("Extracting file(s)...");
-            ExtractPatchArgs extractPatchArgs = (ExtractPatchArgs) param;
+            ExtractPackPatchArgs extractPatchArgs = (ExtractPackPatchArgs) param;
             DialogResult overwrite = DialogResult.None;
             Hashtable indexToWrite = new Hashtable();
 
+            const int progressStepRate = 50;
+            progressForm.ConfigBar(1, extractPatchArgs.CheckedNodes.Count, progressStepRate);
+            progressForm.SetCurrentItemText("Extracting file(s)...");
+
             // might as well just loop all nodes - slower finding and cloning them; using the .Checked setter is the killer
-            if (files_treeView.Nodes.Cast<TreeNode>().Any(node => !_ExtractPatchFile(node, ref overwrite, indexToWrite, extractPatchArgs)))
+            if (!_BeginDatAccess(_indexFiles, false))
             {
+                MessageBox.Show(
+                    "Failed to open dat files for reading!\nEnsure no other programs are using them and try again.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            int i = 0;
+            foreach (TreeNode extractNode in extractPatchArgs.CheckedNodes)
+            {
+                if (i % 50 == 0)
+                {
+                    progressForm.SetCurrentItemText(String.Format("Extracting file... {0}", extractNode.FullPath));
+                }
+                i++;
+
+                if (_ExtractPatchFile(extractNode, ref overwrite, indexToWrite, extractPatchArgs)) continue;
+
                 if (overwrite != DialogResult.Cancel)
                 {
                     MessageBox.Show("Unexpected error, extraction process terminated!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -469,6 +524,7 @@ namespace Reanimator.Forms
 
                 return;
             }
+            _EndDatAccess(_indexFiles);
 
             // are we patching?
             if (!extractPatchArgs.PatchFiles)
@@ -490,12 +546,31 @@ namespace Reanimator.Forms
             foreach (Index idx in
                 from DictionaryEntry indexDictionary in indexToWrite select (Index)indexDictionary.Value)
             {
-                File.WriteAllBytes(idx.FilePath, idx.GenerateIndexFile());
+                byte[] idxData = idx.GenerateIndexFile();
+                Crypt.Encrypt(idxData);
+                File.WriteAllBytes(idx.FilePath, idxData);
             }
-            MessageBox.Show("Modified index file(s) saved sucessfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);            
+            MessageBox.Show("Modified index file(s) saved sucessfully!", "Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
         }
 
-        private static bool _ExtractPatchFile(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite, ExtractPatchArgs extractPatchArgs)
+        private static bool _BeginDatAccess(IEnumerable<Index> indexList, bool write)
+        {
+            Debug.Assert(indexList != null);
+            return indexList.Select(index => write ? index.BeginDatWriting() : index.BeginDatReading()).All(result => result);
+        }
+
+        private static void _EndDatAccess(IEnumerable<Index> indexList)
+        {
+            Debug.Assert(indexList != null);
+
+            foreach (Index index in indexList)
+            {
+                index.EndDatAccess();
+            }
+        }
+
+        private static bool _ExtractPatchFile(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite, ExtractPackPatchArgs extractPatchArgs)
         {
             if (treeNode == null) return false;
 
@@ -524,9 +599,9 @@ namespace Reanimator.Forms
             // get path
             Index fileIndex = nodeObject.Index;
             Index.FileEntry file = nodeObject.FileEntry;
-            String filePath = extractPatchArgs.KeepPath
-                                  ? Path.Combine(extractPatchArgs.ExtractRoot, treeNode.FullPath)
-                                  : Path.Combine(extractPatchArgs.ExtractRoot, file.FileNameString);
+            String filePath = extractPatchArgs.KeepStructure
+                                  ? Path.Combine(extractPatchArgs.RootDir, treeNode.FullPath)
+                                  : Path.Combine(extractPatchArgs.RootDir, file.FileNameString);
 
 
             // does it exist?
@@ -576,6 +651,11 @@ namespace Reanimator.Forms
                 file.FileNameString.EndsWith(".bik")) return true;
 
 
+            // if we're patching out the file, then change its bgColor and set its nodeObject state to backup
+            treeNode.ForeColor = BackupColor;
+            nodeObject.IsBackup = true;
+
+
             // is this file located else where? (i.e. does it have Siblings)
             String fileIndexKey;
             if (nodeObject.Siblings != null && nodeObject.Siblings.Count > 0)
@@ -609,149 +689,269 @@ namespace Reanimator.Forms
 
         private void _PackPatchButtonClick(object sender, EventArgs e)
         {
-            //// get our custom index - or create if doesn't exist
-            //Index packIndex = _indexFiles.FirstOrDefault(index => index.FileNameWithoutExtension == "sp_hellgate_reanimator");
-            //if (packIndex == null)
-            //{
-            //    String indexPath = String.Format(@"data\{0}.idx", ReanimatorIndex);
-            //    indexPath = Path.Combine(Config.HglDir, indexPath);
-            //    try
-            //    {
-            //        File.Create(indexPath);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show("Failed to create custom index file!\n\n" + ex, "Error", MessageBoxButtons.OK,
-            //                        MessageBoxIcon.Error);
-            //        return;
-            //    }
+            // make sure we have at least 1 checked file
+            List<TreeNode> checkedNodes = new List<TreeNode>();
+            if (_GetCheckedNodes(files_treeView.Nodes, checkedNodes) == 0)
+            {
+                MessageBox.Show("No files checked for packing!", "Need Files", MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                return;
+            }
 
-            //    packIndex = new Index(indexPath);
-            //}
+            // get our custom index - or create if doesn't exist
+            Index packIndex = _indexFiles.FirstOrDefault(index => index.FileNameWithoutExtension == ReanimatorIndex);
+            if (packIndex == null)
+            {
+                String indexPath = String.Format(@"data\{0}.idx", ReanimatorIndex);
+                indexPath = Path.Combine(Config.HglDir, indexPath);
+                try
+                {
+                    File.Create(indexPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to create custom index file!\n\n" + ex, "Error", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    return;
+                }
 
-            //ProgressForm progressForm = new ProgressForm(_DoPackPatch, packIndex);
-            //progressForm.SetLoadingText("Packing and Patching files...");
-            //progressForm.SetStyle(ProgressBarStyle.Marquee);
-            //progressForm.Show();
+                packIndex = new Index(indexPath);
+                _indexFiles.Add(packIndex);
+            }
+
+            ExtractPackPatchArgs extractPackPatchArgs = new ExtractPackPatchArgs
+            {
+                PackIndex = packIndex,
+                RootDir = Config.HglDir,
+                CheckedNodes = checkedNodes,
+                PatchFiles = false
+            };
+
+            files_treeView.BeginUpdate();
+            ProgressForm progressForm = new ProgressForm(_DoPackPatch, extractPackPatchArgs);
+            progressForm.Disposed += delegate { files_treeView.EndUpdate(); };
+            progressForm.SetLoadingText("Packing and Patching files...");
+            progressForm.Show();
         }
         
         private void _DoPackPatch(ProgressForm progressForm, Object param)
         {
-            //Index packIndex = (Index)param;
-            //Debug.Assert(packIndex != null);
+            ExtractPackPatchArgs args = (ExtractPackPatchArgs) param;
+
+            // find which checked nodes actually have files we can pack
+            StringWriter packResults = new StringWriter();
+
+            String state = String.Format("Checking {0} file(s) for packing...", args.CheckedNodes.Count);
+            const int packCheckStep = 200;
+            progressForm.SetLoadingText(state);
+            progressForm.ConfigBar(0, args.CheckedNodes.Count, packCheckStep);
+            packResults.WriteLine(state);
+
+            int i = 0;
+            List<TreeNode> packNodes = new List<TreeNode>();
+            foreach (TreeNode checkedNode in args.CheckedNodes)
+            {
+                String filePath = Path.Combine(args.RootDir, checkedNode.FullPath);
+
+                if (i % packCheckStep == 0)
+                {
+                    progressForm.SetCurrentItemText(filePath);
+                }
+                i++;
+
+                // ensure exists
+                if (!File.Exists(filePath))
+                {
+                    packResults.WriteLine("{0} - File Not Found", filePath);
+                    continue;
+                }
+
+                // ensure it was once packed (need FilePathHash etc)
+                NodeObject nodeObject = (NodeObject) checkedNode.Tag;
+                if (nodeObject.FileEntry == null ||
+                    nodeObject.FileEntry.FileStruct == null ||
+                    nodeObject.FileEntry.FileStruct.FileNameHash == 0)
+                {
+                    packResults.WriteLine("{0} - File Has No Base Version", filePath);
+                    continue;
+                }
+
+                packResults.WriteLine(filePath);
+                packNodes.Add(checkedNode);
+            }
 
 
-            //// find/check which files exist
-            //progressForm.SetCurrentItemText("Finding file(s)...");
-            //List<TreeNode> packFiles = new List<TreeNode>();
-            //if (files_treeView.Nodes.Cast<TreeNode>().Any(treeNode => !_PatchPackCheckFiles(treeNode, packFiles)))
-            //{
-            //    MessageBox.Show("Pack and Patching process aborted!", "Notice", MessageBoxButtons.OK,
-            //                    MessageBoxIcon.Information);
-            //    return;
-            //}
+            // write our error log if we have it
+            const String packResultsFile = "packResults.log";
+            if (packNodes.Count != args.CheckedNodes.Count)
+            {
+                try
+                {
+                    File.WriteAllText(packResultsFile, packResults.ToString());
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Failed to write to log file!\n\n" + e, "Warning", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Exclamation);
+                }
+                
 
-            //if (packFiles.Count <= 0)
-            //{
-            //    MessageBox.Show("No files found for packing!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            //    return;
-            //}
+                // can we pack any?
+                if (packNodes.Count == 0)
+                {
+                    String errorMsg =
+                        String.Format("None of the {0} files were able to be packed!\nSee {1} for more details.",
+                                      args.CheckedNodes.Count, packResultsFile);
+                    MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Exclamation);
+                    return;
+                }
+                else
+                {
+                    String errorMsg =
+                        String.Format("Of the {0} files checked, only {1} will be able to be packed.\nSee {2} for more details.\n\nContinue with packing and patching process?",
+                                      args.CheckedNodes.Count, packNodes.Count, packResultsFile);
+                    DialogResult continuePacking = MessageBox.Show(errorMsg, "Notice", MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Information);
+                    if (continuePacking == DialogResult.No) return;
+                }
+            }
 
 
-            //// update pack index
-            //progressForm.SetCurrentItemText("Updating index and packing file(s)...");
-            //if (!packIndex.BeginDatWriting())
-            //{
-            //    MessageBox.Show("Failed to open .dat file for writing!", "Error", MessageBoxButtons.OK,
-            //                    MessageBoxIcon.Error);
-            //    return;
-            //}
+            // pack our files
+            if (!_BeginDatAccess(_indexFiles, true))
+            {
+                MessageBox.Show(
+                    "Failed to open dat files for writing!\nEnsure no other programs are using them and try again.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            //// todo: this needs to be rewritten looks/feels gross shuffling the fileEntry around like this
-            //foreach (TreeNode packNode in packFiles)
-            //{
-            //    NodeObject packObject = (NodeObject) packNode.Tag;
+            state = String.Format("Packing {0} files...", packNodes.Count);
+            progressForm.ConfigBar(0, packNodes.Count, packCheckStep);
+            progressForm.SetLoadingText(state);
+            packResults.WriteLine(state);
 
-            //    // does the file exist in the packIndex - if not, add
-            //    Index.FileEntry fileEntry = packIndex.GetFileFromIndex(packNode.FullPath);
-            //    if (fileEntry == null)
-            //    {
-            //        if (packObject.FileIndex == null)
-            //        {
-            //            // todo: add yes/no continue/cancel etc
-            //            MessageBox.Show("Unable to add file to index; file has no base.\n" + packNode.FullPath, "Error",
-            //                            MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            //            continue;
-            //        }
+            i = 0;
+            bool allNodesPacked = true;
+            bool datNeedsCleaning = false;
+            foreach (TreeNode packNode in packNodes)
+            {
+                NodeObject oldNodeObject = (NodeObject)packNode.Tag;
 
-            //        fileEntry = packIndex.AddFileToIndex(packObject.FileIndex);
-            //    }
+                if (i % packCheckStep == 0)
+                {
+                    progressForm.SetCurrentItemText(packNode.FullPath);
+                }
+                i++;
 
-            //    // update fileTime to now - ensures it will override older versions
-            //    fileEntry.FileStruct.FileTime = DateTime.Now.ToFileTime();
+                // add to our custom index if not already present
+                Index.FileEntry fileEntry = args.PackIndex.GetFileFromIndex(packNode.FullPath);
+                if (fileEntry == null)
+                {
+                    fileEntry = args.PackIndex.AddFileToIndex(oldNodeObject.FileEntry);
+                }
+                else
+                {
+                    // file exists - we'll need to clean the dat afterwards and remove orphaned data bytes
+                    datNeedsCleaning = true;
+                }
 
-            //    String filePath = Path.Combine(Config.HglDir, packNode.FullPath);
-            //    byte[] fileData;
-            //    try
-            //    {
-            //        fileData = File.ReadAllBytes(filePath);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        // todo: add yes/no continue/cancel etc
-            //        MessageBox.Show("Failed to read in file for packing!\n\n" + ex, "Error", MessageBoxButtons.OK,
-            //                        MessageBoxIcon.Error);
-            //        continue;
-            //    }
+                // update fileTime to now - ensures it will override older versions
+                fileEntry.FileStruct.FileTime = DateTime.Now.ToFileTime();
 
-            //    if (!packIndex.AddFileToDat(fileData, fileEntry, true))
-            //    {
-            //        MessageBox.Show("Failed pack file!\n" + packNode.FullPath, "Error", MessageBoxButtons.OK,
-            //                        MessageBoxIcon.Exclamation);
-            //    }
-            //}
+                // read in file data
+                String filePath = Path.Combine(Config.HglDir, packNode.FullPath);
+                byte[] fileData;
+                try
+                {
+                    fileData = File.ReadAllBytes(filePath);
+                }
+                catch (Exception)
+                {
+                    packResults.WriteLine("{0} - Failed to read file data", filePath);
+                    allNodesPacked = false;
+                    continue;
+                }
 
-            //packIndex.EndDatAccess();
+                // append to dat file
+                try
+                {
+                    args.PackIndex.AddFileToDat(fileData, fileEntry);
+                }
+                catch (Exception)
+                {
+                    packResults.WriteLine("{0} - Failed to add to data file", filePath);
+                    allNodesPacked = false;
+                    continue;
+                }
+
+                packResults.WriteLine(filePath);
+
+                // update our node object while we're here
+                oldNodeObject.AddSibling(oldNodeObject);
+                NodeObject newNodeObject = new NodeObject
+                {
+                    Siblings = oldNodeObject.Siblings,
+                    CanEdit =  oldNodeObject.CanEdit,
+                    FileEntry = fileEntry,
+                    Index = args.PackIndex,
+                    IsBackup = false,
+                    IsFolder = false
+                };
+
+                packNode.Tag = newNodeObject;
+                packNode.ForeColor = BaseColor;
+            }
+
+
+            // were all files packed?
+            if (!allNodesPacked)
+            {
+                try
+                {
+                    File.WriteAllText(packResultsFile, packResults.ToString());
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Failed to write to log file!\n\n" + e, "Warning", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Exclamation);
+                }
+
+                String warningMsg = String.Format("Not all files were packed!\nCheck {0} for more details.",
+                                                packResultsFile);
+                MessageBox.Show(warningMsg, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+
+
+            // do we need to clean our dat?
+            progressForm.SetLoadingText("Generating and saving files...");
+            progressForm.SetStyle(ProgressBarStyle.Marquee);
+            if (datNeedsCleaning)
+            {
+                progressForm.SetCurrentItemText("Removing orphan data...");
+                args.PackIndex.RebuildDatFile();
+            }
+            _EndDatAccess(_indexFiles);
             
             
-            //// write index
-            //progressForm.SetCurrentItemText("Writing index...");
-            //try
-            //{
-            //    File.WriteAllBytes(packIndex.FilePath, packIndex.GenerateIndexFile());
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Failed to write updated index file!\n\n" + ex, "Error", MessageBoxButtons.OK,
-            //                    MessageBoxIcon.Error);
-            //    return;
-            //}
+            // write updated index
+            progressForm.SetCurrentItemText("Writing update dat index...");
+            try
+            {
+                byte[] idxBytes = args.PackIndex.GenerateIndexFile();
+                Crypt.Encrypt(idxBytes);
+                File.WriteAllBytes(args.PackIndex.FilePath, idxBytes);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to write updated index file!\n\n" + e, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                return;
+            }
 
-            //MessageBox.Show("File packing and index/dat writing completed!", "Sucess", MessageBoxButtons.OK,
-            //                MessageBoxIcon.Information);
-        }
-
-        private static bool _PatchPackCheckFiles(TreeNode treeNode, List<TreeNode> packFiles)
-        {
-            //NodeObject nodeObject = (NodeObject) treeNode.Tag;
-
-            //if (nodeObject.IsFolder)
-            //{
-            //    return treeNode.Nodes.Cast<TreeNode>().All(childNode => _PatchPackCheckFiles(childNode, packFiles));
-            //}
-
-            //if (!treeNode.Checked) return true;
-
-            //String filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
-            //if (!File.Exists(filePath))
-            //{
-            //    DialogResult dialogResult = MessageBox.Show("A checked file was not found for packing:\n" + filePath + "\n\nIgnore missing checked files and continue?", "Warning",
-            //                                                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            //    return dialogResult == DialogResult.Yes;
-            //}
-
-            //packFiles.Add(treeNode);
-            return true;
+            MessageBox.Show("File packing and idx/dat writing completed!", "Success", MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
         }
 
         private void _RevertRestoreButtonClick(object sender, EventArgs e)
@@ -813,7 +1013,7 @@ namespace Reanimator.Forms
 
         private void _FilterApplyButtonClick(object sender, EventArgs e)
         {
-           // MessageBox.Show("todo");
+            MessageBox.Show("todo");
             //_DoApplyFilter();
 
             //byte[] asdf = GetFileBytes(@"data\ai\carnagorpet.xml.cooked", true);
@@ -821,16 +1021,31 @@ namespace Reanimator.Forms
 
         private void _FilterResetButtonClick(object sender, EventArgs e)
         {
-            //MessageBox.Show("todo");
+            MessageBox.Show("todo");
             //filter_textBox.Text = "*.*";
             //_DoApplyFilter();
 
 
+            //// ignore me - alex's testing stuffs ////
+
 
             //Index idx = _indexFiles.FirstOrDefault(i => i.FileNameWithoutExtension == "hellgate000");
+            //Index idx = _indexFiles.FirstOrDefault(i => i.FileNameWithoutExtension == ReanimatorIndex);
             //Debug.Assert(idx != null);
+            //byte[] data = idx.GenerateIndexFile();
+            //File.WriteAllBytes(idx.FilePath + ".decrypt", data);
+            //Crypt.Encrypt(data);
+            //File.WriteAllBytes(idx.FilePath, data);
 
-            //File.WriteAllBytes(idx.FilePath, idx.GenerateIndexFile());
+
+
+
+            //idx = _indexFiles.FirstOrDefault(i => i.FileNameWithoutExtension == "sp_hellgate_1.10.180.3416_1.18074.70.4256");
+            //Debug.Assert(idx != null);
+            //data = idx.GenerateIndexFile();
+            //File.WriteAllBytes(idx.FilePath + ".decrypt", data);
+            //Crypt.Encrypt(data);
+            //File.WriteAllBytes(idx.FilePath, data);
         }
 
         //TreeView filteredTreeView = new TreeView();
