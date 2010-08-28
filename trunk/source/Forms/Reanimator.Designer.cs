@@ -90,6 +90,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.patchToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -359,6 +360,7 @@
             this.toolsMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clientPatchesToolStripMenuItem,
             this.installModificationsToolStripMenuItem,
+            this.patchToolToolStripMenuItem,
             this.tradeItemsToolStripMenuItem,
             this.searchTablesToolStripMenuItem,
             this.toolStripSeparator9,
@@ -611,6 +613,13 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
+            // patchToolToolStripMenuItem
+            // 
+            this.patchToolToolStripMenuItem.Name = "patchToolToolStripMenuItem";
+            this.patchToolToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.patchToolToolStripMenuItem.Text = "Patch Tool";
+            this.patchToolToolStripMenuItem.Click += new System.EventHandler(this._PatchToolToolStripMenuItem_Click);
+            // 
             // Reanimator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -698,6 +707,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem installModificationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem characterFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem patchToolToolStripMenuItem;
     }
 }
 

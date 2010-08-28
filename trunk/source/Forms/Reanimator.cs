@@ -820,5 +820,19 @@ namespace Reanimator
                 ExceptionLogger.LogException(ex, "_ScriptEditorToolStripMenuItem_Click", false);
             }
         }
+
+        private void _PatchToolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                PatchForm patchForm = new PatchForm();
+                patchForm.MdiParent = this;
+                patchForm.Show();
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "_PatchToolToolStripMenuItem_Click", false);
+            }
+        }
     }
 }
