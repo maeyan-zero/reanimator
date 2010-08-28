@@ -1,7 +1,89 @@
-﻿namespace Reanimator
+﻿using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Collections;
+using System.Collections.Generic;
+using System;
+
+namespace Reanimator
 {
     class Patches
     {
+        public Hashtable AvailablePatches { get; private set; }
+
+        IntPtr openProcess;
+
+        string[] processList = 
+        {
+            "hellgate_sp_dx9_x86",
+            "hellgate_sp_dx10_x86",
+            "hellgate_sp_dx9_x64",
+            "hellgate_sp_dx10_x64"
+        };
+
+        public Patches()
+        {
+            Hashtable HardcoreMode_dx9_x64 = new Hashtable();
+            HardcoreMode_dx9_x64.Add(0x140205BA5, (byte)0x6E);
+            HardcoreMode_dx9_x64.Add(0x1401A9838, (byte)0x75);
+            HardcoreMode_dx9_x64.Add(0x1401A9846, (byte)0x74);
+
+            Hashtable HardcoreMode = new Hashtable();
+            HardcoreMode.Add("hellgate_sp_dx9_x64", HardcoreMode_dx9_x64);
+
+            AvailablePatches = new Hashtable();
+            AvailablePatches.Add("Hardcore Mode", HardcoreMode);
+        }
+
+        public Process OpenProcess()
+        {
+            Process[] result = null;
+            foreach (string processName in processList)
+            {
+                result = Process.GetProcessesByName(processName);
+                if (result.Length == 1) break;
+            }
+
+            if (result.Length == 0) return null;
+
+            Process hellgateProcess = result[0];
+            openProcess = ProcessApi.OpenProcess(
+                ProcessApi.PROCESS_ALL_ACCESS, 1, (uint)hellgateProcess.Id);
+
+            return hellgateProcess;
+        }
+
+        public bool ApplyPatches(string[] patches, string client)
+        {
+            foreach (string patch in patches)
+            {
+                Hashtable currentPatch = (Hashtable)AvailablePatches[patch];
+                Hashtable patchVersion = (Hashtable)currentPatch[client];
+
+                if (patchVersion == null) return false;
+
+                foreach (DictionaryEntry instruction in patchVersion)
+                {
+                    long laddress = (long)instruction.Key;
+                    byte bvalue = (byte)instruction.Value;
+
+                    IntPtr address = new IntPtr(laddress);
+                    byte[] value = new byte[] { bvalue };
+                    uint length = (uint)value.Length;
+                    IntPtr nothing = IntPtr.Zero;
+                    byte[] memory = new byte[4];
+                    ProcessApi.ReadProcessMemory(openProcess, address, memory, 4, out nothing);
+                    ProcessApi.WriteProcessMemory(openProcess, address, value, length, out nothing);
+                }
+            }
+
+            return true;
+        }
+
+        public void CloseHandle()
+        {
+            ProcessApi.CloseHandle(openProcess);
+        }
+
         public byte[] Buffer { get; private set; }
 
         public Patches(byte[] byteArray)
