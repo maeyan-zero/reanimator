@@ -251,7 +251,7 @@ namespace Reanimator.Forms
                     node.ImageIndex = (int)IconIndex.XmlFile;
 
                     // we can only edit skills xml.cooked at the moment
-                    if (nodeKeys.Contains(XmlCookedSkill.RootFolder))
+                    if (nodeKeys.Contains("skills"))
                     {
                         currNodeObject.CanEdit = true;
                     }
@@ -384,7 +384,55 @@ namespace Reanimator.Forms
             }
             else if (fileIndex.FileNameString.EndsWith(XmlCookedFile.FileExtention))
             {
-                MessageBox.Show("todo");
+                String xmlDataPath = Path.Combine(Config.HglDir, fileIndex.FullPath.Replace(".cooked", ""));
+
+                byte[] fileData = GetFileBytes(fileIndex.FullPath, true);
+                if (fileData == null)
+                {
+                    MessageBox.Show("Failed to read xml.cooked from source!", "Error", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    return;
+                }
+
+                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+                if (!xmlCookedFile.ParseData(fileData))
+                {
+                    MessageBox.Show("Failed to uncook xml file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(xmlDataPath));
+                    xmlCookedFile.SaveXml(xmlDataPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to save uncooked xml file!\n\n" + ex, "Error", MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                    return;
+                }
+
+                DialogResult drOpen = MessageBox.Show("Uncooked XML file saved at " + xmlDataPath + "\n\nOpen with notepad (notepad++ if available)?", "Success",
+                                                      MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (drOpen == DialogResult.Yes)
+                {
+                    const String fileName = "notepad++.exe";
+
+                    // this is a bit dodgy using exceptions as if-else, but meh
+                    // todo: add check for file name existence etc
+                    try
+                    {
+                        Process notePad = new Process { StartInfo = { FileName = fileName, Arguments = xmlDataPath } };
+                        notePad.Start();
+                    }
+                    catch(Exception)
+                    {
+                        Process notePad = new Process { StartInfo = { FileName = "notepad.exe", Arguments = xmlDataPath } };
+                        notePad.Start();
+                    }
+                }
             }
             else if (fileIndex.FileNameString.EndsWith(".txt"))
             {
