@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -38,62 +39,62 @@ namespace Reanimator
 
             _fileExplorer = new FileExplorer(_indexFiles) { MdiParent = this };
 
-            /*
-            tw = new StreamWriter(@"C:\asdf.txt");
+            
+            //tw = new StreamWriter(@"C:\asdf.txt");
             //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\monster\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\proc\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\quest\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\templar\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\");
-            tw.Close();
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\monster\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\proc\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\quest\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\templar\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\");
+            //tw.Close();
            // this.Close();
-             */
+             
         }
-        /*
-        private TextWriter tw;
+        
+        //private TextWriter tw;
 
-        private void _DoFolder(String folderDir)
-        {
-            DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
-            FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
+        //private void _DoFolder(String folderDir)
+        //{
+        //    DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
+        //    FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
 
-            XmlCookedFile xmlAdrenaline = null;
+        //    XmlCookedFile xmlAdrenaline = null;
 
-            foreach (FileInfo fileInfo in files)
-            {
-                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+        //    foreach (FileInfo fileInfo in files)
+        //    {
+        //        XmlCookedFile xmlCookedFile = new XmlCookedFile();
 
-                byte[] data = File.ReadAllBytes(fileInfo.FullName);
-                if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
-                {
-                    xmlAdrenaline = xmlCookedFile;
-                    int bp = 0;
-                }
+        //        byte[] data = File.ReadAllBytes(fileInfo.FullName);
+        //        if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
+        //        {
+        //            xmlAdrenaline = xmlCookedFile;
+        //            int bp = 0;
+        //        }
 
-                Debug.Assert(xmlCookedFile.ParseData(data));
+        //        Debug.Assert(xmlCookedFile.ParseData(data));
 
-                xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+        //        xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
 
-                String blah = xmlCookedFile.Blah();
-                if (blah != null)
-                {
-                    tw.WriteLine(fileInfo.FullName);
-                    tw.WriteLine(blah);
-                }
-            }
+        //        //String blah = xmlCookedFile.Blah();
+        //        //if (blah != null)
+        //        //{
+        //        //    //tw.WriteLine(fileInfo.FullName);
+        //        //    //tw.WriteLine(blah);
+        //        //}
+        //    }
 
-            if (xmlAdrenaline != null)
-            {
-               // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
-            }
-        }*/
+        //    if (xmlAdrenaline != null)
+        //    {
+        //        // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
+        //    }
+        //}
 
         //todo: rewrite me
         private void CheckEnvironment()
