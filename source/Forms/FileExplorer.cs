@@ -195,6 +195,24 @@ namespace Reanimator.Forms
                 Debug.Assert(currTreeNode != null);
 
 
+                // need to have canEdit check before we update the node or it'll be false for newer versions
+                // todo: fix me/merge me some how with stuff below - sucks doing multiple checks like this
+                if (currFile.FileNameString.EndsWith(XmlCookedFile.FileExtention))
+                {
+                    // we can only edit skills xml.cooked at the moment
+                    if (nodeKeys.Contains("skills"))
+                    {
+                        currNodeObject.CanEdit = true;
+                    }
+                }
+                else if (currFile.FileNameString.EndsWith(ExcelFile.FileExtention) ||
+                    currFile.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                    currFile.FileNameString.EndsWith("txt"))
+                {
+                    currNodeObject.CanEdit = true;
+                }
+
+
                 // have we already added the file? if so, check file time etc
                 String key = currFile.DirectoryString.Replace(Index.BackupPrefix + @"\", "") + currFile.FileNameString;
                 if (_fileTable.Contains(key))

@@ -510,10 +510,10 @@ namespace Reanimator
 
         public void EndDatAccess()
         {
-            if (DatFile != null)
-            {
-                DatFile.Close();
-            }
+            if (DatFile == null) return;
+
+            DatFile.Close();
+            DatFile = null;
         }
 
         public void AddFileToDat(byte[] fileData, FileEntry fileEntry)
