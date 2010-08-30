@@ -33,11 +33,9 @@ namespace Reanimator
             const int fileTypeOffset = 8;
             if (fileTypeOffset >= _data.Length - 4) return false;
 
-            // this isn't actually (at least, I don't think it is) a type specifier, but seeing
-            // as (from what I've seen so far) the unknown array is constant per-type, might as well use it as such
-            uint cookedType = FileTools.ByteArrayTo<uint>(_data, fileTypeOffset);
+            UInt32 xmlDefinitionHash = FileTools.ByteArrayTo<UInt32>(_data, fileTypeOffset);
 
-            switch(cookedType)
+            switch (xmlDefinitionHash)
             {
                 case 0x400053E7: // skills
                     //_xmlCooked = new XmlCookedSkill();
@@ -49,7 +47,7 @@ namespace Reanimator
                 //    break;
 
                 default:
-                    MessageBox.Show("Not implemented type!\nOnly skills and states supported.\n\nunknown = 0x" + cookedType.ToString("X8"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Not implemented type!\nOnly skills and states supported.\n\nxmlDefinitionHash = 0x" + xmlDefinitionHash.ToString("X8"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     Debug.Assert(false);
                     return false;
             }
@@ -62,8 +60,6 @@ namespace Reanimator
             if (_xmlFile == null) return false;
             _offset = 0;
 
-            // skip over ("parse") default value array
-            // todo: check me?
             if (!_ParseCookedDefaultValues()) return false;
 
             return _DoDefinition(_xmlFile, XmlDoc);
@@ -72,12 +68,11 @@ namespace Reanimator
         private bool _DoDefinition(XmlDefinition xmlDefinition, XmlNode xmlParent)
         {
             XmlElement rootElement = XmlDoc.CreateElement(xmlDefinition.RootElement);
-            xmlParent.AppendChild(rootElement);
 
             int elementCount = xmlDefinition.Elements.Count;
 
             // generate bitField info
-            int bitFieldByteCount = (elementCount-1 >> 3) + 1; // -1 as 16 >> 3 = 2 + 1 = 3, but should only be 2 bytes
+            int bitFieldByteCount = (elementCount - 1 >> 3) + 1; // -1 as 16 >> 3 = 2 + 1 = 3, but should only be 2 bytes
 
             // read cooked elements bitField
             byte[] elementField = new byte[bitFieldByteCount];
@@ -91,12 +86,17 @@ namespace Reanimator
                 // is the field present?
                 if (!_TestBit(elementField, i)) continue;
 
+                if (xmlDefinition[i].Name == "tAttachmentDef.eType")
+                {
+                    int bp = 0;
+                }
+
                 // is the field a count parameter?
                 String elementName = xmlDefinition[i].Name;
                 if (xmlDefinition[i].ChildType != null)
                 {
                     int count = 1;
-                    if (xmlDefinition[i].IsCount)
+                    if (xmlDefinition[i].ElementType == ElementType.TableCount)
                     {
                         elementName += "Count";
                         count = _ReadInt32(rootElement, elementName);
@@ -108,6 +108,8 @@ namespace Reanimator
                         if (!_DoDefinition(xmlCountDefinition, rootElement)) return false;
                     }
 
+
+
                     continue;
                 }
 
@@ -116,42 +118,79 @@ namespace Reanimator
                     case ElementType.Int32:
                         _ReadInt32(rootElement, xmlDefinition[i].Name);
                         break;
-                    case ElementType.UInt32:
-                        _ReadUInt32(rootElement, xmlDefinition[i].Name);
-                        break;
                     case ElementType.Float:
                         _ReadFloat(rootElement, xmlDefinition[i].Name);
                         break;
                     case ElementType.String:
                         _ReadZeroString(rootElement, xmlDefinition[i].Name);
                         break;
-                    case ElementType.ExcelIndex:
-                        _ReadByteString(rootElement, xmlDefinition[i].Name, xmlDefinition[i].DefaultValue); // todo: do proper conversion
+                    case ElementType.NonCookedInt32: // todo: any point this being here?
+                        int bp1 = 0;
                         break;
+                    case ElementType.BitFlag: // todo: what am I exactly?
                     case ElementType.Flag:
                         UInt32 flagId = xmlDefinition[i].FlagId;
-                        if (flags.ContainsKey(flagId))
+                        Debug.Assert(flagId != 0); // flagId shouldn't be zero (as that's a default value)
+
+                        UInt32 flag;
+                        if (!flags.ContainsKey(flagId))
                         {
-                            UInt32 flag = (UInt32)flags[flagId];
-                            bool flagged = (flag & (1 << i)) > 0;
-                            bool defaultFlagged = (bool) xmlDefinition[i].DefaultValue;
-                            if (flagged != defaultFlagged)
-                            {
-                                XmlElement xmlElement = XmlDoc.CreateElement(xmlDefinition[i].Name);
-                                xmlElement.InnerText = flagged ? "1" : "0";
-                                rootElement.AppendChild(xmlElement);
-                            }
+                            flag = _ReadUInt32(null, null);
+                            flags.Add(flagId, flag);
                         }
                         else
                         {
-                            UInt32 flag = _ReadUInt32(rootElement, xmlDefinition[i].Name);
-                            flags.Add(flagId, flag);
+                            flag = (UInt32)flags[flagId];
                         }
+
+                        // this shouldn't be done every time for a flag
+                        // todo: save offset or pre-generate
+                        // get first flag of flagId offset
+                        int flagIndex = 0;
+                        for (; flagIndex < xmlDefinition.Elements.Count & flagIndex < i; flagIndex++)
+                        {
+                            if (xmlDefinition[flagIndex].FlagId != flagId) continue;
+
+                            break;
+                        }
+
+                        int flagBitMask = (1 << (i - flagIndex));// (1 >> (i-1)) & 0x01;
+
+                        // dodgy temp fix for testing
+                        // todo: fixe me
+                        if (xmlDefinition[i].Name == "CONDITION_BIT_CHECK_TARGET")
+                        {
+                            flagBitMask <<= 1;
+                        }
+                        else if (xmlDefinition[i].Name == "CONDITION_BIT_CHECK_WEAPON")
+                        {
+                            flagBitMask >>= 1;
+                        }
+
+                        bool flagged = (flag & flagBitMask) > 0;
+                        bool defaultFlagged = (bool)xmlDefinition[i].DefaultValue;
+                        if (flagged != defaultFlagged)
+                        {
+                            XmlElement xmlElement = XmlDoc.CreateElement(xmlDefinition[i].Name);
+                            xmlElement.InnerText = flagged ? "1" : "0";
+                            rootElement.AppendChild(xmlElement);
+                        }
+                        break;
+                    case ElementType.ExcelIndex:
+                        _ReadByteString(rootElement, xmlDefinition[i].Name, xmlDefinition[i].DefaultValue); // todo: do proper conversion
+                        break;
+                    case ElementType.FloatArray: // todo: in AI
+                        int bp2 = 0;
                         break;
                     default:
                         Debug.Assert(false, "ElementType not set!");
                         break;
                 }
+            }
+
+            if (rootElement.ChildNodes.Count > 0)
+            {
+                xmlParent.AppendChild(rootElement);
             }
 
             return true;
@@ -175,39 +214,24 @@ namespace Reanimator
             int version = FileTools.ByteArrayTo<Int32>(_data, ref _offset);
             if (version != RequiredVersion) return false;
 
-            //XmlElement mainElement = XmlDoc.CreateElement("CO0k");
-            //XmlDoc.AppendChild(mainElement);
+            UInt32 xmlDefinitionHash = _ReadUInt32(null, null);
+            Int32 definitionElementCount = _ReadInt32(null, null);
 
-            //XmlElement versionElement = XmlDoc.CreateElement("version");
-            //versionElement.InnerText = "8";
-            //mainElement.AppendChild(versionElement);
+            /* Default Element Values Array & General Structure
+             * =Token=		=Type=          =FoundIn=       =Details= (* = variable length)
+             * 0x0000       Int32           Skills          4 bytes     e.g. tAttachmentDef.eType = -1 in some cases - also used with tAttachmentDef.dwFlags
+             * 0x0100       Float           Skills          4 bytes     Float value
+             * 0x0200       String          Skills          1 byte*     Str Length (NOT inc \0), then if != 0, string WITH \0 follows
+             * 0x0700       NonCookedInt32  Skills          4 bytes     Used for nPreviewAppearance, but doesn't appear to be cooked by game
+             * 0x0B01       Flag            Skills          4 bytes*    First 4 bytes (UInt32) = Bitmask of Flag in field (In DATA segment, Flag is only read in once per "chunk" i.e. After 32 flags, the next flag will be read 4 bytes again)
+             * 0x0C02       BitFlag         Skills          8 bytes     First 4 bytes (Int32)  = Bit Index of Flag in field, Second 4 bytes (Int32) = Always appears to be 0x00000007
+             * 0x0803       Table           Skills          8 bytes     First 4 bytes (UInt32) = XML Definition Hash, Second 4 bytes (Int32) = XML Definition Element Count - this always exists in cooked file, below TableCount type may not
+             * 0x0903       ExcelIndex      Skills          4 bytes     First 4 bytes (UInt32) = Code of Excel Table - Cooking reads index and places from table
+             * 0x0106       Float Array     AI              4 bytes     First 4 bytes (Float)  = Default Value, Second 4 bytes (Int32) = Array Size
+             * 0x030A       TableCount      Skills          8 bytes     First 4 bytes (UInt32) = XML Definition Hash, Second 4 bytes (Int32) = XML Definition Element Count
 
-
-            /* ==Strange Array==
-             * 4 bytes		unknown
-             * 2 bytes		Type Token
-             * *remaining based on token*
-             * 
-             * =Token=		=Followed By=
-             *  00 00       4 bytes (Int32?  Or UInt32 because 00 07 appears to have -1?)
-             *  00 01       4 bytes (Float)
-             *  00 02       1 byte  (Str Length (NOT inc \0) - if != 0, string WITH \0)
-             *  00 06       4 bytes (Float)
-             *  00 07       4 bytes (Int32?  Or possibly an array with -1 = end?)
-             *  01 0B       8 bytes	(Null Int32?,  32 bit Bitmask)
-             *  02 0C       8 bytes	(Int32 index?,  Int32 value?)
-             *  03 00       2 bytes	(ShortInt?)
-             *  03 09       4 bytes	(Int32?)
-             *  05 00       2 bytes (??)
-             *  08 03       8 bytes	(Int32??,  Int32??)
-             *  09 03       4 bytes (Int32)
-             *  0A 03       8 bytes	(Int32??,  Int32??)
-             *  C0 00       2 bytes (??)
-             *  
-             *  // extras found in particle effects
-             *  8D 00       2 bytes
+             * // extras found in particle effects
              *  00 0A       4 bytes (Int32?)
-             *  06 01       8 bytes (Int32?, Int32?)
              *  00 05       4 bytes (Float)
              */
 
@@ -240,15 +264,6 @@ namespace Reanimator
                             _offset++; // need to include \0 as it isn't included in the strLen byte for some reason
                         }
                         //_AddUnknown(unknown, token, str);
-
-                        break;
-
-                    case 0x0003:    // skills
-                        //case 0x0005:
-                        //case 0x00C0:
-                        //case 0x008D: // found in particle effects
-                        _ReadShort(null, null);
-                        //_AddUnknown(unknown, token, srt);
                         break;
 
                     case 0x0000:    // skills
@@ -296,18 +311,6 @@ namespace Reanimator
             }
 
             return foundDataSegment;
-
-            //XmlElement dataElement = XmlDoc.CreateElement("DATA");
-            //mainElement.AppendChild(dataElement);
-
-            //if (!ParseDataSegment(dataElement)) return false;
-
-            //if (ReadOffset != Data.Length)
-            //{
-            //    MessageBox.Show("Entire file not parsed!\noffset != data.Length\n\noffset = " + ReadOffset +
-            //                    "\ndata.Length = " + Data.Length, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            //    return false;
-            //}
         }
 
         private String _ReadByteString(XmlNode parentNode, String elementName, Object mustExist)
@@ -346,7 +349,6 @@ namespace Reanimator
             {
                 XmlElement element = XmlDoc.CreateElement(elementName);
                 element.InnerText = value.ToString();
-                //element.SetAttribute("asHex", "0x" + value.ToString("X4"));
                 parentNode.AppendChild(element);
             }
 
@@ -361,7 +363,6 @@ namespace Reanimator
             {
                 XmlElement element = XmlDoc.CreateElement(elementName);
                 element.InnerText = value.ToString();
-                //element.SetAttribute("asHex", "0x" + value.ToString("X8"));
                 parentNode.AppendChild(element);
             }
 
@@ -376,7 +377,6 @@ namespace Reanimator
             {
                 XmlElement element = XmlDoc.CreateElement(elementName);
                 element.InnerText = value.ToString();
-                //element.SetAttribute("asHex", "0x" + value.ToString("X8"));
                 parentNode.AppendChild(element);
             }
 
@@ -405,7 +405,6 @@ namespace Reanimator
             {
                 XmlElement element = XmlDoc.CreateElement(elementName);
                 element.InnerText = Convert.ToString(value, 2).PadLeft(32, '0');
-                //element.SetAttribute("asHex", "0x" + value.ToString("X8"));
                 parentNode.AppendChild(element);
             }
 

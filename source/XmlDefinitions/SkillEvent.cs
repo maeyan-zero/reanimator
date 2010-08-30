@@ -73,7 +73,7 @@
 
             nType.Name = "nType";
             nType.DefaultValue = null;
-            nType.ExcelTableCode = 28208;
+            nType.ExcelTableCode = 0x00006E30; // (28208)	SKILLEVENTTYPES
             nType.ElementType = ElementType.ExcelIndex;
             Elements.Add(nType);
 
@@ -361,7 +361,7 @@
 
             dwFlags.Name = "tAttachmentDef.dwFlags";
             dwFlags.DefaultValue = 0;
-            dwFlags.ElementType = ElementType.UInt32;
+            dwFlags.ElementType = ElementType.Int32;
             Elements.Add(dwFlags);
 
             pszAttached.Name = "tAttachmentDef.pszAttached";
@@ -376,7 +376,7 @@
 
             nAttachedDefId.Name = "tAttachmentDef.nAttachedDefId";
             nAttachedDefId.DefaultValue = -1;
-            nAttachedDefId.ElementType = ElementType.Int32;
+            nAttachedDefId.ElementType = ElementType.NonCookedInt32;
             Elements.Add(nAttachedDefId);
 
             pszBone.Name = "tAttachmentDef.pszBone";
@@ -386,7 +386,7 @@
 
             nBoneId.Name = "tAttachmentDef.nBoneId";
             nBoneId.DefaultValue = -1;
-            nBoneId.ElementType = ElementType.Int32;
+            nBoneId.ElementType = ElementType.NonCookedInt32;
             Elements.Add(nBoneId);
 
             vPositionX.Name = "tAttachmentDef.vPosition.fX";
@@ -421,7 +421,7 @@
 
             Condition.Name = "tCondition";
             Condition.DefaultValue = null;
-            Condition.ElementType = ElementType.String;
+            Condition.ElementType = ElementType.Table;
             Condition.ChildType = typeof (ConditionDefinition);
             Elements.Add(Condition);
         }

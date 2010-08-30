@@ -39,6 +39,10 @@ namespace Reanimator
 
             _fileExplorer = new FileExplorer(_indexFiles) { MdiParent = this };
 
+            //String str = "GLOBAL_DEFINITION";
+            //String str = @"data\background\catacombs\ct_connb_path.xml.cooked";
+            //UInt32 strHash = Crypt.GetStringHash(str);
+
             
             //tw = new StreamWriter(@"C:\asdf.txt");
             //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
@@ -60,41 +64,41 @@ namespace Reanimator
         
         //private TextWriter tw;
 
-        //private void _DoFolder(String folderDir)
-        //{
-        //    DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
-        //    FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
+        private void _DoFolder(String folderDir)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
+            FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
 
-        //    XmlCookedFile xmlAdrenaline = null;
+            XmlCookedFile xmlAdrenaline = null;
 
-        //    foreach (FileInfo fileInfo in files)
-        //    {
-        //        XmlCookedFile xmlCookedFile = new XmlCookedFile();
+            foreach (FileInfo fileInfo in files)
+            {
+                XmlCookedFile xmlCookedFile = new XmlCookedFile();
 
-        //        byte[] data = File.ReadAllBytes(fileInfo.FullName);
-        //        if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
-        //        {
-        //            xmlAdrenaline = xmlCookedFile;
-        //            int bp = 0;
-        //        }
+                byte[] data = File.ReadAllBytes(fileInfo.FullName);
+                if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
+                {
+                    xmlAdrenaline = xmlCookedFile;
+                    int bp = 0;
+                }
 
-        //        Debug.Assert(xmlCookedFile.ParseData(data));
+                Debug.Assert(xmlCookedFile.ParseData(data));
 
-        //        xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+                xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
 
-        //        //String blah = xmlCookedFile.Blah();
-        //        //if (blah != null)
-        //        //{
-        //        //    //tw.WriteLine(fileInfo.FullName);
-        //        //    //tw.WriteLine(blah);
-        //        //}
-        //    }
+                //String blah = xmlCookedFile.Blah();
+                //if (blah != null)
+                //{
+                //    //tw.WriteLine(fileInfo.FullName);
+                //    //tw.WriteLine(blah);
+                //}
+            }
 
-        //    if (xmlAdrenaline != null)
-        //    {
-        //        // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
-        //    }
-        //}
+            if (xmlAdrenaline != null)
+            {
+                // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
+            }
+        }
 
         //todo: rewrite me
         private void CheckEnvironment()
