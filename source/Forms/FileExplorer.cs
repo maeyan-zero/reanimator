@@ -727,13 +727,17 @@ namespace Reanimator.Forms
             if (nodeObject.Siblings != null && nodeObject.Siblings.Count > 0)
             {
                 // this file has siblings - loop through
-                foreach (Index.FileEntry siblingFileIndex in
-                    nodeObject.Siblings.Select(siblingNodeObject => siblingNodeObject.FileEntry).Where(fileIndex.PatchOutFile))
+                foreach (NodeObject siblingNodeObject in nodeObject.Siblings)
                 {
-                    fileIndexKey = siblingFileIndex.InIndex.FileNameWithoutExtension;
+                    Index.FileEntry siblingFileEntry = siblingNodeObject.FileEntry;
+                    Index siblingIndex = siblingFileEntry.InIndex;
+
+                    siblingIndex.PatchOutFile(siblingNodeObject.FileEntry);
+
+                    fileIndexKey = siblingIndex.FileNameWithoutExtension;
                     if (!indexToWrite.ContainsKey(fileIndexKey))
                     {
-                        indexToWrite.Add(fileIndexKey, siblingFileIndex.InIndex);
+                        indexToWrite.Add(fileIndexKey, siblingIndex);
                     }
                 }
             }
@@ -1093,6 +1097,8 @@ namespace Reanimator.Forms
 
 
             //// ignore me - alex's testing stuffs ////
+
+            //byte[] asdf = GetFileBytes(@"data\excel\strings\english\strings_affix.xls.uni.cooked", true);
 
 
             //Index idx = _indexFiles.FirstOrDefault(i => i.FileNameWithoutExtension == "hellgate000");
