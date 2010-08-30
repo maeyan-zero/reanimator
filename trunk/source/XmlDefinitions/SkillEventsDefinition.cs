@@ -17,14 +17,13 @@
 
             nPreviewAppearance.Name = "nPreviewAppearance";
             nPreviewAppearance.DefaultValue = -1;
-            nPreviewAppearance.ElementType = ElementType.Int32;
+            nPreviewAppearance.ElementType = ElementType.NonCookedInt32;
             Elements.Add(nPreviewAppearance);
 
             pEventHolders.Name = "pEventHolders";
             pEventHolders.DefaultValue = 0;
-            pEventHolders.IsCount = true;
             pEventHolders.ChildType = typeof (SkillEventHolder);
-            pEventHolders.ElementType = ElementType.Int32;
+            pEventHolders.ElementType = ElementType.TableCount;
             Elements.Add(pEventHolders);
         }
     }

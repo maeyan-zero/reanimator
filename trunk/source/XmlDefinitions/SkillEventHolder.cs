@@ -11,8 +11,8 @@
             RootElement = "SKILL_EVENT_HOLDER";
 
             nUnitMode.Name = "nUnitMode";
-            nUnitMode.DefaultValue = null;
-            nUnitMode.ExcelTableCode = 26160;
+            nUnitMode.DefaultValue = 0;
+            nUnitMode.ExcelTableCode = 0x00006630; // (26160)	UNITMODES
             nUnitMode.ElementType = ElementType.ExcelIndex;
             Elements.Add(nUnitMode);
 
@@ -23,9 +23,8 @@
 
             pEvents.Name = "pEvents";
             pEvents.DefaultValue = 0;
-            pEvents.IsCount = true;
             pEvents.ChildType = typeof (SkillEvent);
-            pEvents.ElementType = ElementType.Int32;
+            pEvents.ElementType = ElementType.TableCount;
             Elements.Add(pEvents);
         }
     }

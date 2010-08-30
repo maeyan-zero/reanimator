@@ -81,6 +81,8 @@
             ConditionBitCheckOwner.FlagId = 1;
             Elements.Add(ConditionBitCheckOwner);
 
+            // this and CHECK_TARGET are swapped for some reason...
+            // see end of default values array in .xml.cooked ordering (0, 2, 1, 3, 4, 5, 6)
             ConditionBitCheckTarget.Name = "CONDITION_BIT_CHECK_TARGET";
             ConditionBitCheckTarget.ElementType = ElementType.Flag;
             ConditionBitCheckTarget.DefaultValue = false;

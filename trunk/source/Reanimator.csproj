@@ -496,6 +496,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlCookedFile.cs" />
+    <Compile Include="XmlDefinitions\AIBehaviorDefinition.cs" />
+    <Compile Include="XmlDefinitions\AIBehaviorDefinitionTable.cs" />
+    <Compile Include="XmlDefinitions\AIDefinition.cs" />
     <Compile Include="XmlDefinitions\ConditionDefinition.cs" />
     <Compile Include="XmlDefinitions\SkillEvent.cs" />
     <Compile Include="XmlDefinitions\SkillEventHolder.cs" />
