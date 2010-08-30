@@ -28,53 +28,11 @@ namespace Reanimator.Forms
 
             Config.HglDir = folderBrowserDialogue.SelectedPath;
             hglDir_TextBox.Text = Config.HglDir;
-
-            if (Config.DataDirsRootChecked)
-            {
-                Config.DataDirsRoot = folderBrowserDialogue.SelectedPath;
-            }
-        }
-
-        private void dataDirCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Config.DataDirsRootChecked = dataDir_CheckBox.Checked;
-            RefreshDataDir();
-        }
-
-        private void RefreshDataDir()
-        {
-            if (dataDir_CheckBox.Checked)
-            {
-                Config.DataDirsRoot = Config.HglDir;
-            }
-
-            dataDir_TextBox.Text = Config.DataDirsRoot;
-            dataDir_Button.Enabled = !dataDir_CheckBox.Checked;
-            dataDir_TextBox.Enabled = !dataDir_CheckBox.Checked;
-        }
-
-        private void dataDir_Button_Clicked(object sender, EventArgs e)
-        {
-            FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog
-                                                            {
-                                                                Description =
-                                                                    "Locate the Hellgate: London installation directory. Example: C:\\Program Files\\Flagship Studios\\Hellgate London",
-                                                                SelectedPath = Config.HglDir
-                                                            };
-
-            if (folderBrowserDialogue.ShowDialog(this) != DialogResult.OK) return;
-
-            Config.DataDirsRoot = folderBrowserDialogue.SelectedPath;
-            dataDir_TextBox.Text = Config.DataDirsRoot;
         }
 
         private void Options_Load(object sender, EventArgs e)
         {
             hglDir_TextBox.Text = Config.HglDir;
-            dataDir_TextBox.Text = Config.DataDirsRoot;
-            dataDir_CheckBox.Checked = Config.DataDirsRootChecked;
-            dataDir_Button.Enabled = !Config.DataDirsRootChecked;
-            dataDir_TextBox.Enabled = !Config.DataDirsRootChecked;
             gameClientPath_TextBox.Text = Config.GameClientPath;
             scriptDirText.Text = Config.ScriptDir;
             intPtrTypeCombo.SelectedItem = Config.IntPtrCast;

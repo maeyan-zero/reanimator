@@ -93,7 +93,7 @@ namespace Reanimator.Forms
             }
         }
 
-        public FileExplorer(List<Index> indexFiles)
+        public FileExplorer(ref List<Index> indexFiles)
         {
             InitializeComponent();
             files_treeView.DoubleBuffered(true);
@@ -1158,6 +1158,20 @@ namespace Reanimator.Forms
             //if (!Regex.IsMatch(treeNode.Text, filterText)) return;
 
             ////filterNodes.Add(treeNode);
+        }
+
+        public bool GetFileExists(String filePath)
+        {
+            if (String.IsNullOrEmpty(filePath)) return false;
+
+            if (filePath[0] == '\\')
+            {
+                filePath = filePath.Replace(@"\data", "data");
+            }
+
+            TreeNode treeNode = (TreeNode)_fileTable[filePath];
+
+            return treeNode == null ? false : true;
         }
 
         public byte[] GetFileBytes(String filePath, bool getLatestVersion)

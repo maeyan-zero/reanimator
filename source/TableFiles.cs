@@ -12,6 +12,7 @@ namespace Reanimator
     public class TableFiles
     {
         private readonly bool _debugAll;
+        private readonly FileExplorer _fileExplorer;
 
         public Hashtable DataFiles { get; private set; }
         public Hashtable TableMap { get; private set; }
@@ -34,9 +35,20 @@ namespace Reanimator
             public bool ManualLoad { get; set; }
         }
 
-        public TableFiles()
+        public DataFile this[String stringId]
+        {
+            get
+            {
+                MapItem mapItem = TableMap[stringId] as MapItem;
+                return mapItem == null ? null : mapItem.LoadedFile;
+            }
+        }
+
+        public TableFiles(ref FileExplorer fileExplorer)
         {
             _debugAll = false;
+            _fileExplorer = fileExplorer;
+
             DataFiles = new Hashtable();
 
             TableMap = new Hashtable
@@ -238,7 +250,7 @@ namespace Reanimator
                 {"_TCv4_AI_INIT", new MapItem {IsTCv4 = true, RowType = typeof (AiInitRow)}},
                 {"_TCv4_AI_START", new MapItem {IsTCv4 = true, RowType = typeof (AiStartRow)}},
                 {"_TCv4_ANIMATION_CONDITION", new MapItem {IsTCv4 = true, RowType = typeof (AnimationConditionRow)}},
-                {"_TCv4_ANIMATION_GROUP", new MapItem {NameReplace = "ANIMATION_GROUPS", RowType = typeof (AnimationGroupsRow)}},
+                {"_TCv4_ANIMATION_GROUP", new MapItem {IsTCv4 = true, NameReplace = "ANIMATION_GROUPS", RowType = typeof (AnimationGroupsRow)}},
                 {"_TCv4_ANIMATION_STANCE", new MapItem {IsTCv4 = true, RowType = typeof (AnimationStanceRow)}},
                 {"_TCv4_BACKGROUNDSOUNDS", new MapItem {IsTCv4 = true, RowType = typeof (BackGroundSoundsRow)}},
                 {"_TCv4_BACKGROUNDSOUNDS3D", new MapItem {IsTCv4 = true, RowType = typeof (BackGroundSounds3DRow)}},
@@ -252,22 +264,22 @@ namespace Reanimator
                 {"_TCv4_CONDITION_FUNCTIONS", new MapItem {IsTCv4 = true, RowType = typeof (ConditionFunctionsRow)}},
                 {"_TCv4_DIALOG", new MapItem {IsTCv4 = true, RowType = typeof (DialogRow)}},
                 {"_TCv4_DIFFICULTY", new MapItem {IsTCv4 = true, RowType = typeof (DifficultyRow)}},
-                {"_TCv4_CHARDISPLAY", new MapItem {NameReplace = "DISPLAY_CHAR", RowType = typeof (DisplayRow)}},
-                {"_TCv4_ITEMDISPLAY", new MapItem {NameReplace = "DISPLAY_ITEM", RowType = typeof (DisplayRow)}},
+                {"_TCv4_CHARDISPLAY", new MapItem {IsTCv4 = true, NameReplace = "DISPLAY_CHAR", RowType = typeof (DisplayRow)}},
+                {"_TCv4_ITEMDISPLAY", new MapItem {IsTCv4 = true, NameReplace = "DISPLAY_ITEM", RowType = typeof (DisplayRow)}},
                 {"_TCv4_EFFECTS_FILES", new MapItem {IsTCv4 = true, RowType = typeof (EffectsFilesRow)}},
-                {"_TCv4_EFFECTS", new MapItem {NameReplace = "EFFECTS_INDEX", RowType = typeof (EffectsIndexRow)}},
+                {"_TCv4_EFFECTS", new MapItem {IsTCv4 = true, NameReplace = "EFFECTS_INDEX", RowType = typeof (EffectsIndexRow)}},
                 {"_TCv4_EFFECTS_SHADERS", new MapItem {IsTCv4 = true, RowType = typeof (EffectsShadersRow)}},
                 {"_TCv4_EXCELTABLES", new MapItem {IsTCv4 = true, RowType = typeof (ExcelTablesRow)}},
                 {"_TCv4_FACTION", new MapItem {IsTCv4 = true, RowType = typeof (FactionRow)}},
                 {"_TCv4_FACTION_STANDING", new MapItem {IsTCv4 = true, RowType = typeof (FactionStandingRow)}},
-                {"_TCv4_FILTER_CHATFILTER", new MapItem {NameReplace = "CHATFILTER", RowType = typeof (FilterRow)}},
-                {"_TCv4_FILTER_NAMEFILTER", new MapItem {NameReplace = "NAMEFILTER", RowType = typeof (FilterRow)}},
+                {"_TCv4_FILTER_CHATFILTER", new MapItem {IsTCv4 = true, NameReplace = "CHATFILTER", RowType = typeof (FilterRow)}},
+                {"_TCv4_FILTER_NAMEFILTER", new MapItem {IsTCv4 = true, NameReplace = "NAMEFILTER", RowType = typeof (FilterRow)}},
                 {"_TCv4_FONT", new MapItem {IsTCv4 = true, RowType = typeof (FontRow)}},
-                {"_TCv4_FONTCOLORS", new MapItem {NameReplace = "FONTCOLOR", RowType = typeof (FontColorRow)}},
+                {"_TCv4_FONTCOLORS", new MapItem {IsTCv4 = true, NameReplace = "FONTCOLOR", RowType = typeof (FontColorRow)}},
                 {"_TCv4_FOOTSTEPS", new MapItem {IsTCv4 = true, RowType = typeof (FootStepsRow)}},
-                {"_TCv4_GAME_GLOBALS", new MapItem {NameReplace = "GAMEGLOBALS", RowType = typeof (GameGlobalsRow)}},
-                {"_TCv4_GLOBAL_INDEX", new MapItem {NameReplace = "GLOBALINDEX", RowType = typeof (GlobalRow)}},
-                {"_TCv4_GLOBAL_STRING", new MapItem {NameReplace = "GLOBALSTRING", RowType = typeof (GlobalRow)}},
+                {"_TCv4_GAME_GLOBALS", new MapItem {IsTCv4 = true, NameReplace = "GAMEGLOBALS", RowType = typeof (GameGlobalsRow)}},
+                {"_TCv4_GLOBAL_INDEX", new MapItem {IsTCv4 = true, NameReplace = "GLOBALINDEX", RowType = typeof (GlobalRow)}},
+                {"_TCv4_GLOBAL_STRING", new MapItem {IsTCv4 = true, NameReplace = "GLOBALSTRING", RowType = typeof (GlobalRow)}},
                 {"_TCv4_GLOBAL_THEMES", new MapItem {IsTCv4 = true, RowType = typeof (GlobalThemesRow)}},
                 {"_TCv4_INITDB", new MapItem {IsTCv4 = true, RowType = typeof (InitDbRow)}},
                 {"_TCv4_INTERACT", new MapItem {IsTCv4 = true, RowType = typeof (InteractRow)}},
@@ -276,12 +288,12 @@ namespace Reanimator
                 {"_TCv4_INVLOC", new MapItem {IsTCv4 = true, RowType = typeof (InvLocRow)}},
                 {"_TCv4_ITEM_LEVELS", new MapItem {IsTCv4 = true, RowType = typeof (ItemLevelsRow)}},
                 {"_TCv4_ITEM_LOOK_GROUPS", new MapItem {IsTCv4 = true, RowType = typeof (ItemLookGroupsRow)}},
-                {"_TCv4_LEVEL_DRLG_CHOICE", new MapItem {NameReplace = "LEVELS_DRLG_CHOICE", RowType = typeof (LevelsDrlgChoiceRow)}},
-                {"_TCv4_LEVEL_DRLGS", new MapItem {NameReplace = "LEVELS_DRLGS", RowType = typeof (LevelsDrlgsRow)}},
-                {"_TCv4_LEVEL_FILE_PATHS", new MapItem {NameReplace = "LEVELS_FILE_PATH", RowType = typeof (LevelsFilePathRow)}},
-                {"_TCv4_LEVEL_ENVIRONMENTS", new MapItem {NameReplace = "LEVELS_ENV", RowType = typeof (LevelsEnvRow)}},
-                {"_TCv4_LEVEL_RULES", new MapItem {NameReplace = "LEVELS_RULES", RowType = typeof (LevelsRulesRow)}},
-                {"_TCv4_LEVEL_THEMES", new MapItem {NameReplace = "LEVELS_THEMES", RowType = typeof (LevelsThemesRow)}},
+                {"_TCv4_LEVEL_DRLG_CHOICE", new MapItem {IsTCv4 = true, NameReplace = "LEVELS_DRLG_CHOICE", RowType = typeof (LevelsDrlgChoiceRow)}},
+                {"_TCv4_LEVEL_DRLGS", new MapItem {IsTCv4 = true, NameReplace = "LEVELS_DRLGS", RowType = typeof (LevelsDrlgsRow)}},
+                {"_TCv4_LEVEL_FILE_PATHS", new MapItem {IsTCv4 = true, NameReplace = "LEVELS_FILE_PATH", RowType = typeof (LevelsFilePathRow)}},
+                {"_TCv4_LEVEL_ENVIRONMENTS", new MapItem {IsTCv4 = true, NameReplace = "LEVELS_ENV", RowType = typeof (LevelsEnvRow)}},
+                {"_TCv4_LEVEL_RULES", new MapItem {IsTCv4 = true, NameReplace = "LEVELS_RULES", RowType = typeof (LevelsRulesRow)}},
+                {"_TCv4_LEVEL_THEMES", new MapItem {IsTCv4 = true, NameReplace = "LEVELS_THEMES", RowType = typeof (LevelsThemesRow)}},
                 {"_TCv4_LOADING_TIPS", new MapItem {IsTCv4 = true, RowType = typeof (LoadingTipsRow)}},
                 {"_TCv4_MATERIALS_GLOBAL", new MapItem {IsTCv4 = true, RowType = typeof (MaterialsGlobalRow)}},
                 {"_TCv4_MELEEWEAPONS", new MapItem {IsTCv4 = true, RowType = typeof (MeleeWeaponsRow)}},
@@ -297,8 +309,8 @@ namespace Reanimator
                 {"_TCv4_MUSICCONDITIONS", new MapItem {IsTCv4 = true, RowType = typeof (MusicConditionsRow)}},
                 {"_TCv4_MUSICGROOVELEVELS", new MapItem {IsTCv4 = true, RowType = typeof (MusicGrooveLevelsRow)}},
                 {"_TCv4_MUSICGROOVELEVELTYPES", new MapItem {IsTCv4 = true, RowType = typeof (MusicGrooveLevelTypesRow)}},
-                {"_TCv4_MUSIC_REF", new MapItem {NameReplace = "MUSICREF", RowType = typeof (MusicRefRow)}},
-                {"_TCv4_MUSIC_SCRIPT_DEBUG", new MapItem {NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
+                {"_TCv4_MUSIC_REF", new MapItem {IsTCv4 = true, NameReplace = "MUSICREF", RowType = typeof (MusicRefRow)}},
+                {"_TCv4_MUSIC_SCRIPT_DEBUG", new MapItem {IsTCv4 = true, NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
                 {"_TCv4_MUSICSTINGERS", new MapItem {IsTCv4 = true, RowType = typeof (MusicStingersRow)}},
                 {"_TCv4_MUSICSTINGERSETS", new MapItem {IsTCv4 = true, RowType = typeof (MusicStingerSetsRow)}},
                 {"_TCv4_NPC", new MapItem {IsTCv4 = true, RowType = typeof (NpcRow)}},
@@ -306,7 +318,7 @@ namespace Reanimator
                 {"_TCv4_OFFER", new MapItem {IsTCv4 = true, RowType = typeof (OfferRow)}},
                 {"_TCv4_PALETTES", new MapItem {IsTCv4 = true, RowType = typeof (PalettesRow)}},
                 {"_TCv4_PETLEVEL", new MapItem {IsTCv4 = true, RowType = typeof (MonLevelRow)}},
-                {"_TCv4_PLAYER_RACE", new MapItem {NameReplace = "PLAYERRACE", RowType = typeof (PlayerRaceRow)}},
+                {"_TCv4_PLAYER_RACE", new MapItem {IsTCv4 = true, NameReplace = "PLAYERRACE", RowType = typeof (PlayerRaceRow)}},
                 {"_TCv4_PROPERTIES", new MapItem {IsTCv4 = true, RowType = typeof (PropertiesRow)}},
                 {"_TCv4_PROCS", new MapItem {IsTCv4 = true, RowType = typeof (ProcsRow)}},
                 {"_TCv4_QUEST", new MapItem {IsTCv4 = true, RowType = typeof (QuestRow)}},
@@ -320,23 +332,23 @@ namespace Reanimator
                 {"_TCv4_SKILLGROUPS", new MapItem {IsTCv4 = true, RowType = typeof (SkillGroupsRow)}},
                 {"_TCv4_SKU", new MapItem {IsTCv4 = true, RowType = typeof (SkuRow)}},
                 {"_TCv4_SOUNDBUSES", new MapItem {IsTCv4 = true, RowType = typeof (SoundBusesRow)}},
-                {"_TCv4_SOUND_MIXSTATE_VALUES", new MapItem {NameReplace = "SOUNDMIXSTATEVALUES", RowType = typeof (SoundMixStateValuesRow)}},
+                {"_TCv4_SOUND_MIXSTATE_VALUES", new MapItem {IsTCv4 = true, NameReplace = "SOUNDMIXSTATEVALUES", RowType = typeof (SoundMixStateValuesRow)}},
                 {"_TCv4_SOUNDVCAS", new MapItem {IsTCv4 = true, RowType = typeof (SoundVidCasRow)}},
                 {"_TCv4_SOUNDVCASETS", new MapItem {IsTCv4 = true, RowType = typeof (SoundVideoCasetsRow)}},
-                {"_TCv4_SPAWN_CLASS", new MapItem {NameReplace = "SPAWNCLASS", RowType = typeof (SpawnClassRow)}},
+                {"_TCv4_SPAWN_CLASS", new MapItem {IsTCv4 = true, NameReplace = "SPAWNCLASS", RowType = typeof (SpawnClassRow)}},
                 {"_TCv4_SUBLEVEL", new MapItem {IsTCv4 = true, RowType = typeof (SubLevelRow)}},
                 {"_TCv4_STATE_EVENT_TYPES", new MapItem {IsTCv4 = true, RowType = typeof (StateEventTypesRow)}},
                 {"_TCv4_STATE_LIGHTING", new MapItem {IsTCv4 = true, RowType = typeof (StateLightingRow)}},
                 {"_TCv4_STATES", new MapItem {IsTCv4 = true, RowType = typeof (StatesRow)}},
-                {"_TCv4_STATS_FUNC", new MapItem {NameReplace = "STATSFUNC", RowType = typeof (StatsFuncRow)}},
-                {"_TCv4_STATS_SELECTOR", new MapItem {NameReplace = "STATSSELECTOR", RowType = typeof (BookMarksRow)}},
+                {"_TCv4_STATS_FUNC", new MapItem {IsTCv4 = true, NameReplace = "STATSFUNC", RowType = typeof (StatsFuncRow)}},
+                {"_TCv4_STATS_SELECTOR", new MapItem {IsTCv4 = true, NameReplace = "STATSSELECTOR", RowType = typeof (BookMarksRow)}},
                 {"_TCv4_STRING_FILES", new MapItem {IsTCv4 = true, RowType = typeof (StringFilesRow)}},
                 {"_TCv4_TASK_STATUS", new MapItem {IsTCv4 = true, RowType = typeof (BookMarksRow)}},
                 {"_TCv4_TAG", new MapItem {IsTCv4 = true, RowType = typeof (TagRow)}},
                 {"_TCv4_TASKS", new MapItem {IsTCv4 = true, RowType = typeof (TasksRow)}},
-                {"_TCv4_TEXTURE_TYPES", new MapItem {NameReplace = "TEXTURETYPES", RowType = typeof (TextureTypesRow)}},
+                {"_TCv4_TEXTURE_TYPES", new MapItem {IsTCv4 = true, NameReplace = "TEXTURETYPES", RowType = typeof (TextureTypesRow)}},
                 {"_TCv4_UI_COMPONENT", new MapItem {IsTCv4 = true, RowType = typeof (UIComponentRow)}},
-                {"_TCv4_UNIT_EVENT_TYPES", new MapItem {NameReplace = "UNITEVENTS", RowType = typeof (UnitEventsRow)}},
+                {"_TCv4_UNIT_EVENT_TYPES", new MapItem {IsTCv4 = true, NameReplace = "UNITEVENTS", RowType = typeof (UnitEventsRow)}},
                 {"_TCv4_WARDROBE_APPEARANCE_GROUP", new MapItem {IsTCv4 = true, RowType = typeof (WardrobeAppearanceGroupRow)}},
                 {"_TCv4_WARDROBE_BLENDOP", new MapItem {IsTCv4 = true, RowType = typeof (WardrobeBlendOpRow)}},
                 {"_TCv4_WARDROBE_BODY", new MapItem {IsTCv4 = true, RowType = typeof (WardrobeBodyRow)}},
@@ -419,15 +431,6 @@ namespace Reanimator
             };
         }
 
-        public DataFile this[String stringId]
-        {
-            get
-            {
-                MapItem mapItem = TableMap[stringId] as MapItem;
-                return mapItem == null ? null : mapItem.LoadedFile;
-            }
-        }
-
         public bool ParseSingleExcelData(String stringId, byte[] data)
         {
             if (String.IsNullOrEmpty(stringId) || data == null) return false;
@@ -444,153 +447,49 @@ namespace Reanimator
             return true;
         }
 
-        public bool LoadExcelFiles(ProgressForm progress, byte[] data)
+        public bool LoadExcelFiles(ProgressForm progress)
         {
-            if (data == null) return false;
-
-
-            // load in initial exceltables.txt.cooked
-            DataFile excelTables = new ExcelFile("EXCELTABLES", typeof(ExcelTablesRow));
-            if (!excelTables.ParseData(data))
-            {
-                const string msg = "Failed to parse primary exceltables.txt.cooked file!\n\n";
-                MessageBox.Show(msg, "Critical Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Debug.Write(msg);
-                return false;
-            }
-            DataFiles.Add(excelTables.StringId, excelTables);
+            AllExcelFilesLoaded = true;
+            AllStringsFilesLoaded = true;
 
 
             // set status
             if (progress != null)
             {
-                progress.ConfigBar(0, excelTables.Count, 1);
-                progress.SetLoadingText("Loading in excel files (" + excelTables.Count + ")...");
+                progress.ConfigBar(0, TableMap.Count, 1);
+                progress.SetLoadingText("Loading Hellgate Excel Files (" + TableMap.Count + ")...");
             }
 
-
-            // load in tables
-            String folderPath = Config.DataDirsRoot + ExcelFile.FolderPath;
-            AllExcelFilesLoaded = true;
-            for (int i = 0; i < excelTables.Count; i++)
-            {
-                ExcelTablesRow excelTablesRow = excelTables.Rows[i] as ExcelTablesRow;
-                if (excelTablesRow == null) continue;
-
-
-                // do we have a definition for this stringId
-                String stringId = excelTablesRow.StringId;
-                MapItem mapItem = TableMap[stringId] as MapItem;
-                if (mapItem == null)
-                {
-                    String msg = "Unknown excel table ID!\n\nstringId = " + stringId;
-                    MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Debug.WriteLine(msg);
-                    AllExcelFilesLoaded = false;
-                    continue;
-                }
-
-
-                // do we want to even parse it?
-                if (mapItem.IsMythos || mapItem.IsEmpty) continue;
-
-                // get file name
-                String fileName = mapItem.NameReplace ?? stringId;
-
-                // don't do/add self again
-                if (fileName == excelTables.StringId) continue;
-
-
-                // get path to file
-                String filePath = String.Format("{0}{1}.{2}", folderPath, fileName, ExcelFile.FileExtention);
-                if (!File.Exists(filePath))
-                {
-                    filePath = filePath.Replace("_common", "");
-                    if (!File.Exists(filePath))
-                    {
-                        String msg = "Excel file not found!\n\n" + filePath;
-                        MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Debug.WriteLine(msg);
-                        AllExcelFilesLoaded = false;
-                        continue;
-                    }
-                }
-
-
-                // update progress
-                if (progress != null)
-                {
-                    progress.SetCurrentItemText(stringId);
-                }
-
-
-                // parse file
-                try
-                {
-                    byte[] buffer = File.ReadAllBytes(filePath);
-
-                    // note: this (stringId, or fileName?) is what the user will see in the loaded tables form
-                    DataFile excelFile = new ExcelFile(stringId, mapItem.RowType);
-                    excelFile.ParseData(buffer);
-
-                    if (excelFile.IsGood)
-                    {
-                        DataFiles.Add(excelFile.StringId, excelFile);
-                        mapItem.LoadedFile = excelFile;
-                    }
-
-                    continue;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Failed to parse excel file!\n\n" + filePath + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
-                AllExcelFilesLoaded = false;
-                Debug.WriteLine("Debug Output - File failed to parse: " + filePath);
-            }
-
-            AllExcelFilesLoaded = DoManualTables(progress);
-
-            return true;
-        }
-
-        // this function is a bit of a dodgy copy-paste job
-        // todo: fix up or something (consolidate with strings loading & excel loading etc
-        private bool DoManualTables(ProgressForm progress)
-        {
-            String folderPath = Config.DataDirsRoot + ExcelFile.FolderPath;
-            String folderPathTCv4 = Config.DataDirsRoot + @"\tcv4" + ExcelFile.FolderPath;
 
             foreach (DictionaryEntry de in TableMap)
             {
                 MapItem mapItem = de.Value as MapItem;
                 if (mapItem == null) continue;
-                if (!mapItem.ManualLoad && !mapItem.IsTCv4) continue;
+
+                // do we want to even parse it?
+                if (mapItem.IsMythos || mapItem.IsEmpty || mapItem.IsTCv4) continue;
 
 
-                // get path to file
                 String stringId = de.Key as String;
                 String fileName = mapItem.NameReplace ?? stringId;
-                Debug.Assert(stringId != null);
-                String filePath = mapItem.IsTCv4 ?
-                                    String.Format("{0}{1}.{2}", folderPathTCv4, fileName.Replace("_TCv4_", ""), ExcelFile.FileExtention) :
-                                    String.Format("{0}{1}.{2}", folderPath,     fileName,                      ExcelFile.FileExtention);
+                String fileExtention = mapItem.RowType == typeof(StringsFile) ? StringsFile.FileExtention : ExcelFile.FileExtention;
+                String folderPath = mapItem.RowType == typeof(StringsFile) ? StringsFile.FolderPath : ExcelFile.FolderPath;
+                String filePath = String.Format("{0}{1}.{2}", folderPath, fileName, fileExtention).ToLower();
 
-                if (!File.Exists(filePath))
+                Debug.Assert(stringId != null);
+
+
+                // fix path.. some files belong in 'data', others in 'data_common'
+                if (!_fileExplorer.GetFileExists(filePath))
                 {
                     filePath = filePath.Replace("_common", "");
-                    if (!File.Exists(filePath))
+                    if (!_fileExplorer.GetFileExists(filePath))
                     {
                         String msg = "Excel file not found!\n\n" + filePath;
                         Debug.WriteLine(msg);
 
-                        // doesn't matter if they don't load
-                        // MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         if (!mapItem.IsTCv4)
                         {
-                            // for release, uncomment me, and remove above - for testing, we want to know if the TC files aren't loading/found
-                            //MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             AllExcelFilesLoaded = false;
                         }
 
@@ -609,13 +508,13 @@ namespace Reanimator
                 // parse file
                 try
                 {
-                    byte[] buffer = File.ReadAllBytes(filePath);
+                    byte[] buffer = _fileExplorer.GetFileBytes(filePath, true);
 
-                    // note: this (stringId, or fileName?) is what the user will see in the loaded tables form
-                    DataFile excelFile = new ExcelFile(stringId, mapItem.RowType);
-                    excelFile.ParseData(buffer);
+                    DataFile excelFile = mapItem.RowType == typeof(StringsFile) ?
+                        (DataFile)new StringsFile(stringId, mapItem.RowType) :
+                        (DataFile)new ExcelFile(stringId, mapItem.RowType);
 
-                    if (excelFile.IsGood)
+                    if (excelFile.ParseData(buffer))
                     {
                         DataFiles.Add(excelFile.StringId, excelFile);
                         mapItem.LoadedFile = excelFile;
@@ -625,103 +524,11 @@ namespace Reanimator
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to parse excel file!\n\n" + filePath + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    ExceptionLogger.LogException(ex, "DoManualTables", false);
-                }
-
-                AllExcelFilesLoaded = false;
-                Debug.WriteLine("Debug Output - File failed to parse: " + filePath);
-            }
-
-            return true;
-        }
-
-        public bool LoadStringsFiles(ProgressForm progress, ExcelFile excelFile)
-        {
-            if (excelFile == null) return false;
-
-
-            // set status
-            if (progress != null)
-            {
-                progress.ConfigBar(0, excelFile.Count, 1);
-                progress.SetLoadingText("Loading in strings files (" + excelFile.Count + ")...");
-            }
-
-
-            // loop through excel strings file table
-            String baseDataDir = Config.DataDirsRoot + StringsFile.FolderPath;
-            AllStringsFilesLoaded = true;
-            foreach (StringFilesRow stringFilesRow in excelFile.Rows)
-            {
-                // do we have a definition for this stringId
-                String stringId = stringFilesRow.name;
-                MapItem mapItem = TableMap[stringId] as MapItem;
-                if (mapItem == null)
-                {
-                    String msg = "Unknown strings table ID!\n\nstringId = " + stringId;
-                    MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Debug.WriteLine(msg);
+                    AllExcelFilesLoaded = false;
                     AllStringsFilesLoaded = false;
-                    continue;
+                    ExceptionLogger.LogException(ex, "DoManualTables", true);
                 }
-
-
-                // do we want to even parse it?
-                if (mapItem.IsMythos || mapItem.IsEmpty) continue;
-
-                // get file name
-                String fileName = mapItem.NameReplace ?? stringId;
-
-
-                // ensure exists
-                String filePath = String.Format("{0}{1}.{2}", baseDataDir, fileName, StringsFile.FileExtention);
-                if (!File.Exists(filePath))
-                {
-                    filePath = filePath.Replace("data", "data_common");
-                    if (!File.Exists(filePath))
-                    {
-                        String msg = "Strings file not found!\n\n" + filePath;
-                        MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Debug.WriteLine(msg);
-                        AllStringsFilesLoaded = false;
-                        continue;
-                    }
-                }
-
-
-                // update progress
-                if (progress != null)
-                {
-                    progress.SetCurrentItemText(stringId);
-                }
-
-
-                // parse file
-                try
-                {
-                    byte[] buffer = File.ReadAllBytes(filePath);
-
-                    StringsFile stringsFile = new StringsFile(stringId, mapItem.RowType) { FilePath = filePath };
-                    stringsFile.ParseData(buffer);
-
-                    if (stringsFile.IsGood)
-                    {
-                        DataFiles.Add(stringsFile.StringId, stringsFile);
-                        mapItem.LoadedFile = stringsFile;
-                    }
-
-                    continue;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Failed to parse strings file!\n\n" + filePath + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-
-                AllStringsFilesLoaded = false;
-                Debug.WriteLine("Debug Output - File failed to parse: " + filePath);
             }
-
 
             return true;
         }

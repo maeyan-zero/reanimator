@@ -800,7 +800,7 @@ namespace Reanimator
 
 
             ////// file block //////
-            const UInt32 foo = 0;
+            //const UInt32 foo = 0;
             //i = 0;
             FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
             foreach (FileEntry fileIndex in Files)
