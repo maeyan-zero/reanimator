@@ -61,16 +61,10 @@ namespace Reanimator
             set { SetValue("HglDir", value); }
         }
 
-        public static bool IndexBackupCreated
+        public static string HglDataDir
         {
-            get { return GetValue("IndexBackup", false); }
-            set { SetValue("IndexBackup", value); }
-        }
-
-        public static bool Installed
-        {
-            get { return GetValue("Installed", false); }
-            set { SetValue("Installed", value); }
+            get { return GetValue("HglDir", @"C:\Program Files\Flagship Studios\Hellgate London\data"); }
+            set { SetValue("HglDataDir", value); }
         }
 
         public static string SaveDir
@@ -79,16 +73,16 @@ namespace Reanimator
             set { SetValue("SaveDir", value); }
         }
 
-        public static bool DataDirsRootChecked
+        public static string ScriptDir
         {
-            get { return GetValue("DataDirsRootChecked", false); }
-            set { SetValue("DataDirsRootChecked", value); }
+            get { return GetValue("ScriptDir", @"C:\Program Files\Flagship Studios\Hellgate London\Reanimator\Scripts"); }
+            set { SetValue("ScriptDir", value); }
         }
 
-        public static string DataDirsRoot
+        public static string GameClientPath
         {
-            get { return GetValue("DataDirsRoot", @"C:\Program Files\Flagship Studios\Hellgate London"); }
-            set { SetValue("DataDirsRoot", value); }
+            get { return GetValue("GameClientPath", @"C:\Program Files\Flagship Studios\Hellgate London\SP_x32\hellgate_sp_dx9_x32.exe"); }
+            set { SetValue("GameClientPath", value); }
         }
 
         public static int ClientHeight
@@ -101,30 +95,6 @@ namespace Reanimator
         {
             get { return GetValue("ClientWidth", 700); }
             set { SetValue("ClientWidth", value); }
-        }
-
-        public static string GameClientPath
-        {
-            get { return GetValue("GameClientPath", @"C:\Program Files\Flagship Studios\Hellgate London\SP_x64\hellgate_sp_dx9_x64.exe"); }
-            set { SetValue("GameClientPath", value); }
-        }
-
-        public static string CacheFilePath
-        {
-            get { return GetValue("CacheFilePath", @"cache\dataSet.dat"); }
-            set { SetValue("CacheFilePath", value); }
-        }
-
-        public static string DatLastUnpacked
-        {
-            get { return GetValue("DatLastUnpacked", "Never"); }
-            set { SetValue("DatLastUnpacked", value); }
-        }
-
-        public static string ScriptDir
-        {
-            get { return GetValue("ScriptDir", @"C:\Program Files\Flagship Studios\Hellgate London\Reanimator\Scripts"); }
-            set { SetValue("ScriptDir", value); }
         }
 
         public static string IntPtrCast

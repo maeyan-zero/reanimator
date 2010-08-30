@@ -26,23 +26,28 @@ namespace Reanimator
         {
             _options = new Options();
             _indexFilesOpen = new List<string>();
-            _tableFiles = new TableFiles();
             _tableDataSet = new TableDataSet();
             _indexFiles = new List<Index>();
 
-            CheckEnvironment();
+            _CheckHellgateInstallation();
             InitializeComponent();
 
 #if DEBUG
             characterFileToolStripMenuItem.Visible = true;
 #endif
 
-            _fileExplorer = new FileExplorer(_indexFiles) { MdiParent = this };
+            _fileExplorer = new FileExplorer(ref _indexFiles) { MdiParent = this };
+            _tableFiles = new TableFiles(ref _fileExplorer);
 
+<<<<<<< .mine
+
+
+=======
             //String str = "GLOBAL_DEFINITION";
             //String str = @"data\background\catacombs\ct_connb_path.xml.cooked";
             //UInt32 strHash = Crypt.GetStringHash(str);
 
+>>>>>>> .r612
             
             //tw = new StreamWriter(@"C:\asdf.txt");
             //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
@@ -100,62 +105,37 @@ namespace Reanimator
             }
         }
 
-        //todo: rewrite me
-        private void CheckEnvironment()
+        private void _CheckHellgateInstallation()
         {
-        //    const string lastUnpacked = "1.1";
-        //    if (Config.DatLastUnpacked == lastUnpacked) return;
+            if (Directory.Exists(Config.HglDir))
+            {
+                return;
+            }
 
-        //    try
-        //    {
-        //        MessageBox.Show("It looks like your using Reanimator for the first time, or you need to re-unpack your files.\nPlease locate your HGL installation.", "Installation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Please locate your Hellgate London installation directory.\n" +
+                "For this program to work correctly, please ensure the latest Single Player patch is installed.\n" +
+                "For more information, please visit our website: http://www.hellgateaus.net",
+                "Installation", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-        //        FolderBrowserDialog folder = new FolderBrowserDialog { SelectedPath = Config.HglDir };
-        //        folder.ShowDialog();
+            DialogResult installResult;
 
-        //        Config.HglDir = folder.SelectedPath;
+            do
+            {
+                FolderBrowserDialog folder = new FolderBrowserDialog { SelectedPath = Config.HglDir };
+                DialogResult selectPathResult = folder.ShowDialog();
 
-        //        foreach (int dat in unpack)
-        //        {
-        //            String indexPath = Config.HglDir + @"\data\" + Index.FileNames[dat] + ".idx";
-        //            byte[] indexData = File.ReadAllBytes(indexPath);
+                if (selectPathResult == DialogResult.OK)
+                {
+                    Config.HglDir = folder.SelectedPath;
+                    Config.HglDataDir = Path.Combine(Config.HglDir, "\\data");
+                    return;
+                }
 
-        //            Index index = new Index();
-        //            index.ParseData(indexData, indexPath);
-
-        //            if (index.Modified)
-        //            {
-        //                MessageBox.Show("Your index file is modified. Please restore it and try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //                throw new Exception("Index error");
-        //            }
-
-        //            foreach (Index.FileIndex file in index.FileTable)
-        //            {
-        //                if (!file.DirectoryString.Contains("excel")) continue;
-
-        //                string directory = Config.HglDir + @"\Reanimator\" + file.DirectoryString;
-        //                string filename = directory + file.FileNameString;
-        //                if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-        //                FileStream stream = new FileStream(@filename, FileMode.Create);
-        //                byte[] buffer = index.ReadDataFile(file);
-        //                stream.Write(buffer, 0, buffer.Length);
-        //                stream.Close();
-        //            }
-
-        //            index.Dispose();
-        //        }
-
-        //        Config.DatLastUnpacked = lastUnpacked;
-        //        Config.DataDirsRoot = Config.HglDir + @"\Reanimator\";
-
-        //        MessageBox.Show("Installation success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Config.DatLastUnpacked = "Never";
-        //        ExceptionLogger.LogException(ex, "CheckEnvironment", false);
-        //        MessageBox.Show("An error occured during the installation.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
+                installResult =
+                    MessageBox.Show("You must have Hellgate: London installed and the directory set to use Reanimator.",
+                        "Installation Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+            }
+            while (installResult == DialogResult.Retry);
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -251,7 +231,7 @@ namespace Reanimator
                 OpenFileDialog openFileDialog = new OpenFileDialog
                 {
                     Filter = "Cooked Files (*.cooked)|*.cooked|All Files (*.*)|*.*",
-                    InitialDirectory = Config.DataDirsRoot
+                    InitialDirectory = Config.HglDataDir
                 };
 
                 if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
@@ -272,7 +252,7 @@ namespace Reanimator
                 OpenFileDialog openFileDialog = new OpenFileDialog
                 {
                     Filter = "Strings Files (*.xls.uni.cooked)|*.xls.uni.cooked|All Files (*.*)|*.*",
-                    InitialDirectory = Config.DataDirsRoot
+                    InitialDirectory = Config.HglDataDir
                 };
 
                 if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
@@ -452,56 +432,17 @@ namespace Reanimator
         {
             try
             {
-                // check exists
-                String excelFilePath = String.Format("{0}{1}exceltables.{2}", Config.DataDirsRoot, ExcelFile.FolderPath, ExcelFile.FileExtention);
-                if (!File.Exists(excelFilePath))
+                if (!_tableFiles.LoadExcelFiles(progress))
                 {
-                    MessageBox.Show(excelFilePath + " not found!\nPlease ensure your directories are set correctly:\nTools > Options", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    //WaitForCacheLoad(progress, loadTableDataSetThread);
-                    return;
+                    throw new Exception("Failed to load/parse all exceltables!\n" +
+                        "Please ensure your directories are set correctly.\nTools > Options");
                 }
 
-
-                // read in .t.c files
-                try
-                {
-                    byte[] excelData = File.ReadAllBytes(excelFilePath);
-                    if (!_tableFiles.LoadExcelFiles(progress, excelData))
-                    {
-                        MessageBox.Show("Failed to load/parse all exceltables!\nPlease ensure your directories are set correctly.\nTools > Options", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ExceptionLogger.LogException(ex, "_LoadTables - read t.c file", false);
-                    MessageBox.Show(
-                        "Failed to read exceltables.txt.cooked!\nPlease ensure your directories are set correctly.\nTools > Options\n\nFile: \n" +
-                        excelFilePath + "\n\n" + ex, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-
-
-                // read in strings files
-                ExcelFile stringsFile = _tableFiles["STRING_FILES"] as ExcelFile;
-                if (stringsFile != null)
-                {
-                    if (!_tableFiles.LoadStringsFiles(progress, stringsFile))
-                    {
-                        MessageBox.Show("Failed to load/parse all string files!\nPlease ensure your directories are set correctly.\nTools > Options", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("String files not loaded due to no strings_files.txt.cooked parsed!\nPlease ensure your directories are set correctly.\nTools > Options", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-
-
-                // wait for the cache to finish loading in if it hasn't already
-                //WaitForCacheLoad(progress, loadTableDataSetThread);
                 _tableDataSet.TableFiles = _tableFiles;
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "_LoadTables", false);
+                ExceptionLogger.LogException(ex, "_LoadTables", true);
             }
         }
 
