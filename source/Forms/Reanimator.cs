@@ -39,16 +39,10 @@ namespace Reanimator
             _fileExplorer = new FileExplorer(ref _indexFiles) { MdiParent = this };
             _tableFiles = new TableFiles(ref _fileExplorer);
 
-<<<<<<< .mine
-
-
-=======
             //String str = "GLOBAL_DEFINITION";
             //String str = @"data\background\catacombs\ct_connb_path.xml.cooked";
             //UInt32 strHash = Crypt.GetStringHash(str);
 
->>>>>>> .r612
-            
             //tw = new StreamWriter(@"C:\asdf.txt");
             //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
             //_DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
