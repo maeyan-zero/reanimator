@@ -605,8 +605,9 @@ namespace Reanimator.Forms
                 return;
             }
 
-            DialogResult writeIdx = MessageBox.Show("Files extracted sucessfully!\nSave modified index file(s)?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (writeIdx == DialogResult.No) return;
+            // do we really need to ask if we've hit "Patch and Extract"?
+            //DialogResult writeIdx = MessageBox.Show("Files extracted sucessfully!\nSave modified index file(s)?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //if (writeIdx == DialogResult.No) return;
 
             progressForm.SetCurrentItemText("Saving modified index file(s)...");
             foreach (Index idx in
@@ -1170,8 +1171,15 @@ namespace Reanimator.Forms
             }
 
             TreeNode treeNode = (TreeNode)_fileTable[filePath];
+            if (treeNode == null) return false;
 
-            return treeNode == null ? false : true;
+            // is not backup (in idx/dat)
+            NodeObject nodeObject = (NodeObject) treeNode.Tag;
+            if (!nodeObject.IsBackup) return true;
+
+            // get full file path
+            filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
+            return File.Exists(filePath);
         }
 
         public byte[] GetFileBytes(String filePath)
