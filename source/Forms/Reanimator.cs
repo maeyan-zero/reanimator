@@ -25,7 +25,7 @@ namespace Reanimator
         public Reanimator()
         {
             _options = new Options();
-            _indexFilesOpen = new List<string>();
+            _indexFilesOpen = new List<String>();
             _tableDataSet = new TableDataSet();
             _indexFiles = new List<Index>();
 
@@ -426,9 +426,9 @@ namespace Reanimator
         {
             try
             {
-                if (!_tableFiles.LoadExcelFiles(progress))
+                if (!_tableFiles.LoadTableFiles(progress))
                 {
-                    throw new Exception("Failed to load/parse all exceltables!\n" +
+                    throw new Exception("Failed to load/parse all excel and strings tables!\n" +
                         "Please ensure your directories are set correctly.\nTools > Options");
                 }
 

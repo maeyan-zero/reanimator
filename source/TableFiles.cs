@@ -447,20 +447,23 @@ namespace Reanimator
             return true;
         }
 
-        public bool LoadExcelFiles(ProgressForm progress)
+        public bool LoadTableFiles(ProgressForm progress)
         {
             AllExcelFilesLoaded = true;
             AllStringsFilesLoaded = true;
 
 
-            // set status
+            // since we're parsing them so quickly now, the progress form is actually causing a slowdow
+            const int progressStepRate = 10;
             if (progress != null)
             {
-                progress.ConfigBar(0, TableMap.Count, 1);
+                progress.ConfigBar(0, TableMap.Count, progressStepRate);
                 progress.SetLoadingText("Loading Hellgate Excel Files (" + TableMap.Count + ")...");
             }
 
 
+            // loop entries
+            int i = 0;
             foreach (DictionaryEntry de in TableMap)
             {
                 MapItem mapItem = de.Value as MapItem;
@@ -499,16 +502,17 @@ namespace Reanimator
 
 
                 // update progress
-                if (progress != null)
+                if (progress != null & i % progressStepRate == 0)
                 {
                     progress.SetCurrentItemText(stringId);
                 }
+                i++;
 
 
                 // parse file
                 try
                 {
-                    byte[] buffer = _fileExplorer.GetFileBytes(filePath, true);
+                    byte[] buffer = _fileExplorer.GetFileBytes(filePath);
 
                     DataFile excelFile = mapItem.RowType == typeof(StringsFile) ?
                         (DataFile)new StringsFile(stringId, mapItem.RowType) :
@@ -526,7 +530,7 @@ namespace Reanimator
                 {
                     AllExcelFilesLoaded = false;
                     AllStringsFilesLoaded = false;
-                    ExceptionLogger.LogException(ex, "DoManualTables", true);
+                    ExceptionLogger.LogException(ex, "LoadTableFiles", true);
                 }
             }
 
