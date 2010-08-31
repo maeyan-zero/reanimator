@@ -958,6 +958,48 @@ namespace Reanimator
             return returnBuffer;
         }
 
+        public DataView ConvertToSinglePlayerVersion(DataView spDataView, DataView tcDataView)
+        {
+            // Add missing columns
+            foreach (DataColumn col in spDataView.Table.Columns)
+            {
+                if (!tcDataView.Table.Columns.Contains(col.ColumnName))
+                {
+                    tcDataView.Table.Columns.Add(col);
+                }
+            }
+
+            // Remove extra columns
+            foreach (DataColumn col in tcDataView.Table.Columns)
+            {
+                if (spDataView.Table.Columns.Contains(col.ColumnName))
+                {
+                    tcDataView.Table.Columns.Remove(col.ColumnName);
+                }
+            }
+
+            // Compare bitmasks
+            foreach (DataColumn col in tcDataView.Table.Columns)
+            {
+                if (col.DataType != typeof(Enum))
+                {
+                    continue;
+                }
+
+                foreach (DataRow row in tcDataView.Table.Rows)
+                {
+                    uint tcBitmask = (uint)row[col];
+                    Type spBitmask = spDataView.Table.Columns[col.ColumnName].DataType;
+
+                    
+                }
+            }
+
+            // Sort Columns
+
+            return tcDataView;
+        }
+
         public void DumpExtraIndiceData()
         {
             using (TextWriter stream = new StreamWriter(@"extradump.txt"))

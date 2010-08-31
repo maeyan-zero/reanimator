@@ -70,6 +70,8 @@ namespace Reanimator
             }
 
             mainDataTable = XlsDataSet.Tables.Add(dataFile.StringId);
+            mainDataTable.TableName = mainTableName;
+
             List<Object> array = dataFile.Rows;
             Type type = array[0].GetType();
             List<ExcelFile.ExcelOutputAttribute> outputAttributes =
