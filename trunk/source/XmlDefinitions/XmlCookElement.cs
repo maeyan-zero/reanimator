@@ -19,10 +19,12 @@ namespace Reanimator.XmlDefinitions
     public class XmlCookElement
     {
         public String Name;
+        public String TrueName; // some element names have illegal xml chars in them (bad FSS), so we need the "true" name if we want the correct string hash
         public Object DefaultValue;
         public Type ChildType;
         public UInt32 ExcelTableCode;
         public ElementType ElementType;
         public UInt32 FlagId;
+        public Int32 ArrayCount;
     }
 }

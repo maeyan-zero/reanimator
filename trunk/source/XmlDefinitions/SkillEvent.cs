@@ -2,7 +2,13 @@
 {
     class SkillEvent : XmlDefinition
     {
-        private static readonly XmlCookElement nType = new XmlCookElement();
+        private static readonly XmlCookElement nType = new XmlCookElement
+        {
+            Name = "nType",
+            DefaultValue = null,
+            ExcelTableCode = 0x00006E30, // (28208)	SKILLEVENTTYPES
+            ElementType = ElementType.ExcelIndex
+        };
         private static readonly XmlCookElement FlagLaserTurns = new XmlCookElement();
         private static readonly XmlCookElement FlagRequiresTarget = new XmlCookElement();
         private static readonly XmlCookElement FlagForceNew = new XmlCookElement();
@@ -71,10 +77,6 @@
         {
             RootElement = "SKILL_EVENT";
 
-            nType.Name = "nType";
-            nType.DefaultValue = null;
-            nType.ExcelTableCode = 0x00006E30; // (28208)	SKILLEVENTTYPES
-            nType.ElementType = ElementType.ExcelIndex;
             Elements.Add(nType);
 
             FlagLaserTurns.Name = "SKILL_EVENT_FLAG_LASER_TURNS";
@@ -422,7 +424,7 @@
             Condition.Name = "tCondition";
             Condition.DefaultValue = null;
             Condition.ElementType = ElementType.Table;
-            Condition.ChildType = typeof (ConditionDefinition);
+            Condition.ChildType = typeof(ConditionDefinition);
             Elements.Add(Condition);
         }
     }

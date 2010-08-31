@@ -2,29 +2,33 @@
 {
     class SkillEventsDefinition : XmlDefinition
     {
-        private static readonly XmlCookElement szPreviewAppearance = new XmlCookElement();
-        private static readonly XmlCookElement nPreviewAppearance = new XmlCookElement();
-        private static readonly XmlCookElement pEventHolders = new XmlCookElement();
+        private new static readonly XmlCookElement[] Elements =
+        {
+            new XmlCookElement
+            {
+                Name = "szPreviewAppearance",
+                DefaultValue = null,
+                ElementType = ElementType.String
+            },
+            new XmlCookElement
+            {
+                Name = "nPreviewAppearance",
+                DefaultValue = -1,
+                ElementType = ElementType.NonCookedInt32
+            },
+            new XmlCookElement
+            {
+                Name = "pEventHolders",
+                DefaultValue = 0,
+                ChildType = typeof(SkillEventHolder),
+                ElementType = ElementType.TableCount
+            }
+        };
 
         public SkillEventsDefinition()
         {
             RootElement = "SKILL_EVENTS_DEFINITION";
-
-            szPreviewAppearance.Name = "szPreviewAppearance";
-            szPreviewAppearance.DefaultValue = null;
-            szPreviewAppearance.ElementType = ElementType.String;
-            Elements.Add(szPreviewAppearance);
-
-            nPreviewAppearance.Name = "nPreviewAppearance";
-            nPreviewAppearance.DefaultValue = -1;
-            nPreviewAppearance.ElementType = ElementType.NonCookedInt32;
-            Elements.Add(nPreviewAppearance);
-
-            pEventHolders.Name = "pEventHolders";
-            pEventHolders.DefaultValue = 0;
-            pEventHolders.ChildType = typeof (SkillEventHolder);
-            pEventHolders.ElementType = ElementType.TableCount;
-            Elements.Add(pEventHolders);
+            base.Elements.AddRange(Elements);
         }
     }
 }

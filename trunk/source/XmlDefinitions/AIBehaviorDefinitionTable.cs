@@ -2,17 +2,21 @@
 {
     class AIBehaviorDefinitionTable : XmlDefinition
     {
-        private static readonly XmlCookElement pBehaviors = new XmlCookElement();
+        private new static readonly XmlCookElement[] Elements =
+        {
+            new XmlCookElement
+            {
+                Name = "pBehaviors",
+                DefaultValue = 0,
+                ElementType = ElementType.TableCount,
+                ChildType = typeof(AIBehaviorDefinition)
+            }
+        };
 
         public AIBehaviorDefinitionTable()
         {
             RootElement = "AI_BEHAVIOR_DEFINITION_TABLE";
-
-            pBehaviors.Name = "pBehaviors";
-            pBehaviors.DefaultValue = null;
-            pBehaviors.ElementType = ElementType.Int32;
-            pBehaviors.ChildType = typeof(AIBehaviorDefinition);
-            Elements.Add(pBehaviors);
+            base.Elements.AddRange(Elements);
         }
     }
 }
