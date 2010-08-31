@@ -41,13 +41,13 @@ namespace Reanimator
                     _xmlFile = new SkillEventsDefinition();
                     break;
 
-                case 0x4c461620: // ai
+                case 0x4C461620: // ai
                     _xmlFile = new AIDefinition();
                     break;
 
-                //case 0x3A048D4A: // states
-                //    _xmlCooked = new XmlCookedState();
-                //    break;
+                case 0x3A048D4A: // states
+                    _xmlFile = new StateDefinition();
+                    break;
 
                 default:
                     MessageBox.Show("Not implemented type!\nOnly skills and states supported.\n\nxmlDefinitionHash = 0x" + xmlDefinitionHash.ToString("X8"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

@@ -503,6 +503,8 @@
     <Compile Include="XmlDefinitions\SkillEvent.cs" />
     <Compile Include="XmlDefinitions\SkillEventHolder.cs" />
     <Compile Include="XmlDefinitions\SkillEventsDefinition.cs" />
+    <Compile Include="XmlDefinitions\StateDefinition.cs" />
+    <Compile Include="XmlDefinitions\StateEvent.cs" />
     <Compile Include="XmlDefinitions\XmlDefinition.cs" />
     <Compile Include="XmlDefinitions\XmlCookElement.cs" />
     <EmbeddedResource Include="Forms\CSVSelection.resx">
