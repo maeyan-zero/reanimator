@@ -432,6 +432,13 @@ namespace Reanimator
                         "Please ensure your directories are set correctly.\nTools > Options");
                 }
 
+#if DEBUG
+                if (!_tableFiles.LoadTCv4Files(progress))
+                {
+                    //throw new Exception("Failed to load/parse all excel and strings tables!\n" +
+                    //    "Please ensure your directories are set correctly.\nTools > Options");
+                }
+#endif
                 _tableDataSet.TableFiles = _tableFiles;
             }
             catch (Exception ex)
