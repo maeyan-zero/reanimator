@@ -49,6 +49,10 @@ namespace Reanimator
                     _xmlFile = new StateDefinition();
                     break;
 
+                case 0xA51494FA: // sounds/effects
+                    _xmlFile = new SoundEffectDefinition();
+                    break;
+
                 default:
                     MessageBox.Show("Not implemented type!\nOnly skills and states supported.\n\nxmlDefinitionHash = 0x" + xmlDefinitionHash.ToString("X8"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     Debug.Assert(false);
