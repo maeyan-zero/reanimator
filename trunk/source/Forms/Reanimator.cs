@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Data;
 using System.Windows.Forms;
 using System.IO;
 using Reanimator.Forms;
@@ -13,14 +14,20 @@ namespace Reanimator
 {
     public partial class Reanimator : Form
     {
+        // Forms
         private readonly Options _options;
-        private readonly List<String> _indexFilesOpen;
-        private TablesLoaded _tablesLoaded;
-        private readonly TableDataSet _tableDataSet;
-        private int _childFormNumber;
-        private readonly TableFiles _tableFiles;
         private readonly FileExplorer _fileExplorer;
+
+        // Dependencies
         private readonly List<Index> _indexFiles;
+        private readonly TableFiles _tableFiles;
+        private readonly TableDataSet _tableDataSet;
+
+        // Variables
+        private readonly List<String> _indexFilesOpen; // do we need this?
+        private TablesLoaded _tablesLoaded; // do we need this?
+        private int _childFormNumber; // do we need this?
+
 
         public Reanimator()
         {
@@ -34,6 +41,7 @@ namespace Reanimator
 
 #if DEBUG
             characterFileToolStripMenuItem.Visible = true;
+            convertTCv4FilesToolStripMenuItem.Visible = true;
 #endif
 
             _fileExplorer = new FileExplorer(ref _indexFiles) { MdiParent = this };
@@ -830,6 +838,37 @@ namespace Reanimator
             catch (Exception ex)
             {
                 ExceptionLogger.LogException(ex, "_PatchToolToolStripMenuItem_Click", false);
+            }
+        }
+
+        private void convertTCv4FilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // cache all tables
+            foreach (DictionaryEntry rawDataFile in _tableDataSet.TableFiles.DataFiles)
+            {
+                DataFile dataFile = (DataFile)rawDataFile.Value;
+                if (!dataFile.IsExcelFile)
+                {
+                    continue;
+                }
+
+                if (_tableDataSet.GetExcelTableFromStringId(dataFile.StringId) == null)
+                {
+                    //ProgressForm cacheTableProgress = new ProgressForm(_tableDataSet.LoadTable, dataFile);
+                    //cacheTableProgress.ShowDialog(this);
+                }
+            }
+            
+            
+            foreach (DataTable dataTable in _tableDataSet.XlsDataSet.Tables)
+            {
+                // check for tcv4 version
+                if (!dataTable.TableName.Contains("_TCv4_"))
+                {
+                    continue;
+                }
+
+
             }
         }
     }

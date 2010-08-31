@@ -62,6 +62,7 @@
             this.clientPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bypassSecurityx64ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.installModificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.patchToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tradeItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -90,7 +91,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.patchToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertTCv4FilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -363,6 +364,7 @@
             this.patchToolToolStripMenuItem,
             this.tradeItemsToolStripMenuItem,
             this.searchTablesToolStripMenuItem,
+            this.convertTCv4FilesToolStripMenuItem,
             this.toolStripSeparator9,
             this.optionsToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
@@ -374,7 +376,7 @@
             this.clientPatchesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bypassSecurityx64ToolStripMenuItem});
             this.clientPatchesToolStripMenuItem.Name = "clientPatchesToolStripMenuItem";
-            this.clientPatchesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.clientPatchesToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.clientPatchesToolStripMenuItem.Text = "&Patches";
             // 
             // bypassSecurityx64ToolStripMenuItem
@@ -387,33 +389,40 @@
             // installModificationsToolStripMenuItem
             // 
             this.installModificationsToolStripMenuItem.Name = "installModificationsToolStripMenuItem";
-            this.installModificationsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.installModificationsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.installModificationsToolStripMenuItem.Text = "&Install Modifications";
             this.installModificationsToolStripMenuItem.Click += new System.EventHandler(this._ApplyModificationsToolStripMenuItem_Click);
+            // 
+            // patchToolToolStripMenuItem
+            // 
+            this.patchToolToolStripMenuItem.Name = "patchToolToolStripMenuItem";
+            this.patchToolToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.patchToolToolStripMenuItem.Text = "Patch Tool";
+            this.patchToolToolStripMenuItem.Click += new System.EventHandler(this._PatchToolToolStripMenuItem_Click);
             // 
             // tradeItemsToolStripMenuItem
             // 
             this.tradeItemsToolStripMenuItem.Name = "tradeItemsToolStripMenuItem";
-            this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.tradeItemsToolStripMenuItem.Text = "&Trade Items";
             this.tradeItemsToolStripMenuItem.Click += new System.EventHandler(this._TradeItemsToolStripMenuItem_Click);
             // 
             // searchTablesToolStripMenuItem
             // 
             this.searchTablesToolStripMenuItem.Name = "searchTablesToolStripMenuItem";
-            this.searchTablesToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.searchTablesToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.searchTablesToolStripMenuItem.Text = "&Search Tables";
             this.searchTablesToolStripMenuItem.Click += new System.EventHandler(this._SearchTablesToolStripMenuItem_Click);
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(178, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(202, 6);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -613,12 +622,13 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // patchToolToolStripMenuItem
+            // convertTCv4FilesToolStripMenuItem
             // 
-            this.patchToolToolStripMenuItem.Name = "patchToolToolStripMenuItem";
-            this.patchToolToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.patchToolToolStripMenuItem.Text = "Patch Tool";
-            this.patchToolToolStripMenuItem.Click += new System.EventHandler(this._PatchToolToolStripMenuItem_Click);
+            this.convertTCv4FilesToolStripMenuItem.Name = "convertTCv4FilesToolStripMenuItem";
+            this.convertTCv4FilesToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.convertTCv4FilesToolStripMenuItem.Text = "Convert Test Center Files";
+            this.convertTCv4FilesToolStripMenuItem.Visible = false;
+            this.convertTCv4FilesToolStripMenuItem.Click += new System.EventHandler(this.convertTCv4FilesToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
@@ -708,6 +718,7 @@
         private System.Windows.Forms.ToolStripMenuItem installModificationsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem characterFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem patchToolToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem convertTCv4FilesToolStripMenuItem;
     }
 }
 
