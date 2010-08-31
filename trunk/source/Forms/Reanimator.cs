@@ -39,7 +39,7 @@ namespace Reanimator
             _fileExplorer = new FileExplorer(ref _indexFiles) { MdiParent = this };
             _tableFiles = new TableFiles(ref _fileExplorer);
 
-            //String str = "GLOBAL_DEFINITION";
+            //String str = "ROOM_PATH_NODE_DEF_INDOOR_FLAG";
             //String str = @"data\background\catacombs\ct_connb_path.xml.cooked";
             //UInt32 strHash = Crypt.GetStringHash(str);
 
@@ -149,6 +149,7 @@ namespace Reanimator
 
                 if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
 
+                String filePath = openFileDialog.FileName;
                 if (openFileDialog.FileName.EndsWith("idx"))
                 {
                     _OpenFileIdx(openFileDialog.FileName);
@@ -160,6 +161,10 @@ namespace Reanimator
                 else if (openFileDialog.FileName.EndsWith("xls.uni.cooked"))
                 {
                     _OpenFileStrings(openFileDialog.FileName);
+                }
+                else if (filePath.EndsWith(XmlCookedFile.FileExtention))
+                {
+                    _OpenFileXmlCooked(filePath);
                 }
                 else if (openFileDialog.FileName.EndsWith("cooked"))
                 {
@@ -173,6 +178,52 @@ namespace Reanimator
             catch (Exception ex)
             {
                 ExceptionLogger.LogException(ex, "OpenFile", false);
+            }
+        }
+
+        private void _OpenFileXmlCooked(String filePath)
+        {
+            byte[] xmlCookedBytes;
+            try
+            {
+                xmlCookedBytes = File.ReadAllBytes(filePath);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("Failed to read in file!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            XmlCookedFile xmlCookedFile = new XmlCookedFile();
+            if (!xmlCookedFile.ParseData(xmlCookedBytes))
+            {
+                MessageBox.Show("Failed to uncook xml file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            String xmlPath = filePath.Replace(".cooked", "");
+            try
+            {
+                xmlCookedFile.SaveXml(xmlPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to save uncooked xml file!\n\n" + ex, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                return;
+            }
+
+            // this is a bit dodgy using exceptions as if-else, but meh
+            // todo: add check for file name existence etc
+            try
+            {
+                Process notePad = new Process { StartInfo = { FileName = "notepad++.exe", Arguments = xmlPath } };
+                notePad.Start();
+            }
+            catch (Exception)
+            {
+                Process notePad = new Process { StartInfo = { FileName = "notepad.exe", Arguments = xmlPath } };
+                notePad.Start();
             }
         }
 
