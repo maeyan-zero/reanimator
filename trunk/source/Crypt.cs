@@ -6,7 +6,7 @@ namespace Reanimator
     {
         ////// String Crypt Stuffs //////
         private const Int32 StringHashSize = 256;
-        private static readonly byte[] StringHash = new byte[StringHashSize*4];
+        private static readonly UInt32[] StringHash = new UInt32[StringHashSize];
         private static bool _needStringHash = true;
         private const UInt32 StringKey1 = 0x80000000;
         private const Int32 StringKey2 = 0x4C11DB7;
@@ -37,8 +37,7 @@ namespace Reanimator
                 UInt32 hashIndex = stringHash >> 0x18;
                 UInt32 hashSalt = stringHash << 0x08;
                 hashIndex ^= str[i];
-                stringHash = BitConverter.ToUInt32(StringHash, (int)hashIndex*4);
-                stringHash ^= hashSalt;
+                stringHash = StringHash[hashIndex] ^ hashSalt;
             }
 
             return stringHash;
@@ -125,49 +124,47 @@ namespace Reanimator
                 hashSalt2 ^= hashSalt1;
                 hashSalt1 = hashSalt2*2;
                 hashValue = 0;
-                if ((UInt64)hashSalt2 >= StringKey1) hashValue--;
+                if ((UInt32)hashSalt2 >= StringKey1) hashValue--;
 
                 hashValue &= StringKey2;
                 hashValue ^= hashSalt1;
                 hashSalt1 = hashValue*2;
                 hashSalt2 = 0;
-                if ((UInt64)hashValue >= StringKey1) hashSalt2--;
+                if ((UInt32)hashValue >= StringKey1) hashSalt2--;
 
                 hashSalt2 &= StringKey2;
                 hashSalt2 ^= hashSalt1;
                 hashSalt1 = hashSalt2*2;
                 hashValue = 0;
-                if ((UInt64)hashSalt2 >= StringKey1) hashValue--;
+                if ((UInt32)hashSalt2 >= StringKey1) hashValue--;
 
                 hashValue &= StringKey2;
                 hashValue ^= hashSalt1;
                 hashSalt1 = hashValue*2;
                 hashSalt2 = 0;
-                if ((UInt64)hashValue >= StringKey1) hashSalt2--;
+                if ((UInt32)hashValue >= StringKey1) hashSalt2--;
 
                 hashSalt2 &= StringKey2;
                 hashSalt2 ^= hashSalt1;
                 hashSalt1 = hashSalt2*2;
                 hashValue = 0;
-                if ((UInt64)hashSalt2 >= StringKey1) hashValue--;
+                if ((UInt32)hashSalt2 >= StringKey1) hashValue--;
 
                 hashValue &= StringKey2;
                 hashValue ^= hashSalt1;
                 hashSalt1 = hashValue*2;
                 hashSalt2 = 0;
-                if ((UInt64)hashValue >= StringKey1) hashSalt2--;
+                if ((UInt32)hashValue >= StringKey1) hashSalt2--;
 
                 hashSalt2 &= StringKey2;
                 hashSalt2 ^= hashSalt1;
                 hashSalt1 = hashSalt2*2;
                 hashValue = 0;
-                if ((UInt64)hashSalt2 >= StringKey1) hashValue--;
+                if ((UInt32)hashSalt2 >= StringKey1) hashValue--;
 
                 hashValue &= StringKey2;
                 hashValue ^= hashSalt1;
-
-                byte[] bytes = BitConverter.GetBytes(hashValue);
-                Buffer.BlockCopy(bytes, 0, StringHash, i * 4, 4);
+                StringHash[i] = (UInt32)hashValue;
             }
 
             _needStringHash = false;

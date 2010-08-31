@@ -404,7 +404,7 @@ namespace Reanimator.Forms
             {
                 String xmlDataPath = Path.Combine(Config.HglDir, fileIndex.FullPath.Replace(".cooked", ""));
 
-                byte[] fileData = GetFileBytes(fileIndex.FullPath, true);
+                byte[] fileData = GetFileBytes(fileIndex.FullPath);
                 if (fileData == null)
                 {
                     MessageBox.Show("Failed to read xml.cooked from source!", "Error", MessageBoxButtons.OK,
@@ -1174,7 +1174,7 @@ namespace Reanimator.Forms
             return treeNode == null ? false : true;
         }
 
-        public byte[] GetFileBytes(String filePath, bool getLatestVersion)
+        public byte[] GetFileBytes(String filePath)
         {
             if (String.IsNullOrEmpty(filePath)) return null;
 
@@ -1187,17 +1187,28 @@ namespace Reanimator.Forms
             if (treeNode == null) return null;
 
             NodeObject nodeObject = (NodeObject) treeNode.Tag;
-            if (getLatestVersion)
+            // not entirly sure why I even had this...
+            //if (getLatestVersion)
+            //{
+            //    nodeObject = nodeObject.GetYoungestChild();
+            //}
+
+            // are we loading from file or dat
+            byte[] fileBytes;
+            if (nodeObject.IsBackup)
             {
-                nodeObject = nodeObject.GetYoungestChild();
+                filePath = Path.Combine(Config.HglDir, nodeObject.FileEntry.FullPath);
+                fileBytes = File.ReadAllBytes(filePath);
             }
+            else
+            {
+                Index idx = nodeObject.Index;
+                Debug.Assert(idx != null);
 
-            Index idx = nodeObject.Index;
-            Debug.Assert(idx != null);
-
-            idx.BeginDatReading();
-            byte[] fileBytes = idx.ReadDatFile(nodeObject.FileEntry);
-            idx.EndDatAccess();
+                idx.BeginDatReading();
+                fileBytes = idx.ReadDatFile(nodeObject.FileEntry);
+                idx.EndDatAccess();
+            }
 
             return fileBytes;
         }
