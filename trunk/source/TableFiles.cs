@@ -537,6 +537,84 @@ namespace Reanimator
             return true;
         }
 
+        public bool LoadTCv4Files(ProgressForm progress)
+        {
+            // since we're parsing them so quickly now, the progress form is actually causing a slowdow
+            const int progressStepRate = 10;
+            if (progress != null)
+            {
+                progress.ConfigBar(0, TableMap.Count, progressStepRate);
+                progress.SetLoadingText("Loading Hellgate Test Center Excel Files (" + TableMap.Count + ")...");
+            }
+
+
+            // loop entries
+            int i = 0;
+            foreach (DictionaryEntry de in TableMap)
+            {
+                MapItem mapItem = de.Value as MapItem;
+                if (mapItem == null) continue;
+
+                // only test center files
+                if (!mapItem.IsTCv4) continue;
+
+
+                String stringId = de.Key as String;
+                String fileName = (mapItem.NameReplace ?? stringId).Replace("_TCv4_", "");
+                String fileExtention = mapItem.RowType == typeof(StringsFile) ? StringsFile.FileExtention : ExcelFile.FileExtention;
+                String folderPath = Config.HglDataDir + "\\Reanimator\\tcv4" + ExcelFile.FolderPath;
+                String filePath = String.Format("{0}{1}.{2}", folderPath, fileName, fileExtention);
+
+                Debug.Assert(stringId != null);
+
+
+                // fix path.. some files belong in 'data', others in 'data_common'
+                if (!File.Exists(filePath))
+                {
+                    filePath = filePath.Replace("_common", "");
+                    if (!File.Exists(filePath))
+                    {
+                        String msg = "Excel file not found!\n\n" + filePath;
+                        Debug.WriteLine(msg);
+                        continue;
+                    }
+                }
+
+
+                // update progress
+                if (progress != null & i % progressStepRate == 0)
+                {
+                    progress.SetCurrentItemText(stringId);
+                }
+                i++;
+
+
+                // parse file
+                try
+                {
+                    byte[] buffer = File.ReadAllBytes(filePath);
+
+                    DataFile excelFile = mapItem.RowType == typeof(StringsFile) ?
+                        (DataFile)new StringsFile(stringId, mapItem.RowType) :
+                        (DataFile)new ExcelFile(stringId, mapItem.RowType);
+
+                    if (excelFile.ParseData(buffer))
+                    {
+                        DataFiles.Add(excelFile.StringId, excelFile);
+                        mapItem.LoadedFile = excelFile;
+                    }
+
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLogger.LogException(ex, "LoadTableFiles", true);
+                }
+            }
+
+            return true;
+        }
+
         public ExcelFile GetExcelTableFromId(int tableId)
         {
             ExcelFile excelTables = DataFiles["EXCELTABLES"] as ExcelFile;
