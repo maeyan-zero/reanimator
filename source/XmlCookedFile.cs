@@ -53,6 +53,10 @@ namespace Reanimator
                     _xmlFile = new SoundEffectDefinition();
                     break;
 
+                case 0x3D699391: // background/ layout
+                    _xmlFile = new RoomLayoutGroupDefinition();
+                    break;
+
                 default:
                     MessageBox.Show("Not implemented type!\nOnly skills and states supported.\n\nxmlDefinitionHash = 0x" + xmlDefinitionHash.ToString("X8"), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     Debug.Assert(false);
