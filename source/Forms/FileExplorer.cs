@@ -200,7 +200,7 @@ namespace Reanimator.Forms
                 if (currFile.FileNameString.EndsWith(XmlCookedFile.FileExtention))
                 {
                     // we can only edit skills xml.cooked at the moment
-                    if (nodeKeys.Contains("skills") || nodeKeys.Contains("ai") || nodeKeys.Contains("states"))
+                    if (nodeKeys.Contains("skills") || nodeKeys.Contains("ai") || nodeKeys.Contains("states") || nodeKeys.Contains("effects"))
                     {
                         currNodeObject.CanEdit = true;
                     }
@@ -396,6 +396,9 @@ namespace Reanimator.Forms
 
             Index.FileEntry fileIndex = nodeObject.FileEntry;
 
+            // todo: this section needs a good cleaning
+            // todo: implementation of choosing default program in the options menu
+            // todo: current implementation overwites already extracted/uncooked file without asking - open it instead or ask?
             if (fileIndex.FileNameString.EndsWith(ExcelFile.FileExtention) || fileIndex.FileNameString.EndsWith(StringsFile.FileExtention))
             {
                 MessageBox.Show("todo");
@@ -454,7 +457,22 @@ namespace Reanimator.Forms
             }
             else if (fileIndex.FileNameString.EndsWith(".txt"))
             {
-                MessageBox.Show("todo");
+                // todo: fix me (copy-pasted from above)
+                String xmlDataPath = Path.Combine(Config.HglDir, fileIndex.FullPath);
+                const String fileName = "notepad++.exe";
+
+                // this is a bit dodgy using exceptions as if-else, but meh
+                // todo: add check for file name existence etc
+                try
+                {
+                    Process notePad = new Process { StartInfo = { FileName = fileName, Arguments = xmlDataPath } };
+                    notePad.Start();
+                }
+                catch (Exception)
+                {
+                    Process notePad = new Process { StartInfo = { FileName = "notepad.exe", Arguments = xmlDataPath } };
+                    notePad.Start();
+                }
             }
             else
             {
