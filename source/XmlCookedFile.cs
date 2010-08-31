@@ -38,8 +38,11 @@ namespace Reanimator
             switch (xmlDefinitionHash)
             {
                 case 0x400053E7: // skills
-                    //_xmlCooked = new XmlCookedSkill();
                     _xmlFile = new SkillEventsDefinition();
+                    break;
+
+                case 0x4c461620: // ai
+                    _xmlFile = new AIDefinition();
                     break;
 
                 //case 0x3A048D4A: // states
@@ -100,6 +103,11 @@ namespace Reanimator
                     {
                         elementName += "Count";
                         count = _ReadInt32(rootElement, elementName);
+
+                        if (count == 0)
+                        {
+                            rootElement.RemoveChild(rootElement.LastChild);
+                        }
                     }
 
                     for (int e = 0; e < count; e++)
@@ -107,8 +115,6 @@ namespace Reanimator
                         XmlDefinition xmlCountDefinition = (XmlDefinition)Activator.CreateInstance(xmlDefinition[i].ChildType);
                         if (!_DoDefinition(xmlCountDefinition, rootElement)) return false;
                     }
-
-
 
                     continue;
                 }
@@ -179,8 +185,11 @@ namespace Reanimator
                     case ElementType.ExcelIndex:
                         _ReadByteString(rootElement, xmlDefinition[i].Name, xmlDefinition[i].DefaultValue); // todo: do proper conversion
                         break;
-                    case ElementType.FloatArray: // todo: in AI
-                        int bp2 = 0;
+                    case ElementType.FloatArray:
+                        for (int fIndex = 0; fIndex < xmlDefinition[i].ArrayCount; fIndex++)
+                        {
+                            _ReadFloat(rootElement, xmlDefinition[i].Name);
+                        }
                         break;
                     default:
                         Debug.Assert(false, "ElementType not set!");
@@ -290,6 +299,7 @@ namespace Reanimator
 
                     case 0x0308:    // skills
                     case 0x030A:    // skills
+                    case 0x0106:    // ai (float array)
                         ////case 0x0106: // found in particle effects
                         _ReadInt32(null, null);
                         _ReadInt32(null, null);

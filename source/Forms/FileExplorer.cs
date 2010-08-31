@@ -200,7 +200,7 @@ namespace Reanimator.Forms
                 if (currFile.FileNameString.EndsWith(XmlCookedFile.FileExtention))
                 {
                     // we can only edit skills xml.cooked at the moment
-                    if (nodeKeys.Contains("skills"))
+                    if (nodeKeys.Contains("skills") || nodeKeys.Contains("ai"))
                     {
                         currNodeObject.CanEdit = true;
                     }

@@ -2,17 +2,21 @@
 {
     class AIDefinition : XmlDefinition
     {
-        private static readonly XmlCookElement Table = new XmlCookElement();
+        private new static readonly XmlCookElement[] Elements =
+        {
+            new XmlCookElement
+            {
+                Name = "tTable",
+                DefaultValue = null,
+                ElementType = ElementType.Table,
+                ChildType = typeof(AIBehaviorDefinitionTable)
+            }
+        };
 
         public AIDefinition()
         {
             RootElement = "AI_DEFINITION";
-
-            Table.Name = "tTable";
-            Table.DefaultValue = null;
-            Table.ElementType = ElementType.Table;
-            Table.ChildType = typeof(AIBehaviorDefinitionTable);
-            Elements.Add(Table);
+            base.Elements.AddRange(Elements);
         }
     }
 }
