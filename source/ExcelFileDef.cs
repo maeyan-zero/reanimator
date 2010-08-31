@@ -7,7 +7,7 @@ namespace Reanimator
 {
     public partial class ExcelFile
     {
-        public const String FolderPath = @"\data_common\excel\";
+        public const String FolderPath = @"\excel\";
         public const String FileExtention = "txt.cooked";
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]

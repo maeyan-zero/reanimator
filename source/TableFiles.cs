@@ -476,7 +476,7 @@ namespace Reanimator
                 String stringId = de.Key as String;
                 String fileName = mapItem.NameReplace ?? stringId;
                 String fileExtention = mapItem.RowType == typeof(StringsFile) ? StringsFile.FileExtention : ExcelFile.FileExtention;
-                String folderPath = mapItem.RowType == typeof(StringsFile) ? StringsFile.FolderPath : ExcelFile.FolderPath;
+                String folderPath = mapItem.RowType == typeof(StringsFile) ? "\\data" + StringsFile.FolderPath : "\\data" + ExcelFile.FolderPath;
                 String filePath = String.Format("{0}{1}.{2}", folderPath, fileName, fileExtention).ToLower();
 
                 Debug.Assert(stringId != null);
@@ -485,7 +485,7 @@ namespace Reanimator
                 // fix path.. some files belong in 'data', others in 'data_common'
                 if (!_fileExplorer.GetFileExists(filePath))
                 {
-                    filePath = filePath.Replace("_common", "");
+                    filePath = filePath.Replace("data", "data_common");
                     if (!_fileExplorer.GetFileExists(filePath))
                     {
                         String msg = "Excel file not found!\n\n" + filePath;
