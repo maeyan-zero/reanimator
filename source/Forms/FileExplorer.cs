@@ -1224,7 +1224,7 @@ namespace Reanimator.Forms
             byte[] fileBytes;
             if (nodeObject.IsBackup)
             {
-                filePath = Path.Combine(Config.HglDir, nodeObject.FileEntry.FullPath);
+                filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
                 fileBytes = File.ReadAllBytes(filePath);
             }
             else
