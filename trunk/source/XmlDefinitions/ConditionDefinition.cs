@@ -1,4 +1,6 @@
-﻿namespace Reanimator.XmlDefinitions
+﻿using System;
+
+namespace Reanimator.XmlDefinitions
 {
     class ConditionDefinition : XmlDefinition
     {
@@ -8,49 +10,49 @@
             {
                 Name = "nType",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 26417, // CONDITION_FUNCTIONS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nState",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 22832, // STATES
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nUnitType",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 21040, // UNITTYPES
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nSkill",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 27952, // SKILLS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nMonsterClass",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 12338, // MONSTERS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nObjectClass",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 13106, // OBJECTS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nStat",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 23088, // STATS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
@@ -70,53 +72,51 @@
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_CHECK_OWNER",
-                ElementType = ElementType.Flag,
+                ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                FlagId = 1
+                BitIndex = 0
             },
             new XmlCookElement
             {
-                // this and CHECK_TARGET are swapped for some reason...
-                // see end of default values array in .xml.cooked ordering (0, 2, 1, 3, 4, 5, 6)
                 Name = "CONDITION_BIT_CHECK_TARGET",
-                ElementType = ElementType.Flag,
+                ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                FlagId = 1
+                BitIndex = 2
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_CHECK_WEAPON",
-                ElementType = ElementType.Flag,
+                ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                FlagId = 1
+                BitIndex = 1
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_NOT_DEAD_OR_DYING",
-                ElementType = ElementType.Flag,
+                ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                FlagId = 1
+                BitIndex = 3
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_IS_YOUR_PLAYER",
-                ElementType = ElementType.Flag,
+                ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                FlagId = 1
+                BitIndex = 4
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_OWNER_IS_YOUR_PLAYER",
-                ElementType = ElementType.Flag,
+                ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                FlagId = 1
+                BitIndex = 5
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_CHECK_STATE_SOURCE",
-                ElementType = ElementType.Flag,
+                ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                FlagId = 1
+                BitIndex = 6
             }
         };
 
@@ -124,6 +124,7 @@
         {
             RootElement = "CONDITION_DEFINITION";
             base.Elements.AddRange(Elements);
+            BitFields = new Int32[] {-1};
         }
     }
 }

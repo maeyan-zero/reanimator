@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using Reanimator.Forms;
 using Reanimator.Forms.ItemTransfer;
+using Reanimator.XmlDefinitions;
 
 namespace Reanimator
 {
@@ -46,8 +47,12 @@ namespace Reanimator
 
             _fileExplorer = new FileExplorer(ref _indexFiles) { MdiParent = this };
             _tableFiles = new TableFiles(ref _fileExplorer);
+            XmlCookedFile.Initialize();
 
-            //String str = "ROOM_PATH_NODE_DEF_INDOOR_FLAG";
+            //XmlCookedFile asdf = new XmlCookedFile();
+            //asdf.Uncook(File.ReadAllBytes(@"D:\Games\Hellgate London\data\skills\consumable\summoncocomoko.xml.cooked"));
+
+            //String str = "pLongConnections";
             //String str = @"data\background\catacombs\ct_connb_path.xml.cooked";
             //UInt32 strHash = Crypt.GetStringHash(str);
 
@@ -65,47 +70,47 @@ namespace Reanimator
             //_DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
             //_DoFolder(@"D:\Games\Hellgate London\data\skills\");
             //tw.Close();
-           // this.Close();
-             
+            // this.Close();
+
         }
-        
+
         //private TextWriter tw;
 
-        private void _DoFolder(String folderDir)
-        {
-            DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
-            FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
+        //private void _DoFolder(String folderDir)
+        //{
+        //    DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
+        //    FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
 
-            XmlCookedFile xmlAdrenaline = null;
+        //    XmlCookedFile xmlAdrenaline = null;
 
-            foreach (FileInfo fileInfo in files)
-            {
-                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+        //    foreach (FileInfo fileInfo in files)
+        //    {
+        //        XmlCookedFile xmlCookedFile = new XmlCookedFile();
 
-                byte[] data = File.ReadAllBytes(fileInfo.FullName);
-                if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
-                {
-                    xmlAdrenaline = xmlCookedFile;
-                    int bp = 0;
-                }
+        //        byte[] data = File.ReadAllBytes(fileInfo.FullName);
+        //        if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
+        //        {
+        //            xmlAdrenaline = xmlCookedFile;
+        //            int bp = 0;
+        //        }
 
-                Debug.Assert(xmlCookedFile.ParseData(data));
+        //        Debug.Assert(xmlCookedFile.Uncook(data));
 
-                xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+        //        xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
 
-                //String blah = xmlCookedFile.Blah();
-                //if (blah != null)
-                //{
-                //    //tw.WriteLine(fileInfo.FullName);
-                //    //tw.WriteLine(blah);
-                //}
-            }
+        //        //String blah = xmlCookedFile.Blah();
+        //        //if (blah != null)
+        //        //{
+        //        //    //tw.WriteLine(fileInfo.FullName);
+        //        //    //tw.WriteLine(blah);
+        //        //}
+        //    }
 
-            if (xmlAdrenaline != null)
-            {
-                // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
-            }
-        }
+        //    if (xmlAdrenaline != null)
+        //    {
+        //        // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
+        //    }
+        //}
 
         private void _CheckHellgateInstallation()
         {
@@ -196,14 +201,14 @@ namespace Reanimator
             {
                 xmlCookedBytes = File.ReadAllBytes(filePath);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show("Failed to read in file!\n\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             XmlCookedFile xmlCookedFile = new XmlCookedFile();
-            if (!xmlCookedFile.ParseData(xmlCookedBytes))
+            if (!xmlCookedFile.Uncook(xmlCookedBytes))
             {
                 MessageBox.Show("Failed to uncook xml file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -858,8 +863,8 @@ namespace Reanimator
                     //cacheTableProgress.ShowDialog(this);
                 }
             }
-            
-            
+
+
             foreach (DataTable dataTable in _tableDataSet.XlsDataSet.Tables)
             {
                 // check for tcv4 version
