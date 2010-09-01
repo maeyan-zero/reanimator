@@ -451,14 +451,17 @@ namespace Reanimator
                     case 1:
                     case 3:
                     case 4:
+                    case 5://tcv4 skills
                     case 14:
                     case 26:
+                    case 86://tcv4 skills
                     case 516:
                     case 527:
                     case 700:
                         len += sizeof(int) * 1;
                         break;
                     case 320:
+                    case 333://tcv4 skills
                     case 339:
                     case 347:
                     case 358: // items
