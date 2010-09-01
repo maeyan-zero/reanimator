@@ -424,7 +424,7 @@
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this._OptionsToolStripMenuItem_Click);
             // 
             // windowsMenu
             // 

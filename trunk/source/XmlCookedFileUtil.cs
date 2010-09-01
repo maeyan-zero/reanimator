@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Reanimator.XmlDefinitions;
@@ -20,8 +21,12 @@ namespace Reanimator
         /// Initialize XML Definitions and generate String Hash values for xml element names.
         /// Must be called before usage of the class.
         /// </summary>
-        public static void Initialize()
+        /// <param name="tableFiles">The loaded table files for excel lookups.</param>
+        public static void Initialize(TableFiles tableFiles)
         {
+            Debug.Assert(tableFiles != null);
+
+            _tableFiles = tableFiles;
             _xmlDefinitions = new XmlDefinition[]
             {
                 // AI
