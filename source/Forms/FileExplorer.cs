@@ -201,7 +201,8 @@ namespace Reanimator.Forms
                 {
                     // we can only edit skills xml.cooked at the moment
                     if (nodeKeys.Contains("skills") || nodeKeys.Contains("ai") || nodeKeys.Contains("states") || nodeKeys.Contains("effects") ||
-                        (nodeKeys.Contains("background") && currFile.FileNameString.Contains("layout")))
+                        (nodeKeys.Contains("background") && (currFile.FileNameString.Contains("layout") || currFile.FileNameString.Contains("path"))) ||
+                        nodeKeys.Contains("materials"))
                     {
                         currNodeObject.CanEdit = true;
                     }
@@ -417,7 +418,7 @@ namespace Reanimator.Forms
                 }
 
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();
-                if (!xmlCookedFile.ParseData(fileData))
+                if (!xmlCookedFile.Uncook(fileData))
                 {
                     MessageBox.Show("Failed to uncook xml file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;

@@ -1,4 +1,6 @@
-﻿namespace Reanimator.XmlDefinitions
+﻿using System;
+
+namespace Reanimator.XmlDefinitions
 {
     internal class AIBehaviorDefinition : XmlDefinition
     {
@@ -27,49 +29,49 @@
             {
                 Name = "nBehaviorId",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 17713, // AI_BEHAVIOR
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nSkillId",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 27952, // SKILLS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nSkillId2",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 27952, // SKILLS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nStateId",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 22832, // STATES
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nStatId",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 23088, // STATS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nSoundId",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 20784, // SOUNDS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
             {
                 Name = "nMonsterId",
                 DefaultValue = null,
-                ExcelTableCode = 0, // todo
+                ExcelTableCode = 14642, // SPAWN_CLASS
                 ElementType = ElementType.ExcelIndex
             },
             new XmlCookElement
@@ -77,35 +79,40 @@
                 Name = "AI_BEHAVIOR_FLAG_ONCE",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 0)
             },
             new XmlCookElement
             {
                 Name = "AI_BEHAVIOR_FLAG_RUN",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 1)
             },
             new XmlCookElement
             {
                 Name = "AI_BEHAVIOR_FLAG_FLY",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 2)
             },
             new XmlCookElement
             {
                 Name = "AI_BEHAVIOR_FLAG_DONT_STOP",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 3)
             },
             new XmlCookElement
             {
                 Name = "AI_BEHAVIOR_FLAG_WARP",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 4)
             },
             new XmlCookElement
             {
@@ -126,6 +133,7 @@
         {
             RootElement = "AI_BEHAVIOR_DEFINITION";
             base.Elements.AddRange(Elements);
+            BitFields = new Int32[] {-1};
         }
     }
 }

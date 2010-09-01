@@ -1,4 +1,6 @@
-﻿namespace Reanimator.XmlDefinitions
+﻿using System;
+
+namespace Reanimator.XmlDefinitions
 {
     class RoomLayoutGroup : XmlDefinition
     {
@@ -104,63 +106,72 @@
                 Name = "ROOM_LAYOUT_FLAG_WEIGHT_PERCENTAGE",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 0)
             },
             new XmlCookElement
             {
                 Name = "ROOM_LAYOUT_FLAG_RANDOM_ROTATIONS",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 1)
             },
             new XmlCookElement
             {
                 Name = "ROOM_LAYOUT_FLAG_AI_NODE_CROUCH",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 2)
             },
             new XmlCookElement
             {
                 Name = "ROOM_LAYOUT_FLAG_AI_NODE_DOORWAY",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 3)
             },
             new XmlCookElement
             {
                 Name = "ROOM_LAYOUT_FLAG_AI_NODE_LARGE_COVER",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 4)
             },
             new XmlCookElement
             {
                 Name = "ROOM_LAYOUT_FLAG_AI_NODE_STONE",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 8)
             },
             new XmlCookElement
             {
                 Name = "ROOM_LAYOUT_FLAG_NOT_THEME",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 5)
             },
             new XmlCookElement
             {
                 Name = "ROOM_LAYOUT_FLAG_NO_THEME",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 6)
             },
             new XmlCookElement
             {
                 Name = "ROOM_LAYOUT_FLAG_EXPANDED",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 7)
             },
             new XmlCookElement
             {
@@ -216,6 +227,7 @@
         {
             RootElement = "ROOM_LAYOUT_GROUP";
             base.Elements.AddRange(Elements);
+            BitFields = new Int32[] {-1};
         }
     }
 }

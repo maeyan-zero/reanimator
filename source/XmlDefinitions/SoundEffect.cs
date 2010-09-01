@@ -57,7 +57,7 @@ namespace Reanimator.XmlDefinitions
             {
                 Name = "bEnabled",
                 ElementType = ElementType.NonCookedInt32, // bool??
-                DefaultValue = 1, // TRUE??
+                DefaultValue = 0, // TRUE??
             },
             new XmlCookElement
             {
@@ -70,7 +70,7 @@ namespace Reanimator.XmlDefinitions
 
         public SoundEffect()
         {
-            RootElement = "SOUND_EFFECT_DEFINITION";
+            RootElement = "SOUND_EFFECT";
             base.Elements.AddRange(Elements);
         }
     }

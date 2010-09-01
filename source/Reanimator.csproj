@@ -298,6 +298,7 @@
     <Compile Include="DataFile.cs" />
     <Compile Include="ExcelDefinitions\ExcelTables.cs" />
     <Compile Include="ExcelFileDef.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="FileTools.cs" />
     <Compile Include="Forms\FileExplorer.cs">
       <SubType>Form</SubType>
@@ -496,12 +497,19 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlCookedFile.cs" />
+    <Compile Include="XmlCookedFileUtil.cs" />
     <Compile Include="XmlDefinitions\AIBehaviorDefinition.cs" />
     <Compile Include="XmlDefinitions\AIBehaviorDefinitionTable.cs" />
     <Compile Include="XmlDefinitions\AIDefinition.cs" />
     <Compile Include="XmlDefinitions\ConditionDefinition.cs" />
+    <Compile Include="XmlDefinitions\Material.cs" />
     <Compile Include="XmlDefinitions\RoomLayoutGroup.cs" />
     <Compile Include="XmlDefinitions\RoomLayoutGroupDefinition.cs" />
+    <Compile Include="XmlDefinitions\RoomPathNode.cs" />
+    <Compile Include="XmlDefinitions\RoomPathNodeConnection.cs" />
+    <Compile Include="XmlDefinitions\RoomPathNodeConnectionRef.cs" />
+    <Compile Include="XmlDefinitions\RoomPathNodeDefinition.cs" />
+    <Compile Include="XmlDefinitions\RoomPathNodeSet.cs" />
     <Compile Include="XmlDefinitions\SkillEvent.cs" />
     <Compile Include="XmlDefinitions\SkillEventHolder.cs" />
     <Compile Include="XmlDefinitions\SkillEventsDefinition.cs" />

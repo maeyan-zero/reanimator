@@ -1,4 +1,6 @@
-﻿namespace Reanimator.XmlDefinitions
+﻿using System;
+
+namespace Reanimator.XmlDefinitions
 {
     class StateEvent : XmlDefinition
     {
@@ -9,98 +11,112 @@
                 Name = "STATE_EVENT_FLAG_FORCE_NEW",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 0)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_FIRST_PERSON",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 1)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_ADD_TO_CENTER",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 2)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_CONTROL_UNIT_ONLY",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 3)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_FLOAT",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 4)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_OWNED_BY_CONTROL",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 5)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_SET_IMMEDIATELY",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 6)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_CLEAR_IMMEDIATELY",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 7)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_NOT_CONTROL_UNIT",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 8)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_ON_WEAPONS",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 9)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_IGNORE_CAMERA",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 10)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_ON_CLEAR",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 11)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_CHECK_CONDITION_ON_CLEAR",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 12)
             },
             new XmlCookElement
             {
                 Name = "STATE_EVENT_FLAG_SHARE_DURATION",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
-                FlagId = 1
+                FlagId = 1,
+                BitMask = (1 << 13)
             },
             new XmlCookElement
             {
@@ -254,6 +270,7 @@
         {
             RootElement = "STATE_EVENT";
             base.Elements.AddRange(Elements);
+            BitFields = new Int32[] {-1};
         }
     }
 }

@@ -6,8 +6,10 @@ namespace Reanimator.XmlDefinitions
     public class XmlDefinition
     {
         public String RootElement;
+        public UInt32 RootHash;
         public String Value;
         public readonly List<XmlCookElement> Elements;
+        public Int32[] BitFields;
 
         protected XmlDefinition()
         {
@@ -17,6 +19,11 @@ namespace Reanimator.XmlDefinitions
         public XmlCookElement this[int index]
         {
             get { return Elements[index]; }
+        }
+
+        public int ElementCount
+        {
+            get { return Elements.Count; }
         }
     }
 }
