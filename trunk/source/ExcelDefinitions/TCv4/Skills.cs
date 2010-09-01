@@ -28,8 +28,11 @@ namespace Reanimator.ExcelDefinitions
         public Skills.Bitmask06 bitmask6;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
         public Int32 displayName;//stridx
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        Int32[] TCv4_1;
+        public Int32 skillLevelIncludesSkills1;
+        public Int32 skillLevelIncludesSkills2;
+        public Int32 skillLevelIncludesSkills3;
+        public Int32 skillLevelIncludesSkills4;
+        public Int32 skillLevelIncludesSkills5;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String descriptionStringFunction;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
@@ -50,9 +53,9 @@ namespace Reanimator.ExcelDefinitions
         Int32 accumulationString;//stridx
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
         public Int32 stringAfterRequiredWeapon;//stridx
-        Int32 skillsToAccumulate1;
-        Int32 skillsToAccumulate2;
-        Int32 skillsToAccumulate3;
+        public Int32 skillsToAccumulate1;
+        public Int32 skillsToAccumulate2;
+        public Int32 skillsToAccumulate3;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String events;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
@@ -61,9 +64,8 @@ namespace Reanimator.ExcelDefinitions
         public String largeIcon;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String smallIcon;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknown2;
-        public Int32 TCv4_2;
         public Int32 iconColor;
         public Int32 iconBackgroundColor;
         public Int32 skillTab;
@@ -93,7 +95,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 level14;
         public Int32 level15;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 15)]
-        Int32[] TCv4_4;
+        Int32[] levels_TCv4_4;
         public Int32 maxLevel;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         String summonedAi;
@@ -112,10 +114,10 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown5;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
-        Int32[] TCv4_5;
+        Int32[] perkPointCost_TCv4_5;
         public Int32 priority;
-        Int32 requiredStats1;
-        Int32 requiredStats2;
+        public Int32 requiredStats1;
+        public Int32 requiredStats2;
         Int32 requiredStatValuesA1;//these seem to be unused
         Int32 requiredStatValuesA2;
         Int32 requiredStatValuesA3;
@@ -131,6 +133,21 @@ namespace Reanimator.ExcelDefinitions
         Int32 requiredStatValuesA13;
         Int32 requiredStatValuesA14;
         Int32 requiredStatValuesA15;
+        Int32 requiredStatValuesA16;
+        Int32 requiredStatValuesA17;
+        Int32 requiredStatValuesA18;
+        Int32 requiredStatValuesA19;
+        Int32 requiredStatValuesA20;
+        Int32 requiredStatValuesA21;
+        Int32 requiredStatValuesA22;
+        Int32 requiredStatValuesA23;
+        Int32 requiredStatValuesA24;
+        Int32 requiredStatValuesA25;
+        Int32 requiredStatValuesA26;
+        Int32 requiredStatValuesA27;
+        Int32 requiredStatValuesA28;
+        Int32 requiredStatValuesA29;
+        Int32 requiredStatValuesA30;
         Int32 requiredStatValuesB1;
         Int32 requiredStatValuesB2;
         Int32 requiredStatValuesB3;
@@ -146,8 +163,21 @@ namespace Reanimator.ExcelDefinitions
         Int32 requiredStatValuesB13;
         Int32 requiredStatValuesB14;
         Int32 requiredStatValuesB15;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
-        Int32[] TCv4_6;
+        Int32 requiredStatValuesB16;
+        Int32 requiredStatValuesB17;
+        Int32 requiredStatValuesB18;
+        Int32 requiredStatValuesB19;
+        Int32 requiredStatValuesB20;
+        Int32 requiredStatValuesB21;
+        Int32 requiredStatValuesB22;
+        Int32 requiredStatValuesB23;
+        Int32 requiredStatValuesB24;
+        Int32 requiredStatValuesB25;
+        Int32 requiredStatValuesB26;
+        Int32 requiredStatValuesB27;
+        Int32 requiredStatValuesB28;
+        Int32 requiredStatValuesB29;
+        Int32 requiredStatValuesB30;
         public Int32 requiredSkills1;
         public Int32 requiredSkills2;
         public Int32 requiredSkills3;
@@ -157,9 +187,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 levelsOfRequiredSkills3;
         public Int32 levelsOfRequiredSkills4;
         [ExcelOutput(IsBool = true)]
-        Int32 bOnlyRequireOne;
+        public Int32 bOnlyRequireOne;
         [ExcelOutput(IsBool = true)]
-        Int32 bUsesCraftingPoints;
+        public Int32 bUsesCraftingPoints;
         public Int32 weaponLocation1;
         public Int32 weaponLocation2;
         public Int32 fallBackSkills1;
@@ -176,21 +206,21 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknown7;
         public Int32 modeOverride;//idx
-        Int32 bonusSkills0;
-        Int32 bonusSkills1;
-        Int32 bonusSkills2;
-        Int32 bonusSkills3;
-        Int32 bonusSkills4;
+        public Int32 bonusSkills0;
+        public Int32 bonusSkills1;
+        public Int32 bonusSkills2;
+        public Int32 bonusSkills3;
+        public Int32 bonusSkills4;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 bonusSkillScript0;
+        public Int32 bonusSkillScript0;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 bonusSkillScript1;
+        public Int32 bonusSkillScript1;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 bonusSkillScript2;
+        public Int32 bonusSkillScript2;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 bonusSkillScript3;
+        public Int32 bonusSkillScript3;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 bonusSkillScript4;
+        public Int32 bonusSkillScript4;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 skillVar0;
         [ExcelOutput(IsIntOffset = true)]
@@ -212,15 +242,19 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 skillVar9;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 rangeMultScript;
+        public Int32 craftingScript;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 cost;
+        public Int32 craftingPropertiesScript;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 rangeMultScript;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 cost;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 coolDownPercentChange;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 statsTransferOnAttack;
+        public Int32 statsSkillEvent;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 statsSkillEvent;
+        public Int32 statsTransferOnAttack;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsSkillEventServer;
         [ExcelOutput(IsIntOffset = true)]
@@ -232,7 +266,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsPostLaunch;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 statsOnStateSet;
+        public Int32 statsOnStateSet;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsServerOnStateSet;
         [ExcelOutput(IsIntOffset = true)]
@@ -242,9 +276,9 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnPulseServerOnly;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 statsOnDeSelectServerOnly;
+        public Int32 statsOnDeSelectServerOnly;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 statsOnPulse;
+        public Int32 statsOnPulse;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsOnLevelChange;
         [ExcelOutput(IsIntOffset = true)]
@@ -252,9 +286,9 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 statsScriptOnTarget;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 scriptFromScriptEvents;
+        public Int32 scriptFromScriptEvents;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 selectCost;
+        public Int32 selectCost;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 startCondition;
         [ExcelOutput(IsIntOffset = true)]
@@ -264,11 +298,13 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 stateDurationBonus;
         [ExcelOutput(IsIntOffset = true)]
+        public Int32 stateDurationPercentByTarget;
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 activatorCondition;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 activatorConditionOnTarget;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 eventChance;
+        public Int32 eventChance;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 eventParam0;
         [ExcelOutput(IsIntOffset = true)]
@@ -280,27 +316,28 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 infoScript;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 stateRemovedServer;
+        public Int32 stateRemovedServer;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 powerCostScript;
+        public Int32 powerCostScript;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 coolDownSkillScript;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        Int32[] TCv4_7;
-        Int32 skillOnpulse;//idx
-        Int32 selectCheckStat;//idx
+        public Int32 powerCostPctMultScript;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 coolDownSkillScript;
+        public Int32 selectCondition;
+        public Int32 skillOnpulse;//idx
+        public Int32 selectCheckStat;//idx
         public Int32 startFunc;
         public Int32 targetFunc;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown8;
-        Int32 givesSkill;//idx
+        public Int32 givesSkill;//idx
         public Int32 extraSkillToTurnOn;//idx
         public Int32 playerInputOverride;
         public Int32 requiresUnitType;//idx
         public Int32 requiresWeaponUnitType;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown9;
-        Int32 fuseMissilesOnStateClear;//idx
+        public Int32 fuseMissilesOnStateClear;//idx
         public Int32 requiresState;//idx
         public Int32 prohibitingState0;//idx
         public Int32 prohibitingState1;//idx
@@ -308,8 +345,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 prohibitingState3;//idx
         public Int32 stateOnSelect;//idx
         public Int32 clearStateOnSelect;//idx
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        Int32[] TCv4_8;
+        public Int32 clearStateOnDeselect;//idx
+        public Int32 preventClearStateOnSelect;//idx
         public Int32 holdTicks;
         public Int32 holdWithMode;//idx
         public Int32 warmUpTicks;
@@ -321,7 +358,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 coolDownMinPercent;
         public Int32 activatorKey;
         public Int32 activateMode;//idx
-        Int32 activateSkill;//idx
+        public Int32 activateSkill;//idx
         public Int32 activatePriority;
         public float rangeMin;
         public float rangeMax;
@@ -331,7 +368,7 @@ namespace Reanimator.ExcelDefinitions
         public float weaponRangeMultiplier;
         public float impactForwardBias;
         public float modeSpeed;
-        Int32 damageTypeOverride;//idx
+        public Int32 damageTypeOverride;//idx
         float damageMultiplier;
         public Int32 maxExtraSpreadBullets;
         public Int32 spreadBulletMultiplier;
@@ -339,7 +376,7 @@ namespace Reanimator.ExcelDefinitions
         public float Param1;
         public float Param2;
         public Int32 usage;
-        Int32 family;
+        public Int32 family;
         public Int32 unitEventTrigger0;
         public Int32 unitEventTrigger1;
         public Int32 unitEventTrigger2;
@@ -350,9 +387,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 linkedLevelSkill0;
         public Int32 linkedLevelSkill1;
         public Int32 linkedLevelSkill2;
-        Int32 skillParent;
+        public Int32 skillParent;
         public Int32 fieldMissile;
-        public Int32 TCv4_9;
+        public Int32 unlockPurchaseItem;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknown11;
         public Int32 TCv4_10;
@@ -362,202 +399,211 @@ namespace Reanimator.ExcelDefinitions
             [FlagsAttribute]
             public enum Bitmask01 : uint
             {
-                // = 1,
-                // = 2,
-                usesWeapon = 4,
-                weaponIsRequired = 8,
-                weaponTargeting = 16,
-                usesWeaponSkill = 32,
-                useWeaponCooldown = 64,
-                cooldownUnitInsteadOfWeapon = 128,
-                // = 256,
-                useWeaponIcon = 512,
-                useAllWeapons = 1024,
-                combineWeaponDamage = 2048,
-                usesUnitFiringError = 4096,
-                displayFiringError = 8192,
-                // = 16384,
-                checkLOS = 32768,
-                noLowAiming3rdPerson = 65536,
-                noHighAiming3rdPerson = 131072,
-                canTargetUnit = 262144,
-                findTargetUnit = 524288,
-                mustTargetUnit = 1048576,
-                mustNotTargetUnit = 2097152,
-                monsterMustTargetUnit = 4194304,
-                cannotRetarget = 8388608,
-                verifyTarget = 16777216,
-                verifyTargetOnRequest = 33554432,
-                targetsPosition = 67108864,
-                keepTargetPositionOnRequest = 134217728,
-                targetPosInStart = 268435456, // 28
-                targetDead = 536870912,
-                dyingOnStart = 1073741824,
-                dyingAfterStart = 2147483648
+                //  = (1 << 0),
+                //  = (1 << 1),
+                usesWeapon = (1 << 2),
+                weaponIsRequired = (1 << 3),
+                weaponTargeting = (1 << 4),
+                usesWeaponSkill = (1 << 5),
+                useWeaponCooldown = (1 << 6),
+                cooldownUnitInsteadOfWeapon = (1 << 7),
+                //  = (1 << 8),
+                useWeaponIcon = (1 << 9),
+                useAllWeapons = (1 << 10),
+                combineWeaponDamage = (1 << 11),
+                usesUnitFiringError = (1 << 12),
+                displayFiringError = (1 << 13),
+                //  = (1 << 14),
+                checkLOS = (1 << 15),
+                noLowAiming3rdPerson = (1 << 16),
+                noHighAiming3rdPerson = (1 << 17),
+                canTargetUnit = (1 << 18),
+                findTargetUnit = (1 << 19),
+                mustTargetUnit = (1 << 20),
+                mustNotTargetUnit = (1 << 21),
+                monsterMustTargetUnit = (1 << 22),
+                cannotRetarget = (1 << 23),
+                verifyTarget = (1 << 24),
+                verifyTargetOnRequest = (1 << 25),
+                targetsPosition = (1 << 26),
+                keepTargetPositionOnRequest = (1 << 27),
+                targetPosInStart = (1 << 28),
+                targetDead = (1 << 29),
+                targetDyingOnStart = (1 << 30),
+                targetDyingAfterStart = ((uint)1 << 31)
             }
 
             [FlagsAttribute]
             public enum Bitmask02 : uint
             {
-                targetSelectableDead = 1,
-                targetFriend = 2,
-                targetEnemy = 4,
-                targetContainer = 8,
-                targetDestructables = 16,
-                targetOnlyDying = 32,
-                dontTargetDestructables = 64,
-                targetPets = 128,
-                ignoreTeams = 256,
-                allowUntargetables = 512,
-                uiUsersTarget = 1024,
-                dontFaceTarget = 2048,
-                mustFaceForward = 4096,
-                aimAtTarget = 8192,
-                // = 16384,
-                useMouseSkillsTargeting = 32768,
-                isMelee = 65536,
-                doMeleeItemEvents = 131072,
-                canDelayMelee = 262144,
-                deadCanDo = 524288,
-                stopAll = 1048576,
-                stopOnDead = 2097152,
-                startOnSelect = 4194304,
-                alwaysSelected = 8388608,
-                // = 16777216,
-                highlightWhenSelected = 33554432,
-                repeatFire = 67108864,
-                repeatAll = 134217728,
-                hold = 268435456,
-                loopMode = 536870912,
-                stopHoldingSkills = 1073741824,
-                holdOtherSkills = 2147483648
+                targetSelectableDead = (1 << 0),
+                targetFriend = (1 << 1),
+                targetEnemy = (1 << 2),
+                targetContainer = (1 << 3),
+                targetDestructables = (1 << 4),
+                targetOnlyDying = (1 << 5),
+                dontTargetDestructables = (1 << 6),
+                targetPets = (1 << 7),
+                ignoreTeams = (1 << 8),
+                allowUntargetables = (1 << 9),
+                targetObjects_tcv4 = (1 << 10),
+                uiUsesTarget = (1 << 11),
+                dontFaceTarget = (1 << 12),
+                mustFaceForward = (1 << 13),
+                aimAtTarget = (1 << 14),
+                unknownbit5 = (1 << 15),
+                useMouseSkillsTargeting = (1 << 16),
+                isMelee = (1 << 17),
+                doMeleeItemEvents = (1 << 18),
+                canDelayMelee = (1 << 19),
+                deadCanDo = (1 << 20),
+                stopall = (1 << 21),
+                stopOnDead = (1 << 22),
+                startOnSelect = (1 << 23),
+                alwaysSelected = (1 << 24),
+                unknownbit6 = (1 << 25),
+                highlightWhenSelected = (1 << 26),
+                repeatFire = (1 << 27),
+                repeatAll = (1 << 28),
+                hold = (1 << 29),
+                loopMode = (1 << 30),
+                stopHoldingSkills = ((uint)1 << 31)
             }
 
             [FlagsAttribute]
             public enum Bitmask03 : uint
             {
-                preventOtherSkills = 1,
-                preventSkillsByPriority = 2,
-                runToTarget = 4,
-                skillIsOn = 8,
-                onGroundOnly = 16,
-                learnable = 32,
-                hotkeyable = 64,
-                canGoInMouseButton = 128,
-                canGoInLeftMouseButton = 256,
-                usesPower = 512,
-                drainsPower = 1024,
-                ajustPowerByLevel = 2048,
-                powerCostBoundedByMaxPower = 4096,
-                allowRequest = 8192,
-                trackRequest = 16384,
-                trackMetrics = 32768,
-                saveMissiles = 65536,
-                removeMissilesOnStop = 131072,
-                stopOnCollied = 262144,
-                noPlayerSkillInput = 524288,
-                noPlayerMovementInput = 1048576,
-                noIdleOnStop = 2097152,
-                doNotClearRemoveOnMoveStates = 4194304,
-                useRange = 8388608,
-                displayRange = 16777216,
-                getHitCanDo = 33554432,
-                movingCantDo = 67108864,
-                playerStopMoving = 134217728,
-                constantCooldown = 268435456,
-                ignoreCooldownOnStart = 536870912,
-                playCooldownOnWeapon = 1073741824,
-                useUnitsCooldown = 2147483648
+                holdOtherSkills = (1 << 0),
+                preventOtherSkills = (1 << 1),
+                preventSkillsByPriority = (1 << 2),
+                runToTarget = (1 << 3),
+                skillIsOn = (1 << 4),
+                onGroundOnly = (1 << 5),
+                learnable = (1 << 6),
+                hotkeyable = (1 << 7),
+                canGoInMouseButton = (1 << 8),
+                canGoInLeftMouseButton = (1 << 9),
+                usesPower = (1 << 10),
+                drainsPower = (1 << 11),
+                adjustPowerByLevel = (1 << 12),
+                powerCostBoundedByMaxPower = (1 << 13),
+                allowRequest = (1 << 14),
+                trackRequest = (1 << 15),
+                trackMetrics = (1 << 16),
+                saveMissiles = (1 << 17),
+                removeMissilesOnStop = (1 << 18),
+                stopOnCollide = (1 << 19),
+                noPlayerSkillInput = (1 << 20),
+                noPlayerMovementInput = (1 << 21),
+                noIdleOnStop = (1 << 22),
+                doNotClearRemoveOnMoveStates = (1 << 23),
+                useRange = (1 << 24),
+                displayRange = (1 << 25),
+                getHitCanDo = (1 << 26),
+                movingCantDo = (1 << 27),
+                playerStopMoving = (1 << 28),
+                constantCooldown = (1 << 29),
+                ignoreCooldownOnStart = (1 << 30),
+                playCooldownOnWeapon = ((uint)1 << 31)
             }
 
             [FlagsAttribute]
             public enum Bitmask04 : uint
             {
-                displayCooldown = 1,
-                checkRangeOnStart = 2,
-                checkMeleeRangeOnStart = 4,
-                dontUseWeaponRange = 8,
-                canStartInTown = 16,
-                cantStartInPvp = 32,
-                canStartInRts = 64,
-                alwaysTestCanStartSkill = 128,
-                isAggressive = 256,
-                angersTargetOnExecute = 512,
-                isRanged = 1024,
-                isSpell = 2048,
-                serverOnly = 4096,
-                clientOnly = 8192,
-                checkInventorySpace = 16384,
-                activatorWhileMoving = 32768,
-                activatorIgnoreMoving = 65536,
-                canNotDoInHellrift = 131072,
-                uiIsRedOnFalback = 262144,
-                impactUsesAimBone = 524288,
-                decoyCannotUse = 1048576,
-                // = 2097152,
-                // = 4194304,
-                doNotPreferForMouse = 8388608,
-                useHolyAuraForRange = 16777216,
-                // = 33554432,
-                disallowSameSkill = 67108864,
-                dontUseRangeForMeleeEvents = 134217728,
-                forceSkillRangeForMeleeEvents = 268435456,
-                disabled = 536870912,
-                skillLevelFromStateTarget = 1073741824,
-                usesItemRequirements = 2147483648
+                useUnitsCooldown = (1 << 0),
+                addMonstersCooldown_tcv4 = (1 << 1),
+                displayCooldown = (1 << 2),
+                checkRangeOnStart = (1 << 3),
+                checkMeleeRangeOnStart = (1 << 4),
+                dontUseWeaponRange = (1 << 5),
+                canStartInTown = (1 << 6),
+                cantStartInPvp = (1 << 7),
+                canStartInRts = (1 << 8),
+                alwaysTestCanStartSkill = (1 << 9),
+                isAggressive = (1 << 10),
+                angersTargetOnExecute = (1 << 11),
+                isRanged = (1 << 12),
+                isSpell = (1 << 13),
+                serverOnly = (1 << 14),
+                clientOnly = (1 << 15),
+                checkInventorySpace = (1 << 16),
+                activatorWhileMoving = (1 << 17),
+                activatorIgnoreMoving = (1 << 18),
+                canNotDoInHellrift = (1 << 19),
+                uiIsRedOnFallback = (1 << 20),
+                impactUsesAimBone = (1 << 21),
+                decoyCannotUse = (1 << 22),
+                unknownbit7 = (1 << 23),
+                unknownbit8 = (1 << 24),
+                doNotPreferForMouse = (1 << 25),
+                useHolyAuraForRange = (1 << 26),
+                unknownbit9 = (1 << 27),
+                disallowSameSkill = (1 << 28),
+                dontUseRangeForMeleeEvents = (1 << 29),
+                forceSkillRangeForMeleeEvents = (1 << 30),
+                disabled = ((uint)1 << 31)
             }
 
             [FlagsAttribute]
             public enum Bitmask05 : uint
             {
-                preventAnimationCutoff = 1,
-                movesUnit = 2,
-                selectsAMeleeSkill = 4,
-                requiresSkillLevel = 8,
-                disableClientsidePathing = 16,
-                executeRequestedSkillOnMeleeAttack = 32,
-                canBeExecutedFromMeleeAttack = 64,
-                dontStopRequestAfterExecute = 128,
-                lerpCameraWhileOn = 256,
-                forceUseWeaponTargeting = 512,
-                dontClearCooldownOnDeath = 1024,
-                dontCooldownOnStart = 2048,
-                powerOnEvent = 4096,
-                // = 8192,
-                defaultShiftSkillEnabled = 16384,
-                shiftSkillAlwaysEnabled = 32768,
-                canKillPetsForPowerCost = 65536,
-                reducePowerMaxByPowerCost = 131072,
-                skillFromUnitEventTriggerNeedsDam = 262144,
-                aiIsBusyWhileOn = 524288,
-                dontSelectOnPurchase = 1048576,
-                // = 2097152,
-                neverSetCooldown = 4194304,
-                ignorePreventAllSkills = 8388608,
-                mustStartInPortalSafeLevel = 16777216,
-                // = 33554432,
-                dontTargetPets = 67108864,
-                requirePathToTarget = 134217728,
-                fireToLocation = 268435456,
-                testFiringConeOnStart = 536870912,
-                ignoreChampions = 1073741824,
-                faceTargetPosition = 2147483648
+                skillLevelFromStateTarget = (1 << 0),
+                usesItemRequirements = (1 << 1),
+                preventAnimationCutoff = (1 << 2),
+                movesUnit = (1 << 3),
+                selectsAMeleeSkill = (1 << 4),
+                requiresSkillLevel = (1 << 5),
+                disableClientsidePathing = (1 << 6),
+                executeRequestedSkillOnMeleeAttack = (1 << 7),
+                canBeExecutedFromMeleeAttack = (1 << 8),
+                dontStopRequestAfterExecute = (1 << 9),
+                lerpCameraWhileOn = (1 << 10),
+                forceUseWeaponTargeting = (1 << 11),
+                dontClearCooldownOnDeath = (1 << 12),
+                dontCooldownOnStart = (1 << 13),
+                powerOnEvent = (1 << 14),
+                unknownbit10 = (1 << 15),
+                defaultShiftSkillEnabled = (1 << 16),
+                shiftSkillAlwaysEnabled = (1 << 17),
+                canKillPetsForPowerCost = (1 << 18),
+                reducePowerMaxByPowerCost = (1 << 19),
+                skillFromUnitEvenTriggerNeedsDamageIncrement = (1 << 20),
+                aiIsBusyWhileOn = (1 << 21),
+                dontSelectOnPurchase = (1 << 22),
+                unknownbit11 = (1 << 23),
+                neverSetCooldown = (1 << 24),
+                ignorePreventAllSkills = (1 << 25),
+                mustStartInPortalSafeLevel = (1 << 26),
+                unknownbit12 = (1 << 27),
+                dontTargetPets = (1 << 28),
+                requirePathToTarget = (1 << 29),
+                fireToLocation = (1 << 30),
+                defaultToPlayerLocation_tcv4 = ((uint)1 << 31)
             }
 
             [FlagsAttribute]
             public enum Bitmask06 : uint
             {
-                targetDeadAndAlive = 1,
-                restartSkillOnUnitReactivate = 2,
-                subscriptionRequiredToLearn = 4,
-                subscriptionRequiredToUse = 8,
-                forceUiToShowEffect = 16,
-                dontIgnoreOwnedState = 32,
-                ghostCanDo = 64,
-                useDoneForMissilePosition = 128,
-                transferDamageToPets = 256,
-                dontStagger = 512,
-                doesNotActivelyUseWeapon = 1024
+                testFiringConeOnStart = (1 << 0),
+        		ignoreChampions = (1 << 1),
+        		faceTargetPosition = (1 << 2),
+        		targetDeadAndAlive	 = (1 << 3),
+        		restartSkillOnUnitReactivate = (1 << 4),
+        		subscriptionRequiredToLearn = (1 << 5),
+        		subscriptionRequiredToUse = (1 << 6),
+        		forceUiToShowEffect = (1 << 7),
+        		dontIgnoreOwnedState = (1 << 8),
+        		ghostCanDo = (1 << 9),
+        		useBoneForMissilePosition = (1 << 10),
+        		transferDamagesToPets = (1 << 11),
+        		dontStagger = (1 << 12),
+        		averageCombinedDamage_tcv4 = (1 << 13),
+        		canNOTStartInRtsLevel_tcv4 = (1 << 14),
+		        doesNotActivelyUseWeapon = (1 << 15),
+        		canStartInPvpTown_tcv4 = (1 << 16),
+		        doNotAllowRespec_tcv4 = (1 << 17),
+                applySkillgroupDamagePercent_tcv4 = (1 << 18),
+                requiresStatUnlockToPurchase_tcv4 = (1 << 19)
             }
         }
     }
