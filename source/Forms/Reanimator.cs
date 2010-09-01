@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using System.IO;
 using Reanimator.Forms;
 using Reanimator.Forms.ItemTransfer;
-using Reanimator.XmlDefinitions;
 
 namespace Reanimator
 {
@@ -20,7 +19,7 @@ namespace Reanimator
         private readonly FileExplorer _fileExplorer;
 
         // Dependencies
-        private readonly List<Index> _indexFiles;
+        private List<Index> _indexFiles;
         private readonly TableFiles _tableFiles;
         private readonly TableDataSet _tableDataSet;
 
@@ -45,9 +44,8 @@ namespace Reanimator
             convertTCv4FilesToolStripMenuItem.Visible = true;
 #endif
 
-            _fileExplorer = new FileExplorer(ref _indexFiles) { MdiParent = this };
-            _tableFiles = new TableFiles(ref _fileExplorer);
-            XmlCookedFile.Initialize();
+            _fileExplorer = new FileExplorer { MdiParent = this };
+            _tableFiles = new TableFiles();
 
             //XmlCookedFile asdf = new XmlCookedFile();
             //asdf.Uncook(File.ReadAllBytes(@"D:\Games\Hellgate London\data\skills\consumable\summoncocomoko.xml.cooked"));
@@ -112,7 +110,7 @@ namespace Reanimator
         //    }
         //}
 
-        private void _CheckHellgateInstallation()
+        private static void _CheckHellgateInstallation()
         {
             if (Directory.Exists(Config.HglDir))
             {
@@ -592,7 +590,7 @@ namespace Reanimator
             }
         }
 
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void _OptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _options.ShowDialog(this);
         }
@@ -648,12 +646,17 @@ namespace Reanimator
                 Refresh();
 
                 ProgressForm fileExplorerProgress = new ProgressForm(_fileExplorer.LoadIndexFiles, null);
-                fileExplorerProgress.Disposed += delegate { _fileExplorer.Show(); };
                 fileExplorerProgress.ShowDialog(this);
+                _fileExplorer.Show();
+
+                _indexFiles = _fileExplorer.IndexFiles;
+                _tableFiles.FileExplorer = _fileExplorer;
 
                 ProgressForm progress = new ProgressForm(_LoadTables, null);
                 progress.Disposed += delegate { _LoadAndDisplayCurrentlyLoadedExcelTables(); };
                 progress.ShowDialog(this);
+
+                XmlCookedFile.Initialize(_tableFiles);
             }
             catch (Exception ex)
             {
@@ -836,8 +839,7 @@ namespace Reanimator
         {
             try
             {
-                PatchForm patchForm = new PatchForm();
-                patchForm.MdiParent = this;
+                PatchForm patchForm = new PatchForm { MdiParent = this };
                 patchForm.Show();
             }
             catch (Exception ex)

@@ -30,7 +30,7 @@ namespace Reanimator.Forms
         private static readonly Color BaseColor = Color.Black;
 
         private static readonly String[] IndexQueryStrings = { "hellgate*.dat", "sp_hellgate*.dat" };
-        private readonly List<Index> _indexFiles;
+        public List<Index> IndexFiles { get; private set; }
         private readonly Hashtable _fileTable;
 
         private class NodeObject
@@ -93,12 +93,12 @@ namespace Reanimator.Forms
             }
         }
 
-        public FileExplorer(ref List<Index> indexFiles)
+        public FileExplorer()
         {
             InitializeComponent();
             files_treeView.DoubleBuffered(true);
 
-            _indexFiles = indexFiles;
+            IndexFiles = new List<Index>();
             _fileTable = new Hashtable();
             backupKey_label.ForeColor = BackupColor;
             noEditorKey_label.ForeColor = NoEditColor;
@@ -137,7 +137,19 @@ namespace Reanimator.Forms
                         progressForm.SetCurrentItemText("Loading " + Path.GetFileName(idxFile) + "...");
                     }
 
-                    byte[] indexData = File.ReadAllBytes(idxFile);
+                    // can we open it - i.e. is HGL using it? - if not, cpy, then open. :)
+                    byte[] indexData;
+                    try
+                    {
+                        indexData = File.ReadAllBytes(idxFile);
+                    }
+                    catch(Exception)
+                    {
+                        String fileNameCpy = idxFile + "cpy";
+                        File.Copy(idxFile, fileNameCpy);
+                        indexData = File.ReadAllBytes(fileNameCpy);
+                        File.Delete(fileNameCpy);
+                    }
 
                     Index index = new Index();
                     if (!index.ParseData(indexData, idxFile))
@@ -146,12 +158,12 @@ namespace Reanimator.Forms
                                         MessageBoxIcon.Error);
                         continue;
                     }
-                    _indexFiles.Add(index);
+                    IndexFiles.Add(index);
                 }
             }
 
             files_treeView.BeginUpdate();
-            foreach (Index index in _indexFiles)
+            foreach (Index index in IndexFiles)
             {
                 _ParseIndexFile(index);
             }
@@ -585,7 +597,7 @@ namespace Reanimator.Forms
             progressForm.SetCurrentItemText("Extracting file(s)...");
 
             // might as well just loop all nodes - slower finding and cloning them; using the .Checked setter is the killer
-            if (!_BeginDatAccess(_indexFiles, false))
+            if (!_BeginDatAccess(IndexFiles, false))
             {
                 MessageBox.Show(
                     "Failed to open dat files for reading!\nEnsure no other programs are using them and try again.",
@@ -610,7 +622,7 @@ namespace Reanimator.Forms
 
                 return;
             }
-            _EndDatAccess(_indexFiles);
+            _EndDatAccess(IndexFiles);
 
             // are we patching?
             if (!extractPatchArgs.PatchFiles)
@@ -790,7 +802,7 @@ namespace Reanimator.Forms
             }
 
             // get our custom index - or create if doesn't exist
-            Index packIndex = _indexFiles.FirstOrDefault(index => index.FileNameWithoutExtension == ReanimatorIndex);
+            Index packIndex = IndexFiles.FirstOrDefault(index => index.FileNameWithoutExtension == ReanimatorIndex);
             if (packIndex == null)
             {
                 String indexPath = String.Format(@"data\{0}.idx", ReanimatorIndex);
@@ -807,7 +819,7 @@ namespace Reanimator.Forms
                 }
 
                 packIndex = new Index(indexPath);
-                _indexFiles.Add(packIndex);
+                IndexFiles.Add(packIndex);
             }
 
             ExtractPackPatchArgs extractPackPatchArgs = new ExtractPackPatchArgs
@@ -910,7 +922,7 @@ namespace Reanimator.Forms
 
 
             // pack our files
-            if (!_BeginDatAccess(_indexFiles, true))
+            if (!_BeginDatAccess(IndexFiles, true))
             {
                 MessageBox.Show(
                     "Failed to open dat files for writing!\nEnsure no other programs are using them and try again.",
@@ -1023,7 +1035,7 @@ namespace Reanimator.Forms
                 progressForm.SetCurrentItemText("Removing orphan data...");
                 args.PackIndex.RebuildDatFile();
             }
-            _EndDatAccess(_indexFiles);
+            _EndDatAccess(IndexFiles);
             
             
             // write updated index
@@ -1181,6 +1193,12 @@ namespace Reanimator.Forms
             ////filterNodes.Add(treeNode);
         }
 
+        /// <summary>
+        /// Determines if the file HGL tries to load exists.<br />
+        /// That is, checks .dat, if patched out, checks HGL data dir's.
+        /// </summary>
+        /// <param name="filePath">The path to the file - relative to HGL e.g. "data\colorsets.xml.cooked"</param>
+        /// <returns>true for file exists, false otherwise.</returns>
         public bool GetFileExists(String filePath)
         {
             if (String.IsNullOrEmpty(filePath)) return false;
@@ -1202,6 +1220,12 @@ namespace Reanimator.Forms
             return File.Exists(filePath);
         }
 
+        /// <summary>
+        /// Reads in a file's bytes from where HGL would read it.<br />
+        /// That is, from the .dat or data directorys if the file has been patched out.
+        /// </summary>
+        /// <param name="filePath">The path to the file - relative to HGL e.g. "data\colorsets.xml.cooked"</param>
+        /// <returns>File byte data, or null if not found.</returns>
         public byte[] GetFileBytes(String filePath)
         {
             if (String.IsNullOrEmpty(filePath)) return null;
@@ -1215,11 +1239,6 @@ namespace Reanimator.Forms
             if (treeNode == null) return null;
 
             NodeObject nodeObject = (NodeObject) treeNode.Tag;
-            // not entirly sure why I even had this...
-            //if (getLatestVersion)
-            //{
-            //    nodeObject = nodeObject.GetYoungestChild();
-            //}
 
             // are we loading from file or dat
             byte[] fileBytes;

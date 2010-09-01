@@ -3,7 +3,6 @@ using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 using Reanimator.Forms;
 using Reanimator.ExcelDefinitions;
 
@@ -12,13 +11,13 @@ namespace Reanimator
     public class TableFiles
     {
         private readonly bool _debugAll;
-        private readonly FileExplorer _fileExplorer;
+        public  FileExplorer FileExplorer { private get; set; }
 
         public Hashtable DataFiles { get; private set; }
         public Hashtable TableMap { get; private set; }
 
-        public bool AllExcelFilesLoaded { get; set; }
-        public bool AllStringsFilesLoaded { get; set; }
+        public bool AllExcelFilesLoaded { get; private set; }
+        public bool AllStringsFilesLoaded { get; private set; }
         public int LoadedFileCount
         {
             get { return DataFiles.Count; }
@@ -44,11 +43,9 @@ namespace Reanimator
             }
         }
 
-        public TableFiles(ref FileExplorer fileExplorer)
+        public TableFiles()
         {
             _debugAll = false;
-            _fileExplorer = fileExplorer;
-
             DataFiles = new Hashtable();
 
             TableMap = new Hashtable
@@ -483,10 +480,10 @@ namespace Reanimator
 
 
                 // fix path.. some files belong in 'data', others in 'data_common'
-                if (!_fileExplorer.GetFileExists(filePath))
+                if (!FileExplorer.GetFileExists(filePath))
                 {
                     filePath = filePath.Replace("data", "data_common");
-                    if (!_fileExplorer.GetFileExists(filePath))
+                    if (!FileExplorer.GetFileExists(filePath))
                     {
                         String msg = "Excel file not found!\n\n" + filePath;
                         Debug.WriteLine(msg);
@@ -512,7 +509,7 @@ namespace Reanimator
                 // parse file
                 try
                 {
-                    byte[] buffer = _fileExplorer.GetFileBytes(filePath);
+                    byte[] buffer = FileExplorer.GetFileBytes(filePath);
 
                     DataFile excelFile = mapItem.RowType == typeof(StringsFile) ?
                         (DataFile)new StringsFile(stringId, mapItem.RowType) :
