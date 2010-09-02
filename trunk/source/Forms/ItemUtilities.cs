@@ -78,7 +78,7 @@ namespace Reanimator.Forms
             if (stat.values.Length != 0)
             {
                 String select = String.Format("code = '{0}'", lookupId);
-                DataTable table = _dataSet.GetExcelTableFromCode(tableId);
+                DataTable table = _dataSet.GetExcelTableFromCode((uint)tableId);
                 DataRow[] row;
 
                 if (table != null)

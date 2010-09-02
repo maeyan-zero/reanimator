@@ -25,14 +25,14 @@ namespace Reanimator.XmlDefinitions
             {
                 Name = "pfParamsBase",
                 ElementType = ElementType.FloatArray,
-                ArrayCount = 8,
+                Count = 8,
                 DefaultValue = 0.0f,
             },
             new XmlCookElement
             {
                 Name = "pfParamsVariation",
                 ElementType = ElementType.FloatArray,
-                ArrayCount = 8,
+                Count = 8,
                 DefaultValue = 0.0f,
             },
             new XmlCookElement

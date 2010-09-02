@@ -43,14 +43,14 @@ namespace Reanimator.XmlDefinitions
                 Name = "vPosition",
                 DefaultValue = 0.0f,
                 ElementType = ElementType.FloatArray,
-                ArrayCount = 3
+                Count = 3
             },
             new XmlCookElement
             {
                 Name = "vNormal",
                 DefaultValue = 0.0f,
                 ElementType = ElementType.FloatArray,
-                ArrayCount = 3
+                Count = 3
             },
             new XmlCookElement
             {

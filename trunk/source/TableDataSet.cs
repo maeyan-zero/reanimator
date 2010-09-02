@@ -47,17 +47,17 @@ namespace Reanimator
             DataTable dataTable = null;
             if (dataFile.IsStringsFile)
             {
-                dataTable = LoadStringsTable(progress, dataFile as StringsFile);
+                dataTable = _LoadStringsTable(progress, dataFile as StringsFile);
             }
             else if (dataFile.IsExcelFile)
             {
-                dataTable = LoadExcelTable(progress, dataFile as ExcelFile);
+                dataTable = _LoadExcelTable(progress, dataFile as ExcelFile);
             }
 
             return dataTable;
         }
 
-        private DataTable LoadExcelTable(ProgressForm progress, ExcelFile dataFile)
+        private DataTable _LoadExcelTable(ProgressForm progress, ExcelFile dataFile)
         {
             // load in main data table
             String mainTableName = dataFile.StringId;
@@ -257,7 +257,7 @@ namespace Reanimator
             return mainDataTable;
         }
 
-        private DataTable LoadStringsTable(ProgressForm progress, StringsFile stringsFile)
+        private DataTable _LoadStringsTable(ProgressForm progress, StringsFile stringsFile)
         {
             // if already done, can't do again
             DataTable dataTable = XlsDataSet.Tables[stringsFile.StringId];
@@ -297,7 +297,7 @@ namespace Reanimator
 
         private DataTable _LoadRelatedTable(ProgressForm progress, String tableId)
         {
-            if (tableId == null) return null;
+            if (String.IsNullOrEmpty(tableId)) return null;
 
             DataTable dataTable = XlsDataSet.Tables[tableId];
             if (dataTable != null) return dataTable;
@@ -409,22 +409,33 @@ namespace Reanimator
             }
         }
 
-        public DataTable GetExcelTableFromCode(int code)
+        /// <summary>
+        /// Gets an excel DataTable from the DataSet.<br />
+        /// If it has not been generated, it will be generated and stored.
+        /// </summary>
+        /// <param name="code">The excel table code (see EXCELTABLE "Code" column).</param>
+        /// <returns>The excel as a DataTable or null if not valid Code.</returns>
+        public DataTable GetExcelTableFromCode(UInt32 code)
         {
             String stringId = GetExcelTableStringIdFromCode(code);
             return GetExcelTableFromStringId(stringId);
         }
 
+        /// <summary>
+        /// Gets an excel DataTable from the DataSet.<br />
+        /// If it has not been generated, it will be generated and stored.
+        /// </summary>
+        /// <param name="stringId">The excel table string name (see EXCELTABLE "StringId" column).</param>
+        /// <returns>The excel as a DataTable or null if not valid StringId.</returns>
         public DataTable GetExcelTableFromStringId(String stringId)
         {
-            if (stringId == null) return null;
-
+            if (String.IsNullOrEmpty(stringId)) return null;
             return XlsDataSet.Tables[stringId] ?? _LoadRelatedTable(null, stringId);
         }
 
-        public String GetExcelTableStringIdFromCode(int code)
+        public String GetExcelTableStringIdFromCode(UInt32 code)
         {
-            DataTable excelTables = XlsDataSet.Tables["EXCELTABLES"];
+            DataTable excelTables = GetExcelTableFromStringId("EXCELTABLES");
             if (excelTables == null) return null;
 
             DataRow[] rows = excelTables.Select(String.Format("code = '{0}'", code));
@@ -433,7 +444,7 @@ namespace Reanimator
 
         public String GetExcelTableStringIdFromIndex(int index)
         {
-            DataTable excelTables = XlsDataSet.Tables["EXCELTABLES"];
+            DataTable excelTables = GetExcelTableFromStringId("EXCELTABLES");
             if (excelTables == null) return null;
 
             DataRow[] rows = excelTables.Select(String.Format("index = {0}", index));

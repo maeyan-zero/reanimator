@@ -21,12 +21,12 @@ namespace Reanimator
         /// Initialize XML Definitions and generate String Hash values for xml element names.
         /// Must be called before usage of the class.
         /// </summary>
-        /// <param name="tableFiles">The loaded table files for excel lookups.</param>
-        public static void Initialize(TableFiles tableFiles)
+        /// <param name="tableDataSet">The loaded table data set of excel/strings for excel lookups.</param>
+        public static void Initialize(TableDataSet tableDataSet)
         {
-            Debug.Assert(tableFiles != null);
+            Debug.Assert(tableDataSet != null);
 
-            _tableFiles = tableFiles;
+            _tableDataSet = tableDataSet;
             _xmlDefinitions = new XmlDefinition[]
             {
                 // AI
@@ -65,6 +65,7 @@ namespace Reanimator
                 new StateEvent()
             };
 
+            // create hashes
             foreach (XmlDefinition xmlDefinition in _xmlDefinitions)
             {
                 xmlDefinition.RootHash = Crypt.GetStringHash(xmlDefinition.RootElement);
@@ -73,6 +74,24 @@ namespace Reanimator
                 {
                     String stringToHash = String.IsNullOrEmpty(xmlCookElement.TrueName) ? xmlCookElement.Name : xmlCookElement.TrueName;
                     xmlCookElement.NameHash = Crypt.GetStringHash(stringToHash);
+                }
+            }
+
+            // assign child table hashes
+            foreach (XmlDefinition xmlDefinition in _xmlDefinitions)
+            {
+                foreach (XmlCookElement xmlCookElement in xmlDefinition.Elements)
+                {
+                    if (xmlCookElement.ChildType == null) continue;
+
+                    Type childType = xmlCookElement.ChildType;
+                    foreach (XmlDefinition xmlDef in _xmlDefinitions.Where(def => def.GetType() == childType))
+                    {
+                        xmlCookElement.ChildTypeHash = xmlDef.RootHash;
+                        break;
+                    }
+
+                    Debug.Assert(xmlCookElement.ChildTypeHash != 0);
                 }
             }
         }

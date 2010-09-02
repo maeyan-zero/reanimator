@@ -116,7 +116,7 @@ namespace Reanimator.Forms
                     statAttribute1_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute1, "BitCount");
                     statAttribute1_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1");
                     statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
-                    statAttribute1_tableId_TextBox.Text = stat.Attribute1.TableId > 0 ? _tableFiles.GetExcelTableFromId(stat.Attribute1.TableId).StringId : "NA";
+                    statAttribute1_tableId_TextBox.Text = stat.Attribute1.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute1.TableId).StringId : "NA";
                 }
                 else
                 {
@@ -136,7 +136,7 @@ namespace Reanimator.Forms
                     statAttribute2_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute2, "BitCount");
                     statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
                     statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
-                    statAttribute2_tableId_TextBox.Text = stat.Attribute2.TableId > 0 ? _tableFiles.GetExcelTableFromId(stat.Attribute2.TableId).StringId : "NA";
+                    statAttribute2_tableId_TextBox.Text = stat.Attribute2.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute2.TableId).StringId : "NA";
                 }
                 else
                 {
@@ -156,7 +156,7 @@ namespace Reanimator.Forms
                     statAttribute3_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute3, "BitCount");
                     statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
                     statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
-                    statAttribute3_tableId_TextBox.Text = stat.Attribute3.TableId > 0 ? _tableFiles.GetExcelTableFromId(stat.Attribute3.TableId).StringId : "NA";
+                    statAttribute3_tableId_TextBox.Text = stat.Attribute3.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute3.TableId).StringId : "NA";
                 }
                 else
                 {
@@ -334,7 +334,7 @@ namespace Reanimator.Forms
                     string id;
                     if (stats.skipResource == 0)
                     {
-                        id = _tableFiles.GetExcelTableFromId(stats.resource).StringId;
+                        id = _tableFiles.GetExcelTableFromCode(stats.resource).StringId;
                         if (!references.Contains(id))
                         {
                             references.Add(id);
@@ -344,7 +344,7 @@ namespace Reanimator.Forms
                     {
                         foreach (Unit.StatBlock.Stat.Attribute att in stats.attributes)
                         {
-                            ExcelFile tab = _tableFiles.GetExcelTableFromId(att.TableId);
+                            ExcelFile tab = _tableFiles.GetExcelTableFromCode(att.TableId);
                             if (tab == null) continue;
 
                             id = tab.StringId;

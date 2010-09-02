@@ -195,6 +195,13 @@ namespace Reanimator
             WriteToBuffer(ref buffer, ref offset, toWrite);
         }
 
+        /// <summary>
+        /// Serializes an object and appends it to the supplied buffer, increasing offset by object size.<br />
+        /// If the buffer is too small the bufer size is increaed by the object size + 1024 bytes.
+        /// </summary>
+        /// <param name="buffer">A reference to a byte array (not null).</param>
+        /// <param name="offset">A reference to the write offset (offset is increased by the size of object).</param>
+        /// <param name="toWrite">A sersializable object to write.</param>
         public static void WriteToBuffer(ref byte[] buffer, ref int offset, Object toWrite)
         {
             byte[] toWriteBytes = toWrite as byte[] ?? StructureToByteArray(toWrite);

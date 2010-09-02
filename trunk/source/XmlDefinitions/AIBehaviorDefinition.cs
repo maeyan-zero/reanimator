@@ -23,7 +23,7 @@ namespace Reanimator.XmlDefinitions
                 Name = "pfParams",
                 DefaultValue = 0.0f,
                 ElementType = ElementType.FloatArray,
-                ArrayCount = 6
+                Count = 6
             },
             new XmlCookElement
             {

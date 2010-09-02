@@ -21,14 +21,14 @@
                     Name = "vPosition",
                     ElementType = ElementType.FloatArray,
                     DefaultValue = 0.0f,
-                    ArrayCount = 3
+                    Count = 3
             },
             new XmlCookElement
             {
                     Name = "vNormal",
                     ElementType = ElementType.FloatArray,
                     DefaultValue = 0.0f,
-                    ArrayCount = 3
+                    Count = 3
             },
             new XmlCookElement
             {
