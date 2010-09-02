@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Windows.Forms;
 using Reanimator.Properties;
 
@@ -143,8 +144,9 @@ namespace Reanimator.Forms
                     {
                         indexData = File.ReadAllBytes(idxFile);
                     }
-                    catch(Exception)
+                    catch(Exception e)
                     {
+                        //FileStream fs = new FileStream(idxFile, FileMode.Open, FileAccess.Read, FileShare.Read);
                         String fileNameCpy = idxFile + "cpy";
                         File.Copy(idxFile, fileNameCpy);
                         indexData = File.ReadAllBytes(fileNameCpy);

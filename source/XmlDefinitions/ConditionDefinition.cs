@@ -74,49 +74,56 @@ namespace Reanimator.XmlDefinitions
                 Name = "CONDITION_BIT_CHECK_OWNER",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 0
+                BitIndex = 0,
+                Count = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_CHECK_TARGET",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 2
+                BitIndex = 2,
+                Count = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_CHECK_WEAPON",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 1
+                BitIndex = 1,
+                Count = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_NOT_DEAD_OR_DYING",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 3
+                BitIndex = 3,
+                Count = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_IS_YOUR_PLAYER",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 4
+                BitIndex = 4,
+                Count = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_OWNER_IS_YOUR_PLAYER",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 5
+                BitIndex = 5,
+                Count = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_CHECK_STATE_SOURCE",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 6
+                BitIndex = 6,
+                Count = 7
             }
         };
 

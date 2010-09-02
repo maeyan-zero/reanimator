@@ -7,6 +7,7 @@ using System.Linq;
 using System.Data;
 using System.Windows.Forms;
 using System.IO;
+using System.Xml;
 using Reanimator.Forms;
 using Reanimator.Forms.ItemTransfer;
 
@@ -19,7 +20,6 @@ namespace Reanimator
         private readonly FileExplorer _fileExplorer;
 
         // Dependencies
-        private List<Index> _indexFiles;
         private readonly TableFiles _tableFiles;
         private readonly TableDataSet _tableDataSet;
 
@@ -31,24 +31,21 @@ namespace Reanimator
 
         public Reanimator()
         {
-            _options = new Options();
-            _indexFilesOpen = new List<String>();
-            _tableDataSet = new TableDataSet();
-            _indexFiles = new List<Index>();
-
-            _CheckHellgateInstallation();
             InitializeComponent();
+
+            _options = new Options();
+            _fileExplorer = new FileExplorer { MdiParent = this };
+            
+            _tableFiles = new TableFiles();
+            _tableDataSet = new TableDataSet();
+
+            _indexFilesOpen = new List<String>();
+            _CheckHellgateInstallation();
 
 #if DEBUG
             characterFileToolStripMenuItem.Visible = true;
             convertTCv4FilesToolStripMenuItem.Visible = true;
 #endif
-
-            _fileExplorer = new FileExplorer { MdiParent = this };
-            _tableFiles = new TableFiles();
-
-            //XmlCookedFile asdf = new XmlCookedFile();
-            //asdf.Uncook(File.ReadAllBytes(@"D:\Games\Hellgate London\data\skills\consumable\summoncocomoko.xml.cooked"));
 
             //String str = "pLongConnections";
             //String str = @"data\background\catacombs\ct_connb_path.xml.cooked";
@@ -460,55 +457,6 @@ namespace Reanimator
             }
         }
 
-        private void _LoadAndDisplayCurrentlyLoadedExcelTables()
-        {
-            try
-            {
-                if (_tableFiles == null || _tableFiles.LoadedFileCount <= 0) return;
-
-                _tablesLoaded = new TablesLoaded(_tableDataSet) { MdiParent = this };
-
-                foreach (DataFile dataFile in from DictionaryEntry de in _tableFiles.DataFiles
-                                              select de.Value as DataFile)
-                {
-                    _tablesLoaded.AddItem(dataFile);
-                }
-
-                _tablesLoaded.SetBounds(_fileExplorer.Size.Width + 10, 0, 300, 350);
-                _tablesLoaded.Text = String.Format("Currently Loaded Tables [{0}]", _tableFiles.LoadedFileCount);
-                _tablesLoaded.Show();
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "LoadAndDisplayCurrentlyLoadedExcelTables", false);
-            }
-        }
-
-        private void _LoadTables(ProgressForm progress, Object var)
-        {
-            try
-            {
-                if (!_tableFiles.LoadTableFiles(progress))
-                {
-                    throw new Exception("Failed to load/parse all excel and strings tables!\n" +
-                        "Please ensure your directories are set correctly.\nTools > Options");
-                }
-
-#if DEBUG
-                if (!_tableFiles.LoadTCv4Files(progress))
-                {
-                    //throw new Exception("Failed to load/parse all excel and strings tables!\n" +
-                    //    "Please ensure your directories are set correctly.\nTools > Options");
-                }
-#endif
-                _tableDataSet.TableFiles = _tableFiles;
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_LoadTables", true);
-            }
-        }
-
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             /* Doesn't appear to do anything...
@@ -649,19 +597,83 @@ namespace Reanimator
                 fileExplorerProgress.ShowDialog(this);
                 _fileExplorer.Show();
 
-                _indexFiles = _fileExplorer.IndexFiles;
+                //_indexFiles = _fileExplorer.IndexFiles;
                 _tableFiles.FileExplorer = _fileExplorer;
 
                 ProgressForm progress = new ProgressForm(_LoadTables, null);
-                progress.Disposed += delegate { _LoadAndDisplayCurrentlyLoadedExcelTables(); };
                 progress.ShowDialog(this);
+                _tableDataSet.TableFiles = _tableFiles;
+                _LoadAndDisplayCurrentlyLoadedExcelTables();
 
-                XmlCookedFile.Initialize(_tableFiles);
+                XmlCookedFile.Initialize(_tableDataSet);
+
+          //      if (false)
+                //{
+                //XmlDocument xmlDocument = new XmlDocument();
+                //xmlDocument.Load(@"D:\Games\Hellgate London\data\skills\consumable\summoncocomoko.xml");
+                ////xmlDocument.Load(@"D:\Games\Hellgate London\data\materials\agitator.xml");
+
+                //    XmlCookedFile asdf = new XmlCookedFile();
+                //    byte[] bytes = asdf.CookXmlDocument(xmlDocument);
+                //    if (bytes != null)
+                //        File.WriteAllBytes(
+                //            @"D:\Games\Hellgate London\data\skills\consumable\summoncocomoko.xml.cooked2", bytes);
+                    //asdf.Uncook(File.ReadAllBytes(@"D:\Games\Hellgate London\data\skills\consumable\summoncocomoko.xml.cooked"));
+
+                //}
             }
             catch (Exception ex)
             {
                 ExceptionLogger.LogException(ex, "Reanimator_Load", false);
                 MessageBox.Show(ex.Message, "Reanimator_Load");
+            }
+        }
+
+        private void _LoadTables(ProgressForm progress, Object var)
+        {
+            try
+            {
+                if (!_tableFiles.LoadTableFiles(progress))
+                {
+                    throw new Exception("Failed to load/parse all excel and strings tables!\n" +
+                        "Please ensure your directories are set correctly.\nTools > Options");
+                }
+
+#if DEBUG
+                if (!_tableFiles.LoadTCv4Files(progress))
+                {
+                    //throw new Exception("Failed to load/parse all excel and strings tables!\n" +
+                    //    "Please ensure your directories are set correctly.\nTools > Options");
+                }
+#endif
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "_LoadTables", true);
+            }
+        }
+
+        private void _LoadAndDisplayCurrentlyLoadedExcelTables()
+        {
+            try
+            {
+                if (_tableFiles.LoadedFileCount <= 0) return;
+
+                _tablesLoaded = new TablesLoaded(_tableDataSet) { MdiParent = this };
+
+                foreach (DataFile dataFile in from DictionaryEntry de in _tableFiles.DataFiles
+                                              select de.Value as DataFile)
+                {
+                    _tablesLoaded.AddItem(dataFile);
+                }
+
+                _tablesLoaded.SetBounds(_fileExplorer.Size.Width + 10, 0, 300, 350);
+                _tablesLoaded.Text = String.Format("Currently Loaded Tables [{0}]", _tableFiles.LoadedFileCount);
+                _tablesLoaded.Show();
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "LoadAndDisplayCurrentlyLoadedExcelTables", false);
             }
         }
 

@@ -26,12 +26,13 @@ namespace Reanimator.XmlDefinitions
         public String TrueName; // some element names have illegal xml chars in them (bad FSS), so we need the "true" name if we want the correct string hash
         public Object DefaultValue;
         public Type ChildType;
+        public UInt32 ChildTypeHash;
         public UInt32 ExcelTableCode;
         public ElementType ElementType;
         public Int32 FlagId;
         public Int32 BitIndex;
         public UInt32 BitMask;
-        public Int32 ArrayCount;
+        public Int32 Count;
         public UInt32 NameHash;
     }
 }
