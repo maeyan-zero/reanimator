@@ -628,7 +628,7 @@
             this.convertTCv4FilesToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.convertTCv4FilesToolStripMenuItem.Text = "Convert Test Center Files";
             this.convertTCv4FilesToolStripMenuItem.Visible = false;
-            this.convertTCv4FilesToolStripMenuItem.Click += new System.EventHandler(this.convertTCv4FilesToolStripMenuItem_Click);
+            this.convertTCv4FilesToolStripMenuItem.Click += new System.EventHandler(this._ConvertTCv4FilesToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
