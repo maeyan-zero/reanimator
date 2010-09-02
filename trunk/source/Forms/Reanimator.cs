@@ -860,34 +860,60 @@ namespace Reanimator
             }
         }
 
-        private void convertTCv4FilesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void _ConvertTCv4FilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Select Dump location
+            FolderBrowserDialog folderBrower = new FolderBrowserDialog();
+            folderBrower.SelectedPath = "D:\\Projects\\Revival\\Converted Files";// Config.HglDataDir;
+            DialogResult dialogResult = folderBrower.ShowDialog();
+            if (dialogResult == DialogResult.Cancel) return;
+
             // cache all tables
+            ProgressForm cacheTableProgress = new ProgressForm(_LoadAllExcelTables, null);
+            cacheTableProgress.SetLoadingText("Caching all tables.");
+            cacheTableProgress.ShowDialog();
+
+            // generate all tables
+            ProgressForm generateTableProgress = new ProgressForm(_GenerateExcelFiles, folderBrower.SelectedPath);
+            generateTableProgress.SetLoadingText("Generating all converted tables, this will take a while.");
+            generateTableProgress.SetStyle(ProgressBarStyle.Continuous);
+            generateTableProgress.ShowDialog();
+
+            MessageBox.Show("Complete");
+        }
+
+        private void _GenerateExcelFiles(ProgressForm progress, object obj)
+        {
+            string filePath = (string)obj;
+
+            foreach (DataTable tcDataTable in _tableDataSet.XlsDataSet.Tables)
+            {
+                // check for tcv4 version
+                if (!tcDataTable.TableName.Contains("_TCv4_")) continue;
+                string spVersion = tcDataTable.TableName.Replace("_TCv4_", "");
+                // set text
+                progress.SetCurrentItemText("Current table... " + spVersion);
+                // get the sp version
+                DataTable spDataTable = _tableDataSet.XlsDataSet.Tables[spVersion];
+                // convert it
+                DataTable convertedDataTable = ExcelFile.ConvertToSinglePlayerVersion(spDataTable, tcDataTable);
+                // get the excel file
+                ExcelFile excelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spVersion);
+                // generate it
+                byte[] buffer = excelFile.GenerateFile(convertedDataTable);
+                // save
+                string path = filePath + "\\" + excelFile.StringId + "." + excelFile.FileExtension;
+                File.WriteAllBytes(path, buffer);
+            }
+        }
+
+        private void _LoadAllExcelTables(ProgressForm progress, object obj)
+        {
             foreach (DictionaryEntry rawDataFile in _tableDataSet.TableFiles.DataFiles)
             {
                 DataFile dataFile = (DataFile)rawDataFile.Value;
-                if (!dataFile.IsExcelFile)
-                {
-                    continue;
-                }
-
-                if (_tableDataSet.GetExcelTableFromStringId(dataFile.StringId) == null)
-                {
-                    //ProgressForm cacheTableProgress = new ProgressForm(_tableDataSet.LoadTable, dataFile);
-                    //cacheTableProgress.ShowDialog(this);
-                }
-            }
-
-
-            foreach (DataTable dataTable in _tableDataSet.XlsDataSet.Tables)
-            {
-                // check for tcv4 version
-                if (!dataTable.TableName.Contains("_TCv4_"))
-                {
-                    continue;
-                }
-
-
+                if (dataFile.IsStringsFile) continue;
+                _tableDataSet.LoadTable(progress, dataFile);
             }
         }
     }

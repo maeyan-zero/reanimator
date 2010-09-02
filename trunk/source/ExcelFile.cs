@@ -689,6 +689,10 @@ namespace Reanimator
                                 {
                                     fieldInfo.SetValue(table, -1);
                                 }
+                                else if (fieldInfo.FieldType == typeof(Int16))
+                                {
+                                    fieldInfo.SetValue(table, new Int16());
+                                }
                                 else
                                 {
                                     fieldInfo.SetValue(table, 0);
@@ -775,47 +779,61 @@ namespace Reanimator
                     }
                     else
                     {
-                        if (row < Rows.Count)
+                        Object o = dr[dc];
+                        Type type = o.GetType();
+                        if (type == typeof(DBNull))
                         {
-                            Object o = dr[dc];
-                            fieldInfo.SetValue(table, o);
-                        }
-                        else
-                        {
-                            // TODO this section is just gross and needs to be done properly
-                            ExcelOutputAttribute excelOutputAttribute = GetExcelOutputAttribute(fieldInfo);
-                            if (excelOutputAttribute == null || !excelOutputAttribute.IsBitmask)
+                            if (fieldInfo.FieldType == typeof(byte))
                             {
-                                Object o = dr[dc];
-                                Type type = o.GetType();
-                                if (type == typeof(DBNull))
-                                {
-                                    if (fieldInfo.FieldType == typeof(byte))
-                                    {
-                                        const byte b = 0;
-                                        fieldInfo.SetValue(table, b);
-                                    }
-                                    else if (fieldInfo.FieldType == typeof(String))
-                                    {
-                                        fieldInfo.SetValue(table, String.Empty);
-                                    }
-                                    else
-                                    {
-                                        o = 0;
-                                        fieldInfo.SetValue(table, o);
-                                    }
-                                }
-                                else
-                                {
-                                    fieldInfo.SetValue(table, o);
-                                }
-
+                                const byte b = 0;
+                                fieldInfo.SetValue(table, b);
+                            }
+                            else if (fieldInfo.FieldType == typeof(UInt32))
+                            {
+                                fieldInfo.SetValue(table, 0);
+                            }
+                            else if (fieldInfo.FieldType == typeof(Int32))
+                            {
+                                fieldInfo.SetValue(table, -1);
+                            }
+                            else if (fieldInfo.FieldType == typeof(Single))
+                            {
+                                const Single f = 0;
+                                fieldInfo.SetValue(table, f);
+                            }
+                            else if (fieldInfo.FieldType == typeof(String))
+                            {
+                                fieldInfo.SetValue(table, String.Empty);
+                            }
+                            else if (fieldInfo.FieldType == typeof(Int32[]))
+                            {
+                                object[] attributes = fieldInfo.GetCustomAttributes(typeof(MarshalAsAttribute), false);
+                                MarshalAsAttribute marshal = (MarshalAsAttribute)attributes[0];
+                                int sizeConst = marshal.SizeConst;
+                                int[] i32 = new int[sizeConst];
+                                fieldInfo.SetValue(table, i32);
+                            }
+                            else if (fieldInfo.FieldType == typeof(Int16))
+                            {
+                                const Int16 i16 = 0;
+                                fieldInfo.SetValue(table, i16);
                             }
                             else
                             {
-                                Object o = dr[dc];
-                                fieldInfo.SetValue(table, o);
+                                ExcelOutputAttribute excelAttribute = GetExcelOutputAttribute(fieldInfo);
+                                if (excelAttribute.IsBitmask)
+                                {
+                                    fieldInfo.SetValue(table, new UInt32());
+                                }
+                                else
+                                {
+                                    Debug.Fail("Unhandled default type");
+                                }
                             }
+                        }
+                        else
+                        {
+                            fieldInfo.SetValue(table, o);
                         }
                     }
                     col++;
@@ -826,18 +844,25 @@ namespace Reanimator
                 {
                     int lastCol = dataTable.Columns.Count - 1;
                     String s = dr[lastCol] as String;
+                    byte[] array = null;
 
                     if (!String.IsNullOrEmpty(s))
                     {
-                        byte[] array = Export.CSVtoArray(s, "hex", sizeof(byte));
-                        if (ExtraIndexData.Count <= row)
-                        {
-                            ExtraIndexData.Add(array);
-                        }
-                        else
-                        {
-                            ExtraIndexData[row] = array;
-                        }
+                        array = Export.CSVtoArray(s, "hex", sizeof(byte));
+                    }
+                    else
+                    {
+                        string empty = "0A,00,02,06,00,64,DA,00,11,09,00,00,00,19,37,40,04,01,00,00,40,E6,0D,10,51,00,00,00,00";
+                        array = Export.CSVtoArray(empty, "hex", sizeof(byte));
+                    }
+
+                    if (ExtraIndexData.Count <= row)
+                    {
+                        ExtraIndexData.Add(array);
+                    }
+                    else
+                    {
+                        ExtraIndexData[row] = array;
                     }
                 }
 
@@ -961,46 +986,29 @@ namespace Reanimator
             return returnBuffer;
         }
 
-        public DataView ConvertToSinglePlayerVersion(DataView spDataView, DataView tcDataView)
+        public static DataTable ConvertToSinglePlayerVersion(DataTable spDataTable, DataTable tcDataTable)
         {
-            // Add missing columns
-            foreach (DataColumn col in spDataView.Table.Columns)
+            spDataTable.Rows.Clear();
+
+            foreach (DataRow tcRow in tcDataTable.Rows)
             {
-                if (!tcDataView.Table.Columns.Contains(col.ColumnName))
+                DataRow convertedRow = spDataTable.NewRow();
+                foreach (DataColumn column in spDataTable.Columns)
                 {
-                    tcDataView.Table.Columns.Add(col);
+                    string columnName = column.ColumnName;
+                    if (tcDataTable.Columns.Contains(columnName))
+                    {
+                        if (column.DataType != tcDataTable.Columns[columnName].DataType)
+                        {
+                            continue;
+                        }
+                        convertedRow[columnName] = tcRow[columnName];
+                    }
                 }
+                spDataTable.Rows.Add(convertedRow);
             }
 
-            // Remove extra columns
-            foreach (DataColumn col in tcDataView.Table.Columns)
-            {
-                if (spDataView.Table.Columns.Contains(col.ColumnName))
-                {
-                    tcDataView.Table.Columns.Remove(col.ColumnName);
-                }
-            }
-
-            // Compare bitmasks
-            foreach (DataColumn col in tcDataView.Table.Columns)
-            {
-                if (col.DataType != typeof(Enum))
-                {
-                    continue;
-                }
-
-                foreach (DataRow row in tcDataView.Table.Rows)
-                {
-                    uint tcBitmask = (uint)row[col];
-                    Type spBitmask = spDataView.Table.Columns[col.ColumnName].DataType;
-
-                    
-                }
-            }
-
-            // Sort Columns
-
-            return tcDataView;
+            return spDataTable;
         }
 
         public void DumpExtraIndiceData()
