@@ -129,133 +129,134 @@ namespace Reanimator.XmlDefinitions
             {
                 Name = "tAttachmentDef.eType",
                 DefaultValue = 0,
-                ElementType = ElementType.Int32,
+                ElementType = ElementType.Int32
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.dwFlags",
                 DefaultValue = 0,
-                ElementType = ElementType.Int32,
+                ElementType = ElementType.Int32
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.nVolume",
                 DefaultValue = 1,
-                ElementType = ElementType.Int32,
+                ElementType = ElementType.Int32
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.pszAttached",
                 DefaultValue = null,
-                ElementType = ElementType.String,
+                ElementType = ElementType.String
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.nAttachedDefId",
                 DefaultValue = -1,
-                ElementType = ElementType.NonCookedInt32,
+                ElementType = ElementType.NonCookedInt32
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.pszBone",
                 DefaultValue = null,
-                ElementType = ElementType.String,
+                ElementType = ElementType.String
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.nBoneId",
                 DefaultValue = -1,
-                ElementType = ElementType.NonCookedInt32,
+                ElementType = ElementType.NonCookedInt32
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.vPosition.fX",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.vPosition.fY",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.vPosition.fZ",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.fRotation",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.fYaw",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.fPitch",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.fRoll",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.vNormal.fX",
                 DefaultValue = -1.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.vNormal.fY",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.vNormal.fZ",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "pszExcelString",
                 DefaultValue = null,
-                ElementType = ElementType.String,
+                ElementType = ElementType.String
             },
             new XmlCookElement
             {
                 Name = "nExcelIndex",
                 DefaultValue = -1,
-                ElementType = ElementType.NonCookedInt32,
+                ElementType = ElementType.NonCookedInt32
             },
             new XmlCookElement
             {
                 Name = "nData",
                 DefaultValue = 0,
-                ElementType = ElementType.Int32,
+                ElementType = ElementType.Int32
             },
             new XmlCookElement
             {
                 Name = "fParam",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float,
+                ElementType = ElementType.Float
             },
             new XmlCookElement
             {
                 Name = "pszData",
                 DefaultValue = null,
                 ElementType = ElementType.String,
+                TreatAsData = true
             },
             new XmlCookElement
             {

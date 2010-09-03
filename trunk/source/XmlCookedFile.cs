@@ -5,7 +5,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Xml;
 using Reanimator.XmlDefinitions;
-using System.Runtime.InteropServices;
 
 namespace Reanimator
 {
@@ -31,7 +30,7 @@ namespace Reanimator
         /// </summary>
         /// <param name="xmlDocument">An XML Document to Cook.</param>
         /// <returns>The cooked bytes, or null upon failure.</returns>
-        public byte[] CookXmlDocument(XmlDocument xmlDocument)
+        public static byte[] CookXmlDocument(XmlDocument xmlDocument)
         {
             if (!xmlDocument.HasChildNodes) return null;
 
@@ -57,9 +56,9 @@ namespace Reanimator
             FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookFileHeader);
 
 
-            // todo: the following two functions could probably be merged to one
             // write default element array //
-            int bytesWritten = _CookXmlDefinition(ref buffer, offset, xmlDefinition);
+            List<UInt32> cookedDefinitions = new List<UInt32>();
+            int bytesWritten = _CookXmlDefinition(ref buffer, offset, xmlDefinition, cookedDefinitions);
             if (bytesWritten == 0) return null;
             offset += bytesWritten;
 
@@ -97,26 +96,40 @@ namespace Reanimator
                 // ElementType.Table must be cooked - so xmlNode might be null if not defined
                 if (xmlNode == null)
                 {
-                    // only thing written in for blank tables
-                    if (xmlCookElement.ElementType != ElementType.ExcelIndex) continue;
+                    // only things written in for blank tables
+                    switch (xmlCookElement.ElementType)
+                    {
+                        case ElementType.ExcelIndex:
+                            const byte noEntry = 0xFF;
+                            FileTools.WriteToBuffer(ref buffer, ref offset, noEntry);
+                            _FlagBit(buffer, bitFieldOffset, bitIndex);
+                            break;
 
-                    const byte noEntry = 0xFF;
-                    FileTools.WriteToBuffer(ref buffer, ref offset, noEntry);
-                    _FlagBit(buffer, bitFieldOffset, bitIndex);
+                        case ElementType.TableCount:
+                            const Int32 zeroTables = 0;
+                            FileTools.WriteToBuffer(ref buffer, ref offset, zeroTables);
+                            _FlagBit(buffer, bitFieldOffset, bitIndex);
+                            break;
+                    }
 
                     continue;
                 }
 
                 // todo: name replace Name with TrueName when saved and when uncooking
                 String elementName = xmlCookElement.Name;
-                if (xmlCookElement.ElementType == ElementType.TableCount)
+                if (xmlCookElement.ElementType == ElementType.TableCount ||
+                    xmlCookElement.ElementType == ElementType.UnknownFloatT)
                 {
                     elementName += "Count";
                 }
 
                 XmlElement xmlElement = xmlNode[elementName];
-                String elementText = String.Empty;              // want excel index even if null/empty
-                if (xmlElement == null && xmlCookElement.ElementType != ElementType.ExcelIndex) continue;
+                String elementText = String.Empty;
+                if (xmlElement == null &&
+                    xmlCookElement.ElementType != ElementType.ExcelIndex && // want excel index even if null/empty
+                    xmlCookElement.ElementType != ElementType.Table &&      // want table even if null/empty
+                    xmlCookElement.ElementType != ElementType.TableCount    // want table count even if null/empty
+                    ) continue;
 
                 if (xmlElement != null)
                 {
@@ -125,12 +138,12 @@ namespace Reanimator
 
                 switch (xmlCookElement.ElementType)
                 {
-                    case ElementType.UnknownFloatT: // 0x0600
                     case ElementType.NonCookedInt32: // 0x0700
                     case ElementType.UnknownFloat: // 0x0800
                     case ElementType.UnknownPTypeD: // 0x0D00
                         // not cooked.... (I think...)
                         continue;
+
 
                     case ElementType.Int32: // 0x0000
                     case ElementType.UnknownPType: // 0x0007    // I think this is just an int32...
@@ -139,11 +152,13 @@ namespace Reanimator
                         FileTools.WriteToBuffer(ref buffer, ref offset, intValue);
                         break;
 
+
                     case ElementType.Float: // 0x0100
                         float floatValue = Convert.ToSingle(elementText);
                         if ((float)xmlCookElement.DefaultValue == floatValue) continue;
                         FileTools.WriteToBuffer(ref buffer, ref offset, floatValue);
                         break;
+
 
                     case ElementType.String: // 0x0200
                         if ((String)xmlCookElement.DefaultValue == elementText) continue;
@@ -151,11 +166,81 @@ namespace Reanimator
                         Int32 strLen = elementText.Length;
                         if (strLen == 0 && xmlCookElement.DefaultValue == null) continue;
 
+                        byte[] strBytes;
+                        if (xmlCookElement.TreatAsData)
+                        {
+                            String[] dataStrBytes = elementText.Split('-');
+                            strLen = dataStrBytes.Length-1; //+1 done down below
+
+                            strBytes = new byte[strLen];
+                            for (int i = 0; i < strLen; i++)
+                            {
+                                strBytes[i] = Byte.Parse(dataStrBytes[i], System.Globalization.NumberStyles.HexNumber);
+                            }
+                        }
+                        else
+                        {
+                            strBytes = FileTools.StringToASCIIByteArray(elementText); 
+                        }
+
                         FileTools.WriteToBuffer(ref buffer, ref offset, strLen + 1);
-                        byte[] strBytes = FileTools.StringToASCIIByteArray(elementText);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, strBytes);
+                        FileTools.WriteToBuffer(ref buffer, ref offset, strBytes);   
+
                         offset++; // \0
+
                         break;
+
+
+                    case ElementType.UnknownFloatT: // 0x0600
+                        Int32 count = Convert.ToInt32(elementText);
+                        FileTools.WriteToBuffer(ref buffer, ref offset, count);
+
+                        int floatTCount = xmlCookElement.Count;
+                        List<float> floatTValues = new List<float>();
+                        bool floatTAllDefault = true;
+
+                        int totalFloatTCount = count * floatTCount;
+                        foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
+                        {
+                            if (xmlChildNode.Name != xmlCookElement.Name) continue;
+
+                            String arrayElementText = xmlChildNode.InnerText;
+                            float fValue = Convert.ToSingle(arrayElementText);
+                            if (fValue == 0 && arrayElementText == "-0")
+                                fValue = -1.0f * 0.0f;
+                            floatTValues.Add(fValue);
+
+                            if ((float)xmlCookElement.DefaultValue != fValue)
+                            {
+                                floatTAllDefault = false;
+                            }
+
+                            if (floatTValues.Count == totalFloatTCount) break;
+                        }
+
+                        if (floatTAllDefault) continue;
+
+                        for (int i = 0; i < count; i++)
+                        {
+                            for (int j = 0; j < floatTCount; j++)
+                            {
+                                float fWrite;
+
+                                int index = i*floatTCount + j;
+                                if (index < floatTValues.Count)
+                                {
+                                    fWrite = floatTValues[index];
+                                }
+                                else
+                                {
+                                    fWrite = (float)xmlCookElement.DefaultValue;
+                                }
+
+                                FileTools.WriteToBuffer(ref buffer, ref offset, fWrite);
+                            }
+                        }
+                        break;
+
 
                     case ElementType.Flag: // 0x0B01
                     case ElementType.BitFlag: // 0x0C02
@@ -186,8 +271,9 @@ namespace Reanimator
 
                         int writeOffset = (int)bitFieldOffsts[flagIndex];
                         FileTools.WriteToBuffer(ref buffer, ref writeOffset, flag);
-                        bitFieldOffsts[flagIndex] = (Int32)flag;
+                        xmlDefinition.BitFields[flagIndex] = (Int32)flag;
                         break;
+
 
                     case ElementType.Table: // 0x0308
                         XmlDefinition xmlTableDefinition = GetXmlDefinition(xmlCookElement.ChildTypeHash);
@@ -197,9 +283,10 @@ namespace Reanimator
                         offset += tableBytesWritten;
                         break;
 
+
                     case ElementType.TableCount: // 0x030A
-                        int tableCount = Convert.ToInt32(elementText);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, tableCount);
+                        int tableCount = String.IsNullOrEmpty(elementText) ? 0 : Convert.ToInt32(elementText);
+                        FileTools.WriteToBuffer(ref buffer, ref offset, tableCount); // table count is always written
                         if (tableCount == 0) break;
 
                         XmlDefinition xmlTableCountDefinition = GetXmlDefinition(xmlCookElement.ChildTypeHash);
@@ -217,6 +304,7 @@ namespace Reanimator
                         if (tablesAdded < tableCount) return 0;
 
                         break;
+
 
                     case ElementType.ExcelIndex: // 0x0903
                         String excelString = String.Empty;
@@ -256,7 +344,8 @@ namespace Reanimator
 
                         break;
 
-                    case ElementType.FloatArray: // 0x0106 todo
+
+                    case ElementType.FloatArray: // 0x0106
                         int arrayCount = xmlCookElement.Count;
                         List<float> elements = new List<float>();
                         bool allDefault = true;
@@ -266,6 +355,8 @@ namespace Reanimator
 
                             String arrayElementText = xmlChildNode.InnerText;
                             float fValue = Convert.ToSingle(arrayElementText);
+                            if (fValue == 0 && arrayElementText == "-0")
+                                fValue = -1.0f*0.0f;
                             elements.Add(fValue);
 
                             if ((float)xmlCookElement.DefaultValue != fValue)
@@ -298,14 +389,17 @@ namespace Reanimator
         }
 
         /// <summary>
-        /// Cooks an XML Definition into the supplied byte array.
+        /// Cooks an XML Definition and its children into the supplied byte array.
         /// </summary>
         /// <param name="buffer">A reference to the byte array buffer.</param>
         /// <param name="offset">The buffer offset to begin writing.</param>
         /// <param name="xmlDefinition">The XML Definition to cook.</param>
+        /// <param name="cookedDefinitions">A list to track already cooked XML Definitions (stops recursion).</param>
         /// <returns>The amount of bytes written.</returns>
-        private static int _CookXmlDefinition(ref byte[] buffer, int offset, XmlDefinition xmlDefinition)
+        private static int _CookXmlDefinition(ref byte[] buffer, int offset, XmlDefinition xmlDefinition, List<UInt32> cookedDefinitions)
         {
+            cookedDefinitions.Add(xmlDefinition.RootHash);
+
             int offsetStart = offset;
             foreach (XmlCookElement xmlCookElement in xmlDefinition.Elements)
             {
@@ -364,9 +458,18 @@ namespace Reanimator
                         if (xmlSubDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
 
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.ChildTypeHash);
+
+                        // make sure we haven't already cooked it
+                        if (cookedDefinitions.Contains(xmlCookElement.ChildTypeHash))
+                        {
+                            const Int32 alreadyCooked = -1;
+                            FileTools.WriteToBuffer(ref buffer, ref offset, alreadyCooked);
+                            break;
+                        }
+
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlSubDefinition.ElementCount);
 
-                        int bytesWritten = _CookXmlDefinition(ref buffer, offset, xmlSubDefinition);
+                        int bytesWritten = _CookXmlDefinition(ref buffer, offset, xmlSubDefinition, cookedDefinitions);
                         if (bytesWritten == 0) return 0;
                         offset += bytesWritten;
                         break;
@@ -475,7 +578,7 @@ namespace Reanimator
                         break;
 
                     case ElementType.String: // 0x0200
-                        String szValue = _ReadZeroString(rootElement, xmlCookElement.Name);
+                        String szValue = _ReadZeroString(rootElement, xmlCookElement);
                         Debug.Assert((String)xmlCookElement.DefaultValue != szValue);
                         break;
 
@@ -652,9 +755,6 @@ namespace Reanimator
                         Int32 totalCount = _ReadInt32(null, null);                      // total count?
 
                         Debug.Assert(xmlCookElement.BitIndex == bitIndex);
-
-                        // todo: shouldn't be doing this here - should be in XML Definition files
-                        xmlCookElement.Count = totalCount;
                         break;
 
 
@@ -684,9 +784,6 @@ namespace Reanimator
                             tableXmlDefition.ElementCount < elementCount)
                             throw new Exceptions.NotSupportedFileDefinitionException();
 
-                        // note:probably be setting this in the XmlCookDefinition files...
-                        xmlCookElement.Count = elementCount; // some tables don't required an element count but want -1 (optional table counts)
-
                         _UncookFileXmlElements(tableXmlDefition, elementCount);
                         break;
 
@@ -710,11 +807,11 @@ namespace Reanimator
             String columnName = excelDataTable.Columns[1].ColumnName;
             DataRow[] dataRows = excelDataTable.Select(String.Format("{0} = '{1}'", columnName, excelString.Replace("'", "''")));
             String index;
-            if (dataRows.Length == 0)
+            if (dataRows.Length == 0) 
             {
-                index = "-1";
+                throw new Exceptions.UnknownExcelElementException("excelString = " + excelString);
             }
-            else if (dataRows.Length > 1) // todo
+            if (dataRows.Length > 1) // todo
             {
                 int bp = 0;
                 index = dataRows[0][0].ToString();
@@ -852,27 +949,48 @@ namespace Reanimator
         {
             float value = FileTools.ByteArrayToFloat(_data, ref _offset);
 
+            // is the float value a negative zero?
+            bool isNegativeZero = false;
+            if (value == 0)
+            {
+                if (_TestBit(_data, _offset-1, 7))
+                {
+                    isNegativeZero = true;
+                }
+            }
+
             if (parentNode != null && elementName != null)
             {
                 XmlElement element = XmlDoc.CreateElement(elementName);
-                element.InnerText = value.ToString();
+                element.InnerText = (isNegativeZero ? "-" : "") + value;
                 parentNode.AppendChild(element);
             }
 
             return value;
         }
 
-        private String _ReadZeroString(XmlNode parentNode, String elementName)
+        private String _ReadZeroString(XmlNode parentNode, XmlCookElement xmlCookElement)
         {
             Int32 strLen = FileTools.ByteArrayToInt32(_data, ref _offset);
             Debug.Assert(strLen != 0);
 
-            String value = FileTools.ByteArrayToStringASCII(_data, _offset);
+            String value;
+            if (xmlCookElement.TreatAsData && strLen > 0)
+            {
+                byte[] data = new byte[strLen];
+                Buffer.BlockCopy(_data, _offset, data, 0, strLen);
+                value = BitConverter.ToString(data);
+            }
+            else
+            {
+                value = FileTools.ByteArrayToStringASCII(_data, _offset);
+            }
+
             _offset += strLen;
 
-            if (parentNode != null && elementName != null)
+            if (parentNode != null)
             {
-                XmlElement element = XmlDoc.CreateElement(elementName);
+                XmlElement element = XmlDoc.CreateElement(xmlCookElement.Name);
                 element.InnerText = value;
                 parentNode.AppendChild(element);
             }

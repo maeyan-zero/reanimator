@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Windows.Forms;
+using System.Xml;
 using Reanimator.Properties;
 
 namespace Reanimator.Forms
@@ -148,6 +149,7 @@ namespace Reanimator.Forms
                     }
                     catch (Exception e)
                     {
+                        // todo: check .dat access when HGL is open as well
                         //FileStream fs = new FileStream(idxFile, FileMode.Open, FileAccess.Read, FileShare.Read);
                         String fileNameCpy = idxFile + "cpy";
                         File.Copy(idxFile, fileNameCpy);
@@ -1145,9 +1147,9 @@ namespace Reanimator.Forms
 
         private void _FilesTreeView_AfterExpand(object sender, TreeViewEventArgs e)
         {
-            NodeObject nodeObject = (NodeObject) e.Node.Tag;
+            NodeObject nodeObject = (NodeObject)e.Node.Tag;
             if (!nodeObject.IsFolder) return;
-            
+
             e.Node.ImageIndex = (int)IconIndex.FolderOpen;
             e.Node.SelectedImageIndex = e.Node.ImageIndex;
         }
@@ -1347,7 +1349,7 @@ namespace Reanimator.Forms
             return fileBytes;
         }
 
-        private void _CookButton_Click(object sender, EventArgs e)
+        private void _UncookButton_Click(object sender, EventArgs e)
         {
             // make sure we have at least 1 checked file
             List<TreeNode> checkedNodes = new List<TreeNode>();
@@ -1358,34 +1360,34 @@ namespace Reanimator.Forms
                 return;
             }
 
-            // we're cooking, so we want only cook-able files
-            List<TreeNode> cookableNodes = (from treeNode in checkedNodes
-                                            let nodeObject = (NodeObject) treeNode.Tag
-                                            where nodeObject.CanCookWith && !nodeObject.IsUncookedVersion
-                                            select treeNode).ToList();
-            if (cookableNodes.Count == 0)
+            // we're uncooking, so we want only uncook-able files
+            List<TreeNode> uncookingNodes = (from treeNode in checkedNodes
+                                             let nodeObject = (NodeObject)treeNode.Tag
+                                             where nodeObject.CanCookWith && !nodeObject.IsUncookedVersion
+                                             select treeNode).ToList();
+            if (uncookingNodes.Count == 0)
             {
-                MessageBox.Show("Unable to find any checked files that can be cooked!", "Error", MessageBoxButtons.OK,
+                MessageBox.Show("Unable to find any checked files that can be uncooked!", "Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Exclamation);
                 return;
             }
 
-            ProgressForm progressForm = new ProgressForm(_DoUnooking, cookableNodes);
-            progressForm.SetLoadingText(String.Format("Uncooking file(s)... ({0})", cookableNodes.Count));
+            ProgressForm progressForm = new ProgressForm(_DoUnooking, uncookingNodes);
+            progressForm.SetLoadingText(String.Format("Uncooking file(s)... ({0})", uncookingNodes.Count));
             progressForm.Show(this);
         }
 
         private void _DoUnooking(ProgressForm progressForm, Object param)
         {
-            List<TreeNode> cookableNodes = (List<TreeNode>)param;
+            List<TreeNode> uncookingNodes = (List<TreeNode>)param;
             const int progressUpdateFreq = 20;
             if (progressForm != null)
             {
-                progressForm.ConfigBar(1, cookableNodes.Count, progressUpdateFreq);
+                progressForm.ConfigBar(1, uncookingNodes.Count, progressUpdateFreq);
             }
 
             int i = 0;
-            foreach (String nodeFullPath in cookableNodes.Select(treeNode => treeNode.FullPath))
+            foreach (String nodeFullPath in uncookingNodes.Select(treeNode => treeNode.FullPath))
             {
                 if (i % progressUpdateFreq == 0 && progressForm != null)
                 {
@@ -1429,18 +1431,15 @@ namespace Reanimator.Forms
 
                 if (!uncooked) continue;
 
-                // todo: add newly cooked file to file tree
+                // todo: add newly uncooked file to file tree
                 // note: assuming all cooked files end in .cooked - is this true anyways?
                 String savePath = Path.Combine(Config.HglDir, nodeFullPath.Replace(".cooked", ""));
                 xmlCookedFile.SaveXml(savePath);
             }
         }
 
-        private void _UncookButton_Click(object sender, EventArgs e)
+        private void _CookButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("todo");
-            return;
-
             // make sure we have at least 1 checked file
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
@@ -1450,7 +1449,100 @@ namespace Reanimator.Forms
                 return;
             }
 
+            // we're uncooking, so we want only cook-able files
+            List<TreeNode> cookNodes = (from treeNode in checkedNodes
+                                        let nodeObject = (NodeObject)treeNode.Tag
+                                        where nodeObject.CanCookWith && nodeObject.IsUncookedVersion
+                                        select treeNode).ToList();
+            if (cookNodes.Count == 0)
+            {
+                MessageBox.Show("Unable to find any checked files that can be cooked!", "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Exclamation);
+                return;
+            }
 
+            ProgressForm progressForm = new ProgressForm(_DoCooking, cookNodes);
+            progressForm.SetLoadingText(String.Format("Uncooking file(s)... ({0})", cookNodes.Count));
+            progressForm.Show(this);
+
+        }
+
+        private static void _DoCooking(ProgressForm progressForm, Object param)
+        {
+            List<TreeNode> cookNodes = (List<TreeNode>)param;
+            const int progressUpdateFreq = 20;
+            if (progressForm != null)
+            {
+                progressForm.ConfigBar(1, cookNodes.Count, progressUpdateFreq);
+            }
+
+            int i = 0;
+            //foreach (String nodeFullPath in cookNodes.Select(treeNode => treeNode.FullPath))
+            foreach (TreeNode treeNode in cookNodes)
+            {
+                TreeNode cookedNode = treeNode.Parent;
+                String nodeFullPath = cookedNode.FullPath.Replace(".cooked", "");
+                String filePath = Path.Combine(Config.HglDir, nodeFullPath);
+                Debug.Assert(filePath.EndsWith(".xml"));
+
+                if (i % progressUpdateFreq == 0 && progressForm != null)
+                {
+                    progressForm.SetCurrentItemText(filePath);
+                }
+                i++;
+
+                //if (nodeFullPath.Contains("actor_ghost.xml"))
+                //{
+                //    int bp = 0;
+                //}
+
+                if (!File.Exists(filePath)) continue;
+                XmlDocument xmlDocument = new XmlDocument();
+                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+
+                DialogResult dr = DialogResult.Retry;
+                byte[] cookedBytes = null;
+                while (dr == DialogResult.Retry && cookedBytes == null)
+                {
+                    try
+                    {
+                        xmlDocument.Load(filePath);
+                        cookedBytes = XmlCookedFile.CookXmlDocument(xmlDocument);
+                    }
+                    catch (Exception e)
+                    {
+                        ExceptionLogger.LogException(e, "_DoCooking", true);
+
+                        String errorMsg = String.Format("Failed to cook file!\n{0}\n\n{1}", nodeFullPath, e);
+                        dr = MessageBox.Show(errorMsg, "Error",
+                                             MessageBoxButtons.AbortRetryIgnore,
+                                             MessageBoxIcon.Exclamation);
+                        if (dr == DialogResult.Abort) return;
+                        if (dr == DialogResult.Ignore) break;
+                    }
+                }
+
+                if (cookedBytes == null) continue;
+
+                // todo: update newly cooked file to file tree
+                String savePath = Path.Combine(Config.HglDir, filePath + ".cooked");
+                File.WriteAllBytes(savePath, cookedBytes);
+
+                // debug section
+                //String savePath2 = Path.Combine(Config.HglDir, filePath + ".cooked2");
+                //File.WriteAllBytes(savePath2, cookedBytes);
+                //byte[] origBytes = File.ReadAllBytes(savePath);
+
+                //if (cookedBytes.Length != origBytes.Length)
+                //{
+                //    int bp = 0;
+                //}
+
+                //if (!origBytes.SequenceEqual(cookedBytes))
+                //{
+                //    int bp = 0;
+                //}
+            }
         }
     }
 }
