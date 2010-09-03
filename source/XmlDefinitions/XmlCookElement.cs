@@ -34,5 +34,6 @@ namespace Reanimator.XmlDefinitions
         public UInt32 BitMask;
         public Int32 Count;
         public UInt32 NameHash;
+        public bool TreatAsData;
     }
 }

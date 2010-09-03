@@ -370,7 +370,8 @@
             {
                 Name = "tScatterColor",
                 ElementType = ElementType.UnknownFloatT,
-                DefaultValue = 0.7f
+                DefaultValue = 0.7f,
+                Count = 4
             }
         };
 

@@ -19,7 +19,7 @@ namespace Reanimator
         public String FileName { get; set; }
 
         internal byte[] _data;
-        public List<object> Rows { get; private set; }
+        public List<object> Rows { get; set; }
 
         protected DataFile(String stringId, Type dataType)
         {

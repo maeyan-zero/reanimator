@@ -203,7 +203,6 @@ namespace Reanimator
             FileExcelHeader = FileTools.ByteArrayToStructure<ExcelHeader>(_data, ref offset);
             if (_excelDebugAll) Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", FileExcelHeader.Unknown161, FileExcelHeader.Unknown162, FileExcelHeader.Unknown163, FileExcelHeader.Unknown164, FileExcelHeader.Unknown165, FileExcelHeader.Unknown166, FileExcelHeader.Unknown321, FileExcelHeader.Unknown322));
 
-
             // strings block
             token = FileTools.ByteArrayToInt32(_data, ref offset);
             CheckExcelFlag(token);
@@ -223,7 +222,6 @@ namespace Reanimator
 
                     i += s.Length;
                 }
-
                 offset += stringsBytesCount;
             }
 
@@ -231,14 +229,14 @@ namespace Reanimator
             token = FileTools.ByteArrayToInt32(_data, ref offset);
             CheckExcelFlag(token);
 
-
             Count = FileTools.ByteArrayToInt32(_data, ref offset);
+            Object[] rows = new Object[Count];
             for (int i = 0; i < Count; i++)
             {
-                Object table = FileTools.ByteArrayToStructure(data, DataType, ref offset);
-                Rows.Add(table);
+                rows[i] = FileTools.ByteArrayToStructure(_data, DataType, ref offset);
+                
             }
-
+            Rows.AddRange(rows);
 
             // index block
             token = FileTools.ByteArrayToInt32(_data, ref offset);

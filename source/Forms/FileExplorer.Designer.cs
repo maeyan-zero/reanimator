@@ -274,7 +274,7 @@
             this.uncook_button.TabIndex = 0;
             this.uncook_button.Text = "Uncook";
             this.uncook_button.UseVisualStyleBackColor = true;
-            this.uncook_button.Click += new System.EventHandler(this._CookButton_Click);
+            this.uncook_button.Click += new System.EventHandler(this._UncookButton_Click);
             // 
             // cook_label
             // 
@@ -297,7 +297,7 @@
             this.cook_button.TabIndex = 2;
             this.cook_button.Text = "Cook";
             this.cook_button.UseVisualStyleBackColor = true;
-            this.cook_button.Click += new System.EventHandler(this._UncookButton_Click);
+            this.cook_button.Click += new System.EventHandler(this._CookButton_Click);
             // 
             // uncook_label
             // 

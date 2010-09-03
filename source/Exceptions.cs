@@ -53,5 +53,15 @@ namespace Reanimator
                 CustomMessage = str;
             }
         }
+
+        public class UnknownExcelElementException : ReanimatorException
+        {
+            public UnknownExcelElementException(String excelElement)
+            {
+                if (String.IsNullOrEmpty(excelElement)) excelElement = String.Empty;
+
+                CustomMessage = "An unknown Excel Element was encountered!\n" + excelElement;
+            }
+        }
     }
 }
