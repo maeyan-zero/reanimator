@@ -362,26 +362,34 @@ namespace Reanimator
             if (token != 0)
             {
                 CheckExcelFlag(token);
+
                 int byteCount = FileTools.ByteArrayToInt32(_data, ref offset);
                 if (byteCount != 0)
                 {
-                    if (FileExcelHeader.StructureId == 0x1F9DDC98 || FileExcelHeader.StructureId == 1558484169)                                 // Only seen in unittypes.txt.cooked so far.
+                    if (FileExcelHeader.StructureId == 0x1F9DDC98 || FileExcelHeader.StructureId == 1558484169) // Only seen in unittypes.txt.cooked so far.
                     {                                                                           // This block reading method is the same as first seen below in the states.txt.cooked,
                         int blockCount = FileTools.ByteArrayToInt32(_data, ref offset);   // but there is no data in the previous block for unittypes.txt.cooked.
                         byteCount = (byteCount << 2) * blockCount;
+                        FinalBytes = new byte[byteCount];
+                        Buffer.BlockCopy(_data, offset, FinalBytes, 0, FinalBytes.Length);
+                        offset += FinalBytes.Length;
+                        Debug.WriteLine(String.Format("Has final block .Length = {0}", byteCount));
                         Debug.Write(String.Format("Has weird block .Length = {0}\n", byteCount));
                     }
-                    _dataBlock = new byte[byteCount];
-                    Buffer.BlockCopy(_data, offset, _dataBlock, 0, byteCount);
-                    offset += byteCount;
-                    Debug.Write(String.Format("Has data block .Length = {0}\n", byteCount));
+                    else
+                    {
+                        _dataBlock = new byte[byteCount];
+                        Buffer.BlockCopy(_data, offset, _dataBlock, 0, byteCount);
+                        offset += byteCount;
+                        Debug.WriteLine(String.Format("Has data block .Length = {0}", byteCount));
+                    }
                 }
             }
 
 
-            // does it have a final flag chunk?
-            if (offset != _data.Length)
+            if (offset != _data.Length) // this is only for because of unittypes, see above
             {
+                // does it have a final flag chunk?
                 token = FileTools.ByteArrayToInt32(_data, ref offset);
                 if (token != 0)
                 {
@@ -396,8 +404,8 @@ namespace Reanimator
                         FinalBytes = new byte[byteCount];
                         Buffer.BlockCopy(_data, offset, FinalBytes, 0, FinalBytes.Length);
                         offset += FinalBytes.Length;
+                        Debug.WriteLine(String.Format("Has final block .Length = {0}", byteCount));
                     }
-                    if (_excelDebugAll) Debug.Write(String.Format("Has final block .Length = {0}\n", byteCount));
                 }
             }
 
@@ -405,8 +413,6 @@ namespace Reanimator
             {
                 throw new Exception("offset != data.Length");
             }
-
-            if (_excelDebugAll) Debug.Write("\n");
 
             IsGood = true;
             return true;
@@ -904,16 +910,14 @@ namespace Reanimator
                 if (!dc.ExtendedProperties.Contains(ColumnTypeKeys.SortId)) continue;
 
                 int sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortId] - 1;
-                string ctype = dc.DataType == typeof(string) ? "''" : "0";  // modify the expr depending on data type
-                string expr = dc.ColumnName + " <> " + ctype;
-                string sort =  dc.ColumnName + " ASC";
-                DataRow[] sortedTable = dataTable.Select(expr, sort);
+                DataView sortedView = dataTable.AsDataView();
+                sortedView.RowFilter = "code <> 0";
+                sortedView.Sort = dc.ColumnName + " asc";
+                _sortIndicies[sortId] = new int[sortedView.Count];
 
-                _sortIndicies[sortId] = new int[sortedTable.Length];
-
-                for (int i = 0; i < sortedTable.Length; i++)
+                for (int i = 0; i < sortedView.Count; i++)
                 {
-                    _sortIndicies[sortId][i] = (int)sortedTable[i][0];
+                    _sortIndicies[sortId][i] = (int)sortedView[i][0];
                 }
             }
 
@@ -945,27 +949,54 @@ namespace Reanimator
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dnehValue);
             }
 
-            // Data Block 1. Holds the 'IntOffset' data.
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
-            if (intBytes != null) // TODO. shouldnt have to do this here
+
+            if (FileExcelHeader.StructureId == 0x1F9DDC98 || FileExcelHeader.StructureId == 1558484169) // UnitTypes only
             {
-                byte[] tmp = new byte[intByteCount];
-                Array.Copy(intBytes, tmp, intByteCount);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, tmp);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
+
+                //DataBlock 2 - Final Bytes
+                int blockCount = dataTable.Rows.Count;
+                int finalBytesCount = FinalBytes == null ? 0 : FinalBytes.Length;
+                finalBytesCount = (finalBytesCount >> 2) / blockCount;
+
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, finalBytesCount);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, blockCount);
+                if (finalBytesCount > 0)
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
+                }
+            }
+            else
+            {
+                // Data Block 1. Holds the 'IntOffset' data.
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
+                if (intBytes != null) // TODO. shouldnt have to do this here
+                {
+                    byte[] tmp = new byte[intByteCount];
+                    Array.Copy(intBytes, tmp, intByteCount);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, tmp);
+                }
+
+                // Data Block 2
+                int blockCount = dataTable.Rows.Count;
+                int finalBytesCount = FinalBytes == null ? 0 : FinalBytes.Length;
+                finalBytesCount = (finalBytesCount >> 2) / blockCount;
+
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, finalBytesCount);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, blockCount);
+                if (finalBytesCount > 0)
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
+                }
+
+                // One last null
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
             }
 
-            // Data Block 2
-            int finalBytesCount = FinalBytes == null ? 0 : FinalBytes.Length;
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, finalBytesCount);
-            if (finalBytesCount > 0)
-            {
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
-            }
-
-            // One last null
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
 
             // return final buffer
             byte[] returnBuffer = new byte[byteOffset];
