@@ -135,7 +135,7 @@ namespace Reanimator
                 {"MUSICGROOVELEVELS", new MapItem {RowType = typeof (MusicGrooveLevelsRow)}},
                 {"MUSICGROOVELEVELTYPES", new MapItem {RowType = typeof (MusicGrooveLevelTypesRow)}},
                 {"MUSIC_REF", new MapItem {NameReplace = "MUSICREF", RowType = typeof (MusicRefRow)}},
-                {"MUSIC_SCRIPT_DEBUG", new MapItem {NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
+                //{"MUSIC_SCRIPT_DEBUG", new MapItem {NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
                 {"MUSICSTINGERS", new MapItem {RowType = typeof (MusicStingersRow)}},
                 {"MUSICSTINGERSETS", new MapItem {RowType = typeof (MusicStingerSetsRow)}},
                 {"NPC", new MapItem {RowType = typeof (NpcRow)}},
@@ -167,7 +167,7 @@ namespace Reanimator
                 {"SOUNDBUSES", new MapItem {RowType = typeof (SoundBusesRow)}},
                 {"SOUND_MIXSTATES", new MapItem {NameReplace = "SOUNDMIXSTATES", RowType = typeof (SoundMixStatesRow)}},
                 {"SOUND_MIXSTATE_VALUES", new MapItem {NameReplace = "SOUNDMIXSTATEVALUES", RowType = typeof (SoundMixStateValuesRow)}},
-                {"SOUNDS", new MapItem {RowType = typeof (SoundsRow)}},
+                //{"SOUNDS", new MapItem {RowType = typeof (SoundsRow)}},
                 {"SOUNDVCAS", new MapItem {RowType = typeof (SoundVidCasRow)}},
                 {"SOUNDVCASETS", new MapItem {RowType = typeof (SoundVideoCasetsRow)}},
                 {"SPAWN_CLASS", new MapItem {NameReplace = "SPAWNCLASS", RowType = typeof (SpawnClassRow)}},
@@ -231,7 +231,7 @@ namespace Reanimator
                 {"_TCv4_SKILLEVENTTYPES", new MapItem {IsTCv4 = true, RowType = typeof (SkillEventTypesTCv4Row)}},
                 {"_TCv4_SKILLTABS", new MapItem {IsTCv4 = true, RowType = typeof (SkillTabsTCv4Row)}},
                 {"_TCv4_SOUND_MIXSTATES", new MapItem {IsTCv4 = true, NameReplace = "SOUNDMIXSTATES", RowType = typeof (SoundMixStatesTCv4Row)}},
-                {"_TCv4_SOUNDS", new MapItem {IsTCv4 = true, RowType = typeof (SoundsTCv4Row)}},
+                //{"_TCv4_SOUNDS", new MapItem {IsTCv4 = true, RowType = typeof (SoundsTCv4Row)}},
                 {"_TCv4_STATS", new MapItem {IsTCv4 = true, RowType = typeof (StatsTCv4Row)}},
                 {"_TCv4_TREASURE", new MapItem {IsTCv4 = true, RowType = typeof (TreasureTCv4Row)}},
                 {"_TCv4_UNITMODE_GROUPS", new MapItem {IsTCv4 = true, RowType = typeof (UnitModeGroupsTCv4Row)}},
@@ -307,7 +307,7 @@ namespace Reanimator
                 {"_TCv4_MUSICGROOVELEVELS", new MapItem {IsTCv4 = true, RowType = typeof (MusicGrooveLevelsRow)}},
                 {"_TCv4_MUSICGROOVELEVELTYPES", new MapItem {IsTCv4 = true, RowType = typeof (MusicGrooveLevelTypesRow)}},
                 {"_TCv4_MUSIC_REF", new MapItem {IsTCv4 = true, NameReplace = "MUSICREF", RowType = typeof (MusicRefRow)}},
-                {"_TCv4_MUSIC_SCRIPT_DEBUG", new MapItem {IsTCv4 = true, NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
+                //{"_TCv4_MUSIC_SCRIPT_DEBUG", new MapItem {IsTCv4 = true, NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
                 {"_TCv4_MUSICSTINGERS", new MapItem {IsTCv4 = true, RowType = typeof (MusicStingersRow)}},
                 {"_TCv4_MUSICSTINGERSETS", new MapItem {IsTCv4 = true, RowType = typeof (MusicStingerSetsRow)}},
                 {"_TCv4_NPC", new MapItem {IsTCv4 = true, RowType = typeof (NpcRow)}},
@@ -473,8 +473,9 @@ namespace Reanimator
                 String stringId = de.Key as String;
                 String fileName = mapItem.NameReplace ?? stringId;
                 String fileExtention = mapItem.RowType == typeof(StringsFile) ? StringsFile.FileExtention : ExcelFile.FileExtention;
-                String folderPath = mapItem.RowType == typeof(StringsFile) ? "\\data" + StringsFile.FolderPath : "\\data" + ExcelFile.FolderPath;
+                String folderPath = mapItem.RowType == typeof(StringsFile) ? "data\\" + StringsFile.FolderPath : "data\\" + ExcelFile.FolderPath;
                 String filePath = String.Format("{0}{1}.{2}", folderPath, fileName, fileExtention).ToLower();
+                String dataPath = "data";//Remember if its in data or data_common.
 
                 Debug.Assert(stringId != null);
 
@@ -482,6 +483,7 @@ namespace Reanimator
                 // fix path.. some files belong in 'data', others in 'data_common'
                 if (!FileExplorer.GetFileExists(filePath))
                 {
+                    dataPath = "data_common";
                     filePath = filePath.Replace("data", "data_common");
                     if (!FileExplorer.GetFileExists(filePath))
                     {
@@ -521,6 +523,10 @@ namespace Reanimator
                         mapItem.LoadedFile = excelFile;
                     }
 
+                    excelFile.FilePath = Path.Combine(dataPath, ExcelFile.FolderPath);
+                    excelFile.FileExtension = ExcelFile.FileExtention;
+                    excelFile.FileName = fileName.ToLower();
+
                     continue;
                 }
                 catch (Exception ex)
@@ -559,7 +565,7 @@ namespace Reanimator
                 String stringId = de.Key as String;
                 String fileName = (mapItem.NameReplace ?? stringId).Replace("_TCv4_", "");
                 String fileExtention = mapItem.RowType == typeof(StringsFile) ? StringsFile.FileExtention : ExcelFile.FileExtention;
-                String folderPath = Config.HglDataDir + "\\Reanimator\\tcv4" + ExcelFile.FolderPath;
+                String folderPath = Config.HglDataDir + "\\Reanimator\\tcv4\\data\\" + ExcelFile.FolderPath;
                 String filePath = String.Format("{0}{1}.{2}", folderPath, fileName, fileExtention);
 
                 Debug.Assert(stringId != null);
@@ -568,7 +574,7 @@ namespace Reanimator
                 // fix path.. some files belong in 'data', others in 'data_common'
                 if (!File.Exists(filePath))
                 {
-                    filePath = filePath.Replace("_common", "");
+                    filePath = filePath.Replace("data", "data_common");
                     if (!File.Exists(filePath))
                     {
                         String msg = "Excel file not found!\n\n" + filePath;
