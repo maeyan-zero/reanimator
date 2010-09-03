@@ -864,7 +864,7 @@ namespace Reanimator
         {
             // Select Dump location
             FolderBrowserDialog folderBrower = new FolderBrowserDialog();
-            folderBrower.SelectedPath = "D:\\Projects\\Revival\\Converted Files";// Config.HglDataDir;
+            folderBrower.SelectedPath = Config.HglDataDir;
             DialogResult dialogResult = folderBrower.ShowDialog();
             if (dialogResult == DialogResult.Cancel) return;
 
@@ -876,7 +876,7 @@ namespace Reanimator
             // generate all tables
             ProgressForm generateTableProgress = new ProgressForm(_GenerateExcelFiles, folderBrower.SelectedPath);
             generateTableProgress.SetLoadingText("Generating all converted tables, this will take a while.");
-            generateTableProgress.SetStyle(ProgressBarStyle.Continuous);
+            generateTableProgress.SetStyle(ProgressBarStyle.Marquee);
             generateTableProgress.ShowDialog();
 
             MessageBox.Show("Complete");
@@ -884,26 +884,29 @@ namespace Reanimator
 
         private void _GenerateExcelFiles(ProgressForm progress, object obj)
         {
-            string filePath = (string)obj;
+            string savePath = (string)obj;
 
             foreach (DataTable tcDataTable in _tableDataSet.XlsDataSet.Tables)
             {
-                // check for tcv4 version
                 if (!tcDataTable.TableName.Contains("_TCv4_")) continue;
                 string spVersion = tcDataTable.TableName.Replace("_TCv4_", "");
-                // set text
+
                 progress.SetCurrentItemText("Current table... " + spVersion);
-                // get the sp version
+
                 DataTable spDataTable = _tableDataSet.XlsDataSet.Tables[spVersion];
-                // convert it
                 DataTable convertedDataTable = ExcelFile.ConvertToSinglePlayerVersion(spDataTable, tcDataTable);
-                // get the excel file
                 ExcelFile excelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spVersion);
-                // generate it
+
                 byte[] buffer = excelFile.GenerateFile(convertedDataTable);
-                // save
-                string path = filePath + "\\" + excelFile.StringId + "." + excelFile.FileExtension;
-                File.WriteAllBytes(path, buffer);
+                string path = Path.Combine(savePath, excelFile.FilePath);
+                string filename = excelFile.FileName + "." + excelFile.FileExtension;
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                File.WriteAllBytes(path + filename, buffer);
             }
         }
 
