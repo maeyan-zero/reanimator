@@ -22,16 +22,6 @@ namespace Reanimator
             return StringId;
         }
 
-        public override string FileExtension
-        {
-            get { return FileExtention; }
-        }
-
-        public override string SaveTitle
-        {
-            get { return "Strings Cooked"; }
-        }
-
         public override bool ParseData(byte[] data)
         {
             _data = data;

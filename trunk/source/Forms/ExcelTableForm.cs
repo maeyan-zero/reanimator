@@ -384,7 +384,7 @@ namespace Reanimator.Forms
             DataTable table = ((DataSet)tableData_DataGridView.DataSource).Tables[tableData_DataGridView.DataMember];
             if (table == null) return;
 
-            String savePath = FileTools.SaveFileDiag(_dataFile.FileExtension, _dataFile.SaveTitle, _dataFile.StringId.ToLower(), Config.HglDataDir);
+            String savePath = FileTools.SaveFileDiag(_dataFile.FileExtension, _dataFile.FileName, _dataFile.StringId.ToLower(), Config.HglDataDir);
             if (String.IsNullOrEmpty(savePath)) return;
 
             byte[] data = _dataFile.GenerateFile(table);

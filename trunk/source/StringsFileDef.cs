@@ -6,7 +6,7 @@ namespace Reanimator
     partial class StringsFile
     {
         public const String FileExtention = "xls.uni.cooked";
-        public const String FolderPath = @"\excel\strings\english\";
+        public const String FolderPath = @"excel\strings\english\";
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         class StringsHeader

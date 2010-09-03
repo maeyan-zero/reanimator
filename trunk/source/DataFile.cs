@@ -15,6 +15,8 @@ namespace Reanimator
         public int Count { get; protected set; }
 
         public String FilePath { get; set; }
+        public String FileExtension { get; set; }
+        public String FileName { get; set; }
 
         internal byte[] _data;
         public List<object> Rows { get; private set; }
@@ -45,7 +47,5 @@ namespace Reanimator
 
         public abstract bool ParseData(byte[] data);
         public abstract byte[] GenerateFile(DataTable dataTable);
-        public abstract String FileExtension { get; }
-        public abstract String SaveTitle { get; }
     }
 }

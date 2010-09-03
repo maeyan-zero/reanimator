@@ -54,16 +54,6 @@ namespace Reanimator
             return StringId;
         }
 
-        public override string FileExtension
-        {
-            get { return FileExtention; }
-        }
-
-        public override string SaveTitle
-        {
-            get { return "Excel Cooked"; }
-        }
-
         public override bool ParseData(byte[] data)
         {
             if (data == null) return false;
@@ -996,15 +986,43 @@ namespace Reanimator
                 foreach (DataColumn column in spDataTable.Columns)
                 {
                     string columnName = column.ColumnName;
-                    if (tcDataTable.Columns.Contains(columnName))
+                    if (!tcDataTable.Columns.Contains(columnName))
                     {
-                        if (column.DataType != tcDataTable.Columns[columnName].DataType)
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
+                    if (column.DataType == tcDataTable.Columns[columnName].DataType)
+                    {
                         convertedRow[columnName] = tcRow[columnName];
+                        continue;
+                    }
+                    if (column.DataType.BaseType == typeof(Enum))
+                    {
+                        Type spBitMask = column.DataType;
+                        Type tcBitMask = tcDataTable.Columns[columnName].DataType;
+                        uint currentMask = (uint)tcRow[columnName];
+                        uint convertedMask = 0;
+
+                        for (int i = 0; i < 32; i++)
+                        {
+                            uint testBit = (uint)1 << i;
+                            if ((currentMask & testBit) == 0)
+                            {
+                                continue;
+                            }
+                            string bitString = Enum.GetName(tcBitMask, testBit);
+                            if (bitString == null)
+                            {
+                                continue;
+                            }
+                            if (Enum.IsDefined(spBitMask, bitString))
+                            {
+                                convertedMask += (uint)Enum.Parse(spBitMask, bitString);
+                            }
+                        }
+                        convertedRow[columnName] = convertedMask;
                     }
                 }
+
                 spDataTable.Rows.Add(convertedRow);
             }
 
