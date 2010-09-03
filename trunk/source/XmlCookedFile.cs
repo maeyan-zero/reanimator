@@ -151,7 +151,7 @@ namespace Reanimator
                         Int32 strLen = elementText.Length;
                         if (strLen == 0 && xmlCookElement.DefaultValue == null) continue;
 
-                        FileTools.WriteToBuffer(ref buffer, ref offset, strLen+1);
+                        FileTools.WriteToBuffer(ref buffer, ref offset, strLen + 1);
                         byte[] strBytes = FileTools.StringToASCIIByteArray(elementText);
                         FileTools.WriteToBuffer(ref buffer, ref offset, strBytes);
                         offset++; // \0
@@ -280,7 +280,7 @@ namespace Reanimator
 
                         for (int i = 0; i < arrayCount; i++)
                         {
-                            float fWrite = (float) xmlCookElement.DefaultValue;
+                            float fWrite = (float)xmlCookElement.DefaultValue;
                             if (i < elements.Count)
                             {
                                 fWrite = elements[i];
@@ -411,8 +411,7 @@ namespace Reanimator
              */
 
             // check file infos
-            XmlCookFileHeader header = (XmlCookFileHeader)FileTools.ByteArrayToStructure(_data, typeof(XmlCookFileHeader), _offset);
-            _offset += Marshal.SizeOf(typeof(XmlCookFileHeader));
+            XmlCookFileHeader header = FileTools.ByteArrayToStructure<XmlCookFileHeader>(_data, ref _offset);
 
             if (header.MagicWord != FileMagicWord) throw new Exceptions.UnexpectedMagicWordException();
             if (header.Version != RequiredVersion) throw new Exceptions.NotSupportedFileVersionException();
@@ -426,10 +425,12 @@ namespace Reanimator
             //XmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);
             _UncookFileXmlElements(xmlDefinition, header.XmlRootElementCount);
 
-            UInt32 dataMagicWord = FileTools.ByteArrayTo<UInt32>(_data, ref _offset);
+            UInt32 dataMagicWord = FileTools.ByteArrayToUInt32(_data, ref _offset);
             if (dataMagicWord != DataMagicWord) throw new Exceptions.UnexpectedTokenException("'DATA' Token MagicWord expected but not found!");
 
             _UncookXmlDefinition(xmlDefinition, XmlDoc);
+
+            Debug.Assert(_offset == _data.Length);
 
             return true;
         }
@@ -478,8 +479,13 @@ namespace Reanimator
                         Debug.Assert((String)xmlCookElement.DefaultValue != szValue);
                         break;
 
-                    // todo: any point this being here?
                     case ElementType.UnknownFloatT: // 0x0600
+                        // todo: not tested with HGL cooking it
+                        _ReadTFloatArray(rootElement, xmlCookElement);
+                        break;
+
+
+                    // todo: any point this being here?
                     case ElementType.NonCookedInt32: // 0x0700
                     case ElementType.UnknownFloat: // 0x0800
                     case ElementType.UnknownPTypeD: // 0x0D00
@@ -488,8 +494,17 @@ namespace Reanimator
 
                     case ElementType.Flag: // 0x0B01
                     case ElementType.BitFlag: // 0x0C02
+                        if (xmlCookElement.Name == "ROOM_PATH_NODE_DEF_INDOOR_FLAG")
+                        {
+                            int b2p = 0;
+                        }
+
                         bool bValue = _ReadBitField(rootElement, xmlDefinition, xmlCookElement);
-                        Debug.Assert((bool)xmlCookElement.DefaultValue != bValue);
+
+                        // note: do flags need to be included for cooking no matter their default value??
+                        // ROOM_PATH_NODE_DEF_INDOOR_FLAG in set to 0 for some reason in catacombs_test_path.xml.cooked
+                        // and caves_d_path.xml.cooked - old version cooking?
+                        //Debug.Assert((bool)xmlCookElement.DefaultValue != bValue);
                         break;
 
                     case ElementType.Table: // 0x0308
@@ -510,7 +525,7 @@ namespace Reanimator
 
                     case ElementType.UnknownPType: // 0x0007
                         Int32 pValue = _ReadInt32(rootElement, xmlCookElement.Name);
-                        Debug.Assert((Int32)xmlCookElement.DefaultValue != pValue);
+                        //Debug.Assert((Int32)xmlCookElement.DefaultValue != pValue);
                         break;
 
                     default:
@@ -527,6 +542,24 @@ namespace Reanimator
             }
         }
 
+        private void _ReadTFloatArray(XmlNode parentNode, XmlCookElement xmlCookElement)
+        {
+            int count = _ReadInt32(null, null);
+            Debug.Assert(count == 1); // not tested with anything other than 1 - not even sure if it's a count
+
+            XmlElement countElement = XmlDoc.CreateElement(xmlCookElement.Name + "Count");
+            countElement.InnerText = count.ToString();
+            parentNode.AppendChild(countElement);
+
+            for (int i = 0; i < count; i++)
+            {
+                for (int f = 0; f < 4; f++)
+                {
+                    _ReadFloat(parentNode, xmlCookElement.Name);
+                }
+            }
+        }
+
         private static bool _TestBit(IList<byte> bitField, int byteOffset, int bitOffset)
         {
             byteOffset += bitOffset >> 3;
@@ -540,7 +573,7 @@ namespace Reanimator
             byteOffset += bitOffset >> 3;
             bitOffset &= 0x07;
 
-            bitField[byteOffset] |= (byte) (1 << bitOffset);
+            bitField[byteOffset] |= (byte)(1 << bitOffset);
         }
 
         private void _UncookFileXmlElements(XmlDefinition xmlDefinition, int xmlDefElementCount)
@@ -565,13 +598,13 @@ namespace Reanimator
 
             for (int i = 0; i < xmlDefElementCount && _offset < _data.Length; i++)
             {
-                uint elementHash = FileTools.ByteArrayTo<UInt32>(_data, ref _offset);
+                uint elementHash = FileTools.ByteArrayToUInt32(_data, ref _offset);
 
                 XmlCookElement xmlCookElement = GetXmlCookElement(xmlDefinition, elementHash);
                 if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException("Unexpected xml element hash: 0x" + elementHash.ToString("X8"));
 
 
-                ElementType token = (ElementType)FileTools.ByteArrayTo<ushort>(_data, ref _offset);
+                ElementType token = (ElementType)FileTools.ByteArrayToUShort(_data, ref _offset);
                 switch (token)
                 {
                     case ElementType.UnknownPTypeD:                                     // 0x0D00
@@ -675,13 +708,21 @@ namespace Reanimator
             Debug.Assert(excelDataTable != null);
 
             String columnName = excelDataTable.Columns[1].ColumnName;
-            DataRow[] dataRows = excelDataTable.Select(String.Format("{0} = '{1}'", columnName, excelString));
-            if (dataRows.Length == 0 || dataRows.Length > 1) // todo
+            DataRow[] dataRows = excelDataTable.Select(String.Format("{0} = '{1}'", columnName, excelString.Replace("'", "''")));
+            String index;
+            if (dataRows.Length == 0)
+            {
+                index = "-1";
+            }
+            else if (dataRows.Length > 1) // todo
             {
                 int bp = 0;
+                index = dataRows[0][0].ToString();
             }
-
-            String index = dataRows[0][0].ToString();
+            else
+            {
+                index = dataRows[0][0].ToString();
+            }
 
             if (parentNode == null) return;
 
@@ -762,12 +803,12 @@ namespace Reanimator
             byte strLen = _data[_offset++];
             if (strLen == 0xFF || strLen == 0x00) return null;
 
-            return FileTools.ByteArrayToStringAnsi(_data, ref _offset, strLen);
+            return FileTools.ByteArrayToStringASCII(_data, ref _offset, strLen);
         }
 
         private Int32 _ReadInt32(XmlNode parentNode, String elementName)
         {
-            Int32 value = FileTools.ByteArrayTo<Int32>(_data, ref _offset);
+            Int32 value = FileTools.ByteArrayToInt32(_data, ref _offset);
 
             if (parentNode != null && elementName != null)
             {
@@ -795,7 +836,7 @@ namespace Reanimator
 
         private UInt32 _ReadUInt32(XmlNode parentNode, String elementName)
         {
-            UInt32 value = FileTools.ByteArrayTo<UInt32>(_data, ref _offset);
+            UInt32 value = FileTools.ByteArrayToUInt32(_data, ref _offset);
 
             if (parentNode != null && elementName != null)
             {
@@ -809,12 +850,12 @@ namespace Reanimator
 
         private float _ReadFloat(XmlNode parentNode, String elementName)
         {
-            float value = FileTools.ByteArrayTo<float>(_data, ref _offset);
+            float value = FileTools.ByteArrayToFloat(_data, ref _offset);
 
             if (parentNode != null && elementName != null)
             {
                 XmlElement element = XmlDoc.CreateElement(elementName);
-                element.InnerText = value.ToString("F2");
+                element.InnerText = value.ToString();
                 parentNode.AppendChild(element);
             }
 
@@ -823,10 +864,10 @@ namespace Reanimator
 
         private String _ReadZeroString(XmlNode parentNode, String elementName)
         {
-            Int32 strLen = FileTools.ByteArrayTo<Int32>(_data, ref _offset);
+            Int32 strLen = FileTools.ByteArrayToInt32(_data, ref _offset);
             Debug.Assert(strLen != 0);
 
-            String value = FileTools.ByteArrayToStringAnsi(_data, _offset);
+            String value = FileTools.ByteArrayToStringASCII(_data, _offset);
             _offset += strLen;
 
             if (parentNode != null && elementName != null)

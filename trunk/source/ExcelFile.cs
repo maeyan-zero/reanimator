@@ -197,19 +197,18 @@ namespace Reanimator
             DataBlock = new Hashtable();
 
             // main header
-            int token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+            int token = FileTools.ByteArrayToInt32(_data, ref offset);
             CheckExcelFlag(token);
 
-            FileExcelHeader = (ExcelHeader)FileTools.ByteArrayToStructure(_data, typeof(ExcelHeader), offset);
-            offset += Marshal.SizeOf(typeof(ExcelHeader));
+            FileExcelHeader = FileTools.ByteArrayToStructure<ExcelHeader>(_data, ref offset);
             if (_excelDebugAll) Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", FileExcelHeader.Unknown161, FileExcelHeader.Unknown162, FileExcelHeader.Unknown163, FileExcelHeader.Unknown164, FileExcelHeader.Unknown165, FileExcelHeader.Unknown166, FileExcelHeader.Unknown321, FileExcelHeader.Unknown322));
 
 
             // strings block
-            token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+            token = FileTools.ByteArrayToInt32(_data, ref offset);
             CheckExcelFlag(token);
 
-            int stringsBytesCount = FileTools.ByteArrayTo<Int32>(data, ref offset);
+            int stringsBytesCount = FileTools.ByteArrayToInt32(data, ref offset);
             if (stringsBytesCount != 0)
             {
                 _stringsBytes = new byte[stringsBytesCount];
@@ -219,7 +218,7 @@ namespace Reanimator
                 // sometimes C# makes things hard  -  C++ char* ftw. x.x
                 for (int i = offset; i < offset + stringsBytesCount; i++)
                 {
-                    String s = FileTools.ByteArrayToStringAnsi(_data, i);
+                    String s = FileTools.ByteArrayToStringASCII(_data, i);
                     Strings.Add(i - offset, s);
 
                     i += s.Length;
@@ -229,21 +228,20 @@ namespace Reanimator
             }
 
             // tables block
-            token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+            token = FileTools.ByteArrayToInt32(_data, ref offset);
             CheckExcelFlag(token);
 
 
-            Count = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+            Count = FileTools.ByteArrayToInt32(_data, ref offset);
             for (int i = 0; i < Count; i++)
             {
-                Object table = FileTools.ByteArrayToStructure(data, DataType, offset);
-                offset += Marshal.SizeOf(DataType);
+                Object table = FileTools.ByteArrayToStructure(data, DataType, ref offset);
                 Rows.Add(table);
             }
 
 
             // index block
-            token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+            token = FileTools.ByteArrayToInt32(_data, ref offset);
             CheckExcelFlag(token);
 
             if ((uint)FileExcelHeader.StructureId == 0x887988C4 || (uint)FileExcelHeader.StructureId == 0xE08E6C41) // items, missiles, monsters, objects, players (includes tcv4 version)
@@ -253,8 +251,8 @@ namespace Reanimator
 
                 for (int i = 0; i < Count; i++)
                 {
-                    TableIndicies[i] = FileTools.ByteArrayTo<Int32>(_data, ref offset);
-                    int size = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+                    TableIndicies[i] = FileTools.ByteArrayToInt32(_data, ref offset);
+                    int size = FileTools.ByteArrayToInt32(_data, ref offset);
                     byte[] extra = new byte[size];
                     Buffer.BlockCopy(_data, offset, extra, 0, size);
                     offset += size;
@@ -263,24 +261,25 @@ namespace Reanimator
             }
             else
             {
-                TableIndicies = FileTools.ByteArrayToInt32Array(_data, offset, Count);
-                offset += Count * sizeof(Int32);
-
                 if (Count == 0)
                 {
                     offset += sizeof(Int32);
                 }
+                else
+                {
+                    TableIndicies = FileTools.ByteArrayToInt32Array(_data, ref offset, Count);
+                }
             }
 
             // secondary string block
-            token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+            token = FileTools.ByteArrayToInt32(_data, ref offset);
             if (!CheckFlag(token, 0x68657863)) // 'cxeh'
             {
                 int stringCount = token;
                 for (int i = 0; i < stringCount; i++)
                 {
-                    int charCount = FileTools.ByteArrayTo<Int32>(_data, ref offset);
-                    String str = FileTools.ByteArrayToStringAnsi(_data, offset);
+                    int charCount = FileTools.ByteArrayToInt32(_data, ref offset);
+                    String str = FileTools.ByteArrayToStringASCII(_data, offset);
                     offset += charCount;
                     SecondaryStrings.Add(str);
                 }
@@ -296,27 +295,26 @@ namespace Reanimator
             // sort index blocks
             for (int i = 0; i < 4; i++)
             {
-                token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+                token = FileTools.ByteArrayToInt32(_data, ref offset);
                 CheckExcelFlag(token);
 
-                int count = FileTools.ByteArrayTo<Int32>(_data, ref offset);
-                _sortIndicies[i] = FileTools.ByteArrayToInt32Array(_data, offset, count);
-                offset += count * sizeof(Int32);
+                int count = FileTools.ByteArrayToInt32(_data, ref offset);
+                _sortIndicies[i] = FileTools.ByteArrayToInt32Array(_data, ref offset, count);
             }
 
 
             // unknown block
-            token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+            token = FileTools.ByteArrayToInt32(_data, ref offset);
             CheckExcelFlag(token);
 
-            token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+            token = FileTools.ByteArrayToInt32(_data, ref offset);
             if (token != 0x00)
             {
                 while (true)
                 {
                     if (CheckFlag(token, 0x68736372)) // 'rcsh'
                     {
-                        _rcshValue = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+                        _rcshValue = FileTools.ByteArrayToInt32(_data, ref offset);
                         if (_rcshValue != 0x04)
                         {
                             throw new Exception("_rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_rcshValue != 0x04)");
@@ -325,7 +323,7 @@ namespace Reanimator
                     }
                     else if (CheckFlag(token, 0x68737974)) // 'tysh'
                     {
-                        _tyshValue = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+                        _tyshValue = FileTools.ByteArrayToInt32(_data, ref offset);
                         if (_tyshValue != 0x02)
                         {
                             throw new Exception("_tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_tyshValue != 0x02)");
@@ -340,7 +338,7 @@ namespace Reanimator
                     }
                     else if (CheckFlag(token, 0x68656E64)) // 'dneh'
                     {
-                        _dnehValue = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+                        _dnehValue = FileTools.ByteArrayToInt32(_data, ref offset);
                         if (_dnehValue != 0x00)
                         {
                             throw new Exception("_dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_dnehValue != 0x02)");
@@ -354,22 +352,22 @@ namespace Reanimator
                         break;
                     }
 
-                    token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+                    token = FileTools.ByteArrayToInt32(_data, ref offset);
                 }
             }
 
 
             // data block
-            token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+            token = FileTools.ByteArrayToInt32(_data, ref offset);
             if (token != 0)
             {
                 CheckExcelFlag(token);
-                int byteCount = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+                int byteCount = FileTools.ByteArrayToInt32(_data, ref offset);
                 if (byteCount != 0)
                 {
                     if (FileExcelHeader.StructureId == 0x1F9DDC98 || FileExcelHeader.StructureId == 1558484169)                                 // Only seen in unittypes.txt.cooked so far.
                     {                                                                           // This block reading method is the same as first seen below in the states.txt.cooked,
-                        int blockCount = FileTools.ByteArrayTo<Int32>(_data, ref offset);   // but there is no data in the previous block for unittypes.txt.cooked.
+                        int blockCount = FileTools.ByteArrayToInt32(_data, ref offset);   // but there is no data in the previous block for unittypes.txt.cooked.
                         byteCount = (byteCount << 2) * blockCount;
                         Debug.Write(String.Format("Has weird block .Length = {0}\n", byteCount));
                     }
@@ -384,13 +382,13 @@ namespace Reanimator
             // does it have a final flag chunk?
             if (offset != _data.Length)
             {
-                token = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+                token = FileTools.ByteArrayToInt32(_data, ref offset);
                 if (token != 0)
                 {
                     CheckExcelFlag(token);
 
-                    int byteCount = FileTools.ByteArrayTo<Int32>(_data, ref offset);
-                    int blockCount = FileTools.ByteArrayTo<Int32>(_data, ref offset);
+                    int byteCount = FileTools.ByteArrayToInt32(_data, ref offset);
+                    int blockCount = FileTools.ByteArrayToInt32(_data, ref offset);
                     byteCount = (byteCount << 2) * blockCount;
 
                     if (byteCount != 0)        // Only seen in states.txt.cooked so far  -  Of note is that 
@@ -430,7 +428,7 @@ namespace Reanimator
             
             while (parsing)
             {
-                i = FileTools.ByteArrayTo<int>(_dataBlock, index + len);
+                i = FileTools.ByteArrayToInt32(_dataBlock, index + len);
                 len += sizeof(int) * 1;
                 
                 switch (i)

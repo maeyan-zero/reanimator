@@ -28,39 +28,28 @@ namespace Reanimator
             int offset = 0;
             StringsTable = new List<StringBlock>();
 
-            _stringsHeader = FileTools.ByteArrayToStructure(_data, typeof(StringsHeader), 0) as StringsHeader;
-            if (_stringsHeader == null) return false;
-
-            offset += Marshal.SizeOf(_stringsHeader);
+            _stringsHeader = FileTools.ByteArrayToStructure<StringsHeader>(_data, ref offset);
 
             bool attributeCountMessageShown = false;
             for (int i = 0; i < _stringsHeader.Count; i++)
             {
                 StringBlock stringBlock = new StringBlock
-                                              {
-                                                  ReferenceId = FileTools.ByteArrayToInt32(_data, offset)
-                                              };
+                {
+                    ReferenceId = FileTools.ByteArrayToInt32(_data, ref offset),
+                    Unknown = FileTools.ByteArrayToInt32(_data, ref offset)
+                };
 
-                offset += sizeof(Int32);
-
-                stringBlock.Unknown = FileTools.ByteArrayToInt32(_data, offset);
-                offset += sizeof(Int32);
-
-                int count = FileTools.ByteArrayToInt32(_data, offset);
-                offset += sizeof(Int32);
-                stringBlock.StringId = FileTools.ByteArrayToStringAnsi(_data, offset);
+                int count = FileTools.ByteArrayToInt32(_data, ref offset);
+                stringBlock.StringId = FileTools.ByteArrayToStringASCII(_data, offset);
                 offset += count + 1;
 
-                stringBlock.Reserved = FileTools.ByteArrayToInt32(_data, offset);
-                offset += sizeof(Int32);
+                stringBlock.Reserved = FileTools.ByteArrayToInt32(_data, ref offset);
 
-                count = FileTools.ByteArrayToInt32(_data, offset);
-                offset += sizeof(Int32);
+                count = FileTools.ByteArrayToInt32(_data, ref offset);
                 stringBlock.String = FileTools.ByteArrayToStringUnicode(_data, offset);
                 offset += count;
 
-                stringBlock.AttributeCount = FileTools.ByteArrayToInt32(_data, offset);
-                offset += sizeof(Int32);
+                stringBlock.AttributeCount = FileTools.ByteArrayToInt32(_data, ref offset);
 
                 if (stringBlock.AttributeCount > MaxAttributes)
                 {
@@ -74,8 +63,7 @@ namespace Reanimator
 
                 for (int j = 0; j < stringBlock.AttributeCount; j++)
                 {
-                    count = FileTools.ByteArrayToInt32(_data, offset);
-                    offset += sizeof(Int32);
+                    count = FileTools.ByteArrayToInt32(_data, ref offset);
 
                     switch (j)
                     {
@@ -113,7 +101,7 @@ namespace Reanimator
         {
             /***** Strings File *****
              * FileToken                                    Int32                   0x68667374 ('tsfh').
-             * MajorVersion                                 Int32                   Only seen as 0x06.
+             * Version                                      Int32                   Only seen as 0x06.
              * Count                                        Int32                   Count of StringBlocks.
              * {
              *      ReferenceId                             Int32                   Global reference ID in-game.
@@ -141,11 +129,11 @@ namespace Reanimator
 
             // write main header first
             StringsHeader stringsHeader = new StringsHeader
-                                              {
-                                                  Header = FileTokens.Header,
-                                                  Version = Version,
-                                                  Count = table.Rows.Count
-                                              };
+            {
+                Header = FileTokens.Header,
+                Version = Version,
+                Count = table.Rows.Count
+            };
             FileTools.WriteToBuffer(ref buffer, ref offset, stringsHeader);
 
             // write string blocks

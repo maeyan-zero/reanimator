@@ -167,7 +167,7 @@ namespace Reanimator
                 {"SOUNDBUSES", new MapItem {RowType = typeof (SoundBusesRow)}},
                 {"SOUND_MIXSTATES", new MapItem {NameReplace = "SOUNDMIXSTATES", RowType = typeof (SoundMixStatesRow)}},
                 {"SOUND_MIXSTATE_VALUES", new MapItem {NameReplace = "SOUNDMIXSTATEVALUES", RowType = typeof (SoundMixStateValuesRow)}},
-                //{"SOUNDS", new MapItem {RowType = typeof (SoundsRow)}},
+                {"SOUNDS", new MapItem {RowType = typeof (SoundsRow)}},
                 {"SOUNDVCAS", new MapItem {RowType = typeof (SoundVidCasRow)}},
                 {"SOUNDVCASETS", new MapItem {RowType = typeof (SoundVideoCasetsRow)}},
                 {"SPAWN_CLASS", new MapItem {NameReplace = "SPAWNCLASS", RowType = typeof (SpawnClassRow)}},

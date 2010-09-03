@@ -83,7 +83,7 @@ namespace Reanimator
 
             protected static T ReadBlock<T>(byte[] dataBlock, ref int offset)
             {
-                return FileTools.ByteArrayTo<T>(dataBlock, ref offset);
+                return FileTools.ByteArrayToStructure<T>(dataBlock, ref offset);
             }
         }
 

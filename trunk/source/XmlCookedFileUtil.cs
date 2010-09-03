@@ -42,11 +42,12 @@ namespace Reanimator
                 new RoomLayoutGroup(),
 
                 // Level Pathing (huge-ass list of nodes/points)
-                new RoomPathNodeDefinition(),
-                new RoomPathNodeSet(),
-                new RoomPathNode(),
-                new RoomPathNodeConnection(),
-                new RoomPathNodeConnectionRef(),
+                // todo: not all are completely parsing
+                //new RoomPathNodeDefinition(),
+                //new RoomPathNodeSet(),
+                //new RoomPathNode(),
+                //new RoomPathNodeConnection(),
+                //new RoomPathNodeConnectionRef(),
 
                 // Material (makes things look like things)
                 new Material(),
