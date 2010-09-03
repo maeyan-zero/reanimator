@@ -10,6 +10,11 @@ namespace Reanimator
 {
     public static class FileTools
     {
+        /// <summary>
+        /// Reads a Stream and converts it to a byte array.
+        /// </summary>
+        /// <param name="stream">The Stream the read from.</param>
+        /// <returns>The read byte array.</returns>
         public static byte[] StreamToByteArray(Stream stream)
         {
             if (stream == null) return null;
@@ -27,107 +32,284 @@ namespace Reanimator
             }
         }
 
-        public static void ByteArrayToStructure(byte[] byteArray, ref object obj, int offset, int length)
+        /// <summary>
+        /// Converts an array of bytes to an Int32 from a given offset.<br />
+        /// <i>offset</i> is incremented by the size of an Int32.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Int32.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted Int32 value.</returns>
+        public static Int32 ByteArrayToInt32(byte[] byteArray, ref int offset)
         {
-            if (length == 0)
-            {
-                length = Marshal.SizeOf(obj);
-            }
-
-            IntPtr i = Marshal.AllocHGlobal(length);
-            Marshal.Copy(byteArray, offset, i, length);
-
-            obj = Marshal.PtrToStructure(i, obj.GetType());
-
-            Marshal.FreeHGlobal(i);
+            Int32 value = BitConverter.ToInt32(byteArray, offset);
+            offset += 4;
+            return value;
         }
 
-        public static object ByteArrayToStructure(byte[] byteArray, Type type, int offset)
+        /// <summary>
+        /// Converts an array of bytes to an Int32 from a given offset.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Int32.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted Int32 value.</returns>
+        public static Int32 ByteArrayToInt32(byte[] byteArray, int offset)
         {
-            object obj = Activator.CreateInstance(type);
-            ByteArrayToStructure(byteArray, ref obj, offset, 0);
-            return obj;
+            return BitConverter.ToInt32(byteArray, offset);
         }
 
-        public static object ByteArrayToStructure(byte[] byteArray, Type type, int offset, int length)
+        /// <summary>
+        /// Converts an array of bytes to a UInt32 from a given offset.<br />
+        /// <i>offset</i> is incremented by the size of a UInt32.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the UInt32.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted UInt32 value.</returns>
+        public static UInt32 ByteArrayToUInt32(byte[] byteArray, ref int offset)
         {
-            object obj = Activator.CreateInstance(type);
-            ByteArrayToStructure(byteArray, ref obj, offset, length);
-            return obj;
+            UInt32 value = BitConverter.ToUInt32(byteArray, offset);
+            offset += 4;
+            return value;
         }
 
-        public static Int32[] ByteArrayToInt32Array(byte[] byteArray, int offset, int count)
+        /// <summary>
+        /// Converts an array of bytes to a Float from a given offset.<br />
+        /// <i>offset</i> is incremented by the size of a Float.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Float.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted Float value.</returns>
+        public static float ByteArrayToFloat(byte[] byteArray, ref int offset)
+        {
+            float value = BitConverter.ToSingle(byteArray, offset);
+            offset += 4;
+            return value;
+        }
+
+        /// <summary>
+        /// Converts an array of bytes to a UInt16 from a given offset.<br />
+        /// <i>offset</i> is incremented by the size of a UInt16.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the UInt16.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted UInt16 value.</returns>
+        public static UInt16 ByteArrayToUShort(byte[] byteArray, ref int offset)
+        {
+            UInt16 value = BitConverter.ToUInt16(byteArray, offset);
+            offset += 2;
+            return value;
+        }
+
+        /// <summary>
+        /// Converts an array of bytes to an array of Int32 values.<br />
+        /// <i>offset</i> is incremented by the size of the Int32 array.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Int32 array.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="count">The number of Int32 array elements.</param>
+        /// <returns>The converted Int32 array.</returns>
+        public static Int32[] ByteArrayToInt32Array(byte[] byteArray, ref int offset, int count)
         {
             Int32[] int32Array = new Int32[count];
 
-            IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
+            GCHandle pinnedArray = GCHandle.Alloc(byteArray, GCHandleType.Pinned);
+            IntPtr bytePtr = new IntPtr((int)pinnedArray.AddrOfPinnedObject() + offset);
             Marshal.Copy(bytePtr, int32Array, 0, count);
+            pinnedArray.Free();
+            offset += count*4;
 
             return int32Array;
         }
 
-        public static Int32 ByteArrayToInt32(byte[] byteArray, int offset)
+        /// <summary>
+        /// Converts an array of bytes to a structure.<br />
+        /// <i>offset</i> is incremented by the size of the structure.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the structure.</param>
+        /// <param name="type">The type of structure.</param>
+        /// <param name="offset">The offset within the byte array to the structure.</param>
+        /// <returns>The converted object.</returns>
+        public static object ByteArrayToStructure(byte[] byteArray, Type type, ref int offset)
         {
-            IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
-            return Marshal.ReadInt32(bytePtr);
+            int structSize = Marshal.SizeOf(type);
+
+            GCHandle hcHandle = GCHandle.Alloc(byteArray, GCHandleType.Pinned);
+            IntPtr ptrStruct = Marshal.AllocHGlobal(structSize);
+            Marshal.Copy(byteArray, offset, ptrStruct, structSize);
+            object structure = Marshal.PtrToStructure(ptrStruct, type);
+            Marshal.FreeHGlobal(ptrStruct);
+            hcHandle.Free();
+
+            offset += structSize;
+            return structure;
         }
 
-        public static T ByteArrayTo<T>(byte[] byteArray, int offset)
+        /// <summary>
+        /// Converts an array of bytes to a structure.<br />
+        /// <i>offset</i> is incremented by the size of the structure.
+        /// </summary>
+        /// <typeparam name="T">The type of structure.</typeparam>
+        /// <param name="byteArray">The byte array containing the structure.</param>
+        /// <param name="offset">The offset within the byte array to the structure.</param>
+        /// <returns>The converted object.</returns>
+        public static T ByteArrayToStructure<T>(byte[] byteArray, ref int offset)
         {
-            IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
-            return (T)Marshal.PtrToStructure(bytePtr, typeof(T));
+            Type structType = typeof(T);
+            int structSize = Marshal.SizeOf(structType);
+
+            GCHandle hcHandle = GCHandle.Alloc(byteArray, GCHandleType.Pinned);
+            IntPtr ptrStruct = new IntPtr((int)hcHandle.AddrOfPinnedObject() + offset);
+            T structure = (T)Marshal.PtrToStructure(ptrStruct, structType);
+            hcHandle.Free();
+
+            offset += structSize;
+            return structure;
         }
 
-        public static T ByteArrayTo<T>(byte[] byteArray, ref int offset)
+        /// <summary>
+        /// Converts an array of bytes to a structure.
+        /// </summary>
+        /// <typeparam name="T">The type of structure.</typeparam>
+        /// <param name="byteArray">The byte array containing the structure.</param>
+        /// <param name="offset">The offset within the byte array to the structure.</param>
+        /// <returns>The converted object.</returns>
+        public static T ByteArrayToStructure<T>(byte[] byteArray, int offset)
         {
-            Debug.Assert(offset < byteArray.Length, "Error: offset < byteArray.Length");
-            IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
-            offset += Marshal.SizeOf(typeof(T));
-            return (T)Marshal.PtrToStructure(bytePtr, typeof(T));
+            return ByteArrayToStructure<T>(byteArray, ref offset);
         }
 
-        public static T[] ByteArrayToArray<T>(byte[] byteArray, ref int offset, int count)
+        /// <summary>
+        /// Converts an array of bytes to an array of T values.<br />
+        /// <i>offset</i> is incremented by the size of the T array.<br />
+        /// <b>This function should not be used for standard types (e.g. Int32).<br />
+        /// (The Marshal.Copy() function can do standard types)</b>
+        /// </summary>
+        /// <typeparam name="T">The type of array elements.</typeparam>
+        /// <param name="byteArray">The byte array containing the T array.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="count">The number of T array elements.</param>
+        /// <returns>The converted T array.</returns>
+        public static unsafe T[] ByteArrayToArray<T>(byte[] byteArray, ref int offset, int count)
         {
             Debug.Assert(offset <= byteArray.Length, "Error: offset > byteArray.Length");
 
             int sizeOfT = Marshal.SizeOf(typeof(T));
             int sizeOfBuffer = sizeOfT * count;
-
             Debug.Assert(offset + sizeOfBuffer <= byteArray.Length, "Error: offset + sizeOfBuffer > byteArray.Length");
 
-            IntPtr buffer = Marshal.AllocCoTaskMem(sizeOfBuffer);
-            Marshal.Copy(byteArray, offset, buffer, sizeOfBuffer);
-            offset += sizeOfBuffer;
-
             T[] obj = new T[count];
-            for (int i = 0, bufferOffset = 0; i < count; i++, bufferOffset += sizeOfT)
+            fixed (byte* pData = byteArray)
             {
-                obj[i] = (T)Marshal.PtrToStructure(new IntPtr(buffer.ToInt32() + bufferOffset), typeof(T));
+                for (int i = 0; i < count; i++)
+                {
+                    IntPtr addr = new IntPtr(pData + offset);
+                    obj[i] = (T)Marshal.PtrToStructure(addr, typeof(T));
+                    offset += sizeOfT;
+                }
             }
 
-            Marshal.FreeCoTaskMem(buffer);
             return obj;
         }
 
-        public static String ByteArrayToStringAnsi(byte[] byteArray, int offset)
+        /// <summary>
+        /// Converts an array of bytes to an ASCII String from offset up to the
+        /// first null character from offset or remaining bytes if null can't be found.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the ASCII String.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted ASCII String.</returns>
+        public static String ByteArrayToStringASCII(byte[] byteArray, int offset)
         {
-            IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
-            return Marshal.PtrToStringAnsi(bytePtr);
+            // may not look as pretty, but much faster/safter than using Marshal string crap
+            // get first null location etc
+            int arrayLenth = byteArray.Length;
+            int strLength = 0;
+            for (int i = offset; i < arrayLenth; i++)
+            {
+                if (byteArray[i] != 0x00) continue;
+
+                strLength = i - offset;
+                break;
+            }
+
+            if (strLength == 0)
+            {
+                strLength = byteArray.Length - offset;
+            }
+
+            return Encoding.ASCII.GetString(byteArray, offset, strLength);
         }
 
-        public static String ByteArrayToStringAnsi(byte[] byteArray, ref int offset, int len)
+        /// <summary>
+        /// Converts an array of bytes to an ASCII String from offset up to the first null character.<br />
+        /// <i>offset</i> is incremented by the <i>len</i> argument value.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the ANSI String.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="len">The length of the string to convert up to.</param>
+        /// <returns>The converted ASCII String.</returns>
+        public static String ByteArrayToStringASCII(byte[] byteArray, ref int offset, int len)
         {
-            IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
+            String str = Encoding.ASCII.GetString(byteArray, offset, len);
             offset += len;
-            return Marshal.PtrToStringAnsi(bytePtr, len);
+            return str;
         }
 
+        /// <summary>
+        /// Converts an array of bytes to a Unicode String from offset up to the first null character.<br />
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Unicode String.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted Unicode String.</returns>
         public static String ByteArrayToStringUnicode(byte[] byteArray, int offset)
         {
-            IntPtr bytePtr = Marshal.UnsafeAddrOfPinnedArrayElement(byteArray, offset);
-            return Marshal.PtrToStringUni(bytePtr);
+            // may not look as pretty, but much faster/safter than using Marshal string crap
+            // get first null location etc
+            int arrayLenth = byteArray.Length;
+            int strLength = 0;
+            for (int i = offset; i < arrayLenth; i++, i++)
+            {
+                if (byteArray[i] != 0x00) continue;
+
+                strLength = i - offset;
+                break;
+            }
+
+            if (strLength == 0)
+            {
+                strLength = byteArray.Length - offset;
+            }
+
+            String str = Encoding.Unicode.GetString(byteArray, offset, strLength);
+            return str;
         }
 
+        /// <summary>
+        /// Converts a String into its Unicode byte array.
+        /// </summary>
+        /// <param name="str">The string to convert.</param>
+        /// <returns>The converted byte array.</returns>
+        public static byte[] StringToUnicodeByteArray(String str)
+        {
+            return Encoding.Unicode.GetBytes(str);
+        }
+
+        /// <summary>
+        /// Converts a String into its ASCII byte array.
+        /// </summary>
+        /// <param name="str">The string to convert.</param>
+        /// <returns>The converted byte array.</returns>
+        public static byte[] StringToASCIIByteArray(String str)
+        {
+            return Encoding.ASCII.GetBytes(str);
+        }
+
+        /// <summary>
+        /// Searches a byte array for a sequence of bytes.<br />
+        /// <i>Uses 0x90 as a wild card.</i>
+        /// </summary>
+        /// <param name="byteArray">The byte array to search.</param>
+        /// <param name="searchFor">The byte sequence to search for.</param>
+        /// <returns>The index found or -1.</returns>
         public static int ByteArrayContains(byte[] byteArray, byte[] searchFor)
         {
             for (int i = 0; i < byteArray.Length; i++)
@@ -155,28 +337,26 @@ namespace Reanimator
             return -1;
         }
 
+        /// <summary>
+        /// Converts an Object into a byte array.
+        /// </summary>
+        /// <param name="obj">The Object to convert.</param>
+        /// <returns>The converted byte array.</returns>
         public static byte[] StructureToByteArray(Object obj)
         {
             int length = Marshal.SizeOf(obj);
             byte[] byteArray = new byte[length];
-            IntPtr i = Marshal.AllocHGlobal(length);
 
-            Marshal.StructureToPtr(obj, i, true);
-            Marshal.Copy(i, byteArray, 0, length);
-            Marshal.FreeHGlobal(i);
+            IntPtr intPtr = Marshal.AllocHGlobal(length);
+            Marshal.StructureToPtr(obj, intPtr, false);
+            Marshal.Copy(intPtr, byteArray, 0, length);
+            Marshal.FreeHGlobal(intPtr);
 
             return byteArray;
         }
 
-        public static byte[] StringToUnicodeByteArray(String str)
-        {
-            return Encoding.Unicode.GetBytes(str);
-        }
 
-        public static byte[] StringToASCIIByteArray(String str)
-        {
-            return Encoding.ASCII.GetBytes(str);
-        }
+
 
         public static byte[] IntArrayToByteArray(int[] source)
         {
@@ -194,6 +374,10 @@ namespace Reanimator
         {
             WriteToBuffer(ref buffer, ref offset, toWrite);
         }
+
+
+
+
 
         /// <summary>
         /// Serializes an object and appends it to the supplied buffer, increasing offset by object size.<br />
@@ -244,7 +428,9 @@ namespace Reanimator
         {
             for (int i = 0; i < destination.Length; i++)
             {
-                destination[i] = (T)ByteArrayToStructure(binReader.ReadBytes(Marshal.SizeOf(typeof(T))), typeof(T), 0);
+                byte[] byteArray = binReader.ReadBytes(Marshal.SizeOf(typeof (T)));
+                int offset = 0;
+                destination[i] = ByteArrayToStructure<T>(byteArray, ref offset);
             }
         }
 

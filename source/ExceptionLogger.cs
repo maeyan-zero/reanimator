@@ -184,7 +184,7 @@ namespace Reanimator
 
             if (!logSilent)
             {
-                MessageBox.Show(exception.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(exception.Message + exception.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
             _exceptions.Add(new ExceptionFormat(exception, functionName, customMessage));

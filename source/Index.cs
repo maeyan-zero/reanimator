@@ -323,8 +323,7 @@ namespace Reanimator
 
             ////// file header //////
             int offset = 0;
-            _indexHeader = (FileHeader)FileTools.ByteArrayToStructure(_data, typeof(FileHeader), offset);
-            offset += Marshal.SizeOf(typeof(FileHeader));
+            _indexHeader = FileTools.ByteArrayToStructure<FileHeader>(_data, ref offset);
 
             if (_indexHeader.FileToken != TokenHead)
             {
@@ -345,8 +344,7 @@ namespace Reanimator
 
 
             ////// strings table //////
-            _stringsHeader = (StringsHeader)FileTools.ByteArrayToStructure(_data, typeof(StringsHeader), offset);
-            offset += Marshal.SizeOf(typeof(StringsHeader));
+            _stringsHeader = FileTools.ByteArrayToStructure<StringsHeader>(_data, ref offset);
 
             if (_stringsHeader.StringsToken != TokenSect)
             {
@@ -360,14 +358,14 @@ namespace Reanimator
             String[] stringTable = new String[_stringsHeader.StringsCount];
             for (int i = 0; i < _stringsHeader.StringsCount; i++)
             {
-                stringTable[i] = FileTools.ByteArrayToStringAnsi(_data, offset);
+                stringTable[i] = FileTools.ByteArrayToStringASCII(_data, offset);
                 offset += stringTable[i].Length + 1; // +1 for \0
             }
             _stringTable.AddRange(stringTable);
 
 
             ////// strings details //////
-            UInt32 stringsDetailsToken = FileTools.ByteArrayTo<UInt32>(_data, ref offset);
+            UInt32 stringsDetailsToken = FileTools.ByteArrayToUInt32(_data, ref offset);
             if (stringsDetailsToken != TokenSect)
             {
                 String msg = String.Format(
@@ -382,7 +380,7 @@ namespace Reanimator
 
 
             ////// files details //////
-            UInt32 filesToken = FileTools.ByteArrayTo<UInt32>(_data, ref offset);
+            UInt32 filesToken = FileTools.ByteArrayToUInt32(_data, ref offset);
             if (filesToken != TokenSect)
             {
                 String msg = String.Format(
@@ -427,7 +425,7 @@ namespace Reanimator
 
             // easy-clone the file details struct
             byte[] cloneData = FileTools.StructureToByteArray(baseEntry.FileStruct);
-            FileDetailsStruct fileDetailsStruct = FileTools.ByteArrayTo<FileDetailsStruct>(cloneData, 0);
+            FileDetailsStruct fileDetailsStruct = FileTools.ByteArrayToStructure<FileDetailsStruct>(cloneData, 0);
 
             FileEntry newFileEntry = new FileEntry { FileStruct = fileDetailsStruct, InIndex = this };
 
@@ -716,6 +714,8 @@ namespace Reanimator
             Debug.Assert(DatFile != null);
 
             int result;
+            // we shouldn't load huge files into memory like this
+            // todo: write progressive extraction/copy progress (cinematic files aren't compressed anyways)
             byte[] destBuffer = new byte[file.UncompressedSize];
             DatFile.Seek(file.DataOffset, SeekOrigin.Begin);
 
