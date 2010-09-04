@@ -135,7 +135,7 @@ namespace Reanimator
                 {"MUSICGROOVELEVELS", new MapItem {RowType = typeof (MusicGrooveLevelsRow)}},
                 {"MUSICGROOVELEVELTYPES", new MapItem {RowType = typeof (MusicGrooveLevelTypesRow)}},
                 {"MUSIC_REF", new MapItem {NameReplace = "MUSICREF", RowType = typeof (MusicRefRow)}},
-                //{"MUSIC_SCRIPT_DEBUG", new MapItem {NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
+                {"MUSIC_SCRIPT_DEBUG", new MapItem {NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
                 {"MUSICSTINGERS", new MapItem {RowType = typeof (MusicStingersRow)}},
                 {"MUSICSTINGERSETS", new MapItem {RowType = typeof (MusicStingerSetsRow)}},
                 {"NPC", new MapItem {RowType = typeof (NpcRow)}},
@@ -231,7 +231,7 @@ namespace Reanimator
                 {"_TCv4_SKILLEVENTTYPES", new MapItem {IsTCv4 = true, RowType = typeof (SkillEventTypesTCv4Row)}},
                 {"_TCv4_SKILLTABS", new MapItem {IsTCv4 = true, RowType = typeof (SkillTabsTCv4Row)}},
                 {"_TCv4_SOUND_MIXSTATES", new MapItem {IsTCv4 = true, NameReplace = "SOUNDMIXSTATES", RowType = typeof (SoundMixStatesTCv4Row)}},
-                //{"_TCv4_SOUNDS", new MapItem {IsTCv4 = true, RowType = typeof (SoundsTCv4Row)}},
+                {"_TCv4_SOUNDS", new MapItem {IsTCv4 = true, RowType = typeof (SoundsTCv4Row)}},
                 {"_TCv4_STATS", new MapItem {IsTCv4 = true, RowType = typeof (StatsTCv4Row)}},
                 {"_TCv4_TREASURE", new MapItem {IsTCv4 = true, RowType = typeof (TreasureTCv4Row)}},
                 {"_TCv4_UNITMODE_GROUPS", new MapItem {IsTCv4 = true, RowType = typeof (UnitModeGroupsTCv4Row)}},
@@ -266,7 +266,7 @@ namespace Reanimator
                 {"_TCv4_EFFECTS_FILES", new MapItem {IsTCv4 = true, RowType = typeof (EffectsFilesRow)}},
                 {"_TCv4_EFFECTS", new MapItem {IsTCv4 = true, NameReplace = "EFFECTS_INDEX", RowType = typeof (EffectsIndexRow)}},
                 {"_TCv4_EFFECTS_SHADERS", new MapItem {IsTCv4 = true, RowType = typeof (EffectsShadersRow)}},
-                {"_TCv4_EXCELTABLES", new MapItem {IsTCv4 = true, RowType = typeof (ExcelTablesRow)}},
+                //{"_TCv4_EXCELTABLES", new MapItem {IsTCv4 = true, RowType = typeof (ExcelTablesRow)}},
                 {"_TCv4_FACTION", new MapItem {IsTCv4 = true, RowType = typeof (FactionRow)}},
                 {"_TCv4_FACTION_STANDING", new MapItem {IsTCv4 = true, RowType = typeof (FactionStandingRow)}},
                 {"_TCv4_FILTER_CHATFILTER", new MapItem {IsTCv4 = true, NameReplace = "CHATFILTER", RowType = typeof (FilterRow)}},
@@ -307,7 +307,7 @@ namespace Reanimator
                 {"_TCv4_MUSICGROOVELEVELS", new MapItem {IsTCv4 = true, RowType = typeof (MusicGrooveLevelsRow)}},
                 {"_TCv4_MUSICGROOVELEVELTYPES", new MapItem {IsTCv4 = true, RowType = typeof (MusicGrooveLevelTypesRow)}},
                 {"_TCv4_MUSIC_REF", new MapItem {IsTCv4 = true, NameReplace = "MUSICREF", RowType = typeof (MusicRefRow)}},
-                //{"_TCv4_MUSIC_SCRIPT_DEBUG", new MapItem {IsTCv4 = true, NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
+                {"_TCv4_MUSIC_SCRIPT_DEBUG", new MapItem {IsTCv4 = true, NameReplace = "MUSICSCRIPTDEBUG", RowType = typeof (MusicScriptDebugRow)}},
                 {"_TCv4_MUSICSTINGERS", new MapItem {IsTCv4 = true, RowType = typeof (MusicStingersRow)}},
                 {"_TCv4_MUSICSTINGERSETS", new MapItem {IsTCv4 = true, RowType = typeof (MusicStingerSetsRow)}},
                 {"_TCv4_NPC", new MapItem {IsTCv4 = true, RowType = typeof (NpcRow)}},
@@ -630,12 +630,14 @@ namespace Reanimator
 
         public ExcelFile GetExcelTableFromId(string tableId)
         {
-            ExcelFile excelTables = DataFiles["EXCELTABLES"] as ExcelFile;
-            if (excelTables == null) return null;
+            //ExcelFile excelTables = DataFiles["EXCELTABLES"] as ExcelFile;
+            //if (excelTables == null) return null;
 
-            return (from ExcelTablesRow excelTable in excelTables.Rows
-                    where excelTable.StringId == tableId
-                    select DataFiles[excelTable.StringId] as ExcelFile).FirstOrDefault();
+            return (ExcelFile)DataFiles[tableId];
+
+            //return (from ExcelTablesRow excelTable in excelTables.Rows
+            //        where excelTable.StringId == tableId
+            //        select DataFiles[excelTable.StringId] as ExcelFile).FirstOrDefault();
         }
 
         public String GetStringIdFromFileName(String fileName)

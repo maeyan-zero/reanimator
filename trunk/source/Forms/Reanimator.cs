@@ -895,11 +895,16 @@ namespace Reanimator
 
                 DataTable spDataTable = _tableDataSet.XlsDataSet.Tables[spVersion];
                 DataTable convertedDataTable = ExcelFile.ConvertToSinglePlayerVersion(spDataTable, tcDataTable);
-                ExcelFile excelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spVersion);
+                ExcelFile tcExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(tcDataTable.TableName);
+                ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spVersion);
 
-                byte[] buffer = excelFile.GenerateFile(convertedDataTable);
-                string path = Path.Combine(savePath, excelFile.FilePath);
-                string filename = excelFile.FileName + "." + excelFile.FileExtension;
+                spExcelFile.DataBlock = tcExcelFile.DataBlock;
+                spExcelFile.MyshBytes = tcExcelFile.MyshBytes;
+                spExcelFile.FinalBytes = tcExcelFile.FinalBytes;
+
+                byte[] buffer = spExcelFile.GenerateFile(convertedDataTable);
+                string path = Path.Combine(savePath, spExcelFile.FilePath);
+                string filename = spExcelFile.FileName + "." + spExcelFile.FileExtension;
 
                 if (!Directory.Exists(path))
                 {
