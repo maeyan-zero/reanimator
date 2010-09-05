@@ -32,8 +32,8 @@ namespace Reanimator.ExcelDefinitions
         public Int32 vulnerabilityInPVPTugboat;
         public Int32 vulnerabilityInPVPHellgate;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_1;
+        public Int32 sfxInvulnerabilityDurationMultInPvpTugboat_tcv4;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_2;
+        public Int32 sfxInvulnerabilityDurationMultInPvpHellgate_tcv4;
     }
 }

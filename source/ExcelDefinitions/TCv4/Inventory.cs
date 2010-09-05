@@ -20,7 +20,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Inventory.Bitmask01 bitmask;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_1;
+        public Int32 undefined_TCV4;
         public Int32 types0;//these reference unitTypes
         public Int32 types1;
         public Int32 types2;
@@ -98,36 +98,38 @@ namespace Reanimator.ExcelDefinitions
             [FlagsAttribute]
             public enum Bitmask01 : uint
             {
-                dynamic = 1,
-                onesize = 2,
-                grid = 4,
-                wardrobe = 8,
-                _undefined1 = 16, //5
-                autopickup = 32,
-                petSlot = 64,
-                dontSav = 128,
-                resurrectable = 256,
-                linkDeaths = 512,
-                _undefined2 = 1024,// 10
-                equipLocation = 2048,
-                useInRandomArmor = 4096,
-                offhandWardrobe = 8192,
-                store = 16384,
-                merchantWarehouse = 32768,
-                skillsCheckOnUltimateOwner = 65536,
-                skillsCheckOnControlUnit = 131072,
-                _undefined3 = 262144,// 19
-                destroyPetOnLevelChange = 524288,
-                knownOnlyWhenStashOpen = 1048576,
-                stashLocation = 2097152,
-                removeFromInventoryOnOwnerDeath = 4194304,
-                cannotAcceptNoDropItems = 8388608,
-                cannotAcceptNoTradeItems = 16777216,
-                cannotDismantleItems = 33554432,
-                weaponconfigLocation = 67108864,
-                freeOnSizeChange = 134217728,
-                enableCacheLocation = 268435456,
-                disableCacheLocation = 536870912
+                dynamic = (1 << 0),
+                onesize = (1 << 1),
+                grid = (1 << 2),
+                wardrobe = (1 << 3),
+                _undefined1 = (1 << 4),
+                autopickup = (1 << 5),
+                petSlot = (1 << 6),
+                dontSave = (1 << 7),
+                resurrectable = (1 << 8),
+                linkDeaths = (1 << 9),
+                _undefined2 = (1 << 10),// 10
+                equipLocation = (1 << 11),
+                useInRandomArmor = (1 << 12),
+                offhandWardrobe = (1 << 13),
+                store = (1 << 14),
+                merchantWarehouse = (1 << 15),
+                skillsCheckOnUltimateOwner = (1 << 16),
+                skillsCheckOnControlUnit = (1 << 17),
+                ingredientLoc = (1 << 18),
+                destroyPetOnLevelChange = (1 << 19),
+                knownOnlyWhenStashOpen = (1 << 20),
+                stashLocation = (1 << 21),
+                removeFromInventoryOnOwnerDeath = (1 << 22),
+                cannotAcceptNoDropItems = (1 << 23),
+                cannotAcceptNoTradeItems = (1 << 24),
+                cannotDismantleItems = (1 << 25),
+                weaponconfigLocation = (1 << 26),
+                freeOnSizeChange = (1 << 27),
+                enableCacheLocation = (1 << 28),
+                disableCacheLocation = (1 << 29),
+                isEmailLocation = (1 << 30),
+                isEmailInbox = ((uint)1 << 31)
             }
         }
     }

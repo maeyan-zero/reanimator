@@ -13,7 +13,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 PlayerAttackMonsterExp;
         public Int32 MonsterAttackPlayerDmg;
         public Int32 PlayerAttackPlayerDmg;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        Int32[] TCv4_1;
+        public Int32 playerAttackPlayerKarma_tcv4;
+        public Int32 PlayerAttackMonsterKarma_tcv4;
+        public Int32 PlayerDamageEffectMonster_tcv4;
+        public Int32 PlayerDamageEffectPlayer_tcv4;
+        public Int32 MonsterDamageEffectPlayer_tcv4;
     }
 }

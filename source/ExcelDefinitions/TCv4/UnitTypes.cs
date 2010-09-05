@@ -47,7 +47,10 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
         public Int32 isA15;
         public Int32 String;//stridx
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        Int32[] undefined4;
+        public Int32 hellgateAuctionFaction;
+        public Int32 hellgateAuctionType;
+        public Int32 hellgateAuctionString;
+        public Int32 mythosAuctionType;
+        public Int32 mythosAuctionString;
     }
 }
