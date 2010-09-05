@@ -20,13 +20,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32 statPoints;
         public Int32 skillPoints;//not active, maybe for mythos?
         public Int32 craftingPoints;//mythos only?
+        [ExcelOutput(Exclude = true)]
+        public Int32 statRespecCost_tcv4;
         public Int32 skillPowerCost;
         public Int32 headstoneReturnCost;
         public Int32 deathExperiencePenaltyPercent;
         public Int32 restartHealthPercent;
         public Int32 restartPowerPercent;
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCv4;
         public Int32 restartShieldPercent;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 prop1;//intptr

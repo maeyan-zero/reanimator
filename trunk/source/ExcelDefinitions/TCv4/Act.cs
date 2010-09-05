@@ -16,7 +16,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 code;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Act.BitMask01 bitmask01;
-        public Int32 TCV4_1;
+        public Int32 minimumExperienceLevelToEnter_tcv4;
 
         public abstract class Act
         {
@@ -24,7 +24,8 @@ namespace Reanimator.ExcelDefinitions
             public enum BitMask01 : uint
             {
                 betaAccountCanPlay = 1,
-                nonSubScriberAccountCanPlay = 2
+                nonSubScriberAccountCanPlay = 2,
+                trialAccountCanPlay = 4
             }
         }
     }

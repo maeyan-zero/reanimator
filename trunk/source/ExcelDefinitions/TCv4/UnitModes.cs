@@ -35,15 +35,13 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBool = true)]
         public Int32 clearSkill;//bool
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_1;
+        public Int32 setstateformode_tcv4;
         public Int32 clearState;//idx
         public Int32 clearStateEnd;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 doEvent;//bool
         [ExcelOutput(IsBool = true)]
         public Int32 endEvent;//bool
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_2;
         [ExcelFile.ExcelOutputAttribute(IsStringOffset = true)]
         public Int32 doFunction;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
@@ -109,10 +107,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 useBackupModeAnims;//bool
         [ExcelOutput(IsBool = true)]
         public Int32 playOnInventoryModel;//bool
+        [ExcelOutput(Exclude = true)]
+        public Int32 hideWeapons_tcv4;
+        [ExcelOutput(Exclude = true)]
+        public Int32 emoteAllowedHellgate_tcv4;
+        [ExcelOutput(Exclude = true)]
+        public Int32 emoteAllowedMythos_tcv4;
         Int32 undefined5;
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_3;
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_4;
     }
 }

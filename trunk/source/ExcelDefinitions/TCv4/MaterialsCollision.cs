@@ -15,12 +15,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 materialNumber;
         [ExcelOutput(IsBool = true)]
         public Int32 floor;//bool
-        public Int32 TCv4_1;
+        public Int32 noCollide_tcv4;
         public Int32 mapsTo;//idx
         public float directOcclusion;
         public float reverbOcclusion;
         public Int32 debugColor;//idx
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        public string TCv4_string;
+        public string max9Name_tcv4;
     }
 }

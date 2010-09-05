@@ -43,8 +43,17 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affixType5;
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType6;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] TCV4;
+        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        //Int32[] affixtype_TCV4;
+        public Int32 affixType7;
+        public Int32 affixType8;
+        public Int32 affixType9;
+        public Int32 affixType10;
+        public Int32 affixType11;
+        public Int32 affixType12;
+        public Int32 affixType13;
+        public Int32 affixType14;
+        public Int32 affixType15;
         public Int32 suffix;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 group;
@@ -105,9 +114,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 property5;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 property6;
-        public Int32 TCv4_1;
+        [ExcelOutput(IsIntOffset = true)]
+        public Int32 statsFeed_TCv4;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyOnItemsRequiringUnitType;
-        public Int32 TCv4_2;
+        public Int32 undefined_TCv4;
     }
 }

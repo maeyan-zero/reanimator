@@ -24,12 +24,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 allowInRandomSingleUse;
         [ExcelOutput(IsBool = true)]
         public Int32 removeOnLoad;
+        public Int32 resultIsUnidentified_tcv4;
         public Int32 weight;
-        Int32 experienceEarned;
-        Int32 goldReward;
-        public Int32 TCv4_1;
+        public Int32 experienceEarned;
+        public Int32 goldReward;
         public Int32 resultQualityModifiesIngredientQuantity;
-        public Int32 TCv4_2;
+        public Int32 resultLevelSameAsIngredient1Level_tcv4;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS", Column = "name")]
         public Int32 ingredient1ItemClass;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
@@ -78,22 +78,54 @@ namespace Reanimator.ExcelDefinitions
         public Int32 ingredient6ItemQuality;
         public Int32 ingredient6MinQuantity;
         public Int32 ingredient6MaxQuantity;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        Int32[] craftResult;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        Int32[] treasureResult;
+        public Int32 craftResult1;
+        public Int32 craftResult2;
+        public Int32 craftResult3;
+        public Int32 craftResult4;
+        public Int32 craftResult5;
+        public Int32 craftResult6;
+        public Int32 treasureResult1;
+        public Int32 treasureResult2;
+        public Int32 treasureResult3;
+        public Int32 treasureResult4;
+        public Int32 treasureResult5;
+        public Int32 treasureResult6;
         [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC", Column = "name")]
         public Int32 mustPlaceInInvSlot;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Recipes.BitMask01 bitmask;
-        Int32 spawnLevelMin;
-        Int32 spawnLevelMax;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        Int32[] TCV4_3;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 146)]
-        Int32[] TCV4_4;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        Int32[] TCV4_5;
+        public Int32 spawnLevelMin;
+        public Int32 spawnLevelMax;
+        public Int32 recipeCategoriesRequired1_tcv4;//( 0 to 3 )
+        public Int32 recipeCategoriesRequired2_tcv4;
+        public Int32 recipeCategoriesRequired3_tcv4;
+        public Int32 recipeCategoryLevelRequired1_tcv4;//( 0 to 3 )
+        public Int32 recipeCategoryLevelRequired2_tcv4;
+        public Int32 recipeCategoryLevelRequired3_tcv4;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 144)]
+        Int32[] undefined_tcv4;
+        public Int32 baseCost_tcv4;
+        public Int32 propertyScript_tcv4;
+        public Int32 spawnForOnlyUnitType1_tcv4;
+        public Int32 spawnForOnlyUnitType2_tcv4;
+        public Int32 spawnForOnlyUnitType3_tcv4;
+        public Int32 spawnForOnlyUnitType4_tcv4;
+        public Int32 spawnForOnlyUnitType5_tcv4;
+        public Int32 spawnForOnlyUnitType6_tcv4;
+        public Int32 spawnForOnlyUnitType7_tcv4;
+        public Int32 spawnForOnlyUnitType8_tcv4;
+        public Int32 spawnForOnlyUnitType9_tcv4;
+        public Int32 spawnForOnlyUnitType10_tcv4;
+        public Int32 spawnForOnlyMonsterClass1_tcv4;
+        public Int32 spawnForOnlyMonsterClass2_tcv4;
+        public Int32 spawnForOnlyMonsterClass3_tcv4;
+        public Int32 spawnForOnlyMonsterClass4_tcv4;
+        public Int32 spawnForOnlyMonsterClass5_tcv4;
+        public Int32 spawnForOnlyMonsterClass6_tcv4;
+        public Int32 spawnForOnlyMonsterClass7_tcv4;
+        public Int32 spawnForOnlyMonsterClass8_tcv4;
+        public Int32 spawnForOnlyMonsterClass9_tcv4;
+        public Int32 spawnForOnlyMonsterClass10_tcv4;
 
         public abstract class Recipes
         {
@@ -101,7 +133,8 @@ namespace Reanimator.ExcelDefinitions
             public enum BitMask01 : uint
             {
                 canBeLearned = 1,
-                canSpawn = 2
+                canSpawn = 2,
+                spawnAtMerchant_tcv4 = 4
             }
         }
     }

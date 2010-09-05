@@ -40,16 +40,14 @@ namespace Reanimator.ExcelDefinitions
         byte[] unknown04;
         public float noDrop;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_1;
+        public Int32 mustDrop_tcv4;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 levelBoost;
+        public float gamblePriceRangeMin_tcv4;
+        public float gamblePriceRangeMax_tcv4;
         public float moneyChanceMultiplier;
         public float moneyLuckChanceMultiplier;
         public float moneyAmountMultiplier;
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_2;
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_3;
         public Int32 item1m;/*this isn't actually defined, but it determines the type of object in item1, whether it's a specific item(01), a unit type(02),
             another treasure class(03), an item quality(04), or something else yet to be determined.*/
         public Int32 item1;
@@ -103,15 +101,19 @@ namespace Reanimator.ExcelDefinitions
             [FlagsAttribute]
             public enum Bitmask01 : uint
             {
-                createForAllPlayersInLevel = 1,
-                requiredUsableByOperator = 2,
-                requiredUsableBySpawner = 4,
-                subscriberOnly = 8,
-                maxSlots = 16,
-                resultsNotRequired = 32,
-                stackTreasure = 64,
-                multiplayerOnly = 128,
-                singlePlayerOnly = 256
+                createForAllPlayersInLevel = (1 << 0),
+                requiredUsableByOperator = (1 << 1),
+                requiredUsableBySpawner = (1 << 2),
+                subscriberOnly = (1 << 3),
+                maxSlots = (1 << 4),
+                resultsNotRequired = (1 << 5),
+                stackTreasure = (1 << 6),
+                multiplayerOnly = (1 << 7),
+                undefined1 = (1 << 8),
+                baseOnPlayerLevel_tcv4 = (1 << 9),
+                recipientRequiresState_tcv4 = (1 << 10),
+                undefined2 = (1 << 11),
+                singlePlayerOnly = (1 << 12)
             };
         }
     }

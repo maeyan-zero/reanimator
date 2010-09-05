@@ -205,7 +205,7 @@ namespace Reanimator.ExcelDefinitions
         public float sideSend;
         public Int32 lfeSend;//lfe ?
         public Int32 mixState;//idx
-        public Int32 undefined43;
+        public Int32 bus;
         public Int32 vcas1;//list
         public Int32 vcas2;
         public Int32 vcas3;
@@ -225,15 +225,15 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined46;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_1;
+        public Int32 ADSR_tcv4;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_2;
+        public Int32 undefined_TCV4_2;//these may not even be the new columns, but all of these undefined columns seem to be zero.
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_3;
+        public Int32 undefined_TCV4_3;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_4;
+        public Int32 undefined_TCV4_4;
         public Int32 undefined46d;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
         Int32[] undefined47;
 
 
@@ -257,18 +257,7 @@ namespace Reanimator.ExcelDefinitions
                 dontRandomizeStart = 2048,
                 dontCrossfadeVariations = 4096,
                 unk02 = 8192,
-                loadAtStartup = 16384,
-                useGlobalLights = 32768,
-                backupTransSpecular = 65536,
-                emitsGpuParticles = 131072,
-                isScreenEffect = 262144,
-                loadAllTechniques = 524288,
-                receiveRain = 1048576,
-                oneParticleSystem = 2097152,
-                usesPortals = 4194304,
-                requiresHavokFx = 8388608,
-                directionalInSH = 16777216,
-                emissivediffuse = 33554432
+                loadAtStartup = 16384
             }
         }
     }

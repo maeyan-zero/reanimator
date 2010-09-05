@@ -12,8 +12,8 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        public float undefined1;
-        public float undefined2;
+        public Int32 undefined1;
+        public Int32 undefined2;
         public float minVolume;
         public float maxVolume;
         public float silentChance;
@@ -23,12 +23,12 @@ namespace Reanimator.ExcelDefinitions
         public float maxSilentTime;
         public float fadeIn;
         public float fadeOut;
-        Int32 TCV4_1;
-        Int32 TCV4_2;
-        Int32 TCV4_3;
-        Int32 TCV4_4;
-        Int32 TCV4_5;
+        public Int32 undefined_TCV4_1;
+        public Int32 ADSR_tcv4;
+        public Int32 undefined_TCV4_3;
+        public Int32 undefined_TCV4_4;
+        public Int32 undefined_TCV4_5;
         public Int32 sound;//idx
-        Int32 TCV4_6;
+        public Int32 undefined_TCV4_6;
     }
 }

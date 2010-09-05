@@ -17,6 +17,6 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32[] undefined;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_1;
+        public Int32 undefined_TCV4;
     }
 }

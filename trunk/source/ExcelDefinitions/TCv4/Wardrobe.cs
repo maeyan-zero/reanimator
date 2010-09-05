@@ -41,12 +41,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 blendOpTemplar;//idx;
         public Int32 blendOpCabalist;//idx;
         public Int32 blendOpHunter;//idx;
-        public Int32 blendOpAdventurer;//idx;
+        public Int32 blendOpSatyr;//idx;
+        public Int32 blendOpCyclops;
+        public Int32 blendOpCyclopsFemale;
         public Int32 offHandlayer;//idx;
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_1;
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_2;
         public Int32 undefined2;
         public Int32 attachType;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
@@ -59,11 +57,11 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
         Int32[] undefined6;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_3;
+        public Int32 undefined_tcv4_1;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_4;
+        public Int32 undefined_tcv4_2;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_5;
+        public Int32 undefined_tcv4_3;
         [ExcelOutput(IsBool = true)]
         public Int32 hasBoneIndex;//bool
         public Int32 boneIndex;

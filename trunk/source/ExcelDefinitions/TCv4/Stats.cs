@@ -42,9 +42,13 @@ namespace Reanimator.ExcelDefinitions
         byte[] undefined5;
         [ExcelOutput(IsBool = true)]
         public Int32 player;//bool
+        [ExcelOutput(IsBool = true)]
         public Int32 monster;
+        [ExcelOutput(IsBool = true)]
         public Int32 missile;
+        [ExcelOutput(IsBool = true)]
         public Int32 item;
+        [ExcelOutput(IsBool = true)]
         public Int32 Object;
         public Int32 valbits;
         public Int32 valWindow;
@@ -77,31 +81,64 @@ namespace Reanimator.ExcelDefinitions
         byte[] undefined9;
         public Int32 minTicksBetweenDbCommand;
         public Int32 databaseUnitField;
+        [ExcelOutput(Exclude = true)]
+        public Int32 databaseOperationContext_tcv4;
         public Int32 specFunc;
         public Int32 sfStat1;
         public Int32 sfStat2;
         public Int32 sfStat3;
         public Int32 sfStat4;
+        [ExcelOutput(Exclude = true)]
+        public Int32 sfStat5_tcv4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] undefined10;
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_1;
-        [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_2;
         public Int32 checkAgainstTypes1;
         public Int32 checkAgainstTypes2;
         public Int32 reqFailString;//stridx
         public Int32 reqFailStringHellgate;
         public Int32 reqFailStringMythos;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] undefined11;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string versionFunction;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] undefined12;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_3;
+        public Int32 sendToOthersStat_tcv4;
         [ExcelOutput(Exclude = true)]
-        public Int32 TCV4_4;
+        public Int32 undefined_TCV4_4;
+
+        [FlagsAttribute]
+        public enum BitMask01 : uint
+        {
+            _undefined1 = (1 << 0),
+            cur = (1 << 1),
+            modList = (1 << 2),
+            vector = (1 << 3),
+            Float = (1 << 4),
+            _undefined2 = (1 << 5),
+            accrue = (1 << 6),
+            accrueOnceOnly = (1 << 7),
+            combat = (1 << 8),
+            directDmg = (1 << 9),
+            send = (1 << 10),
+            sendAll = (1 << 11),
+            _undefined3 = (1 << 12),
+            save = (1 << 13),
+            _undefined4 = (1 << 14),
+            noMaxCurWhenDead = (1 << 15),
+            stateMonitorsC = (1 << 16),
+            stateMonitorsS = (1 << 17),
+            transfer = (1 << 18),
+            transferToMissile = (1 << 19),
+            calcRider = (1 << 20),
+            calc = (1 << 21),
+            updateDatabase = (1 << 22),
+            dontTranferToNonWeaponMissile = (1 << 23),
+            _undefined5_tcv4 = (1 << 24),
+            clearOnItemRestore_tcv4 = (1 << 25),
+            exposeInDataService_tcv4 = (1 << 26)
+            
+        }
     }
 }
