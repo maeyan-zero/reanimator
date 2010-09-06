@@ -244,7 +244,7 @@ namespace Reanimator
                 if ((uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0x887988C4 || (uint)((ExcelFile)dataFile).FileExcelHeader.StructureId == 0xE08E6C41) // items, missiles, monsters, objects, players
                 {
                     int i = row - 1;
-                    baseRow[col++] = Export.ArrayToCSV(((ExcelFile)dataFile).ExtraIndexData[i], "hex", sizeof(byte));
+                    baseRow[col++] = Export.ArrayToCSV(((ExcelFile)dataFile).AiData[i], "hex", sizeof(byte));
                 }
 
                 mainDataTable.Rows.Add(baseRow);

@@ -34,6 +34,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 skillScriptParam;
         Int32 unknown18;            // always 0
         public Int32 element;
+        [ExcelFile.ExcelOutput(IsIntOffset = true)]
         public Int32 pulseRateInMs;
         public Int32 pulseRateInMsClient;            // always 0
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
