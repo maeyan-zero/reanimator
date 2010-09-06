@@ -22,7 +22,7 @@ namespace Reanimator
 
         public Hashtable Strings { get; private set; }
         public int[] TableIndicies { get; private set; }
-        public List<byte[]> ExtraIndexData { get; private set; }
+        public List<byte[]> AiData { get; private set; }
         public List<String> SecondaryStrings { get; private set; }
 
         private Int32 _rcshValue;
@@ -243,7 +243,7 @@ namespace Reanimator
             if ((uint)FileExcelHeader.StructureId == 0x887988C4 || (uint)FileExcelHeader.StructureId == 0xE08E6C41) // items, missiles, monsters, objects, players (includes tcv4 version)
             {
                 TableIndicies = new int[Count];
-                ExtraIndexData = new List<byte[]>();
+                AiData = new List<byte[]>();
 
                 for (int i = 0; i < Count; i++)
                 {
@@ -252,7 +252,7 @@ namespace Reanimator
                     byte[] extra = new byte[size];
                     Buffer.BlockCopy(_data, offset, extra, 0, size);
                     offset += size;
-                    ExtraIndexData.Add(extra);
+                    AiData.Add(extra);
                 }
             }
             else
@@ -361,52 +361,30 @@ namespace Reanimator
                 int byteCount = FileTools.ByteArrayToInt32(_data, ref offset);
                 if (byteCount != 0)
                 {
-                    if (FileExcelHeader.StructureId == 0x1F9DDC98 || FileExcelHeader.StructureId == 1558484169) // Only seen in unittypes.txt.cooked so far.
-                    {                                                                           // This block reading method is the same as first seen below in the states.txt.cooked,
-                        int blockCount = FileTools.ByteArrayToInt32(_data, ref offset);   // but there is no data in the previous block for unittypes.txt.cooked.
-                        byteCount = (byteCount << 2) * blockCount;
-                        FinalBytes = new byte[byteCount];
-                        Buffer.BlockCopy(_data, offset, FinalBytes, 0, FinalBytes.Length);
-                        offset += FinalBytes.Length;
-                        //Debug.WriteLine(String.Format("Has final block .Length = {0}", byteCount));
-                        //Debug.Write(String.Format("Has weird block .Length = {0}\n", byteCount));
-                    }
-                    else
-                    {
-                        DataBlock = new byte[byteCount];
-                        Buffer.BlockCopy(_data, offset, DataBlock, 0, byteCount);
-                        offset += byteCount;
-                        //Debug.WriteLine(String.Format("Has data block .Length = {0}", byteCount));
-                    }
+                    DataBlock = new byte[byteCount];
+                    Buffer.BlockCopy(_data, offset, DataBlock, 0, byteCount);
+                    offset += byteCount;
                 }
             }
 
 
-            if (offset != _data.Length) // this is only for because of unittypes, see above
+            token = FileTools.ByteArrayToInt32(_data, ref offset);
+            if (token != 0)
             {
-                // does it have a final flag chunk?
-                token = FileTools.ByteArrayToInt32(_data, ref offset);
-                if (token != 0)
+                CheckExcelFlag(token);
+
+                int byteCount = FileTools.ByteArrayToInt32(_data, ref offset);
+
+
+                if (byteCount != 0)        // Only seen in states.txt.cooked so far  -  Of note is that 
                 {
-                    CheckExcelFlag(token);
-
-                    int byteCount = FileTools.ByteArrayToInt32(_data, ref offset);
                     int blockCount = FileTools.ByteArrayToInt32(_data, ref offset);
-                    byteCount = (byteCount << 2) * blockCount;
-
-                    if (byteCount != 0)        // Only seen in states.txt.cooked so far  -  Of note is that 
-                    {                          //           the states file has an above data block as well.
-                        FinalBytes = new byte[byteCount];
-                        Buffer.BlockCopy(_data, offset, FinalBytes, 0, FinalBytes.Length);
-                        offset += FinalBytes.Length;
-                        //Debug.WriteLine(String.Format("Has final block .Length = {0}", byteCount));
-                    }
+                    byteCount = (byteCount << 2) * blockCount;//           the states file has an above data block as well.
+                    FinalBytes = new byte[byteCount];
+                    Buffer.BlockCopy(_data, offset, FinalBytes, 0, FinalBytes.Length);
+                    offset += FinalBytes.Length;
+                    //Debug.WriteLine(String.Format("Has final block .Length = {0}", byteCount));
                 }
-            }
-
-            if (offset != _data.Length)
-            {
-                throw new Exception("offset != data.Length");
             }
 
             IsGood = true;
@@ -446,6 +424,10 @@ namespace Reanimator
                     case 86://tcv4 skills
                     case 516:
                     case 527:
+                        
+
+                        len += sizeof(int) * 1;
+                        break;
                     case 700:
                         len += sizeof(int) * 1;
                         break;
@@ -483,7 +465,7 @@ namespace Reanimator
                         len += sizeof(int) * 2;
                         break;
                     case 708: // 26,3,26
-                        len += sizeof(int) * 4;
+                        //len += sizeof(int) * 4;
                         break;
                     case 710: // 26,26,3
                         //len += sizeof(int) * 6;
@@ -498,6 +480,7 @@ namespace Reanimator
                         break;
                 }
             }
+
             byte[] buffer = new byte[len];
             Array.Copy(DataBlock, index, buffer, 0, len);
             return Export.ArrayToCSV(buffer, Config.IntPtrCast, sizeof(int));
@@ -631,7 +614,6 @@ namespace Reanimator
 
         public override byte[] GenerateFile(DataTable dataTable)
         {
-            const int zeroValue = 0;
             byte[] buffer = new byte[1024];
             int byteOffset = 0;
             byte[] intBytes = null;
@@ -661,6 +643,7 @@ namespace Reanimator
             defaultTableHeader.Reserved1 = -1;
             defaultTableHeader.VersionMinor = 0x00;
             defaultTableHeader.Reserved2 = -1;
+
 
             #region Parse DataSet
             int row = 0;
@@ -806,7 +789,7 @@ namespace Reanimator
                             }
                             else if (fieldInfo.FieldType == typeof(Int32))
                             {
-                                fieldInfo.SetValue(table, -1);
+                                fieldInfo.SetValue(table, 0);
                             }
                             else if (fieldInfo.FieldType == typeof(Single))
                             {
@@ -868,13 +851,13 @@ namespace Reanimator
                         array = Export.CSVtoArray(empty, "hex", sizeof(byte));
                     }
 
-                    if (ExtraIndexData.Count <= row)
+                    if (AiData.Count <= row)
                     {
-                        ExtraIndexData.Add(array);
+                        AiData.Add(array);
                     }
                     else
                     {
-                        ExtraIndexData[row] = array;
+                        AiData[row] = array;
                     }
                 }
 
@@ -883,7 +866,8 @@ namespace Reanimator
             }
             #endregion
 
-            // write strings block
+
+            // Strings block
             if (stringBytes != null && stringsByteCount > 0)
             {
                 FileTools.WriteToBuffer(ref buffer, stringsByteOffset, stringsByteCount);
@@ -891,21 +875,27 @@ namespace Reanimator
                 byteOffset += stringsByteCount;
             }
 
-            // PRIMARY INDEX
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
 
+            const uint idItems = 0x887988C4;
+            const uint idItemsTc = 0xE08E6C41;
+
+            // Primary index
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
 
-                if ((uint)FileExcelHeader.StructureId == 0x887988C4) // items, missiles, monsters, objects, players
+                // Ai data - item types only
+                if ((uint)FileExcelHeader.StructureId == idItems ||
+                    (uint)FileExcelHeader.StructureId == idItemsTc)
                 {
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, ExtraIndexData[i].Length);
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, ExtraIndexData[i]);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, AiData[i].Length);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, AiData[i]);
                 }
             }
 
-            // secondary string block
+
+            // Secondary string block
             Int32 secondaryStringCount = SecondaryStrings.Count;
             if (secondaryStringCount > 0)
             {
@@ -922,29 +912,35 @@ namespace Reanimator
                 }
             }
 
-            // Cant be bothered getting this right. Too many conditions, and the game works without them
 
-            // generate and sort the indicies
+            // Generate sort indices
             foreach (DataColumn dc in dataTable.Columns)
             {
-                if (!dc.ExtendedProperties.Contains(ColumnTypeKeys.SortId)) continue;
-
-                int sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortId] - 1;
-                DataView sortedView = dataTable.AsDataView();
-                string sortRow = dataTable.Columns[1].ColumnName;
-                string filterType = dataTable.Columns[1].DataType == typeof(string) ? "''" : "0";
-
-                sortedView.RowFilter = sortRow + " <> " + filterType;
-                sortedView.Sort = dc.ColumnName + " asc";
-                _sortIndicies[sortId] = new int[sortedView.Count];
-
-                for (int i = 0; i < sortedView.Count; i++)
+                if (!dc.ExtendedProperties.Contains(ColumnTypeKeys.SortId))
                 {
-                    _sortIndicies[sortId][i] = (int)sortedView[i][0];
+                    continue;
+                }
+
+                int indexColumn = 0;
+                int sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortId] - 1; // 1,2,3,4
+                string sortColumn = dc.ColumnName;
+
+                DataView dataView = dataTable.DefaultView;
+                dataView.Sort = sortColumn;
+                if (dataTable.Columns.Contains("code"))
+                {
+                    dataView.RowFilter = "code <> 0";
+                }
+
+                _sortIndicies[sortId] = new int[dataView.Count];
+                for (int i = 0; i < dataView.Count; i++)
+                {
+                    _sortIndicies[sortId][i] = (int)dataView[i][indexColumn];
                 }
             }
 
-            // write the indicies to the buffer
+
+            // Sort indices
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex1.Length);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex1));
@@ -958,7 +954,8 @@ namespace Reanimator
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex4.Length);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex4));
 
-            // weird unknown header chunks
+
+            // Rcsh, Tysh, Mysh, Dneh
             if (_rcshValue != 0)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
@@ -976,55 +973,32 @@ namespace Reanimator
             }
 
 
-            if (FileExcelHeader.StructureId == 0x1F9DDC98 || FileExcelHeader.StructureId == 1558484169) // UnitTypes only
+            // IntPtr data block
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
+            if (intByteCount > 0)
             {
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
-
-                //DataBlock 2 - Final Bytes
-                int blockCount = dataTable.Rows.Count;
-                int finalBytesCount = FinalBytes == null ? 0 : FinalBytes.Length;
-                finalBytesCount = (finalBytesCount >> 2) / blockCount;
-
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, finalBytesCount);
-                if (finalBytesCount > 0)
-                {
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, blockCount);
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
-                }
-            }
-            else
-            {
-                // Data Block 1. Holds the 'IntOffset' data.
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
-                if (intBytes != null) // TODO. shouldnt have to do this here
-                {
-                    byte[] tmp = new byte[intByteCount];
-                    Array.Copy(intBytes, tmp, intByteCount);
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, tmp);
-                }
-
-                // Data Block 2
-                int blockCount = dataTable.Rows.Count;
-                int finalBytesCount = FinalBytes == null ? 0 : FinalBytes.Length;
-                finalBytesCount = (finalBytesCount >> 2) / blockCount;
-
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, finalBytesCount);
-                if (finalBytesCount > 0)
-                {
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, blockCount);
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
-                }
-
-                // One last null
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, zeroValue);
+                byte[] intByteBuffer = new byte[intByteCount];
+                Buffer.BlockCopy(intBytes, 0, intByteBuffer, 0, intByteCount);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteBuffer);
             }
 
 
-            // return final buffer
+            // Final data block
+            int blockCount = FinalBytes != null? dataTable.Rows.Count : 0;
+            int byteCount = FinalBytes != null ? FinalBytes.Length : 0;
+            byteCount = byteCount > 0 ? (byteCount >> 2) / blockCount : 0;
+
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, byteCount);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, blockCount);
+            if (byteCount > 0)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
+            }
+
+
+            // Return
             byte[] returnBuffer = new byte[byteOffset];
             Buffer.BlockCopy(buffer, 0, returnBuffer, 0, byteOffset);
 
@@ -1075,6 +1049,7 @@ namespace Reanimator
                             }
                         }
                         convertedRow[columnName] = convertedMask;
+                        continue;
                     }
                 }
 
@@ -1089,7 +1064,7 @@ namespace Reanimator
             using (TextWriter stream = new StreamWriter(@"extradump.txt"))
             {
                 int i = 0;
-                foreach (byte[] array in ExtraIndexData)
+                foreach (byte[] array in AiData)
                 {
                     stream.WriteLine(Export.ArrayToCSV(array, "hex", sizeof(byte)));
                     i++;

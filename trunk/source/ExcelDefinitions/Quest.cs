@@ -8,11 +8,9 @@ namespace Reanimator.ExcelDefinitions
     class QuestRow
     {
         ExcelFile.TableHeader header;
-
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-
         [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 style;
