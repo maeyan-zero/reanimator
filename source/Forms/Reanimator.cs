@@ -925,7 +925,6 @@ namespace Reanimator
                 ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spVersion);
 
                 spExcelFile.MyshBytes = tcExcelFile.MyshBytes;
-                spExcelFile.FinalBytes = tcExcelFile.FinalBytes;
 
                 byte[] buffer = spExcelFile.GenerateFile(convertedDataTable);
                 string path = Path.Combine(savePath, spExcelFile.FilePath);

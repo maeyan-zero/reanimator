@@ -16,7 +16,7 @@ namespace Reanimator
 
         public TableDataSet()
         {
-            RegenerateRelations = true;
+            RegenerateRelations = false;
             _excelDataTableLoaded = false;
             XlsDataSet = new DataSet("xlsDataSet")
             {
@@ -267,7 +267,7 @@ namespace Reanimator
 
             #endregion
 
-            _GenerateRelations(progress, dataFile);
+            //_GenerateRelations(progress, dataFile);
             return mainDataTable;
         }
 
