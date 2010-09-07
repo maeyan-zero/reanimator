@@ -13,21 +13,18 @@ namespace Reanimator
 {
     public partial class ExcelFile : DataFile
     {
-        private readonly bool _excelDebugAll;
-
-        // file vars - order is approx order found in file
         public ExcelHeader FileExcelHeader { get; private set; }
-
         private byte[] _stringsBytes;
 
         public Hashtable Strings { get; private set; }
         public int[] TableIndicies { get; private set; }
+        public byte[] IntPtrData { get; private set; }
         public List<byte[]> AiData { get; private set; }
+        public List<byte[]> FinalData { get; private set; }
         public List<String> SecondaryStrings { get; private set; }
-
+        
         private Int32 _rcshValue;
         private Int32 _tyshValue;
-        // mysh
         private Int32 _dnehValue;
 
         private int[][] _sortIndicies;
@@ -36,22 +33,24 @@ namespace Reanimator
         public int[] SortIndex3 { get { return _sortIndicies[2]; } }
         public int[] SortIndex4 { get { return _sortIndicies[3]; } }
 
-        public byte[] DataBlock { get; set; }
+        // these are only public to pass them through the conversion
+        // eventually better methods will be implemented
         public byte[] FinalBytes { get; set; }
         public byte[] MyshBytes { get; set; }
 
-        // func defs etc
+
+        const uint idItems = 0x887988C4;
+        const uint idItemsTc = 0xE08E6C41;
+        const uint idUnitTypes = 0x1F9DDC98;
+        const uint idUintTypesTc = 0x5CE494C9;
+
+
         public ExcelFile(String stringId, Type type)
             : base(stringId, type)
         {
-            _excelDebugAll = true;
             IsExcelFile = true;
         }
 
-        override public String ToString()
-        {
-            return StringId;
-        }
 
         public override bool ParseData(byte[] data)
         {
@@ -199,7 +198,6 @@ namespace Reanimator
             CheckExcelFlag(token);
 
             FileExcelHeader = FileTools.ByteArrayToStructure<ExcelHeader>(_data, ref offset);
-            //if (_excelDebugAll) Debug.Write(String.Format("ExcelHeader: Unknown161 = {0}, Unknown162 = {1}, Unknown163 = {2}, Unknown164 = {3}, Unknown165 = {4}, Unknown166 = {5}, Unknown321 = {6}, Unknown322 = {7}\n", FileExcelHeader.Unknown161, FileExcelHeader.Unknown162, FileExcelHeader.Unknown163, FileExcelHeader.Unknown164, FileExcelHeader.Unknown165, FileExcelHeader.Unknown166, FileExcelHeader.Unknown321, FileExcelHeader.Unknown322));
 
             // strings block
             token = FileTools.ByteArrayToInt32(_data, ref offset);
@@ -236,11 +234,14 @@ namespace Reanimator
             }
             Rows.AddRange(rows);
 
+
             // index block
             token = FileTools.ByteArrayToInt32(_data, ref offset);
             CheckExcelFlag(token);
 
-            if ((uint)FileExcelHeader.StructureId == 0x887988C4 || (uint)FileExcelHeader.StructureId == 0xE08E6C41) // items, missiles, monsters, objects, players (includes tcv4 version)
+            // tables of the type items have ai data beside each indice
+            if (FileExcelHeader.StructureId == idItems ||
+                FileExcelHeader.StructureId == idItemsTc)
             {
                 TableIndicies = new int[Count];
                 AiData = new List<byte[]>();
@@ -257,19 +258,13 @@ namespace Reanimator
             }
             else
             {
-                if (Count == 0)
-                {
-                    offset += sizeof(Int32);
-                }
-                else
-                {
-                    TableIndicies = FileTools.ByteArrayToInt32Array(_data, ref offset, Count);
-                }
+                TableIndicies = FileTools.ByteArrayToInt32Array(_data, ref offset, Count);
             }
+
 
             // secondary string block
             token = FileTools.ByteArrayToInt32(_data, ref offset);
-            if (!CheckFlag(token, 0x68657863)) // 'cxeh'
+            if (!CheckFlag(token, FileTokens.StartOfBlock))
             {
                 int stringCount = token;
                 for (int i = 0; i < stringCount; i++)
@@ -279,8 +274,6 @@ namespace Reanimator
                     offset += charCount;
                     SecondaryStrings.Add(str);
                 }
-
-                if (_excelDebugAll) Debug.Write("Has secondary strings...\n");
             }
             else
             {
@@ -289,7 +282,9 @@ namespace Reanimator
 
 
             // sort index blocks
-            for (int i = 0; i < 4; i++)
+            // ascending sorted array positions of existing objects, excludes blanks
+            // can contain none or up to 4 arrays
+            for (int i = 0; i < _sortIndicies.Length; i++)
             {
                 token = FileTools.ByteArrayToInt32(_data, ref offset);
                 CheckExcelFlag(token);
@@ -299,101 +294,92 @@ namespace Reanimator
             }
 
 
-            // unknown block
+            // token is duplicated here
             token = FileTools.ByteArrayToInt32(_data, ref offset);
             CheckExcelFlag(token);
 
-            token = FileTools.ByteArrayToInt32(_data, ref offset);
-            if (token != 0x00)
-            {
-                while (true)
-                {
-                    if (CheckFlag(token, 0x68736372)) // 'rcsh'
-                    {
-                        _rcshValue = FileTools.ByteArrayToInt32(_data, ref offset);
-                        if (_rcshValue != 0x04)
-                        {
-                            throw new Exception("_rcshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_rcshValue != 0x04)");
-                        }
-                        //if (_excelDebugAll) Debug.Write(String.Format("Has rcsh value = {0}\n", _rcshValue));
-                    }
-                    else if (CheckFlag(token, 0x68737974)) // 'tysh'
-                    {
-                        _tyshValue = FileTools.ByteArrayToInt32(_data, ref offset);
-                        if (_tyshValue != 0x02)
-                        {
-                            throw new Exception("_tyshValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_tyshValue != 0x02)");
-                        }
-                        //if (_excelDebugAll) Debug.Write(String.Format("Has tysh value = {0}\n", _tyshValue));
-                    }
-                    else if (CheckFlag(token, 0x6873796D)) // 'mysh'
-                    {
-                        ParseMyshTables(_data, ref offset);
-                        //if (_excelDebugAll) Debug.Write(String.Format("Has mysh value = true\n"));
-                    }
-                    else if (CheckFlag(token, 0x68656E64)) // 'dneh'
-                    {
-                        _dnehValue = FileTools.ByteArrayToInt32(_data, ref offset);
-                        if (_dnehValue != 0x00)
-                        {
-                            throw new Exception("_dnehValue = FileTools.ByteArrayTo<Int32>(data, ref offset);\nif (_dnehValue != 0x02)");
-                        }
-                        //if (_excelDebugAll) Debug.Write(String.Format("Has dneh value = {0}\n", _dnehValue));
-                    }
-                    else // 'cxeh'  -  starting next block
-                    {
-                        CheckExcelFlag(token);
-                        offset -= 4;
-                        break;
-                    }
 
+            // rcsh, tysh, mysh, dneh
+            token = FileTools.ByteArrayToInt32(_data, ref offset);
+            if (token != 0)
+            {
+                // rcsh
+                _rcshValue = FileTools.ByteArrayToInt32(_data, ref offset); //0x04 const
+                token = FileTools.ByteArrayToInt32(_data, ref offset);
+
+                // tysh
+                _tyshValue = FileTools.ByteArrayToInt32(_data, ref offset); //0x02 const
+                token = FileTools.ByteArrayToInt32(_data, ref offset);
+
+                // mysh - skills and stats only
+                // todo: needs parsing.. see _ParseMyshTables method
+                if (token == FileTokens.TokenMysh)
+                {
+                    _ParseMyshTables(_data, ref offset);
                     token = FileTools.ByteArrayToInt32(_data, ref offset);
                 }
+
+                // dneh
+                _dnehValue = FileTools.ByteArrayToInt32(_data, ref offset); //0x00 const
+            }
+            else
+            {
+                int paise = 0;
+                paise = paise + 2;
             }
 
 
-            // data block
+            // intptr data block
+            // its wierd the unittypes table ignores this part
+            if (FileExcelHeader.StructureId != idUnitTypes &&
+                FileExcelHeader.StructureId != idUintTypesTc)
+            {
+                token = FileTools.ByteArrayToInt32(_data, ref offset);
+                if (token != 0)
+                {
+                    CheckExcelFlag(token);
+                    int byteCount = FileTools.ByteArrayToInt32(_data, ref offset);
+                    if (byteCount != 0)
+                    {
+                        IntPtrData = new byte[byteCount];
+                        Buffer.BlockCopy(_data, offset, IntPtrData, 0, byteCount);
+                        offset += byteCount;
+                    }
+                }
+            }
+
+
+            // final bytes
+            // only exists in unittypes and states
+            // todo: needs identifying... what does it mean?
             token = FileTools.ByteArrayToInt32(_data, ref offset);
             if (token != 0)
             {
                 CheckExcelFlag(token);
 
                 int byteCount = FileTools.ByteArrayToInt32(_data, ref offset);
-                if (byteCount != 0)
+                int blockCount = FileTools.ByteArrayToInt32(_data, ref offset);
+                if (byteCount != 0) // states & unittypes only
                 {
-                    DataBlock = new byte[byteCount];
-                    Buffer.BlockCopy(_data, offset, DataBlock, 0, byteCount);
-                    offset += byteCount;
+                    byteCount = byteCount << 2;
+                    FinalData = new List<byte[]>(blockCount);
+                    for (int i = 0; i < blockCount; i++)
+                    {
+                        byte[] buffer = new byte[byteCount];
+                        Buffer.BlockCopy(data, offset, buffer, 0, byteCount);
+                        offset += byteCount;
+                        FinalData.Add(buffer);
+                    }
                 }
             }
 
-
-            token = FileTools.ByteArrayToInt32(_data, ref offset);
-            if (token != 0)
-            {
-                CheckExcelFlag(token);
-
-                int byteCount = FileTools.ByteArrayToInt32(_data, ref offset);
-
-
-                if (byteCount != 0)        // Only seen in states.txt.cooked so far  -  Of note is that 
-                {
-                    int blockCount = FileTools.ByteArrayToInt32(_data, ref offset);
-                    byteCount = (byteCount << 2) * blockCount;//           the states file has an above data block as well.
-                    FinalBytes = new byte[byteCount];
-                    Buffer.BlockCopy(_data, offset, FinalBytes, 0, FinalBytes.Length);
-                    offset += FinalBytes.Length;
-                    //Debug.WriteLine(String.Format("Has final block .Length = {0}", byteCount));
-                }
-            }
-
-            IsGood = true;
-            return true;
+            // isgood if eof
+            return IsGood = offset == data.Length;
         }
 
         private void CheckExcelFlag(int flag)
         {
-            if (!CheckFlag(flag, 0x68657863))
+            if (!CheckFlag(flag, FileTokens.StartOfBlock))
             {
                 throw new Exception("Unexpected header flag!\nStructure ID: " + FileExcelHeader.StructureId);
             }
@@ -407,7 +393,7 @@ namespace Reanimator
             
             while (parsing)
             {
-                i = FileTools.ByteArrayToInt32(DataBlock, index + len);
+                i = FileTools.ByteArrayToInt32(IntPtrData, index + len);
                 len += sizeof(int) * 1;
                 
                 switch (i)
@@ -482,7 +468,7 @@ namespace Reanimator
             }
 
             byte[] buffer = new byte[len];
-            Array.Copy(DataBlock, index, buffer, 0, len);
+            Array.Copy(IntPtrData, index, buffer, 0, len);
             return Export.ArrayToCSV(buffer, Config.IntPtrCast, sizeof(int));
         }
 
@@ -492,7 +478,7 @@ namespace Reanimator
         }
 
         // todo: fix me
-        private void ParseMyshTables(byte[] data, ref int offset)
+        private void _ParseMyshTables(byte[] data, ref int offset)
         {
             byte[] endtoken = new byte[] { 0x64, 0x6E, 0x65, 0x68 };
             int check = 0;
@@ -647,10 +633,11 @@ namespace Reanimator
 
             #region Parse DataSet
             int row = 0;
+            int col = 1;
             foreach (DataRow dr in dataTable.Rows)
             {
                 object table = Activator.CreateInstance(tableType);
-                int col = 1;
+                col = 1;
                 foreach (FieldInfo fieldInfo in tableType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     // if it's private, there wont be a column - try for original or assign default
@@ -834,11 +821,10 @@ namespace Reanimator
                     col++;
                 }
 
-                // this is for the extra indice data that is stored in the items, missiles, monsters, objects, players tables.
-                if ((uint)(FileExcelHeader.StructureId) == 0x887988C4) // items, missiles, monsters, objects, players
+
+                if (AiData != null) // items, missiles, monsters, objects, players
                 {
-                    int lastCol = dataTable.Columns.Count - 1;
-                    String s = dr[lastCol] as String;
+                    String s = dr[col++] as String;
                     byte[] array = null;
 
                     if (!String.IsNullOrEmpty(s))
@@ -861,6 +847,30 @@ namespace Reanimator
                     }
                 }
 
+                if (FinalData != null)
+                {
+                    String s = dr[col++] as String;
+                    byte[] array = null;
+
+                    if (!String.IsNullOrEmpty(s))
+                    {
+                        array = Export.CSVtoArray(s, "hex", sizeof(int));
+                    }
+                    else
+                    {
+                        throw new Exception("Final Data cell can not be null");
+                    }
+
+                    if (FinalData.Count <= row)
+                    {
+                        FinalData.Add(array);
+                    }
+                    else
+                    {
+                        FinalData[row] = array;
+                    }
+                }
+
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, table);
                 row++;
             }
@@ -876,8 +886,7 @@ namespace Reanimator
             }
 
 
-            const uint idItems = 0x887988C4;
-            const uint idItemsTc = 0xE08E6C41;
+
 
             // Primary index
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
@@ -922,6 +931,7 @@ namespace Reanimator
                 }
 
                 int indexColumn = 0;
+                int nameColumn = 1;
                 int sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortId] - 1; // 1,2,3,4
                 string sortColumn = dc.ColumnName;
 
@@ -930,6 +940,11 @@ namespace Reanimator
                 if (dataTable.Columns.Contains("code"))
                 {
                     dataView.RowFilter = "code <> 0";
+                }
+                else if (dataTable.Columns[nameColumn].DataType == typeof(string))
+                {
+                    string nameCol = dataTable.Columns[nameColumn].ColumnName;
+                    dataView.RowFilter = nameCol + " <> ''";
                 }
 
                 _sortIndicies[sortId] = new int[dataView.Count];
@@ -955,6 +970,7 @@ namespace Reanimator
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex4));
 
 
+
             // Rcsh, Tysh, Mysh, Dneh
             if (_rcshValue != 0)
             {
@@ -973,28 +989,38 @@ namespace Reanimator
             }
 
 
-            // IntPtr data block
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
-            if (intByteCount > 0)
+            //if (FileExcelHeader.StructureId != idUnitTypes &&
+            //    FileExcelHeader.StructureId != idUintTypesTc)
             {
-                byte[] intByteBuffer = new byte[intByteCount];
-                Buffer.BlockCopy(intBytes, 0, intByteBuffer, 0, intByteCount);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteBuffer);
+                // IntPtr data block
+                // UnitTypes ignores this section
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
+                if (intByteCount > 0)
+                {
+                    byte[] intByteBuffer = new byte[intByteCount];
+                    Buffer.BlockCopy(intBytes, 0, intByteBuffer, 0, intByteCount);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteBuffer);
+                }
             }
 
 
             // Final data block
-            int blockCount = FinalBytes != null? dataTable.Rows.Count : 0;
-            int byteCount = FinalBytes != null ? FinalBytes.Length : 0;
-            byteCount = byteCount > 0 ? (byteCount >> 2) / blockCount : 0;
+            int blockCount = FinalData != null? dataTable.Rows.Count : 0;
+            int blockSize = FinalData != null ? FinalData[0].Length : 0;
+            int bshiftCount = blockSize > 0 ? (blockSize >> 2) : 0;
 
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, byteCount);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, bshiftCount);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, blockCount);
-            if (byteCount > 0)
+            if (bshiftCount > 0)
             {
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FinalBytes);
+                byte[] fbBuffer = new byte[blockCount * blockSize];
+                for (int i = 0; i < blockCount; i++)
+                {
+                    Buffer.BlockCopy(FinalData[i], 0, fbBuffer, i * blockSize, blockSize);
+                }
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, fbBuffer);
             }
 
 

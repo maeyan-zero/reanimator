@@ -65,6 +65,7 @@
             this.patchToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tradeItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.convertTCv4FilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,7 +92,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.convertTCv4FilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSinglePlayerFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -365,6 +366,7 @@
             this.tradeItemsToolStripMenuItem,
             this.searchTablesToolStripMenuItem,
             this.convertTCv4FilesToolStripMenuItem,
+            this.saveSinglePlayerFilesToolStripMenuItem,
             this.toolStripSeparator9,
             this.optionsToolStripMenuItem});
             this.toolsMenu.Name = "toolsMenu";
@@ -413,6 +415,14 @@
             this.searchTablesToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.searchTablesToolStripMenuItem.Text = "&Search Tables";
             this.searchTablesToolStripMenuItem.Click += new System.EventHandler(this._SearchTablesToolStripMenuItem_Click);
+            // 
+            // convertTCv4FilesToolStripMenuItem
+            // 
+            this.convertTCv4FilesToolStripMenuItem.Name = "convertTCv4FilesToolStripMenuItem";
+            this.convertTCv4FilesToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.convertTCv4FilesToolStripMenuItem.Text = "Convert Test Center Files";
+            this.convertTCv4FilesToolStripMenuItem.Visible = false;
+            this.convertTCv4FilesToolStripMenuItem.Click += new System.EventHandler(this._ConvertTestCenterFilesToolStripMenuItem_Click);
             // 
             // toolStripSeparator9
             // 
@@ -622,13 +632,12 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // convertTCv4FilesToolStripMenuItem
+            // saveSinglePlayerFilesToolStripMenuItem
             // 
-            this.convertTCv4FilesToolStripMenuItem.Name = "convertTCv4FilesToolStripMenuItem";
-            this.convertTCv4FilesToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.convertTCv4FilesToolStripMenuItem.Text = "Convert Test Center Files";
-            this.convertTCv4FilesToolStripMenuItem.Visible = false;
-            this.convertTCv4FilesToolStripMenuItem.Click += new System.EventHandler(this._ConvertTCv4FilesToolStripMenuItem_Click);
+            this.saveSinglePlayerFilesToolStripMenuItem.Name = "saveSinglePlayerFilesToolStripMenuItem";
+            this.saveSinglePlayerFilesToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.saveSinglePlayerFilesToolStripMenuItem.Text = "Save Single Player Files";
+            this.saveSinglePlayerFilesToolStripMenuItem.Click += new System.EventHandler(this.saveSinglePlayerFilesToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
@@ -719,6 +728,7 @@
         private System.Windows.Forms.ToolStripMenuItem characterFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem patchToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem convertTCv4FilesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveSinglePlayerFilesToolStripMenuItem;
     }
 }
 

@@ -13,7 +13,7 @@ namespace Reanimator
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct ExcelHeader
         {
-            public Int32 StructureId;   // This is the id used to determine what structure to use to read the table block.
+            public UInt32 StructureId;  // This is the id used to determine what structure to use to read the table block.
             public Int32 Unknown321;    // This is how the game reads this in...
             public Int32 Unknown322;    // What they do I don't know, lol.
             public Int16 Unknown161;
@@ -187,6 +187,7 @@ namespace Reanimator
 
         public abstract class ColumnTypeKeys
         {
+            public const String IsFinalData = "IsFinalData";
             public const String IsIndiceData = "IsIndiceData";
             public const String IsStringOffset = "IsStringOffset";
             public const String IsStringIndex = "IsStringIndex";

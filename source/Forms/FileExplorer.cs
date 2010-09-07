@@ -147,8 +147,9 @@ namespace Reanimator.Forms
                     {
                         indexData = File.ReadAllBytes(idxFile);
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
+                        ExceptionLogger.LogException(ex, "LoadIndexFiles", true);
                         // todo: check .dat access when HGL is open as well
                         //FileStream fs = new FileStream(idxFile, FileMode.Open, FileAccess.Read, FileShare.Read);
                         String fileNameCpy = idxFile + "cpy";
@@ -434,6 +435,7 @@ namespace Reanimator.Forms
                 }
                 catch (Exception ex)
                 {
+                    ExceptionLogger.LogException(ex, "_FilesTreeView_AfterSelect", true);
                     // they moved the file or something weird
                     // todo: remove me from tree if moved exception?
                     return;
