@@ -860,7 +860,7 @@ namespace Reanimator
             }
         }
 
-        private void _ConvertTCv4FilesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void _ConvertTestCenterFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Select Dump location
             FolderBrowserDialog folderBrower = new FolderBrowserDialog();
@@ -874,7 +874,7 @@ namespace Reanimator
             cacheTableProgress.ShowDialog();
 
             // generate all tables
-            ProgressForm generateTableProgress = new ProgressForm(_GenerateExcelFiles, folderBrower.SelectedPath);
+            ProgressForm generateTableProgress = new ProgressForm(_ConvertTestCenterFiles, folderBrower.SelectedPath);
             generateTableProgress.SetLoadingText("Generating all converted tables, this will take a while.");
             generateTableProgress.SetStyle(ProgressBarStyle.Marquee);
             generateTableProgress.ShowDialog();
@@ -882,7 +882,33 @@ namespace Reanimator
             MessageBox.Show("Complete");
         }
 
-        private void _GenerateExcelFiles(ProgressForm progress, object obj)
+        private void _SaveSinglePlayerFiles(ProgressForm progress, object obj)
+        {
+            string savePath = (string)obj;
+
+            foreach (DataTable spDataTable in _tableDataSet.XlsDataSet.Tables)
+            {
+                if (spDataTable.TableName.Contains("_TCv4_")) continue;
+                if (spDataTable.TableName.Contains("Strings_")) continue;
+
+                progress.SetCurrentItemText("Current table... " + spDataTable.TableName);
+
+                ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spDataTable.TableName);
+
+                byte[] buffer = spExcelFile.GenerateFile(spDataTable);
+                string path = Path.Combine(savePath, spExcelFile.FilePath);
+                string filename = spExcelFile.FileName + "." + spExcelFile.FileExtension;
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                File.WriteAllBytes(path + filename, buffer);
+            }
+        }
+
+        private void _ConvertTestCenterFiles(ProgressForm progress, object obj)
         {
             string savePath = (string)obj;
 
@@ -898,7 +924,6 @@ namespace Reanimator
                 ExcelFile tcExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(tcDataTable.TableName);
                 ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spVersion);
 
-                spExcelFile.DataBlock = tcExcelFile.DataBlock;
                 spExcelFile.MyshBytes = tcExcelFile.MyshBytes;
                 spExcelFile.FinalBytes = tcExcelFile.FinalBytes;
 
@@ -923,6 +948,28 @@ namespace Reanimator
                 if (dataFile.IsStringsFile) continue;
                 _tableDataSet.LoadTable(progress, dataFile);
             }
+        }
+
+        private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Select Dump location
+            FolderBrowserDialog folderBrower = new FolderBrowserDialog();
+            folderBrower.SelectedPath = Config.HglDataDir;
+            DialogResult dialogResult = folderBrower.ShowDialog();
+            if (dialogResult == DialogResult.Cancel) return;
+
+            // cache all tables
+            ProgressForm cacheTableProgress = new ProgressForm(_LoadAllExcelTables, null);
+            cacheTableProgress.SetLoadingText("Caching all tables.");
+            cacheTableProgress.ShowDialog();
+
+            // generate all tables
+            ProgressForm generateTableProgress = new ProgressForm(_SaveSinglePlayerFiles, folderBrower.SelectedPath);
+            generateTableProgress.SetLoadingText("Saving all single player files, this will take a while.");
+            generateTableProgress.SetStyle(ProgressBarStyle.Marquee);
+            generateTableProgress.ShowDialog();
+
+            MessageBox.Show("Complete");
         }
     }
 }

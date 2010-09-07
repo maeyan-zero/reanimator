@@ -9,7 +9,7 @@ namespace Reanimator.Forms
     {
         TableDataSet _tableDataSet;
         Modification _modification;
-        List<Modification.Package> _package;
+        //List<Modification.Package> _package;
         
         public ModificationForm(TableDataSet tableDataset)
         {

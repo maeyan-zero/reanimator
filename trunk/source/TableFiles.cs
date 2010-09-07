@@ -469,6 +469,11 @@ namespace Reanimator
                 // do we want to even parse it?
                 if (mapItem.IsMythos || mapItem.IsEmpty || mapItem.IsTCv4) continue;
 
+                if ((String)de.Key == "SOUNDS")
+                {
+                    int io = 0;
+                    io = io + 9;
+                }
 
                 String stringId = de.Key as String;
                 String fileName = mapItem.NameReplace ?? stringId;
