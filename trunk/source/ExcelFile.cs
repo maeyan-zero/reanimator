@@ -405,9 +405,11 @@ namespace Reanimator
                     case 3:
                     case 4:
                     case 5://tcv4 skills
+                    case 6://skills
                     case 14:
                     case 26:
                     case 86://tcv4 skills
+                    case 98://skills
                     case 516:
                     case 527:
                         
@@ -429,6 +431,7 @@ namespace Reanimator
                     case 426: // only on (8)healthpack and (9)powerpack. pick up condition
                     case 437: // only used in skills tabl
                     case 448:
+                    case 459: // music condition
                     case 470:
                     case 481:
                     case 538: // affixes
@@ -457,7 +460,7 @@ namespace Reanimator
                         //len += sizeof(int) * 6;
                         break;
                     case 0:
-                    case 6: // appears twice in skills. weird. it acts as a terminator
+                    //case 6: // appears twice in skills. weird. it acts as a terminator
                         parsing = false;
                         break;
                     default:
@@ -935,23 +938,37 @@ namespace Reanimator
                 int sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortId] - 1; // 1,2,3,4
                 string sortColumn = dc.ColumnName;
 
-                DataView dataView = dataTable.DefaultView;
-                dataView.Sort = sortColumn;
-                if (dataTable.Columns.Contains("code"))
+                // the table is duplicated because we want to modify it below
+                DataTable sortTable = dataTable.Copy();
+                DataView dataView = sortTable.DefaultView;
+
+                if (dc.DataType != typeof(string))
                 {
-                    dataView.RowFilter = "code <> 0";
+                    dataView.RowFilter = sortColumn + " <> -1";
+                    if (dataTable.Columns.Contains("code"))
+                    {
+                        dataView.RowFilter += " AND code <> 0";
+                    }
                 }
-                else if (dataTable.Columns[nameColumn].DataType == typeof(string))
+                else if (dataTable.Columns[sortColumn].DataType == typeof(string))
                 {
-                    string nameCol = dataTable.Columns[nameColumn].ColumnName;
+                    string nameCol = dataTable.Columns[sortColumn].ColumnName;
                     dataView.RowFilter = nameCol + " <> ''";
+
+                    foreach (DataRow dr in sortTable.Rows)
+                    {
+                        dr[sortColumn] = ((string)dr[sortColumn]).Replace("-", "98"); // precedence hack 
+                        dr[sortColumn] = ((string)dr[sortColumn]).Replace("_", "99"); // precedence hack 
+                    }
                 }
 
+                dataView.Sort = sortColumn;
                 _sortIndicies[sortId] = new int[dataView.Count];
                 for (int i = 0; i < dataView.Count; i++)
                 {
                     _sortIndicies[sortId][i] = (int)dataView[i][indexColumn];
                 }
+
             }
 
 
@@ -987,6 +1004,14 @@ namespace Reanimator
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenDneh);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dnehValue);
             }
+
+
+            // todo: fix lazy bug fix below.
+            // when intptr types exists but none are defined, a 1 byte array is created
+            // i doubt its a problem, but for the sake of completeness and debugging
+            // this fix is included
+            if (intByteCount == 1) intByteCount = 0;
+
 
 
             //if (FileExcelHeader.StructureId != idUnitTypes &&

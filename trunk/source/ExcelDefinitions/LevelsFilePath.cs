@@ -12,8 +12,8 @@ namespace Reanimator.ExcelDefinitions
          reverse, ie the four digits are reverse what is displayed. entry #9 is first, but 
          it's SF01, yet if they're reversed, 10FS. #34 is 2nd CR01, or 10RC.
          On another note, for some reason only the first 3 digits of code are displayed*/
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string code;
+        //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
+        public Int32 code;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string path;
         public Int32 localisedFolders0;

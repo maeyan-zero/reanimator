@@ -36,7 +36,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 dexterity;
         public Int32 strength;
         public Int32 statPoints;
-        [ExcelOutput(IsIntOffset = true)]
         public Int32 itemLevel;
     }
 }

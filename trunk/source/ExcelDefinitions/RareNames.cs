@@ -15,8 +15,8 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBool = true)]
         public Int32 suffix;//bool
         public Int32 level;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
-        public string code;
+        //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)] // changed to int.. problem reading last character
+        public Int32 code;
         public Int32 types1;
         public Int32 types2;
         public Int32 types3;
