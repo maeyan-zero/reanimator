@@ -9,7 +9,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string name;
         [ExcelOutput(SortId = 2)]

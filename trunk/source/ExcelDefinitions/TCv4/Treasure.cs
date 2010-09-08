@@ -39,7 +39,6 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] unknown04;
         public float noDrop;
-        [ExcelOutput(Exclude = true)]
         public Int32 mustDrop_tcv4;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 levelBoost;

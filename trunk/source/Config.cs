@@ -102,5 +102,11 @@ namespace Reanimator
             get { return GetValue("IntPtrCast", "hex"); }
             set { SetValue("IntPtrCast", value); }
         }
+
+        public static bool GenerateRelations
+        {
+            get { return GetValue("GenerateRelations", true); }
+            set { SetValue("GenerateRelations", value); }
+        }
     }
 }

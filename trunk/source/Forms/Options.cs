@@ -36,6 +36,7 @@ namespace Reanimator.Forms
             gameClientPath_TextBox.Text = Config.GameClientPath;
             scriptDirText.Text = Config.ScriptDir;
             intPtrTypeCombo.SelectedItem = Config.IntPtrCast;
+            relationsCheck.Checked = Config.GenerateRelations;
         }
 
         private void gameClientPath_Button_Click(object sender, EventArgs e)
@@ -71,6 +72,11 @@ namespace Reanimator.Forms
         private void intPtrTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             Config.IntPtrCast = intPtrTypeCombo.Text;
+        }
+
+        private void relationsCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.GenerateRelations = relationsCheck.Checked;
         }
     }
 }

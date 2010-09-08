@@ -224,13 +224,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 effects;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined46;
-        [ExcelOutput(Exclude = true)]
         public Int32 ADSR_tcv4;
-        [ExcelOutput(Exclude = true)]
         public Int32 undefined_TCV4_2;//these may not even be the new columns, but all of these undefined columns seem to be zero.
-        [ExcelOutput(Exclude = true)]
         public Int32 undefined_TCV4_3;
-        [ExcelOutput(Exclude = true)]
         public Int32 undefined_TCV4_4;
         public Int32 undefined46d;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]

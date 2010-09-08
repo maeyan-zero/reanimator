@@ -44,6 +44,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label2 = new System.Windows.Forms.Label();
             this.intPtrTypeCombo = new System.Windows.Forms.ComboBox();
+            this.relationsCheck = new System.Windows.Forms.CheckBox();
             this.pathSettings_GroupBox.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -181,6 +182,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.relationsCheck);
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.intPtrTypeCombo);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -194,7 +196,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 23);
+            this.label2.Location = new System.Drawing.Point(24, 23);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(94, 13);
             this.label2.TabIndex = 1;
@@ -212,6 +214,18 @@
             this.intPtrTypeCombo.Size = new System.Drawing.Size(121, 21);
             this.intPtrTypeCombo.TabIndex = 0;
             this.intPtrTypeCombo.SelectedIndexChanged += new System.EventHandler(this.intPtrTypeCombo_SelectedIndexChanged);
+            // 
+            // relationsCheck
+            // 
+            this.relationsCheck.AutoSize = true;
+            this.relationsCheck.Location = new System.Drawing.Point(21, 47);
+            this.relationsCheck.Name = "relationsCheck";
+            this.relationsCheck.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.relationsCheck.Size = new System.Drawing.Size(117, 17);
+            this.relationsCheck.TabIndex = 2;
+            this.relationsCheck.Text = "Generate Relations";
+            this.relationsCheck.UseVisualStyleBackColor = true;
+            this.relationsCheck.CheckedChanged += new System.EventHandler(this.relationsCheck_CheckedChanged);
             // 
             // Options
             // 
@@ -259,6 +273,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox intPtrTypeCombo;
+        private System.Windows.Forms.CheckBox relationsCheck;
 
     }
 }

@@ -43,13 +43,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32[] levelsPreLoadedWith;
         public Int32 startingItemsTreasureClass;//idx
         public Int32 removeStartingItemsOnComplete;
-        [ExcelOutput(SortId = 3)]
+        [ExcelOutput(SortId = 3, RequiresDefault = true)]
         public Int32 offerReward;//idx
         public Int32 castGiver;//idx
         public Int32 levelStoryQuestStartsIn;//idx
         public Int32 castRewarder;//idx
         public Int32 levelRewarderNpc;//idx
-        [ExcelOutput(SortId = 4)]
+        [ExcelOutput(SortId = 4, RequiresDefault = true)]
         public Int32 giverItem;//idx
         Int32 giverItemMonster;//idx
         Int32 giverItemLevel;//idx

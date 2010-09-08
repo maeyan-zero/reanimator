@@ -52,7 +52,6 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBool = true)]
         public Int32 useOverrideStats;
         public Int32 PlayerVsMonsterScalingIndex;
-        [ExcelOutput(Exclude = true)]
         public Int32 doNotUseEffectChanceStat_tcv4;
         public Int32 attackStat;//idx
         public Int32 attackLocalStat;//idx

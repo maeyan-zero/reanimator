@@ -10,11 +10,10 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortId = 2, RequiresDefault = true)]
         public Int32 code;
         public Int32 undefined1;
         public Int32 rowCollection;
@@ -23,19 +22,19 @@ namespace Reanimator.ExcelDefinitions
         public Int32 debug;
         public Int32 randomAppearanceGroups1;
         public Int32 randomAppearanceGroups2;
-        Int32 randomAppearanceGroups3;
-        Int32 randomAppearanceGroups4;
-        Int32 randomAppearanceGroups5;
-        Int32 randomAppearanceGroups6;
-        Int32 randomAppearanceGroups7;
-        Int32 randomAppearanceGroups8;
-        Int32 randomAppearanceGroups9;
-        Int32 randomAppearanceGroups10;
+        public Int32 randomAppearanceGroups3;
+        public Int32 randomAppearanceGroups4;
+        public Int32 randomAppearanceGroups5;
+        public Int32 randomAppearanceGroups6;
+        public Int32 randomAppearanceGroups7;
+        public Int32 randomAppearanceGroups8;
+        public Int32 randomAppearanceGroups9;
+        public Int32 randomAppearanceGroups10;
         public Int32 layerSet1;
         public Int32 layerSet2;
-        Int32 layerSet3;
-        Int32 layerSet4;
-        Int32 layerSet5;
+        public Int32 layerSet3;
+        public Int32 layerSet4;
+        public Int32 layerSet5;
         public Int32 modelGroup;//idx;
         public Int32 textureSetGroup;//idx;
         public Int32 blendOp;//idx;

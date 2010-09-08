@@ -8,8 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class BackGroundSounds2DRow
     {
         ExcelFile.TableHeader header;
-
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public float undefined1;

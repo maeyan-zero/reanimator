@@ -45,12 +45,7 @@ namespace Reanimator
             public Type IntOffsetType { get; set; }
             public int IntOffsetOrder { get; set; }
             public String[] FieldNames { get; set; }
-            //public String[] FieldNames { get; set; }
-            //public int DefaultIndex { get; set; }
-
-
-            public bool Exclude { get; set; }
-
+            
             public bool IsStringId { get; set; }
             public bool IsTableIndex { get; set; }
             public String TableStringId { get; set; }
@@ -58,6 +53,8 @@ namespace Reanimator
             public String Column { get; set; }
 
             public int SortId { get; set; }
+            public bool RequiresDefault { get; set; }
+            public bool IsDistinctSort { get; set; }
 
             public bool IsBitmask { get; set; }
             public UInt32 DefaultBitmask { get; set; }
@@ -200,6 +197,8 @@ namespace Reanimator
             public const String IntOffsetType = "IntOffsetType";
             public const String IntOffsetOrder = "IntOffsetOrder";
             public const String SortId = "SortId";
+            public const String RequiresDefault = "RequiresDefault";
+            public const String IsDistinctSort = "IsDistinctSort";
         }
     }
 }

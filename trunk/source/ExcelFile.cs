@@ -35,7 +35,6 @@ namespace Reanimator
 
         // these are only public to pass them through the conversion
         // eventually better methods will be implemented
-        public byte[] FinalBytes { get; set; }
         public byte[] MyshBytes { get; set; }
 
 
@@ -398,7 +397,8 @@ namespace Reanimator
                 
                 switch (i)
                 {
-                    case 2:
+                    case 2: //2,x,0
+                    case 98://skills//98,x,0
                         len += sizeof(int) * 2;
                         break;
                     case 1:
@@ -408,8 +408,8 @@ namespace Reanimator
                     case 6://skills
                     case 14:
                     case 26:
+                    case 50: //skills. 50,0
                     case 86://tcv4 skills
-                    case 98://skills
                     case 516:
                     case 527:
                         
@@ -932,41 +932,55 @@ namespace Reanimator
                 {
                     continue;
                 }
-
-                int indexColumn = 0;
-                int nameColumn = 1;
+                
                 int sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortId] - 1; // 1,2,3,4
                 string sortColumn = dc.ColumnName;
-
-                // the table is duplicated because we want to modify it below
+                string filter = string.Empty;
+                int indexCol = 0;
+                
                 DataTable sortTable = dataTable.Copy();
                 DataView dataView = sortTable.DefaultView;
+                dataView.Sort = sortColumn;
+                int defaultRow = (int)dataView[0][0];
 
                 if (dc.DataType != typeof(string))
                 {
-                    dataView.RowFilter = sortColumn + " <> -1";
+                    filter = sortColumn + " <> -1";
                     if (dataTable.Columns.Contains("code"))
                     {
-                        dataView.RowFilter += " AND code <> 0";
+                        filter = "(" + filter + " AND code <> 0)";
                     }
                 }
-                else if (dataTable.Columns[sortColumn].DataType == typeof(string))
+                else
                 {
-                    string nameCol = dataTable.Columns[sortColumn].ColumnName;
-                    dataView.RowFilter = nameCol + " <> ''";
+                    filter = sortColumn + " <> ''";
 
+                    // precedence hack 
                     foreach (DataRow dr in sortTable.Rows)
                     {
-                        dr[sortColumn] = ((string)dr[sortColumn]).Replace("-", "98"); // precedence hack 
-                        dr[sortColumn] = ((string)dr[sortColumn]).Replace("_", "99"); // precedence hack 
+                        dr[sortColumn] = ((string)dr[sortColumn]).Replace("-", "98");
+                        dr[sortColumn] = ((string)dr[sortColumn]).Replace("_", "99");
                     }
                 }
 
+                if (dc.ExtendedProperties.Contains(ColumnTypeKeys.RequiresDefault))
+                {
+                    filter += " OR Index = " + defaultRow;
+                }
+
+                dataView.RowFilter = filter;
                 dataView.Sort = sortColumn;
+
+
+                if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsDistinctSort))
+                {
+                    dataView.RowFilter = SelectDistinct(sortTable, new string[] { sortColumn });
+                }
+
                 _sortIndicies[sortId] = new int[dataView.Count];
                 for (int i = 0; i < dataView.Count; i++)
                 {
-                    _sortIndicies[sortId][i] = (int)dataView[i][indexColumn];
+                    _sortIndicies[sortId][i] = (int)dataView[i][indexCol];
                 }
 
             }
@@ -1131,6 +1145,75 @@ namespace Reanimator
             }
 
             return null;
+        }
+
+        private static string SelectDistinct(DataTable SourceTable, params string[] FieldNames)
+        {
+            object[] lastValues;
+            string filter = string.Empty;
+
+            if (FieldNames == null || FieldNames.Length == 0)
+                throw new ArgumentNullException("FieldNames");
+
+            lastValues = new object[FieldNames.Length];
+
+            DataRow[] orderedRows = SourceTable.Select("", string.Join(", ", FieldNames));
+
+            foreach (DataRow row in orderedRows)
+            {
+                if (!fieldValuesAreEqual(lastValues, row, FieldNames))
+                {
+                    if ((int)row[FieldNames[0]] == -1)
+                        continue;
+
+                    if (filter == string.Empty)
+                    {
+                        filter = "(";
+                    }
+                    else
+                    {
+                        filter += " OR ";
+                    }
+
+                    filter += "Index = " + row[0];
+
+                    setLastValues(lastValues, row, FieldNames);
+                }
+            }
+
+            filter += ")";
+
+            return filter;
+        }
+
+        private static bool fieldValuesAreEqual(object[] lastValues, DataRow currentRow, string[] fieldNames)
+        {
+            bool areEqual = true;
+
+            for (int i = 0; i < fieldNames.Length; i++)
+            {
+                if (lastValues[i] == null || !lastValues[i].Equals(currentRow[fieldNames[i]]))
+                {
+                    areEqual = false;
+                    break;
+                }
+            }
+
+            return areEqual;
+        }
+
+        private static DataRow createRowClone(DataRow sourceRow, DataRow newRow, string[] fieldNames)
+        {
+            foreach (string field in fieldNames)
+                newRow[field] = sourceRow[field];
+
+            return newRow;
+        }
+
+        private static void setLastValues(object[] lastValues, DataRow sourceRow, string[] fieldNames)
+        {
+            for (int i = 0; i < fieldNames.Length; i++)
+                lastValues[i] = sourceRow[fieldNames[i]];
         }
 
         // todo: FIXME

@@ -81,14 +81,12 @@ namespace Reanimator.ExcelDefinitions
         byte[] undefined9;
         public Int32 minTicksBetweenDbCommand;
         public Int32 databaseUnitField;
-        [ExcelOutput(Exclude = true)]
         public Int32 databaseOperationContext_tcv4;
         public Int32 specFunc;
         public Int32 sfStat1;
         public Int32 sfStat2;
         public Int32 sfStat3;
         public Int32 sfStat4;
-        [ExcelOutput(Exclude = true)]
         public Int32 sfStat5_tcv4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] undefined10;
@@ -103,9 +101,7 @@ namespace Reanimator.ExcelDefinitions
         public string versionFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] undefined12;
-        [ExcelOutput(Exclude = true)]
         public Int32 sendToOthersStat_tcv4;
-        [ExcelOutput(Exclude = true)]
         public Int32 undefined_TCV4_4;
 
         [FlagsAttribute]

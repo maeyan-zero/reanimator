@@ -8,8 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class DisplayRow
     {
         ExcelFile.TableHeader header;
-
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string key;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
