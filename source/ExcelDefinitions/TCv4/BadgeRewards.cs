@@ -18,15 +18,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 item;//idx
         public Int32 dontApplyIfPlayerHasRewardItemF;//idx, and yes, it finishes just like that.
         public Int32 state;//idx
-        [ExcelOutput(Exclude = true)]
         public Int32 minUnitVersion_tcv4;
-        [ExcelOutput(Exclude = true)]
         public Int32 unitTypeLimiter_tcv4;
-        [ExcelOutput(Exclude = true)]
         public Int32 unitTypeLimitPerPlayer_tcv4;
-        [ExcelOutput(Exclude = true)]
         public Int32 forceOnRespec_tcv4;
-        [ExcelOutput(Exclude = true, IsIntOffset = true)]
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 filter_tcv4;
     }
 }

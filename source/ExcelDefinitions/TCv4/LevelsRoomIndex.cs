@@ -58,7 +58,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 runSpawnClassXTimes4_tcv4;
         public Int32 runSpawnClassXTimes5_tcv4;
         public float nodeBuffer;
-        [ExcelOutput(Exclude = true)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined1;
         public Int32 undefined_tcv4_1;

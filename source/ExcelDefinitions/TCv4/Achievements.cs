@@ -79,7 +79,6 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST")]
         public Int32 questTaskComplete;                                                         // 23       0x00000000000000C4      XLS_ReadIndex,0xA5
         public Int32 randomQuests;                                                              // 24       0x00000000000000C8      XLS_ReadInt32
-        [ExcelOutput(Exclude = true)]
         public Int32 craftingFailures_tcv4;
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster;                                                                   // 16       0x00000000000000CC      XLS_ReadIndex,0x73
@@ -116,12 +115,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 rewardAchievementPoints;                                                   // 25       0x00000000000000E8      XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x65)]
         Int32 rewardTreasureClass;//idx                                                         // 26       0x00000000000000EC      XLS_ReadIndex,0x65
-        [ExcelOutput(Exclude = true)]
         public Int32 rewardEmote_tcv4;
         public Int32 rewardXP;                                                                  // 27       0x00000000000000F0      XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 rewardSkill;
-        [ExcelOutput(Exclude = true)]
         public Int32 rewardTitle_tcv4;
         [ExcelOutput(IsIntOffset = true)]
         Int32 rewardScript;                                                                     // 29       0x00000000000000F8      XLS_ReadIntPtr

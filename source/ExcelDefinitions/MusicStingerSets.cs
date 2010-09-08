@@ -8,11 +8,9 @@ namespace Reanimator.ExcelDefinitions
     class MusicStingerSetsRow
     {
         ExcelFile.TableHeader header;
-
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//empty entry is first in index.
-
         public Int32 musicRef;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined1;

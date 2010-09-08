@@ -8,16 +8,13 @@ namespace Reanimator.ExcelDefinitions
     class MusicConditionsRow
     {
         ExcelFile.TableHeader header;
-
         public Int32 musicRef;//idx
         public Int32 unknownA;
         public Int32 unknownB;
         public Int32 unknownC;
-
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//seems to be by name and numerical value. CG_1-5_* is before CG_11-15_* in the index, but not in the table data.
-
         [ExcelOutput(IsIntOffset = true)]
         public Int32 condition1;//intptr
         public Int32 percentChance1;

@@ -56,11 +56,8 @@ namespace Reanimator.ExcelDefinitions
         public string attachBone;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
         Int32[] undefined6;
-        [ExcelOutput(Exclude = true)]
         public Int32 undefined_tcv4_1;
-        [ExcelOutput(Exclude = true)]
         public Int32 undefined_tcv4_2;
-        [ExcelOutput(Exclude = true)]
         public Int32 undefined_tcv4_3;
         [ExcelOutput(IsBool = true)]
         public Int32 hasBoneIndex;//bool

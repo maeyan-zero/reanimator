@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class UnitTypesRow
     {
         ExcelFile.TableHeader header;
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String type;
         [ExcelOutput(SortId = 2)]

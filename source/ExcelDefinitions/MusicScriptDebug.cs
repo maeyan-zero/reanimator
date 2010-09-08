@@ -8,11 +8,9 @@ namespace Reanimator.ExcelDefinitions
     class MusicScriptDebugRow
     {
         ExcelFile.TableHeader header;
-
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-
         [ExcelOutput(IsIntOffset = true)]
         public Int32 script;//intptr
     }

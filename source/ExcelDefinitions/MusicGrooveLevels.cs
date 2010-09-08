@@ -9,10 +9,9 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//seems to be by name, but with an empty entry first.
-
         public Int32 grooveLevelType;//idx
         public Int32 musicRef;//idx
         public Int32 trackNumber;

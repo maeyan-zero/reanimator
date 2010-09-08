@@ -8,11 +8,9 @@ namespace Reanimator.ExcelDefinitions
     class SoundVideoCasetsRow
     {
         ExcelFile.TableHeader header;
-
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortId = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-
         public Int32 vca1;//idx
         public Int32 vca2;//idx
         public Int32 vca3;//idx

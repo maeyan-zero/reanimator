@@ -123,6 +123,14 @@ namespace Reanimator
                     if (excelOutputAttribute.SortId > 0)
                     {
                         dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortId, excelOutputAttribute.SortId);
+                        if (excelOutputAttribute.RequiresDefault)
+                        {
+                            dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.RequiresDefault, true);
+                        }
+                        if (excelOutputAttribute.IsDistinctSort)
+                        {
+                            dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsDistinctSort, true);
+                        }
                     }
 
                     if (excelOutputAttribute.IsStringIndex)
@@ -267,7 +275,11 @@ namespace Reanimator
 
             #endregion
 
-            //_GenerateRelations(progress, dataFile);
+            if (Config.GenerateRelations)
+            {
+                _GenerateRelations(progress, dataFile);
+            }
+
             return mainDataTable;
         }
 
