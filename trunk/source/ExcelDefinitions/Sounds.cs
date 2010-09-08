@@ -34,7 +34,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName1;
         public Int32 undefined6a;
         public Int32 undefined6b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined6c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined6d;//information
@@ -48,7 +47,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName2;
         public Int32 undefined8a;
         public Int32 undefined8b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined8c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined8d;//information
@@ -62,7 +60,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName3;
         public Int32 undefined10a;
         public Int32 undefined10b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined10c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined10d;//information
@@ -76,7 +73,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName4;
         public Int32 undefined12a;
         public Int32 undefined12b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined12c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined12d;//information
@@ -90,7 +86,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName5;
         public Int32 undefined14a;
         public Int32 undefined14b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined14c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined14d;//information
@@ -104,7 +99,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName6;
         public Int32 undefined16a;
         public Int32 undefined16b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined16c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined16d;//information
@@ -118,7 +112,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName7;
         public Int32 undefined18a;
         public Int32 undefined18b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined18c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined18d;//information
@@ -132,7 +125,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName8;
         public Int32 undefined20a;
         public Int32 undefined20b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined20c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined20d;//information
@@ -146,7 +138,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName9;
         public Int32 undefined22a;
         public Int32 undefined22b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined22c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined22d;//information
@@ -160,7 +151,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName10;
         public Int32 undefined24a;
         public Int32 undefined24b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined24c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined24d;//information
@@ -174,7 +164,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName11;
         public Int32 undefined26a;
         public Int32 undefined26b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined26c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined26d;//information
@@ -188,7 +177,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName12;
         public Int32 undefined28a;
         public Int32 undefined28b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined28c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined28d;//information
@@ -202,7 +190,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName13;
         public Int32 undefined30a;
         public Int32 undefined30b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined30c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined30d;//information
@@ -216,7 +203,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 fileName14;
         public Int32 undefined32a;
         public Int32 undefined32b;
-        [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined32c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined32d;//information
