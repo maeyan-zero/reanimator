@@ -46,6 +46,7 @@ namespace Reanimator.Forms
             _itemFunctions.LoadCharacterValues(_heroUnit);
             //_itemFunctions.GenerateUnitNameStrings();
             //_itemFunctions.PopulateItems(ref _heroUnit);
+            _wrapper = new UnitWrapper(_dataSet, heroUnit);
 
             InitializeComponent();
         }
@@ -956,7 +957,7 @@ namespace Reanimator.Forms
 
         private void palladium_numericUpDown_ValueChanged(object sender, EventArgs e)
         {
-            UnitHelpFunctions.SetSimpleValue(_heroUnit, "gold", (int)nud_palladium.Value);
+            _wrapper.Values.Palladium = (int)nud_palladium.Value;
         }
 
         private void skillPoints_numericUpDown_ValueChanged(object sender, EventArgs e)

@@ -18,6 +18,7 @@ namespace Reanimator.Forms.ItemTransfer
         UnitHelpFunctions _itemHelpFunctions;
         DataTable _items;
         bool _isMale = false;
+        PreviewManager _previewManager;
 
         string _characterPath1;
         string _characterPath2;
@@ -25,16 +26,16 @@ namespace Reanimator.Forms.ItemTransfer
         //enables some additional functions when debugging
         bool _debug = false;
 #if DEBUG
-        _debug = true;
+        //_debug = true;
 #endif
         //specifies wether a character is directly loaded as soon as he gets selected via the combobox
         bool _enableItemPreview = true;
         //specifies wether palladium trading is enabled
-        bool _enablePalladiumTrading = true;
+        //bool _enablePalladiumTrading = true;
         //specifies wether a characterbackup should be created before saving  a character
         bool _backupCharacters = true;
         //specifies wether item icons are loaded to display the item
-        bool _displayItemIcons = false;
+        bool _displayItemIcons = true;
         //specifies wether the item name and quantity is displayed
         bool _displayNamesAndQuantity = true;
 
@@ -58,11 +59,6 @@ namespace Reanimator.Forms.ItemTransfer
 
         ItemPanel _eventSender;
 
-        /// <summary>
-        /// Use this constructor when starting the item transfer window from within Reanimator (additional item infos)
-        /// </summary>
-        /// <param name="dataSet">The dataset to use</param>
-        /// <param name="tableFiles">The exceltables to use</param>
         public ItemTransferForm(TableDataSet dataSet)
         {
             InitializeComponent();
@@ -73,6 +69,8 @@ namespace Reanimator.Forms.ItemTransfer
             //preload the tables
             _items = _dataSet.GetExcelTableFromStringId("ITEMS");
             _dataSet.GetExcelTableFromStringId("AFFIXES");
+
+            _previewManager = new PreviewManager();
 
             //if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "trading.xml")))
             //{
@@ -97,8 +95,8 @@ namespace Reanimator.Forms.ItemTransfer
 
             this.Text += " - Location: " + INVENTORYTYPE.ToString();
 
-            _characterItemPanel1 = new ItemPanel(_displayItemIcons);
-            _characterItemPanel2 = new ItemPanel(_displayItemIcons);
+            _characterItemPanel1 = new ItemPanel(_displayItemIcons, _previewManager);
+            _characterItemPanel2 = new ItemPanel(_displayItemIcons, _previewManager);
 
             _characterItemPanel1.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
             _characterItemPanel2.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
@@ -801,6 +799,11 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 _displayItemIcons = false;
             }
+        }
+
+        public void Dispose()
+        {
+            _previewManager.Dispose();
         }
     }
 

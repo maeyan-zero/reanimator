@@ -814,6 +814,7 @@ namespace Reanimator
                 //Displays a warning message before opening the item trading window.
                 transfer.DisplayWarningMessage(null, null);
                 transfer.ShowDialog(this);
+                transfer.Dispose();
             }
             catch (Exception ex)
             {
