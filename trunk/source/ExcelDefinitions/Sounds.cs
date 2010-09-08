@@ -8,8 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class SoundsRow
     {
         ExcelFile.TableHeader header;
-
-        [ExcelFile.ExcelOutput(IsStringOffset = true, SortId = 1)]
+        [ExcelFile.ExcelOutput(IsStringOffset = true, SortId = 1, RequiresDefault = true)]
         public Int32 name; //pchar
         public Int32 undefined1;
         [ExcelFile.ExcelOutput(IsStringOffset = true)]

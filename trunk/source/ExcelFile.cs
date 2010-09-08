@@ -974,7 +974,8 @@ namespace Reanimator
 
                 if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsDistinctSort))
                 {
-                    dataView.RowFilter = SelectDistinct(sortTable, new string[] { sortColumn });
+                    sortTable = SelectDistinct(sortTable, new string[] { sortColumn });
+                    dataView = sortTable.DefaultView;
                 }
 
                 _sortIndicies[sortId] = new int[dataView.Count];
@@ -1147,43 +1148,40 @@ namespace Reanimator
             return null;
         }
 
-        private static string SelectDistinct(DataTable SourceTable, params string[] FieldNames)
+        private static DataTable SelectDistinct(DataTable SourceTable, params string[] FieldNames)
         {
             object[] lastValues;
-            string filter = string.Empty;
+            DataTable newTable;
+            DataRow[] orderedRows;
 
             if (FieldNames == null || FieldNames.Length == 0)
                 throw new ArgumentNullException("FieldNames");
 
             lastValues = new object[FieldNames.Length];
+            newTable = new DataTable();
 
-            DataRow[] orderedRows = SourceTable.Select("", string.Join(", ", FieldNames));
+            foreach (string fieldName in FieldNames)
+                newTable.Columns.Add(fieldName, SourceTable.Columns[fieldName].DataType);
+
+            orderedRows = SourceTable.Select("", string.Join(", ", FieldNames));
 
             foreach (DataRow row in orderedRows)
             {
+                if ((int)row[FieldNames[0]] == -1) //lazy. function cant be reused
+                {
+                    continue; // ignore values -1
+                }
+
                 if (!fieldValuesAreEqual(lastValues, row, FieldNames))
                 {
-                    if ((int)row[FieldNames[0]] == -1)
-                        continue;
-
-                    if (filter == string.Empty)
-                    {
-                        filter = "(";
-                    }
-                    else
-                    {
-                        filter += " OR ";
-                    }
-
-                    filter += "Index = " + row[0];
-
+                    DataRow newRow = createRowClone(row, newTable.NewRow(), FieldNames);
+                    newTable.Rows.Add(newRow);
                     setLastValues(lastValues, row, FieldNames);
+                    newRow[0] = row[0];//modified to store index, not distinct value
                 }
             }
 
-            filter += ")";
-
-            return filter;
+            return newTable;
         }
 
         private static bool fieldValuesAreEqual(object[] lastValues, DataRow currentRow, string[] fieldNames)
