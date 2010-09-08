@@ -31,6 +31,7 @@ namespace Reanimator.Forms
         {
             this.main_TabControl = new System.Windows.Forms.TabControl();
             this.general_TabPage = new System.Windows.Forms.TabPage();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label33 = new System.Windows.Forms.Label();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.tb_playedTime = new System.Windows.Forms.TextBox();
@@ -224,9 +225,9 @@ namespace Reanimator.Forms
             this.b_saveXML = new System.Windows.Forms.Button();
             this.b_loadXML = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud_maxAP)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_currentAP)).BeginInit();
@@ -270,7 +271,6 @@ namespace Reanimator.Forms
             ((System.ComponentModel.ISupportInitialize)(this.nud_invPosX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_itemQuantity)).BeginInit();
             this.tc_characterItemPlacements.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -313,6 +313,13 @@ namespace Reanimator.Forms
             this.general_TabPage.TabIndex = 2;
             this.general_TabPage.Text = "General";
             this.general_TabPage.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(703, 50);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 29;
             // 
             // label33
             // 
@@ -559,8 +566,8 @@ namespace Reanimator.Forms
             // 
             this.nud_palladium.Location = new System.Drawing.Point(82, 71);
             this.nud_palladium.Maximum = new decimal(new int[] {
-            9999999,
-            0,
+            1410065407,
+            2,
             0,
             0});
             this.nud_palladium.Name = "nud_palladium";
@@ -2301,13 +2308,6 @@ namespace Reanimator.Forms
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 13;
             // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(703, 50);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 29;
-            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2334,6 +2334,7 @@ namespace Reanimator.Forms
             this.main_TabControl.ResumeLayout(false);
             this.general_TabPage.ResumeLayout(false);
             this.general_TabPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nud_maxAP)).EndInit();
@@ -2390,7 +2391,6 @@ namespace Reanimator.Forms
             ((System.ComponentModel.ISupportInitialize)(this.nud_invPosX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_itemQuantity)).EndInit();
             this.tc_characterItemPlacements.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

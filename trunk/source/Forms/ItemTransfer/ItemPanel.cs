@@ -12,7 +12,7 @@ namespace Reanimator.Forms.ItemTransfer
         public delegate void NewItemSelected(ItemPanel sender, InventoryItem item);
         public event NewItemSelected NewItemSelected_Event;
 
-    //PreviewManager _manager;
+        PreviewManager _manager;
         bool _displayItemIcons;
         int _itemUnitSize = 40;
 
@@ -22,11 +22,11 @@ namespace Reanimator.Forms.ItemTransfer
             set { _itemUnitSize = value; }
         }
 
-        public ItemPanel(bool displayItemIcons)
+        public ItemPanel(bool displayItemIcons, PreviewManager iconPreview)
         {
             InitializeComponent();
             _displayItemIcons = displayItemIcons;
-    //_manager = new PreviewManager();
+            _manager = iconPreview;
         }
 
         private void RegisterItemEvents(InventoryItem item)
@@ -46,14 +46,14 @@ namespace Reanimator.Forms.ItemTransfer
                 RegisterItemEvents(item);
                 item.ButtonUnitSize = _itemUnitSize;
 
-                //if (_displayItemIcons)// && _manager.ImagesAvailable)
-                //{
-                //    Image img = _manager.GetImage(new Size(item.Size.Width / _itemUnitSize, item.Size.Height / _itemUnitSize), item.ImagePath);
-                //    if (img != null)
-                //    {
-                //        item.BackgroundImage = img;
-                //    }
-                //}
+                if (_displayItemIcons)// && _manager.ImagesAvailable)
+                {
+                    Image img = _manager.GetImage(new Size(item.Size.Width / _itemUnitSize, item.Size.Height / _itemUnitSize), item.ImagePath);
+                    if (img != null)
+                    {
+                        item.BackgroundImage = img;
+                    }
+                }
 
                 this.Controls.Add(item);
 
@@ -324,10 +324,10 @@ namespace Reanimator.Forms.ItemTransfer
 // add check for quest item
 
                 //bitmask2 = 8192
-                if(false)
-                {
-                    color = Color.Red;
-                }
+                //if(false)
+                //{
+                //    color = Color.Red;
+                //}
             }
             else if (quality == (int)ItemQuality.Unique || quality == (int)ItemQuality.UniqueMod)
             {
@@ -358,130 +358,174 @@ namespace Reanimator.Forms.ItemTransfer
         }
     }
 
-    //public class PreviewManager
-    //{
-    //    List<ImageHolder> _imageHolder;
-    //    string _basePath = @"E:\Flagship Studios\Hellgate London\Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items";
+    public class PreviewManager
+    {
+        List<ImageHolder> _imageHolder;
+        string _basePath = Path.Combine(Config.HglDir, @"Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items");
 
-    //    public PreviewManager()
-    //    {
-    //        _imageHolder = new List<ImageHolder>();
-    //    }
+        public PreviewManager()
+        {
+            _imageHolder = new List<ImageHolder>();
+        }
 
-    //    public Image GetImage(int unitType)
-    //    {
-    //        ImageHolder image = _imageHolder.Find(tmp => tmp.UnitType == unitType);
+        public Image GetImage(int unitType)
+        {
+            try
+            {
+                ImageHolder image = _imageHolder.Find(tmp => tmp.UnitType == unitType);
 
-    //        if (image != null)
-    //        {
-    //            return image.Image;
-    //        }
+                if (image != null)
+                {
+                    return image.Image;
+                }
 
-    //        image = new ImageHolder(new Size(8, 8));
-    //        if(image.Load("items", unitType))
-    //        {
-    //            _imageHolder.Add(image);
-    //            return image.Image;
-    //        }
-    //        return null;
-    //    }
+                image = new ImageHolder(new Size(8, 8));
+                if (image.Load("items", unitType))
+                {
+                    _imageHolder.Add(image);
+                    return image.Image;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex);
+                return null;
+            }
+        }
 
-    //    public Image GetImage(Size size, string imagePath)
-    //    {
-    //        ImageHolder image = _imageHolder.Find(tmp => tmp.ImagePath == imagePath);
+        public Image GetImage(Size size, string imagePath)
+        {
+            try
+            {
+                ImageHolder image = _imageHolder.Find(tmp => tmp.ImagePath == imagePath);
 
-    //        if (image != null)
-    //        {
-    //            return image.Image;
-    //        }
+                if (image != null)
+                {
+                    return image.Image;
+                }
 
-    //        image = new ImageHolder(size);
-    //        if (image.Load(_basePath, imagePath))
-    //        {
-    //            _imageHolder.Add(image);
-    //            return image.Image;
-    //        }
-    //        return null;
-    //    }
-    //}
+                image = new ImageHolder(size);
+                if (image.Load(_basePath, imagePath))
+                {
+                    _imageHolder.Add(image);
+                    return image.Image;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex);
+                return null;
+            }
+        }
 
-    //public class ImageHolder
-    //{
-    //    Size _size;
-    //    string _imagePath;
-    //    int _unitType;
-    //    Image _image;
+        public void Dispose()
+        {
+            foreach(ImageHolder holder in _imageHolder)
+            {
+                holder.Dispose();
+            }
+        }
+    }
 
-    //    public string ImagePath
-    //    {
-    //        get { return _imagePath; }
-    //        set { _imagePath = value; }
-    //    }
+    public class ImageHolder
+    {
+        Size _size;
+        string _imagePath;
+        int _unitType;
+        Bitmap _image;
 
-    //    public int UnitType
-    //    {
-    //      get { return _unitType; }
-    //      set { _unitType = value; }
-    //    }
+        public string ImagePath
+        {
+            get { return _imagePath; }
+            set { _imagePath = value; }
+        }
 
-    //    public Image Image
-    //    {
-    //      get { return _image; }
-    //      set { _image = value; }
-    //    }
+        public int UnitType
+        {
+            get { return _unitType; }
+            set { _unitType = value; }
+        }
 
-    //    public ImageHolder(Size size)
-    //    {
-    //        _size = size;
-    //    }
+        public Bitmap Image
+        {
+            get { return _image; }
+            set { _image = value; }
+        }
 
-    //    public bool Load(string folder, int unitType)
-    //    {
-    //        _unitType = unitType;
-    //        string filePath = Path.Combine(folder, _unitType + ".png");
+        public ImageHolder(Size size)
+        {
+            _size = size;
+        }
 
-    //        if (File.Exists(filePath))
-    //        {
-    //            _image = Image.FromFile(filePath);
-    //            return true;
-    //        }
+        public bool Load(string folder, int unitType)
+        {
+            _unitType = unitType;
+            string filePath = Path.Combine(folder, _unitType + ".png");
 
-    //        return false;
-    //    }
+            if (File.Exists(filePath))
+            {
+                _image = new Bitmap(filePath);
+                return true;
+            }
 
-    //    public bool Load(string folder, string imagePath)
-    //    {
-    //        _imagePath = imagePath;
-    //        string filePath = Path.Combine(folder, imagePath) + ".dds";
+            return false;
+        }
 
-    //        if (File.Exists(filePath))
-    //        {
-    //            Bitmap bmp = DevIL.DevIL.LoadBitmap(filePath);
-    //            if (_size.Height != _size.Width)
-    //            {
-    //                _image = CropImage(bmp, _size);
-    //            }
-    //            else
-    //            {
-    //                _image = bmp;
-    //            }
-    //            return true;
-    //        }
+        public bool Load(string folder, string imagePath)
+        {
+            try
+            {
+                _imagePath = imagePath;
+                string filePath = Path.Combine(folder, imagePath) + ".dds";
 
-    //        return false;
-    //    }
+                if (File.Exists(filePath))
+                {
+                    _image = DevIL.DevIL.LoadBitmap(filePath);
+                    if (_size.Height != _size.Width)
+                    {
+                        _image = CropImage(_image, _size);
+                    }
 
-    //    private Image CropImage(Bitmap bmp, Size size)
-    //    {
-    //        int sizeX = size.Width * 68;
-    //        int sizeY = size.Height * 68;
+                    return true;
+                }
 
-    //        int posX = (256 - sizeX) / 2;
-    //        int posY = (256 - sizeY) / 2;
+                return false;
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex);
+                return false;
+            }
+        }
 
-    //        Rectangle rect = new Rectangle(posX, posY, sizeX, sizeY);
-    //        Bitmap bmpCrop = bmp.Clone(rect, bmp.PixelFormat);
-    //        return (Image)bmpCrop;
-    //    }
-    //}
+        private Bitmap CropImage(Bitmap bmp, Size size)
+        {
+            try
+            {
+                int sizeX = size.Width * 68;
+                int sizeY = size.Height * 68;
+
+                int posX = (256 - sizeX) / 2;
+                int posY = (256 - sizeY) / 2;
+
+                Rectangle rect = new Rectangle(posX, posY, sizeX, sizeY);
+                Bitmap tmp = bmp.Clone(rect, bmp.PixelFormat);
+                bmp.Dispose();
+
+                return tmp;
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex);
+                return null;
+            }
+        }
+
+        public void Dispose()
+        {
+            _image.Dispose();
+        }
+    }
 }
