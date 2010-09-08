@@ -8,17 +8,20 @@ using System.Runtime.InteropServices;
 
 namespace Reanimator.Forms
 {
+    public enum SpecialItems
+    {
+        Drone = 29797
+    }
+
     public class UnitHelpFunctions
     {
         private readonly TableDataSet _dataSet;
-        private readonly TableFiles _tableFiles;
-        private readonly ExcelFile _statsTable;
+        private readonly DataTable _statsTable;
 
-        public UnitHelpFunctions(TableDataSet dataSet, TableFiles tableFiles)
+        public UnitHelpFunctions(TableDataSet dataSet)
         {
             _dataSet = dataSet;
-            _tableFiles = tableFiles;
-            _statsTable = _tableFiles["STATS"] as ExcelFile;
+            _statsTable = _dataSet.GetExcelTableFromStringId("STATS");
         }
 
         public void LoadCharacterValues(Unit unit)
@@ -51,7 +54,8 @@ namespace Reanimator.Forms
                         }
                         else
                         {
-                            name = _statsTable.GetStringFromId(stat.id);
+                            DataRow[] statRows = _statsTable.Select("code = " + stat.Id);
+                            name = (string)statRows[0]["stat"];
 
                             if (name != null)
                             {
@@ -120,21 +124,22 @@ namespace Reanimator.Forms
             return unit;
         }
 
-        public static Unit OpenCharacterFile(TableFiles tableFiles, string fileName)
+        //public static Unit OpenCharacterFile(TableFiles tableFiles, string fileName)
+        public static Unit OpenCharacterFile(TableDataSet tableDataSet, string fileName)
         {
             Unit unit = null;
 
-            const string excelError = "You must have all excel tables loaded to use the Hero Editor!";
-            if (tableFiles == null)
+            const string excelError = "You must have all excel tables loaded to load characters!";
+            if (tableDataSet == null)
             {
                 MessageBox.Show(excelError, "OpenCharacterFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
             }
-            if (!tableFiles.AllExcelFilesLoaded || !tableFiles.AllStringsFilesLoaded)
-            {
-                MessageBox.Show(excelError, "OpenCharacterFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
-            }
+            //if (!tableFiles.AllExcelFilesLoaded || !tableFiles.AllStringsFilesLoaded)
+            //{
+            //    MessageBox.Show(excelError, "OpenCharacterFile", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return null;
+            //}
 
             FileStream heroFile;
             try
@@ -159,102 +164,120 @@ namespace Reanimator.Forms
 
         private void PopulateItems(Unit unit)
         {
-            bool canGetItemNames = true;
-            DataTable itemsTable = _dataSet.GetExcelTableFromStringId("ITEMS");
-            DataTable affixTable = _dataSet.GetExcelTableFromStringId("AFFIXES");
-            if (itemsTable != null && affixTable != null)
+            try
             {
-                if (!itemsTable.Columns.Contains("code") || !itemsTable.Columns.Contains("String_string"))
+                bool canGetItemNames = true;
+                DataTable itemsTable = _dataSet.GetExcelTableFromStringId("ITEMS");
+                DataTable affixTable = _dataSet.GetExcelTableFromStringId("AFFIXES");
+                DataTable affixNames = _dataSet.GetExcelTableFromStringId("Strings_Affix");
+                if (itemsTable != null && affixTable != null)
+                {
+                    if (!itemsTable.Columns.Contains("code") || !itemsTable.Columns.Contains("String_string"))
+                        canGetItemNames = false;
+                    if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") ||
+                        !affixTable.Columns.Contains("magicNameString_string"))
+                        canGetItemNames = false;
+                }
+                else
+                {
                     canGetItemNames = false;
-                if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") ||
-                    !affixTable.Columns.Contains("magicNameString_string"))
-                    canGetItemNames = false;
-            }
-            else
-            {
-                canGetItemNames = false;
-            }
-
-
-            List<Unit> items = unit.Items;
-            for (int i = 0; i < items.Count; i++)
-            {
-                Unit item = items[i];
-                if (item == null) continue;
-
-
-                // assign default name
-                item.Name = "Item Id: " + item.unitCode;
-                if (!canGetItemNames)
-                {
-                    continue;
-                }
-                if (item.unitCode == 25393)
-                {
-                    //string a;
                 }
 
 
-                // get item name
-                DataRow[] itemsRows = itemsTable.Select(String.Format("code = '{0}'", item.unitCode));
-                if (itemsRows.Length == 0)
+                List<Unit> items = unit.Items;
+                for (int i = 0; i < items.Count; i++)
                 {
-                    continue;
-                }
-                item.Name = itemsRows[0]["String_string"] as String;
+                    Unit item = items[i];
+                    if (item == null) continue;
 
-
-                // does it have an affix/prefix
-                String affixString = String.Empty;
-                for (int s = 0; s < item.Stats.Length; s++)
-                {
-                    // "applied_affix"
-                    if (item.Stats[s].Id == (int)ItemValueNames.applied_affix)
+                    //It's an engineer and his drone
+                    if (item.unitCode == (int)SpecialItems.Drone)
                     {
-                        int affixCode = item.Stats[s].values[0].Stat;
-                        DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
-                        if (affixRows.Length > 0)
+                        item.Name = "Drone";
+                        continue;
+                    }
+                    // assign default name
+                    item.Name = "Item Id: " + item.unitCode;
+                    if (!canGetItemNames)
+                    {
+                        continue;
+                    }
+                    if (item.unitCode == 25393)
+                    {
+                        //string a;
+                    }
+
+                    // get item name
+                    DataRow[] itemsRows = itemsTable.Select(String.Format("code = '{0}'", item.unitCode));
+                    if (itemsRows.Length == 0)
+                    {
+                        continue;
+                    }
+                    item.Name = itemsRows[0]["String_string"] as String;
+
+
+                    // does it have an affix/prefix
+                    String affixString = String.Empty;
+                    for (int s = 0; s < item.Stats.Length; s++)
+                    {
+                        // "applied_affix"
+                        if (item.Stats[s].Id == (int)ItemValueNames.applied_affix)
                         {
-                            String replaceString = affixRows[0]["setNameString_string"] as String;
-                            if (String.IsNullOrEmpty(replaceString))
+                            int affixCode = item.Stats[s].values[0].Stat;
+                            DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
+                            if (affixRows.Length > 0)
                             {
-                                replaceString = affixRows[0]["magicNameString_string"] as String;
-                                if (String.IsNullOrEmpty(replaceString))
+                                //String replaceString = affixRows[0]["setNameString_String"] as String;
+                                int index = (int)affixRows[0]["setNameString"];
+                                if (index < 0)
                                 {
-                                    break;
+                                    index = (int)affixRows[0]["magicNameString"];
+
+                                    //replaceString = affixRows[0]["magicNameString"] as String;
+                                    if (index < 0)
+                                    {
+                                        break;
+                                    }
                                 }
+
+                                DataRow[] stringRows = affixNames.Select(String.Format("ReferenceId = '{0}'", index));
+                                String replaceString = stringRows[0]["String"] as String;
+
+                                affixString = replaceString;
                             }
-
-                            affixString = replaceString;
                         }
-                    }
 
-                    // "item_quality"
-                    if (item.Stats[s].Id == (int)ItemValueNames.item_quality)
-                    {
-                        // is unique || is mutant then no affix
-                        int itemQualityCode = item.Stats[s].values[0].Stat;
-                        if (itemQualityCode == (int)ItemQuality.Unique || itemQualityCode == (int)ItemQuality.Mutant)
+                        // "item_quality"
+                        if (item.Stats[s].Id == (int)ItemValueNames.item_quality)
                         {
-                            affixString = String.Empty;
-                            break;
+                            // is unique || is mutant then no affix
+                            int itemQualityCode = item.Stats[s].values[0].Stat;
+                            if (itemQualityCode == (int)ItemQuality.Unique || itemQualityCode == (int)ItemQuality.Mutant)
+                            {
+                                affixString = String.Empty;
+                                break;
+                            }
                         }
                     }
-                }
 
-                if (affixString.Length > 0)
-                {
-                    item.Name = affixString.Replace("[item]", item.Name);
-                }
+                    if (affixString.Length > 0)
+                    {
+                        item.Name = affixString.Replace("[item]", item.Name);
+                    }
 
-                if (item.Items.Count > 0)
-                {
-                    PopulateItems(item);
+                    if (item.Items.Count > 0)
+                    {
+                        PopulateItems(item);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, true);
             }
         }
 
-        public static void SetSimpleValue(Unit unit, string valueName, int value)
+        public static bool SetSimpleValue(Unit unit, string valueName, int value)
         {
             //if (!initialized) return;
 
@@ -265,11 +288,30 @@ namespace Reanimator.Forms
                 if (unitStats.Name != valueName) continue;
 
                 unitStats.values[0].Stat = value;
-                return;
+                return true;
             }
+
+            return false;
         }
 
-        public static void SetComplexValue(Unit unit, string valueName, Unit.StatBlock.Stat stat)
+        public static bool SetSimpleValue(Unit unit, int valueId, int value)
+        {
+            //if (!initialized) return;
+
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+
+                if (unitStats.Id != valueId) continue;
+
+                unitStats.values[0].Stat = value;
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool SetComplexValue(Unit unit, string valueName, Unit.StatBlock.Stat stat)
         {
             //if (!initialized) return;
 
@@ -280,8 +322,10 @@ namespace Reanimator.Forms
                 if (unitStats.Name != valueName) continue;
 
                 unitStats = stat;
-                return;
+                return true;
             }
+
+            return false;
         }
 
         public static int GetSimpleValue(Unit unit, string valueName)
@@ -307,7 +351,15 @@ namespace Reanimator.Forms
 
                 if (unitStats.Id == valueId)
                 {
-                    return unitStats.values[0].Stat;
+                    Unit.StatBlock.Stat.Values entry = unitStats.values[0];
+
+                    // if all atributes are 0 the value is most likely a simple value
+                    if (entry.Attribute1 == 0 && entry.Attribute2 == 0 && entry.Attribute3 == 0)
+                    {
+                        return entry.Stat;
+                    }
+
+                    ExceptionLogger.LogException(new Exception("IsComplexAttributeException"), "GetSimpleValue", unitStats.Id + " is of type ComplexValue", false);
                 }
             }
             //MessageBox.Show("Field \"" + valueName + "\" not present in unit " + unit.Name + "!");
@@ -326,6 +378,63 @@ namespace Reanimator.Forms
                 }
             }
             return null;
+        }
+
+        public static Unit.StatBlock.Stat GetComplexValue(Unit unit, ItemValueNames valueName)
+        {
+            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            {
+                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+
+                if (unitStats.Id == (int)valueName)
+                {
+                    return unitStats;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Adds a new simple value (entry that holds only one value) to the stats table
+        /// </summary>
+        /// <param name="unit">The unit to add this stat to</param>
+        /// <param name="valueName">The name/id of the value to add</param>
+        /// <param name="value">The actual value to add</param>
+        /// <param name="bitCount">The bitCount of this value (possibly defines the maximum value of the "value" entry)</param>
+        public static void AddSimpleValue(Unit unit, ItemValueNames valueName, int value, int bitCount)
+        {
+            List<Unit.StatBlock.Stat> newStats = new List<Unit.StatBlock.Stat>();
+            //copies the existing values to a new array
+            newStats.AddRange(unit.Stats.stats);
+
+            //check if the value already exists
+            if (newStats.Find(tmp => tmp.Id == (int)valueName) != null)
+            {
+                return;
+            }
+
+            //generates a new stat
+            Unit.StatBlock.Stat newStat = new Unit.StatBlock.Stat();
+            //generates the entry that holds the stat value
+            Unit.StatBlock.Stat.Values newValue = new Unit.StatBlock.Stat.Values();
+            newStat.values = new Unit.StatBlock.Stat.Values[1];
+            //adds the entry to the new stat
+            newStat.values[0] = newValue;
+            //sets the bitCOunt value (maximum stat value defined by the number of bits?)
+            newStat.bitCount = bitCount;
+            //sets the length of the stat array (may be unnecessary)
+            //newStat.Length = 1;
+            //sets the Id of the new stat
+            newStat.Id = (int)valueName;
+            newStat.skipResource = 1;
+            newStat.repeatCount = 1;
+
+            //adds the new value to the array
+            newStats.Add(newStat);
+
+            //assigns the new array to the unit
+            unit.Stats.stats = newStats.ToArray();
+            unit.Stats.statCount = newStats.Count;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -417,7 +526,13 @@ namespace Reanimator.Forms
         MutantMod = 17200,
 
         Unique = 13616,
-        UniqueMod = 17456
+        UniqueMod = 17456,
+
+        DoubleEdged = 00000,
+        DoubleEdgedMod = 00001,
+
+        Mythic = 00002,
+        MythicMod = 00003
     };
 
     public enum ItemValueNames
@@ -554,6 +669,7 @@ namespace Reanimator.Forms
         //SharedStash = 26160,
         QuestRewards = 26928,
         Cube = 22577,
-        CurrentWeaponSet = 25904
+        CurrentWeaponSet = 25904,
+        Turret = 17457
     };
 }

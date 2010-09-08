@@ -10,6 +10,7 @@ using System.IO;
 using System.Xml;
 using Reanimator.Forms;
 using Reanimator.Forms.ItemTransfer;
+using Reanimator.Forms.HeroEditorFunctions;
 
 namespace Reanimator
 {
@@ -162,10 +163,6 @@ namespace Reanimator
                 {
                     _OpenFileIdx(openFileDialog.FileName);
                 }
-                else if (openFileDialog.FileName.EndsWith("hg1"))
-                {
-                    //OpenFileHg1(openFileDialog.FileName);
-                }
                 else if (openFileDialog.FileName.EndsWith("xls.uni.cooked"))
                 {
                     _OpenFileStrings(openFileDialog.FileName);
@@ -182,6 +179,12 @@ namespace Reanimator
                 {
                     //OpenFileMod(openFileDialog.FileName);
                 }
+#if DEBUG
+                else if (openFileDialog.FileName.EndsWith("hg1"))
+                {
+                    _OpenFileHg1(openFileDialog.FileName);
+                }
+#endif
             }
             catch (Exception ex)
             {
@@ -385,13 +388,36 @@ namespace Reanimator
         {
             try
             {
-                Unit heroUnit = UnitHelpFunctions.OpenCharacterFile(_tableFiles, fileName);
-                HeroEditor heroEditor = new HeroEditor(heroUnit, _tableDataSet, fileName)
+                Unit heroUnit = UnitHelpFunctions.OpenCharacterFile(_tableDataSet, fileName);
+
+                //Unit wrapper test
+                //UnitWrapper wrapper = new UnitWrapper(heroUnit);
+                //wrapper.Mode.IsElite = true;
+                ////wrapper.Mode.IsElite = true;
+                ////UnitWrapper w = new UnitWrapper(wrapper.Items.Items[2]);
+
+                ////UnitWrapper drone = new UnitWrapper(wrapper.Drone.Drone);
+                ////CharacterValues values = drone.Values;
+
+                //UnitHelpFunctions.SaveCharacterFile(heroUnit, @"F:\test.hg1");
+
+                //Comment me when testing the unit wrapper!!!
+
+            //HeroEditor2 heroEditor = new HeroEditor2(fileName, _tableDataSet)
+            //{
+            //    Text = "Hero Editor: " + fileName,
+            //    MdiParent = this
+            //};
+            //heroEditor.Show();
+                if (heroUnit.IsGood)
                 {
-                    Text = "Hero Editor: " + fileName,
-                    MdiParent = this
-                };
-                heroEditor.Show();
+                    HeroEditor heroEditor = new HeroEditor(heroUnit, _tableDataSet, fileName)
+                    {
+                        Text = "Hero Editor: " + fileName,
+                        MdiParent = this
+                    };
+                    heroEditor.Show();
+                }
             }
             catch (Exception ex)
             {
@@ -784,7 +810,7 @@ namespace Reanimator
                 //MessageBox.Show("Tables are being loaded. This may take a few seconds!");
 
                 //ItemTransferForm transfer = new ItemTransferForm(_tableDataSet, _tableFiles);
-                ComplexItemTransferForm transfer = new ComplexItemTransferForm(_tableDataSet, _tableFiles);
+                ItemTransferForm transfer = new ItemTransferForm(_tableDataSet);
                 //Displays a warning message before opening the item trading window.
                 transfer.DisplayWarningMessage(null, null);
                 transfer.ShowDialog(this);

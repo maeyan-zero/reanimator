@@ -32,7 +32,7 @@ namespace Reanimator.Forms.ItemTransfer
 
             this.Text += " - Location: " + InventoryType;
 
-            _itemHelpFunctions = new UnitHelpFunctions(dataSet, tableFiles);
+            _itemHelpFunctions = new UnitHelpFunctions(dataSet);
 
             _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
 
@@ -87,7 +87,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             _characterPath = _characterFolder + @"\" + cb_selectCharacter.SelectedItem + ".hg1";
 
-            _characterUnit = UnitHelpFunctions.OpenCharacterFile(_tableFiles, _characterPath);
+            //_characterUnit = UnitHelpFunctions.OpenCharacterFile(_tableFiles, _characterPath);
 
             if (_characterUnit != null && _characterUnit.IsGood)
             {

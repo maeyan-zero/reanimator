@@ -230,6 +230,8 @@ namespace Reanimator
                 public int Id
                 {
                     get { return id; }
+                    //if we need to add status entries...
+                    set { id = value; }
                 }
 
                 public Attribute Attribute1
@@ -252,6 +254,7 @@ namespace Reanimator
                     return index >= attributes.Count ? null : attributes[index];
                 }
 
+                [XmlAttribute("Name")]
                 public string Name { get; set; }
 
                 public int Length
@@ -316,11 +319,30 @@ namespace Reanimator
             IsGood = false;
         }
 
+        public bool AddItem(Unit item)
+        {
+            if (!Items.Contains(item))
+            {
+                Items.Add(item);
+                _itemCount = Items.Count;
+                return true;
+            }
+
+            return false;
+        }
+
+        public void RemoveItem(Unit item)
+        {
+            Items.Remove(item);
+            _itemCount = Items.Count;
+        }
+
         public StatBlock Stats
         {
             get { return statBlock; }
         }
 
+        [XmlAttribute("Name")]
         public string Name
         {
             get { return ToString(); }

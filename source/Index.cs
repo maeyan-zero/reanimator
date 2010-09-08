@@ -748,7 +748,6 @@ namespace Reanimator
                 result = DatFile.Read(destBuffer, 0, readLength);
                 if (result != file.UncompressedSize) return null;
             }
-
             return destBuffer;
         }
 

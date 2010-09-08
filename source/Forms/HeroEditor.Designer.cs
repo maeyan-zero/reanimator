@@ -224,6 +224,7 @@ namespace Reanimator.Forms
             this.b_saveXML = new System.Windows.Forms.Button();
             this.b_loadXML = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.main_TabControl.SuspendLayout();
             this.general_TabPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -269,6 +270,7 @@ namespace Reanimator.Forms
             ((System.ComponentModel.ISupportInitialize)(this.nud_invPosX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_itemQuantity)).BeginInit();
             this.tc_characterItemPlacements.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // main_TabControl
@@ -295,6 +297,7 @@ namespace Reanimator.Forms
             // 
             // general_TabPage
             // 
+            this.general_TabPage.Controls.Add(this.numericUpDown1);
             this.general_TabPage.Controls.Add(this.label33);
             this.general_TabPage.Controls.Add(this.groupBox8);
             this.general_TabPage.Controls.Add(this.groupBox7);
@@ -2298,6 +2301,13 @@ namespace Reanimator.Forms
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 13;
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(703, 50);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 29;
+            // 
             // HeroEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2380,6 +2390,7 @@ namespace Reanimator.Forms
             ((System.ComponentModel.ISupportInitialize)(this.nud_invPosX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nud_itemQuantity)).EndInit();
             this.tc_characterItemPlacements.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2582,5 +2593,6 @@ namespace Reanimator.Forms
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.RichTextBox richTextBox3;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
     }
 }
