@@ -12,7 +12,7 @@ namespace Reanimator.Forms.ItemTransfer
         public delegate void NewItemSelected(ItemPanel sender, InventoryItem item);
         public event NewItemSelected NewItemSelected_Event;
 
-        PreviewManager _manager;
+    //PreviewManager _manager;
         bool _displayItemIcons;
         int _itemUnitSize = 40;
 
@@ -22,15 +22,11 @@ namespace Reanimator.Forms.ItemTransfer
             set { _itemUnitSize = value; }
         }
 
-        //public InventoryItem _previewItem;
-
         public ItemPanel(bool displayItemIcons)
         {
             InitializeComponent();
-            //_previewItem = null;
             _displayItemIcons = displayItemIcons;
-            //this.Controls.Add(_previewItem);
-            _manager = new PreviewManager();
+    //_manager = new PreviewManager();
         }
 
         private void RegisterItemEvents(InventoryItem item)
@@ -45,21 +41,19 @@ namespace Reanimator.Forms.ItemTransfer
 
         public bool AddItem(InventoryItem item, bool isOnInit)
         {
-            //_previewItem = null;
-
             if (isOnInit)
             {
                 RegisterItemEvents(item);
                 item.ButtonUnitSize = _itemUnitSize;
 
-                if (_displayItemIcons)// && _manager.ImagesAvailable)
-                {
-                    Image img = _manager.GetImage(new Size(item.Size.Width / _itemUnitSize, item.Size.Height / _itemUnitSize), item.ImagePath);
-                    if (img != null)
-                    {
-                        item.BackgroundImage = img;
-                    }
-                }
+                //if (_displayItemIcons)// && _manager.ImagesAvailable)
+                //{
+                //    Image img = _manager.GetImage(new Size(item.Size.Width / _itemUnitSize, item.Size.Height / _itemUnitSize), item.ImagePath);
+                //    if (img != null)
+                //    {
+                //        item.BackgroundImage = img;
+                //    }
+                //}
 
                 this.Controls.Add(item);
 
@@ -326,6 +320,14 @@ namespace Reanimator.Forms.ItemTransfer
             else if (quality == (int)ItemQuality.Normal || quality == (int)ItemQuality.NormalMod)
             {
                 color = Color.White;
+
+// add check for quest item
+
+                //bitmask2 = 8192
+                if(false)
+                {
+                    color = Color.Red;
+                }
             }
             else if (quality == (int)ItemQuality.Unique || quality == (int)ItemQuality.UniqueMod)
             {
@@ -343,245 +345,143 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 color = Color.Orange;
             }
+            else if (quality == (int)ItemQuality.DoubleEdged || quality == (int)ItemQuality.DoubleEdgedMod)
+            {
+                color = Color.FromArgb(96, 255, 255);
+            }
+            else if (quality == (int)ItemQuality.Mythic || quality == (int)ItemQuality.MythicMod)
+            {
+                color = Color.Purple;
+            }
 
             this.FlatAppearance.BorderColor = color;
         }
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    _item = null;
-
-        //    base.Dispose(disposing);
-        //}
     }
 
     //public class PreviewManager
     //{
-    //    List<NameToImage> _images;
-    //    const string _configPath = "imageMapping.xml";
+    //    List<ImageHolder> _imageHolder;
+    //    string _basePath = @"E:\Flagship Studios\Hellgate London\Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items";
 
     //    public PreviewManager()
     //    {
-    //        if (File.Exists(_configPath))
-    //        {
-    //            _images = XmlUtilities<List<NameToImage>>.Deserialize(_configPath);
-    //        }
-    //    }
-
-    //    public Image GetImage(string itemName)
-    //    {
-    //        NameToImage name = _images.Find(tmp => tmp.ItemName.Contains(itemName));
-
-    //        if (name != null)
-    //        {
-    //            return name.GetImage();
-    //        }
-
-    //        return null;
+    //        _imageHolder = new List<ImageHolder>();
     //    }
 
     //    public Image GetImage(int unitType)
     //    {
-    //        NameToImage name = _images.Find(tmp => tmp.UnitType == unitType);
+    //        ImageHolder image = _imageHolder.Find(tmp => tmp.UnitType == unitType);
 
-    //        if (name != null)
+    //        if (image != null)
     //        {
-    //            return name.GetImage();
+    //            return image.Image;
     //        }
 
+    //        image = new ImageHolder(new Size(8, 8));
+    //        if(image.Load("items", unitType))
+    //        {
+    //            _imageHolder.Add(image);
+    //            return image.Image;
+    //        }
     //        return null;
     //    }
 
-    //    public bool ImagesAvailable
+    //    public Image GetImage(Size size, string imagePath)
     //    {
-    //        get
-    //        {
-    //            return _images != null;
-    //        }
-    //    }
+    //        ImageHolder image = _imageHolder.Find(tmp => tmp.ImagePath == imagePath);
 
-    //    //public void Dispose()
-    //    //{
-    //    //    if (_images != null)
-    //    //    {
-    //    //        foreach (NameToImage image in _images)
-    //    //        {
-    //    //            image.Dispose();
-    //    //        }
-    //    //    }
-    //    //}
+    //        if (image != null)
+    //        {
+    //            return image.Image;
+    //        }
+
+    //        image = new ImageHolder(size);
+    //        if (image.Load(_basePath, imagePath))
+    //        {
+    //            _imageHolder.Add(image);
+    //            return image.Image;
+    //        }
+    //        return null;
+    //    }
     //}
 
-
-    //public class NameToImage
+    //public class ImageHolder
     //{
-    //    int _unitType;
-    //    string _itemName;
+    //    Size _size;
     //    string _imagePath;
+    //    int _unitType;
     //    Image _image;
 
-    //    [XmlElement("ItemName")]
-    //    public string ItemName
-    //    {
-    //        get { return _itemName; }
-    //        set { _itemName = value; }
-    //    }
-
-    //    [XmlElement("ImagePath")]
     //    public string ImagePath
     //    {
     //        get { return _imagePath; }
     //        set { _imagePath = value; }
     //    }
 
-    //    [XmlElement("UnitType")]
     //    public int UnitType
     //    {
-    //        get { return _unitType; }
-    //        set { _unitType = value; }
+    //      get { return _unitType; }
+    //      set { _unitType = value; }
     //    }
 
-    //    public Image GetImage()
+    //    public Image Image
     //    {
-    //        if (_image == null)
+    //      get { return _image; }
+    //      set { _image = value; }
+    //    }
+
+    //    public ImageHolder(Size size)
+    //    {
+    //        _size = size;
+    //    }
+
+    //    public bool Load(string folder, int unitType)
+    //    {
+    //        _unitType = unitType;
+    //        string filePath = Path.Combine(folder, _unitType + ".png");
+
+    //        if (File.Exists(filePath))
     //        {
-    //            _image = Bitmap.FromFile(_imagePath);
+    //            _image = Image.FromFile(filePath);
+    //            return true;
     //        }
 
-    //        return _image;
+    //        return false;
     //    }
 
-    //    //public void Dispose()
-    //    //{
-    //    //    _image.Dispose();
-    //    //}
+    //    public bool Load(string folder, string imagePath)
+    //    {
+    //        _imagePath = imagePath;
+    //        string filePath = Path.Combine(folder, imagePath) + ".dds";
+
+    //        if (File.Exists(filePath))
+    //        {
+    //            Bitmap bmp = DevIL.DevIL.LoadBitmap(filePath);
+    //            if (_size.Height != _size.Width)
+    //            {
+    //                _image = CropImage(bmp, _size);
+    //            }
+    //            else
+    //            {
+    //                _image = bmp;
+    //            }
+    //            return true;
+    //        }
+
+    //        return false;
+    //    }
+
+    //    private Image CropImage(Bitmap bmp, Size size)
+    //    {
+    //        int sizeX = size.Width * 68;
+    //        int sizeY = size.Height * 68;
+
+    //        int posX = (256 - sizeX) / 2;
+    //        int posY = (256 - sizeY) / 2;
+
+    //        Rectangle rect = new Rectangle(posX, posY, sizeX, sizeY);
+    //        Bitmap bmpCrop = bmp.Clone(rect, bmp.PixelFormat);
+    //        return (Image)bmpCrop;
+    //    }
     //}
-
-    public class PreviewManager
-    {
-        List<ImageHolder> _imageHolder;
-        string _basePath = @"E:\Flagship Studios\Hellgate London\Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items";
-
-        public PreviewManager()
-        {
-            _imageHolder = new List<ImageHolder>();
-        }
-
-        public Image GetImage(int unitType)
-        {
-            ImageHolder image = _imageHolder.Find(tmp => tmp.UnitType == unitType);
-
-            if (image != null)
-            {
-                return image.Image;
-            }
-
-            image = new ImageHolder(new Size(8, 8));
-            if(image.Load("items", unitType))
-            {
-                _imageHolder.Add(image);
-                return image.Image;
-            }
-            return null;
-        }
-
-        public Image GetImage(Size size, string imagePath)
-        {
-            ImageHolder image = _imageHolder.Find(tmp => tmp.ImagePath == imagePath);
-
-            if (image != null)
-            {
-                return image.Image;
-            }
-
-            image = new ImageHolder(size);
-            if (image.Load(_basePath, imagePath))
-            {
-                _imageHolder.Add(image);
-                return image.Image;
-            }
-            return null;
-        }
-    }
-
-    public class ImageHolder
-    {
-        Size _size;
-        string _imagePath;
-        int _unitType;
-        Image _image;
-
-        public string ImagePath
-        {
-            get { return _imagePath; }
-            set { _imagePath = value; }
-        }
-
-        public int UnitType
-        {
-          get { return _unitType; }
-          set { _unitType = value; }
-        }
-
-        public Image Image
-        {
-          get { return _image; }
-          set { _image = value; }
-        }
-
-        public ImageHolder(Size size)
-        {
-            _size = size;
-        }
-
-        public bool Load(string folder, int unitType)
-        {
-            _unitType = unitType;
-            string filePath = Path.Combine(folder, _unitType + ".png");
-
-            if (File.Exists(filePath))
-            {
-                _image = Image.FromFile(filePath);
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool Load(string folder, string imagePath)
-        {
-            _imagePath = imagePath;
-            string filePath = Path.Combine(folder, imagePath) + ".dds";
-
-            if (File.Exists(filePath))
-            {
-                Bitmap bmp = DevIL.DevIL.LoadBitmap(filePath);
-                if (_size.Height != _size.Width)
-                {
-                    _image = CropImage(bmp, _size);
-                }
-                else
-                {
-                    _image = bmp;
-                }
-                return true;
-            }
-
-            return false;
-        }
-
-        private Image CropImage(Bitmap bmp, Size size)
-        {
-            int sizeX = size.Width * 68;
-            int sizeY = size.Height * 68;
-
-            int posX = (256 - sizeX) / 2;
-            int posY = (256 - sizeY) / 2;
-
-            Rectangle rect = new Rectangle(posX, posY, sizeX, sizeY);
-            Bitmap bmpCrop = bmp.Clone(rect, bmp.PixelFormat);
-            return (Image)bmpCrop;
-        }
-    }
-
 }

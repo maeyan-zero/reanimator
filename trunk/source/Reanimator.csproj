@@ -57,7 +57,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
@@ -101,10 +101,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevIL.NET2, Version=1.1.2619.31671, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dlls\DevILDotNet_1.3\DevIL.NET2.dll</HintPath>
-    </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dlls\DotNetZip\Release\Ionic.Zip.dll</HintPath>
@@ -307,6 +303,37 @@
     <Compile Include="Forms\FileExplorer.Designer.cs">
       <DependentUpon>FileExplorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\HeroEditor2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditor2.Designer.cs">
+      <DependentUpon>HeroEditor2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\SingleSkillControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\SingleSkillControl.Designer.cs">
+      <DependentUpon>SingleSkillControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\SkillPanelControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\SkillPanelControl.Designer.cs">
+      <DependentUpon>SkillPanelControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\UnitWrapper.cs" />
+    <Compile Include="Forms\HeroEditorFunctions\UserValues.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\UserValues.Designer.cs">
+      <DependentUpon>UserValues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ItemTransfer\ItemTransferForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemTransfer\ItemTransferForm.Designer.cs">
+      <DependentUpon>ItemTransferForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PatchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -379,10 +406,7 @@
     <Compile Include="Forms\HeroEditorFunctions\ParentStatusControl.Designer.cs">
       <DependentUpon>ParentStatusControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\HeroEditorFunctions\CreateCharacterSkillControlsAndBmps.cs">
-    </Compile>
     <Compile Include="Forms\HeroEditorFunctions\GetImagesFromTextureFiles.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\HeroEditorFunctions\XmlUtilities.cs" />
     <Compile Include="Forms\ItemDisplay.cs">
@@ -391,20 +415,11 @@
     <Compile Include="Forms\ItemDisplay.Designer.cs">
       <DependentUpon>ItemDisplay.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ItemTransfer\BasicItemTransferForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ItemTransfer\BasicItemTransferForm.Designer.cs">
-      <DependentUpon>BasicItemTransferForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ItemTransfer\CharacterShop.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ItemTransfer\CharacterShop.Designer.cs">
       <DependentUpon>CharacterShop.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ItemTransfer\ComplexItemTransferForm.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ItemTransfer\InventoryHandler.cs" />
     <Compile Include="Forms\ItemTransfer\ItemPanel.cs">
@@ -589,6 +604,10 @@
       <DependentUpon>CacheInfo.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditor2.resx">
+      <DependentUpon>HeroEditor2.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\HeroEditorFunctions\AttributesControl.resx">
       <DependentUpon>AttributesControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -621,12 +640,20 @@
       <DependentUpon>ParentStatusControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ItemDisplay.resx">
-      <DependentUpon>ItemDisplay.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\SingleSkillControl.resx">
+      <DependentUpon>SingleSkillControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ItemTransfer\BasicItemTransferForm.resx">
-      <DependentUpon>BasicItemTransferForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\SkillPanelControl.resx">
+      <DependentUpon>SkillPanelControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HeroEditorFunctions\UserValues.resx">
+      <DependentUpon>UserValues.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemDisplay.resx">
+      <DependentUpon>ItemDisplay.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemTransfer\CharacterShop.resx">
@@ -635,6 +662,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemTransfer\ItemPanel.resx">
       <DependentUpon>ItemPanel.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemTransfer\ItemTransferForm.resx">
+      <DependentUpon>ItemTransferForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MinigameControl.resx">

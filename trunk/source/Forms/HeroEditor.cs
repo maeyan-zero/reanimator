@@ -28,21 +28,21 @@ namespace Reanimator.Forms
         readonly Unit _heroUnit;
         readonly TableDataSet _dataSet;
         readonly TableFiles _tableFiles;
-        readonly CompletePanelControl _panel;
         readonly String _filePath;
         readonly UnitHelpFunctions _itemFunctions;
         CharacterClass _characterClass;
+        UnitWrapper _wrapper;
 
         public HeroEditor(Unit heroUnit, TableDataSet tableDataSet, String filePath)
         {
             _heroUnit = heroUnit;
             _dataSet = tableDataSet;
             _tableFiles = tableDataSet.TableFiles;
-            _panel = new CompletePanelControl();
+            //_panel = new CompletePanelControl();
             //_statsTable = _excelTables.GetTable("stats") as Stats;
             _filePath = filePath;
 
-            _itemFunctions = new UnitHelpFunctions(_dataSet, _tableFiles);
+            _itemFunctions = new UnitHelpFunctions(_dataSet);
             _itemFunctions.LoadCharacterValues(_heroUnit);
             //_itemFunctions.GenerateUnitNameStrings();
             //_itemFunctions.PopulateItems(ref _heroUnit);
@@ -206,7 +206,7 @@ namespace Reanimator.Forms
 
                     if (stat.Name.Equals(ItemValueNames.minigame_category_needed.ToString(), StringComparison.InvariantCultureIgnoreCase))
                     {
-                        // checks for minigame entries by using the values as the minigame doesn't define any tables
+                        // checks for minigame entries by using the values as the minigame doesn't define any tables -> Yes it does... needs some reworking
                         lookUpString = GetMinigameGoal(stat.values[i].Attribute1, stat.values[i].Attribute2);
                     }
                     else
@@ -364,7 +364,7 @@ namespace Reanimator.Forms
             String filePath = FileTools.SaveFileDiag("hg1", "HGL Character", _heroUnit.Name, Config.SaveDir);
             if (String.IsNullOrEmpty(filePath)) return;
 
-            _panel.GetSkillControls(_heroUnit);
+            //_panel.GetSkillControls(_heroUnit);
             UnitHelpFunctions.SaveCharacterFile(_heroUnit, filePath);
         }
 
@@ -700,6 +700,9 @@ namespace Reanimator.Forms
                 {
                     _heroUnit.PlayerFlags2.Add(stateId);
                 }
+                //Adds Subsriber status
+                //_heroUnit.PlayerFlags1.Add(18759);
+                //_heroUnit.PlayerFlags2.Add(18759);
             }
             else
             {
@@ -1058,76 +1061,6 @@ namespace Reanimator.Forms
             }
         }
 
-        //private void CharValuesToSkillPanel()
-        //{
-        //    Unit.StatBlock.Stat skillList = null;
-
-        //    foreach (Unit.StatBlock.Stat skills in _heroUnit.Stats.stats)
-        //    {
-        //        if (skills.Name.Equals("skill_level", StringComparison.CurrentCultureIgnoreCase))
-        //        {
-        //            skillList = skills;
-        //            break;
-        //        }
-        //    }
-
-        //    foreach (SkillControls skill in _skillControls)
-        //    {
-        //        foreach (Unit.StatBlock.Stat.Values value in skillList.values)
-        //        {
-        //            if (value.Attribute1 == skill._id)
-        //            {
-        //                skill.CurrentLevel = value.Stat;
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //private void SkillPanelToCharValues()
-        //{
-        //    Unit.StatBlock.Stat skillList = null;
-
-        //    foreach (Unit.StatBlock.Stat skills in _heroUnit.Stats.stats)
-        //    {
-        //        if (skills.Name.Equals("skill_level", StringComparison.CurrentCultureIgnoreCase))
-        //        {
-        //            skillList = skills;
-        //            break;
-        //        }
-        //    }
-
-        //    foreach (SkillControls skill in _skillControls)
-        //    {
-        //        bool found = false;
-
-        //        foreach (Unit.StatBlock.Stat.Values value in skillList.values)
-        //        {
-        //            if (value.Attribute1 == skill._id)
-        //            {
-        //                value.Stat = skill.CurrentLevel;
-        //                found = true;
-        //                break;
-        //            }
-        //        }
-
-        //        if (!found && skill.CurrentLevel > 0)
-        //        {
-        //            List<Unit.StatBlock.Stat.Values> values = new List<Unit.StatBlock.Stat.Values>();
-        //            values.AddRange(skillList.values);
-
-        //            Unit.StatBlock.Stat.Values newValue = new Unit.StatBlock.Stat.Values();
-        //            newValue.Attribute1 = skill._id;
-        //            newValue.Stat = skill.CurrentLevel;
-
-        //            values.Add(newValue);
-
-        //            skillList.values = values.ToArray();
-        //            skillList.repeatCount = values.Count;
-        //        }
-        //    }
-        //}
-
         bool _isMousePressed;
         private void HeroEditor_MouseDown(object sender, MouseEventArgs e)
         {
@@ -1149,10 +1082,6 @@ namespace Reanimator.Forms
         private void InitializeAttributeSkillPanel(int characterClass)
         {
             DataTable table = _dataSet.GetExcelTableFromCode(27952);
-            _panel.Initialize(ref table, characterClass, _heroUnit);
-
-            tp_characterValues.Controls.Add(_panel);
-            tp_characterValues.Size = _panel.Size;
         }
         #endregion
 

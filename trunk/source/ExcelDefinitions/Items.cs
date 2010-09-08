@@ -710,7 +710,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillWhenUsed;//index                          // 247  0x0000000000000AE0  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
-        public Int32 SkillTab;//index                               // 249  0x0000000000000AE4  XLS_ReadIndex
+        public Int32 SkillTab1;//index                              // 249  0x0000000000000AE4  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
         public Int32 SkillTab2;//index                              // 250  0x0000000000000AE8  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
