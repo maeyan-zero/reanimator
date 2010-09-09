@@ -278,7 +278,6 @@
     <Compile Include="ExcelDefinitions\SubLevel.cs" />
     <Compile Include="ExcelDefinitions\Tag.cs" />
     <Compile Include="ExcelDefinitions\Tasks.cs" />
-    <Compile Include="ExcelDefinitions\Tc\Achievements.cs" />
     <Compile Include="ExcelDefinitions\TextureTypes.cs" />
     <Compile Include="ExcelDefinitions\Treasure.cs" />
     <Compile Include="ExcelDefinitions\UIComponent.cs" />
@@ -749,6 +748,9 @@
     <Content Include="Resources\icon3.ico" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ExcelDefinitions\Tc\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

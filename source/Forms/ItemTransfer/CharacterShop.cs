@@ -43,7 +43,7 @@ namespace Reanimator.Forms.ItemTransfer
 
             cb_selectCharacter.DataSource = characters;
 
-            _characterItemPanel = new ItemPanel(false, null);
+            _characterItemPanel = new ItemPanel(false, null, null);
             _characterItemPanel.NewItemSelected_Event += _characterItemPanel_NewItemSelected_Event;
             _characterItemPanel.ItemUnitSize = ItemUnitSize;
             _characterItemPanel.Size = new Size(InventoryWidth * ItemUnitSize, InventoryHeight * ItemUnitSize);
