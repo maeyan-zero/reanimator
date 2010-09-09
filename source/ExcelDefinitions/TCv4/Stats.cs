@@ -41,7 +41,7 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] undefined5;
         [ExcelOutput(IsBool = true)]
-        public Int32 player;//bool
+        public Int32 player;
         [ExcelOutput(IsBool = true)]
         public Int32 monster;
         [ExcelOutput(IsBool = true)]
@@ -102,26 +102,26 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] undefined12;
         public Int32 sendToOthersStat_tcv4;
-        public Int32 undefined_TCV4_4;
+        public Int32 undefined4_tcv4;
 
         [FlagsAttribute]
         public enum BitMask01 : uint
         {
-            _undefined1 = (1 << 0),
+            _undefined1_tcv4 = (1 << 0),
             cur = (1 << 1),
             modList = (1 << 2),
             vector = (1 << 3),
             Float = (1 << 4),
-            _undefined2 = (1 << 5),
+            _undefined2_tcv4 = (1 << 5),
             accrue = (1 << 6),
             accrueOnceOnly = (1 << 7),
             combat = (1 << 8),
             directDmg = (1 << 9),
             send = (1 << 10),
             sendAll = (1 << 11),
-            _undefined3 = (1 << 12),
+            _undefined3_tcv4 = (1 << 12),
             save = (1 << 13),
-            _undefined4 = (1 << 14),
+            _undefined4_tcv4 = (1 << 14),
             noMaxCurWhenDead = (1 << 15),
             stateMonitorsC = (1 << 16),
             stateMonitorsS = (1 << 17),
@@ -134,7 +134,6 @@ namespace Reanimator.ExcelDefinitions
             _undefined5_tcv4 = (1 << 24),
             clearOnItemRestore_tcv4 = (1 << 25),
             exposeInDataService_tcv4 = (1 << 26)
-            
         }
     }
 }

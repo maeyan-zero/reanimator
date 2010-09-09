@@ -8,6 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class SoundsRow
     {
         ExcelFile.TableHeader header;
+
         [ExcelFile.ExcelOutput(IsStringOffset = true, SortId = 1, RequiresDefault = true)]
         public Int32 name; //pchar
         public Int32 undefined1;
@@ -63,7 +64,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 undefined10c;//information
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined10d;//information
-        Int32 undefined10e;
+        public Int32 undefined10e;
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 undefined10f;//information
         public Int32 undefined10g;
@@ -258,32 +259,32 @@ namespace Reanimator.ExcelDefinitions
         [FlagsAttribute]
         public enum BitMask01 : uint
         {
-            nonblock = 1,
-            stream = 2,
-            is3D = 4,//it is in fact called just 3D, but that isn't liked.
-            unk01 = 8,
-            loops = 16,
-            canCutoff = 32,
-            highlander = 64,
-            groupHighlander = 128,
-            software = 256,
-            headRelative = 512,
-            isMusic = 1024,
-            dontRandomizeStart = 2048,
-            dontCrossfadeVariations = 4096,
-            unk02 = 8192,
-            loadAtStartup = 16384,
-            useGlobalLights = 32768,
-            backupTransSpecular = 65536,
-            emitsGpuParticles = 131072,
-            isScreenEffect = 262144,
-            loadAllTechniques = 524288,
-            receiveRain = 1048576,
-            oneParticleSystem = 2097152,
-            usesPortals = 4194304,
-            requiresHavokFx = 8388608,
-            directionalInSH = 16777216,
-            emissivediffuse = 33554432
+            nonblock = (1 << 0),
+            stream = (1 << 1),
+            is3D = (1 << 2),//it is in fact called just 3D, but that isn't liked.
+            unk01 = (1 << 3),
+            loops = (1 << 4),
+            canCutoff = (1 << 5),
+            highlander = (1 << 6),
+            groupHighlander = (1 << 7),
+            software = (1 << 8),
+            headRelative = (1 << 9),
+            isMusic = (1 << 10),
+            dontRandomizeStart = (1 << 11),
+            dontCrossfadeVariations = (1 << 12),
+            unk02 = (1 << 13),
+            loadAtStartup = (1 << 14),
+            useGlobalLights = (1 << 15),
+            backupTransSpecular = (1 << 16),
+            emitsGpuParticles = (1 << 17),
+            isScreenEffect = (1 << 18),
+            loadAllTechniques = (1 << 19),
+            receiveRain = (1 << 20),
+            oneParticleSystem = (1 << 21),
+            usesPortals = (1 << 22),
+            requiresHavokFx = (1 << 23),
+            directionalInSH = (1 << 24),
+            emissivediffuse = (1 << 25)
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-
         public Int32 priority;
         public Int32 values1;//used
         public Int32 values2;//used

@@ -919,7 +919,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 levelThemeRequired;//index                     // 479  0x0000000000000D18  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x21)]
         public Int32 modeGroupOnClient;//index                      // 475  0x0000000000000D1C  XLS_ReadIndex
-        public Int32 null1;                                         // 455  0x0000000000000D20  XLS_ReadInt32
+        public Int32 cameraTarget;                                         // 455  0x0000000000000D20  XLS_ReadInt32
         public Int32 null2;                                         // 456  0x0000000000000D24  XLS_ReadInt32
         public Int32 null3;                                         // 457  0x0000000000000D28  XLS_ReadInt32
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 88)]

@@ -8,10 +8,10 @@ namespace Reanimator.ExcelDefinitions
     class LevelsRow
     {
         ExcelFile.TableHeader header;
+
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string levelName;
-
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         byte[] reserved;
         [ExcelOutput(SortId = 2)]
@@ -64,7 +64,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBool = true)]
         public Int32 allowRandomOrientation;
         public Int32 hellriftChancePercent;
-        public Int32 hellriftSubLevel;//index
+        public Int32 hellriftSubLevel1;//index
         public Int32 madLibs;//index
         public Int32 properNames;//index
         public Int32 adjectives;//index
@@ -106,7 +106,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 stringEnter;//stridx
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
         public Int32 stringLeave;//stridx
-        public float championSpawnChancePercentAtEachSpawnL;//L == Level?
+        public float championSpawnChancePercentAtEachSpawnLocation;
         public float uniqueMonsterChancePercent;
         public Int32 mapX;
         public Int32 mapY;

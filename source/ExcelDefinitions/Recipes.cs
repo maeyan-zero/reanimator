@@ -26,8 +26,8 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBool = true)]
         public Int32 removeOnLoad;
         public Int32 weight;
-        Int32 experienceEarned;
-        Int32 goldReward;
+        public Int32 experienceEarned;
+        public Int32 goldReward;
         public Int32 resultQualityModifiesIngredientQuantity;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 ingredient1ItemClass;
@@ -77,27 +77,31 @@ namespace Reanimator.ExcelDefinitions
         public Int32 ingredient6ItemQuality;
         public Int32 ingredient6MinQuantity;
         public Int32 ingredient6MaxQuantity;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        Int32[] craftResult;
+        public Int32 craftResult1;
+        public Int32 craftResult2;
+        public Int32 craftResult3;
+        public Int32 craftResult4;
+        public Int32 craftResult5;
+        public Int32 craftResult6;
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
-        public Int32 treasureResult;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        Int32[] treasureResult_2;
+        public Int32 treasureResult1;
+        public Int32 treasureResult2;
+        public Int32 treasureResult3;
+        public Int32 treasureResult4;
+        public Int32 treasureResult5;
+        public Int32 treasureResult6;
         [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
         public Int32 mustPlaceInInvSlot;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public Recipes.BitMask01 bitmask;
-        Int32 spawnLevelMin;
-        Int32 spawnLevelMax;
+        public BitMask01 bitmask;
+        public Int32 spawnLevelMin;
+        public Int32 spawnLevelMax;
 
-        public abstract class Recipes
+        [FlagsAttribute]
+        public enum BitMask01 : uint
         {
-            [FlagsAttribute]
-            public enum BitMask01 : uint
-            {
-                canBeLearned = 1,
-                canSpawn = 2
-            }
+            canBeLearned = (1 << 0),
+            canSpawn = (1 << 1)
         }
     }
 }

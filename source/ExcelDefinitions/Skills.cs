@@ -8,6 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class SkillsRow
     {
         ExcelFile.TableHeader header;
+
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String skill;
         public Int32 code;
@@ -31,9 +32,9 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String effectStringFunction;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 192)]
-        String skillBonusFunction;//doesn't appear to be used
+        public String skillBonusFunction;//doesn't appear to be used
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 192)]
-        String accumulationStringFunction;//doesn't appear to be used
+        public String accumulationStringFunction;//doesn't appear to be used
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknown1;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
@@ -344,38 +345,38 @@ namespace Reanimator.ExcelDefinitions
         [FlagsAttribute]
         public enum Bitmask01 : uint
         {
-            // = 1,
-            // = 2,
-            usesWeapon = 4,
-            weaponIsRequired = 8,
-            weaponTargeting = 16,
-            usesWeaponSkill = 32,
-            useWeaponCooldown = 64,
-            cooldownUnitInsteadOfWeapon = 128,
-            // = 256,
-            useWeaponIcon = 512,
-            useAllWeapons = 1024,
-            combineWeaponDamage = 2048,
-            usesUnitFiringError = 4096,
-            displayFiringError = 8192,
-            // = 16384,
-            checkLOS = 32768,
-            noLowAiming3rdPerson = 65536,
-            noHighAiming3rdPerson = 131072,
-            canTargetUnit = 262144,
-            findTargetUnit = 524288,
-            mustTargetUnit = 1048576,
-            mustNotTargetUnit = 2097152,
-            monsterMustTargetUnit = 4194304,
-            cannotRetarget = 8388608,
-            verifyTarget = 16777216,
-            verifyTargetOnRequest = 33554432,
-            targetsPosition = 67108864,
-            keepTargetPositionOnRequest = 134217728,
-            targetPosInStart = 268435456, // 28
-            targetDead = 536870912,
-            dyingOnStart = 1073741824,
-            dyingAfterStart = 2147483648
+            _undefined1 = (1 << 0),
+            _undefined2 = (1 << 1),
+            usesWeapon = (1 << 2),
+            weaponIsRequired = (1 << 3),
+            weaponTargeting = (1 << 4),
+            usesWeaponSkill = (1 << 5),
+            useWeaponCooldown = (1 << 6),
+            cooldownUnitInsteadOfWeapon = (1 << 7),
+            _undefined3 = (1 << 8),
+            useWeaponIcon = (1 << 9),
+            useAllWeapons = (1 << 10),
+            combineWeaponDamage = (1 << 11),
+            usesUnitFiringError = (1 << 12),
+            displayFiringError = (1 << 13),
+            _undefined4 = (1 << 14),
+            checkLOS = (1 << 15),
+            noLowAiming3rdPerson = (1 << 16),
+            noHighAiming3rdPerson = (1 << 17),
+            canTargetUnit = (1 << 18),
+            findTargetUnit = (1 << 19),
+            mustTargetUnit = (1 << 20),
+            mustNotTargetUnit = (1 << 21),
+            monsterMustTargetUnit = (1 << 22),
+            cannotRetarget = (1 << 23),
+            verifyTarget = (1 << 24),
+            verifyTargetOnRequest = (1 << 25),
+            targetsPosition = (1 << 26),
+            keepTargetPositionOnRequest = (1 << 27),
+            targetPosInStart = (1 << 28),
+            targetDead = (1 << 29),
+            dyingOnStart = (1 << 30),
+            dyingAfterStart = ((uint)1 << 31)
         }
 
         [FlagsAttribute]

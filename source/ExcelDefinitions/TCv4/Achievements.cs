@@ -61,21 +61,21 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
         public Int32 monsterUnitType1;                                                                 // 15       0x00000000000000A0
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        Int32 monsterUnitType2;                                                                        // 15       0x00000000000000A4
+        public Int32 monsterUnitType2;                                                                        // 15       0x00000000000000A4
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        Int32 monsterUnitType3;                                                                        // 15       0x00000000000000A8
+        public Int32 monsterUnitType3;                                                                        // 15       0x00000000000000A8
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        Int32 monsterUnitType4;                                                                        // 15       0x00000000000000AC
+        public Int32 monsterUnitType4;                                                                        // 15       0x00000000000000AC
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        Int32 monsterUnitType5;                                                                        // 15       0x00000000000000B0
+        public Int32 monsterUnitType5;                                                                        // 15       0x00000000000000B0
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        Int32 monsterUnitType6;                                                                        // 15       0x00000000000000B4
+        public Int32 monsterUnitType6;                                                                        // 15       0x00000000000000B4
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        Int32 monsterUnitType7;                                                                        // 15       0x00000000000000B8
+        public Int32 monsterUnitType7;                                                                        // 15       0x00000000000000B8
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        Int32 monsterUnitType8;                                                                        // 15       0x00000000000000BC
+        public Int32 monsterUnitType8;                                                                        // 15       0x00000000000000BC
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x17)]
-        Int32 monsterUnitType9;                                                                        // 15       0x00000000000000C0
+        public Int32 monsterUnitType9;                                                                        // 15       0x00000000000000C0
         [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST")]
         public Int32 questTaskComplete;                                                         // 23       0x00000000000000C4      XLS_ReadIndex,0xA5
         public Int32 randomQuests;                                                              // 24       0x00000000000000C8      XLS_ReadInt32
@@ -114,13 +114,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32 stat;                                                                      // 22       0x00000000000000E4      XLS_ReadIndex,0x1B
         public Int32 rewardAchievementPoints;                                                   // 25       0x00000000000000E8      XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x65)]
-        Int32 rewardTreasureClass;//idx                                                         // 26       0x00000000000000EC      XLS_ReadIndex,0x65
+        public Int32 rewardTreasureClass;//idx                                                         // 26       0x00000000000000EC      XLS_ReadIndex,0x65
         public Int32 rewardEmote_tcv4;
         public Int32 rewardXP;                                                                  // 27       0x00000000000000F0      XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 rewardSkill;
         public Int32 rewardTitle_tcv4;
         [ExcelOutput(IsIntOffset = true)]
-        Int32 rewardScript;                                                                     // 29       0x00000000000000F8      XLS_ReadIntPtr
+        public Int32 rewardScript;                                                                     // 29       0x00000000000000F8      XLS_ReadIntPtr
     }
 }

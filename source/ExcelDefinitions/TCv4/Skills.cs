@@ -11,9 +11,8 @@ namespace Reanimator.ExcelDefinitions
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String skill;
-
         public Int32 code;
-        Int32 buffer;
+        public Int32 buffer;
         [ExcelOutput(IsBitmask = true)]
         public Skills.Bitmask01 bitmask1;
         [ExcelOutput(IsBitmask = true)]
@@ -28,19 +27,19 @@ namespace Reanimator.ExcelDefinitions
         public Skills.Bitmask06 bitmask6;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
         public Int32 displayName;//stridx
-        public Int32 skillLevelIncludesSkills1;
-        public Int32 skillLevelIncludesSkills2;
-        public Int32 skillLevelIncludesSkills3;
-        public Int32 skillLevelIncludesSkills4;
-        public Int32 skillLevelIncludesSkills5;
+        public Int32 skillLevelIncludesSkills1_tcv4;
+        public Int32 skillLevelIncludesSkills2_tcv4;
+        public Int32 skillLevelIncludesSkills3_tcv4;
+        public Int32 skillLevelIncludesSkills4_tcv4;
+        public Int32 skillLevelIncludesSkills5_tcv4;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String descriptionStringFunction;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String effectStringFunction;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 192)]
-        String skillBonusFunction;//doesn't appear to be used
+        public String skillBonusFunction;//doesn't appear to be used
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 192)]
-        String accumulationStringFunction;//doesn't appear to be used
+        public String accumulationStringFunction;//doesn't appear to be used
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknown1;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
@@ -48,9 +47,9 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
         public Int32 effectString;//stridx
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
-        Int32 skillBonusString;//stridx
+        public Int32 skillBonusString;//stridx
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
-        Int32 accumulationString;//stridx
+        public Int32 accumulationString;//stridx
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
         public Int32 stringAfterRequiredWeapon;//stridx
         public Int32 skillsToAccumulate1;
@@ -72,7 +71,7 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 124)]
         byte[] unknown3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
-        Int32[] TCv4_3;
+        Int32[] empty3_tcv4;
         public Int32 skillGroup1;
         public Int32 skillGroup2;
         public Int32 skillGroup3;
@@ -95,10 +94,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 level14;
         public Int32 level15;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 15)]
-        Int32[] levels_TCv4_4;
+        Int32[] levels4_tcv4;
         public Int32 maxLevel;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-        String summonedAi;
+        public String summonedAi;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknown4;
         public Int32 summonedInvLocation1;
@@ -114,7 +113,7 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown5;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
-        Int32[] perkPointCost_TCv4_5;
+        Int32[] perkPointCost_tcv4;
         public Int32 priority;
         public Int32 requiredStats1;
         public Int32 requiredStats2;
@@ -242,9 +241,9 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 skillVar9;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 craftingScript;
+        public Int32 craftingScript_tcv4;
         [ExcelOutput(IsIntOffset = true)]
-        public Int32 craftingPropertiesScript;
+        public Int32 craftingPropertiesScript_tcv4;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 rangeMultScript;
         [ExcelOutput(IsIntOffset = true)]
@@ -369,7 +368,7 @@ namespace Reanimator.ExcelDefinitions
         public float impactForwardBias;
         public float modeSpeed;
         public Int32 damageTypeOverride;//idx
-        float damageMultiplier;
+        public float damageMultiplier;
         public Int32 maxExtraSpreadBullets;
         public Int32 spreadBulletMultiplier;
         public float reflectiveLifeTimeInSeconds;
@@ -389,31 +388,31 @@ namespace Reanimator.ExcelDefinitions
         public Int32 linkedLevelSkill2;
         public Int32 skillParent;
         public Int32 fieldMissile;
-        public Int32 unlockPurchaseItem;
+        public Int32 unlockPurchaseItem_tcv4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknown11;
-        public Int32 TCv4_10;
+        public Int32 undefined10_tcv4;
 
         public abstract class Skills
         {
             [FlagsAttribute]
             public enum Bitmask01 : uint
             {
-                //  = (1 << 0),
-                //  = (1 << 1),
+                _undefined1 = (1 << 0),
+                _undefined2 = (1 << 1),
                 usesWeapon = (1 << 2),
                 weaponIsRequired = (1 << 3),
                 weaponTargeting = (1 << 4),
                 usesWeaponSkill = (1 << 5),
                 useWeaponCooldown = (1 << 6),
                 cooldownUnitInsteadOfWeapon = (1 << 7),
-                //  = (1 << 8),
+                _undefined3 = (1 << 8),
                 useWeaponIcon = (1 << 9),
                 useAllWeapons = (1 << 10),
                 combineWeaponDamage = (1 << 11),
                 usesUnitFiringError = (1 << 12),
                 displayFiringError = (1 << 13),
-                //  = (1 << 14),
+                _undefined4 = (1 << 14),
                 checkLOS = (1 << 15),
                 noLowAiming3rdPerson = (1 << 16),
                 noHighAiming3rdPerson = (1 << 17),

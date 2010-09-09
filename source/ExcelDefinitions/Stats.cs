@@ -12,7 +12,6 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
-
         [ExcelOutput(SortId = 2)]
         public Int32 code;
         public Int32 type;
@@ -42,10 +41,14 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] undefined5;
         [ExcelOutput(IsBool = true)]
-        public Int32 player;//bool
+        public Int32 player;
+        [ExcelOutput(IsBool = true)]
         public Int32 monster;
+        [ExcelOutput(IsBool = true)]
         public Int32 missile;
+        [ExcelOutput(IsBool = true)]
         public Int32 item;
+        [ExcelOutput(IsBool = true)]
         public Int32 Object;
         public Int32 valbits;
         public Int32 valWindow;
@@ -100,28 +103,29 @@ namespace Reanimator.ExcelDefinitions
         [FlagsAttribute]
         public enum BitMask01 : uint
         {
-            cur = 2,
-            modList = 4,
-            vector = 8,
-            Float = 16,
-            _undefined1 = 32,
-            accrue = 64,
-            accrueOnceOnly = 128,
-            combat = 256,
-            directDmg = 512,
-            send = 1024,
-            sendAll = 2048,
-            save = 4096,
-            _undefined2 = 8192,
-            noMaxCurWhenDead = 16384,
-            stateMonitorsC = 32768,
-            stateMonitorsS = 65536,
-            transfer = 131072,
-            transferToMissile = 262144,
-            calcRider = 524288,
-            calc = 1048576,
-            updateDatabase = 2097152,
-            dontTranferToNonWeaponMissile = 4194304
+            _undefined1 = (1 << 0),
+            cur = (1 << 1),
+            modList = (1 << 2),
+            vector = (1 << 3),
+            Float = (1 << 4),
+            _undefined2 = (1 << 5),
+            accrue = (1 << 6),
+            accrueOnceOnly = (1 << 7),
+            combat = (1 << 8),
+            directDmg = (1 << 9),
+            send = (1 << 10),
+            sendAll = (1 << 11),
+            save = (1 << 12),
+            _undefined2 = (1 << 13),
+            noMaxCurWhenDead = (1 << 14),
+            stateMonitorsC = (1 << 15),
+            stateMonitorsS = (1 << 16),
+            transfer = (1 << 17),
+            transferToMissile = (1 << 18),
+            calcRider = (1 << 19),
+            calc = (1 << 20),
+            updateDatabase = (1 << 21),
+            dontTranferToNonWeaponMissile = (1 << 22)
         }
     }
 }

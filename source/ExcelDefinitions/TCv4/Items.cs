@@ -269,7 +269,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 impactUnitToxic;//pchar                        // 450  0x00000000000004E8  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 116)]
         byte[] unknown40;
-        public Int32 baseRow;                                 // ???  0x0000000000000560  ??? Appears to be Int32, but not seen in code?
+        public Int32 itemBaseIndex;                                 // ???  0x0000000000000560  ??? Appears to be Int32, but not seen in code?
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask01 bitmask01;                           // 56   0x0000000000000564  XLS_ReadBitmask
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
@@ -285,7 +285,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask07 bitmask07;                           // 56   0x000000000000057C
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public Items.BitMask08 bitmask08;
+        public Items.BitMask08 bitmask09;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 String;                                        // 375  0x0000000000000580  XLS_ReadStringIndex
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
@@ -732,7 +732,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x29)]
         public Int32 skillWhenUsed;//index                          // 247  0x0000000000000AE0  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
-        public Int32 SkillTab;//index                               // 249  0x0000000000000AE4  XLS_ReadIndex
+        public Int32 SkillTab1;//index                               // 249  0x0000000000000AE4  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
         public Int32 SkillTab2;//index                              // 250  0x0000000000000AE8  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x26)]
