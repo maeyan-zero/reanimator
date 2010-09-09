@@ -814,7 +814,7 @@ namespace Reanimator
                 //MessageBox.Show("Tables are being loaded. This may take a few seconds!");
 
                 //ItemTransferForm transfer = new ItemTransferForm(_tableDataSet, _tableFiles);
-                ItemTransferForm transfer = new ItemTransferForm(_tableDataSet);
+                ItemTransferForm transfer = new ItemTransferForm(_tableDataSet, _fileExplorer);
                 //Displays a warning message before opening the item trading window.
                 transfer.DisplayWarningMessage(null, null);
                 transfer.ShowDialog(this);

@@ -29,6 +29,8 @@ namespace Reanimator.Forms.ItemTransfer
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // ItemPanel
@@ -37,7 +39,6 @@ namespace Reanimator.Forms.ItemTransfer
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Reanimator.Properties.Resources.inventory_bg1;
-            //this.BackgroundImage = Bitmap.FromFile(@"HeroEditor\inventory_bg1.png");
             this.DoubleBuffered = true;
             this.Name = "ItemPanel";
             this.Size = new System.Drawing.Size(240, 240);
@@ -46,6 +47,8 @@ namespace Reanimator.Forms.ItemTransfer
         }
 
         #endregion
+
+        private System.Windows.Forms.ToolTip toolTip1;
 
     }
 }

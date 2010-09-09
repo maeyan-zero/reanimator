@@ -14,6 +14,7 @@ namespace Reanimator.Forms.ItemTransfer
 {
     public partial class ItemTransferForm : Form
     {
+        FileExplorer _fileExplorer;
         TableDataSet _dataSet;
         UnitHelpFunctions _itemHelpFunctions;
         DataTable _items;
@@ -60,18 +61,19 @@ namespace Reanimator.Forms.ItemTransfer
 
         ItemPanel _eventSender;
 
-        public ItemTransferForm(TableDataSet dataSet)
+        public ItemTransferForm(TableDataSet dataSet, FileExplorer fileExplorer)
         {
             InitializeComponent();
 
             _dataSet = dataSet;
+            _fileExplorer = fileExplorer;
             _itemHelpFunctions = new UnitHelpFunctions(_dataSet);
 
             //preload the tables
             _items = _dataSet.GetExcelTableFromStringId("ITEMS");
             _dataSet.GetExcelTableFromStringId("AFFIXES");
 
-            _previewManager = new PreviewManager();
+            _previewManager = new PreviewManager(_fileExplorer);
 
             //if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "trading.xml")))
             //{
@@ -96,8 +98,8 @@ namespace Reanimator.Forms.ItemTransfer
 
             this.Text += " - Location: " + INVENTORYTYPE.ToString();
 
-            _characterItemPanel1 = new ItemPanel(_displayItemIcons, _previewManager);
-            _characterItemPanel2 = new ItemPanel(_displayItemIcons, _previewManager);
+            _characterItemPanel1 = new ItemPanel(_displayItemIcons, _previewManager, _fileExplorer);
+            _characterItemPanel2 = new ItemPanel(_displayItemIcons, _previewManager, _fileExplorer);
 
             _characterItemPanel1.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
             _characterItemPanel2.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);

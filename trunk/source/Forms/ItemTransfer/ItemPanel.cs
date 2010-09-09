@@ -12,6 +12,7 @@ namespace Reanimator.Forms.ItemTransfer
         public delegate void NewItemSelected(ItemPanel sender, InventoryItem item);
         public event NewItemSelected NewItemSelected_Event;
 
+        FileExplorer _fileExplorer;
         PreviewManager _manager;
         bool _displayItemIcons;
         int _itemUnitSize = 40;
@@ -22,11 +23,12 @@ namespace Reanimator.Forms.ItemTransfer
             set { _itemUnitSize = value; }
         }
 
-        public ItemPanel(bool displayItemIcons, PreviewManager iconPreview)
+        public ItemPanel(bool displayItemIcons, PreviewManager iconPreview, FileExplorer fileExplorer)
         {
             InitializeComponent();
             _displayItemIcons = displayItemIcons;
             _manager = iconPreview;
+            _fileExplorer = fileExplorer;
         }
 
         private void RegisterItemEvents(InventoryItem item)
@@ -55,6 +57,7 @@ namespace Reanimator.Forms.ItemTransfer
                     }
                 }
 
+                CreateToolTip(item);
                 this.Controls.Add(item);
 
                 return true;
@@ -73,6 +76,13 @@ namespace Reanimator.Forms.ItemTransfer
                 }
             }
             return false;
+        }
+
+        private void CreateToolTip(InventoryItem item)
+        {
+            string toolTip = item.Item.Name + " x" + item.Quantity + Environment.NewLine + 
+                             "Item quality: " + item.Quality.ToString();
+            toolTip1.SetToolTip(item, toolTip);
         }
 
         public void RemoveItem(InventoryItem item)
@@ -171,6 +181,13 @@ namespace Reanimator.Forms.ItemTransfer
         bool _displayNamesAndQuantity;
         int _unitType;
         string _imagePath;
+        ItemQuality _quality;
+
+        public ItemQuality Quality
+        {
+            get { return _quality; }
+            set { _quality = value; }
+        }
 
         public int Quantity
         {
@@ -272,18 +289,18 @@ namespace Reanimator.Forms.ItemTransfer
             this.BackColor = Color.Transparent;
             this.ForeColor = Color.White;
             this.Text = string.Empty;
-            _displayNamesAndQuantity = displayNameAndQuantity;
+            this._displayNamesAndQuantity = displayNameAndQuantity;
+
+            _quantity = UnitHelpFunctions.GetSimpleValue(_item, ItemValueNames.item_quantity.ToString());
+
+            if (_quantity < 1)
+            {
+                _quantity = 1;
+            }
 
             if (_displayNamesAndQuantity)
             {
-                _quantity = UnitHelpFunctions.GetSimpleValue(_item, ItemValueNames.item_quantity.ToString());
-
-                if (_quantity > 0)
-                {
-                    this.Text += _quantity.ToString() + "x ";
-                }
-
-                this.Text += _item.Name;
+                this.Text = Item.Name;
             }
 
             SetButtonSize();
@@ -310,14 +327,15 @@ namespace Reanimator.Forms.ItemTransfer
         private void SetRarityColor()
         {
             int quality = UnitHelpFunctions.GetSimpleValue(_item, ItemValueNames.item_quality.ToString());
+            _quality = (ItemQuality)quality;
 
             Color color = Color.White;
 
-            if (quality == (int)ItemQuality.Mutant || quality == (int)ItemQuality.MutantMod)
+            if (_quality == ItemQuality.Mutant || _quality == ItemQuality.MutantMod)
             {
                 color = Color.Purple;
             }
-            else if (quality == (int)ItemQuality.Normal || quality == (int)ItemQuality.NormalMod)
+            else if (_quality == ItemQuality.Normal || _quality == ItemQuality.NormalMod)
             {
                 color = Color.White;
 
@@ -329,27 +347,27 @@ namespace Reanimator.Forms.ItemTransfer
                 //    color = Color.Red;
                 //}
             }
-            else if (quality == (int)ItemQuality.Unique || quality == (int)ItemQuality.UniqueMod)
+            else if (_quality == ItemQuality.Unique || _quality == ItemQuality.UniqueMod)
             {
                 color = Color.Gold;
             }
-            else if (quality == (int)ItemQuality.Rare || quality == (int)ItemQuality.RareMod)
+            else if (_quality == ItemQuality.Rare || _quality == ItemQuality.RareMod)
             {
                 color = Color.Blue;
             }
-            else if (quality == (int)ItemQuality.Uncommon)
+            else if (_quality == ItemQuality.Uncommon)
             {
                 color = Color.Green;
             }
-            else if (quality == (int)ItemQuality.Legendary || quality == (int)ItemQuality.LegendaryMod)
+            else if (_quality == ItemQuality.Legendary || _quality == ItemQuality.LegendaryMod)
             {
                 color = Color.Orange;
             }
-            else if (quality == (int)ItemQuality.DoubleEdged || quality == (int)ItemQuality.DoubleEdgedMod)
+            else if (_quality == ItemQuality.DoubleEdged || _quality == ItemQuality.DoubleEdgedMod)
             {
                 color = Color.FromArgb(96, 255, 255);
             }
-            else if (quality == (int)ItemQuality.Mythic || quality == (int)ItemQuality.MythicMod)
+            else if (_quality == ItemQuality.Mythic || _quality == ItemQuality.MythicMod)
             {
                 color = Color.Purple;
             }
@@ -360,12 +378,14 @@ namespace Reanimator.Forms.ItemTransfer
 
     public class PreviewManager
     {
+        FileExplorer _fileExplorer;
         List<ImageHolder> _imageHolder;
         string _basePath = Path.Combine(Config.HglDir, @"Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items");
 
-        public PreviewManager()
+        public PreviewManager(FileExplorer fileExplorer)
         {
             _imageHolder = new List<ImageHolder>();
+            _fileExplorer = fileExplorer;
         }
 
         public Image GetImage(int unitType)
@@ -379,7 +399,7 @@ namespace Reanimator.Forms.ItemTransfer
                     return image.Image;
                 }
 
-                image = new ImageHolder(new Size(8, 8));
+                image = new ImageHolder(new Size(8, 8), _fileExplorer);
                 if (image.Load("items", unitType))
                 {
                     _imageHolder.Add(image);
@@ -405,7 +425,7 @@ namespace Reanimator.Forms.ItemTransfer
                     return image.Image;
                 }
 
-                image = new ImageHolder(size);
+                image = new ImageHolder(size, _fileExplorer);
                 if (image.Load(_basePath, imagePath))
                 {
                     _imageHolder.Add(image);
@@ -431,6 +451,7 @@ namespace Reanimator.Forms.ItemTransfer
 
     public class ImageHolder
     {
+        FileExplorer _fileExplorer;
         Size _size;
         string _imagePath;
         int _unitType;
@@ -454,9 +475,10 @@ namespace Reanimator.Forms.ItemTransfer
             set { _image = value; }
         }
 
-        public ImageHolder(Size size)
+        public ImageHolder(Size size, FileExplorer fileExplorer)
         {
             _size = size;
+            _fileExplorer = fileExplorer;
         }
 
         public bool Load(string folder, int unitType)
@@ -478,11 +500,10 @@ namespace Reanimator.Forms.ItemTransfer
             try
             {
                 _imagePath = imagePath;
-                string filePath = Path.Combine(folder, imagePath) + ".dds";
 
-                if (File.Exists(filePath))
+                if (File.Exists(Path.Combine(folder, _imagePath) + ".dds"))
                 {
-                    _image = LoadImage(filePath);
+                    _image = LoadImage(folder, _imagePath, ".dds");
                     if (_size.Height != _size.Width)
                     {
                         _image = CropImage(_image, _size);
@@ -525,15 +546,30 @@ namespace Reanimator.Forms.ItemTransfer
 
         public void Dispose()
         {
-            _image.Dispose();
+            if (_image != null)
+            {
+                _image.Dispose();
+            }
         }
 
-        private Bitmap LoadImage(string filePath)
+        private Bitmap LoadImage(string folder, string imagePath, string extension)
         {
             //return DevIL.DevIL.LoadBitmap(filePath);
-            FreeImageAPI.FreeImageBitmap bmp = FreeImageAPI.FreeImageBitmap.FromFile(filePath);
-
+            string path = Path.Combine(folder, imagePath) + extension;
+            FreeImageAPI.FreeImageBitmap bmp = FreeImageAPI.FreeImageBitmap.FromFile(path);
             return bmp.ToBitmap();
+            //string path = Path.Combine(@"data\units\items", filePath);
+            //string path = @"data\units\items\misc\dye_kit\low\dye_kit_diffuse.dds";
+
+            //if (_fileExplorer.GetFileExists(path))
+            //{
+            //    byte[] imageBytes = _fileExplorer.GetFileBytes(path);
+            //    MemoryStream imageStream = new MemoryStream(imageBytes, false);
+            //    FreeImageAPI.FreeImageBitmap bmp = FreeImageAPI.FreeImageBitmap.FromStream(imageStream);
+
+            //    return bmp.ToBitmap();
+            //}
+            //return null;
         }
     }
 }

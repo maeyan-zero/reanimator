@@ -752,6 +752,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class CharacterItems : CharacterProperty
     {
+        bool _isQuestItem;
+        Color _qualityColor;
+        Bitmap _itemImage;
+        string _itemImagePath;
+
         public CharacterItems(UnitWrapper heroUnit, TableDataSet dataSet)
             : base(heroUnit, dataSet)
         {
@@ -853,6 +858,38 @@ namespace Reanimator.Forms.HeroEditorFunctions
             get
             {
                 return (ItemQuality)UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.item_quality);
+            }
+        }
+
+        public Color QualityColor
+        {
+            get
+            {
+                return _qualityColor;
+            }
+        }
+
+        public string ItemImagePath
+        {
+            get
+            {
+                return _itemImagePath;
+            }
+        }
+
+        public Image ItemImage
+        {
+            get
+            {
+                return _itemImage;
+            }
+        }
+
+        public bool IsQuestItem
+        {
+            get
+            {
+                return _isQuestItem;
             }
         }
 
