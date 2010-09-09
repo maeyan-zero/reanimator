@@ -35,7 +35,8 @@ namespace Reanimator.Forms.ItemTransfer
         //specifies wether a characterbackup should be created before saving  a character
         bool _backupCharacters = true;
         //specifies wether item icons are loaded to display the item
-        bool _displayItemIcons = true;
+        //bool _displayItemIcons = true;
+        bool _displayItemIcons = Directory.Exists(Path.Combine(Config.HglDir, @"Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items"));
         //specifies wether the item name and quantity is displayed
         bool _displayNamesAndQuantity = true;
 

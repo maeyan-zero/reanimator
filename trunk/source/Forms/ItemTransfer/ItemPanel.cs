@@ -482,7 +482,7 @@ namespace Reanimator.Forms.ItemTransfer
 
                 if (File.Exists(filePath))
                 {
-                    _image = DevIL.DevIL.LoadBitmap(filePath);
+                    _image = LoadImage(filePath);
                     if (_size.Height != _size.Width)
                     {
                         _image = CropImage(_image, _size);
@@ -526,6 +526,14 @@ namespace Reanimator.Forms.ItemTransfer
         public void Dispose()
         {
             _image.Dispose();
+        }
+
+        private Bitmap LoadImage(string filePath)
+        {
+            //return DevIL.DevIL.LoadBitmap(filePath);
+            FreeImageAPI.FreeImageBitmap bmp = FreeImageAPI.FreeImageBitmap.FromFile(filePath);
+
+            return bmp.ToBitmap();
         }
     }
 }
