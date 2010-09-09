@@ -73,12 +73,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 consumesItem;//bool
         [ExcelOutput(IsBool = true)]
         public Int32 checkPetPowerCost;//bool
-        public Int32 TCV4_1;
+        public Int32 undefined1_tcv4;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string eventHandler;
         public Int32 eventStringFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
         byte[] undefined1;
-        public Int32 TCV4_2;
+        public Int32 undefined2_tcv4;
     }
 }

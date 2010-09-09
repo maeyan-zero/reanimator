@@ -74,9 +74,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 colorSetPriority;
         public Int32 state;
         public Int32 saveState;
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceMulti;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceAdd;
+        [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceMulti;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceAdd;

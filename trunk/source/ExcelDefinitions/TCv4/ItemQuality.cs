@@ -21,10 +21,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 displayNameWithItemFormat;
         [ExcelOutput(IsBool = true)]
         public Int32 showBaseDesc;
-        Int32 randomlyNamed;
+        public Int32 randomlyNamed;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 baseDescFormatString;
-        Int32 unknown01;
+        public Int32 unknown01;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS", Column = "Color")]
         public Int32 nameColor;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS", Column = "Color")]
@@ -37,13 +37,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32 always_identified;
         public float price_multiplier;
         public float recipe_quantity_multiplier;
-        Int32 unknown02;
-        Int32 minLevel;
+        public Int32 unknown02;
+        public Int32 minLevel;
         public Int32 rarity;
         public Int32 vendorRarity;
         public Int32 luckRarity;
         public Int32 gamblingRarity_tcv4;
-        Int32 lookGroup;
+        public Int32 lookGroup;
         public Int32 state;
         public Int32 flippySound;
         public Int32 usable;

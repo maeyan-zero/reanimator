@@ -44,6 +44,10 @@ namespace Reanimator
             _CheckHellgateInstallation();
 
 #if DEBUG
+            clientPatchesToolStripMenuItem.Visible = true;
+            installModificationsToolStripMenuItem.Visible = true;
+            saveSinglePlayerFilesToolStripMenuItem.Visible = true;
+            patchToolToolStripMenuItem.Visible = true;
             characterFileToolStripMenuItem.Visible = true;
             convertTCv4FilesToolStripMenuItem.Visible = true;
 #endif

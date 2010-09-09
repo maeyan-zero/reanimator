@@ -344,7 +344,7 @@ namespace Reanimator
                 {"_TCv4_TAG", new MapItem {IsTCv4 = true, RowType = typeof (TagRow)}},
                 {"_TCv4_TASKS", new MapItem {IsTCv4 = true, RowType = typeof (TasksRow)}},
                 {"_TCv4_TEXTURE_TYPES", new MapItem {IsTCv4 = true, NameReplace = "TEXTURETYPES", RowType = typeof (TextureTypesRow)}},
-                {"_TCv4_UI_COMPONENT", new MapItem {IsTCv4 = true, RowType = typeof (UIComponentRow)}},
+                //{"_TCv4_UI_COMPONENT", new MapItem {IsTCv4 = true, RowType = typeof (UIComponentRow)}},
                 {"_TCv4_UNIT_EVENT_TYPES", new MapItem {IsTCv4 = true, NameReplace = "UNITEVENTS", RowType = typeof (UnitEventsRow)}},
                 {"_TCv4_WARDROBE_APPEARANCE_GROUP", new MapItem {IsTCv4 = true, RowType = typeof (WardrobeAppearanceGroupRow)}},
                 {"_TCv4_WARDROBE_BLENDOP", new MapItem {IsTCv4 = true, RowType = typeof (WardrobeBlendOpRow)}},
@@ -454,8 +454,10 @@ namespace Reanimator
             const int progressStepRate = 10;
             if (progress != null)
             {
-                progress.ConfigBar(0, TableMap.Count, progressStepRate);
-                progress.SetLoadingText("Loading Hellgate Excel Files (" + TableMap.Count + ")...");
+                // todo: count the tables properly
+                int noTables = 166;
+                progress.ConfigBar(0, noTables, progressStepRate);
+                progress.SetLoadingText("Loading Hellgate Excel Files (" + noTables + ")...");
             }
 
 

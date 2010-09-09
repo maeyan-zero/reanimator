@@ -12,22 +12,22 @@ namespace Reanimator.ExcelDefinitions
 
         [ExcelOutput(IsStringOffset = true, SortId = 1)]
         public Int32 affix;
-        Int32 unknown02;
+        public Int32 unknown02;
         [ExcelOutput(IsBool = true)]
         public Int32 alwaysApply;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
-        Int32 qualityNameString;
+        public Int32 qualityNameString;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
         public Int32 setNameString;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
         public Int32 magicNameString;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
-        Int32 replaceNameString;
+        public Int32 replaceNameString;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
-        Int32 flavorText;
+        public Int32 flavorText;
         public Int32 unknown03;
-        Int32 nameColor;
-        Int32 gridColor;
+        public Int32 nameColor;
+        public Int32 gridColor;
         public Int32 dom;
         [ExcelOutput(SortId = 3)]
         public Int32 code;
@@ -55,7 +55,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 affixType14;
         public Int32 affixType15;
         public Int32 suffix;
-        [ExcelOutput(IsStringOffset = true)]
+        [ExcelOutput(IsStringOffset = true, IsDistinctSort = true)]
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]
@@ -78,13 +78,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32 allowTypes6;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 weight;
-        Int32 luckWeight;
+        public Int32 luckWeight;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         Int32[] unknown04;
         public Int32 colorSet;
         public Int32 colorSetPriority;
         public Int32 state;
-        Int32 saveState;
+        public Int32 saveState;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceMulti;
         [ExcelOutput(IsIntOffset = true)]

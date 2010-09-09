@@ -467,6 +467,7 @@ namespace Reanimator.Forms
                     sw.Write("<entity id=\"" + dataRow.Index + "\">\n");
                     foreach (DataGridViewCell dataCell in dataRow.Cells)
                     {
+                        if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Contains("tcv4")) continue;
                         if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Equals("Index")) continue;
                         if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Contains("_string")) continue;
                         sw.Write("\t<attribute id=\"" + _dataTable.Columns[dataCell.ColumnIndex].Caption + "\">" + dataCell.Value.ToString() + "</attribute>\n");

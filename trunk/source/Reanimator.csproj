@@ -99,6 +99,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevIL.NET, Version=0.0.0.0, Culture=neutral">
@@ -277,6 +278,7 @@
     <Compile Include="ExcelDefinitions\SubLevel.cs" />
     <Compile Include="ExcelDefinitions\Tag.cs" />
     <Compile Include="ExcelDefinitions\Tasks.cs" />
+    <Compile Include="ExcelDefinitions\Tc\Achievements.cs" />
     <Compile Include="ExcelDefinitions\TextureTypes.cs" />
     <Compile Include="ExcelDefinitions\Treasure.cs" />
     <Compile Include="ExcelDefinitions\UIComponent.cs" />

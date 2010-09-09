@@ -21,10 +21,10 @@ namespace Reanimator.ExcelDefinitions
         public Int32 displayNameWithItemFormat;
         [ExcelOutput(IsBool = true)]
         public Int32 showBaseDesc;
-        Int32 randomlyNamed;
+        public Int32 randomlyNamed;
         [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
         public Int32 baseDescFormatString;
-        Int32 unknown01;
+        public Int32 unknown01;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS", Column = "Color")]
         public Int32 nameColor;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS", Column = "Color")]
@@ -37,12 +37,12 @@ namespace Reanimator.ExcelDefinitions
         public Int32 always_identified;
         public float price_multiplier;
         public float recipe_quantity_multiplier;
-        Int32 unknown02;
-        Int32 minLevel;
+        public Int32 unknown02;
+        public Int32 minLevel;
         public Int32 rarity;
         public Int32 vendorRarity;
         public Int32 luckRarity;
-        Int32 lookGroup;
+        public Int32 lookGroup;
         public Int32 state;
         public Int32 flippySound;
         public Int32 usable;
@@ -58,15 +58,15 @@ namespace Reanimator.ExcelDefinitions
         public Int32 dismantleResultSound;
         public Int32 downgrade;
         public Int32 upgrade;
-        Int32 prefixName;
-        Int32 prefixType;
-        Int32 prefixCount;
-        Int32 force;
-        Int32 suffixName;
-        Int32 suffixType;
-        Int32 suffixCount;
+        public Int32 prefixName;
+        public Int32 prefixType;
+        public Int32 prefixCount;
+        public Int32 force;
+        public Int32 suffixName;
+        public Int32 suffixType;
+        public Int32 suffixCount;
         public float procChance;
-        float luckProbMod;
+        public float luckProbMod;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 affix1Chance;
         [ExcelOutput(IsIntOffset = true)]
