@@ -116,7 +116,7 @@ namespace Reanimator.ExcelDefinitions
             send = (1 << 10),
             sendAll = (1 << 11),
             save = (1 << 12),
-            _undefined2 = (1 << 13),
+            _undefined3 = (1 << 13),
             noMaxCurWhenDead = (1 << 14),
             stateMonitorsC = (1 << 15),
             stateMonitorsS = (1 << 16),

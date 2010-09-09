@@ -28,7 +28,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 rollOffType;
         public Int32 reverbSend;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public Sounds.BitMask01 bitmask01;
+        public BitMask01 bitmask01;
         [ExcelFile.ExcelOutput(IsStringOffset = true)]
         public Int32 directory;//pchar
         public Int32 undefined5;
