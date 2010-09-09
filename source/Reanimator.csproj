@@ -102,9 +102,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DevIL.NET, Version=0.0.0.0, Culture=neutral">
+    <Reference Include="FreeImageNET, Version=3.13.1.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dlls\DevILDotNet_1.3\DevIL.NET.dll</HintPath>
+      <HintPath>..\dlls\FreeImage\FreeImageNET.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -759,6 +759,9 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll"
-copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"</PostBuildEvent>
+copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"
+if $(PlatformName) == x86 copy "$(ProjectDir)..\dlls\FreeImage\x86\FreeImage.dll" "$(TargetDir)FreeImage.dll"
+if $(PlatformName) == x64 copy "$(ProjectDir)..\dlls\FreeImage\x64\FreeImage.dll" "$(TargetDir)FreeImage.dll"
+copy "$(ProjectDir)..\dlls\FreeImage\FreeImageNET.dll" "$(TargetDir)FreeImageNET.dll"</PostBuildEvent>
   </PropertyGroup>
 </Project>
