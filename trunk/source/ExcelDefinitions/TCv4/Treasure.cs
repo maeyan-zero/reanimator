@@ -12,19 +12,19 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string treasureClass;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
-        Int32 allowUnitTypes1;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
-        Int32 allowUnitTypes2;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
-        Int32 allowUnitTypes3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
-        Int32 allowUnitTypes4;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
-        Int32 allowUnitTypes5;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES", Column = "type")]
-        Int32 allowUnitTypes6;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES", Column = "name")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
+        public Int32 allowUnitTypes1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
+        public Int32 allowUnitTypes2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
+        public Int32 allowUnitTypes3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
+        public Int32 allowUnitTypes4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
+        public Int32 allowUnitTypes5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
+        public Int32 allowUnitTypes6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
         public Int32 globalThemeRequired;
         public Int32 unknown02;
         public Int32 pickTypes;
@@ -92,8 +92,8 @@ namespace Reanimator.ExcelDefinitions
         byte[] unknown13;
         [ExcelOutput(IsBitmask = true)]
         public Treasure.Bitmask01 spawnCondition;
-        Int32 spawnFromMonsterUnitType;
-        Int32 spawnFromLevelTheme;
+        public Int32 spawnFromMonsterUnitType;
+        public Int32 spawnFromLevelTheme;
 
         public abstract class Treasure
         {

@@ -109,6 +109,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 hideWeapons_tcv4;
         public Int32 emoteAllowedHellgate_tcv4;
         public Int32 emoteAllowedMythos_tcv4;
-        Int32 undefined5;
+        public Int32 undefined5;
     }
 }
