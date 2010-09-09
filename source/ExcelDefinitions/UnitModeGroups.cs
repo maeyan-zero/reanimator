@@ -12,7 +12,6 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(SortId = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String name;
-
         [ExcelOutput(SortId = 2)]
         public Int32 code;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]

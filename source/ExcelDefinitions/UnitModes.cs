@@ -105,6 +105,6 @@ namespace Reanimator.ExcelDefinitions
         public Int32 useBackupModeAnims;//bool
         [ExcelOutput(IsBool = true)]
         public Int32 playOnInventoryModel;//bool
-        Int32 undefined5;
+        public Int32 undefined5;
     }
 }
