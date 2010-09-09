@@ -22,7 +22,7 @@ namespace Reanimator
     {
         public int unknown;											// 16 bits
         public int statCount;										// 16 bits
-        public Unit.StatBlock.Stat[] stats;
+        public List<Unit.StatBlock.Stat> stats;
     };
 
     [Serializable]
@@ -223,9 +223,9 @@ namespace Reanimator
                 public int skipResource;									    // 2 bits		// resouce flag I think...
                 public int resource;										    // 16 bits		// like in extra attributes - read if above is 0x00
                 public int repeatFlag;										// 1 bit		// if set, check for repeat number
-                public int repeatCount;										// 10 bits		// i think this can be something other than 10 bits... I think...
+                //public int repeatCount;										// 10 bits		// i think this can be something other than 10 bits... I think...
 
-                public Values[] values;
+                public List<Values> values;
 
                 public int Id
                 {
@@ -259,7 +259,7 @@ namespace Reanimator
 
                 public int Length
                 {
-                    get { return values.Length; }
+                    get { return values.Count; }
                 }
 
                 public override string ToString()
@@ -275,18 +275,18 @@ namespace Reanimator
 
             public int statVersion;										    // 16 bits
             public int unknown1;										    // 3 bits		// untested - alert if != 0
-            public int additionalStatCount;								    // 6 bits
-            public UnitStatAdditional[] additionalStats;
+            //public int additionalStatCount;								    // 6 bits
+            public List<UnitStatAdditional> additionalStats;
 
-            public int statCount;										    // 16 bits
-            public Stat[] stats;
+            //public int statCount;										    // 16 bits
+            public List<Stat> stats;
 
             public int nameCount;										    // 8 bits		// i think this has something to do with item affix/prefix naming
             public UnitStatName[] names;
 
             public int Length
             {
-                get { return stats.Length; }
+                get { return stats.Count; }
             }
 
             public Stat this[int index]
@@ -840,16 +840,18 @@ namespace Reanimator
                 return false;
             }
             statBlock.unknown1 = _bitBuffer.ReadBits(3);
-            statBlock.additionalStatCount = _bitBuffer.ReadBits(6);
-            statBlock.additionalStats = new UnitStatAdditional[statBlock.additionalStatCount];
+            //statBlock.additionalStatCount = _bitBuffer.ReadBits(6);
+            int count = _bitBuffer.ReadBits(6);
+            //statBlock.additionalStats = new UnitStatAdditional[statBlock.additionalStatCount];
+            statBlock.additionalStats = new List<UnitStatAdditional>();
 
-            for (int i = 0; i < statBlock.additionalStatCount; i++)
+            for (int i = 0; i < count; i++)
             {
                 UnitStatAdditional additionalStat = new UnitStatAdditional();
 
                 additionalStat.unknown = _bitBuffer.ReadBits(16);
                 additionalStat.statCount = _bitBuffer.ReadBits(16);
-                additionalStat.stats = new StatBlock.Stat[additionalStat.statCount];
+                additionalStat.stats = new List<StatBlock.Stat>();
 
                 for (int j = 0; j < additionalStat.statCount; j++)
                 {
@@ -857,22 +859,26 @@ namespace Reanimator
                     if (!ReadStat(ref unitStat))
                         return false;
 
-                    additionalStat.stats[j] = unitStat;
+                    additionalStat.stats.Add(unitStat);
 
                 }
 
-                statBlock.additionalStats[i] = additionalStat;
+                statBlock.additionalStats.Add(additionalStat);
             }
 
-            statBlock.statCount = _bitBuffer.ReadBits(16);
-            statBlock.stats = new StatBlock.Stat[statBlock.statCount];
-            for (int i = 0; i < statBlock.statCount; i++)
+            count = _bitBuffer.ReadBits(16);
+            //statBlock.statCount = _bitBuffer.ReadBits(16);
+            //statBlock.stats = new StatBlock.Stat[statBlock.statCount];
+            statBlock.stats = new List<StatBlock.Stat>();
+
+            for (int i = 0; i < count; i++)
             {
                 StatBlock.Stat unitStat = new StatBlock.Stat();
                 if (!ReadStat(ref unitStat))
                     return false;
 
-                statBlock.stats[i] = unitStat;
+                //statBlock.stats[i] = unitStat;
+                statBlock.stats.Add(unitStat);
             }
 
             if (!readNameCount)
@@ -951,16 +957,16 @@ namespace Reanimator
             }
 
             unitStat.repeatFlag = _bitBuffer.ReadBits(1);
-            unitStat.repeatCount = 1;
+            int count = 1;
             if (unitStat.repeatFlag == 1)
             {
-                unitStat.repeatCount = _bitBuffer.ReadBits(10);
+                count = _bitBuffer.ReadBits(10);
             }
-            unitStat.values = new StatBlock.Stat.Values[unitStat.repeatCount];
+            unitStat.values = new List<StatBlock.Stat.Values>();
 
-            for (int i = 0; i < unitStat.repeatCount; i++)
+            for (int i = 0; i < count; i++)
             {
-                unitStat.values[i] = new StatBlock.Stat.Values();
+                unitStat.values.Add(new StatBlock.Stat.Values());
                 for (int j = 0; j < unitStat.attributesCount; j++)
                 {
                     if (unitStat.attributes[j].exists != 1) continue;
@@ -1734,20 +1740,20 @@ namespace Reanimator
             saveBuffer.WriteBits(0x000A, 16);
             saveBuffer.WriteBits(0x0, 3);
 
-            saveBuffer.WriteBits(statBlock.additionalStatCount, 6);
-            for (int i = 0; i < statBlock.additionalStatCount; i++)
+            saveBuffer.WriteBits(statBlock.additionalStats.Count, 6);
+            for (int i = 0; i < statBlock.additionalStats.Count; i++)
             {
                 saveBuffer.WriteBits(statBlock.additionalStats[i].unknown, 16);
-                saveBuffer.WriteBits(statBlock.additionalStats[i].stats.Length, 16);
+                saveBuffer.WriteBits(statBlock.additionalStats[i].stats.Count, 16);
 
-                for (int j = 0; j < statBlock.additionalStats[i].stats.Length; j++)
+                for (int j = 0; j < statBlock.additionalStats[i].stats.Count; j++)
                 {
                     WriteStat(statBlock.additionalStats[i].stats[j], saveBuffer);
                 }
             }
 
-            saveBuffer.WriteBits(statBlock.stats.Length, 16);
-            for (int i = 0; i < statBlock.stats.Length; i++)
+            saveBuffer.WriteBits(statBlock.stats.Count, 16);
+            for (int i = 0; i < statBlock.stats.Count; i++)
             {
                 WriteStat(statBlock.stats[i], saveBuffer);
             }
@@ -1890,8 +1896,8 @@ namespace Reanimator
             saveBuffer.WriteBits(stat.repeatFlag, 1);
             if (stat.repeatFlag == 1)
             {
-                saveBuffer.WriteBits(stat.repeatCount, 10);
-                repeatCount = stat.repeatCount;
+                saveBuffer.WriteBits(stat.values.Count, 10);
+                repeatCount = stat.values.Count;
             }
 
             for (int i = 0; i < repeatCount; i++)

@@ -407,21 +407,21 @@ namespace Reanimator
 
                 //Comment me when testing the unit wrapper!!!
 
-            //HeroEditor2 heroEditor = new HeroEditor2(fileName, _tableDataSet)
-            //{
-            //    Text = "Hero Editor: " + fileName,
-            //    MdiParent = this
-            //};
-            //heroEditor.Show();
-                if (heroUnit.IsGood)
+                HeroEditor2 heroEditor = new HeroEditor2(fileName, _tableDataSet)
                 {
-                    HeroEditor heroEditor = new HeroEditor(heroUnit, _tableDataSet, fileName)
-                    {
-                        Text = "Hero Editor: " + fileName,
-                        MdiParent = this
-                    };
-                    heroEditor.Show();
-                }
+                    Text = "Hero Editor: " + fileName,
+                    MdiParent = this
+                };
+                heroEditor.Show();
+                //if (heroUnit.IsGood)
+                //{
+                //    HeroEditor heroEditor = new HeroEditor(heroUnit, _tableDataSet, fileName)
+                //    {
+                //        Text = "Hero Editor: " + fileName,
+                //        MdiParent = this
+                //    };
+                //    heroEditor.Show();
+                //}
             }
             catch (Exception ex)
             {

@@ -96,7 +96,10 @@ namespace Reanimator
             _time = DateTime.Now.ToLongTimeString();
             _function = functionName;
             _source = exception.Source;
-            _targetSite = exception.TargetSite.Name;
+            if (exception.TargetSite != null)
+            {
+                _targetSite = exception.TargetSite.Name;
+            }
             if (exception.InnerException != null)
             {
                 _innerException = exception.InnerException.ToString();

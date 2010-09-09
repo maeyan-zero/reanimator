@@ -79,7 +79,7 @@ namespace Reanimator.Forms
         {
             string value = string.Empty;
 
-            if (stat.values.Length != 0)
+            if (stat.values.Count != 0)
             {
                 String select = String.Format("code = '{0}'", lookupId);
                 DataTable table = _dataSet.GetExcelTableFromCode((uint)tableId);
@@ -417,9 +417,9 @@ namespace Reanimator.Forms
             Unit.StatBlock.Stat newStat = new Unit.StatBlock.Stat();
             //generates the entry that holds the stat value
             Unit.StatBlock.Stat.Values newValue = new Unit.StatBlock.Stat.Values();
-            newStat.values = new Unit.StatBlock.Stat.Values[1];
+            newStat.values = new List<Unit.StatBlock.Stat.Values>();
             //adds the entry to the new stat
-            newStat.values[0] = newValue;
+            newStat.values.Add(newValue);
             //sets the bitCOunt value (maximum stat value defined by the number of bits?)
             newStat.bitCount = bitCount;
             //sets the length of the stat array (may be unnecessary)
@@ -427,14 +427,14 @@ namespace Reanimator.Forms
             //sets the Id of the new stat
             newStat.Id = (int)valueName;
             newStat.skipResource = 1;
-            newStat.repeatCount = 1;
+            //newStat.repeatCount = 1;
 
             //adds the new value to the array
             newStats.Add(newStat);
 
             //assigns the new array to the unit
-            unit.Stats.stats = newStats.ToArray();
-            unit.Stats.statCount = newStats.Count;
+            unit.Stats.stats.Add(newStat);// = newStats.ToArray();
+            //unit.Stats.statCount = newStats.Count;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]

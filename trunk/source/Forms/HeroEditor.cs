@@ -455,7 +455,7 @@ namespace Reanimator.Forms
             Unit.StatBlock.Stat minigame = UnitHelpFunctions.GetComplexValue(_heroUnit, ItemValueNames.minigame_category_needed.ToString());
 
             // As long as VS won't let me place the control in the form by hand I'll initialize it here
-            MinigameControl control = new MinigameControl(minigame.values);
+            MinigameControl control = new MinigameControl(minigame.values.ToArray());
             p_miniGame.Controls.Add(control);
         }
 
@@ -465,12 +465,12 @@ namespace Reanimator.Forms
 
             if (wayPoints != null)
             {
-                if (wayPoints.values.Length >= 1)
+                if (wayPoints.values.Count >= 1)
                 {
                     WayPointControl wpcNormal = new WayPointControl(wayPoints.values[0]);
                     p_wpNormal.Controls.Add(wpcNormal);
                 }
-                if (wayPoints.values.Length >= 2)
+                if (wayPoints.values.Count >= 2)
                 {
                     WayPointControl wpcNightmare = new WayPointControl(wayPoints.values[1]);
                     p_wpNightmare.Controls.Add(wpcNightmare);
