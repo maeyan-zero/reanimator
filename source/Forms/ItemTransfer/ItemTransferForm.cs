@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Xml.Serialization;
 using Reanimator.Forms.HeroEditorFunctions;
+using Reanimator.Properties;
 
 namespace Reanimator.Forms.ItemTransfer
 {
@@ -149,6 +150,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             originalCharacterStatus = newCharacterStatus;
 
+            panel.BackgroundImage = null;
             if (newCharacterStatus == CharacterStatus.Error)
             {
                 panel.BackColor = Color.Red;
@@ -179,6 +181,12 @@ namespace Reanimator.Forms.ItemTransfer
                 panel.BackColor = Color.Red;
                 label.Text = "Character already loaded";
             }
+            else if (newCharacterStatus == CharacterStatus.WeaponSetDetected)
+            {
+                panel.BackColor = Color.Green;
+                panel.BackgroundImage = Resources.warning;
+                label.Text = "Warning: Active weapon set(s) detected!";
+            }
         }
 
         private void _characterItemPanel_NewItemSelected_Event(ItemPanel sender, InventoryItem item)
@@ -187,9 +195,9 @@ namespace Reanimator.Forms.ItemTransfer
 
             l_selectedItem.Text = item.Item.Name;
 
-            if (item.Quantity > 1)
+            if (item.Item.StackSize > 1)
             {
-                l_selectedItem.Text += " (x" + item.Quantity.ToString() + ")";
+                l_selectedItem.Text += " (x" + item.Item.StackSize.ToString() + ")";
             }
 
             l_selectedItem.Tag = item;
@@ -377,18 +385,19 @@ namespace Reanimator.Forms.ItemTransfer
                     _itemHelpFunctions.LoadCharacterValues(character);
                     _characterUnit1 = new UnitWrapper(_dataSet, character);
 
-                    //if (WeaponSlotsPopulated(_characterUnit1))
-                    //{
-                    //    MessageBox.Show("There still seem to be weapons left in your weapon slots." + Environment.NewLine +
-                    //    "Please unequipp all weapons before trading items or continue at your own risk!", "Warning!");
-                    //}
-
                     gb_characterName1.Text = cb_selectCharacter1.SelectedItem.ToString();
                     int level = _characterUnit1.Values.Level;
                     gb_characterName1.Text += " (Level " + level.ToString() + " " + _characterUnit1.ClassName + ")";
                     l_palladium1.Text = _characterUnit1.Values.Palladium.ToString();
 
-                    SetCharacterStatus(_characterStatus1, CharacterStatus.Loaded, p_status1, l_status1);
+                    if (_characterUnit1.Inventory.CheckIfInventoryIsPopulated((int)InventoryTypes.CurrentWeaponSet))
+                    {
+                        SetCharacterStatus(_characterStatus1, CharacterStatus.WeaponSetDetected, p_status1, l_status1);
+                    }
+                    else
+                    {
+                        SetCharacterStatus(_characterStatus1, CharacterStatus.Loaded, p_status1, l_status1);
+                    }
 
                     InitInventory(_characterUnit1, _characterItemPanel1);
                 }
@@ -415,61 +424,35 @@ namespace Reanimator.Forms.ItemTransfer
             CheckAndSetButtonStatus();
         }
 
+        private void DisplayWeaponSlotWarning()
+        {
+            MessageBox.Show("There still seem to be weapons left in your weapon slots." + Environment.NewLine +
+           "Please unequipp all weapons before trading items or continue at your own risk!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         private void InitInventory(UnitWrapper unit, ItemPanel itemPanel)
         {
             itemPanel.Controls.Clear();
 
             try
             {
-                foreach (Unit item in unit.Items.Items)
+                CharacterInventoryType inv = unit.Inventory.GetInventoryById((int)INVENTORYTYPE);
+
+                if (inv == null) return;
+
+                foreach (CharacterItems item in inv.Items)
                 {
-                    if (item.inventoryType == (int)INVENTORYTYPE)
-                    {
 //Unit.StatBlock.Stat atat = item.Stats.GetStatById((int)ItemValueNames.applied_affix);
-
-                        DataRow[] itemsRows = _items.Select(String.Format("code = '{0}'", item.unitCode));
-                        if (itemsRows.Length == 0)
-                        {
-
-                        }
-                        int unitType = (int)itemsRows[0]["unitType"];
-                        string folder = (string)itemsRows[0]["folder"] + @"\icons";
-                        string name = (string)itemsRows[0]["name"];
-                        //string unitType = (string)itemsRows[0]["unitType_string"];
-
-                        string itemPath = Path.Combine(folder, name);
-
-                        if(itemPath.StartsWith("armor"))
-                        {
-                            if (_isMale)
-                            {
-                                itemPath += "_m";
-                            }
-                            else
-                            {
-                                itemPath += "_f";
-                            }
-                        }
-
-                        InventoryItem iItem = new InventoryItem(item, itemPath);
-                        iItem.InitButton(_displayNamesAndQuantity);
-                        itemPanel.AddItem(iItem, true);
-                    }
+                    itemPanel.IsMale = _isMale;
+                    InventoryItem iItem = new InventoryItem(item);
+                    iItem.InitButton(_displayNamesAndQuantity);
+                    itemPanel.AddItem(iItem, true);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "InitInventory: " + unit.Name);
             }
-        }
-
-        private bool WeaponSlotsPopulated(UnitWrapper unit)
-        {
-            if (unit.Items.Items.Find(tmp => tmp.inventoryType == (int)InventoryTypes.CurrentWeaponSet) == null)
-            {
-                return false;
-            }
-            return true;
         }
 
         private void b_loadCharacter2_Click(object sender, EventArgs e)
@@ -489,10 +472,9 @@ namespace Reanimator.Forms.ItemTransfer
                     _itemHelpFunctions.LoadCharacterValues(character);
                     _characterUnit2 = new UnitWrapper(_dataSet, character);
 
-                    //if(WeaponSlotsPopulated(_characterUnit2))
+                    //if (WeaponSlotsPopulated(_characterUnit2))
                     //{
-                    //    MessageBox.Show("There still seem to be weapons left in your weapon slots." + Environment.NewLine +
-                    //    "Please unequipp all weapons before trading items or continue at your own risk!", "Warning!");
+                    //    DisplayWeaponSlotWarning();
                     //}
 
                     gb_characterName2.Text = cb_selectCharacter2.SelectedItem.ToString();
@@ -501,7 +483,14 @@ namespace Reanimator.Forms.ItemTransfer
                     gb_characterName2.Text += " (Level " + level.ToString() + " " + _characterUnit2.ClassName + ")";
                     l_palladium2.Text = _characterUnit2.Values.Palladium.ToString();
 
-                    SetCharacterStatus(_characterStatus2, CharacterStatus.Loaded, p_status2, l_status2);
+                    if (_characterUnit2.Inventory.CheckIfInventoryIsPopulated((int)InventoryTypes.CurrentWeaponSet))
+                    {
+                        SetCharacterStatus(_characterStatus2, CharacterStatus.WeaponSetDetected, p_status2, l_status2);
+                    }
+                    else
+                    {
+                        SetCharacterStatus(_characterStatus2, CharacterStatus.Loaded, p_status2, l_status2);
+                    }
 
                     InitInventory(_characterUnit2, _characterItemPanel2);
                 }
@@ -590,13 +579,15 @@ namespace Reanimator.Forms.ItemTransfer
                     if (l_selectedItem.Tag != null)
                     {
                         InventoryItem item = (InventoryItem)l_selectedItem.Tag;
+                        CharacterInventoryType char1 = _characterUnit1.Inventory.GetInventoryById((int)INVENTORYTYPE);
+                        CharacterInventoryType char2 = _characterUnit2.Inventory.GetInventoryById((int)INVENTORYTYPE);
 
                         if (_eventSender == _characterItemPanel1)
                         {
                             if (_characterItemPanel2.AddItem(item, false))
                             {
-                                _characterUnit2.Items.AddItem(item.Item);
-                                _characterUnit1.Items.RemoveItem(item.Item);
+                                char2.Items.Add(item.Item);
+                                char1.Items.Remove(item.Item);
                                 _characterItemPanel1.RemoveItem(item);
                             }
                             else
@@ -610,8 +601,8 @@ namespace Reanimator.Forms.ItemTransfer
                         {
                             if (_characterItemPanel1.AddItem(item, false))
                             {
-                                _characterUnit1.Items.AddItem(item.Item);
-                                _characterUnit2.Items.RemoveItem(item.Item);
+                                char1.Items.Add(item.Item);
+                                char2.Items.Remove(item.Item);
                                 _characterItemPanel2.RemoveItem(item);
                             }
                             else
@@ -622,6 +613,9 @@ namespace Reanimator.Forms.ItemTransfer
                             l_selectedItem.Tag = null;
                         }
 
+
+                        _characterUnit1.Inventory.Apply();
+                        _characterUnit2.Inventory.Apply();
                         RequiresUserVerification();
                     }
                 }
@@ -652,32 +646,16 @@ namespace Reanimator.Forms.ItemTransfer
                     l_selectedItem.ResetText();
                     l_selectedItem.Tag = null;
 
-                    List<Unit> tmpItem = new List<Unit>();
+                    List<CharacterItems> tmpItem = new List<CharacterItems>();
 
+                    CharacterInventoryType char1 = _characterUnit1.Inventory.GetInventoryById((int)INVENTORYTYPE);
+                    CharacterInventoryType char2 = _characterUnit2.Inventory.GetInventoryById((int)INVENTORYTYPE);
 
-                    for (int counter = 0; counter < _characterUnit1.Items.Items.Count; counter++)
-                    {
-                        if (_characterUnit1.Items.Items[counter].inventoryType == (int)INVENTORYTYPE)
-                        {
-                            tmpItem.Add(_characterUnit1.Items.Items[counter]);
-                            _characterUnit1.Items.Items.RemoveAt(counter);
+                    _characterUnit1.Inventory.Set(char2);
+                    _characterUnit2.Inventory.Set(char1);
 
-                            counter--;
-                        }
-                    }
-
-                    for (int counter = 0; counter < _characterUnit2.Items.Items.Count; counter++)
-                    {
-                        if (_characterUnit2.Items.Items[counter].inventoryType == (int)INVENTORYTYPE)
-                        {
-                            _characterUnit1.Items.Items.Add(_characterUnit2.Items.Items[counter]);
-                            _characterUnit2.Items.Items.RemoveAt(counter);
-
-                            counter--;
-                        }
-                    }
-
-                    _characterUnit2.Items.Items.AddRange(tmpItem.ToArray());
+                    _characterUnit1.Inventory.Apply();
+                    _characterUnit2.Inventory.Apply();
 
                     InitInventory(_characterUnit1, _characterItemPanel1);
                     InitInventory(_characterUnit2, _characterItemPanel2);
@@ -697,21 +675,30 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 InventoryItem item = (InventoryItem)l_selectedItem.Tag;
 
-                _eventSender.RemoveItem(item);
-
-                if (_characterUnit1 != null && item != null)
+                if (item != null)
                 {
-                    _characterUnit1.Items.Items.Remove(item.Item);
-                }
-                if (_characterUnit2 != null && item != null)
-                {
-                    _characterUnit2.Items.Items.Remove(item.Item);
-                }
+                    _eventSender.RemoveItem(item);
 
-                l_selectedItem.ResetText();
-                l_selectedItem.Tag = null;
+                    CharacterInventoryType char1 = _characterUnit1.Inventory.GetInventoryById((int)INVENTORYTYPE);
+                    CharacterInventoryType char2 = _characterUnit2.Inventory.GetInventoryById((int)INVENTORYTYPE);
 
-                RequiresUserVerification();
+                    if (_characterUnit1 != null && item != null)
+                    {
+                        char1.Items.Remove(item.Item);
+                    }
+                    if (_characterUnit2 != null && item != null)
+                    {
+                        char2.Items.Remove(item.Item);
+                    }
+
+                    l_selectedItem.ResetText();
+                    l_selectedItem.Tag = null;
+
+                    _characterUnit1.Inventory.Apply();
+                    _characterUnit2.Inventory.Apply();
+
+                    RequiresUserVerification();
+                }
             }
             catch (Exception)
             {
@@ -804,9 +791,15 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        public void Dispose()
+        public new void Dispose()
         {
             _previewManager.Dispose();
+            base.Dispose();
+        }
+
+        private void cb_isMale_CheckedChanged(object sender, EventArgs e)
+        {
+            _isMale = cb_isMale.Checked;
         }
     }
 
@@ -817,7 +810,8 @@ namespace Reanimator.Forms.ItemTransfer
         Modified,
         Saved,
         Error,
-        AlreadyLoaded
+        AlreadyLoaded,
+        WeaponSetDetected
     }
 
     [XmlRoot("ItemTradingOptions")]

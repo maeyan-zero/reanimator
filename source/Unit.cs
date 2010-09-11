@@ -215,7 +215,7 @@ namespace Reanimator
                 }
 
                 public int id;											    // 16 bits
-                public int attributesCount;							        // 2 bits
+                //public int attributesCount;							        // 2 bits
                 public List<Attribute> attributes;                                            // tells the game if it's a skill id, or waypoint flag, etc
                 public int bitCount;									        // 6 bits		// size in bits of extra attribute
                 public int otherAttributeFlag;								// 3 bits		// i think that's what this is...		// can be 0x00, 0x01, 0x02, 0x03, 0x04
@@ -903,10 +903,11 @@ namespace Reanimator
         private bool ReadStat(ref StatBlock.Stat unitStat)
         {
             unitStat.id = _bitBuffer.ReadBits(16);
-            unitStat.attributesCount = _bitBuffer.ReadBits(2);
+            int count = _bitBuffer.ReadBits(2);
             //unitStat.attributes = new StatBlock.Stat.Attribute[unitStat.attributesCount];
+            unitStat.attributes = new List<StatBlock.Stat.Attribute>(count);
 
-            for (int i = 0; i < unitStat.attributesCount; i++)
+            for (int i = 0; i < unitStat.attributes.Capacity; i++)
             {
                 StatBlock.Stat.Attribute exAtrib = new StatBlock.Stat.Attribute { exists = _bitBuffer.ReadBits(1) };
 
@@ -957,7 +958,7 @@ namespace Reanimator
             }
 
             unitStat.repeatFlag = _bitBuffer.ReadBits(1);
-            int count = 1;
+            count = 1;
             if (unitStat.repeatFlag == 1)
             {
                 count = _bitBuffer.ReadBits(10);
@@ -967,7 +968,7 @@ namespace Reanimator
             for (int i = 0; i < count; i++)
             {
                 unitStat.values.Add(new StatBlock.Stat.Values());
-                for (int j = 0; j < unitStat.attributesCount; j++)
+                for (int j = 0; j < unitStat.attributes.Capacity; j++)
                 {
                     if (unitStat.attributes[j].exists != 1) continue;
 

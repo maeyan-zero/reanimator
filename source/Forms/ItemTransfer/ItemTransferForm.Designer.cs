@@ -85,6 +85,7 @@
             this.cb_isMale.TabIndex = 63;
             this.cb_isMale.Text = "Male";
             this.cb_isMale.UseVisualStyleBackColor = true;
+            this.cb_isMale.CheckedChanged += new System.EventHandler(this.cb_isMale_CheckedChanged);
             // 
             // label5
             // 
@@ -441,6 +442,7 @@
             // p_status1
             // 
             this.p_status1.BackColor = System.Drawing.Color.Silver;
+            this.p_status1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.p_status1.Location = new System.Drawing.Point(15, 49);
             this.p_status1.Name = "p_status1";
             this.p_status1.Size = new System.Drawing.Size(24, 24);
@@ -458,6 +460,7 @@
             // p_status2
             // 
             this.p_status2.BackColor = System.Drawing.Color.Silver;
+            this.p_status2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.p_status2.Location = new System.Drawing.Point(345, 49);
             this.p_status2.Name = "p_status2";
             this.p_status2.Size = new System.Drawing.Size(24, 24);

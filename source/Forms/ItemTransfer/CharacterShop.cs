@@ -60,9 +60,9 @@ namespace Reanimator.Forms.ItemTransfer
             _selectedItem = item;
             l_selectedItem.Text = item.Item.Name;
 
-            if (item.Quantity > 1)
+            if (item.Item.StackSize > 1)
             {
-                l_selectedItem.Text += " (x" + item.Quantity + ")";
+                l_selectedItem.Text += " (x" + item.Item.StackSize + ")";
             }
 
             l_selectedItem.Tag = item;
@@ -117,9 +117,9 @@ namespace Reanimator.Forms.ItemTransfer
                 {
                     if (item.inventoryType == (int)InventoryType)
                     {
-                        InventoryItem iItem = new InventoryItem(item, 0);
-                        iItem.InitButton(false);
-                        itemPanel.AddItem(iItem, true);
+                        //InventoryItem iItem = new InventoryItem(item);
+                        //iItem.InitButton(false);
+                        //itemPanel.AddItem(iItem, true);
                     }
                 }
             }
@@ -184,7 +184,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if (_characterUnit == null || _selectedItem == null) return;
 
-            Unit.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item, ItemValueNames.applied_affix.ToString());
+            Unit.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item.BaseUnit, ItemValueNames.applied_affix.ToString());
             if (value != null)
             {
                 MessageBox.Show(value.ToString());
