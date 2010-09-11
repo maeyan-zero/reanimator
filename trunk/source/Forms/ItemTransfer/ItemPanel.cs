@@ -101,8 +101,8 @@ namespace Reanimator.Forms.ItemTransfer
                              "Item quantity: " + tmpItem.StackSize + "/" + tmpItem.MaxStackSize + Environment.NewLine +
                              "Item quality: " + tmpItem.Quality.ToString() + Environment.NewLine + Environment.NewLine +
                              "Upgrades: " + tmpItem.NumberOfUpgrades + "/" + tmpItem.MaxNumberOfUpgrades + Environment.NewLine +
-                             "Augments: " + tmpItem.NumberOfAffixes + "/" + tmpItem.MaxNumberOfAffixes + Environment.NewLine +
-                             "Augments by hand: " + tmpItem.NumberOfAugmentations + Environment.NewLine +
+                             "Augments: " + tmpItem.NumberOfAugmentations + "/" + tmpItem.MaxNumberOfAugmentations + Environment.NewLine +
+                             "Affixes: " + tmpItem.NumberOfAffixes + Environment.NewLine +
                              "Age: " + tmpItem.PlayTime / 60 + " ingame minutes";
             toolTip1.SetToolTip(item, toolTip);
             
