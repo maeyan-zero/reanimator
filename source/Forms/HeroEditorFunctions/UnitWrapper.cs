@@ -958,7 +958,10 @@ namespace Reanimator.Forms.HeroEditorFunctions
         Bitmap _itemImage;
         string _itemImagePath;
         bool _isItem;
+        bool _isConsumable;
         int _numberOfAugmentations;
+        int _numberOfAugmentationsLeft;
+        int _maxNumberOfAugmentations;
         int _maxNumberOfAffixes;
         int _numberOfAffixes;
         int _numberOfUpgrades;
@@ -1002,6 +1005,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 _itemImagePath = CreateImagePath();
 
                 _numberOfAugmentations = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_augmented_count.ToString());
+                _numberOfUpgrades = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_upgraded_count.ToString());
 
                 DataTable gameGlobals = _dataSet.GetExcelTableFromStringId("GAME_GLOBALS");
                 //DataRow[] globalsRow = gameGlobals.Select("name = " + "max_item_upgrades");
@@ -1015,11 +1019,20 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 if (affixes != null)
                 {
                     _numberOfAffixes = affixes.values.Count;
+                }
 
-                    if (_numberOfAffixes > _maxNumberOfAffixes)
-                    {
-                        _numberOfAffixes = _maxNumberOfAffixes;
-                    }
+                int numberOfInherentAffixes = _numberOfAffixes - _numberOfAugmentations;
+                _numberOfAugmentationsLeft = _maxNumberOfAffixes - numberOfInherentAffixes;
+
+                if (_numberOfAugmentationsLeft < 0)
+                {
+                    _numberOfAugmentationsLeft = 0;
+                }
+
+                _maxNumberOfAugmentations = _numberOfAugmentations + _numberOfAugmentationsLeft;
+                if (_maxNumberOfAugmentations > _maxNumberOfAffixes)
+                {
+                    _maxNumberOfAugmentations = _maxNumberOfAffixes;
                 }
             }
 
@@ -1147,17 +1160,41 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
+        public bool IsConsumable
+        {
+            get
+            {
+                return _isConsumable;
+            }
+        }
+
+        /// <summary>
+        /// Number of uses of the Nanoforge up till now
+        /// </summary>
         public int NumberOfUpgrades
         {
             get { return _numberOfUpgrades; }
         }
 
+        /// <summary>
+        /// Number of uses of the Nanoforge left
+        /// </summary>
         public int MaxNumberOfUpgrades
         {
             get { return _maxNumberOfUpgrades; }
-            set { _maxNumberOfUpgrades = value; }
         }
 
+        /// <summary>
+        /// Maximum number of Augmentrix usages given the inherent affixes
+        /// </summary>
+        public int MaxNumberOfAugmentations
+        {
+            get { return _maxNumberOfAugmentations; }
+        }
+
+        /// <summary>
+        /// Number of Augmentrix usages up till now
+        /// </summary>
         public int NumberOfAugmentations
         {
             get
@@ -1166,6 +1203,17 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
+        /// <summary>
+        /// Number of Augmentrix usages left
+        /// </summary>
+        public int NumberOfAugmentationsLeft
+        {
+            get { return _numberOfAugmentationsLeft; }
+        }
+
+        /// <summary>
+        /// Number of already present affixes 
+        /// </summary>
         public int NumberOfAffixes
         {
             get
@@ -1174,6 +1222,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
+        /// <summary>
+        /// Maximum number of affixes
+        /// </summary>
         public int MaxNumberOfAffixes
         {
             get { return _maxNumberOfAffixes; }
