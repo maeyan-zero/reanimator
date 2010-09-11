@@ -746,6 +746,7 @@
     <None Include="Resources\Annotate_QuestionBlue.ico" />
     <None Include="Resources\Annotate_QuestionRed.ico" />
     <Content Include="Resources\icon3.ico" />
+    <None Include="Resources\warning.png" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

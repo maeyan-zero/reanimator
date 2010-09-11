@@ -63,7 +63,7 @@ namespace Reanimator.Forms
         }
 
         private void InitSkillTree(AtlasImageLoader loader)
-        {
+        { 
             if (_wrapper.Skills.SkillTabs.Count == 0) return;
 
             foreach (SkillTab skillTab in _wrapper.Skills.SkillTabs)

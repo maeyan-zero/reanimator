@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using Reanimator.Forms.HeroEditorFunctions;
 
 namespace Reanimator.Forms.ItemTransfer
 {
@@ -16,6 +17,13 @@ namespace Reanimator.Forms.ItemTransfer
         PreviewManager _manager;
         bool _displayItemIcons;
         int _itemUnitSize = 40;
+        bool _isMale;
+
+        public bool IsMale
+        {
+            get { return _isMale; }
+            set { _isMale = value; }
+        }
 
         public int ItemUnitSize
         {
@@ -50,7 +58,7 @@ namespace Reanimator.Forms.ItemTransfer
 
                 if (_displayItemIcons)// && _manager.ImagesAvailable)
                 {
-                    Image img = _manager.GetImage(new Size(item.Size.Width / _itemUnitSize, item.Size.Height / _itemUnitSize), item.ImagePath);
+                    Image img = _manager.GetImage(new Size(item.Size.Width / _itemUnitSize, item.Size.Height / _itemUnitSize), item.Item.GetItemImagePath(_isMale));
                     if (img != null)
                     {
                         item.BackgroundImage = img;
@@ -80,9 +88,24 @@ namespace Reanimator.Forms.ItemTransfer
 
         private void CreateToolTip(InventoryItem item)
         {
-            string toolTip = item.Item.Name + " x" + item.Quantity + Environment.NewLine + 
-                             "Item quality: " + item.Quality.ToString();
+            CharacterItems tmpItem = item.Item;
+            string questString = String.Empty;
+
+            if(tmpItem.IsQuestItem)
+            {
+                questString = "[Questitem]" + Environment.NewLine;
+            }
+
+            string toolTip = questString +
+                             tmpItem.Name + Environment.NewLine +
+                             "Item quantity: " + tmpItem.StackSize + "/" + tmpItem.MaxStackSize + Environment.NewLine +
+                             "Item quality: " + tmpItem.Quality.ToString() + Environment.NewLine + Environment.NewLine +
+                             "Upgrades: " + tmpItem.NumberOfUpgrades + "/" + tmpItem.MaxNumberOfUpgrades + Environment.NewLine +
+                             "Augments: " + tmpItem.NumberOfAffixes + "/" + tmpItem.MaxNumberOfAffixes + Environment.NewLine +
+                             "Augments by hand: " + tmpItem.NumberOfAugmentations + Environment.NewLine +
+                             "Age: " + tmpItem.PlayTime / 60 + " ingame minutes";
             toolTip1.SetToolTip(item, toolTip);
+            
         }
 
         public void RemoveItem(InventoryItem item)
@@ -176,35 +199,14 @@ namespace Reanimator.Forms.ItemTransfer
     public class InventoryItem : Button
     {
         int _size = 40;
-        Unit _item;
-        int _quantity;
+        CharacterItems _item;
         bool _displayNamesAndQuantity;
-        int _unitType;
-        string _imagePath;
-        ItemQuality _quality;
 
-        public ItemQuality Quality
+        public CharacterItems Item
         {
-            get { return _quality; }
-            set { _quality = value; }
-        }
-
-        public int Quantity
-        {
-            get { return _quantity; }
-            set { _quantity = value; }
-        }
-
-        /// <summary>
-        /// The item that is bound to this button
-        /// </summary>
-        public Unit Item
-        {
-            get { return _item; }
-            set
+            get
             {
-                _item = value;
-                InitButton(_displayNamesAndQuantity);
+                return _item;
             }
         }
 
@@ -226,11 +228,11 @@ namespace Reanimator.Forms.ItemTransfer
         /// </summary>
         public Point Position
         {
-            get { return new Point(_item.inventoryPositionX, _item.inventoryPositionY); }
+            get { return _item.InventoryPosition; }
             set
             {
-                _item.inventoryPositionX = value.X; _item.inventoryPositionY = value.Y;
-                this.Location = new Point(_item.inventoryPositionX * _size, _item.inventoryPositionY * _size);
+                _item.InventoryPosition = value;
+                this.Location = new Point(_item.InventoryPosition.X * _size, _item.InventoryPosition.Y * _size);
             }
         }
 
@@ -245,62 +247,41 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        public string ImagePath
-        {
-            get { return _imagePath; }
-            set { _imagePath = value; }
-        }
-
-        public int UnitType
-        {
-            get { return _unitType; }
-            set { _unitType = value; }
-        }
-
         public InventoryItem()
             : base()
         {
         }
 
-        public InventoryItem(Unit item, int unitType)//, string baseItem)
+        public InventoryItem(CharacterItems item)//, string baseItem)
             : base()
         {
             _item = item;
-            _unitType = unitType;
 
             this.BackgroundImageLayout = ImageLayout.Stretch;
-            Position = new Point(_item.inventoryPositionX, _item.inventoryPositionY);
-        }
-
-        public InventoryItem(Unit item, string imagePath)//, string baseItem)
-            : base()
-        {
-            _item = item;
-            _imagePath = imagePath;
-
-            this.BackgroundImageLayout = ImageLayout.Stretch;
-            Position = new Point(_item.inventoryPositionX, _item.inventoryPositionY);
+            Position = _item.InventoryPosition;
         }
 
         public void InitButton(bool displayNameAndQuantity)
         {
             this.FlatStyle = FlatStyle.Flat;
-            this.FlatAppearance.BorderSize = 3;
+            this.FlatAppearance.BorderSize = 2;
+            this.TextAlign = ContentAlignment.BottomRight;
             this.BackColor = Color.Transparent;
             this.ForeColor = Color.White;
             this.Text = string.Empty;
             this._displayNamesAndQuantity = displayNameAndQuantity;
+            //this.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 
-            _quantity = UnitHelpFunctions.GetSimpleValue(_item, ItemValueNames.item_quantity.ToString());
+            int quantity = _item.StackSize;
 
-            if (_quantity < 1)
+            if (quantity < 1)
             {
-                _quantity = 1;
+                quantity = 1;
             }
 
             if (_displayNamesAndQuantity)
             {
-                this.Text = Item.Name;
+                this.Text = quantity.ToString();// Item.Name;
             }
 
             SetButtonSize();
@@ -309,8 +290,8 @@ namespace Reanimator.Forms.ItemTransfer
 
         private void SetButtonSize()
         {
-            int width = UnitHelpFunctions.GetSimpleValue(_item, ItemValueNames.inventory_width.ToString());
-            int height = UnitHelpFunctions.GetSimpleValue(_item, ItemValueNames.inventory_height.ToString());
+            int width = _item.InventorySize.Width;
+            int height = _item.InventorySize.Height;
 
             if (width <= 0)
             {
@@ -326,16 +307,15 @@ namespace Reanimator.Forms.ItemTransfer
 
         private void SetRarityColor()
         {
-            int quality = UnitHelpFunctions.GetSimpleValue(_item, ItemValueNames.item_quality.ToString());
-            _quality = (ItemQuality)quality;
+            ItemQuality quality = _item.Quality;
 
             Color color = Color.White;
 
-            if (_quality == ItemQuality.Mutant || _quality == ItemQuality.MutantMod)
+            if (quality == ItemQuality.Mutant || quality == ItemQuality.MutantMod)
             {
                 color = Color.Purple;
             }
-            else if (_quality == ItemQuality.Normal || _quality == ItemQuality.NormalMod)
+            else if (quality == ItemQuality.Normal || quality == ItemQuality.NormalMod)
             {
                 color = Color.White;
 
@@ -347,29 +327,33 @@ namespace Reanimator.Forms.ItemTransfer
                 //    color = Color.Red;
                 //}
             }
-            else if (_quality == ItemQuality.Unique || _quality == ItemQuality.UniqueMod)
+            else if (quality == ItemQuality.Unique || quality == ItemQuality.UniqueMod)
             {
                 color = Color.Gold;
             }
-            else if (_quality == ItemQuality.Rare || _quality == ItemQuality.RareMod)
+            else if (quality == ItemQuality.Rare || quality == ItemQuality.RareMod)
             {
                 color = Color.Blue;
             }
-            else if (_quality == ItemQuality.Uncommon)
+            else if (quality == ItemQuality.Uncommon)
             {
                 color = Color.Green;
             }
-            else if (_quality == ItemQuality.Legendary || _quality == ItemQuality.LegendaryMod)
+            else if (quality == ItemQuality.Legendary || quality == ItemQuality.LegendaryMod)
             {
                 color = Color.Orange;
             }
-            else if (_quality == ItemQuality.DoubleEdged || _quality == ItemQuality.DoubleEdgedMod)
+            else if (quality == ItemQuality.DoubleEdged || quality == ItemQuality.DoubleEdgedMod)
             {
                 color = Color.FromArgb(96, 255, 255);
             }
-            else if (_quality == ItemQuality.Mythic || _quality == ItemQuality.MythicMod)
+            else if (quality == ItemQuality.Mythic || quality == ItemQuality.MythicMod)
             {
                 color = Color.Purple;
+            }
+            if (_item.IsQuestItem)
+            {
+                color = Color.Red;
             }
 
             this.FlatAppearance.BorderColor = color;

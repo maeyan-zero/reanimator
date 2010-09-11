@@ -11,6 +11,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
     public abstract class CharacterProperty
     {
         protected Unit _hero;
+
         protected TableDataSet _dataSet;
         protected DataTable _statsTable;
 
@@ -21,6 +22,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
             _dataSet = dataSet;
 
             _statsTable = _dataSet.GetExcelTableFromStringId("STATS");
+        }
+
+        public Unit BaseUnit
+        {
+            get { return _hero; }
+            set { _hero = value; }
         }
 
         public int GetBitCount(string value)
@@ -56,10 +63,10 @@ namespace Reanimator.Forms.HeroEditorFunctions
         CharacterGameMode _mode;
         CharacterValues _values;
         CharacterSkills _skills;
-        CharacterItems _items;
         CharacterEquippment _equippment;
         CharacterAppearance _appearance;
-        CharacterWaypoint _waypoints;
+        CharacterInventory _inventory;
+        //CharacterWaypoint _waypoints;
         EngineerDrone _drone;
         DataTable _itemsTable;
 
@@ -100,9 +107,10 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 _mode = new CharacterGameMode(this.HeroUnit, _dataSet);
                 _values = new CharacterValues(this.HeroUnit, _dataSet);
                 _skills = new CharacterSkills(this.HeroUnit, _dataSet, skillTabs.ToArray());
-                _items = new CharacterItems(this.HeroUnit, _dataSet);
                 _equippment = new CharacterEquippment(this.HeroUnit, _dataSet);
+                //_waypoints = new CharacterWaypoint(this.HeroUnit, _dataSet);
                 _appearance = new CharacterAppearance(this.HeroUnit, _dataSet);
+                _inventory = new CharacterInventory(this.HeroUnit, dataSet);
 
             }
             if (_class == CharacterClass.Engineer_Male || _class == CharacterClass.Engineer_Female)
@@ -161,10 +169,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
             set { _skills = value; }
         }
 
-        public CharacterItems Items
+        public CharacterInventory Inventory
         {
-            get { return _items; }
-            set { _items = value; }
+            get { return _inventory; }
         }
 
         public CharacterEquippment Equippment
@@ -179,11 +186,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
             set { _appearance = value; }
         }
 
-        public CharacterWaypoint Waypoints
-        {
-            get { return _waypoints; }
-            set { _waypoints = value; }
-        }
+        //public CharacterWaypoint Waypoints
+        //{
+        //    get { return _waypoints; }
+        //    set { _waypoints = value; }
+        //}
 
         public EngineerDrone Drone
         {
@@ -229,12 +236,53 @@ namespace Reanimator.Forms.HeroEditorFunctions
         public CharacterWaypoint(Unit heroUnit, TableDataSet dataSet)
             : base(heroUnit, dataSet)
         {
-            _waypoints = UnitHelpFunctions.GetComplexValue(_hero, ItemValueNames.waypoint_flags);
-            if (_waypoints == null)
+            _waypoints = UnitHelpFunctions.GetComplexValue(BaseUnit, ItemValueNames.waypoint_flags);
+            //if (_waypoints == null)
             {
-                //_waypoints = _hero.statBlock.stats
-            }
+                Unit.StatBlock.Stat _waypoint = new Unit.StatBlock.Stat();
+                _waypoint.repeatFlag = 1;
+                _waypoint.skipResource = 1;
+                _waypoint.bitCount = 32;
+                _waypoint.id = 20532;
+                _waypoint.Name = "waypoint_flags";
 
+                Unit.StatBlock.Stat.Attribute att1 = new Unit.StatBlock.Stat.Attribute();
+                att1.BitCount = 8;
+                att1.exists = 1;
+                att1.skipTableId = 1;
+
+                Unit.StatBlock.Stat.Attribute att2 = new Unit.StatBlock.Stat.Attribute();
+                att2.BitCount = 16;
+                att2.exists = 1;
+                att2.TableId = 17715;
+
+                _waypoint.attributes.Add(att1);
+                _waypoint.attributes.Add(att2);
+
+                _waypoint.values = new List<Unit.StatBlock.Stat.Values>();
+                _waypoint.values.Add(GenerateNormal());
+                _waypoint.values.Add(GenerateNightmare());
+
+                _waypoints.values[0].Stat = 1535;
+                //_waypoints.values.Add(GenerateNightmare());// = _waypoint;
+            }
+            //UnitHelpFunctions.SetComplexValue(_hero, ItemValueNames.waypoint_flags.ToString(), _waypoints);
+        }
+
+        private Unit.StatBlock.Stat.Values GenerateNormal()
+        {
+            Unit.StatBlock.Stat.Values normal = new Unit.StatBlock.Stat.Values();
+            normal.Attribute2 = 16705;
+            normal.Stat = 1535;
+            return normal;
+        }
+
+        private Unit.StatBlock.Stat.Values GenerateNightmare()
+        {
+            Unit.StatBlock.Stat.Values nightmare = new Unit.StatBlock.Stat.Values();
+            nightmare.Attribute2 = 16961;
+            nightmare.Stat = 1535;
+            return nightmare;
         }
 
         public int NormalWaypoints
@@ -295,25 +343,25 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return _hero.PlayerFlags1.Contains((int)GameMode.Elite) || _hero.PlayerFlags2.Contains((int)GameMode.Elite);
+                return BaseUnit.PlayerFlags1.Contains((int)GameMode.Elite) || BaseUnit.PlayerFlags2.Contains((int)GameMode.Elite);
             }
             set
             {
                 if (value)
                 {
-                    if (!_hero.PlayerFlags1.Contains((int)GameMode.Elite))
+                    if (!BaseUnit.PlayerFlags1.Contains((int)GameMode.Elite))
                     {
-                        _hero.PlayerFlags1.Add((int)GameMode.Elite);
+                        BaseUnit.PlayerFlags1.Add((int)GameMode.Elite);
                     }
-                    if (!_hero.PlayerFlags2.Contains((int)GameMode.Elite))
+                    if (!BaseUnit.PlayerFlags2.Contains((int)GameMode.Elite))
                     {
-                        _hero.PlayerFlags2.Add((int)GameMode.Elite);
+                        BaseUnit.PlayerFlags2.Add((int)GameMode.Elite);
                     }
                 }
                 else
                 {
-                    _hero.PlayerFlags1.Remove((int)GameMode.Elite);
-                    _hero.PlayerFlags2.Remove((int)GameMode.Elite);
+                    BaseUnit.PlayerFlags1.Remove((int)GameMode.Elite);
+                    BaseUnit.PlayerFlags2.Remove((int)GameMode.Elite);
                 }
             }
         }
@@ -322,25 +370,25 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return _hero.PlayerFlags1.Contains((int)GameMode.Hardcore) || _hero.PlayerFlags2.Contains((int)GameMode.Hardcore);
+                return BaseUnit.PlayerFlags1.Contains((int)GameMode.Hardcore) || BaseUnit.PlayerFlags2.Contains((int)GameMode.Hardcore);
             }
             set
             {
                 if (value)
                 {
-                    if (!_hero.PlayerFlags1.Contains((int)GameMode.Hardcore))
+                    if (!BaseUnit.PlayerFlags1.Contains((int)GameMode.Hardcore))
                     {
-                        _hero.PlayerFlags1.Add((int)GameMode.Hardcore);
+                        BaseUnit.PlayerFlags1.Add((int)GameMode.Hardcore);
                     }
-                    if (!_hero.PlayerFlags2.Contains((int)GameMode.Hardcore))
+                    if (!BaseUnit.PlayerFlags2.Contains((int)GameMode.Hardcore))
                     {
-                        _hero.PlayerFlags2.Add((int)GameMode.Hardcore);
+                        BaseUnit.PlayerFlags2.Add((int)GameMode.Hardcore);
                     }
                 }
                 else
                 {
-                    _hero.PlayerFlags1.Remove((int)GameMode.Hardcore);
-                    _hero.PlayerFlags2.Remove((int)GameMode.Hardcore);
+                    BaseUnit.PlayerFlags1.Remove((int)GameMode.Hardcore);
+                    BaseUnit.PlayerFlags2.Remove((int)GameMode.Hardcore);
                 }
             }
         }
@@ -349,25 +397,25 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return _hero.PlayerFlags1.Contains((int)GameMode.HardcoreDead) || _hero.PlayerFlags2.Contains((int)GameMode.HardcoreDead);
+                return BaseUnit.PlayerFlags1.Contains((int)GameMode.HardcoreDead) || BaseUnit.PlayerFlags2.Contains((int)GameMode.HardcoreDead);
             }
             set
             {
                 if (value)
                 {
-                    if (!_hero.PlayerFlags1.Contains((int)GameMode.HardcoreDead))
+                    if (!BaseUnit.PlayerFlags1.Contains((int)GameMode.HardcoreDead))
                     {
-                        _hero.PlayerFlags1.Add((int)GameMode.HardcoreDead);
+                        BaseUnit.PlayerFlags1.Add((int)GameMode.HardcoreDead);
                     }
-                    if (!_hero.PlayerFlags2.Contains((int)GameMode.HardcoreDead))
+                    if (!BaseUnit.PlayerFlags2.Contains((int)GameMode.HardcoreDead))
                     {
-                        _hero.PlayerFlags2.Add((int)GameMode.HardcoreDead);
+                        BaseUnit.PlayerFlags2.Add((int)GameMode.HardcoreDead);
                     }
                 }
                 else
                 {
-                    _hero.PlayerFlags1.Remove((int)GameMode.HardcoreDead);
-                    _hero.PlayerFlags2.Remove((int)GameMode.HardcoreDead);
+                    BaseUnit.PlayerFlags1.Remove((int)GameMode.HardcoreDead);
+                    BaseUnit.PlayerFlags2.Remove((int)GameMode.HardcoreDead);
                 }
             }
         }
@@ -389,7 +437,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             _maxPalladium = maxPalladium;
 
             DataTable playersTable = _dataSet.GetExcelTableFromStringId("PLAYERS");
-            DataRow[] playerRows = playersTable.Select("code = " + _hero.unitCode);
+            DataRow[] playerRows = playersTable.Select("code = " + BaseUnit.unitCode);
             int maxLevel = (int)playerRows[0]["maxLevel"];
 
             _maxLevel = maxLevel;
@@ -399,7 +447,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.level) - GetBitCount((int)ItemValueNames.level);
+                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.level) - GetBitCount((int)ItemValueNames.level);
                 //return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.level) - GetBitCount(12336);
             }
             set
@@ -413,7 +461,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                     value = 0;
                 }
 
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.level, value + GetBitCount((int)ItemValueNames.level));
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.level, value + GetBitCount((int)ItemValueNames.level));
             }
         }
 
@@ -429,13 +477,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                int palladium = UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.gold);
+                int palladium = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.gold);
 
                 //if the character doesn't have palladium on him, there's also no palladium entry, so let's add it
                 if(palladium == 0)
                 {
                     //maximum Palladium value is 9.999.999 which is 100110001001011001111111 = 24 bit = bitCount
-                    UnitHelpFunctions.AddSimpleValue(_hero, ItemValueNames.gold, 0, GetBitCount((int)ItemValueNames.gold));
+                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.gold, 0, GetBitCount((int)ItemValueNames.gold));
                 }
 
                 return palladium;
@@ -451,7 +499,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                     value = 0;
                 }
 
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.gold, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.gold, value);
             }
         }
 
@@ -467,13 +515,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                int attributePoints = UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.stat_points);
+                int attributePoints = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.stat_points);
 
                 //if the character doesn't have palladium on him, there's also no palladium entry, so let's add it
                 if (attributePoints == 0)
                 {
                     //bitCount = 10 taken from other saves => max value = 1023
-                    UnitHelpFunctions.AddSimpleValue(_hero, ItemValueNames.stat_points, 0, GetBitCount((int)ItemValueNames.stat_points));
+                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.stat_points, 0, GetBitCount((int)ItemValueNames.stat_points));
                 }
 
                 return attributePoints;
@@ -489,7 +537,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                     value = 0;
                 }
 
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.stat_points, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.stat_points, value);
             }
         }
 
@@ -505,13 +553,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                int skillPoints = UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.skill_points);
+                int skillPoints = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.skill_points);
 
                 //if the character doesn't have palladium on him, there's also no palladium entry, so let's add it
                 if (skillPoints == 0)
                 {
                     //bitCount = 12 taken from other saves => max value = 4095
-                    UnitHelpFunctions.AddSimpleValue(_hero, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.skill_points));
+                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.skill_points));
                 }
 
                 return skillPoints;
@@ -527,7 +575,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                     value = 0;
                 }
 
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.skill_points, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.skill_points, value);
             }
         }
 
@@ -543,11 +591,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.accuracy);
+                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.accuracy);
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.accuracy, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.accuracy, value);
             }
         }
 
@@ -555,11 +603,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.stamina);
+                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.stamina);
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.stamina, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.stamina, value);
             }
         }
 
@@ -567,11 +615,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.strength);
+                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.strength);
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.strength, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.strength, value);
             }
         }
 
@@ -579,11 +627,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.willpower);
+                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.willpower);
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.willpower, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.willpower, value);
             }
         }
 
@@ -591,19 +639,19 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                int achievementPointsCur = UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.achievement_points_cur);
+                int achievementPointsCur = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_cur);
 
                 if (achievementPointsCur == 0)
                 {
                     //bitCount = 12 taken from other saves => max value = 4095
-                    UnitHelpFunctions.AddSimpleValue(_hero, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.achievement_points_cur));
+                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.achievement_points_cur));
                 }
 
                 return achievementPointsCur;
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.achievement_points_cur, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_cur, value);
             }
         }
 
@@ -611,19 +659,19 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                int achievementPointsTotal = UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.achievement_points_total);
+                int achievementPointsTotal = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_total);
 
                 if (achievementPointsTotal == 0)
                 {
                     //bitCount = 12 taken from other saves => max value = 4095
-                    UnitHelpFunctions.AddSimpleValue(_hero, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.achievement_points_total));
+                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.achievement_points_total));
                 }
 
                 return achievementPointsTotal;
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.achievement_points_cur, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_cur, value);
             }
         }
 
@@ -631,11 +679,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.experience);
+                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.experience);
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.experience, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.experience, value);
             }
         }
 
@@ -643,11 +691,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.experience_prev);
+                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.experience_prev);
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.experience_prev, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.experience_prev, value);
             }
         }
 
@@ -655,11 +703,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.experience_next);
+                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.experience_next);
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.experience_next, value);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.experience_next, value);
             }
         }
     }
@@ -687,7 +735,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             //to make things easier, let's add all available character skills to the list
             List<Unit.StatBlock.Stat.Values> availableSkills = new List<Unit.StatBlock.Stat.Values>();
             ////get the skills the character already knows
-            Unit.StatBlock.Stat skills = UnitHelpFunctions.GetComplexValue(_hero, ItemValueNames.skill_level);
+            Unit.StatBlock.Stat skills = UnitHelpFunctions.GetComplexValue(BaseUnit, ItemValueNames.skill_level);
             ////add them to the complete skill list
             availableSkills.AddRange(skills.values);
 
@@ -798,6 +846,109 @@ namespace Reanimator.Forms.HeroEditorFunctions
         }
     }
 
+    public class CharacterInventory : CharacterProperty
+    {
+        List<CharacterInventoryType> _inventoryList;
+
+        public CharacterInventory(Unit heroUnit, TableDataSet dataSet)
+            : base(heroUnit, dataSet)
+        {
+            _inventoryList = new List<CharacterInventoryType>();
+
+            foreach (Unit unit in heroUnit.Items)
+            {
+                CharacterItems item = new CharacterItems(unit, dataSet);
+
+                // get the matching inventory entry
+                CharacterInventoryType inv = _inventoryList.Find(tmp => tmp.InventoryType == (int)item.InventoryType);
+
+                if (inv == null)
+                {
+                    inv = new CharacterInventoryType((int)item.InventoryType);
+                    _inventoryList.Add(inv);
+                }
+
+                inv.Items.Add(item);
+            }
+        }
+
+        public CharacterInventoryType GetInventoryById(int inventoryId)
+        {
+            CharacterInventoryType inv = _inventoryList.Find(tmp => tmp.InventoryType == inventoryId);
+
+            if (inv == null)
+            {
+                inv = new CharacterInventoryType(inventoryId);
+                _inventoryList.Add(inv);
+            }
+
+            return inv;
+        }
+
+        public bool CheckIfInventoryIsPopulated(int inventory)
+        {
+            CharacterInventoryType inventorySlot = GetInventoryById(inventory);
+            if (inventorySlot != null && inventorySlot.Items.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public List<CharacterInventoryType> InventoryType
+        {
+            get { return _inventoryList; }
+        }
+
+        public void Set(CharacterInventoryType inventory)
+        {
+            int index = _inventoryList.FindIndex(tmp => tmp.InventoryType == inventory.InventoryType);
+            _inventoryList[index] = inventory;
+        }
+
+        public void Apply()
+        {
+            _hero.Items.Clear();
+
+            foreach (CharacterInventoryType type in _inventoryList)
+            {
+                foreach(CharacterItems item in type.Items)
+                {
+                    _hero.AddItem(item.BaseUnit);
+                }
+            }
+        }
+    }
+
+    public class CharacterInventoryType
+    {
+        int _inventoryType;
+        List<CharacterItems> _items;
+
+        public CharacterInventoryType(int inventoryType)
+        {
+            _inventoryType = inventoryType;
+            _items = new List<CharacterItems>();
+        }
+
+        public List<CharacterItems> Items
+        {
+            get { return _items; }
+            set { _items = value; }
+        }
+
+        public int InventoryType
+        {
+            get { return _inventoryType; }
+            set { _inventoryType = value; }
+        }
+
+        public override string ToString()
+        {
+            return _inventoryType.ToString();
+        }
+    }
+
     public class CharacterItems : CharacterProperty
     {
         DataTable _itemTable;
@@ -807,12 +958,19 @@ namespace Reanimator.Forms.HeroEditorFunctions
         Bitmap _itemImage;
         string _itemImagePath;
         bool _isItem;
+        int _numberOfAugmentations;
+        int _maxNumberOfAffixes;
+        int _numberOfAffixes;
+        int _numberOfUpgrades;
+        int _maxNumberOfUpgrades;
+        int _stackSize;
+        int _maxStackSize;
 
         public CharacterItems(Unit heroUnit, TableDataSet dataSet)
             : base(heroUnit, dataSet)
         {
             _itemTable = _dataSet.GetExcelTableFromStringId("ITEMS");
-            DataRow[] itemRow = _itemTable.Select("code = " + _hero.unitCode);
+            DataRow[] itemRow = _itemTable.Select("code = " + BaseUnit.unitCode);
 
             //DataTable colorTable = _dataSet.GetExcelTableFromStringId("ITEMQUALITY");
             //DataRow[] colorRow = colorTable.Select("code = " + _hero.unitCode);
@@ -820,24 +978,63 @@ namespace Reanimator.Forms.HeroEditorFunctions
             if (itemRow.Length > 0)
             {
                 _isItem = true;
+
                 uint bitMask = (uint)itemRow[0]["bitmask02"];
                 _isQuestItem = (bitMask >> 13 & 1) == 1;
-            }
 
-            _itemImagePath = CreateImagePath();
+                string maxStackSize = (string)itemRow[0]["stackSize"];
+                string[] splitResult = maxStackSize.Split(new char[] { ',' });
+                if(splitResult.Length == 3)
+                {
+                    _maxStackSize = int.Parse(splitResult[1]);
+                }
+                if (_maxStackSize <= 0)
+                {
+                    _maxStackSize = 1;
+                }
+
+                _stackSize = UnitHelpFunctions.GetSimpleValue(heroUnit, ItemValueNames.item_quantity.ToString());
+                if (_stackSize <= 0)
+                {
+                    _stackSize = 1;
+                }
+
+                _itemImagePath = CreateImagePath();
+
+                _numberOfAugmentations = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_augmented_count.ToString());
+
+                DataTable gameGlobals = _dataSet.GetExcelTableFromStringId("GAME_GLOBALS");
+                //DataRow[] globalsRow = gameGlobals.Select("name = " + "max_item_upgrades");
+                DataRow[] globalsRow = gameGlobals.Select("Index = " + 16);
+                _maxNumberOfUpgrades = (int)globalsRow[0]["intValue"];
+
+                //globalsRow = gameGlobals.Select("name = " + "max_item_augmentations");
+                globalsRow = gameGlobals.Select("Index = " + 17);
+                _maxNumberOfAffixes = (int)globalsRow[0]["intValue"];
+                Unit.StatBlock.Stat affixes = UnitHelpFunctions.GetComplexValue(_hero, ItemValueNames.applied_affix.ToString());
+                if (affixes != null)
+                {
+                    _numberOfAffixes = affixes.values.Count;
+
+                    if (_numberOfAffixes > _maxNumberOfAffixes)
+                    {
+                        _numberOfAffixes = _maxNumberOfAffixes;
+                    }
+                }
+            }
 
             _items = new List<CharacterItems>();
 
-            //foreach (Unit item in _hero.Items)
-            //{
-            //    CharacterItems wrapper = new CharacterItems(item, dataSet);
-            //    _items.Add(wrapper);
-            //}
+            foreach (Unit item in BaseUnit.Items)
+            {
+                CharacterItems wrapper = new CharacterItems(item, dataSet);
+                _items.Add(wrapper);
+            }
         }
 
         private string CreateImagePath()
         {
-            DataRow[] itemsRows = _itemTable.Select(String.Format("code = '{0}'", _hero.unitCode));
+            DataRow[] itemsRows = _itemTable.Select(String.Format("code = '{0}'", BaseUnit.unitCode));
             if (itemsRows.Length == 0)
             {
                 return null;
@@ -850,6 +1047,19 @@ namespace Reanimator.Forms.HeroEditorFunctions
             string itemPath = Path.Combine(folder, name);
 
             return itemPath;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        public string Name
+        {
+            get
+            {
+                return BaseUnit.Name;
+            }
         }
 
         public string GetItemImagePath(bool male)
@@ -868,12 +1078,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 }
             }
 
-            if (path == null)
-            {
-                return path; 
-            }
-
-            return path += ".dds";
+            //if (path == null)
+            //{
+            //    return path; 
+            //}
+            //we don't know if we want to load dds or png yet
+            return path;// += ".dds";
         }
 
         public bool IsItem
@@ -882,23 +1092,36 @@ namespace Reanimator.Forms.HeroEditorFunctions
             set { _isItem = value; }
         }
 
+        /// <summary>
+        /// Do NOT use this entry for item adding/removing!
+        /// </summary>
+        public List<CharacterItems> WrappedItems
+        {
+            get
+            {
+                return _items;
+            }
+        }
+
         public List<Unit> Items
         {
             get
             {
-                return _hero.Items;
+                return BaseUnit.Items;
             }
+
             set
             {
-                _hero.Items = value;
+                BaseUnit.Items = value;
+
             }
         }
 
-        public int Quantity
+        public int StackSize
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.item_quantity);
+                return _stackSize;
             }
             set
             {
@@ -906,32 +1129,66 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 {
                     value = 1;
                 }
-                if (value > MaxQuantity)
+                if (value > MaxStackSize)
                 {
-                    value = MaxQuantity;
+                    value = MaxStackSize;
                 }
 
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.item_quantity, value);
+                _stackSize = value;
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.item_quantity, value);
             }
         }
 
-        public int MaxQuantity
+        public int MaxStackSize
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.item_quantity_max);
+                return _maxStackSize;
             }
+        }
+
+        public int NumberOfUpgrades
+        {
+            get { return _numberOfUpgrades; }
+        }
+
+        public int MaxNumberOfUpgrades
+        {
+            get { return _maxNumberOfUpgrades; }
+            set { _maxNumberOfUpgrades = value; }
+        }
+
+        public int NumberOfAugmentations
+        {
+            get
+            {
+                return _numberOfAugmentations;
+            }
+        }
+
+        public int NumberOfAffixes
+        {
+            get
+            {
+                return _numberOfAffixes;
+            }
+        }
+
+        public int MaxNumberOfAffixes
+        {
+            get { return _maxNumberOfAffixes; }
+            set { _maxNumberOfAffixes = value; }
         }
 
         public InventoryTypes InventoryType
         {
             get
             {
-                return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), _hero.unitCode.ToString());
+                return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), BaseUnit.inventoryType.ToString());
             }
             set
             {
-                _hero.inventoryType = (int)value;
+                BaseUnit.inventoryType = (int)value;
             }
         }
 
@@ -939,12 +1196,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return new Point(_hero.inventoryPositionX, _hero.inventoryPositionY);
+                return new Point(BaseUnit.inventoryPositionX, BaseUnit.inventoryPositionY);
             }
             set
             {
-                _hero.inventoryPositionX = value.X;
-                _hero.inventoryPositionY = value.Y;
+                BaseUnit.inventoryPositionX = value.X;
+                BaseUnit.inventoryPositionY = value.Y;
             }
         }
 
@@ -952,8 +1209,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                int width = UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.inventory_width);
-                int height =  UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.inventory_height);
+                int width = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.inventory_width);
+                int height =  UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.inventory_height);
 
                 if (width < 1)
                 {
@@ -968,8 +1225,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.inventory_width, value.Width);
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.inventory_height, value.Height);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.inventory_width, value.Width);
+                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.inventory_height, value.Height);
             }
         }
 
@@ -977,7 +1234,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return (ItemQuality)UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.item_quality);
+                return (ItemQuality)UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.item_quality);
             }
         }
 
@@ -989,13 +1246,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        public Image ItemImage
-        {
-            get
-            {
-                return _itemImage;
-            }
-        }
+        //public Image ItemImage
+        //{
+        //    get
+        //    {
+        //        return _itemImage;
+        //    }
+        //}
 
         public bool IsQuestItem
         {
@@ -1009,9 +1266,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             List<Unit> tmp = new List<Unit>();
 
-            foreach (Unit item in _hero.Items)
+            foreach (Unit item in BaseUnit.Items)
             {
-                if (UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.item_quality) == (int)quality)
+                if (UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.item_quality) == (int)quality)
                 {
                     tmp.Add(item);
                 }
@@ -1023,7 +1280,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             List<Unit> tmp = new List<Unit>();
 
-            foreach (Unit item in _hero.Items)
+            foreach (Unit item in BaseUnit.Items)
             {
                 if (item.inventoryType == (int)type)
                 {
@@ -1034,50 +1291,36 @@ namespace Reanimator.Forms.HeroEditorFunctions
             return tmp;
         }
 
-        public int ItemAugmentedCount
+        public void AddItem(Unit item)
         {
-            get
-            {
-                int augmentedCount = UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.item_augmented_count);
-
-                if (augmentedCount == 0)
-                {
-                    //maximum Palladium value is 9.999.999 which is 100110001001011001111111 = 24 bit = bitCount
-                    UnitHelpFunctions.AddSimpleValue(_hero, ItemValueNames.item_augmented_count, 0, GetBitCount((int)ItemValueNames.item_augmented_count));
-                }
-
-                return augmentedCount;
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    value = 0;
-                }
-                //if (value > 10)
-                //{
-                //    value = 10;
-                //}
-
-                UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.item_augmented_count, value);
-            }
+            BaseUnit.AddItem(item);
+            _items.Add(new CharacterItems(item, _dataSet));
         }
 
         public void RemoveItem(Unit item)
         {
-            _hero.RemoveItem(item);
+            BaseUnit.RemoveItem(item);
+            CharacterItems tmpItem = _items.Find(tmp => tmp.BaseUnit == item);
+            _items.Remove(tmpItem);
         }
 
-        public void AddItem(Unit item)
+        public void AddItem(CharacterItems item)
         {
-            _hero.AddItem(item);
+            _items.Add(item);
+            BaseUnit.AddItem(item.BaseUnit);
+        }
+
+        public void RemoveItem(CharacterItems item)
+        {
+            BaseUnit.RemoveItem(item.BaseUnit);
+            _items.Remove(item);
         }
 
         public int PlayTime
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.played_time_in_seconds);
+                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.played_time_in_seconds);
             }
             //set
             //{
@@ -1208,12 +1451,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return new Size(_hero.CharacterWidth, _hero.CharacterHeight);
+                return new Size(BaseUnit.CharacterWidth, BaseUnit.CharacterHeight);
             }
             set
             {
-                _hero.CharacterWidth = value.Width;
-                _hero.CharacterHeight = value.Height;
+                BaseUnit.CharacterWidth = value.Width;
+                BaseUnit.CharacterHeight = value.Height;
             }
         }
     }
@@ -1233,7 +1476,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         public EngineerDrone(Unit heroUnit, TableDataSet dataSet)
             : base(heroUnit, dataSet)
         {
-            _drone = _hero.Items.Find(item => item.unitCode == (int)CharacterClass.Drone);
+            _drone = BaseUnit.Items.Find(item => item.unitCode == (int)CharacterClass.Drone);
         }
 
         public Unit Drone
@@ -1244,8 +1487,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
             set
             {
-                _hero.Items.Remove(_drone);
-                _hero.Items.Add(value);
+                BaseUnit.Items.Remove(_drone);
+                BaseUnit.Items.Add(value);
                 _drone = value;
             }
         }
@@ -1264,7 +1507,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             {
                 List<Unit> _weapons = new List<Unit>();
 
-                foreach(Unit item in _hero.Items)
+                foreach(Unit item in BaseUnit.Items)
                 {
                     if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
@@ -1282,7 +1525,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             {
                 List<Unit> _weapons = new List<Unit>();
 
-                foreach (Unit item in _hero.Items)
+                foreach (Unit item in BaseUnit.Items)
                 {
                     if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
@@ -1300,7 +1543,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             {
                 List<Unit> _weapons = new List<Unit>();
 
-                foreach (Unit item in _hero.Items)
+                foreach (Unit item in BaseUnit.Items)
                 {
                     if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
