@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FC9EA483-8C7E-4E71-A49A-CB3379615D18}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Hellgate</RootNamespace>
+    <AssemblyName>Hellgate</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Crypt.cs" />
+    <Compile Include="ExcelFile.cs" />
+    <Compile Include="ExcelFileDef.cs" />
+    <Compile Include="Excel\Achievements.cs" />
+    <Compile Include="Excel\Act.cs" />
+    <Compile Include="Excel\Affixes.cs" />
+    <Compile Include="Excel\AffixTypes.cs" />
+    <Compile Include="Excel\AiBehaviour.cs" />
+    <Compile Include="Excel\AiCommonState.cs" />
+    <Compile Include="Excel\AiInit.cs" />
+    <Compile Include="Excel\AiStart.cs" />
+    <Compile Include="Excel\AnimationCondition.cs" />
+    <Compile Include="Excel\AnimationGroups.cs" />
+    <Compile Include="Excel\AnimationStance.cs" />
+    <Compile Include="Excel\BackGroundSounds.cs" />
+    <Compile Include="Excel\BackGroundSounds2D.cs" />
+    <Compile Include="Excel\BackGroundSounds3D.cs" />
+    <Compile Include="Excel\BadgeRewards.cs" />
+    <Compile Include="Excel\Bones.cs" />
+    <Compile Include="Excel\BookMarks.cs" />
+    <Compile Include="Excel\BudgetsModel.cs" />
+    <Compile Include="Excel\BudgetTextureMips.cs" />
+    <Compile Include="Excel\CharacterClass.cs" />
+    <Compile Include="Excel\ChatInstancedChannels.cs" />
+    <Compile Include="Excel\ColorSets.cs" />
+    <Compile Include="Excel\ConditionFunctions.cs" />
+    <Compile Include="Excel\DamageEffects.cs" />
+    <Compile Include="Excel\DamageTypes.cs" />
+    <Compile Include="Excel\Dialog.cs" />
+    <Compile Include="Excel\Difficulty.cs" />
+    <Compile Include="Excel\Display.cs" />
+    <Compile Include="Excel\EffectsFiles.cs" />
+    <Compile Include="Excel\EffectsIndex.cs" />
+    <Compile Include="Excel\EffectsShaders.cs" />
+    <Compile Include="Excel\ExcelTables.cs" />
+    <Compile Include="Excel\GameGlobals.cs" />
+    <Compile Include="Excel\ItemQuality.cs" />
+    <Compile Include="Excel\Treasure.cs" />
+    <Compile Include="Excel\UnitTypes.cs" />
+    <Compile Include="FileManager.cs" />
+    <Compile Include="IndexFile.cs" />
+    <Compile Include="StringFile.cs" />
+    <Compile Include="StringFileDef.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tools\Tools.csproj">
+      <Project>{EB23609A-93D8-4CAE-B80C-4444B1CB8631}</Project>
+      <Name>Tools</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Excel\Tc\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

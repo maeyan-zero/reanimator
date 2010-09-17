@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<modification>
-	<file id="ITEM_LEVELS">
-		<entity id="*">
-			<attribute id="AugmentCostRare" param="/">2</attribute>
-			<attribute id="AugmentCostLegendary" param="/">2</attribute>
-		</entity>
-	</file>
-</modification>
