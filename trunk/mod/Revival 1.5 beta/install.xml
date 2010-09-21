@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<modification>
+	<install>
+		<release>Revival</release>
+		<version>1.5 beta</release>
+		<author>Maeyan, Malachor, Alex2069, Kite &amp; The Revival Team</release>
+		<www>http://www.hellgateaus.net/</www>
+		<email>maeyan.zero@gmail.com</email>
+		<dependencies>
+			<patch>sp_hellgate_1.10.180.3416_1.18074.70.4256</patch>
+			<patch>mp_hellgate_1.10.180.3416_1.0.86.4580</patch>
+		</dependencies>
+		<description>Welcome to the amazing 1.5 beta release of Revival. This is the most expansive update to the game yet including these major features:
+		* Stonehenge and Abyss Armor &amp; Weapons including original names &amp; stats.
+				* 6x Stonehenge Helms, 3x Abyss Armor Sets
+				* Sunblade, Sunshield, Moonblade, Gleamcarver, Dissector, Dissector Shield
+				* Vigilante, Hellbore, Fry Baby, Core Magnum, Thumper, Thunderclash
+				* Fire Seeds, Negatron, Singularity Node, 3x Focus Items (yes, including Slippies!)
+		* The incredible particle updates from Abyss.
+		* Background environment updates from Abyss.
+		* New community item loots!
+		* Mythic &amp; Double-Edged qualities.
+		
+		Brand new game experience. Although you can play your higher level characters, we would recommend starting a new one so you can reep the full benefits update.
+		
+		</description>
+		<extract idx="mp_hellgate_1.10.180.3416_1.0.86.4580">
+			<path>data/units/items/*</path>
+			<path>data/particles/*</path>
+			<path>data/background/*</path>
+		</extract>
+	</install>
+</modification>

@@ -1,0 +1,376 @@
+textureSetGroup	appearanceGroupFolder	appearanceGroup1	appearanceGroup2	folder	diffuse	normal	specular	lightMap	colorMask	undefined1	undefinedBool1	undefinedBool2	undefinedBool3	undefinedBool4	undefinedBool5	undefinedInt1	undefinedInt2	undefinedInt3	undefinedInt4	undefinedInt5	undefinedInt6	undefinedInt7	undefinedInt8	undefinedInt9	undefinedInt10	sizeDiffuseW	sizeDiffuseH	sizeNormalW	sizeNormalH	sizeSpecularW	sizeSpecularH	sizeLightMapW	sizeLightMapH	sizeColorMaskW	sizeColorMaskH	undefined2	undefined2a
+1	2	2	-1		male_bare_arms_diffuse	male_bare_arms_normal	male_bare_arms_specular	male_bare_arms_glow	male_bare_arms_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+1	3	3	-1		female_bare_arms_diffuse	female_bare_arms_normal	female_bare_arms_specular	female_bare_arms_glow	female_bare_arms_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+7	4	4	-1	powered_light	tm_powered_light_diffuse	tm_powered_light_normal	tm_powered_light_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+8	4	4	-1	powered_heavy	tm_powered_heavy_diffuse	tm_powered_heavy_normal	tm_powered_heavy_specular	tm_powered_heavy_Glow	TM_Power_Heavy_Color_Mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+9	4	4	-1	tech_light	tm_fp_tech_light_diffuse	tm_fp_tech_light_normal	tm_fp_tech_light_specular		tm_fp_tech_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+10	4	4	-1	tech_heavy	tm_tech_heavy_diffuse	tm_tech_heavy_normal	tm_tech_heavy_specular		tm_tech_heavy_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+3	4	4	-1	arcane_light	tm_fp_arcane_light_diffuse	tm_fp_arcane_light_normal	tm_fp_arcane_light_specular		tm_fp_arcane_light_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+4	4	4	-1	arcane_heavy	tm_fp_arcane_heavy_diffuse	tm_fp_arcane_heavy_normal	tm_fp_arcane_heavy_specular		tm_fp_arcane_heavy_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+7	7	7	-1	power_light	tf_power_light_diffuse	tf_power_light_normal	tf_power_light_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+8	7	7	-1	power_heavy	tf_power_heavy_diffuse	tf_power_heavy_normal	tf_power_heavy_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+9	7	7	-1	tech_light	tf_tech_light_diffuse	tf_tech_light_normal	tf_tech_light_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+10	7	7	-1	tech_heavy	tf_tech_heavy_diffuse	tf_tech_heavy_normal	tf_tech_heavy_specular	tf_tech_heavy_glow		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+3	7	7	-1	power_light	tf_power_light_diffuse	tf_power_light_normal	tf_power_light_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+4	7	7	-1	power_heavy	tf_power_heavy_diffuse	tf_power_heavy_normal	tf_power_heavy_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+12	5	5	-1	focus_a	FocusItem_A_diffuse	FocusItem_A_normal	FocusItem_A_specular	FocusItem_A_glow		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+2	5	5	-1	apprentice	cm_apprentice_diffuse	cm_apprentice_normal	cm_apprentice_specular	cm_apprentice_glow	cm_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+3	5	5	-1	arcane_light	cm_arcane_light_diffuse	cm_arcane_light_normal	cm_arcane_light_specular		cm_arcane_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+12	8	8	-1	focus_a	FocusItem_A_diffuse	FocusItem_A_normal	FocusItem_A_specular	FocusItem_A_glow		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+2	8	8	-1	apprentice	cf_apprentice_diffuse	cf_apprentice_normal	cf_apprentice_specular	cf_apprentice_glow	cf_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+3	8	8	-1	arcane_light	cf_arcane_light_diffuse	cf_arcane_light_normal	cf_arcane_light_specular		cf_arcane_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+2	6	6	-1	apprentice	hm_apprentice_diffuse	hm_apprentice_normal	hm_apprentice_specular		hm_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+4	6	6	-1	arcane_heavy	hm_arcane_heavy_diffuse	hm_arcane_heavy_normal	hm_arcane_heavy_specular		hm_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+3	6	6	-1	arcane_light	hm_arcane_light_diffuse	hm_arcane_light_normal	hm_arcane_light_specular		hm_arcane_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+6	6	6	-1	mystic_heavy	hm_mystic_heavy_diffuse	hm_mystic_heavy_normal	hm_mystic_heavy_specular	hm_mystic_heavy_sillum	hm_mystic_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+5	6	6	-1	mystic_light	hm_mystic_light_diffuse	hm_mystic_light_normal	hm_mystic_light_specular	hm_mystic_light_sillum	hm_mystic_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+10	6	6	-1	tech_heavy	hm_tech_heavy_diffuse	hm_tech_heavy_normal	hm_tech_heavy_specular		hm_tech_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+9	6	6	-1	tech_light	hm_tech_light_diffuse	hm_tech_light_normal	hm_tech_light_specular		hm_tech_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+2	9	9	-1	apprentice	hf_apprentice_diffuse	hf_apprentice_normal	hf_apprentice_specular		hf_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+4	9	9	-1	arcane_heavy	hf_arcane_heavy_diffuse	hf_arcane_heavy_normal	hf_arcane_heavy_specular		hf_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+3	9	9	-1	arcane_light	hf_arcane_light_diffuse	hf_arcane_light_normal	hf_arcane_light_specular		hf_arcane_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+6	9	9	-1	mystic_heavy	hf_mystic_heavy_diffuse	hf_mystic_heavy_normal	hf_mystic_heavy_specular	hf_mystic_heavy_sillum	hf_mystic_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+5	9	9	-1	mystic_light	hf_mystic_light_diffuse	hf_mystic_light_normal	hf_mystic_light_specular	hf_mystic_light_sillum	hf_mystic_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+10	9	9	-1	tech_heavy	hf_tech_heavy_diffuse	hf_tech_heavy_normal	hf_tech_heavy_specular		hf_tech_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+9	9	9	-1	tech_light	hf_tech_light_diffuse	hf_tech_light_normal	hf_tech_light_specular		hf_tech_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+11	6	2	-1	arcane_heavy	hm_arcane_heavy_diffuse	hm_arcane_heavy_normal	hm_arcane_heavy_specular		hm_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+11	9	3	-1	arcane_heavy	hf_arcane_heavy_diffuse	hf_arcane_heavy_normal	hf_arcane_heavy_specular		hf_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+14	10	10	-1	skinsuit	tm_skinsuit_body_diffuse	tm_skinsuit_body_normal	tm_skinsuit_body_specular	tm_skinsuit_body_Sillum		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+15	10	10	-1	skinsuit	tm_skinsuit_body_diffuse	tm_skinsuit_body_normal	tm_skinsuit_body_specular	tm_skinsuit_body_Sillum		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+16	10	10	-1	starter	tm_street_body_diffuse	tm_street_body_normal	tm_street_body_specular	tm_street_body_sillum	tm_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+17	10	10	-1	apprentice	tm_apprentice_diffuse	tm_apprentice_normal	tm_apprentice_specular	tm_apprentice_sillum	tm_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+18	10	10	-1	arcane_light	tm_arcane_light_diffuse	tm_arcane_light_normal	tm_arcane_light_specular	tm_arcane_light_sillum	tm_arcane_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+19	10	10	-1	arcane_heavy	tm_arcane_heavy_diffuse	tm_arcane_heavy_normal	tm_arcane_heavy_specular	tm_arcane_heavy_sillum	tm_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+22	10	10	-1	power_light	tm_power_light_diffuse	tm_power_light_normal	tm_power_light_specular	tm_power_light_sillum	tm_power_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+23	10	10	-1	power_heavy	tm_power_heavy_diffuse	tm_power_heavy_normal	tm_power_heavy_specular	tm_power_heavy_sillum	tm_power_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+25	10	10	-1	tech_light	tm_tech_light_diffuse	tm_tech_light_normal	tm_tech_light_specular		TM_Tech_Light_Color_Mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+26	10	10	-1	tech_heavy	tm_tech_heavy_diffuse	tm_tech_heavy_normal	tm_tech_heavy_specular	tm_tech_heavy_sillum	tm_tech_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+27	10	10	-1	tech_heavy	tm_tech_heavy_dmg_dif	tm_tech_heavy_dmg_norm	tm_tech_heavy_dmg_spec	tm_tech_heavy_sillum	tm_tech_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+35	10	10	-1	apprentice	tm_apprentice_helm_diffuse	tm_apprentice_helm_normal	tm_apprentice_helm_specular	tm_apprentice_helm_sillum	tm_apprentice_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+36	10	10	-1	arcane_light	tm_arcane_light_helm_diffuse	tm_arcane_light_helm_normal	tm_arcane_light_helm_spec		tm_arcane_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+37	10	10	-1	arcane_heavy	tm_arcane_heavy_helm_diffuse	tm_arcane_heavy_helm_normal	tm_arcane_heavy_helm_specular	tm_arcane_heavy_helm_Sillum	tm_arcane_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+40	10	10	-1	power_light	tm_power_light_helm_diffuse	tm_power_light_helm_normal	tm_power_light_helm_specular	tm_power_light_helm_sillum	tm_power_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+41	10	10	-1	power_heavy	tm_power_heavy_helm_diffuse	tm_power_heavy_helm_normal	tm_power_heavy_helm_specular	tm_power_heavy_helm_sillum	tm_power_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+43	10	10	-1	tech_light	tm_tech_light_helm_diffuse	tm_tech_light_helm_normal	tm_tech_light_helm_specular	tm_tech_light_helm_sillum	tm_tech_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+44	10	10	-1	tech_heavy	tm_tech_heavy_helm_diffuse	tm_tech_heavy_helm_normal	tm_tech_heavy_helm_specular	tm_tech_heavy_helm_sillum	tm_tech_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+14	14	14	-1	undersuit	tf_undersuit_body_diffuse	tf_undersuit_body_normal	tf_undersuit_body_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+15	14	14	-1	undersuit	tf_undersuit_body_diffuse	tf_undersuit_body_normal	tf_undersuit_body_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+16	14	14	-1	starter	tf_street_body_diffuse	tf_street_body_normal	tf_street_body_specular	tf_street_body_sillum	tf_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+17	14	14	-1	apprentice	tf_apprentice_diffuse	tf_apprentice_normal	tf_apprentice_specular	tf_apprentice_sillum	tf_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+18	14	14	-1	arcane_light	tf_arcane_light_diffuse	tf_arcane_light_normal	tf_arcane_light_specular	tf_arcane_light_glow	tf_arcane_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+19	14	14	-1	arcane_heavy	tf_arcane_heavy_diffuse	tf_arcane_heavy_normal	tf_arcane_heavy_specular	tf_arcane_heavy_glow	tf_arcane_heavy_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+22	14	14	-1	power_light	tf_power_light_diffuse	tf_power_light_normal	tf_power_light_specular	tf_power_light_sillum	tf_power_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+23	14	14	-1	power_heavy	tf_power_heavy_diffuse	tf_power_heavy_normal	tf_power_heavy_specular	tf_power_heavy_sillum	tf_power_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+25	14	14	-1	tech_light	tf_tech_light_diffuse	tf_tech_light_normal	tf_tech_light_specular	tf_tech_light_selfIllum	tf_tech_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+26	14	14	-1	tech_heavy	tf_tech_heavy_diffuse	tf_tech_heavy_normal	tf_tech_heavy_specular	tf_tech_heavy_glow	tf_tech_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+35	14	14	-1	apprentice	tf_apprentice_helm_diffuse	tf_apprentice_helm_normal	tf_apprentice_helm_specular	tf_apprentice_helm_sillum	tf_apprentice_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+36	14	14	-1	arcane_light	tf_arcane_light_helm_diffuse	tf_arcane_light_helm_normal	tf_arcane_light_helm_spec		TF_arcane_light_helm_Color_Mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+37	14	14	-1	arcane_heavy	tf_arcane_heavy_helm_diffuse	tf_arcane_heavy_helm_normal	tf_arcane_heavy_helm_specular	tf_arcane_heavy_helm_sillum	tf_arcane_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+40	14	14	-1	power_light	tf_power_light_helm_diffuse	tf_power_light_helm_normal	tf_power_light_helm_specular	tf_power_light_helm_sillum	tf_power_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+41	14	14	-1	power_heavy	tf_power_heavy_helm_diffuse	tf_power_heavy_helm_normal	tf_power_heavy_helm_specular	tf_power_heavy_helm_sillum	tf_power_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+43	14	14	-1	tech_light	tf_tech_light_helm_diffuse	tf_tech_light_helm_normal	tf_tech_light_helm_specular	tf_tech_light_helm_sillum	tf_tech_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+44	14	14	-1	tech_heavy	tf_tech_heavy_helm_diffuse	tf_tech_heavy_helm_normal	tf_tech_heavy_helm_specular	tf_tech_heavy_helm_glow	tf_tech_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+14	10	11	-1	starter	tm_street_body_diffuse	tm_street_body_normal	tm_street_body_specular		tm_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+15	10	11	-1	skinsuit	tm_skinsuit_body_diffuse	tm_skinsuit_body_normal	tm_skinsuit_body_specular	tm_skinsuit_body_Sillum		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+16	10	11	-1	starter	tm_street_body_diffuse	tm_street_body_normal	tm_street_body_specular	tm_street_body_sillum.tga	tm_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+17	11	11	-1	apprentice	cm_apprentice_diffuse	cm_apprentice_normal	cm_apprentice_specular	cm_apprentice_sillum	cm_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+18	11	11	-1	arcane_light	cm_arcane_light_diffuse	cm_arcane_light_normal	cm_arcane_light_specular		cm_arcane_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+19	11	11	-1	arcane_heavy	cm_arcane_heavy_body_diffuse	cm_arcane_heavy_body_normal	cm_arcane_heavy_body_specular	cm_arcane_heavy_body_sillum	cm_arcane_heavy_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+22	11	11	-1	power_light	cm_power_light_body_diffuse	cm_power_light_body_normal	cm_power_light_body_specular	cm_power_light_body_sillum	cm_power_light_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+23	11	11	-1	power_heavy	cm_power_heavy_body_diffuse	cm_power_heavy_body_normal	cm_power_heavy_body_specular	cm_power_heavy_body_sillum	cm_power_heavy_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+25	11	11	-1	tech_light	cm_tech_light_diffuse	cm_tech_light_normal	cm_tech_light_specular	cm_tech_light_sillum	cm_tech_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+26	11	11	-1	tech_heavy	cm_tech_heavy_diffuse	cm_tech_heavy_normal	cm_tech_heavy_specular	cm_tech_heavy_sillum	cm_tech_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+35	11	11	-1	apprentice	cm_apprentice_helm_diffuse	cm_apprentice_helm_normal	cm_apprentice_helm_specular		cm_apprentice_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+36	11	11	-1	arcane_light	cm_arcane_light_helm_diffuse	cm_arcane_light_helm_normal	cm_arcane_light_helm_specular		cm_arcane_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+37	11	11	-1	arcane_heavy	cm_arcane_heavy_helm_diffuse	cm_arcane_heavy_helm_normal	cm_arcane_heavy_helm_specular		cm_arcane_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+40	11	11	-1	power_light	cm_power_light_helm_diffuse	cm_power_light_helm_normal	cm_power_light_helm_specular	cm_power_light_helm_sillum	cm_power_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+41	11	11	-1	power_heavy	cm_power_heavy_helm_diffuse	cm_power_heavy_helm_normal	cm_power_heavy_helm_specular	cm_power_heavy_helm_sillum	cm_power_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+43	11	11	-1	tech_light	cm_tech_light_helm_diffuse	cm_tech_light_helm_normal	cm_tech_light_helm_specular		cm_tech_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+44	11	11	-1	tech_heavy	cm_tech_heavy_helm_diffuse	cm_tech_heavy_helm_normal	cm_tech_heavy_helm_specular	cm_tech_heavy_helm_sillum	cm_tech_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+14	14	15	-1	starter	tf_street_body_diffuse	tf_street_body_normal	tf_street_body_specular		tf_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+15	14	15	-1	undersuit	tf_undersuit_body_diffuse	tf_undersuit_body_normal	tf_undersuit_body_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+16	14	15	-1	starter	tf_street_body_diffuse	tf_street_body_normal	tf_street_body_specular	tf_street_body_sillum.tga	tf_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+17	15	15	-1	apprentice	cf_apprentice_diffuse	cf_apprentice_normal	cf_apprentice_specular	cf_apprentice_sillum	cf_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+18	15	15	-1	arcane_light	cf_arcane_light_diffuse	cf_arcane_light_normal	cf_arcane_light_specular	cf_arcane_light_selfIllum	CF_Arcane_Light_Color_Mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+19	15	15	-1	arcane_heavy	cf_arcane_heavy_diffuse	cf_arcane_heavy_normal	cf_arcane_heavy_specular	cf_arcane_heavy_sillum	cf_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+22	15	15	-1	power_light	cf_power_light_body_diffuse	cf_power_light_body_normal	cf_power_light_body_specular	cf_power_light_body_sillum	cf_power_light_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+23	15	15	-1	power_heavy	cf_power_heavy_body_diffuse	cf_power_heavy_body_normal	cf_power_heavy_body_specular	cf_power_heavy_body_sillum	cf_power_heavy_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+25	15	15	-1	tech_light	cf_tech_light_diffuse	cf_tech_light_normal	cf_tech_light_specular		cf_tech_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+26	15	15	-1	tech_heavy	cf_tech_heavy_diffuse	cf_tech_heavy_normal	cf_tech_heavy_specular	cf_tech_heavy_sillum	cf_tech_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+35	15	15	-1	apprentice	cf_apprentice_helm_diffuse	cf_apprentice_helm_normal	cf_apprentice_helm_specular		cf_apprentice_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+36	15	15	-1	arcane_light	cf_arcane_light_helm_diffuse	cf_arcane_light_helm_normal	cf_arcane_light_helm_specular		CF_Arcane_Light_helmet_Color_Mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+37	15	15	-1	arcane_heavy	cf_arcane_heavy_helm_diffuse	cf_arcane_heavy_helm_normal	cf_arcane_heavy_helm_specular		cf_arcane_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+40	15	15	-1	power_light	cf_power_light_helm_diffuse	cf_power_light_helm_normal	cf_power_light_helm_specular	cf_power_light_helm_sillum	cf_power_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+41	15	15	-1	power_heavy	cf_power_heavy_helm_diffuse	cf_power_heavy_helm_normal	cf_power_heavy_helm_specular	cf_power_heavy_helm_sillum	cf_power_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+43	15	15	-1	tech_light	cf_tech_light_helm_diffuse	cf_tech_light_helm_normal	cf_tech_light_helm_specular		cf_tech_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+44	15	15	-1	tech_heavy	cf_tech_heavy_helm_diffuse	cf_tech_heavy_helm_normal	cf_tech_heavy_helm_specular	cf_tech_heavy_helm_sillum	cf_tech_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+14	10	12	-1	starter	tm_street_body_diffuse	tm_street_body_normal	tm_street_body_specular		tm_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+15	10	12	-1	skinsuit	tm_skinsuit_body_diffuse	tm_skinsuit_body_normal	tm_skinsuit_body_specular	tm_skinsuit_body_Sillum		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+16	10	12	-1	starter	tm_street_body_diffuse	tm_street_body_normal	tm_street_body_specular	tm_street_body_sillum.tga	tm_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+14	14	13	-1	starter	tf_street_body_diffuse	tf_street_body_normal	tf_street_body_specular		tf_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+15	14	13	-1	undersuit	tf_undersuit_body_diffuse	tf_undersuit_body_normal	tf_undersuit_body_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+16	14	13	-1	starter	tf_street_body_diffuse	tf_street_body_normal	tf_street_body_specular	tf_street_body_sillum.tga	tf_street_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+17	13	13	-1	apprentice	hf_apprentice_diffuse	hf_apprentice_normal	hf_apprentice_specular		hf_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+18	13	13	-1	arcane_light	hf_arcane_light_diffuse	hf_arcane_light_normal	hf_arcane_light_specular		hf_arcane_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+19	13	13	-1	arcane_heavy	hf_arcane_heavy_diffuse	hf_arcane_heavy_normal	hf_arcane_heavy_specular		hf_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+20	13	13	-1	mystic_light	hf_mystic_light_diffuse	hf_mystic_light_normal	hf_mystic_light_specular	hf_mystic_light_sillum	hf_mystic_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+21	13	13	-1	mystic_heavy	hf_mystic_heavy_diffuse	hf_mystic_heavy_normal	hf_mystic_heavy_specular	hf_mystic_heavy_sillum	hf_mystic_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+25	13	13	-1	tech_light	hf_tech_light_diffuse	hf_tech_light_normal	hf_tech_light_specular		hf_tech_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+26	13	13	-1	tech_heavy	hf_tech_heavy_diffuse	hf_tech_heavy_normal	hf_tech_heavy_specular	hf_tech_heavy_glow	hf_tech_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+35	13	13	-1	apprentice	hf_apprentice_helm_diffuse	hf_apprentice_helm_normal	hf_apprentice_helm_specular		hf_apprentice_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+36	13	13	-1	arcane_light	hf_arcane_light_helm_diffuse	hf_arcane_light_helm_normal	hf_arcane_light_helm_specular	hf_arcane_light_helm_sillum	hf_arcane_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+37	13	13	-1	arcane_heavy	hf_arcane_heavy_helm_diffuse	hf_arcane_heavy_helm_normal	hf_arcane_heavy_helm_specular		hf_arcane_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+38	13	13	-1	mystic_light	hf_mystic_light_helm_diffuse	hf_mystic_light_helm_normal	hf_mystic_light_helm_specular	hf_mystic_light_helm_sillum	hf_mystic_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+39	13	13	-1	mystic_heavy	hf_mystic_heavy_helm_diffuse	hf_mystic_heavy_helm_normal	hf_mystic_heavy_helm_specular	hf_mystic_heavy_helm_sillum	hf_mystic_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+43	13	13	-1	tech_light	hf_tech_light_helm_diffuse	hf_tech_light_helm_normal	hf_tech_light_helm_specular		hf_tech_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+44	13	13	-1	tech_heavy	hf_tech_heavy_helm_diffuse	hf_tech_heavy_helm_normal	hf_tech_heavy_helm_specular	hf_tech_heavy_helm_glow	hf_tech_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+17	12	12	-1	apprentice	hm_apprentice_diffuse	hm_apprentice_normal	hm_apprentice_specular		hm_apprentice_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+18	12	12	-1	arcane_light	hm_arcane_light_diffuse	hm_arcane_light_normal	hm_arcane_light_specular		hm_arcane_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+19	12	12	-1	arcane_heavy	hm_arcane_heavy_diffuse	hm_arcane_heavy_normal	hm_arcane_heavy_specular		hm_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+20	12	12	-1	mystic_light	hm_mystic_light_diffuse	hm_mystic_light_normal	hm_mystic_light_specular	hm_mystic_light_sillum	hm_mystic_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+21	12	12	-1	mystic_heavy	hm_mystic_heavy_diffuse	hm_mystic_heavy_normal	hm_mystic_heavy_specular	hm_mystic_heavy_glow	hm_mystic_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+23	12	12	-1	power_heavy	hm_power_heavy_body_diffuse	hm_power_heavy_body_normal	hm_power_heavy_body_specular	hm_power_heavy_body_glow	hm_power_heavy_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+25	12	12	-1	tech_light	hm_tech_light_diffuse	hm_tech_light_normal	hm_tech_light_specular		hm_tech_light_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+26	12	12	-1	tech_heavy	hm_tech_heavy_diffuse	hm_tech_heavy_normal	hm_tech_heavy_specular		hm_tech_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+35	12	12	-1	apprentice	hm_apprentice_helm_diffuse	hm_apprentice_helm_normal	hm_apprentice_helm_specular		hm_apprentice_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+36	12	12	-1	arcane_light	hm_arcane_light_helm_diffuse	hm_arcane_light_helm_normal	hm_arcane_light_helm_specular	hm_arcane_light_helm_sillum	hm_arcane_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+37	12	12	-1	arcane_heavy	hm_arcane_heavy_helm_diffuse	hm_arcane_heavy_helm_normal	hm_arcane_heavy_helm_specular		hm_arcane_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+38	12	12	-1	mystic_light	hm_mystic_light_helm_diffuse	hm_mystic_light_helm_normal	hm_mystic_light_helm_specular	hm_mystic_light_helm_sillum	hm_mystic_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+39	12	12	-1	mystic_heavy	hm_mystic_heavy_helm_diffuse	hm_mystic_heavy_helm_normal	hm_mystic_heavy_helm_specular	hm_mystic_heavy_helm_glow	hm_mystic_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+41	12	12	-1	power_heavy	hm_power_heavy_head_diffuse	hm_power_heavy_head_normal	hm_power_heavy_head_specular	hm_power_heavy_head_glow	hm_power_heavy_head_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+43	12	12	-1	tech_light	hm_tech_light_helm_diffuse	hm_tech_light_helm_normal	hm_tech_light_helm_specular		hm_tech_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+44	12	12	-1	tech_heavy	hm_tech_heavy_helm_diffuse	hm_tech_heavy_helm_normal	hm_tech_heavy_helm_specular		hm_tech_heavy_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+30	109	63	-1	military01	gf_military01_diffuse	gf_military01_normal	gf_military01_specular	gf_military01_sillum	gf_military01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+29	109	63	-1	mechanic01	gf_mechanic01_diffuse	gf_mechanic01_normal	gf_mechanic01_specular	gf_mechanic01_sillumn	gf_mechanic01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+31	109	63	-1	vagrant01	gf_vagrant01_diffuse	gf_vagrant01_normal	gf_vagrant01_specular		gf_vagrant01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+32	109	63	-1	apocalyptic01	gf_apocalyptic01_diffuse	gf_apocalyptic01_normal	gf_apocalyptic01_specular	gf_apocalyptic01_sillum	gf_apocalyptic01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+33	109	63	-1	veteran01	gf_veteran_diffuse	gf_veteran_normal	gf_veteran_specular	gf_veteran_sillum	gf_veteran_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+34	109	63	-1	proper01	gf_proper01_diffuse	gf_proper01_normal	gf_proper01_specular	gf_proper01_sillum	gf_proper01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+30	108	16	-1	military01	gm_military01_diffuse	gm_military01_normal	gm_military01_specular		gm_military01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+29	108	16	-1	mechanic01	gm_mechanic01_diffuse	gm_mechanic01_normal	gm_mechanic01_specular	gm_mechanic01_glow	gm_mechanic01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+31	108	16	-1	vagrant01	gm_vagrant01_diffuse	gm_vagrant01_normal	gm_vagrant01_specular		gm_vagrant01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+32	108	16	-1	apocalyptic01	gm_apocalyptic01_diffuse	gm_apocalyptic01_normal	gm_apocalyptic01_specular		gm_apocalyptic01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+33	108	16	-1	veteran01	gm_veteran01_diffuse	gm_veteran01_normal	gm_veteran01_specular		gm_veteran01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+34	108	16	-1	proper01	gm_proper01_diffuse	gm_proper01_normal	gm_proper01_specular		gm_proper01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+64	113	16	-1	murmur	murmur_body_diffuse	murmur_body_normal	murmur_body_specular	murmur_body_sillum	murmur_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+54	28	28	-1	murmur	murmur_head_diffuse	murmur_head_normal	murmur_head_specular	murmur_head_sillum	murmur_head_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+66	113	16	-1	murmur_ruined	murmur_ruined_body_diffuse	murmur_ruined_body_normal	murmur_ruined_body_specular		murmur_ruined_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+67	17	16	-1	murmur_ruined	murmur_ruined_head_diffuse	murmur_ruined_head_normal	murmur_ruined_head_specular		murmur_ruined_head_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+68	113	16	-1	murmur_ruined	c_murmur_ruined_body_diffuse	c_murmur_ruined_body_normal	c_murmur_ruined_body_specular		murmur_ruined_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+54	29	29	-1	murmur_ruined	c_murmur_ruined_head_diffuse	c_murmur_ruined_head_normal	c_murmur_ruined_head_specular		murmur_ruined_head_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	31	31	-1	npc_consul	npc_consul_diffuse	npc_consul_normal	npc_consul_specular	npc_consul_sillum	npc_consul_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+71	113	16	-1	lucious	lucious_coat_diffuse	lucious_coat_normal	lucious_coat_specular	lucious_coat_sillumn	lucious_coat_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+54	30	30	-1	lucious	Lucious_Head_diffuse	Lucious_Head_normal	Lucious_Head_specular		Lucious_Head_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	48	48	-1	lucious_hair	lucious_hair_diffuse	lucious_hair_normal	lucious_hair_specular		lucious_hair_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	62	62	-1	lucious_beard	lucious_beard_diffuse	lucious_beard_normal	lucious_beard_specular	lucious_beard_sillum	lucious_beard_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+70	113	16	-1	bodger	npc_bodger_diffuse	npc_bodger_normal	npc_bodger_specular	npc_bodger_glow	npc_bodger_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+72	113	16	-1	techsmith	npc_techsmith_body_diffuse	npc_techsmith_body_normal	npc_techsmith_body_spec	npc_techsmith_body_glow	techsmith_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+73	113	16	-1	techsmith	npc_techsmith_helm_diffuse	npc_techsmith_helm_normal	npc_techsmith_helm_spec	npc_techsmith_helm_glow	techsmith_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+74	113	16	-1	techsmith	npc_techsmith_face_diffuse	npc_techsmith_face_normal	npc_techsmith_face_spec		techsmith_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+75	113	16	-1	techsmith	npc_techsmith_stage2_body_diffuse	npc_techsmith_stage2_body_normal	npc_techsmith_stage2_body_spec	npc_techsmith_stage2_body_glow	techsmith_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+76	113	16	-1	techsmith	npc_techsmith_stage2_helm_diffuse	npc_techsmith_stage2_helm_normal	npc_techsmith_stage2_helm_spec	npc_techsmith_stage2_helm_glow	techsmith_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+77	113	16	-1	techsmith	npc_techsmith_stage2_face_diffuse	npc_techsmith_stage2_face_normal	npc_techsmith_stage2_face_spec		techsmith_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+78	113	16	-1	techsmith	npc_techsmith_stage3_body_diffuse	npc_techsmith_stage3_body_normal	npc_techsmith_stage3_body_spec	npc_techsmith_stage3_body_glow	techsmith_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+79	113	16	-1	techsmith	npc_techsmith_stage3_head_diffuse	npc_techsmith_stage3_head_normal	npc_techsmith_stage3_head_spec	npc_techsmith_stage3_head_glow	techsmith_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+80	113	16	-1	techsmith	china_techsmith_stage2_body_diffuse	china_techsmith_stage2_body_normal	china_techsmith_stage2_body_spec	china_techsmith_stage2_body_glow	techsmith_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+81	113	16	-1	techsmith	china_techsmith_stage2_helm_diffuse	china_techsmith_stage2_helm_normal	china_techsmith_stage2_helm_spec	china_techsmith_stage2_helm_glow	techsmith_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+82	113	16	-1	techsmith	china_techsmith_stage2_face_diffuse	china_techsmith_stage2_face_normal	china_techsmith_stage2_face_spec		techsmith_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+83	113	16	-1	techsmith	china_techsmith_stage3_body_diffuse	china_techsmith_stage3_body_normal	china_techsmith_stage3_body_spec	china_techsmith_stage3_body_glow	techsmith_body_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+84	113	16	-1	techsmith	china_techsmith_stage3_head_diffuse	china_techsmith_stage3_head_normal	china_techsmith_stage3_head_spec	china_techsmith_stage3_head_glow	techsmith_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+85	114	63	-1	emmera	emmera_diffuse	emmera_normal	emmera_specular		emmera_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+56	90	90	-1	emmera_hair	emmera_hair_diffuse	emmera_hair_normal	emmera_hair_specular	emmera_hair_sillum	emmera_hair_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	74	74	-1	emmera	emmera_head_diffuse	emmera_head_normal	emmera_head_specular	emmera_head_sillum	emmera_head_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+86	113	16	-1	Truth	npc_truth_male_pristine_diffuse	npc_truth_male_normal	npc_truth_male_pristine_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+87	113	16	-1	Truth	npc_truth_male_eroded_diffuse	npc_truth_male_normal	npc_truth_male_eroded_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+86	114	63	-1	gf_truth	gf_truth_pristine_diffuse	gf_truth_pristine_normal	gf_truth_pristine_specular		gf_truth_pristine_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+87	114	63	-1	gf_truth	gf_truth_eroded_diffuse	gf_truth_eroded_normal	gf_truth_eroded_specular		gf_truth_eroded_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+88	114	63	-1	child_truth	child_truth_pristine_diffuse	child_truth_pristine_normal	child_truth_pristine_specular		child_truth_pristine_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+89	114	63	-1	child_truth	child_truth_eroded_diffuse	child_truth_eroded_normal	child_truth_eroded_specular		child_truth_eroded_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+54	75	75	-1	child_truth	child_truth_head_diffuse	child_truth_head_normal	child_truth_head_specular		child_truth_head_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+48	17	16	-1	male_eyepiece	Male_Eyepiece_Diffuse	Male_Eyepiece_normal	Male_Eyepiece_specular	Male_Eyepiece_selfIllumin		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+48	64	63	-1	female_eyepiece	Male_Eyepiece_Diffuse	Male_Eyepiece_normal	Male_Eyepiece_specular	Male_Eyepiece_selfIllumin		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+49	12	16	-1	tech_light	hm_tech_light_helm_diffuse	hm_tech_light_helm_normal	hm_tech_light_helm_specular		hm_tech_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+49	13	63	-1	tech_light	hf_tech_light_helm_diffuse	hf_tech_light_helm_normal	hf_tech_light_helm_specular		hf_tech_light_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+51	32	16	-1	male_hair_01	Male_Skull	male_hair_01_normal	Male_Skull	Male_Skull	male_hair_01_sillum	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+51	32	63	-1	male_hair_01	Male_Skull	male_hair_01_normal	Male_Skull	Male_Skull	male_hair_01_sillum	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+52	111	16	-1	santa_helm	gf_santa_helm_diffuse	gf_santa_helm_normal	gf_santa_helm_specular		gf_santa_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+52	111	63	-1	santa_helm	gf_santa_helm_diffuse	gf_santa_helm_normal	gf_santa_helm_specular		gf_santa_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+53	13	63	-1	arcane_heavy	hf_arcane_heavy_diffuse	hf_arcane_heavy_normal	hf_arcane_heavy_specular		hf_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+53	12	16	-1	arcane_heavy	hm_arcane_heavy_diffuse	hm_arcane_heavy_normal	hm_arcane_heavy_specular		hm_arcane_heavy_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+50	11	11	-1	focus_a	CM_focusitem_a_diffuse	CM_focusitem_a_normal	CM_focusitem_a_specular	CM_focusitem_a_selfIllum		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+50	15	15	-1	focus_a	CF_focusitem_a_diffuse	CF_focusitem_a_normal	CF_focusitem_a_specular	CF_focusitem_a_selfIllum		0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+13	16	16	-1		male_bare_body_diffuse_a	male_bare_body_normal	male_bare_body_specular	male_bare_body_sillum	male_bare_body_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+54	17	17	-1	Male_1	Male_1_diffuse	Male_1_Normal	Male_1_Specular	Male_1_sillum	Male_1_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+55	17	17	-1	Male_1	Male_1_dmg_Diffuse_a	Male_1_dmg_Normal_a	Male_1_dmg_Specular_a	Male_1_sillum	Male_1_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	18	18	-1	Male_2	Male_2_diffuse	Male_2_Normal	Male_2_Specular	Male_2_sillum	Male_2_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	19	19	-1	Male_3	Male_3_diffuse	Male_3_Normal	Male_3_Specular	Male_3_sillum	Male_3_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	20	20	-1	Male_4	Male_4_diffuse	Male_4_Normal	Male_4_Specular	Male_4_sillum	Male_4_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	21	21	-1	Male_5	Male_5_diffuse	Male_5_Normal	Male_5_Specular	Male_5_sillum	Male_5_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	22	22	-1	Male_6	Male_6_diffuse	Male_6_Normal	Male_6_Specular	Male_6_sillum	Male_6_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	23	23	-1	Male_7	Male_7_diffuse	Male_7_Normal	Male_7_Specular	Male_7_sillum	Male_7_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	24	24	-1	Male_8	Male_8_diffuse	Male_8_Normal	Male_8_Specular	Male_8_sillum	Male_8_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	25	25	-1	Male_9	Male_9_diffuse	Male_9_Normal	Male_9_Specular	Male_9_sillum	Male_9_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	26	26	-1	Male_10	Male_10_diffuse	Male_10_Normal	Male_10_Specular	Male_10_sillum	Male_10_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	27	27	-1	Male_11	Male_11_diffuse	Male_11_Normal	Male_11_Specular	Male_11_sillum	Male_11_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	32	32	-1	male_hair_01	male_hair_01_diffuse	male_hair_01_normal	male_hair_01_specular	male_hair_01_sillum	male_hair_01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	33	33	-1	male_hair_02	male_hair_02_diffuse	male_hair_02_normal	male_hair_02_specular	male_hair_02_sillum	male_hair_02_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	34	34	-1	male_hair_03	male_hair_03_diffuse	male_hair_03_normal	male_hair_03_specular	male_hair_03_sillum	male_hair_03_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	35	35	-1	male_hair_04	male_hair_04_diffuse	male_hair_04_normal	male_hair_04_specular	male_hair_04_sillum	male_hair_04_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	36	36	-1	male_hair_05	male_hair_05_diffuse	male_hair_05_normal	male_hair_05_specular	male_hair_05_sillum	male_hair_05_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	37	37	-1	male_hair_06	male_hair_06_diffuse	male_hair_06_normal	male_hair_06_specular	male_hair_06_sillum	male_hair_06_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	38	38	-1	male_hair_07	male_hair_07_diffuse	male_hair_07_normal	male_hair_07_specular	male_hair_07_sillum	male_hair_07_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	39	39	-1	male_hair_08	male_hair_08_diffuse	male_hair_08_normal	male_hair_08_specular	male_hair_08_sillum	male_hair_08_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	40	40	-1	male_hair_09	male_hair_09_diffuse	male_hair_09_normal	male_hair_09_specular	male_hair_09_sillum	male_hair_09_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	41	41	-1	male_hair_10	male_hair_10_diffuse	male_hair_10_normal	male_hair_10_specular	male_hair_10_sillum	male_hair_10_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	42	42	-1	male_hair_11	male_hair_11_diffuse	male_hair_11_normal	male_hair_11_specular	male_hair_11_sillum	male_hair_11_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	43	43	-1	male_hair_12	male_hair_12_diffuse	male_hair_12_normal	male_hair_12_specular	male_hair_12_sillum	male_hair_12_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	44	44	-1	male_hair_13	male_hair_13_diffuse	male_hair_13_normal	male_hair_13_specular	male_hair_13_sillum	male_hair_13_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	45	45	-1	male_hair_14	male_hair_14_diffuse	male_hair_14_normal	male_hair_14_specular	male_hair_14_sillum	male_hair_14_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	46	46	-1	male_hair_15	male_hair_15_diffuse	male_hair_15_normal	male_hair_15_specular	male_hair_15_sillum	male_hair_15_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	47	47	-1	male_hair_16	male_hair_16_diffuse	male_hair_16_normal	male_hair_16_specular	male_hair_16_sillum	male_hair_16_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	49	49	-1	facial_hair_01	facial_hair_01_diffuse	facial_hair_01_normal	facial_hair_01_specular	facial_hair_01_sillum	facial_hair_01_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	50	50	-1	facial_hair_02	facial_hair_02_diffuse	facial_hair_02_normal	facial_hair_02_specular	facial_hair_02_sillum	facial_hair_02_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	51	51	-1	facial_hair_03	facial_hair_03_diffuse	facial_hair_03_normal	facial_hair_03_specular	facial_hair_03_sillum	facial_hair_03_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	52	52	-1	facial_hair_04	facial_hair_04_diffuse	facial_hair_04_normal	facial_hair_04_specular	facial_hair_04_sillum	facial_hair_04_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	53	53	-1	facial_hair_05	facial_hair_05_diffuse	facial_hair_05_normal	facial_hair_05_specular	facial_hair_05_sillum	facial_hair_05_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	54	54	-1	facial_hair_06	facial_hair_06_diffuse	facial_hair_06_normal	facial_hair_06_specular	facial_hair_06_sillum	facial_hair_06_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	55	55	-1	facial_hair_07	facial_hair_07_diffuse	facial_hair_07_normal	facial_hair_07_specular	facial_hair_07_sillum	facial_hair_07_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	56	56	-1	facial_hair_08	facial_hair_08_diffuse	facial_hair_08_normal	facial_hair_08_specular	facial_hair_08_sillum	facial_hair_08_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	57	57	-1	facial_hair_09	facial_hair_09_diffuse	facial_hair_09_normal	facial_hair_09_specular	facial_hair_09_sillum	facial_hair_09_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	58	58	-1	facial_hair_10	facial_hair_10_diffuse	facial_hair_10_normal	facial_hair_10_specular	facial_hair_10_sillum	facial_hair_10_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	59	59	-1	facial_hair_11	facial_hair_11_diffuse	facial_hair_11_normal	facial_hair_11_specular	facial_hair_11_sillum	facial_hair_11_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	60	60	-1	facial_hair_12	facial_hair_12_diffuse	facial_hair_12_normal	facial_hair_12_specular	facial_hair_12_sillum	facial_hair_12_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+57	61	61	-1	facial_hair_13	facial_hair_13_diffuse	facial_hair_13_normal	facial_hair_13_specular	facial_hair_13_sillum	facial_hair_13_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+13	63	14	-1		female_bare_body_diffuse_a	female_bare_body_normal_a	female_bare_body_specular_a	female_bare_body_sillum	female_bare_body_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+13	63	13	-1		female_bare_body_diffuse_a	female_bare_body_normal_a	female_bare_body_specular_a	female_bare_body_sillum	female_bare_body_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+13	63	15	-1		female_bare_body_diffuse_a	female_bare_body_normal_a	female_bare_body_specular_a	female_bare_body_sillum	female_bare_body_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+60	63	63	-1		cf_body_scar_1_diffuse_a	cf_body_scar_1_normal	cf_body_scar_1_specular			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+54	64	64	-1	Female_1	Female_1_diffuse	Female_1_Normal	Female_1_Specular	Female_1_sillum	Female_1_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	65	65	-1	Female_2	Female_2_diffuse	Female_2_Normal	Female_2_Specular	Female_2_sillum	Female_2_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	66	66	-1	Female_3	Female_3_diffuse	Female_3_Normal	Female_3_Specular	Female_3_sillum	Female_3_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	67	67	-1	Female_4	Female_4_diffuse	Female_4_Normal	Female_4_Specular	Female_4_sillum	Female_4_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	68	68	-1	Female_5	Female_5_diffuse	Female_5_Normal	Female_5_Specular	Female_5_sillum	Female_5_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	69	69	-1	Female_6	Female_6_diffuse	Female_6_Normal	Female_6_Specular	Female_6_sillum	Female_6_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	70	70	-1	Female_7	Female_7_diffuse	Female_7_Normal	Female_7_Specular	Female_7_sillum	Female_7_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	71	71	-1	Female_8	Female_8_diffuse	Female_8_Normal	Female_8_Specular	Female_8_sillum	Female_8_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	72	72	-1	Female_9	Female_9_diffuse	Female_9_Normal	Female_9_Specular	Female_9_sillum	Female_9_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+54	73	73	-1	Female_10	Female_10_diffuse	Female_10_Normal	Female_10_Specular	Female_10_sillum	Female_10_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+59	64	64	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+59	65	65	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+59	66	66	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+59	67	67	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+59	68	68	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+59	69	69	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+59	70	70	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+59	71	71	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+59	72	72	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+59	73	73	15	Common_Textures	cf_accessory_diffuse_1	cf_accessory_normal_1	cf_accessory_specular_1			0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	0	0	0	0
+56	76	76	-1	female_hair_01	female_hair_01_diffuse	female_hair_01_normal	female_hair_01_specular	female_hair_01_sillum	female_hair_01_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	77	77	-1	female_hair_02	female_hair_02_diffuse	female_hair_02_normal	female_hair_02_specular	female_hair_02_sillum	female_hair_02_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	78	78	-1	female_hair_03	female_hair_03_diffuse	female_hair_03_normal	female_hair_03_specular	female_hair_03_sillum	female_hair_03_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	79	79	-1	female_hair_04	female_hair_04_diffuse	female_hair_04_normal	female_hair_04_specular	female_hair_04_sillum	female_hair_04_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	80	80	-1	female_hair_05	female_hair_05_diffuse	female_hair_05_normal	female_hair_05_specular	female_hair_05_sillum	female_hair_05_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	81	81	-1	female_hair_06	female_hair_06_diffuse	female_hair_06_normal	female_hair_06_specular	female_hair_06_sillum	female_hair_06_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	82	82	-1	female_hair_07	female_hair_07_diffuse	female_hair_07_normal	female_hair_07_specular	female_hair_07_sillum	female_hair_07_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	83	83	-1	female_hair_08	female_hair_08_diffuse	female_hair_08_normal	female_hair_08_specular	female_hair_08_sillum	female_hair_08_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	84	84	-1	female_hair_09	female_hair_09_diffuse	female_hair_09_normal	female_hair_09_specular	female_hair_09_sillum	female_hair_09_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	85	85	-1	female_hair_10	female_hair_10_diffuse	female_hair_10_normal	female_hair_10_specular	female_hair_10_sillum	female_hair_10_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	86	86	-1	female_hair_11	female_hair_11_diffuse	female_hair_11_normal	female_hair_11_specular	female_hair_11_sillum	female_hair_11_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	87	87	-1	female_hair_12	female_hair_12_diffuse	female_hair_12_normal	female_hair_12_specular	female_hair_12_sillum	female_hair_12_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	88	88	-1	female_hair_14	female_hair_14_diffuse	female_hair_14_normal	female_hair_14_specular	female_hair_14_sillum	female_hair_14_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+56	89	89	-1	female_hair_15	female_hair_15_diffuse	female_hair_15_normal	female_hair_15_specular	female_hair_15_sillum	female_hair_15_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+58	91	63	-1	Female_Accessories	Female_Acc_Diffuse	Female_Acc_Normal	Female_Acc_Spec	Female_Acc_Sillumn	Female_Acc_Color_Mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+61	112	16	-1	wardrobe	dye_kit_diffuse		dye_kit_specular		dye_kit_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	128	128	0	0	128	128	0	0	128	128	0	0
+61	112	63	-1	wardrobe	dye_kit_diffuse		dye_kit_specular		dye_kit_colormask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	128	128	0	0	128	128	0	0	128	128	0	0
+62	106	106	-1		suit_diffuse	suit_normal	suit_specular	suit_glow	suit_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+63	106	106	-1		helmet_diffuse	helmet_normal	helmet_specular	helmet_glow	helmet_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+62	107	107	-1		suit_diffuse	suit_normal	suit_specular	suit_glow	suit_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+63	107	107	-1		helmet_diffuse	helmet_normal	helmet_specular	helmet_glow	helmet_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+47	13	12	-1	ong1_misc2	hf_ong1_misc2_helm_diffuse	hf_ong1_misc2_helm_normal	hf_ong1_misc2_helm_specular		hf_ong1_misc2_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+47	13	13	-1	ong1_misc2	hf_ong1_misc2_helm_diffuse	hf_ong1_misc2_helm_normal	hf_ong1_misc2_helm_specular		hf_ong1_misc2_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+47	11	15	-1	ong1_misc2	cm_ong1_misc2_helm_diffuse	cm_ong1_misc2_helm_normal	cm_ong1_misc2_helm_specular		cm_ong1_misc2_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+47	11	11	-1	ong1_misc2	cm_ong1_misc2_helm_diffuse	cm_ong1_misc2_helm_normal	cm_ong1_misc2_helm_specular		cm_ong1_misc2_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+47	10	14	-1	ong1_misc2	tm_ong1_misc2_helm_diffuse	tm_ong1_misc2_helm_normal	tm_ong1_misc2_helm_specular	tm_ong1_misc2_helm_glow	tm_ong1_misc2_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+47	10	10	-1	ong1_misc2	tm_ong1_misc2_helm_diffuse	tm_ong1_misc2_helm_normal	tm_ong1_misc2_helm_specular	tm_ong1_misc2_helm_glow	tm_ong1_misc2_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+46	13	12	-1	ong1_misc1	hf_ong1_misc1_helm_diffuse	hf_ong1_misc1_helm_normal	hf_ong1_misc1_helm_specular		hf_ong1_misc1_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+46	13	13	-1	ong1_misc1	hf_ong1_misc1_helm_diffuse	hf_ong1_misc1_helm_normal	hf_ong1_misc1_helm_specular		hf_ong1_misc1_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+46	11	15	-1	ong1_misc1	cm_ong1_misc1_helm_diffuse	cm_ong1_misc1_helm_normal	cm_ong1_misc1_helm_specular		cm_ong1_misc1_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+46	11	11	-1	ong1_misc1	cm_ong1_misc1_helm_diffuse	cm_ong1_misc1_helm_normal	cm_ong1_misc1_helm_specular		cm_ong1_misc1_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+46	10	14	-1	ong1_misc1	tm_ong1_misc1_helm_diffuse	tm_ong1_misc1_helm_normal	tm_ong1_misc1_helm_specular	tm_ong1_misc1_helm_glow	tm_ong1_misc1_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+46	10	10	-1	ong1_misc1	tm_ong1_misc1_helm_diffuse	tm_ong1_misc1_helm_normal	tm_ong1_misc1_helm_specular	tm_ong1_misc1_helm_glow	tm_ong1_misc1_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+24	10	10	-1	power_uber	tm_power_uber_diffuse	tm_power_uber_normal	tm_power_uber_specular	tm_power_uber_glow	tm_power_uber_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+42	10	10	-1	power_uber	tm_power_uber_helm_diffuse	tm_power_uber_helm_normal	tm_power_uber_helm_specular	tm_power_uber_helm_glow	tm_power_uber_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+24	10	14	-1	power_uber	tm_power_uber_diffuse	tm_power_uber_normal	tm_power_uber_specular	tm_power_uber_glow	tm_power_uber_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+42	10	14	-1	power_uber	tm_power_uber_helm_diffuse	tm_power_uber_helm_normal	tm_power_uber_helm_specular	tm_power_uber_helm_glow	tm_power_uber_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+24	11	11	-1	power_uber	cm_power_uber_diffuse	cm_power_uber_normal	cm_power_uber_specular	cm_power_uber_glow	cm_power_uber_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+42	11	11	-1	power_uber	cm_power_uber_helm_diffuse	cm_power_uber_helm_normal	cm_power_uber_helm_specular	cm_power_uber_helm_glow	cm_power_uber_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+24	15	15	-1	power_uber	cf_power_uber_diffuse	cf_power_uber_normal	cf_power_uber_specular	cf_power_uber_glow	cf_power_uber_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+42	15	15	-1	power_uber	cf_power_uber_helm_diffuse	cf_power_uber_helm_normal	cf_power_uber_helm_specular	cf_power_uber_helm_glow	cf_power_uber_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+0	-1	0	0							0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	0	0	0	0	0	0	0	0	0	0	0	0
+28	13	13	-1	tech_uber	hf_tech_uber_diffuse	hf_tech_uber_normal	hf_tech_uber_specular	hf_tech_uber_glow	hf_tech_uber_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+45	13	13	-1	tech_uber	hf_tech_uber_helm_diffuse	hf_tech_uber_helm_normal	hf_tech_uber_helm_specular	hf_tech_uber_helm_glow	hf_tech_uber_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0
+28	12	12	-1	tech_uber	hm_tech_uber_diffuse	hm_tech_uber_normal	hm_tech_uber_specular	hm_tech_uber_glow	hm_tech_uber_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	1024	1024	1024	1024	1024	1024	1024	1024	1024	1024	0	0
+45	12	12	-1	tech_uber	hm_tech_uber_helm_diffuse	hm_tech_uber_helm_normal	hm_tech_uber_helm_specular	hm_tech_uber_helm_glow	hm_tech_uber_helm_color_mask	0	0	0	0	0	0	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	512	512	512	512	512	512	512	512	512	512	0	0

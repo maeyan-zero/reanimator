@@ -1,0 +1,540 @@
+one,two,three,f,five,six,seven
+15178,3837,respec unique,0,Unique Skill Retrainer,Singular,Default
+15179,3837,respec unique,0,Unique Skill Retrainers,Plural,
+15180,639,respec perks,0,Expertise Retrainer,Singular,Default
+15181,639,respec perks,0,Expertise Retrainers,Plural,
+15182,3254,respec perks unique,0,Unique Expertise Retrainer,Singular,Default
+15183,3254,respec perks unique,0,Unique Expertise Retrainers,Plural,
+15184,3421,Skill Token Shock Buildup,0,Shock Buildup Skill Token,Singular,Default
+15185,3421,Skill Token Shock Buildup,0,Shock Buildup Skill Tokens,Plural,
+15186,368,Skill Token Surge Heal,0,Icon of the Archangel,Singular,Default
+15187,368,Skill Token Surge Heal,0,Icons of the Archangel,Plural,
+15188,2572,Skill Token Surge Blast,0,Surge Blast Skill Token,Singular,Default
+15189,2572,Skill Token Surge Blast,0,Surge Blast Skill Tokens,Plural,
+15190,2347,Skill Token Surge Crusader,0,Bane of St. George,Singular,Default
+15191,2347,Skill Token Surge Crusader,0,Bane of St. George,Plural,
+15192,2259,Skill Token Surge Berserker,0,Surge Berserker Skill Token,Singular,Default
+15193,2259,Skill Token Surge Berserker,0,Surge Berserker Skill Tokens,Plural,
+15194,878,Skill Token Power Steal,0,Seal of the Bishop,Singular,Default
+15195,878,Skill Token Power Steal,0,Seals of the Bishop,Plural,
+15196,1751,Skill Token Electrical Prayer,0,Seal of Sumerisle,Singular,Default
+15197,1751,Skill Token Electrical Prayer,0,Seals of Sumerisle,Plural,
+15198,382,Skill Token Shield Toss,0,Orbital Stabilizer,Singular,Default
+15199,382,Skill Token Shield Toss,0,Orbital Stabilizers,Plural,
+15200,3438,Skill Token Aura Stability,0,Cross of St. Patrick,Singular,Default
+15201,3438,Skill Token Aura Stability,0,Crosses of St. Patrick,Plural,
+15202,443,Skill Token Grenade Mastery,0,Grenade Mastery Skill Token,Singular,Default
+15203,443,Skill Token Grenade Mastery,0,Grenade Mastery Skill Tokens,Plural,
+15204,2572,Skill Token EMP Blast,0,ElectroMag,Singular,Default
+15205,2572,Skill Token EMP Blast,0,ElectroMags,Plural,
+15206,1054,Skill Token Flash Bang,0,Nesmith's Blast Cell,Singular,Default
+15207,1054,Skill Token Flash Bang,0,Nesmith's Blast Cells,Plural,
+15208,3656,Skill Token Decoy,0,Decoy Skill Token,Singular,Default
+15209,3656,Skill Token Decoy,0,Decoy Skill Tokens,Plural,
+15210,3114,Skill Token Sniper Stealth,0,Ghillie Suit,Singular,Default
+15211,3114,Skill Token Sniper Stealth,0,Ghillie Suits,Plural,
+15212,296,Skill Token Sacrifice Device Bomber,0,Sacrifice Device Bomber Skill Token,Singular,Default
+15213,296,Skill Token Sacrifice Device Bomber,0,Sacrifice Device Bomber Skill Tokens,Plural,
+15214,4011,Skill Token Spider Mines,0,Spider Mine Schematic,Singular,Default
+15215,4011,Skill Token Spider Mines,0,Spider Mine Schematics,Plural,
+15216,725,Skill Token Buff Turret,0,Buff Turret Skill Token,Singular,Default
+15217,725,Skill Token Buff Turret,0,Buff Turret Skill Tokens,Plural,
+15218,3135,Skill Token Turret Attack Mode,0,Scorpion Targeting System,Singular,Default
+15219,3135,Skill Token Turret Attack Mode,0,Scorpion Targeting Systems,Plural,
+15220,830,Skill Token Transform Zombie,0,Heart of Talox,Singular,Default
+15221,830,Skill Token Transform Zombie,0,Hearts of Talox,Plural,
+15222,3435,Skill Token Zombie Lord,0,Skull of Dessicator,Singular,Default
+15223,3435,Skill Token Zombie Lord,0,Skulls of Dessicator,Plural,
+15224,250,Skill Token Command Laser,0,Command Laser Skill Token,Singular,Default
+15225,250,Skill Token Command Laser,0,Command Laser Skill Tokens,Plural,
+15226,1602,Skill Token Reaper Laser,0,Reaper Laser Skill Token,Singular,Default
+15227,1602,Skill Token Reaper Laser,0,Reaper Laser Skill Tokens,Plural,
+15228,3716,Skill Token Zombie Lunch,0,Zombie Lunch Skill Token,Singular,Default
+15229,3716,Skill Token Zombie Lunch,0,Zombie Lunch Skill Tokens,Plural,
+15230,627,Skill Token Zombie Sacrifice,0,Claw of Errgoth,Singular,Default
+15231,627,Skill Token Zombie Sacrifice,0,Claws of Errgoth,Plural,
+15232,3647,Skill Token Transform Wraith,0,Transform Wraith Skill Token,Singular,Default
+15233,3647,Skill Token Transform Wraith,0,Transform Wraith Skill Tokens,Plural,
+15234,2451,Skill Token Summon Bonewall,0,Gravedust,Singular,Default
+15235,2451,Skill Token Summon Bonewall,0,Gravedust,Plural,
+15236,2707,Skill Token Summon Hydra,0,Pendant of Talox,Singular,Default
+15237,2707,Skill Token Summon Hydra,0,Pendants of Talox,Plural,
+15238,2857,Skill Token Shield Hardening,0,Shield Hardening Skill Token,Singular,Default
+15239,2857,Skill Token Shield Hardening,0,Shield Hardening Skill Tokens,Plural,
+15240,1189,Cabalist_Focus27_teeth_basic,0,Coreslicer,Singular,Default
+15241,1189,Cabalist_Focus27_teeth_basic,0,Coreslicers,Plural,
+15242,3011,Cabalist_Focus27_teethMk2_basic,0,Coreslasher,Singular,Default
+15243,3011,Cabalist_Focus27_teethMk2_basic,0,Coreslashers,Plural,
+15244,3212,Cabalist_Focus27_teethMk3_basic,0,Coreshredder,Singular,Default
+15245,3212,Cabalist_Focus27_teethMk3_basic,0,Coreshredders,Plural,
+15246,1602,Cabalist_Focus28_tusks_basic,0,Ripping Radiant,Singular,Default
+15247,1602,Cabalist_Focus28_tusks_basic,0,Ripping Radiants,Plural,
+15248,332,Cabalist_Focus28_tusksMk2_basic,0,Riving Radiant,Singular,Default
+15249,332,Cabalist_Focus28_tusksMk2_basic,0,Riving Radiants,Plural,
+15250,533,Cabalist_Focus28_tusksMk3_basic,0,Rending Radiant,Singular,Default
+15251,533,Cabalist_Focus28_tusksMk3_basic,0,Rending Radiants,Plural,
+15252,2960,Cabalist_Focus27_teeth,0,Ripshard,Singular,Default
+15253,2960,Cabalist_Focus27_teeth,0,Ripshards,Plural,
+15254,1800,Cabalist_Focus27_teeth Unique 01,0,Megalodon,Singular,Default
+15255,1800,Cabalist_Focus27_teeth Unique 01,0,Megalodons,Plural,
+15256,1735,fla Cabalist_Focus27_teeth,0,"When I fight someone, I want to break his will. I want to take his manhood. I want to rip out his heart and show it to him.\n- Mike Tyson",Singular,Default
+15257,1735,fla Cabalist_Focus27_teeth,0,"When I fight someone, I want to break his will. I want to take his manhood. I want to rip out his heart and show it to him.\n- Mike Tyson",Plural,
+15258,1726,Cabalist_Focus27_teethMk2,0,Predator Ripshard,Singular,Default
+15259,1726,Cabalist_Focus27_teethMk2,0,Predator Ripshards,Plural,
+15260,2630,Cabalist_Focus27_teethMk2 Unique 01,0,Remnants of Grregas,Singular,Default
+15261,2630,Cabalist_Focus27_teethMk2 Unique 01,0,Remnants of Grregas,Plural,
+15262,2105,fla Cabalist_Focus27_teethMk2,0,"Life itself is held in the grinning fangs of Death, Yet men delay to obtain release from the world. Alas, the conduct of mankind is surprising.\n- Titus Maccius Plautus",Singular,Default
+15263,2105,fla Cabalist_Focus27_teethMk2,0,"Life itself is held in the grinning fangs of Death, Yet men delay to obtain release from the world. Alas, the conduct of mankind is surprising.\n- Titus Maccius Plautus",Plural,
+15264,1727,Cabalist_Focus27_teethMk3,0,Slayer Ripshard,Singular,Default
+15265,1727,Cabalist_Focus27_teethMk3,0,Slayer Ripshards,Plural,
+15266,3967,Cabalist_Focus27_teethMk3 Unique 01,0,Black Angel,Singular,Default
+15267,3967,Cabalist_Focus27_teethMk3 Unique 01,0,Black Angels,Plural,
+15268,2106,fla Cabalist_Focus27_teethMk3,0,On a starred night the dark angel uprose.\nTired of his dark dominion swung the fiend.\n- Cabalist Text,Singular,Default
+15269,2106,fla Cabalist_Focus27_teethMk3,0,On a starred night the dark angel uprose.\nTired of his dark dominion swung the fiend.\n- Cabalist Text,Plural,
+15270,965,Cabalist_Focus28_tusks,0,Bloodshard,Singular,Default
+15271,965,Cabalist_Focus28_tusks,0,Bloodshards,Plural,
+15272,981,Cabalist_Focus28_tusks Unique 01,0,Mordify,Singular,Default
+15273,981,Cabalist_Focus28_tusks Unique 01,0,Tuskulls,Plural,
+15274,3836,fla Cabalist_Focus28_tusks,0,My bones are pierced in me in the night season: and my sinews take no rest.\n- Job 30:17,Singular,Default
+15275,3836,fla Cabalist_Focus28_tusks,0,My bones are pierced in me in the night season: and my sinews take no rest.\n- Job 30:17,Plural,
+15276,1407,Cabalist_Focus28_tusksMk2,0,Grim Bloodshard,Singular,Default
+15277,1407,Cabalist_Focus28_tusksMk2,0,Grim Bloodshards,Plural,
+15278,2111,Cabalist_Focus28_tusksMk2 Unique 01,0,Tuskull,Singular,Default
+15279,2111,Cabalist_Focus28_tusksMk2 Unique 01,0,The Abandoned Fists,Plural,
+15280,1786,fla Cabalist_Focus28_tusksMk2,0,"Counting its dead by thousands, the hostile army, pierced and shattered in the clash of arms, shall lie!\n- Atharva Veda",Singular,Default
+15281,1786,fla Cabalist_Focus28_tusksMk2,0,"Counting its dead by thousands, the hostile army, pierced and shattered in the clash of arms, shall lie!\n- Atharva Veda",Plural,
+15282,1408,Cabalist_Focus28_tusksMk3,0,Eviceration Bloodshard,Singular,Default
+15283,1408,Cabalist_Focus28_tusksMk3,0,Eviceration Bloodshards,Plural,
+15284,3448,Cabalist_Focus28_tusksMk3 Unique 01,0,The Abandoned Fist,Singular,Default
+15285,3448,Cabalist_Focus28_tusksMk3 Unique 01,0,Mordify,Plural,
+15286,1787,fla Cabalist_Focus28_tusksMk3,0,"When you are an anvil be patient; when a hammer, strike.\n- Arabian Proverb",Singular,Default
+15287,1787,fla Cabalist_Focus28_tusksMk3,0,"When you are an anvil be patient; when a hammer, strike.\n- Arabian Proverb",Plural,
+15288,3152,Cabalist_Focus29_glyph,0,Glyphshard,Singular,Default
+15289,3152,Cabalist_Focus29_glyph,0,Glyphshards,Plural,
+15290,456,Cabalist_Focus29_glyph Unique 01,0,Ceremonial Shard,Singular,Default
+15291,456,Cabalist_Focus29_glyph Unique 01,0,Keel Brands,Plural,
+15292,1927,fla Cabalist_Focus29_glyph,0,I would rather live in a world where my life is surrounded by mystery than live in a world so small that my mind could comprehend it.\n- Harry Emerson Fosdick,Singular,Default
+15293,1927,fla Cabalist_Focus29_glyph,0,I would rather live in a world where my life is surrounded by mystery than live in a world so small that my mind could comprehend it.\n- Harry Emerson Fosdick,Plural,
+15294,3198,Cabalist_Focus29_glyphMk2,0,Grand Glyphshard,Singular,Default
+15295,3198,Cabalist_Focus29_glyphMk2,0,Glyph Glyphshard,Plural,
+15296,518,Cabalist_Focus29_glyphMk2 Unique 01,0,The Keel Brand,Singular,Default
+15297,518,Cabalist_Focus29_glyphMk2 Unique 01,0,Ceremonial Shards,Plural,
+15298,3577,fla Cabalist_Focus29_glyphMk2,0,Now comes the mystery.\n- Last words of Ambrose Delphian,Singular,Default
+15299,3577,fla Cabalist_Focus29_glyphMk2,0,Now comes the mystery.\n- Last words of Ambrose Delphian,Plural,
+15300,3199,Cabalist_Focus29_glyphMk3,0,Obliteration Glyphshard,Singular,Default
+15301,3199,Cabalist_Focus29_glyphMk3,0,Glyph Glyphshard,Plural,
+15302,1855,Cabalist_Focus29_glyphMk3 Unique 01,0,Galactic Conquest,Singular,Default
+15303,1855,Cabalist_Focus29_glyphMk3 Unique 01,0,Galactic Conquests,Plural,
+15304,3578,fla Cabalist_Focus29_glyphMk3,0,The final mystery is oneself.\n- Oscar Wilde,Singular,Default
+15305,3578,fla Cabalist_Focus29_glyphMk3,0,The final mystery is oneself.\n- Oscar Wilde,Plural,
+15306,861,Gleamcarver,0,Gleamcarver,Singular,Default
+15307,861,Gleamcarver,0,Gleamcarver,Plural,
+15308,1197,Gleamcarver Unique 01,0,Grimace,Singular,Default
+15309,1197,Gleamcarver Unique 01,0,Grimaces,Plural,
+15310,2048,fla gleamcarver,0,"There has been opposition to every innovation in the history of man, with the possible exception of the sword.\n- Benjamin Dana",Singular,Default
+15311,2048,fla gleamcarver,0,"There has been opposition to every innovation in the history of man, with the possible exception of the sword.\n- Benjamin Dana",Plural,
+15312,3696,Dissector,0,Dissector,Singular,Default
+15313,3696,Dissector,0,Dissector,Plural,
+15314,2792,Dissector Unique 01,0,Moorgoth's Hand,Singular,Default
+15315,2792,Dissector Unique 01,0,Moorgoth's Hands,Plural,
+15316,3275,fla dissector,0,The failure to dissect the cause of war leaves us open for the next installment.\n- Chris Hedges,Singular,Default
+15317,3275,fla dissector,0,The failure to dissect the cause of war leaves us open for the next installment.\n- Chris Hedges,Plural,
+15318,3465,Dissector Shield,0,Dissector Shield,Singular,Default
+15319,3465,Dissector Shield,0,Dissector Shield,Plural,
+15320,1145,Dissector Shield Unique 01,0,Moorgoth's Hold,Singular,Default
+15321,1145,Dissector Shield Unique 01,0,Moorgoth's Holds,Plural,
+15322,831,fla dissector_shield,0,"Let those who boast their courage in the field, find little safety from my shield.\n- Guardian Chant",Singular,Default
+15323,831,fla dissector_shield,0,"Let those who boast their courage in the field, find little safety from my shield.\n- Guardian Chant",Plural,
+15324,1002,Core Magnum,0,F-S Force Magnum,Singular,Default
+15325,1002,Core Magnum,0,F-S Force Magnums,Plural,
+15326,1298,Core Magnum Unique 01,0,Mastodon,Singular,Default
+15327,1298,Core Magnum Unique 01,0,Mastodons,Plural,
+15328,1188,fla core_magnum,0,"Don't force it, get a bigger hammer.\n- Arthur Bloch",Singular,Default
+15329,1188,fla core_magnum,0,"Don't force it, get a bigger hammer.\n- Arthur Bloch",Plural,
+15330,1037,Thunderclash,0,XM909 Thunderclash,Singular,Default
+15331,1037,Thunderclash,0,XM909 Thunderclashs,Plural,
+15332,3037,Thunderclash Unique 01,0,XM9x Thundergod,Singular,Default
+15333,3037,Thunderclash Unique 01,0,XM9x Thundergods,Plural,
+15334,3996,fla thunderclash,0,"Thunder is good, thunder is impressive; but it is lightning that does all the work.\n- Mark Twain",Singular,Default
+15335,3996,fla thunderclash,0,"Thunder is good, thunder is impressive; but it is lightning that does all the work.\n- Mark Twain",Plural,
+15336,949,Thumper,0,Thumper,Singular,Default
+15337,949,Thumper,0,Thumpers,Plural,
+15338,69,Thumper Unique 01,0,Doompulse,Singular,Default
+15339,69,Thumper Unique 01,0,Doompulses,Plural,
+15340,360,fla Thumper,0,Three. . . Two. . . One. . .!\n- Gunny,Singular,Default
+15341,360,fla Thumper,0,Three. . . Two. . . One. . .!\n- Gunny,Plural,
+15342,4054,c_power5_normal_belt,0,Feral Belt,Singular,Default
+15343,4054,c_power5_normal_belt,0,Feral Belts,Plural,
+15344,2206,c_power5_normal_belt Unique 01,0,Hellion Hasp,Singular,Default
+15345,2206,c_power5_normal_belt Unique 01,0,Hellion Hasps,Plural,
+15346,741,fla c_power5_normal_belt,0,I don't need a belt to make me. I make the belt.\n- James Toney,Singular,Default
+15347,741,fla c_power5_normal_belt,0,I don't need a belt to make me. I make the belt.\n- James Toney,Plural,
+15348,3963,c_power5_normal_gloves,0,Feral Gloves,Singular,Default
+15349,3963,c_power5_normal_gloves,0,Feral Gloves,Plural,
+15350,3419,c_power5_normal_gloves Unique 01,0,Gehenna Grasps,Singular,Default
+15351,3419,c_power5_normal_gloves Unique 01,0,Gehenna Grasps,Plural,
+15352,2738,fla c_power5_normal_gloves,0,Beware that you do not lose the substance by grasping at the shadow.\n- Aesop,Singular,Default
+15353,2738,fla c_power5_normal_gloves,0,Beware that you do not lose the substance by grasping at the shadow.\n- Aesop,Plural,
+15354,349,c_power5_normal_head,0,Feral Mask,Singular,Default
+15355,349,c_power5_normal_head,0,Feral Masks,Plural,
+15356,685,c_power5_normal_head Unique 01,0,Dark Visage,Singular,Default
+15357,685,c_power5_normal_head Unique 01,0,Dark Visages,Plural,
+15358,1132,fla c_power5_normal_head,0,"We are each our own devil, and we make this world our hell.\n- Oscar Wilde",Singular,Default
+15359,1132,fla c_power5_normal_head,0,"We are each our own devil, and we make this world our hell.\n- Oscar Wilde",Plural,
+15360,2765,c_power5_normal_pants,0,Feral Guards,Singular,Default
+15361,2765,c_power5_normal_pants,0,Feral Guards,Plural,
+15362,3229,c_power5_normal_pants Unique 01,0,Legion Guards,Singular,Default
+15363,3229,c_power5_normal_pants Unique 01,0,Legion Guards,Plural,
+15364,3064,fla c_power5_normal_pants,0,My name is Legion: for we are many.\n-Mark 5:9,Singular,Default
+15365,3064,fla c_power5_normal_pants,0,My name is Legion: for we are many.\n-Mark 5:9,Plural,
+15366,2912,c_power5_normal_shoulders,0,Feral Shoulders,Singular,Default
+15367,2912,c_power5_normal_shoulders,0,Feral Shoulders,Plural,
+15368,3160,c_power5_normal_shoulders Unique 01,0,Pit Pauldrons,Singular,Default
+15369,3160,c_power5_normal_shoulders Unique 01,0,Pit Pauldrons,Plural,
+15370,3291,fla c_power5_normal_shoulders,0,Hell is empty and all the devils are here.\n- William Shakespeare,Singular,Default
+15371,3291,fla c_power5_normal_shoulders,0,Hell is empty and all the devils are here.\n- William Shakespeare,Plural,
+15372,1506,c_power5_normal_torso,0,Feral Plate,Singular,Default
+15373,1506,c_power5_normal_torso,0,Feral Plates,Plural,
+15374,3402,c_power5_normal_torso Unique 01,0,Heart of Darkness,Singular,Default
+15375,3402,c_power5_normal_torso Unique 01,0,Hearts of Darkness,Plural,
+15376,1805,fla c_power5_normal_torso,0,For this world which thou dost inhabit is itself the realm of darkness and this very flesh is thy perdition.\n-Ecclesiastes,Singular,Default
+15377,1805,fla c_power5_normal_torso,0,For this world which thou dost inhabit is itself the realm of darkness and this very flesh is thy perdition.\n-Ecclesiastes,Plural,
+15378,1294,c_power5_normal_boots,0,Feral Boots,Singular,Default
+15379,1294,c_power5_normal_boots,0,Feral Boots,Plural,
+15380,2582,c_power5_normal_boots Unique 01,0,Night Striders,Singular,Default
+15381,2582,c_power5_normal_boots Unique 01,0,Night Striders,Plural,
+15382,1593,fla c_power5_normal_boots,0,"When you reach the end of all light, it is time to step into the darkness.\n- Seeker Crowe",Singular,Default
+15383,1593,fla c_power5_normal_boots,0,"When you reach the end of all light, it is time to step into the darkness.\n- Seeker Crowe",Plural,
+15384,1410,h_tech5_normal_belt,0,Cybernet Belt,Singular,Default
+15385,1410,h_tech5_normal_belt,0,Cybernet Belts,Plural,
+15386,2026,h_tech5_normal_belt Unique 01,0,Techa Band,Singular,Default
+15387,2026,h_tech5_normal_belt Unique 01,0,Techa Bands,Plural,
+15388,2981,fla h_tech5_normal_belt,0,"I just invent, then wait until man comes around to needing what I've invented.\n- R. Buckminster Fuller",Singular,Default
+15389,2981,fla h_tech5_normal_belt,0,"I just invent, then wait until man comes around to needing what I've invented.\n- R. Buckminster Fuller",Plural,
+15390,1095,h_tech5_normal_gloves,0,Cybernet Gloves,Singular,Default
+15391,1095,h_tech5_normal_gloves,0,Cybernet Gloves,Plural,
+15392,2759,h_tech5_normal_gloves Unique 01,0,Techa Gauntlet,Singular,Default
+15393,2759,h_tech5_normal_gloves Unique 01,0,Techa Gauntlets,Plural,
+15394,1394,fla h_tech5_normal_gloves,0,One machine can do the work of fifty ordinary men. No machine can do the work of one extraordinary man.\n- Elbert Hubbard,Singular,Default
+15395,1394,fla h_tech5_normal_gloves,0,One machine can do the work of fifty ordinary men. No machine can do the work of one extraordinary man.\n- Elbert Hubbard,Plural,
+15396,1801,h_tech5_normal_head,0,Cybernet Helmet,Singular,Default
+15397,1801,h_tech5_normal_head,0,Cybernet Helmets,Plural,
+15398,505,h_tech5_normal_head Unique 01,0,Somberg's Guise,Singular,Default
+15399,505,h_tech5_normal_head Unique 01,0,Techa VizGuards,Plural,
+15400,3372,fla h_tech5_normal_head,0,Vision without action is merely a dream. Action without vision just passes the time. Vision with action can change the world.\n- Joel A. Barker,Singular,Default
+15401,3372,fla h_tech5_normal_head,0,Vision without action is merely a dream. Action without vision just passes the time. Vision with action can change the world.\n- Joel A. Barker,Plural,
+15402,3241,h_tech5_normal_pants,0,Cybernet Legs,Singular,Default
+15403,3241,h_tech5_normal_pants,0,Cybernet Legs,Plural,
+15404,665,h_tech5_normal_pants Unique 01,0,TechaWeave,Singular,Default
+15405,665,h_tech5_normal_pants Unique 01,0,TechaWeaves,Plural,
+15406,4024,fla h_tech5_normal_pants,0,The future has already arrived. It's just not evenly distributed yet.\n- William Gibson,Singular,Default
+15407,4024,fla h_tech5_normal_pants,0,The future has already arrived. It's just not evenly distributed yet.\n- William Gibson,Plural,
+15408,2940,h_tech5_normal_shoulders,0,Cybernet Shoulders,Singular,Default
+15409,2940,h_tech5_normal_shoulders,0,Cybernet Shoulders,Plural,
+15410,3732,h_tech5_normal_shoulders Unique 01,0,Techa Bladeguards,Singular,Default
+15411,3732,h_tech5_normal_shoulders Unique 01,0,Techa Bladeguards,Plural,
+15412,1179,fla h_tech5_normal_shoulders,0,"If you fall, fall on your back. If you can look up, you can get up.\n- Les Brown",Singular,Default
+15413,1179,fla h_tech5_normal_shoulders,0,"If you fall, fall on your back. If you can look up, you can get up.\n- Les Brown",Plural,
+15414,1982,h_tech5_normal_torso,0,Cybernet Core,Singular,Default
+15415,1982,h_tech5_normal_torso,0,Cybernet Cores,Plural,
+15416,838,h_tech5_normal_torso Unique 01,0,Techa Battlecore,Singular,Default
+15417,838,h_tech5_normal_torso Unique 01,0,Techa Battlecores,Plural,
+15418,2765,fla h_tech5_normal_torso,0,"I would be willing, yes glad, to see a battle every day during my life.\n- George Armstrong Custer",Singular,Default
+15419,2765,fla h_tech5_normal_torso,0,"I would be willing, yes glad, to see a battle every day during my life.\n- George Armstrong Custer",Plural,
+15420,1770,h_tech5_normal_boots,0,Cybernet Boots,Singular,Default
+15421,1770,h_tech5_normal_boots,0,Cybernet Boots,Plural,
+15422,18,h_tech5_normal_boots Unique 01,0,Techa Deathstompers,Singular,Default
+15423,18,h_tech5_normal_boots Unique 01,0,Techa Deathstompers,Plural,
+15424,2553,fla h_tech5_normal_boots,0,Power never takes a back step only in the face of more power.\n- Malcolm X,Singular,Default
+15425,2553,fla h_tech5_normal_boots,0,Power never takes a back step only in the face of more power.\n- Malcolm X,Plural,
+15426,2627,t_power5_normal_belt,0,Seraph Belt,Singular,Default
+15427,2627,t_power5_normal_belt,0,Seraph Belts,Plural,
+15428,3043,t_power5_normal_belt Unique 01,0,Archangel Cincture,Singular,Default
+15429,3043,t_power5_normal_belt Unique 01,0,Archangel Cinctures,Plural,
+15430,3410,fla t_power5_normal_belt,0,"Gird me, O Lord, with the cincture of fortitude, and quench in my heart the fire of cowardice.\n- Templar Prayer",Singular,Default
+15431,3410,fla t_power5_normal_belt,0,"Gird me, O Lord, with the cincture of fortitude, and quench in my heart the fire of cowardice.\n- Templar Prayer",Plural,
+15432,96,t_power5_normal_gloves,0,Seraph Gauntlets,Singular,Default
+15433,96,t_power5_normal_gloves,0,Seraph Gauntlets,Plural,
+15434,2392,t_power5_normal_gloves Unique 01,0,Hands of Heaven,Singular,Default
+15435,2392,t_power5_normal_gloves Unique 01,0,Hands of Heaven,Plural,
+15436,2967,fla t_power5_normal_gloves,0,"Is there not some hidden thunder in the stores of heaven, red with uncommon wrath, to blast the monster who seeks this country's ruin!\n- Joseph Addison",Singular,Default
+15437,2967,fla t_power5_normal_gloves,0,"Is there not some hidden thunder in the stores of heaven, red with uncommon wrath, to blast the monster who seeks this country's ruin!\n- Joseph Addison",Plural,
+15438,3018,t_power5_normal_head,0,Seraph Helm,Singular,Default
+15439,3018,t_power5_normal_head,0,Seraph Helms,Plural,
+15440,1522,t_power5_normal_head Unique 01,0,Angelic Visage,Singular,Default
+15441,1522,t_power5_normal_head Unique 01,0,Angelic Visages,Plural,
+15442,3801,fla t_power5_normal_head,0,The bravest sight in the world is to see a great man struggling against adversity.\n- Lucius Annaeus Seneca,Singular,Default
+15443,3801,fla t_power5_normal_head,0,The bravest sight in the world is to see a great man struggling against adversity.\n- Lucius Annaeus Seneca,Plural,
+15444,3214,t_power5_normal_pants,0,Seraph Cuisses,Singular,Default
+15445,3214,t_power5_normal_pants,0,Seraph Cuisses,Plural,
+15446,1430,t_power5_normal_pants Unique 01,0,Archangel Cuisses,Singular,Default
+15447,1430,t_power5_normal_pants Unique 01,0,Archangel Cuisses,Plural,
+15448,3513,fla t_power5_normal_pants,0,Let us go forward in this battle fortified by conviction that those who labour in the service of a great and good cause will never fail.\n- Owen Arthur,Singular,Default
+15449,3513,fla t_power5_normal_pants,0,Let us go forward in this battle fortified by conviction that those who labour in the service of a great and good cause will never fail.\n- Owen Arthur,Plural,
+15450,2577,t_power5_normal_shoulders,0,Seraph Spaulders,Singular,Default
+15451,2577,t_power5_normal_shoulders,0,Seraph Spaulders,Plural,
+15452,1729,t_power5_normal_shoulders Unique 01,0,Archangel Wings,Singular,Default
+15453,1729,t_power5_normal_shoulders Unique 01,0,Archangel Wings,Plural,
+15454,2956,fla t_power5_normal_shoulders,0,He who can prevail in battle by taking advantage of his enemy's doubts is invincible.\n- Cao Cao,Singular,Default
+15455,2956,fla t_power5_normal_shoulders,0,He who can prevail in battle by taking advantage of his enemy's doubts is invincible.\n- Cao Cao,Plural,
+15456,1955,t_power5_normal_torso,0,Seraph Cuirass,Singular,Default
+15457,1955,t_power5_normal_torso,0,Seraph Cuirasses,Plural,
+15458,1603,t_power5_normal_torso Unique 01,0,Heart of Heaven,Singular,Default
+15459,1603,t_power5_normal_torso Unique 01,0,Hearts of Heaven,Plural,
+15460,2254,fla t_power5_normal_torso,0,"Any man's finest hour, the greatest fulfillment of all that he holds dear, is that moment when he has worked his heart out in a good cause and lies exhausted on the field of battle - victorious.\n- Vince Lombardi",Singular,Default
+15461,2254,fla t_power5_normal_torso,0,"Any man's finest hour, the greatest fulfillment of all that he holds dear, is that moment when he has worked his heart out in a good cause and lies exhausted on the field of battle - victorious.\n- Vince Lombardi",Plural,
+15462,1743,t_power5_normal_boots,0,Seraph Sollerets,Singular,Default
+15463,1743,t_power5_normal_boots,0,Seraph Sollerets,Plural,
+15464,783,t_power5_normal_boots Unique 01,0,Archangel Gliders,Singular,Default
+15465,783,t_power5_normal_boots Unique 01,0,Archangel Gliders,Plural,
+15466,2042,fla t_power5_normal_boots,0,Living at risk is jumping off the cliff and building your wings on the way down.\n- Ray Bradbury,Singular,Default
+15467,2042,fla t_power5_normal_boots,0,Living at risk is jumping off the cliff and building your wings on the way down.\n- Ray Bradbury,Plural,
+15468,4006,cursed_ring_generic1,0,Accursed Band,Singular,Default
+15469,4006,cursed_ring_generic1,0,Accursed Bands,Plural,
+15470,693,fla cursed_ring_generic1,0,Every blessing ignored becomes a curse.\n- Paulo Coelho,Singular,Default
+15471,693,fla cursed_ring_generic1,0,Every blessing ignored becomes a curse.\n- Paulo Coelho,Plural,
+15472,3877,ring_generic1,0,Skillful Opal Band,Singular,Default
+15473,3877,ring_generic1,0,Skillful Opal Bands,Plural,
+15474,176,fla ring_generic1,0,"He that struggles with us strengthens our nerves, and sharpens our skill. Our antagonist is our helper.\n- Edmund Burke",Singular,Default
+15475,176,fla ring_generic1,0,"He that struggles with us strengthens our nerves, and sharpens our skill. Our antagonist is our helper.\n- Edmund Burke",Plural,
+15476,4007,cursed_ring_generic2,0,Cursed Circle,Singular,Default
+15477,4007,cursed_ring_generic2,0,Cursed Circles,Plural,
+15478,694,fla cursed_ring_generic2,0,"Good can exist without evil, whereas evil cannot exist without good.\n- Saint Thomas Aquinas",Singular,Default
+15479,694,fla cursed_ring_generic2,0,"Good can exist without evil, whereas evil cannot exist without good.\n- Saint Thomas Aquinas",Plural,
+15480,3878,ring_generic2,0,Defender's Stone Circle,Singular,Default
+15481,3878,ring_generic2,0,ring_generic2,Plural,
+15482,177,fla ring_generic2,0,"My own ambition in the ring had always been skill, speed and defense.\n- Gene Tunney",Singular,Default
+15483,177,fla ring_generic2,0,"My own ambition in the ring had always been skill, speed and defense.\n- Gene Tunney",Plural,
+15484,4008,cursed_ring_generic3,0,Ruinous Ring,Singular,Default
+15485,4008,cursed_ring_generic3,0,Ruinous Rings,Plural,
+15486,695,fla cursed_ring_generic3,0,"Destroy the seed of evil, or it will grow up to your ruin.\n- Aesop",Singular,Default
+15487,695,fla cursed_ring_generic3,0,"Destroy the seed of evil, or it will grow up to your ruin.\n- Aesop",Plural,
+15488,3879,ring_generic3,0,Silver Runic Ring,Singular,Default
+15489,3879,ring_generic3,0,ring_generic3,Plural,
+15490,178,fla ring_generic3,0,A hidden connection is stronger than an obvious one.\n- Heraclitus of Ephesus,Singular,Default
+15491,178,fla ring_generic3,0,A hidden connection is stronger than an obvious one.\n- Heraclitus of Ephesus,Plural,
+15492,728,cursed_ring_boss1,0,Talox's Tormented Soulband,Singular,Default
+15493,728,cursed_ring_boss1,0,cursed_ring_boss1,Plural,
+15494,3763,fla cursed_ring_boss1,0,The mind is the result of the torments the flesh undergoes or inflicts upon itself.\n- Emile M. Cioran,Singular,Default
+15495,3763,fla cursed_ring_boss1,0,The mind is the result of the torments the flesh undergoes or inflicts upon itself.\n- Emile M. Cioran,Plural,
+15496,3555,ring_boss1,0,Talox's Ruby,Singular,Default
+15497,3555,ring_boss1,0,ring_boss1,Plural,
+15498,1601,ring_boss1_unique,0,Talox's Masterwork Soulband,Singular,Default
+15499,1601,ring_boss1_unique,0,ring_boss1_unique,Plural,
+15500,106,fla ring_boss1,0,"Ordinary riches can be stolen, real riches cannot. In your soul are infinitely precious things that cannot be taken from you.\n- Oscar Wilde",Singular,Default
+15501,106,fla ring_boss1,0,"Ordinary riches can be stolen, real riches cannot. In your soul are infinitely precious things that cannot be taken from you.\n- Oscar Wilde",Plural,
+15502,729,cursed_ring_boss2,0,Vitava's Vengeful Stone,Singular,Default
+15503,729,cursed_ring_boss2,0,cursed_ring_boss2,Plural,
+15504,3764,fla cursed_ring_boss2,0,"Vengeance is mine, and I will repay.\n- Leo Tolstoy",Singular,Default
+15505,3764,fla cursed_ring_boss2,0,"Vengeance is mine, and I will repay.\n- Leo Tolstoy",Plural,
+15506,3556,ring_boss2,0,Vitava's Emerald,Singular,Default
+15507,3556,ring_boss2,0,ring_boss2,Plural,
+15508,846,ring_boss2_unique,0,Vitava's Masterwork Stone,Singular,Default
+15509,846,ring_boss2_unique,0,ring_boss2_unique,Plural,
+15510,107,fla ring_boss2,0,The emerald light coming from within is refracted and dispersed according to the consistency of the impurities that gave it its quality.\n- Thomas D'Evelyn,Singular,Default
+15511,107,fla ring_boss2,0,The emerald light coming from within is refracted and dispersed according to the consistency of the impurities that gave it its quality.\n- Thomas D'Evelyn,Plural,
+15512,730,cursed_ring_boss3,0,Dreadnaught's Accursed Circle,Singular,Default
+15513,730,cursed_ring_boss3,0,cursed_ring_boss3,Plural,
+15514,3765,fla cursed_ring_boss3,0,"Of all base passions, fear is the most accursed.\n- William Shakespeare",Singular,Default
+15515,3765,fla cursed_ring_boss3,0,"Of all base passions, fear is the most accursed.\n- William Shakespeare",Plural,
+15516,3557,ring_boss3,0,Dreadnaught's Ring,Singular,Default
+15517,3557,ring_boss3,0,ring_boss3,Plural,
+15518,91,ring_boss3_unique,0,Dreadnaught's Masterwork Band,Singular,Default
+15519,91,ring_boss3_unique,0,ring_boss3_unique,Plural,
+15520,108,fla ring_boss3,0,"Behold, I have refined thee, but not with silver; I have chosen thee in the furnace of affliction.\n- Isaiah 48:10 ",Singular,Default
+15521,108,fla ring_boss3,0,"Behold, I have refined thee, but not with silver; I have chosen thee in the furnace of affliction.\n- Isaiah 48:10 ",Plural,
+15522,731,cursed_ring_boss4,0,Fulcrum's Spiteful Scalework,Singular,Default
+15523,731,cursed_ring_boss4,0,cursed_ring_boss4,Plural,
+15524,3766,fla cursed_ring_boss4,0,Spite and hatred go hand in hand.\n- Seeker Crowe,Singular,Default
+15525,3766,fla cursed_ring_boss4,0,Spite and hatred go hand in hand.\n- Seeker Crowe,Plural,
+15526,3558,ring_boss4,0,Fulcrum's Scale,Singular,Default
+15527,3558,ring_boss4,0,ring_boss4,Plural,
+15528,3432,ring_boss4_unique,0,Fulcrum's Masterwork Scale,Singular,Default
+15529,3432,ring_boss4_unique,0,ring_boss4_unique,Plural,
+15530,109,fla ring_boss4,0,Measure not by the scale of perfection the meager product of reality.\n- Friedrich von Schiller,Singular,Default
+15531,109,fla ring_boss4,0,Measure not by the scale of perfection the meager product of reality.\n- Friedrich von Schiller,Plural,
+15532,732,cursed_ring_boss5,0,Squadro's Cursed Crystal,Singular,Default
+15533,732,cursed_ring_boss5,0,cursed_ring_boss5,Plural,
+15534,3767,fla cursed_ring_boss5,0,To me death is not a fearful thing. It's living that's cursed.\n- Jim Jones,Singular,Default
+15535,3767,fla cursed_ring_boss5,0,To me death is not a fearful thing. It's living that's cursed.\n- Jim Jones,Plural,
+15536,3559,ring_boss5,0,Squadro's Prism,Singular,Default
+15537,3559,ring_boss5,0,ring_boss5,Plural,
+15538,2677,ring_boss5_unique,0,Squadro's Masterwork Crystal,Singular,Default
+15539,2677,ring_boss5_unique,0,ring_boss5_unique,Plural,
+15540,110,fla ring_boss5,0,"In the attitude of silence the soul finds the path in an clearer light, and what is elusive and deceptive resolves itself into crystal clearness.\n- Mahatma Ghandi",Singular,Default
+15541,110,fla ring_boss5,0,"In the attitude of silence the soul finds the path in an clearer light, and what is elusive and deceptive resolves itself into crystal clearness.\n- Mahatma Ghandi",Plural,
+15542,3949,Dye_Kit_Talox_Fire,0,Ultimate Flame Dye Kit,Singular,Default
+15543,3949,Dye_Kit_Talox_Fire,0,Ultimate Flame Dye Kits,Plural,
+15544,4056,Dye_Kit_Talox_Physical,0,Ultimate Steel Dye Kit,Singular,Default
+15545,4056,Dye_Kit_Talox_Physical,0,Ultimate Steel Dye Kits,Plural,
+15546,3114,Dye_Kit_Talox_Toxic,0,Ultimate Venom Dye Kit,Singular,Default
+15547,3114,Dye_Kit_Talox_Toxic,0,Ultimate Venom Dye Kits,Plural,
+15548,1609,Dye_Kit_Talox_Spectral,0,Ultimate Rift Dye Kit,Singular,Default
+15549,1846,affix sub TechUber,0,Sentinel [item],English,
+15550,2816,affix sub TechUber2,0,Angelic [item],English,
+15551,1691,affix sub PowerUber,0,Onslaught [item],English,
+15552,1177,affix sub PowerUber2,0,Overlord [item],English,
+15553,3740,affix mythic,0,Mythic [item],English,
+15554,1375,affix mythic desc,0,Mythic,English,
+15555,3269,affix negative,0,Double-Edged [item],English,
+15556,1916,affix negative desc,0,Double-Edged,English,
+15557,403,affix sub dam aug weapon mythic,0,Heavenly [item],English,
+15558,738,affix sub dam aug weapon mythic desc,0,Heavenly,English,
+15559,3192,affix sub dmg boost phys fire weap mythic,0,Fulminating [item],English,
+15560,1387,affix sub dmg boost phys fire weap mythic desc,0,Fulminating,English,
+15561,179,affix sub dmg boost phys elec weap mythic,0,Crashing [item],English,
+15562,2178,affix sub dmg boost phys elec weap mythic desc,0,Crashing,English,
+15563,3405,affix sub dmg boost phys spec weap mythic,0,Soulblasting [item],English,
+15564,2212,affix sub dmg boost phys spec weap mythic desc,0,Soulblasting,English,
+15565,1205,affix sub dmg boost phys toxic weap mythic,0,Pernicous [item],English,
+15566,556,affix sub dmg boost phys toxic weap mythic desc,0,Pernicous,English,
+15567,561,affix sub dmg boost fire elec weap mythic,0,Pyrostatic [item],English,
+15568,600,affix sub dmg boost fire elec weap mythic desc,0,Pyrostatic,English,
+15569,3787,affix sub dmg boost fire spec weap mythic,0,Consumed [item],English,
+15570,634,affix sub dmg boost fire spec weap mythic desc,0,Consumed,English,
+15571,3051,affix sub dmg boost fire toxic weap mythic,0,Sulfuric [item],English,
+15572,3610,affix sub dmg boost fire toxic weap mythic desc,0,Sulfuric,English,
+15573,482,affix sub dmg boost elec spec weap mythic,0,Surging [item],English,
+15574,2717,affix sub dmg boost elec spec weap mythic desc,0,Surging,English,
+15575,3646,affix sub dmg boost elec toxic weap mythic,0,Crackling [item],English,
+15576,2857,affix sub dmg boost elec toxic weap mythic desc,0,Crackling,English,
+15577,808,affix sub dmg boost spec toxic weap mythic,0,Infesting [item],English,
+15578,1499,affix sub dmg boost spec toxic weap mythic desc,0,Infesting,English,
+15579,2975,affix sub sfx boost phys weap mythic,0,Deadening [item],English,
+15580,1758,affix sub sfx boost phys weap mythic desc,0,Deadening,English,
+15581,2597,affix sub sfx boost fire weap mythic,0,Immolating [item],English,
+15582,2140,affix sub sfx boost fire weap mythic desc,0,Immolating ,English,
+15583,3680,affix sub sfx boost elec weap mythic,0,Incapacitating [item],English,
+15584,2931,affix sub sfx boost elec weap mythic desc,0,Incapacitating,English,
+15585,2810,affix sub sfx boost spec weap mythic,0,Sanctified [item],English,
+15586,2965,affix sub sfx boost spec weap mythic desc,0,Sancitified,English,
+15587,3766,affix sub sfx boost toxic weap mythic,0,Corrupted [item],English,
+15588,3841,affix sub sfx boost toxic weap mythic desc,0,Corrupted,English,
+15589,603,affix sub crit chance add mythic,0,Nemesis' [item],English,
+15590,2378,affix sub crit chance add mythic desc,0,Nemesis',English,
+15591,2186,affix sub radius boost weap mythic,0,Global [item],English,
+15592,1125,affix sub radius boost weap mythic desc,0,Global,English,
+15593,3362,affix sub range boost mythic,0,Astronomic [item],English,
+15594,1757,affix sub range boost mythic desc,0,Astronomic,English,
+15595,3449,affix sub precision bonus mythic,0,Elite Marksman's [item],English,
+15596,1344,affix sub precision bonus mythic desc,0,Elite Marksman,English,
+15597,1985,affix sub proc toxic nova mythic,0,Vile [item],English,
+15598,808,affix sub proc toxic nova mythic desc,0,Vile,English,
+15599,3600,affix sub proc fire nova mythic,0,Torrid [item],English,
+15600,2275,affix sub proc fire nova mythic desc,0,Torrid,English,
+15601,2972,affix sub proc spectral nova mythic,0,Flailing [item],English,
+15602,1631,affix sub proc spectral nova mythic desc,0,Flailing,English,
+15603,2597,affix sub proc charged bolt nova mythic,0,Raging [item],English,
+15604,2140,affix sub proc charged bolt nova mythic desc,0,Raging,English,
+15605,1003,affix sub proc arc jumper mythic,0,Puncturing [item],English,
+15606,1562,affix sub proc arc jumper mythic desc,0,Puncturing,English,
+15607,2755,affix sub proc blaze pistol mythic,0,Flaring [item],English,
+15608,2002,affix sub proc blaze pistol mythic desc,0,Flaring,English,
+15609,2787,affix sub proc frag blaster mythic,0,Echoing [item],English,
+15610,626,affix sub proc frag blaster mythic desc,0,Echoing,English,
+15611,3724,affix sub proc hyper slicer mythic,0,Attenuating [item],English,
+15612,2063,affix sub proc hyper slicer mythic desc,0,Attenuating,English,
+15613,2708,affix sub pet damage weapon mythic,0,Commanding [item],English,
+15614,2743,affix sub pet damage weapon mythic desc,0,Commanding,English,
+15615,931,affix sub will armor mythic,0,Pontific [item],English,
+15616,2610,affix sub will armor mythic desc,0,Pontific,English,
+15617,2100,affix sub str armor mythic,0,Intrepid [item],English,
+15618,215,affix sub str armor mythic desc,0,Intrepid,English,
+15619,2870,affix sub acc armor mythic,0,Hawk's [item],English,
+15620,1409,affix sub acc armor mythic desc,0,Hawk's,English,
+15621,1455,affix sub sta armor mythic,0,Colossal [item],English,
+15622,1582,affix sub sta armor mythic desc,0,Colossal,English,
+15623,3548,affix sub all stat armor scaled mythic,0,Heroic [item],English,
+15624,1439,affix sub all stat armor scaled mythic desc,0,Heroic,English,
+15625,3431,affix sub hp armor mythic,0,Full-Bodied [item],English,
+15626,582,affix sub hp armor mythic desc,0,Full-Bodied,English,
+15627,1302,affix sub hp pct armor mythic,0,Immortalizing [item],English,
+15628,3297,affix sub hp pct armor mythic desc,0,Immortalizing,English,
+15629,3552,affix sub power armor mythic,0,Rejuvenating [item],English,
+15630,243,affix sub power armor mythic desc,0,Rejuvenating,English,
+15631,3871,affix sub speed mythic,0,Accelerating [item],English,
+15632,94,affix sub speed mythic desc,0,Accelerating,English,
+15633,3133,affix sub luck mythic,0,Prophetic [item],English,
+15634,1620,affix sub luck mythic desc,0,Prophetic,English,
+15635,1443,affix sub proc all mythic,0,Prismatically Charged [item],English,
+15636,1074,affix sub proc all mythic desc,0,Prismatically Charged,English,
+15637,3079,affix sub pet damage armor mythic,0,Dominating [item],English,
+15638,3430,affix sub pet damage armor mythic desc,0,Dominating,English,
+15639,797,affix sub dam aug mod mythic,0,Heavenly [item],English,
+15640,3764,affix sub dam aug mod mythic desc,0,Heavenly,English,
+15641,3359,affix sub dmg boost phys fire mod mythic,0,Disintegrating [item],English,
+15642,1630,affix sub dmg boost phys fire mod mythic desc,0,Disintegrating,English,
+15643,510,affix sub dmg boost phys elec mod mythic,0,Clamorous [item],English,
+15644,2537,affix sub dmg boost phys elec mod mythic desc,0,Clamorous,English,
+15645,1040,affix sub dmg boost phys spec mod mythic,0,Wailing [item],English,
+15646,1763,affix sub dmg boost phys spec mod mythic desc,0,Wailing,English,
+15647,3416,affix sub dmg boost phys toxic mod mythic,0,Corrosive [item],English,
+15648,4043,affix sub dmg boost phys toxic mod mythic desc,0,Corrosive,English,
+15649,3620,affix sub dmg boost fire elec mod mythic,0,Conflagrant [item],English,
+15650,391,affix sub dmg boost fire elec mod mythic desc,0,Conflagrant,English,
+15651,54,affix sub dmg boost fire spec mod mythic,0,Cindering [item],English,
+15652,3713,affix sub dmg boost fire spec mod mythic desc,0,Cindering,English,
+15653,3798,affix sub dmg boost fire toxic mod mythic,0,Acidic [item],English,
+15654,2465,affix sub dmg boost fire toxic mod mythic desc,0,Acidic,English,
+15655,961,affix sub dmg boost elec spec mod mythic,0,Enrapturing [item],English,
+15656,3880,affix sub dmg boost elec spec mod mythic desc,0,Enrapturing,English,
+15657,493,affix sub dmg boost elec toxic mod mythic,0,Putrefying [item],English,
+15658,452,affix sub dmg boost elec toxic mod mythic desc,0,Putrefying,English,
+15659,527,affix sub dmg boost spec toxic mod mythic,0,Preternatural [item],English,
+15660,526,affix sub dmg boost spec toxic mod mythic desc,0,Preternatural,English,
+15661,1914,affix sub sfx boost phys mod mythic,0,Deadening [item],English,
+15662,533,affix sub sfx boost phys mod mythic desc,0,Deadening,English,
+15663,2568,affix sub sfx boost fire mod mythic,0,Immolating [item],English,
+15664,3643,affix sub sfx boost fire mod mythic desc,0,Immolating,English,
+15665,3815,affix sub sfx boost elec mod mythic,0,Incapacitating [item],English,
+15666,454,affix sub sfx boost elec mod mythic desc,0,Incapacitating,English,
+15667,249,affix sub sfx boost spec mod mythic,0,Sanctified [item],English,
+15668,3776,affix sub sfx boost spec mod mythic desc,0,Sancitified,English,
+15669,2821,affix sub sfx boost toxic mod mythic,0,Corrupted [Item],English,
+15670,700,affix sub sfx boost toxic mod mythic desc,0,Corrupted,English,
+15671,2706,affix sub pet damage mod mythic,0,Mordacious [item],English,
+15672,1293,affix sub pet damage mod mythic desc,0,Mordacious,English,
+15673,2553,affix sub pet health mod mythic,0,Capacious [item],English,
+15674,3008,affix sub pet health mod mythic desc,0,Capacious,English,
+15675,457,affix sub pet armor pet mythic,0,Roborant [item],English,
+15676,3024,affix sub pet armor pet mythic desc,0,Roborant,English,
+15677,2364,affix sub shield penetration mythic,0,Impaling [item],English,
+15678,3199,affix sub shield penetration mythic desc,0,Impaling,English,
+15679,2199,affix sub precision consistency bonus mythic,0,Errorless [item],English,
+15680,310,affix sub precision consistency bonus mythic desc,0,Errorless,English,
+15681,3982,affix sub will mod mythic,0,Runic [item],English,
+15682,697,affix sub will mod mythic desc,0,Runic,English,
+15683,2439,affix sub str mod mythic,0,Brawn [item],English,
+15684,2278,affix sub str mod mythic desc,0,Brawn,English,
+15685,2649,affix sub acc mod mythic,0,Prescience [item],English,
+15686,2976,affix sub acc mod mythic desc,0,Prescience,English,
+15687,1146,affix sub sta mod mythic,0,Hardening [item],English,
+15688,789,affix sub sta mod mythic desc,0,Hardening,English,
+15689,1599,affix sub all stat mod mythic,0,Champion [item],English,
+15690,3582,affix sub all stat mod mythic desc,0,Champion,English,
+15691,541,affix sub crit mult vs dam vs beast mythic,0,BeastSlaughterer's [item],English,
+15692,2484,affix sub crit mult vs dam vs beast mythic desc,0,BeastSlaughterer's,English,
+15693,481,affix sub crit mult vs dam vs necro mythic,0,NecroSlaughterer's [item],English,
+15694,4040,affix sub crit mult vs dam vs necro mythic desc,0,NecroSlaughterer's,English,
+15695,268,affix sub crit mult vs dam vs spectral mythic,0,SpectralSlaughterer's [item],English,
+15696,3215,affix sub crit mult vs dam vs spectral mythic desc,0,SpectralSlaughterer's,English,
+15697,2305,affix sub crit mult vs dam vs demon mythic,0,DemonSlaughterer's [item],English,
+15698,3432,affix sub crit mult vs dam vs demon mythic desc,0,DemonSlaughterer's,English,
+15699,1695,affix sub hp pct armor negative,0,Sapping [item],English,
+15700,3550,affix sub hp pct armor negative desc,0,Sapping ,English,
+15701,373,affix sub all stat armor scaled negative,0,Dreadful [item],English,
+15702,3564,affix sub all stat armor scaled negative desc,0,Dreadful,English,
+15703,192,affix sub speed negative,0,Lethargic [item],English,
+15704,1363,affix sub speed negative desc,0,Lethargic,English,
+15705,1753,affix sub power armor negative,0,Dissipating [item],English,
+15706,544,affix sub power armor negative desc,0,Dissipating,English,
+15707,1018,affix sub dam aug negative,0,Disabled [item],English,
+15708,2197,affix sub dam aug negative desc,0,Disabled,English,
+15709,779,affix sub skillcost negative,0,Impaired [item],English,
+15710,3002,affix sub skillcost negative desc,0,Impaired,English,
+15711,3735,affix sub skill cooldown negative,0,Languid [item],English,
+15712,3894,affix sub skill cooldown negative desc,0,Languid,English,
+15713,1606,affix type curse,0,Cursed [item],English,
+15714,2513,affix type curse desc,0,Cursed,English,
+15715,6660,affix type core,0,Core [item],English,
+15716,6661,affix type core desc,0,Core,English,
