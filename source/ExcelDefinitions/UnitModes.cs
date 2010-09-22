@@ -9,11 +9,11 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelFile.ExcelOutputAttribute(IsStringOffset = true, SortId = 1)]
+        [ExcelFile.ExcelOutputAttribute(IsStringOffset = true, SortAscendingID = 1)]
         public Int32 mode;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] undefined1;
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
         public Int32[] block;

@@ -174,8 +174,9 @@ namespace Reanimator
         {
             try
             {
-                DataTable table = _tableDataSet.XlsDataSet.Tables[file.ID];
+                
                 ExcelFile excel = _tableDataSet.TableFiles.GetExcelTableFromId(file.ID);
+                DataTable table = _tableDataSet.XlsDataSet.Tables[file.ID];
 
                 foreach (Entity entity in file.Entities)
                 {

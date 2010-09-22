@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class LevelsRulesRow
     {
         ExcelFile.TableHeader header;
-        [ExcelOutput(SortId = 1, RequiresDefault = true)]
+        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]//Except it's by unique drlgFileName, and it starts at 918 which is an empty entry?
         public string drlgFileName;
         public Int32 undefined1;

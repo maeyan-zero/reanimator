@@ -10,7 +10,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;                               // ReadOrder   OffsetFromHeader     ReadFunction
 
-        [ExcelOutput(IsStringOffset = true, SortId = 1)]
+        [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
         public Int32 name;//pchar                                   // 1    0x0000000000000000  XLS_ReadCharPtr1
         Int32 buffer1;
         [ExcelOutput(IsStringOffset = true)]
@@ -294,17 +294,17 @@ namespace Reanimator.ExcelDefinitions
         public Items.BitMask06 bitmask06;                           // 56   0x0000000000000578
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask07 bitmask07;                           // 56   0x000000000000057C
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Items")]
         public Int32 String;                                        // 375  0x0000000000000580  XLS_ReadStringIndex
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Items")]
         public Int32 typeDescription;                               // 378  0x0000000000000584  XLS_ReadStringIndex
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Items")]
         public Int32 flavorText;                                    // 379  0x0000000000000588  XLS_ReadStringIndex
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Items")]
         public Int32 additionalDescription;                         // 380  0x000000000000058C  XLS_ReadStringIndex
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Items")]
         public Int32 additionalRaceDescription;                     // 381  0x0000000000000590  XLS_ReadStringIndex
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Items")]
         public Int32 analyze;                                       // 382  0x0000000000000594  XLS_ReadStringIndex
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x6D)]
         public Int32 recipeList;//index                                    // 62   0x0000000000000598  XLS_ReadIndex
@@ -321,7 +321,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 respawnChance;                                 // 35   0x00000000000005B4  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableIndex = 0x90)]
         public Int32 respawnSpawnClass;//index                             // 34   0x00000000000005B8  XLS_ReadIndex,90
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;                                          // 32   0x00000000000005BC  XLS_ReadCode
         Int32 unknown41;
         public Int32 densityValueOverride;                          // 54   0x00000000000005C4  XLS_ReadInt32
@@ -476,7 +476,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 meleeWeapon;//index                            // 122  0x0000000000000770  XLS_ReadIndex
         public Int32 cdTicks;                                       // 131  0x0000000000000774  XLS_ReadInt32
         public float approxDps;                                     // 132  0x0000000000000778  XLS_ReadFloat
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_DisplayFormat")]
         public Int32 tooltipDamageString;//stridx                   // 137  0x000000000000077C  XLS_ReadStringIndex
         public Int32 requiredAffixGroups1;                          // 126  0x0000000000000780  XLS_ReadIntArray,8
         public Int32 requiredAffixGroups2;                          // 126  0x0000000000000784

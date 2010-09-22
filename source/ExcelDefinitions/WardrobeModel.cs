@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using TableHeader = Reanimator.ExcelFile.TableHeader;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class WardrobeModelRow
     {
-        ExcelFile.TableHeader header;
-
+        TableHeader header;
         public Int32 undefined1;
+        [ExcelOutput(SortAscendingID = 1, SortColumnTwo = "appearanceGroup", ExcludeZero = true)]
         public Int32 modelGroup;//idx;
         public Int32 appearanceGroup;//idx;
         public Int32 appearanceGroup2;//idx;

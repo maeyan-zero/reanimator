@@ -9,7 +9,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public Int32 maleUnit0;
@@ -34,7 +34,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 femaleEnabled;
         //insert new
         //public Int32 unitVersionToGetSkillRespec;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 stringOneLetterCode;
         [ExcelOutput(IsBool = true)]
         public Int32 Default;

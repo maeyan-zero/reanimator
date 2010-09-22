@@ -9,12 +9,12 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String name;
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 unlockedString;
     }
 }

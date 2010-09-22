@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class BackGroundSounds3DRow
     {
         ExcelFile.TableHeader header;
-        [ExcelOutput(SortId = 1, RequiresDefault = true)]
+        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [ExcelOutput(IsBool = true)]

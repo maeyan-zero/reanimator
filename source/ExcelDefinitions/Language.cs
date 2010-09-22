@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     public class LanguageRow
     {
         ExcelFile.TableHeader header;
-        [ExcelFile.ExcelOutput(IsStringOffset = true, SortId = 1)]
+        [ExcelFile.ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
         public Int32 language;
         Int32 null1;
         [ExcelFile.ExcelOutput(IsStringOffset = true)]

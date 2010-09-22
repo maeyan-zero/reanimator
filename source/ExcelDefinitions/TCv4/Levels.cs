@@ -8,24 +8,24 @@ namespace Reanimator.ExcelDefinitions
     class LevelsTCv4Row
     {
         ExcelFile.TableHeader header;
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string levelName;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         byte[] reserved;
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         public Int32 bitfieldIndex;
         public Int32 unknown1;
         public Int32 defaultSubLevel;
         public Int32 previousLevel;
         public Int32 nextLevel;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Level")]
         public Int32 levelDisplayName;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Level")]
         public Int32 floorSuffixName;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Level")]
         public Int32 finalSuffixFloorName;
         public Int32 automapWidth;
         public Int32 automapHeight;
@@ -115,9 +115,9 @@ namespace Reanimator.ExcelDefinitions
         public Int32 partySizeRecommended;
         public Int32 questSpawnClass;
         public Int32 interactableSpawnClass;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Level")]
         public Int32 stringEnter;//stridx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Level")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Level")]
         public Int32 stringLeave;//stridx
         public float championSpawnChancePercentAtEachSpawnLocation;
         public float uniqueMonsterChancePercent;

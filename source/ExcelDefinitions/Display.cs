@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class DisplayRow
     {
         ExcelFile.TableHeader header;
-        [ExcelOutput(SortId = 1, RequiresDefault = true)]
+        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string key;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
@@ -32,11 +32,11 @@ namespace Reanimator.ExcelDefinitions
         public Int32 displayCondition3;
         [ExcelOutput(IsBool = true)]
         public Int32 newLine;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_DisplayFormat")]
         public Int32 formatString;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_DisplayFormat")]
         public Int32 formatShort;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_DisplayFormat")]
         public Int32 decripShort;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         string iconFrame;
@@ -56,7 +56,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsIntOffset = true)]
         public Int32 val4;
         public Int32 toolTipArea;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_DisplayFormat")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_DisplayFormat")]
         public Int32 toolTipText;//stridx
         [ExcelOutput(IsIntOffset = true)]
         public Int32 color;

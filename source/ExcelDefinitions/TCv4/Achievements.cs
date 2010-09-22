@@ -11,18 +11,18 @@ namespace Reanimator.ExcelDefinitions
         ExcelFile.TableHeader header;
 
         Int32 undefined;                                                                        // ??       0x0000000000000000      ?? (Never Read?)
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String name;                                                                     // 1        0x0000000000000004      XLS_ReadString
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;                                                                      // 2        0x0000000000000044      XLS_ReadCode
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 nameString;                                                                // 3        0x0000000000000048      XLS_ReadStringIndex
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 descripFormatString;                                                       // 4        0x000000000000004C      XLS_ReadStringIndex
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 detailsString;                                                             // 5        0x0000000000000050      XLS_ReadStringIndex
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 rewardTypeString;                                                          // 6        0x0000000000000054      XLS_ReadStringIndex
         public Int32 icon;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 15)]

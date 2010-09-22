@@ -1,33 +1,34 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
+using TableHeader = Reanimator.ExcelFile.TableHeader;
 
 namespace Reanimator.ExcelDefinitions
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class AffixesRow
     {
-        ExcelFile.TableHeader header;
-        [ExcelOutput(IsStringOffset = true, SortId = 1)]
+        TableHeader header;
+        [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
         public Int32 affix;
         public Int32 unknown02;
         [ExcelOutput(IsBool = true)]
         public Int32 alwaysApply;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Affix")]
         public Int32 qualityNameString;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Affix")]
         public Int32 setNameString;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Affix")]
         public Int32 magicNameString;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Affix")]
         public Int32 replaceNameString;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Affix")]
         public Int32 flavorText;
         public Int32 unknown03;
         public Int32 nameColor;
         public Int32 gridColor;
         public Int32 dom;
-        [ExcelOutput(SortId = 3)]
+        [ExcelOutput(SortAscendingID = 3)]
         public Int32 code;
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType1;
@@ -42,7 +43,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType6;
         public Int32 suffix;
-        [ExcelOutput(SortId = 4, IsDistinctSort = true)]
+        [ExcelOutput(SortDistinctID = 4)]
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]

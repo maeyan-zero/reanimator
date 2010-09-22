@@ -286,21 +286,21 @@ namespace Reanimator.Forms
 
         void DoIntOffsetType(DataColumn dc)
         {
-            Type type = dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IntOffsetType] as Type;
-            if (type == null) return;
+            //Type type = dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IntOffsetType] as Type;
+            //if (type == null) return;
 
-            if (type == typeof(ExcelFile.SingleInt32))
-            {
-                NumericUpDown nud = new NumericUpDown
-                                        {
-                                            Parent = rows_LayoutPanel,
-                                            AutoSize = true,
-                                            Dock = DockStyle.Fill
-                                        };
+            //if (type == typeof(ExcelFile.SingleInt32))
+            //{
+            //    NumericUpDown nud = new NumericUpDown
+            //                            {
+            //                                Parent = rows_LayoutPanel,
+            //                                AutoSize = true,
+            //                                Dock = DockStyle.Fill
+            //                            };
 
-                nud.ValueChanged += nud_ValueChanged;
-                _specialControls.Add(dc.ColumnName, nud);
-            }
+            //    nud.ValueChanged += nud_ValueChanged;
+            //    _specialControls.Add(dc.ColumnName, nud);
+            //}
         }
 
         void nud_ValueChanged(object sender, EventArgs e)
@@ -384,7 +384,7 @@ namespace Reanimator.Forms
             DataTable table = ((DataSet)tableData_DataGridView.DataSource).Tables[tableData_DataGridView.DataMember];
             if (table == null) return;
 
-            String savePath = FileTools.SaveFileDiag(_dataFile.FileExtension, _dataFile.FileName, _dataFile.StringId.ToLower(), Config.HglDataDir);
+            String savePath = FileTools.SaveFileDiag(_dataFile.FileExtension, _dataFile.FileName, _dataFile.FileName, Config.HglDataDir);
             if (String.IsNullOrEmpty(savePath)) return;
 
             byte[] data = _dataFile.GenerateFile(table);
@@ -462,26 +462,50 @@ namespace Reanimator.Forms
             using (StringWriter sw = new StringWriter())
             {
                 DataGridViewSelectedRowCollection dataRows = tableData_DataGridView.SelectedRows;
+                sw.Write("<file id=\"" + _dataTable.TableName + "\">\n");
                 foreach (DataGridViewRow dataRow in dataRows)
                 {
-                    sw.Write("<entity id=\"" + dataRow.Index + "\">\n");
+                    sw.Write("\t<entity id=\"" + dataRow.Index + "\">\n");
                     foreach (DataGridViewCell dataCell in dataRow.Cells)
                     {
                         if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Contains("tcv4")) continue;
                         if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Equals("Index")) continue;
                         if (_dataTable.Columns[dataCell.ColumnIndex].Caption.Contains("_string")) continue;
-                        sw.Write("\t<attribute id=\"" + _dataTable.Columns[dataCell.ColumnIndex].Caption + "\">" + dataCell.Value.ToString() + "</attribute>\n");
+                        sw.Write("\t\t<attribute id=\"" + _dataTable.Columns[dataCell.ColumnIndex].Caption + "\">" + dataCell.Value.ToString() + "</attribute>\n");
                     }
-                    sw.Write("</entity>\n");
+                    sw.Write("\t</entity>\n");
                 }
-
+                sw.Write("</file>");
                 Clipboard.SetText(sw.ToString());
             }
         }
 
-        private void toolStripButton3_Click(object sender, EventArgs e)
+        private void ImportCSVToolStripLabel1_Click(object sender, EventArgs e)
         {
-            _excelFile.DumpExtraIndiceData();
+            OpenFileDialog fileDialog = new OpenFileDialog()
+            {
+                InitialDirectory = Config.ScriptDir
+            };
+
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                byte[] buffer = File.ReadAllBytes(fileDialog.FileName);
+                _dataTable.Clear();
+                _dataTable.Columns[0].AutoIncrementStep = -1;
+                _dataTable.Columns[0].AutoIncrementSeed = -1;
+                _dataTable.Columns[0].AutoIncrementStep = 1;
+                _dataTable.Columns[0].AutoIncrementSeed = 0;
+
+
+                if (FileTools.CSVtoDataTable(buffer, _dataTable))
+                {
+                    MessageBox.Show("Import okay!");
+                }
+                else
+                {
+                    MessageBox.Show("Error!");
+                }
+            }
         }
     }
 

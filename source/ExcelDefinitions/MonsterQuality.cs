@@ -9,17 +9,17 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string quality;
 
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         public Int32 rarity;
         public Int32 nameColor;//idx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 displayNameStringKey;//stridx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Affix")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Affix")]
         public Int32 championFormatStringKey;//stridx
         [ExcelOutput(IsBool = true)]
         public Int32 pickProperName;//bool
