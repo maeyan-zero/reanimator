@@ -46,15 +46,18 @@ namespace Reanimator
             public int IntOffsetOrder { get; set; }
             public String[] FieldNames { get; set; }
             
-            public bool IsStringId { get; set; }
+            public bool IsStringID { get; set; }
             public bool IsTableIndex { get; set; }
             public String TableStringId { get; set; }
             public int TableIndex { get; set; }
             public String Column { get; set; }
 
-            public int SortId { get; set; }
+            public int SortAscendingID { get; set; }
+            public int SortDistinctID { get; set; }
+            public int SortPostOrderID { get; set; }
             public bool RequiresDefault { get; set; }
-            public bool IsDistinctSort { get; set; }
+            public String SortColumnTwo { get; set; }
+            public bool ExcludeZero { get; set; }
 
             public bool IsBitmask { get; set; }
             public UInt32 DefaultBitmask { get; set; }
@@ -188,17 +191,19 @@ namespace Reanimator
             public const String IsIndiceData = "IsIndiceData";
             public const String IsStringOffset = "IsStringOffset";
             public const String IsStringIndex = "IsStringIndex";
-            public const String IsStringId = "IsStringId";
+            public const String IsStringId = "IsStringID";
             public const String IsRelationGenerated = "IsRelationGenerated";
             public const String IsTableIndex = "IsTableIndex";
             public const String IsBitmask = "IsBitmask";
             public const String IsBool = "IsBool";
             public const String IsIntOffset = "IsIntOffset";
-            public const String IntOffsetType = "IntOffsetType";
-            public const String IntOffsetOrder = "IntOffsetOrder";
-            public const String SortId = "SortId";
+            //sorting
             public const String RequiresDefault = "RequiresDefault";
-            public const String IsDistinctSort = "IsDistinctSort";
+            public const String SortAscendingID = "SortAscendingID";
+            public const String SortColumnTwo = "SortColumnTwo";
+            public const String SortDistinctID = "SortDistinctID";
+            public const String SortPostOrderID = "SortPostOrderID";
+            public const String ExcludeZero = "ExcludeZero";
         }
     }
 }

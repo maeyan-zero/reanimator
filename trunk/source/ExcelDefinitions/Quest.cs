@@ -8,13 +8,13 @@ namespace Reanimator.ExcelDefinitions
     class QuestRow
     {
         ExcelFile.TableHeader header;
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         public Int32 style;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Quest")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Quest")]
         public Int32 nameStringKey;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 subscriberOnly;//bool
@@ -43,13 +43,13 @@ namespace Reanimator.ExcelDefinitions
         public Int32[] levelsPreLoadedWith;
         public Int32 startingItemsTreasureClass;//idx
         public Int32 removeStartingItemsOnComplete;
-        [ExcelOutput(SortId = 3, RequiresDefault = true)]
+        [ExcelOutput(SortAscendingID = 3, RequiresDefault = true)]
         public Int32 offerReward;//idx
         public Int32 castGiver;//idx
         public Int32 levelStoryQuestStartsIn;//idx
         public Int32 castRewarder;//idx
         public Int32 levelRewarderNpc;//idx
-        [ExcelOutput(SortId = 4, RequiresDefault = true)]
+        [ExcelOutput(SortAscendingID = 4, RequiresDefault = true)]
         public Int32 giverItem;//idx
         Int32 giverItemMonster;//idx
         Int32 giverItemLevel;//idx
@@ -114,7 +114,7 @@ namespace Reanimator.ExcelDefinitions
         //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 rewardDialog;//idx
         Int32 unavailableDialog;//idx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 acceptButtonText;//stridx
         float timeLimit;
         public Int32 objectiveMonster;//idx
@@ -129,12 +129,12 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         string spawnNodeLabel;
         public Int32 spawnCount;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Names")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Names")]
         public Int32 nameOverrideStringKey;//stridx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Names")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Names")]
         public Int32 nameInLogOverrideStringKey;//stridx
         public Int32 logOverrideState;//idx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Quest")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Quest")]
         public Int32 logOverrideString;//stridx
         public Int32 subLevelTypeTruthOld;
         public Int32 subLevelTypeTruthNew;

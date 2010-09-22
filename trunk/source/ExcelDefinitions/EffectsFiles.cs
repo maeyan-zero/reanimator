@@ -9,10 +9,10 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string FXOName;
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string fxFile;
         public Int32 folder;

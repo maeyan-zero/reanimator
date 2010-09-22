@@ -9,20 +9,20 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String quality;
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         Int32 craftingBreakdownTreasure;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 displayName;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Strings")]
         public Int32 displayNameWithItemFormat;
         [ExcelOutput(IsBool = true)]
         public Int32 showBaseDesc;
         public Int32 randomlyNamed;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Items")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Items")]
         public Int32 baseDescFormatString;
         public Int32 unknown01;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS", Column = "Color")]

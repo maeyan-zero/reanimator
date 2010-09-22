@@ -8,14 +8,14 @@ namespace Reanimator.ExcelDefinitions
     class LevelsDrlgsRow
     {
         ExcelFile.TableHeader header;
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string drlgRuleSet;
         public Int32 drlgDisplayName;//stridx
         public Int32 undefined1;
-        [ExcelFile.ExcelOutputAttribute(SortId = 2, IsDistinctSort = true)]
+        [ExcelFile.ExcelOutputAttribute(SortDistinctID = 2)]
         public Int32 style;
         public Int32 theme0;
         public Int32 theme1;

@@ -25,7 +25,7 @@ namespace Reanimator.ExcelDefinitions
         public Skills.Bitmask05 bitmask5;
         [ExcelOutput(IsBitmask = true)]
         public Skills.Bitmask06 bitmask6;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Skills")]
         public Int32 displayName;//stridx
         public Int32 skillLevelIncludesSkills1_tcv4;
         public Int32 skillLevelIncludesSkills2_tcv4;
@@ -42,15 +42,15 @@ namespace Reanimator.ExcelDefinitions
         public String accumulationStringFunction;//doesn't appear to be used
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknown1;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Skills")]
         public Int32 descriptionString;//stridx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Skills")]
         public Int32 effectString;//stridx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Skills")]
         public Int32 skillBonusString;//stridx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Skills")]
         public Int32 accumulationString;//stridx
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Skills")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Skills")]
         public Int32 stringAfterRequiredWeapon;//stridx
         public Int32 skillsToAccumulate1;
         public Int32 skillsToAccumulate2;

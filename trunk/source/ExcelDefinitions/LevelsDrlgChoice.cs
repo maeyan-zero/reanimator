@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class LevelsDrlgChoiceRow
     {
         ExcelFile.TableHeader header;
-        [ExcelFile.ExcelOutput(IsStringOffset = true, SortId = 1)]
+        [ExcelFile.ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
         public Int32 name; //pchar
         public Int32 undefined1;
         public float namedMonsterChance;
@@ -23,7 +23,7 @@ namespace Reanimator.ExcelDefinitions
         public Int32 environmentOverRide;//idx
         public float environmentSpawnClassRoomDensity;
         public Int32 environmentSpawnClass;//idx
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         public Int32 undefined3;
     }

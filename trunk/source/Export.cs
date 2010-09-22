@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Reanimator
 {
@@ -32,22 +33,29 @@ namespace Reanimator
                 for (int col = 0; col < datagridview.Rows[row].Cells.Count; col++)
                 {
                     if (!selected[col]) continue;
-
-                    if (datagridview[col, row].Value != null)
+                    if (datagridview[col, row].Value != null && (!(String.IsNullOrEmpty(datagridview[col, row].Value.ToString()))))
                     {
                         string stringBuffer = datagridview[col, row].Value.ToString();
-
-                        if (stringBuffer.Contains(',') || stringBuffer.Contains('"'))
+                        if (((stringBuffer[0] == '\0'))) // Weird bug fix, doesnt recognise this character as nothing
                         {
-                            //stringBuffer = stringBuffer.Replace("\"", "\"\"");
-                            //stringBuffer = stringBuffer.Replace(",", "\",\"");
-                            stringBuffer = stringBuffer.Insert(0, "\"");
-                            stringBuffer = stringBuffer.Insert(stringBuffer.Length, "\"");
-                            csv.Write(stringBuffer);
+                            csv.Write(String.Empty);
                         }
                         else
                         {
-                            csv.Write(datagridview[col, row].Value);
+                            if (stringBuffer.Contains('"'))
+                            {
+                                stringBuffer = stringBuffer.Replace("\"", "\"\"");
+                            }
+                            if (stringBuffer.Contains(','))
+                            {
+                                stringBuffer = stringBuffer.Insert(0, "\"");
+                                stringBuffer = stringBuffer.Insert(stringBuffer.Length, "\"");
+                            }
+                            if (stringBuffer.Contains('\n'))
+                            {
+                                stringBuffer = stringBuffer.Replace("\n", "\\n");
+                            }
+                            csv.Write(stringBuffer);
                         }
                     }
                     if (col < datagridview.Rows[row].Cells.Count)

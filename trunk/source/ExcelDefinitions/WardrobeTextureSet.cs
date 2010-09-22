@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using TableHeader = Reanimator.ExcelFile.TableHeader;
+using ExcelOutput = Reanimator.ExcelFile.ExcelOutputAttribute;
 
 namespace Reanimator.ExcelDefinitions
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class WardrobeTextureSetRow
     {
-        ExcelFile.TableHeader header;
-
+        TableHeader header;
+        [ExcelOutput(SortAscendingID = 1, SortColumnTwo = "appearanceGroupFolder", ExcludeZero = true)]
         public Int32 textureSetGroup;//idx;
         public Int32 appearanceGroupFolder;//idx;
         public Int32 appearanceGroup1;//idx;

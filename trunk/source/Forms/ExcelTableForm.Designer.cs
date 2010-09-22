@@ -45,7 +45,7 @@
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.copyScriptLabel = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.tabControl1.SuspendLayout();
             this.tableDataPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).BeginInit();
@@ -179,7 +179,7 @@
             this.toolStripButton2,
             this.toolStripSeparator2,
             this.copyScriptLabel,
-            this.toolStripButton3});
+            this.toolStripLabel1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 592);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -227,15 +227,12 @@
             this.copyScriptLabel.Text = "Copy as Script";
             this.copyScriptLabel.Click += new System.EventHandler(this.copyScriptLabel_Click);
             // 
-            // toolStripButton3
+            // toolStripLabel1
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton3.Text = "toolStripButton3";
-            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(67, 22);
+            this.toolStripLabel1.Text = "Import CSV";
+            this.toolStripLabel1.Click += new System.EventHandler(this.ImportCSVToolStripLabel1_Click);
             // 
             // ExcelTableForm
             // 
@@ -278,6 +275,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton copyScriptLabel;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     }
 }

@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.IO;
 using Reanimator.ExcelDefinitions;
+using SkmDataStructures2;
 
 namespace Reanimator
 {
@@ -928,17 +929,33 @@ namespace Reanimator
             // Generate sort indices
             foreach (DataColumn dc in dataTable.Columns)
             {
-                if (!dc.ExtendedProperties.Contains(ColumnTypeKeys.SortId))
+                if (!(dc.ExtendedProperties.Contains(ColumnTypeKeys.SortAscendingID)) &&
+                    !(dc.ExtendedProperties.Contains(ColumnTypeKeys.SortDistinctID)) && 
+                    !(dc.ExtendedProperties.Contains(ColumnTypeKeys.SortPostOrderID)))
                 {
                     continue;
                 }
                 
-                int sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortId] - 1; // 1,2,3,4
+                int sortId;
+                if (dc.ExtendedProperties.ContainsKey(ColumnTypeKeys.SortAscendingID))
+                {
+                    sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortAscendingID] - 1; // 1,2,3,4
+                }
+                else if (dc.ExtendedProperties.ContainsKey(ColumnTypeKeys.SortDistinctID))
+                {
+                    sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortDistinctID] - 1; // 1,2,3,4
+                }
+                else
+                {
+                    sortId = (int)dc.ExtendedProperties[ColumnTypeKeys.SortPostOrderID] - 1; // 1,2,3,4
+                }
+
+
                 string sortColumn = dc.ColumnName;
                 string filter = string.Empty;
                 int indexCol = 0;
                 
-                DataTable sortTable = dataTable.Copy();
+                DataTable sortTable = dataTable;
                 DataView dataView = sortTable.DefaultView;
                 dataView.Sort = sortColumn;
                 int defaultRow = (int)dataView[0][0];
@@ -949,6 +966,12 @@ namespace Reanimator
                     if (dataTable.Columns.Contains("code"))
                     {
                         filter = "(" + filter + " AND code <> 0)";
+                    }
+
+                    // only used on wardrobe tables
+                    if (dc.ExtendedProperties.Contains(ColumnTypeKeys.ExcludeZero))
+                    {
+                        filter = "(" + filter + " AND " + sortColumn + "<> 0)";
                     }
                 }
                 else
@@ -968,20 +991,60 @@ namespace Reanimator
                     filter += " OR Index = " + defaultRow;
                 }
 
+                if (dc.ExtendedProperties.Contains(ColumnTypeKeys.SortColumnTwo))
+                {
+                    sortColumn += ", " + dc.ExtendedProperties[ColumnTypeKeys.SortColumnTwo];
+                }
+
                 dataView.RowFilter = filter;
                 dataView.Sort = sortColumn;
 
 
-                if (dc.ExtendedProperties.Contains(ColumnTypeKeys.IsDistinctSort))
+                if (dc.ExtendedProperties.Contains(ColumnTypeKeys.SortDistinctID))
                 {
                     sortTable = SelectDistinct(sortTable, new string[] { sortColumn });
                     dataView = sortTable.DefaultView;
                 }
 
-                _sortIndicies[sortId] = new int[dataView.Count];
-                for (int i = 0; i < dataView.Count; i++)
+
+                // Do post tree transversal using a binary tree structure
+                if (dc.ExtendedProperties.Contains(ColumnTypeKeys.SortPostOrderID))
                 {
-                    _sortIndicies[sortId][i] = (int)dataView[i][indexCol];
+                    BinarySearchTree<int> binaryTree = new BinarySearchTree<int>();
+                    foreach (DataRowView dr in dataView)
+                    {
+                        binaryTree.Add((int)dr[0]);
+                    }
+
+                    int[] postOrderArray = binaryTree.Postorder.ToArray();
+
+                    _sortIndicies[sortId] = new int[postOrderArray.Length];
+                    for (int i = 0; i < postOrderArray.Length; i++)
+                    {
+                        _sortIndicies[sortId][i] = postOrderArray[i];
+                    }
+                
+                }
+
+                // Ascending and distinct sorts using the dataiew
+                if (dc.ExtendedProperties.Contains(ColumnTypeKeys.SortAscendingID) ||
+                    dc.ExtendedProperties.Contains(ColumnTypeKeys.SortDistinctID))
+                {
+                    _sortIndicies[sortId] = new int[dataView.Count];
+                    for (int i = 0; i < dataView.Count; i++)
+                    {
+                        _sortIndicies[sortId][i] = (int)dataView[i][indexCol];
+                    }
+                }
+
+                // undo precedence hack 
+                if (dc.DataType == typeof(string))
+                {
+                    foreach (DataRow dr in sortTable.Rows)
+                    {
+                        dr[sortColumn] = ((string)dr[sortColumn]).Replace("98", "-");
+                        dr[sortColumn] = ((string)dr[sortColumn]).Replace("99", "_");
+                    }
                 }
 
             }
@@ -1144,7 +1207,6 @@ namespace Reanimator
             {
                 return attribute as ExcelOutputAttribute;
             }
-
             return null;
         }
 

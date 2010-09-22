@@ -9,11 +9,11 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string spawnClass;
 
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         public Int32 pickType;
         [ExcelOutput(IsBool = true)]

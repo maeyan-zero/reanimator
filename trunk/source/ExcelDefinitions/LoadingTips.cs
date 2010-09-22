@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class LoadingTipsRow
     {
         ExcelFile.TableHeader header;
-         [ExcelOutput(SortId = 1)]
+         [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
 

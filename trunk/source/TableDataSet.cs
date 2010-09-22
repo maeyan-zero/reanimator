@@ -104,35 +104,48 @@ namespace Reanimator
                     DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, typeof(String));
                     dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsStringOffset, true);
                     dataColumn.DefaultValue = String.Empty;
-                    if (excelOutputAttribute.SortId > 0)
+                    if (excelOutputAttribute.SortAscendingID > 0)
                     {
-                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortId, excelOutputAttribute.SortId);
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortAscendingID, excelOutputAttribute.SortAscendingID);
                     }
                 }
                 else if (excelOutputAttribute.IsIntOffset)
                 {
                     DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, typeof(String));
                     dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsIntOffset, true);
-                    dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IntOffsetOrder, excelOutputAttribute.IntOffsetOrder);
                     dataColumn.DefaultValue = String.Empty;
                 }
                 else
                 {
+                    // Sorting Keys
                     DataColumn dataColumn = mainDataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
 
-                    if (excelOutputAttribute.SortId > 0)
+                    if (excelOutputAttribute.RequiresDefault)
                     {
-                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortId, excelOutputAttribute.SortId);
-                        if (excelOutputAttribute.RequiresDefault)
-                        {
-                            dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.RequiresDefault, true);
-                        }
-                        if (excelOutputAttribute.IsDistinctSort)
-                        {
-                            dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsDistinctSort, true);
-                        }
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.RequiresDefault, true);
+                    }
+                    if (excelOutputAttribute.SortAscendingID > 0)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortAscendingID, excelOutputAttribute.SortAscendingID);
+                    }
+                    if (excelOutputAttribute.SortDistinctID > 0)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortDistinctID, excelOutputAttribute.SortDistinctID);
+                    }
+                    if (excelOutputAttribute.SortPostOrderID > 0)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortPostOrderID, excelOutputAttribute.SortPostOrderID);
+                    }
+                    if (!(String.IsNullOrEmpty(excelOutputAttribute.SortColumnTwo)))
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.SortColumnTwo, excelOutputAttribute.SortColumnTwo);
+                    }
+                    if (excelOutputAttribute.ExcludeZero == true)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.ExcludeZero, true);
                     }
 
+                    // Other types
                     if (excelOutputAttribute.IsStringIndex)
                     {
                         dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsStringIndex, true);
@@ -141,7 +154,7 @@ namespace Reanimator
                                                                                 typeof(String));
                         dataColumnString.DefaultValue = String.Empty;
                     }
-                    else if (excelOutputAttribute.IsStringId)
+                    else if (excelOutputAttribute.IsStringID)
                     {
                         dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsStringId, true);
                     }
@@ -377,7 +390,7 @@ namespace Reanimator
                 {
                     DataColumn dcChild = mainDataTable.Columns[col];
 
-                    if (excelOutputAttribute.IsStringId)
+                    if (excelOutputAttribute.IsStringID)
                     {
                         DataTable dtStrings = XlsDataSet.Tables[excelOutputAttribute.TableStringId] ??
                                               _LoadRelatedTable(progress, excelOutputAttribute.TableStringId);

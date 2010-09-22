@@ -9,7 +9,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1, RequiresDefault = true)]
+        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//seems to be by name, but with an empty entry first.
         public Int32 grooveLevelType;//idx

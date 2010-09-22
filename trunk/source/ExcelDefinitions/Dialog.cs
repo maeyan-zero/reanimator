@@ -9,14 +9,14 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Quest")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Quest")]
         public Int32 stringAll;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Quest")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Quest")]
         public Int32 stringHellGate;
-        [ExcelOutput(IsStringId = true, TableStringId = "Strings_Quest")]
+        [ExcelOutput(IsStringID = true, TableStringId = "Strings_Quest")]
         public Int32 stringMythos;
         public Int32 sound;//idx
         public Int32 mode;//idx

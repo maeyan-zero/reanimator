@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Data;
 
 namespace Reanimator
 {
@@ -356,8 +358,6 @@ namespace Reanimator
         }
 
 
-
-
         public static byte[] IntArrayToByteArray(int[] source)
         {
             byte[] result = new byte[source.Length * sizeof(int)];
@@ -369,6 +369,142 @@ namespace Reanimator
 
             return result;
         }
+
+
+
+
+
+
+
+        public static bool CSVtoDataTable(byte[] source, DataTable destination)
+        {
+            if (source == null) return false;
+            if (destination == null) return false;
+            if (source.Length == 0) return false;
+
+            int offset = 0;
+            int length = source.Length;
+            bool ignoreFirstRow = true;
+            byte deliminter = (byte)'\t';
+            DataRow dataRow;
+            Type dataType;
+            int column = destination.Columns.Contains("Index") ? 1 : 0;
+
+            if (ignoreFirstRow)
+            {
+                while (offset < length)
+                {
+                    if (source[offset++] == (byte)0x0A)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            dataRow = destination.NewRow();
+
+            while (offset < length)
+            {
+                foreach (DataColumn dataColumn in destination.Columns)
+                {
+                    if (dataColumn.ColumnName == "Index") continue;
+
+                    dataType = dataColumn.DataType;
+                    byte[] newStringBuffer = DelimintedByteArray(source, ref offset, deliminter);
+                    string newString = newStringBuffer == null ? String.Empty : Encoding.ASCII.GetString(newStringBuffer);
+
+                    if (dataType.BaseType == typeof(Enum))
+                    {
+                        dataType = typeof(UInt32);
+                    }
+
+                    if (dataType == typeof(String))
+                    {
+                        newString = newString.Replace("\\n", "\n");
+                        newString = newString.Replace("\"", "");
+                        dataRow[column] = newString;
+                    }
+                    else if (dataType == typeof(Int32))
+                    {
+                         dataRow[column] = Int32.Parse(newString);
+                    }
+                    else if (dataType == typeof(UInt32))
+                    {
+                        dataRow[column] = UInt32.Parse(newString);
+                    }
+                    else if (dataType == typeof(Single))
+                    {
+                        dataRow[column] = Single.Parse(newString);
+                    }
+                    else if (dataType == typeof(byte))
+                    {
+                        dataRow[column] = Byte.Parse(newString);
+                    }
+                    else if (dataType == typeof(Int64))
+                    {
+                        dataRow[column] = Int64.Parse(newString);
+                    }
+                    else if (dataType == typeof(UInt64))
+                    {
+                        dataRow[column] = UInt64.Parse(newString);
+                    }
+                    else if (dataType == typeof(short))
+                    {
+                        dataRow[column] = short.Parse(newString);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Unimplemented data type");
+                        return false;
+                    }
+                    column++;
+                }
+                //offset++;
+                column = destination.Columns.Contains("Index") ? 1 : 0;
+                destination.Rows.Add(dataRow);
+                dataRow = destination.NewRow();
+            }
+
+            return true;
+        }
+
+
+        private static byte[] DelimintedByteArray(byte[] source, ref int offset, byte delimiter)
+        {
+            List<byte> buffer = new List<byte>();
+            int length = source.Length;
+            byte endrow = (byte)0x0D;
+
+            // empty string
+            if (source[offset] == delimiter)
+            {
+                offset++; // skip delimiter
+                return null;
+            }
+
+            // not empty
+            while (source[offset] != delimiter && source[offset] != endrow && offset < length)
+            {
+                buffer.Add(source[offset++]);
+            }
+
+            if (source[offset] == delimiter)
+            {
+                offset++; // skip delimiter
+            }
+            else
+            {
+                offset++;
+                offset++;
+            }
+            return buffer.ToArray();
+        }
+
+
+
+
+
+
 
         public static void WriteToBuffer(ref byte[] buffer, int offset, Object toWrite)
         {

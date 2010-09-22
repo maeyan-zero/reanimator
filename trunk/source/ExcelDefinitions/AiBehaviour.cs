@@ -8,7 +8,7 @@ namespace Reanimator.ExcelDefinitions
     class AiBehaviourRow
     {
         ExcelFile.TableHeader header;
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 60)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]

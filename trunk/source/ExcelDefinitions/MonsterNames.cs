@@ -9,13 +9,13 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortId = 1)]
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
 
-        [ExcelOutput(SortId = 2)]
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
-        [ExcelFile.ExcelOutput(IsStringId = true, TableStringId = "Strings_Names")]
+        [ExcelFile.ExcelOutput(IsStringID = true, TableStringId = "Strings_Names")]
         public Int32 stringKey;//stridx
         public Int32 monsterNameType;//idx
         [ExcelOutput(IsBool = true)]
