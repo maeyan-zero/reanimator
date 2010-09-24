@@ -964,7 +964,7 @@ namespace Reanimator.Forms
                 NodeObject nodeObject = (NodeObject)checkedNode.Tag;
                 if (nodeObject.FileEntry == null ||
                     nodeObject.FileEntry.FileStruct == null ||
-                    nodeObject.FileEntry.FileStruct.FileNameHash == 0)
+                    nodeObject.FileEntry.FileStruct.FileNameSHA1Hash == 0)
                 {
                     packResults.WriteLine("{0} - File Has No Base Version", filePath);
                     continue;

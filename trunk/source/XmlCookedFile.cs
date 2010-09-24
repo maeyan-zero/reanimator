@@ -525,26 +525,25 @@ namespace Reanimator
                 throw new Exceptions.NotSupportedFileDefinitionException();
 
             XmlDoc = new XmlDocument();
-            //XmlDoc.CreateXmlDeclaration("1.0", "utf-8", null);
-            _UncookFileXmlElements(xmlDefinition, header.XmlRootElementCount);
+            Hashtable elements = _UncookFileXmlElements(xmlDefinition, header.XmlRootElementCount);
 
             UInt32 dataMagicWord = FileTools.ByteArrayToUInt32(_data, ref _offset);
             if (dataMagicWord != DataMagicWord) throw new Exceptions.UnexpectedTokenException("'DATA' Token MagicWord expected but not found!");
 
-            _UncookXmlDefinition(xmlDefinition, XmlDoc);
+            _UncookXmlDefinition(xmlDefinition, XmlDoc, elements);
 
             Debug.Assert(_offset == _data.Length);
 
             return true;
         }
 
-        private void _UncookXmlDefinition(XmlDefinition xmlDefinition, XmlNode xmlParent)
+        private void _UncookXmlDefinition(XmlDefinition xmlDefinition, XmlNode xmlParent, Hashtable elements)
         {
             XmlElement rootElement = XmlDoc.CreateElement(xmlDefinition.RootElement);
             xmlParent.AppendChild(rootElement);
 
-            int elementCount = xmlDefinition.Elements.Count;
-
+            // actual present element count - not total count possible
+            int elementCount = elements.Count;
 
             // bitField info
             int bitFieldOffset = _offset;
@@ -552,18 +551,21 @@ namespace Reanimator
             _offset += bitFieldByteCount;
 
 
-            // loop through elements
-            for (int i = 0; i < elementCount; i++)
+            // loop through all elements
+            for (int i = 0; i < xmlDefinition.ElementCount; i++)
             {
                 // is the field present?
                 if (!_TestBit(_data, bitFieldOffset, i)) continue;
 
                 XmlCookElement xmlCookElement = xmlDefinition[i];
 
+                // sanity check - ensure it was in the definition segment
+                Debug.Assert(elements.ContainsKey(xmlCookElement.NameHash));
+
                 //if (xmlCookElement.Name == "tAttachmentDef.eType")
                 //{
                 //    int bp = 0;
-                //}
+                //});
 
                 switch (xmlCookElement.ElementType)
                 {
@@ -612,7 +614,7 @@ namespace Reanimator
 
                     case ElementType.Table: // 0x0308
                     case ElementType.TableCount: // 0x030A
-                        _ReadTable(rootElement, xmlCookElement);
+                        _ReadTable(rootElement, xmlCookElement, elements);
                         break;
 
                     case ElementType.ExcelIndex: // 0x0903
@@ -679,7 +681,7 @@ namespace Reanimator
             bitField[byteOffset] |= (byte)(1 << bitOffset);
         }
 
-        private void _UncookFileXmlElements(XmlDefinition xmlDefinition, int xmlDefElementCount)
+        private Hashtable _UncookFileXmlElements(XmlDefinition xmlDefinition, int xmlDefElementCount)
         {
             /* Default Element Values Array & General Structure
              * =Token=		=Type=          =FoundIn=       =Details= (* = variable length)
@@ -699,13 +701,14 @@ namespace Reanimator
              *  00 05       4 bytes (Float)
              */
 
+            Hashtable elements = new Hashtable();
             for (int i = 0; i < xmlDefElementCount && _offset < _data.Length; i++)
             {
                 uint elementHash = FileTools.ByteArrayToUInt32(_data, ref _offset);
 
                 XmlCookElement xmlCookElement = GetXmlCookElement(xmlDefinition, elementHash);
                 if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException("Unexpected xml element hash: 0x" + elementHash.ToString("X8"));
-
+                elements.Add(elementHash, xmlCookElement);
 
                 ElementType token = (ElementType)FileTools.ByteArrayToUShort(_data, ref _offset);
                 switch (token)
@@ -759,7 +762,7 @@ namespace Reanimator
 
 
                     case ElementType.ExcelIndex:                                        // 0x0903
-                        Int32 excelTableCode = _ReadInt32(null, null);                   // excel table code
+                        Int32 excelTableCode = _ReadInt32(null, null);                  // excel table code
 
                         Debug.Assert(xmlCookElement.ExcelTableCode == excelTableCode);
                         break;
@@ -784,7 +787,8 @@ namespace Reanimator
                             tableXmlDefition.ElementCount < elementCount)
                             throw new Exceptions.NotSupportedFileDefinitionException();
 
-                        _UncookFileXmlElements(tableXmlDefition, elementCount);
+                        Hashtable childElements = _UncookFileXmlElements(tableXmlDefition, elementCount);
+                        elements[elementHash] = childElements;
                         break;
 
 
@@ -793,6 +797,8 @@ namespace Reanimator
                             "Unexpected .xml.cooked definition array token: 0x" + ((ushort)token).ToString("X4"));
                 }
             }
+
+            return elements;
         }
 
         private void _ReadExcelIndex(XmlNode parentNode, XmlCookElement xmlCookElement)
@@ -834,7 +840,7 @@ namespace Reanimator
             parentNode.AppendChild(element);
         }
 
-        private void _ReadTable(XmlNode parentNode, XmlCookElement xmlCookElement)
+        private void _ReadTable(XmlNode parentNode, XmlCookElement xmlCookElement, Hashtable elements)
         {
             String elementName = xmlCookElement.Name;
             Debug.Assert(xmlCookElement.ChildType != null);
@@ -857,7 +863,9 @@ namespace Reanimator
                 parentNode.AppendChild(tableDesc);
 
                 XmlDefinition xmlCountDefinition = (XmlDefinition)Activator.CreateInstance(xmlCookElement.ChildType);
-                _UncookXmlDefinition(xmlCountDefinition, parentNode);
+                Hashtable childElements = (Hashtable)elements[xmlCookElement.NameHash];
+
+                _UncookXmlDefinition(xmlCountDefinition, parentNode, childElements);
             }
         }
 

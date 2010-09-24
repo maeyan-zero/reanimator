@@ -1,11 +1,38 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace Reanimator
 {
     static class Crypt
     {
+        ////// IDX String Crypt Stuffs //////
+        private static readonly SHA1 SHA1Crypto = new SHA1CryptoServiceProvider();
+
+        /// <summary>
+        /// Generates the SHA1 hash key for 2 given strings and returns the first 4 bytes from each as a UInt64.
+        /// </summary>
+        /// <param name="str1">The first string to be hashed (low).</param>
+        /// <param name="str2">The second string to be hashed (high).</param>
+        /// <returns>The hashed strings first 4 bytes eash as a UInt64.</returns>
+        public static UInt64 GetStringsSHA1UInt64(String str1, String str2)
+        {
+            UInt32 result1 = GetStringSHA1UInt32(str1);
+            UInt32 result2 = GetStringSHA1UInt32(str2);
+            return result1 | (UInt64)result2 << 32;
+        }
+
+        /// <summary>
+        /// Generates the SHA1 hash key for a given string and returns the first 4 bytes as a UInt32.
+        /// </summary>
+        /// <param name="str">The string the be hashed.</param>
+        /// <returns>The first 4 bytes of the hash as a UInt32.</returns>
+        public static UInt32 GetStringSHA1UInt32(String str)
+        {
+            byte[] result = SHA1Crypto.ComputeHash(FileTools.StringToASCIIByteArray(str));
+            return BitConverter.ToUInt32(result, 0);
+        }
+
+
         ////// String Crypt Stuffs //////
         private const Int32 StringHashSize = 256;
         private static readonly UInt32[] StringHash = new UInt32[StringHashSize];
@@ -171,6 +198,8 @@ namespace Reanimator
 
             _needStringHash = false;
         }
+
+
 
         ////// IDX Crypt Stuffs //////
         class CryptState
