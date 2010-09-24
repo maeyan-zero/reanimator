@@ -35,5 +35,7 @@ namespace Reanimator.XmlDefinitions
         public Int32 Count;
         public UInt32 NameHash;
         public bool TreatAsData;
+        public bool IsTCv4;
+        public bool IsPresent;
     }
 }

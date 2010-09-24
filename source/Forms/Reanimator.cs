@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Data;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
@@ -52,9 +53,66 @@ namespace Reanimator
             convertTCv4FilesToolStripMenuItem.Visible = true;
 #endif
 
-            //String str = "pLongConnections";
-            //String str = @"data\background\catacombs\ct_connb_path.xml.cooked";
-            //UInt32 strHash = Crypt.GetStringHash(str);
+
+            #region alexs_stuff
+            //const String idxReadPath = @"D:\Games\Hellgate London\data\hellgate000.idx";
+            //String idxWritePath = Path.Combine(Path.GetDirectoryName(idxReadPath),
+            //                                   Path.GetFileNameWithoutExtension(idxReadPath) + ".dec.idx");
+            //byte[] idxBytes = File.ReadAllBytes(idxReadPath);
+            //Crypt.Decrypt(idxBytes);
+            //File.WriteAllBytes(idxWritePath, idxBytes);
+
+
+
+
+
+            //const String hashStr1 = @"data\background\catacombs\";
+            //const String hashStr2 = "ct_connb_path.xml.cooked";
+            //byte[] data1 = FileTools.StringToASCIIByteArray(hashStr1);
+            //byte[] data2 = FileTools.StringToASCIIByteArray(hashStr2);
+
+            //SHA1 sha = new SHA1CryptoServiceProvider();
+            //byte[] result1 = sha.ComputeHash(data1);
+            //byte[] result2 = sha.ComputeHash(data2);
+
+            //byte[] cryptoBytes = Crypt.GetStringsSHA1Bytes(hashStr1, hashStr2);
+            //UInt64 cryptoValue = Crypt.GetStringsSHA1UInt64(hashStr1, hashStr2);
+
+
+
+            //const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
+            //String[] strings = File.ReadAllLines(filePath);
+            //foreach (String str in strings)
+            //{
+            //    if (str.Length <= 37) continue;
+
+            //    String subStr = str.Substring(37);
+            //    UInt32 strHash = Crypt.GetStringHash(subStr);
+
+            //    if (strHash == 1578484633)
+            //    {
+            //        int bp = 0;
+            //    }
+
+            //    if (strHash == 284639281)
+            //    {
+            //        int bp = 0;
+            //    }
+
+            //    // achievements.txt.cooked
+            //    if (strHash == 2138164252) // 2466221064??
+            //    {
+            //        int bp = 0;
+            //    }
+            //}
+
+
+
+
+            //String str2 = "achievements.txt.cooked";
+            //String str2 = @"data\background\catacombs\ct_connb_path.xml.cooked";
+            //String str2 = @"data\excel\"; //3188197601 0xBE0808E1
+            //UInt32 strHash2 = Crypt.GetStringHash(str2);
 
             //tw = new StreamWriter(@"C:\asdf.txt");
             //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
@@ -71,7 +129,7 @@ namespace Reanimator
             //_DoFolder(@"D:\Games\Hellgate London\data\skills\");
             //tw.Close();
             // this.Close();
-
+            #endregion
         }
 
         //private TextWriter tw;

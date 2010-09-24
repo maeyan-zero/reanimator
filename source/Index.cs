@@ -130,17 +130,16 @@ namespace Reanimator
         private class StringDetailsStruct
         {
             public short StringLength;
-            public UInt32 Unknown;
+            public UInt32 StringHash;              // this is the Crypt.GetStringHash results
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class FileDetailsStruct
         {
             public UInt32 StartToken;
-            public UInt32 FolderPathHash;                // 0    0x00        this value is the same for all files that have the same folder path
-            public UInt32 FileNameHash;                  // 4    0x04        as above, but with file name
-            public Int32 DataOffset;                    // 8    0x08
-            public Int32 Null1;                         // 12   0x0C
+            public UInt32 FolderPathSHA1Hash;           // 0    0x00        this is the first 4 bytes of an SHA1 crypto hash of the folder path string
+            public UInt32 FileNameSHA1Hash;             // 4    0x04        as above, but with file name string
+            public Int64 DataOffset;                    // 8    0x08        this is read in as 8 bytes
             public Int32 UncompressedSize;              // 16   0x10
             public Int32 CompressedSize;                // 20   0x14
             public Int32 Null2;                         // 24   0x18
@@ -166,7 +165,7 @@ namespace Reanimator
             [Browsable(false)]
             public Index InIndex { get; set; }
 
-            public int DataOffset
+            public Int64 DataOffset
             {
                 get { return FileStruct.DataOffset; }
                 set { FileStruct.DataOffset = value; }
@@ -181,15 +180,6 @@ namespace Reanimator
             {
                 get { return FileStruct.CompressedSize; }
                 set { FileStruct.CompressedSize = value; }
-            }
-
-            public String FolderPathHash
-            {
-                get { return FileStruct.FolderPathHash.ToString("X8"); }
-            }
-            public String FileNameHash
-            {
-                get { return FileStruct.FileNameHash.ToString("X8"); }
             }
 
             public String Unknown23
@@ -456,8 +446,8 @@ namespace Reanimator
                 UncompressedSize = fileBuffer.Length,
                 FileTime = DateTime.Now.ToFileTime(),
                 DataOffset = (int)DatFile.Length,
-                FileNameHash = Crypt.GetStringHash(fileName),
-                FolderPathHash = Crypt.GetStringHash(directory),
+                FileNameSHA1Hash = Crypt.GetStringSHA1UInt32(fileName),
+                FolderPathSHA1Hash = Crypt.GetStringSHA1UInt32(directory),
                 StartToken = TokenInfo,
                 EndToken = TokenInfo
             };
@@ -879,20 +869,12 @@ namespace Reanimator
 
             ////// string data //////
             FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
-            int i = 0;
             foreach (String str in _stringTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
-
-                // while the stringsDetails.Uknown isn't required by the game - let's not just zero it out
-                if (_stringsDetails == null || i >= _stringsDetails.Length)
-                {
-                    offset += 4; // leave new strings as null - doesn't really matter though
-                    continue;
-                }
-
-                FileTools.WriteToBuffer(ref buffer, ref offset, _stringsDetails[i].Unknown);
-                i++;
+                
+                UInt32 stringHash = Crypt.GetStringHash(str);
+                FileTools.WriteToBuffer(ref buffer, ref offset, stringHash);
             }
 
 
@@ -906,12 +888,13 @@ namespace Reanimator
                 // todo: this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
                 FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
-                //FileTools.WriteToBuffer(ref buffer, ref offset, foo);
-                //FileTools.WriteToBuffer(ref buffer, ref offset, foo);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FolderPathHash); // tested with 0xDEADBEEF and 0x00000000, game didn't care
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FileNameHash); // game freezes if not correct value
+
+                UInt64 cryptoBytes = Crypt.GetStringsSHA1UInt64(fileIndex.DirectoryString, fileIndex.FileNameString);
+                FileTools.WriteToBuffer(ref buffer, ref offset, cryptoBytes);
+                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FolderPathSHA1Hash); // tested with 0xDEADBEEF and 0x00000000, game didn't care
+                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FileNameSHA1Hash); // game freezes if not correct value
+
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
-                offset += 4; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.CompressedSize);
                 offset += 4; // null
@@ -923,6 +906,7 @@ namespace Reanimator
                 offset += 12; // null
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.First4BytesOfFile);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Second4BytesOfFile);
+
                 FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
             }
 

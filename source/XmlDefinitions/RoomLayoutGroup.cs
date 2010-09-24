@@ -175,6 +175,15 @@ namespace Reanimator.XmlDefinitions
             },
             new XmlCookElement
             {
+                Name = "ROOM_LAYOUT_FLAG_TESTCENTER",
+                DefaultValue = false,
+                ElementType = ElementType.Flag,
+                FlagId = 1,
+                BitMask = (1 << 8),
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
                 Name = "fBuffer",
                 ElementType = ElementType.Float,
                 DefaultValue = 0.0f
@@ -190,6 +199,28 @@ namespace Reanimator.XmlDefinitions
                 Name = "fFalloffFar",
                 ElementType = ElementType.Float,
                 DefaultValue = 0.0f
+            },
+            new XmlCookElement
+            {
+                Name = "vScale",
+                ElementType = ElementType.FloatArray,
+                DefaultValue = 1.0f,
+                Count = 3,
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
+                Name = "fSpawnClassRadius",
+                ElementType = ElementType.Float,
+                DefaultValue = 0.0f,
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
+                Name = "iSpawnClassExecuteXTimes",
+                ElementType = ElementType.Int32,
+                DefaultValue = 1,
+                IsTCv4 = true
             },
             new XmlCookElement
             {
