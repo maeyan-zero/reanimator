@@ -623,7 +623,9 @@ namespace Reanimator
                 Show();
                 Refresh();
 
-                ProgressForm fileExplorerProgress = new ProgressForm(_fileExplorer.LoadIndexFiles, null);
+                
+
+                ProgressForm fileExplorerProgress = new ProgressForm(_fileExplorer.LoadIndexFiles, Config.LoadMPVersion);
                 fileExplorerProgress.ShowDialog(this);
                 _fileExplorer.Show();
 

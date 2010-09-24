@@ -32,6 +32,7 @@ namespace Reanimator.Forms
         private static readonly Color BaseColor = Color.Black;
 
         private static readonly String[] IndexQueryStrings = { "hellgate*.dat", "sp_hellgate*.dat" };
+        private static readonly String[] IndexQueryStringsMP = { "hellgate*.dat", "mp_hellgate*.dat" };
         public List<Index> IndexFiles { get; private set; }
         private readonly Hashtable _fileTable;
 
@@ -97,6 +98,7 @@ namespace Reanimator.Forms
             }
         }
 
+
         public FileExplorer()
         {
             InitializeComponent();
@@ -123,8 +125,12 @@ namespace Reanimator.Forms
                 progressForm.SetLoadingText("Loading game file system...");
             }
 
+            // change the query strings if the mp version needs to be loaded
+            Boolean mpVersion = (Boolean)param;
+            String[] hellgateQuery = mpVersion ? IndexQueryStringsMP : IndexQueryStrings;
+
             String idxFilesRoot = Path.Combine(Config.HglDir, "data");
-            foreach (String queryString in IndexQueryStrings)
+            foreach (String queryString in hellgateQuery)
             {
                 String[] datFiles = Directory.GetFiles(idxFilesRoot, queryString);
                 if (datFiles.Length == 0) continue;
@@ -827,7 +833,7 @@ namespace Reanimator.Forms
 
 
             // don't patch out string files or music/movie files
-            if (file.FileNameString.EndsWith(StringsFile.FileExtention) ||
+            if (/**file.FileNameString.EndsWith(StringsFile.FileExtention) ||**/
                 file.FileNameString.EndsWith(".ogg") ||
                 file.FileNameString.EndsWith(".mp2") ||
                 file.FileNameString.EndsWith(".bik")) return true;

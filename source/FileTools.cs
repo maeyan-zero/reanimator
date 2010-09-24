@@ -413,6 +413,7 @@ namespace Reanimator
                     byte[] newStringBuffer = DelimintedByteArray(source, ref offset, deliminter);
                     string newString = newStringBuffer == null ? String.Empty : Encoding.ASCII.GetString(newStringBuffer);
 
+
                     if (dataType.BaseType == typeof(Enum))
                     {
                         dataType = typeof(UInt32);
@@ -451,11 +452,6 @@ namespace Reanimator
                     else if (dataType == typeof(short))
                     {
                         dataRow[column] = short.Parse(newString);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Unimplemented data type");
-                        return false;
                     }
                     column++;
                 }

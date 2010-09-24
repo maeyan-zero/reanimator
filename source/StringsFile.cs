@@ -150,11 +150,7 @@ namespace Reanimator
 
 
                 // Unknown
-                Int32 unknownValue = 0;
-                if (row < StringsTable.Count)
-                {
-                    unknownValue = StringsTable[row].Unknown;
-                }
+                Int32 unknownValue = (Int32)dr[1];
                 FileTools.WriteToBuffer(ref buffer, ref offset, unknownValue);
 
 

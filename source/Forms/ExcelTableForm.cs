@@ -489,7 +489,15 @@ namespace Reanimator.Forms
 
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                byte[] buffer = File.ReadAllBytes(fileDialog.FileName);
+                byte[] buffer = null;
+                try
+                {
+                    buffer = File.ReadAllBytes(fileDialog.FileName);
+                }
+                catch
+                {
+                    return;
+                }
                 _dataTable.Clear();
                 _dataTable.Columns[0].AutoIncrementStep = -1;
                 _dataTable.Columns[0].AutoIncrementSeed = -1;

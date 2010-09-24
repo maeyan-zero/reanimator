@@ -58,7 +58,7 @@ namespace Reanimator
                             csv.Write(stringBuffer);
                         }
                     }
-                    if (col < datagridview.Rows[row].Cells.Count)
+                    if (col < datagridview.Rows[row].Cells.Count - 1)
                     {
                         switch (delimiter)
                         {

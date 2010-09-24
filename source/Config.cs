@@ -108,5 +108,11 @@ namespace Reanimator
             get { return GetValue("GenerateRelations", true); }
             set { SetValue("GenerateRelations", value); }
         }
+
+        public static bool LoadMPVersion
+        {
+            get { return GetValue("LoadMPVersion", false); }
+            set { SetValue("LoadMPVersion", value); }
+        }
     }
 }
