@@ -137,8 +137,8 @@ namespace Reanimator
         public class FileDetailsStruct
         {
             public UInt32 StartToken;
-            public Int32 FolderPathHash;                // 0    0x00        this value is the same for all files that have the same folder path
-            public Int32 FileNameHash;                  // 4    0x04        as above, but with file name
+            public UInt32 FolderPathHash;                // 0    0x00        this value is the same for all files that have the same folder path
+            public UInt32 FileNameHash;                  // 4    0x04        as above, but with file name
             public Int32 DataOffset;                    // 8    0x08
             public Int32 Null1;                         // 12   0x0C
             public Int32 UncompressedSize;              // 16   0x10
@@ -260,7 +260,7 @@ namespace Reanimator
         private StringsHeader _stringsHeader;
         private StringDetailsStruct[] _stringsDetails;
         private readonly List<String> _stringTable = new List<String>();
-        private FileDetailsStruct[] _filesDetails;
+        private readonly List<FileDetailsStruct> _filesDetails = new List<FileDetailsStruct>();
         //public FileEntry[] FileTable { get; private set; }
         public List<FileEntry> Files { get; private set; }
 
@@ -271,6 +271,7 @@ namespace Reanimator
         public bool DatFileOpen { get { return DatFile == null ? false : true; } }
         public FileStream DatFile { get; set; }
 
+        private String[] DoNotCompress = new String[] { ".bik", ".ogg", ".mp2" };
         public const string BackupPrefix = @"backup";
         private bool _checkedForModified;
         private bool _modified;
@@ -390,7 +391,7 @@ namespace Reanimator
                 return false;
             }
 
-            _filesDetails = FileTools.ByteArrayToArray<FileDetailsStruct>(_data, ref offset, _indexHeader.FileCount);
+            _filesDetails.AddRange(FileTools.ByteArrayToArray<FileDetailsStruct>(_data, ref offset, _indexHeader.FileCount));
 
 
 
@@ -417,6 +418,103 @@ namespace Reanimator
         public FileEntry GetFileFromIndex(String filePath)
         {
             return String.IsNullOrEmpty(filePath) ? null : Files.FirstOrDefault(fileIndex => fileIndex.FullPath == filePath);
+        }
+
+        public bool Add(string directory, string fileName, byte[] bytesToWrite)
+        {
+            if (bytesToWrite == null) return false;
+            if (bytesToWrite.Length <= 0) return false;
+
+            // Check Data Stream is available.
+            if ((DatFile == null))
+            {
+                if (!(OpenDat(FileAccess.Write))) return false;
+            }
+
+            bool doCompress = true;
+            foreach (string fileExt in DoNotCompress)
+            {
+                if (fileName.EndsWith(fileExt))
+                {
+                    doCompress = false;
+                    break;
+                }
+            }
+
+            UInt32 hash = Crypt.GetStringHash("achievements.txt.cooked");
+
+            UInt32 copy;
+            copy = hash;
+
+
+            // Create new Index File entry
+            byte[] fileBuffer = bytesToWrite;
+
+            FileDetailsStruct fileStruct = new FileDetailsStruct
+            {
+                CompressedSize = 0,
+                UncompressedSize = fileBuffer.Length,
+                FileTime = DateTime.Now.ToFileTime(),
+                DataOffset = (int)DatFile.Length,
+                FileNameHash = Crypt.GetStringHash(fileName),
+                FolderPathHash = Crypt.GetStringHash(directory),
+                StartToken = TokenInfo,
+                EndToken = TokenInfo
+            };
+
+            // See if the index already contains the FileName string
+            int fileNameIndex = _stringTable.IndexOf(fileName);
+            if (fileNameIndex != -1)
+            {
+                fileStruct.FilenameArrayIndex = fileNameIndex;
+            }
+            // otherwise add it
+            else
+            {
+                _stringTable.Add(fileName);
+                fileStruct.FilenameArrayIndex = _stringTable.Count - 1;
+            }
+
+            // See if the index already contains the Directory string
+            int directoryIndex = _stringTable.IndexOf(directory);
+            if (directoryIndex != -1)
+            {
+                fileStruct.DirectoryArrayIndex = directoryIndex;
+            }
+            // otherwise add it
+            else
+            {
+                _stringTable.Add(directory);
+                fileStruct.DirectoryArrayIndex = _stringTable.Count - 1;
+            }
+
+
+            fileStruct.First4BytesOfFile = FileTools.ByteArrayToInt32(fileBuffer, 0);
+            fileStruct.Second4BytesOfFile = FileTools.ByteArrayToInt32(fileBuffer, 4);
+            _filesDetails.Add(fileStruct);
+            
+
+            // Create an entry in the File Index
+            FileEntry fileEntry = new FileEntry
+            {
+                FileStruct = fileStruct,
+                InIndex = this
+            };
+
+            fileEntry.DirectoryString = _stringTable[fileEntry.Directory];
+            fileEntry.FileNameString = _stringTable[fileEntry.FileName];
+            fileEntry.CompressedSize = doCompress ? 1 : 0;
+ 
+            Files.Add(fileEntry);
+
+            AddFileToDat(bytesToWrite, fileEntry);
+
+            // todo: handle existing files
+            //int index = Files.IndexOf(fileEntry);
+            //if (index != -1) Files[index] = fileEntry;
+            //else Files.Add(fileEntry);
+
+            return true;
         }
 
         public FileEntry AddFileToIndex(FileEntry baseEntry)
@@ -513,6 +611,7 @@ namespace Reanimator
             DatFile.Close();
             DatFile = null;
         }
+
 
         public void AddFileToDat(byte[] fileData, FileEntry fileEntry)
         {
