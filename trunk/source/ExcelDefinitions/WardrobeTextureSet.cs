@@ -9,7 +9,7 @@ namespace Reanimator.ExcelDefinitions
     class WardrobeTextureSetRow
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1, SortColumnTwo = "appearanceGroup1", ExcludeZero = true)]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_TEXTURESET_GROUP", SortAscendingID = 1, SortColumnTwo = "appearanceGroup1", ExcludeZero = true)]
         public Int32 textureSetGroup;//idx;
         public Int32 appearanceGroupFolder;//idx;
         public Int32 appearanceGroup1;//idx;

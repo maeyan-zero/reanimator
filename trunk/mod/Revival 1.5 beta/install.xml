@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<modification>
-	<install>
+<revival>
+	<modification>
 		<release>Revival</release>
 		<version>1.5 beta</release>
 		<author>Maeyan, Malachor, Alex2069, Kite &amp; The Revival Team</release>
@@ -22,12 +22,38 @@
 		* Mythic &amp; Double-Edged qualities.
 		
 		Brand new game experience. Although you can play your higher level characters, we would recommend starting a new one so you can reep the full benefits update.
-		
 		</description>
-		<extract idx="mp_hellgate_1.10.180.3416_1.0.86.4580">
-			<path>data/units/items/*</path>
-			<path>data/particles/*</path>
-			<path>data/background/*</path>
-		</extract>
-	</install>
-</modification>
+		<script type="hidden">
+			<description>Extracts files from the MP data packs</description>
+			<extract id="mp_hellgate_1.10.180.3416_1.0.86.4580">
+				<path>data/units/items/*</path>
+				<path>data/particles/*</path>
+				<path>data/background/*</path>
+			</extract>
+		</script>
+		<script type="optional">
+			<description>Remove regional censoring.</description>
+			<table id="items">
+				<entity id="*">
+					<attribute id="censorLocked">0</attribute>
+					<attribute id="censorParticles">0</attribute>
+					<attribute id="censorBoneShrinking">0</attribute>
+					<attribute id="censorNoGore">0</attribute>
+					<attribute id="censorMovies">0</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
+			<description>Enable retrainers to be purchased.</description>
+			<table id="treasure">
+				<entity id="bodger">
+					<attribute id="item06m">123</attribute>
+					<attribute id="item06">12</attribute>
+					<attribute id="item06z">1</attribute>
+					<attribute id="item06m">123</attribute>
+					<attribute id="item06">12</attribute>
+					<attribute id="item06z">1</attribute>
+				</entity>
+			</table>
+	</modification>
+</revival>

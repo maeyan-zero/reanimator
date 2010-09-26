@@ -372,10 +372,131 @@ namespace Reanimator
 
 
 
+        public static string[][] CSVtoStringArray(byte[] source, int columns, byte delimiter)
+        {
+            if (source == null) return null;
+            if (source.Length == 0) return null;
+
+
+            int offset = 0;
+            int length = source.Length;
+            bool ignoreFirstRow = true;
+            string[] newRow = new string[columns];
+            List<string[]> rowCollection = new List<string[]>();
+            int row = 0;
+            while (offset < length)
+            {
+                byte[] buffer;
+                for (int i = 0; i < columns; i++)
+                {
+                    buffer = GetDelimintedByteArray(source, ref offset, delimiter);
+                    string newString;
+                    newString = buffer == null ? String.Empty : FileTools.ByteArrayToStringASCII(buffer, 0);
+                    newRow[i] = newString;
+                }
+                if ((row == 0) && (ignoreFirstRow))
+                {
+                    row++;
+                    continue;
+                }
+                rowCollection.Add(newRow);
+            }
+
+            return rowCollection.ToArray();
+        }
+
+
+        /// <summary>
+        /// Reads the byte array CSV as interpreted by the definition fields.
+        /// </summary>
+        /// <param name="source">The CSV in byte array form.</param>
+        /// <param name="definition">The collection of fields that describe the source data.</param>
+        /// <param name="delimiter">The byte to be treated as the delimiter symbol.</param>
+        /// <returns></returns>
+        public static Object[] CSVtoObjectArray(byte[] source, Type definition, byte delimiter)
+        {
+            if (source == null) return null;
+            if (source.Length == 0) return null;
+            if (definition == null) return null;
+
+
+            int offset = 0;
+            int length = source.Length;
+            bool ignoreFirstRow = true;
+            List<Object> rowCollection;
+            List<Object> writeIn;
 
 
 
+            rowCollection = new List<Object>();
+            while (offset < length)
+            {
+                writeIn = new List<Object>();
+                foreach (FieldInfo fieldInfo in definition.GetFields())
+                {
+                    Type dataType = fieldInfo.GetType();
+                    Byte[] newStringBuffer = GetDelimintedByteArray(source, ref offset, delimiter);
+                    String newString = newStringBuffer == null ? String.Empty : Encoding.ASCII.GetString(newStringBuffer);
 
+
+                    if (dataType.BaseType == typeof(Enum))// todo: do this properly
+                    {                            // need the method to get the type the enum is derived from.
+                        dataType = typeof(UInt32); // not all enums will be uint, so need to fix this eventually
+                    }
+                    if (dataType == typeof(String)) // convert symbols used
+                    {
+                        newString = newString.Replace("\\n", "\n");
+                        newString = newString.Replace("\"", "");
+                        writeIn.Add(newString);
+                    }
+                    else if (dataType == typeof(Int32))
+                    {
+                        writeIn.Add(Int32.Parse(newString));
+                    }
+                    else if (dataType == typeof(UInt32))
+                    {
+                        writeIn.Add(UInt32.Parse(newString));
+                    }
+                    else if (dataType == typeof(Single))
+                    {
+                        writeIn.Add(Single.Parse(newString));
+                    }
+                    else if (dataType == typeof(byte))
+                    {
+                        writeIn.Add(Byte.Parse(newString));
+                    }
+                    else if (dataType == typeof(Int64))
+                    {
+                        writeIn.Add(Int64.Parse(newString));
+                    }
+                    else if (dataType == typeof(UInt64))
+                    {
+                        writeIn.Add(UInt64.Parse(newString));
+                    }
+                    else if (dataType == typeof(short))
+                    {
+                        writeIn.Add(short.Parse(newString));
+                    }
+                }
+
+                // ignore the first row if chosen
+                if ((rowCollection.Count == 0) && (!(ignoreFirstRow)))
+                {
+                    rowCollection.Add(writeIn);
+                }
+            }
+
+            return rowCollection.ToArray();
+        }
+
+
+
+        /// <summary>
+        /// Reads the source array in the column sequence of the destination datatable.
+        /// </summary>
+        /// <param name="source">The array of the CSV data.</param>
+        /// <param name="destination">The datatable it is being loaded into.</param>
+        /// <returns></returns>
         public static bool CSVtoDataTable(byte[] source, DataTable destination)
         {
             if (source == null) return false;
@@ -410,48 +531,54 @@ namespace Reanimator
                     if (dataColumn.ColumnName == "Index") continue;
 
                     dataType = dataColumn.DataType;
-                    byte[] newStringBuffer = DelimintedByteArray(source, ref offset, deliminter);
+                    byte[] newStringBuffer = GetDelimintedByteArray(source, ref offset, deliminter);
                     string newString = newStringBuffer == null ? String.Empty : Encoding.ASCII.GetString(newStringBuffer);
 
+                    try
+                    {
+                        if (dataType.BaseType == typeof(Enum))
+                        {
+                            dataType = typeof(UInt32);
+                        }
 
-                    if (dataType.BaseType == typeof(Enum))
-                    {
-                        dataType = typeof(UInt32);
+                        if (dataType == typeof(String)) //hellgate thing only
+                        {
+                            newString = newString.Replace("\\n", "\n");
+                            newString = newString.Replace("\"", "");
+                            dataRow[column] = newString;
+                        }
+                        else if (dataType == typeof(Int32))
+                        {
+                            dataRow[column] = Int32.Parse(newString);
+                        }
+                        else if (dataType == typeof(UInt32))
+                        {
+                            dataRow[column] = UInt32.Parse(newString);
+                        }
+                        else if (dataType == typeof(Single))
+                        {
+                            dataRow[column] = Single.Parse(newString);
+                        }
+                        else if (dataType == typeof(byte))
+                        {
+                            dataRow[column] = Byte.Parse(newString);
+                        }
+                        else if (dataType == typeof(Int64))
+                        {
+                            dataRow[column] = Int64.Parse(newString);
+                        }
+                        else if (dataType == typeof(UInt64))
+                        {
+                            dataRow[column] = UInt64.Parse(newString);
+                        }
+                        else if (dataType == typeof(short))
+                        {
+                            dataRow[column] = short.Parse(newString);
+                        }
                     }
-
-                    if (dataType == typeof(String))
+                    catch
                     {
-                        newString = newString.Replace("\\n", "\n");
-                        newString = newString.Replace("\"", "");
-                        dataRow[column] = newString;
-                    }
-                    else if (dataType == typeof(Int32))
-                    {
-                         dataRow[column] = Int32.Parse(newString);
-                    }
-                    else if (dataType == typeof(UInt32))
-                    {
-                        dataRow[column] = UInt32.Parse(newString);
-                    }
-                    else if (dataType == typeof(Single))
-                    {
-                        dataRow[column] = Single.Parse(newString);
-                    }
-                    else if (dataType == typeof(byte))
-                    {
-                        dataRow[column] = Byte.Parse(newString);
-                    }
-                    else if (dataType == typeof(Int64))
-                    {
-                        dataRow[column] = Int64.Parse(newString);
-                    }
-                    else if (dataType == typeof(UInt64))
-                    {
-                        dataRow[column] = UInt64.Parse(newString);
-                    }
-                    else if (dataType == typeof(short))
-                    {
-                        dataRow[column] = short.Parse(newString);
+                        // bad data type
                     }
                     column++;
                 }
@@ -464,8 +591,14 @@ namespace Reanimator
             return true;
         }
 
-
-        private static byte[] DelimintedByteArray(byte[] source, ref int offset, byte delimiter)
+        /// <summary>
+        /// Collects tbe bytes read in the source array until the delimiter byte is encounted.
+        /// </summary>
+        /// <param name="source">The array containing your data.</param>
+        /// <param name="offset">The starting position in the source array to read from.</param>
+        /// <param name="delimiter">The byte to interpret as the delimiter symbol.</param>
+        /// <returns></returns>
+        private static byte[] GetDelimintedByteArray(byte[] source, ref int offset, byte delimiter)
         {
             List<byte> buffer = new List<byte>();
             int length = source.Length;
@@ -498,18 +631,17 @@ namespace Reanimator
 
 
 
-
-
-
-
+        /// <summary>
+        /// Serializes an object and appends it to the supplied buffer, increasing offset by object size.<br />
+        /// If the buffer is too small the bufer size is increaed by the object size + 1024 bytes.
+        /// </summary>
+        /// <param name="buffer">A reference to a byte array (not null).</param>
+        /// <param name="offset">A reference to the write offset (offset is increased by the size of object).</param>
+        /// <param name="toWrite">A sersializable object to write.</param>
         public static void WriteToBuffer(ref byte[] buffer, int offset, Object toWrite)
         {
             WriteToBuffer(ref buffer, ref offset, toWrite);
         }
-
-
-
-
 
         /// <summary>
         /// Serializes an object and appends it to the supplied buffer, increasing offset by object size.<br />

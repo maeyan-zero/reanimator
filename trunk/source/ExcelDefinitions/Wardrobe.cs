@@ -34,12 +34,19 @@ namespace Reanimator.ExcelDefinitions
         public Int32 layerSet3;
         public Int32 layerSet4;
         public Int32 layerSet5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_MODEL_GROUP")]
         public Int32 modelGroup;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_TEXTURESET_GROUP")]
         public Int32 textureSetGroup;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOp;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpTemplar;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpCabalist;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpHunter;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpAdventurer;//idx;
         public Int32 offHandlayer;//idx;
         public Int32 undefined2;

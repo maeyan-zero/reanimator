@@ -1,0 +1,3425 @@
+<ui>
+  <widthbasis>1600</widthbasis>
+  <heightbasis>1200</heightbasis>
+  <ws_widthbasis>1920</ws_widthbasis>
+  <screen name="inventory screen">
+    <texture>inventory_atlas</texture>
+    <ws_texture>WSinventory_atlas</ws_texture>
+    <font>Upper_Font</font>
+    <fontsize>32</fontsize>
+    <x>0</x>
+    <y>0</y>
+    <width>1600</width>
+    <height>1200</height>
+    <ws_width>1920</ws_width>
+    <panel name="paperdoll screen">
+      <!--<frame>paperdoll</frame>-->
+      <x>446</x>
+      <y>0</y>
+      <tgty>1200</tgty>
+      <ws_x>606</ws_x>
+      <width>708</width>
+      <height>1066</height>
+      <visible>0</visible>
+      <animtime>300</animtime>
+      <usescursor>1</usescursor>
+      <anim_category>middle panel</anim_category>
+      <anim_relationship type="closes" onactivate="1" category="1" ondirectonly="0">middle panel</anim_relationship>
+      
+      <OnActivateSnd>OpenInventoryEnd</OnActivateSnd>
+      <OnInactivateSnd>CloseInventory</OnInactivateSnd>
+      <OnPostActivate>UIOnPostActivatePaperdoll</OnPostActivate>
+      <OnPostInactivate>UIOnPostInactivatePaperdoll</OnPostInactivate>
+      <OnPostInvisible>UIContextHelpLabelOnPaint</OnPostInvisible>
+      <OnSetControlUnit>UIComponentSetFocusUnit</OnSetControlUnit>
+      <OnSetFocusUnit>UIOnPostActivatePaperdoll</OnSetFocusUnit>
+      
+      <invslot name="head slot">
+        <frame>inventory 96x slot</frame>
+        <x>305</x>
+        <y>25</y>
+        <width>98</width>
+        <height>98</height>
+        <invloc>head</invloc>
+        <tooltipstring>helmet</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <independentactivate>1</independentactivate>
+        <label name="invslot price text">
+          <x>5</x>
+          <y>5</y>
+          <width>93</width>
+          <height>93</height>
+          <fontsize>22</fontsize>
+          <rendersection>ItemText</rendersection>
+          <align>topleft</align>
+          <color>inv_price_text</color>
+        </label>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>96</width>
+          <height>96</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>helm big</frame>
+          <x>1</x>
+          <y>1</y>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>98</width>
+          <height>98</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <invslot name="shoulders slot">
+        <frame>inventory 96x slot</frame>
+        <x>599</x>
+        <y>252</y>
+        <width>98</width>
+        <height>98</height>
+        <invloc>shoulders</invloc>
+        <tooltipstring>shoulder armor</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>96</width>
+          <height>96</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>shoulderpads big</frame>
+          <x>1</x>
+          <y>1</y>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>98</width>
+          <height>98</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <!--<invslot name="eyes slot">
+        <frame>inventory 96x slot</frame>
+        <x>359</x>
+        <y>25</y>
+        <width>98</width>
+        <height>98</height>
+        <invloc>eyes</invloc>
+        <tooltipstring>goggles</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <reference>invslot price text</reference>
+				<independentactivate>1</independentactivate>        
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>goggles big</frame>
+          <x>1</x>
+          <y>1</y>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>98</width>
+          <height>98</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>-->
+      <invslot name="torso slot">
+        <frame>inventory 96x slot</frame>
+        <x>599</x>
+        <y>358</y>
+        <width>98</width>
+        <height>98</height>
+        <invloc>torso</invloc>
+        <tooltipstring>torso slot</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>torso big</frame>
+          <x>1</x>
+          <y>1</y>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>98</width>
+          <height>98</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <invslot name="dye kit slot">
+        <frame>inventory 96x slot</frame>
+        <x>13</x>
+        <y>252</y>
+        <width>65</width>
+        <height>65</height>
+        <stretch>1</stretch>
+        <invloc>dye_kit</invloc>
+        <tooltipstring>dye_kit</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>5</model_border_x>
+        <model_border_y>5</model_border_y>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>65</width>
+          <height>65</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>dye big</frame>
+          <x>1</x>
+          <y>1</y>
+          <stretch>1></stretch>
+          <width>64</width>
+          <height>64</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>65</width>
+          <height>65</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <invslot name="right hand slot">
+        <frame>inventory big slot</frame>
+        <x>569</x>
+        <y>465</y>
+        <width>128</width>
+        <height>128</height>
+        <invloc>rhand</invloc>
+        <tooltipstring>right hand slot</tooltipstring>
+        <rendersection>Models</rendersection>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <litframe>bighighlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <reference>invslot price text</reference>
+        <reference>invslot icon panel</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>128</width>
+          <height>128</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>right hand</frame>
+          <x>22</x>
+          <y>16</y>
+          <stretch>1></stretch>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>128</width>
+          <height>128</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <invslot name="left hand slot">
+        <frame>inventory big slot</frame>
+        <x>13</x>
+        <y>465</y>
+        <width>128</width>
+        <height>128</height>
+        <invloc>lhand</invloc>
+        <tooltipstring>left hand slot</tooltipstring>
+        <rendersection>Models</rendersection>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <litframe>bighighlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <reference>invslot price text</reference>
+        <reference>invslot icon panel</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>128</width>
+          <height>128</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>left hand</frame>
+          <x>10</x>
+          <y>16</y>
+          <stretch>1></stretch>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>128</width>
+          <height>128</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <invslot name="arms slot">
+        <frame>inventory 96x slot</frame>
+        <x>13</x>
+        <y>601</y>
+        <width>98</width>
+        <height>98</height>
+        <invloc>arms</invloc>
+        <tooltipstring>arm armor</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>arms big</frame>
+          <x>1</x>
+          <y>1</y>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>98</width>
+          <height>98</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <invslot name="belt slot">
+        <frame>inventory 96x slot</frame>
+        <x>599</x>
+        <y>601</y>
+        <width>98</width>
+        <height>98</height>
+        <invloc>belt</invloc>
+        <tooltipstring>belt</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>belt big</frame>
+          <x>1</x>
+          <y>1</y>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>98</width>
+          <height>98</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <invslot name="leg slot">
+        <frame>inventory 96x slot</frame>
+        <x>599</x>
+        <y>707</y>
+        <width>98</width>
+        <height>98</height>
+        <invloc>pants</invloc>
+        <tooltipstring>leg armor</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>pants big</frame>
+          <x>1</x>
+          <y>1</y>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>98</width>
+          <height>98</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <invslot name="boots slot">
+        <frame>inventory 96x slot</frame>
+        <x>13</x>
+        <y>707</y>
+        <width>98</width>
+        <height>98</height>
+        <invloc>boots</invloc>
+        <tooltipstring>boots</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <rendersection>Models</rendersection>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>boots big</frame>
+          <x>1</x>
+          <y>1</y>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>98</width>
+          <height>98</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <panel name="player model">
+        <!--<x>87</x>
+        <y>99</y>
+        <width>532</width>
+        <height>822</height>-->
+        <width>708</width>
+        <height>926</height>
+        <!--<rendersection>MaskedModels</rendersection>
+        <OnSetControlUnit>UIComponentSetFocusUnit</OnSetControlUnit>
+        <OnPaint>UIPaperDollPaint</OnPaint>-->
+        <OnLButtonDown>UIEquipCursorItem</OnLButtonDown>
+        <OnLButtonUp>UIModelPanelOnLButtonUp</OnLButtonUp>
+        <OnMouseMove>UIModelPanelWorldCameraOnMouseMove</OnMouseMove>
+        <OnPostInactivate>UIModelPanelOnPostInactivate</OnPostInactivate>
+      </panel>
+      <weaponconfig name="weaponconfig 1">
+        <x>11</x>
+        <y>927</y>
+        <width>220</width>
+        <height>137</height>
+        <frame1weap>item slot</frame1weap>
+        <frame2weap>double item slot</frame2weap>
+        <weapon_lit_frame>96x highlight</weapon_lit_frame>
+        <skill_lit_frame>smallhighlight</skill_lit_frame>
+        <selected_frame>config_highlight_single</selected_frame>
+        <double_selected_frame>config_highlight_dual</double_selected_frame>
+        <dblweaponframesize>64</dblweaponframesize>
+        <bkgd_frame_r>weaponslot highlight r</bkgd_frame_r>
+        <bkgd_frame_l>weaponslot highlight l</bkgd_frame_l>
+        <bkgd_frame_2>weaponslot highlight 2</bkgd_frame_2>
+        <hotkeynum>0</hotkeynum>
+        <invloc>weaponconfig</invloc>
+        <tooltipstring>ui battleset 1</tooltipstring>
+        <OnSetFocusStat stat="current_weaponconfig">UIWeaponConfigOnSetFocusStat</OnSetFocusStat>
+        <OnSetFocusStat stat="skill_left">UIWeaponConfigOnSetFocusStat</OnSetFocusStat>
+        <OnSetFocusStat stat="skill_right">UIWeaponConfigOnSetFocusStat</OnSetFocusStat>
+        <label name="wc_key_label">
+          <x>20</x>
+          <y>20</y>
+          <autosize>1</autosize>
+          <red>247</red>
+          <green>132</green>
+          <blue>30</blue>
+          <alpha>192</alpha>
+          <fontsize>20</fontsize>
+        </label>
+        <panel name="wc_weapon(s)">
+          <x>61</x>
+          <y>29</y>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>Models</rendersection>
+        </panel>
+        <panel name="selectedpanel">
+          <x>54</x>
+          <y>22</y>
+          <width>148</width>
+          <height>137</height>
+          <rendersection>Models</rendersection>
+        </panel>
+        <panel name="wc_leftskill_bkgd">
+          <frame>inventory miniskill slot left</frame>
+          <x>0</x>
+          <y>51</y>
+          <width>61</width>
+          <height>64</height>
+        </panel>
+        <panel name="wc_leftskill_mask">
+          <frame>inventory miniskill slot mask left</frame>
+          <x>0</x>
+          <y>51</y>
+          <width>61</width>
+          <height>64</height>
+          <alpha>1</alpha>
+          <zdelta>-0.001</zdelta>
+          <rendersection>Masks</rendersection>
+        </panel>
+        <panel name="wc_leftskill">
+          <x>4</x>
+          <y>55</y>
+          <width>54</width>
+          <height>54</height>
+          <rendersection>MaskedModels</rendersection>
+        </panel>
+        <panel name="wc_rightskill_bkgd">
+          <frame>inventory miniskill slot right</frame>
+          <x>159</x>
+          <y>51</y>
+          <width>61</width>
+          <height>64</height>
+        </panel>
+        <panel name="wc_rightskill mask">
+          <frame>inventory miniskill slot mask right</frame>
+          <x>159</x>
+          <y>51</y>
+          <width>61</width>
+          <height>64</height>
+          <alpha>1</alpha>
+          <zdelta>-0.001</zdelta>
+          <rendersection>Masks</rendersection>
+        </panel>
+        <panel name="wc_rightskill">
+          <x>161</x>
+          <y>55</y>
+          <width>54</width>
+          <height>54</height>
+          <rendersection>MaskedModels</rendersection>
+        </panel>
+      </weaponconfig>
+      <reference refname="weaponconfig 1" name="weaponconfig 2">
+        <x>247</x>
+        <tgtx>247</tgtx>
+        <dblweaponframesize>64</dblweaponframesize>
+        <hotkeynum>1</hotkeynum>
+        <tooltipstring>ui battleset 2</tooltipstring>
+      </reference>
+      <reference refname="weaponconfig 1" name="weaponconfig 3">
+        <x>477</x>
+        <tgtx>477</tgtx>
+        <dblweaponframesize>64</dblweaponframesize>
+        <hotkeynum>2</hotkeynum>
+        <tooltipstring>ui battleset 3</tooltipstring>
+      </reference>
+      <!--<weaponconfig name="weaponconfig 2">
+        <x>247</x>
+        <y>927</y>
+        <width>220</width>
+        <height>137</height>
+        <frame1weap>inventory 96x slot</frame1weap>
+        <frame2weap>double item slot</frame2weap>
+        <weapon_lit_frame>96x highlight</weapon_lit_frame>
+        <skill_lit_frame>smallhighlight</skill_lit_frame>
+        <selected_frame>config_highlight_single</selected_frame>
+        <double_selected_frame>config_highlight_dual</double_selected_frame>
+        <dblweaponframesize>64</dblweaponframesize>
+        <hotkeynum>1</hotkeynum>
+        <invloc>weaponconfig</invloc>
+        <tooltipstring>ui battleset 2</tooltipstring>
+        <OnSetFocusStat stat="current_weaponconfig">UIWeaponConfigOnSetFocusStat</OnSetFocusStat>
+        <OnSetFocusStat stat="skill_left">UIWeaponConfigOnSetFocusStat</OnSetFocusStat>
+        <OnSetFocusStat stat="skill_right">UIWeaponConfigOnSetFocusStat</OnSetFocusStat>
+        <label>
+          <string>ui F2 key</string>
+          <x>20</x>
+          <y>20</y>
+          <autosize>1</autosize>
+          <red>247</red>
+          <green>132</green>
+          <blue>30</blue>
+          <alpha>192</alpha>
+          <fontsize>20</fontsize>
+        </label>
+        <panel name="selectedpanel">
+          <x>31</x>
+          <y>0</y>
+          <width>148</width>
+          <height>137</height>
+        </panel>
+        <panel name="wc_leftskill">
+          <frame>inventory miniskill slot</frame>
+          <x>0</x>
+          <y>51</y>
+          <width>53</width>
+          <height>53</height>
+          <stretch>1</stretch>
+          <rendersection>Masks</rendersection>
+        </panel>
+        <panel name="wc_rightskill">
+          <frame>inventory miniskill slot</frame>
+          <x>156</x>
+          <y>51</y>
+          <width>53</width>
+          <height>53</height>
+          <stretch>1</stretch>
+          <rendersection>Masks</rendersection>
+        </panel>
+        <panel name="wc_weapon(s)">
+          <x>56</x>
+          <y>29</y>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>Models</rendersection>
+        </panel>
+      </weaponconfig>
+      <weaponconfig name="weaponconfig 3">
+        <x>477</x>
+        <y>927</y>
+        <width>220</width>
+        <height>137</height>
+        <frame1weap>inventory 96x slot</frame1weap>
+        <frame2weap>double item slot</frame2weap>
+        <weapon_lit_frame>96x highlight</weapon_lit_frame>
+        <skill_lit_frame>smallhighlight</skill_lit_frame>
+        <selected_frame>config_highlight_single</selected_frame>
+        <double_selected_frame>config_highlight_dual</double_selected_frame>
+        <dblweaponframesize>64</dblweaponframesize>
+        <hotkeynum>2</hotkeynum>
+        <invloc>weaponconfig</invloc>
+        <tooltipstring>ui battleset 3</tooltipstring>
+        <OnSetFocusStat stat="current_weaponconfig">UIWeaponConfigOnSetFocusStat</OnSetFocusStat>
+        <OnSetFocusStat stat="skill_left">UIWeaponConfigOnSetFocusStat</OnSetFocusStat>
+        <OnSetFocusStat stat="skill_right">UIWeaponConfigOnSetFocusStat</OnSetFocusStat>
+        <label>
+          <string>ui F3 key</string>
+          <x>20</x>
+          <y>20</y>
+          <autosize>1</autosize>
+          <red>247</red>
+          <green>132</green>
+          <blue>30</blue>
+          <alpha>192</alpha>
+          <fontsize>20</fontsize>
+        </label>
+        <panel name="selectedpanel">
+          <x>31</x>
+          <y>0</y>
+          <width>148</width>
+          <height>137</height>
+        </panel>
+        <panel name="wc_leftskill">
+          <frame>inventory miniskill slot</frame>
+          <x>0</x>
+          <y>51</y>
+          <width>53</width>
+          <height>53</height>
+          <stretch>1</stretch>
+          <rendersection>Masks</rendersection>
+        </panel>
+        <panel name="wc_rightskill">
+          <frame>inventory miniskill slot</frame>
+          <x>156</x>
+          <y>51</y>
+          <width>53</width>
+          <height>53</height>
+          <stretch>1</stretch>
+          <rendersection>Masks</rendersection>
+        </panel>
+        <panel name="wc_weapon(s)">
+          <x>56</x>
+          <y>29</y>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>Models</rendersection>
+        </panel>
+      </weaponconfig>-->
+    </panel>
+    <panel name="character sheet">
+      <frame>character</frame>
+      <tgtx>-497</tgtx>
+      <ws_tgtx>-657</ws_tgtx>
+      <x>0</x>
+      <width>482</width>
+      <ws_width>642</ws_width>
+      <height>1144</height>
+      <visible>0</visible>
+      <animtime>300</animtime>
+      <font>Upper_Font</font>
+      <fontsize>24</fontsize>
+      <wheelscrollincrement>10</wheelscrollincrement>
+
+      <anim_category>left panel</anim_category>
+      <anim_relationship type="closes" onactivate="1" ondirectonly="0" category="1">left panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" ondirectonly="0" preserveuseractive="1">monster tracker</anim_relationship>
+      <anim_relationship type="opens"  onactivate="0" ondirectonly="0" ifuseractive="1">monster tracker</anim_relationship>
+
+      <OnSetControlUnit>UIComponentSetFocusUnit</OnSetControlUnit>
+      <OnPostVisible>UICharacterSheetOnPostVisible</OnPostVisible>
+      <OnPostInvisible>UISetChatActive</OnPostInvisible>
+      <statdispl name="char name">
+        <x>38</x>
+        <ws_x>198</ws_x>
+        <y>24</y>
+        <fontsize>28</fontsize>
+        <autosize>0</autosize>
+        <height>28</height>
+        <width>430</width>
+        <chardisplay>name</chardisplay>
+	<panel name="hardcore char icon">
+	  <texture>guild_icons_atlas</texture>
+	  <frame>sm_icon_hardcore</frame>
+	  <x>390</x>
+	  <y>0</y>
+	  <width>50</width>
+	  <height>50</height>
+	  <rendersection>UpOne</rendersection>
+	  <independentactivate>1</independentactivate>
+	</panel>
+	<!--Elite and roleplay are mutually exclusive, so they can take the same spot... -->
+	<panel name="elite char icon">
+	  <texture>guild_icons_atlas</texture>
+	  <frame>sm_icon_elite</frame>
+	  <x>360</x>
+	  <y>0</y>
+	  <width>50</width>
+	  <height>50</height>
+	  <rendersection>UpOne</rendersection>
+	  <independentactivate>1</independentactivate>
+	</panel>
+	<panel name="roleplay char icon">
+	  <texture>guild_icons_atlas</texture>
+	  <frame>sm_icon_roleplay</frame>
+	  <x>360</x>
+	  <y>0</y>
+	  <width>50</width>
+	  <height>50</height>
+	  <rendersection>UpOne</rendersection>
+	  <independentactivate>1</independentactivate>
+	</panel>
+      </statdispl>
+      <label name="char level label">
+        <x>38</x>
+        <ws_x>198</ws_x>
+        <y>90</y>
+        <width>300</width>
+        <height>24</height>
+        <autosize>0</autosize>
+        <red>255</red>
+        <green>120</green>
+        <blue>0</blue>
+        <string>ui inventory level label</string>
+      </label>
+      <statdispl name="char level">
+        <x>146</x>
+        <ws_x>306</ws_x>
+        <y>90</y>
+        <chardisplay>level</chardisplay>
+        <OnSetFocusStat stat="level">UIStatDisplOnPaint</OnSetFocusStat>
+      </statdispl>
+      <label name="char class label">
+        <x>38</x>
+        <ws_x>198</ws_x>
+        <y>66</y>
+        <width>300</width>
+        <height>24</height>
+        <autosize>0</autosize>
+        <red>255</red>
+        <green>120</green>
+        <blue>0</blue>
+        <string>ui inventory class label</string>
+      </label>
+      <statdispl name="char class">
+        <x>146</x>
+        <ws_x>306</ws_x>
+        <y>66</y>
+        <chardisplay>class</chardisplay>
+      </statdispl>
+      <label name="char xp label">
+        <x>38</x>
+        <y>114</y>
+        <ws_x>198</ws_x>
+        <width>300</width>
+        <height>24</height>
+        <autosize>0</autosize>
+        <red>255</red>
+        <green>120</green>
+        <blue>0</blue>
+        <string>ui inventory experience label no colon</string>
+      </label>
+      <statdispl name="char xp">
+        <x>183</x>
+        <y>114</y>
+        <ws_x>343</ws_x>
+        <width>235</width>
+        <height>24</height>
+        <autosize>0</autosize>
+        <autosizefont>1</autosizefont>
+        <chardisplay>xp_with_next</chardisplay>
+        <OnSetFocusStat stat="experience">UIStatDisplOnPaint</OnSetFocusStat>
+        <OnSetFocusStat stat="experience_next">UIStatDisplOnPaint</OnSetFocusStat>
+      </statdispl>
+      <panel name="character stats">
+        <x>25</x>
+        <ws_x>190</ws_x>
+        <y>175</y>
+        <width>360</width>
+        <height>800</height>
+        <clipchildren>1</clipchildren>
+        <OnAnimate>UIPanelResizeScrollbar</OnAnimate>
+        <OnLButtonDown>UIPanelBeginMouseDragScroll</OnLButtonDown>
+        <OnMouseMove>UIPanelMouseDragScroll</OnMouseMove>
+        <OnLButtonUp>UIPanelEndMouseDragScroll</OnLButtonUp>
+        <panel name="attributes sliding panel">
+          <OnAnimate>UIMsgPassToParent</OnAnimate>
+          <button name="attributes header">
+            <frame>menu header closed</frame>
+            <downframe>menu header open</downframe>
+            <buttonstyle>checkbox</buttonstyle>
+            <width>360</width>
+            <height>35</height>
+            <startdown>1</startdown>
+            <OnLClick>UIWindowshadeAndSlideButtonOnClick</OnLClick>
+            <label name="attributes label">
+              <x>10</x>
+              <y>6</y>
+              <width>165</width>
+              <height>24</height>
+              <autosizefont>1</autosizefont>
+              <string>ui char panel label attributes</string>
+              <font>Upper_Font_Bold</font>
+              <red>0</red>
+              <green>0</green>
+              <blue>0</blue>
+              <dropshadowred>180</dropshadowred>
+        			<dropshadowgreen>180</dropshadowgreen>
+        			<dropshadowblue>180</dropshadowblue>
+            </label>
+            <panel name="pointsremaining">
+              <frame>pointbox</frame>
+              <x>180</x>
+              <y>2</y>
+              <width>128</width>
+              <height>32</height>
+              <visible>0</visible>
+              <statdispl name="attrib points remaining">
+                <x>0</x>
+                <y>0</y>
+                <width>128</width>
+                <height>31</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <autosizefont>1</autosizefont>
+                <fontsize>20</fontsize>
+                <red>82</red>
+                <green>137</green>
+                <blue>160</blue>
+                <chardisplay>statpoints</chardisplay>
+                <OnSetFocusStat stat="stat_points">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <visibleonfocusstat stat="stat_points">stat_points</visibleonfocusstat>
+              <OnSetFocusUnit>UIComponentVisibleOnStat</OnSetFocusUnit>
+            </panel>
+          </button>
+          <panel name="attributes">
+            <y>35</y>
+            <tgty>-179</tgty>
+            <width>359</width>
+            <height>214</height>
+            <visible>1</visible>
+            <independentactivate>1</independentactivate>
+            <animtime>300</animtime>
+            <!--<OnAnimate>UISetCharsheetScrollbar</OnAnimate>-->
+            <OnAnimate>UIMsgPassToParent</OnAnimate>
+            <OnActivateSnd>UIPaneAttributeOpen</OnActivateSnd>
+            <OnInactivateSnd>UIPaneAttributeClose</OnInactivateSnd>
+            <flexborder name="charsheet attributes flexborder">
+              <frameML>charsheet border ML</frameML>
+              <frameMM>charsheet border MM</frameMM>
+              <frameMR>charsheet border MR</frameMR>
+              <frameBL>charsheet border BL</frameBL>
+              <frameBM>charsheet border BM</frameBM>
+              <frameBR>charsheet border BR</frameBR>
+            </flexborder>
+            <panel name="accuracy frame">
+              <x>10</x>
+              <y>12</y>
+              <width>70</width>
+              <height>44</height>
+              <frame>statbox 1</frame>
+              <stretch>1</stretch>
+              <statdispl name="char accuracy">
+                <width>70</width>
+                <height>25</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <chardisplay>accu</chardisplay>
+                <OnSetFocusStat stat="accuracy">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <statdispl name="accuracy feed">
+                <x>5</x>
+                <y>27</y>
+                <width>60</width>
+                <height>17</height>
+                <align>right</align>
+                <autosize>0</autosize>
+                <fontsize>20</fontsize>
+                <color>char_sheet_subcolor</color>
+                <chardisplay>feed_accu</chardisplay>
+                <tooltipstring>ui feed tooltip accuracy</tooltipstring>
+                <OnSetFocusStat stat="accuracy_feed">UIStatDisplOnPaint</OnSetFocusStat>
+                <OnSetFocusStat stat="accuracy">UIStatDisplOnPaint</OnSetFocusStat>
+                <OnSetHoverUnit>UIStatDisplOnPaint</OnSetHoverUnit>
+                <OnInventoryChange>UIStatDisplOnPaint</OnInventoryChange>
+              </statdispl>
+              <button name="accu_clicker">
+                <frame>attribute add</frame>
+                <downframe>attribute add lit</downframe>
+                <litframe>attribute add lit</litframe>
+                <x>0</x>
+                <y>0</y>
+                <width>338</width>
+                <height>30</height>
+                <assocstat>accuracy</assocstat>
+                <tooltipstring>cdisp tooltip accu</tooltipstring>
+                <independentactivate>1</independentactivate>
+                <OnLButtonUp>UIStatPointAddUp</OnLButtonUp>
+                <OnLButtonUpSnd>UIStatUp</OnLButtonUpSnd>
+                <OnLButtonDown>UIStatPointAddDown</OnLButtonDown>
+                <OnSetFocusUnit>UIStatPointAddButtonSetVisible</OnSetFocusUnit>
+                <OnSetFocusStat stat="stat_points">UIStatPointAddButtonSetVisible</OnSetFocusStat>
+              </button>
+              <label name="accuracy label">
+                <x>75</x>
+                <y>0</y>
+                <!--<width>300</width>
+                <height>28</height>-->
+                <autosize>1</autosize>
+                <align>left</align>
+                <string>ui char panel label accuracy</string>
+                <tooltipstring>cdisp tooltip accu</tooltipstring>
+                <fontsize>28</fontsize>
+              </label>
+              <panel name="accuracy feed bar background">
+                <x>70</x>
+                <y>30</y>
+                <width>230</width>
+                <height>14</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+              </panel>
+              <bar name="accuracy feed bar">
+                <x>70</x>
+                <y>30</y>
+                <width>230</width>
+                <height>14</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <color>char_sheet_subcolor</color>
+                <altred>255</altred>
+                <altgreen>0</altgreen>
+                <altblue>0</altblue>
+                <alt2red>200</alt2red>
+                <alt2green>200</alt2green>
+                <alt2blue>30</alt2blue>
+                <alt3red>30</alt3red>
+                <alt3green>200</alt3green>
+                <alt3blue>30</alt3blue>
+                <cur>accuracy_feed</cur>
+                <max>accuracy</max>
+                <stat>accuracy_feed</stat>
+                <tooltipstring>ui feed tooltip accuracy</tooltipstring>
+                <OnSetFocusStat stat="accuracy_feed">UIFeedBarOnPaint</OnSetFocusStat>
+                <OnSetFocusStat stat="accuracy">UIFeedBarOnPaint</OnSetFocusStat>
+                <OnPaint>UIFeedBarOnPaint</OnPaint>
+                <OnSetHoverUnit>UIFeedBarOnPaint</OnSetHoverUnit>
+                <OnInventoryChange>UIFeedBarOnPaint</OnInventoryChange>
+              </bar>
+            </panel>
+            <panel name="strength frame">
+              <x>10</x>
+              <y>60</y>
+              <width>70</width>
+              <height>44</height>
+              <frame>statbox 1</frame>
+              <stretch>1</stretch>
+              <statdispl name="char strength">
+                <width>70</width>
+                <height>25</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <chardisplay>str</chardisplay>
+                <OnSetFocusStat stat="strength">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <statdispl name="strength feed">
+                <x>5</x>
+                <y>27</y>
+                <width>60</width>
+                <height>17</height>
+                <align>right</align>
+                <autosize>0</autosize>
+                <fontsize>20</fontsize>
+                <color>char_sheet_subcolor</color>
+                <chardisplay>feed_str</chardisplay>
+                <tooltipstring>ui feed tooltip strength</tooltipstring>
+                <OnSetFocusStat stat="strength_feed">UIStatDisplOnPaint</OnSetFocusStat>
+                <OnSetFocusStat stat="strength">UIStatDisplOnPaint</OnSetFocusStat>
+                <OnSetHoverUnit>UIStatDisplOnPaint</OnSetHoverUnit>
+                <OnInventoryChange>UIStatDisplOnPaint</OnInventoryChange>
+              </statdispl>
+              <button name="str_clicker">
+                <frame>attribute add</frame>
+                <downframe>attribute add lit</downframe>
+                <litframe>attribute add lit</litframe>
+                <x>0</x>
+                <y>0</y>
+                <width>338</width>
+                <height>30</height>
+                <assocstat>strength</assocstat>
+                <tooltipstring>cdisp tooltip str</tooltipstring>
+                <independentactivate>1</independentactivate>
+                <OnLButtonUp>UIStatPointAddUp</OnLButtonUp>
+                <OnLButtonUpSnd>UIStatUp</OnLButtonUpSnd>
+                <OnLButtonDown>UIStatPointAddDown</OnLButtonDown>
+                <OnSetFocusUnit>UIStatPointAddButtonSetVisible</OnSetFocusUnit>
+                <OnSetFocusStat stat="stat_points">UIStatPointAddButtonSetVisible</OnSetFocusStat>
+              </button>
+              <label name="strength label">
+                <x>75</x>
+                <y>0</y>
+                <!--<width>300</width>
+                <height>28</height>-->
+                <autosize>1</autosize>
+                <align>left</align>
+                <string>ui char panel label strength</string>
+                <tooltipstring>cdisp tooltip str</tooltipstring>
+                <fontsize>28</fontsize>
+              </label>
+              <panel name="strength feed bar background">
+                <x>70</x>
+                <y>30</y>
+                <width>230</width>
+                <height>14</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+              </panel>
+              <bar name="strength feed bar">
+                <x>70</x>
+                <y>30</y>
+                <width>230</width>
+                <height>14</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <color>char_sheet_subcolor</color>
+                <altred>255</altred>
+                <altgreen>0</altgreen>
+                <altblue>0</altblue>
+                <alt2red>200</alt2red>
+                <alt2green>200</alt2green>
+                <alt2blue>30</alt2blue>
+                <alt3red>30</alt3red>
+                <alt3green>200</alt3green>
+                <alt3blue>30</alt3blue>
+                <cur>strength_feed</cur>
+                <max>strength</max>
+                <stat>strength_feed</stat>
+                <tooltipstring>ui feed tooltip strength</tooltipstring>
+                <OnSetFocusStat stat="strength_feed">UIFeedBarOnPaint</OnSetFocusStat>
+                <OnSetFocusStat stat="strength">UIFeedBarOnPaint</OnSetFocusStat>
+                <OnPaint>UIFeedBarOnPaint</OnPaint>
+                <OnSetHoverUnit>UIFeedBarOnPaint</OnSetHoverUnit>
+                <OnInventoryChange>UIFeedBarOnPaint</OnInventoryChange>
+              </bar>
+            </panel>
+            <panel name="stamina frame">
+              <x>10</x>
+              <y>108</y>
+              <width>70</width>
+              <height>44</height>
+              <frame>statbox 1</frame>
+              <stretch>1</stretch>
+              <statdispl name="char stamina">
+                <width>70</width>
+                <height>25</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <chardisplay>stam</chardisplay>
+                <OnSetFocusStat stat="stamina">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <statdispl name="stamina feed">
+                <x>5</x>
+                <y>27</y>
+                <width>60</width>
+                <height>17</height>
+                <align>right</align>
+                <autosize>0</autosize>
+                <fontsize>20</fontsize>
+                <color>char_sheet_subcolor</color>
+                <chardisplay>feed_stam</chardisplay>
+                <tooltipstring>ui feed tooltip stamina</tooltipstring>
+                <OnSetFocusStat stat="stamina_feed">UIStatDisplOnPaint</OnSetFocusStat>
+                <OnSetFocusStat stat="stamina">UIStatDisplOnPaint</OnSetFocusStat>
+                <OnSetHoverUnit>UIStatDisplOnPaint</OnSetHoverUnit>
+                <OnInventoryChange>UIStatDisplOnPaint</OnInventoryChange>
+              </statdispl>
+              <button name="stam_clicker">
+                <frame>attribute add</frame>
+                <downframe>attribute add lit</downframe>
+                <litframe>attribute add lit</litframe>
+                <x>0</x>
+                <y>0</y>
+                <width>338</width>
+                <height>30</height>
+                <assocstat>stamina</assocstat>
+                <tooltipstring>cdisp tooltip stam</tooltipstring>
+                <independentactivate>1</independentactivate>
+                <OnLButtonUp>UIStatPointAddUp</OnLButtonUp>
+                <OnLButtonUpSnd>UIStatUp</OnLButtonUpSnd>
+                <OnLButtonDown>UIStatPointAddDown</OnLButtonDown>
+                <OnSetFocusUnit>UIStatPointAddButtonSetVisible</OnSetFocusUnit>
+                <OnSetFocusStat stat="stat_points">UIStatPointAddButtonSetVisible</OnSetFocusStat>
+              </button>
+              <label name="stamina label">
+                <x>75</x>
+                <y>0</y>
+                <!--<width>300</width>
+                <height>28</height>-->
+                <autosize>1</autosize>
+                <align>left</align>
+                <string>ui char panel label stamina</string>
+                <tooltipstring>cdisp tooltip stam</tooltipstring>
+                <fontsize>28</fontsize>
+              </label>
+              <panel name="stamina feed bar background">
+                <x>70</x>
+                <y>30</y>
+                <width>230</width>
+                <height>14</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+              </panel>
+              <bar name="stamina feed bar">
+                <x>70</x>
+                <y>30</y>
+                <width>230</width>
+                <height>14</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <color>char_sheet_subcolor</color>
+                <altred>255</altred>
+                <altgreen>0</altgreen>
+                <altblue>0</altblue>
+                <alt2red>200</alt2red>
+                <alt2green>200</alt2green>
+                <alt2blue>30</alt2blue>
+                <alt3red>30</alt3red>
+                <alt3green>200</alt3green>
+                <alt3blue>30</alt3blue>
+                <cur>stamina_feed</cur>
+                <max>stamina</max>
+                <stat>stamina_feed</stat>
+                <tooltipstring>ui feed tooltip stamina</tooltipstring>
+                <OnSetFocusStat stat="stamina_feed">UIFeedBarOnPaint</OnSetFocusStat>
+                <OnSetFocusStat stat="stamina">UIFeedBarOnPaint</OnSetFocusStat>
+                <OnPaint>UIFeedBarOnPaint</OnPaint>
+                <OnSetHoverUnit>UIFeedBarOnPaint</OnSetHoverUnit>
+                <OnInventoryChange>UIFeedBarOnPaint</OnInventoryChange>
+              </bar>
+            </panel>
+            <panel name="willpower frame">
+              <x>10</x>
+              <y>156</y>
+              <width>70</width>
+              <height>44</height>
+              <frame>statbox 1</frame>
+              <stretch>1</stretch>
+              <statdispl name="char willpower">
+                <width>70</width>
+                <height>25</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <chardisplay>will</chardisplay>
+                <OnSetFocusStat stat="willpower">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <statdispl name="willpower feed">
+                <x>5</x>
+                <y>27</y>
+                <width>60</width>
+                <height>17</height>
+                <align>right</align>
+                <autosize>0</autosize>
+                <fontsize>20</fontsize>
+                <color>char_sheet_subcolor</color>
+                <chardisplay>feed_will</chardisplay>
+                <tooltipstring>ui feed tooltip willpower</tooltipstring>
+                <OnSetFocusStat stat="willpower_feed">UIStatDisplOnPaint</OnSetFocusStat>
+                <OnSetFocusStat stat="willpower">UIStatDisplOnPaint</OnSetFocusStat>
+                <OnSetHoverUnit>UIStatDisplOnPaint</OnSetHoverUnit>
+                <OnInventoryChange>UIStatDisplOnPaint</OnInventoryChange>
+              </statdispl>
+              <button name="will_clicker">
+                <frame>attribute add</frame>
+                <downframe>attribute add lit</downframe>
+                <litframe>attribute add lit</litframe>
+                <x>0</x>
+                <y>0</y>
+                <width>338</width>
+                <height>30</height>
+                <assocstat>willpower</assocstat>
+                <tooltipstring>cdisp tooltip will</tooltipstring>
+                <independentactivate>1</independentactivate>
+                <OnLButtonUp>UIStatPointAddUp</OnLButtonUp>
+                <OnLButtonUpSnd>UIStatUp</OnLButtonUpSnd>
+                <OnLButtonDown>UIStatPointAddDown</OnLButtonDown>
+                <OnSetFocusUnit>UIStatPointAddButtonSetVisible</OnSetFocusUnit>
+                <OnSetFocusStat stat="stat_points">UIStatPointAddButtonSetVisible</OnSetFocusStat>
+              </button>
+              <label name="willpower label">
+                <x>75</x>
+                <y>0</y>
+                <!--<width>300</width>
+                <height>28</height>-->
+                <autosize>1</autosize>
+                <align>left</align>
+                <string>ui char panel label willpower</string>
+                <tooltipstring>cdisp tooltip will</tooltipstring>
+                <fontsize>28</fontsize>
+              </label>
+              <panel name="willpower feed bar background">
+                <x>70</x>
+                <y>30</y>
+                <width>230</width>
+                <height>14</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+              </panel>
+              <bar name="willpower feed bar">
+                <x>70</x>
+                <y>30</y>
+                <width>230</width>
+                <height>14</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <color>char_sheet_subcolor</color>
+                <altred>255</altred>
+                <altgreen>0</altgreen>
+                <altblue>0</altblue>
+                <alt2red>200</alt2red>
+                <alt2green>200</alt2green>
+                <alt2blue>30</alt2blue>
+                <alt3red>30</alt3red>
+                <alt3green>200</alt3green>
+                <alt3blue>30</alt3blue>
+                <cur>willpower_feed</cur>
+                <max>willpower</max>
+                <stat>willpower_feed</stat>
+                <tooltipstring>ui feed tooltip willpower</tooltipstring>
+                <OnSetFocusStat stat="willpower_feed">UIFeedBarOnPaint</OnSetFocusStat>
+                <OnSetFocusStat stat="willpower">UIFeedBarOnPaint</OnSetFocusStat>
+                <OnPaint>UIFeedBarOnPaint</OnPaint>
+                <OnSetHoverUnit>UIFeedBarOnPaint</OnSetHoverUnit>
+                <OnInventoryChange>UIFeedBarOnPaint</OnInventoryChange>
+              </bar>
+            </panel>
+          </panel>
+        </panel>
+        <panel name="base stats sliding panel">
+          <y>249</y>
+          <ttyoffs>0</ttyoffs>
+          <OnAnimate>UIMsgPassToParent</OnAnimate>
+          <button name="base stats header">
+            <frame>menu header closed</frame>
+            <downframe>menu header open</downframe>
+            <buttonstyle>checkbox</buttonstyle>
+            <width>360</width>
+            <height>35</height>
+            <startdown>1</startdown>
+            <OnLClick>UIWindowshadeAndSlideButtonOnClick</OnLClick>
+            <label name="base stats label">
+              <x>10</x>
+              <y>6</y>
+              <autosize>1</autosize>
+              <string>ui char panel label base stats</string>
+              <font>Upper_Font_Bold</font>
+              <red>0</red>
+              <green>0</green>
+              <blue>0</blue>
+              <dropshadowred>180</dropshadowred>
+        			<dropshadowgreen>180</dropshadowgreen>
+        			<dropshadowblue>180</dropshadowblue>
+            </label>
+          </button>
+          <panel name="base statistics">
+            <y>35</y>
+            <tgty>-300</tgty>
+            <width>359</width>
+            <height>339</height>
+            <visible>1</visible>
+            <independentactivate>1</independentactivate>
+            <animtime>300</animtime>
+            <!--<OnAnimate>UISetCharsheetScrollbar</OnAnimate>-->
+            <OnAnimate>UIMsgPassToParent</OnAnimate>
+            <OnActivateSnd>UIPaneAttributeOpen</OnActivateSnd>
+            <OnInactivateSnd>UIPaneAttributeClose</OnInactivateSnd>
+            <flexborder name="charsheet base stats flexborder">
+              <frameML>charsheet border ML</frameML>
+              <frameMM>charsheet border MM</frameMM>
+              <frameMR>charsheet border MR</frameMR>
+              <frameBL>charsheet border BL</frameBL>
+              <frameBM>charsheet border BM</frameBM>
+              <frameBR>charsheet border BR</frameBR>
+            </flexborder>
+            <panel name="health frame">
+              <x>10</x>
+              <y>12</y>
+              <width>70</width>
+              <height>40</height>
+              <frame>statbox 1</frame>
+              <statdispl name="cur hitpoints">
+                <width>70</width>
+                <height>28</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <chardisplay>curhp</chardisplay>
+                <OnSetFocusStat stat="hp_cur">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <statdispl name="max hp">
+                <y>30</y>
+                <width>70</width>
+                <height>20</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <fontsize>20</fontsize>
+                <color>char_sheet_subcolor</color>
+                <chardisplay>hp</chardisplay>
+                <OnSetFocusStat stat="hp_max">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+            </panel>
+            <label name="health label">
+              <x>88</x>
+              <y>12</y>
+              <width>266</width>
+              <height>28</height>
+              <align>left</align>
+              <string>ui char panel label health cur</string>
+              <autosizefont>1</autosizefont>
+              <fontsize>28</fontsize>
+            </label>
+            <label name="health max label">
+              <x>98</x>
+              <y_rel>30</y_rel>
+              <width>266</width>
+              <height>20</height>
+              <align>left</align>
+              <font lang="Korean">Alt_Font</font>
+              <fontsize>20</fontsize>
+              <autosizefont>1</autosizefont>
+              <string>ui char panel label health max</string>
+              <color>char_sheet_subcolor</color>
+            </label>
+            <statdispl name="hp regen">
+              <x>98</x>
+              <y_rel>23</y_rel>
+              <width>256</width>
+              <height>20</height>
+              <autosize>0</autosize>
+              <autosizefont>1</autosizefont>
+              <font lang="Korean">Alt_Font</font>
+              <fontsize>20</fontsize>
+              <chardisplay>regen</chardisplay>
+              <OnSetFocusStat stat="hp_regen">UIStatDisplOnPaint</OnSetFocusStat>
+            </statdispl>
+            <panel name="power frame">
+              <x>10</x>
+              <y_rel>25</y_rel>
+              <width>70</width>
+              <height>40</height>
+              <frame>statbox 1</frame>
+              <statdispl name="cur power">
+                <width>70</width>
+                <height>28</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <chardisplay>power_cur</chardisplay>
+                <OnSetFocusStat stat="power_cur">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <statdispl name="max power">
+                <y>30</y>
+                <width>70</width>
+                <height>20</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <fontsize>20</fontsize>
+                <color>char_sheet_subcolor</color>
+                <chardisplay>power_max</chardisplay>
+                <OnSetFocusStat stat="power_max">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+            </panel>
+            <label name="power label">
+              <x>88</x>
+              <y_rel>0</y_rel>
+              <width>266</width>
+              <height>28</height>
+              <align>left</align>
+              <fontsize>28</fontsize>
+              <autosizefont>1</autosizefont>
+              <string>ui char panel label power</string>
+            </label>
+            <label name="power max label">
+              <x>98</x>
+              <y_rel>30</y_rel>
+              <width>266</width>
+              <height>20</height>
+              <align>left</align>
+              <font lang="Korean">Alt_Font</font>
+              <fontsize>20</fontsize>
+              <autosizefont>1</autosizefont>
+              <string>ui char panel label power max</string>
+              <color>char_sheet_subcolor</color>
+            </label>
+            <statdispl name="power regen">
+              <x>98</x>
+              <y_rel>23</y_rel>
+              <width>256</width>
+              <height>20</height>
+              <autosize>0</autosize>
+              <autosizefont>1</autosizefont>
+              <font lang="Korean">Alt_Font</font>
+              <fontsize>20</fontsize>
+              <chardisplay>power_regen</chardisplay>
+              <OnSetFocusStat stat="power_regen">UIStatDisplOnPaint</OnSetFocusStat>
+            </statdispl>
+            <statdispl name="speed">
+              <frame>statbox 2</frame>
+              <x>10</x>
+              <y_rel>27</y_rel>
+              <width>70</width>
+              <height>40</height>
+              <align>center</align>
+              <autosize>0</autosize>
+              <chardisplay>velocity</chardisplay>
+              <OnSetFocusStat stat="velocity">UIStatDisplOnPaint</OnSetFocusStat>
+            </statdispl>
+            <label name="speedlabel">
+              <x>88</x>
+              <y_rel>0</y_rel>
+              <width>266</width>
+              <height>40</height>
+              <align>left</align>
+              <fontsize>28</fontsize>
+              <autosizefont>1</autosizefont>
+              <string>ui char panel label speed</string>
+            </label>
+            <label name="crit right label">
+              <string>ui label right hand</string>
+              <x>80</x>
+              <y_rel>45</y_rel>
+              <width>70</width>
+              <height>20</height>
+              <align>center</align>
+              <fontsize>20</fontsize>
+              <color>char_sheet_subcolor</color>
+            </label>
+            <label name="crit left label">
+              <string>ui label left hand</string>
+              <x>10</x>
+              <y_rel>0</y_rel>
+              <width>70</width>
+              <height>20</height>
+              <align>center</align>
+              <fontsize>20</fontsize>
+              <color>char_sheet_subcolor</color>
+            </label>
+            <statdispl name="crit chance 1">
+              <frame>statbox 2</frame>
+              <x>80</x>
+              <y_rel>25</y_rel>
+              <width>70</width>
+              <height>40</height>
+              <align>center</align>
+              <autosize>0</autosize>
+              <fontsize>24</fontsize>
+              <chardisplay>critical_chance1</chardisplay>
+              <OnSetFocusStat stat="critical_chance">UIStatDisplOnPaint</OnSetFocusStat>
+              <OnSetFocusStat stat="critical_chance_pct">UIStatDisplOnPaint</OnSetFocusStat>
+            </statdispl>
+            <statdispl name="crit chance 2">
+              <frame>statbox 2</frame>
+              <x>10</x>
+              <y_rel>0</y_rel>
+              <width>70</width>
+              <height>40</height>
+              <align>center</align>
+              <autosize>0</autosize>
+              <fontsize>24</fontsize>
+              <chardisplay>critical_chance2</chardisplay>
+              <OnSetFocusStat stat="critical_chance">UIStatDisplOnPaint</OnSetFocusStat>
+              <OnSetFocusStat stat="critical_chance_pct">UIStatDisplOnPaint</OnSetFocusStat>
+            </statdispl>
+            <label name="crit chance label">
+              <x>158</x>
+              <y_rel>0</y_rel>
+              <width>194</width>
+              <height>40</height>
+              <align>left</align>
+              <!--<autosizefont>1</autosizefont>-->
+              <wordwrap>1</wordwrap>
+              <fontsize>20</fontsize>
+              <string>ui char panel label crit chance</string>
+            </label>
+            <statdispl name="crit damage bonus 1">
+              <frame>statbox 2</frame>
+              <x>80</x>
+              <y_rel>45</y_rel>
+              <width>70</width>
+              <height>40</height>
+              <align>center</align>
+              <autosize>0</autosize>
+              <fontsize>18</fontsize>
+              <chardisplay>critical_damage1</chardisplay>
+              <OnSetFocusStat stat="critical_mult_pct">UIStatDisplOnPaint</OnSetFocusStat>
+            </statdispl>
+            <statdispl name="crit damage bonus 2">
+              <frame>statbox 2</frame>
+              <x>10</x>
+              <y_rel>0</y_rel>
+              <width>70</width>
+              <height>40</height>
+              <align>center</align>
+              <autosize>0</autosize>
+              <fontsize>18</fontsize>
+              <chardisplay>critical_damage2</chardisplay>
+              <OnSetFocusStat stat="critical_mult_pct">UIStatDisplOnPaint</OnSetFocusStat>
+            </statdispl>
+            <label name="crit dmg label">
+              <x>158</x>
+              <y_rel>0</y_rel>
+              <width>194</width>
+              <height>40</height>
+              <align>left</align>
+              <!--<autosizefont>1</autosizefont>-->
+              <wordwrap>1</wordwrap>
+              <fontsize>20</fontsize>
+              <string>ui char panel label crit damage</string>
+            </label>
+          </panel>
+        </panel>
+        <panel name="defense stats sliding panel">
+          <y>623</y>
+          <ttyoffs>0</ttyoffs>
+          <OnAnimate>UIMsgPassToParent</OnAnimate>
+          <button name="defense stats header">
+            <frame>menu header closed</frame>
+            <downframe>menu header open</downframe>
+            <buttonstyle>checkbox</buttonstyle>
+            <width>360</width>
+            <height>35</height>
+            <OnLClick>UIWindowshadeAndSlideButtonOnClick</OnLClick>
+            <label name="defense stats label">
+              <x>10</x>
+              <y>6</y>
+              <autosize>1</autosize>
+              <string>ui char panel label defense stats</string>
+              <font>Upper_Font_Bold</font>
+              <red>0</red>
+              <green>0</green>
+              <blue>0</blue>
+              <dropshadowred>180</dropshadowred>
+        			<dropshadowgreen>180</dropshadowgreen>
+        			<dropshadowblue>180</dropshadowblue>
+            </label>
+          </button>
+          <panel name="defense statistics">
+            <y>35</y>
+            <tgty>-320</tgty>
+            <width>359</width>
+            <height>371</height>
+            <visible>0</visible>
+            <independentactivate>1</independentactivate>
+            <animtime>300</animtime>
+            <!--<OnAnimate>UISetCharsheetScrollbar</OnAnimate>-->
+            <OnAnimate>UIMsgPassToParent</OnAnimate>
+            <OnActivateSnd>UIPaneAttributeOpen</OnActivateSnd>
+            <OnInactivateSnd>UIPaneAttributeClose</OnInactivateSnd>
+            <flexborder name="charsheet defense stats flexborder">
+              <frameML>charsheet border ML</frameML>
+              <frameMM>charsheet border MM</frameMM>
+              <frameMR>charsheet border MR</frameMR>
+              <frameBL>charsheet border BL</frameBL>
+              <frameBM>charsheet border BM</frameBM>
+              <frameBR>charsheet border BR</frameBR>
+            </flexborder>
+            <panel name="shields frame">
+              <x>10</x>
+              <y>12</y>
+              <width>70</width>
+              <height>40</height>
+              <frame>statbox 1</frame>
+              <statdispl name="cur shields">
+                <width>70</width>
+                <height>28</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <chardisplay>shields_cur</chardisplay>
+                <OnSetFocusStat stat="shield_buffer_cur">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <statdispl name="max shields">
+                <y>30</y>
+                <width>70</width>
+                <height>20</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <fontsize>20</fontsize>
+                <color>char_sheet_subcolor</color>
+                <chardisplay>shields_max</chardisplay>
+                <OnSetFocusStat stat="shield_buffer_max">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <label name="shields label">
+                <x>78</x>
+                <y>0</y>
+                <width>300</width>
+                <height>28</height>
+                <align>left</align>
+                <string>ui char panel label shields cur</string>
+                <fontsize>28</fontsize>
+              </label>
+              <label name="shields max label">
+                <x>88</x>
+                <y>30</y>
+                <width>300</width>
+                <height>20</height>
+                <align>left</align>
+                <fontsize>20</fontsize>
+                <string>ui char panel label shields max</string>
+                <color>char_sheet_subcolor</color>
+              </label>
+              <statdispl name="shields regen">
+                <x>88</x>
+                <y>53</y>
+                <width>256</width>
+                <height>20</height>
+                <autosize>0</autosize>
+                <autosizefont>1</autosizefont>
+                <fontsize>20</fontsize>
+                <chardisplay>shields_regen</chardisplay>
+                <OnSetFocusStat stat="shield_buffer_regen">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+            </panel>
+            <panel name="armor frame">
+              <x>10</x>
+              <y>95</y>
+              <width>70</width>
+              <height>40</height>
+              <frame>statbox 1</frame>
+              <statdispl name="armor">
+                <width>70</width>
+                <height>28</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <chardisplay>armor</chardisplay>
+                <OnSetFocusStat stat="armor">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <statdispl name="damage absorbed">
+                <y>30</y>
+                <width>70</width>
+                <height>20</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <fontsize>20</fontsize>
+                <color>char_sheet_subcolor</color>
+                <chardisplay>damage_absorbed</chardisplay>
+                <tooltipstring>ui dmg absorbed tooltip</tooltipstring>
+                <OnSetFocusStat stat="armor">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <label name="armor label">
+                <x>78</x>
+                <y>-4</y>
+                <width>300</width>
+                <height>40</height>
+                <align>left</align>
+                <fontsize>28</fontsize>
+                <string>ui char panel label armor</string>
+              </label>
+              <label name="damage absorbed label">
+                <x>88</x>
+                <y>32</y>
+                <width>300</width>
+                <height>20</height>
+                <align>left</align>
+                <fontsize>20</fontsize>
+                <string>ui dmg absorbed</string>
+                <tooltipstring>ui dmg absorbed tooltip</tooltipstring>
+                <color>char_sheet_subcolor</color>
+              </label>
+            </panel>
+            <label name="defenses label">
+              <x>88</x>
+              <y_rel>63</y_rel>
+              <width>300</width>
+              <height>26</height>
+              <align>left</align>
+              <fontsize>28</fontsize>
+              <string>ui char panel label defenses</string>
+            </label>
+            <panel name="knockdown def panel">
+              <frame>statbox 3</frame>
+              <x>32</x>
+              <y_rel>30</y_rel>
+              <width>220</width>
+              <height>32</height>
+              <fontsize>20</fontsize>
+              <statdispl name="knockdown def">
+                <width>48</width>
+                <height>32</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <red>150</red>
+                <green>150</green>
+                <blue>150</blue>
+                <chardisplay>def_knockdown</chardisplay>
+                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <label name="knockdown def label">
+                <x>56</x>
+                <width>188</width>
+                <height>32</height>
+                <align>left</align>
+                <string>ui char panel label knockdown def</string>
+                <red>150</red>
+                <green>150</green>
+                <blue>150</blue>
+              </label>
+            </panel>
+            <panel name="ignite def panel">
+              <frame>statbox 3</frame>
+              <x>32</x>
+              <y_rel>35</y_rel>
+              <width>220</width>
+              <height>32</height>
+              <fontsize>20</fontsize>
+              <statdispl name="ignite def">
+                <width>48</width>
+                <height>32</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <red>196</red>
+                <green>17</green>
+                <blue>26</blue>
+                <chardisplay>def_ignite</chardisplay>
+                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <label name="ignite def label">
+                <x>56</x>
+                <width>188</width>
+                <height>32</height>
+                <align>left</align>
+                <string>ui char panel label ignite def</string>
+                <red>196</red>
+                <green>17</green>
+                <blue>26</blue>
+              </label>
+            </panel>
+            <panel name="stun def panel">
+              <frame>statbox 3</frame>
+              <x>32</x>
+              <y_rel>35</y_rel>
+              <width>220</width>
+              <height>32</height>
+              <fontsize>20</fontsize>
+              <statdispl name="stun def">
+                <width>48</width>
+                <height>32</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <red>0</red>
+                <green>174</green>
+                <blue>239</blue>
+                <chardisplay>def_stun</chardisplay>
+                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <label name="stun def label">
+                <x>56</x>
+                <width>188</width>
+                <height>32</height>
+                <align>left</align>
+                <string>ui char panel label stun def</string>
+                <red>0</red>
+                <green>174</green>
+                <blue>239</blue>
+              </label>
+            </panel>
+            <panel name="phase def panel">
+              <frame>statbox 3</frame>
+              <x>32</x>
+              <y_rel>35</y_rel>
+              <width>220</width>
+              <height>32</height>
+              <fontsize>20</fontsize>
+              <statdispl name="phase def">
+                <width>48</width>
+                <height>32</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <red>205</red>
+                <green>130</green>
+                <blue>190</blue>
+                <chardisplay>def_phase</chardisplay>
+                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <label name="phase def label">
+                <x>56</x>
+                <width>188</width>
+                <height>32</height>
+                <align>left</align>
+                <string>ui char panel label phase def</string>
+                <red>205</red>
+                <green>130</green>
+                <blue>190</blue>
+              </label>
+            </panel>
+            <panel name="poison def panel">
+              <frame>statbox 3</frame>
+              <x>32</x>
+              <y_rel>35</y_rel>
+              <width>220</width>
+              <height>32</height>
+              <fontsize>20</fontsize>
+              <statdispl name="poison def">
+                <width>48</width>
+                <height>32</height>
+                <align>center</align>
+                <autosize>0</autosize>
+                <red>34</red>
+                <green>178</green>
+                <blue>75</blue>
+                <chardisplay>def_poison</chardisplay>
+                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+              </statdispl>
+              <label name="poison def label">
+                <x>56</x>
+                <width>188</width>
+                <height>32</height>
+                <align>left</align>
+                <string>ui char panel label poison def</string>
+                <red>34</red>
+                <green>178</green>
+                <blue>75</blue>
+              </label>
+            </panel>
+          </panel>
+        </panel>
+        <panel name="factions sliding panel">
+          <y>658</y>
+          <ttyoffs>0</ttyoffs>
+          <independentactivate>1</independentactivate>
+          <OnAnimate>UIMsgPassToParent</OnAnimate>
+          <OnSetFocusUnit>UIVisibleOnPlayerFocusOnly</OnSetFocusUnit>
+          <button name="faction standings header">
+            <frame>menu header closed</frame>
+            <downframe>menu header open</downframe>
+            <buttonstyle>checkbox</buttonstyle>
+            <width>360</width>
+            <height>35</height>
+            <OnLClick>UIWindowshadeAndSlideButtonOnClick</OnLClick>
+            <label name="faction standings label">
+              <x>10</x>
+              <y>6</y>
+              <autosize>1</autosize>
+              <string>ui char panel factions button label</string>
+              <font>Upper_Font_Bold</font>
+              <red>0</red>
+              <green>0</green>
+              <blue>0</blue>
+              <dropshadowred>180</dropshadowred>
+        			<dropshadowgreen>180</dropshadowgreen>
+        			<dropshadowblue>180</dropshadowblue>
+            </label>
+          </button>
+          <tooltip name="faction standings">
+            <y>35</y>
+            <tgty>-310</tgty>
+            <minwidth>336</minwidth>
+            <maxwidth>336</maxwidth>
+            <visible>0</visible>
+            <independentactivate>1</independentactivate>
+            <animtime>300</animtime>
+            <!--<OnAnimate>UISetCharsheetScrollbar</OnAnimate>-->
+            <OnAnimate>UIMsgPassToParent</OnAnimate>
+            <OnActivate>UIComponentOnActivate</OnActivate>
+            <OnActivateSnd>UIPaneAttributeOpen</OnActivateSnd>
+            <OnInactivate>UIComponentOnInactivate</OnInactivate>
+            <OnInactivateSnd>UIPaneAttributeClose</OnInactivateSnd>
+            <OnPaint>UIFactionStandingsOnPaint</OnPaint>
+            <OnSetFocusStat stat="faction_score">UIFactionStandingsOnPaint</OnSetFocusStat>
+            <flexborder name="charsheet faction standings flexborder">
+              <frameML>charsheet border ML</frameML>
+              <frameMM>charsheet border MM</frameMM>
+              <frameMR>charsheet border MR</frameMR>
+              <frameBL>charsheet border BL</frameBL>
+              <frameBM>charsheet border BM</frameBM>
+              <frameBR>charsheet border BR</frameBR>
+            </flexborder>
+            <tooltip name="faction frame 1">
+              <ttline>next</ttline>
+              <ttlineorder>1</ttlineorder>
+              <ttjustify>center</ttjustify>
+              <ttpaddingy>0</ttpaddingy>
+              <visible>0</visible>
+              <independentactivate>1</independentactivate>
+              <flexborder name="individual faction standings flexborder">
+                <frameTL>charsheet border TL</frameTL>
+                <frameTM>charsheet border TM</frameTM>
+                <frameTR>charsheet border TR</frameTR>
+                <frameML>charsheet border ML</frameML>
+                <frameMM>charsheet border MM</frameMM>
+                <frameMR>charsheet border MR</frameMR>
+                <frameBL>charsheet border BL</frameBL>
+                <frameBM>charsheet border BM</frameBM>
+                <frameBR>charsheet border BR</frameBR>
+              </flexborder>
+              <label name="faction label">
+                <ttline>1</ttline>
+                <ttlineorder>1</ttlineorder>
+                <ttjustify>left</ttjustify>
+                <width>300</width>
+                <wordwrap>1</wordwrap>
+                <autosizeverticalonly>1</autosizeverticalonly>
+                <align>center</align>
+                <fontsize>24</fontsize>
+              </label>
+              <panel name="faction bar background">
+                <ttline>2</ttline>
+                <ttlineorder>next</ttlineorder>
+                <ttjustify>center</ttjustify>
+                <width>300</width>
+                <height>22</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <ttnospace>1</ttnospace>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+              </panel>
+              <bar name="faction bar">
+                <ttline>2</ttline>
+                <ttlineorder>next</ttlineorder>
+                <ttjustify>center</ttjustify>
+                <width>300</width>
+                <height>22</height>
+                <frame>textboxcolor</frame>
+                <stretch>1</stretch>
+                <ttnospace>1</ttnospace>
+                <color>char_sheet_subcolor</color>
+              </bar>
+              <label name="faction standing desc">
+                <ttline>2</ttline>
+                <ttlineorder>next</ttlineorder>
+                <ttjustify>center</ttjustify>
+                <width>300</width>
+                <height>22</height>
+                <align>center</align>
+                <red>235</red>
+                <green>235</green>
+                <blue>235</blue>
+                <OnMouseOver>UIFactionStadingDispOnMouseOver</OnMouseOver>
+                <OnMouseLeave>UIFactionStadingDispOnMouseLeave</OnMouseLeave>
+                <fontsize>18</fontsize>
+              </label>
+            </tooltip>
+            <reference refname="faction frame 1" name="faction frame 2">  <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 3">  <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 4">  <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 5">  <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 6">  <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 7">  <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 8">  <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 9">  <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 10"> <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 11"> <ttline>next</ttline> </reference>
+            <reference refname="faction frame 1" name="faction frame 12"> <ttline>next</ttline> </reference>
+          </tooltip>
+        </panel>
+<!--          
+        <panel name="options sliding panel">
+          <y>693</y>
+          <ttyoffs>0</ttyoffs>
+          <independentactivate>1</independentactivate>
+          <OnAnimate>UIMsgPassToParent</OnAnimate>
+          <OnSetFocusUnit>UIVisibleOnPlayerFocusOnly</OnSetFocusUnit>
+          <button name="character options header">
+            <frame>menu header closed</frame>
+            <downframe>menu header open</downframe>
+            <buttonstyle>checkbox</buttonstyle>
+            <width>360</width>
+            <height>35</height>
+            <OnLClick>UIWindowshadeAndSlideButtonOnClick</OnLClick>
+            <label name="character options label">
+              <x>10</x>
+              <y>6</y>
+              <autosize>1</autosize>
+              <string>ui char panel options button label</string>
+              <font>Upper_Font_Bold</font>
+              <red>0</red>
+              <green>0</green>
+              <blue>0</blue>
+              <dropshadowred>180</dropshadowred>
+        			<dropshadowgreen>180</dropshadowgreen>
+        			<dropshadowblue>180</dropshadowblue>
+            </label>
+          </button>
+          <panel name="character options">
+            <y>35</y>
+            <tgty>-320</tgty>
+            <width>359</width>
+            <height>70</height>
+            <visible>0</visible>
+            <independentactivate>1</independentactivate>
+            <animtime>300</animtime>
+            <OnAnimate>UIMsgPassToParent</OnAnimate>
+            <OnPostActivate>UICharacterOptionsPanelOnPostActivate</OnPostActivate>
+            <OnActivateSnd>UIPaneAttributeOpen</OnActivateSnd>
+            <OnInactivateSnd>UIPaneAttributeClose</OnInactivateSnd>
+            <flexborder name="charsheet character options flexborder">
+              <frameML>charsheet border ML</frameML>
+              <frameMM>charsheet border MM</frameMM>
+              <frameMR>charsheet border MR</frameMR>
+              <frameBL>charsheet border BL</frameBL>
+              <frameBM>charsheet border BM</frameBM>
+              <frameBR>charsheet border BR</frameBR>
+            </flexborder>
+            <button name="autoparty btn">
+              <texture>options_atlas</texture>
+              <frame>box_uncheck</frame>
+              <downframe>box_check</downframe>
+              <inactiveframe>box_uncheck_dis</inactiveframe>
+              <x>25</x>
+              <y>15</y>
+              <width>35</width>
+              <height>35</height>
+              <buttonstyle>checkbox</buttonstyle>
+              <OnPostActivate>UIAutoPartyButtonOnPostActivate</OnPostActivate>
+              <OnLButtonDown>UIAutoPartyButtonClicked</OnLButtonDown>
+              <OnActivateSnd>ButtonAccept</OnActivateSnd>
+              <rendersection>UpOne</rendersection>
+              <tooltipstring>ui char panel options autoparty button tooltip</tooltipstring>
+              <label name="autoparty label">
+                <string>ui char panel options autoparty button label</string>
+                <x>50</x>
+                <y>-5</y>
+                <width>220</width>
+                <height>44</height>
+                <align>left</align>
+                <autosizefont>1</autosizefont>
+                <wordwrap>1</wordwrap>
+                <red>240</red>
+                <green>240</green>
+                <blue>240</blue>
+                <OnLButtonDown>UIClickParentButton</OnLButtonDown>
+                <tooltipstring>ui char panel options autoparty button tooltip</tooltipstring>
+              </label>
+            </button>
+          </panel>
+        </panel>
+-->                  
+      </panel>
+      <scrollbar name="char sheet scrollbar">
+        <frame tile="1">scrollbar line</frame>
+        <ws_frame tile="1">scrollbar line</ws_frame>
+        <x>387</x>
+        <ws_x>554</ws_x>
+        <y>175</y>
+        <width>16</width>
+        <height>825</height>
+        <visible>0</visible>
+        <independentactivate>1</independentactivate>
+        <OnScroll>UIScrollBarOnScroll</OnScroll>
+        <scrollcontrol>character stats</scrollcontrol>
+        <minvalue>0</minvalue>
+        <maxvalue>0</maxvalue>
+        <thumbpadframe>scrollbar thumbpad</thumbpadframe>
+        <orientation>top</orientation>
+        <!--<flexline>
+          <x>11</x>
+          <width>16</width>
+          <height>825</height>
+          <autosize>1</autosize>
+          <horizontal>0</horizontal>
+          <lineframe>scrollbar line</lineframe>
+        </flexline>-->
+      </scrollbar>
+    </panel>
+    
+    <panel name="inventory panel">
+      <frame>inventory</frame>
+      <x>1199</x>
+      <ws_x>1359</ws_x>
+      <tgtx>1601</tgtx>
+      <ws_tgtx>1921</ws_tgtx>
+      <width>471</width>
+      <ws_width>631</ws_width>
+      <height>1144</height>
+      <visible>0</visible>
+      <animtime>300</animtime>
+      <usescursor>1</usescursor>
+      
+      <anim_category>quick close</anim_category>
+      <anim_category>close all</anim_category>
+      <anim_category>right panel</anim_category>
+      <anim_relationship type="linked">paperdoll screen</anim_relationship>
+      <anim_relationship type="linked">character sheet</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">merchant panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">gunmod panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">recipe current panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">stash panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">trade panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">NPC conversation dialog</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">recipe list panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">cube panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="1">email panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">email body panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">item upgrade panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">item augment panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" ondirectonly="0">item unmod panel</anim_relationship>
+
+      <anim_relationship type="closes" onactivate="1" category="1" ondirectonly="0">right panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" category="1" ondirectonly="0">main panels</anim_relationship>
+      <anim_relationship type="opens"  onactivate="0" category="1" ondirectonly="0">main panels</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" category="1" ondirectonly="0" preserveuseractive="1">main panels UA</anim_relationship>
+      <anim_relationship type="opens"  onactivate="0" category="1" ondirectonly="0" ifuseractive="1">main panels UA</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" category="1">tooltips</anim_relationship>
+      <anim_relationship type="closes" onactivate="0" category="1">tooltips</anim_relationship>
+      <anim_relationship type="closes" onactivate="1">alt menu</anim_relationship>
+      
+      <OnSetControlUnit>UIComponentSetFocusUnit</OnSetControlUnit>
+      <OnPostActivate>UIInventoryOnPostActivate</OnPostActivate>
+      <OnPostVisible>UIContextHelpLabelOnPaint</OnPostVisible>
+      <OnPostInvisible>UIContextHelpLabelOnPaint</OnPostInvisible>
+  	  <OnInactivateSnd>CloseInventory</OnInactivateSnd>
+      <label>
+        <x>-3</x>
+        <y>25</y>
+        <width>300</width>
+        <height>32</height>
+        <fontsize>28</fontsize>
+        <autosize>1</autosize>
+        <font>Upper_Font</font>
+        <align>center</align>
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <alpha>255</alpha>
+        <string>ui inventory inventory panel</string>
+      </label>
+	    <panel name="big pack holder">
+        <x>-14</x>
+        <y>176</y>
+        <ws_x>-19</ws_x>
+        <width>390</width>
+        <height>796</height>
+        <clipchildren>1</clipchildren>
+        <wheelscrollincrement>66</wheelscrollincrement>
+        <OnPostActivate>UIStashHolderOnPostActivate</OnPostActivate>
+        <OnMouseWheel>UIScrollOnMouseWheelRepaint</OnMouseWheel>
+      <invgrid name="big pack">
+        <width>390</width>
+        <height>1584</height>
+		<!--ScrollVertMax>1560</ScrollVertMax-->
+        <invloc>bigpack</invloc>
+        <!--<frame tile="1" tilepaddingx="0" tilepaddingy="0">inventory small slot</frame>
+        <ws_frame tile="1" tilepaddingx="0" tilepaddingy="0">inventory small slot</ws_frame>-->
+        <cellx>65</cellx>
+        <celly>66</celly>
+        <cellborder>0</cellborder>
+        <litframe>verybighighlight</litframe>
+        <useableborder>verybighighlightborder</useableborder>
+        <unidentifiedicon>inv small no id</unidentifiedicon>
+        <badclassicon>inv small no use1</badclassicon>
+        <badclassuicon>inv small no use 1 and 2</badclassuicon>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <recipecompleteicon>small green check</recipecompleteicon>
+        <mod_wont_go_in_item_alpha>158</mod_wont_go_in_item_alpha>
+        <mod_wont_go_in_item_red>32</mod_wont_go_in_item_red>
+        <mod_wont_go_in_item_green>32</mod_wont_go_in_item_green>
+        <mod_wont_go_in_item_blue>32</mod_wont_go_in_item_blue>
+        <!-- <recipeincompleteicon>inv small no use1</recipeincompleteicon> -->
+        <rendersection>Models</rendersection>
+        <OnSetControlStat stat="accuracy">UIInvGridOnPaint</OnSetControlStat>
+        <OnSetControlStat stat="strength">UIInvGridOnPaint</OnSetControlStat>
+        <OnSetControlStat stat="stamina">UIInvGridOnPaint</OnSetControlStat>
+        <OnSetControlStat stat="willpower">UIInvGridOnPaint</OnSetControlStat>
+        <label name="quantity text">
+          <x>-4</x>
+          <y>-4</y>
+          <width>390</width>
+          <height>1584</height>
+          <fontsize>22</fontsize>
+          <rendersection>ItemText</rendersection>
+          <align>bottomright</align>
+        </label>
+        <label name="price text">
+          <x>5</x>
+          <y>5</y>
+          <width>400</width>
+          <height>1584</height>
+          <fontsize>22</fontsize>
+          <rendersection>ItemText</rendersection>
+          <align>topleft</align>
+          <color>inv_price_text</color>
+        </label>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>390</width>
+          <height>1584</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+      </invgrid>
+	  </panel>
+      <button name="inv close button">
+        <frame>button_cancel</frame>
+        <litframe>button_cancel mouse</litframe>
+        <downframe>button_cancel_lit</downframe>
+	<inactiveframe>button_cancel_dis</inactiveframe>   
+        <x>306</x>
+        <y>23</y>
+	<ws_x>302</ws_x>
+        <width>65</width>
+        <height>65</height>
+        <OnLClick>UIInventoryOnCloseButtonClicked</OnLClick>
+        <OnLButtonDownSnd>ButtonReject</OnLButtonDownSnd>
+      </button>
+      <statdispl name="gold amount">
+        <frame>goldbox</frame>
+        <x>33</x>
+        <y>105</y>
+        <ws_x>33</ws_x>
+        <width>256</width>
+        <height>38</height>
+        <autosize>0</autosize>
+        <align>center</align>
+        <chardisplay>gold</chardisplay>
+        <fontsize>26</fontsize>
+        <OnSetControlStat stat="gold">UIStatDisplOnPaint</OnSetControlStat>
+      </statdispl>
+      <label name="money label">
+        <x>33</x>
+        <y>71</y>
+        <ws_x>33</ws_x>
+        <width>256</width>
+        <height>40</height>
+        <align>center</align>
+        <fontsize>24</fontsize>
+        <font>Upper_Font</font>
+        <string>money</string>
+        <red>247</red>
+        <green>132</green>
+        <blue>30</blue>
+      </label>
+	  <!--panel name="big pack panel top">
+        <x>-17</x>
+        <ws_x>-22</ws_x>
+        <y>137</y>
+		<height>25</height>
+		<stretch>1</stretch>
+        <frame>stash grid panel top</frame>
+      </panel-->
+      <button name="big pack scrollup">
+        <frame>merchant scrollup active</frame>
+        <litframe>merchant scrollup mouseover</litframe>
+        <downframe>merchant scrollup pressed</downframe>
+        <x>-11</x>
+        <ws_x>-16</ws_x>
+        <y>149</y>
+        <width>383</width>
+        <height>25</height>
+		<stretch>1</stretch>
+        <visible>1</visible>
+        <scrollcontrol inc="-66">big pack holder</scrollcontrol>
+        <hideonscrollextent>1</hideonscrollextent>
+        <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+      </button>
+      <!--panel name="big pack panel btm">
+        <x>-17</x>
+        <ws_x>-22</ws_x>
+        <y>962</y>
+		<height>25</height>
+		<stretch>1</stretch>
+        <frame>stash grid panel btm</frame>
+      </panel-->
+      <button name="big pack scrolldown">
+        <frame>merchant scrolldown active</frame>
+        <litframe>merchant scrolldown mouseover</litframe>
+        <downframe>merchant scrolldown pressed</downframe>
+        <x>-11</x>
+        <ws_x>-16</ws_x>
+        <y>970</y>
+        <width>383</width>
+        <height>25</height>
+		<stretch>1</stretch>
+        <visible>1</visible>
+        <scrollcontrol inc="66">big pack holder</scrollcontrol>
+        <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+        <hideonscrollextent>1</hideonscrollextent>
+      </button>
+    </panel>
+    <gunmod name="gunmod panel">
+      <texture>inventory_atlas</texture>
+      <frame>item mod panel</frame>
+      <x>446</x>
+      <y>0</y>
+      <tgty>1200</tgty>
+      <ws_x>606</ws_x>
+      <width>708</width>
+      <height>1200</height>
+      <visible>0</visible>
+      <stretch>0</stretch>
+      <font>Lower_Font</font>
+      <fontsize>20</fontsize>
+      <noscalefont>0</noscalefont>
+
+      <OnActivate>UIGunModScreenOnActivate</OnActivate>
+      <OnActivateSnd>OpenOrCloseModWindowEnd</OnActivateSnd>
+      <OnInactivate>UIGunModScreenOnInactivate</OnInactivate>
+      <OnInactivateSnd>CloseInventory</OnInactivateSnd>
+      <icontexture>main_atlas</icontexture>
+      <modtypeframe invloc="battery" tooltip="empty_mod_slot_battery">battery mod</modtypeframe>
+      <modtypeframe invloc="fuel" tooltip="empty_mod_slot_fuel">fuel mod</modtypeframe>
+      <modtypeframe invloc="ammo" tooltip="empty_mod_slot_ammo">ammo mod</modtypeframe>
+      <modtypeframe invloc="rockets" tooltip="empty_mod_slot_rocket">rockets mod</modtypeframe>
+      <modtypeframe invloc="relic" tooltip="empty_mod_slot_relic">relic mod</modtypeframe>
+      <modtypeframe invloc="tech" tooltip="empty_mod_slot_tech">tech mod</modtypeframe>
+      <itemswitchsound>ItemFocusSwap</itemswitchsound>
+      
+      <anim_category>close all</anim_category>
+      <anim_category>quick close</anim_category>
+      <anim_category>middle panel</anim_category>
+      <!--<anim_relationship type="closes" onactivate="1" preserveuseractive="1" category="1">middle panel</anim_relationship>
+      <anim_relationship type="opens" onactivate="0" ifuseractive="1" category="1">middle panel</anim_relationship>-->
+      <anim_relationship type="replaces" onactivate="1" ifuseractive="1" preserveuseractive="1" category="1">middle panel</anim_relationship>
+
+      <!--<anim_relationship type="restores" ifuseractive="1">paperdoll screen</anim_relationship>
+      <anim_relationship type="restores" ifuseractive="1">item upgrade panel</anim_relationship>
+      <anim_relationship type="restores" ifuseractive="1">item augment panel</anim_relationship>
+      <anim_relationship type="restores" ifuseractive="1">item unmod panel</anim_relationship>-->
+      
+      <label name="MODIFICATION PANEL">
+        <x>154</x>
+        <y>968</y>
+        <width>400</width>
+        <height>32</height>
+        <align>center</align>
+        <fontsize>28</fontsize>
+        <autosize>0</autosize>
+        <font>Upper_Font</font>
+        <red>180</red>
+        <green>180</green>
+        <blue>180</blue>
+        <alpha>255</alpha>
+      <dropshadowred>0</dropshadowred>
+      <dropshadowgreen>0</dropshadowgreen>
+      <dropshadowblue>0</dropshadowblue>
+        <string>ui inventory modification panel</string>
+      </label>
+      <statdispl name="mod panel statdisp-name">
+        <x>81</x>
+        <y>100</y>
+        <width>475</width>
+        <height>32</height>
+        <align>left</align>
+        <font>Upper_Font</font>
+        <fontsize>28</fontsize>
+        <autosize>0</autosize>
+        <autosizefont>1</autosizefont>
+        <dropshadowred>0</dropshadowred>
+        <dropshadowgreen>0</dropshadowgreen>
+        <dropshadowblue>0</dropshadowblue>
+        <itemdisplay>base name</itemdisplay>
+      </statdispl>
+      <statdispl name="mod panel statdisp DPS icon">
+        <texture>main_atlas</texture>
+        <rendersection>DynamicBottom</rendersection>
+        <x>565</x>
+        <y>91</y>
+        <width>64</width>
+        <height>64</height>
+        <specialspacing>-10</specialspacing>
+        <noscale>1</noscale>
+        <autosize>1</autosize>
+        <showicons>1</showicons>
+        <itemdisplay>dps</itemdisplay>
+        <font>Upper_Font</font>
+        <fontsize>32</fontsize>
+      </statdispl>
+      <statdispl name="mod panel statdisp-itemtype">
+        <x>81</x>
+        <y>130</y>
+        <height>16</height>
+        <width>300</width>
+        <visible>1</visible>
+        <autosize>1</autosize>
+        <align>left</align>
+        <itemdisplay>itemtypequality</itemdisplay>
+      </statdispl>
+      <panel name="mod item stats panel">
+        <x>50</x>
+        <y>637</y>
+        <width>573</width>
+        <height>321</height>
+        <clipchildren>1</clipchildren>
+        <font lang="Korean">Alt_Font</font>
+        <OnPaint>UIPanelResizeScrollbar</OnPaint>
+        <OnPostActivate>UIPanelResizeScrollbar</OnPostActivate>
+        <OnLButtonDown>UIPanelBeginMouseDragScroll</OnLButtonDown>
+        <OnMouseMove>UIPanelMouseDragScroll</OnMouseMove>
+        <OnLButtonUp>UIPanelEndMouseDragScroll</OnLButtonUp>
+        <tooltip name="mod panel left column">
+          <x>0</x>
+          <y>0</y>
+          <minwidth>250</minwidth>
+          <maxwidth>250</maxwidth>
+          <statdispl name="mod panel statdisp-additional descrip">
+            <itemdisplay>itemaddtl</itemdisplay>
+            <ttline>1</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <wordwrap>1</wordwrap>
+            <ttpaddingy>16</ttpaddingy>
+          </statdispl>
+          <statdispl name="mod panel statdisp-damage stats">
+            <itemdisplayarea>damage</itemdisplayarea>
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <wordwrap>1</wordwrap>
+            <ttpaddingy>16</ttpaddingy>
+          </statdispl>
+          <statdispl name="mod panel statdisp-defense stats">
+            <itemdisplayarea>defense</itemdisplayarea>
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <wordwrap>1</wordwrap>
+            <ttpaddingy>16</ttpaddingy>
+          </statdispl>
+          <statdispl name="mod panel statdisp-weapon stats">
+            <wordwrap>1</wordwrap>
+            <itemdisplayarea>weaponstats</itemdisplayarea>
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <wordwrap>1</wordwrap>
+            <ttpaddingy>16</ttpaddingy>
+          </statdispl>
+          <statdispl name="mod panel statdisp-sfx stats">
+            <wordwrap>1</wordwrap>
+            <itemdisplayarea>sfx</itemdisplayarea>
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <wordwrap>1</wordwrap>
+            <ttpaddingy>16</ttpaddingy>
+          </statdispl>
+          <statdispl name="mod panel statdisp-stats for mods header">
+            <unittype>mod</unittype>
+            <wordwrap>1</wordwrap>
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <itemdisplay>mod_stats_header</itemdisplay>
+          </statdispl>
+          <statdispl name="mod panel statdisp-stats for mods">
+            <unittype>mod</unittype>
+            <wordwrap>1</wordwrap>
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <itemdisplayarea>other</itemdisplayarea>
+          </statdispl>
+          <statdispl name="mod panel statdisp-requirements">
+            <wordwrap>1</wordwrap>
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <itemdisplayarea>feeds</itemdisplayarea>
+          </statdispl>
+        </tooltip>
+        <tooltip name="mod panel right column">
+          <x>260</x>
+          <y>0</y>
+          <minwidth>300</minwidth>
+          <maxwidth>300</maxwidth>
+          <statdispl name="mod panel statdisp-other properties header">
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <wordwrap>1</wordwrap>
+            <itemdisplayarea>otherpropshdr</itemdisplayarea>
+            <ttyoffs>8</ttyoffs>
+            <ttpaddingy>0</ttpaddingy>
+          </statdispl>
+          <statdispl name="mod panel statdisp-other properties">
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <wordwrap>1</wordwrap>
+            <itemdisplayarea>otherprops</itemdisplayarea>
+            <ttpaddingy>16</ttpaddingy>
+            <red>160</red>
+            <green>160</green>
+            <blue>160</blue>
+          </statdispl>
+          <statdispl name="mod panel statdisp-affix stats">
+            <font>Lower_Font_Bold</font>
+            <font lang="Korean">Alt_Font</font>
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <wordwrap>1</wordwrap>
+            <itemdisplayarea>affixprops</itemdisplayarea>
+            <ttpaddingy>16</ttpaddingy>
+            <red>160</red>
+            <green>160</green>
+            <blue>160</blue>
+          </statdispl>
+          <statdispl name="mod panel statdisp-mod stats">
+            <ttline>next</ttline>
+            <ttlineorder>1</ttlineorder>
+            <ttjustify>left</ttjustify>
+            <wordwrap>1</wordwrap>
+            <itemdisplayarea>modlist</itemdisplayarea>
+            <ttpaddingy>16</ttpaddingy>
+            <red>160</red>
+            <green>160</green>
+            <blue>160</blue>
+          </statdispl>
+        </tooltip>
+      </panel>
+      <scrollbar name="mod item stats scrollbar">
+        <frame tile="1">scrollbar line</frame>
+        <ws_frame tile="1">scrollbar line</ws_frame>
+        <x>636</x>
+        <y>637</y>
+        <width>16</width>
+        <height>321</height>
+        <visible>0</visible>
+        <independentactivate>1</independentactivate>
+        <OnScroll>UIScrollBarOnScroll</OnScroll>
+        <scrollcontrol>mod item stats panel</scrollcontrol>
+        <minvalue>0</minvalue>
+        <maxvalue>0</maxvalue>
+        <wheelscrollincrement>16</wheelscrollincrement>
+        <thumbpadframe>scrollbar thumbpad</thumbpadframe>
+        <orientation>top</orientation>
+      </scrollbar>
+      <statdispl name="mod panel statdisp-flavor">
+        <font>Lower_Font</font>
+        <font lang="Korean">Alt_Font</font>
+        <fontsize>20</fontsize>
+        <x>61</x>
+        <y>169</y>
+        <width>586</width>
+        <height>380</height>
+        <red>128</red>
+        <green>128</green>
+        <blue>255</blue>
+        <autosize>0</autosize>
+        <wordwrap>1</wordwrap>
+        <align>bottomleft</align>
+        <itemdisplay>flavor</itemdisplay>
+        <rendersection>ItemText</rendersection>
+      </statdispl>
+      <button name="gunmod ok">
+        <frame>button_accept</frame>
+        <downframe>button_accept_lit</downframe>
+        <litframe>button_accept mouse</litframe>
+        <x>577</x>
+        <y>966</y>
+        <width>65</width>
+        <height>65</height>
+		    <OnLButtonDownSnd>ButtonAccept</OnLButtonDownSnd>
+        <OnLClick>UIGunModScreenConfirmClick</OnLClick>
+      </button>
+      <modbox name="modbox 1">
+        <frame>modbox</frame>
+        <x>35</x>
+        <y>565</y>
+        <width>65</width>
+        <height>65</height>
+        <cellborder>0</cellborder>
+        <litframe>smallhighlight</litframe>
+        <independentactivate>1</independentactivate>
+        <panel name="modbox contents">
+          <rendersection>Models</rendersection>
+        </panel>
+      </modbox>
+      <modbox name="modbox 2">
+        <frame>modbox</frame>
+        <x_rel>82</x_rel>
+        <y_rel>0</y_rel>
+        <width>65</width>
+        <height>65</height>
+        <cellborder>0</cellborder>
+        <litframe>smallhighlight</litframe>
+        <independentactivate>1</independentactivate>
+        <panel name="modbox contents">
+          <rendersection>Models</rendersection>
+        </panel>
+      </modbox>
+      <reference refname="modbox 2">
+        <name>modbox 3</name>
+      </reference>
+      <reference refname="modbox 2">
+        <name>modbox 4</name>
+      </reference>
+      <reference refname="modbox 2">
+        <name>modbox 5</name>
+      </reference>
+      <reference refname="modbox 2">
+        <name>modbox 6</name>
+      </reference>
+      <reference refname="modbox 2">
+        <name>modbox 7</name>
+      </reference>
+      <reference refname="modbox 2">
+        <name>modbox 8</name>
+      </reference>
+      <panel name="gun image">
+        <!-- This one should go last, so the others have first shot at mouse messages -->
+        <x>61</x>
+        <y>169</y>
+        <width>586</width>
+        <height>394</height>
+        <rendersection>Models</rendersection>
+        <OnPaint>UIGunModImageOnPaint</OnPaint>
+        <OnMouseMove>UIModelPanelOnMouseMove</OnMouseMove>
+        <OnPostVisible>UIModelPanelOnPostVisible</OnPostVisible>
+        <OnLButtonUp>UIModelPanelOnLButtonUp</OnLButtonUp>
+        <OnLButtonDown>UIModelPanelOnLButtonDown</OnLButtonDown>
+        <OnPostInactivate>UIModelPanelOnPostInactivate</OnPostInactivate>
+      </panel>
+    </gunmod>
+    <panel name="merchant panel">
+      <frame>left panel blank</frame>
+      <tgtx>-497</tgtx>
+      <ws_tgtx>-657</ws_tgtx>
+      <x>0</x>
+      <width>471</width>
+      <ws_width>631</ws_width>
+      <height>1144</height>
+      <visible>0</visible>
+      <animtime>300</animtime>
+      <starttab>0</starttab>
+      <fontsize>28</fontsize>
+
+      <anim_category>quick close</anim_category>
+      <anim_category>close all</anim_category>
+      <anim_category>left panel</anim_category>
+      <anim_relationship type="linked">merchant welcome panel</anim_relationship>
+      <anim_relationship type="linked">inventory panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" category="1">left panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" category="1">main panels</anim_relationship>
+      <anim_relationship type="opens"  onactivate="0" category="1" ondirectonly="0">main panels</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" category="1" preserveuseractive="1">main panels UA</anim_relationship>
+      <anim_relationship type="opens"  onactivate="0" category="1" ifuseractive="1">main panels UA</anim_relationship>
+      <anim_relationship type="closes" onactivate="1">alt menu</anim_relationship>
+
+      <OnPostActivate>UIRepaintComponent</OnPostActivate>
+  	  <OnActivateSnd>VendorDialogueOpenEnd</OnActivateSnd>
+      <OnInactivate>UIMerchantOnInactivate</OnInactivate>
+      <OnPostInactivate>UITradeCancel</OnPostInactivate>
+	    <OnInactivateSnd></OnInactivateSnd>
+      <OnPostVisible>UISetChatActive</OnPostVisible>
+      <OnPostInvisible>UISetChatActive</OnPostInvisible>
+      <label name="merchant panel label">
+        <x>20</x>
+        <ws_x>180</ws_x>
+        <y>25</y>
+        <width>441</width>
+        <height>32</height>
+        <fontsize>28</fontsize>
+        <autosizefont>1</autosizefont>
+        <font>Upper_Font</font>
+        <align>center</align>
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <alpha>255</alpha>
+        <dropshadowred>0</dropshadowred>
+        <dropshadowgreen>0</dropshadowgreen>
+        <dropshadowblue>0</dropshadowblue>
+        <string>ui inventory merchant panel</string>
+      </label>
+      <panel name="merchant panel tab 1">
+        <x>0</x>
+        <ws_x>160</ws_x>
+        <width>471</width>
+        <ws_width>631</ws_width>
+        <height>1144</height>
+        <visible>0</visible>
+        <tab>0</tab>
+        <independentactivate>1</independentactivate>
+        <invgrid name="merchant weapon pack">
+          <cellx>65</cellx>
+          <celly>66</celly>
+          <cellborder>0</cellborder>
+          <frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</frame>
+          <ws_frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</ws_frame>
+          <litframe>verybighighlight</litframe>
+          <useableborder>verybighighlightborder</useableborder>
+          <unidentifiedicon>inv small no id</unidentifiedicon>
+          <badclassicon>inv small no use1</badclassicon>
+          <badclassuicon>inv small no use 1 and 2</badclassuicon>
+          <lowstatsicon>inv sm no use2</lowstatsicon>
+          <x>29</x>
+          <y>279</y>
+          <width>400</width>
+          <height>660</height>
+          <ScrollVertMax>1200</ScrollVertMax>
+          <invloc>active_personal_store_page_1</invloc>
+          <invloccabalist>merchantweapongridcabalist</invloccabalist>
+          <invlochunter>merchantweapongridhunter</invlochunter>
+          <invloctemplar>merchantweapongridtemplar</invloctemplar>          
+          <rendersection>Models</rendersection>
+          <OnSetFocusUnit>UIMerchantInvGridOnSetControlUnit</OnSetFocusUnit>
+          <OnSetControlStat stat="gold">UIInvGridOnPaint</OnSetControlStat>
+          <wheelscrollincrement>66</wheelscrollincrement>
+          <OnMouseWheel>UIScrollOnMouseWheelRepaint</OnMouseWheel>
+          <label name="price text">
+            <x>5</x>
+            <y>5</y>
+            <width>384</width>
+            <height>640</height>
+            <fontsize>22</fontsize>
+            <rendersection>ItemText</rendersection>
+            <align>topleft</align>
+            <color>inv_price_text</color>
+          </label>
+          <panel name="icon panel">
+            <texture>main_atlas</texture>
+            <width>400</width>
+            <height>660</height>
+            <rendersection>ItemText</rendersection>
+          </panel>
+        </invgrid>
+        <button name="merchant scrollup">
+          <frame>merchant scrollup active</frame>
+          <litframe>merchant scrollup mouseover</litframe>
+          <downframe>merchant scrollup pressed</downframe>
+          <inactiveframe>merchant scrollup dis</inactiveframe>
+          <x>30</x>
+          <y>240</y>
+          <!--<y>-39</y>-->
+          <width>383</width>
+          <height>35</height>
+          <visible>1</visible>
+          <scrollcontrol inc="-100">merchant weapon pack</scrollcontrol>
+          <hideonscrollextent>1</hideonscrollextent>
+          <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+        </button>
+        <button name="merchant scrolldown">
+          <frame>merchant scrolldown active</frame>
+          <litframe>merchant scrolldown mouseover</litframe>
+          <downframe>merchant scrolldown pressed</downframe>
+          <inactiveframe>merchant scrolldown dis</inactiveframe>
+          <x>30</x>
+          <y>944</y>
+          <width>383</width>
+          <height>35</height>
+          <visible>1</visible>
+          <scrollcontrol inc="100">merchant weapon pack</scrollcontrol>
+          <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+          <hideonscrollextent>1</hideonscrollextent>
+        </button>
+      </panel>
+      <panel name="merchant panel tab 2">
+        <x>0</x>
+        <ws_x>160</ws_x>
+        <width>471</width>
+        <ws_width>631</ws_width>
+        <height>1144</height>
+        <visible>0</visible>
+        <tab>1</tab>
+        <independentactivate>1</independentactivate>
+        <invgrid name="merchant armor pack">
+          <cellx>65</cellx>
+          <celly>66</celly>
+          <cellborder>0</cellborder>
+          <frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</frame>
+          <ws_frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</ws_frame>
+          <litframe>verybighighlight</litframe>
+          <useableborder>verybighighlightborder</useableborder>
+          <unidentifiedicon>inv small no id</unidentifiedicon>
+          <badclassicon>inv small no use1</badclassicon>
+          <badclassuicon>inv small no use 1 and 2</badclassuicon>
+          <lowstatsicon>inv sm no use2</lowstatsicon>
+          <x>29</x>
+          <y>279</y>
+          <width>400</width>
+          <height>660</height>
+          <ScrollVertMax>700</ScrollVertMax>
+          <invloc>active_personal_store_page_2</invloc>
+          <invloccabalist>merchantarmorgridcabalist</invloccabalist>
+          <invlochunter>merchantarmorgridhunter</invlochunter>
+          <invloctemplar>merchantarmorgridtemplar</invloctemplar>                    
+          <fillin>1</fillin>
+          <zdelta>-0.001</zdelta>
+          <rendersection>Models</rendersection>
+          <OnSetFocusUnit>UIMerchantInvGridOnSetControlUnit</OnSetFocusUnit>
+          <OnSetControlStat stat="gold">UIInvGridOnPaint</OnSetControlStat>
+          <wheelscrollincrement>66</wheelscrollincrement>
+          <OnMouseWheel>UIScrollOnMouseWheelRepaint</OnMouseWheel>
+          <label name="price text">
+            <x>5</x>
+            <y>5</y>
+            <width>384</width>
+            <height>640</height>
+            <fontsize>22</fontsize>
+            <rendersection>ItemText</rendersection>
+            <align>topleft</align>
+            <color>inv_price_text</color>
+          </label>
+          <panel name="icon panel">
+            <texture>main_atlas</texture>
+            <width>400</width>
+            <height>660</height>
+            <rendersection>ItemText</rendersection>
+          </panel>
+        </invgrid>
+        <button name="merchant scrollup">
+          <frame>merchant scrollup active</frame>
+          <litframe>merchant scrollup mouseover</litframe>
+          <downframe>merchant scrollup pressed</downframe>
+          <x>30</x>
+          <y>240</y>
+          <width>383</width>
+          <height>35</height>
+          <visible>1</visible>
+          <scrollcontrol inc="-100">merchant armor pack</scrollcontrol>
+          <hideonscrollextent>1</hideonscrollextent>
+          <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+        </button>
+        <button name="merchant scrolldown">
+          <frame>merchant scrolldown active</frame>
+          <litframe>merchant scrolldown mouseover</litframe>
+          <downframe>merchant scrolldown pressed</downframe>
+          <x>30</x>
+          <y>944</y>
+          <width>383</width>
+          <height>35</height>
+          <visible>1</visible>
+          <scrollcontrol inc="100">merchant armor pack</scrollcontrol>
+          <hideonscrollextent>1</hideonscrollextent>
+          <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+        </button>
+      </panel>
+      <panel name="merchant panel tab 3">
+        <x>0</x>
+        <ws_x>160</ws_x>
+        <width>471</width>
+        <ws_width>631</ws_width>
+        <height>1144</height>
+        <visible>0</visible>
+        <tab>2</tab>
+        <independentactivate>1</independentactivate>
+        <invgrid name="merchant small pack">
+          <cellx>65</cellx>
+          <celly>66</celly>
+          <cellborder>0</cellborder>
+          <frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</frame>
+          <ws_frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</ws_frame>
+          <litframe>verybighighlight</litframe>
+          <useableborder>verybighighlightborder</useableborder>
+          <unidentifiedicon>inv small no id</unidentifiedicon>
+          <badclassicon>inv small no use1</badclassicon>
+          <badclassuicon>inv small no use 1 and 2</badclassuicon>
+          <lowstatsicon>inv sm no use2</lowstatsicon>
+          <x>29</x>
+          <y>279</y>
+          <width>400</width>
+          <height>660</height>
+          <ScrollVertMax>700</ScrollVertMax>
+					<invloc>active_personal_store_page_3</invloc>          
+					<invlocmerchant>merchantsmallgrid</invlocmerchant>					
+          <rendersection>Models</rendersection>
+          <OnSetFocusUnit>UIMerchantInvGridOnSetControlUnit</OnSetFocusUnit>
+          <OnSetControlStat stat="gold">UIInvGridOnPaint</OnSetControlStat>
+          <wheelscrollincrement>66</wheelscrollincrement>
+          <OnMouseWheel>UIScrollOnMouseWheelRepaint</OnMouseWheel>
+          <label name="price text">
+            <x>5</x>
+            <y>5</y>
+            <width>384</width>
+            <height>640</height>
+            <fontsize>22</fontsize>
+            <rendersection>ItemText</rendersection>
+            <align>topleft</align>
+            <color>inv_price_text</color>
+          </label>
+          <panel name="icon panel">
+            <texture>main_atlas</texture>
+            <width>400</width>
+            <height>660</height>
+            <rendersection>ItemText</rendersection>
+          </panel>
+        </invgrid>
+      </panel>
+      <panel name="merchant panel tab 4">
+        <x>0</x>
+        <ws_x>160</ws_x>
+        <width>471</width>
+        <ws_width>631</ws_width>
+        <height>1144</height>
+        <visible>0</visible>
+        <tab>3</tab>
+        <independentactivate>1</independentactivate>
+        <invgrid name="merchant buyback">
+          <cellx>65</cellx>
+          <celly>66</celly>
+          <cellborder>0</cellborder>
+          <litframe>verybighighlight</litframe>
+          <frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</frame>
+          <ws_frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</ws_frame>
+          <useableborder>verybighighlightborder</useableborder>
+          <unidentifiedicon>inv small no id</unidentifiedicon>
+          <badclassicon>inv small no use1</badclassicon>
+          <badclassuicon>inv small no use 1 and 2</badclassuicon>
+          <lowstatsicon>inv sm no use2</lowstatsicon>
+          <x>29</x>
+          <y>279</y>
+          <width>400</width>
+          <height>660</height>
+          <ScrollVertMax>9900</ScrollVertMax>
+					<invloc>merchant_buyback</invloc>          
+          <rendersection>Models</rendersection>
+          <OnSetFocusUnit>UIMerchantInvGridOnSetControlUnit</OnSetFocusUnit>
+          <OnSetControlStat stat="gold">UIInvGridOnPaint</OnSetControlStat>
+          <wheelscrollincrement>66</wheelscrollincrement>
+          <OnMouseWheel>UIScrollOnMouseWheelRepaint</OnMouseWheel>
+          <label name="price text">
+            <x>5</x>
+            <y>5</y>
+            <width>384</width>
+            <height>640</height>
+            <fontsize>22</fontsize>
+            <rendersection>ItemText</rendersection>
+            <align>topleft</align>
+            <color>inv_price_text</color>
+          </label>
+          <panel name="icon panel">
+            <texture>main_atlas</texture>
+            <width>400</width>
+            <height>660</height>
+            <rendersection>ItemText</rendersection>
+          </panel>
+          <label name="quantity text">
+            <x>-4</x>
+            <y>-4</y>
+            <width>400</width>
+            <height>664</height>
+            <fontsize>22</fontsize>
+            <rendersection>ItemText</rendersection>
+            <align>bottomright</align>
+          </label>
+        </invgrid>
+        <button name="merchant scrollup">
+          <frame>merchant scrollup active</frame>
+          <litframe>merchant scrollup mouseover</litframe>
+          <downframe>merchant scrollup pressed</downframe>
+          <x>30</x>
+          <y>240</y>
+          <width>383</width>
+          <height>35</height>
+          <visible>1</visible>
+          <scrollcontrol inc="-100">merchant buyback</scrollcontrol>
+          <hideonscrollextent>1</hideonscrollextent>
+          <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+        </button>
+        <button name="merchant scrolldown">
+          <frame>merchant scrolldown active</frame>
+          <litframe>merchant scrolldown mouseover</litframe>
+          <downframe>merchant scrolldown pressed</downframe>
+          <x>30</x>
+          <y>944</y>
+          <width>383</width>
+          <height>35</height>
+          <visible>1</visible>
+          <scrollcontrol inc="100">merchant buyback</scrollcontrol>
+          <hideonscrollextent>1</hideonscrollextent>
+          <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+        </button>
+      </panel>
+      <button name="merchant tab button 1">
+        <x>32</x>
+        <y>178</y>
+        <ws_x>192</ws_x>
+        <width>116</width>
+        <height>52</height>
+        <frame>merchant tab</frame>
+        <litframe>merchant tab highlight</litframe>
+        <downframe>merchant tab on</downframe>
+		    <OnLButtonDownSnd>ButtonMerchantPanelTabs</OnLButtonDownSnd>
+        <visible>1</visible>
+        <tab>0</tab>
+        <toggle>1</toggle>
+        <label>
+          <x>5</x>
+          <y>0</y>
+          <width>106</width>
+          <height>49</height>
+          <string>merchanttab weapons</string>
+          <align>center</align>
+          <autosizefont>1</autosizefont>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="merchant tab button 2">
+        <frame>merchant tab</frame>
+        <downframe>merchant tab on</downframe>
+        <litframe>merchant tab highlight</litframe>
+		    <OnLButtonDownSnd>ButtonMerchantPanelTabs</OnLButtonDownSnd>
+		    <x>164</x>
+        <y>178</y>
+        <ws_x>324</ws_x>
+        <width>116</width>
+        <height>49</height>
+        <visible>1</visible>
+        <tab>1</tab>
+        <toggle>1</toggle>
+        <label>
+          <x>5</x>
+          <y>0</y>
+          <width>106</width>
+          <height>49</height>
+          <string>merchanttab armor</string>
+          <align>center</align>
+          <autosizefont>1</autosizefont>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="merchant tab button 3">
+        <frame>merchant tab</frame>
+        <litframe>merchant tab highlight</litframe>
+        <downframe>merchant tab on</downframe>
+		    <OnLButtonDownSnd>ButtonMerchantPanelTabs</OnLButtonDownSnd>
+		    <x>296</x>
+        <y>178</y>
+        <ws_x>456</ws_x>
+        <width>116</width>
+        <height>49</height>
+        <tab>2</tab>
+        <label>
+          <x>5</x>
+          <y>0</y>
+          <width>106</width>
+          <height>49</height>
+          <string>merchanttab miscellaneous</string>
+          <align>center</align>
+          <autosizefont>1</autosizefont>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="merchant tab button 4">
+        <frame>buy back button</frame>
+        <litframe>buy back button mouse</litframe>
+        <downframe>buy back button lit</downframe>
+		    <OnLButtonDownSnd>ButtonMerchantPanelTabs</OnLButtonDownSnd>
+		    <x>214</x>
+        <y>990</y>
+        <ws_x>374</ws_x>
+        <width>189</width>
+        <height>41</height>
+        <stretch>0</stretch>
+        <tab>3</tab>
+        <label>
+          <x>5</x>
+          <y>6</y>
+          <width>179</width>
+          <height>28</height>
+          <string>ui buyback</string>
+          <align>center</align>
+          <autosizefont>1</autosizefont>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+    </panel>
+    <panel name="merchant welcome panel">
+      <frame>gunmod panel</frame>
+      <x>446</x>
+      <y>0</y>
+      <tgty>1200</tgty>
+      <ws_x>606</ws_x>
+      <width>708</width>
+      <height>1200</height>
+      <visible>0</visible>
+      <stretch>0</stretch>
+      <anim_category>quick close</anim_category>
+      <anim_category>close all</anim_category>
+      <anim_category>middle panel</anim_category>
+
+      <anim_relationship type="closes" onactivate="1" ondirectonly="0" category="1">middle panel</anim_relationship>
+
+      <OnSetControlUnit>UIComponentSetFocusUnit</OnSetControlUnit>
+	    <OnActivateSnd>VendorDialogueOpenEnd</OnActivateSnd>
+	    <OnInactivateSnd>CloseInventory</OnInactivateSnd>
+      <label name="welcome message">
+        <x>88</x>
+        <y>225</y>
+        <width>534</width>
+        <height>260</height>
+        <autosize>0</autosize>
+        <align>top</align>
+        <wordwrap>1</wordwrap>
+        <red>247</red>
+        <green>132</green>
+        <blue>30</blue>
+        <fontsize>40</fontsize>
+        <OnPostActivate>UIOnPostActivateSetWelcomeMsg</OnPostActivate>
+      </label>
+      <label name="gold label">
+        <x>88</x>
+        <y>505</y>
+        <width>534</width>
+        <height>32</height>
+        <autosize>0</autosize>
+        <align>center</align>
+        <red>247</red>
+        <green>132</green>
+        <blue>30</blue>
+        <string>ui inventory money label</string>
+      </label>
+      <statdispl>
+        <x>88</x>
+        <y>537</y>
+        <width>534</width>
+        <height>32</height>
+        <autosize>0</autosize>
+        <align>center</align>
+        <chardisplay>gold</chardisplay>
+        <OnSetControlStat stat="gold">UIStatDisplOnPaint</OnSetControlStat>
+      </statdispl>
+      <button>
+        <frame>button_paperdoll</frame>
+        <litframe>button_paperdoll mouse</litframe>
+        <downframe>button_paperdolllit</downframe>
+        <x>73</x>
+        <y>648</y>
+        <width>65</width>
+        <height>65</height>
+        <overlaylitframe>1</overlaylitframe>
+        <OnLClick>UIMerchantShowPaperdoll</OnLClick>
+        <OnLButtonDownSnd>ButtonAccept</OnLButtonDownSnd>
+        <OnLButtonUpSnd></OnLButtonUpSnd>
+        <tooltipstring>CurrentlyEquipped</tooltipstring>
+      </button>
+      <button>
+        <frame>button_cancel</frame>
+        <litframe>button_cancel mouse</litframe>
+        <downframe>button_cancel_lit</downframe>
+        <x>566</x>
+        <y>648</y>
+        <width>65</width>
+        <height>65</height>
+        <overlaylitframe>1</overlaylitframe>
+        <OnLButtonUp>UIMerchantClose</OnLButtonUp>
+        <OnLButtonDownSnd>ButtonReject</OnLButtonDownSnd>
+        <tooltipstring>cancel</tooltipstring>
+      </button>
+    </panel>
+
+    <panel name="reward message panel">
+      <frame>gunmod panel</frame>
+      <x>446</x>
+      <y>0</y>
+      <tgty>1200</tgty>
+      <ws_x>606</ws_x>
+      <width>708</width>
+      <height>1200</height>
+      <visible>0</visible>
+      <stretch>0</stretch>
+      <anim_category>close all</anim_category>
+      <OnSetControlUnit>UIComponentSetFocusUnit</OnSetControlUnit>
+      <label name="reward message">
+        <x>88</x>
+        <y>225</y>
+        <width>534</width>
+        <height>260</height>
+        <autosize>0</autosize>
+        <align>top</align>
+        <wordwrap>1</wordwrap>
+        <red>247</red>
+        <green>132</green>
+        <blue>30</blue>
+        <fontsize>30</fontsize>
+        <!--<OnPostActivate>UIOnPostActivateSetWelcomeMsg</OnPostActivate>-->
+      </label>
+      <!--<button>
+        <frame>button_cancel</frame>
+        <downframe>button_cancel</downframe>
+        <litframe>smallhighlight</litframe>
+        <x>574</x>
+        <y>649</y>
+        <width>65</width>
+        <height>65</height>
+        <overlaylitframe>1</overlaylitframe>
+        <OnLButtonDown>UIMerchantClose</OnLButtonDown>
+      </button>-->
+    </panel>
+
+    <panel name="stash panel">
+      <frame>left panel blank</frame>
+      <tgtx>-497</tgtx>
+      <ws_tgtx>-657</ws_tgtx>
+      <x>0</x>
+      <width>471</width>
+      <ws_width>631</ws_width>
+      <height>1144</height>
+      <visible>0</visible>
+      <animtime>300</animtime>
+
+      <anim_category>quick close</anim_category>
+      <anim_category>close all</anim_category>
+      <anim_category>left panel</anim_category>
+      <anim_relationship type="linked">paperdoll screen</anim_relationship>
+      <anim_relationship type="linked">inventory panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" category="1">left panel</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" category="1">main panels</anim_relationship>
+      <anim_relationship type="opens"  onactivate="0" category="1">main panels</anim_relationship>
+      <anim_relationship type="closes" onactivate="1" category="1" preserveuseractive="1">main panels UA</anim_relationship>
+      <anim_relationship type="opens"  onactivate="0" category="1" ifuseractive="1">main panels UA</anim_relationship>
+      <anim_relationship type="closes" onactivate="1">alt menu</anim_relationship>
+
+      <OnSetControlUnit>UIComponentSetFocusUnit</OnSetControlUnit>
+      <OnInactivate>UIStashOnInactivate</OnInactivate>
+      <OnPostVisible>UISetChatActive</OnPostVisible>
+      <OnPostInvisible>UIStashOnPostInvisible</OnPostInvisible>
+      <label>
+        <x>20</x>
+        <ws_x>180</ws_x>
+        <y>25</y>
+        <width>441</width>
+        <height>32</height>
+        <fontsize>28</fontsize>
+        <autosizefont>1</autosizefont>
+        <font>Upper_Font</font>
+        <align>center</align>
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <alpha>255</alpha>
+        <dropshadowred>0</dropshadowred>
+        <dropshadowgreen>0</dropshadowgreen>
+        <dropshadowblue>0</dropshadowblue>
+        <string>ui inventory stash panel</string>
+      </label>
+      <panel name="stash holder">
+        <x>29</x>
+        <ws_x>189</ws_x>
+        <y>216</y>
+        <width>390</width>
+        <height>720</height>
+        <clipchildren>1</clipchildren>
+        <!--<ScrollVertMax>884</ScrollVertMax>-->
+        <wheelscrollincrement>66</wheelscrollincrement>
+        <OnPostActivate>UIStashHolderOnPostActivate</OnPostActivate>
+        <!--<OnPostActivate>UIRepaintComponent</OnPostActivate>-->
+        <OnMouseWheel>UIScrollOnMouseWheelRepaint</OnMouseWheel>
+        <invgrid name="stash grid">
+          <width>390</width>
+          <height>6600</height>
+          <cellx>65</cellx>
+          <celly>66</celly>
+          <cellborder>0</cellborder>
+          <frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</frame>
+          <ws_frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</ws_frame>
+          <litframe>verybighighlight</litframe>
+          <useableborder>verybighighlightborder</useableborder>
+          <unidentifiedicon>inv small no id</unidentifiedicon>
+          <badclassicon>inv small no use1</badclassicon>
+          <badclassuicon>inv small no use 1 and 2</badclassuicon>
+          <lowstatsicon>inv sm no use2</lowstatsicon>
+          <invloc>stash</invloc>
+          <rendersection>Models</rendersection>
+          <label name="quantity text">
+            <x>-4</x>
+            <y>-4</y>
+            <width>394</width>
+            <height>6600</height>
+            <fontsize>22</fontsize>
+            <rendersection>ItemText</rendersection>
+            <align>bottomright</align>
+          </label>
+          <panel name="icon panel">
+            <texture>main_atlas</texture>
+            <width>390</width>
+            <height>6600</height>
+            <rendersection>ItemText</rendersection>
+          </panel>
+        </invgrid>
+
+        <invgrid name="extra stash grid">
+          <y>675</y>
+          <width>390</width>
+          <height>528</height>
+          <cellx>65</cellx>
+          <celly>66</celly>
+          <cellborder>0</cellborder>
+          <frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</frame>
+          <ws_frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</ws_frame>
+          <litframe>verybighighlight</litframe>
+          <useableborder>verybighighlightborder</useableborder>
+          <unidentifiedicon>inv small no id</unidentifiedicon>
+          <badclassicon>inv small no use1</badclassicon>
+          <badclassuicon>inv small no use 1 and 2</badclassuicon>
+          <lowstatsicon>inv sm no use2</lowstatsicon>
+          <invloc>extra_stash</invloc>
+          <rendersection>Models</rendersection>
+          <visible>0</visible>
+          <independentactivate>1</independentactivate>
+          <label name="quantity text">
+            <x>-4</x>
+            <y>-4</y>
+            <width>390</width>
+            <height>528</height>
+            <fontsize>22</fontsize>
+            <rendersection>ItemText</rendersection>
+            <align>bottomright</align>
+          </label>
+          <panel name="icon panel">
+            <texture>main_atlas</texture>
+            <width>390</width>
+            <height>528</height>
+            <rendersection>ItemText</rendersection>
+          </panel>
+        </invgrid>
+      </panel>
+
+      <panel name="stash grid panel top">
+        <x>24</x>
+        <ws_x>184</ws_x>
+        <y>166</y>
+        <frame>stash grid panel top</frame>
+      </panel>
+      <button name="stash scrollup">
+        <frame>merchant scrollup active</frame>
+        <litframe>merchant scrollup mouseover</litframe>
+        <downframe>merchant scrollup pressed</downframe>
+        <x>30</x>
+        <ws_x>190</ws_x>
+        <y>172</y>
+        <!--<y>-39</y>-->
+        <width>383</width>
+        <height>35</height>
+        <visible>1</visible>
+        <scrollcontrol inc="-68">stash holder</scrollcontrol>
+        <hideonscrollextent>1</hideonscrollextent>
+        <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+      </button>
+      <panel name="stash grid panel btm">
+        <x>24</x>
+        <ws_x>184</ws_x>
+        <y>936</y>
+        <frame>stash grid panel btm</frame>
+      </panel>
+      <button name="stash scrolldown">
+        <frame>merchant scrolldown active</frame>
+        <litframe>merchant scrolldown mouseover</litframe>
+        <downframe>merchant scrolldown pressed</downframe>
+        <x>30</x>
+        <ws_x>190</ws_x>
+        <y>944</y>
+        <!--<y>645</y>-->
+        <width>383</width>
+        <height>35</height>
+        <visible>1</visible>
+        <scrollcontrol inc="68">stash holder</scrollcontrol>
+        <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+        <hideonscrollextent>1</hideonscrollextent>
+      </button>
+    </panel>
+  </screen>
+</ui>
