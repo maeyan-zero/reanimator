@@ -1,0 +1,21 @@
+<atlas>
+	<file>data\uix\revival_atlas.png</file>
+	<widthbasis>1600</widthbasis>
+	<heightbasis>1200</heightbasis>
+	<ws_widthbasis>1920</ws_widthbasis>
+	<chunksize>0</chunksize>
+	<frame>
+		<name>revival</name>
+		<x>0</x>
+		<y>0</y>
+		<w>96</w>
+		<h>96</h>
+	</frame>
+	<frame>
+		<name>ring</name>
+		<x>96</x>
+		<y>0</y>
+		<w>96</w>
+		<h>96</h>
+	</frame>
+</atlas>
