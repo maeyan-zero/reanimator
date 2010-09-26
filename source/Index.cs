@@ -418,7 +418,7 @@ namespace Reanimator
             // Check Data Stream is available.
             if ((DatFile == null))
             {
-                if (!(OpenDat(FileAccess.Write))) return false;
+                if (!(OpenDat(FileAccess.ReadWrite))) return false;
             }
 
             bool doCompress = true;
@@ -430,12 +430,6 @@ namespace Reanimator
                     break;
                 }
             }
-
-            UInt32 hash = Crypt.GetStringHash("achievements.txt.cooked");
-
-            UInt32 copy;
-            copy = hash;
-
 
             // Create new Index File entry
             byte[] fileBuffer = bytesToWrite;
@@ -449,7 +443,9 @@ namespace Reanimator
                 FileNameSHA1Hash = Crypt.GetStringSHA1UInt32(fileName),
                 FolderPathSHA1Hash = Crypt.GetStringSHA1UInt32(directory),
                 StartToken = TokenInfo,
-                EndToken = TokenInfo
+                EndToken = TokenInfo,
+                Unknown23 = 1,
+                Unknown24 = 1
             };
 
             // See if the index already contains the FileName string
@@ -479,9 +475,7 @@ namespace Reanimator
             }
 
 
-            fileStruct.First4BytesOfFile = FileTools.ByteArrayToInt32(fileBuffer, 0);
-            fileStruct.Second4BytesOfFile = FileTools.ByteArrayToInt32(fileBuffer, 4);
-            _filesDetails.Add(fileStruct);
+
             
 
             // Create an entry in the File Index
@@ -494,10 +488,21 @@ namespace Reanimator
             fileEntry.DirectoryString = _stringTable[fileEntry.Directory];
             fileEntry.FileNameString = _stringTable[fileEntry.FileName];
             fileEntry.CompressedSize = doCompress ? 1 : 0;
- 
-            Files.Add(fileEntry);
+
+            int pos = 0;
+            byte[] first4Bytes = FileTools.ByteArrayToArray<byte>(bytesToWrite, ref pos, 4);
+            byte[] second4Bytes = FileTools.ByteArrayToArray<byte>(bytesToWrite, ref pos, 4);
+
+            fileStruct.First4BytesOfFile = BitConverter.ToInt32(first4Bytes, 0);
+            fileStruct.Second4BytesOfFile = BitConverter.ToInt32(second4Bytes, 0);
+            _filesDetails.Add(fileStruct);
 
             AddFileToDat(bytesToWrite, fileEntry);
+
+            Files.Add(fileEntry);
+            
+
+            
 
             // todo: handle existing files
             //int index = Files.IndexOf(fileEntry);

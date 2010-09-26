@@ -15,6 +15,7 @@ namespace Reanimator
     public partial class ExcelFile : DataFile
     {
         public ExcelHeader FileExcelHeader { get; private set; }
+       
         private byte[] _stringsBytes;
 
         public Hashtable Strings { get; private set; }
@@ -24,6 +25,17 @@ namespace Reanimator
         public List<byte[]> FinalData { get; private set; }
         public List<String> SecondaryStrings { get; private set; }
         
+
+        /**
+         * Updated Members for newer methods
+         * */
+        private List<String> StringTable { set; get; }
+        private List<Int32[]> IntegerTable { get; set; }
+        public Boolean IntegrityCheck { get; private set; }
+        public UInt32 StructureID { get; private set; }
+
+
+
         private Int32 _rcshValue;
         private Int32 _tyshValue;
         private Int32 _dnehValue;
@@ -50,6 +62,212 @@ namespace Reanimator
         {
             IsExcelFile = true;
         }
+
+
+        public ExcelFile(byte[] CSVsource)
+        {
+            IntegrityCheck = false;
+            if (CSVsource == null) return;
+            if (CSVsource.Length < 64) return;
+            int offset = 0;
+            int length = CSVsource.Length;
+            byte delimiter = (byte)'\t';
+            string stringToken = FileTools.ByteArrayToStringASCII(CSVsource, ref offset, 8);
+            uint typeToken = Convert.ToUInt32(stringToken, 16);
+            int stringCursor = 1;
+            int integerCursor = 1;
+            bool skipFirstRow = true;
+            StringTable = new List<string>();
+            IntegerTable = new List<int[]>();
+
+            if (!(DataTypes.Contains(typeToken))) return;
+            DataType = (Type)DataTypes[typeToken];
+
+            string[][] tableRows = FileTools.CSVtoStringArray(CSVsource, DataType.GetFields().Count(), delimiter);
+            if (tableRows == null) return;
+            
+
+            int column = 0;
+            for (int row = 0; row < tableRows.Count(); row++)
+            {
+                Object newRow = new Object();
+                foreach (FieldInfo field in DataType.GetFields())
+                {
+                    if ((skipFirstRow) && (row == 0)) continue;
+                    if ((field.IsPrivate)) continue; // build the private fields on file generation ToByteArray() etc
+                    string value = tableRows[row][column];
+                    ExcelOutputAttribute attribute = GetExcelOutputAttribute(field);
+
+                    if ((attribute.IsStringOffset))
+                    {
+                        StringTable.Add(value);
+                        int position = StringTable.Count;
+                        field.SetValue(newRow, position);
+                    }
+                    else if ((attribute.IsIntOffset))
+                    {
+                        value = value.Replace("\"", "");
+                        string[] splitValue = value.Split(',');
+                        int count = splitValue.Length;
+                        int[] intValue = new int[count];
+                        for (int i = 0; i < count; i++)
+                            intValue[i] = int.Parse(splitValue[i]);
+                        IntegerTable.Add(intValue);
+                        int position = IntegerTable.Count;
+                        field.SetValue(newRow, position);
+                    }
+                    else if (field.FieldType == typeof(String))
+                        field.SetValue(newRow, value);
+                    else if (field.FieldType == typeof(Int32))
+                        field.SetValue(newRow, Int32.Parse(value));
+                    else if (field.FieldType == typeof(UInt32))
+                        field.SetValue(newRow, UInt32.Parse(value));
+                    else if (field.FieldType == typeof(Single))
+                        field.SetValue(newRow, Single.Parse(value));
+                    else if (field.FieldType == typeof(Int16))
+                        field.SetValue(newRow, Int16.Parse(value));
+                    else if (field.FieldType == typeof(UInt16))
+                        field.SetValue(newRow, UInt16.Parse(value));
+                    else if (field.FieldType == typeof(Byte))
+                        field.SetValue(newRow, Byte.Parse(value));
+                    else if (field.FieldType == typeof(Char))
+                        field.SetValue(newRow, Char.Parse(value));
+                    else if (field.FieldType == typeof(Int64))
+                        field.SetValue(newRow, Int64.Parse(value));
+                    else if (field.FieldType == typeof(UInt64))
+                        field.SetValue(newRow, UInt64.Parse(value));
+
+                    column++;
+                }
+                Rows.Add(newRow);
+            }
+            IntegrityCheck = true;
+        }
+
+        public byte[] ToByteArray()
+        {
+            List<byte> buffer = new List<byte>();
+            List<byte> stringTableBuffer = new List<byte>();
+            stringTableBuffer.Add((byte)0); // add 1 for internal offsetting
+            List<byte> integerTableBuffer = new List<byte>();
+            integerTableBuffer.Add((byte)0);// add 1 for internal offsetting
+            byte[] cxehToken = BitConverter.GetBytes(FileTokens.StartOfBlock);
+            buffer.AddRange(cxehToken);
+            
+            ExcelHeader header = new ExcelHeader
+            {
+                StructureId = StructureID,
+                Unknown321 = 1,
+                Unknown322 = 17,
+                Unknown161 = 20,
+                Unknown162 = 20,
+                Unknown163 = 0,
+                Unknown164 = 0,
+                Unknown165 = 20,
+                Unknown166 = 0
+            };
+            buffer.AddRange(FileTools.StructureToByteArray(header));
+            buffer.AddRange(cxehToken);
+            int stringByteCountOffset = buffer.Count; // insert here later
+            buffer.AddRange(cxehToken);
+            TableHeader tableHeader = new TableHeader
+            {
+                Unknown1 = 0x03,
+                Unknown2 = 0x3F,
+                VersionMajor = 0x00,
+                Reserved1 = -1,
+                VersionMinor = 0x00,
+                Reserved2 = -1
+            };
+
+            foreach (Object row in Rows)
+            {
+                foreach (FieldInfo field in DataType.GetFields())
+                {
+                    if ((field.IsPrivate)) // initialize all private fields
+                    {
+                        if ((field.FieldType == typeof(TableHeader)))
+                            field.SetValue(row, tableHeader);
+                        else if (field.FieldType.BaseType == typeof(Array))
+                        {
+                            Array arrayBase = (Array)field.GetValue(Rows[0]);
+                            Array ar = (Array)Activator.CreateInstance(field.FieldType, arrayBase.Length);
+                            field.SetValue(row, ar);
+                        }
+                        else if (field.FieldType == typeof(String))
+                            field.SetValue(row, String.Empty);
+                        else if (field.FieldType == typeof(Int32))
+                            field.SetValue(row, (Int32)(-1));
+                        else if (field.FieldType == typeof(UInt32))
+                            field.SetValue(row, (UInt32)0);
+                        else if (field.FieldType == typeof(Int64))
+                            field.SetValue(row, (Int64)(-1));
+                        else if (field.FieldType == typeof(UInt64))
+                            field.SetValue(row, (UInt64)0);
+                        else if (field.FieldType == typeof(Single))
+                            field.SetValue(row, (Single)0);
+                        else if (field.FieldType == typeof(Int16))
+                            field.SetValue(row, (Int16)0);
+                        else if (field.FieldType == typeof(UInt16))
+                            field.SetValue(row, (UInt16)0);
+                        else if (field.FieldType == typeof(Byte))
+                            field.SetValue(row, (Byte)0);
+                        else if (field.FieldType == typeof(Char))
+                            field.SetValue(row, (Char)0);
+                    }
+
+                    ExcelOutputAttribute attribute = GetExcelOutputAttribute(field);
+                    if ((attribute.IsStringOffset))
+                    {
+                        int i = (int)field.GetValue(row);
+                        string stringValue = StringTable[i];
+                        stringTableBuffer.AddRange(FileTools.StringToASCIIByteArray(stringValue));
+                        int offset = stringTableBuffer.Count;
+                        field.SetValue(row, offset);
+                    }
+                    if ((attribute.IsIntOffset))
+                    {
+                        int i = (int)field.GetValue(row);
+                        int[] integerValue = IntegerTable[i];
+                        integerTableBuffer.AddRange(FileTools.IntArrayToByteArray(integerValue));
+                        int offset = integerTableBuffer.Count;
+                        field.SetValue(row, offset);
+                    }
+
+                    // Check and create any sorting patterns
+                    if ((attribute.SortAscendingID != 0) || (attribute.SortDistinctID != 0) || (attribute.SortPostOrderID != 0))
+                    {
+                        //IEnumerable<int> indiceOrder = Rows.Select(i => i
+                    }
+
+
+                    
+
+                    buffer.AddRange(FileTools.StructureToByteArray(row));
+                }
+            }
+
+            // Now all the offset strings have been read, merge the arrays
+            byte[] stringArrayLength = BitConverter.GetBytes(stringTableBuffer.Count);
+            buffer.InsertRange(stringByteCountOffset, stringArrayLength);
+            stringByteCountOffset += stringArrayLength.Length;// 4 bytes
+            buffer.InsertRange(stringByteCountOffset, stringTableBuffer);
+
+            //todo: secondary strings
+
+
+            int[] indices = new int[Rows.Count];
+            for (int i = 0; i < Rows.Count; i++)
+                indices[i] = i;
+            buffer.AddRange(cxehToken);
+            buffer.AddRange(FileTools.IntArrayToByteArray(indices));
+
+            buffer.AddRange(cxehToken);
+
+
+            return null;
+        }
+
 
 
         public override bool ParseData(byte[] data)

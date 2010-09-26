@@ -7,7 +7,9 @@ namespace Reanimator
     public abstract class DataFile
     {
         public String StringId { get; private set; }
-        public Type DataType { get; private set; }
+        public Type DataType { get; protected set; }
+        
+
 
         public bool IsExcelFile { get; protected set; }
         public bool IsStringsFile { get; protected set; }
@@ -37,6 +39,11 @@ namespace Reanimator
             FilePath = String.Empty;
 
             _data = null;
+            Rows = new List<object>();
+        }
+
+        protected DataFile()
+        {
             Rows = new List<object>();
         }
 

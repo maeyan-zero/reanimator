@@ -833,7 +833,7 @@ namespace Reanimator.Forms
 
 
             // don't patch out string files or music/movie files
-            if (/**file.FileNameString.EndsWith(StringsFile.FileExtention) ||**/
+            if (file.FileNameString.EndsWith(StringsFile.FileExtention) ||
                 file.FileNameString.EndsWith(".ogg") ||
                 file.FileNameString.EndsWith(".mp2") ||
                 file.FileNameString.EndsWith(".bik")) return true;
