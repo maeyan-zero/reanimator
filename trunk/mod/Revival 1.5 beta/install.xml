@@ -10,16 +10,99 @@
 			<patch>sp_hellgate_1.10.180.3416_1.18074.70.4256</patch>
 			<patch>mp_hellgate_1.10.180.3416_1.0.86.4580</patch>
 		</dependencies>
-		<description>Welcome to the amazing 1.5 beta release of Revival. This is the most expansive update to the game yet including these major features:
+		<description>Welcome to the amazing 1.5 beta release of Revival.
+		This is the most expansive update to the game yet including these major features:
 		* Stonehenge and Abyss Armor &amp; Weapons including original names &amp; stats.
-				* 6x Stonehenge Helms, 3x Abyss Armor Sets
-				* Sunblade, Sunshield, Moonblade, Gleamcarver, Dissector, Dissector Shield
-				* Vigilante, Hellbore, Fry Baby, Core Magnum, Thumper, Thunderclash
-				* Fire Seeds, Negatron, Singularity Node, 3x Focus Items (yes, including Slippies!)
-		* The incredible particle updates from Abyss.
+			* 6x Stonehenge Helms, 3x Abyss Armor Sets
+			* Sunblade, Sunshield, Moonblade, Gleamcarver, Dissector, Dissector Shield
+			* Vigilante, Hellbore, Fry Baby, Core Magnum, Thumper, Thunderclash
+			* Fire Seeds, Negatron, Singularity Node, 3x Focus Items (yes, including Slippies!)
+		* Particle updates from Abyss.
 		* Background environment updates from Abyss.
+			* Map nodes more clearly defined.
+			* Widened streets.
+			* Improved architecture and enchanced geometrical detail.
+			* 
 		* New community item loots!
+		  * 16x new unique items named after hellgateaus community members.
 		* Mythic &amp; Double-Edged qualities.
+		* New minigame events. When winning the minigame, you may be lucky enough to proc:
+			* Palladium.
+			* Fawkes items.
+			* Mods.
+			* Debuffs.
+		* Rings added to the game.
+		* 1x slot for goggles &amp; 2x slots added for your rings .
+		* Passgeways are rarer but richer.
+		* Rare and boss mobs are a lot more challenging and have fixed chances of dropping exceptional loot.
+		* Players are rewarded with a skill &amp; attribute retrainer upon the completion of the game (norm &amp; nm).
+		* Major bosses have a fixed chance of drop retrainers.
+		* Moloch has been added as a rare spawn to the hell dungeon and drops original stonehenge loot.
+		* A number of quest rewards have been reworked.
+		* Improved dye kit colors.
+		* New loader screen art work from the Abyss expansion.
+		* Nanoforge increaments are larger. -something coldheart wrote into a post
+		* Pets only drop from certain fixed bosses.
+		* Only legendary and rarer items require identifying.
+		* Nightmare mode levels scale to your character level (excluding end game).
+		* Pets drop as eggs and need to be used in the cube.
+		* Old bosses can be fought again.
+		* Slightly better chance of finding uniques in general.
+		* Obtain genre specific mods from certain enemies. ie. Get beast multiplier mods from beast type mobs.
+		* Zomper, the Bill Roper zombie is now a unique spawn and carries IOU's.
+		* Blue prints only craft exceptional items that require a lot of parts.
+		* Mods no longer show up on weapons ?
+		* None stat boosting dye kits rare drops from monsters.
+		* Fix end game level advancement.
+		* XP penalty removed for fighting monsters above your level.. in fact you level faster.
+		* Stonehenge bosses added to end game quests, replayable.
+		* Better lifetime on modifications.
+		* Starting point removed. Murmur gives you skills points to advance you.
+		* Tutorial dialogue can be skipped.
+		* Monster shield overload capacity capped at 100%.
+		* Power regeneration increase from 120 to 480.
+		* Reduced power regen per Willpower from 3 to 2.
+		* Monster/platyer shield charge delay reduced from 4 to 2.5 seconds.
+		* Shield recharge rate from from 5% to 10%.
+		* Fix reaper model.
+		* Change basic crafting progressions.
+		  * I'm not sure if I'm in the right place, but can I make a suggestion? It regards the Transmorg. Cube and crafting.
+		
+		* Lower environment visability
+		
+		Early game:
+		* Start with no weapons in tutorial.
+		* Get a choice of weapon for your first quest.
+		
+		
+		Class changes:
+		General:
+		* Sprint maxes at 3 points and has no cooldown.
+		* Skills rearranged into their groups.
+		
+		Templar:
+		* Multiple auras can be used at once at the expense of mana pool.
+		
+		Engineer:
+		* Haste bot dependency removed.
+		* 
+		
+		Optional components:
+		* Allow purchasing of retrainers.
+		* Removal of regional censoring.
+		* Automatically pickup basic items.
+		* Malachor's Sniper Pack.
+		* "Hell" mode difficulty.
+		* Tabbed inventory.
+		
+		Previous fixes included:
+		* Increased stash (x10) and inventory (2x).
+		* Level cap increased to 55.
+		* Destructables only drop basic items.
+		* Mutant boss loots are fixed drops and scale.
+		* Vendor will sometimes offer legendary mods.
+
+		
 		
 		Brand new game experience. Although you can play your higher level characters, we would recommend starting a new one so you can reep the full benefits update.
 		</description>
