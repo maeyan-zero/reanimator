@@ -58,6 +58,10 @@ namespace Reanimator
                             }
                             csv.Write(stringBuffer);
                         }
+                    }
+                    // dont write delimiter for last column
+                    if (col + 1 != dataTable.Columns.Count)
+                    {
                         csv.Write(delimiter);
                     }
                 }

@@ -385,7 +385,7 @@ namespace Reanimator.Forms
             if (table == null) return;
 
             String saveType = _dataFile.IsExcelFile ? "Cooked Excel Files" : "Cooked String Files";
-            String saveExtension = _dataFile.IsExcelFile ? ".txt.cooked" : ".uni.xls.cooked";
+            String saveExtension = _dataFile.IsExcelFile ? "txt.cooked" : "uni.xls.cooked";
             String saveInitialPath = Path.Combine(Config.HglDir, _dataFile.FilePath);
 
             String savePath = FileTools.SaveFileDiag(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
@@ -554,7 +554,7 @@ namespace Reanimator.Forms
 
             dataRow = destination.NewRow();
 
-            while (offset < length)
+            while (!(offset >= length))
             {
                 foreach (DataColumn dataColumn in destination.Columns)
                 {
@@ -568,6 +568,8 @@ namespace Reanimator.Forms
                         column++;
                         continue;
                     }
+
+                    if (offset == length) break;
 
                     dataType = dataColumn.DataType;
                     byte[] newStringBuffer = FileTools.GetDelimintedByteArray(source, ref offset, deliminter);
@@ -621,7 +623,7 @@ namespace Reanimator.Forms
                     }
                     column++;
                 }
-                //offset++;
+
                 column = 0;
                 destination.Rows.Add(dataRow);
                 dataRow = destination.NewRow();
