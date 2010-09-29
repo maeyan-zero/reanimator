@@ -19,18 +19,27 @@ namespace Reanimator.Forms
             InitializeComponent();
         }
 
-        public CSVSelection(DataGridView datagridview)
+        public CSVSelection(DataTable dataTable)
         {
             InitializeComponent();
-            selected = new bool[datagridview.ColumnCount];
-            for (int i = 0; i < datagridview.ColumnCount; i++)
+            selected = new bool[dataTable.Columns.Count];
+            for (int i = 0; i < dataTable.Columns.Count; i++)
             {
                 CheckBox checkbox = new CheckBox();
-                checkbox.Text = datagridview.Columns[i].Name;
+                checkbox.Text = dataTable.Columns[i].ColumnName;
                 checkbox.Click += new EventHandler(checkbox_Click);
                 flowLayoutPanel1.Controls.Add(checkbox);
+
+                // dont tick related columns and index by default
+                if (!(dataTable.Columns[i].ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated)))
+                {
+                    if (!(dataTable.Columns[i].ColumnName == "Index"))
+                    {
+                        checkbox.CheckState = CheckState.Checked;
+                        selected[i] = checkbox.Checked;
+                    }
+                }
             }
-            comboBoxDelimiter.SelectedIndex = 1;
         }
 
         private void checkbox_Click(object sender, EventArgs e)
@@ -71,6 +80,11 @@ namespace Reanimator.Forms
                     }
                 }
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

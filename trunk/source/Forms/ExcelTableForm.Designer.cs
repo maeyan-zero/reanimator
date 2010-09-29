@@ -45,7 +45,10 @@
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.copyScriptLabel = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tableDataPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).BeginInit();
@@ -65,10 +68,10 @@
             this.tabControl1.Controls.Add(this.indexArraysPage);
             this.tabControl1.Controls.Add(this.stringsPage);
             this.tabControl1.Controls.Add(this.rowViewPage);
-            this.tabControl1.Location = new System.Drawing.Point(0, 1);
+            this.tabControl1.Location = new System.Drawing.Point(0, 5);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(752, 588);
+            this.tabControl1.Size = new System.Drawing.Size(752, 584);
             this.tabControl1.TabIndex = 4;
             // 
             // tableDataPage
@@ -77,7 +80,7 @@
             this.tableDataPage.Location = new System.Drawing.Point(4, 22);
             this.tableDataPage.Name = "tableDataPage";
             this.tableDataPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tableDataPage.Size = new System.Drawing.Size(744, 562);
+            this.tableDataPage.Size = new System.Drawing.Size(744, 558);
             this.tableDataPage.TabIndex = 0;
             this.tableDataPage.Text = "Table Data";
             this.tableDataPage.UseVisualStyleBackColor = true;
@@ -87,7 +90,7 @@
             this.tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableData_DataGridView.Location = new System.Drawing.Point(3, 3);
             this.tableData_DataGridView.Name = "tableData_DataGridView";
-            this.tableData_DataGridView.Size = new System.Drawing.Size(738, 556);
+            this.tableData_DataGridView.Size = new System.Drawing.Size(738, 552);
             this.tableData_DataGridView.TabIndex = 1;
             // 
             // indexArraysPage
@@ -179,6 +182,9 @@
             this.toolStripButton2,
             this.toolStripSeparator2,
             this.copyScriptLabel,
+            this.toolStripSeparator4,
+            this.toolStripButton3,
+            this.toolStripSeparator3,
             this.toolStripLabel1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 592);
             this.toolStrip1.Name = "toolStrip1";
@@ -195,6 +201,7 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(47, 22);
             this.toolStripButton1.Text = "Reload";
+            this.toolStripButton1.ToolTipText = "Reloads this table.";
             this.toolStripButton1.Click += new System.EventHandler(this.regenTable_Click);
             // 
             // toolStripSeparator1
@@ -210,6 +217,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(39, 22);
             this.toolStripButton2.Text = "Dupe";
+            this.toolStripButton2.ToolTipText = "Duplicates the selected rows and appends them to the end of the table.";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripSeparator2
@@ -225,14 +233,40 @@
             this.copyScriptLabel.Name = "copyScriptLabel";
             this.copyScriptLabel.Size = new System.Drawing.Size(86, 22);
             this.copyScriptLabel.Text = "Copy as Script";
+            this.copyScriptLabel.ToolTipText = "Copy the selected rows as a Reanimator script.";
             this.copyScriptLabel.Click += new System.EventHandler(this.copyScriptLabel_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(44, 22);
+            this.toolStripButton3.Text = "Export";
+            this.toolStripButton3.ToolTipText = "Export a tab delimited txt file of this table.";
+            this.toolStripButton3.Click += new System.EventHandler(this.ExportButton_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripLabel1
             // 
+            this.toolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripLabel1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripLabel1.Image")));
+            this.toolStripLabel1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(67, 22);
-            this.toolStripLabel1.Text = "Import CSV";
-            this.toolStripLabel1.Click += new System.EventHandler(this.ImportCSVToolStripLabel1_Click);
+            this.toolStripLabel1.Size = new System.Drawing.Size(47, 22);
+            this.toolStripLabel1.Text = "Import";
+            this.toolStripLabel1.ToolTipText = "Open a tab delimited txt file of this table.";
+            this.toolStripLabel1.Click += new System.EventHandler(this.ImportButton_Click);
             // 
             // ExcelTableForm
             // 
@@ -275,6 +309,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton copyScriptLabel;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton toolStripLabel1;
     }
 }
