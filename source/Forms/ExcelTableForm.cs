@@ -334,7 +334,7 @@ namespace Reanimator.Forms
 
             DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
             uint value = (uint) dr[clb.Name];
-            value ^= (uint) ((1 << (e.Index))*(e.NewValue == CheckState.Checked ? 1 : 0));
+            value ^= (uint) (1 << (e.Index));
             dr[clb.Name] = value;
         }
 
