@@ -12,84 +12,166 @@
 		</dependencies>
 		<description>Welcome to the amazing 1.5 beta release of Revival.
 		This is the most expansive update to the game yet including these major features:
+		
+		
 		* Stonehenge and Abyss Armor &amp; Weapons including original names &amp; stats.
 			* 6x Stonehenge Helms, 3x Abyss Armor Sets
 			* Sunblade, Sunshield, Moonblade, Gleamcarver, Dissector, Dissector Shield
 			* Vigilante, Hellbore, Fry Baby, Core Magnum, Thumper, Thunderclash
 			* Fire Seeds, Negatron, Singularity Node, 3x Focus Items (yes, including Slippies!)
-		* Particle updates from Abyss.
-		* Background environment updates from Abyss.
-			* Map nodes more clearly defined.
-			* Widened streets.
-			* Improved architecture and enchanced geometrical detail.
-			* 
+			
+			
+			----------------------
+		29/09/10: The stonehenge helms have been added but are not rendored correctly. It could possably be
+		a problem with the blend operation.
+		
+		As for the Abyss sets, The bottom half of the set rendors okay, but the hands, shoulders and chest suffer
+		geometrical distortion. I am quite sure it isn't a differation in the .am data structure but possible
+		error with blend operation again. The helms are off centre like the stonehenge ones.
+		
+		All of the Templar swords and shields work okay. The slot props need updating and also the shield, armor
+		and damage props.
+		
+		All of the other weapons are not implemented properly yet and need a lot of work. Some weapons require
+		skill imports too which have yet to be done.
+			----------------------
+			
+		* Particle updates from Abyss. - Nothing to be done.
+		* Background environment updates from Abyss.- Nothing to be done.
 		* New community item loots!
 		  * 16x new unique items named after hellgateaus community members.
+		  ------------------------
+		These items have been started, need testing and others still need adding.
+		  ------------------------
+			
 		* Mythic &amp; Double-Edged qualities.
+		  ------------------------
+			The affixes have been added to the affix table but all the props need changing
+			because the symbols are different in the TC version.
+			------------------------
+		
+		
 		* New minigame events. When winning the minigame, you may be lucky enough to proc:
 			* Palladium.
 			* Fawkes items.
 			* Mods.
 			* Debuffs.
+			-------------------------
+			The treasure classes have been templated, needs implementing and testing.
+			-------------------------
+			
 		* Rings added to the game.
 		* 1x slot for goggles &amp; 2x slots added for your rings .
-		* Passgeways are rarer but richer.
-		* Rare and boss mobs are a lot more challenging and have fixed chances of dropping exceptional loot.
-		* Players are rewarded with a skill &amp; attribute retrainer upon the completion of the game (norm &amp; nm).
-		* Major bosses have a fixed chance of drop retrainers.
-		* Moloch has been added as a rare spawn to the hell dungeon and drops original stonehenge loot.
-		* A number of quest rewards have been reworked.
-		* Improved dye kit colors.
-		* New loader screen art work from the Abyss expansion.
-		* Nanoforge increaments are larger. -something coldheart wrote into a post
-		* Pets only drop from certain fixed bosses.
-		* Only legendary and rarer items require identifying.
-		* Nightmare mode levels scale to your character level (excluding end game).
-		* Pets drop as eggs and need to be used in the cube.
-		* Old bosses can be fought again.
-		* Slightly better chance of finding uniques in general.
-		* Obtain genre specific mods from certain enemies. ie. Get beast multiplier mods from beast type mobs.
-		* Zomper, the Bill Roper zombie is now a unique spawn and carries IOU's.
-		* Blue prints only craft exceptional items that require a lot of parts.
-		* Mods no longer show up on weapons ?
-		* None stat boosting dye kits rare drops from monsters.
-		* Fix end game level advancement.
-		* XP penalty removed for fighting monsters above your level.. in fact you level faster.
-		* Stonehenge bosses added to end game quests, replayable.
-		* Better lifetime on modifications.
-		* Starting point removed. Murmur gives you skills points to advance you.
-		* Tutorial dialogue can be skipped.
-		* Monster shield overload capacity capped at 100%.
-		* Power regeneration increase from 120 to 480.
-		* Reduced power regen per Willpower from 3 to 2.
-		* Monster/platyer shield charge delay reduced from 4 to 2.5 seconds.
-		* Shield recharge rate from from 5% to 10%.
-		* Fix reaper model.
-		* Change basic crafting progressions.
-		  * I'm not sure if I'm in the right place, but can I make a suggestion? It regards the Transmorg. Cube and crafting.
+		  -------------------------
+			Issue: The ring slots are highlighted when equipping weapons.
+		  --------------------------
 		
-		* Lower environment visability
+		
+		* Passgeways are rarer but richer. TODO. Need to change the spawn chance in levels and tweak the passageway multipliers.
+		* Rare and boss mobs are a lot more challenging and have fixed chances of dropping exceptional loot.
+		  --------------------------------
+		The treasure classes have been implemented and added to the monster quality table. Needs testing\
+		These mobs still need toughening
+		-----------------------------------
+		
+		* Players are rewarded with a skill &amp; attribute retrainer upon the completion of the game (norm &amp; nm).
+		----------------------------------------
+		Treasure table created, need to link to sydonai first time look table.
+		------------------------------------------
+		
+		* Major bosses have a fixed chance of drop retrainers.
+		----------------------------------------------
+		Sydonai and Moloch only. These are the unique retrainer drops.
+		The unique retrainers have been added as new items. Note the difference between the normal and unique retrainers. Only the unique retrainers can be bought/sold. 
+		------------------------------------------------
+		* Moloch has been added as a rare spawn to the hell dungeon and drops original stonehenge loot.
+		-------------------------------
+		Loot tables created. Still needs work
+		----------------------------------
+		* A number of quest rewards have been reworked. 
+		TODO. this will be a lot of work. We should perhaps only tweak a small number of quests for now and put a lot of thought and creativity into the rewards.
+		----------------------------------
+		* Improved dye kit colors.
+		------------------------------------
+		I'm using sets designed by a forum member, will probably need more. TODO
+		-------------------------------------
+		* New loader screen art work from the Abyss expansion. - CODEX is onto this
+		* Nanoforge increaments are larger. -something coldheart wrote into a post. dunno if its possible, but something about the nanoforge seems like it could be improved
+		* Pets only drop from certain fixed bosses. - which bosses, which pets
+		* Only legendary and rarer items require identifying. - need to discuss. is it a good idea. Analysers would be expensive under this implementation.
+		* Nightmare mode levels scale to your character level (excluding end game).
+		-------------------------------------
+		It would be good if nightmare levels would generally scale to your level so you can replay any part of the game at any time.
+		End game would still cap at like level 60 mobs.
+		---------------------------------------
+		* Pets drop as eggs and need to be used in the cube. TODO
+		* Old bosses can be fought again.
+		----------------------------------------
+		Considering all the bosses have the same loot tables anyway (apart from their fixed mutant drops)
+		I see no harm in allowing players to revist all game bosses. TODO
+		----------------------------------------
+		* Slightly better chance of finding uniques in general. TODO
+		* Obtain genre specific mods from certain enemies. ie. Get beast multiplier mods from beast type mobs.TODO
+		* Zomper, the Bill Roper zombie is now a unique spawn and carries IOU's.
+		---------------------------
+		Zomper created. Needs to be enabled as a unique type spawn so he can spawn anywhere.
+		Needs loot table and items
+		------------------------
+		* Blue prints only craft exceptional items that require a lot of parts. TODO
+		* Mods no longer show up on weapons ?
+		----------------------------
+		We can disable mods from showing up. Should we do it? We can't fix them but we can stop them from showing up
+		--------------------------
+		* None stat boosting dye kits rare drops from monsters. TODO
+		* XP penalty removed for fighting monsters above your level.. in fact you level slightly faster. TODO
+		* Stonehenge bosses added to end game quests, replayable.
+		---------------------------------
+		Add these bosses to St Pauls quests, allow repeating. Make them hard
+		-------------------------------------
+		* Better lifetime on modifications.
+		-----
+		Modification generally last about 12 levels. We could make them last 20 levels
+		-----
+		* Starting point removed. Murmur gives you skills points to advance you. TODO
+		* Tutorial dialogue can be skipped. TODO
+		* Monster shield overload capacity capped at 100%. TODO
+		* Power regeneration increase from 120 to 480. TODO
+		* Reduced power regen per Willpower from 3 to 2. TODO
+		* Monster/platyer shield charge delay reduced from 4 to 2.5 seconds. TODO
+		* Shield recharge rate from from 5% to 10%. TODO
+		* Fix reaper model.
+		------------------------------
+		A lot of people want to change the quest that uses a shock fiend monster, when to be consistant with the story line it should be the reaper.
+		-----------------------------
+		* Change basic crafting progressions.
+		-----------------------------
+		A lot of recipies can be added for general fun. Ie, 2 lower level injectors turn into a higher
+		-------------------------------
+		* Lower environment visability. TODO try darken the game
 		
 		Early game:
-		* Start with no weapons in tutorial.
-		* Get a choice of weapon for your first quest.
-		
+		* Start with no weapons in tutorial. TODO
+		* Get a choice of weapon for your first quest. ie. Do you want to go a one or two hand build? Fire or toxic? etc TODO
+		--------------------
+		A lot of severe gameplay changes. We can make the game a lot of fun, it will take a lot of time.
+		List all ideas here and current status.
+		--------------------
 		
 		Class changes:
 		General:
-		* Sprint maxes at 3 points and has no cooldown.
-		* Skills rearranged into their groups.
+		* Sprint maxes at 3 points and has no cooldown. TODO
+		* Skills rearranged into their groups. TODO. Should we bother
 		
 		Templar:
-		* Multiple auras can be used at once at the expense of mana pool.
+		* Multiple auras can be used at once at the expense of mana pool. TODO
 		
 		Engineer:
-		* Haste bot dependency removed.
+		* Haste bot dependency removed. // Saw this in a community mod. Is it a good idea
 		* 
 		
 		Optional components:
-		* Allow purchasing of retrainers.
-		* Removal of regional censoring.
+		* Allow purchasing of retrainers. TODO
+		* Removal of regional censoring. 
 		* Automatically pickup basic items.
 		* Malachor's Sniper Pack.
 		* "Hell" mode difficulty.
@@ -100,7 +182,7 @@
 		* Level cap increased to 55.
 		* Destructables only drop basic items.
 		* Mutant boss loots are fixed drops and scale.
-		* Vendor will sometimes offer legendary mods.
+		* Vendor will sometimes offer legendary mods. Increase mod offering from 6 to 8.
 
 		
 		
