@@ -490,107 +490,6 @@ namespace Reanimator
         }
 
 
-
-        /// <summary>
-        /// Reads the source array in the column sequence of the destination datatable.
-        /// </summary>
-        /// <param name="source">The array of the CSV data.</param>
-        /// <param name="destination">The datatable it is being loaded into.</param>
-        /// <returns></returns>
-        public static bool CSVtoDataTable(byte[] source, DataTable destination)
-        {
-            if (source == null) return false;
-            if (destination == null) return false;
-            if (source.Length == 0) return false;
-
-            int offset = 0;
-            int length = source.Length;
-            bool ignoreFirstRow = true;
-            byte deliminter = (byte)'\t';
-            DataRow dataRow;
-            Type dataType;
-            int column = destination.Columns.Contains("Index") ? 1 : 0;
-
-            if (ignoreFirstRow)
-            {
-                while (offset < length)
-                {
-                    if (source[offset++] == (byte)0x0A)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            dataRow = destination.NewRow();
-
-            while (offset < length)
-            {
-                foreach (DataColumn dataColumn in destination.Columns)
-                {
-                    if (dataColumn.ColumnName == "Index") continue;
-
-                    dataType = dataColumn.DataType;
-                    byte[] newStringBuffer = GetDelimintedByteArray(source, ref offset, deliminter);
-                    string newString = newStringBuffer == null ? String.Empty : Encoding.ASCII.GetString(newStringBuffer);
-
-                    try
-                    {
-                        if (dataType.BaseType == typeof(Enum))
-                        {
-                            dataType = typeof(UInt32);
-                        }
-
-                        if (dataType == typeof(String)) //hellgate thing only
-                        {
-                            newString = newString.Replace("\\n", "\n");
-                            newString = newString.Replace("\"", "");
-                            dataRow[column] = newString;
-                        }
-                        else if (dataType == typeof(Int32))
-                        {
-                            dataRow[column] = Int32.Parse(newString);
-                        }
-                        else if (dataType == typeof(UInt32))
-                        {
-                            dataRow[column] = UInt32.Parse(newString);
-                        }
-                        else if (dataType == typeof(Single))
-                        {
-                            dataRow[column] = Single.Parse(newString);
-                        }
-                        else if (dataType == typeof(byte))
-                        {
-                            dataRow[column] = Byte.Parse(newString);
-                        }
-                        else if (dataType == typeof(Int64))
-                        {
-                            dataRow[column] = Int64.Parse(newString);
-                        }
-                        else if (dataType == typeof(UInt64))
-                        {
-                            dataRow[column] = UInt64.Parse(newString);
-                        }
-                        else if (dataType == typeof(short))
-                        {
-                            dataRow[column] = short.Parse(newString);
-                        }
-                    }
-                    catch
-                    {
-                        // bad data type
-                    }
-                    column++;
-                }
-                //offset++;
-                column = destination.Columns.Contains("Index") ? 1 : 0;
-                destination.Rows.Add(dataRow);
-                dataRow = destination.NewRow();
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// Collects tbe bytes read in the source array until the delimiter byte is encounted.
         /// </summary>
@@ -598,7 +497,7 @@ namespace Reanimator
         /// <param name="offset">The starting position in the source array to read from.</param>
         /// <param name="delimiter">The byte to interpret as the delimiter symbol.</param>
         /// <returns></returns>
-        private static byte[] GetDelimintedByteArray(byte[] source, ref int offset, byte delimiter)
+        public static byte[] GetDelimintedByteArray(byte[] source, ref int offset, byte delimiter)
         {
             List<byte> buffer = new List<byte>();
             int length = source.Length;

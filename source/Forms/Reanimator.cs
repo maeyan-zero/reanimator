@@ -585,10 +585,6 @@ namespace Reanimator
         {
         }
 
-        private void ToolBarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            toolStrip.Visible = toolBarToolStripMenuItem.Checked;
-        }
 
         private void StatusBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -773,39 +769,6 @@ namespace Reanimator
             if (mdiChildBase == null) return;
 
             mdiChildBase.SaveButton();
-        }
-
-        private void _ExportCSVToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // ensure we're trying to export from a valid form
-                ExcelTableForm excelTable = ActiveMdiChild as ExcelTableForm;
-                if (excelTable == null) return;
-
-                // what columns do we want to export?
-                CSVSelection select = new CSVSelection(excelTable.tableData_DataGridView);
-                if (select.ShowDialog(this) != DialogResult.OK) return;
-
-                // compiles the CSV string
-                string strValue = Export.CSV(excelTable.tableData_DataGridView, select.selected, select.comboBoxDelimiter.Text);
-
-                // prompts the user to choose where to save the file
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal)
-                };
-                if (saveFileDialog.ShowDialog(this) != DialogResult.OK) return;
-
-                // done
-                File.WriteAllText(saveFileDialog.FileName, strValue);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Export of this form not supported at this time or unknown error!\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                ExceptionLogger.LogException(ex, "_ExportCSVToolStripMenuItem_Click", false);
-            }
         }
 
         private void _HardcoreModex64DX9ToolStripMenuItem_Click(object sender, EventArgs e)

@@ -384,7 +384,11 @@ namespace Reanimator.Forms
             DataTable table = ((DataSet)tableData_DataGridView.DataSource).Tables[tableData_DataGridView.DataMember];
             if (table == null) return;
 
-            String savePath = FileTools.SaveFileDiag(_dataFile.FileExtension, _dataFile.FileName, _dataFile.FileName, Config.HglDataDir);
+            String saveType = _dataFile.IsExcelFile ? "Cooked Excel Files" : "Cooked String Files";
+            String saveExtension = _dataFile.IsExcelFile ? ".txt.cooked" : ".uni.xls.cooked";
+            String saveInitialPath = Path.Combine(Config.HglDir, _dataFile.FilePath);
+
+            String savePath = FileTools.SaveFileDiag(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
             if (String.IsNullOrEmpty(savePath)) return;
 
             byte[] data = _dataFile.GenerateFile(table);
@@ -480,7 +484,7 @@ namespace Reanimator.Forms
             }
         }
 
-        private void ImportCSVToolStripLabel1_Click(object sender, EventArgs e)
+        private void ImportButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog()
             {
@@ -496,6 +500,7 @@ namespace Reanimator.Forms
                 }
                 catch
                 {
+                    MessageBox.Show("There was a problem opening the file. Make sure the file isn't locked by another program (like Excel)");
                     return;
                 }
                 _dataTable.Clear();
@@ -505,14 +510,157 @@ namespace Reanimator.Forms
                 _dataTable.Columns[0].AutoIncrementSeed = 0;
 
 
-                if (FileTools.CSVtoDataTable(buffer, _dataTable))
+                if (CSVtoDataTable(buffer, _dataTable))
                 {
                     MessageBox.Show("Import okay!");
                 }
                 else
                 {
-                    MessageBox.Show("Error!");
+                    MessageBox.Show("Error importing this table. Make sure the table has the correct number of columns and the correct data. If you have a string where a number is expected, the import will not work.");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Reads the source array in the column sequence of the destination datatable.
+        /// </summary>
+        /// <param name="source">The array of the CSV data.</param>
+        /// <param name="destination">The datatable it is being loaded into.</param>
+        /// <returns></returns>
+        public static bool CSVtoDataTable(byte[] source, DataTable destination)
+        {
+            if (source == null) return false;
+            if (destination == null) return false;
+            if (source.Length == 0) return false;
+
+            int offset = 0;
+            int length = source.Length;
+            bool ignoreFirstRow = true;
+            byte deliminter = (byte)'\t';
+            DataRow dataRow;
+            Type dataType;
+            int column = 0;
+
+            if (ignoreFirstRow)
+            {
+                while (offset < length)
+                {
+                    if (source[offset++] == (byte)0x0A)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            dataRow = destination.NewRow();
+
+            while (offset < length)
+            {
+                foreach (DataColumn dataColumn in destination.Columns)
+                {
+                    if (dataColumn.ColumnName == "Index")
+                    {
+                        column++;
+                        continue;
+                    }
+                    if (dataColumn.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated))
+                    {
+                        column++;
+                        continue;
+                    }
+
+                    dataType = dataColumn.DataType;
+                    byte[] newStringBuffer = FileTools.GetDelimintedByteArray(source, ref offset, deliminter);
+                    string newString = newStringBuffer == null ? String.Empty : System.Text.Encoding.ASCII.GetString(newStringBuffer);
+
+                    try
+                    {
+                        if (dataType.BaseType == typeof(Enum))
+                        {
+                            dataType = typeof(UInt32);
+                        }
+
+                        if (dataType == typeof(String)) //hellgate thing only
+                        {
+                            newString = newString.Replace("\\n", "\n");
+                            newString = newString.Replace("\"", "");
+                            dataRow[column] = newString;
+                        }
+                        else if (dataType == typeof(Int32))
+                        {
+                            dataRow[column] = Int32.Parse(newString);
+                        }
+                        else if (dataType == typeof(UInt32))
+                        {
+                            dataRow[column] = UInt32.Parse(newString);
+                        }
+                        else if (dataType == typeof(Single))
+                        {
+                            dataRow[column] = Single.Parse(newString);
+                        }
+                        else if (dataType == typeof(byte))
+                        {
+                            dataRow[column] = Byte.Parse(newString);
+                        }
+                        else if (dataType == typeof(Int64))
+                        {
+                            dataRow[column] = Int64.Parse(newString);
+                        }
+                        else if (dataType == typeof(UInt64))
+                        {
+                            dataRow[column] = UInt64.Parse(newString);
+                        }
+                        else if (dataType == typeof(short))
+                        {
+                            dataRow[column] = short.Parse(newString);
+                        }
+                    }
+                    catch
+                    {
+                        // bad data type
+                    }
+                    column++;
+                }
+                //offset++;
+                column = 0;
+                destination.Rows.Add(dataRow);
+                dataRow = destination.NewRow();
+            }
+
+            return true;
+        }
+
+        private void ExportButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // ensure we're trying to export from a valid form
+                ExcelTableForm excelTable = this;
+                if (excelTable == null) return;
+
+                // what columns do we want to export?
+                CSVSelection select = new CSVSelection(_dataTable);
+                if (select.ShowDialog(this) != DialogResult.OK) return;
+
+                // compiles the CSV string
+                string strValue = Export.CSV(_dataTable, select.selected, '\t');
+
+                // prompts the user to choose where to save the file
+                SaveFileDialog saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+                    InitialDirectory = Config.ScriptDir,
+                    FileName = _dataFile.FileName
+                };
+                if (saveFileDialog.ShowDialog(this) != DialogResult.OK) return;
+
+                // done
+                File.WriteAllText(saveFileDialog.FileName, strValue);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Export of this form not supported at this time or unknown error!\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExceptionLogger.LogException(ex, "_ExportCSVToolStripMenuItem_Click", false);
             }
         }
     }

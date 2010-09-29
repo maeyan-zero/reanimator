@@ -5,37 +5,38 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Text;
+using System.Data;
 
 namespace Reanimator
 {
     static public class Export
     {
-        static public string CSV(DataGridView datagridview, bool[] selected, string delimiter)
+        static public string CSV(DataTable dataTable, bool[] selected, char delimiter)
         {
             StringWriter csv = new StringWriter();
 
             // column headers
-            for (int col = 0; col < datagridview.Rows[0].Cells.Count; col++)
+            for (int col = 0; col < dataTable.Columns.Count; col++)
             {
                 if (!selected[col]) continue;
 
-                csv.Write(datagridview.Columns[col].Name);
-                if (col < datagridview.Rows[0].Cells.Count)
+                csv.Write(dataTable.Columns[col].ColumnName);
+                if (col < dataTable.Columns.Count)
                 {
-                    csv.Write("\t");
+                    csv.Write(delimiter);
                 }
             }
             csv.Write(Environment.NewLine);
 
             // rows
-            for (int row = 0; row < datagridview.Rows.Count - 1; row++)
+            for (int row = 0; row < dataTable.Rows.Count - 1; row++)
             {
-                for (int col = 0; col < datagridview.Rows[row].Cells.Count; col++)
+                for (int col = 0; col < dataTable.Columns.Count; col++)
                 {
                     if (!selected[col]) continue;
-                    if (datagridview[col, row].Value != null && (!(String.IsNullOrEmpty(datagridview[col, row].Value.ToString()))))
+                    if (dataTable.Rows[row][col] != null && (!(String.IsNullOrEmpty(dataTable.Rows[row][col].ToString()))))
                     {
-                        string stringBuffer = datagridview[col, row].Value.ToString();
+                        string stringBuffer = dataTable.Rows[row][col].ToString();
                         if (((stringBuffer[0] == '\0'))) // Weird bug fix, doesnt recognise this character as nothing
                         {
                             csv.Write(String.Empty);
@@ -57,18 +58,7 @@ namespace Reanimator
                             }
                             csv.Write(stringBuffer);
                         }
-                    }
-                    if (col < datagridview.Rows[row].Cells.Count - 1)
-                    {
-                        switch (delimiter)
-                        {
-                            case "Commar":
-                                csv.Write(",");
-                                break;
-                            case "Tab":
-                                csv.Write("\t");
-                                break;
-                        }
+                        csv.Write(delimiter);
                     }
                 }
                 csv.Write(Environment.NewLine);
