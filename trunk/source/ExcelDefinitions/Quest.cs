@@ -33,14 +33,14 @@ namespace Reanimator.ExcelDefinitions
         public Int32 autoActivateLevel;//idx
         public Int32 onlyOneDifficulty;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public Int32[] questPreReqs;
+        Int32[] questPreReqs;
         public Int32 currentlyUnavailable;
         public Int32 minLevelPreReq;
         public Int32 maxLevelPreReq;
         public Int32 factionTypePreReq;//idx
         public Int32 factionAmountPreReq;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public Int32[] levelsPreLoadedWith;
+        Int32[] levelsPreLoadedWith;
         public Int32 startingItemsTreasureClass;//idx
         public Int32 removeStartingItemsOnComplete;
         [ExcelOutput(SortAscendingID = 3, RequiresDefault = true)]
@@ -66,29 +66,29 @@ namespace Reanimator.ExcelDefinitions
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string InitFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] undefined2;
+        Int32[] undefined2;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string FreeFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] undefined3;
+        Int32[] undefined3;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string onEnterGameFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] undefined4;
+        Int32[] undefined4;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         string CompleteFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] undefined5;
+        Int32[] undefined5;
         public Int32 warpToOpenOnActivate;//idx
         public Int32 warpToOpenOnComplete;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        public Int32[] itemsToRemoveOnAbandon;
+        Int32[] itemsToRemoveOnAbandon;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        public Int32[] itemsToRemoveOnComplete;
+        Int32[] itemsToRemoveOnComplete;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string versionFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] undefined6;
+        Int32[] undefined6;
         Int32 removeOnJoinGame;
         public Int32 beatGameOnComplete;
         Int32 undefined7;
@@ -97,11 +97,11 @@ namespace Reanimator.ExcelDefinitions
         public float height;
         public float flatZTolerance;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        public Int32[] allowedDRLGStyles;
+        Int32[] allowedDRLGStyles;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public Int32[] levelDestinations;
+        Int32[] levelDestinations;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-        string layoutAdventure;
+        public string layoutAdventure;
         public Int32 objectAdventure;//idx
         public Int32 treasureRoomClass;//idx
         public Int32 template;//idx
