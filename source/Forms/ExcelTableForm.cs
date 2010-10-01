@@ -385,7 +385,7 @@ namespace Reanimator.Forms
             if (table == null) return;
 
             String saveType = _dataFile.IsExcelFile ? "Cooked Excel Files" : "Cooked String Files";
-            String saveExtension = _dataFile.IsExcelFile ? "txt.cooked" : "uni.xls.cooked";
+            String saveExtension = _dataFile.IsExcelFile ? "txt.cooked" : "xls.uni.cooked";
             String saveInitialPath = Path.Combine(Config.HglDir, _dataFile.FilePath);
 
             String savePath = FileTools.SaveFileDiag(saveExtension, saveType, _dataFile.FileName, saveInitialPath);

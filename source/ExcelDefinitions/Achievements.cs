@@ -10,7 +10,7 @@ namespace Reanimator.ExcelDefinitions
     {
         ExcelFile.TableHeader header;
 
-        public Int32 undefined;                                                                        // ??       0x0000000000000000      ?? (Never Read?)
+        Int32 undefined;                                                                        // ??       0x0000000000000000      ?? (Never Read?)
         [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String name;                                                                     // 1        0x0000000000000004      XLS_ReadString

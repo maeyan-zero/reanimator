@@ -1811,59 +1811,44 @@ ReferenceId	Unknown1	StringId	Unknown2	String	Attribute1	Attribute2	Attribute3	A
 15548	7043	johnys mecha slicer	0	Johnny's Mecha-Slicer 3000's	Plural			
 15549	7044	johnys mecha slicer fla	0	"Long has been the predicament of Engineers who have tinkered with their Drones. With this Fancy New Technological Wonder.Armed with a Spectral Emitter this Blade allows constant phasing status to your enemies who dare strike your Drone. With this, your Drone is guaranteed to outlast any battle. AMAZING!\n-Johnny"	Singular	Default		
 15550	7045	zomper	0	Zomper	Singular	Default		
-15550	7046	zomper	0	Zomper's	Plural			
-15551	7047		0		Singular	Default		
-15552	7048		0		Singular	Default		
-15552	7049		0		Plural			
-15553	7050		0		Singular	Default		
-15554	7051		0		Singular	Default		
-15554	7052		0		Plural			
-15555	7053		0		Singular	Default		
-15556	7054		0		Singular	Default		
-15556	7055		0		Plural			
-15557	7056		0		Singular	Default		
-15558	7057		0		Singular	Default		
-15558	7058		0		Plural			
-15559	7059		0		Singular	Default		
-15560	7060		0		Singular	Default		
-15560	7061		0		Plural			
-15561	7062		0		Singular	Default		
-15562	7063		0		Singular	Default		
-15562	7064		0		Plural			
-15563	7065		0		Singular	Default		
-15564	7066		0		Singular	Default		
-15564	7067		0		Plural			
-15565	7068		0		Singular	Default		
-15566	7069		0		Singular	Default		
-15566	7070		0		Plural			
-15567	7071		0		Singular	Default		
-15568	7072		0		Singular	Default		
-15568	7073		0		Plural			
-15569	7074		0		Singular	Default		
-15570	7075		0		Singular	Default		
-15570	7076		0		Plural			
-15571	7077		0		Singular	Default		
-15572	7078		0		Singular	Default		
-15572	7079		0		Plural			
-15573	7080		0		Singular	Default		
-15574	7081		0		Singular	Default		
-15574	7082		0		Plural			
-15575	7083		0		Singular	Default		
-15576	7084		0		Singular	Default		
-15576	7085		0		Plural			
-15577	7086		0		Singular	Default		
-15578	7087		0		Singular	Default		
-15578	7088		0		Plural			
-15579	7089		0		Singular	Default		
-15580	7090		0		Singular	Default		
-15580	7091		0		Plural			
-15581	7092		0		Singular	Default		
-15582	7093		0		Singular	Default		
-15582	7094		0		Plural			
+15550	7046	zomper	0	Zomper's	English			
+15551	7047	achievement zomper title	0	No Sushi For You	English			
+15552	7048	achievement zomper descr	0	Kill Zomper	English			
+15553	7050	achievement zomper detail	0	"Even after the apocolyse, video game producers are mindless zombies..."	English			
+15554	7051	achievement moloch title	0	The Master's Advocate	English			
+15555	7053	achievement moloch desr	0	Kill Moloch [completenum] times	English			
+15556	7054	achievement moloch detail	0	"As close to death as you come, another step procedes you."	English			
+15557	7056	achievement money02 title	0	Piggybank	English			
+15558	7057	achievement money02 detail	0	Your so rich.	English			
+15559	7059	achievement money03 title	0	Nestegg	English			
+15560	7060	achievement money03 detail	0	Just what are you planning to do with all this?	English			
+15561	7062	achievement equip02 title	0	Deckout Out	English			
+15562	7063	achievement equip02 detail	0	Is there anything less unique than wielding the same items as everyone else?	English			
+15563	7065	achievement equip03 title	0	Paint Purple	English			
+15564	7066	achievement equip03 descr	0	"If this were Wonkerland, we'd have to roll you out of here."	English			
+15565	7068	achievement minigame 02 title	0	Luuuucky!	English			
+15566	7069	achievement minigame 02 desr	0	Have you considered going pro?	English			
+15567	7071	achievement pet title	0	Friends	English			
+15568	7072	achievement pet descr	0	Summon [completenum] pets	English			
+15569	7074	achievement pet detail	0	Nothing can come between two companions... perhaps a bladesaw.	English			
+15570	7076	achievement sprint title	0	Speedy Gonzales	English			
+15571	7077	achievement sprint descr	0	Invest [completenum] points in the sprint skill	English			
+15572	7079	achievement sprint detail	0	When the going gets though... run away!!!	English			
+15573	7080	achievement findlevel 02 title	0	A Step into Hell	English			
+15574	7082	achievement findlevel 02 descr	0	Find Achient Blood [completenum] times	English			
+15575	7083	achievement findlevel 02 detail	0	A dark presence lingures this chamber.	English			
+15576	7084	achievement retrainer title	0	Back to School	English			
+15577	7086	achievement retrainer descr	0	Respec your character skills [completenum] times	English			
+15578	7087	achievement retrainer detail	0	"When you do find the ultimate build, let me know!"	English			
+15579	7089	tutorial first weapon	0	"Here, exam these weapons and select your inventory."	English			
+15580	7091		0		English			
+15581	7092		0		English			
+15582	7093		0		English			
+15582	7094		0		English			
 15583	7095		0		Singular	Default		
-15584	7096		0		Singular	Default		
-15584	7097		0		Plural			
-15585	7098		0		Singular	Default		
+15584	7096	iou note	0	I.O.U. Note	Singular	Default		
+15584	7097	iou note	0	I.O.U. Note's	Plural			
+15585	7098	iou note descr	0	"This document gaurentees that I owe you a LAN patch, 2 expansions and 150 clams.\\n -Zomper"	Singular	Default		
 15586	7099		0		Singular	Default		
 15586	7100		0		Plural			
 15587	7101		0		Singular	Default		

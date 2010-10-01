@@ -11,7 +11,7 @@ namespace Reanimator.ExcelDefinitions
 
         [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
         public Int32 name;
-        public Int32 _buffer;
+        UInt32 _buffer;
         public Int32 intValue;
         public float floatValue;
     }

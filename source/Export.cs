@@ -29,7 +29,7 @@ namespace Reanimator
             csv.Write(Environment.NewLine);
 
             // rows
-            for (int row = 0; row < dataTable.Rows.Count - 1; row++)
+            for (int row = 0; row < dataTable.Rows.Count; row++)
             {
                 for (int col = 0; col < dataTable.Columns.Count; col++)
                 {
@@ -147,53 +147,61 @@ namespace Reanimator
             List<byte> list = new List<byte>();
             byte[] array = null;
 
-            foreach (string part in explode)
+            try
             {
-                switch (castAs)
+                foreach (string part in explode)
                 {
-                    case "hex":
-                        if (castLen == sizeof(byte))
-                        {
-                            byte b = byte.Parse(part, System.Globalization.NumberStyles.HexNumber);
-                            array = new byte[] { b };
-                        }
-                        if (castLen == sizeof(int))
-                        {
-                            uint i = uint.Parse(part, System.Globalization.NumberStyles.HexNumber);
-                            array = BitConverter.GetBytes(i);
-                        }
-                        break;
-                    case "signed":
-                        if (castLen == sizeof(byte))
-                        {
-                            char c = char.Parse(part);
-                            byte b = Convert.ToByte(c);
-                            array = new byte[] { b };
-                        }
-                        if (castLen == sizeof(int))
-                        {
-                            int i = int.Parse(part);
-                            array = BitConverter.GetBytes(i);
-                        }
-                        break;
-                    case "unsigned":
-                        if (castLen == sizeof(byte))
-                        {
-                            byte b = byte.Parse(part);
-                            array = new byte[] { b };
-                        }
-                        if (castLen == sizeof(int))
-                        {
-                            uint i = uint.Parse(part);
-                            array = BitConverter.GetBytes(i);
-                        }
-                        break;
-                }
+                    switch (castAs)
+                    {
+                        case "hex":
+                            if (castLen == sizeof(byte))
+                            {
+                                byte b = byte.Parse(part, System.Globalization.NumberStyles.HexNumber);
+                                array = new byte[] { b };
+                            }
+                            if (castLen == sizeof(int))
+                            {
+                                uint i = uint.Parse(part, System.Globalization.NumberStyles.HexNumber);
+                                array = BitConverter.GetBytes(i);
+                            }
+                            break;
+                        case "signed":
+                            if (castLen == sizeof(byte))
+                            {
+                                char c = char.Parse(part);
+                                byte b = Convert.ToByte(c);
+                                array = new byte[] { b };
+                            }
+                            if (castLen == sizeof(int))
+                            {
+                                int i = int.Parse(part);
+                                array = BitConverter.GetBytes(i);
+                            }
+                            break;
+                        case "unsigned":
+                            if (castLen == sizeof(byte))
+                            {
+                                byte b = byte.Parse(part);
+                                array = new byte[] { b };
+                            }
+                            if (castLen == sizeof(int))
+                            {
+                                uint i = uint.Parse(part);
+                                array = BitConverter.GetBytes(i);
+                            }
+                            break;
+                    }
 
-                foreach (byte b in array)
-                {
-                    list.Add(b);
+                    foreach (byte b in array)
+                    {
+                        list.Add(b);
+                    }
                 }
+            }
+            catch
+            {
+                // bad parse. probably passed alpha characters into a int parser
+                return null;
             }
 
             return list.ToArray();

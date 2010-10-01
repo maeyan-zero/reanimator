@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Xml;
+using System.IO;
 using Reanimator.XmlDefinitions;
 
 namespace Reanimator
@@ -1013,6 +1014,12 @@ namespace Reanimator
         public void SaveXml(String path)
         {
             if (XmlDoc == null || String.IsNullOrEmpty(path)) return;
+
+            string directory = Path.GetDirectoryName(path);
+            if (!(Directory.Exists(directory)))
+            {
+                Directory.CreateDirectory(directory);
+            }
 
             XmlDoc.Save(path);
         }
