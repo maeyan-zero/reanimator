@@ -1841,11 +1841,11 @@ ReferenceId	Unknown1	StringId	Unknown2	String	Attribute1	Attribute2	Attribute3	A
 15577	7086	achievement retrainer descr	0	Respec your character skills [completenum] times	English			
 15578	7087	achievement retrainer detail	0	"When you do find the ultimate build, let me know!"	English			
 15579	7089	tutorial first weapon	0	"Here, exam these weapons and select your inventory."	English			
-15580	7091		0		English			
-15581	7092		0		English			
-15582	7093		0		English			
-15582	7094		0		English			
-15583	7095		0		Singular	Default		
+15580	7091	loading tip revival 01	0	Over 500 hours were spent making the Revival 1.5 patch.	English			
+15581	7092	loading tip revival 02	0	You can create your own modifications using our editor Reanimator.	English			
+15582	7093	loading tip revival 03	0	It is possible we can bring your more Abyss and Stonehenge content. Be sure to support us.	English			
+15582	7094	loading tip revival 04	0	There are 16 new unique items available named after the hellgateaus community.	English			
+15583	7095	loading tip revival 05	0	Join us at www.hellgateaus.net	English			
 15584	7096	iou note	0	I.O.U. Note	Singular	Default		
 15584	7097	iou note	0	I.O.U. Note's	Plural			
 15585	7098	iou note descr	0	"This document gaurentees that I owe you a LAN patch, 2 expansions and 150 clams.\\n -Zomper"	Singular	Default		

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <revival>
-	<modification>
+	<modification id="sp_hellgate_1337_1.5.0">
 		<release>Revival</release>
-		<version>1.5 beta</release>
-		<author>Maeyan, Malachor, Alex2069, Kite &amp; The Revival Team</release>
+		<version>1.5 beta</version>
+		<author>Maeyan, Malachor, Alex2069, Kite &amp; The Revival Team</author>
 		<www>http://www.hellgateaus.net/</www>
 		<email>maeyan.zero@gmail.com</email>
 		<dependencies>
@@ -11,91 +11,73 @@
 			<patch>mp_hellgate_1.10.180.3416_1.0.86.4580</patch>
 		</dependencies>
 		<description>Welcome to the amazing 1.5 beta release of Revival.
+		
+		Levels
+		* Environment updates from the Abyss added.
+		* Moloch spawns in Anchient Blood as a rare spawn.
+		* Certain levels are now marked elite zones and enemies are much tougher.
+		* Passageways and Hellriffs are a lot rarer.
+		* Elite passageways contain a lot more rare monsters.
+		* Treasure passageways contain a lot more loot.
+		* Monster density in general increased.
+		
+		Players
+		* Players are no longer assigned a default skill.
+		* Starting attributes balanced.
+		* Level cap increased to 55.
+		
+		Skills
+		* The sprint skill caps at 4 points and no cooldown.
+		
+		Monsters
+		* Moloch has been added into the game.
+		* Champion monster scale slightly increased.
+		* Champion mob health and experience increased.
+		
+		Quests
+		* A skill point is rewarded for completing the quest Break on Through.
+		
+		NPCs
+		* All of the original voices have been restored.
+		* Techsmith 314 has been transformed into his 3rd stage state.
+
+		Items
+		* Templar items added: Sunblade, Sunshield, Moonblade, Dissector, Dissector Shield &amp; Gleamcarver.
+		* 6x new unique items inspired by hellgateaus.
+		* Shield overload on Swords halved and capped at 100%.
+		* Boss/Mutant items are now of unique quality.
+		* Boss items are fixed drops and scale.
+		* Only unique retrainers can be bought and sold.
+		* Rare and Legendary augmentation cost reduced.
+		* Destructables only drop basic items.
+
+		Treasure
+		* Champion mobs have a better chances dropping rare loot according to monster quality.
+		* Sydonai drops a skill and attribute retrainer when you finish the game.
+		* Moloch drops the Stonehenge dye kits.
+		* Sydonai and Moloch have a chance to drop unique retrainers.
+		* Zomper drops new items.
+		* Vendor modification and consumable quantities balanced.
+		* Chests are generally more exciting.
+
+		Inventory
+		* Increased stash (x10) and inventory (2x).
+
+		
 		This is the most expansive update to the game yet including these major features:
 		
-		
-		* Stonehenge and Abyss Armor &amp; Weapons including original names &amp; stats.
-			* 6x Stonehenge Helms, 3x Abyss Armor Sets
-			* Sunblade, Sunshield, Moonblade, Gleamcarver, Dissector, Dissector Shield
-			* Vigilante, Hellbore, Fry Baby, Core Magnum, Thumper, Thunderclash
-			* Fire Seeds, Negatron, Singularity Node, 3x Focus Items (yes, including Slippies!)
-			
-			
-			----------------------
-		29/09/10: The stonehenge helms have been added but are not rendored correctly. It could possably be
-		a problem with the blend operation.
-		
-		As for the Abyss sets, The bottom half of the set rendors okay, but the hands, shoulders and chest suffer
-		geometrical distortion. I am quite sure it isn't a differation in the .am data structure but possible
-		error with blend operation again. The helms are off centre like the stonehenge ones.
-		
-		All of the Templar swords and shields work okay. The slot props need updating and also the shield, armor
-		and damage props.
-		
-		All of the other weapons are not implemented properly yet and need a lot of work. Some weapons require
-		skill imports too which have yet to be done.
-			----------------------
-			
-		* Particle updates from Abyss. - Nothing to be done.
-		* Background environment updates from Abyss.- Nothing to be done.
+		* 6x new Templar weapons from the Abyss and Stonehenge expansions.
+		* Particle updates from Abyss.
+		* Environment updates from Abyss.
 		* New community item loots!
-		  * 16x new unique items named after hellgateaus community members.
-		  ------------------------
-		These items have been started, need testing and others still need adding.
-		  ------------------------
-			
 		* Mythic &amp; Double-Edged qualities.
-		  ------------------------
-			The affixes have been added to the affix table but all the props need changing
-			because the symbols are different in the TC version.
-			------------------------
-		
-		
 		* New minigame events. When winning the minigame, you may be lucky enough to proc:
-			* Palladium.
-			* Fawkes items.
-			* Mods.
-			* Debuffs.
-			-------------------------
-			The treasure classes have been templated, needs implementing and testing.
-			-------------------------
-			
-		* Rings added to the game.
-		* 1x slot for goggles &amp; 2x slots added for your rings .
-		  -------------------------
-			Issue: The ring slots are highlighted when equipping weapons.
-		  --------------------------
-		
-		
-		* Passgeways are rarer but richer. TODO. Need to change the spawn chance in levels and tweak the passageway multipliers.
+		* Passgeways are rarer but richer.
 		* Rare and boss mobs are a lot more challenging and have fixed chances of dropping exceptional loot.
-		  --------------------------------
-		The treasure classes have been implemented and added to the monster quality table. Needs testing\
-		These mobs still need toughening
-		-----------------------------------
-		
 		* Players are rewarded with a skill &amp; attribute retrainer upon the completion of the game (norm &amp; nm).
-		----------------------------------------
-		Treasure table created, need to link to sydonai first time look table.
-		------------------------------------------
-		
 		* Major bosses have a fixed chance of drop retrainers.
-		----------------------------------------------
-		Sydonai and Moloch only. These are the unique retrainer drops.
-		The unique retrainers have been added as new items. Note the difference between the normal and unique retrainers. Only the unique retrainers can be bought/sold. 
-		------------------------------------------------
 		* Moloch has been added as a rare spawn to the hell dungeon and drops original stonehenge loot.
-		-------------------------------
-		Loot tables created. Still needs work
-		----------------------------------
-		* A number of quest rewards have been reworked. 
-		TODO. this will be a lot of work. We should perhaps only tweak a small number of quests for now and put a lot of thought and creativity into the rewards.
-		----------------------------------
-		* Improved dye kit colors.
-		------------------------------------
-		I'm using sets designed by a forum member, will probably need more. TODO
-		-------------------------------------
-		* New loader screen art work from the Abyss expansion. - CODEX is onto this
+
 		* Nanoforge increaments are larger. -something coldheart wrote into a post. dunno if its possible, but something about the nanoforge seems like it could be improved
 		* Pets only drop from certain fixed bosses. - which bosses, which pets
 		* Only legendary and rarer items require identifying. - need to discuss. is it a good idea. Analysers would be expensive under this implementation.
@@ -177,14 +159,7 @@
 		* "Hell" mode difficulty.
 		* Tabbed inventory.
 		
-		Previous fixes included:
-		* Increased stash (x10) and inventory (2x).
-		* Level cap increased to 55.
-		* Destructables only drop basic items.
-		* Mutant boss loots are fixed drops and scale.
-		* Vendor will sometimes offer legendary mods. Increase mod offering from 6 to 8.
 
-		
 		
 		Brand new game experience. Although you can play your higher level characters, we would recommend starting a new one so you can reep the full benefits update.
 		</description>
@@ -194,6 +169,9 @@
 				<path>data/units/items/*</path>
 				<path>data/particles/*</path>
 				<path>data/background/*</path>
+				<path>data/states/*</path>
+				<path>data/ai/*</path>
+				<path>data/lighting/*</path>
 			</extract>
 		</script>
 		<script type="optional">
@@ -220,5 +198,6 @@
 					<attribute id="item06z">1</attribute>
 				</entity>
 			</table>
+		</script>
 	</modification>
 </revival>
