@@ -32,8 +32,8 @@ credit_character_group_display_time_factor	0	0.2
 credit_num_characters_per_display_time_factor	15	0
 passageway_money_chance_per_path_node	8	0
 passageway_item_chance_per_path_node	1	0
-passageway_money_amount_level_multiplier_min	1	0
-passageway_money_amount_level_multiplier_max	6	0
+passageway_money_amount_level_multiplier_min	5	0
+passageway_money_amount_level_multiplier_max	15	0
 ui_bar_regen_interval	100	0
 elite_monster_damage_percent	0	50
 elite_monster_sfx_chance_percent	0	20
@@ -64,3 +64,4 @@ PVP_Vulnerability_Max	75	0
 PVP_Vulnerability_Min	-75	0
 email_base_cost_to_send	5	0
 email_cost_item_val_percent	0	0
+email_cost_money_percent	0	0
