@@ -15,15 +15,14 @@
 		Levels
 		* Environment updates from the Abyss added.
 		* Moloch spawns in Anchient Blood as a rare spawn.
-		* Certain levels are now marked elite zones and enemies are much tougher.
+		* Certain levels are now marked elite zones and enemies are much tougher. TODO
 		* Passageways and Hellriffs are a lot rarer.
-		* Elite passageways contain a lot more rare monsters.
+		* Elite passageways contain a lot more champion monsters.
 		* Treasure passageways contain a lot more loot.
 		* Monster density in general increased.
 		
 		Players
 		* Players are no longer assigned a default skill.
-		* Starting attributes balanced.
 		* Level cap increased to 55.
 		
 		Skills
@@ -33,12 +32,14 @@
 		* Moloch has been added into the game.
 		* Champion monster scale slightly increased.
 		* Champion mob health and experience increased.
+		* Shield overload reduced and capped at 100%.
+		* New rare spawn: Zomper.
 		
 		Quests
 		* A skill point is rewarded for completing the quest Break on Through.
 		
 		NPCs
-		* All of the original voices have been restored.
+		* Original voices have been restored.
 		* Techsmith 314 has been transformed into his 3rd stage state.
 
 		Items
@@ -46,10 +47,8 @@
 		* 6x new unique items inspired by hellgateaus.
 		* Shield overload on Swords halved and capped at 100%.
 		* Boss/Mutant items are now of unique quality.
-		* Boss items are fixed drops and scale.
 		* Only unique retrainers can be bought and sold.
 		* Rare and Legendary augmentation cost reduced.
-		* Destructables only drop basic items.
 
 		Treasure
 		* Champion mobs have a better chances dropping rare loot according to monster quality.
@@ -59,109 +58,11 @@
 		* Zomper drops new items.
 		* Vendor modification and consumable quantities balanced.
 		* Chests are generally more exciting.
+	  * Destructables only drop basic items.
 
 		Inventory
 		* Increased stash (x10) and inventory (2x).
-
 		
-		This is the most expansive update to the game yet including these major features:
-		
-		* 6x new Templar weapons from the Abyss and Stonehenge expansions.
-		* Particle updates from Abyss.
-		* Environment updates from Abyss.
-		* New community item loots!
-		* Mythic &amp; Double-Edged qualities.
-		* New minigame events. When winning the minigame, you may be lucky enough to proc:
-		* Passgeways are rarer but richer.
-		* Rare and boss mobs are a lot more challenging and have fixed chances of dropping exceptional loot.
-		* Players are rewarded with a skill &amp; attribute retrainer upon the completion of the game (norm &amp; nm).
-		* Major bosses have a fixed chance of drop retrainers.
-		* Moloch has been added as a rare spawn to the hell dungeon and drops original stonehenge loot.
-
-		* Nanoforge increaments are larger. -something coldheart wrote into a post. dunno if its possible, but something about the nanoforge seems like it could be improved
-		* Pets only drop from certain fixed bosses. - which bosses, which pets
-		* Only legendary and rarer items require identifying. - need to discuss. is it a good idea. Analysers would be expensive under this implementation.
-		* Nightmare mode levels scale to your character level (excluding end game).
-		-------------------------------------
-		It would be good if nightmare levels would generally scale to your level so you can replay any part of the game at any time.
-		End game would still cap at like level 60 mobs.
-		---------------------------------------
-		* Pets drop as eggs and need to be used in the cube. TODO
-		* Old bosses can be fought again.
-		----------------------------------------
-		Considering all the bosses have the same loot tables anyway (apart from their fixed mutant drops)
-		I see no harm in allowing players to revist all game bosses. TODO
-		----------------------------------------
-		* Slightly better chance of finding uniques in general. TODO
-		* Obtain genre specific mods from certain enemies. ie. Get beast multiplier mods from beast type mobs.TODO
-		* Zomper, the Bill Roper zombie is now a unique spawn and carries IOU's.
-		---------------------------
-		Zomper created. Needs to be enabled as a unique type spawn so he can spawn anywhere.
-		Needs loot table and items
-		------------------------
-		* Blue prints only craft exceptional items that require a lot of parts. TODO
-		* Mods no longer show up on weapons ?
-		----------------------------
-		We can disable mods from showing up. Should we do it? We can't fix them but we can stop them from showing up
-		--------------------------
-		* None stat boosting dye kits rare drops from monsters. TODO
-		* XP penalty removed for fighting monsters above your level.. in fact you level slightly faster. TODO
-		* Stonehenge bosses added to end game quests, replayable.
-		---------------------------------
-		Add these bosses to St Pauls quests, allow repeating. Make them hard
-		-------------------------------------
-		* Better lifetime on modifications.
-		-----
-		Modification generally last about 12 levels. We could make them last 20 levels
-		-----
-		* Starting point removed. Murmur gives you skills points to advance you. TODO
-		* Tutorial dialogue can be skipped. TODO
-		* Monster shield overload capacity capped at 100%. TODO
-		* Power regeneration increase from 120 to 480. TODO
-		* Reduced power regen per Willpower from 3 to 2. TODO
-		* Monster/platyer shield charge delay reduced from 4 to 2.5 seconds. TODO
-		* Shield recharge rate from from 5% to 10%. TODO
-		* Fix reaper model.
-		------------------------------
-		A lot of people want to change the quest that uses a shock fiend monster, when to be consistant with the story line it should be the reaper.
-		-----------------------------
-		* Change basic crafting progressions.
-		-----------------------------
-		A lot of recipies can be added for general fun. Ie, 2 lower level injectors turn into a higher
-		-------------------------------
-		* Lower environment visability. TODO try darken the game
-		
-		Early game:
-		* Start with no weapons in tutorial. TODO
-		* Get a choice of weapon for your first quest. ie. Do you want to go a one or two hand build? Fire or toxic? etc TODO
-		--------------------
-		A lot of severe gameplay changes. We can make the game a lot of fun, it will take a lot of time.
-		List all ideas here and current status.
-		--------------------
-		
-		Class changes:
-		General:
-		* Sprint maxes at 3 points and has no cooldown. TODO
-		* Skills rearranged into their groups. TODO. Should we bother
-		
-		Templar:
-		* Multiple auras can be used at once at the expense of mana pool. TODO
-		
-		Engineer:
-		* Haste bot dependency removed. // Saw this in a community mod. Is it a good idea
-		* 
-		
-		Optional components:
-		* Allow purchasing of retrainers. TODO
-		* Removal of regional censoring. 
-		* Automatically pickup basic items.
-		* Malachor's Sniper Pack.
-		* "Hell" mode difficulty.
-		* Tabbed inventory.
-		
-
-		
-		Brand new game experience. Although you can play your higher level characters, we would recommend starting a new one so you can reep the full benefits update.
 		</description>
 		<script type="hidden">
 			<description>Extracts files from the MP data packs</description>
