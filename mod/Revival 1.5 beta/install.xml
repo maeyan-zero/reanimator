@@ -14,33 +14,36 @@
 		
 		Levels
 		* Environment updates from the Abyss added.
-		* Moloch spawns in Anchient Blood as a rare spawn.
-		* Certain levels are now marked elite zones and enemies are much tougher. TODO
-		* Passageways and Hellriffs are a lot rarer.
-		* Elite passageways contain a lot more champion monsters.
-		* Treasure passageways contain a lot more loot.
-		* Monster density in general increased.
+		* Moloch spawns in Anchient Blood - 4/5 chance to spawn.
+		* Passageways and Hellriffs are a lot rarer 1/10.
+		* Elite passageways champion spawn chance increased by 100%.
+		* Treasure passageways contain 100% more treasure.
+		* Monster density increased by 15%.
+		* Champion spawn chance increased by x4.
+		TODO
+		* Certain levels are now marked elite zones and enemies are much tougher.
 		
 		Players
 		* Players are no longer assigned a default skill.
+		* The initial skill is placed on the starter weapons.
 		* Level cap increased to 55.
+		* Power regeneration decreased from 3 to 2 per willpower point.
+		* Melee damage increased from 1% to 3% per strength point.
 		
 		Skills
 		* The sprint skill caps at 4 points and no cooldown.
 		
 		Monsters
 		* Moloch has been added into the game.
-		* Champion monster scale slightly increased.
-		* Champion mob health and experience increased.
+		* New champion spawn: Zomper. - Skin by Tirex
+		* Champion monster are slightly bigger 50%.
+		* Champion mob health and experience increased 100%-300%.
 		* Shield overload reduced and capped at 100%.
-		* New rare spawn: Zomper.
-		
-		Quests
-		* A skill point is rewarded for completing the quest Break on Through.
-		
+		* Killing monsters 3 levels above you grants you more experience up to 95%.
+
 		NPCs
-		* Original voices have been restored.
-		* Techsmith 314 has been transformed into his 3rd stage state.
+		* Original voices have been restored for about 15 npcs.
+		* Techsmith 314 has been reskinned into his 3rd stage state.
 
 		Items
 		* Templar items added: Sunblade, Sunshield, Moonblade, Dissector, Dissector Shield &amp; Gleamcarver.
@@ -48,21 +51,41 @@
 		* Shield overload on Swords halved and capped at 100%.
 		* Boss/Mutant items are now of unique quality.
 		* Only unique retrainers can be bought and sold.
-		* Rare and Legendary augmentation cost reduced.
+		* Common retrainers are gained from Sydonai the first time you complete the game.
+		* Rare and Legendary augmentation cost reduced by 50%.
+		* Bosses have a 1/100 chance to drop an egg.
+		* Scrap stack size increased to 10,000.
+		* Consumables stack size increased to 100.
 
+		Recipies
+		* The cube recipes are hidden until discovered.
+		* New recipe to create pets.
+		TODO:
+		* Create more basic consumable recipes.
+		* Create more recipes to create random items.
+		
 		Treasure
-		* Champion mobs have a better chances dropping rare loot according to monster quality.
+		* Champion mobs have a fixed chance of dropping legendary or better loot!
+		  * Rare mobs 1/100
+			* Epic/Legendary mobs 1/50
+			* Named/Unique mobs 1/25
 		* Sydonai drops a skill and attribute retrainer when you finish the game.
-		* Moloch drops the Stonehenge dye kits.
-		* Sydonai and Moloch have a chance to drop unique retrainers.
+		* Moloch drops the Stonehenge dye kits. 1/10 chance to drop.
+		* Sydonai and Moloch have a chance to drop unique retrainers. 1/25 chance to drop.
 		* Zomper drops new items.
+		  * 1/2 chance to drop a special item (not telling what it is ;))
+			* 1/10 chance to drop hellgateaus unique items.
 		* Vendor modification and consumable quantities balanced.
-		* Chests are generally more exciting.
-	  * Destructables only drop basic items.
-
+		* Chests and crates are generally more exciting.
+		  * Crates will only drop palladium and consumables.
+			* Common chests will drop up to 3 consumables and palladium.
+			* There is a 1/1000 chance a common chest will drop a legendary of better item.
+			* Elite chests drop a lot more palladium and drop 2 rare or better items.
+			
 		Inventory
 		* Increased stash (x10) and inventory (2x).
-		
+		TODO:
+		* Add a new slot for goggles.
 		</description>
 		<script type="hidden">
 			<description>Extracts files from the MP data packs</description>
