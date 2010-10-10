@@ -34,6 +34,159 @@
       <OnSetControlUnit>UIComponentSetFocusUnit</OnSetControlUnit>
       <OnSetFocusUnit>UIOnPostActivatePaperdoll</OnSetFocusUnit>
       
+	  <!-- revival patch slots-->
+	  <invslot name="left ring slot">
+        <frame>inventory 96x slot</frame>
+        <x>148</x>
+        <y>528</y>
+        <width>65</width>
+        <height>65</height>
+        <stretch>1</stretch>
+        <invloc>email_inbox</invloc>
+        <tooltipstring>trinket</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>5</model_border_x>
+        <model_border_y>5</model_border_y>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>65</width>
+          <height>65</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+		  <texture>revival_atlas</texture>
+          <frame>ring big</frame>
+          <x>1</x>
+          <y>1</y>
+          <stretch>1</stretch>
+          <width>64</width>
+          <height>64</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>65</width>
+          <height>65</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+	  <invslot name="right ring slot">
+        <frame>inventory 96x slot</frame>
+        <x>497</x>
+        <y>528</y>
+        <width>65</width>
+        <height>65</height>
+        <stretch>1</stretch>
+        <invloc>email_outbox</invloc>
+        <tooltipstring>trinket</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>5</model_border_x>
+        <model_border_y>5</model_border_y>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>65</width>
+          <height>65</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+		  <texture>revival_atlas</texture>
+          <frame>ring big</frame>
+          <x>1</x>
+          <y>1</y>
+          <stretch>1</stretch>
+          <width>64</width>
+          <height>64</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>65</width>
+          <height>65</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+      <invslot name="eyes slot">
+        <frame>inventory 96x slot</frame>
+        <x>359</x>
+        <y>25</y>
+        <width>98</width>
+        <height>98</height>
+        <invloc>eyes</invloc>
+        <tooltipstring>goggles</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <reference>invslot price text</reference>
+		<independentactivate>1</independentactivate>        
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>goggles big</frame>
+          <x>1</x>
+          <y>1</y>
+          <width>96</width>
+          <height>96</height>
+          <alpha>255</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>98</width>
+          <height>98</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot>
+	  <!--invslot name="implant slot">
+        <frame>inventory 96x slot</frame>
+        <x>300</x>
+        <y>528</y>
+        <width>65</width>
+        <height>65</height>
+        <stretch>1</stretch>
+        <invloc>email_inbox</invloc>
+        <tooltipstring>tattoo</tooltipstring>
+        <litframe>96x highlight</litframe>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <useableborder>verybighighlightborder</useableborder>
+        <rendersection>Models</rendersection>
+        <model_border_x>5</model_border_x>
+        <model_border_y>5</model_border_y>
+        <reference>invslot price text</reference>
+        <independentactivate>1</independentactivate>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>65</width>
+          <height>65</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+        <panel name="slot icon">
+          <frame>implant big</frame>
+          <x>1</x>
+          <y>1</y>
+          <stretch>1></stretch>
+          <width>64</width>
+          <height>64</height>
+          <alpha>75</alpha>
+        </panel>
+        <panel name="overlay">
+          <width>65</width>
+          <height>65</height>
+          <rendersection>UpOne</rendersection>
+        </panel>
+      </invslot-->
+	  
+	  <!-- original slots-->
       <invslot name="head slot">
         <frame>inventory 96x slot</frame>
         <x>305</x>
