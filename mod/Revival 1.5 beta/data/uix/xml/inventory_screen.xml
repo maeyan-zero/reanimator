@@ -115,7 +115,7 @@
       </invslot>
       <invslot name="eyes slot">
         <frame>inventory 96x slot</frame>
-        <x>359</x>
+        <x>408</x>
         <y>25</y>
         <width>98</width>
         <height>98</height>
