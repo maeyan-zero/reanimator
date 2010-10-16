@@ -384,7 +384,7 @@ namespace Reanimator.Forms
             DataTable table = ((DataSet)tableData_DataGridView.DataSource).Tables[tableData_DataGridView.DataMember];
             if (table == null) return;
 
-            String saveType = _dataFile.IsExcelFile ? "Cooked Excel Files" : "Cooked String Files";
+            String saveType = _dataFile.IsExcelFile ? "Cooked Excel Tables" : "Cooked String Tables";
             String saveExtension = _dataFile.IsExcelFile ? "txt.cooked" : "xls.uni.cooked";
             String saveInitialPath = Path.Combine(Config.HglDir, _dataFile.FilePath);
 
@@ -394,7 +394,7 @@ namespace Reanimator.Forms
             byte[] data = _dataFile.GenerateFile(table);
             if (FileTools.WriteFile(savePath, data))
             {
-                MessageBox.Show("File saved Successfully!", "Completed", MessageBoxButtons.OK,
+                MessageBox.Show("Table saved Successfully!", "Completed", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }
         }
@@ -584,7 +584,7 @@ namespace Reanimator.Forms
 
                         if (dataType == typeof(String)) //hellgate thing only
                         {
-                            newString = newString.Replace("\\n", "\n");
+                            newString = newString.Replace("\\\\n", "\n");
                             newString = newString.Replace("\"", "");
                             dataRow[column] = newString;
                         }
@@ -650,7 +650,7 @@ namespace Reanimator.Forms
                 // prompts the user to choose where to save the file
                 SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+                    Filter = "Text Tables (*.txt)|*.txt|All Tables (*.*)|*.*",
                     InitialDirectory = Config.ScriptDir,
                     FileName = _dataFile.FileName
                 };
