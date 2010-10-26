@@ -1,0 +1,25 @@
+The following row counting corresponds to the excel/OpenOffice Calc way of numbering the rows, NOT the Reanimator style.
+If you want to test/convert TCv4 items, open the items table in excel/OO-Calc and go to the rows mentioned here.
+
+Except for the entries mentioned below, all other items were added to the SP items table:
+Holy Katana Test
+
+The added SP files can be found here:
+TCv4 name							row in Revival 1.5 items table
+Poseidon Sniper Rifle Unique 01		397
+Hunter weapons						450-461
+RevealerMk2 Unique 01				480
+Cracker								581
+Purification Ray					585
+Vampire PistolMk3 Unique 02			929
+Fire Seeds							935
+Fire SeedsMk2						937
+Negatron							939
+Singularity Node					941
+Abyss Boss Dye-Kits					1078-1082
+Santa Hat							1083
+Head gear							2030-2041
+Body gear							1728-1769
+Heads								1969-1972
+etc									1974-1977
+Foci								1989-2017
