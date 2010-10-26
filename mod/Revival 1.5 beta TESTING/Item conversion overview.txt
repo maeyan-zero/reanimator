@@ -2,7 +2,7 @@ The following row counting corresponds to the excel/OpenOffice Calc way of numbe
 If you want to test/convert TCv4 items, open the items table in excel/OO-Calc and go to the rows mentioned here.
 
 Except for the entries mentioned below, all other items were added to the SP items table:
-Holy Katana Test
+Holy Katana Test (this entry is 1:1 identical to the "Holy Katana" entry)
 
 The added SP files can be found here:
 TCv4 name							row in Revival 1.5 items table
