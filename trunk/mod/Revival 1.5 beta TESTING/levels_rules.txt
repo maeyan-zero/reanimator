@@ -1,0 +1,1027 @@
+drlgFileName	undefined1	drlgRuleSet	label	minSubs	minSubsNightMare	maxSubs	maxSubsNightMare	attempts	replaceAll	replaceAndCheck	onceForReplacement	mustPlace	weighted	exitRule	deadEndRule	looping	loopLabel	askQuests	randomQuestPercent	questTaskComplete	theme_RunRule	theme_SkipRule	
+Rule_CharacterCreation	1	DRLG_CharacterCreation		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+DestroyedStation_rule1	0	DRLG_DestroyedStation		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_TB01	35	DRLG_TemplarBase		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_rc01	1	DRLG_RuinCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_tp01	32	DRLG_TownPortal		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_cg01	1	DRLG_CGMarket		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_cg02	1	DRLG_CGMarket		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_CGMarket		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01	1	DRLG_MiniCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01a	1	DRLG_MiniCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc02	1	DRLG_MiniCity		5	6	6	8	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc03	1	DRLG_MiniCity		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_MiniCity		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pm01	1	DRLG_PedMall		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pm02	1	DRLG_PedMall		5	6	6	8	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pm03	1	DRLG_PedMall		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_pm04	1	DRLG_PedMall		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_PedMall		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bc01	1	DRLG_BoulevardCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bc01a	1	DRLG_BoulevardCity		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_bc02	1	DRLG_BoulevardCity		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bc03	1	DRLG_BoulevardCity		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_bc03deadend	1	DRLG_BoulevardCity		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_BoulevardCity		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_ac01	1	DRLG_AlleyCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_ac02	1	DRLG_AlleyCity		3	4	5	6	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_ac03	1	DRLG_AlleyCity		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_AlleyCity		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pc01	1	DRLG_ParkCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pc02	1	DRLG_ParkCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pc03	1	DRLG_ParkCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pc04	1	DRLG_ParkCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pc03	1	DRLG_ParkCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pc04	1	DRLG_ParkCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pc05	1	DRLG_ParkCity		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_ParkCity		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pm04	1	DRLG_ParkCity		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01	1	DRLG_MiniCityRare		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01a	1	DRLG_MiniCityRare		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc02	1	DRLG_MiniCityRare		4	5	5	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc03	1	DRLG_MiniCityRare		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_escort	1	DRLG_MiniCityRare		1	1	1	1	0	0	0	0	0	0	0	0	0		1	100	-1	-1	-1
+Rule_CityRepALL	1	DRLG_MiniCityRare		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pmT01	1	DRLG_PedMallTutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pmT02	1	DRLG_PedMallTutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pmT03	1	DRLG_PedMallTutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pmT04	1	DRLG_PedMallTutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pmT05	1	DRLG_PedMallTutorial		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_TutorialRepALL	1	DRLG_PedMallTutorial		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01	1	DRLG_DeathsCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01a	1	DRLG_DeathsCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc02	1	DRLG_DeathsCity		3	3	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc03_altar	1	DRLG_DeathsCity		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_DeathsCity		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01	1	DRLG BishopsCourt		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01a	1	DRLG BishopsCourt		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc02	1	DRLG BishopsCourt		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc03_Message	1	DRLG BishopsCourt		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_mc03	1	DRLG BishopsCourt		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG BishopsCourt		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01_PortalFix	1	DRLG Aldgate		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc02	1	DRLG Aldgate		3	3	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG Aldgate		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_NvidiaDemo	1	DRLG_NVIDIADemo		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_cp01	16	DRLG_ChocolatePark		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_cp02	16	DRLG_ChocolatePark		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_cp04	16	DRLG_ChocolatePark		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pa01	16	DRLG_Park		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pa02	16	DRLG_Park		4	5	5	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pa03	16	DRLG_Park		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_pa04	16	DRLG_Park		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Hell01	54	DRLG_Hell		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Hell02	54	DRLG_Hell		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_PvPArena		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_ac01	1	DRLG Angel Passage		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_ac02	1	DRLG Angel Passage		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_ac03_clean	1	DRLG Angel Passage		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG Angel Passage		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pb01	1	DRLG_PiccadillyBookstores		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pb02	1	DRLG_PiccadillyBookstores		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_pb03	1	DRLG_PiccadillyBookstores		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_PiccadillyBookstores		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_STPL01	1	DRLG_StPauls		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_StPauls		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bg01	1	DRLG_BigGundown		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_BigGundown		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_RTS01	1	DRLG_RTSCity		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_RTS02	1	DRLG_RTSCity		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_RTS03	1	DRLG_RTSCity		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_RTS04	1	DRLG_RTSCity		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL_RTS	1	DRLG_RTSCity		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Th01	1	DRLG TestHope		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Th02	1	DRLG TestHope		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Th03	1	DRLG TestHope		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Th04	1	DRLG TestHope		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Th05	1	DRLG TestHope		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG TestHope		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_tc01	1	DRLG_TottenhamCourt		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_tc02	1	DRLG_TottenhamCourt		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_tc03	1	DRLG_TottenhamCourt		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_tc04	1	DRLG_TottenhamCourt		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_TottenhamCourt		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bm01	1	DRLG_BritishMuseum		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bm02	1	DRLG_BritishMuseum		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bm03	1	DRLG_BritishMuseum		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bm04	1	DRLG_BritishMuseum		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bm05	1	DRLG_BritishMuseum		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_bm06	1	DRLG_BritishMuseum		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_01C	1	DRLG_Piccadilly Circus		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_02	1	DRLG_Piccadilly Circus		4	4	5	5	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_03	1	DRLG_Piccadilly Circus		3	3	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_04	1	DRLG_Piccadilly Circus		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_05	1	DRLG_Piccadilly Circus		3	3	4	4	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_07	1	DRLG_Piccadilly Circus		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_10	1	DRLG_Piccadilly Circus		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_11	1	DRLG_Piccadilly Circus		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG_Piccadilly Circus		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_14	1	DRLG_Piccadilly Circus		6	6	8	8	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01	1	DRLG BargeHouse		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_wh1	1	DRLG BargeHouse	BargeLoop	1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_wh2	1	DRLG BargeHouse		1	1	1	1	0	0	0	0	0	0	0	0	3	BargeLoop	0	0	-1	-1	-1
+Rule_wh3	1	DRLG BargeHouse		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL_wh	1	DRLG BargeHouse		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01	1	DRLG PuddleDock		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01a	1	DRLG PuddleDock		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc02	1	DRLG PuddleDock		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_exospector	1	DRLG PuddleDock		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG PuddleDock		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01	1	DRLG Crown Office Row		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc01a	1	DRLG Crown Office Row		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc02	1	DRLG Crown Office Row		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc03_triage	1	DRLG Crown Office Row		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_mc02	1	DRLG Crown Office Row		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_mc03	1	DRLG Crown Office Row		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG Crown Office Row		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_01	2	DRLG_MiniTubesHole	FoetidLoop1	1	2	2	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_02	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	0	0	0	0	0	FoetidLoop1	0	0	-1	-1	-1
+Rule_03	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_05	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_04	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_06	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_07	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_09	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_08	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_11	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_12	2	DRLG_MiniTubesHole		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+TemplateB	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B01	2	DRLG_MiniTubesDepot	MiniTubeDepotLoopB1	2	3	3	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B02	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	0	0	0	0	0	MiniTubeDepotLoopB1	0	0	-1	-1	-1
+Rule_B08	2	DRLG_MiniTubesDepot		0	0	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B01	2	DRLG_MiniTubesDepot		1	2	2	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B08	2	DRLG_MiniTubesDepot		0	0	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B02	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B09	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_B09_DE	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+Rule_B10	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_B11	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_B12	2	DRLG_MiniTubesDepot		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B05	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B04	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B06	2	DRLG_MiniTubesDepot		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B07	2	DRLG_MiniTubesDepot		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateB	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B01	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B02	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B08	2	DRLG_MiniTubesShort		0	0	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B01	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B09	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_B09_DE	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+Rule_B11	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_B12	2	DRLG_MiniTubesShort		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B05	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B04	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B06	2	DRLG_MiniTubesShort		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B07	2	DRLG_MiniTubesShort		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateB	2	DRLG_DeathsTunnels		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B01	2	DRLG_DeathsTunnels	DarkTunnelsLoopB1	2	3	3	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B02	2	DRLG_DeathsTunnels		1	1	1	1	0	0	0	0	0	0	0	0	0	DarkTunnelsLoopB1	0	0	-1	-1	-1
+Rule_B08	2	DRLG_DeathsTunnels		0	0	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B09_dark	2	DRLG_DeathsTunnels		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_B11	2	DRLG_DeathsTunnels		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_B12	2	DRLG_DeathsTunnels		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B05	2	DRLG_DeathsTunnels		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B04	2	DRLG_DeathsTunnels		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_B06	2	DRLG_DeathsTunnels		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateN	2	DRLG_UndergroundPassage		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_J01	2	DRLG_UndergroundPassage		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_J02	2	DRLG_UndergroundPassage		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_J03	2	DRLG_UndergroundPassage		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_J04	2	DRLG_UndergroundPassage		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_J05	2	DRLG_UndergroundPassage		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_J06	2	DRLG_UndergroundPassage		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_J07	2	DRLG_UndergroundPassage		1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_J08	2	DRLG_UndergroundPassage		1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateC	2	DRLG_Northern Line South		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_C01	2	DRLG_Northern Line South	FoetidLoopC1	2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_C02	2	DRLG_Northern Line South		1	1	1	1	0	0	0	0	0	0	0	0	0	FoetidLoopC1	0	0	-1	-1	-1
+Rule_C03	2	DRLG_Northern Line South		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_C04	2	DRLG_Northern Line South		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_C05	2	DRLG_Northern Line South		0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_C06	2	DRLG_Northern Line South		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_C07	2	DRLG_Northern Line South		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateD	2	DRLG_MiniRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_D05	2	DRLG_MiniRooms	MiniRoomLoop1	1	1	1	1	0	0	0	0	0	0	0	0	2		0	0	-1	-1	-1
+Rule_D04	2	DRLG_MiniRooms		1	1	1	1	0	0	0	0	0	0	0	0	0	MiniRoomLoop1	0	0	-1	-1	-1
+Rule_D05	2	DRLG_MiniRooms	MiniRoomLoop2	1	1	1	1	0	0	0	0	0	0	0	0	2		0	0	-1	-1	-1
+Rule_D04	2	DRLG_MiniRooms		1	1	1	1	0	0	0	0	0	0	0	0	0	MiniRoomLoop2	0	0	-1	-1	-1
+Rule_D05	2	DRLG_MiniRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_D06	2	xxx		1	1	1	1	0	0	0	0	1	0	0	0	0		1	10	-1	-1	-1
+Rule_D09	2	DRLG_MiniRooms		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_D10	2	DRLG_MiniRooms		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+Rule_D07	2	DRLG_MiniRooms		7	7	11	11	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTutorial	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_D05	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_D04	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Tutorial01	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_D05	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_D04	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Tutorial02	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_D05	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_D04	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_D09	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_D07	2	DRLG_Tutorial		7	7	11	11	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateA	4	DRLG_IndustrialRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_05	4	DRLG_IndustrialRooms		5	5	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_10	4	DRLG_IndustrialRooms		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_11	4	DRLG_IndustrialRooms		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+TemplateA	4	DRLG_IndustrialHalls		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_05	4	DRLG_IndustrialHalls	IndustrialHallsLoop1	1	1	1	1	0	0	0	0	0	0	0	0	4		0	0	-1	-1	-1
+Rule_07	4	DRLG_IndustrialHalls		1	2	3	4	0	0	0	0	0	0	0	0	0	IndustrialHallsLoop1	0	0	-1	-1	-1
+Rule_10	4	DRLG_IndustrialHalls		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_11	4	DRLG_IndustrialHalls		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+TemplateP	2	DRLG_MiniRoomsAdventure		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_P01	2	DRLG_MiniRoomsAdventure		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_P02	2	DRLG_MiniRoomsAdventure		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_P01	2	DRLG_MiniRoomsAdventure		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_P03	2	DRLG_MiniRoomsAdventure		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateP	2	DRLG_MiniRoomsAdventureSmall		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_P01	2	DRLG_MiniRoomsAdventureSmall		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_P03	2	DRLG_MiniRoomsAdventureSmall		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateL	2	DRLG_MiniRoomsDark		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_I05	2	DRLG_MiniRoomsDark	RoomDarkLoopD2	1	1	1	1	0	0	0	0	0	0	0	0	3		0	0	-1	-1	-1
+Rule_I04	2	DRLG_MiniRoomsDark		1	1	1	1	0	0	0	0	0	0	0	0	0	RoomDarkLoopD2	0	0	-1	-1	-1
+Rule_I09	2	DRLG_MiniRoomsDark		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateL	2	DRLG AldwychDark		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_I05	2	DRLG AldwychDark	AldwychLoop	1	1	1	1	0	0	0	0	0	0	0	0	3		0	0	-1	-1	-1
+Rule_I04	2	DRLG AldwychDark		1	1	1	1	0	0	0	0	0	0	0	0	0	AldwychLoop	0	0	-1	-1	-1
+Rule_I09firstsample	2	DRLG AldwychDark		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateK	2	DRLG_Central Line West		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_H01	2	DRLG_Central Line West	FoetidLoopH1	2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_H02	2	DRLG_Central Line West		1	1	1	1	0	0	0	0	0	0	0	0	0	FoetidLoopH1	0	0	-1	-1	-1
+Rule_H03	2	DRLG_Central Line West		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_H04	2	DRLG_Central Line West		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_H05	2	DRLG_Central Line West		0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_H06	2	DRLG_Central Line West		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_H07	2	DRLG_Central Line West		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateE	2	DRLG_MiniTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_E01	2	DRLG_MiniTubes	MiniTubesLoop1	1	2	2	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_E02	2	DRLG_MiniTubes		1	1	1	1	0	0	0	0	0	0	0	0	0	MiniTubesLoop1	0	0	-1	-1	-1
+Rule_E03	2	DRLG_MiniTubes		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_E01	2	DRLG_MiniTubes		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_E02	2	DRLG_MiniTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_E04	2	DRLG_MiniTubes		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_E05	2	DRLG_MiniTubes		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_E08	2	DRLG_MiniTubes		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateE	2	DRLG_MiniTubesStationA		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_E01	2	DRLG_MiniTubesStationA		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_E02	2	DRLG_MiniTubesStationA		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_U05	2	DRLG_MiniTubesStationA		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_E03	2	DRLG_MiniTubesStationA		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_E02	2	DRLG_MiniTubesStationA		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_E03	2	DRLG_MiniTubesStationA		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_E04	2	DRLG_MiniTubesStationA		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_E08	2	DRLG_MiniTubesStationA		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateExodus	2	DRLG_Exodus		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_R01	2	old DRLG_Exodus	ExodusLoop1	1	1	3	3	0	0	0	0	0	0	0	0	3		0	0	-1	-1	-1
+Rule_R02	2	old DRLG_Exodus		2	2	5	5	0	0	0	0	0	0	0	0	0	ExodusLoop1	0	0	-1	-1	-1
+Rule_R01	2	DRLG_Exodus		10	10	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_R05	2	DRLG_Exodus		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateS	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q01	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q03	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q02	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q04	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q05	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q06	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q07	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Q03	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q02	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q03	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q05	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q06	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q10	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Q03	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q02	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q03	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q05	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q06	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q07	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Q03	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q02	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q04	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q05	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q06	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q13	2	DRLG_MiniTubesAndRooms		8	8	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q15	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_Q16	2	DRLG_MiniTubesAndRooms		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+TemplateS	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q01	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_S02	2	DRLG_IndustrialTubes		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q05	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q06	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_S07	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_S02	2	DRLG_IndustrialTubes		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q05	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q06	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q10	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_S02	2	DRLG_IndustrialTubes		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q05	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q06	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_S07	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_S02	2	DRLG_IndustrialTubes		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q05	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q06	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q13	2	DRLG_IndustrialTubes		8	8	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Q15	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_Q16	2	DRLG_IndustrialTubes		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+Template_TrainFix	2	DRLG CannonStreetRail		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_S02	2	DRLG CannonStreetRail	CannonLoop	1	1	1	2	0	0	0	0	0	0	0	0	3		0	0	-1	-1	-1
+Rule_STrainFix	2	DRLG CannonStreetRail		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_StrainFix_End	2	DRLG CannonStreetRail		1	1	1	1	0	0	0	0	1	0	0	0	0	CannonLoop	0	0	-1	-1	-1
+Rule_StrainFix_End	2	DRLG CannonStreetRail		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateF	2	DRLG_Tutorial		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateJ	2	DRLG_Bakerloo Line South		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_G01	2	DRLG_Bakerloo Line South	FoetidLoopG1	1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_G02	2	DRLG_Bakerloo Line South		1	1	1	1	0	0	0	0	0	0	0	0	0	FoetidLoopG1	0	0	-1	-1	-1
+Rule_G03	2	DRLG_Bakerloo Line South		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_G04	2	DRLG_Bakerloo Line South		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	22	DRLG_HellTower		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateB	22	DRLG_HellTowerFawkes		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateC	22	DRLG_HellTowerHellPortal		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateD	22	DRLG_HellTowerAdventure		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateE	22	DRLG_HellTowerHellPortalPrevious		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateF	22	DRLG_HellriftRescue		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateA	23	DRLG_HellDungeon		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_01	23	DRLG_HellDungeon		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_02	23	DRLG_HellDungeon		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_03	23	DRLG_HellDungeon		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_04	23	DRLG_HellDungeon		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_06	23	DRLG_HellDungeon		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_05	23	DRLG_HellDungeon		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_07	23	DRLG_HellDungeon		16	16	18	18	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_08	23	DRLG_HellDungeon		1	1	1	1	0	0	0	0	1	0	0	0	0		1	100	-1	-1	-1
+TemplateA	23	DRLG_HellPiccadilly		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_01	23	DRLG_HellPiccadilly		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_02	23	DRLG_HellPiccadilly		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_03	23	DRLG_HellPiccadilly		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_06	23	DRLG_HellPiccadilly		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_05	23	DRLG_HellPiccadilly		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_07	23	DRLG_HellPiccadilly		14	14	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_08_oracle	23	DRLG_HellPiccadilly		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateAdventure	23	DRLG_HellDungeonAdventure		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_02	23	DRLG_HellDungeonAdventure		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_03	23	DRLG_HellDungeonAdventure		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_06	23	DRLG_HellDungeonAdventure		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_05	23	DRLG_HellDungeonAdventure		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_07	23	DRLG_HellDungeonAdventure		14	14	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SWT_Template	8	DRLG_MiniSewersAdventureSmall		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SWT_Rule_01	8	DRLG_MiniSewersAdventureSmall		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_02	8	DRLG_MiniSewersAdventureSmall		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG_MiniSewersAdventureSmall		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_07	8	DRLG_MiniSewersAdventureSmall		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SWT_Template	8	DRLG_MiniSewersAdventureLarge		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SWT_Rule_02	8	DRLG_MiniSewersAdventureLarge		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_02	8	DRLG_MiniSewersAdventureLarge		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG_MiniSewersAdventureLarge		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_07	8	DRLG_MiniSewersAdventureLarge		7	7	14	14	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Template	8	DRLG_MiniSewersC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_015	8	DRLG_MiniSewersC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_11	8	DRLG_MiniSewersC		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+SR_Rule_11D	8	DRLG_MiniSewersC		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG_MiniSewersC		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_02	8	DRLG_MiniSewersC		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG_MiniSewersC		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_06	8	DRLG_MiniSewersC		8	8	12	12	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_07	8	DRLG_MiniSewersC		30	30	60	60	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Template	8	DRLG_MiniSewers		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_015	8	DRLG_MiniSewers		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_01	8	DRLG_MiniSewers		3	3	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_02	8	DRLG_MiniSewers		8	8	12	12	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG_MiniSewers		8	8	12	12	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_06	8	DRLG_MiniSewers		8	8	12	12	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG_MiniSewers		8	8	12	12	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_05	8	DRLG_MiniSewers		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+SR_Rule_05D	8	DRLG_MiniSewers		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+SR_Rule_10	8	x		1	1	1	1	0	0	0	0	1	0	0	0	0		1	0	-1	-1	-1
+SR_Rule_08	8	DRLG_MiniSewers		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_04	8	DRLG_MiniSewers		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_09	8	DRLG_MiniSewers		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_07	8	DRLG_MiniSewers		75	75	150	150	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Template	8	DRLG_DeathsSewers		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_01	8	DRLG_DeathsSewers		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_02	8	DRLG_DeathsSewers		6	6	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG_DeathsSewers		6	6	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_06	8	DRLG_DeathsSewers		6	6	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG_DeathsSewers		6	6	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_10	8	DRLG_DeathsSewers		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_08	8	DRLG_DeathsSewers		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_04	8	DRLG_DeathsSewers		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_09	8	DRLG_DeathsSewers		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_07	8	DRLG_DeathsSewers		50	50	75	75	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Template	8	DRLG_MiniSewersB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_015	8	DRLG_MiniSewersB		1	1	1	1	0	0	0	0	0	0	0	0	0		1	0	-1	-1	-1
+BSB_Rule_01	8	DRLG_MiniSewersB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_08	8	DRLG_MiniSewersB		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_02	8	DRLG_MiniSewersB		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_03	8	DRLG_MiniSewersB		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_04	8	DRLG_MiniSewersB		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_05	8	DRLG_MiniSewersB		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_06	8	DRLG_MiniSewersB		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_01	8	DRLG_MiniSewersB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_05	8	DRLG_MiniSewersB		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_07	8	DRLG_MiniSewersB		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_02	8	DRLG_MiniSewersB		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG_MiniSewersB		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_07	8	DRLG_MiniSewersB		25	25	50	50	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Template	8	DRLG MiniBigSewers		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_015	8	DRLG MiniBigSewers		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_01	8	DRLG MiniBigSewers		5	5	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+BSB_Rule_07	8	DRLG MiniBigSewers		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+BSB_Rule_07D	8	DRLG MiniBigSewers		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+SR_Rule_02	8	DRLG MiniBigSewers		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_03	8	DRLG MiniBigSewers		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+SR_Rule_07	8	DRLG MiniBigSewers		25	25	50	50	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	29	DRLG_TruthRoomKnowledge		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateB	29	DRLG_TruthRoomKnowledgeB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTRL	29	DRLG_TruthRoomLeadership		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTRLB	29	DRLG_TruthRoomLeadershipB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTRB	29	DRLG_TruthRoomBeauty		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTRBB	29	DRLG_TruthRoomBeautyB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTRH	29	DRLG_TruthRoomHope		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTRHB	29	DRLG_TruthRoomHopeB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTRBR	29	DRLG_TruthRoomBrotherhood		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTRBRB	29	DRLG_TruthRoomBrotherhoodB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+RiverTemplate	24	DRLG_River		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_01	24	DRLG_River		2	2	3	3	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_02	24	DRLG_River		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Rule_02_end	24	DRLG_River		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+Rule_10	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_09	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_10	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_03	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_04	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Test	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_05	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_06	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_07	24	DRLG_River		1	1	2	2	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_08	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_11	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_12	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_13	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_18	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Parliament	24	DRLG_River		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_20	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_14	24	DRLG_River		2	2	5	5	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_15	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_16	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_22	24	xxx		1	1	1	1	0	0	0	0	1	0	0	0	0		1	100	-1	-1	-1
+Rule_22_Hold_Fast	24	DRLG_River		1	1	1	1	0	0	0	0	1	0	0	0	0		1	100	-1	-1	-1
+Rule_17	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_19	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_21	24	DRLG_River		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+RiverTemplate	24	DRLG Millennium Battle		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_01	24	DRLG Millennium Battle		2	2	3	3	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_02_end	24	DRLG Millennium Battle		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_10	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_09	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_10	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_03	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_04	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Test	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_05	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_06	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_07	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_08	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_11	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_12	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_13	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Parliament	24	DRLG Millennium Battle		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_18	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_20	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_14	24	DRLG Millennium Battle		2	2	5	5	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_15	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_16	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_17	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_19	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_21	24	DRLG Millennium Battle		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	9	DRLG_SoundField		0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	10	DRLG_Soundfield_Part_Deux		0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+MonsterFieldTemplate	10	DRLG_MonsterField		0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateM	2	DRLG_LevelExperiment		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_ParkingLot	1	DRLG_ParkingLot		0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_01	1	DRLG_PerformanceTestLevel		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_02	1	DRLG_PerformanceTestLevel		6	6	8	8	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_03	1	DRLG_PerformanceTestLevel		4	4	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_04	1	DRLG_PerformanceTestLevel		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_05	1	DRLG_PerformanceTestLevel		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_06	1	DRLG_PerformanceTestLevel		4	4	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_07	1	DRLG_PerformanceTestLevel		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_01	1	DRLG_PerformanceTestLevelA		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_02	1	DRLG_PerformanceTestLevelA		6	6	8	8	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_03	1	DRLG_PerformanceTestLevelA		4	4	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_04	1	DRLG_PerformanceTestLevelA		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_05	1	DRLG_PerformanceTestLevelA		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_06	1	DRLG_PerformanceTestLevelA		4	4	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_07A	1	DRLG_PerformanceTestLevelA		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_01	1	DRLG_PerformanceTestLevelB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_02	1	DRLG_PerformanceTestLevelB		6	6	8	8	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_03	1	DRLG_PerformanceTestLevelB		4	4	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_04	1	DRLG_PerformanceTestLevelB		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_05	1	DRLG_PerformanceTestLevelB		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_06	1	DRLG_PerformanceTestLevelB		4	4	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_07B	1	DRLG_PerformanceTestLevelB		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_01	1	DRLG_PerformanceTestLevelC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_02	1	DRLG_PerformanceTestLevelC		6	6	8	8	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_03	1	DRLG_PerformanceTestLevelC		4	4	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_04	1	DRLG_PerformanceTestLevelC		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_05	1	DRLG_PerformanceTestLevelC		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_06	1	DRLG_PerformanceTestLevelC		4	4	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TRule_07C	1	DRLG_PerformanceTestLevelC		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_01	1	DRLG_MonsterTestLevel		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_02	1	DRLG_MonsterTestLevel		4	4	5	5	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_03	1	DRLG_MonsterTestLevel		3	3	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_04	1	DRLG_MonsterTestLevel		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_05	1	DRLG_MonsterTestLevel		3	3	4	4	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_06	1	DRLG_MonsterTestLevel		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_07	1	DRLG_MonsterTestLevel		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_09	1	DRLG_MonsterTestLevel		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_10	1	DRLG_MonsterTestLevel		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_11	1	DRLG_MonsterTestLevel		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_13	1	DRLG_MonsterTestLevel		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_14	1	DRLG_MonsterTestLevel		6	6	8	8	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+DRLG_1	5	DRLG_TubeB		0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Template	34	DRLG_Crypts		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_015	34	DRLG_Crypts		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_01	34	DRLG_Crypts		3	3	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_05	34	DRLG_Crypts		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+C_Rule_05D	34	DRLG_Crypts		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+C_Rule_02	34	DRLG_Crypts		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_03	34	DRLG_Crypts		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_06	34	DRLG_Crypts		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_08	34	DRLG_Crypts		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_04	34	DRLG_Crypts		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_09	34	DRLG_Crypts		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_07	34	DRLG_Crypts		30	30	35	35	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Template	34	DRLG_CryptsB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_015	34	DRLG_CryptsB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_10	34	DRLG_CryptsB		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_05	34	DRLG_CryptsB		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+C_Rule_05D	34	DRLG_CryptsB		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+C_Rule_02	34	DRLG_CryptsB		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_03	34	DRLG_CryptsB		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_06	34	DRLG_CryptsB		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_08	34	DRLG_CryptsB		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_04	34	DRLG_CryptsB		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_09	34	DRLG_CryptsB		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_07	34	DRLG_CryptsB		30	30	35	35	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Template	34	DRLG_CryptsC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_015	34	DRLG_CryptsC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_11	34	DRLG_CryptsC		5	5	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_20	34	DRLG_CryptsC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_12	34	DRLG_CryptsC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_21	34	DRLG_CryptsC		3	3	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_05	34	DRLG_CryptsC		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+C_Rule_05D	34	DRLG_CryptsC		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+C_Rule_03	34	DRLG_CryptsC		5	5	15	15	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_06	34	DRLG_CryptsC		5	5	15	15	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_08	34	DRLG_CryptsC		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_04	34	DRLG_CryptsC		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_09	34	DRLG_CryptsC		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_07	34	DRLG_CryptsC		30	30	35	35	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CB_Template	34	DRLG_CryptsD		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_16	34	DRLG_CryptsD		4	4	8	8	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_17	34	DRLG_CryptsD		1	1	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_18	34	DRLG_CryptsD		1	1	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_19	34	DRLG_CryptsD		5	5	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_03	34	DRLG_CryptsD		10	10	30	30	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_06	34	DRLG_CryptsD		10	10	30	30	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_14	34	DRLG_CryptsD		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+C_Rule_15	34	DRLG_CryptsD		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+C_Rule_15D	34	DRLG_CryptsD		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+C_Rule_07	34	DRLG_CryptsD		20	20	100	100	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	31	DRLG_Caves		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_Caves		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_03	31	DRLG_Caves		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	31	DRLG_CavesSmall		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_CavesSmall		1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_03	31	DRLG_CavesSmall		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Template	34	DRLG Temple Place		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_01	34	DRLG Temple Place		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_01_rescue	34	DRLG Temple Place		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+C_Rule_01	34	DRLG Temple Place		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_02	34	DRLG Temple Place		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_03	34	DRLG Temple Place		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_06	34	DRLG Temple Place		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_05	34	DRLG Temple Place		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+C_Rule_08	34	DRLG Temple Place		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_04	34	DRLG Temple Place		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_09	34	DRLG Temple Place		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_07	34	DRLG Temple Place		30	30	35	35	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Template	34	DRLG OldBailey		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_01	34	DRLG OldBailey		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_01_message	34	DRLG OldBailey		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+C_Rule_02	34	DRLG OldBailey		3	3	7	7	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_03	34	DRLG OldBailey		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_06	34	DRLG OldBailey		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_08	34	DRLG OldBailey		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_04	34	DRLG OldBailey		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_09	34	DRLG OldBailey		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_07	34	DRLG OldBailey		30	30	35	35	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template_TK	34	DRLG TestKnowledge		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+C_Rule_07	34	DRLG TestKnowledge		30	30	35	35	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateBlackfriarsStation	2	DRLG_Blackfriars Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateMansionHouse	2	DRLG_Mansion House Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateTowerHillStation	2	DRLG_Tower Hill Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	37	DRLG_Catacombs		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_01	37	DRLG_Catacombs		60	60	75	75	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_24	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_02	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_03	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_04	37	DRLG_Catacombs		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_05	37	DRLG_Catacombs		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_06	37	DRLG_Catacombs		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_07	37	DRLG_Catacombs		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_08	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_09	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_10	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_11	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_12	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_13	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_14	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_15	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_16	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_18	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_19	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_25	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_20	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_21	37	DRLG_Catacombs		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_22	37	DRLG_Catacombs		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_23	37	DRLG_Catacombs		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_99	37	DRLG_Catacombs		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_100	37	DRLG_Catacombs		0	0	0	0	0	0	1	1	0	0	0	0	0		0	0	-1	-1	-1
+Template	37	DRLG Necropolis 5		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_01	37	DRLG Necropolis 5		60	60	75	75	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_24	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_02	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_03	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_04	37	DRLG Necropolis 5		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_05	37	DRLG Necropolis 5		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_06	37	DRLG Necropolis 5		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_07	37	DRLG Necropolis 5		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_08	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_09	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_10	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_11	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_12	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_13	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_14	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_15	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_16	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_18	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_19	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_25	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_20	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_21	37	DRLG Necropolis 5		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_23	37	DRLG Necropolis 5		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_Deep	37	DRLG Necropolis 5		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_99	37	DRLG Necropolis 5		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_100	37	DRLG Necropolis 5		0	0	0	0	0	0	1	1	0	0	0	0	0		0	0	-1	-1	-1
+CTB_Template	37	DRLG_CatacombsB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_102	37	DRLG_CatacombsB		6	6	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_103	37	DRLG_CatacombsB		2	2	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_102	37	DRLG_CatacombsB		5	5	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_103	37	DRLG_CatacombsB		2	2	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_102	37	DRLG_CatacombsB		2	2	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_104	37	DRLG_CatacombsB		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_105	37	DRLG_CatacombsB		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_106	37	DRLG_CatacombsB		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_99	37	DRLG_CatacombsB		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CTC_Template	37	DRLG_CatacombsC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_107	37	DRLG_CatacombsC		4	4	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_108	37	DRLG_CatacombsC		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_109	37	DRLG_CatacombsC		5	5	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_112	37	DRLG_CatacombsC		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_113	37	DRLG_CatacombsC		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_110	37	DRLG_CatacombsC		10	10	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_111	37	DRLG_CatacombsC		13	13	13	13	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_99	37	DRLG_CatacombsC		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CTD_Template	37	DRLG_CatacombsD		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_114	37	DRLG_CatacombsD		14	14	30	30	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_115	37	DRLG_CatacombsD		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_116	37	DRLG_CatacombsD		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+CT_Rule_Dark	37	DRLG_CatacombsD		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	38	DRLG_ExospectorInt		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_01	38	DRLG_ExospectorInt		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_03	38	DRLG_ExospectorInt		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_01	38	DRLG_ExospectorInt		3	3	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_04	38	DRLG_ExospectorInt		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_02	38	DRLG_ExospectorInt		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Template	38	DRLG Mind 314		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_01	38	DRLG Mind 314	MindLoop	4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_03	38	DRLG Mind 314		1	1	1	1	0	0	0	0	0	0	0	0	5	MindLoop	0	0	-1	-1	-1
+ESI_Rule_01	38	DRLG Mind 314		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_04	38	DRLG Mind 314		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_05	38	DRLG Mind 314		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateLowPoly	2	DRLG_LowPolyTest		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_LS_01	63	DRLG_TubeStation		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_CG_01	63	DRLG Covent Garden Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_LS_01	63	DRLG_LeicesterSquare		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_HB_01	63	DRLG Holborn Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_CC_01	63	DRLG Charing Cross Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_OC_01	63	DRLG Oxford Circus Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_TM_01	63	DRLG Temple Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_MN_01	63	DRLG Monument Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_LP_01	63	DRLG Liverpool Street Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_SP_01	63	DRLG St. Paul's Station		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	30	DRLG_TowerOfLondon		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template_ToL	23	DRLG TestLeadership		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_PC01FinsburySquare	1	DRLG TestingGrounds		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template_ToF	24	DRLG TestFellowship		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template_ToB	8	DRLG TestBeauty		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_HavokDemo	1	DRLG_HavokDemo		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Hell_narration	54	DRLG_HellNarration		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Hell02	54	xxx		0	0	0	0	50	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateFire	22	DRLG_HellTowerFire		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateElectrical	22	DRLG_HellTowerElectrical		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateSpectral	22	DRLG_HellTowerSpectral		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplateToxic	22	DRLG_HellTowerToxic		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+TemplatePhysical	22	DRLG_HellTowerPhysical		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	84	DRLG_Forest		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest01	84	DRLG_Forest		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest02	84	DRLG_Forest		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest04	84	DRLG_Forest		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest03	84	DRLG_Forest		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest06	84	DRLG_Forest		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest07	84	DRLG_Forest		5	5	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest11	84	DRLG_Forest		4	4	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest05	84	DRLG_Forest		5	5	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest08	84	DRLG_Forest		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest09A	84	DRLG_Forest		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest09B	84	DRLG_Forest		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest09C	84	DRLG_Forest		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest09D	84	DRLG_Forest		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest10	84	DRLG_Forest		30	30	60	60	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest14	84	DRLG_Forest		30	30	60	60	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	84	DRLG_ForestNOEXIT		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest01	84	DRLG_ForestNOEXIT		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest02	84	DRLG_ForestNOEXIT		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest04	84	DRLG_ForestNOEXIT		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest03	84	DRLG_ForestNOEXIT		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest06	84	DRLG_ForestNOEXIT		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest07	84	DRLG_ForestNOEXIT		5	5	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest05	84	DRLG_ForestNOEXIT		5	5	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest08	84	DRLG_ForestNOEXIT		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_ForestCaveD	84	DRLG_ForestNOEXIT		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_ForestCaveE	84	DRLG_ForestNOEXIT		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_ForestCaveF	84	DRLG_ForestNOEXIT		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest10	84	DRLG_ForestNOEXIT		20	20	50	50	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest14	84	DRLG_ForestNOEXIT		20	20	50	50	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+A_Template	84	DRLG_ForestPath		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest101	84	DRLG_ForestPath		0	0	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest102	84	DRLG_ForestPath		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest103	84	DRLG_ForestPath		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest104	84	DRLG_ForestPath		3	3	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest105	84	DRLG_ForestPath		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest04	84	DRLG_ForestPath		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest03	84	DRLG_ForestPath		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest106	84	DRLG_ForestPath		0	0	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest07	84	DRLG_ForestPath		5	5	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest05	84	DRLG_ForestPath		5	5	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_ForestCaveB	84	DRLG_ForestPath		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_ForestCaveC	84	DRLG_ForestPath		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest10	84	DRLG_ForestPath		40	40	60	60	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest14	84	DRLG_ForestPath		40	40	60	60	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Template	84	DRLG_Forestskinny		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule01	84	DRLG_Forestskinny		8	8	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule07	84	DRLG_Forestskinny		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule02	84	DRLG_Forestskinny		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule03	84	DRLG_Forestskinny		1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule04	84	DRLG_Forestskinny		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule05	84	DRLG_Forestskinny		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule06	84	DRLG_Forestskinny		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest10	84	DRLG_Forestskinny		5	5	15	15	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest14	84	DRLG_Forestskinny		10	10	40	40	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_DAc01	1	DRLG Duel Arena City		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_CityRepALL	1	DRLG Duel Arena City		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateA	86	DRLG_Stonehenge		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateA	31	DRLG_CavesBossA		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_04	31	DRLG_CavesBossA		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_CavesBossA		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_04	31	DRLG_CavesBossA		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_07	31	DRLG_CavesBossA		3	3	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_03A	31	DRLG_CavesBossA		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_CavesBossA		2	2	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_06	31	DRLG_CavesBossA		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateA	31	DRLG_CavesBossB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_04	31	DRLG_CavesBossB		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_CavesBossB		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_04	31	DRLG_CavesBossB		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_07	31	DRLG_CavesBossB		3	3	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_03A	31	DRLG_CavesBossB		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_CavesBossB		2	2	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_06	31	DRLG_CavesBossB		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateA	31	DRLG_CavesBossC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_04	31	DRLG_CavesBossC		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_CavesBossC		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_04	31	DRLG_CavesBossC		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_07	31	DRLG_CavesBossC		3	3	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_03A	31	DRLG_CavesBossC		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_CavesBossC		2	2	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_06	31	DRLG_CavesBossC		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateA	31	DRLG_CavesBossD		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_04	31	DRLG_CavesBossD		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_CavesBossD		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_04	31	DRLG_CavesBossD		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_07	31	DRLG_CavesBossD		3	3	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_03A	31	DRLG_CavesBossD		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_CavesBossD		2	2	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_06	31	DRLG_CavesBossD		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	84	DRLG_ForestBossA		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest03	84	DRLG_ForestBossA		2	2	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest07	84	DRLG_ForestBossA		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest05	84	DRLG_ForestBossA		3	3	6	6	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest08	84	DRLG_ForestBossA		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest10	84	DRLG_ForestBossA		10	10	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest14	84	DRLG_ForestBossA		10	10	20	20	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	38	DRLG_SpectralBossB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_01	38	DRLG_SpectralBossB	BossBLoop	4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_03	38	DRLG_SpectralBossB		1	1	1	1	0	0	0	0	0	0	0	0	5	BossBLoop	0	0	-1	-1	-1
+ESI_Rule_01	38	DRLG_SpectralBossB		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+ESI_Rule_04	38	DRLG_SpectralBossB		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateB	54	DRLG_BossD		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Hell04	54	DRLG_BossD		1	0	1	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Hell02	54	DRLG_BossD		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateARENA	54	DRLG_BossArenaFinal		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplateA	31	DRLG_TreasureCaveA		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_02	31	DRLG_TreasureCaveA		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Caves_03	31	DRLG_TreasureCaveA		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Template	84	DRLG_ForestskinnyB		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule01	84	DRLG_ForestskinnyB		8	8	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule07	84	DRLG_ForestskinnyB		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule02	84	DRLG_ForestskinnyB		2	2	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule03	84	DRLG_ForestskinnyB		1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule04	84	DRLG_ForestskinnyB		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule05	84	DRLG_ForestskinnyB		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+WDS_Rule06	84	DRLG_ForestskinnyB		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_ForestCaveA	84	DRLG_ForestskinnyB		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest10	84	DRLG_ForestskinnyB		5	5	15	15	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_Forest14	84	DRLG_ForestskinnyB		10	10	40	40	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	88	DRLG_BuildInterior		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_01	88	DRLG_BuildInterior		3	3	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_015	88	DRLG_BuildInterior		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_02	88	DRLG_BuildInterior		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_015	88	DRLG_BuildInterior		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_03	88	DRLG_BuildInterior		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_035	88	DRLG_BuildInterior		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_037	88	DRLG_BuildInterior		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_05	88	DRLG_BuildInterior		1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_055	88	DRLG_BuildInterior		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_057	88	DRLG_BuildInterior		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_058	88	DRLG_BuildInterior		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_06	88	DRLG_BuildInterior		1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_07	88	DRLG_BuildInterior		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_DynaLight	88	DRLG_BuildInterior		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_04	88	DRLG_BuildInterior		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Template	88	DRLG_BuildInteriorC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_01	88	DRLG_BuildInteriorC		4	4	5	5	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_015	88	DRLG_BuildInteriorC		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_02	88	DRLG_BuildInteriorC		5	5	10	10	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_015	88	DRLG_BuildInteriorC		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_03	88	DRLG_BuildInteriorC		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_035	88	DRLG_BuildInteriorC		0	0	0	0	0	0	1	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_037C	88	DRLG_BuildInteriorC		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_039C	88	DRLG_BuildInteriorC		1	1	1	1	0	0	0	0	1	0	1	0	0		0	0	-1	-1	-1
+Bint_Rule_039C_D	88	DRLG_BuildInteriorC		1	1	1	1	0	0	0	0	1	0	0	1	0		0	0	-1	-1	-1
+Bint_Rule_05	88	DRLG_BuildInteriorC		1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_055	88	DRLG_BuildInteriorC		2	2	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_057	88	DRLG_BuildInteriorC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_058	88	DRLG_BuildInteriorC		1	1	2	2	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_06	88	DRLG_BuildInteriorC		1	1	3	3	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_07	88	DRLG_BuildInteriorC		1	1	4	4	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_DynaLightC	88	DRLG_BuildInteriorC		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_04	88	DRLG_BuildInteriorC		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Bint_Rule_04C	88	DRLG_BuildInteriorC		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_ab01	89	DRLG_Abyss		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_ab02	89	DRLG_AbyssPVE		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+TemplatePSQUARE	1	DRLG_PSquare		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pa01a	16	DRLG_ParkCemetery		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pa02	16	DRLG_ParkCemetery		9	9	12	12	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_pa03A	16	DRLG_ParkCemetery		1	1	1	1	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_pa04a	16	DRLG_ParkCemetery		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_TR01	1	DRLG_Treasury		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_TR02	1	DRLG_Treasury		1	1	1	1	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_TR03	1	DRLG_Treasury		8	8	12	12	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_TR04	1	DRLG_Treasury		8	8	12	12	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+Rule_TR05	1	DRLG_Treasury		1	1	6	6	0	0	0	0	1	0	0	0	0		0	0	-1	-1	-1
+Rule_TR_warpNext	1	DRLG_Treasury		1	1	1	1	0	0	0	0	0	0	1	0	0		0	0	-1	-1	-1
+Rule_TR_deadEnd	1	DRLG_Treasury		1	1	1	1	0	0	0	0	0	0	0	1	0		0	0	-1	-1	-1
+Rule_TR_RepALL	1	DRLG_Treasury		0	0	0	0	0	1	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
+	-1			0	0	0	0	0	0	0	0	0	0	0	0	0		0	0	-1	-1	-1
