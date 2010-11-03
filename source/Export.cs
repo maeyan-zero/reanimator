@@ -54,7 +54,7 @@ namespace Reanimator
                             }
                             if (stringBuffer.Contains('\n'))
                             {
-                                stringBuffer = stringBuffer.Replace("\n", "\\n");
+                                stringBuffer = stringBuffer.Replace("\n", "\\\\n");
                             }
                             csv.Write(stringBuffer);
                         }
