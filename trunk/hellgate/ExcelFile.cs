@@ -57,33 +57,37 @@ namespace Hellgate
         const uint idUintTypesTc = 0x5CE494C9;
 
 
-        public ExcelFile(String stringId, Type type)
-            : base(stringId, type)
+        public ExcelFile(byte[] buffer)
         {
-            IsExcelFile = true;
+            if (FileTools.ByteArrayToInt32(buffer, 0) == Token.cxeh)
+            {
+                IntegrityCheck = ParseData(buffer);
+            }
+            else
+            {
+                IntegrityCheck = ParseCSV(buffer);
+            }
         }
 
-
-        public ExcelFile(byte[] CSVsource)
+        bool ParseCSV(byte[] buffer)
         {
-            IntegrityCheck = false;
-            if (CSVsource == null) return;
-            if (CSVsource.Length < 64) return;
+            if (buffer == null) return false;
+            if (buffer.Length < 64) return false;
             int offset = 0;
-            int length = CSVsource.Length;
+            int length = buffer.Length;
             byte delimiter = (byte)'\t';
-            string stringToken = FileTools.ByteArrayToStringASCII(CSVsource, ref offset, 8);
+            string stringToken = FileTools.ByteArrayToStringASCII(buffer, ref offset, 8);
             uint typeToken = Convert.ToUInt32(stringToken, 16);
             bool skipFirstRow = true;
             StringTable = new List<string>();
             IntegerTable = new List<int[]>();
 
-            if (!(DataTypes.Contains(typeToken))) return;
+            if (!(DataTypes.Contains(typeToken))) return false;
             DataType = (Type)DataTypes[typeToken];
 
-            string[][] tableRows = FileTools.CSVtoStringArray(CSVsource, DataType.GetFields().Count(), delimiter);
-            if (tableRows == null) return;
-            
+            string[][] tableRows = FileTools.CSVtoStringArray(buffer, DataType.GetFields().Count(), delimiter);
+            if (tableRows == null) return false;
+
 
             int column = 0;
             for (int row = 0; row < tableRows.Count(); row++)
@@ -139,7 +143,8 @@ namespace Hellgate
                 }
                 Rows.Add(newRow);
             }
-            IntegrityCheck = true;
+
+            return true;
         }
 
         public byte[] ToByteArray()
@@ -149,12 +154,12 @@ namespace Hellgate
             stringTableBuffer.Add((byte)0); // add 1 for internal offsetting
             List<byte> integerTableBuffer = new List<byte>();
             integerTableBuffer.Add((byte)0);// add 1 for internal offsetting
-            byte[] cxehToken = BitConverter.GetBytes(FileTokens.StartOfBlock);
+            byte[] cxehToken = BitConverter.GetBytes(Token.cxeh);
             buffer.AddRange(cxehToken);
             
             ExcelHeader header = new ExcelHeader
             {
-                StructureId = StructureID,
+                StructureID = StructureID,
                 Unknown321 = 1,
                 Unknown322 = 17,
                 Unknown161 = 20,
@@ -414,6 +419,8 @@ namespace Hellgate
             CheckExcelFlag(token);
 
             FileExcelHeader = FileTools.ByteArrayToStructure<ExcelHeader>(_data, ref offset);
+            DataType = (Type)DataTypes[FileExcelHeader.StructureID];
+            if (DataType == null) return false;
 
             // strings block
             token = FileTools.ByteArrayToInt32(_data, ref offset);
@@ -456,8 +463,8 @@ namespace Hellgate
             CheckExcelFlag(token);
 
             // tables of the type items have ai data beside each indice
-            if (FileExcelHeader.StructureId == idItems ||
-                FileExcelHeader.StructureId == idItemsTc)
+            if (FileExcelHeader.StructureID == idItems ||
+                FileExcelHeader.StructureID == idItemsTc)
             {
                 TableIndicies = new int[Count];
                 AiData = new List<byte[]>();
@@ -480,7 +487,7 @@ namespace Hellgate
 
             // secondary string block
             token = FileTools.ByteArrayToInt32(_data, ref offset);
-            if (!CheckFlag(token, FileTokens.StartOfBlock))
+            if (!CheckFlag(token, Token.cxeh))
             {
                 int stringCount = token;
                 for (int i = 0; i < stringCount; i++)
@@ -529,7 +536,7 @@ namespace Hellgate
 
                 // mysh - skills and stats only
                 // todo: needs parsing.. see _ParseMyshTables method
-                if (token == FileTokens.TokenMysh)
+                if (token == Token.mysh)
                 {
                     _ParseMyshTables(_data, ref offset);
                     token = FileTools.ByteArrayToInt32(_data, ref offset);
@@ -547,8 +554,8 @@ namespace Hellgate
 
             // intptr data block
             // its wierd the unittypes table ignores this part
-            if (FileExcelHeader.StructureId != idUnitTypes &&
-                FileExcelHeader.StructureId != idUintTypesTc)
+            if (FileExcelHeader.StructureID != idUnitTypes &&
+                FileExcelHeader.StructureID != idUintTypesTc)
             {
                 token = FileTools.ByteArrayToInt32(_data, ref offset);
                 if (token != 0)
@@ -595,9 +602,9 @@ namespace Hellgate
 
         private void CheckExcelFlag(int flag)
         {
-            if (!CheckFlag(flag, FileTokens.StartOfBlock))
+            if (!CheckFlag(flag, Token.cxeh))
             {
-                throw new Exception("Unexpected header flag!\nStructure ID: " + FileExcelHeader.StructureId);
+                throw new Exception("Unexpected header flag!\nStructure ID: " + FileExcelHeader.StructureID);
             }
         }
 
@@ -827,18 +834,18 @@ namespace Hellgate
             int intByteCount = 0;
 
             // File Header
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileExcelHeader);
 
             // Strings Block
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
             int stringsByteCount = 0;
             int stringsByteOffset = byteOffset;
             byte[] stringBytes = null;
             byteOffset += sizeof(Int32);
 
             // Tables Block
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, dataTable.Rows.Count);
 
             Type tableType = Rows[0].GetType();
@@ -1111,14 +1118,14 @@ namespace Hellgate
 
 
             // Primary index
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
             for (int i = 0; i < dataTable.Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, i);
 
                 // Ai data - item types only
-                if ((uint)FileExcelHeader.StructureId == idItems ||
-                    (uint)FileExcelHeader.StructureId == idItemsTc)
+                if ((uint)FileExcelHeader.StructureID == idItems ||
+                    (uint)FileExcelHeader.StructureID == idItemsTc)
                 {
                     FileTools.WriteToBuffer(ref buffer, ref byteOffset, AiData[i].Length);
                     FileTools.WriteToBuffer(ref buffer, ref byteOffset, AiData[i]);
@@ -1269,16 +1276,16 @@ namespace Hellgate
 
 
             // Sort indices
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex1.Length);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex1));
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex2.Length);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex2));
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex3.Length);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex3));
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, SortIndex4.Length);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTools.IntArrayToByteArray(SortIndex4));
 
@@ -1287,17 +1294,17 @@ namespace Hellgate
             // Rcsh, Tysh, Mysh, Dneh
             if (_rcshValue != 0)
             {
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenRcsh);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.rcsh);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _rcshValue);
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenTysh);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.tysh);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _tyshValue);
                 if (MyshBytes != null)
                 {
-                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenMysh);
+                    FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.mysh);
                     FileTools.WriteToBuffer(ref buffer, ref byteOffset, MyshBytes);
                 }
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.TokenDneh);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.dneh);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, _dnehValue);
             }
 
@@ -1315,7 +1322,7 @@ namespace Hellgate
             {
                 // IntPtr data block
                 // UnitTypes ignores this section
-                FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+                FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref byteOffset, intByteCount);
                 if (intByteCount > 0)
                 {
@@ -1331,7 +1338,7 @@ namespace Hellgate
             int blockSize = FinalData != null ? FinalData[0].Length : 0;
             int bshiftCount = blockSize > 0 ? (blockSize >> 2) : 0;
 
-            FileTools.WriteToBuffer(ref buffer, ref byteOffset, FileTokens.StartOfBlock);
+            FileTools.WriteToBuffer(ref buffer, ref byteOffset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, bshiftCount);
             FileTools.WriteToBuffer(ref buffer, ref byteOffset, blockCount);
             if (bshiftCount > 0)

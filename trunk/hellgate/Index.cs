@@ -106,9 +106,12 @@ namespace Hellgate
             public byte[] hashKeys;
         }
 
-        public const UInt32 TokenHead = 0x6867696E; // 'nigh'
-        public const UInt32 TokenSect = 0x68677073; // 'spgh'
-        public const UInt32 TokenInfo = 0x6867696F; // 'oigh'
+        class Tokens
+        {
+            public const UInt32 TokenHead = 0x6867696E; // 'nigh'
+            public const UInt32 TokenSect = 0x68677073; // 'spgh'
+            public const UInt32 TokenInfo = 0x6867696F; // 'oigh'
+        }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private class FileHeader
@@ -244,11 +247,11 @@ namespace Hellgate
                 }
             }
 
-            public uint LongHash
+            public UInt64 LongHash
             {
                 get
                 {
-                    return (uint)FileStruct.FolderPathSHA1Hash | (uint)FileStruct.FileNameSHA1Hash << 31;
+                    return (UInt64)FileStruct.FolderPathSHA1Hash | ((UInt64)FileStruct.FileNameSHA1Hash << 32);
                 }
             }
 
@@ -324,7 +327,7 @@ namespace Hellgate
 
             ////// check if encrypted //////
             UInt32 fileHeadToken = BitConverter.ToUInt32(_data, 0);
-            if (fileHeadToken != TokenHead)
+            if (fileHeadToken != Tokens.TokenHead)
             {
                 Crypt.Decrypt(_data);
             }
@@ -335,7 +338,7 @@ namespace Hellgate
             int offset = 0;
             _indexHeader = FileTools.ByteArrayToStructure<FileHeader>(_data, ref offset);
 
-            if (_indexHeader.FileToken != TokenHead)
+            if (_indexHeader.FileToken != Tokens.TokenHead)
             {
                 return false;
             }
@@ -349,7 +352,7 @@ namespace Hellgate
             ////// strings table //////
             _stringsHeader = FileTools.ByteArrayToStructure<StringsHeader>(_data, ref offset);
 
-            if (_stringsHeader.StringsToken != TokenSect)
+            if (_stringsHeader.StringsToken != Tokens.TokenSect)
             {
                 return false;
             }
@@ -365,7 +368,7 @@ namespace Hellgate
 
             ////// strings details //////
             UInt32 stringsDetailsToken = FileTools.ByteArrayToUInt32(_data, ref offset);
-            if (stringsDetailsToken != TokenSect)
+            if (stringsDetailsToken != Tokens.TokenSect)
             {
                 return false;
             }
@@ -376,7 +379,7 @@ namespace Hellgate
 
             ////// files details //////
             UInt32 filesToken = FileTools.ByteArrayToUInt32(_data, ref offset);
-            if (filesToken != TokenSect)
+            if (filesToken != Tokens.TokenSect)
             {
                 return false;
             }
@@ -442,8 +445,8 @@ namespace Hellgate
                 DataOffset = (int)DatFile.Length,
                 FileNameSHA1Hash = Crypt.GetStringSHA1UInt32(fileName),
                 FolderPathSHA1Hash = Crypt.GetStringSHA1UInt32(directory),
-                StartToken = TokenInfo,
-                EndToken = TokenInfo,
+                StartToken = Tokens.TokenInfo,
+                EndToken = Tokens.TokenInfo,
                 Unknown23 = 1,
                 Unknown24 = 1
             };
@@ -842,14 +845,14 @@ namespace Hellgate
 
             ////// main header //////
             const Int32 version = 4;
-            FileTools.WriteToBuffer(ref buffer, ref offset, TokenHead);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenHead);
             FileTools.WriteToBuffer(ref buffer, ref offset, version);
             FileTools.WriteToBuffer(ref buffer, ref offset, Files.Count);
 
 
 
             ////// string block //////
-            FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenSect);
             FileTools.WriteToBuffer(ref buffer, ref offset, _stringTable.Count);
             int stringByteCountOffset = offset;
             offset += 4;
@@ -863,7 +866,7 @@ namespace Hellgate
 
 
             ////// string data //////
-            FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenSect);
             foreach (String str in _stringTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
@@ -877,12 +880,12 @@ namespace Hellgate
             ////// file block //////
             //const UInt32 foo = 0;
             //i = 0;
-            FileTools.WriteToBuffer(ref buffer, ref offset, TokenSect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenSect);
             foreach (FileEntry fileIndex in Files)
             {
                 // todo: this looks gross, but is just for testing
                 // final version will be similar to reading - dumping struct using MarshalAs
-                FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenInfo);
 
                 UInt64 cryptoBytes = Crypt.GetStringsSHA1UInt64(fileIndex.DirectoryString, fileIndex.FileNameString);
                 FileTools.WriteToBuffer(ref buffer, ref offset, cryptoBytes);
@@ -902,7 +905,7 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.First4BytesOfFile);
                 FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Second4BytesOfFile);
 
-                FileTools.WriteToBuffer(ref buffer, ref offset, TokenInfo);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenInfo);
             }
 
             // get final buffer of correct size

@@ -175,7 +175,7 @@
             this.noEditorKey_label.Name = "noEditorKey_label";
             this.noEditorKey_label.Size = new System.Drawing.Size(270, 22);
             this.noEditorKey_label.TabIndex = 4;
-            this.noEditorKey_label.Text = "File has no editor";
+            this.noEditorKey_label.Text = "Table has no editor";
             this.noEditorKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // backupKey_label
@@ -186,7 +186,7 @@
             this.backupKey_label.Name = "backupKey_label";
             this.backupKey_label.Size = new System.Drawing.Size(270, 23);
             this.backupKey_label.TabIndex = 0;
-            this.backupKey_label.Text = "File is backed up";
+            this.backupKey_label.Text = "Table is backed up";
             this.backupKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // _files_fileTreeView
@@ -538,7 +538,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(126, 24);
             this.label1.TabIndex = 0;
-            this.label1.Text = "File";
+            this.label1.Text = "Table";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // fileName_textBox
@@ -585,7 +585,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(126, 26);
             this.label8.TabIndex = 11;
-            this.label8.Text = "Index File Time";
+            this.label8.Text = "Index Table Time";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FileExplorer
@@ -597,7 +597,7 @@
             this.Controls.Add(this.splitContainer1);
             this.DoubleBuffered = true;
             this.Name = "FileExplorer";
-            this.Text = "File Explorer";
+            this.Text = "Table Explorer";
             this.Shown += new System.EventHandler(this.FileExplorer_Shown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();

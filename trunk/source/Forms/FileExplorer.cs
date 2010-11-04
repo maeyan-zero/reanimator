@@ -595,7 +595,7 @@ namespace Reanimator.Forms
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for extraction!", "Need Tables", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }
@@ -627,7 +627,7 @@ namespace Reanimator.Forms
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for extraction!", "Need Tables", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }
@@ -796,7 +796,7 @@ namespace Reanimator.Forms
             bool fileExists = File.Exists(filePath);
             if (fileExists && overwrite == DialogResult.None)
             {
-                overwrite = MessageBox.Show("An extract file already exists, do you wish to overwrite the file, and all following?\n\nFile: " + filePath,
+                overwrite = MessageBox.Show("An extract file already exists, do you wish to overwrite the file, and all following?\nTablele: " + filePath,
                     "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if (overwrite == DialogResult.Cancel) return false;
             }
@@ -886,7 +886,7 @@ namespace Reanimator.Forms
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for packing!", "Need Files", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for packing!", "Need Tables", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }
@@ -955,7 +955,7 @@ namespace Reanimator.Forms
                 // ensure exists
                 if (!File.Exists(filePath))
                 {
-                    packResults.WriteLine("{0} - File Not Found", filePath);
+                    packResults.WriteLine("{0} - Table Not Found", filePath);
                     continue;
                 }
 
@@ -966,7 +966,7 @@ namespace Reanimator.Forms
                     nodeObject.FileEntry.FileStruct == null ||
                     nodeObject.FileEntry.FileStruct.FileNameSHA1Hash == 0)
                 {
-                    packResults.WriteLine("{0} - File Has No Base Version", filePath);
+                    packResults.WriteLine("{0} - Table Has No Base Version", filePath);
                     continue;
                 }
 
@@ -1144,7 +1144,7 @@ namespace Reanimator.Forms
                 return;
             }
 
-            MessageBox.Show("File packing and idx/dat writing completed!", "Success", MessageBoxButtons.OK,
+            MessageBox.Show("Table packing and idx/dat writing completed!", "Success", MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
         }
 
@@ -1363,7 +1363,7 @@ namespace Reanimator.Forms
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for extraction!", "Need Tables", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }
@@ -1452,7 +1452,7 @@ namespace Reanimator.Forms
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for extraction!", "Need Tables", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }

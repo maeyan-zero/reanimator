@@ -53,8 +53,6 @@ namespace Hellpack
                 filesToPack.AddRange(Directory.GetFiles(dataDir, "*", SearchOption.AllDirectories));
             if (hasDataCommonDir)
                 filesToPack.AddRange(Directory.GetFiles(dataCommonDir, "*", SearchOption.AllDirectories));
-            //if (hasRevivalDir)
-            //    filesToPack.AddRange(Directory.GetFiles(revivalDir, "*", SearchOption.AllDirectories));
 
 
             String packName = args.Length == 0 ? defaultDat : args[1];
