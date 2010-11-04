@@ -8,8 +8,8 @@
     <ProjectGuid>{F2C2B5C8-8ACE-44BE-A3CF-A3C045A64A61}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>common</RootNamespace>
-    <AssemblyName>common</AssemblyName>
+    <RootNamespace>Revival.Common</RootNamespace>
+    <AssemblyName>Common</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,6 +37,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -79,10 +80,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionLogger.cs" />
+    <Compile Include="Exceptions.cs" />
     <Compile Include="Export.cs" />
     <Compile Include="FileTools.cs" />
     <Compile Include="FormTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlUtilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
