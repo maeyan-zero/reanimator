@@ -11,7 +11,7 @@ namespace Hellpack
         static void Main(string[] args)
         {
             String currentDir = Directory.GetCurrentDirectory();
-            String dataDir = Path.Combine(currentDir, "data\\");
+            String dataDir = Path.Combine(currentDir, "buffer\\");
             String dataCommonDir = Path.Combine(currentDir, "data_common\\");
             String defaultDat = "sp_hellgate_1337";
             String excelDir = "excel\\";
@@ -22,7 +22,7 @@ namespace Hellpack
             // Any files to pack? If no, exit
             if (!(hasDataDir) && !(hasDataCommonDir))
             {
-                Console.WriteLine("Sorry, no data paths were found. Check error.xml for details.");
+                Console.WriteLine("Sorry, no buffer paths were found. Check error.xml for details.");
                 return;
             }
 
@@ -58,20 +58,22 @@ namespace Hellpack
             String packName = args.Length == 0 ? defaultDat : args[1];
             if (!(packName.EndsWith(".idx"))) packName += ".idx";
             packName = Path.Combine(currentDir, packName);
-
-            Index newPack = new Index(packName);
+            Index newPack = new Index()
+            {
+                FilePath = packName
+            };
             // Pack the files!
             foreach (String filePath in filesToPack)
             {
                 String fileName = Path.GetFileName(filePath);
                 String directory = Path.GetDirectoryName(filePath);
-                int dataCursor = directory.IndexOf("data");
+                int dataCursor = directory.IndexOf("buffer");
                 directory = directory.Remove(0, dataCursor) + "\\";
                 
                 byte[] buffer = File.ReadAllBytes(filePath);
                 if (buffer == null) continue;
 
-                newPack.Add(directory, fileName, buffer);
+                newPack.AddFile(directory, fileName, buffer);
             }
 
             byte[] indexBytes = newPack.GenerateIndexFile();

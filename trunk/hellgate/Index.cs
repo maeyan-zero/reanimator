@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -93,28 +94,29 @@ namespace Hellgate
         );
         #endregion
 
+        #region Data Structures
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private class DatHeader
+        struct DatHeader
         {
-            public UInt32 DatHead = 0x68676461;
-            public Int32 Version = 4;
-            public Int32 Unknown1 = 1;
-            public Int32 Unknown2 = 0;
-            public Int32 Unknown3 = 0;
-            public Int32 Unknown4 = 0x00001154;
+            public UInt32 DatHead { get { return 0x68676461; } }
+            public Int32 Version { get { return 0x01; } }
+            public Int32 Unknown1 { get { return 0x00; } }
+            public Int32 Unknown2 { get { return 0x00; } }
+            public Int32 Unknown3 { get { return 0x00; } }
+            public Int32 Unknown4 { get { return 0x00001154; } }
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 488)]
             public byte[] hashKeys;
         }
 
-        class Tokens
+        static class Token
         {
-            public const UInt32 TokenHead = 0x6867696E; // 'nigh'
-            public const UInt32 TokenSect = 0x68677073; // 'spgh'
-            public const UInt32 TokenInfo = 0x6867696F; // 'oigh'
+            public static UInt32 Head { get { return 0x6867696E; } } // 'nigh'
+            public static UInt32 Sect { get { return 0x68677073; } } // 'spgh'
+            public static UInt32 Info { get { return 0x6867696F; } } // 'oigh'
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private class FileHeader
+        struct FileHeader
         {
             public UInt32 FileToken;
             public UInt32 FileVersion;
@@ -122,7 +124,7 @@ namespace Hellgate
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private class StringsHeader
+        struct StringsHeader
         {
             public UInt32 StringsToken;
             public Int32 StringsCount;
@@ -130,10 +132,10 @@ namespace Hellgate
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private class StringDetailsStruct
+        struct StringDetailsStruct
         {
             public short StringLength;
-            public UInt32 StringHash;              // this is the Crypt.GetStringHash results
+            public UInt32 StringHash; // this is the Crypt.GetStringHash results
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -159,14 +161,13 @@ namespace Hellgate
             public UInt32 EndToken;
         }
 
-
         public class FileEntry
         {
             [Browsable(false)]
             public FileDetailsStruct FileStruct { get; set; }
 
             [Browsable(false)]
-            public Index InIndex { get; set; }
+            public Index Parent { get; set; }
 
             public Int64 DataOffset
             {
@@ -185,27 +186,16 @@ namespace Hellgate
                 set { FileStruct.CompressedSize = value; }
             }
 
-            public String Unknown23
-            {
-                get { return FileStruct.Unknown23.ToString("X8"); }
-            }
-            public String Unknown24
-            {
-                get { return FileStruct.Unknown24.ToString("X8"); }
-            }
-
             [Browsable(false)]
-            public int Directory
+            public int DirectoryIndex
             {
                 get { return FileStruct.DirectoryArrayIndex; }
                 set { FileStruct.DirectoryArrayIndex = value; }
             }
-
             private String _directoryString;
             public String DirectoryString
             {
                 get { return _directoryString; }
-
                 set
                 {
                     _directoryString = value;
@@ -214,16 +204,14 @@ namespace Hellgate
             }
 
             [Browsable(false)]
-            public int FileName
+            public int FileNameIndex
             {
                 get { return FileStruct.FilenameArrayIndex; }
             }
-
             private String _fileNameString;
             public String FileNameString
             {
                 get { return _fileNameString; }
-
                 set
                 {
                     _fileNameString = value;
@@ -235,185 +223,186 @@ namespace Hellgate
             private void GenerateFullPath()
             {
                 if (_directoryString == null || _fileNameString == null) return;
-
                 FullPath = _directoryString + _fileNameString;
             }
 
             public bool Modified
             {
-                get
-                {
-                    return DirectoryString != null && DirectoryString.Contains(BackupPrefix);
-                }
+                get { return DirectoryString != null && DirectoryString.Contains(BackupPrefix); }
             }
 
             public UInt64 LongHash
             {
-                get
-                {
-                    return (UInt64)FileStruct.FolderPathSHA1Hash | ((UInt64)FileStruct.FileNameSHA1Hash << 32);
-                }
+                get { return (UInt64)FileStruct.FolderPathSHA1Hash | ((UInt64)FileStruct.FileNameSHA1Hash << 32); }
             }
 
             public long FileTime
             {
-                get
-                {
-                    return FileStruct.FileTime;
-                }
+                get { return FileStruct.FileTime; }
             }
 
             [Browsable(false)]
             public int TempDatOffset { get; set; }
         }
+        #endregion
 
-        private byte[] _data;
-        private FileHeader _indexHeader;
-        private StringsHeader _stringsHeader;
-        private StringDetailsStruct[] _stringsDetails;
-        private readonly List<String> _stringTable = new List<String>();
-        private readonly List<FileDetailsStruct> _filesDetails = new List<FileDetailsStruct>();
-        //public FileEntry[] FileTable { get; private set; }
-        public List<FileEntry> Files { get; private set; }
-
-        public String FilePath { get; private set; }
+        #region Members
+        public String FilePath { get; set; }
         public String FileDirectory { get { return Path.GetDirectoryName(FilePath); } }
         public String FileNameWithoutExtension { get { return Path.GetFileNameWithoutExtension(FilePath); } }
+        public bool IntegrityCheck { get; private set; }
+        public List<FileEntry> Files { get; private set; }
 
+        StringCollection Strings { get; set; }
+        List<FileDetailsStruct> FileDetails { get; set; }
+        FileStream DatFile { get; set; }
         public bool DatFileOpen { get { return DatFile == null ? false : true; } }
-        public FileStream DatFile { get; set; }
+        public UInt32 Version { get { return 0x04; } }
+        public String[] DoNotCompress = new String[] { ".bik", ".ogg", ".mp2" };
+        public static String BackupPrefix { get { return "backup"; } }
+        public bool Modified { get { return Files.Any(file => file.DirectoryString.Contains(BackupPrefix)); } }
+        #endregion
 
-        private String[] DoNotCompress = new String[] { ".bik", ".ogg", ".mp2" };
-        public const string BackupPrefix = @"backup";
-        private bool _checkedForModified;
-        private bool _modified;
-        public bool Modified
-        {
-            get
-            {
-                if (_checkedForModified) return _modified;
 
-                _checkedForModified = true;
-                _modified = Files.Any(file => file.DirectoryString.Contains(BackupPrefix));
-                return _modified;
-            }
 
-            private set
-            {
-                _modified = value;
-            }
-        }
-
+        /// <summary>
+        /// Creates an empty Index file.
+        /// </summary>
         public Index()
         {
-            FilePath = null;
+            Strings = new StringCollection();
+            FileDetails = new List<FileDetailsStruct>();
             Files = new List<FileEntry>();
         }
 
-        public Index(String filePath)
+        /// <summary>
+        /// Creates a new index file from the byte array.
+        /// </summary>
+        /// <param name="buffer">The index file as a byte array.</param>
+        public Index(byte[] buffer)
+            : this()
         {
-            FilePath = filePath;
-            Files = new List<FileEntry>();
+            IntegrityCheck = ParseData(buffer);
         }
 
-        public bool ParseData(byte[] data, String filePath)
+
+
+        /// <summary>
+        /// Parses a serialized version of an index file.
+        /// </summary>
+        /// <param name="buffer">Encrypted or decrypted index byte array.</param>
+        /// <returns>Returns false if the file is malformed.</returns>
+        bool ParseData(byte[] buffer)
         {
-            if (data == null || data.Length == 0) return false;
-
-            _data = data;
-            FilePath = filePath;
-
-
-
-            ////// check if encrypted //////
-            UInt32 fileHeadToken = BitConverter.ToUInt32(_data, 0);
-            if (fileHeadToken != Tokens.TokenHead)
-            {
-                Crypt.Decrypt(_data);
-            }
-
-
-
-            ////// file header //////
+            if ((buffer == null) || (buffer.Length == 0)) return false;
             int offset = 0;
-            _indexHeader = FileTools.ByteArrayToStructure<FileHeader>(_data, ref offset);
 
-            if (_indexHeader.FileToken != Tokens.TokenHead)
+            // Check for encryption,
+            UInt32 fileHeadToken = BitConverter.ToUInt32(buffer, 0);
+            if (!(fileHeadToken == Token.Head))
             {
-                return false;
-            }
-            if (_indexHeader.FileVersion != 0x04)
-            {
-                return false;
+                Crypt.Decrypt(buffer);
             }
 
+            // Read the file header, check for errors
+            FileHeader fileHeader = FileTools.ByteArrayToStructure<FileHeader>(buffer, ref offset);
+            if (!(fileHeader.FileToken == Token.Head)) return false;
+            if (!(fileHeader.FileVersion == Version)) return false;
 
-
-            ////// strings table //////
-            _stringsHeader = FileTools.ByteArrayToStructure<StringsHeader>(_data, ref offset);
-
-            if (_stringsHeader.StringsToken != Tokens.TokenSect)
+            // Read the strings section
+            StringsHeader stringsHeader = FileTools.ByteArrayToStructure<StringsHeader>(buffer, ref offset);
+            if (!(stringsHeader.StringsToken == Token.Sect)) return false;
+            for (int i = 0; i < stringsHeader.StringsCount; i++)
             {
-                return false;
+                Strings.Add(FileTools.ByteArrayToStringASCII(buffer, offset));
+                offset += Strings[i].Length + 1; // +1 for \0
             }
+            
+            // String Details
+            UInt32 stringsDetailsToken = FileTools.ByteArrayToUInt32(buffer, ref offset);
+            if (!(stringsDetailsToken == Token.Sect)) return false;
+            // Skip over the details struct because we don't need it.
+            offset += stringsHeader.StringsCount * Marshal.SizeOf(typeof(StringDetailsStruct));
 
-            String[] stringTable = new String[_stringsHeader.StringsCount];
-            for (int i = 0; i < _stringsHeader.StringsCount; i++)
-            {
-                stringTable[i] = FileTools.ByteArrayToStringASCII(_data, offset);
-                offset += stringTable[i].Length + 1; // +1 for \0
-            }
-            _stringTable.AddRange(stringTable);
+            // Files Structure details
+            UInt32 filesToken = FileTools.ByteArrayToUInt32(buffer, ref offset);
+            if (!(filesToken == Token.Sect)) return false;
+            FileDetails.AddRange(FileTools.ByteArrayToArray<FileDetailsStruct>(buffer, ref offset, fileHeader.FileCount));
 
-
-            ////// strings details //////
-            UInt32 stringsDetailsToken = FileTools.ByteArrayToUInt32(_data, ref offset);
-            if (stringsDetailsToken != Tokens.TokenSect)
-            {
-                return false;
-            }
-
-            _stringsDetails = FileTools.ByteArrayToArray<StringDetailsStruct>(_data, ref offset, _stringsHeader.StringsCount);
-
-
-
-            ////// files details //////
-            UInt32 filesToken = FileTools.ByteArrayToUInt32(_data, ref offset);
-            if (filesToken != Tokens.TokenSect)
-            {
-                return false;
-            }
-
-            _filesDetails.AddRange(FileTools.ByteArrayToArray<FileDetailsStruct>(_data, ref offset, _indexHeader.FileCount));
-
-
-
-            ////// do files //////
-            //FileTable = new FileEntry[_indexHeader.FileCount];
-            for (int i = 0; i < _indexHeader.FileCount; i++)
+            // The Files list is the public interface
+            for (int i = 0; i < fileHeader.FileCount; i++)
             {
                 FileEntry fileEntry = new FileEntry
                 {
-                    FileStruct = _filesDetails[i],
-                    InIndex = this
+                    FileStruct = FileDetails[i],
+                    Parent = this,
+                    DirectoryString = Strings[FileDetails[i].DirectoryArrayIndex],
+                    FileNameString = Strings[FileDetails[i].FilenameArrayIndex]
                 };
-
-                fileEntry.DirectoryString = _stringTable[fileEntry.Directory];
-                fileEntry.FileNameString = _stringTable[fileEntry.FileName];
-
-                //FileTable[i] = fileEntry;
                 Files.Add(fileEntry);
             }
 
             return true;
         }
 
-        public FileEntry GetFileFromIndex(String filePath)
+        /// <summary>
+        /// Generates a serialized version of the index file.
+        /// </summary>
+        /// <returns>Returns the index file as an encrypted byte array.</returns>
+        public byte[] GenerateIndexFile()
         {
-            return String.IsNullOrEmpty(filePath) ? null : Files.FirstOrDefault(fileIndex => fileIndex.FullPath == filePath);
+            byte[] buffer = new byte[1024];
+            int offset = 0;
+
+            // Header
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Head);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Version);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Files.Count);
+
+            // Strings
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Strings.Count);
+            int stringByteCountOffset = offset;
+            offset += 4;
+            foreach (String str in Strings)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(str));
+                offset++; // \0
+            }
+            UInt32 strByteArrayLen = (UInt32)(offset - stringByteCountOffset - sizeof(UInt32));
+            FileTools.WriteToBuffer(ref buffer, stringByteCountOffset, strByteArrayLen);
+
+            // String Details Struct
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
+            foreach (String str in Strings)
+            {
+                FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Crypt.GetStringHash(str));
+            }
+
+            // File Structure Block
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
+            foreach (FileEntry fileIndex in Files)
+            {
+                FileTools.WriteToBuffer(ref buffer, offset, fileIndex);
+            }
+
+            // Resize the buffer and return
+            byte[] returnBuffer = new byte[offset];
+            Buffer.BlockCopy(buffer, 0, returnBuffer, 0, returnBuffer.Length);
+            return returnBuffer;
         }
 
-        public bool Add(string directory, string fileName, byte[] bytesToWrite)
+
+
+        /// <summary>
+        /// Appends a file to the index and corresponding data file.
+        /// </summary>
+        /// <param name="directory">The directory that will be stored in the index.</param>
+        /// <param name="fileName">The filename that will be stored in the index.</param>
+        /// <param name="bytesToWrite">Byte array of the file to add.</param>
+        /// <returns>Returns true if the operation was successful.</returns>
+        public bool AddFile(string directory, string fileName, byte[] bytesToWrite)
         {
             if (bytesToWrite == null) return false;
             if (bytesToWrite.Length <= 0) return false;
@@ -425,9 +414,9 @@ namespace Hellgate
             }
 
             bool doCompress = true;
-            foreach (string fileExt in DoNotCompress)
+            foreach (string extentsion in DoNotCompress)
             {
-                if (fileName.EndsWith(fileExt))
+                if (fileName.EndsWith(extentsion))
                 {
                     doCompress = false;
                     break;
@@ -445,14 +434,14 @@ namespace Hellgate
                 DataOffset = (int)DatFile.Length,
                 FileNameSHA1Hash = Crypt.GetStringSHA1UInt32(fileName),
                 FolderPathSHA1Hash = Crypt.GetStringSHA1UInt32(directory),
-                StartToken = Tokens.TokenInfo,
-                EndToken = Tokens.TokenInfo,
+                StartToken = Token.Info,
+                EndToken = Token.Info,
                 Unknown23 = 1,
                 Unknown24 = 1
             };
 
             // See if the index already contains the FileName string
-            int fileNameIndex = _stringTable.IndexOf(fileName);
+            int fileNameIndex = Strings.IndexOf(fileName);
             if (fileNameIndex != -1)
             {
                 fileStruct.FilenameArrayIndex = fileNameIndex;
@@ -460,12 +449,12 @@ namespace Hellgate
             // otherwise add it
             else
             {
-                _stringTable.Add(fileName);
-                fileStruct.FilenameArrayIndex = _stringTable.Count - 1;
+                Strings.Add(fileName);
+                fileStruct.FilenameArrayIndex = Strings.Count - 1;
             }
 
             // See if the index already contains the Directory string
-            int directoryIndex = _stringTable.IndexOf(directory);
+            int directoryIndex = Strings.IndexOf(directory);
             if (directoryIndex != -1)
             {
                 fileStruct.DirectoryArrayIndex = directoryIndex;
@@ -473,23 +462,20 @@ namespace Hellgate
             // otherwise add it
             else
             {
-                _stringTable.Add(directory);
-                fileStruct.DirectoryArrayIndex = _stringTable.Count - 1;
+                Strings.Add(directory);
+                fileStruct.DirectoryArrayIndex = Strings.Count - 1;
             }
 
-
-
-            
 
             // Create an entry in the File Index
             FileEntry fileEntry = new FileEntry
             {
                 FileStruct = fileStruct,
-                InIndex = this
+                Parent = this
             };
 
-            fileEntry.DirectoryString = _stringTable[fileEntry.Directory];
-            fileEntry.FileNameString = _stringTable[fileEntry.FileName];
+            fileEntry.DirectoryString = Strings[fileEntry.DirectoryIndex];
+            fileEntry.FileNameString = Strings[fileEntry.FileNameIndex];
             fileEntry.CompressedSize = doCompress ? 1 : 0;
 
             int pos = 0;
@@ -498,7 +484,7 @@ namespace Hellgate
 
             fileStruct.First4BytesOfFile = BitConverter.ToInt32(first4Bytes, 0);
             fileStruct.Second4BytesOfFile = BitConverter.ToInt32(second4Bytes, 0);
-            _filesDetails.Add(fileStruct);
+            FileDetails.Add(fileStruct);
 
             AddFileToDat(bytesToWrite, fileEntry);
 
@@ -515,6 +501,11 @@ namespace Hellgate
             return true;
         }
 
+        /// <summary>
+        /// Appends a FileEntry object to the index collection.
+        /// </summary>
+        /// <param name="baseEntry">The FileEntry to add.</param>
+        /// <returns>The new FileEntry reference.</returns>
         public FileEntry AddFileToIndex(FileEntry baseEntry)
         {
             Debug.Assert(baseEntry != null);
@@ -523,7 +514,7 @@ namespace Hellgate
             byte[] cloneData = FileTools.StructureToByteArray(baseEntry.FileStruct);
             FileDetailsStruct fileDetailsStruct = FileTools.ByteArrayToStructure<FileDetailsStruct>(cloneData, 0);
 
-            FileEntry newFileEntry = new FileEntry { FileStruct = fileDetailsStruct, InIndex = this };
+            FileEntry newFileEntry = new FileEntry { FileStruct = fileDetailsStruct, Parent = this };
 
             // update directory and file name string index offsets
             // todo: should we even allow these to be null/empty??
@@ -532,10 +523,10 @@ namespace Hellgate
                 // remove the backup string if present
                 String directoryString = baseEntry.DirectoryString.Replace(BackupPrefix + @"\", "");
 
-                int directoryIndex = _GetStringIndex(directoryString);
+                int directoryIndex = GetStringIndex(directoryString);
                 if (directoryIndex == -1)
                 {
-                    directoryIndex = _AddString(directoryString);
+                    directoryIndex = AddString(directoryString);
                 }
 
                 newFileEntry.FileStruct.DirectoryArrayIndex = directoryIndex;
@@ -543,10 +534,10 @@ namespace Hellgate
             }
             if (!String.IsNullOrEmpty(baseEntry.FileNameString))
             {
-                int fileNameIndex = _GetStringIndex(baseEntry.FileNameString);
+                int fileNameIndex = GetStringIndex(baseEntry.FileNameString);
                 if (fileNameIndex == -1)
                 {
-                    fileNameIndex = _AddString(baseEntry.FileNameString);
+                    fileNameIndex = AddString(baseEntry.FileNameString);
                 }
 
                 newFileEntry.FileStruct.FilenameArrayIndex = fileNameIndex;
@@ -558,59 +549,11 @@ namespace Hellgate
             return newFileEntry;
         }
 
-        public bool BeginDatReading()
-        {
-            return OpenDat(FileAccess.Read);
-        }
-
-        public bool BeginDatWriting()
-        {
-            if (DatFile != null) DatFile.Close();
-
-            return OpenDat(FileAccess.ReadWrite);
-        }
-
-        public bool OpenDat(FileAccess fileAccess)
-        {
-            if (DatFile == null)
-            {
-                try
-                {
-                    String filePath = String.Format(@"{0}\{1}.dat", FileDirectory, FileNameWithoutExtension);
-
-                    // open if exists
-                    if (File.Exists(filePath))
-                    {
-                        DatFile = new FileStream(filePath, FileMode.Open, fileAccess);
-                        return true;
-                    }
-
-                    // can we write to it?
-                    if (fileAccess == FileAccess.Read) return false;
-
-                    // create new dat and add header
-                    DatFile = new FileStream(filePath, FileMode.Create, fileAccess);
-                    DatHeader datHeader = new DatHeader();
-                    DatFile.Write(FileTools.StructureToByteArray(datHeader), (int)DatFile.Length, Marshal.SizeOf(datHeader));
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public void EndDatAccess()
-        {
-            if (DatFile == null) return;
-
-            DatFile.Close();
-            DatFile = null;
-        }
-
-
+        /// <summary>
+        /// Appends a file byte array to the corresponding dat and adjusts the FileEntry object.
+        /// </summary>
+        /// <param name="fileData">The byte array to append.</param>
+        /// <param name="fileEntry">The corresponding FileEntry that will be adjusted.</param>
         public void AddFileToDat(byte[] fileData, FileEntry fileEntry)
         {
             Debug.Assert(DatFile != null && fileData != null && fileEntry != null);
@@ -650,153 +593,24 @@ namespace Hellgate
             DatFile.Write(writeBuffer, 0, writeLength);
         }
 
-        // note: this function does shit all exception checking
-        // todo: "complete" me
-        public void RebuildDatFile()
+
+
+        /// <summary>
+        /// Gets the corresponding File Entry structure from the index.
+        /// </summary>
+        /// <param name="filePath">The full path of the file to search.</param>
+        /// <returns>Returns the matching FileEntry or null if no match found.</returns>
+        public FileEntry GetFileEntry(String filePath)
         {
-            Debug.Assert(DatFile != null);
-
-            // easiest way to remove orphan data blocks to just extract
-            // all known files then delete and remake it
-            const String tempDir = "temp";
-
-            // extract/save each file in temp dir (no point decompressing them)
-            try
-            {
-                foreach (FileEntry fileEntry in Files)
-                {
-                    byte[] fileData = _ReadDatFile(fileEntry, false);
-                    String filePath = Path.Combine(tempDir, fileEntry.FullPath);
-                    Directory.CreateDirectory(filePath);
-                    File.WriteAllBytes(filePath, fileData);
-                }
-            }
-            catch
-            {
-                return;
-            }
-
-            // save our current index,  close our dat, and make a backup just in case
-            String datPath = DatFile.Name;
-            DatFile.Close();
-            if (!_MoveFile(datPath, datPath + ".bak"))
-            {
-                _DeleteTempDir(tempDir);
-                return;
-            }
-
-
-            // create new dat and add our files
-            if (!BeginDatWriting())
-            {
-                _MoveFile(datPath + ".bak", datPath);
-                _DeleteTempDir(tempDir);
-                return;
-            }
-
-            try
-            {
-                foreach (FileEntry fileEntry in Files)
-                {
-                    String filePath = Path.Combine(tempDir, fileEntry.FullPath);
-                    byte[] fileBytes = File.ReadAllBytes(filePath);
-
-                    fileEntry.TempDatOffset = (int)DatFile.Length;
-                    DatFile.Write(fileBytes, (int)DatFile.Length, fileBytes.Length);
-                }
-            }
-            catch
-            {
-                DatFile.Close();
-                _DeleteTempFile(datPath);
-                _MoveFile(datPath + ".bak", datPath);
-                _DeleteTempDir(tempDir);
-                return;
-            }
-
-            // dat has been rebuilt - apply the DatOffset values
-            foreach (FileEntry fileEntry in Files)
-            {
-                fileEntry.DataOffset = fileEntry.TempDatOffset;
-            }
+            return String.IsNullOrEmpty(filePath) ? null : Files.FirstOrDefault(fileIndex => fileIndex.FullPath == filePath);
         }
 
-        // these 3 functions look a little exccessive, but they're:
-        // "let the user know" if something has failed functions
-        // as well as "clean-up" functions
-        private static void _DeleteTempDir(String tempDir)
+        public byte[] GetFileBytes(FileEntry file)
         {
-            try
-            {
-                Directory.Delete(tempDir, true);
-            }
-            catch
-            {
-
-            }
+            return GetFileBytes(file, true);
         }
 
-        private static bool _MoveFile(String moveFrom, String moveTo)
-        {
-            try
-            {
-                File.Move(moveFrom, moveTo);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static void _DeleteTempFile(String tempFilePath)
-        {
-            try
-            {
-                File.Delete(tempFilePath);
-            }
-            catch
-            {
-
-            }
-        }
-
-        // todo: finish me... haven't needed it yet
-        //public bool RemoveFileFromDat(FileEntry fileEntry)
-        //{
-        //    Debug.Assert(DatFile != null && fileEntry != null && DatFile.CanWrite);
-
-        //    if (fileEntry.DataOffset < 0) return true;
-
-        //    int byteCount = fileEntry.CompressedSize > 0 ? fileEntry.CompressedSize : fileEntry.UncompressedSize;
-        //    if (byteCount <= 0) return true;
-
-        //    try
-        //    {
-        //        // create new temp .dat file
-        //        String tempPath = fileEntry.FullPath + ".temp";
-        //        FileStream tempDat = new FileStream(tempPath, FileMode.Create, FileAccess.ReadWrite);
-        //        tempDat.W
-
-        //        DatFile.Seek(fileEntry.DataOffset, SeekOrigin.Begin);
-
-        //        return true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        String errorMsg = String.Format("Failed to delete file to .dat!\nFile: {0}\n\n{1}", fileEntry.FileName, e);
-        //        MessageBox.Show(errorMsg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-        //        return false;
-        //    }
-        //}
-
-        public byte[] ReadDatFile(FileEntry file)
-        {
-            return _ReadDatFile(file, true);
-        }
-
-        private byte[] _ReadDatFile(FileEntry file, bool decompress)
+        byte[] GetFileBytes(FileEntry file, bool decompress)
         {
             Debug.Assert(DatFile != null);
 
@@ -838,81 +652,60 @@ namespace Hellgate
             return destBuffer;
         }
 
-        public byte[] GenerateIndexFile()
+
+
+        public bool BeginDatReading()
         {
-            byte[] buffer = new byte[1024];
-            int offset = 0;
-
-            ////// main header //////
-            const Int32 version = 4;
-            FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenHead);
-            FileTools.WriteToBuffer(ref buffer, ref offset, version);
-            FileTools.WriteToBuffer(ref buffer, ref offset, Files.Count);
-
-
-
-            ////// string block //////
-            FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenSect);
-            FileTools.WriteToBuffer(ref buffer, ref offset, _stringTable.Count);
-            int stringByteCountOffset = offset;
-            offset += 4;
-            foreach (String str in _stringTable)
-            {
-                FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(str));
-                offset++; // \0
-            }
-            FileTools.WriteToBuffer(ref buffer, stringByteCountOffset, (UInt32)(offset - stringByteCountOffset - sizeof(UInt32)));
-
-
-
-            ////// string data //////
-            FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenSect);
-            foreach (String str in _stringTable)
-            {
-                FileTools.WriteToBuffer(ref buffer, ref offset, (Int16)str.Length);
-                
-                UInt32 stringHash = Crypt.GetStringHash(str);
-                FileTools.WriteToBuffer(ref buffer, ref offset, stringHash);
-            }
-
-
-
-            ////// file block //////
-            //const UInt32 foo = 0;
-            //i = 0;
-            FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenSect);
-            foreach (FileEntry fileIndex in Files)
-            {
-                // todo: this looks gross, but is just for testing
-                // final version will be similar to reading - dumping struct using MarshalAs
-                FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenInfo);
-
-                UInt64 cryptoBytes = Crypt.GetStringsSHA1UInt64(fileIndex.DirectoryString, fileIndex.FileNameString);
-                FileTools.WriteToBuffer(ref buffer, ref offset, cryptoBytes);
-                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FolderPathSHA1Hash); // tested with 0xDEADBEEF and 0x00000000, game didn't care
-                //FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FileNameSHA1Hash); // game freezes if not correct value
-
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.CompressedSize);
-                offset += 4; // null
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Directory);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileName);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.FileTime);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown23);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Unknown24);
-                offset += 12; // null
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.First4BytesOfFile);
-                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileStruct.Second4BytesOfFile);
-
-                FileTools.WriteToBuffer(ref buffer, ref offset, Tokens.TokenInfo);
-            }
-
-            // get final buffer of correct size
-            byte[] returnBuffer = new byte[offset];
-            Buffer.BlockCopy(buffer, 0, returnBuffer, 0, returnBuffer.Length);
-            return returnBuffer;
+            return OpenDat(FileAccess.Read);
         }
+
+        public bool BeginDatWriting()
+        {
+            if (DatFile != null) DatFile.Close();
+            return OpenDat(FileAccess.ReadWrite);
+        }
+
+        public void EndDatAccess()
+        {
+            if (DatFile == null) return;
+
+            DatFile.Close();
+            DatFile = null;
+        }
+
+        public bool OpenDat(FileAccess fileAccess)
+        {
+            if (DatFile == null)
+            {
+                try
+                {
+                    String filePath = String.Format(@"{0}\{1}.dat", FileDirectory, FileNameWithoutExtension);
+
+                    // open if exists
+                    if (File.Exists(filePath))
+                    {
+                        DatFile = new FileStream(filePath, FileMode.Open, fileAccess);
+                        return true;
+                    }
+
+                    // can we write to it?
+                    if (fileAccess == FileAccess.Read) return false;
+
+                    // create new dat and add header
+                    DatFile = new FileStream(filePath, FileMode.Create, fileAccess);
+                    DatHeader datHeader = new DatHeader();
+                    DatFile.Write(FileTools.StructureToByteArray(datHeader), (int)DatFile.Length, Marshal.SizeOf(datHeader));
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
 
         public bool PatchOutFile(int i)
         {
@@ -930,18 +723,17 @@ namespace Hellgate
             if (fileEntry.DirectoryString.Contains(BackupPrefix)) return false;
 
             // does the backup dir exist?
-            String dir = BackupPrefix + @"\" + _stringTable[fileEntry.Directory];
-            int index = _GetStringIndex(dir);
+            String dir = BackupPrefix + @"\" + Strings[fileEntry.DirectoryIndex];
+            int index = GetStringIndex(dir);
 
             // if the directory doesn't exist, add it.
             if (index == -1)
             {
-                index = _stringTable.Count;
-                _stringTable.Add(dir);
+                index = Strings.Count;
+                Strings.Add(dir);
             }
 
-            fileEntry.Directory = index;
-            Modified = true;
+            fileEntry.DirectoryIndex = index;
             return true;
         }
 
@@ -969,25 +761,30 @@ namespace Hellgate
             return true;
         }
 
-        private int _GetStringIndex(String str)
+
+
+        private int GetStringIndex(String str)
         {
             if (String.IsNullOrEmpty(str)) return -1;
 
-            return _stringTable.IndexOf(str);
+            return Strings.IndexOf(str);
         }
 
-        private int _AddString(String str)
+        private int AddString(String str)
         {
-            int index = _stringTable.Count;
-            _stringTable.Add(str);
+            int index = Strings.Count;
+            Strings.Add(str);
             return index;
         }
+
+
 
         public override string ToString()
         {
             return FileNameWithoutExtension;
         }
 
+        #region Dispose Methods
         public void Dispose()
         {
             if (DatFile != null)
@@ -995,5 +792,6 @@ namespace Hellgate
                 DatFile.Dispose();
             }
         }
+        #endregion
     }
 }
