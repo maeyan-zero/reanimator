@@ -156,4 +156,9 @@
 "fawkes_red"	86	86	255	255	-1
 "fawkes_blue"	255	184	86	255	-1
 "fawkes_gold"	63	191	255	255	-1
+"core"	216	255	0	255	-1
+"mythic"	255	96	160	255	-1
 "cursed"	100	150	180	255	-1
+"core_item_bkgd"	200	200	0	255	-1
+"mythic_item_bkgd"	192	56	104	255	-1
+"cursed_item_bkgd"	70	120	150	255	-1
