@@ -382,7 +382,7 @@ namespace Hellgate
 
             // File Structure Block
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
-            foreach (FileEntry fileIndex in Files)
+            foreach (FileDetailsStruct fileIndex in FileDetails)
             {
                 FileTools.WriteToBuffer(ref buffer, offset, fileIndex);
             }

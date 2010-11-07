@@ -11,62 +11,55 @@ namespace Hellgate
         private StringsHeader _stringsHeader;
         public List<StringBlock> StringsTable { get; private set; }
 
-        public StringsFile(String stringId, Type type)
-            : base(stringId, type)
+        public StringsFile()
         {
             IsStringsFile = true;
         }
 
-        override public String ToString()
+        public override bool ParseData(byte[] buffer)
         {
-            return StringId;
-        }
-
-        public override bool ParseData(byte[] data)
-        {
-            _data = data;
             int offset = 0;
             StringsTable = new List<StringBlock>();
 
-            _stringsHeader = FileTools.ByteArrayToStructure<StringsHeader>(_data, ref offset);
+            _stringsHeader = FileTools.ByteArrayToStructure<StringsHeader>(buffer, ref offset);
 
             for (int i = 0; i < _stringsHeader.Count; i++)
             {
                 StringBlock stringBlock = new StringBlock
                 {
-                    ReferenceId = FileTools.ByteArrayToInt32(_data, ref offset),
-                    Unknown = FileTools.ByteArrayToInt32(_data, ref offset)
+                    ReferenceId = FileTools.ByteArrayToInt32(buffer, ref offset),
+                    Unknown = FileTools.ByteArrayToInt32(buffer, ref offset)
                 };
 
-                int count = FileTools.ByteArrayToInt32(_data, ref offset);
-                stringBlock.StringId = FileTools.ByteArrayToStringASCII(_data, offset);
+                int count = FileTools.ByteArrayToInt32(buffer, ref offset);
+                stringBlock.StringId = FileTools.ByteArrayToStringASCII(buffer, offset);
                 offset += count + 1;
 
-                stringBlock.Reserved = FileTools.ByteArrayToInt32(_data, ref offset);
+                stringBlock.Reserved = FileTools.ByteArrayToInt32(buffer, ref offset);
 
-                count = FileTools.ByteArrayToInt32(_data, ref offset);
-                stringBlock.String = FileTools.ByteArrayToStringUnicode(_data, offset);
+                count = FileTools.ByteArrayToInt32(buffer, ref offset);
+                stringBlock.String = FileTools.ByteArrayToStringUnicode(buffer, offset);
                 offset += count;
 
-                stringBlock.AttributeCount = FileTools.ByteArrayToInt32(_data, ref offset);
+                stringBlock.AttributeCount = FileTools.ByteArrayToInt32(buffer, ref offset);
 
                 for (int j = 0; j < stringBlock.AttributeCount; j++)
                 {
-                    count = FileTools.ByteArrayToInt32(_data, ref offset);
+                    count = FileTools.ByteArrayToInt32(buffer, ref offset);
 
                     switch (j)
                     {
                         case 0:
-                            stringBlock.Attribute1 = FileTools.ByteArrayToStringUnicode(_data, offset);
+                            stringBlock.Attribute1 = FileTools.ByteArrayToStringUnicode(buffer, offset);
                             break;
                         case 1:
-                            stringBlock.Attribute2 = FileTools.ByteArrayToStringUnicode(_data, offset);
+                            stringBlock.Attribute2 = FileTools.ByteArrayToStringUnicode(buffer, offset);
                             break;
                         case 2:
-                            stringBlock.Attribute3 = FileTools.ByteArrayToStringUnicode(_data, offset);
+                            stringBlock.Attribute3 = FileTools.ByteArrayToStringUnicode(buffer, offset);
                             break;
                         case 3:
-                            stringBlock.Attribute4 = FileTools.ByteArrayToStringUnicode(_data, offset);
+                            stringBlock.Attribute4 = FileTools.ByteArrayToStringUnicode(buffer, offset);
                             break;
                     }
 
@@ -76,41 +69,22 @@ namespace Hellgate
                 StringsTable.Add(stringBlock);
             }
 
-            if (offset != _data.Length)
+            if (offset != buffer.Length)
             {
                 return false;
             }
 
-            IsGood = true;
+            IntegrityCheck = true;
             return true;
         }
 
-        public  override byte[] GenerateFile(DataTable table)
+        public override bool ParseCSV(byte[] buffer)
         {
-            /***** Strings File *****
-             * FileToken                                    Int32                   0x68667374 ('tsfh').
-             * Version                                      Int32                   Only seen as 0x06.
-             * Count                                        Int32                   Count of StringBlocks.
-             * {
-             *      ReferenceId                             Int32                   Global reference ID in-game.
-             *      Unknown                                 Int32                   TO BE DETEREMINED
-             *      
-             *      ByteCount                               Int32                   Byte count of following ASCII string (not including \0 termination).
-             *      StringId                                ByteCount + 1           String as ASCII, zero terminated.
-             *      
-             *      Reserved                                Int32                   Null.
-             *      
-             *      ByteCount                               Int32                   Byte count of following UNICODE string (include \0 termination).
-             *      String                                  ByteCount               String as UNICODE, zero terminated.
-             *      
-             *      AttributeCount                          Int32                   Count of attributes (0 to 4).
-             *      {
-             *          CharCount                           Int32                   Count of ASCII characters of following string (not including \0 termination).
-             *          AttributeString                     (CharCount + 1) * 2     String as UNICODE, zero terminated.
-             *      }
-             * }
-             */
+            throw new NotImplementedException();
+        }
 
+        public override bool ParseDataTable(DataTable table)
+        {
             byte[] buffer = new byte[1024];
             int offset = 0;
             int lastOffset = 4;
@@ -128,7 +102,7 @@ namespace Hellgate
             int row = 0;
             foreach (DataRow dr in table.Rows)
             {
-                String stringId = dr["StringId"] as String;
+                String stringId = dr["StringID"] as String;
                 if (String.IsNullOrEmpty(stringId)) continue;
 
 
@@ -205,7 +179,12 @@ namespace Hellgate
             byte[] returnBuffer = new byte[offset];
             Buffer.BlockCopy(buffer, 0, returnBuffer, 0, offset);
 
-            return returnBuffer;
+            return true;
+        }
+
+        public override byte[] ToByteArray()
+        {
+            throw new NotImplementedException();
         }
     }
 }

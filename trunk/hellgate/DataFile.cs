@@ -6,51 +6,25 @@ namespace Hellgate
 {
     public abstract class DataFile
     {
-        public String StringId { get; private set; }
+        public String StringID { get; protected set; }
         public Type DataType { get; protected set; }
-
+        public uint StructureID { get; protected set; }
+        public bool IntegrityCheck { get; protected set; }
         public bool IsExcelFile { get; protected set; }
         public bool IsStringsFile { get; protected set; }
-        public bool IsGood { get; protected set; }
-        public int Count { get; protected set; }
-
+        public int Count { get { return (!(Rows == null)) ? Rows.Count : 0; } }
         public String FilePath { get; set; }
         public String FileExtension { get; set; }
         public String FileName { get; set; }
+        public List<Object> Rows { get; protected set; }
 
-        internal byte[] _data;
-        public List<object> Rows { get; set; }
-
-        protected DataFile(String stringId, Type dataType)
+        public override String ToString()
         {
-            if (String.IsNullOrEmpty(stringId)) throw new Exception("if (String.IsNullOrEmpty(stringId))");
-            if (dataType == null) throw new Exception("if (dataType == null)");
-
-            StringId = stringId;
-            DataType = dataType;
-
-            IsExcelFile = false;
-            IsStringsFile = false;
-            IsGood = false;
-            Count = -1;
-
-            FilePath = String.Empty;
-
-            _data = null;
-            Rows = new List<object>();
+            return StringID;
         }
-
-        protected DataFile()
-        {
-            Rows = new List<object>();
-        }
-
-        override public String ToString()
-        {
-            return StringId;
-        }
-
-        public abstract bool ParseData(byte[] data);
-        public abstract byte[] GenerateFile(DataTable dataTable);
+        public abstract bool ParseData(byte[] buffer);
+        public abstract bool ParseCSV(byte[] buffer);
+        public abstract bool ParseDataTable(DataTable dataTable);
+        public abstract byte[] ToByteArray();
     }
 }

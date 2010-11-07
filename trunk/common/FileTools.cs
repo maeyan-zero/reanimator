@@ -220,13 +220,26 @@ namespace Revival.Common
         /// <returns>The converted ASCII String.</returns>
         public static String ByteArrayToStringASCII(byte[] byteArray, int offset)
         {
+            return ByteArrayToStringASCII(byteArray, offset, (byte)0x00);
+        }
+
+        /// <summary>
+        /// Converts an array of bytes to an ASCII String from offset up to the
+        /// first <i>delimiter</i> character from offset or remaining bytes if <i>delimiter</i> can't be found.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the ASCII String.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="delimiter">The byte the signifies the end of the string.</param>
+        /// <returns>The converted ASCII String.</returns>
+        public static String ByteArrayToStringASCII(byte[] byteArray, int offset, byte delimiter)
+        {
             // may not look as pretty, but much faster/safter than using Marshal string crap
             // get first null location etc
             int arrayLenth = byteArray.Length;
             int strLength = 0;
             for (int i = offset; i < arrayLenth; i++)
             {
-                if (byteArray[i] != 0x00) continue;
+                if (byteArray[i] != delimiter) continue;
 
                 strLength = i - offset;
                 break;
@@ -305,6 +318,38 @@ namespace Revival.Common
         }
 
         /// <summary>
+        /// Converts a string into the given type.
+        /// </summary>
+        /// <param name="value">The string to convert.</param>
+        /// <param name="type">The type to convert the string into.</param>
+        /// <returns>The converted object. If the type was unhandled, null will be returned.</returns>
+        public static Object StringToType(String value, Type type)
+        {
+            if (type == typeof(String))
+                return value;
+            else if (type == typeof(Int32))
+                return Int32.Parse(value);
+            else if (type == typeof(UInt32))
+                return UInt32.Parse(value);
+            else if (type == typeof(Single))
+                return Single.Parse(value);
+            else if (type == typeof(Int16))
+                return Int16.Parse(value);
+            else if (type == typeof(UInt16))
+                return UInt16.Parse(value);
+            else if (type == typeof(Byte))
+                return Byte.Parse(value);
+            else if (type == typeof(Char))
+                return Char.Parse(value);
+            else if (type == typeof(Int64))
+                return Int64.Parse(value);
+            else if (type == typeof(UInt64))
+                return UInt64.Parse(value);
+            else
+                return null;
+        }
+
+        /// <summary>
         /// Searches a byte array for a sequence of bytes.<br />
         /// <i>Uses 0x90 as a wild card.</i>
         /// </summary>
@@ -380,11 +425,11 @@ namespace Revival.Common
             int offset = 0;
             int length = source.Length;
             bool ignoreFirstRow = true;
-            string[] newRow = new string[columns];
             List<string[]> rowCollection = new List<string[]>();
             int row = 0;
             while (offset < length)
             {
+                string[] newRow = new string[columns];
                 byte[] buffer;
                 for (int i = 0; i < columns; i++)
                 {
