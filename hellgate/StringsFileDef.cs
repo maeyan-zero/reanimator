@@ -16,14 +16,13 @@ namespace Hellgate
             public Int32 Count;
         }
 
-        private abstract class FileTokens
+        private class FileTokens
         {
             public const Int32 Header = 0x68667374;
         }
         private const Int32 Version = 6;
         private const int MaxAttributes = 4;
 
-        // public access stuffs
         public class StringBlock
         {
             public Int32 ReferenceId { get; set; }

@@ -11,10 +11,11 @@ namespace Hellpack
         static void Main(string[] args)
         {
             String currentDir = Directory.GetCurrentDirectory();
-            String dataDir = Path.Combine(currentDir, "buffer\\");
-            String dataCommonDir = Path.Combine(currentDir, "data_common\\");
+            String dataDir = Path.Combine(currentDir, Common.DataPath);
+            String dataCommonDir = Path.Combine(currentDir, Common.DataCommonPath);
+            String excelDir = ExcelFile.FolderPath;
+            String stringDir = StringsFile.FolderPath;
             String defaultDat = "sp_hellgate_1337";
-            String excelDir = "excel\\";
 
             Boolean hasDataDir = Directory.Exists(dataDir);
             Boolean hasDataCommonDir = Directory.Exists(dataCommonDir);
@@ -23,9 +24,9 @@ namespace Hellpack
             if (!(hasDataDir) && !(hasDataCommonDir))
             {
                 Console.WriteLine("Sorry, no buffer paths were found. Check error.xml for details.");
+                Console.ReadKey();
                 return;
             }
-
 
             // Get a list of all the files to add.
             List<String> filesToPack = new List<String>();
@@ -36,17 +37,22 @@ namespace Hellpack
             if (Directory.Exists(dataCommonDir + excelDir))
                 excelFilesToCook.AddRange(Directory.GetFiles(dataCommonDir + excelDir, "*.txt", SearchOption.TopDirectoryOnly));
 
-
-
             // Cook all the excel files.
             foreach (String excelPath in excelFilesToCook)
             {
                 byte[] excelBuffer = File.ReadAllBytes(excelPath);
                 ExcelFile excelFile = new ExcelFile(excelBuffer);
+                if (!(excelFile.IntegrityCheck == true)) continue;
                 excelBuffer = excelFile.ToByteArray();
                 if (excelBuffer == null) continue;
                 File.WriteAllBytes(excelPath + ".cooked", excelBuffer);
             }
+
+
+            // Cook String files
+
+
+            // Cook XML files
 
 
             if (hasDataDir)
@@ -67,7 +73,7 @@ namespace Hellpack
             {
                 String fileName = Path.GetFileName(filePath);
                 String directory = Path.GetDirectoryName(filePath);
-                int dataCursor = directory.IndexOf("buffer");
+                int dataCursor = directory.IndexOf("data");
                 directory = directory.Remove(0, dataCursor) + "\\";
                 
                 byte[] buffer = File.ReadAllBytes(filePath);
