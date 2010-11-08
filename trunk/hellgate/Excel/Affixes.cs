@@ -43,7 +43,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
         public Int32 affixType6;
         public Int32 suffix;
-        [ExcelOutput(SortDistinctID = 4)]
+        [ExcelOutput(SortDistinctID = 4, IsSecondaryString = true)]
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]

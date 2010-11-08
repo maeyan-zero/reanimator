@@ -41,12 +41,12 @@ namespace Hellgate
             DataTypes.Add((UInt32)0x1E760FB1, new TypeMap { DataType = typeof(SoundBuses) });
             DataTypes.Add((UInt32)0x1EE32EF6, new TypeMap { DataType = typeof(Bones) });
             DataTypes.Add((UInt32)0x1F0513C5, new TypeMap { DataType = typeof(WardrobeModelGroupRow) });
-            DataTypes.Add((UInt32)0x1F9DDC98, new TypeMap { DataType = typeof(UnitTypes) });
+            DataTypes.Add((UInt32)0x1F9DDC98, new TypeMap { DataType = typeof(UnitTypes), IgnoresTable = true, HasSignature = true });
 
             DataTypes.Add((UInt32)0x22FCCFEB, new TypeMap { DataType = typeof(StringFiles) });
             DataTypes.Add((UInt32)0x26BC8A8D, new TypeMap { DataType = typeof(DamageEffects) });
             DataTypes.Add((UInt32)0x2C085508, new TypeMap { DataType = typeof(StatsFunc) });
-            DataTypes.Add((UInt32)0x2D83EDCC, new TypeMap { DataType = typeof(ItemQuality), HasRcsh = true });
+            DataTypes.Add((UInt32)0x2D83EDCC, new TypeMap { DataType = typeof(ItemQuality) });
             DataTypes.Add((UInt32)0x2F942E56, new TypeMap { DataType = typeof(MusicRef) });
 
             DataTypes.Add((UInt32)0x3230B6BC, new TypeMap { DataType = typeof(Recipes) });
@@ -67,7 +67,7 @@ namespace Hellgate
             DataTypes.Add((UInt32)0x51C1C606, new TypeMap { DataType = typeof(Levels) });
             DataTypes.Add((UInt32)0x569C0513, new TypeMap { DataType = typeof(Stats) });
             DataTypes.Add((UInt32)0x57D269AF, new TypeMap { DataType = typeof(GlobalThemes) });
-            DataTypes.Add((UInt32)0x5876D156, new TypeMap { DataType = typeof(Properties) });
+            DataTypes.Add((UInt32)0x5876D156, new TypeMap { DataType = typeof(Properties), HasMysh = true });
             DataTypes.Add((UInt32)0x58D35B7C, new TypeMap { DataType = typeof(WardrobePart) });
             DataTypes.Add((UInt32)0x5BCCB897, new TypeMap { DataType = typeof(MonsterQuality) });
 
@@ -89,7 +89,7 @@ namespace Hellgate
 
             DataTypes.Add((UInt32)0x80DE708E, new TypeMap { DataType = typeof(MonsterNames) });
             DataTypes.Add((UInt32)0x86DC367C, new TypeMap { DataType = typeof(BookMarks) });
-            DataTypes.Add((UInt32)0x887988C4, new TypeMap { DataType = typeof(Items) });
+            DataTypes.Add((UInt32)0x887988C4, new TypeMap { DataType = typeof(Items), HasExtended = true });
             DataTypes.Add((UInt32)0x8A5FF6B8, new TypeMap { DataType = typeof(AiBehaviour) });
             DataTypes.Add((UInt32)0x8B84B802, new TypeMap { DataType = typeof(ConditionFunctions) });
             DataTypes.Add((UInt32)0x8E1FFDA1, new TypeMap { DataType = typeof(WardrobeBlendOp) });
@@ -120,7 +120,7 @@ namespace Hellgate
             DataTypes.Add((UInt32)0xB47A4EC5, new TypeMap { DataType = typeof(SkillEventTypes) });
             DataTypes.Add((UInt32)0xB7A70C96, new TypeMap { DataType = typeof(LevelsRules) });
             DataTypes.Add((UInt32)0xB7BB74D1, new TypeMap { DataType = typeof(Faction) });
-            DataTypes.Add((UInt32)0xBAF5E904, new TypeMap { DataType = typeof(Skills) });
+            DataTypes.Add((UInt32)0xBAF5E904, new TypeMap { DataType = typeof(Skills), HasMysh = true });
             DataTypes.Add((UInt32)0xBB554372, new TypeMap { DataType = typeof(Act) });
             DataTypes.Add((UInt32)0xBBC15A50, new TypeMap { DataType = typeof(ColorSets) });
             DataTypes.Add((UInt32)0xBBEBD669, new TypeMap { DataType = typeof(SpawnClass) });
@@ -164,7 +164,7 @@ namespace Hellgate
             DataTypes.Add((UInt32)0xF98A5E41, new TypeMap { DataType = typeof(LoadingTips) });
             DataTypes.Add((UInt32)0xFA7B3939, new TypeMap { DataType = typeof(WardrobeAppearanceGroup) });
             DataTypes.Add((UInt32)0xFC8E3B0C, new TypeMap { DataType = typeof(Interact) });
-            DataTypes.Add((UInt32)0xFD6839DE, new TypeMap { DataType = typeof(States) });
+            DataTypes.Add((UInt32)0xFD6839DE, new TypeMap { DataType = typeof(States), HasSignature = true });
             DataTypes.Add((UInt32)0xFE47EF60, new TypeMap { DataType = typeof(Palettes) });
 
             DataTables = new KeyValuePair<String, UInt32>[]
@@ -346,11 +346,10 @@ namespace Hellgate
         public class TypeMap
         {
             public Type DataType;
-            public Boolean HasRcsh;
             public Boolean HasMysh;
             public Boolean HasExtended;
-            public Boolean HasFinal;
-            public Boolean HasSecondary;
+            public Boolean HasSignature;
+            public Boolean IgnoresTable;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -389,6 +388,7 @@ namespace Hellgate
             public bool IsIntOffset { get; set; }
             public bool IsStringID { get; set; }
             public bool IsTableIndex { get; set; }
+            public bool IsSecondaryString { get; set; }
             public string TableStringID { get; set; }
             public int SortAscendingID { get; set; }
             public int SortDistinctID { get; set; }
@@ -405,6 +405,9 @@ namespace Hellgate
             public const Int32 tysh = 0x68737974;
             public const Int32 mysh = 0x6873796D;
             public const Int32 dneh = 0x68656E64;
+            public const Int32 RcshValue = 4;
+            public const Int32 TyshValue = 2;
+            public const Int32 DnehValue = 0;
         }
 
         public class ColumnTypeKeys
@@ -419,6 +422,7 @@ namespace Hellgate
             public const String IsBitmask = "IsBitmask";
             public const String IsBool = "IsBool";
             public const String IsIntOffset = "IsIntOffset";
+            public const String IsSecondaryString = "IsSecondaryString";
             public const String RequiresDefault = "RequiresDefault";
             public const String SortAscendingID = "SortAscendingID";
             public const String SortColumnTwo = "SortColumnTwo";
@@ -604,6 +608,40 @@ namespace Hellgate
             //                    }
 
             //}
+        }
+
+        private static uint[] Signature = new uint[]
+        {
+            0x00000001, 0x00000002, 0x00000004, 0x00000008,
+            0x00000010, 0x00000020, 0x00000040, 0x00000080,
+            0x00000100, 0x00000200, 0x00000400, 0x00000800,
+            0x00001000, 0x00002000, 0x00004000, 0x00008000,
+            0x00010000, 0x00020000, 0x00040000, 0x00080000,
+            0x00100000, 0x00200000, 0x00400000, 0x00800000,
+            0x01000000, 0x02000000, 0x04000000, 0x08000000,
+            0x10000000, 0x20000000, 0x40000000, 0x80000000
+        };
+
+        private uint[,] CreateExcelSignature()
+        {
+            int length = (int)(System.Math.Ceiling((double)(Count / Signature.Length)));
+            uint[,] signature = new uint[Count,length];
+
+            int i = 0;
+            int pos = 0;
+            int sig = 0;
+            
+            // Assign unique signatures
+            while (i < Count)
+            {
+                sig = ((i % Signature.Length) % Signature.Length);
+                signature[i++, pos] = Signature[sig];
+                if ((sig == (Signature.Length - 1))) pos++;
+            }
+
+            // OR relationships
+
+            return signature;
         }
     }
 }

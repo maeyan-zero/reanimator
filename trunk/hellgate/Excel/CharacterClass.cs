@@ -33,7 +33,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsBool = true)]
         public Int32 femaleEnabled;
         public Int32 unitVersionToGetSkillRespec;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Strings")]
+        [ExcelOutput(IsStringID = true)]
         public Int32 stringOneLetterCode;
         [ExcelOutput(IsBool = true)]
         public Int32 Default;
