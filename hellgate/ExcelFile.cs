@@ -20,21 +20,12 @@ namespace Hellgate
         byte[] IntegerBuffer;
         byte[] MyshBuffer; // skills, stats(?), properties
         List<byte[]> ExtendedBuffer; // item types
-        List<byte[]> FinalBuffer; // unittypes & states. Generate this eventually
         StringCollection SecondaryStrings;
         TypeMap ExcelMap { get; set; }
+        new Type DataType { get { return ExcelMap.DataType; } }
+        new UInt32 StructureID { get { return ExcelFileHeader.StructureID; } }
 
-        const int RcshValue = 4;
-        const int TyshValue = 2;
-        const int DnehValue = 0;
-
-        // Special structures
-        const uint idItems = 0x887988C4;
-        const uint idItemsTc = 0xE08E6C41;
-        const uint idUnitTypes = 0x1F9DDC98;
-        const uint idUintTypesTc = 0x5CE494C9;
-
-        ExcelHeader ExcelHead = new ExcelHeader
+        ExcelHeader ExcelFileHeader = new ExcelHeader
         {
             Unknown321 = 0x01,
             Unknown322 = 0x09,
@@ -46,7 +37,7 @@ namespace Hellgate
             Unknown166 = 0x00
         };
 
-        TableHeader DefaultTableHeader = new TableHeader
+        TableHeader ExcelTableHeader = new TableHeader
         {
             Unknown1 = 0x03,
             Unknown2 = 0x3F,
@@ -98,12 +89,10 @@ namespace Hellgate
             StringID = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(buffer, ref offset, delimiter), 0);
             StringID = StringID.Replace("\"", "");//in case strings embedded
             IEnumerable<KeyValuePair<string, uint>> tokenQuery = DataTables.Where(dt => dt.Key == StringID);
-            if (tokenQuery.Count() == 0) return false;
-            StructureID = tokenQuery.First().Value;
-            if (!(DataTypes.Contains(StructureID))) return false;
-            ExcelMap = (TypeMap)DataTypes[StructureID];
-            DataType = ExcelMap.DataType;
-            ExcelHead.StructureID = StructureID;
+            if (tokenQuery.Count() == 0) return false; // no string association found
+            ExcelFileHeader.StructureID = tokenQuery.First().Value;
+            if (!(DataTypes.Contains(StructureID))) return false; // no structure definition found
+            ExcelMap = (TypeMap)DataTypes[StructureID]; // grab the excel map
 
             // Mutate the buffer into a string array
             string[][] tableRows = FileTools.CSVtoStringArray(buffer, DataType.GetFields().Count(), delimiter);
@@ -123,7 +112,7 @@ namespace Hellgate
                     {
                         if ((fieldInfo.FieldType == typeof(TableHeader)))
                         {
-                            fieldInfo.SetValue(rowInstance, DefaultTableHeader);
+                            fieldInfo.SetValue(rowInstance, ExcelTableHeader);
                             continue;
                         }
                         if ((fieldInfo.FieldType.BaseType == typeof(Array)))
@@ -213,10 +202,9 @@ namespace Hellgate
 
             // File Header
             if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
-            ExcelHeader excelHeader = FileTools.ByteArrayToStructure<ExcelHeader>(buffer, ref offset);
-            StructureID = excelHeader.StructureID;
-            DataType = (Type)DataTypes[StructureID];
-            if ((DataType == null)) return false;
+            ExcelFileHeader = FileTools.ByteArrayToStructure<ExcelHeader>(buffer, ref offset);
+            ExcelMap = (TypeMap)DataTypes[StructureID];
+            if ((ExcelMap == null)) return false;
 
             // Strings Block
             if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
@@ -239,7 +227,7 @@ namespace Hellgate
 
             // Primary Indice Block
             if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
-            if (!(StructureID == idItems || StructureID == idItemsTc))
+            if (!(ExcelMap.HasExtended))
             {
                 offset += (Count * sizeof(int));// do not allocate this array
             }
@@ -282,20 +270,20 @@ namespace Hellgate
             if (!(CheckFlag(buffer, offset, 0)))
             {
                 if (!(CheckFlag(buffer, ref offset, Token.rcsh))) return false;
-                if (!(CheckFlag(buffer, ref offset, RcshValue))) return false;
+                if (!(CheckFlag(buffer, ref offset, Token.RcshValue))) return false;
                 if (!(CheckFlag(buffer, ref offset, Token.tysh))) return false;
-                if (!(CheckFlag(buffer, ref offset, TyshValue))) return false;
-                if ((CheckFlag(buffer, offset, Token.mysh)))
+                if (!(CheckFlag(buffer, ref offset, Token.TyshValue))) return false;
+                if ((ExcelMap.HasMysh))
                 {
-                    offset += sizeof(int);
+                    if (!(CheckFlag(buffer, ref offset, Token.mysh))) return false;
                     ParseMyshTable(buffer, ref offset);
                 }
                 if (!(CheckFlag(buffer, ref offset, Token.dneh))) return false;
-                if (!(CheckFlag(buffer, ref offset, DnehValue))) return false;
+                if (!(CheckFlag(buffer, ref offset, Token.DnehValue))) return false;
             }
 
             // Integer Block
-            if (!(StructureID == idUnitTypes) && !(StructureID == idUintTypesTc))
+            if (!(ExcelMap.IgnoresTable))
             {
                 if ((CheckFlag(buffer, ref offset, Token.cxeh)))
                 {
@@ -315,16 +303,10 @@ namespace Hellgate
                 if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
                 int byteCount = FileTools.ByteArrayToInt32(buffer, ref offset);
                 int blockCount = FileTools.ByteArrayToInt32(buffer, ref offset);
-                if (!(byteCount == 0)) // states & unittypes only
+                if (!(byteCount == 0))
                 {
                     byteCount = byteCount << 2;
-                    FinalBuffer = new List<byte[]>(blockCount);
-                    for (int i = 0; i < blockCount; i++)
-                    {
-                        FinalBuffer.Add(new byte[byteCount]);
-                        Buffer.BlockCopy(buffer, offset, FinalBuffer[i], 0, byteCount);
-                        offset += byteCount;
-                    }
+                    offset += ((byteCount * blockCount)); //do not allocate
                 }
             }
 
@@ -352,7 +334,7 @@ namespace Hellgate
 
             // The Excel File header
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-            FileTools.WriteToBuffer(ref buffer, ref offset, ExcelHead);
+            FileTools.WriteToBuffer(ref buffer, ref offset, ExcelFileHeader);
 
             // Strings Block
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
@@ -414,20 +396,21 @@ namespace Hellgate
             }
 
             // Rcsh, Tysh, Mysh, Dneh
+            // This section exists when there is a string or integer block or a mysh table
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-            if ((ExcelMap.HasRcsh))
+            if (!(StringBuffer == null) || !(IntegerBuffer == null) || ExcelMap.HasMysh)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.rcsh);
-                FileTools.WriteToBuffer(ref buffer, ref offset, RcshValue);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.RcshValue);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.tysh);
-                FileTools.WriteToBuffer(ref buffer, ref offset, TyshValue);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.TyshValue);
                 if ((ExcelMap.HasMysh))
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
                     FileTools.WriteToBuffer(ref buffer, ref offset, MyshBuffer);
                 }
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.dneh);
-                FileTools.WriteToBuffer(ref buffer, ref offset, DnehValue);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.DnehValue);
             }
             else
             {
@@ -435,27 +418,43 @@ namespace Hellgate
             }
 
             // Append the integer array.
-            if (!(IntegerBuffer == null))
+            // Unitypes ignores this section for some reason
+            if (!(ExcelMap.IgnoresTable))
             {
+                if (!(IntegerBuffer == null))
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer.Length);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer);
+                }
+                else
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, 0);
+                }
+            }
+
+            // Signature. Used with isa1, isa2, isa3 etc etc.
+            // Unittypes, states.
+            if ((ExcelMap.HasSignature))
+            {
+                int blockSize = ((int)(System.Math.Ceiling((double)(Count / Signature.Length))) >> 2);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-                FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer.Length);
-                FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer);
+                FileTools.WriteToBuffer(ref buffer, ref offset, blockSize);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Count);
+                foreach (uint integer in CreateExcelSignature())
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref offset, integer);
+                }
             }
             else
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, 0);
+                FileTools.WriteToBuffer(ref buffer, ref offset, 0);
             }
 
-            // Final data block
-            //int blockCount = FinalData != null ? dataTable.Rows.Count : 0;
-            //int blockSize = FinalData != null ? FinalData[0].Length : 0;
-            //int bshiftCount = blockSize > 0 ? (blockSize >> 2) : 0;
-
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-            FileTools.WriteToBuffer(ref buffer, ref offset, 0);//bshiftCount
-            FileTools.WriteToBuffer(ref buffer, ref offset, 0);//blockCount
-
+            // Resize
             Array.Resize<byte>(ref buffer, offset);
             return buffer;
         }
