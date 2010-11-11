@@ -1,4 +1,4 @@
-AffixType	NameColor	DownGrade	Required
+AffixType	NameColor	DownGrade	Required	
 common	42	-1	1
 rare	44	0	0
 epic	47	1	0
@@ -9,6 +9,6 @@ mutant levelmod	46	-1	0
 legendary levelmod	45	-1	0
 rare levelmod	44	-1	0
 uncommon levelmod	132	-1	0
+negative	10	-1	0
 mythic	158	3	0
 mythic levelmod	158	-1	0
-negative	10	-1	0
