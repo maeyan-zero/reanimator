@@ -16,28 +16,28 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public Int32[] stinger1Measures;
+        Int32[] stinger1Measures;
         public Int32 stinger1;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined2;
         public float stinger1Chance;
         public Int32 undefined3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public Int32[] stinger2Measures;
+        Int32[] stinger2Measures;
         public Int32 stinger2;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined4;
         public float stinger2Chance;
         public Int32 undefined5;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public Int32[] stinger3Measures;
+        Int32[] stinger3Measures;
         public Int32 stinger3;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined6;
         public float stinger3Chance;
         public Int32 undefined7;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public Int32[] stinger4Measures;
+        Int32[] stinger4Measures;
         public Int32 stinger4;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined8;

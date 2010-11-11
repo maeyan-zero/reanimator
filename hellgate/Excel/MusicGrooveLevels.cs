@@ -25,7 +25,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsBool = true)]
         public Int32 isAction;//bool
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] playStingerSets;
+        Int32[] playStingerSets;
         public Int32 noCollide;//idx
         public Int32 forParticles;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 13)]

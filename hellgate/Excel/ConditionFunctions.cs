@@ -17,7 +17,7 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] undefined1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Int32[] undefinedBool;
+        Int32[] undefinedBool;
         [ExcelOutput(IsBool = true)]
         public Int32 usesMonsterClass;
         [ExcelOutput(IsBool = true)]

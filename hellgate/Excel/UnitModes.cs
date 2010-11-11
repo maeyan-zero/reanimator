@@ -16,15 +16,15 @@ namespace Hellgate.Excel
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public Int32[] block;
+        Int32[] block;
         [ExcelOutput(IsBool = true)]
         public Int32 blockOnGround;//bool
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public Int32[] wait;
+        Int32[] wait;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public Int32[] clear;
+        Int32[] clear;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public Int32[] endBlock;
+        Int32[] endBlock;
         public Int32 group;//idx
         public Int32 otherhand;//idx
         public Int32 backUp;//idx

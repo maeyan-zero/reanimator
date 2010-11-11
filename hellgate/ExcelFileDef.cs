@@ -452,7 +452,7 @@ namespace Hellgate
             // t
             public static int[] Case03 = new int[] { 320, 333, 339, 347, 358, 369, 388, 399, 418, 426, 437, 448, 459, 470, 481, 538, 708, 709, 710, 711, 712 };
             // t, x
-            public static int[] BitField = new int[] { 666, 669, 673, 674, 680, 683, 687, 688 };
+            public static int[] BitField = new int[] { 666, 667, 669, 673, 674, 680, 683, 687, 688 };
         }
         #endregion
 
@@ -494,7 +494,7 @@ namespace Hellgate
                 value = FileTools.ByteArrayToInt32(IntegerBuffer, position);
             }
 
-            int length = position - offset;
+            int length = (position + sizeof(int) - offset) / sizeof(int);
             return FileTools.ByteArrayToInt32Array(IntegerBuffer, ref offset, length);
         }
 

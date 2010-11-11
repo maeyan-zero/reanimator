@@ -525,15 +525,21 @@ namespace Hellgate
                             int offset = (int)fieldInfo.GetValue(rowObject);
                             if ((offset == 0))
                             {
-                                csvObject[row, col++] = 0;
+                                csvObject[row, col++] = "0";
                                 continue;
                             }
                             byte[] buffer = FileTools.IntArrayToByteArray(ReadIntegerTable(offset));
                             csvObject[row, col++] = Export.ArrayToCSV(buffer, ',', typeof(int));
                             continue;
                         }
+                        if ((attribute.IsSecondaryString))
+                        {
+                            int index = (int)fieldInfo.GetValue(rowObject);
+                            csvObject[row, col++] = (!(index == -1)) ? SecondaryStrings[index] : String.Empty;
+                            continue;
+                        }
                     }
-                    csvObject[row, col++] = fieldInfo.GetValue(rowObject);
+                    csvObject[row, col++] = fieldInfo.GetValue(rowObject).ToString();
                 }
                 if (ExcelMap.HasExtended)
                 {

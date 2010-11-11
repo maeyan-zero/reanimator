@@ -35,9 +35,9 @@ namespace Hellgate.Excel
         public Int32 titlescreenMovie;//idx;
         public Int32 titlescreenMovieWide;//idx;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-        public Int32[] languages;
+        Int32[] languages;
         public Int32 undefined3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        public Int32[] regions;
+        Int32[] regions;
     }
 }
