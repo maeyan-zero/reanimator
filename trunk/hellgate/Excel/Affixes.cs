@@ -28,7 +28,7 @@ namespace Hellgate.Excel
         public Int32 nameColor;
         public Int32 gridColor;
         public Int32 dom;
-        [ExcelOutput(SortAscendingID = 3)]
+        [ExcelOutput(SortPostOrderID = 2, SortAscendingID = 3)]
         public Int32 code;
         [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
         public Int32 affixType1;

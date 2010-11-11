@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using SkmDataStructures2;
 using Hellgate.Excel;
 using Revival.Common;
 
@@ -343,7 +344,8 @@ namespace Hellgate
             #endregion
         }
 
-        public class TypeMap
+        #region Excel Types
+        class TypeMap
         {
             public Type DataType;
             public Boolean HasMysh;
@@ -353,7 +355,7 @@ namespace Hellgate
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct ExcelHeader
+        struct ExcelHeader
         {
             public UInt32 StructureID;
             public Int32 Unknown321;
@@ -395,10 +397,9 @@ namespace Hellgate
             public int SortPostOrderID { get; set; }
             public bool RequiresDefault { get; set; }
             public string SortColumnTwo { get; set; }
-            public bool ExcludeZero { get; set; }
         }
 
-        private class Token
+        class Token
         {
             public const Int32 cxeh = 0x68657863;
             public const Int32 rcsh = 0x68736372;
@@ -428,10 +429,21 @@ namespace Hellgate
             public const String SortColumnTwo = "SortColumnTwo";
             public const String SortDistinctID = "SortDistinctID";
             public const String SortPostOrderID = "SortPostOrderID";
-            public const String ExcludeZero = "ExcludeZero";
         }
 
-        static class IntegerTableDefinition
+        static uint[] Signature = new uint[]
+        {
+            0x00000001, 0x00000002, 0x00000004, 0x00000008,
+            0x00000010, 0x00000020, 0x00000040, 0x00000080,
+            0x00000100, 0x00000200, 0x00000400, 0x00000800,
+            0x00001000, 0x00002000, 0x00004000, 0x00008000,
+            0x00010000, 0x00020000, 0x00040000, 0x00080000,
+            0x00100000, 0x00200000, 0x00400000, 0x00800000,
+            0x01000000, 0x02000000, 0x04000000, 0x08000000,
+            0x10000000, 0x20000000, 0x40000000, 0x80000000
+        };
+
+        static class IntTableDef
         {
             // t, x, 0
             public static int[] Case01 = new int[] { 2, 98, 707 };
@@ -442,6 +454,7 @@ namespace Hellgate
             // t, x
             public static int[] BitField = new int[] { 666, 669, 673, 674, 680, 683, 687, 688 };
         }
+        #endregion
 
         public static OutputAttribute GetExcelOutputAttribute(FieldInfo fieldInfo)
         {
@@ -452,30 +465,30 @@ namespace Hellgate
             return null;
         }
 
-        private bool CheckFlag(byte[] buffer, ref int offset, int token)
+        bool CheckFlag(byte[] buffer, ref int offset, int token)
         {
             return token == FileTools.ByteArrayToInt32(buffer, ref offset);
         }
 
-        private bool CheckFlag(byte[] buffer, int offset, int token)
+        bool CheckFlag(byte[] buffer, int offset, int token)
         {
             return token == BitConverter.ToInt32(buffer, offset);
         }
 
-        private int[] ReadIntegerTable(int offset)
+        int[] ReadIntegerTable(int offset)
         {
             int position = offset;
             int value = FileTools.ByteArrayToInt32(IntegerBuffer, position);
             
             while (!(value == 0))
             {
-                if (IntegerTableDefinition.Case01.Contains(value))
+                if (IntTableDef.Case01.Contains(value))
                     position += (3 * sizeof(int));
-                else if (IntegerTableDefinition.Case02.Contains(value))
+                else if (IntTableDef.Case02.Contains(value))
                     position += (2 * sizeof(int));
-                else if (IntegerTableDefinition.Case03.Contains(value))
+                else if (IntTableDef.Case03.Contains(value))
                     position += (1 * sizeof(int));
-                else if (IntegerTableDefinition.BitField.Contains(value))
+                else if (IntTableDef.BitField.Contains(value))
                     position += (2 * sizeof(int));
                 else return null;
                 value = FileTools.ByteArrayToInt32(IntegerBuffer, position);
@@ -485,12 +498,12 @@ namespace Hellgate
             return FileTools.ByteArrayToInt32Array(IntegerBuffer, ref offset, length);
         }
 
-        private string ReadStringTable(int offset)
+        string ReadStringTable(int offset)
         {
             return FileTools.ByteArrayToStringASCII(StringBuffer, offset);
         }
 
-        private void ParseMyshTable(byte[] data, ref int offset)
+        void ParseMyshTable(byte[] data, ref int offset)
         {
             byte[] endtoken = new byte[] { 0x64, 0x6E, 0x65, 0x68 };
             int check = 0;
@@ -610,19 +623,7 @@ namespace Hellgate
             //}
         }
 
-        private static uint[] Signature = new uint[]
-        {
-            0x00000001, 0x00000002, 0x00000004, 0x00000008,
-            0x00000010, 0x00000020, 0x00000040, 0x00000080,
-            0x00000100, 0x00000200, 0x00000400, 0x00000800,
-            0x00001000, 0x00002000, 0x00004000, 0x00008000,
-            0x00010000, 0x00020000, 0x00040000, 0x00080000,
-            0x00100000, 0x00200000, 0x00400000, 0x00800000,
-            0x01000000, 0x02000000, 0x04000000, 0x08000000,
-            0x10000000, 0x20000000, 0x40000000, 0x80000000
-        };
-
-        private uint[,] CreateExcelSignature()
+        uint[,] CreateSignature()
         {
             int length = (int)(System.Math.Ceiling((double)(Count / Signature.Length)));
             uint[,] signature = new uint[Count,length];
@@ -642,6 +643,140 @@ namespace Hellgate
             // OR relationships
 
             return signature;
+        }
+
+        int[][] CreateSortIndices()
+        {
+            int[][] customSorts = new int[4][];
+
+            foreach (FieldInfo fieldInfo in DataType.GetFields())
+            {
+                OutputAttribute outputAttribute = GetExcelOutputAttribute(fieldInfo);
+                if ((outputAttribute == null)) continue;
+
+                #region Ascending Sort
+                // Standard Ascending Sort
+                if (!(outputAttribute.SortAscendingID == 0))
+                {
+                    // Gets the sort array position
+                    int pos = outputAttribute.SortAscendingID - 1;
+                    // Checks for code field
+                    FieldInfo codeFieldInfo = DataType.GetField("code");
+
+                    // 1 Ascending Sort Column
+                    if ((String.IsNullOrEmpty(outputAttribute.SortColumnTwo)))
+                    {
+                        // Requires Default
+                        if ((outputAttribute.RequiresDefault))
+                        {
+                            int defaultRow = (from element in Rows
+                                              orderby fieldInfo.GetValue(element)
+                                              select Rows.IndexOf(element)).First();
+
+                            // Contains a code column
+                            if (!(codeFieldInfo == null))
+                            {
+                                var sortedList = from element in Rows
+                                                 where ((!((int)codeFieldInfo.GetValue(element) == 0) &&
+                                                         !(fieldInfo.GetValue(element).ToString() == "-1") &&
+                                                         !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString()))) ||
+                                                         Rows.IndexOf(element) == defaultRow)
+                                                 orderby fieldInfo.GetValue(element)
+                                                 select Rows.IndexOf(element);
+                                customSorts[pos] = sortedList.ToArray();
+                            }
+                            // Doesnt contain a code column
+                            else
+                            {
+                                var sortedList = from element in Rows
+                                                 where ((!(fieldInfo.GetValue(element).ToString() == "-1") &&
+                                                         !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString()))) ||
+                                                         Rows.IndexOf(element) == defaultRow)
+                                                 orderby fieldInfo.GetValue(element)
+                                                 select Rows.IndexOf(element);
+                                customSorts[pos] = sortedList.ToArray();
+                            }
+                        }
+                        // Doesnt require a default row
+                        else
+                        {
+                            // Contains a code column
+                            if (!(codeFieldInfo == null))
+                            {
+                                var sortedList = from element in Rows
+                                                 where (!((int)codeFieldInfo.GetValue(element) == 0) &&
+                                                        !(fieldInfo.GetValue(element).ToString() == "-1") &&
+                                                        !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())))
+                                                 orderby fieldInfo.GetValue(element)
+                                                 select Rows.IndexOf(element);
+                                customSorts[pos] = sortedList.ToArray();
+                            }
+                            // Doesn't contain a code column
+                            else
+                            {
+                                var sortedList = from element in Rows
+                                                 where (!(fieldInfo.GetValue(element).ToString() == "-1") &&
+                                                        !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())))
+                                                 orderby fieldInfo.GetValue(element)
+                                                 select Rows.IndexOf(element);
+                                customSorts[pos] = sortedList.ToArray();
+                            }
+                        }
+                    }
+                    // Sort by 2 columns - only used in wardrobe tables
+                    else
+                    {
+                        FieldInfo fieldInfo2 = DataType.GetField(outputAttribute.SortColumnTwo);
+                        var sortedList = from element in Rows
+                                         where (!(fieldInfo.GetValue(element).ToString() == "-1") &&
+                                                !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())) &&
+                                                !(Rows.IndexOf(element) == 0)) // wardrobe tables exclude index 0
+                                         orderby fieldInfo.GetValue(element)
+                                         select Rows.IndexOf(element);
+                        customSorts[pos] = sortedList.ToArray();
+                    }
+                }
+                #endregion
+
+                // A distinct sort
+                if (!(outputAttribute.SortDistinctID == 0))
+                {
+                    int pos = outputAttribute.SortDistinctID - 1;
+                    var sortedList = from element in Rows
+                                     where (!(fieldInfo.GetValue(element).ToString() == "-1"))
+                                     orderby fieldInfo.GetValue(element)
+                                     select element;
+                    int lastValue = -1;
+                    List<int> distinctList = new List<int>();
+                    foreach (Object element in sortedList)
+                    {
+                        if (!(lastValue == (int)fieldInfo.GetValue(element)))
+                        {
+                            lastValue = (int)fieldInfo.GetValue(element);
+                            distinctList.Add(Rows.IndexOf(element));
+                        }
+                    }
+                    customSorts[pos] = distinctList.ToArray();
+                }
+
+                // Post order tree sort. only used in the affix class
+                if (!(outputAttribute.SortPostOrderID == 0))
+                {
+                    int pos = outputAttribute.SortPostOrderID - 1;
+                    BinarySearchTree<int> binaryTree = new BinarySearchTree<int>();
+                    var sortedList = from element in Rows
+                                     where (!(fieldInfo.GetValue(element).ToString() == "0"))
+                                     orderby fieldInfo.GetValue(element)
+                                     select Rows.IndexOf(element);
+                    foreach (int i in sortedList.ToArray())
+                    {
+                        binaryTree.Add(i);
+                    }
+                    customSorts[pos] = binaryTree.Postorder.ToArray();
+                }
+            }
+
+            return customSorts;
         }
     }
 }

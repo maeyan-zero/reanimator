@@ -186,5 +186,14 @@ namespace Hellgate
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Converts the StringsFile to a CSV
+        /// </summary>
+        /// <returns>The CSV as a byte array.</returns>
+        public override byte[] ExportCSV()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
