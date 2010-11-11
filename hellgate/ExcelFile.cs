@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.IO;
-using SkmDataStructures2;
 using Revival.Common;
 
 namespace Hellgate
@@ -18,8 +18,8 @@ namespace Hellgate
         #region Members
         byte[] StringBuffer;
         byte[] IntegerBuffer;
-        byte[] MyshBuffer; // skills, stats(?), properties
-        List<byte[]> ExtendedBuffer; // item types
+        byte[] MyshBuffer;
+        byte[][] ExtendedBuffer;
         StringCollection SecondaryStrings;
         TypeMap ExcelMap { get; set; }
         new Type DataType { get { return ExcelMap.DataType; } }
@@ -131,6 +131,7 @@ namespace Hellgate
                     }
 
                     // Parse public fields
+                    // All public fields must be inside the CSV
                     string value = tableRows[row][col++];
                     OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
                     if (!(attribute == null))
@@ -166,9 +167,25 @@ namespace Hellgate
                             int count = splitValue.Length;
                             int[] intValue = new int[count];
                             for (int i = 0; i < count; i++)
+                            {
                                 intValue[i] = int.Parse(splitValue[i]);
-                            fieldInfo.SetValue(rowInstance, integerBufferOffset);//todo
+                            }
+                            fieldInfo.SetValue(rowInstance, integerBufferOffset);
                             FileTools.WriteToBuffer(ref IntegerBuffer, ref integerBufferOffset, FileTools.IntArrayToByteArray(intValue));
+                            continue;
+                        }
+
+                        if ((attribute.IsSecondaryString))
+                        {
+                            if ((SecondaryStrings == null))
+                            {
+                                SecondaryStrings = new StringCollection();
+                            }
+                            if (!(SecondaryStrings.Contains(value)))
+                            {
+                                SecondaryStrings.Add(value);
+                            }
+                            fieldInfo.SetValue(rowInstance, SecondaryStrings.IndexOf(value));
                             continue;
                         }
                     }
@@ -177,13 +194,32 @@ namespace Hellgate
                     fieldInfo.SetValue(rowInstance, objValue);
                 }
 
+                // For item types, items, missiles, monsters etc
+                // This must be a hex byte delimited array
+                if ((ExcelMap.HasExtended))
+                {
+                    if ((ExtendedBuffer == null))
+                    {
+                        ExtendedBuffer = new byte[tableRows.Count()][];
+                    }
+                    char split = ',';
+                    string value = tableRows[row][col];
+                    string[] stringArray = value.Split(split);
+                    byte[] byteArray = new byte[stringArray.Length];
+                    for (int i = 0; i < byteArray.Length; i++)
+                    {
+                        byteArray[i] = Byte.Parse(stringArray[i], NumberStyles.HexNumber);
+                    }
+                    ExtendedBuffer[row] = byteArray;
+                }
+
                 Rows.Add(rowInstance);
             }
 
-            if (!(stringBufferOffset == 1))
+            if (!(StringBuffer == null))
                 Array.Resize<byte>(ref StringBuffer, stringBufferOffset);
 
-            if (!(integerBufferOffset == 1))
+            if (!(IntegerBuffer == null))
                 Array.Resize<byte>(ref IntegerBuffer, integerBufferOffset);
 
             return true;
@@ -205,6 +241,7 @@ namespace Hellgate
             ExcelFileHeader = FileTools.ByteArrayToStructure<ExcelHeader>(buffer, ref offset);
             ExcelMap = (TypeMap)DataTypes[StructureID];
             if ((ExcelMap == null)) return false;
+            StringID = DataTables.Where(dt => dt.Value == ExcelFileHeader.StructureID).First().Key;
 
             // Strings Block
             if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
@@ -233,12 +270,12 @@ namespace Hellgate
             }
             else
             {
-                ExtendedBuffer = new List<byte[]>(Count);
+                ExtendedBuffer = new byte[Count][];
                 for (int i = 0; i < Count; i++)
                 {
                     offset += sizeof(int); // Skip the indice
                     int size = FileTools.ByteArrayToInt32(buffer, ref offset);
-                    ExtendedBuffer.Add(new byte[size]);
+                    ExtendedBuffer[i] = new byte[size];
                     Buffer.BlockCopy(buffer, offset, ExtendedBuffer[i], 0, size);
                     offset += size;
                 }
@@ -283,6 +320,7 @@ namespace Hellgate
             }
 
             // Integer Block
+            // Only the UnitTypes class ignores this section
             if (!(ExcelMap.IgnoresTable))
             {
                 if ((CheckFlag(buffer, ref offset, Token.cxeh)))
@@ -364,22 +402,7 @@ namespace Hellgate
             }
 
             // Generate custom sorts
-            int[][] customSorts = new int[4][];
-            foreach (FieldInfo fieldInfo in DataType.GetFields())
-            {
-                OutputAttribute outputAttribute = GetExcelOutputAttribute(fieldInfo);
-                if ((outputAttribute == null)) continue;
-                if (!(outputAttribute.SortAscendingID == 0))
-                {
-                    int pos = outputAttribute.SortAscendingID - 1;
-                    var sortedList = from element in Rows
-                                     orderby fieldInfo.GetValue(element)
-                                     select Rows.IndexOf(element);
-                    customSorts[pos] = sortedList.ToArray();
-                }
-            }
-
-            // Write custom sorts
+            int[][] customSorts = CreateSortIndices();
             foreach (int[] intArray in customSorts)
             {                
                 if (!(intArray == null))
@@ -442,7 +465,7 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, blockSize);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Count);
-                foreach (uint integer in CreateExcelSignature())
+                foreach (uint integer in CreateSignature())
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, integer);
                 }
@@ -457,6 +480,69 @@ namespace Hellgate
             // Resize
             Array.Resize<byte>(ref buffer, offset);
             return buffer;
+        }
+
+        /// <summary>
+        /// Converts the ExcelFile to a CSV
+        /// </summary>
+        /// <returns>The CSV as a byte array.</returns>
+        public override byte[] ExportCSV()
+        {
+            int noCols = DataType.GetFields().Count();
+            int noRows = Count + 1; // +1 for column headers
+            if (ExcelMap.HasExtended) noCols++; // extra column for extended data
+
+            Object[,] csvObject = new Object[Count + 1, noCols];
+
+            int row = 0;
+            int col = 0;
+
+            // First dump column headers, replace the first with the table string id
+            foreach (FieldInfo fieldInfo in DataType.GetFields())
+            {
+                csvObject[row, col++] = ((col == 0)) ? StringID : fieldInfo.Name;
+            }
+            if (ExcelMap.HasExtended) csvObject[row, col] = "ExtendedProps";
+            row = 1;
+
+            // Parse each row, resolve buffers if needed
+            foreach (Object rowObject in Rows)
+            {
+                col = 0; // reset
+                foreach (FieldInfo fieldInfo in DataType.GetFields())
+                {
+                    OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
+                    if (!(attribute == null))
+                    {
+                        if ((attribute.IsStringOffset))
+                        {
+                            int offset = (int)fieldInfo.GetValue(rowObject);
+                            csvObject[row, col++] = (!(offset == -1)) ? ReadStringTable(offset) : String.Empty;
+                            continue;
+                        }
+                        if ((attribute.IsIntOffset))
+                        {
+                            int offset = (int)fieldInfo.GetValue(rowObject);
+                            if ((offset == 0))
+                            {
+                                csvObject[row, col++] = 0;
+                                continue;
+                            }
+                            byte[] buffer = FileTools.IntArrayToByteArray(ReadIntegerTable(offset));
+                            csvObject[row, col++] = Export.ArrayToCSV(buffer, ',', typeof(int));
+                            continue;
+                        }
+                    }
+                    csvObject[row, col++] = fieldInfo.GetValue(rowObject);
+                }
+                if (ExcelMap.HasExtended)
+                {
+                    csvObject[row, col] = Export.ArrayToCSV(ExtendedBuffer[row - 1], ',', typeof(byte));
+                }
+                row++;
+            }
+
+            return Export.ObjectToArray(csvObject, '\t');
         }
 
         /// <summary>

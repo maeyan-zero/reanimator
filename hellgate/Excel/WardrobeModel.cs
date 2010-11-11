@@ -10,7 +10,7 @@ namespace Hellgate.Excel
     {
         TableHeader header;
         public Int32 undefined1;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_MODEL_GROUP", SortColumnTwo = "appearanceGroup", ExcludeZero = true)]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_MODEL_GROUP", SortColumnTwo = "appearanceGroup")]
         public Int32 modelGroup;//idx;
         public Int32 appearanceGroup;//idx;
         public Int32 appearanceGroup2;//idx;

@@ -210,6 +210,40 @@ namespace Revival.Common
             return list.ToArray();
         }
 
+        static public byte[] ObjectToArray(object[,] objArray, char delimiter)
+        {
+            byte[] buffer = new byte[1024];
+            int offset = 0;
+
+            for (int i = 0; i < objArray.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j < objArray.GetUpperBound(1); j++)
+                {
+                    if (objArray[i, j].GetType() == typeof(string))
+                    {
+                        FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray((string)objArray[i, j]));
+                    }
+                    else
+                    {
+                        FileTools.WriteToBuffer(ref buffer, ref offset, objArray[i, j]);
+                    }
+
+                    if (!(j == objArray.GetUpperBound(1) - 1))
+                    {
+                        FileTools.WriteToBuffer(ref buffer, ref offset, delimiter);
+                    }
+                }
+
+                if (!(i == objArray.GetUpperBound(0) - 1))
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(Environment.NewLine));
+                }
+            }
+
+            Array.Resize<byte>(ref buffer, offset);
+            return buffer;
+        }
+
         static public class Asset
         {
             //public static string ToObj(Model model)

@@ -26,5 +26,6 @@ namespace Hellgate
         public abstract bool ParseCSV(byte[] buffer);
         public abstract bool ParseDataTable(DataTable dataTable);
         public abstract byte[] ToByteArray();
+        public abstract byte[] ExportCSV();
     }
 }
