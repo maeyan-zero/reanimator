@@ -103,35 +103,11 @@ namespace Revival.Common
                 {
                     switch (valueCast)
                     {
-                        case "hex":
-                            if (castLen == sizeof(byte))
-                            {
-                                sw.Write(data[i].ToString("X2"));
-                            }
-                            if (castLen == sizeof(int))
-                            {
-                                sw.Write(BitConverter.ToUInt32(data, i).ToString("X2"));
-                            }
+                        case "Int32":
+                            sw.Write(BitConverter.ToInt32(data, i).ToString());
                             break;
-                        case "signed":
-                            if (castLen == sizeof(byte))
-                            {
-                                sw.Write(Convert.ToChar(data[i]).ToString());
-                            }
-                            if (castLen == sizeof(int))
-                            {
-                                sw.Write(BitConverter.ToInt32(data, i).ToString());
-                            }
-                            break;
-                        case "unsigned":
-                            if (castLen == sizeof(byte))
-                            {
-                                sw.Write(data[i].ToString());
-                            }
-                            if (castLen == sizeof(int))
-                            {
-                                sw.Write(BitConverter.ToUInt32(data, i).ToString());
-                            }
+                        case "Byte":
+                            sw.Write(data[i].ToString("X2"));
                             break;
                     }
 
@@ -215,26 +191,30 @@ namespace Revival.Common
             byte[] buffer = new byte[1024];
             int offset = 0;
 
-            for (int i = 0; i < objArray.GetUpperBound(0); i++)
+            for (int i = 0; i <= objArray.GetUpperBound(0); i++)
             {
-                for (int j = 0; j < objArray.GetUpperBound(1); j++)
+                for (int j = 0; j <= objArray.GetUpperBound(1); j++)
                 {
                     if (objArray[i, j].GetType() == typeof(string))
                     {
                         FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray((string)objArray[i, j]));
+                    }
+                    else if (objArray[i, j].GetType().BaseType == typeof(Enum))
+                    {
+                        FileTools.WriteToBuffer(ref buffer, ref offset, (uint)objArray[i, j]);
                     }
                     else
                     {
                         FileTools.WriteToBuffer(ref buffer, ref offset, objArray[i, j]);
                     }
 
-                    if (!(j == objArray.GetUpperBound(1) - 1))
+                    if (!(j == objArray.GetUpperBound(1)))
                     {
                         FileTools.WriteToBuffer(ref buffer, ref offset, delimiter);
                     }
                 }
 
-                if (!(i == objArray.GetUpperBound(0) - 1))
+                if (!(i == objArray.GetUpperBound(0)))
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(Environment.NewLine));
                 }
