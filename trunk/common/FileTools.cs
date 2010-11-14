@@ -323,7 +323,7 @@ namespace Revival.Common
         /// <param name="value">The string to convert.</param>
         /// <param name="type">The type to convert the string into.</param>
         /// <returns>The converted object. If the type was unhandled, null will be returned.</returns>
-        public static Object StringToType(String value, Type type)
+        public static Object StringToObject(String value, Type type)
         {
             if (type == typeof(String))
                 return value;
@@ -415,165 +415,6 @@ namespace Revival.Common
         }
 
 
-
-        public static string[][] CSVtoStringArray(byte[] source, int columns, byte delimiter)
-        {
-            if (source == null) return null;
-            if (source.Length == 0) return null;
-
-
-            int offset = 0;
-            int length = source.Length;
-            bool ignoreFirstRow = true;
-            List<string[]> rowCollection = new List<string[]>();
-            int row = 0;
-            while (offset < length)
-            {
-                string[] newRow = new string[columns];
-                byte[] buffer;
-                for (int i = 0; i < columns; i++)
-                {
-                    buffer = GetDelimintedByteArray(source, ref offset, delimiter);
-                    string newString;
-                    newString = buffer == null ? String.Empty : FileTools.ByteArrayToStringASCII(buffer, 0);
-                    newRow[i] = newString;
-                }
-                if ((row == 0) && (ignoreFirstRow))
-                {
-                    row++;
-                    continue;
-                }
-                rowCollection.Add(newRow);
-            }
-
-            return rowCollection.ToArray();
-        }
-
-
-        /// <summary>
-        /// Reads the byte array CSV as interpreted by the definition fields.
-        /// </summary>
-        /// <param name="source">The CSV in byte array form.</param>
-        /// <param name="definition">The collection of fields that describe the source data.</param>
-        /// <param name="delimiter">The byte to be treated as the delimiter symbol.</param>
-        /// <returns></returns>
-        public static Object[] CSVtoObjectArray(byte[] source, Type definition, byte delimiter)
-        {
-            if (source == null) return null;
-            if (source.Length == 0) return null;
-            if (definition == null) return null;
-
-
-            int offset = 0;
-            int length = source.Length;
-            bool ignoreFirstRow = true;
-            List<Object> rowCollection;
-            List<Object> writeIn;
-
-
-
-            rowCollection = new List<Object>();
-            while (offset < length)
-            {
-                writeIn = new List<Object>();
-                foreach (FieldInfo fieldInfo in definition.GetFields())
-                {
-                    Type dataType = fieldInfo.GetType();
-                    Byte[] newStringBuffer = GetDelimintedByteArray(source, ref offset, delimiter);
-                    String newString = newStringBuffer == null ? String.Empty : Encoding.ASCII.GetString(newStringBuffer);
-
-
-                    if (dataType.BaseType == typeof(Enum))// todo: do this properly
-                    {                            // need the method to get the type the enum is derived from.
-                        dataType = typeof(UInt32); // not all enums will be uint, so need to fix this eventually
-                    }
-                    if (dataType == typeof(String)) // convert symbols used
-                    {
-                        newString = newString.Replace("\\n", "\n");
-                        newString = newString.Replace("\"", "");
-                        writeIn.Add(newString);
-                    }
-                    else if (dataType == typeof(Int32))
-                    {
-                        writeIn.Add(Int32.Parse(newString));
-                    }
-                    else if (dataType == typeof(UInt32))
-                    {
-                        writeIn.Add(UInt32.Parse(newString));
-                    }
-                    else if (dataType == typeof(Single))
-                    {
-                        writeIn.Add(Single.Parse(newString));
-                    }
-                    else if (dataType == typeof(byte))
-                    {
-                        writeIn.Add(Byte.Parse(newString));
-                    }
-                    else if (dataType == typeof(Int64))
-                    {
-                        writeIn.Add(Int64.Parse(newString));
-                    }
-                    else if (dataType == typeof(UInt64))
-                    {
-                        writeIn.Add(UInt64.Parse(newString));
-                    }
-                    else if (dataType == typeof(short))
-                    {
-                        writeIn.Add(short.Parse(newString));
-                    }
-                }
-
-                // ignore the first row if chosen
-                if ((rowCollection.Count == 0) && (!(ignoreFirstRow)))
-                {
-                    rowCollection.Add(writeIn);
-                }
-            }
-
-            return rowCollection.ToArray();
-        }
-
-
-        /// <summary>
-        /// Collects tbe bytes read in the source array until the delimiter byte is encounted.
-        /// </summary>
-        /// <param name="source">The array containing your data.</param>
-        /// <param name="offset">The starting position in the source array to read from.</param>
-        /// <param name="delimiter">The byte to interpret as the delimiter symbol.</param>
-        /// <returns></returns>
-        public static byte[] GetDelimintedByteArray(byte[] source, ref int offset, byte delimiter)
-        {
-            List<byte> buffer = new List<byte>();
-            int length = source.Length;
-            byte endrow = (byte)0x0D;
-
-            // empty string
-            if (source[offset] == delimiter)
-            {
-                offset++; // skip delimiter
-                return null;
-            }
-
-            // not empty
-            while (source[offset] != delimiter && source[offset] != endrow && offset < length)
-            {
-                buffer.Add(source[offset++]);
-            }
-
-            if (source[offset] == delimiter)
-            {
-                offset++; // skip delimiter
-            }
-            else
-            {
-                offset++;
-                offset++;
-            }
-            return buffer.ToArray();
-        }
-
-
-
         /// <summary>
         /// Serializes an object and appends it to the supplied buffer, increasing offset by object size.<br />
         /// If the buffer is too small the bufer size is increaed by the object size + 1024 bytes.
@@ -663,5 +504,170 @@ namespace Revival.Common
 
             return outputString;
         }
+
+        public static string ByteArrayToDelimitedASCIIString(byte[] data, char delimiter, Type castAs)
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                int noValues = data.Length;
+                string valueCast = castAs.Name;
+                int castLen = Marshal.SizeOf(castAs);
+
+                for (int i = 0; i < data.Length; i = i + castLen)
+                {
+                    switch (valueCast)
+                    {
+                        case "Int32":
+                            sw.Write(BitConverter.ToInt32(data, i).ToString());
+                            break;
+                        case "Byte":
+                            sw.Write(data[i].ToString("X2"));
+                            break;
+                    }
+
+                    if (i != data.Length - castLen) sw.Write(delimiter);
+                }
+
+                return sw.ToString();
+            }
+        }
+        
+        public static string[][] CSVtoStringArray(byte[] source, int columns, byte delimiter)
+        {
+            if (source == null) return null;
+            if (source.Length == 0) return null;
+
+            int offset = 0;
+            int length = source.Length;
+            bool ignoreFirstRow = true;
+            List<string[]> rowCollection = new List<string[]>();
+            int row = 0;
+            while (offset < length)
+            {
+                string[] newRow = new string[columns];
+                byte[] buffer;
+                for (int i = 0; i < columns; i++)
+                {
+                    buffer = (!(offset == length)) ? GetDelimintedByteArray(source, ref offset, delimiter) : null;
+                    string newString;
+                    newString = buffer == null ? String.Empty : FileTools.ByteArrayToStringASCII(buffer, 0);
+                    newRow[i] = newString;
+                }
+                if ((row == 0) && (ignoreFirstRow))
+                {
+                    row++;
+                    continue;
+                }
+                rowCollection.Add(newRow);
+            }
+
+            return rowCollection.ToArray();
+        }
+
+        public static string[][] UnicodeCSVtoStringArray(byte[] source, ushort delimiter, ushort encap)
+        {
+            if ((source == null)) return null;
+            if ((source.Length == 0)) return null;
+            ushort CR = 0x0D;
+            ushort LF = 0x0A;
+            ushort EN = 0x22;
+
+            int noCols = 1;
+            int offset = 0;
+            ushort characterIn = 0;
+
+            // Get a column count
+            while (offset < source.Length)
+            {
+                characterIn = FileTools.ByteArrayToUShort(source, ref offset);
+                if ((characterIn == delimiter)) noCols++;
+                if ((characterIn == CR || characterIn == LF)) break;
+                if ((offset == source.Length)) return null;
+            }
+
+            offset = 0;
+            int col = 0;
+            bool encapsulationOpen = false;
+            bool lastCharacterEncap = false;
+            int stringLen = 0;
+            string[] arrayBuffer = new string[noCols];
+            List<string[]> stringList = new List<string[]>();
+
+            // Excel puts this token here.
+            if ((BitConverter.ToUInt16(source, offset) == 0xFEFF)) offset += sizeof(short);
+
+            while (offset < source.Length)
+            {
+                characterIn = FileTools.ByteArrayToUShort(source, ref offset);
+                if ((characterIn == EN && !(lastCharacterEncap))) encapsulationOpen = !encapsulationOpen;
+                lastCharacterEncap = ((characterIn == EN)) ? true : false;
+
+                if (!(encapsulationOpen))
+                {
+                    if ((characterIn == delimiter))
+                    {
+                        arrayBuffer[col] = Encoding.Unicode.GetString(source, offset - stringLen - sizeof(short), stringLen);
+                        col++;
+                        stringLen = 0;
+                        continue;
+                    }
+
+                    if ((characterIn == CR || characterIn == LF))
+                    {
+                        arrayBuffer[col] = Encoding.Unicode.GetString(source, offset - stringLen - sizeof(short), stringLen);
+                        stringList.Add(arrayBuffer);
+                        stringLen = 0;
+                        col = 0;
+                        arrayBuffer = new string[noCols];
+                        ushort peek = BitConverter.ToUInt16(source, offset);
+                        if ((peek == CR || peek == LF)) offset += sizeof(ushort);
+                        continue;
+                    }
+                }
+
+                stringLen += sizeof(short);
+            }
+
+            return stringList.ToArray();
+        }
+
+        /// <summary>
+        /// Collects tbe bytes read in the source array until the delimiter byte is encounted.
+        /// </summary>
+        /// <param name="source">The array containing your data.</param>
+        /// <param name="offset">The starting position in the source array to read from.</param>
+        /// <param name="delimiter">The byte to interpret as the delimiter symbol.</param>
+        /// <returns></returns>
+        public static byte[] GetDelimintedByteArray(byte[] source, ref int offset, byte delimiter)
+        {
+            List<byte> buffer = new List<byte>();
+            int length = source.Length;
+            byte endrow = (byte)0x0D;
+
+            // empty string
+            if (source[offset] == delimiter)
+            {
+                offset++; // skip delimiter
+                return null;
+            }
+
+            // not empty
+            while (offset < length && source[offset] != delimiter && source[offset] != endrow)
+            {
+                buffer.Add(source[offset++]);
+            }
+
+            if (offset < length && source[offset] == delimiter)
+            {
+                offset++; // skip delimiter
+            }
+            else
+            {
+                offset++;
+                offset++;
+            }
+            return buffer.ToArray();
+        }
+
     }
 }

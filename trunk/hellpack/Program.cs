@@ -14,16 +14,17 @@ namespace Hellpack
             String dataDir = Path.Combine(currentDir, Common.DataPath);
             String dataCommonDir = Path.Combine(currentDir, Common.DataCommonPath);
             String excelDir = ExcelFile.FolderPath;
-            String stringDir = StringsFile.FolderPath;
+            String stringDir = "excel\\strings\\";
             String defaultDat = "sp_hellgate_1337";
-
             Boolean hasDataDir = Directory.Exists(dataDir);
             Boolean hasDataCommonDir = Directory.Exists(dataCommonDir);
+            String welcomeMsg = "Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2010\nhttp://www.hellgateaus.net\n";
+            String noPathsMsg = "Sorry, no data paths were found. Check error.xml for details.";
 
-            // Any files to pack? If no, exit
+            Console.WriteLine(welcomeMsg);
             if (!(hasDataDir) && !(hasDataCommonDir))
             {
-                Console.WriteLine("Sorry, no buffer paths were found. Check error.xml for details.");
+                Console.WriteLine(noPathsMsg);
                 Console.ReadKey();
                 return;
             }
@@ -31,11 +32,31 @@ namespace Hellpack
             // Get a list of all the files to add.
             List<String> filesToPack = new List<String>();
             List<String> excelFilesToCook = new List<String>();
+            List<String> stringFilesToCook = new List<String>();
 
+            // Query Excel
             if (Directory.Exists(dataDir + excelDir))
                 excelFilesToCook.AddRange(Directory.GetFiles(dataDir + excelDir, "*.txt", SearchOption.TopDirectoryOnly));
             if (Directory.Exists(dataCommonDir + excelDir))
                 excelFilesToCook.AddRange(Directory.GetFiles(dataCommonDir + excelDir, "*.txt", SearchOption.TopDirectoryOnly));
+            
+            // Query Strings
+            if (Directory.Exists(dataDir + stringDir))
+                stringFilesToCook.AddRange(Directory.GetFiles(dataDir + stringDir, "*.uni.txt", SearchOption.AllDirectories));
+            if (Directory.Exists(dataCommonDir + stringDir))
+                stringFilesToCook.AddRange(Directory.GetFiles(dataCommonDir + stringDir, "*.uni.txt", SearchOption.AllDirectories));
+
+            // Cook String files
+            foreach (String stringPath in stringFilesToCook)
+            {
+                byte[] stringsBuffer = File.ReadAllBytes(stringPath);
+                StringsFile stringsFile = new StringsFile(stringsBuffer);
+                if (!(stringsFile.IntegrityCheck == true)) continue;
+                Console.WriteLine("Cooking " + stringPath.Replace(currentDir, ""));
+                stringsBuffer = stringsFile.ToByteArray();
+                if (stringsBuffer == null) continue;
+                File.WriteAllBytes(stringPath + ".cooked", stringsBuffer);
+            }
 
             // Cook all the excel files.
             foreach (String excelPath in excelFilesToCook)
@@ -43,18 +64,16 @@ namespace Hellpack
                 byte[] excelBuffer = File.ReadAllBytes(excelPath);
                 ExcelFile excelFile = new ExcelFile(excelBuffer);
                 if (!(excelFile.IntegrityCheck == true)) continue;
+                Console.WriteLine("Cooking " + excelPath.Replace(currentDir, ""));
                 excelBuffer = excelFile.ToByteArray();
                 if (excelBuffer == null) continue;
                 File.WriteAllBytes(excelPath + ".cooked", excelBuffer);
             }
 
-
-            // Cook String files
-
-
             // Cook XML files
+            // todo
 
-
+            // Files to pack
             if (hasDataDir)
                 filesToPack.AddRange(Directory.GetFiles(dataDir, "*", SearchOption.AllDirectories));
             if (hasDataCommonDir)
