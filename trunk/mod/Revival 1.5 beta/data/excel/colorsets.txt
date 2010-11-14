@@ -1,4 +1,4 @@
-color	code	canBeRandomPick
+COLORSETS	code	canBeRandomPick
 Grey-Gold-LBlue	12336	0
 Burgundy-DGrey-LGreen	12592	0
 Ivory-Gold-Purple	12848	0

@@ -1,4 +1,4 @@
-name	intValue	floatValue	
+GAMEGLOBALS	intValue	floatValue	
 game_ticks_per_second	20	0
 merchant_refresh_time_in_ticks	6000	0
 merchant_refresh_required_time_between_browse_in_ticks	1200	0

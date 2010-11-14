@@ -1,4 +1,4 @@
-type	code	isA0	isA1	isA2	isA3	isA4	isA5	isA6	isA7	isA8	isA9	isA10	isA11	isA12	isA13	isA14	isA15	String	FinalData	
+UNITTYPES	code	isA0	isA1	isA2	isA3	isA4	isA5	isA6	isA7	isA8	isA9	isA10	isA11	isA12	isA13	isA14	isA15	String	FinalData	
 	12336	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	"01,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00"
 any	12592	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	"02,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00"
 object	12848	1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	"06,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00"

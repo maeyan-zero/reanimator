@@ -1,4 +1,4 @@
-name	stringKey	weight	condition	dontUseWithoutAGame	
+LOADING_TIPS	stringKey	weight	condition	dontUseWithoutAGame	
 LoadingTipInventory	8699	20	"666,0,26,5,426,0"	0
 LoadingTipSkills	8700	20	"666,0,26,5,426,0"	0
 LoadingTipSkillPoints01	8711	1	"666,0,26,5,426,0"	0

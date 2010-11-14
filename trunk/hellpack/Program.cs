@@ -52,7 +52,7 @@ namespace Hellpack
                 byte[] stringsBuffer = File.ReadAllBytes(stringPath);
                 StringsFile stringsFile = new StringsFile(stringsBuffer);
                 if (!(stringsFile.IntegrityCheck == true)) continue;
-                Console.WriteLine("Cooking " + stringPath.Replace(currentDir, ""));
+                Console.WriteLine("Cooking " + stringPath.Replace(currentDir + "\\", ""));
                 stringsBuffer = stringsFile.ToByteArray();
                 if (stringsBuffer == null) continue;
                 File.WriteAllBytes(stringPath + ".cooked", stringsBuffer);
@@ -64,7 +64,7 @@ namespace Hellpack
                 byte[] excelBuffer = File.ReadAllBytes(excelPath);
                 ExcelFile excelFile = new ExcelFile(excelBuffer);
                 if (!(excelFile.IntegrityCheck == true)) continue;
-                Console.WriteLine("Cooking " + excelPath.Replace(currentDir, ""));
+                Console.WriteLine("Cooking " + excelPath.Replace(currentDir + "\\", ""));
                 excelBuffer = excelFile.ToByteArray();
                 if (excelBuffer == null) continue;
                 File.WriteAllBytes(excelPath + ".cooked", excelBuffer);

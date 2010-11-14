@@ -551,7 +551,7 @@ namespace Hellgate
                 col = 0; // reset
                 foreach (FieldInfo fieldInfo in DataType.GetFields())
                 {
-                    if (!(col == 0) && !(col == noCols -1)) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+                    if (!(col == 0) && !(col == noCols)) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                     col++;
 
                     OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
@@ -571,7 +571,7 @@ namespace Hellgate
                             int offset = (int)fieldInfo.GetValue(rowObject);
                             if ((offset == 0))
                             {
-                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, 0);
+                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("0"));
                                 continue;
                             }
                             int[] buffer = ReadIntegerTable(offset);
