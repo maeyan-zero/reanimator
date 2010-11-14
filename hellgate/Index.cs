@@ -388,9 +388,8 @@ namespace Hellgate
             }
 
             // Resize the buffer and return
-            byte[] returnBuffer = new byte[offset];
-            Buffer.BlockCopy(buffer, 0, returnBuffer, 0, returnBuffer.Length);
-            return returnBuffer;
+            Array.Resize<byte>(ref buffer, offset);
+            return buffer;
         }
 
 

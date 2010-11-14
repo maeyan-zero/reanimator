@@ -82,7 +82,6 @@
   <ItemGroup>
     <Compile Include="ExceptionLogger.cs" />
     <Compile Include="Exceptions.cs" />
-    <Compile Include="Export.cs" />
     <Compile Include="FileTools.cs" />
     <Compile Include="FormTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

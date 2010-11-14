@@ -82,7 +82,7 @@ namespace Hellgate
             // Initialization
             int offset = 0;
             byte delimiter = (byte)'\t';
-            int stringBufferOffset = 1;
+            int stringBufferOffset = 0;
             int integerBufferOffset = 1;
 
             // Determine the data type
@@ -95,7 +95,8 @@ namespace Hellgate
             ExcelMap = (TypeMap)DataTypes[StructureID]; // grab the excel map
 
             // Mutate the buffer into a string array
-            string[][] tableRows = FileTools.CSVtoStringArray(buffer, DataType.GetFields().Count(), delimiter);
+            int colCount = ExcelMap.HasExtended ? DataType.GetFields().Count() + 1 : DataType.GetFields().Count();
+            string[][] tableRows = FileTools.CSVtoStringArray(buffer, colCount, delimiter);
             if ((tableRows == null)) return false;
 
             // Parse the tableRows
@@ -136,23 +137,20 @@ namespace Hellgate
                     OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
                     if (!(attribute == null))
                     {
-                        if ((attribute.IsStringOffset) || (attribute.IsIntOffset))
-                        {
-                            if ((value == "0"))
-                            {
-                                fieldInfo.SetValue(rowInstance, 0);
-                                continue;
-                            }
-                        }
-
                         if ((attribute.IsStringOffset))
                         {
                             if ((StringBuffer == null))
                             {
                                 StringBuffer = new byte[1024];
                             }
+                            if ((String.IsNullOrEmpty(value)))
+                            {
+                                fieldInfo.SetValue(rowInstance, -1);
+                                continue;
+                            }
                             fieldInfo.SetValue(rowInstance, stringBufferOffset);
                             FileTools.WriteToBuffer(ref StringBuffer, ref stringBufferOffset, FileTools.StringToASCIIByteArray(value));
+                            FileTools.WriteToBuffer(ref StringBuffer, ref stringBufferOffset, (byte)0x00);
                             continue;
                         }
 
@@ -161,6 +159,12 @@ namespace Hellgate
                             if ((IntegerBuffer == null))
                             {
                                 IntegerBuffer = new byte[1024];
+                                IntegerBuffer[0] = (byte)0x00;
+                            }
+                            if ((value == "0"))
+                            {
+                                fieldInfo.SetValue(rowInstance, 0);
+                                continue;
                             }
                             value = value.Replace("\"", "");
                             string[] splitValue = value.Split(',');
@@ -181,6 +185,11 @@ namespace Hellgate
                             {
                                 SecondaryStrings = new StringCollection();
                             }
+                            if ((String.IsNullOrEmpty(value)))
+                            {
+                                fieldInfo.SetValue(rowInstance, -1);
+                                continue;
+                            }
                             if (!(SecondaryStrings.Contains(value)))
                             {
                                 SecondaryStrings.Add(value);
@@ -190,7 +199,7 @@ namespace Hellgate
                         }
                     }
 
-                    Object objValue = FileTools.StringToType(value, fieldInfo.FieldType);
+                    Object objValue = FileTools.StringToObject(value, fieldInfo.FieldType);
                     fieldInfo.SetValue(rowInstance, objValue);
                 }
 
@@ -370,13 +379,17 @@ namespace Hellgate
             byte[] buffer = new byte[1024];
             int offset = 0;
 
+            //DEBUG - these parts arn't finished
+            if (ExcelMap.HasMysh) return null;
+            if (ExcelMap.HasSignature) return null;
+
             // The Excel File header
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref offset, ExcelFileHeader);
 
             // Strings Block
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-            if (!(StringBuffer == null))
+            if (!(StringBuffer == null) && (StringBuffer.Length > 1))
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, StringBuffer.Length);
                 FileTools.WriteToBuffer(ref buffer, ref offset, StringBuffer);
@@ -401,6 +414,21 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, i);
             }
 
+            // Secondary Strings
+            if (!(SecondaryStrings == null))
+            {
+                byte[] secondaryStringBuffer = new byte[1024];
+                int secondaryStringBufferOffset = 0;
+                foreach (string str in SecondaryStrings)
+                {
+                    FileTools.WriteToBuffer(ref secondaryStringBuffer, ref secondaryStringBufferOffset, str.Length + 1);
+                    FileTools.WriteToBuffer(ref secondaryStringBuffer, ref secondaryStringBufferOffset, FileTools.StringToASCIIByteArray(str));
+                    FileTools.WriteToBuffer(ref secondaryStringBuffer, ref secondaryStringBufferOffset, (byte)0x00);
+                }
+                FileTools.WriteToBuffer(ref buffer, ref offset, SecondaryStrings.Count);
+                FileTools.WriteToBuffer(ref buffer, ref offset, secondaryStringBuffer, secondaryStringBufferOffset, false);
+            }
+
             // Generate custom sorts
             int[][] customSorts = CreateSortIndices();
             foreach (int[] intArray in customSorts)
@@ -420,9 +448,9 @@ namespace Hellgate
 
             // Rcsh, Tysh, Mysh, Dneh
             // This section exists when there is a string or integer block or a mysh table
-            FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
             if (!(StringBuffer == null) || !(IntegerBuffer == null) || ExcelMap.HasMysh)
             {
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.rcsh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.RcshValue);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.tysh);
@@ -435,16 +463,12 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.dneh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.DnehValue);
             }
-            else
-            {
-                FileTools.WriteToBuffer(ref buffer, ref offset, 0);
-            }
 
             // Append the integer array.
             // Unitypes ignores this section for some reason
             if (!(ExcelMap.IgnoresTable))
             {
-                if (!(IntegerBuffer == null))
+                if (!(IntegerBuffer == null) && (IntegerBuffer.Length > 1))
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                     FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer.Length);
@@ -490,20 +514,36 @@ namespace Hellgate
         {
             int noCols = DataType.GetFields().Count();
             int noRows = Count + 1; // +1 for column headers
-            if (ExcelMap.HasExtended) noCols++; // extra column for extended data
+            byte delimiter = (byte)'\t';
 
-            Object[,] csvObject = new Object[Count + 1, noCols];
+            byte[] csvBuffer = new byte[1024];
+            int csvOffset = 0;
 
             int row = 0;
             int col = 0;
+            
 
             // First dump column headers, replace the first with the table string id
             foreach (FieldInfo fieldInfo in DataType.GetFields())
             {
-                csvObject[row, col++] = ((col == 0)) ? StringID : fieldInfo.Name;
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, ((col == 0)) ?
+                    FileTools.StringToASCIIByteArray(StringID) :
+                    FileTools.StringToASCIIByteArray(fieldInfo.Name));
+
+                if (!(col == noCols - 1))
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+
+                col++;
             }
-            if (ExcelMap.HasExtended) csvObject[row, col] = "ExtendedProps";
-            row = 1;
+            // Add extra column for extended properties
+            if ((ExcelMap.HasExtended))
+            {
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("ExtendedProps"));
+            }
+            // End of line
+            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(Environment.NewLine));
+
 
             // Parse each row, resolve buffers if needed
             foreach (Object rowObject in Rows)
@@ -511,13 +551,19 @@ namespace Hellgate
                 col = 0; // reset
                 foreach (FieldInfo fieldInfo in DataType.GetFields())
                 {
+                    if (!(col == 0) && !(col == noCols -1)) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+                    col++;
+
                     OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
                     if (!(attribute == null))
                     {
                         if ((attribute.IsStringOffset))
                         {
                             int offset = (int)fieldInfo.GetValue(rowObject);
-                            csvObject[row, col++] = (!(offset == -1)) ? ReadStringTable(offset) : String.Empty;
+                            if (!(offset == -1))
+                            {
+                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, ReadStringTableAsBytes(offset));
+                            }
                             continue;
                         }
                         if ((attribute.IsIntOffset))
@@ -525,30 +571,43 @@ namespace Hellgate
                             int offset = (int)fieldInfo.GetValue(rowObject);
                             if ((offset == 0))
                             {
-                                csvObject[row, col++] = "0";
+                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, 0);
                                 continue;
                             }
-                            byte[] buffer = FileTools.IntArrayToByteArray(ReadIntegerTable(offset));
-                            csvObject[row, col++] = Export.ArrayToCSV(buffer, ',', typeof(int));
+                            int[] buffer = ReadIntegerTable(offset);
+                            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ArrayToStringGeneric(buffer, ",")));
                             continue;
                         }
                         if ((attribute.IsSecondaryString))
                         {
                             int index = (int)fieldInfo.GetValue(rowObject);
-                            csvObject[row, col++] = (!(index == -1)) ? SecondaryStrings[index] : String.Empty;
+                            if (!(index == -1))
+                            {
+                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(SecondaryStrings[index]));
+                            }
+                            continue;
+                        }
+                        if ((attribute.IsBitmask))
+                        {
+                            FileTools.WriteToBuffer(ref csvBuffer, csvOffset, FileTools.StringToASCIIByteArray(((uint)fieldInfo.GetValue(rowObject)).ToString()));
                             continue;
                         }
                     }
-                    csvObject[row, col++] = fieldInfo.GetValue(rowObject).ToString();
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(fieldInfo.GetValue(rowObject).ToString()));
                 }
                 if (ExcelMap.HasExtended)
                 {
-                    csvObject[row, col] = Export.ArrayToCSV(ExtendedBuffer[row - 1], ',', typeof(byte));
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(ExtendedBuffer[row], ',', typeof(byte))));
                 }
                 row++;
+                if (!(row == noRows - 1))
+                {
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(Environment.NewLine));
+                }
             }
 
-            return Export.ObjectToArray(csvObject, '\t');
+            Array.Resize(ref csvBuffer, csvOffset);
+            return csvBuffer;
         }
 
         /// <summary>

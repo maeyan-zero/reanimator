@@ -25,16 +25,15 @@ namespace Hellgate
 
         public class StringBlock
         {
-            public Int32 ReferenceId { get; set; }
-            public Int32 Unknown { get; set; }
-            public String StringId { get; set; }
+            public Int32 ReferenceId;
+            public Int32 Unknown;
+            public String StringId;
             public Int32 Reserved;
-            public String String { get; set; }
-            public Int32 AttributeCount;
-            public String Attribute1 { get; set; }
-            public String Attribute2 { get; set; }
-            public String Attribute3 { get; set; }
-            public String Attribute4 { get; set; }
+            public String String;
+            public String Attribute1;
+            public String Attribute2;
+            public String Attribute3;
+            public String Attribute4;
 
             public StringBlock()
             {
