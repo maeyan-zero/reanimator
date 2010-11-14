@@ -1,4 +1,4 @@
-"Color"	"blue"	"green"	"red"	"alpha"	"fontColor"
+"FONTCOLOR"	"blue"	"green"	"red"	"alpha"	"fontColor"
 "DO_NOT_USE_ME"	0	0	0	0	-1
 "black"	0	0	0	255	-1
 "white"	255	255	255	255	-1

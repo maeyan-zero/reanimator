@@ -1,4 +1,4 @@
-name	code	noDuplicates	doNotIdentify	numAllowedTakes	treasure0UnitType	treasure0	treasure1UnitType	treasure1	treasure2UnitType	treasure2	treasure3UnitType	treasure3	treasure4UnitType	treasure4	treasure5UnitType	treasure5	treasure6UnitType	treasure6	treasure7UnitType	treasure7	offerString	
+OFFER	code	noDuplicates	doNotIdentify	numAllowedTakes	treasure0UnitType	treasure0	treasure1UnitType	treasure1	treasure2UnitType	treasure2	treasure3UnitType	treasure3	treasure4UnitType	treasure4	treasure5UnitType	treasure5	treasure6UnitType	treasure6	treasure7UnitType	treasure7	offerString	
 Quest_Tutorial_Notes	17474	1	0	-1	-1	80	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1
 Quest_Tutorial_Reward	19521	0	0	-1	-1	81	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1
 Quest_Ferry_Reward	18497	0	0	-1	-1	100	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1

@@ -1,4 +1,4 @@
-name	layers1	layers2	layers3	layers4	Base	head	hair	facialHair	skin	hairColorTexture	skinColor	hairColor	randomize	randomLayerSets1	randomLayerSets2	randomLayerSets3	
+WARDROBE_BODY	layers1	layers2	layers3	layers4	Base	head	hair	facialHair	skin	hairColorTexture	skinColor	hairColor	randomize	randomLayerSets1	randomLayerSets2	randomLayerSets3	
 Templar Guard	597	-1	-1	-1	16	17	32	-1	-1	-1	12	12	0	-1	-1	-1
 Town Guard	-1	-1	-1	-1	-1	-1	-1	-1	-1	-1	12	12	1	-1	-1	-1
 Commander	823	597	616	-1	16	23	32	49	-1	-1	13	6	0	-1	-1	-1

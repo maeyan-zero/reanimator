@@ -1,4 +1,4 @@
-name	isCommon	loadedbyGame	creditsFile
+STRING_FILES	isCommon	loadedbyGame	creditsFile
 Strings_Affix	0	1	0
 Strings_Cinematic	0	1	0
 Strings_Common	1	1	0

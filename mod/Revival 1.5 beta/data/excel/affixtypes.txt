@@ -1,4 +1,4 @@
-AffixType	NameColor	DownGrade	Required	
+AFFIXTYPES	NameColor	DownGrade	Required	
 common	42	-1	1
 rare	44	0	0
 epic	47	1	0

@@ -1,4 +1,4 @@
-name	undefined1	namedMonsterChance	undefined2	levelName	difficulty	drlg	spawnClass	namedMonsterClass	weight	music	environmentOverRide	environmentSpawnClassRoomDensity	environmentSpawnClass	code	undefined3	
+LEVELS_DRLG_CHOICE	undefined1	namedMonsterChance	undefined2	levelName	difficulty	drlg	spawnClass	namedMonsterClass	weight	music	environmentOverRide	environmentSpawnClassRoomDensity	environmentSpawnClass	code	undefined3	
 Russell Square	0	0	-1	0	0	8	6	-1	1	42	2	0	-1	16705	0
 Holborn Station	0	0	-1	1	0	0	1	-1	1	48	-1	0	-1	16961	0
 Tottenham Court	0	25	-1	2	0	2	122	201	1	45	2	0	-1	17217	0
