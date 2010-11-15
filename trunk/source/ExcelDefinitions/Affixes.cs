@@ -43,7 +43,7 @@ namespace Reanimator.ExcelDefinitions
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType6;
         public Int32 suffix;
-        [ExcelOutput(SortDistinctID = 4)]
+        [ExcelOutput(IsSecondaryString = true, SortDistinctID = 4)]
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]

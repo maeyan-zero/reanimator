@@ -144,6 +144,11 @@ namespace Reanimator
                     {
                         dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.ExcludeZero, true);
                     }
+                    if (excelOutputAttribute.IsSecondaryString == true)
+                    {
+                        dataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsSecondaryString, true);
+                        dataColumn.DataType = typeof(string);
+                    }
 
                     // Other types
                     if (excelOutputAttribute.IsStringIndex)
@@ -263,6 +268,13 @@ namespace Reanimator
                         {
                             baseRow[col++] = 0;
                         }
+                    }
+                    else if (excelOutputAttribute.IsSecondaryString)
+                    {
+                        int index = (int)value;
+                        if (index == -1) baseRow[col++] = String.Empty;
+                        else
+                        baseRow[col++] = dataFile.SecondaryStrings[index];
                     }
                     else
                     {

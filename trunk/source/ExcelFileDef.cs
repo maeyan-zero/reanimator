@@ -253,6 +253,7 @@ namespace Reanimator
             public String TableStringId { get; set; }
             public int TableIndex { get; set; }
             public String Column { get; set; }
+            public bool IsSecondaryString { get; set; }
 
             public int SortAscendingID { get; set; }
             public int SortDistinctID { get; set; }
@@ -260,6 +261,7 @@ namespace Reanimator
             public bool RequiresDefault { get; set; }
             public String SortColumnTwo { get; set; }
             public bool ExcludeZero { get; set; }
+
 
             public bool HasAIData { get; set; }
             public bool HasSignature { get; set; }
@@ -410,6 +412,7 @@ namespace Reanimator
             public const String SortDistinctID = "SortDistinctID";
             public const String SortPostOrderID = "SortPostOrderID";
             public const String ExcludeZero = "ExcludeZero";
+            public const String IsSecondaryString = "IsSecondaryString";
         }
     }
 }
