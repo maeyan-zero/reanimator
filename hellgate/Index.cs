@@ -96,14 +96,14 @@ namespace Hellgate
 
         #region Data Structures
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct DatHeader
+        private class DatHeader
         {
-            public UInt32 DatHead { get { return 0x68676461; } }
-            public Int32 Version { get { return 0x01; } }
-            public Int32 Unknown1 { get { return 0x00; } }
-            public Int32 Unknown2 { get { return 0x00; } }
-            public Int32 Unknown3 { get { return 0x00; } }
-            public Int32 Unknown4 { get { return 0x00001154; } }
+            public UInt32 DatHead = 0x68676461;
+            public Int32 Version = 4;
+            public Int32 Unknown1 = 1;
+            public Int32 Unknown2 = 0;
+            public Int32 Unknown3 = 0;
+            public Int32 Unknown4 = 0x00001154;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 488)]
             public byte[] hashKeys;
         }
@@ -357,7 +357,7 @@ namespace Hellgate
             // Header
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Head);
             FileTools.WriteToBuffer(ref buffer, ref offset, Version);
-            FileTools.WriteToBuffer(ref buffer, ref offset, Files.Count);
+            FileTools.WriteToBuffer(ref buffer, ref offset, FileDetails.Count);
 
             // Strings
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
@@ -384,11 +384,26 @@ namespace Hellgate
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.Sect);
             foreach (FileDetailsStruct fileIndex in FileDetails)
             {
-                FileTools.WriteToBuffer(ref buffer, offset, fileIndex);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FolderPathSHA1Hash);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileNameSHA1Hash);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DataOffset);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.UncompressedSize);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.CompressedSize);
+                offset += 4; // null
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.DirectoryArrayIndex);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FilenameArrayIndex);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.FileTime);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Unknown23);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Unknown24);
+                offset += 12; // null
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.First4BytesOfFile);
+                FileTools.WriteToBuffer(ref buffer, ref offset, fileIndex.Second4BytesOfFile);
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.Info);
             }
 
             // Resize the buffer and return
-            Array.Resize<byte>(ref buffer, offset);
+            Array.Resize(ref buffer, offset);
             return buffer;
         }
 
@@ -427,30 +442,14 @@ namespace Hellgate
 
             FileDetailsStruct fileStruct = new FileDetailsStruct
             {
-                CompressedSize = 0,
                 UncompressedSize = fileBuffer.Length,
                 FileTime = DateTime.Now.ToFileTime(),
-                DataOffset = (int)DatFile.Length,
                 FileNameSHA1Hash = Crypt.GetStringSHA1UInt32(fileName),
                 FolderPathSHA1Hash = Crypt.GetStringSHA1UInt32(directory),
                 StartToken = Token.Info,
-                EndToken = Token.Info,
-                Unknown23 = 1,
-                Unknown24 = 1
+                EndToken = Token.Info
             };
 
-            // See if the index already contains the FileName string
-            int fileNameIndex = Strings.IndexOf(fileName);
-            if (fileNameIndex != -1)
-            {
-                fileStruct.FilenameArrayIndex = fileNameIndex;
-            }
-            // otherwise add it
-            else
-            {
-                Strings.Add(fileName);
-                fileStruct.FilenameArrayIndex = Strings.Count - 1;
-            }
 
             // See if the index already contains the Directory string
             int directoryIndex = Strings.IndexOf(directory);
@@ -465,37 +464,29 @@ namespace Hellgate
                 fileStruct.DirectoryArrayIndex = Strings.Count - 1;
             }
 
-
-            // Create an entry in the File Index
-            FileEntry fileEntry = new FileEntry
+            // See if the index already contains the FileName string
+            int fileNameIndex = Strings.IndexOf(fileName);
+            if (fileNameIndex != -1)
             {
-                FileStruct = fileStruct,
-                Parent = this
-            };
+                fileStruct.FilenameArrayIndex = fileNameIndex;
+            }
+            // otherwise add it
+            else
+            {
+                Strings.Add(fileName);
+                fileStruct.FilenameArrayIndex = Strings.Count - 1;
+            }
 
-            fileEntry.DirectoryString = Strings[fileEntry.DirectoryIndex];
-            fileEntry.FileNameString = Strings[fileEntry.FileNameIndex];
-            fileEntry.CompressedSize = doCompress ? 1 : 0;
 
-            int pos = 0;
-            byte[] first4Bytes = FileTools.ByteArrayToArray<byte>(bytesToWrite, ref pos, 4);
-            byte[] second4Bytes = FileTools.ByteArrayToArray<byte>(bytesToWrite, ref pos, 4);
 
-            fileStruct.First4BytesOfFile = BitConverter.ToInt32(first4Bytes, 0);
-            fileStruct.Second4BytesOfFile = BitConverter.ToInt32(second4Bytes, 0);
+            fileStruct.CompressedSize = doCompress ? 1 : 0;
+            fileStruct.First4BytesOfFile = FileTools.ByteArrayToInt32(bytesToWrite, 0);
+            fileStruct.Second4BytesOfFile = FileTools.ByteArrayToInt32(bytesToWrite, 4);
+
+            AddFileToDat(bytesToWrite, fileStruct);
             FileDetails.Add(fileStruct);
 
-            AddFileToDat(bytesToWrite, fileEntry);
-
-            Files.Add(fileEntry);
-            
-
-            
-
-            // todo: handle existing files
-            //int index = Files.IndexOf(fileEntry);
-            //if (index != -1) Files[index] = fileEntry;
-            //else Files.Add(fileEntry);
+            //todo: existing files
 
             return true;
         }
@@ -553,7 +544,7 @@ namespace Hellgate
         /// </summary>
         /// <param name="fileData">The byte array to append.</param>
         /// <param name="fileEntry">The corresponding FileEntry that will be adjusted.</param>
-        public void AddFileToDat(byte[] fileData, FileEntry fileEntry)
+        public FileEntry AddFileToDat(byte[] fileData, FileEntry fileEntry)
         {
             Debug.Assert(DatFile != null && fileData != null && fileEntry != null);
 
@@ -590,9 +581,47 @@ namespace Hellgate
             fileEntry.DataOffset = (int)DatFile.Position;
             fileEntry.UncompressedSize = fileData.Length;
             DatFile.Write(writeBuffer, 0, writeLength);
+            return fileEntry;
         }
 
+        public void AddFileToDat(byte[] fileData, FileDetailsStruct fileStruct)
+        {
+            Debug.Assert(DatFile != null && fileData != null && fileStruct != null);
 
+            DatFile.Seek(0, SeekOrigin.End);
+
+            byte[] writeBuffer;
+            int writeLength;
+            if (fileStruct.CompressedSize > 0)
+            {
+                writeBuffer = new byte[fileData.Length];
+
+                if (IntPtr.Size == 4) // x86
+                {
+                    UInt32 destinationLength = (UInt32)writeBuffer.Length;
+                    compress(writeBuffer, ref destinationLength, fileData, (UInt32)fileData.Length);
+                    writeLength = (int)destinationLength;
+                }
+                else // x64
+                {
+                    UInt64 destinationLength = (UInt64)writeBuffer.Length;
+                    compress(writeBuffer, ref destinationLength, fileData, (UInt64)fileData.Length);
+                    writeLength = (int)destinationLength;
+                }
+
+                fileStruct.CompressedSize = writeLength;
+            }
+            else
+            {
+                writeBuffer = fileData;
+                fileStruct.CompressedSize = 0;
+                writeLength = fileData.Length;
+            }
+
+            fileStruct.DataOffset = (int)DatFile.Position;
+            fileStruct.UncompressedSize = fileData.Length;
+            DatFile.Write(writeBuffer, 0, writeLength);
+        }
 
         /// <summary>
         /// Gets the corresponding File Entry structure from the index.
@@ -693,7 +722,7 @@ namespace Hellgate
                     // create new dat and add header
                     DatFile = new FileStream(filePath, FileMode.Create, fileAccess);
                     DatHeader datHeader = new DatHeader();
-                    DatFile.Write(FileTools.StructureToByteArray(datHeader), (int)DatFile.Length, Marshal.SizeOf(datHeader));
+                    DatFile.Write(FileTools.StructureToByteArray(datHeader), 0, Marshal.SizeOf(datHeader));
                 }
                 catch (Exception)
                 {

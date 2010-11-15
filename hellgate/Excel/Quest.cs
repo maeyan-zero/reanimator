@@ -16,16 +16,16 @@ namespace Hellgate.Excel
         public Int32 code;
         public Int32 style;
         [ExcelOutput(IsStringID = true)]
-        public Int32 nameStringKey;//idx
+        public Int32 nameStringKey;
         [ExcelOutput(IsBool = true)]
-        public Int32 subscriberOnly;//bool
+        public Int32 subscriberOnly;
         [ExcelOutput(IsBool = true)]
-        Int32 multiplayerOnly;//bool
+        public Int32 multiplayerOnly;
         public Int32 startingQuestCheat;
-        Int32 questCheatCompleted;
+        public Int32 questCheatCompleted;
         public Int32 closeOnComplete;
         public Int32 repeatable;
-        Int32 hideQuestLog;
+        public Int32 hideQuestLog;
         public Int32 repeatRateInSeconds;
         public Int32 skipActivateFanfare;
         public Int32 skipCompleteFanfare;
@@ -33,8 +33,14 @@ namespace Hellgate.Excel
         public Int32 autoTrackOnActivate;
         public Int32 autoActivateLevel;//idx
         public Int32 onlyOneDifficulty;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        Int32[] questPreReqs;
+        public Int32 questPreReqs01;
+        public Int32 questPreReqs02;
+        public Int32 questPreReqs03;
+        public Int32 questPreReqs04;
+        public Int32 questPreReqs05;
+        public Int32 questPreReqs06;
+        public Int32 questPreReqs07;
+        public Int32 questPreReqs08;
         public Int32 currentlyUnavailable;
         public Int32 minLevelPreReq;
         public Int32 maxLevelPreReq;
@@ -52,12 +58,12 @@ namespace Hellgate.Excel
         public Int32 levelRewarderNpc;//idx
         [ExcelOutput(SortAscendingID = 4, RequiresDefault = true)]
         public Int32 giverItem;//idx
-        Int32 giverItemMonster;//idx
-        Int32 giverItemLevel;//idx
+        public Int32 giverItemMonster;//idx
+        public Int32 giverItemLevel;//idx
         public float giverItemDropRate;
         public Int32 level;
         public Int32 levelNightmare;
-        Int32 undefined1;
+        public Int32 undefined1;
         public float experienceMultiplier;
         public float moneyMultiplier;
         public Int32 statPoints;
@@ -77,7 +83,7 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] undefined4;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-        string CompleteFunction;
+        public string CompleteFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] undefined5;
         public Int32 warpToOpenOnActivate;//idx
@@ -90,15 +96,29 @@ namespace Hellgate.Excel
         public string versionFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] undefined6;
-        Int32 removeOnJoinGame;
+        public Int32 removeOnJoinGame;
         public Int32 beatGameOnComplete;
         Int32 undefined7;
         public Int32 weight;
         public float radius;
         public float height;
         public float flatZTolerance;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        Int32[] allowedDRLGStyles;
+        public Int32 allowedDRLGStyles01;
+        public Int32 allowedDRLGStyles02;
+        public Int32 allowedDRLGStyles03;
+        public Int32 allowedDRLGStyles04;
+        public Int32 allowedDRLGStyles05;
+        public Int32 allowedDRLGStyles06;
+        public Int32 allowedDRLGStyles07;
+        public Int32 allowedDRLGStyles08;
+        public Int32 allowedDRLGStyles09;
+        public Int32 allowedDRLGStyles10;
+        public Int32 allowedDRLGStyles11;
+        public Int32 allowedDRLGStyles12;
+        public Int32 allowedDRLGStyles13;
+        public Int32 allowedDRLGStyles14;
+        public Int32 allowedDRLGStyles15;
+        public Int32 allowedDRLGStyles16;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         Int32[] levelDestinations;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
@@ -114,29 +134,29 @@ namespace Hellgate.Excel
         public Int32 completeDialog;//idx
         //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 rewardDialog;//idx
-        Int32 unavailableDialog;//idx
+        public Int32 unavailableDialog;//idx
         [ExcelOutput(IsStringID = true, TableStringID = "Strings_Strings")]
         public Int32 acceptButtonText;//stridx
-        float timeLimit;
+        public float timeLimit;
         public Int32 objectiveMonster;//idx
         public Int32 objectiveUnitType;//idx
         public Int32 objectiveObject;//idx
         [ExcelOutput(IsBool = true)]
-        Int32 disableSpawning;//bool
+        public Int32 disableSpawning;//bool
         public Int32 objectiveCount;
         public float collectDropRate;
         public Int32 collectItem;//idx
         public float explorePercent;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        string spawnNodeLabel;
+        public string spawnNodeLabel;
         public Int32 spawnCount;
         [ExcelOutput(IsStringID = true, TableStringID = "Strings_Names")]
-        public Int32 nameOverrideStringKey;//stridx
+        public Int32 nameOverrideStringKey;
         [ExcelOutput(IsStringID = true, TableStringID = "Strings_Names")]
-        public Int32 nameInLogOverrideStringKey;//stridx
-        public Int32 logOverrideState;//idx
+        public Int32 nameInLogOverrideStringKey;
+        public Int32 logOverrideState;
         [ExcelOutput(IsStringID = true, TableStringID = "Strings_Quest")]
-        public Int32 logOverrideString;//stridx
+        public Int32 logOverrideString;
         public Int32 subLevelTypeTruthOld;
         public Int32 subLevelTypeTruthNew;
         public Int32 questStateAdvanceToAtSubLevelTrut;//idx

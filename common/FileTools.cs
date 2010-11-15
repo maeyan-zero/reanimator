@@ -537,6 +537,9 @@ namespace Revival.Common
             if (source == null) return null;
             if (source.Length == 0) return null;
 
+            byte CR = 0x0D;
+            byte LF = 0x0A;
+            byte EN = 0x22;
             int offset = 0;
             int length = source.Length;
             bool ignoreFirstRow = true;
@@ -548,11 +551,17 @@ namespace Revival.Common
                 byte[] buffer;
                 for (int i = 0; i < columns; i++)
                 {
-                    buffer = (!(offset == length)) ? GetDelimintedByteArray(source, ref offset, delimiter) : null;
+                    buffer = (!(offset >= length)) ? GetDelimintedByteArray(source, ref offset, delimiter) : null;
                     string newString;
                     newString = buffer == null ? String.Empty : FileTools.ByteArrayToStringASCII(buffer, 0);
+                    newString = newString.Replace("\"", "");
                     newRow[i] = newString;
                 }
+
+                //if (offset < source.Length && source[offset] == delimiter) offset += sizeof(byte);
+                if (offset < source.Length && source[offset] == CR) offset += sizeof(byte);
+                if (offset < source.Length && source[offset] == LF) offset += sizeof(byte);
+
                 if ((row == 0) && (ignoreFirstRow))
                 {
                     row++;
