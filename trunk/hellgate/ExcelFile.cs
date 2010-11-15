@@ -225,11 +225,12 @@ namespace Hellgate
                 Rows.Add(rowInstance);
             }
 
+            // Resize the integer and string buffers if they were used.
             if (!(StringBuffer == null))
-                Array.Resize<byte>(ref StringBuffer, stringBufferOffset);
+                Array.Resize(ref StringBuffer, stringBufferOffset);
 
             if (!(IntegerBuffer == null))
-                Array.Resize<byte>(ref IntegerBuffer, integerBufferOffset);
+                Array.Resize(ref IntegerBuffer, integerBufferOffset);
 
             return true;
         }
@@ -551,7 +552,7 @@ namespace Hellgate
                 col = 0; // reset
                 foreach (FieldInfo fieldInfo in DataType.GetFields())
                 {
-                    if (!(col == 0) && !(col == noCols)) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+                    if (!(col == 0)) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                     col++;
 
                     OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
@@ -597,6 +598,7 @@ namespace Hellgate
                 }
                 if (ExcelMap.HasExtended)
                 {
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(ExtendedBuffer[row], ',', typeof(byte))));
                 }
                 row++;

@@ -42,21 +42,11 @@ namespace Hellpack
             
             // Query Strings
             if (Directory.Exists(dataDir + stringDir))
-                stringFilesToCook.AddRange(Directory.GetFiles(dataDir + stringDir, "*.uni.txt", SearchOption.AllDirectories));
+                stringFilesToCook.AddRange(Directory.GetFiles(dataDir + stringDir, "*.xls.uni", SearchOption.AllDirectories));
             if (Directory.Exists(dataCommonDir + stringDir))
-                stringFilesToCook.AddRange(Directory.GetFiles(dataCommonDir + stringDir, "*.uni.txt", SearchOption.AllDirectories));
+                stringFilesToCook.AddRange(Directory.GetFiles(dataCommonDir + stringDir, "*.xls.uni", SearchOption.AllDirectories));
 
-            // Cook String files
-            foreach (String stringPath in stringFilesToCook)
-            {
-                byte[] stringsBuffer = File.ReadAllBytes(stringPath);
-                StringsFile stringsFile = new StringsFile(stringsBuffer);
-                if (!(stringsFile.IntegrityCheck == true)) continue;
-                Console.WriteLine("Cooking " + stringPath.Replace(currentDir + "\\", ""));
-                stringsBuffer = stringsFile.ToByteArray();
-                if (stringsBuffer == null) continue;
-                File.WriteAllBytes(stringPath + ".cooked", stringsBuffer);
-            }
+            // todo: Query XML
 
             // Cook all the excel files.
             foreach (String excelPath in excelFilesToCook)
@@ -70,8 +60,20 @@ namespace Hellpack
                 File.WriteAllBytes(excelPath + ".cooked", excelBuffer);
             }
 
-            // Cook XML files
-            // todo
+            // Cook String files
+            foreach (String stringPath in stringFilesToCook)
+            {
+                byte[] stringsBuffer = File.ReadAllBytes(stringPath);
+                StringsFile stringsFile = new StringsFile(stringsBuffer);
+                if (!(stringsFile.IntegrityCheck == true)) continue;
+                Console.WriteLine("Cooking " + stringPath.Replace(currentDir + "\\", ""));
+                stringsBuffer = stringsFile.ToByteArray();
+                if (stringsBuffer == null) continue;
+                File.WriteAllBytes(stringPath + ".cooked", stringsBuffer);
+            }
+
+            // todo: Cook XML files
+
 
             // Files to pack
             if (hasDataDir)
@@ -98,17 +100,17 @@ namespace Hellpack
                 byte[] buffer = File.ReadAllBytes(filePath);
                 if (buffer == null) continue;
 
+                Console.WriteLine("Packing " + directory + fileName);
                 newPack.AddFile(directory, fileName, buffer);
             }
 
+            string thisPack = packName.Replace(currentDir + "\\", "");
             byte[] indexBytes = newPack.GenerateIndexFile();
+            Crypt.Encrypt(indexBytes);
+            Console.WriteLine("Writing " + thisPack);
             File.WriteAllBytes(packName, indexBytes);
-
-            // All done, save the idx and finish.
-            //indexFile.CloseStream();
-            //Boolean saveResult = indexFile.Save();
-            //String operationResult = (!(saveResult)) ? "Sorry, there was a problem saving the file." : "Modification compilation success.";
-            //Console.WriteLine(operationResult);
+            Console.WriteLine(thisPack + " generation complete.");
+            Console.ReadKey();
             return;
         }
     }

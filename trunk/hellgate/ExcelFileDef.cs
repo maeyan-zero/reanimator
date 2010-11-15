@@ -656,8 +656,8 @@ namespace Hellgate
             {
                 foreach (object row in Rows)
                 {
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "98"));
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "99"));
+                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "998-"));
+                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "999_"));
                 }
             }
             OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
@@ -668,8 +668,8 @@ namespace Hellgate
                 {
                     foreach (object row in Rows)
                     {
-                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "98"));
-                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "99"));
+                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "998-"));
+                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "999_"));
                     }
                 }
             }
@@ -681,8 +681,8 @@ namespace Hellgate
             {
                 foreach (object row in Rows)
                 {
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("98", "-"));
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("99", "_"));
+                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("998-", "-"));
+                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("999_", "_"));
                 }
             }
             OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
@@ -693,8 +693,8 @@ namespace Hellgate
                 {
                     foreach (object row in Rows)
                     {
-                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("98", "-"));
-                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("99", "_"));
+                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("998-", "-"));
+                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("999_", "_"));
                     }
                 }
             }

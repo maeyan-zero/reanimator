@@ -4,7 +4,7 @@ using Revival.Common;
 
 namespace Hellgate
 {
-    static class Crypt
+    static public class Crypt
     {
         ////// IDX String Crypt Stuffs //////
         private static readonly SHA1 SHA1Crypto = new SHA1CryptoServiceProvider();
