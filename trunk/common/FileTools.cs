@@ -616,6 +616,7 @@ namespace Revival.Common
                     if ((characterIn == delimiter))
                     {
                         arrayBuffer[col] = Encoding.Unicode.GetString(source, offset - stringLen - sizeof(short), stringLen);
+                        arrayBuffer[col] = arrayBuffer[col].Replace("\"", "");
                         col++;
                         stringLen = 0;
                         continue;
@@ -624,6 +625,7 @@ namespace Revival.Common
                     if ((characterIn == CR || characterIn == LF))
                     {
                         arrayBuffer[col] = Encoding.Unicode.GetString(source, offset - stringLen - sizeof(short), stringLen);
+                        arrayBuffer[col] = arrayBuffer[col].Replace("\"", "");
                         stringList.Add(arrayBuffer);
                         stringLen = 0;
                         col = 0;

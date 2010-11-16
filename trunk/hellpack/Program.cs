@@ -39,7 +39,7 @@ namespace Hellpack
                 excelFilesToCook.AddRange(Directory.GetFiles(dataDir + excelDir, "*.txt", SearchOption.TopDirectoryOnly));
             if (Directory.Exists(dataCommonDir + excelDir))
                 excelFilesToCook.AddRange(Directory.GetFiles(dataCommonDir + excelDir, "*.txt", SearchOption.TopDirectoryOnly));
-            
+
             // Query Strings
             if (Directory.Exists(dataDir + stringDir))
                 stringFilesToCook.AddRange(Directory.GetFiles(dataDir + stringDir, "*.xls.uni", SearchOption.AllDirectories));

@@ -197,6 +197,12 @@ namespace Hellgate
                             fieldInfo.SetValue(rowInstance, SecondaryStrings.IndexOf(value));
                             continue;
                         }
+
+                        if ((attribute.IsBitmask))
+                        {
+                            fieldInfo.SetValue(rowInstance, UInt32.Parse(value));
+                            continue;
+                        }
                     }
 
                     Object objValue = FileTools.StringToObject(value, fieldInfo.FieldType);
@@ -413,6 +419,11 @@ namespace Hellgate
             for (int i = 0; i < Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, i);
+                if ((ExcelMap.HasExtended))
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref offset, ExtendedBuffer[i].Length);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, ExtendedBuffer[i]);
+                }
             }
 
             // Secondary Strings
@@ -590,7 +601,9 @@ namespace Hellgate
                         }
                         if ((attribute.IsBitmask))
                         {
-                            FileTools.WriteToBuffer(ref csvBuffer, csvOffset, FileTools.StringToASCIIByteArray(((uint)fieldInfo.GetValue(rowObject)).ToString()));
+                            uint uintValue = (uint)fieldInfo.GetValue(rowObject);
+                            string stringValue = uintValue.ToString();
+                            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(stringValue));
                             continue;
                         }
                     }

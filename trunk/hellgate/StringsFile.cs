@@ -215,7 +215,7 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(stringBlock.StringId));
                 FileTools.WriteToBuffer(ref buffer, ref offset, (byte)0);
                 FileTools.WriteToBuffer(ref buffer, ref offset, stringBlock.Reserved);
-                FileTools.WriteToBuffer(ref buffer, ref offset, stringBlock.String.Length);
+                FileTools.WriteToBuffer(ref buffer, ref offset, (stringBlock.String.Length * sizeof(short)) + sizeof(short));
                 FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToUnicodeByteArray(stringBlock.String));
                 FileTools.WriteToBuffer(ref buffer, ref offset, (short)0);
                 int attributeCount = 0;
