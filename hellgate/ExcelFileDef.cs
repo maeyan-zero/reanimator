@@ -652,24 +652,42 @@ namespace Hellgate
 
         void DoPrecedenceHack(FieldInfo fieldInfo)
         {
+            OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
+
             if ((fieldInfo.FieldType == typeof(string)))
             {
                 foreach (object row in Rows)
                 {
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "998-"));
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "999_"));
+                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "8"));
+                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "9"));
                 }
             }
-            OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
+
+            if ((attribute.IsStringOffset))
+            {
+                for (int i = 0; i < StringBuffer.Length; i++)
+                {
+                    switch (StringBuffer[i])
+                    {
+                        case (byte)'-':
+                            StringBuffer[i] = (byte)'8';
+                            break;
+                        case (byte)'_':
+                            StringBuffer[i] = (byte)'9'; 
+                            break;
+                    }
+                }
+            }
+
             if (!(String.IsNullOrEmpty(attribute.SortColumnTwo)))
             {
                 FieldInfo fieldInfo2 = DataType.GetField(attribute.SortColumnTwo);
-                if ((fieldInfo2.FieldType == typeof(string)))
+                if (fieldInfo2.FieldType == typeof(string))
                 {
                     foreach (object row in Rows)
                     {
-                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "998-"));
-                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "999_"));
+                        fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "8"));
+                        fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "9"));
                     }
                 }
             }
@@ -677,27 +695,7 @@ namespace Hellgate
 
         void UndoPrecedenceHack(FieldInfo fieldInfo)
         {
-            if ((fieldInfo.FieldType == typeof(string)))
-            {
-                foreach (object row in Rows)
-                {
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("998-", "-"));
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("999_", "_"));
-                }
-            }
-            OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
-            if (!(String.IsNullOrEmpty(attribute.SortColumnTwo)))
-            {
-                FieldInfo fieldInfo2 = DataType.GetField(attribute.SortColumnTwo);
-                if ((fieldInfo2.FieldType == typeof(string)))
-                {
-                    foreach (object row in Rows)
-                    {
-                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("998-", "-"));
-                        fieldInfo2.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("999_", "_"));
-                    }
-                }
-            }
+
         }
 
         int[][] CreateSortIndices()
@@ -881,7 +879,7 @@ namespace Hellgate
                 #endregion
 
                 // Remove precedence hack
-                UndoPrecedenceHack(fieldInfo);
+                // UndoPrecedenceHack(fieldInfo);
             }
 
             return customSorts;
