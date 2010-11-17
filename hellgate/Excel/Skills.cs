@@ -25,7 +25,7 @@ namespace Hellgate.Excel
         public Bitmask05 bitmask5;
         [ExcelOutput(IsBitmask = true)]
         public Bitmask06 bitmask6;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
         public Int32 displayName;//stridx
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String descriptionStringFunction;
@@ -37,15 +37,15 @@ namespace Hellgate.Excel
         public String accumulationStringFunction;//doesn't appear to be used
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknown1;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
         public Int32 descriptionString;//stridx
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
         public Int32 effectString;//stridx
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
         public Int32 skillBonusString;//stridx
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
         public Int32 accumulationString;//stridx
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
         public Int32 stringAfterRequiredWeapon;//stridx
         public Int32 skillsToAccumulate1;
         public Int32 skillsToAccumulate2;

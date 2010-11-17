@@ -14,15 +14,15 @@ namespace Hellgate.Excel
         public Int32 unknown02;
         [ExcelOutput(IsBool = true)]
         public Int32 alwaysApply;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 qualityNameString;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 setNameString;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 magicNameString;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 replaceNameString;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 flavorText;
         public Int32 unknown03;
         public Int32 nameColor;

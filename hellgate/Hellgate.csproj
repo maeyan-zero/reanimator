@@ -229,6 +229,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringsFile.cs" />
     <Compile Include="StringsFileDef.cs" />
+    <Compile Include="TableDataSet.cs" />
     <Compile Include="Xml\AIBehaviorDefinition.cs" />
     <Compile Include="Xml\AIBehaviorDefinitionTable.cs" />
     <Compile Include="Xml\AIDefinition.cs" />

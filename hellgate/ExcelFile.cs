@@ -21,9 +21,9 @@ namespace Hellgate
         byte[] MyshBuffer;
         byte[][] ExtendedBuffer;
         StringCollection SecondaryStrings;
-        TypeMap ExcelMap { get; set; }
+        public TypeMap ExcelMap { get; set; }
         new Type DataType { get { return ExcelMap.DataType; } }
-        new UInt32 StructureID { get { return ExcelFileHeader.StructureID; } }
+        new UInt32 StructureID { get { return ExcelFileHeader.StructureID; } set { ExcelFileHeader.StructureID = value; } }
 
         ExcelHeader ExcelFileHeader = new ExcelHeader
         {
@@ -85,19 +85,22 @@ namespace Hellgate
             int stringBufferOffset = 0;
             int integerBufferOffset = 1;
 
-            // Determine the data type
+
             StringID = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(buffer, ref offset, delimiter), 0);
             StringID = StringID.Replace("\"", "");//in case strings embedded
-            IEnumerable<KeyValuePair<string, uint>> tokenQuery = DataTables.Where(dt => dt.Key == StringID);
-            if (tokenQuery.Count() == 0) return false; // no string association found
-            ExcelFileHeader.StructureID = tokenQuery.First().Value;
-            if (!(DataTypes.Contains(StructureID))) return false; // no structure definition found
-            ExcelMap = (TypeMap)DataTypes[StructureID]; // grab the excel map
+
+            StructureID = GetStructureID(StringID);
+            if ((StructureID == 0)) return false;
+
+            ExcelMap = GetTypeMap(StructureID);
+            if ((ExcelMap == null)) return false;
+
 
             // Mutate the buffer into a string array
             int colCount = ExcelMap.HasExtended ? DataType.GetFields().Count() + 1 : DataType.GetFields().Count();
             string[][] tableRows = FileTools.CSVtoStringArray(buffer, colCount, delimiter);
             if ((tableRows == null)) return false;
+
 
             // Parse the tableRows
             Rows = new List<Object>();
@@ -255,9 +258,8 @@ namespace Hellgate
             // File Header
             if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
             ExcelFileHeader = FileTools.ByteArrayToStructure<ExcelHeader>(buffer, ref offset);
-            ExcelMap = (TypeMap)DataTypes[StructureID];
+            ExcelMap = GetTypeMap(StructureID);
             if ((ExcelMap == null)) return false;
-            StringID = DataTables.Where(dt => dt.Value == ExcelFileHeader.StructureID).First().Key;
 
             // Strings Block
             if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;

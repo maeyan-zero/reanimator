@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -8,23 +7,18 @@ using FileEntry = Hellgate.Index.FileEntry;
 
 namespace Hellgate
 {
-    public class FileManager
+    public partial class FileManager
     {
         public bool IntegrityCheck { get; private set; }
-
-        bool MPVersion { get; set; }
-        string HellgatePath { get; set; }
-        string HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
-        string HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
-        string[] MPFiles = new string[] { "hellgate*", "mp_hellgate*" };
-        string[] SPFiles = new string[] { "hellgate*", "sp_hellgate*" };
-        string Language { get; set; }
-
-        public List<Index> IndexFiles { get; set; }
-        public Hashtable FileEntries { get; set; }
-        public Hashtable ExcelFiles { get; set; }
-        public DataSet XlsDataSet { get; set; }
-
+        public bool MPVersion { get; private set; }
+        public string HellgatePath { get; private set; }
+        public string HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
+        public string HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
+        public string Language { get; private set; }
+        public List<Index> IndexFiles { get; private set; }
+        public Dictionary<ulong,FileEntry> FileEntries { get; private set; }
+        public Dictionary<string,DataFile> DataFiles { get; private set; }
+        public DataSet XlsDataSet { get; private set; }
 
         /// <summary>
         /// Initialize the File Manager by the given Hellgate path.
@@ -45,32 +39,25 @@ namespace Hellgate
         {
             HellgatePath = hellgatePath;
             MPVersion = mpVersion;
-
             IntegrityCheck = LoadFileTable();
-            // If the index files didn't load correctly, don't go any further.
-            if (!(IntegrityCheck)) return;
-
-            LoadExcelFiles();
         }
 
         /// <summary>
         /// Generates of a list of all the files inside the .idx .dat files from the Hellgate path.
         /// </summary>
         /// <returns>Result of the initialization. Occurance of an error will return false.</returns>
-        bool LoadFileTable()
+        private bool LoadFileTable()
         {
             IndexFiles = new List<Index>();
 
-            // Get a list of all the existing idx paths
             List<string> idxPaths = new List<string>();
-            string[] query = MPVersion ? MPFiles : SPFiles;
+            string[] query = MPVersion ? Common.MPFiles : Common.SPFiles;
             foreach (string fileQuery in query)
             {
                 idxPaths.AddRange(Directory.GetFiles(HellgateDataPath, fileQuery).Where(p => p.EndsWith(".idx")));
             }
 
-            // Initialize the file table
-            FileEntries = new Hashtable();
+            FileEntries = new Dictionary<ulong,FileEntry>();
 
             foreach (string idxPath in idxPaths)
             {
@@ -82,24 +69,20 @@ namespace Hellgate
                 if (!(index.IntegrityCheck)) return false;
                 IndexFiles.Add(index);
 
-                foreach (FileEntry fileEntry in index.Files)
+                foreach (FileEntry current in index.Files)
                 {
-                    // If the file isn't already hashed, add it
-                    if (!(FileEntries.Contains(fileEntry.LongHash)))
-                    {
-                        FileEntries.Add(fileEntry.LongHash, fileEntry);
-                    }
-                    else
-                    {
-                        // This file has already been added. If this version is newer, replace it
-                        UInt64 longHash = fileEntry.LongHash;
-                        FileEntry existingFile = (FileEntry)FileEntries[longHash];
-                        long existingFileTime = existingFile.FileTime;
+                    ulong hash = current.LongHash;
 
-                        if (existingFileTime < fileEntry.FileTime)
-                        {
-                            FileEntries[longHash] = fileEntry;
-                        }
+                    if (!(FileEntries.ContainsKey(hash)))
+                    {
+                        FileEntries.Add(hash, current);
+                        continue;
+                    }
+
+                    FileEntry existing = FileEntries[hash];
+                    if (existing.FileTime < current.FileTime)
+                    {
+                        FileEntries[hash] = current;
                     }
                 }
             }
@@ -110,40 +93,44 @@ namespace Hellgate
         /// <summary>
         /// Loads all of the available Excel files to a hashtable.
         /// </summary>
-        void LoadExcelFiles()
+        public bool LoadExcelFiles()
         {
-            ExcelFiles = new Hashtable();
-            foreach (DictionaryEntry item in FileEntries)
+            DataFiles = new Dictionary<string,DataFile>();
+            foreach (FileEntry fileEntry in FileEntries.Values)
             {
-                FileEntry fileEntry = (FileEntry)item.Value;
-
                 // Do not load excel files that have been "backed up"
-                if (fileEntry.DirectoryString.Contains(Index.BackupPrefix))
+                if ((fileEntry.DirectoryString.Contains(Index.BackupPrefix)))
                 {
                     continue;
                 }
-                
-                if (fileEntry.FileNameString.Contains(ExcelFile.FileExtention))
+
+                // Check if its a excel file by its file extentsion
+                if (!(fileEntry.FileNameString.Contains(ExcelFile.FileExtention)))
                 {
-                    // Create a hashtable key from the filename
-                    string fileName = fileEntry.FileNameString;
-                    fileName = fileName.Replace(ExcelFile.FileExtention, "");
-                    fileName = fileName.ToUpper();
+                    continue;
+                }
 
-                    // If the accompanying dat isn't open, open it
-                    if (!(fileEntry.Parent.DatFileOpen))
-                    {
-                        fileEntry.Parent.OpenDat(FileAccess.Read);
-                    }
+                // Create a hashtable key from the filename
+                string fileName = fileEntry.FileNameString;
+                fileName = fileName.Replace(ExcelFile.FileExtention, "");
+                fileName = fileName.ToUpper();
 
-                    // Parse the excel file and if it reads okay add it to the table
-                    byte[] fileBytes = fileEntry.Parent.GetFileBytes(fileEntry);
-                    ExcelFile excelFile = new ExcelFile(fileBytes);
-                    if (excelFile.IntegrityCheck)
-                    {
-                        string path = Path.Combine(fileEntry.DirectoryString, fileEntry.FileNameString);
-                        ExcelFiles.Add(path, excelFile);
-                    }
+                // If the accompanying dat isn't open, open it
+                if (!(fileEntry.Parent.DatFileOpen))
+                {
+                    fileEntry.Parent.OpenDat(FileAccess.Read);
+                }
+
+                // Parse the excel file and if it reads okay add it to the table
+                byte[] fileBytes = fileEntry.Parent.GetFileBytes(fileEntry);
+                ExcelFile excelFile = new ExcelFile(fileBytes)
+                {
+                    FilePath = Path.Combine(fileEntry.DirectoryString, fileEntry.FileNameString)
+                };
+
+                if (excelFile.IntegrityCheck)
+                {
+                    DataFiles.Add(excelFile.GetStringID(), excelFile);
                 }
             }
 
@@ -152,14 +139,21 @@ namespace Hellgate
             {
                 indexFile.EndDatAccess();
             }
+            return true;
         }
 
         /// <summary>
-        /// Loads the excel table data set.
+        /// Retrieves a DataFile from the DataFiles list.
         /// </summary>
-        void LoadTableDataSet()
+        /// <param name="stringID">The stringID of the DataFile.</param>
+        /// <returns>Matching DataFile if it exists.</returns>
+        public DataFile GetDataFile(string stringID)
         {
-
+            if ((DataFiles == null)) return null;
+            var query = from dt in DataFiles
+                        where dt.Value.StringID == stringID
+                        select dt.Value;
+            return (!(query.Count() == 0)) ? query.First() : null;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         public Int32 style;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 nameStringKey;
         [ExcelOutput(IsBool = true)]
         public Int32 subscriberOnly;
@@ -135,7 +135,7 @@ namespace Hellgate.Excel
         //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 rewardDialog;//idx
         public Int32 unavailableDialog;//idx
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Strings")]
         public Int32 acceptButtonText;//stridx
         public float timeLimit;
         public Int32 objectiveMonster;//idx
@@ -150,12 +150,12 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string spawnNodeLabel;
         public Int32 spawnCount;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Names")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Names")]
         public Int32 nameOverrideStringKey;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Names")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Names")]
         public Int32 nameInLogOverrideStringKey;
         public Int32 logOverrideState;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Quest")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Quest")]
         public Int32 logOverrideString;
         public Int32 subLevelTypeTruthOld;
         public Int32 subLevelTypeTruthNew;

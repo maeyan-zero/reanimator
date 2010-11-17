@@ -21,11 +21,11 @@ namespace Hellgate.Excel
         public Int32 defaultSubLevel;
         public Int32 previousLevel;
         public Int32 nextLevel;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
         public Int32 levelDisplayName;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
         public Int32 floorSuffixName;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
         public Int32 finalSuffixFloorName;
         [ExcelOutput(IsBool = true)]
         public Int32 town;
@@ -102,9 +102,9 @@ namespace Hellgate.Excel
         public Int32 partySizeRecommended;
         public Int32 questSpawnClass;
         public Int32 interactableSpawnClass;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
         public Int32 stringEnter;//stridx
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
         public Int32 stringLeave;//stridx
         public float championSpawnChancePercentAtEachSpawnLocation;
         public float uniqueMonsterChancePercent;

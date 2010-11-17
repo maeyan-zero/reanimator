@@ -15,13 +15,13 @@ namespace Hellgate.Excel
         public String name;
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 nameString;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 descripFormatString;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 detailsString;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 rewardTypeString;
         public Int32 revealCondition;
         public Int32 revealValue;

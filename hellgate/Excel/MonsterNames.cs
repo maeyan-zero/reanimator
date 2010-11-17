@@ -14,7 +14,7 @@ namespace Hellgate.Excel
         public string name;
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 stringKey;//stridx
         public Int32 monsterNameType;//idx
         [ExcelOutput(IsBool = true)]
