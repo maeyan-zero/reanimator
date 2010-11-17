@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Revival.Common
+namespace Hellgate
 {
     static class Exceptions
     {
