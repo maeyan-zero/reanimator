@@ -22,11 +22,11 @@ namespace Hellgate
         /// Must be called before usage of the class.
         /// </summary>
         /// <param name="tableDataSet">The loaded table data set of excel/strings for excel lookups.</param>
-        public static void Initialize(TableDataSet tableDataSet)
+        public static void Initialize(FileManager fileManager)
         {
-            Debug.Assert(tableDataSet != null);
+            Debug.Assert(fileManager != null);
 
-            _tableDataSet = tableDataSet;
+            _fileManager = fileManager;
             _xmlDefinitions = new XmlDefinition[]
             {
                 // AI
