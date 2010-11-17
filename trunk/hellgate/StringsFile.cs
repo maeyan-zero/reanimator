@@ -12,6 +12,7 @@ namespace Hellgate
         public StringsFile()
         {
             IsStringsFile = true;
+            DataType = typeof(StringBlock);
         }
 
         public StringsFile(byte[] buffer)

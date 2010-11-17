@@ -14,7 +14,7 @@ namespace Hellgate.Excel
         public string name;
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Strings")]
         public Int32 displayString;
         public Int32 unitTypeStartStanding1;
         Int32 levelDefStartStanding1;

@@ -33,11 +33,11 @@ namespace Hellgate.Excel
         public Int32 displayCondition3;
         [ExcelOutput(IsBool = true)]
         public Int32 newLine;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 formatString;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 formatShort;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 decripShort;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         string iconFrame;
@@ -57,7 +57,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsIntOffset = true)]
         public Int32 val4;
         public Int32 toolTipArea;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 toolTipText;//stridx
         [ExcelOutput(IsIntOffset = true)]
         public Int32 color;

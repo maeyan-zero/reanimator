@@ -15,14 +15,14 @@ namespace Hellgate.Excel
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         Int32 craftingBreakdownTreasure;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 displayName;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 displayNameWithItemFormat;
         [ExcelOutput(IsBool = true)]
         public Int32 showBaseDesc;
         public Int32 randomlyNamed;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 baseDescFormatString;
         public Int32 unknown01;
         [ExcelOutput(IsTableIndex = true, TableStringID = "FONTCOLORS")]

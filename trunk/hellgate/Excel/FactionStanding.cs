@@ -14,9 +14,9 @@ namespace Hellgate.Excel
         public string name;
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Strings")]
         public Int32 displayString;
-        [ExcelOutput(IsStringID = true, TableStringID = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Strings")]
         public Int32 displayStringNumbers;
         public Int32 minScore;
         public Int32 maxScore;

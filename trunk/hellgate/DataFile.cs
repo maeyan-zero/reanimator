@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 
 namespace Hellgate
 {
     public abstract class DataFile
     {
-        public String StringID { get; protected set; }
+        public string StringID { get; protected set; }
         public Type DataType { get; protected set; }
         public uint StructureID { get; protected set; }
         public bool IntegrityCheck { get; protected set; }
         public bool IsExcelFile { get; protected set; }
         public bool IsStringsFile { get; protected set; }
         public int Count { get { return (!(Rows == null)) ? Rows.Count : 0; } }
-        public String FilePath { get; set; }
-        public String FileExtension { get; set; }
-        public String FileName { get; set; }
-        public List<Object> Rows { get; protected set; }
+        public string FilePath { get; set; }
+        public string FileExtension { get; set; }
+        public string FileName { get { return Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(FilePath)); } }
+        public List<object> Rows { get; protected set; }
 
-        public override String ToString()
+        public override string ToString()
         {
             return StringID;
         }

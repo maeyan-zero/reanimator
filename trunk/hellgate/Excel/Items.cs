@@ -283,17 +283,17 @@ namespace Hellgate.Excel
         public Items.BitMask06 bitmask06;                           // 56   0x0000000000000578
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask07 bitmask07;                           // 56   0x000000000000057C
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 String;                                        // 375  0x0000000000000580  XLS_ReadStringIndex
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 typeDescription;                               // 378  0x0000000000000584  XLS_ReadStringIndex
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 flavorText;                                    // 379  0x0000000000000588  XLS_ReadStringIndex
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 additionalDescription;                         // 380  0x000000000000058C  XLS_ReadStringIndex
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 additionalRaceDescription;                     // 381  0x0000000000000590  XLS_ReadStringIndex
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 analyze;                                       // 382  0x0000000000000594  XLS_ReadStringIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "RECIPELISTS")]
         public Int32 recipeList;//index                                    // 62   0x0000000000000598  XLS_ReadIndex
@@ -465,7 +465,7 @@ namespace Hellgate.Excel
         public Int32 meleeWeapon;//index                            // 122  0x0000000000000770  XLS_ReadIndex
         public Int32 cdTicks;                                       // 131  0x0000000000000774  XLS_ReadInt32
         public float approxDps;                                     // 132  0x0000000000000778  XLS_ReadFloat
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 tooltipDamageString;//stridx                   // 137  0x000000000000077C  XLS_ReadStringIndex
         public Int32 requiredAffixGroups1;                          // 126  0x0000000000000780  XLS_ReadIntArray,8
         public Int32 requiredAffixGroups2;                          // 126  0x0000000000000784

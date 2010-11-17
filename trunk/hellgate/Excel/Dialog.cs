@@ -12,11 +12,11 @@ namespace Hellgate.Excel
         [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 stringAll;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 stringHellGate;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 stringMythos;
         public Int32 sound;//idx
         public Int32 mode;//idx

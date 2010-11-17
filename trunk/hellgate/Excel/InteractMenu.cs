@@ -13,9 +13,9 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public Int32 interaction;//index
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 stringTitle;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 stringToolTip;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string frameIcon;

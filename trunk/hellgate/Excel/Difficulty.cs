@@ -14,7 +14,7 @@ namespace Hellgate.Excel
         public String name;
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
-        [ExcelOutput(IsStringID = true)]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 unlockedString;
     }
 }
