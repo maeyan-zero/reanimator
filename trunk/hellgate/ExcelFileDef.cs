@@ -477,13 +477,6 @@ namespace Hellgate
             return (!(query.Count() == 0)) ? query.First().Value : 0;
         }
 
-        //public string GetStringID(uint structureID)
-        //{
-        //    string fileName = FileName.Replace("_", "");
-        //    var query = DataTables.Where(dt => dt.Value == structureID && (dt.Key == fileName || dt.Key == FileName));
-        //    return (!(query.Count() == 0)) ? query.First().Key : String.Empty;
-        //}
-
         public static TypeMap GetTypeMap(uint structureID)
         {
             var query = DataTypes.Where(dt => dt.Key == structureID);

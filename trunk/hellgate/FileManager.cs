@@ -7,7 +7,7 @@ using FileEntry = Hellgate.Index.FileEntry;
 
 namespace Hellgate
 {
-    public partial class FileManager
+    public partial class FileManager : IDisposable
     {
         public bool IntegrityCheck { get; private set; }
         public bool MPVersion { get; private set; }
@@ -155,5 +155,26 @@ namespace Hellgate
                         select dt.Value;
             return (!(query.Count() == 0)) ? query.First() : null;
         }
+
+        public DataTable GetExcelTableFromCode(uint code)
+        {
+            if ((DataFiles == null)) return null;
+            if ((DataFiles["EXCEL_TABLES"] == null)) return null;
+            ExcelFile excelTables = (ExcelFile)DataFiles["EXCEL_TABLES"];
+            Excel.ExcelTables tableRow = (Excel.ExcelTables)excelTables.Rows[(int)code];
+            string stringID = tableRow.StringId;
+            if ((DataFiles[stringID] == null)) return null;
+            ExcelFile excelFile = (ExcelFile)DataFiles[stringID];
+            DataTable dataTable = LoadExcelTable(excelFile, false);
+            return dataTable;
+        }
+
+        #region IDisposable Members
+        public void Dispose()
+        {
+            if (!(XlsDataSet == null))
+                XlsDataSet.Dispose();
+        }
+        #endregion
     }
 }

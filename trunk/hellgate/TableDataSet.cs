@@ -354,17 +354,5 @@ namespace Hellgate
         {
             get { return (!(XlsDataSet == null)) ? XlsDataSet.Tables.Count : 0; }
         }
-
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            if (XlsDataSet != null)
-            {
-                XlsDataSet.Dispose();
-            }
-        }
-
-        #endregion
     }
 }

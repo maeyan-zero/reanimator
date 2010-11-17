@@ -17,7 +17,7 @@ namespace Hellgate
         private const Int32 RequiredVersion = 8;
         private const UInt32 DataMagicWord = 0x41544144;
         private static XmlDefinition[] _xmlDefinitions;
-        private static TableDataSet _tableDataSet;
+        private static FileManager _fileManager;
 
         private int _offset;
         private byte[] _data;
@@ -314,7 +314,7 @@ namespace Hellgate
                         if (byteLen > 0)
                         {
                             // get excel table index
-                            DataTable excelDataTable = _tableDataSet.GetExcelTableFromCode(xmlCookElement.ExcelTableCode);
+                            DataTable excelDataTable = _fileManager.GetExcelTableFromCode(xmlCookElement.ExcelTableCode);
                             Debug.Assert(excelDataTable != null);
 
                             String columnName = excelDataTable.Columns[0].ColumnName;
@@ -809,7 +809,7 @@ namespace Hellgate
             if (String.IsNullOrEmpty(excelString)) return;
 
             // get excel table index
-            DataTable excelDataTable = _tableDataSet.GetExcelTableFromCode(xmlCookElement.ExcelTableCode);
+            DataTable excelDataTable = _fileManager.GetExcelTableFromCode(xmlCookElement.ExcelTableCode);
             Debug.Assert(excelDataTable != null);
 
             String columnName = excelDataTable.Columns[1].ColumnName;
