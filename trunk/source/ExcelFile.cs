@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.IO;
 using Reanimator.ExcelDefinitions;
-using SkmDataStructures2;
 
 namespace Reanimator
 {
@@ -1224,25 +1223,6 @@ namespace Reanimator
                     dataView = sortTable.DefaultView;
                 }
 
-
-                // Do post tree transversal using a binary tree structure
-                if (dc.ExtendedProperties.Contains(ColumnTypeKeys.SortPostOrderID))
-                {
-                    BinarySearchTree<int> binaryTree = new BinarySearchTree<int>();
-                    foreach (DataRowView dr in dataView)
-                    {
-                        binaryTree.Add((int)dr[0]);
-                    }
-
-                    int[] postOrderArray = binaryTree.Postorder.ToArray();
-
-                    _sortIndicies[sortId] = new int[postOrderArray.Length];
-                    for (int i = 0; i < postOrderArray.Length; i++)
-                    {
-                        _sortIndicies[sortId][i] = postOrderArray[i];
-                    }
-                
-                }
 
                 // Ascending and distinct sorts using the dataiew
                 if (dc.ExtendedProperties.Contains(ColumnTypeKeys.SortAscendingID) ||

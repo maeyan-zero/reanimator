@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using SkmDataStructures2;
 using Hellgate.Excel;
 using Revival.Common;
 
@@ -893,16 +892,11 @@ namespace Hellgate
                 if (!(attribute.SortPostOrderID == 0))
                 {
                     int pos = attribute.SortPostOrderID - 1;
-                    BinarySearchTree<int> binaryTree = new BinarySearchTree<int>();
                     var sortedList = from element in Rows
                                      where (!(fieldInfo.GetValue(element).ToString() == "0"))
                                      orderby fieldInfo.GetValue(element)
                                      select Rows.IndexOf(element);
-                    foreach (int i in sortedList.ToArray())
-                    {
-                        binaryTree.Add(i);
-                    }
-                    customSorts[pos] = binaryTree.Postorder.ToArray();
+                    customSorts[pos] = sortedList.ToArray();
                 }
                 #endregion
 

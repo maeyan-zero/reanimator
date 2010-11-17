@@ -110,10 +110,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dlls\DotNetZip\Release\Ionic.Zip.dll</HintPath>
     </Reference>
-    <Reference Include="skmDataStructures2, Version=1.0.3915.36930, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dlls\skmDataStructures2\Release\skmDataStructures2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>

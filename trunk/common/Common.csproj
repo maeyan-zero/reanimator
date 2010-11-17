@@ -81,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitBuffer.cs" />
     <Compile Include="ExceptionLogger.cs" />
     <Compile Include="FileTools.cs" />
     <Compile Include="FormTools.cs" />
