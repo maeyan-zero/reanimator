@@ -122,7 +122,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PreBuildEvent>if $(PlatformName) == x86 copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll
+    <PreBuildEvent>if $(PlatformName) == x86 copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll"
 if $(PlatformName) == x64 copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"</PreBuildEvent>
   </PropertyGroup>
 </Project>
