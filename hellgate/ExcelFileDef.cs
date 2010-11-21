@@ -655,27 +655,83 @@ namespace Hellgate
             //}
         }
 
-        uint[,] CreateSignature()
+        UInt32[,] CreateIndexBitRelations()
         {
-            int length = (int)(System.Math.Ceiling((double)(Count / Signature.Length)));
-            uint[,] signature = new uint[Count,length];
-
-            int i = 0;
-            int pos = 0;
-            int sig = 0;
-            
-            // Assign unique signatures
-            while (i < Count)
+            // get our index ranges
+            int startIndex, endIndex;
+            switch (StringID)
             {
-                sig = ((i % Signature.Length) % Signature.Length);
-                signature[i++, pos] = Signature[sig];
-                if ((sig == (Signature.Length - 1))) pos++;
+                case "STATES":
+                    // states has 10x columns to check from 3 (zero based index)
+                    startIndex = 3;
+                    endIndex = startIndex + 10;
+                    break;
+
+                case "UNITTYPES":
+                    // unittypes has 16x columns to check from 2
+                    startIndex = 2;
+                    endIndex = startIndex + 15;
+                    break;
+
+                default:
+                    // this shouldn't happen
+                    return new uint[0,0];
             }
 
-            // OR relationships
 
-            return signature;
+            // need 1 bit for every row; 32 bits per int
+            int intCount = (Count >> 5) + 1;
+            UInt32[,] indexBitRelations = new UInt32[Count,intCount];
+            bool[] isGenerated = new bool[Count];
+
+
+            // generate binary relation table
+            for (int i = 0; i < Count; i++)
+            {
+                if (isGenerated[i]) continue;
+
+                _GenerateIndexBitRelation(ref indexBitRelations, ref isGenerated, i, startIndex, endIndex);
+                isGenerated[i] = true;
+            }
+
+            return indexBitRelations;
         }
+
+        void _GenerateIndexBitRelation(ref uint[,] indexBitRelations, ref bool[] isGenerated, int index, int startIndex, int endIndex)
+        {
+            int intCount = (Count >> 5) + 1;
+
+            // need column fields
+            Object row = Rows[index];
+            FieldInfo[] fields = Rows[0].GetType().GetFields();
+
+            // each row has its own bit high
+            int intOffset = index >> 5;
+            indexBitRelations[index, intOffset] |= (uint)1 << index;
+
+            // check isAX columns
+            for (int j = startIndex; j < endIndex; j++)
+            {
+                int value = (int)fields[j].GetValue(row);
+                if (value == -1) continue; // at first -1, no other values have been found (tested)
+
+                intOffset = value >> 5;
+                indexBitRelations[index, intOffset] |= (uint)1 << value;
+
+                if (!isGenerated[value])
+                {
+                    _GenerateIndexBitRelation(ref indexBitRelations, ref isGenerated, value, startIndex, endIndex);
+                    isGenerated[value] = true;
+                }
+
+                // now we need to | the related row and its relations
+                for (int relationIndex = 0; relationIndex < intCount; relationIndex++)
+                {
+                    indexBitRelations[index, relationIndex] |= indexBitRelations[value, relationIndex];
+                }
+            }
+        }
+
 
         void DoPrecedenceHack(FieldInfo fieldInfo)
         {

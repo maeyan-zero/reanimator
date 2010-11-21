@@ -390,7 +390,7 @@ namespace Hellgate
 
             //DEBUG - these parts arn't finished
             if (ExcelMap.HasMysh) return null;
-            if (ExcelMap.HasSignature) return null;
+            // if (ExcelMap.HasSignature) return null;
 
             // The Excel File header
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
@@ -499,14 +499,15 @@ namespace Hellgate
             // Unittypes, states.
             if ((ExcelMap.HasSignature))
             {
-                int blockSize = ((int)(System.Math.Ceiling((double)(Count / Signature.Length))) >> 2);
+                int blockSize = (Count >> 5) + 1; // need 1 bit for every row; 32 bits per int - blockSize = no. of Int's
+                UInt32[,] indexBitRelations = CreateIndexBitRelations();
+                byte[] relationsData = new byte[Count*blockSize*sizeof (UInt32)];
+                Buffer.BlockCopy(indexBitRelations, 0, relationsData, 0, relationsData.Length);
+
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, blockSize);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Count);
-                foreach (uint integer in CreateSignature())
-                {
-                    FileTools.WriteToBuffer(ref buffer, ref offset, integer);
-                }
+                FileTools.WriteToBuffer(ref buffer, ref offset, relationsData);
             }
             else
             {
@@ -516,7 +517,7 @@ namespace Hellgate
             }
 
             // Resize
-            Array.Resize<byte>(ref buffer, offset);
+            Array.Resize(ref buffer, offset);
             return buffer;
         }
 

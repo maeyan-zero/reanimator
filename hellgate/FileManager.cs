@@ -98,28 +98,33 @@ namespace Hellgate
             DataFiles = new Dictionary<string,DataFile>();
             foreach (FileEntry fileEntry in FileEntries.Values)
             {
+                // Check if its a excel file by its file extentsion
+                if (!(fileEntry.FileNameString.Contains(ExcelFile.FileExtention)))
+                {
+                    continue;
+                }
                 // Do not load excel files that have been "backed up"
                 if ((fileEntry.DirectoryString.Contains(Index.BackupPrefix)))
                 {
                     continue;
                 }
 
-                // Check if its a excel file by its file extentsion
-                if (!(fileEntry.FileNameString.Contains(ExcelFile.FileExtention)))
-                {
-                    continue;
-                }
 
                 // Create a hashtable key from the filename
                 string fileName = fileEntry.FileNameString;
                 fileName = fileName.Replace(ExcelFile.FileExtention, "");
                 fileName = fileName.ToUpper();
+                // todo: fileName not used for anything - is it needed?
+
 
                 // If the accompanying dat isn't open, open it
-                if (!(fileEntry.Parent.DatFileOpen))
+                if (!fileEntry.Parent.DatFileOpen && !fileEntry.Parent.OpenDat(FileAccess.Read))
                 {
-                    fileEntry.Parent.OpenDat(FileAccess.Read);
+                    // todo: add error message/log
+                    // can happen when .dat doesn't exist (renamed files), or when we .dat is in use (HGL)
+                    continue;
                 }
+
 
                 // Parse the excel file and if it reads okay add it to the table
                 byte[] fileBytes = fileEntry.Parent.GetFileBytes(fileEntry);
