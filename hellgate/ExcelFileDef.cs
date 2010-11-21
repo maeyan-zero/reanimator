@@ -14,13 +14,13 @@ namespace Hellgate
     {
         public const String FolderPath = "excel\\";
         public const String FileExtention = ".txt.cooked";
-        public static KeyValuePair<uint,TypeMap>[] DataTypes;
-        public static KeyValuePair<string,uint>[] DataTables;
+        public static KeyValuePair<uint, TypeMap>[] DataTypes;
+        public static KeyValuePair<string, uint>[] DataTables;
 
         static ExcelFile()
         {
             #region Data Types List
-            DataTypes = new KeyValuePair<uint,TypeMap>[]
+            DataTypes = new KeyValuePair<uint, TypeMap>[]
             {
                 new KeyValuePair<uint,TypeMap>((uint)0x01082DBE, new TypeMap { DataType = typeof(UnitEvents) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x01A80106, new TypeMap { DataType = typeof(FactionStanding) }),
@@ -42,7 +42,7 @@ namespace Hellgate
                 new KeyValuePair<uint,TypeMap>((uint)0x1E760FB1, new TypeMap { DataType = typeof(SoundBuses) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1EE32EF6, new TypeMap { DataType = typeof(Bones) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1F0513C5, new TypeMap { DataType = typeof(WardrobeModelGroupRow) }),
-                new KeyValuePair<uint,TypeMap>((uint)0x1F9DDC98, new TypeMap { DataType = typeof(UnitTypes), IgnoresTable = true, HasSignature = true }),
+                new KeyValuePair<uint,TypeMap>((uint)0x1F9DDC98, new TypeMap { DataType = typeof(UnitTypes), IgnoresTable = true, HasIndexBitRelations = true }),
 
                 new KeyValuePair<uint,TypeMap>((uint)0x22FCCFEB, new TypeMap { DataType = typeof(StringFiles) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x26BC8A8D, new TypeMap { DataType = typeof(DamageEffects) }),
@@ -165,11 +165,11 @@ namespace Hellgate
                 new KeyValuePair<uint,TypeMap>((uint)0xF98A5E41, new TypeMap { DataType = typeof(LoadingTips) }),
                 new KeyValuePair<uint,TypeMap>((uint)0xFA7B3939, new TypeMap { DataType = typeof(WardrobeAppearanceGroup) }),
                 new KeyValuePair<uint,TypeMap>((uint)0xFC8E3B0C, new TypeMap { DataType = typeof(Interact) }),
-                new KeyValuePair<uint,TypeMap>((uint)0xFD6839DE, new TypeMap { DataType = typeof(States), HasSignature = true }),
+                new KeyValuePair<uint,TypeMap>((uint)0xFD6839DE, new TypeMap { DataType = typeof(States), HasIndexBitRelations = true }),
                 new KeyValuePair<uint,TypeMap>((uint)0xFE47EF60, new TypeMap { DataType = typeof(Palettes) })
             };
 
-            DataTables = new KeyValuePair<string,uint>[]
+            DataTables = new KeyValuePair<string, uint>[]
             {
                 new KeyValuePair<String, UInt32>("ACHIEVEMENTS", 0x62ECA6E1),
                 new KeyValuePair<String, UInt32>("ACT", 0xBB554372),
@@ -351,7 +351,7 @@ namespace Hellgate
             public Type DataType;
             public Boolean HasMysh;
             public Boolean HasExtended;
-            public Boolean HasSignature;
+            public Boolean HasIndexBitRelations;
             public Boolean IgnoresTable;
         }
 
@@ -430,18 +430,6 @@ namespace Hellgate
             public const String SortPostOrderID = "SortPostOrderID";
         }
 
-        static uint[] Signature = new uint[]
-        {
-            0x00000001, 0x00000002, 0x00000004, 0x00000008,
-            0x00000010, 0x00000020, 0x00000040, 0x00000080,
-            0x00000100, 0x00000200, 0x00000400, 0x00000800,
-            0x00001000, 0x00002000, 0x00004000, 0x00008000,
-            0x00010000, 0x00020000, 0x00040000, 0x00080000,
-            0x00100000, 0x00200000, 0x00400000, 0x00800000,
-            0x01000000, 0x02000000, 0x04000000, 0x08000000,
-            0x10000000, 0x20000000, 0x40000000, 0x80000000
-        };
-
         static class IntTableDef
         {
             // t, x, 0
@@ -496,7 +484,7 @@ namespace Hellgate
         {
             int position = offset;
             int value = FileTools.ByteArrayToInt32(IntegerBuffer, position);
-            
+
             while (!(value == 0))
             {
                 if (IntTableDef.Case01.Contains(value))
@@ -517,7 +505,7 @@ namespace Hellgate
 
         public string ReadStringTable(int offset)
         {
-            return FileTools.ByteArrayToStringASCII(StringBuffer, offset);
+            return offset == -1 ? String.Empty : FileTools.ByteArrayToStringASCII(StringBuffer, offset);
         }
 
         public byte[] ReadStringTableAsBytes(int offset)
@@ -675,13 +663,13 @@ namespace Hellgate
 
                 default:
                     // this shouldn't happen
-                    return new uint[0,0];
+                    return new uint[0, 0];
             }
 
 
             // need 1 bit for every row; 32 bits per int
             int intCount = (Count >> 5) + 1;
-            UInt32[,] indexBitRelations = new UInt32[Count,intCount];
+            UInt32[,] indexBitRelations = new UInt32[Count, intCount];
             bool[] isGenerated = new bool[Count];
 
 
@@ -756,7 +744,7 @@ namespace Hellgate
                             StringBuffer[i] = (byte)'8';
                             break;
                         case (byte)'_':
-                            StringBuffer[i] = (byte)'9'; 
+                            StringBuffer[i] = (byte)'9';
                             break;
                     }
                 }
@@ -790,14 +778,14 @@ namespace Hellgate
                 OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
                 if ((attribute == null)) continue;
                 if ((attribute.SortAscendingID == 0) && (attribute.SortDistinctID == 0) && (attribute.SortPostOrderID == 0)) continue;
-                
+
                 // Precedence Hack
                 // This Excel files order special characters differently to convention
                 DoPrecedenceHack(fieldInfo);
 
                 #region Ascending Sort
                 // Standard Ascending Sort
-                if (!(attribute.SortAscendingID == 0))
+                if (attribute.SortAscendingID != 0)
                 {
                     // Gets the sort array position
                     int pos = attribute.SortAscendingID - 1;
@@ -805,7 +793,7 @@ namespace Hellgate
                     FieldInfo codeFieldInfo = DataType.GetField("code");
 
                     // 1 Ascending Sort Column
-                    if ((String.IsNullOrEmpty(attribute.SortColumnTwo)))
+                    if (String.IsNullOrEmpty(attribute.SortColumnTwo))
                     {
                         // Requires Default
                         if ((attribute.RequiresDefault))
@@ -815,13 +803,13 @@ namespace Hellgate
                                               select Rows.IndexOf(element)).First();
 
                             // Contains a code column
-                            if (!(codeFieldInfo == null))
+                            if (codeFieldInfo != null)
                             {
                                 if (codeFieldInfo.FieldType == typeof(short))
                                 {
                                     var sortedList = from element in Rows
-                                                     where ((!((short)codeFieldInfo.GetValue(element) == 0) &&
-                                                             !(fieldInfo.GetValue(element).ToString() == "-1") &&
+                                                     where (((short)codeFieldInfo.GetValue(element) != 0 &&
+                                                             fieldInfo.GetValue(element).ToString() != "-1" &&
                                                              !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString()))) ||
                                                              Rows.IndexOf(element) == defaultRow)
                                                      orderby fieldInfo.GetValue(element)
@@ -831,9 +819,9 @@ namespace Hellgate
                                 else
                                 {
                                     var sortedList = from element in Rows
-                                                     where ((!((int)codeFieldInfo.GetValue(element) == 0) &&
-                                                             !(fieldInfo.GetValue(element).ToString() == "-1") &&
-                                                             !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString()))) ||
+                                                     where (((int)codeFieldInfo.GetValue(element) != 0 &&
+                                                             fieldInfo.GetValue(element).ToString() != "-1" &&
+                                                             !String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())) ||
                                                              Rows.IndexOf(element) == defaultRow)
                                                      orderby fieldInfo.GetValue(element)
                                                      select Rows.IndexOf(element);
@@ -844,8 +832,8 @@ namespace Hellgate
                             else
                             {
                                 var sortedList = from element in Rows
-                                                 where ((!(fieldInfo.GetValue(element).ToString() == "-1") &&
-                                                         !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString()))) ||
+                                                 where ((fieldInfo.GetValue(element).ToString() != "-1" &&
+                                                         !String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())) ||
                                                          Rows.IndexOf(element) == defaultRow)
                                                  orderby fieldInfo.GetValue(element)
                                                  select Rows.IndexOf(element);
@@ -871,12 +859,10 @@ namespace Hellgate
                                 else
                                 {
                                     // Is a string offset
-                                    if ((attribute.IsStringOffset))
+                                    if (attribute.IsStringOffset)
                                     {
                                         var sortedList = from element in Rows
-                                                         where (!((int)codeFieldInfo.GetValue(element) == 0) &&
-                                                                !(fieldInfo.GetValue(element).ToString() == "-1") &&
-                                                                !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())))
+                                                         where (int)codeFieldInfo.GetValue(element) != 0
                                                          orderby ReadStringTable((int)fieldInfo.GetValue(element))
                                                          select Rows.IndexOf(element);
                                         customSorts[pos] = sortedList.ToArray();
