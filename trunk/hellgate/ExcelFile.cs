@@ -37,7 +37,7 @@ namespace Hellgate
             Unknown166 = 0x00
         };
 
-        TableHeader ExcelTableHeader = new TableHeader
+        readonly TableHeader ExcelTableHeader = new TableHeader
         {
             Unknown1 = 0x03,
             Unknown2 = 0x3F,
@@ -73,7 +73,7 @@ namespace Hellgate
         /// </summary>
         /// <param name="buffer">The CSV file as a byte array.</param>
         /// <returns>True if the buffer parsed okay.</returns>
-        public override bool ParseCSV(byte[] buffer)
+        public override sealed bool ParseCSV(byte[] buffer)
         {
             // Pre-checks
             if (buffer == null) return false;
@@ -81,7 +81,7 @@ namespace Hellgate
 
             // Initialization
             int offset = 0;
-            byte delimiter = (byte)'\t';
+            const byte delimiter = (byte)'\t';
             int stringBufferOffset = 0;
             int integerBufferOffset = 1;
 
@@ -104,7 +104,7 @@ namespace Hellgate
 
             // Parse the tableRows
             Rows = new List<Object>();
-            BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             for (int row = 0; row < tableRows.Count(); row++)
             {
                 int col = 0;
@@ -138,19 +138,21 @@ namespace Hellgate
                     // All public fields must be inside the CSV
                     string value = tableRows[row][col++];
                     OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
-                    if (!(attribute == null))
+                    if (attribute != null)
                     {
-                        if ((attribute.IsStringOffset))
+                        if (attribute.IsStringOffset)
                         {
-                            if ((StringBuffer == null))
+                            if (StringBuffer == null)
                             {
                                 StringBuffer = new byte[1024];
                             }
-                            if ((String.IsNullOrEmpty(value)))
+
+                            if (String.IsNullOrEmpty(value))
                             {
                                 fieldInfo.SetValue(rowInstance, -1);
                                 continue;
                             }
+
                             fieldInfo.SetValue(rowInstance, stringBufferOffset);
                             FileTools.WriteToBuffer(ref StringBuffer, ref stringBufferOffset, FileTools.StringToASCIIByteArray(value));
                             FileTools.WriteToBuffer(ref StringBuffer, ref stringBufferOffset, (byte)0x00);
@@ -249,7 +251,7 @@ namespace Hellgate
         /// </summary>
         /// <param name="buffer">The serialized excel file as a byte array.</param>
         /// <returns>True if the buffer parsed okay.</returns>
-        public override bool ParseData(byte[] buffer)
+        public override sealed bool ParseData(byte[] buffer)
         {
             if ((buffer == null)) return false;
             if ((buffer.Length == 0)) return false;
@@ -263,12 +265,12 @@ namespace Hellgate
 
             // Strings Block
             if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
-            int StringBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
-            if (!(StringBufferOffset == 0))
+            int stringBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
+            if (stringBufferOffset != 0)
             {
-                StringBuffer = new byte[StringBufferOffset];
-                Buffer.BlockCopy(buffer, offset, StringBuffer, 0, StringBufferOffset);
-                offset += StringBufferOffset;
+                StringBuffer = new byte[stringBufferOffset];
+                Buffer.BlockCopy(buffer, offset, StringBuffer, 0, stringBufferOffset);
+                offset += stringBufferOffset;
             }
 
             // Dataset Block
@@ -284,7 +286,7 @@ namespace Hellgate
             if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
             if (!(ExcelMap.HasExtended))
             {
-                offset += (Count * sizeof(int));// do not allocate this array
+                offset += (Count * sizeof(int)); // do not allocate this array
             }
             else
             {
@@ -303,7 +305,7 @@ namespace Hellgate
             if (!(CheckFlag(buffer, offset, Token.cxeh)))
             {
                 int stringCount = FileTools.ByteArrayToInt32(buffer, ref offset);
-                if (!(stringCount == 0)) SecondaryStrings = new StringCollection();
+                if (stringCount != 0) SecondaryStrings = new StringCollection();
                 for (int i = 0; i < stringCount; i++)
                 {
                     int charCount = FileTools.ByteArrayToInt32(buffer, ref offset);
@@ -343,12 +345,12 @@ namespace Hellgate
             {
                 if ((CheckFlag(buffer, ref offset, Token.cxeh)))
                 {
-                    int IntegerBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
-                    if (!(IntegerBufferOffset == 0))
+                    int integerBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
+                    if (integerBufferOffset != 0)
                     {
-                        IntegerBuffer = new byte[IntegerBufferOffset];
-                        Buffer.BlockCopy(buffer, offset, IntegerBuffer, 0, IntegerBufferOffset);
-                        offset += IntegerBufferOffset;
+                        IntegerBuffer = new byte[integerBufferOffset];
+                        Buffer.BlockCopy(buffer, offset, IntegerBuffer, 0, integerBufferOffset);
+                        offset += integerBufferOffset;
                     }
                 }
             }
@@ -495,9 +497,9 @@ namespace Hellgate
                 }
             }
 
-            // Signature. Used with isa1, isa2, isa3 etc etc.
-            // Unittypes, states.
-            if ((ExcelMap.HasSignature))
+            // row-row index bit relations - generated from isA0, isA1, isA2 etc
+            // only applicable on the UNITTYPES and STATES tables
+            if (ExcelMap.HasIndexBitRelations)
             {
                 int blockSize = (Count >> 5) + 1; // need 1 bit for every row; 32 bits per int - blockSize = no. of Int's
                 UInt32[,] indexBitRelations = CreateIndexBitRelations();
