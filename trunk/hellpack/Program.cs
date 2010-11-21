@@ -10,6 +10,17 @@ namespace Hellpack
     {
         static void Main(string[] args)
         {
+            if (false)
+            {
+                FileManager fileManager = new FileManager(@"D:\Games\Hellgate London");
+                fileManager.LoadExcelFiles();
+                byte[] data = fileManager.DataFiles["STATES"].ExportCSV();
+                File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\states.orig.txt", data);
+            }
+
+
+
+
             String currentDir = Directory.GetCurrentDirectory();
             String dataDir = Path.Combine(currentDir, Common.DataPath);
             String dataCommonDir = Path.Combine(currentDir, Common.DataCommonPath);
@@ -97,8 +108,15 @@ namespace Hellpack
                 int dataCursor = directory.IndexOf("data");
                 directory = directory.Remove(0, dataCursor) + "\\";
                 
-                byte[] buffer = File.ReadAllBytes(filePath);
-                if (buffer == null) continue;
+                byte[] buffer;
+                try
+                {
+                    buffer = File.ReadAllBytes(filePath); // buffer is never null - only exceptions are thrown
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
 
                 Console.WriteLine("Packing " + directory + fileName);
                 newPack.AddFile(directory, fileName, buffer);
