@@ -1,0 +1,349 @@
+<ui>
+  <widthbasis>1600</widthbasis>
+  <heightbasis>1200</heightbasis>
+  <ws_widthbasis>1920</ws_widthbasis>
+  <screen>
+    <name>cube screen</name>
+		<texture>cube_atlas</texture>
+    <font>Upper_Font</font>
+    <fontsize>46</fontsize>
+    <x>0</x>
+    <y>0</y>
+		<font>Eurostile</font>
+		<fontsize>32</fontsize>
+    <width>1600</width>
+    <height>1200</height>
+    <ws_width>1920</ws_width>
+
+    <panel name="cube panel">
+      <frame>cube_panel_top</frame>
+      <x>448</x>
+      <y>12</y>
+      <tgty>-640</tgty>
+      <ws_x>592</ws_x>
+      <width>730</width>
+      <height>1002</height>
+      <visible>0</visible>
+      <stretch>0</stretch>
+
+      <anim_category>close all</anim_category>
+      <anim_category>quick close</anim_category>
+      <anim_category>middle panel</anim_category>
+      <anim_relationship type="replaces" onactivate="1" ifuseractive="1" preserveuseractive="1" category="1">middle panel</anim_relationship>
+
+      <OnSetControlUnit>UIComponentSetFocusUnit</OnSetControlUnit>
+      <OnPostInactivate>UICubeOnPostInactivate</OnPostInactivate>
+
+      <label name="cube name label">
+        <x>150</x>
+        <y>8</y>
+        <width>420</width>
+        <height>36</height>
+        <string>xmas_sporadic_cube3</string>
+        <align>center</align>
+        <autosizefont>1</autosizefont>
+        <font>Upper_Font</font>
+        <fontsize>32</fontsize>
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+      </label>
+      
+      <!-- Ingredient inventory grid -->
+      <invgrid name="cube grid">
+        <cellx>65</cellx>
+        <celly>66</celly>
+        <cellborder>0</cellborder>
+        <texture>inventory_atlas</texture>
+        <ws_texture>WSinventory_atlas</ws_texture>
+        <litframe>verybighighlight</litframe>
+        <useableborder>verybighighlightborder</useableborder>
+        <unidentifiedicon>inv small no id</unidentifiedicon>
+        <badclassicon>inv small no use1</badclassicon>
+        <badclassuicon>inv small no use 1 and 2</badclassuicon>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <!-- 
+        <frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</frame>
+        <ws_frame tile="1" tilepaddingx="1" tilepaddingy="1">stash grid</ws_frame>
+        -->
+        <x>291</x>
+        <y>50</y>
+        <width>390</width>
+        <height>396</height>
+        <invloc>cube</invloc>
+        <zdelta>-0.001</zdelta>
+        <rendersection>Models</rendersection>
+        <OnInventoryChange>UICubeOnChangeIngredients</OnInventoryChange>
+        <label>
+          <name>quantity text</name>
+          <x>-4</x>
+          <y>-4</y>
+          <width>544</width>
+          <height>396</height>
+          <fontsize>14</fontsize>
+          <noscalefont>1</noscalefont>
+          <rendersection>ItemText</rendersection>
+          <align>bottomright</align>
+        </label>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>544</width>
+          <height>273</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+      </invgrid>
+
+      <!-- Turned off for now... no client items... *boggle* -->
+      <invslot name="cube result picture">
+        <x>141</x>
+        <y>136</y>
+        <width>132</width>
+        <height>132</height>
+        <stretch>1</stretch>
+        <unidentifiedicon>inv small no id</unidentifiedicon>
+        <badclassicon>inv small no use1</badclassicon>
+        <badclassuicon>inv small no use 1 and 2</badclassuicon>
+        <lowstatsicon>inv sm no use2</lowstatsicon>
+        <rendersection>Models</rendersection>
+        <model_border_x>10</model_border_x>
+        <model_border_y>10</model_border_y>
+        <hasownfocusunit>1</hasownfocusunit>
+        <panel name="icon panel">
+          <texture>main_atlas</texture>
+          <width>98</width>
+          <height>98</height>
+          <rendersection>ItemText</rendersection>
+        </panel>
+      </invslot>
+
+      <!-- Create button -->
+      <button name="cube button create">
+        <x>50</x>
+        <y>402</y>
+        <width>232</width>
+        <height>42</height>
+        <frame>create_button</frame>
+        <litframe>create_button_mouse</litframe>
+        <downframe>create_button_dn</downframe>
+        <inactiveframe>create_button_dis</inactiveframe>
+        <visible>1</visible>
+        <stretch>1</stretch>
+        <OnLClick>UICubeCreate</OnLClick>
+        <OnLButtonDownSnd>PowerSupplyPU</OnLButtonDownSnd>
+        <OnLButtonDownSnd>ButtonAccept</OnLButtonDownSnd>
+        <independentactivate>1</independentactivate>
+        <label>
+          <x>0</x>
+          <y>0</y>
+          <width>222</width>
+          <height>42</height>
+          <fontsize>30</fontsize>
+          <string>RecipeCreate</string>
+          <align>center</align>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>120</dropshadowred>
+          <dropshadowgreen>120</dropshadowgreen>
+          <dropshadowblue>120</dropshadowblue>
+        </label>
+      </button>
+
+      <!-- Close button -->
+      <button name="cube button close">
+        <x>639</x>
+        <y>11</y>
+        <width>33</width>
+        <height>34</height>
+        <frame>close_button</frame>
+        <litframe>close_button_mouse</litframe>
+        <downframe>close_button_dn</downframe>
+        <visible>1</visible>
+        <OnLClick>UICubeCancel</OnLClick>
+        <OnLButtonDownSnd>ButtonReject</OnLButtonDownSnd>
+        <OnLButtonDownSnd>CloseInventory</OnLButtonDownSnd>
+        <independentactivate>0</independentactivate>
+      </button>
+
+      <!-- Recipe Open button -->
+      <button name="cube button open recipe">
+        <x>318</x>
+        <y>457</y>
+        <width>94</width>
+        <height>29</height>
+        <frame>panel_dn_button</frame>
+        <litframe>panel_dn_button_mouse</litframe>
+        <downframe>panel_dn_button_dn</downframe>
+        <visible>1</visible>
+        <OnLClick>UICubeRecipeOpen</OnLClick>
+        <OnLButtonDownSnd>PowerSupplyPU</OnLButtonDownSnd>
+        <OnLButtonDownSnd>ButtonAccept</OnLButtonDownSnd>
+        <independentactivate>1</independentactivate>
+      </button>
+
+      <!-- Recipe Open button -->
+      <button name="cube button close recipe">
+        <x>318</x>
+        <y>457</y>
+        <width>94</width>
+        <height>29</height>
+        <frame>panel_up_button</frame>
+        <litframe>panel_up_button_mouse</litframe>
+        <downframe>panel_up_button_dn</downframe>
+        <visible>0</visible>
+        <OnLClick>UICubeRecipeClose</OnLClick>
+        <OnLButtonDownSnd>PowerSupplyPU</OnLButtonDownSnd>
+        <OnLButtonDownSnd>ButtonAccept</OnLButtonDownSnd>
+        <independentactivate>1</independentactivate>
+      </button>
+
+      <!-- Recipe list panel -->
+      <panel name="cube recipe list">
+        <frame>cube_panel_btm</frame>
+        <x>1</x>
+        <y>465</y>
+        <width>729</width>
+        <height>512</height>
+        <stretch>0</stretch>
+        <visible>0</visible>
+        <font>Lower_Font</font>
+        <fontsize>20</fontsize>
+        <independentactivate>1</independentactivate>
+
+        <OnPaint>UICubeRecipeOnPaint</OnPaint>
+
+        <flexborder>
+          <x>10</x>
+          <y>98</y>
+          <width>675</width>
+          <height>316</height>
+          <autosize>0</autosize>
+          <frameTL>tilebox_1</frameTL>
+          <frameTM>tilebox_2</frameTM>
+          <frameTR>tilebox_3</frameTR>
+          <frameML>tilebox_4</frameML>
+          <frameMM>tilebox_5</frameMM>
+          <frameMR>tilebox_6</frameMR>
+          <frameBL>tilebox_7</frameBL>
+          <frameBM>tilebox_8</frameBM>
+          <frameBR>tilebox_9</frameBR>
+          <clipchildren>1</clipchildren>
+          <panel name="highlight panel">
+            <x>0</x>
+            <y>0</y>
+            <width>675</width>
+            <height>21</height>
+            <!--<texture>inventory_atlas</texture>-->
+            <!--<frame>whitebox</frame>-->
+            <frame>create_button</frame>
+            <stretch>1</stretch>
+            <alpha>128</alpha>
+            <independentactivate>1</independentactivate>
+            <visible>0</visible>
+          </panel>
+        </flexborder>
+        <label name="name column label">
+          <x>30</x>
+          <y>63</y>
+          <width>266</width>
+          <height>39</height>
+          <string>RecipeResults</string>
+          <align>left</align>
+          <autosizefont>1</autosizefont>
+          <font>Upper_Font</font>
+          <fontsize>24</fontsize>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+          <selectedred>255</selectedred>
+          <selectedgreen>255</selectedgreen>
+          <selectedblue>0</selectedblue>
+        </label>
+        <panel name="name column">
+          <alpha>128</alpha>
+          <x>30</x>
+          <y>102</y>
+          <width>215</width>
+          <height>307</height>
+          <OnLClick>UICubeColumnOnClick</OnLClick>
+          <OnPaint>UIIgnoreMsgHandler</OnPaint>
+          <!--its parent will paint it-->
+        </panel>
+        <label name="ingredient column label">
+          <x>252</x>
+          <y>63</y>
+          <width>425</width>
+          <height>39</height>
+          <string>RecipeDescription</string>
+          <align>left</align>
+          <autosizefont>1</autosizefont>
+          <font>Upper_Font</font>
+          <fontsize>24</fontsize>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+          <selectedred>255</selectedred>
+          <selectedgreen>255</selectedgreen>
+          <selectedblue>0</selectedblue>
+        </label>
+        <panel name="ingredient column">
+          <x>252</x>
+          <y>102</y>
+          <width>430</width>
+          <height>307</height>
+          <OnLClick>UICubeColumnOnClick</OnLClick>
+          <OnPaint>UIIgnoreMsgHandler</OnPaint>
+          <!--its parent will paint it-->
+        </panel>
+
+        <scrollbar name="cube list scrollbar">
+          <frame tile="1">scroll_track</frame>
+          <ws_frame tile="1">scroll_track</ws_frame>
+          <x>682</x>
+          <y>134</y>
+          <width>16</width>
+          <height>244</height>
+          <alpha>255</alpha>
+          <OnScroll>UIScrollBarOnScroll</OnScroll>
+          <minvalue>0</minvalue>
+          <maxvalue>0</maxvalue>
+          <thumbpadframe>scroll_thumbpad</thumbpadframe>
+          <orientation>top</orientation>
+          <OnScroll>UICubeScrollBarOnScroll</OnScroll>
+        <wheelscrollincrement>66</wheelscrollincrement>
+          <OnMouseWheel>UICubeScrollBarOnMouseWheel</OnMouseWheel>
+        </scrollbar>
+        <button name="cube scroll button up">
+          <frame>scroll_button_up</frame>
+          <downframe>scroll_button_up_dn</downframe>
+          <litframe>scroll_button_up_mouse</litframe>
+          <x>682</x>
+          <y>100</y>
+          <width>34</width>
+          <height>34</height>
+          <scrollcontrol inc="-20">cube list scrollbar</scrollcontrol>
+        </button>
+        <button name="cube scroll button down">
+          <frame>scroll_button_dn</frame>
+          <downframe>scroll_button_dn_dn</downframe>
+          <litframe>scroll_button_dn_mouse</litframe>
+          <x>682</x>
+          <y>378</y>
+          <width>34</width>
+          <height>34</height>
+          <scrollcontrol inc="20">cube list scrollbar</scrollcontrol>
+        </button>
+
+      </panel>
+           
+    </panel> 
+    
+  </screen>
+  
+</ui>
