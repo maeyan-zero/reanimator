@@ -1,0 +1,829 @@
+<ui>
+  <widthbasis>1600</widthbasis>
+  <heightbasis>1200</heightbasis>
+  <ws_widthbasis>1920</ws_widthbasis>
+  <screen>
+    <name>gamestart screen</name>
+    <texture>loading_atlas</texture>
+    <ws_texture>WSloading_atlas</ws_texture>
+    <texture lang="Korean">loading_kor_atlas</texture>
+    <ws_texture lang="Korean">WSloading_kor_atlas</ws_texture>
+    <font>Upper_Font_Bold</font>
+    <fontsize>48</fontsize>
+	<x>0</x>
+    <y>0</y>
+    <width>1600</width>
+    <height>1200</height>
+    <ws_width>1920</ws_width>
+    <visible>0</visible>
+    <independentactivate>1</independentactivate>
+    <rendersection>Menus</rendersection>
+    <frame>loading</frame>
+    <OnKeyDown>UIMainMenuOnKeyDown</OnKeyDown>   <!-- This will process the slash key and if cheats are enabled bring up the console -->
+    <OnPaint>UIPaintIfNoMovieIsPlaying</OnPaint>  <!-- Some SKUs play a movie as a background -->
+    <menu name="game type menu">
+      <x>0</x>
+      <y>0</y>
+      <width>1600</width>
+      <height>1200</height>
+      <ws_width>1920</ws_width>
+      <!--<frame>loading</frame>-->
+      <!--      <alpha>128</alpha> -->
+      <independentactivate>1</independentactivate>
+      <visible>0</visible>
+      <fontsize>64</fontsize>
+      <usescursor>1</usescursor>
+      <anim_relationship type="closes" onactivate="1">dashboard</anim_relationship>
+      <anim_relationship type="opens" onactivate="1">panel legal</anim_relationship>
+
+      <OnKeyUp>UIMenuDoSelectedOnEnter</OnKeyUp>
+      <panel name="background panel">
+        <texture>char_create_atlas</texture>
+        <frame>main menu bkgrd</frame>
+        <x>434</x>
+        <ws_x>594</ws_x>
+        <y>555</y>
+        <width>732</width>
+        <height>330</height>
+        <stretch>1</stretch>
+      </panel>
+      <label name="ui menu singleplayer">
+        <string>ui menu singleplayer</string>
+        <x>0</x>
+        <y>800</y>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>0</menuorder>
+        <OnLClick>UIStartGameMenuDoSingleplayer</OnLClick>
+        <OnLClickSnd>TitleScreenSinglePlayer</OnLClickSnd>
+      </label>
+      <label name="ui menu multiplayer">
+        <string>ui menu multiplayer</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>1</menuorder>
+        <OnLClick>UIStartGameMenuDoMultiplayer</OnLClick>
+        <OnLClickSnd>TitleScreenMultiPlayer</OnLClickSnd>
+      </label>
+      <label name="ui menu options">
+        <string>ui menu options</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>2</menuorder>
+        <OnLClick>UIGameMenuDoOptions</OnLClick>
+		    <OnLClickSnd>TitleScreenSinglePlayer</OnLClickSnd>
+      </label>
+      <label name="ui menu credits">
+        <string>ui_credits</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>3</menuorder>
+        <OnLClick>UIButtonCreditsShow</OnLClick>
+      </label>
+      <label name="ui menu quit">
+        <string>ui menu quit</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <ws_width>1920</ws_width>
+        <height>64</height>
+        <align>top</align>
+        <menuorder>4</menuorder>
+        <OnLClick>UIStartGameMenuDoQuit</OnLClick>
+        <OnLClickSnd>TitleScreenQuit</OnLClickSnd>
+      </label>
+
+      <panel name="rating logo" sku="hanbitsoft_korea_censor,hanbitsoft_korea_online,hanbitsoft_korea_beta">
+        <texture lang="Korean">ratings_atlas_korea</texture>
+        <rendersection>debug</rendersection>
+        <x>1600</x>
+        <ws_x>1920</ws_x>
+        <y>0</y>
+        <noscale>1</noscale>
+
+        <panel name="main rating">
+          <x>-179</x>
+          <y>25</y>
+          <frame>rating_18</frame>
+          <width>154</width>
+          <height>168</height>
+          <stretch>1</stretch>
+        </panel>
+        <panel name="sub rating 1">
+          <x_rel>5</x_rel>
+          <y_rel>170</y_rel>
+          <frame>rating_running_from_arrows</frame>
+          <width>70</width>
+          <height>72</height>
+          <stretch>1</stretch>
+        </panel>
+        <panel name="sub rating 2">
+          <x_rel>75</x_rel>
+          <y_rel>0</y_rel>
+          <frame>rating_lightning</frame>
+          <width>70</width>
+          <height>72</height>
+          <stretch>1</stretch>
+        </panel>
+      </panel>
+    </menu>
+    <menu name="game type menu sp only">
+      <x>0</x>
+      <y>0</y>
+      <width>1600</width>
+      <height>1200</height>
+      <ws_width>1920</ws_width>
+      <!--<frame>loading</frame>-->
+      <!--      <alpha>128</alpha> -->
+      <independentactivate>1</independentactivate>
+      <visible>0</visible>
+      <fontsize>64</fontsize>
+	  <usescursor>1</usescursor>
+      <anim_relationship type="closes" onactivate="1">dashboard</anim_relationship>
+      <anim_relationship type="opens" onactivate="1">panel legal</anim_relationship>
+
+      <OnKeyUp>UIMenuDoSelectedOnEnter</OnKeyUp>
+      <panel name="sp background panel">
+        <texture>char_create_atlas</texture>
+        <frame>main menu bkgrd</frame>
+        <x>434</x>
+        <ws_x>594</ws_x>
+        <y>555</y>
+        <width>732</width>
+        <height>330</height>
+        <stretch>1</stretch>
+      </panel>
+      <!--  <label name="ui menu play">-->
+      <!--    <string>ui char select accept</string>-->
+      <label name="ui menu sp singleplayer">
+        <string>ui menu singleplayer</string>
+        <x>0</x>
+        <y>800</y>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>0</menuorder>
+		<red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <OnLClick>UIStartGameMenuDoSingleplayer</OnLClick>
+        <OnLClickSnd>TitleScreenSinglePlayer</OnLClickSnd>
+      </label>
+      <label name="ui menu sp options">
+        <string>ui menu options</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>1</menuorder>
+		<red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <OnLClick>UIGameMenuDoOptions</OnLClick>
+      </label>
+      <label name="ui menu sp credits">
+        <string>ui_credits</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>2</menuorder>
+		<red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <OnLClick>UIButtonCreditsShow</OnLClick>
+      </label>
+      <label name="ui menu sp quit">
+        <string>ui menu quit</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <ws_width>1920</ws_width>
+        <height>64</height>
+        <align>top</align>
+        <menuorder>3</menuorder>
+		<red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <OnLClick>UIStartGameMenuDoQuit</OnLClick>
+        <OnLClickSnd>TitleScreenQuit</OnLClickSnd>
+      </label>
+
+      <reference refname="rating logo" sku="hanbitsoft_korea_censor,hanbitsoft_korea_online,hanbitsoft_korea_beta"> </reference>
+
+    </menu>
+    <menu name="game type menu mp only">
+      <x>0</x>
+      <y>0</y>
+      <width>1600</width>
+      <height>1200</height>
+      <ws_width>1920</ws_width>
+      <!--<frame>loading</frame>-->
+      <!--      <alpha>128</alpha> -->
+      <independentactivate>1</independentactivate>
+      <visible>0</visible>
+      <fontsize>64</fontsize>
+      <usescursor>1</usescursor>
+      <anim_relationship type="closes" onactivate="1">dashboard</anim_relationship>
+      <anim_relationship type="opens" onactivate="1">panel legal</anim_relationship>
+
+      <OnKeyUp>UIMenuDoSelectedOnEnter</OnKeyUp>
+      <panel name="mp background panel">
+        <texture>char_create_atlas</texture>
+        <frame>main menu bkgrd</frame>
+        <x>434</x>
+        <ws_x>594</ws_x>
+        <y>555</y>
+        <width>732</width>
+        <height>330</height>
+        <stretch>1</stretch>
+      </panel>
+      <label name="ui menu mp multiplayer">
+        <string>ui menu multiplayer</string>
+        <x>0</x>
+        <y>800</y>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>0</menuorder>
+        <OnLClick>UIStartGameMenuDoMultiplayer</OnLClick>
+        <OnLClickSnd>TitleScreenMultiPlayer</OnLClickSnd>
+      </label>
+      <label name="ui menu mp options">
+        <string>ui menu options</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>1</menuorder>
+        <OnLClick>UIGameMenuDoOptions</OnLClick>
+      </label>
+      <label name="ui menu mp credits">
+        <string>ui_credits</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>2</menuorder>
+        <OnLClick>UIButtonCreditsShow</OnLClick>
+      </label>
+      <label name="ui menu mp quit">
+        <string>ui menu quit</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <ws_width>1920</ws_width>
+        <height>64</height>
+        <align>top</align>
+        <menuorder>3</menuorder>
+        <OnLClick>UIStartGameMenuDoQuit</OnLClick>
+        <OnLClickSnd>TitleScreenQuit</OnLClickSnd>
+      </label>
+
+      <reference refname="rating logo" sku="hanbitsoft_korea_censor,hanbitsoft_korea_online,hanbitsoft_korea_beta"> </reference>
+
+    </menu>
+    <menu name="demo start menu">
+      <x>0</x>
+      <y>0</y>
+      <width>1600</width>
+      <height>1200</height>
+      <ws_width>1920</ws_width>
+      <!--<frame>loading</frame>-->
+      <!--      <alpha>128</alpha> -->
+      <independentactivate>1</independentactivate>
+      <visible>0</visible>
+      <fontsize>64</fontsize>
+      <usescursor>1</usescursor>
+      <anim_relationship type="closes" onactivate="1">dashboard</anim_relationship>
+      <anim_relationship type="opens" onactivate="1">panel legal</anim_relationship>
+
+      <OnKeyUp>UIMenuDoSelectedOnEnter</OnKeyUp>
+      <panel name="background panel">
+        <texture>char_create_atlas</texture>
+        <frame>main menu bkgrd</frame>
+        <x>434</x>
+        <ws_x>594</ws_x>
+        <y>555</y>
+        <width>732</width>
+        <height>330</height>
+        <stretch>1</stretch>
+      </panel>
+      <label name="ui demo menu order">
+        <string>ui_demo_menu_order</string>
+        <x>0</x>
+        <y>800</y>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>0</menuorder>
+        <OnLClick>UIDemoMenuDoOrder</OnLClick>
+        <OnLClickSnd>TitleScreenMultiPlayer</OnLClickSnd>
+      </label>
+      <label name="ui demo menu play">
+        <string>ui_demo_menu_play</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>1</menuorder>
+        <OnLClick>UIStartGameMenuDoSingleplayer</OnLClick>
+        <OnLClickSnd>TitleScreenSinglePlayer</OnLClickSnd>
+      </label>
+      <label name="demo menu options">
+        <string>ui menu options</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <menuorder>2</menuorder>
+        <OnLClick>UIGameMenuDoOptions</OnLClick>
+      </label>
+      <label name="ui menu quit">
+        <string>ui menu quit</string>
+        <x>0</x>
+        <y_rel>67</y_rel>
+        <width>1600</width>
+        <ws_width>1920</ws_width>
+        <height>64</height>
+        <align>top</align>
+        <menuorder>3</menuorder>
+        <OnLClick>UIStartGameMenuDoQuit</OnLClick>
+        <OnLClickSnd>TitleScreenQuit</OnLClickSnd>
+      </label>
+
+      <reference refname="rating logo" sku="hanbitsoft_korea_censor,hanbitsoft_korea_online,hanbitsoft_korea_beta"> </reference>
+
+    </menu>
+
+    <menu name="login screen">
+      <x>0</x>
+      <y>0</y>
+      <width>1600</width>
+      <height>1200</height>
+      <ws_width>1920</ws_width>
+      <!--<frame>loading</frame>-->
+      <visible>0</visible>
+      <independentactivate>1</independentactivate>
+      <fontsize>40</fontsize>
+      <usescursor>1</usescursor>
+      <OnPostActivate>UILoginOnActivate</OnPostActivate>
+      <anim_relationship type="closes" onactivate="1">dashboard</anim_relationship>
+
+      <combobox name="realm combo">
+        <texture>options_atlas</texture>
+        <stretch>1</stretch>
+        <x>620</x>
+        <ws_x>780</ws_x>
+        <y>769</y>
+        <width>310</width>
+        <height>64</height>
+        <labelx>10</labelx>
+        <labely>0</labely>
+        <labelwidth>240</labelwidth>
+        <labelheight>24</labelheight>
+        <fontsize>24</fontsize>
+        <animtime>0</animtime>
+        <rendersection>UpOne</rendersection>
+        <buttonupframemid>dropmenu_top_mid</buttonupframemid>
+        <buttonupframeleft>dropmenu_top_left</buttonupframeleft>
+        <buttonupframeright>dropmenu_top_right_open</buttonupframeright>
+        <buttondownframemid>dropmenu_top_mid</buttondownframemid>
+        <buttondownframeleft>dropmenu_top_left</buttondownframeleft>
+        <buttondownframeright>dropmenu_top_right_closed</buttondownframeright>
+        <dropdownheight>400</dropdownheight>
+        <bordersize>5</bordersize>
+        <itemred>247</itemred>
+        <itemgreen>142</itemgreen>
+        <itemblue>30</itemblue>
+        <highlightred>255</highlightred>
+        <highlightgreen>255</highlightgreen>
+        <highlightblue>255</highlightblue>
+        <highlightbkred>247</highlightbkred>
+        <highlightbkgreen>142</highlightbkgreen>
+        <highlightbkblue>30</highlightbkblue>
+        <autosize>1</autosize>
+        <listflexborder>1</listflexborder>
+        <frameML>dropmenu_mid_left</frameML>
+        <frameMM>dropmenu_mid_mid</frameMM>
+        <frameMR>dropmenu_mid_right</frameMR>
+        <frameBL>dropmenu_btm_left</frameBL>
+        <frameBM>dropmenu_btm_mid</frameBM>
+        <frameBR>dropmenu_btm_right</frameBR>
+        <highlightframe>dropmenu_hilite</highlightframe>
+        <thumbpadframe>scrollbar thumbpad</thumbpadframe>
+        <scrollbarframe tile="1">scrollbar line</scrollbarframe>
+        <OnLBSelect>UIRealmComboOnSelect</OnLBSelect>
+      </combobox>
+      <panel name="multiplayer background panel">
+        <texture>char_create_atlas</texture>
+        <frame>multiplayer panel</frame>
+        <x>400</x>
+        <ws_x>560</ws_x>
+        <y>555</y>
+        <width>732</width>
+        <height>330</height>
+        <stretch>0</stretch>
+      </panel>
+      <label name="login header label">
+        <string>ui login header</string>
+        <red>192</red>
+        <green>192</green>
+        <blue>192</blue>
+        <x>0</x>
+        <y>587</y>
+        <width>1600</width>
+        <height>64</height>
+        <ws_width>1920</ws_width>
+        <align>top</align>
+        <font>Upper_Font_Bold</font>
+        <rendersection>UpOne</rendersection>
+      </label>
+
+      <button name="login screen cancel">
+        <texture>char_create_atlas</texture>
+        <frame>char select play btn</frame>
+        <downframe>char select play btn highlight</downframe>
+        <litframe>char select play mouse</litframe>
+        <x>469</x>
+        <ws_x>629</ws_x>
+        <y>835</y>
+        <width>220</width>
+        <height>48</height>
+        <rendersection>UpOne</rendersection>
+        <OnLClick>UILoginScreenOnBack</OnLClick>
+        <OnLClickSnd>TitleScreenQuit</OnLClickSnd>
+        <OnKeyUp>UILoginScreenOnBack</OnKeyUp>
+        <label name="login cancel label">
+          <string>back</string>
+          <x>0</x>
+          <width>220</width>
+          <height>48</height>
+          <align>center</align>
+          <font>Upper_Font</font>
+          <fontsize>30</fontsize>
+          <autosizefont>1</autosizefont>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="login screen create account">
+        <texture>char_create_atlas</texture>
+        <frame>char select play btn</frame>
+        <downframe>char select play btn highlight</downframe>
+        <litframe>char select play mouse</litframe>
+        <x>709</x>
+        <ws_x>860</ws_x>
+        <y>835</y>
+        <width>220</width>
+        <height>48</height>
+        <rendersection>UpOne</rendersection>
+        <OnLClick>UICreateAccountOnClick</OnLClick>
+        <label>
+          <string>ui_create_account</string>
+          <x>0</x>
+          <width>220</width>
+          <height>48</height>
+          <align>center</align>
+          <font>Upper_Font</font>
+          <fontsize>26</fontsize>
+          <autosizefont>1</autosizefont>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+      <button name="login screen accept">
+        <texture>char_create_atlas</texture>
+        <frame>char select play btn</frame>
+        <downframe>char select play btn highlight</downframe>
+        <litframe>char select play mouse</litframe>
+        <x>947</x>
+        <ws_x>1101</ws_x>
+        <y>835</y>
+        <width>220</width>
+        <height>48</height>
+        <rendersection>UpOne</rendersection>
+        <OnLClick>UILoginScreenOnEnter</OnLClick>
+        <OnLClickSnd>TitleScreenMultiPlayer</OnLClickSnd>
+        <OnKeyUp>UILoginScreenOnEnter</OnKeyUp>
+        <label>
+          <string>ui menu enter</string>
+          <x>0</x>
+          <width>220</width>
+          <height>48</height>
+          <align>center</align>
+          <font>Upper_Font</font>
+          <fontsize>30</fontsize>
+          <autosizefont>1</autosizefont>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+          <dropshadowred>180</dropshadowred>
+          <dropshadowgreen>180</dropshadowgreen>
+          <dropshadowblue>180</dropshadowblue>
+        </label>
+      </button>
+
+      <label name="login name label">
+        <string>ui_login_name</string>
+        <red>247</red>
+        <green>142</green>
+        <blue>20</blue>
+        <x>457</x>
+        <ws_x>617</ws_x>
+        <x>0</x>
+        <y>656</y>
+        <width>333</width>
+        <height>64</height>
+        <align>topright</align>
+        <autosizefont>1</autosizefont>
+        <rendersection>UpOne</rendersection>
+      </label>
+      <editctrl name="login name">
+        <x>800</x>
+        <ws_x>960</ws_x>
+        <y>656</y>
+        <width>300</width>
+        <height>64</height>
+        <align>topleft</align>
+        <font>Lower_Font</font>
+        <limit_to_space>0</limit_to_space>
+        <maxchars>50</maxchars>
+        <startwithfocus>1</startwithfocus>
+        <nexttabctrl>login password</nexttabctrl>
+        <allowchars>abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-</allowchars>
+        <rendersection>UpOne</rendersection>
+        <allowIME>false</allowIME>
+      </editctrl>
+      <label name="login password label">
+        <string>ui_login_password</string>
+        <red>247</red>
+        <green>142</green>
+        <blue>20</blue>
+        <x>457</x>
+        <ws_x>617</ws_x>
+        <y>711</y>
+        <width>333</width>
+        <height>64</height>
+        <align>topright</align>
+        <autosizefont>1</autosizefont>
+        <rendersection>UpOne</rendersection>
+      </label>
+      <editctrl name="login password">
+        <x>800</x>
+        <ws_x>960</ws_x>
+        <y>711</y>
+        <width>300</width>
+        <height>64</height>
+        <align>topleft</align>
+        <font>Lower_Font</font>
+        <maxchars>127</maxchars>
+        <limit_to_space>0</limit_to_space>
+        <nexttabctrl>login name</nexttabctrl>
+        <password>1</password>
+        <!--<allowchars>abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_</allowchars>-->
+        <rendersection>UpOne</rendersection>
+        <allowIME>false</allowIME>
+      </editctrl>
+      <label name="login server label">
+        <string>ui_login_server</string>
+        <red>247</red>
+        <green>142</green>
+        <blue>20</blue>
+        <x>457</x>
+        <ws_x>617</ws_x>
+        <y>764</y>
+        <width>160</width>
+        <height>64</height>
+        <align>topright</align>
+        <font>Upper_Font_Bold</font>
+        <autosizefont>1</autosizefont>
+        <rendersection>UpOne</rendersection>
+      </label>
+      <button name="show all servers btn">
+        <texture>options_atlas</texture>
+        <rendersection>UpOne</rendersection>
+        <frame>box_uncheck</frame>
+        <downframe>box_check</downframe>
+        <x>940</x>
+        <ws_x>1100</ws_x>
+        <y>769</y>
+        <width>35</width>
+        <height>35</height>
+        <buttonstyle>checkbox</buttonstyle>
+        <OnLButtonDown>UIShowAllServersOnButtonDown</OnLButtonDown>
+      </button>
+      <label name="show all servers label">
+        <string>show_all_servers</string>
+        <red>247</red>
+        <green>142</green>
+        <blue>20</blue>
+        <x>985</x>
+        <ws_x>1145</ws_x>
+        <y>769</y>
+        <width>210</width>
+        <height>35</height>
+        <fontsize>-4</fontsize>
+        <autosizefont>1</autosizefont>
+        <align>left</align>
+        <rendersection>UpOne</rendersection>
+      </label>
+
+      <reference refname="rating logo" sku="hanbitsoft_korea_censor,hanbitsoft_korea_online,hanbitsoft_korea_beta"> </reference>
+
+      <panel name="panel esrb" region="NorthAmerica">
+        <x>0</x>
+        <y>0</y>
+        <width>1600</width>
+        <height>1200</height>
+        <ws_width>1920</ws_width>
+        <font>Lower_Font</font>
+        <fontsize>40</fontsize>
+        <rendersection>Menus</rendersection>
+        <label name="esrb text">
+          <x>28</x>
+          <ws_x>70</ws_x>
+          <y>1000</y>
+          <string>esrb_experience_change_online_play</string>
+          <wordwrap>1</wordwrap>
+          <height>60</height>
+          <width>1590</width>
+          <ws_width>1800</ws_width>
+          <red>180</red>
+          <green>180</green>
+          <blue>180</blue>
+          <visible>0</visible>
+          <align>center</align>
+        </label>
+      </panel>
+
+    </menu>
+
+    <panel name="panel legal">
+      <x>0</x>
+      <y>0</y>
+      <width>1600</width>
+      <height>1200</height>
+      <ws_width>1920</ws_width>
+      <font>Lower_Font</font>
+      <fontsize>24</fontsize>
+      <rendersection>Menus</rendersection>
+      <label name="Hellgate Legal Text">
+        <x>28</x>
+        <ws_x>78</ws_x>
+        <y>1140</y>
+        <string>HellgateLegalLine</string>
+        <wordwrap>1</wordwrap>
+        <height>60</height>
+        <width>1590</width>
+        <ws_width>1800</ws_width>
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <visible>0</visible>
+        <align>center</align>
+      </label>
+      <panel name="logo tm">
+        <frame>logo tm</frame>
+        <texture>loading_atlas</texture>
+        <ws_texture>WSloading_atlas</ws_texture>
+        <texture lang="Korean">loading_kor_atlas</texture>
+        <ws_texture lang="Korean">WSloading_kor_atlas</ws_texture>
+        <x>1260</x>
+        <ws_x>1360</ws_x>
+        <y>370</y>
+        <width>32</width>
+        <height>32</height>
+      </panel>
+
+      <label name="Hellgate Version Text">
+        <x>800</x>
+        <ws_x>960</ws_x>
+        <y>1086</y>
+        <wordwrap>0</wordwrap>
+        <height>96</height>
+        <width>780</width>
+        <ws_width>940</ws_width>
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <visible>1</visible>
+        <align>bottomright</align>
+        <OnPostCreate>UIVersionLabelOnPostCreate</OnPostCreate>
+      </label>
+	  <label name="Revival Version Text">
+        <x>20</x>
+        <ws_x>20</ws_x>
+        <y>1086</y>
+        <wordwrap>0</wordwrap>
+        <height>96</height>
+        <width>780</width>
+        <ws_width>940</ws_width>
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <visible>1</visible>
+        <align>bottomleft</align>
+        <text>Revival version 2.0</text>
+      </label>
+    </panel>
+
+
+    <panel name="panel credits">
+	    <x>0</x>
+	    <y>0</y>
+	    <width>1600</width>
+	    <height>1200</height>
+	    <ws_width>1920</ws_width>
+	    <font>Upper_Font</font>
+	    <fontsize>36</fontsize>
+	    <visible>0</visible>
+	    <independentactivate>1</independentactivate>
+	    <rendersection>Menus</rendersection>
+			<xframe>loading</xframe>  			
+			<usescursor>1</usescursor>
+
+      <anim_relationship type="closes" onactivate="1">panel legal</anim_relationship>
+
+      <label name="label credits scroller">
+        <x>50</x>
+        <y>0</y>
+        <width>1600</width>
+        <height>1200</height>
+        <ws_width>1920</ws_width>
+        <independentactivate>0</independentactivate>
+        <align>left</align>
+				<marquee increment="5">vert</marquee>
+      </label>
+
+      <label name="label credits text page">
+        <x>50</x>
+        <y>0</y>
+        <width>1600</width>
+        <height>1200</height>
+        <ws_width>1920</ws_width>
+	    	<fontsize>36</fontsize>        
+        <independentactivate>1</independentactivate>
+        <visible>0</visible>
+        <align>left</align>
+        <fades>1</fades>
+        <fadeticks>20</fadeticks>        
+      </label>
+						
+      <button name="button credits exit">
+        <texture>inventory_atlas</texture>
+        <frame>button_cancel</frame>
+        <litframe>button_cancel mouse</litframe>
+        <downframe>button_cancel_lit</downframe>
+        <x>1500</x>
+        <y>1100</y>
+        <width>64</width>
+        <height>64</height>
+        <ws_x>1820</ws_x>
+        <independentactivate>0</independentactivate>
+        <rendersection>UpOne</rendersection>
+			  <OnLClick>UIButtonCreditsExit</OnLClick>          
+        <tooltipstring>back</tooltipstring>
+      </button>
+			
+  	</panel>
+
+  </screen>
+</ui>
