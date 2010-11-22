@@ -42,7 +42,7 @@ namespace Hellgate
                 new KeyValuePair<uint,TypeMap>((uint)0x1E760FB1, new TypeMap { DataType = typeof(SoundBuses) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1EE32EF6, new TypeMap { DataType = typeof(Bones) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1F0513C5, new TypeMap { DataType = typeof(WardrobeModelGroupRow) }),
-                new KeyValuePair<uint,TypeMap>((uint)0x1F9DDC98, new TypeMap { DataType = typeof(UnitTypes), IgnoresTable = true, HasIndexBitRelations = true }),
+                new KeyValuePair<uint,TypeMap>((uint)0x1F9DDC98, new TypeMap { DataType = typeof(UnitTypes), HasIndexBitRelations = true }),
 
                 new KeyValuePair<uint,TypeMap>((uint)0x22FCCFEB, new TypeMap { DataType = typeof(StringFiles) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x26BC8A8D, new TypeMap { DataType = typeof(DamageEffects) }),
@@ -352,7 +352,6 @@ namespace Hellgate
             public Boolean HasMysh;
             public Boolean HasExtended;
             public Boolean HasIndexBitRelations;
-            public Boolean IgnoresTable;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]

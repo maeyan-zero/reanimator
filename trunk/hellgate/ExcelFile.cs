@@ -340,18 +340,14 @@ namespace Hellgate
             }
 
             // Integer Block
-            // Only the UnitTypes class ignores this section
-            if (!(ExcelMap.IgnoresTable))
+            if ((CheckFlag(buffer, ref offset, Token.cxeh)))
             {
-                if ((CheckFlag(buffer, ref offset, Token.cxeh)))
+                int integerBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
+                if (integerBufferOffset != 0)
                 {
-                    int integerBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
-                    if (integerBufferOffset != 0)
-                    {
-                        IntegerBuffer = new byte[integerBufferOffset];
-                        Buffer.BlockCopy(buffer, offset, IntegerBuffer, 0, integerBufferOffset);
-                        offset += integerBufferOffset;
-                    }
+                    IntegerBuffer = new byte[integerBufferOffset];
+                    Buffer.BlockCopy(buffer, offset, IntegerBuffer, 0, integerBufferOffset);
+                    offset += integerBufferOffset;
                 }
             }
 
@@ -481,21 +477,18 @@ namespace Hellgate
             }
 
             // Append the integer array.
-            // Unitypes ignores this section for some reason
-            if (!ExcelMap.IgnoresTable)
+            if (IntegerBuffer != null && IntegerBuffer.Length > 1)
             {
-                if (IntegerBuffer != null && IntegerBuffer.Length > 1)
-                {
-                    FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-                    FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer.Length);
-                    FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer);
-                }
-                else
-                {
-                    FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-                    FileTools.WriteToBuffer(ref buffer, ref offset, 0);
-                }
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
+                FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer.Length);
+                FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer);
             }
+            else
+            {
+                FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
+                FileTools.WriteToBuffer(ref buffer, ref offset, 0);
+            }
+
 
             // row-row index bit relations - generated from isA0, isA1, isA2 etc
             // only applicable on the UNITTYPES and STATES tables
