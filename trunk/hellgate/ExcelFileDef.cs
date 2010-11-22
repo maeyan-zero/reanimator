@@ -896,10 +896,8 @@ namespace Hellgate
                     {
                         FieldInfo fieldInfo2 = DataType.GetField(attribute.SortColumnTwo);
                         var sortedList = from element in Rows
-                                         where (!(fieldInfo.GetValue(element).ToString() == "-1") &&
-                                                !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())) &&
-                                                !(Rows.IndexOf(element) == 0)) // wardrobe tables exclude index 0
-                                         orderby fieldInfo.GetValue(element)
+                                         where (int)fieldInfo.GetValue(element) != 0 // wardrobe tables exclude index 0
+                                         orderby fieldInfo.GetValue(element), fieldInfo2.GetValue(element)
                                          select Rows.IndexOf(element);
                         customSorts[pos] = sortedList.ToArray();
                     }

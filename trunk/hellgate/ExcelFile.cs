@@ -464,14 +464,14 @@ namespace Hellgate
 
             // Rcsh, Tysh, Mysh, Dneh
             // This section exists when there is a string or integer block or a mysh table
-            if (!(StringBuffer == null) || !(IntegerBuffer == null) || ExcelMap.HasMysh)
+            if (IntegerBuffer != null || ExcelMap.HasMysh)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.rcsh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.RcshValue);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.tysh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.TyshValue);
-                if ((ExcelMap.HasMysh))
+                if (ExcelMap.HasMysh)
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
                     FileTools.WriteToBuffer(ref buffer, ref offset, MyshBuffer);
@@ -482,9 +482,9 @@ namespace Hellgate
 
             // Append the integer array.
             // Unitypes ignores this section for some reason
-            if (!(ExcelMap.IgnoresTable))
+            if (!ExcelMap.IgnoresTable)
             {
-                if (!(IntegerBuffer == null) && (IntegerBuffer.Length > 1))
+                if (IntegerBuffer != null && IntegerBuffer.Length > 1)
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                     FileTools.WriteToBuffer(ref buffer, ref offset, IntegerBuffer.Length);
