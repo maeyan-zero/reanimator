@@ -11,6 +11,7 @@ namespace Hellgate.Excel
         TableHeader header;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string description;
+        [ExcelOutput(SortAscendingID = 1, SortColumnTwo = "inventoryType")]
         public Int32 inventoryType;//idx
         public Int32 location;//idx
         public Int32 colorSetPriority;
