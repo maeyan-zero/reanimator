@@ -16,7 +16,7 @@ namespace Hellgate
             public Int32 Count;
         }
 
-        private class FileTokens
+        private abstract class Token
         {
             public const Int32 Header = 0x68667374;
         }

@@ -7,18 +7,18 @@ namespace Reanimator.Forms
 {
     public partial class ModificationForm : Form
     {
-        TableDataSet _tableDataSet;
+        // todo: rewrite TableDataSet _tableDataSet;
         Modification _modification;
         //List<Modification.Package> _package;
         
-        public ModificationForm(TableDataSet tableDataset)
-        {
-            _tableDataSet = tableDataset;
-            _modification = new Modification(_tableDataSet);
-            InitializeComponent();
+        //// todo: rewrite public ModificationForm(TableDataSet tableDataset)
+        //{
+        //    _tableDataSet = tableDataset;
+        //    _modification = new Modification(_tableDataSet);
+        //    InitializeComponent();
 
-            add_Click(this, null); // automatically asks user for a file
-        }
+        //    add_Click(this, null); // automatically asks user for a file
+        //}
         private void itemList_SelectedIndexChanged(object sender, EventArgs e)
         {
             int i = checkedListBox.SelectedIndex;

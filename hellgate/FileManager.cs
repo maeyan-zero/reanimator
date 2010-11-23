@@ -17,17 +17,16 @@ namespace Hellgate
         public string Language { get; private set; }
         public List<Index> IndexFiles { get; private set; }
         public Dictionary<ulong,FileEntry> FileEntries { get; private set; }
-        public Dictionary<string,DataFile> DataFiles { get; private set; }
+        public SortedDictionary<string,DataFile> DataFiles { get; private set; }
         public DataSet XlsDataSet { get; private set; }
 
         /// <summary>
         /// Initialize the File Manager by the given Hellgate path.
         /// </summary>
         /// <param name="hellgatePath">Path to the Hellgate installation.</param>
-        public FileManager(string hellgatePath)
-            : this(hellgatePath, false)
+        public FileManager(string hellgatePath) : this(hellgatePath, false)
         {
-            //no body
+            // no body
         }
 
         /// <summary>
@@ -93,9 +92,10 @@ namespace Hellgate
         /// <summary>
         /// Loads all of the available Excel files to a hashtable.
         /// </summary>
+        /// <returns>Returns true on success.</returns>
         public bool LoadExcelFiles()
         {
-            DataFiles = new Dictionary<string,DataFile>();
+            DataFiles = new SortedDictionary<string,DataFile>();
             foreach (FileEntry fileEntry in FileEntries.Values)
             {
                 // Check if its a excel file by its file extentsion
@@ -159,7 +159,7 @@ namespace Hellgate
             if (DataFiles == null) return null;
 
             var query = from dt in DataFiles
-                        where dt.Value.StringID == stringId
+                        where dt.Value.StringId == stringId
                         select dt.Value;
 
             return (query.Count() != 0) ? query.First() : null;

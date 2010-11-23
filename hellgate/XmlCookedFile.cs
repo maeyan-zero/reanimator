@@ -10,7 +10,7 @@ using Revival.Common;
 
 namespace Hellgate
 {
-    partial class XmlCookedFile
+    public partial class XmlCookedFile
     {
         public const String FileExtention = "xml.cooked";
         private const UInt32 FileMagicWord = 0x6B304F43; // 'CO0k'

@@ -15,6 +15,7 @@ namespace Hellpack
                 FileManager fileManager = new FileManager(@"D:\Games\Hellgate London");
                 fileManager.LoadExcelFiles();
                 byte[] data = fileManager.DataFiles["SKILLS"].ExportCSV();
+               // byte[] scriptData = fileManager.DataFiles["SKILLS"].ExportScriptTable();
                 File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\SKILLS.orig.txt", data);
             }
 
@@ -75,7 +76,7 @@ namespace Hellpack
                 excelBuffer = excelFile.ToByteArray();
                 if (excelBuffer == null)
                 {
-                    Console.WriteLine("Failed to cook excel file: " + excelFile.StringID);
+                    Console.WriteLine("Failed to cook excel file: " + excelFile.StringId);
                     continue;
                 }
 

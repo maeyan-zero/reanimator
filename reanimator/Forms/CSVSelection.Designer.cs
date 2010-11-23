@@ -59,7 +59,7 @@
             this.button1.TabIndex = 2;
             this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this._Button1_Click);
             // 
             // button2
             // 
@@ -94,7 +94,7 @@
             this.buttonSelectAll.TabIndex = 7;
             this.buttonSelectAll.Text = "Select All";
             this.buttonSelectAll.UseVisualStyleBackColor = true;
-            this.buttonSelectAll.Click += new System.EventHandler(this.buttonSelectAll_Click);
+            this.buttonSelectAll.Click += new System.EventHandler(this._ButtonSelectAll_Click);
             // 
             // CSVSelection
             // 

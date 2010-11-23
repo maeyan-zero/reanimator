@@ -6,7 +6,7 @@ using Hellgate.Xml;
 
 namespace Hellgate
 {
-    partial class XmlCookedFile
+    public partial class XmlCookedFile
     {
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private class XmlCookFileHeader

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml.Serialization;
+using Hellgate;
 using Reanimator.Forms.HeroEditorFunctions;
 using Reanimator.Properties;
 
@@ -16,7 +14,7 @@ namespace Reanimator.Forms.ItemTransfer
     public partial class ItemTransferForm : Form
     {
         FileExplorer _fileExplorer;
-        TableDataSet _dataSet;
+        // todo: rewrite TableDataSet _dataSet;
         UnitHelpFunctions _itemHelpFunctions;
         DataTable _items;
         bool _isMale = false;
@@ -62,83 +60,83 @@ namespace Reanimator.Forms.ItemTransfer
 
         ItemPanel _eventSender;
 
-        public ItemTransferForm(TableDataSet dataSet, FileExplorer fileExplorer)
-        {
-            InitializeComponent();
+        //// todo: rewrite public ItemTransferForm(TableDataSet dataSet, FileExplorer fileExplorer)
+        //{
+        //    InitializeComponent();
 
-            _dataSet = dataSet;
-            _fileExplorer = fileExplorer;
-            _itemHelpFunctions = new UnitHelpFunctions(_dataSet);
+        //    _dataSet = dataSet;
+        //    _fileExplorer = fileExplorer;
+        //    _itemHelpFunctions = new UnitHelpFunctions(_dataSet);
 
-            //preload the tables
-            _items = _dataSet.GetExcelTableFromStringId("ITEMS");
-            _dataSet.GetExcelTableFromStringId("AFFIXES");
+        //    //preload the tables
+        //    _items = _dataSet.GetExcelTableFromStringId("ITEMS");
+        //    _dataSet.GetExcelTableFromStringId("AFFIXES");
 
-            _previewManager = new PreviewManager(_fileExplorer);
+        //    _previewManager = new PreviewManager(_fileExplorer);
 
-            //if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "trading.xml")))
-            //{
-            //    ItemTradingOptions options = XmlUtilities<ItemTradingOptions>.Deserialize("trading.xml");
-            //    INVENTORYTYPE = options.InventoryToUse;
-            //    INVENTORYHEIGHT = options.InventoryHeight;
-            //    _enableItemPreview = options.EnableItemPreview;
-            //    _enablePalladiumTrading = options.EnablePalladiumTrading;
-            //    _backupCharacters = options.BackupCharacters;
-            //    _displayItemIcons = options.DisplayItemIcons;
-            //    _displayNamesAndQuantity = options.DisplayNamesAndQuantity;
-            //    _debug = options.Debug;
-            //}
+        //    //if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "trading.xml")))
+        //    //{
+        //    //    ItemTradingOptions options = XmlUtilities<ItemTradingOptions>.Deserialize("trading.xml");
+        //    //    INVENTORYTYPE = options.InventoryToUse;
+        //    //    INVENTORYHEIGHT = options.InventoryHeight;
+        //    //    _enableItemPreview = options.EnableItemPreview;
+        //    //    _enablePalladiumTrading = options.EnablePalladiumTrading;
+        //    //    _backupCharacters = options.BackupCharacters;
+        //    //    _displayItemIcons = options.DisplayItemIcons;
+        //    //    _displayNamesAndQuantity = options.DisplayNamesAndQuantity;
+        //    //    _debug = options.Debug;
+        //    //}
 
-            //ItemTradingOptions options2 = new ItemTradingOptions();
-            //options2.EnableItemPreview = true;
-            //options2.EnablePalladiumTrading = true;
-            //options2.BackupCharacters = true;
-            //options2.InventoryHeight = 6;
-            //options2.InventoryToUse = InventoryTypes.Inventory;
-            //XmlUtilities<ItemTradingOptions>.Serialize(options2, "trading2.xml");
+        //    //ItemTradingOptions options2 = new ItemTradingOptions();
+        //    //options2.EnableItemPreview = true;
+        //    //options2.EnablePalladiumTrading = true;
+        //    //options2.BackupCharacters = true;
+        //    //options2.InventoryHeight = 6;
+        //    //options2.InventoryToUse = InventoryTypes.Inventory;
+        //    //XmlUtilities<ItemTradingOptions>.Serialize(options2, "trading2.xml");
 
-            this.Text += " - Location: " + INVENTORYTYPE.ToString();
+        //    this.Text += " - Location: " + INVENTORYTYPE.ToString();
 
-            _characterItemPanel1 = new ItemPanel(_displayItemIcons, _previewManager, _fileExplorer);
-            _characterItemPanel2 = new ItemPanel(_displayItemIcons, _previewManager, _fileExplorer);
+        //    _characterItemPanel1 = new ItemPanel(_displayItemIcons, _previewManager, _fileExplorer);
+        //    _characterItemPanel2 = new ItemPanel(_displayItemIcons, _previewManager, _fileExplorer);
 
-            _characterItemPanel1.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
-            _characterItemPanel2.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
+        //    _characterItemPanel1.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
+        //    _characterItemPanel2.NewItemSelected_Event += new ItemPanel.NewItemSelected(_characterItemPanel_NewItemSelected_Event);
 
-            _characterItemPanel1.ItemUnitSize = ITEMUNITSIZE;
-            _characterItemPanel2.ItemUnitSize = ITEMUNITSIZE;
+        //    _characterItemPanel1.ItemUnitSize = ITEMUNITSIZE;
+        //    _characterItemPanel2.ItemUnitSize = ITEMUNITSIZE;
 
-            SetPanelSize();
+        //    SetPanelSize();
 
-            _characterItemPanel1.Location = new Point(16, 18);
-            _characterItemPanel2.Location = new Point(16, 18);
+        //    _characterItemPanel1.Location = new Point(16, 18);
+        //    _characterItemPanel2.Location = new Point(16, 18);
 
-            SetCharacterStatus(_characterStatus1, CharacterStatus.NotLoaded, p_status1, l_status1);
-            SetCharacterStatus(_characterStatus2, CharacterStatus.NotLoaded, p_status2, l_status2);
+        //    SetCharacterStatus(_characterStatus1, CharacterStatus.NotLoaded, p_status1, l_status1);
+        //    SetCharacterStatus(_characterStatus2, CharacterStatus.NotLoaded, p_status2, l_status2);
 
-            // use inventory panels, as a normal groupBox doesn't provide the option "AutoScroll"
-            p_inventory1.Controls.Add(_characterItemPanel1);
-            p_inventory2.Controls.Add(_characterItemPanel2);
+        //    // use inventory panels, as a normal groupBox doesn't provide the option "AutoScroll"
+        //    p_inventory1.Controls.Add(_characterItemPanel1);
+        //    p_inventory2.Controls.Add(_characterItemPanel2);
 
-            EnableComboBoxes(true, true);
+        //    EnableComboBoxes(true, true);
 
-            if (_debug)
-            {
-                InitDebugControls();
-            }
-            ts_debugControl.Enabled = _debug;
-            ts_debugControl.Visible = _debug;
-            cb_isMale.Visible = _debug;
+        //    if (_debug)
+        //    {
+        //        InitDebugControls();
+        //    }
+        //    ts_debugControl.Enabled = _debug;
+        //    ts_debugControl.Visible = _debug;
+        //    cb_isMale.Visible = _debug;
 
-            EnableTradingControls(false);
+        //    EnableTradingControls(false);
 
-            _characterFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games\\Hellgate\\Save\\Singleplayer");
+        //    _characterFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games\\Hellgate\\Save\\Singleplayer");
 
-            //adding the character names triggers the cb_selectCharacter1_SelectedIndexChanged event which will load the first character
-            string[] characters = LoadCharacterNames();
-            cb_selectCharacter1.DataSource = characters;
-            cb_selectCharacter2.DataSource = characters.Clone();
-        }
+        //    //adding the character names triggers the cb_selectCharacter1_SelectedIndexChanged event which will load the first character
+        //    string[] characters = LoadCharacterNames();
+        //    cb_selectCharacter1.DataSource = characters;
+        //    cb_selectCharacter2.DataSource = characters.Clone();
+        //}
 
         private void SetPanelSize()
         {
@@ -336,7 +334,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if (_enableItemPreview)
             {
-                b_loadCharacter1_Click(sender, e);
+                // todo: rewrite b_loadCharacter1_Click(sender, e);
             }
         }
 
@@ -370,59 +368,59 @@ namespace Reanimator.Forms.ItemTransfer
             tscb_itemIcons.Text = _displayItemIcons.ToString();
         }
 
-        private void b_loadCharacter1_Click(object sender, EventArgs e)
-        {
-            l_selectedItem.ResetText();
-            l_selectedItem.Tag = null;
-            _characterPath1 = _characterFolder + @"\" + cb_selectCharacter1.SelectedItem + ".hg1";
+        //// todo: rewrite private void b_loadCharacter1_Click(object sender, EventArgs e)
+        //{
+        //    l_selectedItem.ResetText();
+        //    l_selectedItem.Tag = null;
+        //    _characterPath1 = _characterFolder + @"\" + cb_selectCharacter1.SelectedItem + ".hg1";
 
-            if (_characterPath1 != _characterPath2)
-            {
-                Unit character = UnitHelpFunctions.OpenCharacterFile(_dataSet, _characterPath1);
+        //    if (_characterPath1 != _characterPath2)
+        //    {
+        //        Unit character = UnitHelpFunctions.OpenCharacterFile(_dataSet, _characterPath1);
 
-                if (character != null && character.IsGood)
-                {
-                    _itemHelpFunctions.LoadCharacterValues(character);
-                    _characterUnit1 = new UnitWrapper(_dataSet, character);
+        //        if (character != null && character.IsGood)
+        //        {
+        //            _itemHelpFunctions.LoadCharacterValues(character);
+        //            _characterUnit1 = new UnitWrapper(_dataSet, character);
 
-                    gb_characterName1.Text = cb_selectCharacter1.SelectedItem.ToString();
-                    int level = _characterUnit1.Values.Level;
-                    gb_characterName1.Text += " (Level " + level.ToString() + " " + _characterUnit1.ClassName + ")";
-                    l_palladium1.Text = _characterUnit1.Values.Palladium.ToString();
+        //            gb_characterName1.Text = cb_selectCharacter1.SelectedItem.ToString();
+        //            int level = _characterUnit1.Values.Level;
+        //            gb_characterName1.Text += " (Level " + level.ToString() + " " + _characterUnit1.ClassName + ")";
+        //            l_palladium1.Text = _characterUnit1.Values.Palladium.ToString();
 
-                    if (_characterUnit1.Inventory.CheckIfInventoryIsPopulated((int)InventoryTypes.CurrentWeaponSet))
-                    {
-                        SetCharacterStatus(_characterStatus1, CharacterStatus.WeaponSetDetected, p_status1, l_status1);
-                    }
-                    else
-                    {
-                        SetCharacterStatus(_characterStatus1, CharacterStatus.Loaded, p_status1, l_status1);
-                    }
+        //            if (_characterUnit1.Inventory.CheckIfInventoryIsPopulated((int)InventoryTypes.CurrentWeaponSet))
+        //            {
+        //                SetCharacterStatus(_characterStatus1, CharacterStatus.WeaponSetDetected, p_status1, l_status1);
+        //            }
+        //            else
+        //            {
+        //                SetCharacterStatus(_characterStatus1, CharacterStatus.Loaded, p_status1, l_status1);
+        //            }
 
-                    InitInventory(_characterUnit1, _characterItemPanel1);
-                }
-                else
-                {
-                    _characterPath1 = null;
-                    _characterUnit1 = null;
-                    _characterItemPanel1.Controls.Clear();
-                    l_palladium1.Text = "-";
-                    SetCharacterStatus(_characterStatus1, CharacterStatus.Error, p_status1, l_status1);
-                    //MessageBox.Show("Error while parsing the character file!");
-                }
-            }
-            else
-            {
-                _characterPath1 = null;
-                _characterUnit1 = null;
-                _characterItemPanel1.Controls.Clear();
-                l_palladium1.Text = "-";
-                SetCharacterStatus(_characterStatus1, CharacterStatus.AlreadyLoaded, p_status1, l_status1);
-                SameCharacterSelected();
-            }
+        //            InitInventory(_characterUnit1, _characterItemPanel1);
+        //        }
+        //        else
+        //        {
+        //            _characterPath1 = null;
+        //            _characterUnit1 = null;
+        //            _characterItemPanel1.Controls.Clear();
+        //            l_palladium1.Text = "-";
+        //            SetCharacterStatus(_characterStatus1, CharacterStatus.Error, p_status1, l_status1);
+        //            //MessageBox.Show("Error while parsing the character file!");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _characterPath1 = null;
+        //        _characterUnit1 = null;
+        //        _characterItemPanel1.Controls.Clear();
+        //        l_palladium1.Text = "-";
+        //        SetCharacterStatus(_characterStatus1, CharacterStatus.AlreadyLoaded, p_status1, l_status1);
+        //        SameCharacterSelected();
+        //    }
 
-            CheckAndSetButtonStatus();
-        }
+        //    CheckAndSetButtonStatus();
+        //}
 
         private void DisplayWeaponSlotWarning()
         {
@@ -463,14 +461,14 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                Unit character = UnitHelpFunctions.OpenCharacterFile(_dataSet, _characterPath2);
+                Unit character = null;// todo: rewrite  UnitHelpFunctions.OpenCharacterFile(_dataSet, _characterPath2);
 
 //XmlUtilities<Unit>.Serialize(character, @"F:\before.xml");
 
                 if (character != null && character.IsGood)
                 {
                     _itemHelpFunctions.LoadCharacterValues(character);
-                    _characterUnit2 = new UnitWrapper(_dataSet, character);
+                    _characterUnit2 = null;// todo: rewrite  new UnitWrapper(_dataSet, character);
 
                     //if (WeaponSlotsPopulated(_characterUnit2))
                     //{
@@ -708,7 +706,7 @@ namespace Reanimator.Forms.ItemTransfer
 
         private void b_undoTransfer_Click(object sender, EventArgs e)
         {
-            b_loadCharacter1_Click(null, null);
+            // todo: rewrite b_loadCharacter1_Click(null, null);
             b_loadCharacter2_Click(null, null);
 
             EnableComboBoxes(true, true);

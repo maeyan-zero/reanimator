@@ -12,12 +12,12 @@ namespace Hellgate
 {
     public partial class FileManager
     {
-        public void ClearDataSet()
-        {
-            XlsDataSet.Clear();
-            XlsDataSet.Relations.Clear();
-            XlsDataSet.Tables.Clear();
-        }
+        //public void ClearDataSet()
+        //{
+        //    XlsDataSet.Clear();
+        //    XlsDataSet.Relations.Clear();
+        //    XlsDataSet.Tables.Clear();
+        //}
 
         public DataTable LoadTable(DataFile dataFile, bool relations)
         {
@@ -31,21 +31,23 @@ namespace Hellgate
             }
 
             DataTable dataTable = null;
-
-            if ((dataFile.IsStringsFile))
+            if (dataFile.IsStringsFile)
+            {
                 dataTable = LoadStringsTable(dataFile as StringsFile);
-
-            if ((dataFile.IsExcelFile))
+            }
+            else if (dataFile.IsExcelFile)
+            {
                 dataTable = LoadExcelTable(dataFile as ExcelFile, relations);
+            }
 
             return dataTable;
         }
 
         private DataTable LoadExcelTable(ExcelFile excelFile, bool relations)
         {
-            String tableName = excelFile.StringID;
+            String tableName = excelFile.StringId;
             DataTable dataTable = XlsDataSet.Tables[tableName];
-            if (!(dataTable == null)) return dataTable;
+            if (dataTable != null) return dataTable;
 
             dataTable = XlsDataSet.Tables.Add(tableName);
             dataTable.TableName = tableName;
@@ -210,7 +212,7 @@ namespace Hellgate
 
         private DataTable LoadStringsTable(StringsFile stringsFile)
         {
-            String tableName = stringsFile.StringID;
+            String tableName = stringsFile.StringId;
             DataTable dataTable = XlsDataSet.Tables[tableName];
             if (!(dataTable == null)) return dataTable;
 
@@ -259,7 +261,7 @@ namespace Hellgate
             Type type = excelFile.Rows[0].GetType();
             int col;
 
-            String mainTableName = excelFile.StringID;
+            String mainTableName = excelFile.StringId;
             DataTable mainDataTable = XlsDataSet.Tables[mainTableName];
 
             // remove all extra generated columns on this table
@@ -296,7 +298,7 @@ namespace Hellgate
                     {
                         DataColumn dcParent = dtStrings.Columns["ReferenceId"];
 
-                        String relationName = String.Format("{0}_{1}_{2}", excelFile.StringID, dcChild.ColumnName, ColumnKeys.IsStringIndex);
+                        String relationName = String.Format("{0}_{1}_{2}", excelFile.StringId, dcChild.ColumnName, ColumnKeys.IsStringIndex);
                         // parent and child are swapped here for StringId relations
                         DataRelation relation = new DataRelation(relationName, dcChild, dcParent, false);
                         XlsDataSet.Relations.Add(relation);
@@ -323,7 +325,7 @@ namespace Hellgate
                         string relatedColumn = dt.Columns[1].ColumnName;
 
 
-                        String relationName = excelFile.StringID + dcChild.ColumnName + ExcelFile.ColumnTypeKeys.IsTableIndex;
+                        String relationName = excelFile.StringId + dcChild.ColumnName + ExcelFile.ColumnTypeKeys.IsTableIndex;
                         DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
                         XlsDataSet.Relations.Add(relation);
 

@@ -127,181 +127,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitBuffer.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Achievements.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Act.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Affixes.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\BackGroundSounds2D.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\BadgeRewards.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\CharacterClass.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\DamageEffects.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\DamageTypes.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Inventory.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\ItemLooks.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\ItemQuality.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Items.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ExcelDefinitions\TCv4\Levels.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\LevelScaling.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\LevelsRoomIndex.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\MaterialsCollision.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\PlayerLevels.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Recipes.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\SkillEventTypes.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Skills.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\SkillTabs.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\SoundMixStates.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Sounds.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Stats.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Treasure.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\UnitModeGroups.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\UnitModes.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\UnitTypes.cs" />
-    <Compile Include="ExcelDefinitions\TCv4\Wardrobe.cs" />
-    <Compile Include="ExcelDefinitions\Achievements.cs" />
-    <Compile Include="ExcelDefinitions\Act.cs" />
-    <Compile Include="ExcelDefinitions\Affixes.cs" />
-    <Compile Include="ExcelDefinitions\AffixTypes.cs" />
-    <Compile Include="ExcelDefinitions\AiBehaviour.cs" />
-    <Compile Include="ExcelDefinitions\AiCommonState.cs" />
-    <Compile Include="ExcelDefinitions\AiInit.cs" />
-    <Compile Include="ExcelDefinitions\AiStart.cs" />
-    <Compile Include="ExcelDefinitions\AnimationCondition.cs" />
-    <Compile Include="ExcelDefinitions\AnimationGroups.cs" />
-    <Compile Include="ExcelDefinitions\AnimationStance.cs" />
-    <Compile Include="ExcelDefinitions\BackGroundSounds.cs" />
-    <Compile Include="ExcelDefinitions\BackGroundSounds2D.cs" />
-    <Compile Include="ExcelDefinitions\BackGroundSounds3D.cs" />
-    <Compile Include="ExcelDefinitions\BadgeRewards.cs" />
-    <Compile Include="ExcelDefinitions\Bones.cs" />
-    <Compile Include="ExcelDefinitions\BookMarks.cs" />
-    <Compile Include="ExcelDefinitions\BudgetsModel.cs" />
-    <Compile Include="ExcelDefinitions\BudgetTextureMips.cs" />
-    <Compile Include="ExcelDefinitions\CharacterClass.cs" />
-    <Compile Include="ExcelDefinitions\ChatInstancedChannels.cs" />
-    <Compile Include="ExcelDefinitions\ColorSets.cs" />
-    <Compile Include="ExcelDefinitions\ConditionFunctions.cs" />
-    <Compile Include="ExcelDefinitions\DamageEffects.cs" />
-    <Compile Include="ExcelDefinitions\DamageTypes.cs" />
-    <Compile Include="ExcelDefinitions\Dialog.cs" />
-    <Compile Include="ExcelDefinitions\Difficulty.cs" />
-    <Compile Include="ExcelDefinitions\Display.cs" />
-    <Compile Include="ExcelDefinitions\EffectsFiles.cs" />
-    <Compile Include="ExcelDefinitions\EffectsIndex.cs" />
-    <Compile Include="ExcelDefinitions\EffectsShaders.cs" />
-    <Compile Include="ExcelDefinitions\Faction.cs" />
-    <Compile Include="ExcelDefinitions\FactionStanding.cs" />
-    <Compile Include="ExcelDefinitions\Filter.cs" />
-    <Compile Include="ExcelDefinitions\Font.cs" />
-    <Compile Include="ExcelDefinitions\FontColor.cs" />
-    <Compile Include="ExcelDefinitions\FootSteps.cs" />
-    <Compile Include="ExcelDefinitions\GameGlobals.cs" />
-    <Compile Include="ExcelDefinitions\Global.cs" />
-    <Compile Include="ExcelDefinitions\GlobalThemes.cs" />
-    <Compile Include="ExcelDefinitions\InitDb.cs" />
-    <Compile Include="ExcelDefinitions\Interact.cs" />
-    <Compile Include="ExcelDefinitions\InteractMenu.cs" />
-    <Compile Include="ExcelDefinitions\Inventory.cs" />
-    <Compile Include="ExcelDefinitions\InventoryTypes.cs" />
-    <Compile Include="ExcelDefinitions\InvLoc.cs" />
-    <Compile Include="ExcelDefinitions\ItemLevels.cs" />
-    <Compile Include="ExcelDefinitions\ItemLookGroups.cs" />
-    <Compile Include="ExcelDefinitions\ItemLooks.cs" />
-    <Compile Include="ExcelDefinitions\ItemQuality.cs" />
-    <Compile Include="ExcelDefinitions\Items.cs" />
-    <Compile Include="ExcelDefinitions\Language.cs" />
-    <Compile Include="ExcelDefinitions\Levels.cs" />
-    <Compile Include="ExcelDefinitions\LevelScaling.cs" />
-    <Compile Include="ExcelDefinitions\LevelsDrlgChoice.cs" />
-    <Compile Include="ExcelDefinitions\LevelsDrlgs.cs" />
-    <Compile Include="ExcelDefinitions\LevelsEnv.cs" />
-    <Compile Include="ExcelDefinitions\LevelsFilePath.cs" />
-    <Compile Include="ExcelDefinitions\LevelsRoomIndex.cs" />
-    <Compile Include="ExcelDefinitions\LevelsRules.cs" />
-    <Compile Include="ExcelDefinitions\LevelsThemes.cs" />
-    <Compile Include="ExcelDefinitions\LoadingTips.cs" />
-    <Compile Include="ExcelDefinitions\MaterialsCollision.cs" />
-    <Compile Include="ExcelDefinitions\MaterialsGlobal.cs" />
-    <Compile Include="ExcelDefinitions\MeleeWeapons.cs" />
-    <Compile Include="ExcelDefinitions\MonLevel.cs" />
-    <Compile Include="ExcelDefinitions\MonScaling.cs" />
-    <Compile Include="ExcelDefinitions\MonsterNames.cs" />
-    <Compile Include="ExcelDefinitions\MonsterNameTypes.cs" />
-    <Compile Include="ExcelDefinitions\MonsterQuality.cs" />
-    <Compile Include="ExcelDefinitions\MovieLists.cs" />
-    <Compile Include="ExcelDefinitions\Movies.cs" />
-    <Compile Include="ExcelDefinitions\MovieSubTitles.cs" />
-    <Compile Include="ExcelDefinitions\Music.cs" />
-    <Compile Include="ExcelDefinitions\MusicConditions.cs" />
-    <Compile Include="ExcelDefinitions\MusicGrooveLevels.cs" />
-    <Compile Include="ExcelDefinitions\MusicGrooveLevelTypes.cs" />
-    <Compile Include="ExcelDefinitions\MusicRef.cs" />
-    <Compile Include="ExcelDefinitions\MusicScriptDebug.cs" />
-    <Compile Include="ExcelDefinitions\MusicStingers.cs" />
-    <Compile Include="ExcelDefinitions\MusicStingerSets.cs" />
-    <Compile Include="ExcelDefinitions\Npc.cs" />
-    <Compile Include="ExcelDefinitions\ObjectTriggers.cs" />
-    <Compile Include="ExcelDefinitions\Offer.cs" />
-    <Compile Include="ExcelDefinitions\Palettes.cs" />
-    <Compile Include="ExcelDefinitions\PlayerLevels.cs" />
-    <Compile Include="ExcelDefinitions\PlayerRace.cs" />
-    <Compile Include="ExcelDefinitions\Procs.cs" />
-    <Compile Include="ExcelDefinitions\Properties.cs" />
-    <Compile Include="ExcelDefinitions\Quest.cs" />
-    <Compile Include="ExcelDefinitions\QuestCast.cs" />
-    <Compile Include="ExcelDefinitions\QuestState.cs" />
-    <Compile Include="ExcelDefinitions\QuestStatus.cs" />
-    <Compile Include="ExcelDefinitions\QuestTemplate.cs" />
-    <Compile Include="ExcelDefinitions\RareNames.cs" />
-    <Compile Include="ExcelDefinitions\RecipeLists.cs" />
-    <Compile Include="ExcelDefinitions\Recipes.cs" />
-    <Compile Include="ExcelDefinitions\Region.cs" />
-    <Compile Include="ExcelDefinitions\SkillEventTypes.cs" />
-    <Compile Include="ExcelDefinitions\SkillGroups.cs" />
-    <Compile Include="ExcelDefinitions\Skills.cs" />
-    <Compile Include="ExcelDefinitions\SkillTabs.cs" />
-    <Compile Include="ExcelDefinitions\Sku.cs" />
-    <Compile Include="ExcelDefinitions\SoundBuses.cs" />
-    <Compile Include="ExcelDefinitions\SoundMixStates.cs" />
-    <Compile Include="ExcelDefinitions\SoundMixStateValues.cs" />
-    <Compile Include="ExcelDefinitions\Sounds.cs" />
-    <Compile Include="ExcelDefinitions\SoundVidCas.cs" />
-    <Compile Include="ExcelDefinitions\SoundVideoCasets.cs" />
-    <Compile Include="ExcelDefinitions\SpawnClass.cs" />
-    <Compile Include="ExcelDefinitions\StateEventTypes.cs" />
-    <Compile Include="ExcelDefinitions\StateLighting.cs" />
-    <Compile Include="ExcelDefinitions\States.cs" />
-    <Compile Include="ExcelDefinitions\Stats.cs" />
-    <Compile Include="ExcelDefinitions\StatsFunc.cs" />
-    <Compile Include="ExcelDefinitions\StringsFiles.cs" />
-    <Compile Include="ExcelDefinitions\SubLevel.cs" />
-    <Compile Include="ExcelDefinitions\Tag.cs" />
-    <Compile Include="ExcelDefinitions\Tasks.cs" />
-    <Compile Include="ExcelDefinitions\TextureTypes.cs" />
-    <Compile Include="ExcelDefinitions\Treasure.cs" />
-    <Compile Include="ExcelDefinitions\UIComponent.cs" />
-    <Compile Include="ExcelDefinitions\UnitEvents.cs" />
-    <Compile Include="ExcelDefinitions\UnitModeGroups.cs" />
-    <Compile Include="ExcelDefinitions\UnitModes.cs" />
-    <Compile Include="ExcelDefinitions\UnitTypes.cs" />
-    <Compile Include="ExcelDefinitions\Wardrobe.cs" />
-    <Compile Include="ExcelDefinitions\WardrobeAppearanceGroup.cs" />
-    <Compile Include="ExcelDefinitions\WardrobeBlendOp.cs" />
-    <Compile Include="ExcelDefinitions\WardrobeBody.cs" />
-    <Compile Include="ExcelDefinitions\WardrobeModel.cs" />
-    <Compile Include="ExcelDefinitions\WardrobeModelGroup.cs" />
-    <Compile Include="ExcelDefinitions\WardrobePart.cs" />
-    <Compile Include="ExcelDefinitions\WardrobeTextureSet.cs" />
-    <Compile Include="ExcelDefinitions\WardrobeTextureSetGroup.cs" />
-    <Compile Include="ExcelDefinitions\Weather.cs" />
-    <Compile Include="ExcelDefinitions\WeatherSets.cs" />
-    <Compile Include="ExcelFile.cs" />
-    <Compile Include="DataFile.cs" />
-    <Compile Include="ExcelDefinitions\ExcelTables.cs" />
-    <Compile Include="ExcelFileDef.cs" />
     <Compile Include="Exceptions.cs" />
-    <Compile Include="FileTools.cs" />
     <Compile Include="Forms\FileExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -353,14 +179,8 @@
     </Compile>
     <Compile Include="PathTools.cs" />
     <Compile Include="MemoryReader.cs" />
-    <Compile Include="StringsFile.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="StringsFileDef.cs" />
-    <Compile Include="TableFiles.cs" />
     <Compile Include="Patches.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Crypt.cs" />
     <Compile Include="ExceptionLogger.cs" />
     <Compile Include="Forms\HeroEditorFunctions\Atlas_functions.cs" />
     <Compile Include="Forms\HeroEditorFunctions\AttributesControl.cs">
@@ -445,7 +265,6 @@
     <Compile Include="Forms\TableSearch.Designer.cs">
       <DependentUpon>TableSearch.cs</DependentUpon>
     </Compile>
-    <Compile Include="TableDataSet.cs" />
     <Compile Include="Export.cs" />
     <Compile Include="Forms\CacheInfo.cs">
       <SubType>Form</SubType>
@@ -510,14 +329,11 @@
     <Compile Include="Forms\WayPointControl.Designer.cs">
       <DependentUpon>WayPointControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Index.cs" />
     <Compile Include="IMdiChildBase.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Modification.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XmlCookedFile.cs" />
-    <Compile Include="XmlCookedFileUtil.cs" />
     <Compile Include="XmlDefinitions\AIBehaviorDefinition.cs" />
     <Compile Include="XmlDefinitions\AIBehaviorDefinitionTable.cs" />
     <Compile Include="XmlDefinitions\AIDefinition.cs" />
@@ -601,7 +417,6 @@
     <Compile Include="Forms\Reanimator.Designer.cs">
       <DependentUpon>Reanimator.cs</DependentUpon>
     </Compile>
-    <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\CacheInfo.resx">
@@ -749,14 +564,16 @@
     <None Include="Resources\warning.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\common\Common.csproj">
+      <Project>{F2C2B5C8-8ACE-44BE-A3CF-A3C045A64A61}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\hellgate\Hellgate.csproj">
       <Project>{B6CC99E9-8371-43C3-A20B-D8AA4B7DACCC}</Project>
       <Name>Hellgate</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ExcelDefinitions\Tc\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

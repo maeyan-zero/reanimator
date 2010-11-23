@@ -41,7 +41,7 @@
             this.loadedTables_ListBox.Name = "loadedTables_ListBox";
             this.loadedTables_ListBox.Size = new System.Drawing.Size(270, 303);
             this.loadedTables_ListBox.TabIndex = 1;
-            this.loadedTables_ListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
+            this.loadedTables_ListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this._ListBox1_MouseDoubleClick);
             // 
             // TablesLoaded
             // 

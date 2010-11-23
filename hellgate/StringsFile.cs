@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Revival.Common;
 
 namespace Hellgate
@@ -15,15 +14,14 @@ namespace Hellgate
             DataType = typeof(StringBlock);
         }
 
-        public StringsFile(byte[] buffer)
-            : this()
+        public StringsFile(byte[] buffer) : this()
         {
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
-            bool isCSV = (!(peek == FileTokens.Header));
+            bool isCSV = (peek != Token.Header);
             IntegrityCheck = ((isCSV)) ? ParseCSV(buffer) : ParseData(buffer);
         }
 
-        public override bool ParseData(byte[] buffer)
+        public override sealed bool ParseData(byte[] buffer)
         {
             if ((buffer == null)) return false;
             int offset = 0;
@@ -79,7 +77,7 @@ namespace Hellgate
             return IntegrityCheck = ((offset == buffer.Length)) ? true : false;
         }
 
-        public override bool ParseCSV(byte[] buffer)
+        public override sealed bool ParseCSV(byte[] buffer)
         {
             if ((buffer == null)) return false;
             string[][] stringBuffer = FileTools.UnicodeCSVToStringArray(buffer, 0x09, 0x22);
@@ -109,7 +107,7 @@ namespace Hellgate
             // write main header first
             StringsHeader stringsHeader = new StringsHeader
             {
-                Header = FileTokens.Header,
+                Header = Token.Header,
                 Version = Version,
                 Count = table.Rows.Count
             };
@@ -204,7 +202,7 @@ namespace Hellgate
             byte[] buffer = new byte[1024];
             int offset = 0;
 
-            FileTools.WriteToBuffer(ref buffer, ref offset, FileTokens.Header);
+            FileTools.WriteToBuffer(ref buffer, ref offset, Token.Header);
             FileTools.WriteToBuffer(ref buffer, ref offset, Version);
             FileTools.WriteToBuffer(ref buffer, ref offset, Count);
 
@@ -221,14 +219,10 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, (short)0);
                 int attributeCount = 0;
                 {
-                    if (!(String.IsNullOrEmpty(stringBlock.Attribute1)))
-                        attributeCount++;
-                    if (!(String.IsNullOrEmpty(stringBlock.Attribute2)))
-                        attributeCount++;
-                    if (!(String.IsNullOrEmpty(stringBlock.Attribute3)))
-                        attributeCount++;
-                    if (!(String.IsNullOrEmpty(stringBlock.Attribute4)))
-                        attributeCount++;
+                    if (!String.IsNullOrEmpty(stringBlock.Attribute1)) attributeCount++;
+                    if (!String.IsNullOrEmpty(stringBlock.Attribute2)) attributeCount++;
+                    if (!String.IsNullOrEmpty(stringBlock.Attribute3)) attributeCount++;
+                    if (!String.IsNullOrEmpty(stringBlock.Attribute4)) attributeCount++;
                 }
                 FileTools.WriteToBuffer(ref buffer, ref offset, attributeCount);
                 for (int i = 1; i <= attributeCount; i++)

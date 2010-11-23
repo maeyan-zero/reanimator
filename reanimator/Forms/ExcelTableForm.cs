@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Reflection;
 using System.IO;
+using Hellgate;
+using Revival.Common;
 
 namespace Reanimator.Forms
 {
@@ -22,7 +24,7 @@ namespace Reanimator.Forms
             public int Unknowns4 { get; set; }
         };
 
-        readonly TableDataSet _tableDataSet;
+        readonly FileManager _fileManager;
         readonly Hashtable _specialControls;
         private DataTable _dataTable;
         private bool _dataChanged;
@@ -32,11 +34,11 @@ namespace Reanimator.Forms
         private readonly DataFile _dataFile;
         private readonly ExcelFile _excelFile;
 
-        public ExcelTableForm(DataFile dataFile, TableDataSet tableDataSet)
+        public ExcelTableForm(DataFile dataFile, FileManager fileManager)
         {
             _dataFile = dataFile;
             _excelFile = _dataFile as ExcelFile;
-            _tableDataSet = tableDataSet;
+            _fileManager = fileManager;
             _specialControls = new Hashtable();
             _dataChanged = false;
             _selectedIndexChange = false;
@@ -60,7 +62,7 @@ namespace Reanimator.Forms
         private void UseDataView()
         {
             String temp = tableData_DataGridView.DataMember;
-            DataTable dataTable = _tableDataSet.XlsDataSet.Tables[temp];
+            DataTable dataTable = _fileManager.XlsDataSet.Tables[temp];
             _dataView = dataTable.DefaultView;
             tableData_DataGridView.DataMember = null;
             tableData_DataGridView.DataSource = _dataView;
@@ -73,7 +75,7 @@ namespace Reanimator.Forms
             tableData_DataGridView.DoubleBuffered(true);
             tableData_DataGridView.EnableHeadersVisualStyles = false;
             tableData_DataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-            tableData_DataGridView.DataSource = _tableDataSet.XlsDataSet;
+            tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
             tableData_DataGridView.DataMember = null;
         }
 
@@ -85,7 +87,7 @@ namespace Reanimator.Forms
 
             // table tab
             tableData_DataGridView.SuspendLayout();
-            _dataTable = _tableDataSet.LoadTable(progress, dataFile);
+            _dataTable = _fileManager.LoadTable(dataFile, true);
             if (_dataTable == null)
             {
                 MessageBox.Show("Failed to load DataTable!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -119,97 +121,97 @@ namespace Reanimator.Forms
             }
             tableData_DataGridView.ResumeLayout();
 
+            // todo: rewrite
+            //// list view tab
+            //int rowCount = _dataTable.Rows.Count;
+            //Object[] rows = new Object[rowCount];
+            //int row = 0;
+            //foreach (DataRow dr in _dataTable.Rows)
+            //{
+            //    rows[row++] = dr[0] + ": " + dr[1];
+            //}
+            //rows_ListBox.SuspendLayout();
+            //rows_ListBox.Items.AddRange(rows);
+            //rows_ListBox.SelectedIndexChanged += rows_ListBox_SelectedIndexChanged;
+            //rows_ListBox.ResumeLayout();
 
-            // list view tab
-            int rowCount = _dataTable.Rows.Count;
-            Object[] rows = new Object[rowCount];
-            int row = 0;
-            foreach (DataRow dr in _dataTable.Rows)
-            {
-                rows[row++] = dr[0] + ": " + dr[1];
-            }
-            rows_ListBox.SuspendLayout();
-            rows_ListBox.Items.AddRange(rows);
-            rows_ListBox.SelectedIndexChanged += rows_ListBox_SelectedIndexChanged;
-            rows_ListBox.ResumeLayout();
+            //rows_LayoutPanel.SuspendLayout();
+            //int column = 0;
+            //TextBox relationTextBox = null;
+            //foreach (DataColumn dc in _dataTable.Columns)
+            //{
+            //    if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBool) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBool])
+            //    {
+            //        CheckBox cb = new CheckBox
+            //                          {
+            //                              Parent = rows_LayoutPanel,
+            //                              AutoSize = true,
+            //                              Dock = DockStyle.Fill,
+            //                              Name = dc.ColumnName,
+            //                              Text = dc.ColumnName
+            //                          };
+            //        rows_LayoutPanel.SetColumnSpan(cb, 2);
 
-            rows_LayoutPanel.SuspendLayout();
-            int column = 0;
-            TextBox relationTextBox = null;
-            foreach (DataColumn dc in _dataTable.Columns)
-            {
-                if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBool) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBool])
-                {
-                    CheckBox cb = new CheckBox
-                                      {
-                                          Parent = rows_LayoutPanel,
-                                          AutoSize = true,
-                                          Dock = DockStyle.Fill,
-                                          Name = dc.ColumnName,
-                                          Text = dc.ColumnName
-                                      };
-                    rows_LayoutPanel.SetColumnSpan(cb, 2);
+            //        cb.CheckedChanged += cb_ItemCheck;
+            //        _specialControls.Add(dc.ColumnName, cb);
 
-                    cb.CheckedChanged += cb_ItemCheck;
-                    _specialControls.Add(dc.ColumnName, cb);
+            //        column++;
+            //        continue;
+            //    }
 
-                    column++;
-                    continue;
-                }
+            //    new Label { Text = dc.ColumnName, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft};
 
-                new Label { Text = dc.ColumnName, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft};
+            //    if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
+            //    {
+            //        CheckedListBox clb = new CheckedListBox
+            //                                 {
+            //                                     Parent = rows_LayoutPanel,
+            //                                     AutoSize = true,
+            //                                     Dock = DockStyle.Fill,
+            //                                     MultiColumn = false,
+            //                                     Name = dc.ColumnName
+            //                                 };
 
-                if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
-                {
-                    CheckedListBox clb = new CheckedListBox
-                                             {
-                                                 Parent = rows_LayoutPanel,
-                                                 AutoSize = true,
-                                                 Dock = DockStyle.Fill,
-                                                 MultiColumn = false,
-                                                 Name = dc.ColumnName
-                                             };
+            //        clb.ItemCheck += clb_ItemCheck;
+            //        _specialControls.Add(dc.ColumnName, clb);
 
-                    clb.ItemCheck += clb_ItemCheck;
-                    _specialControls.Add(dc.ColumnName, clb);
+            //        Type cellType = dc.DataType;
 
-                    Type cellType = dc.DataType;
+            //        foreach (Enum type in Enum.GetValues(cellType))
+            //        {
+            //            clb.Items.Add(type, false);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        TextBox tb = new TextBox { Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill};
+            //        tb.DataBindings.Add("Text", _dataTable, dc.ColumnName);
 
-                    foreach (Enum type in Enum.GetValues(cellType))
-                    {
-                        clb.Items.Add(type, false);
-                    }
-                }
-                else
-                {
-                    TextBox tb = new TextBox { Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill};
-                    tb.DataBindings.Add("Text", _dataTable, dc.ColumnName);
+            //        if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsRelationGenerated]) ||
+            //            (column == 0))
+            //        {
+            //            tb.ReadOnly = true;
+            //            if (relationTextBox != null)
+            //                relationTextBox.TextChanged += (sender, e) =>
+            //                        tb.ResetText();
+            //        }
 
-                    if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsRelationGenerated]) ||
-                        (column == 0))
-                    {
-                        tb.ReadOnly = true;
-                        if (relationTextBox != null)
-                            relationTextBox.TextChanged += (sender, e) =>
-                                    tb.ResetText();
-                    }
-
-                    if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringIndex) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringIndex]) ||
-                        (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringId) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringId]))
-                    {
-                        relationTextBox = tb;
-                    }
-                    else
-                    {
-                        relationTextBox = null;
-                    }
-                }
+            //        if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringIndex) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringIndex]) ||
+            //            (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringId) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringId]))
+            //        {
+            //            relationTextBox = tb;
+            //        }
+            //        else
+            //        {
+            //            relationTextBox = null;
+            //        }
+            //    }
                 
-                column++;
-            }
+            //    column++;
+            //}
 
-            new Label {Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill};
-            rows_LayoutPanel.ResumeLayout();
+            //new Label {Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill};
+            //rows_LayoutPanel.ResumeLayout();
 
 
             if (_excelFile == null)
@@ -219,69 +221,71 @@ namespace Reanimator.Forms
                 return;
             }
 
+            // todo: rewrite
             // strings tab
-            if (_excelFile.SecondaryStrings != null && _excelFile.SecondaryStrings.Count > 0)
-            {
-                strings_ListBox.SuspendLayout();
-                strings_ListBox.DataSource = _excelFile.SecondaryStrings;
-                strings_ListBox.ResumeLayout();
-            }
-            else
-            {
-                tabControl1.TabPages.RemoveByKey("stringsPage");
-            }
+            //if (_excelFile.SecondaryStrings != null && _excelFile.SecondaryStrings.Count > 0)
+            //{
+            //    strings_ListBox.SuspendLayout();
+            //    strings_ListBox.DataSource = _excelFile.SecondaryStrings;
+            //    strings_ListBox.ResumeLayout();
+            //}
+            //else
+            //{
+            //    tabControl1.TabPages.RemoveByKey("stringsPage");
+            //}
 
+            // todo: rewrite
             // table sort index tab
             // todo: make me nicer
-            List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
-            int[][] intArrays = { _excelFile.TableIndicies, _excelFile.SortIndex1, _excelFile.SortIndex2, _excelFile.SortIndex3, _excelFile.SortIndex4 };
-            for (int i = 0; i < intArrays.Length; i++)
-            {
-                if (intArrays[i] == null)
-                {
-                    continue;
-                }
+            //List<TableIndexDataSource> tdsList = new List<TableIndexDataSource>();
+            //int[][] intArrays = { _excelFile.TableIndicies, _excelFile.SortIndex1, _excelFile.SortIndex2, _excelFile.SortIndex3, _excelFile.SortIndex4 };
+            //for (int i = 0; i < intArrays.Length; i++)
+            //{
+            //    if (intArrays[i] == null)
+            //    {
+            //        continue;
+            //    }
 
-                for (int j = 0; j < intArrays[i].Length; j++)
-                {
-                    if (tdsList.Count <= j)
-                    {
-                        tdsList.Add(new TableIndexDataSource());
-                    }
+            //    for (int j = 0; j < intArrays[i].Length; j++)
+            //    {
+            //        if (tdsList.Count <= j)
+            //        {
+            //            tdsList.Add(new TableIndexDataSource());
+            //        }
 
-                    TableIndexDataSource tds = tdsList[j];
-                    switch (i)
-                    {
-                        case 0:
-                            // should we still use the "official" one?
-                            // or leave as autogenerated - has anyone ever seen it NOT be ascending from 0?
-                            // TODO
-                            //dataGridView[i, j].Value = intArrays[i][j];
-                            break;
-                        case 1:
-                            tds.Unknowns1 = intArrays[i][j];
-                            break;
-                        case 2:
-                            tds.Unknowns2 = intArrays[i][j];
-                            break;
-                        case 3:
-                            tds.Unknowns3 = intArrays[i][j];
-                            break;
-                        case 4:
-                            tds.Unknowns4 = intArrays[i][j];
-                            break;
-                    }
-                }
-            }
+            //        TableIndexDataSource tds = tdsList[j];
+            //        switch (i)
+            //        {
+            //            case 0:
+            //                // should we still use the "official" one?
+            //                // or leave as autogenerated - has anyone ever seen it NOT be ascending from 0?
+            //                // TODO
+            //                //dataGridView[i, j].Value = intArrays[i][j];
+            //                break;
+            //            case 1:
+            //                tds.Unknowns1 = intArrays[i][j];
+            //                break;
+            //            case 2:
+            //                tds.Unknowns2 = intArrays[i][j];
+            //                break;
+            //            case 3:
+            //                tds.Unknowns3 = intArrays[i][j];
+            //                break;
+            //            case 4:
+            //                tds.Unknowns4 = intArrays[i][j];
+            //                break;
+            //        }
+            //    }
+            //}
 
-            if (tdsList.Count == 0)
-            {
-                tabControl1.TabPages.RemoveByKey("indexArraysPage");
-            }
+            //if (tdsList.Count == 0)
+            //{
+            //    tabControl1.TabPages.RemoveByKey("indexArraysPage");
+            //}
 
-            indexArrays_DataGridView.SuspendLayout();
-            indexArrays_DataGridView.DataSource = tdsList.ToArray();
-            indexArrays_DataGridView.ResumeLayout();
+            //indexArrays_DataGridView.SuspendLayout();
+            //indexArrays_DataGridView.DataSource = tdsList.ToArray();
+            //indexArrays_DataGridView.ResumeLayout();
         }
 
         void DoIntOffsetType(DataColumn dc)
@@ -388,11 +392,11 @@ namespace Reanimator.Forms
             String saveExtension = _dataFile.IsExcelFile ? "txt.cooked" : "xls.uni.cooked";
             String saveInitialPath = Path.Combine(Config.HglDir, _dataFile.FilePath);
 
-            String savePath = FileTools.SaveFileDiag(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
+            String savePath = String.Empty; // todo: rewrite  FileTools.SaveFileDiag(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
             if (String.IsNullOrEmpty(savePath)) return;
 
-            byte[] data = _dataFile.GenerateFile(table);
-            if (FileTools.WriteFile(savePath, data))
+            byte[] data = null; // todo: rewrite _dataFile.GenerateFile(table);
+            if (FileTools.WriteFileWithRetry(savePath, data))
             {
                 MessageBox.Show("Table saved Successfully!", "Completed", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
@@ -403,7 +407,7 @@ namespace Reanimator.Forms
         {
             // make sure we're trying to rebuild an excel table, and that it's actually in the dataset
             if (_excelFile == null) return;
-            if (!_tableDataSet.XlsDataSet.Tables.Contains(_dataFile.StringId)) return;
+            if (!_fileManager.XlsDataSet.Tables.Contains(_dataFile.StringId)) return;
 
             // remove from view or die, lol
             tableData_DataGridView.DataMember = null;
@@ -411,7 +415,7 @@ namespace Reanimator.Forms
             strings_ListBox.DataSource = null;
 
             // remove and reload
-            DataTable dt = _tableDataSet.XlsDataSet.Tables[_dataFile.StringId];
+            DataTable dt = _fileManager.XlsDataSet.Tables[_dataFile.StringId];
             if (dt.ChildRelations.Count != 0)
             {
                 dt.ChildRelations.Clear();
@@ -423,8 +427,8 @@ namespace Reanimator.Forms
                 dt.ParentRelations.Clear();
             }
 
-            _tableDataSet.XlsDataSet.Tables.Remove(_dataFile.StringId);
-            _tableDataSet.LoadTable(null, _dataFile);
+            _fileManager.XlsDataSet.Tables.Remove(_dataFile.StringId);
+            _fileManager.LoadTable(_dataFile, true);
 
             // display updated table
             MessageBox.Show("Table regenerated!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -432,9 +436,9 @@ namespace Reanimator.Forms
             // todo: when adding new columns the window will need to be close/reopened to show the changes
             // the dataGridView is storing its own little cache or something - 
             tableData_DataGridView.Refresh();
-            tableData_DataGridView.DataSource = _tableDataSet.XlsDataSet;
+            tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
             tableData_DataGridView.DataMember = _dataFile.StringId;
-            strings_ListBox.DataSource = _excelFile.SecondaryStrings;
+            // todo: rewrite strings_ListBox.DataSource = _excelFile.SecondaryStrings;
             _dataChanged = true;
 
             MessageBox.Show(
@@ -645,7 +649,7 @@ namespace Reanimator.Forms
                 if (select.ShowDialog(this) != DialogResult.OK) return;
 
                 // compiles the CSV string
-                string strValue = Export.CSV(_dataTable, select.selected, '\t');
+                string strValue = Export.CSV(_dataTable, select.Selected, '\t');
 
                 // prompts the user to choose where to save the file
                 SaveFileDialog saveFileDialog = new SaveFileDialog

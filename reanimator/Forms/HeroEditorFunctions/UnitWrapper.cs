@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Data;
 using System.IO;
+using Hellgate;
 
 namespace Reanimator.Forms.HeroEditorFunctions
 {
@@ -12,17 +11,17 @@ namespace Reanimator.Forms.HeroEditorFunctions
     {
         protected Unit _hero;
 
-        protected TableDataSet _dataSet;
+        // todo: rewrite protected TableDataSet _dataSet;
         protected DataTable _statsTable;
 
 
-        public CharacterProperty(Unit heroUnit, TableDataSet dataSet)
-        {
-            _hero = heroUnit;
-            _dataSet = dataSet;
+        //// todo: rewrite public CharacterProperty(Unit heroUnit, TableDataSet dataSet)
+        //{
+        //    _hero = heroUnit;
+        //    _dataSet = dataSet;
 
-            _statsTable = _dataSet.GetExcelTableFromStringId("STATS");
-        }
+        //    _statsTable = _dataSet.GetExcelTableFromStringId("STATS");
+        //}
 
         public Unit BaseUnit
         {
@@ -56,7 +55,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
     {
         Unit _hero;
         string _savePath;
-        TableDataSet _dataSet;
+        // todo: rewrite TableDataSet _dataSet;
         int _unitType;
         bool _isMale;
         CharacterClass _class;
@@ -70,58 +69,58 @@ namespace Reanimator.Forms.HeroEditorFunctions
         EngineerDrone _drone;
         DataTable _itemsTable;
 
-        public UnitWrapper(TableDataSet dataSet, Unit heroUnit)
-        {
-            _hero = heroUnit;
-            _dataSet = dataSet;
+        //// todo: rewrite public UnitWrapper(TableDataSet dataSet, Unit heroUnit)
+        //{
+        //    _hero = heroUnit;
+        //    _dataSet = dataSet;
 
-            _itemsTable = _dataSet.GetExcelTableFromStringId("ITEMS");
+        //    _itemsTable = _dataSet.GetExcelTableFromStringId("ITEMS");
 
-            DataTable players = _dataSet.GetExcelTableFromStringId("PLAYERS");
-            DataRow[] playerRow = players.Select("code = " + _hero.unitCode);
+        //    DataTable players = _dataSet.GetExcelTableFromStringId("PLAYERS");
+        //    DataRow[] playerRow = players.Select("code = " + _hero.unitCode);
 
-            if (playerRow.Length > 0)
-            {
-                int playerType = (int)playerRow[0]["unitType"];
+        //    if (playerRow.Length > 0)
+        //    {
+        //        int playerType = (int)playerRow[0]["unitType"];
 
-                List<int> skillTabs = new List<int>();
+        //        List<int> skillTabs = new List<int>();
 
-                for (int counter = 1; counter < 8; counter++)
-                {
-                    int skillTab = (int)playerRow[0]["SkillTab" + counter];
-                    if (skillTab >= 0)
-                    {
-                        skillTabs.Add(skillTab);
-                    }
-                }
+        //        for (int counter = 1; counter < 8; counter++)
+        //        {
+        //            int skillTab = (int)playerRow[0]["SkillTab" + counter];
+        //            if (skillTab >= 0)
+        //            {
+        //                skillTabs.Add(skillTab);
+        //            }
+        //        }
 
-                _unitType = playerType - 3;
-                //the following code also retrieves the unitType from the tables, but is VERY prone to modifications
-                //DataTable unitTypes = _dataSet.GetExcelTableFromStringId("UNITTYPES");
-                //DataRow[] unitTypeRow = unitTypes.Select("code = " + playerType);
-                //_unitType = (int)unitTypeRow[0]["isA0"];
+        //        _unitType = playerType - 3;
+        //        //the following code also retrieves the unitType from the tables, but is VERY prone to modifications
+        //        //DataTable unitTypes = _dataSet.GetExcelTableFromStringId("UNITTYPES");
+        //        //DataRow[] unitTypeRow = unitTypes.Select("code = " + playerType);
+        //        //_unitType = (int)unitTypeRow[0]["isA0"];
 
 
-                _class = GetCharacterClass(_hero);
-                _isMale = _class.ToString().EndsWith("_Male");
-                _mode = new CharacterGameMode(this.HeroUnit, _dataSet);
-                _values = new CharacterValues(this.HeroUnit, _dataSet);
-                _skills = new CharacterSkills(this.HeroUnit, _dataSet, skillTabs.ToArray());
-                _equippment = new CharacterEquippment(this.HeroUnit, _dataSet);
-                //_waypoints = new CharacterWaypoint(this.HeroUnit, _dataSet);
-                _appearance = new CharacterAppearance(this.HeroUnit, _dataSet);
-                _inventory = new CharacterInventory(this.HeroUnit, dataSet);
+        //        _class = GetCharacterClass(_hero);
+        //        _isMale = _class.ToString().EndsWith("_Male");
+        //        _mode = new CharacterGameMode(this.HeroUnit, _dataSet);
+        //        _values = new CharacterValues(this.HeroUnit, _dataSet);
+        //        _skills = new CharacterSkills(this.HeroUnit, _dataSet, skillTabs.ToArray());
+        //        _equippment = new CharacterEquippment(this.HeroUnit, _dataSet);
+        //        //_waypoints = new CharacterWaypoint(this.HeroUnit, _dataSet);
+        //        _appearance = new CharacterAppearance(this.HeroUnit, _dataSet);
+        //        _inventory = new CharacterInventory(this.HeroUnit, dataSet);
 
-            }
-            if (_class == CharacterClass.Engineer_Male || _class == CharacterClass.Engineer_Female)
-            {
-                _drone = new EngineerDrone(this.HeroUnit, _dataSet);
-            }
+        //    }
+        //    if (_class == CharacterClass.Engineer_Male || _class == CharacterClass.Engineer_Female)
+        //    {
+        //        _drone = new EngineerDrone(this.HeroUnit, _dataSet);
+        //    }
 
-            //int level = _values.Level;
-            //int skills = _values.SkillPoints;
-            //int attribute = _values.AttributePoints;
-        }
+        //    //int level = _values.Level;
+        //    //int skills = _values.SkillPoints;
+        //    //int attribute = _values.AttributePoints;
+        //}
 
         public string SavePath
         {
@@ -233,41 +232,41 @@ namespace Reanimator.Forms.HeroEditorFunctions
         Unit.StatBlock.Stat _waypoints;
         string[] _waypointNames;
 
-        public CharacterWaypoint(Unit heroUnit, TableDataSet dataSet)
-            : base(heroUnit, dataSet)
-        {
-            _waypoints = UnitHelpFunctions.GetComplexValue(BaseUnit, ItemValueNames.waypoint_flags);
-            //if (_waypoints == null)
-            {
-                Unit.StatBlock.Stat _waypoint = new Unit.StatBlock.Stat();
-                _waypoint.repeatFlag = 1;
-                _waypoint.skipResource = 1;
-                _waypoint.bitCount = 32;
-                _waypoint.id = 20532;
-                _waypoint.Name = "waypoint_flags";
+        //// todo: rewrite public CharacterWaypoint(Unit heroUnit, TableDataSet dataSet)
+        //    : base(heroUnit, dataSet)
+        //{
+        //    _waypoints = UnitHelpFunctions.GetComplexValue(BaseUnit, ItemValueNames.waypoint_flags);
+        //    //if (_waypoints == null)
+        //    {
+        //        Unit.StatBlock.Stat _waypoint = new Unit.StatBlock.Stat();
+        //        _waypoint.repeatFlag = 1;
+        //        _waypoint.skipResource = 1;
+        //        _waypoint.bitCount = 32;
+        //        _waypoint.id = 20532;
+        //        _waypoint.Name = "waypoint_flags";
 
-                Unit.StatBlock.Stat.Attribute att1 = new Unit.StatBlock.Stat.Attribute();
-                att1.BitCount = 8;
-                att1.exists = 1;
-                att1.skipTableId = 1;
+        //        Unit.StatBlock.Stat.Attribute att1 = new Unit.StatBlock.Stat.Attribute();
+        //        att1.BitCount = 8;
+        //        att1.exists = 1;
+        //        att1.skipTableId = 1;
 
-                Unit.StatBlock.Stat.Attribute att2 = new Unit.StatBlock.Stat.Attribute();
-                att2.BitCount = 16;
-                att2.exists = 1;
-                att2.TableId = 17715;
+        //        Unit.StatBlock.Stat.Attribute att2 = new Unit.StatBlock.Stat.Attribute();
+        //        att2.BitCount = 16;
+        //        att2.exists = 1;
+        //        att2.TableId = 17715;
 
-                _waypoint.attributes.Add(att1);
-                _waypoint.attributes.Add(att2);
+        //        _waypoint.attributes.Add(att1);
+        //        _waypoint.attributes.Add(att2);
 
-                _waypoint.values = new List<Unit.StatBlock.Stat.Values>();
-                _waypoint.values.Add(GenerateNormal());
-                _waypoint.values.Add(GenerateNightmare());
+        //        _waypoint.values = new List<Unit.StatBlock.Stat.Values>();
+        //        _waypoint.values.Add(GenerateNormal());
+        //        _waypoint.values.Add(GenerateNightmare());
 
-                _waypoints.values[0].Stat = 1535;
-                //_waypoints.values.Add(GenerateNightmare());// = _waypoint;
-            }
-            //UnitHelpFunctions.SetComplexValue(_hero, ItemValueNames.waypoint_flags.ToString(), _waypoints);
-        }
+        //        _waypoints.values[0].Stat = 1535;
+        //        //_waypoints.values.Add(GenerateNightmare());// = _waypoint;
+        //    }
+        //    //UnitHelpFunctions.SetComplexValue(_hero, ItemValueNames.waypoint_flags.ToString(), _waypoints);
+        //}
 
         private Unit.StatBlock.Stat.Values GenerateNormal()
         {
@@ -335,9 +334,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class CharacterGameMode : CharacterProperty
     {
-        public CharacterGameMode(Unit heroUnit, TableDataSet dataSet) : base(heroUnit, dataSet)
-        {
-        }
+        //public CharacterGameMode(Unit heroUnit, TableDataSet dataSet) : base(heroUnit, dataSet)
+        //{
+        //}
 
         public bool IsElite
         {
@@ -426,22 +425,22 @@ namespace Reanimator.Forms.HeroEditorFunctions
         int _maxPalladium;
         int _maxLevel;
 
-        public CharacterValues(Unit heroUnit, TableDataSet dataSet)
-            : base(heroUnit, dataSet)
-        {
-            DataTable statsTable = dataSet.GetExcelTableFromStringId("STATS");
-            //could also use "stat" column and "gold" entry
-            DataRow[] goldRow = statsTable.Select("code = " + (int)ItemValueNames.gold);
-            int maxPalladium = (int)goldRow[0]["maxSet"];
+        //public CharacterValues(Unit heroUnit, TableDataSet dataSet)
+        //    : base(heroUnit, dataSet)
+        //{
+        //    DataTable statsTable = dataSet.GetExcelTableFromStringId("STATS");
+        //    //could also use "stat" column and "gold" entry
+        //    DataRow[] goldRow = statsTable.Select("code = " + (int)ItemValueNames.gold);
+        //    int maxPalladium = (int)goldRow[0]["maxSet"];
 
-            _maxPalladium = maxPalladium;
+        //    _maxPalladium = maxPalladium;
 
-            DataTable playersTable = _dataSet.GetExcelTableFromStringId("PLAYERS");
-            DataRow[] playerRows = playersTable.Select("code = " + BaseUnit.unitCode);
-            int maxLevel = (int)playerRows[0]["maxLevel"];
+        //    DataTable playersTable = _dataSet.GetExcelTableFromStringId("PLAYERS");
+        //    DataRow[] playerRows = playersTable.Select("code = " + BaseUnit.unitCode);
+        //    int maxLevel = (int)playerRows[0]["maxLevel"];
 
-            _maxLevel = maxLevel;
-        }
+        //    _maxLevel = maxLevel;
+        //}
 
         public int Level
         {
@@ -727,57 +726,57 @@ namespace Reanimator.Forms.HeroEditorFunctions
             get { return _skillTabs; }
         }
 
-        public CharacterSkills(Unit heroUnit, TableDataSet dataSet, int[] skillTabs)
-            : base(heroUnit, dataSet)
-        {
-            _skillTabs = new List<SkillTab>();
+        //public CharacterSkills(Unit heroUnit, TableDataSet dataSet, int[] skillTabs)
+        //    : base(heroUnit, dataSet)
+        //{
+        //    _skillTabs = new List<SkillTab>();
 
-            //to make things easier, let's add all available character skills to the list
-            List<Unit.StatBlock.Stat.Values> availableSkills = new List<Unit.StatBlock.Stat.Values>();
-            ////get the skills the character already knows
-            Unit.StatBlock.Stat skills = UnitHelpFunctions.GetComplexValue(BaseUnit, ItemValueNames.skill_level);
-            ////add them to the complete skill list
-            availableSkills.AddRange(skills.values);
+        //    //to make things easier, let's add all available character skills to the list
+        //    List<Unit.StatBlock.Stat.Values> availableSkills = new List<Unit.StatBlock.Stat.Values>();
+        //    ////get the skills the character already knows
+        //    Unit.StatBlock.Stat skills = UnitHelpFunctions.GetComplexValue(BaseUnit, ItemValueNames.skill_level);
+        //    ////add them to the complete skill list
+        //    availableSkills.AddRange(skills.values);
 
-            DataTable skillTable = dataSet.GetExcelTableFromStringId("SKILLS");
+        //    DataTable skillTable = dataSet.GetExcelTableFromStringId("SKILLS");
 
-            //let's add all the skills the character doesn't know yet
-            foreach (int skillTab in skillTabs)
-            {
-                DataRow[] skillRows = skillTable.Select("skillTab = " + skillTab);
+        //    //let's add all the skills the character doesn't know yet
+        //    foreach (int skillTab in skillTabs)
+        //    {
+        //        DataRow[] skillRows = skillTable.Select("skillTab = " + skillTab);
 
-                SkillTab skillsInSkillTab = CreateSkillsFromRow(availableSkills, skillTable, skillRows);
+        //        SkillTab skillsInSkillTab = CreateSkillsFromRow(availableSkills, skillTable, skillRows);
 
-                if (skillsInSkillTab.Skills.Count > 0)
-                {
-                    _skillTabs.Add(skillsInSkillTab);
-                }
-            }
+        //        if (skillsInSkillTab.Skills.Count > 0)
+        //        {
+        //            _skillTabs.Add(skillsInSkillTab);
+        //        }
+        //    }
 
 
-            // select the general skill tab
-            DataRow[] generalSkillRows = skillTable.Select("skillTab = " + 0);
-            _generalSkills = CreateSkillsFromRow(availableSkills, skillTable, generalSkillRows);
+        //    // select the general skill tab
+        //    DataRow[] generalSkillRows = skillTable.Select("skillTab = " + 0);
+        //    _generalSkills = CreateSkillsFromRow(availableSkills, skillTable, generalSkillRows);
 
-            //add all skills back to the savegame
-            availableSkills.Clear();
+        //    //add all skills back to the savegame
+        //    availableSkills.Clear();
 
-            foreach (Skill skill in _generalSkills.Skills)
-            {
-                availableSkills.Add(skill.SkillBlock);
-            }
+        //    foreach (Skill skill in _generalSkills.Skills)
+        //    {
+        //        availableSkills.Add(skill.SkillBlock);
+        //    }
 
-            foreach (SkillTab skillTab in _skillTabs)
-            {
-                foreach (Skill skill in skillTab.Skills)
-                {
-                    availableSkills.Add(skill.SkillBlock);
-                }
-            }
+        //    foreach (SkillTab skillTab in _skillTabs)
+        //    {
+        //        foreach (Skill skill in skillTab.Skills)
+        //        {
+        //            availableSkills.Add(skill.SkillBlock);
+        //        }
+        //    }
 
-            //skills.repeatCount = availableSkills.Count;
-            skills.values = availableSkills;
-        }
+        //    //skills.repeatCount = availableSkills.Count;
+        //    skills.values = availableSkills;
+        //}
 
         private SkillTab CreateSkillsFromRow(List<Unit.StatBlock.Stat.Values> availableSkills, DataTable skillTable, DataRow[] skillRows)
         {
@@ -850,27 +849,27 @@ namespace Reanimator.Forms.HeroEditorFunctions
     {
         List<CharacterInventoryType> _inventoryList;
 
-        public CharacterInventory(Unit heroUnit, TableDataSet dataSet)
-            : base(heroUnit, dataSet)
-        {
-            _inventoryList = new List<CharacterInventoryType>();
+        //// todo: rewrite public CharacterInventory(Unit heroUnit, TableDataSet dataSet)
+        //    : base(heroUnit, dataSet)
+        //{
+        //    _inventoryList = new List<CharacterInventoryType>();
 
-            foreach (Unit unit in heroUnit.Items)
-            {
-                CharacterItems item = new CharacterItems(unit, dataSet);
+        //    foreach (Unit unit in heroUnit.Items)
+        //    {
+        //        CharacterItems item = new CharacterItems(unit, dataSet);
 
-                // get the matching inventory entry
-                CharacterInventoryType inv = _inventoryList.Find(tmp => tmp.InventoryType == (int)item.InventoryType);
+        //        // get the matching inventory entry
+        //        CharacterInventoryType inv = _inventoryList.Find(tmp => tmp.InventoryType == (int)item.InventoryType);
 
-                if (inv == null)
-                {
-                    inv = new CharacterInventoryType((int)item.InventoryType);
-                    _inventoryList.Add(inv);
-                }
+        //        if (inv == null)
+        //        {
+        //            inv = new CharacterInventoryType((int)item.InventoryType);
+        //            _inventoryList.Add(inv);
+        //        }
 
-                inv.Items.Add(item);
-            }
-        }
+        //        inv.Items.Add(item);
+        //    }
+        //}
 
         public CharacterInventoryType GetInventoryById(int inventoryId)
         {
@@ -969,81 +968,81 @@ namespace Reanimator.Forms.HeroEditorFunctions
         int _stackSize;
         int _maxStackSize;
 
-        public CharacterItems(Unit heroUnit, TableDataSet dataSet)
-            : base(heroUnit, dataSet)
-        {
-            _itemTable = _dataSet.GetExcelTableFromStringId("ITEMS");
-            DataRow[] itemRow = _itemTable.Select("code = " + BaseUnit.unitCode);
+        //// todo: rewrite public CharacterItems(Unit heroUnit, TableDataSet dataSet)
+        //    : base(heroUnit, dataSet)
+        //{
+        //    _itemTable = _dataSet.GetExcelTableFromStringId("ITEMS");
+        //    DataRow[] itemRow = _itemTable.Select("code = " + BaseUnit.unitCode);
 
-            //DataTable colorTable = _dataSet.GetExcelTableFromStringId("ITEMQUALITY");
-            //DataRow[] colorRow = colorTable.Select("code = " + _hero.unitCode);
+        //    //DataTable colorTable = _dataSet.GetExcelTableFromStringId("ITEMQUALITY");
+        //    //DataRow[] colorRow = colorTable.Select("code = " + _hero.unitCode);
 
-            if (itemRow.Length > 0)
-            {
-                _isItem = true;
+        //    if (itemRow.Length > 0)
+        //    {
+        //        _isItem = true;
 
-                uint bitMask = (uint)itemRow[0]["bitmask02"];
-                _isQuestItem = (bitMask >> 13 & 1) == 1;
+        //        uint bitMask = (uint)itemRow[0]["bitmask02"];
+        //        _isQuestItem = (bitMask >> 13 & 1) == 1;
 
-                string maxStackSize = (string)itemRow[0]["stackSize"];
-                string[] splitResult = maxStackSize.Split(new char[] { ',' });
-                if(splitResult.Length == 3)
-                {
-                    _maxStackSize = int.Parse(splitResult[1]);
-                }
-                if (_maxStackSize <= 0)
-                {
-                    _maxStackSize = 1;
-                }
+        //        string maxStackSize = (string)itemRow[0]["stackSize"];
+        //        string[] splitResult = maxStackSize.Split(new char[] { ',' });
+        //        if(splitResult.Length == 3)
+        //        {
+        //            _maxStackSize = int.Parse(splitResult[1]);
+        //        }
+        //        if (_maxStackSize <= 0)
+        //        {
+        //            _maxStackSize = 1;
+        //        }
 
-                _stackSize = UnitHelpFunctions.GetSimpleValue(heroUnit, ItemValueNames.item_quantity.ToString());
-                if (_stackSize <= 0)
-                {
-                    _stackSize = 1;
-                }
+        //        _stackSize = UnitHelpFunctions.GetSimpleValue(heroUnit, ItemValueNames.item_quantity.ToString());
+        //        if (_stackSize <= 0)
+        //        {
+        //            _stackSize = 1;
+        //        }
 
-                _itemImagePath = CreateImagePath();
+        //        _itemImagePath = CreateImagePath();
 
-                _numberOfAugmentations = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_augmented_count.ToString());
-                _numberOfUpgrades = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_upgraded_count.ToString());
+        //        _numberOfAugmentations = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_augmented_count.ToString());
+        //        _numberOfUpgrades = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_upgraded_count.ToString());
 
-                DataTable gameGlobals = _dataSet.GetExcelTableFromStringId("GAME_GLOBALS");
-                //DataRow[] globalsRow = gameGlobals.Select("name = " + "max_item_upgrades");
-                DataRow[] globalsRow = gameGlobals.Select("Index = " + 16);
-                _maxNumberOfUpgrades = (int)globalsRow[0]["intValue"];
+        //        DataTable gameGlobals = _dataSet.GetExcelTableFromStringId("GAME_GLOBALS");
+        //        //DataRow[] globalsRow = gameGlobals.Select("name = " + "max_item_upgrades");
+        //        DataRow[] globalsRow = gameGlobals.Select("Index = " + 16);
+        //        _maxNumberOfUpgrades = (int)globalsRow[0]["intValue"];
 
-                //globalsRow = gameGlobals.Select("name = " + "max_item_augmentations");
-                globalsRow = gameGlobals.Select("Index = " + 17);
-                _maxNumberOfAffixes = (int)globalsRow[0]["intValue"];
-                Unit.StatBlock.Stat affixes = UnitHelpFunctions.GetComplexValue(_hero, ItemValueNames.applied_affix.ToString());
-                if (affixes != null)
-                {
-                    _numberOfAffixes = affixes.values.Count;
-                }
+        //        //globalsRow = gameGlobals.Select("name = " + "max_item_augmentations");
+        //        globalsRow = gameGlobals.Select("Index = " + 17);
+        //        _maxNumberOfAffixes = (int)globalsRow[0]["intValue"];
+        //        Unit.StatBlock.Stat affixes = UnitHelpFunctions.GetComplexValue(_hero, ItemValueNames.applied_affix.ToString());
+        //        if (affixes != null)
+        //        {
+        //            _numberOfAffixes = affixes.values.Count;
+        //        }
 
-                int numberOfInherentAffixes = _numberOfAffixes - _numberOfAugmentations;
-                _numberOfAugmentationsLeft = _maxNumberOfAffixes - numberOfInherentAffixes;
+        //        int numberOfInherentAffixes = _numberOfAffixes - _numberOfAugmentations;
+        //        _numberOfAugmentationsLeft = _maxNumberOfAffixes - numberOfInherentAffixes;
 
-                if (_numberOfAugmentationsLeft < 0)
-                {
-                    _numberOfAugmentationsLeft = 0;
-                }
+        //        if (_numberOfAugmentationsLeft < 0)
+        //        {
+        //            _numberOfAugmentationsLeft = 0;
+        //        }
 
-                _maxNumberOfAugmentations = _numberOfAugmentations + _numberOfAugmentationsLeft;
-                if (_maxNumberOfAugmentations > _maxNumberOfAffixes)
-                {
-                    _maxNumberOfAugmentations = _maxNumberOfAffixes;
-                }
-            }
+        //        _maxNumberOfAugmentations = _numberOfAugmentations + _numberOfAugmentationsLeft;
+        //        if (_maxNumberOfAugmentations > _maxNumberOfAffixes)
+        //        {
+        //            _maxNumberOfAugmentations = _maxNumberOfAffixes;
+        //        }
+        //    }
 
-            _items = new List<CharacterItems>();
+        //    _items = new List<CharacterItems>();
 
-            foreach (Unit item in BaseUnit.Items)
-            {
-                CharacterItems wrapper = new CharacterItems(item, dataSet);
-                _items.Add(wrapper);
-            }
-        }
+        //    foreach (Unit item in BaseUnit.Items)
+        //    {
+        //        CharacterItems wrapper = new CharacterItems(item, dataSet);
+        //        _items.Add(wrapper);
+        //    }
+        //}
 
         private string CreateImagePath()
         {
@@ -1345,7 +1344,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         public void AddItem(Unit item)
         {
             BaseUnit.AddItem(item);
-            _items.Add(new CharacterItems(item, _dataSet));
+            // todo: rewrite _items.Add(new CharacterItems(item, _dataSet));
         }
 
         public void RemoveItem(Unit item)
@@ -1493,10 +1492,10 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class CharacterAppearance : CharacterProperty
     {
-        public CharacterAppearance(Unit heroUnit, TableDataSet dataSet)
-            : base(heroUnit, dataSet)
-        {
-        }
+        //// todo: rewrite public CharacterAppearance(Unit heroUnit, TableDataSet dataSet)
+        //    : base(heroUnit, dataSet)
+        //{
+        //}
 
         public Size CharacterSize
         {
@@ -1514,21 +1513,21 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class CharacterEquippment : CharacterProperty
     {
-        public CharacterEquippment(Unit heroUnit, TableDataSet dataSet)
-            : base(heroUnit, dataSet)
-        {
-        }
+        //// todo: rewrite public CharacterEquippment(Unit heroUnit, TableDataSet dataSet)
+        //    : base(heroUnit, dataSet)
+        //{
+        //}
     }
 
     public class EngineerDrone : CharacterProperty
     {
         Unit _drone;
 
-        public EngineerDrone(Unit heroUnit, TableDataSet dataSet)
-            : base(heroUnit, dataSet)
-        {
-            _drone = BaseUnit.Items.Find(item => item.unitCode == (int)CharacterClass.Drone);
-        }
+        //// todo: rewrite public EngineerDrone(Unit heroUnit, TableDataSet dataSet)
+        //    : base(heroUnit, dataSet)
+        //{
+        //    _drone = BaseUnit.Items.Find(item => item.unitCode == (int)CharacterClass.Drone);
+        //}
 
         public Unit Drone
         {
@@ -1547,10 +1546,10 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class WeaponSlots : CharacterProperty
     {
-        public WeaponSlots(Unit heroUnit, TableDataSet dataSet)
-            : base(heroUnit, dataSet)
-        {
-        }
+        //// todo: rewrite public WeaponSlots(Unit heroUnit, TableDataSet dataSet)
+        //    : base(heroUnit, dataSet)
+        //{
+        //}
 
         public Unit[] WeaponSlot1
         {

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Hellgate;
 using Reanimator.Forms.HeroEditorFunctions;
 using System.IO;
 
@@ -14,28 +10,28 @@ namespace Reanimator.Forms
     public partial class HeroEditor2 : Form
     {
         Unit _hero;
-        TableDataSet _dataSet;
+        // todo: rewrite TableDataSet _dataSet;
         string _filePath;
         UnitHelpFunctions _itemFunctions;
         UnitWrapper _wrapper;
 
-        public HeroEditor2(String filePath, TableDataSet tableDataSet)
-        {
-            _dataSet = tableDataSet;
-            _filePath = filePath;
+        //// todo: rewrite public HeroEditor2(String filePath, TableDataSet tableDataSet)
+        //{
+        //    _dataSet = tableDataSet;
+        //    _filePath = filePath;
 
-            _hero = UnitHelpFunctions.OpenCharacterFile(_dataSet, _filePath);
+        //    _hero = UnitHelpFunctions.OpenCharacterFile(_dataSet, _filePath);
 
-            if (_hero.IsGood)
-            {
-                _itemFunctions = new UnitHelpFunctions(_dataSet);
-                _itemFunctions.LoadCharacterValues(_hero);
+        //    if (_hero.IsGood)
+        //    {
+        //        _itemFunctions = new UnitHelpFunctions(_dataSet);
+        //        _itemFunctions.LoadCharacterValues(_hero);
 
-                _wrapper = new UnitWrapper(tableDataSet, _hero);
+        //        _wrapper = new UnitWrapper(tableDataSet, _hero);
 
-                InitializeComponent();
-            }
-        }
+        //        InitializeComponent();
+        //    }
+        //}
 
         private void HeroEditor2_Load(object sender, EventArgs e)
         {

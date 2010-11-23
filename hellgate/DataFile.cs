@@ -7,9 +7,9 @@ namespace Hellgate
 {
     public abstract class DataFile
     {
-        public string StringID { get; protected set; }
+        public string StringId { get; protected set; }
         public Type DataType { get; protected set; }
-        public uint StructureID { get; protected set; }
+        public uint StructureId { get; protected set; }
         public bool IntegrityCheck { get; protected set; }
         public bool IsExcelFile { get; protected set; }
         public bool IsStringsFile { get; protected set; }
@@ -21,7 +21,7 @@ namespace Hellgate
 
         public override string ToString()
         {
-            return StringID;
+            return StringId;
         }
         public abstract bool ParseData(byte[] buffer);
         public abstract bool ParseCSV(byte[] buffer);
