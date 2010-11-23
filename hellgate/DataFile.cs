@@ -7,13 +7,13 @@ namespace Hellgate
 {
     public abstract class DataFile
     {
-        public string StringId { get; protected set; }
+        public abstract String StringId { get; protected set; }
         public Type DataType { get; protected set; }
         public uint StructureId { get; protected set; }
         public bool IntegrityCheck { get; protected set; }
         public bool IsExcelFile { get; protected set; }
         public bool IsStringsFile { get; protected set; }
-        public int Count { get { return (!(Rows == null)) ? Rows.Count : 0; } }
+        public int Count { get { return (Rows != null) ? Rows.Count : 0; } }
         public string FilePath { get; set; }
         public string FileExtension { get; set; }
         public string FileName { get { return Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(FilePath)); } }

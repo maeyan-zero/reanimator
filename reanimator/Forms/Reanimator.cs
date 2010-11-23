@@ -566,12 +566,8 @@ namespace Reanimator
 
                 if (CheckInstallation())
                 {
-                    //ProgressForm reanimatorInitProgress = new ProgressForm(_Reanimator_Init, null);
-                    //reanimatorInitProgress.Show();
-                    //_DisplayLoadedTables();
-
                     _hellgateFileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
-                    if (!_hellgateFileManager.LoadExcelFiles())
+                    if (!_hellgateFileManager.LoadTableFiles())
                     {
                         MessageBox.Show("Failed to load excel files!", "Excel Table Error", MessageBoxButtons.OK,
                                         MessageBoxIcon.Error);

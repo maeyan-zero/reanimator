@@ -465,16 +465,25 @@ namespace Hellgate
             return (query.Length != 0) ? (OutputAttribute)query[0] : null;
         }
 
-        public string GetStringId()
+        private String _stringId;
+        public override String StringId
         {
-            if (!String.IsNullOrEmpty(StringId)) return StringId;
+            get
+            {
+                if (!String.IsNullOrEmpty(_stringId)) return _stringId;
 
-            var query = DataTables.Where(dt => dt.Value == StructureId);
-            if (query.Count() == 1) return StringId = query.First().Key;
+                var query = DataTables.Where(dt => dt.Value == StructureId);
+                if (query.Count() == 1) return _stringId = query.First().Key;
 
-            if (String.IsNullOrEmpty(FilePath)) return String.Empty;
+                if (String.IsNullOrEmpty(FilePath)) return String.Empty;
 
-            return StringId = FileName.ToUpper();
+                return _stringId = FileName.ToUpper();
+            }
+
+            protected set
+            {
+                _stringId = value;
+            }
         }
 
         public static uint GetStructureId(string stringId)
