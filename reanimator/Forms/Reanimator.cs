@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -12,47 +13,27 @@ using System.Xml;
 using Reanimator.Forms;
 using Reanimator.Forms.ItemTransfer;
 using Reanimator.Forms.HeroEditorFunctions;
+using Hellgate;
 
 namespace Reanimator
 {
     public partial class Reanimator : Form
     {
-        // Forms
-        private readonly Options _options;
-        private readonly FileExplorer _fileExplorer;
-
-        // Dependencies
-        private readonly TableFiles _tableFiles;
-        private readonly TableDataSet _tableDataSet;
-
-        // Variables
-        private readonly List<String> _indexFilesOpen; // do we need this?
-        private TablesLoaded _tablesLoaded; // do we need this?
-        private int _childFormNumber; // do we need this?
-
+        FileManager HellgateFileManager;
+        Options OptionsForm = new Options();
+        List<TableForm> OpenTableForms = new List<TableForm>();
+        List<ExcelTableForm> OpenExcelTableForms = new List<ExcelTableForm>();
+        List<HeroEditor> OpenHeroEditorForms = new List<HeroEditor>();
 
         public Reanimator()
         {
             InitializeComponent();
 
-            _options = new Options();
-            _fileExplorer = new FileExplorer { MdiParent = this };
-            
-            _tableFiles = new TableFiles();
-            _tableDataSet = new TableDataSet();
-
-            _indexFilesOpen = new List<String>();
-            _CheckHellgateInstallation();
-
-#if DEBUG
-            clientPatchesToolStripMenuItem.Visible = true;
-            installModificationsToolStripMenuItem.Visible = true;
-            saveSinglePlayerFilesToolStripMenuItem.Visible = true;
-            patchToolToolStripMenuItem.Visible = true;
-            characterFileToolStripMenuItem.Visible = true;
-            convertTCv4FilesToolStripMenuItem.Visible = true;
-#endif
-
+            // The FileManager is only initialized if there is a Hellgate Installation is found.
+            if ((CheckInstallation() == true))
+            {
+                HellgateFileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
+            }
 
             #region alexs_stuff
             //const String idxReadPath = @"D:\Games\Hellgate London\data\hellgate000.idx";
@@ -132,129 +113,215 @@ namespace Reanimator
             #endregion
         }
 
-        //private TextWriter tw;
-
-        //private void _DoFolder(String folderDir)
-        //{
-        //    DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
-        //    FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
-
-        //    XmlCookedFile xmlAdrenaline = null;
-
-        //    foreach (FileInfo fileInfo in files)
-        //    {
-        //        XmlCookedFile xmlCookedFile = new XmlCookedFile();
-
-        //        byte[] data = File.ReadAllBytes(fileInfo.FullName);
-        //        if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
-        //        {
-        //            xmlAdrenaline = xmlCookedFile;
-        //            int bp = 0;
-        //        }
-
-        //        Debug.Assert(xmlCookedFile.Uncook(data));
-
-        //        xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
-
-        //        //String blah = xmlCookedFile.Blah();
-        //        //if (blah != null)
-        //        //{
-        //        //    //tw.WriteLine(fileInfo.FullName);
-        //        //    //tw.WriteLine(blah);
-        //        //}
-        //    }
-
-        //    if (xmlAdrenaline != null)
-        //    {
-        //        // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
-        //    }
-        //}
-
-        private static void _CheckHellgateInstallation()
+        /// <summary>
+        /// Checks the registry for the Hellgate path, if it doesn't exist prompt the user to find it.
+        /// </summary>
+        /// <returns>True if the installation is okay.</returns>
+        private bool CheckInstallation()
         {
-            if (Directory.Exists(Config.HglDir))
-            {
-                return;
-            }
+            if ((Directory.Exists(Config.HglDir)))
+                return true;
 
-            MessageBox.Show("Please locate your Hellgate London installation directory.\n" +
-                "For this program to work correctly, please ensure the latest Single Player patch is installed.\n" +
-                "For more information, please visit our website: http://www.hellgateaus.net",
-                "Installation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            string caption = "Reanimator Installation";
+            string message = "Please locate your Hellgate London installation directory.\n" +
+                             "For this program to work correctly, please ensure the latest Single Player patch is installed.\n" +
+                             "For more information, please visit our website: http://www.hellgateaus.net";
+            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
             DialogResult installResult;
 
             do
             {
-                FolderBrowserDialog folder = new FolderBrowserDialog { SelectedPath = Config.HglDir };
-                DialogResult selectPathResult = folder.ShowDialog();
-
-                if (selectPathResult == DialogResult.OK)
+                DialogResult selectPathResult = folderBrowser.ShowDialog();
+                if ((selectPathResult == DialogResult.OK))
                 {
-                    Config.HglDir = folder.SelectedPath;
+                    Config.HglDir = folderBrowser.SelectedPath;
                     Config.HglDataDir = Path.Combine(Config.HglDir, "\\data");
-                    return;
+                    return true;
                 }
 
-                installResult =
-                    MessageBox.Show("You must have Hellgate: London installed and the directory set to use Reanimator.",
-                        "Installation Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                caption = "Installation Error";
+                message = "You must have Hellgate: London installed and the directory set to use Reanimator.";
+                installResult =  MessageBox.Show(message, caption, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
             }
             while (installResult == DialogResult.Retry);
-        }
-
-        private void ShowNewForm(object sender, EventArgs e)
-        {
-            Form childForm = new Form { MdiParent = this, Text = "Window " + _childFormNumber++ };
-            childForm.Show();
+            return false;
         }
 
         private void OpenFile(object sender, EventArgs e)
         {
-            try
+            OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog
-                {
-                    Filter = "HGL Files (*.idx, *.cooked)|*.idx;*.cooked|All Files (*.*)|*.*"
-                };
+                InitialDirectory = (!(String.IsNullOrEmpty(Config.LastDirectory))) ? Config.LastDirectory : Config.HglDataDir,
+                Filter = "Hellgate London Files (*.*)|*.idx;*.txt.cooked;*.xls.uni.cooked;*.xml.cooked;*.hg1|" + 
+                         "Index Files|*.idx|" +
+                         "Excel Files|*.txt.cooked|" +
+                         "String Files|*.xls.uni.cooked|" +
+                         "XML Files|*.xml.cooked|" +
+                         "Save Files|*.hg1"
+            };
 
-                if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
+            if ((openFileDialog.ShowDialog(this) != DialogResult.OK)) return;
 
-                String filePath = openFileDialog.FileName;
-                if (openFileDialog.FileName.EndsWith("idx"))
-                {
-                    _OpenFileIdx(openFileDialog.FileName);
-                }
-                else if (openFileDialog.FileName.EndsWith("xls.uni.cooked"))
-                {
-                    _OpenFileStrings(openFileDialog.FileName);
-                }
-                else if (filePath.EndsWith(XmlCookedFile.FileExtention))
-                {
-                    _OpenFileXmlCooked(filePath);
-                }
-                else if (openFileDialog.FileName.EndsWith("cooked"))
-                {
-                    _OpenFileCooked(openFileDialog.FileName);
-                }
-                else if (openFileDialog.FileName.EndsWith("mod") || openFileDialog.FileName.EndsWith("xml"))
-                {
-                    //OpenFileMod(openFileDialog.FileName);
-                }
-#if DEBUG
-                else if (openFileDialog.FileName.EndsWith("hg1"))
-                {
-                    _OpenFileHg1(openFileDialog.FileName);
-                }
-#endif
+            string fileName = openFileDialog.FileName;
+            Config.LastDirectory = Path.GetDirectoryName(fileName);
+
+            if ((fileName.EndsWith(".idx")))
+            {
+                OpenIndexFile(fileName);
+                return;
             }
-            catch (Exception ex)
+
+            if ((fileName.EndsWith(".txt.cooked")))
             {
-                ExceptionLogger.LogException(ex, "OpenFile", false);
+                OpenExcelFile(fileName);
+                return;
+            }
+
+            if ((fileName.EndsWith(".xls.uni.cooked")))
+            {
+                // Open String File
+                return;
+            }
+
+            if ((fileName.EndsWith(".xml.cooked")))
+            {
+                // Open Xml File
+                return;
+            }
+
+            if ((fileName.EndsWith(".hg1")))
+            {
+                // Open Save File
+                return;
             }
         }
 
-        private void _OpenFileXmlCooked(String filePath)
+        /// <summary>
+        /// Opens a TableForm based on the path to a Index or StringsFile.
+        /// </summary>
+        /// <param name="filePath">Path to the Index or StringsFile.</param>
+        private void OpenIndexFile(String filePath)
+        {
+            byte[] buffer;
+            Hellgate.Index indexFile;
+            TableForm tableForm;
+
+            // Check if the form is already open.
+            // If true, then activate the form.
+            bool isOpen = OpenTableForms.Where(tf => tf.FilePath == filePath).Any();
+            if (isOpen)
+            {
+                tableForm = OpenTableForms.Where(tf => tf.FilePath == filePath).First();
+                if ((tableForm.Created))
+                {
+                    tableForm.Select();
+                    return;
+                }
+            }
+
+            // Try read the file.
+            // If an exception is caught, log the error and inform the user.
+            try
+            {
+                buffer = File.ReadAllBytes(filePath);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, false);
+                return;
+            }
+
+            // Initialize the indexFile.
+            indexFile = new Hellgate.Index(buffer)
+            {
+                FilePath = filePath
+            };
+
+            // If the Index file is initialized without error, load the form.
+            // Otherwise, show a message box.
+            if ((indexFile.IntegrityCheck == true))
+            {
+                tableForm = new TableForm(indexFile)
+                {
+                    MdiParent = this
+                };
+                if (!(OpenTableForms.Contains(tableForm)))
+                    OpenTableForms.Add(tableForm);
+                tableForm.Show();
+            }
+            else
+            {
+                string message = String.Format("The index file {0} appears invalid or malformed.", filePath);
+                string caption = "Bad File Format";
+                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Opens a ExcelTableForm based on the given path of a Excel/Strings file.
+        /// </summary>
+        /// <param name="fileName">Path to the file to open.</param>
+        private void OpenExcelFile(String filePath)
+        {
+            byte[] buffer;
+            Hellgate.ExcelFile excelFile;
+            ExcelTableForm excelTableForm;
+
+            // Check if the form is already open.
+            // If true, then activate the form.
+            bool isOpen = OpenExcelTableForms.Where(etf => etf.FilePath == filePath).Any();
+            if (isOpen)
+            {
+                excelTableForm = OpenExcelTableForms.Where(etf => etf.FilePath == filePath).First();
+                if ((excelTableForm.Created))
+                {
+                    excelTableForm.Select();
+                    return;
+                }
+            }
+
+            // Try read the file.
+            // If an exception is caught, log the error and inform the user.
+            try
+            {
+                buffer = File.ReadAllBytes(filePath);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, false);
+                return;
+            }
+
+            // Initialize the ExcelFile.
+            excelFile = new Hellgate.ExcelFile(buffer)
+            {
+                FilePath = filePath
+            };
+
+            // If the Excel file is initialized without error, load the form.
+            // Otherwise, show a message box.
+            if ((excelFile.IntegrityCheck == true))
+            {
+                excelTableForm = new ExcelTableForm(excelFile)
+                {
+                    MdiParent = this
+                };
+                if (!(OpenExcelTableForms.Contains(excelTableForm)))
+                    OpenExcelTableForms.Add(excelTableForm);
+                excelTableForm.Show();
+            }
+            else
+            {
+                string message = String.Format("The excel file {0} appears invalid or malformed.", filePath);
+                string caption = "Bad File Format";
+                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void OpemXmlFile(String filePath)
         {
             byte[] xmlCookedBytes;
             try
@@ -300,250 +367,79 @@ namespace Reanimator
             }
         }
 
-        private void OpenIndexFile(object sender, EventArgs e)
-        {
-            try
-            {
-                OpenFileDialog openFileDialog = new OpenFileDialog
-                {
-                    Filter = "Index Files (*.idx)|*.idx|All Files (*.*)|*.*",
-                    InitialDirectory = Config.HglDir + @"\data"
-                };
 
-                if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("idx"))
-                {
-                    _OpenFileIdx(openFileDialog.FileName);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "OpenIndexFile", false);
-            }
-        }
+        //private void _OpenFileHg1(String fileName)
+        //{
+        //    try
+        //    {
+        //        Unit heroUnit = UnitHelpFunctions.OpenCharacterFile(_tableDataSet, fileName);
 
-        private void OpenCharacterFile(object sender, EventArgs e)
-        {
-            try
-            {
-                OpenFileDialog openFileDialog = new OpenFileDialog
-                {
-                    Filter = "Character Files (*.hg1)|*.hg1|All Files (*.*)|*.*",
-                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer"
-                };
+        //        //Unit wrapper test
+        //        //UnitWrapper wrapper = new UnitWrapper(heroUnit);
+        //        //wrapper.Mode.IsElite = true;
+        //        ////wrapper.Mode.IsElite = true;
+        //        ////UnitWrapper w = new UnitWrapper(wrapper.Items.Items[2]);
 
-                if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("hg1"))
-                {
-                    _OpenFileHg1(openFileDialog.FileName);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "OpenCharacterFile", false);
-            }
-        }
+        //        ////UnitWrapper drone = new UnitWrapper(wrapper.Drone.Drone);
+        //        ////CharacterValues values = drone.Values;
 
-        private void OpenCookedFile(object sender, EventArgs e)
-        {
-            try
-            {
-                OpenFileDialog openFileDialog = new OpenFileDialog
-                {
-                    Filter = "Cooked Files (*.cooked)|*.cooked|All Files (*.*)|*.*",
-                    InitialDirectory = Config.HglDataDir
-                };
+        //        //UnitHelpFunctions.SaveCharacterFile(heroUnit, @"F:\test.hg1");
 
-                if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
-                {
-                    _OpenFileCooked(openFileDialog.FileName);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "OpenCookedFile", false);
-            }
-        }
+        //        //Comment me when testing the unit wrapper!!!
 
-        private void StringsFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                OpenFileDialog openFileDialog = new OpenFileDialog
-                {
-                    Filter = "Strings Files (*.xls.uni.cooked)|*.xls.uni.cooked|All Files (*.*)|*.*",
-                    InitialDirectory = Config.HglDataDir
-                };
-
-                if (openFileDialog.ShowDialog(this) == DialogResult.OK && openFileDialog.FileName.EndsWith("cooked"))
-                {
-                    _OpenFileStrings(openFileDialog.FileName);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "StringsFileToolStripMenuItem_Click", false);
-            }
-        }
-
-        private void _OpenFileMod(String fileName)
-        {
-            if (_indexFilesOpen.Contains(fileName)) return;
-
-            try
-            {
-                // Check the XML is valid before declaring an object
-                bool pass = true;// Modification.Parse(fileName);
-
-                if (pass)
-                {
-                    //Mod revivalMod = new Mod(szFileName, index);
-                    //ModificationForm modificationForm = new ModificationForm();
-                    //modificationForm.MdiParent = this;
-                    //modificationForm.ShowDialog();
-                }
-                else
-                {
-                    MessageBox.Show("The Modification appears to be invalid. Check syntax and try again.");
-                }
-
-                return;
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "OpenFileMod", false);
-                MessageBox.Show(ex.Message);
-                return;
-            }
-        }
-
-        private void _OpenFileIdx(String fileName)
-        {
-            if (_indexFilesOpen.Contains(fileName)) return;
-
-            Index index = new Index();
-            try
-            {
-                byte[] indexData = File.ReadAllBytes(fileName);
-
-                index.ParseData(indexData, fileName);
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "OpenFileIdx", false);
-                MessageBox.Show("Failed to open file: " + fileName + "\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            TableForm indexExplorer = new TableForm(index)
-            {
-                dataGridView = { DataSource = index.Files.ToArray() },
-                MdiParent = this
-            };
-            indexExplorer.Text += ": " + fileName;
-            indexExplorer.Show();
-
-            _indexFilesOpen.Add(fileName);
-
-            return;
-        }
-
-        private void _OpenFileHg1(String fileName)
-        {
-            try
-            {
-                Unit heroUnit = UnitHelpFunctions.OpenCharacterFile(_tableDataSet, fileName);
-
-                //Unit wrapper test
-                //UnitWrapper wrapper = new UnitWrapper(heroUnit);
-                //wrapper.Mode.IsElite = true;
-                ////wrapper.Mode.IsElite = true;
-                ////UnitWrapper w = new UnitWrapper(wrapper.Items.Items[2]);
-
-                ////UnitWrapper drone = new UnitWrapper(wrapper.Drone.Drone);
-                ////CharacterValues values = drone.Values;
-
-                //UnitHelpFunctions.SaveCharacterFile(heroUnit, @"F:\test.hg1");
-
-                //Comment me when testing the unit wrapper!!!
-
-                HeroEditor2 heroEditor = new HeroEditor2(fileName, _tableDataSet)
-                {
-                    Text = "Hero Editor: " + fileName,
-                    MdiParent = this
-                };
-                heroEditor.Show();
-                //if (heroUnit.IsGood)
-                //{
-                //    HeroEditor heroEditor = new HeroEditor(heroUnit, _tableDataSet, fileName)
-                //    {
-                //        Text = "Hero Editor: " + fileName,
-                //        MdiParent = this
-                //    };
-                //    heroEditor.Show();
-                //}
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "OpenFileHg1", false);
-            }
-        }
-
-        private void _OpenFileCooked(String fileName)
-        {
-            try
-            {
-                String name = Path.GetFileNameWithoutExtension(fileName);
-
-                DataFile excelTable = _tableFiles.GetTableFromFileName(name.ToUpper());
-                // todo: Add check for file differing from what's in dataset, and open as new file if different etc
-                if (excelTable == null)
-                {
-                    MessageBox.Show("TODO");
-                    return;
-                }
-
-                ExcelTableForm excelTableForm = new ExcelTableForm(excelTable, _tableDataSet)
-                {
-                    Text = "Excel Table: " + fileName,
-                    MdiParent = this
-                };
-                excelTableForm.Show();
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "OpenFileCooked", false);
-            }
-        }
-
-        private void _OpenFileStrings(String fileName)
-        {
-            // todo: make me neater etc - i.e. merge with cooked file above
-            // copy-paste for most part
-            try
-            {
-                String name = Path.GetFileNameWithoutExtension(fileName);
+        //        HeroEditor2 heroEditor = new HeroEditor2(fileName, _tableDataSet)
+        //        {
+        //            Text = "Hero Editor: " + fileName,
+        //            MdiParent = this
+        //        };
+        //        heroEditor.Show();
+        //        //if (heroUnit.IsGood)
+        //        //{
+        //        //    HeroEditor heroEditor = new HeroEditor(heroUnit, _tableDataSet, fileName)
+        //        //    {
+        //        //        Text = "Hero Editor: " + fileName,
+        //        //        MdiParent = this
+        //        //    };
+        //        //    heroEditor.Show();
+        //        //}
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ExceptionLogger.LogException(ex, "OpenFileHg1", false);
+        //    }
+        //}
 
 
-                // todo: this doesn't work 100% as string IDs are stored with each first letter capitalized
-                DataFile excelTable = _tableFiles.GetTableFromFileName(name);
-                // todo: Add check for file differing from what's in dataset, and open as new file if different etc
-                if (excelTable == null)
-                {
-                    MessageBox.Show("TODO");
-                    return;
-                }
+        //private void _OpenFileStrings(String fileName)
+        //{
+        //    // todo: make me neater etc - i.e. merge with cooked file above
+        //    // copy-paste for most part
+        //    try
+        //    {
+        //        String name = Path.GetFileNameWithoutExtension(fileName);
 
-                ExcelTableForm excelTableForm = new ExcelTableForm(excelTable, _tableDataSet)
-                {
-                    Text = "Excel Table: " + fileName,
-                    MdiParent = this
-                };
-                excelTableForm.Show();
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "OpenFileCooked", false);
-            }
-        }
+
+        //        // todo: this doesn't work 100% as string IDs are stored with each first letter capitalized
+        //        DataFile excelTable = _tableFiles.GetTableFromFileName(name);
+        //        // todo: Add check for file differing from what's in dataset, and open as new file if different etc
+        //        if (excelTable == null)
+        //        {
+        //            MessageBox.Show("TODO");
+        //            return;
+        //        }
+
+        //        ExcelTableForm excelTableForm = new ExcelTableForm(excelTable, _tableDataSet)
+        //        {
+        //            Text = "Excel Table: " + fileName,
+        //            MdiParent = this
+        //        };
+        //        excelTableForm.Show();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ExceptionLogger.LogException(ex, "OpenFileCooked", false);
+        //    }
+        //}
 
         private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -624,7 +520,7 @@ namespace Reanimator
 
         private void _OptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _options.ShowDialog(this);
+            OptionsForm.ShowDialog(this);
         }
 
         private void _ClientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
@@ -679,19 +575,19 @@ namespace Reanimator
 
                 
 
-                ProgressForm fileExplorerProgress = new ProgressForm(_fileExplorer.LoadIndexFiles, Config.LoadMPVersion);
-                fileExplorerProgress.ShowDialog(this);
-                _fileExplorer.Show();
+                //ProgressForm fileExplorerProgress = new ProgressForm(_fileExplorer.LoadIndexFiles, Config.LoadMPVersion);
+                //fileExplorerProgress.ShowDialog(this);
+                //_fileExplorer.Show();
 
-                //_indexFiles = _fileExplorer.IndexFiles;
-                _tableFiles.FileExplorer = _fileExplorer;
+                ////_indexFiles = _fileExplorer.IndexFiles;
+                //_tableFiles.FileExplorer = _fileExplorer;
 
-                ProgressForm progress = new ProgressForm(_LoadTables, null);
-                progress.ShowDialog(this);
-                _tableDataSet.TableFiles = _tableFiles;
-                _LoadAndDisplayCurrentlyLoadedExcelTables();
+                //ProgressForm progress = new ProgressForm(_LoadTables, null);
+                //progress.ShowDialog(this);
+                //_tableDataSet.TableFiles = _tableFiles;
+                //_LoadAndDisplayCurrentlyLoadedExcelTables();
 
-                XmlCookedFile.Initialize(_tableDataSet);
+                //XmlCookedFile.Initialize(_tableDataSet);
 
           //      if (false)
                 //{
@@ -715,53 +611,53 @@ namespace Reanimator
             }
         }
 
-        private void _LoadTables(ProgressForm progress, Object var)
-        {
-            try
-            {
-                if (!_tableFiles.LoadTableFiles(progress))
-                {
-                    throw new Exception("Failed to load/parse all excel and strings tables!\n" +
-                        "Please ensure your directories are set correctly.\nTools > Options");
-                }
+//        private void _LoadTables(ProgressForm progress, Object var)
+//        {
+//            try
+//            {
+//                if (!_tableFiles.LoadTableFiles(progress))
+//                {
+//                    throw new Exception("Failed to load/parse all excel and strings tables!\n" +
+//                        "Please ensure your directories are set correctly.\nTools > Options");
+//                }
 
-#if DEBUG
-                if (!_tableFiles.LoadTCv4Files(progress))
-                {
-                    //throw new Exception("Failed to load/parse all excel and strings tables!\n" +
-                    //    "Please ensure your directories are set correctly.\nTools > Options");
-                }
-#endif
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_LoadTables", true);
-            }
-        }
+//#if DEBUG
+//                if (!_tableFiles.LoadTCv4Files(progress))
+//                {
+//                    //throw new Exception("Failed to load/parse all excel and strings tables!\n" +
+//                    //    "Please ensure your directories are set correctly.\nTools > Options");
+//                }
+//#endif
+//            }
+//            catch (Exception ex)
+//            {
+//                ExceptionLogger.LogException(ex, "_LoadTables", true);
+//            }
+//        }
 
-        private void _LoadAndDisplayCurrentlyLoadedExcelTables()
-        {
-            try
-            {
-                if (_tableFiles.LoadedFileCount <= 0) return;
+        //private void _LoadAndDisplayCurrentlyLoadedExcelTables()
+        //{
+        //    try
+        //    {
+        //        if (_tableFiles.LoadedFileCount <= 0) return;
 
-                _tablesLoaded = new TablesLoaded(_tableDataSet) { MdiParent = this };
+        //        _tablesLoaded = new TablesLoaded(_tableDataSet) { MdiParent = this };
 
-                foreach (DataFile dataFile in from DictionaryEntry de in _tableFiles.DataFiles
-                                              select de.Value as DataFile)
-                {
-                    _tablesLoaded.AddItem(dataFile);
-                }
+        //        foreach (DataFile dataFile in from DictionaryEntry de in _tableFiles.DataFiles
+        //                                      select de.Value as DataFile)
+        //        {
+        //            _tablesLoaded.AddItem(dataFile);
+        //        }
 
-                _tablesLoaded.SetBounds(_fileExplorer.Size.Width + 10, 0, 300, 350);
-                _tablesLoaded.Text = String.Format("Currently Loaded Tables [{0}]", _tableFiles.LoadedFileCount);
-                _tablesLoaded.Show();
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "LoadAndDisplayCurrentlyLoadedExcelTables", false);
-            }
-        }
+        //        _tablesLoaded.SetBounds(_fileExplorer.Size.Width + 10, 0, 300, 350);
+        //        _tablesLoaded.Text = String.Format("Currently Loaded Tables [{0}]", _tableFiles.LoadedFileCount);
+        //        _tablesLoaded.Show();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ExceptionLogger.LogException(ex, "LoadAndDisplayCurrentlyLoadedExcelTables", false);
+        //    }
+        //}
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)
         {
@@ -798,55 +694,55 @@ namespace Reanimator
 
         private void _ShowExcelTablesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                if (showExcelTablesToolStripMenuItem.Checked)
-                {
-                    _tablesLoaded.StartPosition = FormStartPosition.Manual;
-                    _tablesLoaded.Location = new Point(0, 0);
-                    _tablesLoaded.Show();
-                }
-                else
-                {
-                    _tablesLoaded.Hide();
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_ShowExcelTablesToolStripMenuItem_Click", false);
-            }
+            //try
+            //{
+            //    if (showExcelTablesToolStripMenuItem.Checked)
+            //    {
+            //        _tablesLoaded.StartPosition = FormStartPosition.Manual;
+            //        _tablesLoaded.Location = new Point(0, 0);
+            //        _tablesLoaded.Show();
+            //    }
+            //    else
+            //    {
+            //        _tablesLoaded.Hide();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    ExceptionLogger.LogException(ex, "_ShowExcelTablesToolStripMenuItem_Click", false);
+            //}
         }
 
         private void _ApplyModificationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                ModificationForm modificationForm = new ModificationForm(_tableDataSet);
-                modificationForm.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_ApplyModificationsToolStripMenuItem_Click", false);
-            }
+            //try
+            //{
+            //    ModificationForm modificationForm = new ModificationForm(_tableDataSet);
+            //    modificationForm.ShowDialog();
+            //}
+            //catch (Exception ex)
+            //{
+            //    ExceptionLogger.LogException(ex, "_ApplyModificationsToolStripMenuItem_Click", false);
+            //}
         }
 
         private void _TradeItemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                //MessageBox.Show("Tables are being loaded. This may take a few seconds!");
+            //try
+            //{
+            //    //MessageBox.Show("Tables are being loaded. This may take a few seconds!");
 
-                //ItemTransferForm transfer = new ItemTransferForm(_tableDataSet, _tableFiles);
-                ItemTransferForm transfer = new ItemTransferForm(_tableDataSet, _fileExplorer);
-                //Displays a warning message before opening the item trading window.
-                transfer.DisplayWarningMessage(null, null);
-                transfer.ShowDialog(this);
-                transfer.Dispose();
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_TradeItemsToolStripMenuItem_Click", false);
-            }
+            //    //ItemTransferForm transfer = new ItemTransferForm(_tableDataSet, _tableFiles);
+            //    ItemTransferForm transfer = new ItemTransferForm(_tableDataSet, _fileExplorer);
+            //    //Displays a warning message before opening the item trading window.
+            //    transfer.DisplayWarningMessage(null, null);
+            //    transfer.ShowDialog(this);
+            //    transfer.Dispose();
+            //}
+            //catch (Exception ex)
+            //{
+            //    ExceptionLogger.LogException(ex, "_TradeItemsToolStripMenuItem_Click", false);
+            //}
         }
 
         private void _SaveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -856,28 +752,28 @@ namespace Reanimator
 
         private void _ItemShopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                CharacterShop shop = new CharacterShop(_tableDataSet, _tableFiles);
-                shop.ShowDialog(this);
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_ItemShopToolStripMenuItem_Click", false);
-            }
+            //try
+            //{
+            //    CharacterShop shop = new CharacterShop(_tableDataSet, _tableFiles);
+            //    shop.ShowDialog(this);
+            //}
+            //catch (Exception ex)
+            //{
+            //    ExceptionLogger.LogException(ex, "_ItemShopToolStripMenuItem_Click", false);
+            //}
         }
 
         private void _SearchTablesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                TableSearch search = new TableSearch(_tableDataSet, _tableFiles);
-                search.ShowDialog(this);
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_SearchTablesToolStripMenuItem_Click", false);
-            }
+            //try
+            //{
+            //    TableSearch search = new TableSearch(_tableDataSet, _tableFiles);
+            //    search.ShowDialog(this);
+            //}
+            //catch (Exception ex)
+            //{
+            //    ExceptionLogger.LogException(ex, "_SearchTablesToolStripMenuItem_Click", false);
+            //}
         }
 
         private void _AboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -889,16 +785,16 @@ namespace Reanimator
 
         private void _ScriptEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                ScriptEditor scriptEditor = new ScriptEditor(_tableDataSet);
-                scriptEditor.MdiParent = this;
-                scriptEditor.Show();
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_ScriptEditorToolStripMenuItem_Click", false);
-            }
+            //try
+            //{
+            //    ScriptEditor scriptEditor = new ScriptEditor(_tableDataSet);
+            //    scriptEditor.MdiParent = this;
+            //    scriptEditor.Show();
+            //}
+            //catch (Exception ex)
+            //{
+            //    ExceptionLogger.LogException(ex, "_ScriptEditorToolStripMenuItem_Click", false);
+            //}
         }
 
         private void _PatchToolToolStripMenuItem_Click(object sender, EventArgs e)
@@ -916,113 +812,113 @@ namespace Reanimator
 
         private void _ConvertTestCenterFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Select Dump location
-            FolderBrowserDialog folderBrower = new FolderBrowserDialog();
-            folderBrower.SelectedPath = Config.HglDataDir;
-            DialogResult dialogResult = folderBrower.ShowDialog();
-            if (dialogResult == DialogResult.Cancel) return;
+            //// Select Dump location
+            //FolderBrowserDialog folderBrower = new FolderBrowserDialog();
+            //folderBrower.SelectedPath = Config.HglDataDir;
+            //DialogResult dialogResult = folderBrower.ShowDialog();
+            //if (dialogResult == DialogResult.Cancel) return;
 
-            // cache all tables
-            ProgressForm cacheTableProgress = new ProgressForm(_LoadAllExcelTables, null);
-            cacheTableProgress.SetLoadingText("Caching all tables.");
-            cacheTableProgress.ShowDialog();
+            //// cache all tables
+            //ProgressForm cacheTableProgress = new ProgressForm(_LoadAllExcelTables, null);
+            //cacheTableProgress.SetLoadingText("Caching all tables.");
+            //cacheTableProgress.ShowDialog();
 
-            // generate all tables
-            ProgressForm generateTableProgress = new ProgressForm(_ConvertTestCenterFiles, folderBrower.SelectedPath);
-            generateTableProgress.SetLoadingText("Generating all converted tables, this will take a while.");
-            generateTableProgress.SetStyle(ProgressBarStyle.Marquee);
-            generateTableProgress.ShowDialog();
+            //// generate all tables
+            //ProgressForm generateTableProgress = new ProgressForm(_ConvertTestCenterFiles, folderBrower.SelectedPath);
+            //generateTableProgress.SetLoadingText("Generating all converted tables, this will take a while.");
+            //generateTableProgress.SetStyle(ProgressBarStyle.Marquee);
+            //generateTableProgress.ShowDialog();
 
-            MessageBox.Show("Complete");
+            //MessageBox.Show("Complete");
         }
 
         private void _SaveSinglePlayerFiles(ProgressForm progress, object obj)
         {
-            string savePath = (string)obj;
+        //    string savePath = (string)obj;
 
-            foreach (DataTable spDataTable in _tableDataSet.XlsDataSet.Tables)
-            {
-                if (spDataTable.TableName.Contains("_TCv4_")) continue;
-                if (spDataTable.TableName.Contains("Strings_")) continue;
+        //    foreach (DataTable spDataTable in _tableDataSet.XlsDataSet.Tables)
+        //    {
+        //        if (spDataTable.TableName.Contains("_TCv4_")) continue;
+        //        if (spDataTable.TableName.Contains("Strings_")) continue;
 
-                progress.SetCurrentItemText("Current table... " + spDataTable.TableName);
+        //        progress.SetCurrentItemText("Current table... " + spDataTable.TableName);
 
-                ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spDataTable.TableName);
+        //        ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spDataTable.TableName);
 
-                byte[] buffer = spExcelFile.GenerateFile(spDataTable);
-                string path = Path.Combine(savePath, spExcelFile.FilePath);
-                string filename = spExcelFile.FileName + "." + spExcelFile.FileExtension;
+        //        byte[] buffer = spExcelFile.GenerateFile(spDataTable);
+        //        string path = Path.Combine(savePath, spExcelFile.FilePath);
+        //        string filename = spExcelFile.FileName + "." + spExcelFile.FileExtension;
 
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
+        //        if (!Directory.Exists(path))
+        //        {
+        //            Directory.CreateDirectory(path);
+        //        }
 
-                File.WriteAllBytes(path + filename, buffer);
-            }
+        //        File.WriteAllBytes(path + filename, buffer);
+        //    }
         }
 
-        private void _ConvertTestCenterFiles(ProgressForm progress, object obj)
-        {
-            string savePath = (string)obj;
+        //private void _ConvertTestCenterFiles(ProgressForm progress, object obj)
+        //{
+        //    string savePath = (string)obj;
 
-            foreach (DataTable tcDataTable in _tableDataSet.XlsDataSet.Tables)
-            {
-                if (!tcDataTable.TableName.Contains("_TCv4_")) continue;
-                string spVersion = tcDataTable.TableName.Replace("_TCv4_", "");
+        //    foreach (DataTable tcDataTable in _tableDataSet.XlsDataSet.Tables)
+        //    {
+        //        if (!tcDataTable.TableName.Contains("_TCv4_")) continue;
+        //        string spVersion = tcDataTable.TableName.Replace("_TCv4_", "");
 
-                progress.SetCurrentItemText("Current table... " + spVersion);
+        //        progress.SetCurrentItemText("Current table... " + spVersion);
 
-                DataTable spDataTable = _tableDataSet.XlsDataSet.Tables[spVersion];
-                DataTable convertedDataTable = ExcelFile.ConvertToSinglePlayerVersion(spDataTable, tcDataTable);
-                ExcelFile tcExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(tcDataTable.TableName);
-                ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spVersion);
+        //        DataTable spDataTable = _tableDataSet.XlsDataSet.Tables[spVersion];
+        //        DataTable convertedDataTable = ExcelFile.ConvertToSinglePlayerVersion(spDataTable, tcDataTable);
+        //        ExcelFile tcExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(tcDataTable.TableName);
+        //        ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spVersion);
 
-                spExcelFile.MyshBytes = tcExcelFile.MyshBytes;
+        //        spExcelFile.MyshBytes = tcExcelFile.MyshBytes;
 
-                byte[] buffer = spExcelFile.GenerateFile(convertedDataTable);
-                string path = Path.Combine(savePath, spExcelFile.FilePath);
-                string filename = spExcelFile.FileName + "." + spExcelFile.FileExtension;
+        //        byte[] buffer = spExcelFile.GenerateFile(convertedDataTable);
+        //        string path = Path.Combine(savePath, spExcelFile.FilePath);
+        //        string filename = spExcelFile.FileName + "." + spExcelFile.FileExtension;
 
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
+        //        if (!Directory.Exists(path))
+        //        {
+        //            Directory.CreateDirectory(path);
+        //        }
 
-                File.WriteAllBytes(path + filename, buffer);
-            }
-        }
+        //        File.WriteAllBytes(path + filename, buffer);
+        //    }
+        //}
 
-        private void _LoadAllExcelTables(ProgressForm progress, object obj)
-        {
-            foreach (DictionaryEntry rawDataFile in _tableDataSet.TableFiles.DataFiles)
-            {
-                DataFile dataFile = (DataFile)rawDataFile.Value;
-                if (dataFile.IsStringsFile) continue;
-                _tableDataSet.LoadTable(progress, dataFile);
-            }
-        }
+        //private void _LoadAllExcelTables(ProgressForm progress, object obj)
+        //{
+        //    foreach (DictionaryEntry rawDataFile in _tableDataSet.TableFiles.DataFiles)
+        //    {
+        //        DataFile dataFile = (DataFile)rawDataFile.Value;
+        //        if (dataFile.IsStringsFile) continue;
+        //        _tableDataSet.LoadTable(progress, dataFile);
+        //    }
+        //}
 
-        private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Select Dump location
-            FolderBrowserDialog folderBrower = new FolderBrowserDialog();
-            folderBrower.SelectedPath = Config.HglDataDir;
-            DialogResult dialogResult = folderBrower.ShowDialog();
-            if (dialogResult == DialogResult.Cancel) return;
+        //private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    // Select Dump location
+        //    FolderBrowserDialog folderBrower = new FolderBrowserDialog();
+        //    folderBrower.SelectedPath = Config.HglDataDir;
+        //    DialogResult dialogResult = folderBrower.ShowDialog();
+        //    if (dialogResult == DialogResult.Cancel) return;
 
-            // cache all tables
-            ProgressForm cacheTableProgress = new ProgressForm(_LoadAllExcelTables, null);
-            cacheTableProgress.SetLoadingText("Caching all tables.");
-            cacheTableProgress.ShowDialog();
+        //    // cache all tables
+        //    ProgressForm cacheTableProgress = new ProgressForm(_LoadAllExcelTables, null);
+        //    cacheTableProgress.SetLoadingText("Caching all tables.");
+        //    cacheTableProgress.ShowDialog();
 
-            // generate all tables
-            ProgressForm generateTableProgress = new ProgressForm(_SaveSinglePlayerFiles, folderBrower.SelectedPath);
-            generateTableProgress.SetLoadingText("Saving all single player files, this will take a while.");
-            generateTableProgress.SetStyle(ProgressBarStyle.Marquee);
-            generateTableProgress.ShowDialog();
+        //    // generate all tables
+        //    ProgressForm generateTableProgress = new ProgressForm(_SaveSinglePlayerFiles, folderBrower.SelectedPath);
+        //    generateTableProgress.SetLoadingText("Saving all single player files, this will take a while.");
+        //    generateTableProgress.SetStyle(ProgressBarStyle.Marquee);
+        //    generateTableProgress.ShowDialog();
 
-            MessageBox.Show("Complete");
-        }
+        //    MessageBox.Show("Complete");
+        //}
     }
 }

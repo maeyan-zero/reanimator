@@ -114,5 +114,11 @@ namespace Reanimator
             get { return GetValue("LoadMPVersion", false); }
             set { SetValue("LoadMPVersion", value); }
         }
+
+        public static string LastDirectory
+        {
+            get { return GetValue("LastDirectory", ""); }
+            set { SetValue("LastDirectory", value); }
+        }
     }
 }
