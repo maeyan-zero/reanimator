@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using FileEntry = Hellgate.Index.FileEntry;
@@ -16,28 +17,24 @@ namespace Hellgate
         public string HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
         public string Language { get; private set; }
         public List<Index> IndexFiles { get; private set; }
-        public Dictionary<ulong,FileEntry> FileEntries { get; private set; }
-        public SortedDictionary<string,DataFile> DataFiles { get; private set; }
+        public Dictionary<ulong, FileEntry> FileEntries { get; private set; }
+        public SortedDictionary<String, DataFile> DataFiles { get; private set; }
         public DataSet XlsDataSet { get; private set; }
 
         /// <summary>
         /// Initialize the File Manager by the given Hellgate path.
         /// </summary>
         /// <param name="hellgatePath">Path to the Hellgate installation.</param>
-        public FileManager(string hellgatePath) : this(hellgatePath, false)
-        {
-            // no body
-        }
-
-        /// <summary>
-        /// Initialize the File Manager by the given Hellgate path.
-        /// </summary>
-        /// <param name="hellgatePath">Path to the Hellgate installation.</param>
         /// <param name="mpVersion">Set true to initialize MP data.</param>
-        public FileManager(string hellgatePath, bool mpVersion)
+        public FileManager(string hellgatePath, bool mpVersion = false)
         {
             HellgatePath = hellgatePath;
             MPVersion = mpVersion;
+            XlsDataSet = new DataSet("xlsDataSet")
+            {
+                Locale = new CultureInfo("en-us", true),
+                RemotingFormat = SerializationFormat.Binary
+            };
             IntegrityCheck = LoadFileTable();
         }
 
@@ -56,7 +53,7 @@ namespace Hellgate
                 idxPaths.AddRange(Directory.GetFiles(HellgateDataPath, fileQuery).Where(p => p.EndsWith(".idx")));
             }
 
-            FileEntries = new Dictionary<ulong,FileEntry>();
+            FileEntries = new Dictionary<ulong, FileEntry>();
 
             foreach (string idxPath in idxPaths)
             {
@@ -95,7 +92,7 @@ namespace Hellgate
         /// <returns>Returns true on success.</returns>
         public bool LoadExcelFiles()
         {
-            DataFiles = new SortedDictionary<string,DataFile>();
+            DataFiles = new SortedDictionary<string, DataFile>();
             foreach (FileEntry fileEntry in FileEntries.Values)
             {
                 // Check if its a excel file by its file extentsion

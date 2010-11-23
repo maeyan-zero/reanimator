@@ -50,8 +50,9 @@ namespace Reanimator.Forms
             _dataTable.RowChanged += (sender, e) => { _dataChanged = true; };
 
             // make it look pretty
-            rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
-            rows_ListBox.SelectedIndex = 0;
+            // todo: rewrite
+            //rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
+            //rows_ListBox.SelectedIndex = 0;
 
             // fixes mouse scroll wheel
             // todo: this is dodgy and causes focused elements within the layoutpanel to lose focus (e.g. a text box) - rather anoying
@@ -93,6 +94,7 @@ namespace Reanimator.Forms
                 MessageBox.Show("Failed to load DataTable!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
+
             // need to manually populate columns due to fillweight = 100 by default (overflow crap; 655 * 100 > max int)
             if (_dataTable.Columns.Count > 655)
             {

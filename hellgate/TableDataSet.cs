@@ -12,24 +12,8 @@ namespace Hellgate
 {
     public partial class FileManager
     {
-        //public void ClearDataSet()
-        //{
-        //    XlsDataSet.Clear();
-        //    XlsDataSet.Relations.Clear();
-        //    XlsDataSet.Tables.Clear();
-        //}
-
-        public DataTable LoadTable(DataFile dataFile, bool relations)
+        public DataTable LoadTable(DataFile dataFile, bool doRelations)
         {
-            if ((XlsDataSet == null))
-            {
-                XlsDataSet = new DataSet("xlsDataSet")
-                {
-                    Locale = new CultureInfo("en-us", true),
-                    RemotingFormat = SerializationFormat.Binary
-                };
-            }
-
             DataTable dataTable = null;
             if (dataFile.IsStringsFile)
             {
@@ -37,13 +21,13 @@ namespace Hellgate
             }
             else if (dataFile.IsExcelFile)
             {
-                dataTable = LoadExcelTable(dataFile as ExcelFile, relations);
+                dataTable = LoadExcelTable(dataFile as ExcelFile, doRelations);
             }
 
             return dataTable;
         }
 
-        private DataTable LoadExcelTable(ExcelFile excelFile, bool relations)
+        private DataTable LoadExcelTable(ExcelFile excelFile, bool doRelations)
         {
             String tableName = excelFile.StringId;
             DataTable dataTable = XlsDataSet.Tables[tableName];
@@ -204,8 +188,7 @@ namespace Hellgate
             #endregion
 
             // Generate Relationships as required
-            if ((relations))
-                GenerateRelations(excelFile);
+            if (doRelations) GenerateRelations(excelFile);
 
             return dataTable;
         }
@@ -214,7 +197,7 @@ namespace Hellgate
         {
             String tableName = stringsFile.StringId;
             DataTable dataTable = XlsDataSet.Tables[tableName];
-            if (!(dataTable == null)) return dataTable;
+            if (dataTable != null) return dataTable;
 
             dataTable = XlsDataSet.Tables.Add(tableName);
             dataTable.TableName = tableName;
@@ -242,15 +225,15 @@ namespace Hellgate
             return dataTable;
         }
 
-        private DataTable LoadRelatedTable(String stringID)
+        private DataTable LoadRelatedTable(String stringId)
         {
-            if ((String.IsNullOrEmpty(stringID))) return null;
+            if ((String.IsNullOrEmpty(stringId))) return null;
 
-            DataTable dataTable = XlsDataSet.Tables[stringID];
-            if (!(dataTable == null)) return dataTable;
+            DataTable dataTable = XlsDataSet.Tables[stringId];
+            if (dataTable != null) return dataTable;
 
-            DataFile dataFile = GetDataFile(stringID);
-            return (!(dataFile == null)) ? LoadTable(dataFile, false) : null;
+            DataFile dataFile = GetDataFile(stringId);
+            return (dataFile != null) ? LoadTable(dataFile, false) : null;
         }
 
         private void GenerateRelations(ExcelFile excelFile)
@@ -341,20 +324,15 @@ namespace Hellgate
         }
 
         /// <summary>
-        /// Gets an excel DataTable from the DataSet.<br />
+        /// Gets an excel DataTable from the DataSet.
         /// If it has not been generated, it will be generated and stored.
         /// </summary>
         /// <param name="stringId">The excel table string name (see EXCELTABLE "StringId" column).</param>
         /// <returns>The excel as a DataTable or null if not valid StringId.</returns>
-        public DataTable GetDataTable(String stringID)
+        public DataTable GetDataTable(String stringId)
         {
-            if ((String.IsNullOrEmpty(stringID))) return null;
-            return XlsDataSet.Tables[stringID] ?? LoadRelatedTable(stringID);
-        }
-
-        public int LoadedDataTableCount
-        {
-            get { return (!(XlsDataSet == null)) ? XlsDataSet.Tables.Count : 0; }
+            if ((String.IsNullOrEmpty(stringId))) return null;
+            return XlsDataSet.Tables[stringId] ?? LoadRelatedTable(stringId);
         }
     }
 }
