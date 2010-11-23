@@ -384,8 +384,6 @@ namespace Hellgate
             byte[] buffer = new byte[1024];
             int offset = 0;
 
-            //DEBUG - these parts arn't finished
-            if (ExcelMap.HasScriptTable) return null;
 
             // The Excel File header
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
