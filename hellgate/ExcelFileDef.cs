@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -68,7 +66,7 @@ namespace Hellgate
                 new KeyValuePair<uint,TypeMap>((uint)0x51C1C606, new TypeMap { DataType = typeof(Levels) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x569C0513, new TypeMap { DataType = typeof(Stats) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x57D269AF, new TypeMap { DataType = typeof(GlobalThemes) }),
-                new KeyValuePair<uint,TypeMap>((uint)0x5876D156, new TypeMap { DataType = typeof(Properties), HasMysh = true }),
+                new KeyValuePair<uint,TypeMap>((uint)0x5876D156, new TypeMap { DataType = typeof(Properties), HasScriptTable = true }),
                 new KeyValuePair<uint,TypeMap>((uint)0x58D35B7C, new TypeMap { DataType = typeof(WardrobePart) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x5BCCB897, new TypeMap { DataType = typeof(MonsterQuality) }),
 
@@ -121,7 +119,7 @@ namespace Hellgate
                 new KeyValuePair<uint,TypeMap>((uint)0xB47A4EC5, new TypeMap { DataType = typeof(SkillEventTypes) }),
                 new KeyValuePair<uint,TypeMap>((uint)0xB7A70C96, new TypeMap { DataType = typeof(LevelsRules) }),
                 new KeyValuePair<uint,TypeMap>((uint)0xB7BB74D1, new TypeMap { DataType = typeof(Faction) }),
-                new KeyValuePair<uint,TypeMap>((uint)0xBAF5E904, new TypeMap { DataType = typeof(Skills), HasMysh = true }),
+                new KeyValuePair<uint,TypeMap>((uint)0xBAF5E904, new TypeMap { DataType = typeof(Skills), HasScriptTable = true }),
                 new KeyValuePair<uint,TypeMap>((uint)0xBB554372, new TypeMap { DataType = typeof(Act) }),
                 new KeyValuePair<uint,TypeMap>((uint)0xBBC15A50, new TypeMap { DataType = typeof(ColorSets) }),
                 new KeyValuePair<uint,TypeMap>((uint)0xBBEBD669, new TypeMap { DataType = typeof(SpawnClass) }),
@@ -349,7 +347,7 @@ namespace Hellgate
         public class TypeMap
         {
             public Type DataType;
-            public Boolean HasMysh;
+            public Boolean HasScriptTable;
             public Boolean HasExtended;
             public Boolean HasIndexBitRelations;
         }
@@ -398,7 +396,7 @@ namespace Hellgate
             public string SortColumnTwo { get; set; }
         }
 
-        class Token
+        abstract class Token
         {
             public const Int32 cxeh = 0x68657863;
             public const Int32 rcsh = 0x68736372;
@@ -440,41 +438,63 @@ namespace Hellgate
             // t, x
             public static int[] BitField = new int[] { 666, 667, 669, 673, 674, 680, 683, 687, 688 };
         }
+
+        class ExcelScript
+        {
+            internal class Paramater
+            {
+                public String Name { get; set; }                // short string name e.g. dmg_elec, dam, dur, etc
+                public UInt32 Unknown { get; set; }             // todo: check if is Name string-hash (quite sure it is, but need to check... doesn't really matter either way)
+                public UInt32 TypeId { get; set; }              // seen as 0x39, 0x3C, 0x41 - "determines" TypeValues length (more specifically, the paramater type values)
+                public Int32[] TypeValues { get; set; }         // at least 1 int specifies the param element:  dmg_elec = 0xFC, dmg_fire = 0xFD
+            }
+
+            public List<Paramater> Paramaters { get; private set; }
+            public byte[] ScriptValues { get; set; }
+
+            public ExcelScript()
+            {
+                Paramaters = new List<Paramater>();
+            }
+        }
         #endregion
 
         public static OutputAttribute GetExcelOutputAttribute(FieldInfo fieldInfo)
         {
             object[] query = fieldInfo.GetCustomAttributes(typeof(OutputAttribute), true);
-            return (!(query.Length == 0)) ? (OutputAttribute)query[0] : null;
+            return (query.Length != 0) ? (OutputAttribute)query[0] : null;
         }
 
-        public string GetStringID()
+        public string GetStringId()
         {
-            if (!(String.IsNullOrEmpty(StringID))) return StringID;
-            var query = DataTables.Where(dt => dt.Value == StructureID);
-            if ((query.Count() == 1)) return StringID = query.First().Key;
-            if ((String.IsNullOrEmpty(FilePath))) return String.Empty;
+            if (!String.IsNullOrEmpty(StringID)) return StringID;
+
+            var query = DataTables.Where(dt => dt.Value == StructureId);
+            if (query.Count() == 1) return StringID = query.First().Key;
+
+            if (String.IsNullOrEmpty(FilePath)) return String.Empty;
+
             return StringID = FileName.ToUpper();
         }
 
-        public static uint GetStructureID(string stringID)
+        public static uint GetStructureId(string stringId)
         {
-            var query = DataTables.Where(dt => dt.Key == stringID);
-            return (!(query.Count() == 0)) ? query.First().Value : 0;
+            var query = DataTables.Where(dt => dt.Key == stringId);
+            return (query.Count() != 0) ? query.First().Value : 0;
         }
 
-        public static TypeMap GetTypeMap(uint structureID)
+        public static TypeMap GetTypeMap(uint structureId)
         {
-            var query = DataTypes.Where(dt => dt.Key == structureID);
-            return (!(query.Count() == 0)) ? query.First().Value : null;
+            var query = DataTypes.Where(dt => dt.Key == structureId);
+            return (query.Count() != 0) ? query.First().Value : null;
         }
 
-        bool CheckFlag(byte[] buffer, ref int offset, int token)
+        static bool CheckToken(byte[] buffer, ref int offset, int token)
         {
             return token == FileTools.ByteArrayToInt32(buffer, ref offset);
         }
 
-        bool CheckFlag(byte[] buffer, int offset, int token)
+        static bool CheckToken(byte[] buffer, int offset, int token)
         {
             return token == BitConverter.ToInt32(buffer, offset);
         }
@@ -484,21 +504,19 @@ namespace Hellgate
             int position = offset;
             int value = FileTools.ByteArrayToInt32(IntegerBuffer, position);
 
-            while (!(value == 0))
+            while (value != 0)
             {
-                if (IntTableDef.Case01.Contains(value))
-                    position += (3 * sizeof(int));
-                else if (IntTableDef.Case02.Contains(value))
-                    position += (2 * sizeof(int));
-                else if (IntTableDef.Case03.Contains(value))
-                    position += (1 * sizeof(int));
-                else if (IntTableDef.BitField.Contains(value))
-                    position += (2 * sizeof(int));
+                if (IntTableDef.Case01.Contains(value)) position += (3 * sizeof(int));
+                else if (IntTableDef.Case02.Contains(value)) position += (2 * sizeof(int));
+                else if (IntTableDef.Case03.Contains(value)) position += (1 * sizeof(int));
+                else if (IntTableDef.BitField.Contains(value)) position += (2 * sizeof(int));
                 else return null;
+
                 value = FileTools.ByteArrayToInt32(IntegerBuffer, position);
             }
 
             int length = (position + sizeof(int) - offset) / sizeof(int);
+
             return FileTools.ByteArrayToInt32Array(IntegerBuffer, ref offset, length);
         }
 
@@ -514,7 +532,7 @@ namespace Hellgate
 
         public byte[] ReadExtendedProperties(int index)
         {
-            return (!(ExtendedBuffer == null)) ? ExtendedBuffer[index] : null;
+            return (ExtendedBuffer != null) ? ExtendedBuffer[index] : null;
         }
 
         public string ReadSecondaryStringTable(int index)
@@ -522,124 +540,80 @@ namespace Hellgate
             return SecondaryStrings[index];
         }
 
-        void ParseMyshTable(byte[] data, ref int offset)
+        private bool _ParseScriptTable(byte[] data, ref int offset)
         {
-            byte[] endtoken = new byte[] { 0x64, 0x6E, 0x65, 0x68 };
-            int check = 0;
+            _rowScripts = new List<ExcelScript>();
 
-            List<byte> buffer = new List<byte>();
-
-            while (check < 4)
+            while (offset <= data.Length)
             {
-                if (data[offset] == endtoken[check])
+                if (CheckToken(data, offset, Token.dneh)) return true;
+
+                ExcelScript excelScript = new ExcelScript();
+                if (!_ParseScript(data, ref offset, ref excelScript))
                 {
-                    check++;
+                    return false;
                 }
-                else
-                {
-                    check = 0;
-                }
-                buffer.Add(data[offset++]);
+                _rowScripts.Add(excelScript);
             }
 
-            offset = offset - 4;
-            buffer.RemoveRange(buffer.Count - 4, 4);
-            MyshBuffer = buffer.ToArray();
+            return false;
+        }
 
-            //int totalAttributeCount = 0;
-            //int attributeCount = 0;
-            //int blockCount = 0;
-            //int flagCount = 0;
-            //while (offset < data.Length)
-            //{
-            //    ////////////// temp fix /////////////////
-            //    //int f = BitConverter.ToInt32(data, offset);
-            //    //if (CheckFlag(f, 0x68657863))
-            //    //{
-            //    //    //Debug.Write("mysh flagCount = " + flagCount + "\n");
-            //    //    break;
-            //    //}
-            //    ////if (CheckFlag(f, 0x6873796D))
-            //    ////{
-            //    ////    flagCount++;
-            //    ////}
-            //    //offset++;
-            //    //continue;
-            //    ////////////// temp fix /////////////////
+        private static bool _ParseScript(byte[] data, ref int offset, ref ExcelScript excelScript)
+        {
+            ExcelScript.Paramater parameter = new ExcelScript.Paramater();
 
+            // token and version checks
+            if (!CheckToken(data, ref offset, Token.mysh)) return false;
+            UInt32 version = FileTools.ByteArrayToUInt32(data, ref offset);
+            if (version != 3) return false;
 
-            //                    int flag = FileTools.ByteArrayToInt32(data, ref offset);
-            //                    if (!CheckFlag(flag, 0x6873796D))
-            //                    {
-            //                        offset -= 4;
-            //                        break;
-            //                    }
+            // general parameter values
+            int charCount = FileTools.ByteArrayToInt32(data, ref offset);
+            if (charCount >= 0x1000) return false;
+            parameter.Name = FileTools.ByteArrayToStringASCII(data, ref offset, charCount);
+            parameter.Unknown = FileTools.ByteArrayToUInt32(data, ref offset);
 
-            //                    int unknown1 = FileTools.ByteArrayToInt32(data, ref offset);
-            //                    if (unknown1 == 0x00)
-            //                    {
-            //                        break;
-            //                    }
+            // what kind of parameter is it
+            parameter.TypeId = FileTools.ByteArrayToUInt32(data, ref offset);
+            int paramLength;
+            switch (parameter.TypeId)
+            {
+                case 0x39: // 57 // oldstats, x, sel, dmgtype, ?
+                    paramLength = 4;
+                    break;
 
-            //                    int byteCount = FileTools.ByteArrayToInt32(data, ref offset);
-            //                    // this is really lazy and I couldn't be bothered trying to figure out how to get a *non-zero terminated* string out of a byte array
-            //                    byte[] temp = new byte[byteCount + 1];
-            //                    Buffer.BlockCopy(data, offset, temp, 0, byteCount);
-            //                    String str = FileTools.ByteArrayToStringASCII(temp, 0);
-            //                    offset += byteCount;
+                case 0x3C: // 60 // dam, ?
+                    paramLength = 5;
+                    break;
 
-            //                    int unknown2 = FileTools.ByteArrayToInt32(data, ref offset);
-            //                    int type = FileTools.ByteArrayToInt32(data, ref offset); // 0x39 = single, 0x41 = has properties, 0x3C = property
-            //                    int unknown3 = FileTools.ByteArrayToInt32(data, ref offset);  // usually 0x05
-            //                    int unknown4 = FileTools.ByteArrayToInt32(data, ref offset);  // always 0x00?
-            //                    int unknown5 = FileTools.ByteArrayToInt32(data, ref offset);  // usually 0x04
-            //                    int unknown6 = FileTools.ByteArrayToInt32(data, ref offset);  // always 0x00?
+                case 0x41: // 65 // dmg_elec, dmg_fire, etc
+                    paramLength = 8;
+                    break;
 
-            //                    if (type == 0x39)
-            //                    {
-            //                        continue;
-            //                    }
+                default:
+                    return false;
+            }
+            parameter.TypeValues = FileTools.ByteArrayToInt32Array(data, ref offset, paramLength);
 
-            //                    int id = FileTools.ByteArrayToInt32(data, ref offset);
-            //                    attributeCount = FileTools.ByteArrayToInt32(data, ref offset);
-            //                    totalAttributeCount = attributeCount;
+            excelScript.Paramaters.Add(parameter);
+            if (parameter.TypeId != 0x41) return true; // only 0x41 has paramaters following it and a script values block
 
-            //                    if (type == 0x41)
-            //                    {
-            //                        int attributeCountAgain = FileTools.ByteArrayToInt32(data, ref offset); // ??
-            //                    }
-            //                    else if (type == 0x3C)
-            //                    {
-            //                        if (str == "dam")
-            //                        {
-            //                            blockCount += 2;
-            //                        }
-            //                        else if (str == "dur")
-            //                        {
-            //                            blockCount++;
-            //                        }
+            // get remaining parameters
+            int paramCount = parameter.TypeValues[5];
+            for (int i = 0; i < paramCount; i++)
+            {
+                if (!_ParseScript(data, ref offset, ref excelScript)) return false;
+            }
 
-            //                        const int blockSize = 4 * sizeof(Int32);
-            //                        if (attributeCount == 0)
-            //                        {
-            //                            offset += blockCount * blockSize;
-            //                            continue;
-            //                        }
+            // the actual script values
+            int valuesByteCount = FileTools.ByteArrayToInt32(data, ref offset);
+            if (valuesByteCount <= 0) return false;
+            excelScript.ScriptValues = new byte[valuesByteCount];
+            Buffer.BlockCopy(data, offset, excelScript.ScriptValues, 0, valuesByteCount);
+            offset += valuesByteCount;
 
-            //                        attributeCount--;
-            //                    }
-            //                    else
-            //                    {
-            //                        throw new NotImplementedException("type not implemented!\ntype = " + type);
-            //                    }
-
-            //                    int endInt = FileTools.ByteArrayToInt32(data, ref offset);
-            //                    if (endInt != 0x00)
-            //                    {
-            //                        int breakpoint = 1;
-            //                    }
-
-            //}
+            return true;
         }
 
         UInt32[,] CreateIndexBitRelations()
@@ -749,17 +723,15 @@ namespace Hellgate
                 }
             }
 
-            if (!(String.IsNullOrEmpty(attribute.SortColumnTwo)))
+            if (String.IsNullOrEmpty(attribute.SortColumnTwo)) return;
+
+            FieldInfo fieldInfo2 = DataType.GetField(attribute.SortColumnTwo);
+            if (fieldInfo2.FieldType != typeof (string)) return;
+
+            foreach (object row in Rows)
             {
-                FieldInfo fieldInfo2 = DataType.GetField(attribute.SortColumnTwo);
-                if (fieldInfo2.FieldType == typeof(string))
-                {
-                    foreach (object row in Rows)
-                    {
-                        fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "8"));
-                        fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "9"));
-                    }
-                }
+                fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "8"));
+                fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "9"));
             }
         }
 

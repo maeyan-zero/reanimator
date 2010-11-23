@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Reflection;
-using System.Data;
 
 namespace Revival.Common
 {
@@ -73,6 +71,17 @@ namespace Revival.Common
         }
 
         /// <summary>
+        /// Converts an array of bytes to an UInt32 from a given offset.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the UInt32.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted UInt32 value.</returns>
+        public static UInt32 ByteArrayToUInt32(byte[] byteArray, int offset)
+        {
+            return BitConverter.ToUInt32(byteArray, offset);
+        }
+
+        /// <summary>
         /// Converts an array of bytes to a Float from a given offset.<br />
         /// <i>offset</i> is incremented by the size of a Float.
         /// </summary>
@@ -116,7 +125,7 @@ namespace Revival.Common
             IntPtr bytePtr = new IntPtr((int)pinnedArray.AddrOfPinnedObject() + offset);
             Marshal.Copy(bytePtr, int32Array, 0, count);
             pinnedArray.Free();
-            offset += count*4;
+            offset += count * 4;
 
             return int32Array;
         }
@@ -220,7 +229,7 @@ namespace Revival.Common
         /// <returns>The converted ASCII String.</returns>
         public static String ByteArrayToStringASCII(byte[] byteArray, int offset)
         {
-            return ByteArrayToStringASCII(byteArray, offset, (byte)0x00);
+            return ByteArrayToStringASCII(byteArray, offset, 0x00);
         }
 
         /// <summary>
@@ -325,28 +334,17 @@ namespace Revival.Common
         /// <returns>The converted object. If the type was unhandled, null will be returned.</returns>
         public static Object StringToObject(String value, Type type)
         {
-            if (type == typeof(String))
-                return value;
-            else if (type == typeof(Int32))
-                return Int32.Parse(value);
-            else if (type == typeof(UInt32))
-                return UInt32.Parse(value);
-            else if (type == typeof(Single))
-                return Single.Parse(value);
-            else if (type == typeof(Int16))
-                return Int16.Parse(value);
-            else if (type == typeof(UInt16))
-                return UInt16.Parse(value);
-            else if (type == typeof(Byte))
-                return Byte.Parse(value);
-            else if (type == typeof(Char))
-                return Char.Parse(value);
-            else if (type == typeof(Int64))
-                return Int64.Parse(value);
-            else if (type == typeof(UInt64))
-                return UInt64.Parse(value);
-            else
-                return null;
+            if (type == typeof(String)) return value;
+            if (type == typeof(Int32)) return Int32.Parse(value);
+            if (type == typeof(UInt32)) return UInt32.Parse(value);
+            if (type == typeof(Single)) return Single.Parse(value);
+            if (type == typeof(Int16)) return Int16.Parse(value);
+            if (type == typeof(UInt16)) return UInt16.Parse(value);
+            if (type == typeof(Byte)) return Byte.Parse(value);
+            if (type == typeof(Char)) return Char.Parse(value);
+            if (type == typeof(Int64)) return Int64.Parse(value);
+            if (type == typeof(UInt64)) return UInt64.Parse(value);
+            return null;
         }
 
         /// <summary>
@@ -363,11 +361,7 @@ namespace Revival.Common
                 bool found = true;
                 for (int j = 0; j < searchFor.Length; j++)
                 {
-                    if (searchFor[j] == 0x90)
-                    {
-                        continue;
-                    }
-
+                    if (searchFor[j] == 0x90) continue;
                     if (byteArray[i + j] == searchFor[j]) continue;
 
                     found = false;
@@ -401,7 +395,11 @@ namespace Revival.Common
             return byteArray;
         }
 
-
+        /// <summary>
+        /// Converts an Int Array to its respective Byte Array.
+        /// </summary>
+        /// <param name="source">The Int Array to serialise.</param>
+        /// <returns>The Serialised Int Array.</returns>
         public static byte[] IntArrayToByteArray(int[] source)
         {
             byte[] result = new byte[source.Length * sizeof(int)];
@@ -476,7 +474,7 @@ namespace Revival.Common
         {
             for (int i = 0; i < destination.Length; i++)
             {
-                byte[] byteArray = binReader.ReadBytes(Marshal.SizeOf(typeof (T)));
+                byte[] byteArray = binReader.ReadBytes(Marshal.SizeOf(typeof(T)));
                 int offset = 0;
                 destination[i] = ByteArrayToStructure<T>(byteArray, ref offset);
             }
@@ -531,29 +529,27 @@ namespace Revival.Common
                 return sw.ToString();
             }
         }
-        
-        public static string[][] CSVtoStringArray(byte[] source, int columns, byte delimiter)
+
+        public static string[][] CSVToStringArray(byte[] source, int columns, byte delimiter)
         {
             if (source == null) return null;
             if (source.Length == 0) return null;
 
-            byte CR = 0x0D;
-            byte LF = 0x0A;
+            const byte CR = 0x0D;
+            const byte LF = 0x0A;
             byte EN = 0x22;
             int offset = 0;
             int length = source.Length;
-            bool ignoreFirstRow = true;
+            const bool ignoreFirstRow = true;
             List<string[]> rowCollection = new List<string[]>();
             int row = 0;
             while (offset < length)
             {
-                string[] newRow = new string[columns];
-                byte[] buffer;
+                String[] newRow = new string[columns];
                 for (int i = 0; i < columns; i++)
                 {
-                    buffer = (!(offset >= length)) ? GetDelimintedByteArray(source, ref offset, delimiter) : null;
-                    string newString;
-                    newString = buffer == null ? String.Empty : FileTools.ByteArrayToStringASCII(buffer, 0);
+                    byte[] buffer = (!(offset >= length)) ? GetDelimintedByteArray(source, ref offset, delimiter) : null;
+                    String newString = buffer == null ? String.Empty : ByteArrayToStringASCII(buffer, 0);
                     newString = newString.Replace("\"", "");
                     newRow[i] = newString;
                 }
@@ -573,22 +569,22 @@ namespace Revival.Common
             return rowCollection.ToArray();
         }
 
-        public static string[][] UnicodeCSVtoStringArray(byte[] source, ushort delimiter, ushort encap)
+        public static string[][] UnicodeCSVToStringArray(byte[] source, ushort delimiter, ushort encap)
         {
             if ((source == null)) return null;
             if ((source.Length == 0)) return null;
-            ushort CR = 0x0D;
-            ushort LF = 0x0A;
-            ushort EN = 0x22;
+            const ushort CR = 0x0D;
+            const ushort LF = 0x0A;
+            const ushort EN = 0x22;
 
             int noCols = 1;
             int offset = 0;
-            ushort characterIn = 0;
+            ushort characterIn;
 
             // Get a column count
             while (offset < source.Length)
             {
-                characterIn = FileTools.ByteArrayToUShort(source, ref offset);
+                characterIn = ByteArrayToUShort(source, ref offset);
                 if ((characterIn == delimiter)) noCols++;
                 if ((characterIn == CR || characterIn == LF)) break;
                 if ((offset == source.Length)) return null;
@@ -607,7 +603,7 @@ namespace Revival.Common
 
             while (offset < source.Length)
             {
-                characterIn = FileTools.ByteArrayToUShort(source, ref offset);
+                characterIn = ByteArrayToUShort(source, ref offset);
                 if ((characterIn == EN && !(lastCharacterEncap))) encapsulationOpen = !encapsulationOpen;
                 lastCharacterEncap = ((characterIn == EN)) ? true : false;
 
@@ -653,7 +649,7 @@ namespace Revival.Common
         {
             List<byte> buffer = new List<byte>();
             int length = source.Length;
-            byte endrow = (byte)0x0D;
+            const byte endrow = 0x0D;
 
             // empty string
             if (source[offset] == delimiter)

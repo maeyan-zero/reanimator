@@ -14,8 +14,8 @@ namespace Hellpack
             {
                 FileManager fileManager = new FileManager(@"D:\Games\Hellgate London");
                 fileManager.LoadExcelFiles();
-                byte[] data = fileManager.DataFiles["STATES"].ExportCSV();
-                File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\states.orig.txt", data);
+                byte[] data = fileManager.DataFiles["SKILLS"].ExportCSV();
+                File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\SKILLS.orig.txt", data);
             }
 
 
@@ -59,17 +59,39 @@ namespace Hellpack
 
             // todo: Query XML
 
-            // Cook all the excel files.
+
+            // cook all the excel files
             foreach (String excelPath in excelFilesToCook)
             {
                 byte[] excelBuffer = File.ReadAllBytes(excelPath);
                 ExcelFile excelFile = new ExcelFile(excelBuffer);
-                if (!(excelFile.IntegrityCheck == true)) continue;
+                if (!excelFile.IntegrityCheck)
+                {
+                    Console.WriteLine("Failed to uncook excel file: " + excelPath);
+                    continue;
+                }
+
                 Console.WriteLine("Cooking " + excelPath.Replace(currentDir + "\\", ""));
                 excelBuffer = excelFile.ToByteArray();
-                if (excelBuffer == null) continue;
-                File.WriteAllBytes(excelPath + ".cooked", excelBuffer);
+                if (excelBuffer == null)
+                {
+                    Console.WriteLine("Failed to cook excel file: " + excelFile.StringID);
+                    continue;
+                }
+
+                String writeToPath = excelPath + ".cooked";
+                try
+                {
+                    File.WriteAllBytes(writeToPath, excelBuffer);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Failed to write cooked file: " + writeToPath);
+                    continue;
+                }
+                
             }
+
 
             // Cook String files
             foreach (String stringPath in stringFilesToCook)
