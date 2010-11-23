@@ -34,10 +34,6 @@
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.indexFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cookedFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.stringsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.characterFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -125,15 +121,9 @@
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.newToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.newToolStripMenuItem.Text = "&New";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.ShowNewForm);
             // 
             // openToolStripMenuItem
             // 
-            this.openToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.indexFileToolStripMenuItem,
-            this.cookedFileToolStripMenuItem,
-            this.stringsFileToolStripMenuItem,
-            this.characterFileToolStripMenuItem});
             this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
@@ -141,38 +131,7 @@
                         | System.Windows.Forms.Keys.O)));
             this.openToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.openToolStripMenuItem.Text = "&Open";
-            // 
-            // indexFileToolStripMenuItem
-            // 
-            this.indexFileToolStripMenuItem.Name = "indexFileToolStripMenuItem";
-            this.indexFileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.indexFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.indexFileToolStripMenuItem.Text = "&Index File...";
-            this.indexFileToolStripMenuItem.Click += new System.EventHandler(this.OpenIndexFile);
-            // 
-            // cookedFileToolStripMenuItem
-            // 
-            this.cookedFileToolStripMenuItem.Name = "cookedFileToolStripMenuItem";
-            this.cookedFileToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift)
-                        | System.Windows.Forms.Keys.O)));
-            this.cookedFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.cookedFileToolStripMenuItem.Text = "&Cooked File...";
-            this.cookedFileToolStripMenuItem.Click += new System.EventHandler(this.OpenCookedFile);
-            // 
-            // stringsFileToolStripMenuItem
-            // 
-            this.stringsFileToolStripMenuItem.Name = "stringsFileToolStripMenuItem";
-            this.stringsFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.stringsFileToolStripMenuItem.Text = "&Strings File...";
-            this.stringsFileToolStripMenuItem.Click += new System.EventHandler(this.StringsFileToolStripMenuItem_Click);
-            // 
-            // characterFileToolStripMenuItem
-            // 
-            this.characterFileToolStripMenuItem.Name = "characterFileToolStripMenuItem";
-            this.characterFileToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
-            this.characterFileToolStripMenuItem.Text = "C&haracter File";
-            this.characterFileToolStripMenuItem.Visible = false;
-            this.characterFileToolStripMenuItem.Click += new System.EventHandler(this.OpenCharacterFile);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenFile);
             // 
             // toolStripSeparator3
             // 
@@ -298,7 +257,7 @@
             this.statusBarToolStripMenuItem.CheckOnClick = true;
             this.statusBarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.statusBarToolStripMenuItem.Name = "statusBarToolStripMenuItem";
-            this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.statusBarToolStripMenuItem.Text = "&Status Bar";
             this.statusBarToolStripMenuItem.Click += new System.EventHandler(this.StatusBarToolStripMenuItem_Click);
             // 
@@ -308,14 +267,14 @@
             this.showExcelTablesToolStripMenuItem.CheckOnClick = true;
             this.showExcelTablesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showExcelTablesToolStripMenuItem.Name = "showExcelTablesToolStripMenuItem";
-            this.showExcelTablesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showExcelTablesToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.showExcelTablesToolStripMenuItem.Text = "&ExcelTables";
             this.showExcelTablesToolStripMenuItem.Click += new System.EventHandler(this._ShowExcelTablesToolStripMenuItem_Click);
             // 
             // scriptEditorToolStripMenuItem
             // 
             this.scriptEditorToolStripMenuItem.Name = "scriptEditorToolStripMenuItem";
-            this.scriptEditorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scriptEditorToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.scriptEditorToolStripMenuItem.Text = "Script Editor";
             this.scriptEditorToolStripMenuItem.Click += new System.EventHandler(this._ScriptEditorToolStripMenuItem_Click);
             // 
@@ -395,7 +354,6 @@
             this.saveSinglePlayerFilesToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.saveSinglePlayerFilesToolStripMenuItem.Text = "Save Single Player Files";
             this.saveSinglePlayerFilesToolStripMenuItem.Visible = false;
-            this.saveSinglePlayerFilesToolStripMenuItem.Click += new System.EventHandler(this.saveSinglePlayerFilesToolStripMenuItem_Click);
             // 
             // toolStripSeparator9
             // 
@@ -427,7 +385,6 @@
             this.newWindowToolStripMenuItem.Name = "newWindowToolStripMenuItem";
             this.newWindowToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.newWindowToolStripMenuItem.Text = "&New Window";
-            this.newWindowToolStripMenuItem.Click += new System.EventHandler(this.ShowNewForm);
             // 
             // cascadeToolStripMenuItem
             // 
@@ -591,9 +548,6 @@
         private System.Windows.Forms.ToolStripMenuItem indexToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.ToolStripMenuItem indexFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cookedFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stringsFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clientPatchesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bypassSecurityx64ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showExcelTablesToolStripMenuItem;
@@ -603,7 +557,6 @@
         private System.Windows.Forms.ToolStripMenuItem scriptEditorToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem installModificationsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem characterFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem patchToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem convertTCv4FilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSinglePlayerFilesToolStripMenuItem;

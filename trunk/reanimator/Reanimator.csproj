@@ -748,7 +748,12 @@
     <Content Include="Resources\icon3.ico" />
     <None Include="Resources\warning.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\hellgate\Hellgate.csproj">
+      <Project>{B6CC99E9-8371-43C3-A20B-D8AA4B7DACCC}</Project>
+      <Name>Hellgate</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Folder Include="ExcelDefinitions\Tc\" />
   </ItemGroup>

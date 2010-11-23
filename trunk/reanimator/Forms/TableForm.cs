@@ -4,36 +4,41 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using Reanimator.Forms;
+using Hellgate;
+using FileEntry = Hellgate.Index.FileEntry;
 
 namespace Reanimator
 {
     public partial class TableForm : ThreadedFormBase, IDisposable, IMdiChildBase
     {
-        Index index;
-        StringsFile _stringsFile;
+        
+        Hellgate.Index IndexFile;
+        Hellgate.StringsFile StringsFileData;
         List<int> foundIndices;
         int currentSelection;
+        public string FilePath { get { return (!(IndexFile == null)) ? IndexFile.FilePath : string.Empty; } }
 
         public bool IsIndexFile
         {
-            get { return index == null ? false : true; }
+            get { return IndexFile == null ? false : true; }
         }
 
-        public TableForm(Index idx)
+        public TableForm(Hellgate.Index indexFile)
         {
-            index = idx;
-            if (!index.OpenDat(FileAccess.Read))
-            {
-                MessageBox("Unable to open accompanying data file:\n" + index.FileNameWithoutExtension + ".dat\nYou will be unable to extract any files.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-
+            IndexFile = indexFile;
+            Text += ": " + FilePath;
             TableFormInit();
+            if (!(IndexFile.OpenDat(FileAccess.Read)))
+            {
+                string caption = "Warning";
+                string message = "Unable to open accompanying data file: \n" + IndexFile.FileNameWithoutExtension + ".dat\nYou will be unable to extract any files.";
+                MessageBox(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
 
-        public TableForm(StringsFile stringsFile)
+        public TableForm(Hellgate.StringsFile stringsFile)
         {
-            _stringsFile = stringsFile;
-
+            StringsFileData = stringsFile;
             TableFormInit();
         }
 
@@ -52,23 +57,29 @@ namespace Reanimator
             IndexFileCheckBoxColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             IndexFileCheckBoxColumn.Width = 24;
             IndexFileCheckBoxColumn.Name = "IndexFileCheckBoxColumn";
-
+            
             foundIndices = new List<int>();
             currentSelection = 0;
+
+            if (!(IndexFile == null))
+                dataGridView.DataSource = IndexFile.Files.ToArray();
+
+            if (!(StringsFileData == null))
+                dataGridView.DataSource = StringsFileData.Rows.ToArray();
         }
 
         /// <summary>
         /// Returns a list of items that were checked in the DataGridView
         /// </summary>
         /// <returns>A list of all checked items</returns>
-        public Index.FileEntry[] GetCheckedFiles()
+        public FileEntry[] GetCheckedFiles()
         {
             int counter = 0;
             //A list of checked files
-            List<Index.FileEntry> fileIndex = new List<Index.FileEntry>();
+            List<FileEntry> fileIndex = new List<FileEntry>();
 
             //Get the data bound to the DataGridView
-            Index.FileEntry[] index = (Index.FileEntry[])this.dataGridView.DataSource;
+            FileEntry[] index = (FileEntry[])this.dataGridView.DataSource;
 
             //Iterate through the Rows and check if the checkBoxes were checked 
             foreach (DataGridViewRow row in this.dataGridView.Rows)
@@ -94,11 +105,11 @@ namespace Reanimator
             return fileIndex.ToArray();
         }
 
-        public Index.FileEntry[] GetSelectedFiles()
+        public FileEntry[] GetSelectedFiles()
         {
             int counter = 0;
-            List<Index.FileEntry> fileIndex = new List<Index.FileEntry>();
-            Index.FileEntry[] index = (Index.FileEntry[])this.dataGridView.DataSource;
+            List<FileEntry> fileIndex = new List<FileEntry>();
+            FileEntry[] index = (FileEntry[])this.dataGridView.DataSource;
 
             foreach (DataGridViewRow row in this.dataGridView.Rows)
             {
@@ -119,7 +130,7 @@ namespace Reanimator
             {
                 return;
             }
-            if (!index.DatFileOpen)
+            if (!IndexFile.DatFileOpen)
             {
                 return;
             }
@@ -176,25 +187,25 @@ namespace Reanimator
             //ExtractFiles(index.FileTable);
         }
 
-        private void ExtractFiles(Index.FileEntry[] files)
+        private void ExtractFiles(FileEntry[] files)
         {
             new ProgressForm(DoExtractFiles, files).ShowDialog(this);
         }
 
         private void DoExtractFiles(ProgressForm progressBar, Object param)
         {
-            Index.FileEntry[] files = param as Index.FileEntry[];
+           FileEntry[] files = param as FileEntry[];
             if (param == null)
             {
                 return;
             }
-            if (!index.DatFileOpen)
+            if (!IndexFile.DatFileOpen)
             {
                 return;
             }
 
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.SelectedPath = index.FileDirectory;
+            folderBrowserDialog.SelectedPath = IndexFile.FileDirectory;
             if (this.ShowDialog(folderBrowserDialog) != DialogResult.OK)
             {
                 return;
@@ -210,20 +221,20 @@ namespace Reanimator
             else if (dr == DialogResult.Yes)
             {
                 keepPath = true;
-                extractToPath += @"\" + index.FileNameWithoutExtension;
+                extractToPath += @"\" + IndexFile.FileNameWithoutExtension;
             }
 
             progressBar.ConfigBar(0, files.Length, 1);
             progressBar.SetLoadingText("Extracting files to... " + extractToPath);
 
             int filesSaved = 0;
-            foreach (Index.FileEntry file in files)
+            foreach (FileEntry file in files)
             {
                 while (true)
                 {
                     try
                     {
-                        byte[] buffer = index.ReadDatFile(file);
+                        byte[] buffer = IndexFile.GetFileBytes(file);
 
                         string keepPathString = "\\";
                         if (keepPath)
@@ -286,9 +297,9 @@ namespace Reanimator
 
         new public void Dispose()
         {
-            if (index != null)
+            if (IndexFile != null)
             {
-                index.Dispose();
+                IndexFile.Dispose();
             }
 
             Dispose(true);
@@ -379,9 +390,9 @@ namespace Reanimator
 
         public void SaveButton()
         {
-            byte[] saveData = index.GenerateIndexFile();
+            byte[] saveData = IndexFile.GenerateIndexFile();
             Crypt.Encrypt(saveData);
-            FileStream fOut = new FileStream(index.FileDirectory + index.FileNameWithoutExtension + ".new.idx", FileMode.Create);
+            FileStream fOut = new FileStream(IndexFile.FileDirectory + IndexFile.FileNameWithoutExtension + ".new.idx", FileMode.Create);
             fOut.Write(saveData, 0, saveData.Length);
             fOut.Dispose();
         }
@@ -429,7 +440,7 @@ namespace Reanimator
 
             foreach (DataGridViewRow row in selectedRows)
             {
-                if (!index.PatchOutFile(row.Index))
+                if (!IndexFile.PatchOutFile(row.Index))
                 {
                     MessageBox("Filed to patch out file!");
                 }
@@ -446,7 +457,7 @@ namespace Reanimator
             ReplaceFiles(GetCheckedFiles());
         }
 
-        void ReplaceFiles(Index.FileEntry[] files)
+        void ReplaceFiles(FileEntry[] files)
         {
             //if (!index.BeginDatWriting())
             //{
