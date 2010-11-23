@@ -30,11 +30,13 @@ namespace Hellgate
         {
             HellgatePath = hellgatePath;
             MPVersion = mpVersion;
+            Language = "english";
             XlsDataSet = new DataSet("xlsDataSet")
             {
                 Locale = new CultureInfo("en-us", true),
                 RemotingFormat = SerializationFormat.Binary
             };
+            DataFiles = new SortedDictionary<String, DataFile>();
             IntegrityCheck = LoadFileTable();
         }
 
@@ -86,32 +88,102 @@ namespace Hellgate
             return true;
         }
 
+        public bool LoadTableFiles()
+        {
+            // want excel files and strings files
+            foreach (FileEntry fileEntry in
+                FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention) ||
+                    (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) && fileEntry.FullPath.Contains(Language))))
+            {
+                byte[] fileBytes = null;
+
+                // if file is backed up, check for unpacked copy
+                String filePath = fileEntry.FullPath;
+                if (fileEntry.DirectoryString.Contains(Index.BackupPrefix))
+                {
+                    filePath = filePath.Replace(@"backup\", "");
+
+                    String fullPath = Path.Combine(HellgatePath, filePath);
+                    if (File.Exists(fullPath))
+                    {
+                        try
+                        {
+                            fileBytes = File.ReadAllBytes(fullPath);
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("Warning: Reading from Backup - Failed to read from file: " + fullPath);
+                        }
+                    }
+                }
+
+
+                // if not backed up or if backed up but file not found/readable, then read from .dat
+                if (fileBytes == null)
+                {
+                    // open .dat
+                    if (!fileEntry.Parent.DatFileOpen && !fileEntry.Parent.OpenDat(FileAccess.Read))
+                    {
+                        Console.WriteLine("Warning: Failed to open .dat for reading: " + fileEntry.Parent.FileNameWithoutExtension);
+                        continue;
+                    }
+
+                    fileBytes = fileEntry.Parent.GetFileBytes(fileEntry);
+                    if (fileBytes == null)
+                    {
+                        Console.WriteLine("Warning: Failed to read file from .dat: " + fileEntry.FileNameString);
+                        continue;
+                    }
+                }
+
+
+                // parse file data
+                DataFile dataFile;
+                if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention))
+                {
+                    dataFile = new ExcelFile(fileBytes) { FilePath = filePath };
+                }
+                else // strings file
+                {
+                    String stringsStringId = fileEntry.FileNameString.Replace(StringsFile.FileExtention, "").ToUpper();
+                    dataFile = new StringsFile(fileBytes, stringsStringId) { FilePath = filePath };
+                }
+                if (dataFile.IntegrityCheck) DataFiles.Add(dataFile.StringId, dataFile);
+            }
+
+
+            // close any open dats
+            foreach (Index indexFile in IndexFiles)
+            {
+                indexFile.EndDatAccess();
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Loads all of the available Excel files to a hashtable.
         /// </summary>
         /// <returns>Returns true on success.</returns>
         public bool LoadExcelFiles()
         {
-            DataFiles = new SortedDictionary<string, DataFile>();
             foreach (FileEntry fileEntry in FileEntries.Values)
             {
                 // Check if its a excel file by its file extentsion
-                if (!(fileEntry.FileNameString.Contains(ExcelFile.FileExtention)))
-                {
-                    continue;
-                }
+                if (!fileEntry.FileNameString.Contains(ExcelFile.FileExtention)) continue;
+
                 // Do not load excel files that have been "backed up"
                 // todo: need to have it load from file instead
                 if ((fileEntry.DirectoryString.Contains(Index.BackupPrefix)))
                 {
-                    continue;
+                    //continue;
                 }
 
 
                 // Create a hashtable key from the filename
-                string fileName = fileEntry.FileNameString;
-                fileName = fileName.Replace(ExcelFile.FileExtention, "");
-                fileName = fileName.ToUpper();
+                //string fileName = fileEntry.FileNameString;
+                //fileName = fileName.Replace(ExcelFile.FileExtention, "");
+                //fileName = fileName.ToUpper();
                 // todo: fileName not used for anything - is it needed?
 
 
@@ -133,7 +205,7 @@ namespace Hellgate
 
                 if (excelFile.IntegrityCheck)
                 {
-                    DataFiles.Add(excelFile.GetStringId(), excelFile);
+                    DataFiles.Add(excelFile.StringId, excelFile);
                 }
             }
 

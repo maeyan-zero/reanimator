@@ -98,7 +98,7 @@ namespace Hellpack
             foreach (String stringPath in stringFilesToCook)
             {
                 byte[] stringsBuffer = File.ReadAllBytes(stringPath);
-                StringsFile stringsFile = new StringsFile(stringsBuffer);
+                StringsFile stringsFile = new StringsFile(stringsBuffer, Path.GetFileName(stringPath).ToUpper());
                 if (!(stringsFile.IntegrityCheck == true)) continue;
                 Console.WriteLine("Cooking " + stringPath.Replace(currentDir + "\\", ""));
                 stringsBuffer = stringsFile.ToByteArray();

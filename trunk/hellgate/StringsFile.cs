@@ -12,14 +12,18 @@ namespace Hellgate
         {
             IsStringsFile = true;
             DataType = typeof(StringBlock);
+            Rows = new List<Object>();
         }
 
-        public StringsFile(byte[] buffer) : this()
+        public StringsFile(byte[] buffer, String stringId) : this()
         {
+            StringId = stringId;
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCSV = (peek != Token.Header);
             IntegrityCheck = ((isCSV)) ? ParseCSV(buffer) : ParseData(buffer);
         }
+
+        public override sealed String StringId { get; protected set; }
 
         public override sealed bool ParseData(byte[] buffer)
         {
