@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Hellgate;
 
 namespace Reanimator.Forms
 {
     public partial class CSVSelection : Form
     {
-        public bool[] selected;
-        public bool selectAll;
+        public bool[] Selected;
+        public bool SelectAll;
 
         public CSVSelection()
         {
@@ -22,67 +18,63 @@ namespace Reanimator.Forms
         public CSVSelection(DataTable dataTable)
         {
             InitializeComponent();
-            selected = new bool[dataTable.Columns.Count];
+            Selected = new bool[dataTable.Columns.Count];
             for (int i = 0; i < dataTable.Columns.Count; i++)
             {
-                CheckBox checkbox = new CheckBox();
-                checkbox.Text = dataTable.Columns[i].ColumnName;
-                checkbox.Click += new EventHandler(checkbox_Click);
+                CheckBox checkbox = new CheckBox {Text = dataTable.Columns[i].ColumnName};
+                checkbox.Click += _Checkbox_Click;
                 flowLayoutPanel1.Controls.Add(checkbox);
 
                 // dont tick related columns and index by default
-                if (!(dataTable.Columns[i].ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated)))
-                {
-                    if (!(dataTable.Columns[i].ColumnName == "Index"))
-                    {
-                        checkbox.CheckState = CheckState.Checked;
-                        selected[i] = checkbox.Checked;
-                    }
-                }
+                if (dataTable.Columns[i].ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated)) continue;
+                if (dataTable.Columns[i].ColumnName == "Index") continue;
+
+                checkbox.CheckState = CheckState.Checked;
+                Selected[i] = checkbox.Checked;
             }
         }
 
-        private void checkbox_Click(object sender, EventArgs e)
+        private void _Checkbox_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
             {
                 CheckBox check = (CheckBox)flowLayoutPanel1.Controls[i];
                 //if (check.GetType())
                 {
-                    selected[i] = check.Checked;
+                    Selected[i] = check.Checked;
                 }
             }
         }
 
-        private void buttonSelectAll_Click(object sender, EventArgs e)
+        private void _ButtonSelectAll_Click(object sender, EventArgs e)
         {
-            if (selectAll == true)
+            if (SelectAll)
             {
-                selectAll = false;
+                SelectAll = false;
                 for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
                 {
                     CheckBox check = (CheckBox)flowLayoutPanel1.Controls[i];
                     {
                         check.Checked = false;
-                        selected[i] = check.Checked;
+                        Selected[i] = check.Checked;
                     }
                 }
             }
             else
             {
-                selectAll = true;
+                SelectAll = true;
                 for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
                 {
                     CheckBox check = (CheckBox)flowLayoutPanel1.Controls[i];
                     {
                         check.Checked = true;
-                        selected[i] = check.Checked;
+                        Selected[i] = check.Checked;
                     }
                 }
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void _Button1_Click(object sender, EventArgs e)
         {
 
         }

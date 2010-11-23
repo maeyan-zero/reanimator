@@ -7,7 +7,9 @@ using System.Windows.Forms;
 using System.IO;
 using System.Xml.Serialization;
 using System.Drawing;
+using Hellgate;
 using Reanimator.Forms.HeroEditorFunctions;
+using Revival.Common;
 
 namespace Reanimator.Forms
 {
@@ -26,30 +28,30 @@ namespace Reanimator.Forms
         }
 
         readonly Unit _heroUnit;
-        readonly TableDataSet _dataSet;
-        readonly TableFiles _tableFiles;
+        // todo: rewrite readonly TableDataSet _dataSet;
+        // todo: rewrite readonly TableFiles _tableFiles;
         readonly String _filePath;
         readonly UnitHelpFunctions _itemFunctions;
         CharacterClass _characterClass;
         UnitWrapper _wrapper;
 
-        public HeroEditor(Unit heroUnit, TableDataSet tableDataSet, String filePath)
-        {
-            _heroUnit = heroUnit;
-            _dataSet = tableDataSet;
-            _tableFiles = tableDataSet.TableFiles;
-            //_panel = new CompletePanelControl();
-            //_statsTable = _excelTables.GetTable("stats") as Stats;
-            _filePath = filePath;
+        //// todo: rewrite public HeroEditor(Unit heroUnit, TableDataSet tableDataSet, String filePath)
+        //{
+        //    _heroUnit = heroUnit;
+        //    _dataSet = tableDataSet;
+        //    _tableFiles = tableDataSet.TableFiles;
+        //    //_panel = new CompletePanelControl();
+        //    //_statsTable = _excelTables.GetTable("stats") as Stats;
+        //    _filePath = filePath;
 
-            _itemFunctions = new UnitHelpFunctions(_dataSet);
-            _itemFunctions.LoadCharacterValues(_heroUnit);
-            //_itemFunctions.GenerateUnitNameStrings();
-            //_itemFunctions.PopulateItems(ref _heroUnit);
-            _wrapper = new UnitWrapper(_dataSet, heroUnit);
+        //    _itemFunctions = new UnitHelpFunctions(_dataSet);
+        //    _itemFunctions.LoadCharacterValues(_heroUnit);
+        //    //_itemFunctions.GenerateUnitNameStrings();
+        //    //_itemFunctions.PopulateItems(ref _heroUnit);
+        //    _wrapper = new UnitWrapper(_dataSet, heroUnit);
 
-            InitializeComponent();
-        }
+        //    InitializeComponent();
+        //}
 
         private void HeroEditor_Load(object sender, EventArgs e)
         {
@@ -117,7 +119,7 @@ namespace Reanimator.Forms
                     statAttribute1_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute1, "BitCount");
                     statAttribute1_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1");
                     statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
-                    statAttribute1_tableId_TextBox.Text = stat.Attribute1.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute1.TableId).StringId : "NA";
+                    // todo: rewrite statAttribute1_tableId_TextBox.Text = stat.Attribute1.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute1.TableId).StringId : "NA";
                 }
                 else
                 {
@@ -137,7 +139,7 @@ namespace Reanimator.Forms
                     statAttribute2_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute2, "BitCount");
                     statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
                     statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
-                    statAttribute2_tableId_TextBox.Text = stat.Attribute2.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute2.TableId).StringId : "NA";
+                    // todo: rewrite statAttribute2_tableId_TextBox.Text = stat.Attribute2.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute2.TableId).StringId : "NA";
                 }
                 else
                 {
@@ -157,7 +159,7 @@ namespace Reanimator.Forms
                     statAttribute3_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute3, "BitCount");
                     statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
                     statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
-                    statAttribute3_tableId_TextBox.Text = stat.Attribute3.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute3.TableId).StringId : "NA";
+                    // todo: rewrite statAttribute3_tableId_TextBox.Text = stat.Attribute3.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute3.TableId).StringId : "NA";
                 }
                 else
                 {
@@ -311,7 +313,7 @@ namespace Reanimator.Forms
         private void button3_Click(object sender, EventArgs e)
         {
             List<String> references = new List<String>();
-            CheckTableReferencesForItems(references, _heroUnit.Items.ToArray());
+            // todo: rewrite CheckTableReferencesForItems(references, _heroUnit.Items.ToArray());
 
             listBox1.DataSource = references;
         }
@@ -319,50 +321,50 @@ namespace Reanimator.Forms
         private void button4_Click(object sender, EventArgs e)
         {
             List<String> references = new List<String>();
-            CheckTableReferencesForItems(references, new[] { _heroUnit });
+            // todo: rewrite CheckTableReferencesForItems(references, new[] { _heroUnit });
 
             listBox1.DataSource = references;
         }
 
-        private void CheckTableReferencesForItems(List<string> references, Unit[] items)
-        {
-            foreach (Unit item in items)
-            {
-                foreach (Unit.StatBlock.Stat stats in item.Stats.stats)
-                {
-                    CheckTableReferencesForItems(references, item.Items.ToArray());
+        //// todo: rewrite private void CheckTableReferencesForItems(List<string> references, Unit[] items)
+        //{
+        //    foreach (Unit item in items)
+        //    {
+        //        foreach (Unit.StatBlock.Stat stats in item.Stats.stats)
+        //        {
+        //            CheckTableReferencesForItems(references, item.Items.ToArray());
 
-                    string id;
-                    if (stats.skipResource == 0)
-                    {
-                        id = _tableFiles.GetExcelTableFromCode(stats.resource).StringId;
-                        if (!references.Contains(id))
-                        {
-                            references.Add(id);
-                        }
-                    }
-                    else
-                    {
-                        foreach (Unit.StatBlock.Stat.Attribute att in stats.attributes)
-                        {
-                            ExcelFile tab = _tableFiles.GetExcelTableFromCode(att.TableId);
-                            if (tab == null) continue;
+        //            string id;
+        //            if (stats.skipResource == 0)
+        //            {
+        //                id = _tableFiles.GetExcelTableFromCode(stats.resource).StringId;
+        //                if (!references.Contains(id))
+        //                {
+        //                    references.Add(id);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                foreach (Unit.StatBlock.Stat.Attribute att in stats.attributes)
+        //                {
+        //                    ExcelFile tab = _tableFiles.GetExcelTableFromCode(att.TableId);
+        //                    if (tab == null) continue;
 
-                            id = tab.StringId;
+        //                    id = tab.StringId;
 
-                            if (!references.Contains(id))
-                            {
-                                references.Add(id);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //                    if (!references.Contains(id))
+        //                    {
+        //                        references.Add(id);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         private void saveCharButton_Click(object sender, EventArgs e)
         {
-            String filePath = FileTools.SaveFileDiag("hg1", "HGL Character", _heroUnit.Name, Config.SaveDir);
+            String filePath = FileTools.SaveFileDialogBox("hg1", "HGL Character", _heroUnit.Name, Config.SaveDir);
             if (String.IsNullOrEmpty(filePath)) return;
 
             //_panel.GetSkillControls(_heroUnit);
@@ -758,7 +760,7 @@ namespace Reanimator.Forms
             {
                 Unit unit = (Unit)currentlyEditing_ComboBox.SelectedItem;
 
-                ShowInvInfo(unit);
+                // todo: rewrite ShowInvInfo(unit);
 
                 PopulateStats(unit);
             }
@@ -769,52 +771,52 @@ namespace Reanimator.Forms
         }
 
         Unit _currentlySelectedItem;
-        private void ShowInvInfo(Unit unit)
-        {
-            //save currently selected item
-            _currentlySelectedItem = unit;
+        //// todo: rewrite private void ShowInvInfo(Unit unit)
+        //{
+        //    //save currently selected item
+        //    _currentlySelectedItem = unit;
 
-            DataTable items = _dataSet.GetExcelTableFromCode(27953);
-            DataRow[] itemRow = items.Select("code = '" + unit.unitCode + "'");
+        //    DataTable items = _dataSet.GetExcelTableFromCode(27953);
+        //    DataRow[] itemRow = items.Select("code = '" + unit.unitCode + "'");
 
-            if (itemRow.Length > 0)
-            {
-                int value = (int)itemRow[0]["unitType"];
+        //    if (itemRow.Length > 0)
+        //    {
+        //        int value = (int)itemRow[0]["unitType"];
 
-                DataTable unitTypes = _dataSet.GetExcelTableFromCode(21040);
-                DataRow[] unitRow = unitTypes.Select("Index = '" + value + "'");
+        //        DataTable unitTypes = _dataSet.GetExcelTableFromCode(21040);
+        //        DataRow[] unitRow = unitTypes.Select("Index = '" + value + "'");
 
-                if (unitRow.Length > 0)
-                {
-                    tb_itemType.Text = unitRow[0]["type"].ToString();
-                }
-            }
-            else
-            {
-                tb_itemType.Text = "unknown";
-            }
+        //        if (unitRow.Length > 0)
+        //        {
+        //            tb_itemType.Text = unitRow[0]["type"].ToString();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        tb_itemType.Text = "unknown";
+        //    }
 
-            tb_itemLevel.Text = (UnitHelpFunctions.GetSimpleValue(_currentlySelectedItem, ItemValueNames.level.ToString()) - 8).ToString();
-            tb_itemName.Text = unit.Name;
-            tb_invLoc.Text = unit.inventoryType.ToString();
+        //    tb_itemLevel.Text = (UnitHelpFunctions.GetSimpleValue(_currentlySelectedItem, ItemValueNames.level.ToString()) - 8).ToString();
+        //    tb_itemName.Text = unit.Name;
+        //    tb_invLoc.Text = unit.inventoryType.ToString();
 
-            nud_invPosX.Value = unit.inventoryPositionX;
-            nud_invPosY.Value = unit.inventoryPositionY;
+        //    nud_invPosX.Value = unit.inventoryPositionX;
+        //    nud_invPosY.Value = unit.inventoryPositionY;
 
-            tb_itemWidth.Text = GetItemWidth(unit).ToString();
-            tb_itemHeight.Text = GetItemHeight(unit).ToString();
+        //    tb_itemWidth.Text = GetItemWidth(unit).ToString();
+        //    tb_itemHeight.Text = GetItemHeight(unit).ToString();
 
-            int quantity = UnitHelpFunctions.GetSimpleValue(unit, ItemValueNames.item_quantity.ToString());
+        //    int quantity = UnitHelpFunctions.GetSimpleValue(unit, ItemValueNames.item_quantity.ToString());
 
-            if (quantity <= 0)
-            {
-                quantity = 1;
-            }
+        //    if (quantity <= 0)
+        //    {
+        //        quantity = 1;
+        //    }
 
-            nud_itemQuantity.Value = quantity;
+        //    nud_itemQuantity.Value = quantity;
 
-            ShowItemMods(unit.Items.ToArray());
-        }
+        //    ShowItemMods(unit.Items.ToArray());
+        //}
 
         private void ShowItemMods(Unit[] items)
         {
@@ -1082,7 +1084,7 @@ namespace Reanimator.Forms
         #region SKILLPANEL
         private void InitializeAttributeSkillPanel(int characterClass)
         {
-            DataTable table = _dataSet.GetExcelTableFromCode(27952);
+            // todo: rewrite DataTable table = _dataSet.GetExcelTableFromCode(27952);
         }
         #endregion
 
@@ -1091,7 +1093,7 @@ namespace Reanimator.Forms
             Unit unit = currentlyEditing_ComboBox.SelectedItem as Unit;
             if (unit == null) return;
 
-            String savePath = FileTools.SaveFileDiag("dat", "Data", unit.Name, null);
+            String savePath = FileTools.SaveFileDialogBox("dat", "Data", unit.Name, null);
             if (String.IsNullOrEmpty(savePath)) return;
 
             using (FileStream fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
@@ -1110,7 +1112,7 @@ namespace Reanimator.Forms
             //unit.inventoryPositionX++;
             //unit.inventoryPositionY++;
 
-            String filePath = FileTools.OpenFileDiag("dat", "Data", null);
+            String filePath = FileTools.OpenFileDialogBox("dat", "Data", null);
             if (String.IsNullOrEmpty(filePath)) return;
 
             Unit unit;
@@ -1275,7 +1277,7 @@ namespace Reanimator.Forms
 
             currentlyEditing_ComboBox.SelectedItem = unit;
 
-            ShowInvInfo(unit);
+            // todo: rewrite ShowInvInfo(unit);
         }
 
         private void lv_itemSelected_SelectedIndexChanged(object sender, EventArgs e)
@@ -1286,7 +1288,7 @@ namespace Reanimator.Forms
 
             currentlyEditing_ComboBox.SelectedItem = unit;
 
-            ShowInvInfo(unit);
+            // todo: rewrite ShowInvInfo(unit);
         }
 
         private void button10_Click(object sender, EventArgs e)
@@ -1320,7 +1322,7 @@ namespace Reanimator.Forms
 
         private void b_loadXML_Click(object sender, EventArgs e)
         {
-            String filePath = FileTools.OpenFileDiag("xml", "XML", null);
+            String filePath = FileTools.OpenFileDialogBox("xml", "XML", null);
             if (String.IsNullOrEmpty(filePath)) return;
 
             Unit unit = XmlUtilities<Unit>.Deserialize(filePath);

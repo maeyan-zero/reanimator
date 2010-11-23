@@ -14,7 +14,7 @@ namespace Reanimator.Forms
     public partial class ScriptEditor : Form
     {
         UTF8Encoding _encoding; //used for string to byte[]
-        TableDataSet _tableDataSet;
+        // todo: rewrite TableDataSet _tableDataSet;
         Modification _modification;
         List<Modification.Package> _package;
         Modification.Script _script;
@@ -22,22 +22,22 @@ namespace Reanimator.Forms
         public string ScriptDir { get { return Config.ScriptDir; } }
         public string Filter { get { return "Xml Files (*.xml)|*.xml|All Files (*.*)|*.*"; } }
 
-        public ScriptEditor(TableDataSet tableDataSet)
-        {
-            InitializeComponent();
-            SetTabs(textBox);
-            _encoding = new System.Text.UTF8Encoding();
-            _tableDataSet = tableDataSet;
-            _modification = new Modification(_tableDataSet);
-            _package = _modification.ModPackage;
+        //// todo: rewrite public ScriptEditor(TableDataSet tableDataSet)
+        //{
+        //    InitializeComponent();
+        //    SetTabs(textBox);
+        //    _encoding = new System.Text.UTF8Encoding();
+        //    _tableDataSet = tableDataSet;
+        //    _modification = new Modification(_tableDataSet);
+        //    _package = _modification.ModPackage;
 
-            if (!Directory.Exists(Config.ScriptDir)) Directory.CreateDirectory(Config.ScriptDir);
-            string[] modPackPaths = Directory.GetDirectories(Config.ScriptDir).Where(subDir => (!subDir.Contains("."))).ToArray();
-            foreach (string path in modPackPaths)
-            {
-                _modification.Open(path);
-            }
-        }
+        //    if (!Directory.Exists(Config.ScriptDir)) Directory.CreateDirectory(Config.ScriptDir);
+        //    string[] modPackPaths = Directory.GetDirectories(Config.ScriptDir).Where(subDir => (!subDir.Contains("."))).ToArray();
+        //    foreach (string path in modPackPaths)
+        //    {
+        //        _modification.Open(path);
+        //    }
+        //}
 
         private void UpdateTreeView()
         {

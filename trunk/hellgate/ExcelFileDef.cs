@@ -12,8 +12,8 @@ namespace Hellgate
     {
         public const String FolderPath = "excel\\";
         public const String FileExtention = ".txt.cooked";
-        public static KeyValuePair<uint, TypeMap>[] DataTypes;
-        public static KeyValuePair<string, uint>[] DataTables;
+        public static readonly KeyValuePair<uint, TypeMap>[] DataTypes;
+        public static readonly KeyValuePair<string, uint>[] DataTables;
 
         static ExcelFile()
         {
@@ -467,14 +467,14 @@ namespace Hellgate
 
         public string GetStringId()
         {
-            if (!String.IsNullOrEmpty(StringID)) return StringID;
+            if (!String.IsNullOrEmpty(StringId)) return StringId;
 
             var query = DataTables.Where(dt => dt.Value == StructureId);
-            if (query.Count() == 1) return StringID = query.First().Key;
+            if (query.Count() == 1) return StringId = query.First().Key;
 
             if (String.IsNullOrEmpty(FilePath)) return String.Empty;
 
-            return StringID = FileName.ToUpper();
+            return StringId = FileName.ToUpper();
         }
 
         public static uint GetStructureId(string stringId)
@@ -549,10 +549,7 @@ namespace Hellgate
                 if (CheckToken(data, offset, Token.dneh)) return true;
 
                 ExcelScript excelScript = new ExcelScript();
-                if (!_ParseScript(data, ref offset, ref excelScript))
-                {
-                    return false;
-                }
+                if (!_ParseScript(data, ref offset, ref excelScript)) return false;
                 _rowScripts.Add(excelScript);
             }
 
@@ -568,11 +565,13 @@ namespace Hellgate
             UInt32 version = FileTools.ByteArrayToUInt32(data, ref offset);
             if (version != 3) return false;
 
+
             // general parameter values
             int charCount = FileTools.ByteArrayToInt32(data, ref offset);
             if (charCount >= 0x1000) return false;
             parameter.Name = FileTools.ByteArrayToStringASCII(data, ref offset, charCount);
             parameter.Unknown = FileTools.ByteArrayToUInt32(data, ref offset);
+
 
             // what kind of parameter is it
             parameter.TypeId = FileTools.ByteArrayToUInt32(data, ref offset);
@@ -597,7 +596,8 @@ namespace Hellgate
             parameter.TypeValues = FileTools.ByteArrayToInt32Array(data, ref offset, paramLength);
 
             excelScript.Paramaters.Add(parameter);
-            if (parameter.TypeId != 0x41) return true; // only 0x41 has paramaters following it and a script values block
+            if (parameter.TypeId != 0x41) return true; // only 0x41 has paramaters and a script values block following it
+
 
             // get remaining parameters
             int paramCount = parameter.TypeValues[5];
@@ -605,6 +605,7 @@ namespace Hellgate
             {
                 if (!_ParseScript(data, ref offset, ref excelScript)) return false;
             }
+
 
             // the actual script values
             int valuesByteCount = FileTools.ByteArrayToInt32(data, ref offset);
@@ -620,7 +621,7 @@ namespace Hellgate
         {
             // get our index ranges
             int startIndex, endIndex;
-            switch (StringID)
+            switch (StringId)
             {
                 case "STATES":
                     // states has 10x columns to check from 3 (zero based index)

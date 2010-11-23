@@ -1,18 +1,38 @@
 ﻿using System;
+using System.Collections;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using Hellgate;
 
 namespace Reanimator.Forms
 {
     public partial class TablesLoaded : Form
     {
-        private readonly TableDataSet _tableDataSet;
+        private readonly FileManager _fileManager;
 
-        public TablesLoaded(TableDataSet xlsDataSet)
+        public TablesLoaded(FileManager fileManager)
         {
             InitializeComponent();
-            _tableDataSet = xlsDataSet;
-            loadedTables_ListBox.Sorted = true;
+            _fileManager = fileManager;
+
+
+            loadedTables_ListBox.DataSource = new BindingSource(_fileManager.DataFiles, null);
+            //listBox1.DisplayMember = "Value";
+            //listBox1.ValueMember = "Key";
+
+            //foreach (DataFile dataFile in from DictionaryEntry de in _fileManager.DataFiles select de.Value as DataFile)
+            //{
+                
+            //}
+
+            //foreach (DataFile dataFile in from DictionaryEntry de in _tableFiles.DataFiles
+            //                              select de.Value as DataFile)
+            //{
+            //    _tablesLoaded.AddItem(dataFile);
+            //}
+
+          //  loadedTables_ListBox.Sorted = true;
         }
 
         public void AddItem(Object o)
@@ -20,17 +40,17 @@ namespace Reanimator.Forms
             loadedTables_ListBox.Items.Add(o);
         }
 
-        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void _ListBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             DataFile dataFile = loadedTables_ListBox.SelectedItem as DataFile;
             if (dataFile == null) return;
 
-            ExcelTableForm etf = new ExcelTableForm(dataFile, _tableDataSet)
-            {
-                Text = "Table: " + dataFile,
-                MdiParent = MdiParent
-            };
-            etf.Show();
+            //ExcelTableForm etf = new ExcelTableForm(dataFile, _tableDataSet)
+            //{
+            //    Text = "Table: " + dataFile,
+            //    MdiParent = MdiParent
+            //};
+            //etf.Show();
         }
 
         private void TablesLoaded_LocationChanged(object sender, EventArgs e)

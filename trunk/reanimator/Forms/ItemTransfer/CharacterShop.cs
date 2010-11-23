@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using Hellgate;
 
 namespace Reanimator.Forms.ItemTransfer
 {
@@ -14,8 +15,8 @@ namespace Reanimator.Forms.ItemTransfer
 
         private readonly string _characterFolder;
 
-        private TableFiles _tableFiles;
-        private TableDataSet _dataSet;
+        // todo: rewrite private TableFiles _tableFiles;
+        // todo: rewrite private TableDataSet _dataSet;
 
         private string _characterPath;
         private Unit _characterUnit;
@@ -26,34 +27,34 @@ namespace Reanimator.Forms.ItemTransfer
         private readonly ItemPanel _characterItemPanel;
         private CharacterStatus CharacterStatus = 0;
 
-        public CharacterShop(TableDataSet dataSet, TableFiles tableFiles)
-        {
-            InitializeComponent();
+        //// todo: rewrite public CharacterShop(TableDataSet dataSet, TableFiles tableFiles)
+        //{
+        //    InitializeComponent();
 
-            this.Text += " - Location: " + InventoryType;
+        //    this.Text += " - Location: " + InventoryType;
 
-            _itemHelpFunctions = new UnitHelpFunctions(dataSet);
+        //    _itemHelpFunctions = new UnitHelpFunctions(dataSet);
 
-            _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
+        //    _characterFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\My Games\\Hellgate\\Save\\Singleplayer";
 
-            _tableFiles = tableFiles;
-            _dataSet = dataSet;
+        //    _tableFiles = tableFiles;
+        //    _dataSet = dataSet;
 
-            string[] characters = LoadCharacterNames();
+        //    string[] characters = LoadCharacterNames();
 
-            cb_selectCharacter.DataSource = characters;
+        //    cb_selectCharacter.DataSource = characters;
 
-            _characterItemPanel = new ItemPanel(false, null, null);
-            _characterItemPanel.NewItemSelected_Event += _characterItemPanel_NewItemSelected_Event;
-            _characterItemPanel.ItemUnitSize = ItemUnitSize;
-            _characterItemPanel.Size = new Size(InventoryWidth * ItemUnitSize, InventoryHeight * ItemUnitSize);
-            _characterItemPanel.Location = new Point(16, 18);
+        //    _characterItemPanel = new ItemPanel(false, null, null);
+        //    _characterItemPanel.NewItemSelected_Event += _characterItemPanel_NewItemSelected_Event;
+        //    _characterItemPanel.ItemUnitSize = ItemUnitSize;
+        //    _characterItemPanel.Size = new Size(InventoryWidth * ItemUnitSize, InventoryHeight * ItemUnitSize);
+        //    _characterItemPanel.Location = new Point(16, 18);
 
-            SetCharacterStatus(CharacterStatus, CharacterStatus.NotLoaded, p_status, l_status);
+        //    SetCharacterStatus(CharacterStatus, CharacterStatus.NotLoaded, p_status, l_status);
 
-            // use inventory panels, as a normal groupBox doesn't provide the option "AutoScroll"
-            p_inventory.Controls.Add(_characterItemPanel);
-        }
+        //    // use inventory panels, as a normal groupBox doesn't provide the option "AutoScroll"
+        //    p_inventory.Controls.Add(_characterItemPanel);
+        //}
 
         void _characterItemPanel_NewItemSelected_Event(ItemPanel sender, InventoryItem item)
         {

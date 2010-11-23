@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
 using System.Drawing;
-using Reanimator.ExcelDefinitions;
+using Hellgate;
 using Reanimator.Forms;
 using System.Data;
 using System.Linq;
@@ -15,17 +12,18 @@ namespace Reanimator
 {
     public class Modification
     {
-        TableDataSet _tableDataSet;
+        // todo: rewrite TableDataSet _tableDataSet;
         List<Index> _index;
 
         public List<Package> ModPackage { get; set; }
         public string ModPackPath { get { return Config.HglDir + "\\modpacks\\"; } }
 
-        public Modification(TableDataSet tableDataSet)
-        {
-            _tableDataSet = tableDataSet;
-            ModPackage = new List<Package>();
-        }
+        //// todo: rewrite public Modification(TableDataSet tableDataSet)
+        //{
+        //    _tableDataSet = tableDataSet;
+        //    ModPackage = new List<Package>();
+        //}
+
         public void Open(string path)
         {
             string modDir;
@@ -174,9 +172,9 @@ namespace Reanimator
         {
             try
             {
-                
-                ExcelFile excel = _tableDataSet.TableFiles.GetExcelTableFromId(file.ID);
-                DataTable table = _tableDataSet.XlsDataSet.Tables[file.ID];
+
+                ExcelFile excel = null;// todo: rewrite  _tableDataSet.TableFiles.GetExcelTableFromId(file.ID);
+                DataTable table = null;// todo: rewrite  _tableDataSet.XlsDataSet.Tables[file.ID];
 
                 foreach (Entity entity in file.Entities)
                 {

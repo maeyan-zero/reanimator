@@ -1,39 +1,28 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Data;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 using System.IO;
-using System.Xml;
 using Reanimator.Forms;
-using Reanimator.Forms.ItemTransfer;
-using Reanimator.Forms.HeroEditorFunctions;
 using Hellgate;
+using Revival.Common;
 
 namespace Reanimator
 {
     public partial class Reanimator : Form
     {
-        FileManager HellgateFileManager;
-        Options OptionsForm = new Options();
-        List<TableForm> OpenTableForms = new List<TableForm>();
-        List<ExcelTableForm> OpenExcelTableForms = new List<ExcelTableForm>();
-        List<HeroEditor> OpenHeroEditorForms = new List<HeroEditor>();
+        private FileExplorer _fileExplorer;
+        private TablesLoaded _tablesLoaded;
+        private FileManager _hellgateFileManager;
+        private readonly Options _optionsForm = new Options();
+        private readonly List<TableForm> _openTableForms = new List<TableForm>();
+        private readonly List<ExcelTableForm> _openExcelTableForms = new List<ExcelTableForm>();
+        private List<HeroEditor> _openHeroEditorForms = new List<HeroEditor>();
 
         public Reanimator()
         {
             InitializeComponent();
-
-            // The FileManager is only initialized if there is a Hellgate Installation is found.
-            if ((CheckInstallation() == true))
-            {
-                HellgateFileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
-            }
 
             #region alexs_stuff
             //const String idxReadPath = @"D:\Games\Hellgate London\data\hellgate000.idx";
@@ -117,7 +106,7 @@ namespace Reanimator
         /// Checks the registry for the Hellgate path, if it doesn't exist prompt the user to find it.
         /// </summary>
         /// <returns>True if the installation is okay.</returns>
-        private bool CheckInstallation()
+        private static bool CheckInstallation()
         {
             if ((Directory.Exists(Config.HglDir)))
                 return true;
@@ -146,6 +135,7 @@ namespace Reanimator
                 installResult =  MessageBox.Show(message, caption, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
             }
             while (installResult == DialogResult.Retry);
+
             return false;
         }
 
@@ -210,10 +200,10 @@ namespace Reanimator
 
             // Check if the form is already open.
             // If true, then activate the form.
-            bool isOpen = OpenTableForms.Where(tf => tf.FilePath == filePath).Any();
+            bool isOpen = _openTableForms.Where(tf => tf.FilePath == filePath).Any();
             if (isOpen)
             {
-                tableForm = OpenTableForms.Where(tf => tf.FilePath == filePath).First();
+                tableForm = _openTableForms.Where(tf => tf.FilePath == filePath).First();
                 if ((tableForm.Created))
                 {
                     tableForm.Select();
@@ -247,8 +237,8 @@ namespace Reanimator
                 {
                     MdiParent = this
                 };
-                if (!(OpenTableForms.Contains(tableForm)))
-                    OpenTableForms.Add(tableForm);
+                if (!(_openTableForms.Contains(tableForm)))
+                    _openTableForms.Add(tableForm);
                 tableForm.Show();
             }
             else
@@ -262,62 +252,62 @@ namespace Reanimator
         /// <summary>
         /// Opens a ExcelTableForm based on the given path of a Excel/Strings file.
         /// </summary>
-        /// <param name="fileName">Path to the file to open.</param>
+        /// <param name="filePath">Path to the file to open.</param>
         private void OpenExcelFile(String filePath)
         {
-            byte[] buffer;
-            Hellgate.ExcelFile excelFile;
-            ExcelTableForm excelTableForm;
+            //byte[] buffer;
+            //Hellgate.ExcelFile excelFile;
+            //ExcelTableForm excelTableForm;
 
-            // Check if the form is already open.
-            // If true, then activate the form.
-            bool isOpen = OpenExcelTableForms.Where(etf => etf.FilePath == filePath).Any();
-            if (isOpen)
-            {
-                excelTableForm = OpenExcelTableForms.Where(etf => etf.FilePath == filePath).First();
-                if ((excelTableForm.Created))
-                {
-                    excelTableForm.Select();
-                    return;
-                }
-            }
+            //// Check if the form is already open.
+            //// If true, then activate the form.
+            //bool isOpen = _openExcelTableForms.Where(etf => etf.FilePath == filePath).Any();
+            //if (isOpen)
+            //{
+            //    excelTableForm = _openExcelTableForms.Where(etf => etf.FilePath == filePath).First();
+            //    if ((excelTableForm.Created))
+            //    {
+            //        excelTableForm.Select();
+            //        return;
+            //    }
+            //}
 
-            // Try read the file.
-            // If an exception is caught, log the error and inform the user.
-            try
-            {
-                buffer = File.ReadAllBytes(filePath);
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, false);
-                return;
-            }
+            //// Try read the file.
+            //// If an exception is caught, log the error and inform the user.
+            //try
+            //{
+            //    buffer = File.ReadAllBytes(filePath);
+            //}
+            //catch (Exception ex)
+            //{
+            //    ExceptionLogger.LogException(ex, false);
+            //    return;
+            //}
 
-            // Initialize the ExcelFile.
-            excelFile = new Hellgate.ExcelFile(buffer)
-            {
-                FilePath = filePath
-            };
+            //// Initialize the ExcelFile.
+            //excelFile = new Hellgate.ExcelFile(buffer)
+            //{
+            //    FilePath = filePath
+            //};
 
-            // If the Excel file is initialized without error, load the form.
-            // Otherwise, show a message box.
-            if ((excelFile.IntegrityCheck == true))
-            {
-                excelTableForm = new ExcelTableForm(excelFile)
-                {
-                    MdiParent = this
-                };
-                if (!(OpenExcelTableForms.Contains(excelTableForm)))
-                    OpenExcelTableForms.Add(excelTableForm);
-                excelTableForm.Show();
-            }
-            else
-            {
-                string message = String.Format("The excel file {0} appears invalid or malformed.", filePath);
-                string caption = "Bad File Format";
-                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //// If the Excel file is initialized without error, load the form.
+            //// Otherwise, show a message box.
+            //if ((excelFile.IntegrityCheck == true))
+            //{
+            //    excelTableForm = new ExcelTableForm(excelFile)
+            //    {
+            //        MdiParent = this
+            //    };
+            //    if (!(_openExcelTableForms.Contains(excelTableForm)))
+            //        _openExcelTableForms.Add(excelTableForm);
+            //    excelTableForm.Show();
+            //}
+            //else
+            //{
+            //    string message = String.Format("The excel file {0} appears invalid or malformed.", filePath);
+            //    string caption = "Bad File Format";
+            //    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
 
@@ -520,7 +510,7 @@ namespace Reanimator
 
         private void _OptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OptionsForm.ShowDialog(this);
+            _optionsForm.ShowDialog(this);
         }
 
         private void _ClientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
@@ -573,7 +563,23 @@ namespace Reanimator
                 Show();
                 Refresh();
 
-                
+
+                if (CheckInstallation())
+                {
+                    //ProgressForm reanimatorInitProgress = new ProgressForm(_Reanimator_Init, null);
+                    //reanimatorInitProgress.Show();
+                    //_DisplayLoadedTables();
+
+                    _hellgateFileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
+                    if (!_hellgateFileManager.LoadExcelFiles())
+                    {
+                        MessageBox.Show("Failed to load excel files!", "Excel Table Error", MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                    }
+                    _tablesLoaded = new TablesLoaded(_hellgateFileManager) { MdiParent = this };
+                    _tablesLoaded.Show();
+                }
+
 
                 //ProgressForm fileExplorerProgress = new ProgressForm(_fileExplorer.LoadIndexFiles, Config.LoadMPVersion);
                 //fileExplorerProgress.ShowDialog(this);
@@ -609,6 +615,30 @@ namespace Reanimator
                 ExceptionLogger.LogException(ex, "Reanimator_Load", false);
                 MessageBox.Show(ex.Message, "Reanimator_Load");
             }
+        }
+
+        private void _Reanimator_Init(ProgressForm progress, Object var)
+        {
+            progress.SetStyle(ProgressBarStyle.Marquee);
+            progress.SetLoadingText("Initialising Reanimator...");
+
+            progress.SetCurrentItemText("Loading Hellgate File System...");
+            _hellgateFileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
+
+            progress.SetCurrentItemText("Loading Excel Tables...");
+            if (!_hellgateFileManager.LoadExcelFiles())
+            {
+                MessageBox.Show("Failed to load excel files!", "Excel Table Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                return;
+            }
+
+            
+        }
+
+        private void _DisplayLoadedTables()
+        {
+            _tablesLoaded = new TablesLoaded(_hellgateFileManager) { MdiParent = this };
         }
 
 //        private void _LoadTables(ProgressForm progress, Object var)

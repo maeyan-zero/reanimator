@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Windows.Forms;
 using System.Xml;
+using Hellgate;
 using Reanimator.Properties;
 
 namespace Reanimator.Forms
@@ -165,12 +166,13 @@ namespace Reanimator.Forms
                     }
 
                     Index index = new Index();
-                    if (!index.ParseData(indexData, idxFile))
-                    {
-                        MessageBox.Show("Failed to parse index file!", "Error", MessageBoxButtons.OK,
-                                        MessageBoxIcon.Error);
-                        continue;
-                    }
+                    // todo: rewrite 
+                    //if (!index.ParseData(indexData, idxFile))
+                    //{
+                    //    MessageBox.Show("Failed to parse index file!", "Error", MessageBoxButtons.OK,
+                    //                    MessageBoxIcon.Error);
+                    //    continue;
+                    //}
                     IndexFiles.Add(index);
                 }
             }
@@ -807,7 +809,7 @@ namespace Reanimator.Forms
             DialogResult extractDialogResult = DialogResult.Retry;
             while (extractDialogResult == DialogResult.Retry)
             {
-                byte[] fileBytes = nodeObject.Index.ReadDatFile(file);
+                byte[] fileBytes = null;// todo: rewrite  nodeObject.Index.ReadDatFile(file);
                 if (fileBytes == null)
                 {
                     extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
@@ -852,7 +854,7 @@ namespace Reanimator.Forms
                 foreach (NodeObject siblingNodeObject in nodeObject.Siblings)
                 {
                     Index.FileEntry siblingFileEntry = siblingNodeObject.FileEntry;
-                    Index siblingIndex = siblingFileEntry.InIndex;
+                    Index siblingIndex = null; // todo: rewrite siblingFileEntry.InIndex;
 
                     siblingIndex.PatchOutFile(siblingNodeObject.FileEntry);
 
@@ -875,7 +877,7 @@ namespace Reanimator.Forms
             fileIndexKey = fileIndex.FileNameWithoutExtension;
             if (!indexToWrite.ContainsKey(fileIndexKey))
             {
-                indexToWrite.Add(fileIndexKey, file.InIndex);
+                // todo: rewrite indexToWrite.Add(fileIndexKey, file.InIndex);
             }
             return true;
         }
@@ -908,7 +910,7 @@ namespace Reanimator.Forms
                     return;
                 }
 
-                packIndex = new Index(indexPath);
+                // todo: rewrite packIndex = new Index(indexPath);
                 IndexFiles.Add(packIndex);
             }
 
@@ -1040,7 +1042,7 @@ namespace Reanimator.Forms
                 i++;
 
                 // add to our custom index if not already present
-                Index.FileEntry fileEntry = args.PackIndex.GetFileFromIndex(packNode.FullPath);
+                Index.FileEntry fileEntry = null; // todo: rewrite args.PackIndex.GetFileFromIndex(packNode.FullPath);
                 if (fileEntry == null)
                 {
                     fileEntry = args.PackIndex.AddFileToIndex(oldNodeObject.FileEntry);
@@ -1124,7 +1126,7 @@ namespace Reanimator.Forms
             if (datNeedsCleaning)
             {
                 progressForm.SetCurrentItemText("Removing orphan data...");
-                args.PackIndex.RebuildDatFile();
+                // todo: rewrite args.PackIndex.RebuildDatFile();
             }
             _EndDatAccess(IndexFiles);
 
@@ -1350,11 +1352,11 @@ namespace Reanimator.Forms
                 Debug.Assert(idx != null);
 
                 idx.BeginDatReading();
-                fileBytes = idx.ReadDatFile(nodeObject.FileEntry);
+                // todo: rewrite fileBytes = idx.ReadDatFile(nodeObject.FileEntry);
                 idx.EndDatAccess();
             }
 
-            return fileBytes;
+            return null;// todo: rewrite  fileBytes;
         }
 
         private void _UncookButton_Click(object sender, EventArgs e)

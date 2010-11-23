@@ -22,7 +22,7 @@ namespace Hellgate
 
         public TypeMap ExcelMap { get; set; }
         public new Type DataType { get { return ExcelMap.DataType; } }
-        public UInt32 StructureId { get { return ExcelFileHeader.StructureID; } set { ExcelFileHeader.StructureID = value; } }
+        public new UInt32 StructureId { get { return ExcelFileHeader.StructureID; } set { ExcelFileHeader.StructureID = value; } }
 
         ExcelHeader ExcelFileHeader = new ExcelHeader
         {
@@ -85,10 +85,10 @@ namespace Hellgate
             int integerBufferOffset = 1;
 
 
-            StringID = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(buffer, ref offset, delimiter), 0);
-            StringID = StringID.Replace("\"", "");//in case strings embedded
+            StringId = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(buffer, ref offset, delimiter), 0);
+            StringId = StringId.Replace("\"", "");//in case strings embedded
 
-            StructureId = GetStructureId(StringID);
+            StructureId = GetStructureId(StringId);
             if ((StructureId == 0)) return false;
 
             ExcelMap = GetTypeMap(StructureId);
@@ -522,7 +522,7 @@ namespace Hellgate
         {
             int noCols = DataType.GetFields().Count();
             int noRows = Count + 1; // +1 for column headers
-            byte delimiter = (byte)'\t';
+            const byte delimiter = (byte)'\t';
 
             byte[] csvBuffer = new byte[1024];
             int csvOffset = 0;
@@ -535,11 +535,10 @@ namespace Hellgate
             foreach (FieldInfo fieldInfo in DataType.GetFields())
             {
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, ((col == 0)) ?
-                    FileTools.StringToASCIIByteArray(StringID) :
+                    FileTools.StringToASCIIByteArray(StringId) :
                     FileTools.StringToASCIIByteArray(fieldInfo.Name));
 
-                if (!(col == noCols - 1))
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+                if (col != noCols - 1) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
 
                 col++;
             }
@@ -559,16 +558,16 @@ namespace Hellgate
                 col = 0; // reset
                 foreach (FieldInfo fieldInfo in DataType.GetFields())
                 {
-                    if (!(col == 0)) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+                    if (col != 0) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                     col++;
 
                     OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
-                    if (!(attribute == null))
+                    if (attribute != null)
                     {
                         if ((attribute.IsStringOffset))
                         {
                             int offset = (int)fieldInfo.GetValue(rowObject);
-                            if (!(offset == -1))
+                            if (offset != -1)
                             {
                                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, ReadStringTableAsBytes(offset));
                             }
@@ -589,7 +588,7 @@ namespace Hellgate
                         if ((attribute.IsSecondaryString))
                         {
                             int index = (int)fieldInfo.GetValue(rowObject);
-                            if (!(index == -1))
+                            if (index != -1)
                             {
                                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(SecondaryStrings[index]));
                             }
@@ -611,7 +610,7 @@ namespace Hellgate
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(ExtendedBuffer[row], ',', typeof(byte))));
                 }
                 row++;
-                if (!(row == noRows - 1))
+                if (row != noRows - 1)
                 {
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(Environment.NewLine));
                 }
@@ -619,6 +618,11 @@ namespace Hellgate
 
             Array.Resize(ref csvBuffer, csvOffset);
             return csvBuffer;
+        }
+
+        public byte[] ExportScriptTable()
+        {
+            return null;
         }
 
         /// <summary>

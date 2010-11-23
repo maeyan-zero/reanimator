@@ -12,114 +12,114 @@ namespace Reanimator.Forms
         private Thread _searchThread;
         private bool _started;
 
-        private readonly TableDataSet _dataSet;
+        // todo: rewrite private readonly TableDataSet _dataSet;
         private readonly List<DataTable> _tables;
         private int _index;
 
-        private TableFiles _tableFiles;
+        // todo: rewrite private TableFiles _tableFiles;
 
-        public TableSearch(TableDataSet dataSet, TableFiles tableFiles)
-        {
-            InitializeComponent();
+        //// todo: rewrite public TableSearch(TableDataSet dataSet, TableFiles tableFiles)
+        //{
+        //    InitializeComponent();
 
-            _started = false;
+        //    _started = false;
 
-            _dataSet = dataSet;
-            _tableFiles = tableFiles;
-            _tables = new List<DataTable>();
+        //    _dataSet = dataSet;
+        //    _tableFiles = tableFiles;
+        //    _tables = new List<DataTable>();
 
-            l_nOfTables.Text = _dataSet.XlsDataSet.Tables.Count.ToString();
+        //    l_nOfTables.Text = _dataSet.XlsDataSet.Tables.Count.ToString();
 
-            foreach (DataTable table in _dataSet.XlsDataSet.Tables)
-            {
-                clb_tablesToSearch.Items.Add(table.ToString(), true);
-            }
-        }
+        //    foreach (DataTable table in _dataSet.XlsDataSet.Tables)
+        //    {
+        //        clb_tablesToSearch.Items.Add(table.ToString(), true);
+        //    }
+        //}
 
-        private void StartSearch()
-        {
-            this.Invoke((MethodInvoker)delegate { tsb_search.Text = "Abort"; });
-            _started = true;
+        //// todo: rewrite private void StartSearch()
+        //{
+        //    this.Invoke((MethodInvoker)delegate { tsb_search.Text = "Abort"; });
+        //    _started = true;
 
-            string searchString = tst_searchString.Text;
+        //    string searchString = tst_searchString.Text;
 
-            _tables.Clear();
-            this.Invoke((MethodInvoker)delegate { dgv_foundTables.DataSource = null; });
+        //    _tables.Clear();
+        //    this.Invoke((MethodInvoker)delegate { dgv_foundTables.DataSource = null; });
 
-            int tableCounter = 0;
-            int columnCounter = 0;
+        //    int tableCounter = 0;
+        //    int columnCounter = 0;
 
-            this.Invoke((MethodInvoker)delegate { UpdatePosition(); });
+        //    this.Invoke((MethodInvoker)delegate { UpdatePosition(); });
 
-            this.Invoke((MethodInvoker)delegate { tspb_progress.Maximum = clb_tablesToSearch.CheckedItems.Count - 1; });
-            this.Invoke((MethodInvoker)delegate { tspb_progress.Value = 0; });
+        //    this.Invoke((MethodInvoker)delegate { tspb_progress.Maximum = clb_tablesToSearch.CheckedItems.Count - 1; });
+        //    this.Invoke((MethodInvoker)delegate { tspb_progress.Value = 0; });
 
-            foreach (DataTable table in _dataSet.XlsDataSet.Tables)
-            {
-                if (clb_tablesToSearch.CheckedItems.Contains(table.TableName))
-                {
-                    columnCounter = 0;
+        //    foreach (DataTable table in _dataSet.XlsDataSet.Tables)
+        //    {
+        //        if (clb_tablesToSearch.CheckedItems.Contains(table.TableName))
+        //        {
+        //            columnCounter = 0;
 
-                    DataView view = new DataView(table);
+        //            DataView view = new DataView(table);
 
-                    bool add = false;
-                    DataTable tmp = new DataTable(table.TableName);
-                    foreach (DataColumn column in table.Columns)
-                    {
-                        view.RowFilter = string.Format("Convert({0}, 'System.String') LIKE '{1}'", column.ColumnName, searchString);
-                        view.Sort = column.ColumnName;
+        //            bool add = false;
+        //            DataTable tmp = new DataTable(table.TableName);
+        //            foreach (DataColumn column in table.Columns)
+        //            {
+        //                view.RowFilter = string.Format("Convert({0}, 'System.String') LIKE '{1}'", column.ColumnName, searchString);
+        //                view.Sort = column.ColumnName;
 
-                        string newTitle = string.Format("Searching Tables - {0} ({1}/{2}) - Column {3}/{4}", table.TableName, tableCounter + 1, clb_tablesToSearch.CheckedIndices.Count/*_dataSet.XlsDataSet.Tables.Count*/, columnCounter + 1, table.Columns.Count);
-                        this.Invoke((MethodInvoker)delegate { this.Text = newTitle; });
-                        columnCounter++;
+        //                string newTitle = string.Format("Searching Tables - {0} ({1}/{2}) - Column {3}/{4}", table.TableName, tableCounter + 1, clb_tablesToSearch.CheckedIndices.Count/*_dataSet.XlsDataSet.Tables.Count*/, columnCounter + 1, table.Columns.Count);
+        //                this.Invoke((MethodInvoker)delegate { this.Text = newTitle; });
+        //                columnCounter++;
 
-                        if (view.Count > 0)
-                        {
-                            tmp.Merge(view.ToTable());
-                            add = true;
-                        }
-                    }
+        //                if (view.Count > 0)
+        //                {
+        //                    tmp.Merge(view.ToTable());
+        //                    add = true;
+        //                }
+        //            }
 
-                    tableCounter++;
+        //            tableCounter++;
 
-                    if (add)
-                    {
-                        _tables.Add(tmp);
-                    }
+        //            if (add)
+        //            {
+        //                _tables.Add(tmp);
+        //            }
 
-                    _index = 0;
+        //            _index = 0;
 
-                    if (_tables.Count > 0)
-                    {
-                        //this.Invoke((MethodInvoker)delegate { dgv_foundTables.SuspendLayout(); });
+        //            if (_tables.Count > 0)
+        //            {
+        //                //this.Invoke((MethodInvoker)delegate { dgv_foundTables.SuspendLayout(); });
 
-                        if (_tables.Count == 1)
-                        {
-                            this.Invoke((MethodInvoker)delegate { dgv_foundTables.DataSource = _tables[0]; });
-                        }
+        //                if (_tables.Count == 1)
+        //                {
+        //                    this.Invoke((MethodInvoker)delegate { dgv_foundTables.DataSource = _tables[0]; });
+        //                }
 
-                        this.Invoke((MethodInvoker)delegate { l_tableName.Text = _tables[0].TableName; });
+        //                this.Invoke((MethodInvoker)delegate { l_tableName.Text = _tables[0].TableName; });
 
-                        //this.Invoke((MethodInvoker)delegate { dgv_foundTables.ResumeLayout(); });
+        //                //this.Invoke((MethodInvoker)delegate { dgv_foundTables.ResumeLayout(); });
 
-                        //this.Invoke((MethodInvoker)delegate { dgv_foundTables.Update(); });
+        //                //this.Invoke((MethodInvoker)delegate { dgv_foundTables.Update(); });
 
-                        this.Invoke((MethodInvoker)delegate { tsl_results.Text = _tables.Count + " matches found"; });
-                    }
-                    else
-                    {
-                        this.Invoke((MethodInvoker)delegate { tsl_results.Text = "No matches found"; });
-                    }
+        //                this.Invoke((MethodInvoker)delegate { tsl_results.Text = _tables.Count + " matches found"; });
+        //            }
+        //            else
+        //            {
+        //                this.Invoke((MethodInvoker)delegate { tsl_results.Text = "No matches found"; });
+        //            }
 
-                    this.Invoke((MethodInvoker)delegate { UpdatePosition(); });
-                    this.Invoke((MethodInvoker)delegate { tspb_progress.PerformStep(); });
-                }
-            }
+        //            this.Invoke((MethodInvoker)delegate { UpdatePosition(); });
+        //            this.Invoke((MethodInvoker)delegate { tspb_progress.PerformStep(); });
+        //        }
+        //    }
 
-            _started = false;
-            this.Invoke((MethodInvoker)delegate { tsb_search.Text = "Start"; });
-            this.Invoke((MethodInvoker)delegate { this.Text = "Searching Tables - Done"; });
-        }
+        //    _started = false;
+        //    this.Invoke((MethodInvoker)delegate { tsb_search.Text = "Start"; });
+        //    this.Invoke((MethodInvoker)delegate { this.Text = "Searching Tables - Done"; });
+        //}
 
         private void b_prev_Click(object sender, EventArgs e)
         {
@@ -182,7 +182,7 @@ namespace Reanimator.Forms
 
             if (!_started)
             {
-                _searchThread = new Thread(StartSearch);
+                _searchThread = null;// todo: rewrite  new Thread(StartSearch);
                 _searchThread.Start();
             }
             else

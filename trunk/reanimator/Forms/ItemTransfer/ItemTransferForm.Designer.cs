@@ -229,7 +229,7 @@
             this.b_loadCharacter1.TabIndex = 46;
             this.b_loadCharacter1.Text = "load";
             this.b_loadCharacter1.UseVisualStyleBackColor = true;
-            this.b_loadCharacter1.Click += new System.EventHandler(this.b_loadCharacter1_Click);
+            // todo: rewrite this.b_loadCharacter1.Click += new System.EventHandler(this.b_loadCharacter1_Click);
             // 
             // gb_characterName2
             // 
