@@ -82,7 +82,7 @@ namespace Hellgate
         public override bool ParseCSV(byte[] buffer)
         {
             if ((buffer == null)) return false;
-            string[][] stringBuffer = FileTools.UnicodeCSVtoStringArray(buffer, 0x09, 0x22);
+            string[][] stringBuffer = FileTools.UnicodeCSVToStringArray(buffer, 0x09, 0x22);
             if ((stringBuffer == null)) return false;
             int row = 0;
             Rows = new List<Object>();

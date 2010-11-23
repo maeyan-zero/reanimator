@@ -104,6 +104,7 @@ namespace Hellgate
                     continue;
                 }
                 // Do not load excel files that have been "backed up"
+                // todo: need to have it load from file instead
                 if ((fileEntry.DirectoryString.Contains(Index.BackupPrefix)))
                 {
                     continue;
@@ -135,41 +136,50 @@ namespace Hellgate
 
                 if (excelFile.IntegrityCheck)
                 {
-                    DataFiles.Add(excelFile.GetStringID(), excelFile);
+                    DataFiles.Add(excelFile.GetStringId(), excelFile);
                 }
             }
 
-            // Close any open dats
+            // close any open dats
             foreach (Index indexFile in IndexFiles)
             {
                 indexFile.EndDatAccess();
             }
+
             return true;
         }
 
         /// <summary>
         /// Retrieves a DataFile from the DataFiles list.
         /// </summary>
-        /// <param name="stringID">The stringID of the DataFile.</param>
+        /// <param name="stringId">The stringID of the DataFile.</param>
         /// <returns>Matching DataFile if it exists.</returns>
-        public DataFile GetDataFile(string stringID)
+        public DataFile GetDataFile(string stringId)
         {
-            if ((DataFiles == null)) return null;
+            if (DataFiles == null) return null;
+
             var query = from dt in DataFiles
-                        where dt.Value.StringID == stringID
+                        where dt.Value.StringID == stringId
                         select dt.Value;
-            return (!(query.Count() == 0)) ? query.First() : null;
+
+            return (query.Count() != 0) ? query.First() : null;
         }
 
+        /// <summary>
+        /// Retrieves an Excel Table from its Code value. If it's not loaded, then it will be loaded and returned.
+        /// </summary>
+        /// <param name="code">The code of the Excel Table to retrieve.</param>
+        /// <returns>The Excel Table as a DataTable, or null if not found.</returns>
         public DataTable GetExcelTableFromCode(uint code)
         {
-            if ((DataFiles == null)) return null;
-            if ((DataFiles["EXCEL_TABLES"] == null)) return null;
+            if (DataFiles == null || DataFiles["EXCEL_TABLES"] == null) return null;
+
             ExcelFile excelTables = (ExcelFile)DataFiles["EXCEL_TABLES"];
             Excel.ExcelTables tableRow = (Excel.ExcelTables)excelTables.Rows[(int)code];
-            string stringID = tableRow.StringId;
-            if ((DataFiles[stringID] == null)) return null;
-            ExcelFile excelFile = (ExcelFile)DataFiles[stringID];
+            String stringId = tableRow.StringId;
+            if (DataFiles[stringId] == null) return null;
+
+            ExcelFile excelFile = (ExcelFile)DataFiles[stringId];
             DataTable dataTable = LoadExcelTable(excelFile, false);
             return dataTable;
         }

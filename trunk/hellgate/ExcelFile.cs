@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
@@ -7,8 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
-using System.IO;
 using Revival.Common;
 
 namespace Hellgate
@@ -16,14 +13,16 @@ namespace Hellgate
     public partial class ExcelFile : DataFile
     {
         #region Members
-        byte[] StringBuffer;
-        byte[] IntegerBuffer;
-        byte[] MyshBuffer;
-        byte[][] ExtendedBuffer;
-        StringCollection SecondaryStrings;
+        private byte[] StringBuffer;
+        private byte[] IntegerBuffer;
+        private byte[] MyshBuffer;
+        private byte[][] ExtendedBuffer;
+        private StringCollection SecondaryStrings;
+        private List<ExcelScript> _rowScripts;
+
         public TypeMap ExcelMap { get; set; }
-        new Type DataType { get { return ExcelMap.DataType; } }
-        new UInt32 StructureID { get { return ExcelFileHeader.StructureID; } set { ExcelFileHeader.StructureID = value; } }
+        public new Type DataType { get { return ExcelMap.DataType; } }
+        public UInt32 StructureId { get { return ExcelFileHeader.StructureID; } set { ExcelFileHeader.StructureID = value; } }
 
         ExcelHeader ExcelFileHeader = new ExcelHeader
         {
@@ -60,12 +59,12 @@ namespace Hellgate
         /// Creates a new ExcelFile object.
         /// </summary>
         /// <param name="buffer">Byte array of the given Excel file object.</param>
-        public ExcelFile(byte[] buffer)
-            : this()
+        public ExcelFile(byte[] buffer) : this()
         {
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
-            bool isCSV = (!(peek == Token.cxeh));
-            IntegrityCheck = ((isCSV)) ? ParseCSV(buffer) : ParseData(buffer);
+            bool isCSV = (peek != Token.cxeh);
+
+            IntegrityCheck = isCSV ? ParseCSV(buffer) : ParseData(buffer);
         }
 
         /// <summary>
@@ -89,16 +88,16 @@ namespace Hellgate
             StringID = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(buffer, ref offset, delimiter), 0);
             StringID = StringID.Replace("\"", "");//in case strings embedded
 
-            StructureID = GetStructureID(StringID);
-            if ((StructureID == 0)) return false;
+            StructureId = GetStructureId(StringID);
+            if ((StructureId == 0)) return false;
 
-            ExcelMap = GetTypeMap(StructureID);
+            ExcelMap = GetTypeMap(StructureId);
             if ((ExcelMap == null)) return false;
 
 
             // Mutate the buffer into a string array
             int colCount = ExcelMap.HasExtended ? DataType.GetFields().Count() + 1 : DataType.GetFields().Count();
-            string[][] tableRows = FileTools.CSVtoStringArray(buffer, colCount, delimiter);
+            string[][] tableRows = FileTools.CSVToStringArray(buffer, colCount, delimiter);
             if ((tableRows == null)) return false;
 
 
@@ -236,12 +235,9 @@ namespace Hellgate
                 Rows.Add(rowInstance);
             }
 
-            // Resize the integer and string buffers if they were used.
-            if (!(StringBuffer == null))
-                Array.Resize(ref StringBuffer, stringBufferOffset);
-
-            if (!(IntegerBuffer == null))
-                Array.Resize(ref IntegerBuffer, integerBufferOffset);
+            // resize the integer and string buffers if they were used
+            if (StringBuffer != null) Array.Resize(ref StringBuffer, stringBufferOffset);
+            if (IntegerBuffer != null) Array.Resize(ref IntegerBuffer, integerBufferOffset);
 
             return true;
         }
@@ -258,13 +254,13 @@ namespace Hellgate
             int offset = 0;
 
             // File Header
-            if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
+            if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
             ExcelFileHeader = FileTools.ByteArrayToStructure<ExcelHeader>(buffer, ref offset);
-            ExcelMap = GetTypeMap(StructureID);
+            ExcelMap = GetTypeMap(StructureId);
             if ((ExcelMap == null)) return false;
 
             // Strings Block
-            if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
+            if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
             int stringBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
             if (stringBufferOffset != 0)
             {
@@ -274,7 +270,7 @@ namespace Hellgate
             }
 
             // Dataset Block
-            if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
+            if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
             int rowCount = FileTools.ByteArrayToInt32(buffer, ref offset);
             Rows = new List<Object>(rowCount);
             for (int i = 0; i < rowCount; i++)
@@ -283,7 +279,7 @@ namespace Hellgate
             }
 
             // Primary Indice Block
-            if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
+            if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
             if (!(ExcelMap.HasExtended))
             {
                 offset += (Count * sizeof(int)); // do not allocate this array
@@ -302,7 +298,7 @@ namespace Hellgate
             }
 
             // Secondary String Block
-            if (!(CheckFlag(buffer, offset, Token.cxeh)))
+            if (!(CheckToken(buffer, offset, Token.cxeh)))
             {
                 int stringCount = FileTools.ByteArrayToInt32(buffer, ref offset);
                 if (stringCount != 0) SecondaryStrings = new StringCollection();
@@ -317,30 +313,30 @@ namespace Hellgate
             // Sorted Indices
             for (int i = 0; i < 4; i++)
             {
-                if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
+                if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
                 int count = FileTools.ByteArrayToInt32(buffer, ref offset);
                 offset += (count * sizeof(int)); // do not allocate
             }
 
-            // Rcsh, Tysh, Mysh, Dneh block
-            if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
-            if (!(CheckFlag(buffer, offset, 0)))
+            // rcsh, tysh, mysh, dneh blocks
+            if (!CheckToken(buffer, ref offset, Token.cxeh)) return false;
+            if (!CheckToken(buffer, offset, 0))
             {
-                if (!(CheckFlag(buffer, ref offset, Token.rcsh))) return false;
-                if (!(CheckFlag(buffer, ref offset, Token.RcshValue))) return false;
-                if (!(CheckFlag(buffer, ref offset, Token.tysh))) return false;
-                if (!(CheckFlag(buffer, ref offset, Token.TyshValue))) return false;
-                if ((ExcelMap.HasMysh))
-                {
-                    if (!(CheckFlag(buffer, ref offset, Token.mysh))) return false;
-                    ParseMyshTable(buffer, ref offset);
-                }
-                if (!(CheckFlag(buffer, ref offset, Token.dneh))) return false;
-                if (!(CheckFlag(buffer, ref offset, Token.DnehValue))) return false;
+                if (!CheckToken(buffer, ref offset, Token.rcsh)) return false;
+                if (!CheckToken(buffer, ref offset, Token.RcshValue)) return false;
+
+                if (!CheckToken(buffer, ref offset, Token.tysh)) return false;
+                if (!CheckToken(buffer, ref offset, Token.TyshValue)) return false;
+
+                if (ExcelMap.HasScriptTable && !_ParseScriptTable(buffer, ref offset)) return false;
+
+                if (!CheckToken(buffer, ref offset, Token.dneh)) return false;
+                if (!CheckToken(buffer, ref offset, Token.DnehValue)) return false;
             }
 
+
             // Integer Block
-            if ((CheckFlag(buffer, ref offset, Token.cxeh)))
+            if ((CheckToken(buffer, ref offset, Token.cxeh)))
             {
                 int integerBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
                 if (integerBufferOffset != 0)
@@ -351,16 +347,18 @@ namespace Hellgate
                 }
             }
 
-            // Final data block
-            if (!(CheckFlag(buffer, offset, 0)))
+
+            // final data block; why is this not allocated? - no need to save? automatically generated when cooked?
+            if (!CheckToken(buffer, offset, 0))
             {
-                if (!(CheckFlag(buffer, ref offset, Token.cxeh))) return false;
+                if (!CheckToken(buffer, ref offset, Token.cxeh)) return false;
+
                 int byteCount = FileTools.ByteArrayToInt32(buffer, ref offset);
                 int blockCount = FileTools.ByteArrayToInt32(buffer, ref offset);
-                if (!(byteCount == 0))
+                if (byteCount != 0)
                 {
                     byteCount = byteCount << 2;
-                    offset += ((byteCount * blockCount)); //do not allocate
+                    offset += ((byteCount * blockCount)); // do not allocate
                 }
             }
 
@@ -387,16 +385,16 @@ namespace Hellgate
             int offset = 0;
 
             //DEBUG - these parts arn't finished
-            if (ExcelMap.HasMysh) return null;
-            // if (ExcelMap.HasSignature) return null;
+            if (ExcelMap.HasScriptTable) return null;
 
             // The Excel File header
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref offset, ExcelFileHeader);
 
-            // Strings Block
+
+            // strings Block
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-            if (!(StringBuffer == null) && (StringBuffer.Length > 1))
+            if (StringBuffer != null && StringBuffer.Length > 1)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, StringBuffer.Length);
                 FileTools.WriteToBuffer(ref buffer, ref offset, StringBuffer);
@@ -406,6 +404,7 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, 0);
             }
 
+
             // Dataset Block
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
             FileTools.WriteToBuffer(ref buffer, ref offset, Rows.Count);
@@ -414,17 +413,18 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, row);
             }
 
-            // Primary Indice
+
+            // primary index
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
             for (int i = 0; i < Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, i);
-                if ((ExcelMap.HasExtended))
-                {
-                    FileTools.WriteToBuffer(ref buffer, ref offset, ExtendedBuffer[i].Length);
-                    FileTools.WriteToBuffer(ref buffer, ref offset, ExtendedBuffer[i]);
-                }
+                if (!ExcelMap.HasExtended) continue;
+
+                FileTools.WriteToBuffer(ref buffer, ref offset, ExtendedBuffer[i].Length);
+                FileTools.WriteToBuffer(ref buffer, ref offset, ExtendedBuffer[i]);
             }
+
 
             // Secondary Strings
             if (!(SecondaryStrings == null))
@@ -460,14 +460,14 @@ namespace Hellgate
 
             // Rcsh, Tysh, Mysh, Dneh
             // This section exists when there is a string or integer block or a mysh table
-            if (IntegerBuffer != null || ExcelMap.HasMysh)
+            if (IntegerBuffer != null || ExcelMap.HasScriptTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.rcsh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.RcshValue);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.tysh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.TyshValue);
-                if (ExcelMap.HasMysh)
+                if (ExcelMap.HasScriptTable)
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
                     FileTools.WriteToBuffer(ref buffer, ref offset, MyshBuffer);
@@ -639,42 +639,39 @@ namespace Hellgate
                 foreach (DataColumn column in spDataTable.Columns)
                 {
                     string columnName = column.ColumnName;
-                    if (!tcDataTable.Columns.Contains(columnName))
-                    {
-                        continue;
-                    }
+
+                    if (!tcDataTable.Columns.Contains(columnName)) continue;
                     if (column.DataType == tcDataTable.Columns[columnName].DataType)
                     {
                         convertedRow[columnName] = tcRow[columnName];
                         continue;
                     }
-                    if (column.DataType.BaseType == typeof(Enum))
-                    {
-                        Type spBitMask = column.DataType;
-                        Type tcBitMask = tcDataTable.Columns[columnName].DataType;
-                        uint currentMask = (uint)tcRow[columnName];
-                        uint convertedMask = 0;
+                    if (column.DataType.BaseType != typeof (Enum)) continue;
 
-                        for (int i = 0; i < 32; i++)
+                    Type spBitMask = column.DataType;
+                    Type tcBitMask = tcDataTable.Columns[columnName].DataType;
+                    uint currentMask = (uint)tcRow[columnName];
+                    uint convertedMask = 0;
+
+                    for (int i = 0; i < 32; i++)
+                    {
+                        uint testBit = (uint)1 << i;
+                        if ((currentMask & testBit) == 0)
                         {
-                            uint testBit = (uint)1 << i;
-                            if ((currentMask & testBit) == 0)
-                            {
-                                continue;
-                            }
-                            string bitString = Enum.GetName(tcBitMask, testBit);
-                            if (bitString == null)
-                            {
-                                continue;
-                            }
-                            if (Enum.IsDefined(spBitMask, bitString))
-                            {
-                                convertedMask += (uint)Enum.Parse(spBitMask, bitString);
-                            }
+                            continue;
                         }
-                        convertedRow[columnName] = convertedMask;
-                        continue;
+                        string bitString = Enum.GetName(tcBitMask, testBit);
+                        if (bitString == null)
+                        {
+                            continue;
+                        }
+                        if (Enum.IsDefined(spBitMask, bitString))
+                        {
+                            convertedMask += (uint)Enum.Parse(spBitMask, bitString);
+                        }
                     }
+                    convertedRow[columnName] = convertedMask;
+                    continue;
                 }
 
                 spDataTable.Rows.Add(convertedRow);
