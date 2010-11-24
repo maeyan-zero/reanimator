@@ -120,5 +120,23 @@ namespace Reanimator
             get { return GetValue("LastDirectory", ""); }
             set { SetValue("LastDirectory", value); }
         }
+
+        public static string TxtEditor
+        {
+            get { return GetValue("TxtEditor", "notepad.exe"); }
+            set { SetValue("TxtEditor", value); }
+        }
+
+        public static string XmlEditor
+        {
+            get { return GetValue("XmlEditor", "notepad.exe"); }
+            set { SetValue("XmlEditor", value); }
+        }
+
+        public static string CsvEditor
+        {
+            get { return GetValue("CsvEditor", "notepad.exe"); }
+            set { SetValue("CsvEditor", value); }
+        }
     }
 }

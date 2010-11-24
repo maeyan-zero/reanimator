@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Windows.Forms;
 using System.Xml;
 using Hellgate;
@@ -32,12 +31,7 @@ namespace Reanimator.Forms
         private static readonly Color NoEditColor = Color.DimGray;
         private static readonly Color BaseColor = Color.Black;
 
-        private FileManager _fileManager;
-
-        private static readonly String[] IndexQueryStrings = { "hellgate*.dat", "sp_hellgate*.dat" };
-        private static readonly String[] IndexQueryStringsMP = { "hellgate*.dat", "mp_hellgate*.dat" };
-        public List<IndexFile> IndexFiles { get; private set; }
-        private readonly Hashtable _fileTable;
+        private readonly FileManager _fileManager;
 
         private class NodeObject
         {
@@ -59,26 +53,6 @@ namespace Reanimator.Forms
 
                 Siblings.Add(siblingNodeObject);
             }
-
-            //public NodeObject GetYoungestChild()
-            //{
-            //    if (Siblings == null || Siblings.Count == 0 || FileEntry == null)
-            //    {
-            //        return this;
-            //    }
-
-            //    NodeObject returnObject = this;
-            //    foreach (NodeObject siblingObject in Siblings)
-            //    {
-            //        // if sibiling.FileTime > this.FileTime - i.e. sibling has bigger date; is newer
-            //        if (siblingObject.FileEntry != null && siblingObject.FileEntry.FileStruct.FileTime > FileEntry.FileStruct.FileTime)
-            //        {
-            //            returnObject = siblingObject;
-            //        }
-            //    }
-
-            //    return returnObject;
-            //}
         }
 
         private class NodeSorter : IComparer
@@ -120,12 +94,15 @@ namespace Reanimator.Forms
             _files_fileTreeView.ImageList = imageList;
 
             // generate tree data
+            _files_fileTreeView.BeginUpdate();
             _GenerateFileTree();
-
-            //IndexFiles = new List<Index>();
-            //_fileTable = new Hashtable();
+            _files_fileTreeView.TreeViewNodeSorter = new NodeSorter();
+            _files_fileTreeView.EndUpdate();
         }
 
+        /// <summary>
+        /// Loop over all file entries and generate tree nodes.
+        /// </summary>
         private void _GenerateFileTree()
         {
             foreach (IndexFile.FileEntry fileEntry in _fileManager.FileEntries.Values)
@@ -133,12 +110,6 @@ namespace Reanimator.Forms
                 NodeObject nodeObject = new NodeObject { Index = fileEntry.Index, FileEntry = fileEntry };
                 String[] nodeKeys = fileEntry.DirectoryStringWithoutBackup.Split('\\');
                 TreeNode treeNode = null;
-
-
-                //if (currFile.FileNameString == "affixes.txt.cooked")
-                //{
-                //    int bp = 0;
-                //}
 
 
                 // set up folders and get applicable root folder
@@ -154,6 +125,7 @@ namespace Reanimator.Forms
                     }
                 }
                 Debug.Assert(treeNode != null);
+
 
                 // need to have canEdit check before we update the node below or it'll be false for newer versions);
                 if (fileEntry.FileNameString.EndsWith(XmlCookedFile.FileExtention))
@@ -178,6 +150,7 @@ namespace Reanimator.Forms
                 {
                     nodeObject.CanEdit = true;
                 }
+
 
                 // our new node
                 TreeNode node = treeNode.Nodes.Add(fileEntry.RelativeFullPathWithoutBackup, fileEntry.FileNameString);
@@ -219,241 +192,7 @@ namespace Reanimator.Forms
                 {
                     node.ForeColor = NoEditColor;
                 }
-
                 node.Tag = nodeObject;
-                //_fileTable.Add(fileEntry.RelativeFullPathWithoutBackup, node);
-
-            }
-
-            // aesthetics etc
-            foreach (TreeNode treeNode in _files_fileTreeView.Nodes)
-            {
-                if (treeNode.Index == 0)
-                {
-                    _files_fileTreeView.SelectedNode = treeNode;
-                }
-
-                treeNode.Expand();
-                _FlagFolderNodes(treeNode);
-            }
-        }
-
-        public void LoadIndexFiles(ProgressForm progressForm, Object param)
-        {
-            if (progressForm != null)
-            {
-                progressForm.SetLoadingText("Loading game file system...");
-            }
-
-            // change the query strings if the mp version needs to be loaded
-            Boolean mpVersion = (Boolean)param;
-            String[] hellgateQuery = mpVersion ? IndexQueryStringsMP : IndexQueryStrings;
-
-            String idxFilesRoot = Path.Combine(Config.HglDir, "data");
-            foreach (String queryString in hellgateQuery)
-            {
-                String[] datFiles = Directory.GetFiles(idxFilesRoot, queryString);
-                if (datFiles.Length == 0) continue;
-                if (progressForm != null)
-                {
-                    progressForm.ConfigBar(1, datFiles.Length, 1);
-                }
-
-                foreach (String idxFile in datFiles.Select(datFile => datFile.Replace(".dat", ".idx")))
-                {
-                    // update progress
-                    if (progressForm != null)
-                    {
-                        progressForm.SetCurrentItemText(Path.GetFileName(idxFile));
-                    }
-
-                    // can we open it - i.e. is HGL using it? - if not, cpy, then open. :)
-                    byte[] indexData;
-                    try
-                    {
-                        indexData = File.ReadAllBytes(idxFile);
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionLogger.LogException(ex, "LoadIndexFiles", true);
-                        // todo: check .dat access when HGL is open as well
-                        //FileStream fs = new FileStream(idxFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-                        String fileNameCpy = idxFile + "cpy";
-                        File.Copy(idxFile, fileNameCpy);
-                        indexData = File.ReadAllBytes(fileNameCpy);
-                        File.Delete(fileNameCpy);
-                    }
-
-                    IndexFile index = new IndexFile();
-                    // todo: rewrite 
-                    //if (!index.ParseData(indexData, idxFile))
-                    //{
-                    //    MessageBox.Show("Failed to parse index file!", "Error", MessageBoxButtons.OK,
-                    //                    MessageBoxIcon.Error);
-                    //    continue;
-                    //}
-                    IndexFiles.Add(index);
-                }
-            }
-
-            _files_fileTreeView.BeginUpdate();
-            foreach (IndexFile index in IndexFiles)
-            {
-                _ParseIndexFile(index);
-            }
-            _files_fileTreeView.TreeViewNodeSorter = new NodeSorter();
-        }
-
-        private void _ParseIndexFile(IndexFile index)
-        {
-            // loop files
-            foreach (IndexFile.FileEntry currFile in index.Files)
-            {
-                NodeObject currNodeObject = new NodeObject { Index = index, FileEntry = currFile };
-                String[] nodeKeys = currFile.DirectoryString.Split('\\');
-                TreeNode currTreeNode = null;
-
-
-                //if (currFile.FileNameString == "affixes.txt.cooked")
-                //{
-                //    int bp = 0;
-                //}
-
-
-                // set up folders and get applicable root folder
-                foreach (string nodeKey in nodeKeys.Where(nodeKey => !String.IsNullOrEmpty(nodeKey)))
-                {
-                    if (nodeKey == IndexFile.BackupPrefix)
-                    {
-                        currNodeObject.IsBackup = true;
-                        continue;
-                    }
-
-                    if (currTreeNode == null)
-                    {
-                        currTreeNode = _files_fileTreeView.Nodes[nodeKey] ?? _files_fileTreeView.Nodes.Add(nodeKey, nodeKey);
-                    }
-                    else
-                    {
-                        currTreeNode = currTreeNode.Nodes[nodeKey] ?? currTreeNode.Nodes.Add(nodeKey, nodeKey);
-                    }
-                }
-                Debug.Assert(currTreeNode != null);
-
-
-                // need to have canEdit check before we update the node below or it'll be false for newer versions);
-                if (currFile.FileNameString.EndsWith(XmlCookedFile.FileExtention))
-                {
-                    // we can't edit all .xml.cooked yet...
-                    if (nodeKeys.Contains("skills") ||
-                        nodeKeys.Contains("ai") ||
-                        (nodeKeys.Contains("states") && !nodeKeys.Contains("particles")) ||
-                        nodeKeys.Contains("effects") ||
-                        (nodeKeys.Contains("background") &&
-                            (currFile.FileNameString.Contains("layout") /* todo: not parsing 100% || currFile.FileNameString.Contains("path")*/)) ||
-                        (nodeKeys.Contains("materials") && !nodeKeys.Contains("textures")))
-                    {
-                        currNodeObject.CanEdit = true;
-                        currNodeObject.CanCookWith = true;
-                    }
-                }
-                else if (currFile.FileNameString.EndsWith(ExcelFile.FileExtention) ||
-                    currFile.FileNameString.EndsWith(StringsFile.FileExtention) ||
-                    currFile.FileNameString.EndsWith("txt"))
-                {
-                    currNodeObject.CanEdit = true;
-                }
-
-
-                // have we already added the file? if so, check file time etc
-                String key = currFile.DirectoryString.Replace(IndexFile.BackupPrefix + @"\", "") + currFile.FileNameString;
-                if (_fileTable.Contains(key))
-                {
-                    // get the already added/original node
-                    TreeNode origTreeNode = (TreeNode)_fileTable[key];
-                    NodeObject origNodeObject = (NodeObject)origTreeNode.Tag;
-
-                    // do backup checks first as they'll "override" the FileTime values (i.e. file not found causes game to go to older version)
-                    // if currFile IS a backup, and orig is NOT, then add to Siblings as game will be loading orig over "backup" anyways
-                    if (currNodeObject.IsBackup && !origNodeObject.IsBackup)
-                    {
-                        origNodeObject.AddSibling(currNodeObject);
-                        continue;
-                    }
-
-                    // if curr is NOT a backup, but orig IS, then we want to update (i.e. don't care about FileTime; as above)
-                    // OR if orig is older than curr, we also want to update/re-arrange NodeObjects, etc
-                    if (!currNodeObject.IsBackup && origNodeObject.IsBackup ||
-                        origNodeObject.FileEntry.FileStruct.FileTime < currFile.FileStruct.FileTime)
-                    {
-                        // set the Siblings list to the updated NodeObject and null out other
-                        if (origNodeObject.Siblings != null)
-                        {
-                            currNodeObject.Siblings = origNodeObject.Siblings;
-                            origNodeObject.Siblings = null;
-                        }
-                        // add the "orig" (now old) to the curr NodeObject.Siblings list
-                        currNodeObject.AddSibling(origNodeObject);
-                        // update TreeNode.Tag to point to new (curr) NodeObject
-                        origTreeNode.Tag = currNodeObject;
-
-                        continue;
-                    }
-
-                    // if curr is older (or equal to; hellgate000 has duplicates) than the orig, then add this to the Siblings list (i.e. orig is newer)
-                    if (origNodeObject.FileEntry.FileStruct.FileTime >= currFile.FileStruct.FileTime)
-                    {
-                        origNodeObject.AddSibling(currNodeObject);
-                        continue;
-                    }
-
-                    Debug.Assert(false, "End of 'if (_fileTable.Contains(key))'", "wtf??\n\nThis shouldn't happen, please report this.");
-                }
-
-
-                // our new node
-                TreeNode node = currTreeNode.Nodes.Add(key, currFile.FileNameString);
-                _AssignIcons(node);
-
-
-                // if we can cook with it, then check if the uncooked version is present
-                if (currNodeObject.CanCookWith)
-                {
-                    // sanity check
-                    String nodeFullPath = node.FullPath;
-                    Debug.Assert(nodeFullPath.EndsWith(".cooked"));
-
-                    String uncookedDataPath = nodeFullPath.Replace(".cooked", "");
-                    String uncookedFilePath = Path.Combine(Config.HglDir, uncookedDataPath);
-                    if (File.Exists(uncookedFilePath))
-                    {
-                        String uncookedFileName = Path.GetFileName(uncookedFilePath);
-                        TreeNode uncookedNode = node.Nodes.Add(uncookedDataPath, uncookedFileName);
-                        _AssignIcons(uncookedNode);
-
-                        NodeObject uncookedNodeObject = new NodeObject
-                        {
-                            IsUncookedVersion = true,
-                            CanCookWith = true,
-                            CanEdit = true
-                        };
-                        uncookedNode.Tag = uncookedNodeObject;
-                    }
-                }
-
-
-                // final nodeObject setups
-                if (currNodeObject.IsBackup)
-                {
-                    node.ForeColor = BackupColor;
-                }
-                else if (!currNodeObject.CanEdit)
-                {
-                    node.ForeColor = NoEditColor;
-                }
-
-                node.Tag = currNodeObject;
-                _fileTable.Add(key, node);
             }
 
 
@@ -516,6 +255,7 @@ namespace Reanimator.Forms
             }
         }
 
+
         private void _FilesTreeView_AfterSelect(Object sender, TreeViewEventArgs e)
         {
             TreeView treeView = (TreeView)sender;
@@ -562,9 +302,7 @@ namespace Reanimator.Forms
                 }
                 catch (Exception ex)
                 {
-                    ExceptionLogger.LogException(ex, "_FilesTreeView_AfterSelect", true);
-                    // they moved the file or something weird
-                    // todo: remove me from tree if moved exception?
+                    // todo remove file from tree as it has been moved(?)
                     return;
                 }
 
@@ -614,11 +352,17 @@ namespace Reanimator.Forms
             if (nodeObject.IsFolder || !nodeObject.CanEdit) return;
 
             String nodeFullPath = selectedNode.FullPath;
+            String filePath = Path.Combine(Config.HglDir, nodeFullPath); // todo: need to remove nested filename from path for uncooked files
+            String editorPath = null;
 
             // todo: this section needs a good cleaning
             // todo: implementation of choosing default program in the options menu
             // todo: current implementation overwites already extracted/uncooked file without asking - open it instead or ask?
-            if (nodeFullPath.EndsWith(ExcelFile.FileExtention) || nodeFullPath.EndsWith(StringsFile.FileExtention))
+            if (nodeFullPath.EndsWith(ExcelFile.FileExtention))
+            {
+                 MessageBox.Show("todo");
+            }
+            else if (nodeFullPath.EndsWith(StringsFile.FileExtention))
             {
                 MessageBox.Show("todo");
             }
@@ -627,7 +371,7 @@ namespace Reanimator.Forms
                 IndexFile.FileEntry fileIndex = nodeObject.FileEntry;
                 String xmlDataPath = Path.Combine(Config.HglDir, nodeFullPath.Replace(".cooked", ""));
 
-                byte[] fileData = GetFileBytes(fileIndex.RelativeFullPath);
+                byte[] fileData = _fileManager.GetFileBytes(fileIndex);
                 if (fileData == null)
                 {
                     MessageBox.Show("Failed to read xml.cooked from source!", "Error", MessageBoxButtons.OK,
@@ -654,50 +398,50 @@ namespace Reanimator.Forms
                     return;
                 }
 
-                DialogResult drOpen = MessageBox.Show("Uncooked XML file saved at " + xmlDataPath + "\n\nOpen with notepad (notepad++ if available)?", "Success",
+                DialogResult drOpen = MessageBox.Show("Uncooked XML file saved at " + xmlDataPath + "\n\nOpen with editor?", "Success",
                                                       MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
                 if (drOpen == DialogResult.Yes)
                 {
-                    const String fileName = "notepad++.exe";
-
-                    // this is a bit dodgy using exceptions as if-else, but meh
-                    // todo: add check for file name existence etc
                     try
                     {
-                        Process notePad = new Process { StartInfo = { FileName = fileName, Arguments = xmlDataPath } };
+                        Process notePad = new Process { StartInfo = { FileName = Config.XmlEditor, Arguments = xmlDataPath } };
                         notePad.Start();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        Process notePad = new Process { StartInfo = { FileName = "notepad.exe", Arguments = xmlDataPath } };
-                        notePad.Start();
+                        MessageBox.Show("Failed to start editor!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
+            else if (nodeFullPath.EndsWith(".xml"))
+            {
+                editorPath = Config.XmlEditor;
+            }
             else if (nodeFullPath.EndsWith(".txt"))
             {
-                // todo: fix me (copy-pasted from above)
-                String xmlDataPath = Path.Combine(Config.HglDir, nodeFullPath);
-                const String fileName = "notepad++.exe";
-
-                // this is a bit dodgy using exceptions as if-else, but meh
-                // todo: add check for file name existence etc
-                try
-                {
-                    Process notePad = new Process { StartInfo = { FileName = fileName, Arguments = xmlDataPath } };
-                    notePad.Start();
-                }
-                catch (Exception)
-                {
-                    Process notePad = new Process { StartInfo = { FileName = "notepad.exe", Arguments = xmlDataPath } };
-                    notePad.Start();
-                }
+                editorPath = Config.TxtEditor;
+            }
+            else if (nodeFullPath.EndsWith(".csv"))
+            {
+                editorPath = Config.CsvEditor;
             }
             else
             {
                 MessageBox.Show("Unexpected editable file!\n(this shouldn't happen - please report this)", "Warning",
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+
+            if (String.IsNullOrEmpty(editorPath) || String.IsNullOrEmpty(filePath)) return;
+
+            try
+            {
+                Process process = new Process { StartInfo = { FileName = editorPath, Arguments = filePath } };
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to start editor!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -812,7 +556,7 @@ namespace Reanimator.Forms
             progressForm.ConfigBar(1, extractPatchArgs.CheckedNodes.Count, progressStepRate);
             progressForm.SetCurrentItemText("Extracting file(s)...");
 
-            if (!_BeginDatAccess(IndexFiles, false))
+            if (!_fileManager.BeginAllDatReadAccess())
             {
                 MessageBox.Show(
                     "Failed to open dat files for reading!\nEnsure no other programs are using them and try again.",
@@ -837,7 +581,7 @@ namespace Reanimator.Forms
 
                 return;
             }
-            _EndDatAccess(IndexFiles);
+            _fileManager.EndAllDatAccess();
 
             // are we patching?
             if (!extractPatchArgs.PatchFiles)
@@ -880,7 +624,7 @@ namespace Reanimator.Forms
             }
         }
 
-        private static bool _ExtractPatchFile(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite, ExtractPackPatchArgs extractPatchArgs)
+        private bool _ExtractPatchFile(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite, ExtractPackPatchArgs extractPatchArgs)
         {
             if (treeNode == null) return false;
 
@@ -928,7 +672,7 @@ namespace Reanimator.Forms
             DialogResult extractDialogResult = DialogResult.Retry;
             while (extractDialogResult == DialogResult.Retry)
             {
-                byte[] fileBytes = null;// todo: rewrite  nodeObject.Index.ReadDatFile(file);
+                byte[] fileBytes = _fileManager.GetFileBytes(file);
                 if (fileBytes == null)
                 {
                     extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
@@ -1013,7 +757,7 @@ namespace Reanimator.Forms
             }
 
             // get our custom index - or create if doesn't exist
-            IndexFile packIndex = IndexFiles.FirstOrDefault(index => index.FileNameWithoutExtension == ReanimatorIndex);
+            IndexFile packIndex = null; // todo: rewrite IndexFiles.FirstOrDefault(index => index.FileNameWithoutExtension == ReanimatorIndex);
             if (packIndex == null)
             {
                 String indexPath = String.Format(@"data\{0}.idx", ReanimatorIndex);
@@ -1030,7 +774,7 @@ namespace Reanimator.Forms
                 }
 
                 // todo: rewrite packIndex = new Index(indexPath);
-                IndexFiles.Add(packIndex);
+                // todo: rewrite IndexFiles.Add(packIndex);
             }
 
             ExtractPackPatchArgs extractPackPatchArgs = new ExtractPackPatchArgs
@@ -1134,13 +878,14 @@ namespace Reanimator.Forms
 
 
             // pack our files
-            if (!_BeginDatAccess(IndexFiles, true))
-            {
-                MessageBox.Show(
-                    "Failed to open dat files for writing!\nEnsure no other programs are using them and try again.",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            // todo: rewrite
+            //if (!_BeginDatAccess(IndexFiles, true))
+            //{
+            //    MessageBox.Show(
+            //        "Failed to open dat files for writing!\nEnsure no other programs are using them and try again.",
+            //        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //    return;
+            //}
 
             state = String.Format("Packing {0} files...", packNodes.Count);
             progressForm.ConfigBar(0, packNodes.Count, packCheckStep);
@@ -1247,7 +992,7 @@ namespace Reanimator.Forms
                 progressForm.SetCurrentItemText("Removing orphan data...");
                 // todo: rewrite args.PackIndex.RebuildDatFile();
             }
-            _EndDatAccess(IndexFiles);
+            _fileManager.EndAllDatAccess();
 
 
             // write updated index
@@ -1417,26 +1162,26 @@ namespace Reanimator.Forms
         /// </summary>
         /// <param name="filePath">The path to the file - relative to HGL e.g. "data\colorsets.xml.cooked"</param>
         /// <returns>true for file exists, false otherwise.</returns>
-        public bool GetFileExists(String filePath)
-        {
-            if (String.IsNullOrEmpty(filePath)) return false;
+        //public bool GetFileExists(String filePath)
+        //{
+        //    if (String.IsNullOrEmpty(filePath)) return false;
 
-            if (filePath[0] == '\\')
-            {
-                filePath = filePath.Replace(@"\data", "data");
-            }
+        //    if (filePath[0] == '\\')
+        //    {
+        //        filePath = filePath.Replace(@"\data", "data");
+        //    }
 
-            TreeNode treeNode = (TreeNode)_fileTable[filePath];
-            if (treeNode == null) return false;
+        //    TreeNode treeNode = (TreeNode)_fileTable[filePath];
+        //    if (treeNode == null) return false;
 
-            // is not backup (in idx/dat)
-            NodeObject nodeObject = (NodeObject)treeNode.Tag;
-            if (!nodeObject.IsBackup) return true;
+        //    // is not backup (in idx/dat)
+        //    NodeObject nodeObject = (NodeObject)treeNode.Tag;
+        //    if (!nodeObject.IsBackup) return true;
 
-            // get full file path
-            filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
-            return File.Exists(filePath);
-        }
+        //    // get full file path
+        //    filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
+        //    return File.Exists(filePath);
+        //}
 
         /// <summary>
         /// Reads in a file's bytes from where HGL would read it.<br />
@@ -1444,39 +1189,39 @@ namespace Reanimator.Forms
         /// </summary>
         /// <param name="filePath">The path to the file - relative to HGL e.g. "data\colorsets.xml.cooked"</param>
         /// <returns>File byte data, or null if not found.</returns>
-        public byte[] GetFileBytes(String filePath)
-        {
-            if (String.IsNullOrEmpty(filePath)) return null;
+        //public byte[] GetFileBytes(String filePath)
+        //{
+        //    if (String.IsNullOrEmpty(filePath)) return null;
 
-            if (filePath[0] == '\\')
-            {
-                filePath = filePath.Replace(@"\data", "data");
-            }
+        //    if (filePath[0] == '\\')
+        //    {
+        //        filePath = filePath.Replace(@"\data", "data");
+        //    }
 
-            TreeNode treeNode = (TreeNode)_fileTable[filePath];
-            if (treeNode == null) return null;
+        //    TreeNode treeNode = (TreeNode)_fileTable[filePath];
+        //    if (treeNode == null) return null;
 
-            NodeObject nodeObject = (NodeObject)treeNode.Tag;
+        //    NodeObject nodeObject = (NodeObject)treeNode.Tag;
 
-            // are we loading from file or dat
-            byte[] fileBytes;
-            if (nodeObject.IsBackup)
-            {
-                filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
-                fileBytes = File.ReadAllBytes(filePath);
-            }
-            else
-            {
-                IndexFile idx = nodeObject.Index;
-                Debug.Assert(idx != null);
+        //    // are we loading from file or dat
+        //    byte[] fileBytes;
+        //    if (nodeObject.IsBackup)
+        //    {
+        //        filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
+        //        fileBytes = File.ReadAllBytes(filePath);
+        //    }
+        //    else
+        //    {
+        //        IndexFile idx = nodeObject.Index;
+        //        Debug.Assert(idx != null);
 
-                idx.BeginDatReading();
-                // todo: rewrite fileBytes = idx.ReadDatFile(nodeObject.FileEntry);
-                idx.EndDatAccess();
-            }
+        //        idx.BeginDatReading();
+        //        // todo: rewrite fileBytes = idx.ReadDatFile(nodeObject.FileEntry);
+        //        idx.EndDatAccess();
+        //    }
 
-            return null;// todo: rewrite  fileBytes;
-        }
+        //    return null;// todo: rewrite  fileBytes;
+        //}
 
         private void _UncookButton_Click(object sender, EventArgs e)
         {
@@ -1526,7 +1271,7 @@ namespace Reanimator.Forms
 
                 if (!nodeFullPath.EndsWith(XmlCookedFile.FileExtention)) continue;
 
-                byte[] fileBytes = GetFileBytes(nodeFullPath);
+                byte[] fileBytes = null; // todo: rewrite GetFileBytes(nodeFullPath);
                 Debug.Assert(fileBytes != null);
 
                 //if (nodeFullPath.Contains("actor_ghost.xml.cooked"))
