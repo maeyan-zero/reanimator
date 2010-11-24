@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using FileEntry = Hellgate.Index.FileEntry;
+using FileEntry = Hellgate.IndexFile.FileEntry;
 
 namespace Hellgate
 {
@@ -17,7 +17,7 @@ namespace Hellgate
         public string HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
         public string HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
         public string Language { get; private set; } // determines which folder to check for the strings files
-        public List<Index> IndexFiles { get; private set; }
+        public List<IndexFile> IndexFiles { get; private set; }
         public Dictionary<ulong, FileEntry> FileEntries { get; private set; }
         public SortedDictionary<String, DataFile> DataFiles { get; private set; }
         public DataSet XlsDataSet { get; private set; }
@@ -34,7 +34,7 @@ namespace Hellgate
             Language = "english"; // do we need to bother with anything other than english?
 
             DataFiles = new SortedDictionary<String, DataFile>();
-            IndexFiles = new List<Index>();
+            IndexFiles = new List<IndexFile>();
             FileEntries = new Dictionary<ulong, FileEntry>();
             XlsDataSet = new DataSet("xlsDataSet")
             {
@@ -55,7 +55,7 @@ namespace Hellgate
             string[] query = MPVersion ? Common.MPFiles : Common.SPFiles;
             foreach (String fileQuery in query)
             {
-                idxPaths.AddRange(Directory.GetFiles(HellgateDataPath, fileQuery).Where(p => p.EndsWith(Index.FileExtension)));
+                idxPaths.AddRange(Directory.GetFiles(HellgateDataPath, fileQuery).Where(p => p.EndsWith(IndexFile.FileExtension)));
             }
             if (idxPaths.Count == 0)
             {
@@ -78,16 +78,16 @@ namespace Hellgate
         private void _LoadIndexFile(String fullPath)
         {
             // if there is no accompanying .dat at all, then ignore .idx
-            String datFullPath = fullPath.Replace(Index.FileExtension, Index.DatFileExtension);
+            String datFullPath = fullPath.Replace(IndexFile.FileExtension, IndexFile.DatFileExtension);
             if (!File.Exists(datFullPath)) return;
 
 
             // read in and parse index
-            Index index;
+            IndexFile index;
             try
             {
                 byte[] idxBytes = File.ReadAllBytes(fullPath);
-                index = new Index(idxBytes) { FilePath = fullPath };
+                index = new IndexFile(idxBytes) { FilePath = fullPath };
             }
             catch (Exception)
             {
@@ -235,7 +235,7 @@ namespace Hellgate
 
             // if file is backed up, check for unpacked copy
             String filePath = fileEntry.RelativeFullPath;
-            if (fileEntry.DirectoryString.Contains(Index.BackupPrefix))
+            if (fileEntry.DirectoryString.Contains(IndexFile.BackupPrefix))
             {
                 filePath = filePath.Replace(@"backup\", "");
 
@@ -258,13 +258,13 @@ namespace Hellgate
             if (fileBytes == null)
             {
                 // open .dat
-                if (!fileEntry.Parent.DatFileOpen && !fileEntry.Parent.OpenDat(FileAccess.Read))
+                if (!fileEntry.Index.DatFileOpen && !fileEntry.Index.OpenDat(FileAccess.Read))
                 {
-                    Console.WriteLine("Warning: Failed to open .dat for reading: " + fileEntry.Parent.FileNameWithoutExtension);
+                    Console.WriteLine("Warning: Failed to open .dat for reading: " + fileEntry.Index.FileNameWithoutExtension);
                     return null;
                 }
 
-                fileBytes = fileEntry.Parent.GetFileBytes(fileEntry);
+                fileBytes = fileEntry.Index.GetFileBytes(fileEntry);
                 if (fileBytes == null)
                 {
                     Console.WriteLine("Warning: Failed to read file from .dat: " + fileEntry.FileNameString);
@@ -281,7 +281,7 @@ namespace Hellgate
         public void EndAllDatAccess()
         {
             // close any/all open dats
-            foreach (Index indexFile in IndexFiles)
+            foreach (IndexFile indexFile in IndexFiles)
             {
                 indexFile.EndDatAccess();
             }

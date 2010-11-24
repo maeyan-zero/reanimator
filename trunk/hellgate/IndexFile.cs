@@ -10,7 +10,7 @@ using Revival.Common;
 
 namespace Hellgate
 {
-    public class Index : IDisposable
+    public class IndexFile : IDisposable
     {
         #region ZLibImports
         /* Decompresses the source buffer into the destination buffer.  sourceLen is
@@ -167,7 +167,7 @@ namespace Hellgate
             public FileDetailsStruct FileStruct { get; set; }
 
             [Browsable(false)]
-            public Index Parent { get; set; }
+            public IndexFile Index { get; set; }
 
             public Int64 DataOffset
             {
@@ -225,8 +225,10 @@ namespace Hellgate
                 if (_directoryString == null || _fileNameString == null) return;
                 RelativeFullPath = _directoryString + _fileNameString;
                 RelativeFullPathWithoutBackup = RelativeFullPath.Replace(@"backup\", "");
+                DirectoryStringWithoutBackup = _directoryString.Replace(@"backup\", "");
             }
 
+            public String DirectoryStringWithoutBackup { get; private set; }
             public String RelativeFullPathWithoutBackup { get; private set; }
 
             public bool IsBackup
@@ -273,7 +275,7 @@ namespace Hellgate
         /// <summary>
         /// Creates an empty Index file.
         /// </summary>
-        public Index()
+        public IndexFile()
         {
             Strings = new StringCollection();
             FileDetails = new List<FileDetailsStruct>();
@@ -284,7 +286,7 @@ namespace Hellgate
         /// Creates a new index file from the byte array.
         /// </summary>
         /// <param name="buffer">The index file as a byte array.</param>
-        public Index(byte[] buffer) : this()
+        public IndexFile(byte[] buffer) : this()
         {
             HasIntegrity = ParseData(buffer);
         }
@@ -337,7 +339,7 @@ namespace Hellgate
                 FileEntry fileEntry = new FileEntry
                 {
                     FileStruct = FileDetails[i],
-                    Parent = this,
+                    Index = this,
                     DirectoryString = Strings[FileDetails[i].DirectoryArrayIndex],
                     FileNameString = Strings[FileDetails[i].FilenameArrayIndex]
                 };
@@ -410,8 +412,6 @@ namespace Hellgate
             Array.Resize(ref buffer, offset);
             return buffer;
         }
-
-
 
         /// <summary>
         /// Appends a file to the index and accompanying data file.
@@ -737,6 +737,12 @@ namespace Hellgate
             return true;
         }
 
+        /// <summary>
+        /// Patch out a file in the index by prepending a junk string to the entry.
+        /// This function does not modify the file details string hashes.
+        /// </summary>
+        /// <param name="i">The index to the file entry to be patched out.</param>
+        /// <returns>True upon success, of false if file is already patched out or on invalid index.</returns>
         public bool PatchOutFile(int i)
         {
             if (i < 0 || i > Files.Count) return false;
@@ -746,7 +752,7 @@ namespace Hellgate
         }
 
         /// <summary>
-        /// Patch out a file of the index by prepending a junk string to the entry.
+        /// Patch out a file in the index by prepending a junk string to the entry.
         /// This function does not modify the file details string hashes.
         /// </summary>
         /// <param name="fileEntry">The file entry to patch out.</param>
@@ -760,7 +766,7 @@ namespace Hellgate
 
             // does the backup dir exist?
             String dir = BackupPrefix + @"\" + Strings[fileEntry.DirectoryIndex];
-            int index = GetStringIndex(dir);
+            int index = Strings.IndexOf(dir);
 
             // if the directory doesn't exist, add it.
             if (index == -1)
@@ -773,46 +779,37 @@ namespace Hellgate
             return true;
         }
 
-        //public bool PatchInFile(FileEntry fileEntry)
-        //{
-        //    Debug.Assert(fileEntry != null);
-
-        //    // does it even need to be patched in?
-        //    if (!fileEntry.DirectoryString.Contains(BackupPrefix)) return false;
-
-        //    // does the original dir exist?
-        //    Debug.Assert(false, "todo");
-        //    //String dir = BackupPrefix + @"\" + _stringTable[fileEntry.Directory];
-        //    //int index = _GetStringIndex(dir);
-
-        //    //// if the directory doesn't exist, add it.
-        //    //if (index == -1)
-        //    //{
-        //    //    index = _stringTable.Count;
-        //    //    _stringTable.Add(dir);
-        //    //}
-
-        //    //fileEntry.Directory = index;
-        //    //Modified = true;);
-        //    return true;
-        //}
-
-        private int GetStringIndex(String str)
+        /// <summary>
+        /// Patch in a file in the index by removing the prepended junk string on the entry.
+        /// The function does not modify the file details string hashes (they shouldn't need to be changed).
+        /// </summary>
+        /// <param name="fileEntry">The file entry to be patched back in.</param>
+        /// <returns>True if file has been patched back in, false if file was never patched out.</returns>
+        public bool PatchInFile(FileEntry fileEntry)
         {
-            if (String.IsNullOrEmpty(str)) return -1;
+            Debug.Assert(fileEntry != null);
 
-            return Strings.IndexOf(str);
+            // does it even need to be patched in?
+            if (!fileEntry.DirectoryString.Contains(BackupPrefix)) return false;
+
+            // does the original dir exist?
+            int index = Strings.IndexOf(fileEntry.DirectoryStringWithoutBackup);
+
+            // if the directory doesn't exist, add it.
+            if (index == -1)
+            {
+                index = Strings.Count;
+                Strings.Add(fileEntry.DirectoryStringWithoutBackup);
+            }
+
+            fileEntry.DirectoryIndex = index;
+            return true;
         }
 
-        private int AddString(String str)
-        {
-            int index = Strings.Count;
-            Strings.Add(str);
-            return index;
-        }
-
-
-
+        /// <summary>
+        /// Override of ToString() function.
+        /// </summary>
+        /// <returns>The index filename without the index file extension.</returns>
         public override string ToString()
         {
             return FileNameWithoutExtension;

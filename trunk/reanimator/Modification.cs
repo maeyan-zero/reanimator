@@ -13,7 +13,7 @@ namespace Reanimator
     public class Modification
     {
         // todo: rewrite TableDataSet _tableDataSet;
-        List<Index> _index;
+        List<IndexFile> _index;
 
         public List<Package> ModPackage { get; set; }
         public string ModPackPath { get { return Config.HglDir + "\\modpacks\\"; } }

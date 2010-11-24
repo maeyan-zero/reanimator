@@ -102,6 +102,7 @@ namespace Hellgate
 
 
             // Parse the tableRows
+            bool failedParsing = false;
             Rows = new List<Object>();
             const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             for (int row = 0; row < tableRows.Count(); row++)
@@ -163,7 +164,7 @@ namespace Hellgate
                             if ((IntegerBuffer == null))
                             {
                                 IntegerBuffer = new byte[1024];
-                                IntegerBuffer[0] = (byte)0x00;
+                                IntegerBuffer[0] = 0x00;
                             }
                             if ((value == "0"))
                             {
@@ -217,10 +218,12 @@ namespace Hellgate
                     catch (Exception e)
                     {
                         Console.WriteLine("Critical Parsing Error: " + e);
+                        failedParsing = true;
                         break;
                     }
 
                 }
+                if (failedParsing) break;
 
                 // For item types, items, missiles, monsters etc
                 // This must be a hex byte delimited array
@@ -230,7 +233,7 @@ namespace Hellgate
                     {
                         ExtendedBuffer = new byte[tableRows.Count()][];
                     }
-                    char split = ',';
+                    const char split = ',';
                     string value = tableRows[row][col];
                     string[] stringArray = value.Split(split);
                     byte[] byteArray = new byte[stringArray.Length];
@@ -245,7 +248,7 @@ namespace Hellgate
             }
 
             // resize the integer and string buffers if they were used
-            if (StringBuffer != null) Array.Resize(ref StringBuffer, stringBufferOffset);
+            if (StringBuffer != null)  Array.Resize(ref StringBuffer, stringBufferOffset);
             if (IntegerBuffer != null) Array.Resize(ref IntegerBuffer, integerBufferOffset);
 
             return true;
@@ -434,7 +437,7 @@ namespace Hellgate
 
 
             // Secondary Strings
-            if (!(SecondaryStrings == null))
+            if (SecondaryStrings != null)
             {
                 byte[] secondaryStringBuffer = new byte[1024];
                 int secondaryStringBufferOffset = 0;
@@ -452,7 +455,7 @@ namespace Hellgate
             int[][] customSorts = CreateSortIndices();
             foreach (int[] intArray in customSorts)
             {                
-                if (!(intArray == null))
+                if (intArray != null)
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                     FileTools.WriteToBuffer(ref buffer, ref offset, intArray.Length);

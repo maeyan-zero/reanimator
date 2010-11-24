@@ -175,7 +175,7 @@
             this.noEditorKey_label.Name = "noEditorKey_label";
             this.noEditorKey_label.Size = new System.Drawing.Size(270, 22);
             this.noEditorKey_label.TabIndex = 4;
-            this.noEditorKey_label.Text = "Table has no editor";
+            this.noEditorKey_label.Text = "File has no editor";
             this.noEditorKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // backupKey_label
@@ -186,7 +186,7 @@
             this.backupKey_label.Name = "backupKey_label";
             this.backupKey_label.Size = new System.Drawing.Size(270, 23);
             this.backupKey_label.TabIndex = 0;
-            this.backupKey_label.Text = "Table is backed up";
+            this.backupKey_label.Text = "File is patched out";
             this.backupKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // _files_fileTreeView
@@ -203,9 +203,9 @@
             this._files_fileTreeView.TabIndex = 1;
             this._files_fileTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterCheck);
             this._files_fileTreeView.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterCollapse);
-            this._files_fileTreeView.DoubleClick += new System.EventHandler(this._FilesTreeView_DoubleClick);
-            this._files_fileTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterSelect);
             this._files_fileTreeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterExpand);
+            this._files_fileTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterSelect);
+            this._files_fileTreeView.DoubleClick += new System.EventHandler(this._FilesTreeView_DoubleClick);
             // 
             // contextMenuStrip1
             // 
@@ -597,7 +597,7 @@
             this.Controls.Add(this.splitContainer1);
             this.DoubleBuffered = true;
             this.Name = "FileExplorer";
-            this.Text = "Table Explorer";
+            this.Text = "Hellgate File Explorer";
             this.Shown += new System.EventHandler(this.FileExplorer_Shown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
