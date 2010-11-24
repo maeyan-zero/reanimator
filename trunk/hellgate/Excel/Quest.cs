@@ -46,8 +46,22 @@ namespace Hellgate.Excel
         public Int32 maxLevelPreReq;
         public Int32 factionTypePreReq;//idx
         public Int32 factionAmountPreReq;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        Int32[] levelsPreLoadedWith;
+        public Int32 levelsPreLoadedWith01;
+        public Int32 levelsPreLoadedWith02;
+        public Int32 levelsPreLoadedWith03;
+        public Int32 levelsPreLoadedWith04;
+        public Int32 levelsPreLoadedWith05;
+        public Int32 levelsPreLoadedWith06;
+        public Int32 levelsPreLoadedWith07;
+        public Int32 levelsPreLoadedWith08;
+        public Int32 levelsPreLoadedWith09;
+        public Int32 levelsPreLoadedWith10;
+        public Int32 levelsPreLoadedWith11;
+        public Int32 levelsPreLoadedWith12;
+        public Int32 levelsPreLoadedWith13;
+        public Int32 levelsPreLoadedWith14;
+        public Int32 levelsPreLoadedWith15;
+        public Int32 levelsPreLoadedWith16;
         public Int32 startingItemsTreasureClass;//idx
         public Int32 removeStartingItemsOnComplete;
         [ExcelOutput(SortAscendingID = 3, RequiresDefault = true)]
@@ -88,10 +102,70 @@ namespace Hellgate.Excel
         Int32[] undefined5;
         public Int32 warpToOpenOnActivate;//idx
         public Int32 warpToOpenOnComplete;//idx
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        Int32[] itemsToRemoveOnAbandon;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        Int32[] itemsToRemoveOnComplete;
+        public Int32 itemsToRemoveOnAbandon01;
+        public Int32 itemsToRemoveOnAbandon02;
+        public Int32 itemsToRemoveOnAbandon03;
+        public Int32 itemsToRemoveOnAbandon04;
+        public Int32 itemsToRemoveOnAbandon05;
+        public Int32 itemsToRemoveOnAbandon06;
+        public Int32 itemsToRemoveOnAbandon07;
+        public Int32 itemsToRemoveOnAbandon08;
+        public Int32 itemsToRemoveOnAbandon09;
+        public Int32 itemsToRemoveOnAbandon10;
+        public Int32 itemsToRemoveOnAbandon11;
+        public Int32 itemsToRemoveOnAbandon12;
+        public Int32 itemsToRemoveOnAbandon13;
+        public Int32 itemsToRemoveOnAbandon14;
+        public Int32 itemsToRemoveOnAbandon15;
+        public Int32 itemsToRemoveOnAbandon16;
+        public Int32 itemsToRemoveOnAbandon17;
+        public Int32 itemsToRemoveOnAbandon18;
+        public Int32 itemsToRemoveOnAbandon19;
+        public Int32 itemsToRemoveOnAbandon20;
+        public Int32 itemsToRemoveOnAbandon21;
+        public Int32 itemsToRemoveOnAbandon22;
+        public Int32 itemsToRemoveOnAbandon23;
+        public Int32 itemsToRemoveOnAbandon24;
+        public Int32 itemsToRemoveOnAbandon25;
+        public Int32 itemsToRemoveOnAbandon26;
+        public Int32 itemsToRemoveOnAbandon27;
+        public Int32 itemsToRemoveOnAbandon28;
+        public Int32 itemsToRemoveOnAbandon29;
+        public Int32 itemsToRemoveOnAbandon30;
+        public Int32 itemsToRemoveOnAbandon31;
+        public Int32 itemsToRemoveOnAbandon32;
+        public Int32 itemsToRemoveOnComplete01;
+        public Int32 itemsToRemoveOnComplete02;
+        public Int32 itemsToRemoveOnComplete03;
+        public Int32 itemsToRemoveOnComplete04;
+        public Int32 itemsToRemoveOnComplete05;
+        public Int32 itemsToRemoveOnComplete06;
+        public Int32 itemsToRemoveOnComplete07;
+        public Int32 itemsToRemoveOnComplete08;
+        public Int32 itemsToRemoveOnComplete09;
+        public Int32 itemsToRemoveOnComplete10;
+        public Int32 itemsToRemoveOnComplete11;
+        public Int32 itemsToRemoveOnComplete12;
+        public Int32 itemsToRemoveOnComplete13;
+        public Int32 itemsToRemoveOnComplete14;
+        public Int32 itemsToRemoveOnComplete15;
+        public Int32 itemsToRemoveOnComplete16;
+        public Int32 itemsToRemoveOnComplete17;
+        public Int32 itemsToRemoveOnComplete18;
+        public Int32 itemsToRemoveOnComplete19;
+        public Int32 itemsToRemoveOnComplete20;
+        public Int32 itemsToRemoveOnComplete21;
+        public Int32 itemsToRemoveOnComplete22;
+        public Int32 itemsToRemoveOnComplete23;
+        public Int32 itemsToRemoveOnComplete24;
+        public Int32 itemsToRemoveOnComplete25;
+        public Int32 itemsToRemoveOnComplete26;
+        public Int32 itemsToRemoveOnComplete27;
+        public Int32 itemsToRemoveOnComplete28;
+        public Int32 itemsToRemoveOnComplete29;
+        public Int32 itemsToRemoveOnComplete30;
+        public Int32 itemsToRemoveOnComplete31;
+        public Int32 itemsToRemoveOnComplete32;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string versionFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
@@ -119,8 +193,14 @@ namespace Hellgate.Excel
         public Int32 allowedDRLGStyles14;
         public Int32 allowedDRLGStyles15;
         public Int32 allowedDRLGStyles16;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        Int32[] levelDestinations;
+        public Int32 levelDestinations01;
+        public Int32 levelDestinations02;
+        public Int32 levelDestinations03;
+        public Int32 levelDestinations04;
+        public Int32 levelDestinations05;
+        public Int32 levelDestinations06;
+        public Int32 levelDestinations07;
+        public Int32 levelDestinations08;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string layoutAdventure;
         public Int32 objectAdventure;//idx
@@ -135,7 +215,7 @@ namespace Hellgate.Excel
         //[ExcelOutput(IsStringId = true, TableStringId = "Strings_Strings")]
         public Int32 rewardDialog;//idx
         public Int32 unavailableDialog;//idx
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 acceptButtonText;//stridx
         public float timeLimit;
         public Int32 objectiveMonster;//idx
@@ -150,12 +230,12 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string spawnNodeLabel;
         public Int32 spawnCount;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Names")]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 nameOverrideStringKey;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Names")]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 nameInLogOverrideStringKey;
         public Int32 logOverrideState;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Quest")]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 logOverrideString;
         public Int32 subLevelTypeTruthOld;
         public Int32 subLevelTypeTruthNew;
