@@ -390,7 +390,7 @@ namespace Reanimator
 
         public void SaveButton()
         {
-            byte[] saveData = IndexFile.GenerateIndexFile();
+            byte[] saveData = IndexFile.ToByteArray();
             Crypt.Encrypt(saveData);
             FileStream fOut = new FileStream(IndexFile.FileDirectory + IndexFile.FileNameWithoutExtension + ".new.idx", FileMode.Create);
             fOut.Write(saveData, 0, saveData.Length);
@@ -442,7 +442,7 @@ namespace Reanimator
             {
                 if (!IndexFile.PatchOutFile(row.Index))
                 {
-                    MessageBox("Filed to patch out file!");
+                    MessageBox("Failed to patch out file!");
                 }
             }
         }

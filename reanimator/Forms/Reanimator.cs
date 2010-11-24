@@ -231,7 +231,7 @@ namespace Reanimator
 
             // If the Index file is initialized without error, load the form.
             // Otherwise, show a message box.
-            if ((indexFile.IntegrityCheck == true))
+            if ((indexFile.HasIntegrity == true))
             {
                 tableForm = new TableForm(indexFile)
                 {
@@ -574,6 +574,8 @@ namespace Reanimator
                     }
                     _tablesLoaded = new TablesLoaded(_hellgateFileManager) { MdiParent = this };
                     _tablesLoaded.Show();
+
+                    _fileExplorer = new FileExplorer(_hellgateFileManager) { MdiParent = this };
                 }
 
 
@@ -612,78 +614,6 @@ namespace Reanimator
                 MessageBox.Show(ex.Message, "Reanimator_Load");
             }
         }
-
-        private void _Reanimator_Init(ProgressForm progress, Object var)
-        {
-            progress.SetStyle(ProgressBarStyle.Marquee);
-            progress.SetLoadingText("Initialising Reanimator...");
-
-            progress.SetCurrentItemText("Loading Hellgate File System...");
-            _hellgateFileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
-
-            progress.SetCurrentItemText("Loading Excel Tables...");
-            if (!_hellgateFileManager.LoadExcelFiles())
-            {
-                MessageBox.Show("Failed to load excel files!", "Excel Table Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-                return;
-            }
-
-            
-        }
-
-        private void _DisplayLoadedTables()
-        {
-            _tablesLoaded = new TablesLoaded(_hellgateFileManager) { MdiParent = this };
-        }
-
-//        private void _LoadTables(ProgressForm progress, Object var)
-//        {
-//            try
-//            {
-//                if (!_tableFiles.LoadTableFiles(progress))
-//                {
-//                    throw new Exception("Failed to load/parse all excel and strings tables!\n" +
-//                        "Please ensure your directories are set correctly.\nTools > Options");
-//                }
-
-//#if DEBUG
-//                if (!_tableFiles.LoadTCv4Files(progress))
-//                {
-//                    //throw new Exception("Failed to load/parse all excel and strings tables!\n" +
-//                    //    "Please ensure your directories are set correctly.\nTools > Options");
-//                }
-//#endif
-//            }
-//            catch (Exception ex)
-//            {
-//                ExceptionLogger.LogException(ex, "_LoadTables", true);
-//            }
-//        }
-
-        //private void _LoadAndDisplayCurrentlyLoadedExcelTables()
-        //{
-        //    try
-        //    {
-        //        if (_tableFiles.LoadedFileCount <= 0) return;
-
-        //        _tablesLoaded = new TablesLoaded(_tableDataSet) { MdiParent = this };
-
-        //        foreach (DataFile dataFile in from DictionaryEntry de in _tableFiles.DataFiles
-        //                                      select de.Value as DataFile)
-        //        {
-        //            _tablesLoaded.AddItem(dataFile);
-        //        }
-
-        //        _tablesLoaded.SetBounds(_fileExplorer.Size.Width + 10, 0, 300, 350);
-        //        _tablesLoaded.Text = String.Format("Currently Loaded Tables [{0}]", _tableFiles.LoadedFileCount);
-        //        _tablesLoaded.Show();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ExceptionLogger.LogException(ex, "LoadAndDisplayCurrentlyLoadedExcelTables", false);
-        //    }
-        //}
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)
         {

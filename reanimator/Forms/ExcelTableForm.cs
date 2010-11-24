@@ -391,12 +391,13 @@ namespace Reanimator.Forms
             if (table == null) return;
 
             String saveType = _dataFile.IsExcelFile ? "Cooked Excel Tables" : "Cooked String Tables";
-            String saveExtension = _dataFile.IsExcelFile ? "txt.cooked" : "xls.uni.cooked";
+            String saveExtension = _dataFile.FileExtension;
             String saveInitialPath = Path.Combine(Config.HglDir, _dataFile.FilePath);
 
-            String savePath = String.Empty; // todo: rewrite  FileTools.SaveFileDiag(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
+            String savePath = FileTools.SaveFileDialogBox(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
             if (String.IsNullOrEmpty(savePath)) return;
 
+            MessageBox.Show("REWRITE");
             byte[] data = null; // todo: rewrite _dataFile.GenerateFile(table);
             if (FileTools.WriteFileWithRetry(savePath, data))
             {
