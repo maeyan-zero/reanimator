@@ -209,8 +209,17 @@ namespace Hellgate
                         }
                     }
 
-                    Object objValue = FileTools.StringToObject(value, fieldInfo.FieldType);
-                    fieldInfo.SetValue(rowInstance, objValue);
+                    try
+                    {
+                        Object objValue = FileTools.StringToObject(value, fieldInfo.FieldType);
+                        fieldInfo.SetValue(rowInstance, objValue);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Critical Parsing Error: " + e);
+                        break;
+                    }
+
                 }
 
                 // For item types, items, missiles, monsters etc
