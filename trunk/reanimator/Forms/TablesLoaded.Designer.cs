@@ -58,7 +58,7 @@
             this.Name = "TablesLoaded";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "ExcelTablesLoaded";
+            this.Text = "Hellgate Tables Loaded";
             this.LocationChanged += new System.EventHandler(this.TablesLoaded_LocationChanged);
             this.ResumeLayout(false);
 

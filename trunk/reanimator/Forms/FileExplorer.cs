@@ -32,6 +32,8 @@ namespace Reanimator.Forms
         private static readonly Color NoEditColor = Color.DimGray;
         private static readonly Color BaseColor = Color.Black;
 
+        private FileManager _fileManager;
+
         private static readonly String[] IndexQueryStrings = { "hellgate*.dat", "sp_hellgate*.dat" };
         private static readonly String[] IndexQueryStringsMP = { "hellgate*.dat", "mp_hellgate*.dat" };
         public List<Index> IndexFiles { get; private set; }
@@ -100,13 +102,12 @@ namespace Reanimator.Forms
         }
 
 
-        public FileExplorer()
+        public FileExplorer(FileManager fileManager)
         {
+            // init stuffs
             InitializeComponent();
             _files_fileTreeView.DoubleBuffered(true);
-
-            IndexFiles = new List<Index>();
-            _fileTable = new Hashtable();
+            _fileManager = fileManager;
             backupKey_label.ForeColor = BackupColor;
             noEditorKey_label.ForeColor = NoEditColor;
 
@@ -117,6 +118,9 @@ namespace Reanimator.Forms
                 imageList.Images.Add(icon);
             }
             _files_fileTreeView.ImageList = imageList;
+
+            //IndexFiles = new List<Index>();
+            //_fileTable = new Hashtable();
         }
 
         public void LoadIndexFiles(ProgressForm progressForm, Object param)
@@ -466,7 +470,7 @@ namespace Reanimator.Forms
             fileCompressed_textBox.DataBindings.Add("Text", fileIndex, "CompressedSize");
             fileTime_textBox.Text = (DateTime.FromFileTime(fileIndex.FileStruct.FileTime)).ToString();
 
-            if (fileIndex.Modified)
+            if (fileIndex.IsBackup)
             {
                 String fileDataPath = Path.Combine(fileIndex.DirectoryString.Replace(Index.BackupPrefix, ""), fileIndex.FileNameString);
                 String filePath = Config.HglDir + fileDataPath;
@@ -508,7 +512,7 @@ namespace Reanimator.Forms
                 Index.FileEntry fileIndex = nodeObject.FileEntry;
                 String xmlDataPath = Path.Combine(Config.HglDir, nodeFullPath.Replace(".cooked", ""));
 
-                byte[] fileData = GetFileBytes(fileIndex.FullPath);
+                byte[] fileData = GetFileBytes(fileIndex.RelativeFullPath);
                 if (fileData == null)
                 {
                     MessageBox.Show("Failed to read xml.cooked from source!", "Error", MessageBoxButtons.OK,
@@ -737,7 +741,7 @@ namespace Reanimator.Forms
             foreach (Index idx in
                 from DictionaryEntry indexDictionary in indexToWrite select (Index)indexDictionary.Value)
             {
-                byte[] idxData = idx.GenerateIndexFile();
+                byte[] idxData = idx.ToByteArray();
                 Crypt.Encrypt(idxData);
                 File.WriteAllBytes(idx.FilePath, idxData);
             }
@@ -1045,7 +1049,7 @@ namespace Reanimator.Forms
                 Index.FileEntry fileEntry = null; // todo: rewrite args.PackIndex.GetFileFromIndex(packNode.FullPath);
                 if (fileEntry == null)
                 {
-                    fileEntry = args.PackIndex.AddFileToIndex(oldNodeObject.FileEntry);
+                    //fileEntry = args.PackIndex.AddFileToIndex(oldNodeObject.FileEntry);
                 }
                 else
                 {
@@ -1073,7 +1077,7 @@ namespace Reanimator.Forms
                 // append to dat file
                 try
                 {
-                    args.PackIndex.AddFileToDat(fileData, fileEntry);
+                    // todo: rewite args.PackIndex.AddFileToDat(fileData, fileEntry);
                 }
                 catch (Exception)
                 {
@@ -1135,7 +1139,7 @@ namespace Reanimator.Forms
             progressForm.SetCurrentItemText("Writing update dat index...");
             try
             {
-                byte[] idxBytes = args.PackIndex.GenerateIndexFile();
+                byte[] idxBytes = args.PackIndex.ToByteArray();
                 Crypt.Encrypt(idxBytes);
                 File.WriteAllBytes(args.PackIndex.FilePath, idxBytes);
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Hellgate
         public string HellgatePath { get; private set; }
         public string HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
         public string HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
-        public string Language { get; private set; }
+        public string Language { get; private set; } // determines which folder to check for the strings files
         public List<Index> IndexFiles { get; private set; }
         public Dictionary<ulong, FileEntry> FileEntries { get; private set; }
         public SortedDictionary<String, DataFile> DataFiles { get; private set; }
@@ -26,17 +27,21 @@ namespace Hellgate
         /// </summary>
         /// <param name="hellgatePath">Path to the Hellgate installation.</param>
         /// <param name="mpVersion">Set true to initialize MP data.</param>
-        public FileManager(string hellgatePath, bool mpVersion = false)
+        public FileManager(String hellgatePath, bool mpVersion = false)
         {
             HellgatePath = hellgatePath;
             MPVersion = mpVersion;
-            Language = "english";
+            Language = "english"; // do we need to bother with anything other than english?
+
+            DataFiles = new SortedDictionary<String, DataFile>();
+            IndexFiles = new List<Index>();
+            FileEntries = new Dictionary<ulong, FileEntry>();
             XlsDataSet = new DataSet("xlsDataSet")
             {
                 Locale = new CultureInfo("en-us", true),
                 RemotingFormat = SerializationFormat.Binary
             };
-            DataFiles = new SortedDictionary<String, DataFile>();
+
             IntegrityCheck = LoadFileTable();
         }
 
@@ -46,174 +51,138 @@ namespace Hellgate
         /// <returns>Result of the initialization. Occurance of an error will return false.</returns>
         private bool LoadFileTable()
         {
-            IndexFiles = new List<Index>();
-
-            List<string> idxPaths = new List<string>();
+            List<String> idxPaths = new List<String>();
             string[] query = MPVersion ? Common.MPFiles : Common.SPFiles;
-            foreach (string fileQuery in query)
+            foreach (String fileQuery in query)
             {
-                idxPaths.AddRange(Directory.GetFiles(HellgateDataPath, fileQuery).Where(p => p.EndsWith(".idx")));
+                idxPaths.AddRange(Directory.GetFiles(HellgateDataPath, fileQuery).Where(p => p.EndsWith(Index.FileExtension)));
+            }
+            if (idxPaths.Count == 0)
+            {
+                Console.WriteLine("Error: No index files found at parth: " + HellgateDataPath);
+                return false;
+            }
+            
+            foreach (String idxPath in idxPaths)
+            {
+                _LoadIndexFile(idxPath);
             }
 
-            FileEntries = new Dictionary<ulong, FileEntry>();
-
-            foreach (string idxPath in idxPaths)
-            {
-                byte[] buffer = File.ReadAllBytes(idxPath);
-                Index index = new Index(buffer)
-                {
-                    FilePath = idxPath
-                };
-                if (!(index.IntegrityCheck)) return false;
-                IndexFiles.Add(index);
-
-                foreach (FileEntry current in index.Files)
-                {
-                    ulong hash = current.LongHash;
-
-                    if (!(FileEntries.ContainsKey(hash)))
-                    {
-                        FileEntries.Add(hash, current);
-                        continue;
-                    }
-
-                    FileEntry existing = FileEntries[hash];
-                    if (existing.FileTime < current.FileTime)
-                    {
-                        FileEntries[hash] = current;
-                    }
-                }
-            }
-
-            return true;
+            return FileEntries.Count != 0;
         }
 
+        /// <summary>
+        /// Parses a single index file on the specified path. Checking for accompanying dat file and populating file index.
+        /// </summary>
+        /// <param name="fullPath">The full path of the index file to parse.</param>
+        private void _LoadIndexFile(String fullPath)
+        {
+            // if there is no accompanying .dat at all, then ignore .idx
+            String datFullPath = fullPath.Replace(Index.FileExtension, Index.DatFileExtension);
+            if (!File.Exists(datFullPath)) return;
+
+
+            // read in and parse index
+            Index index;
+            try
+            {
+                byte[] idxBytes = File.ReadAllBytes(fullPath);
+                index = new Index(idxBytes) { FilePath = fullPath };
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Warning: Failed to read in index file: " + fullPath);
+                return;
+            }
+            if (!index.HasIntegrity) return;
+            IndexFiles.Add(index);
+
+
+            // loop through index files
+            foreach (FileEntry currFileEntry in index.Files)
+            {
+                ulong hash = currFileEntry.LongPathHash;
+
+                // have we added the file yet
+                if (!FileEntries.ContainsKey(hash))
+                {
+                    FileEntries.Add(hash, currFileEntry);
+                    continue;
+                }
+
+                // we haven't added the file, so we need to compare file times and backup states
+                FileEntry origFileEntry = FileEntries[hash];
+
+                // do backup checks first as they'll "override" the FileTime values (i.e. file not found causes game to go to older version)
+                // if currFile IS a backup, and orig is NOT, then add to Siblings as game will be loading orig over "backup" anyways
+                if (currFileEntry.IsBackup && !origFileEntry.IsBackup)
+                {
+                    if (origFileEntry.Siblings == null) origFileEntry.Siblings = new List<FileEntry>();
+                    origFileEntry.Siblings.Add(currFileEntry);
+
+                    continue;
+                }
+
+                // if curr is NOT a backup, but orig IS, then we want to update (i.e. don't care about FileTime; as above)
+                // OR if orig is older than curr, we also want to update/re-arrange Siblings, etc
+                if ((!currFileEntry.IsBackup && origFileEntry.IsBackup) ||
+                    origFileEntry.FileTime < currFileEntry.FileTime)
+                {
+                    // set the Siblings list to the updated FileEntry and null out other
+                    if (origFileEntry.Siblings != null)
+                    {
+                        currFileEntry.Siblings = origFileEntry.Siblings;
+                        origFileEntry.Siblings = null;
+                    }
+
+                    // add the "orig" (now old) to the curr FileEntry.Siblings list
+                    if (currFileEntry.Siblings == null) currFileEntry.Siblings = new List<FileEntry>();
+                    currFileEntry.Siblings.Add(origFileEntry);
+
+                    continue;
+                }
+
+                // if curr is older (or equal to; hellgate000 has duplicates) than the orig, then add this to the Siblings list (i.e. orig is newer)
+                if (origFileEntry.FileTime >= currFileEntry.FileTime)
+                {
+                    if (origFileEntry.Siblings == null) origFileEntry.Siblings = new List<FileEntry>();
+                    origFileEntry.Siblings.Add(currFileEntry);
+
+                    continue;
+                }
+
+                Debug.Assert(false, "End of 'if (FileEntries.ContainsKey(hash))'", "wtf??\n\nThis shouldn't happen, please report this.");
+            }
+        }
+
+        /// <summary>
+        /// Loads all of the available Excel and Strings files to a hashtable.
+        /// </summary>
+        /// <returns>Returns true on success.</returns>
         public bool LoadTableFiles()
         {
             // want excel files and strings files
             foreach (FileEntry fileEntry in
                 FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention) ||
-                    (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) && fileEntry.FullPath.Contains(Language))))
+                    (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) && fileEntry.RelativeFullPath.Contains(Language))))
             {
-                byte[] fileBytes = null;
-
-                // if file is backed up, check for unpacked copy
-                String filePath = fileEntry.FullPath;
-                if (fileEntry.DirectoryString.Contains(Index.BackupPrefix))
-                {
-                    filePath = filePath.Replace(@"backup\", "");
-
-                    String fullPath = Path.Combine(HellgatePath, filePath);
-                    if (File.Exists(fullPath))
-                    {
-                        try
-                        {
-                            fileBytes = File.ReadAllBytes(fullPath);
-                        }
-                        catch (Exception)
-                        {
-                            Console.WriteLine("Warning: Reading from Backup - Failed to read from file: " + fullPath);
-                        }
-                    }
-                }
-
-
-                // if not backed up or if backed up but file not found/readable, then read from .dat
-                if (fileBytes == null)
-                {
-                    // open .dat
-                    if (!fileEntry.Parent.DatFileOpen && !fileEntry.Parent.OpenDat(FileAccess.Read))
-                    {
-                        Console.WriteLine("Warning: Failed to open .dat for reading: " + fileEntry.Parent.FileNameWithoutExtension);
-                        continue;
-                    }
-
-                    fileBytes = fileEntry.Parent.GetFileBytes(fileEntry);
-                    if (fileBytes == null)
-                    {
-                        Console.WriteLine("Warning: Failed to read file from .dat: " + fileEntry.FileNameString);
-                        continue;
-                    }
-                }
-
+                byte[] fileBytes = GetFileBytes(fileEntry);
 
                 // parse file data
                 DataFile dataFile;
                 if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention))
                 {
-                    dataFile = new ExcelFile(fileBytes) { FilePath = filePath };
+                    dataFile = new ExcelFile(fileBytes) { FilePath = fileEntry.RelativeFullPathWithoutBackup };
                 }
-                else // strings file
+                else
                 {
                     String stringsStringId = fileEntry.FileNameString.Replace(StringsFile.FileExtention, "").ToUpper();
-                    dataFile = new StringsFile(fileBytes, stringsStringId) { FilePath = filePath };
+                    dataFile = new StringsFile(fileBytes, stringsStringId) { FilePath = fileEntry.RelativeFullPathWithoutBackup };
                 }
                 if (dataFile.IntegrityCheck) DataFiles.Add(dataFile.StringId, dataFile);
             }
 
-
-            // close any open dats
-            foreach (Index indexFile in IndexFiles)
-            {
-                indexFile.EndDatAccess();
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Loads all of the available Excel files to a hashtable.
-        /// </summary>
-        /// <returns>Returns true on success.</returns>
-        public bool LoadExcelFiles()
-        {
-            foreach (FileEntry fileEntry in FileEntries.Values)
-            {
-                // Check if its a excel file by its file extentsion
-                if (!fileEntry.FileNameString.Contains(ExcelFile.FileExtention)) continue;
-
-                // Do not load excel files that have been "backed up"
-                // todo: need to have it load from file instead
-                if ((fileEntry.DirectoryString.Contains(Index.BackupPrefix)))
-                {
-                    //continue;
-                }
-
-
-                // Create a hashtable key from the filename
-                //string fileName = fileEntry.FileNameString;
-                //fileName = fileName.Replace(ExcelFile.FileExtention, "");
-                //fileName = fileName.ToUpper();
-                // todo: fileName not used for anything - is it needed?
-
-
-                // If the accompanying dat isn't open, open it
-                if (!fileEntry.Parent.DatFileOpen && !fileEntry.Parent.OpenDat(FileAccess.Read))
-                {
-                    // todo: add error message/log
-                    // can happen when .dat doesn't exist (renamed files), or when we .dat is in use (HGL)
-                    continue;
-                }
-
-
-                // Parse the excel file and if it reads okay add it to the table
-                byte[] fileBytes = fileEntry.Parent.GetFileBytes(fileEntry);
-                ExcelFile excelFile = new ExcelFile(fileBytes)
-                {
-                    FilePath = Path.Combine(fileEntry.DirectoryString, fileEntry.FileNameString)
-                };
-
-                if (excelFile.IntegrityCheck)
-                {
-                    DataFiles.Add(excelFile.StringId, excelFile);
-                }
-            }
-
-            // close any open dats
-            foreach (Index indexFile in IndexFiles)
-            {
-                indexFile.EndDatAccess();
-            }
+            EndAllDatAccess();
 
             return true;
         }
@@ -223,7 +192,7 @@ namespace Hellgate
         /// </summary>
         /// <param name="stringId">The stringID of the DataFile.</param>
         /// <returns>Matching DataFile if it exists.</returns>
-        public DataFile GetDataFile(string stringId)
+        public DataFile GetDataFile(String stringId)
         {
             if (DataFiles == null) return null;
 
@@ -252,6 +221,72 @@ namespace Hellgate
             DataTable dataTable = LoadExcelTable(excelFile, false);
             return dataTable;
         }
+
+        /// <summary>
+        /// Gets file byte data from most principle location; considering filetimes and backup status.
+        /// The user must manually call EndAllDatAccess to close access to any opened .dat files during the process.
+        /// </summary>
+        /// <param name="fileEntry">The file entry details to read.</param>
+        /// <returns>The file byte array, or null on error.</returns>
+        public byte[] GetFileBytes(FileEntry fileEntry)
+        {
+            byte[] fileBytes = null;
+
+
+            // if file is backed up, check for unpacked copy
+            String filePath = fileEntry.RelativeFullPath;
+            if (fileEntry.DirectoryString.Contains(Index.BackupPrefix))
+            {
+                filePath = filePath.Replace(@"backup\", "");
+
+                String fullPath = Path.Combine(HellgatePath, filePath);
+                if (File.Exists(fullPath))
+                {
+                    try
+                    {
+                        fileBytes = File.ReadAllBytes(fullPath);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Warning: Reading from Backup - Failed to read from file: " + fullPath);
+                    }
+                }
+            }
+
+
+            // if not backed up or if backed up but file not found/readable, then read from .dat
+            if (fileBytes == null)
+            {
+                // open .dat
+                if (!fileEntry.Parent.DatFileOpen && !fileEntry.Parent.OpenDat(FileAccess.Read))
+                {
+                    Console.WriteLine("Warning: Failed to open .dat for reading: " + fileEntry.Parent.FileNameWithoutExtension);
+                    return null;
+                }
+
+                fileBytes = fileEntry.Parent.GetFileBytes(fileEntry);
+                if (fileBytes == null)
+                {
+                    Console.WriteLine("Warning: Failed to read file from .dat: " + fileEntry.FileNameString);
+                    return null;
+                }
+            }
+
+            return fileBytes;
+        }
+
+        /// <summary>
+        /// Close any opened .dat files during file reading process'
+        /// </summary>
+        public void EndAllDatAccess()
+        {
+            // close any/all open dats
+            foreach (Index indexFile in IndexFiles)
+            {
+                indexFile.EndDatAccess();
+            }
+        }
+
 
         #region IDisposable Members
         public void Dispose()

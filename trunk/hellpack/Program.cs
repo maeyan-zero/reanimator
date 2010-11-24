@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using Hellgate;
-using FileEntry = Hellgate.Index.FileEntry;
 
 namespace Hellpack
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
             if (false)
             {
                 FileManager fileManager = new FileManager(@"D:\Games\Hellgate London");
-                fileManager.LoadExcelFiles();
+                fileManager.LoadTableFiles();
                 byte[] data = fileManager.DataFiles["SKILLS"].ExportCSV();
                // byte[] scriptData = fileManager.DataFiles["SKILLS"].ExportScriptTable();
                 File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\SKILLS.orig.txt", data);
@@ -25,13 +24,13 @@ namespace Hellpack
             String currentDir = Directory.GetCurrentDirectory();
             String dataDir = Path.Combine(currentDir, Common.DataPath);
             String dataCommonDir = Path.Combine(currentDir, Common.DataCommonPath);
-            String excelDir = ExcelFile.FolderPath;
-            String stringDir = "excel\\strings\\";
-            String defaultDat = "sp_hellgate_1337";
-            Boolean hasDataDir = Directory.Exists(dataDir);
-            Boolean hasDataCommonDir = Directory.Exists(dataCommonDir);
-            String welcomeMsg = "Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2010\nhttp://www.hellgateaus.net\n";
-            String noPathsMsg = "Sorry, no data paths were found. Check error.xml for details.";
+            bool hasDataDir = Directory.Exists(dataDir);
+            bool hasDataCommonDir = Directory.Exists(dataCommonDir);
+            const string excelDir = ExcelFile.FolderPath;
+            const string stringDir = "excel\\strings\\";
+            const string defaultDat = "sp_hellgate_1337";
+            const string welcomeMsg = "Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2010\nhttp://www.hellgateaus.net\n";
+            const string noPathsMsg = "Sorry, no data paths were found. Check error.xml for details.";
 
             Console.WriteLine(welcomeMsg);
             if (!(hasDataDir) && !(hasDataCommonDir))
@@ -142,11 +141,15 @@ namespace Hellpack
                 }
 
                 Console.WriteLine("Packing " + directory + fileName);
-                newPack.AddFile(directory, fileName, buffer);
+                
+                if (!newPack.AddFile(directory, fileName, buffer))
+                {
+                    Console.WriteLine("Warning: Failed to add file to index...");
+                }
             }
 
             string thisPack = packName.Replace(currentDir + "\\", "");
-            byte[] indexBytes = newPack.GenerateIndexFile();
+            byte[] indexBytes = newPack.ToByteArray();
             Crypt.Encrypt(indexBytes);
             Console.WriteLine("Writing " + thisPack);
             File.WriteAllBytes(packName, indexBytes);

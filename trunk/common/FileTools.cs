@@ -335,16 +335,24 @@ namespace Revival.Common
         /// <returns>The converted object. If the type was unhandled, null will be returned.</returns>
         public static Object StringToObject(String value, Type type)
         {
-            if (type == typeof(String)) return value;
-            if (type == typeof(Int32)) return Int32.Parse(value);
-            if (type == typeof(UInt32)) return UInt32.Parse(value);
-            if (type == typeof(Single)) return Single.Parse(value);
-            if (type == typeof(Int16)) return Int16.Parse(value);
-            if (type == typeof(UInt16)) return UInt16.Parse(value);
-            if (type == typeof(Byte)) return Byte.Parse(value);
-            if (type == typeof(Char)) return Char.Parse(value);
-            if (type == typeof(Int64)) return Int64.Parse(value);
-            if (type == typeof(UInt64)) return UInt64.Parse(value);
+            try
+            {
+                if (type == typeof(String)) return value;
+                if (type == typeof(Int32)) return Int32.Parse(value);
+                if (type == typeof(UInt32)) return UInt32.Parse(value);
+                if (type == typeof(Single)) return Single.Parse(value);
+                if (type == typeof(Int16)) return Int16.Parse(value);
+                if (type == typeof(UInt16)) return UInt16.Parse(value);
+                if (type == typeof(Byte)) return Byte.Parse(value);
+                if (type == typeof(Char)) return Char.Parse(value);
+                if (type == typeof(Int64)) return Int64.Parse(value);
+                if (type == typeof(UInt64)) return UInt64.Parse(value);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Critical Error: " + e);
+            }
+
             return null;
         }
 
