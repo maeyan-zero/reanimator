@@ -287,6 +287,21 @@ namespace Hellgate
             }
         }
 
+        /// <summary>
+        /// Attempts to open all .dat files for reading.
+        /// </summary>
+        /// <returns>True if .dat files were opened, false upon failure.</returns>
+        public bool BeginAllDatReadAccess()
+        {
+            // open accompanying dat files
+            if (IndexFiles.Any(indexFile => !indexFile.BeginDatReading()))
+            {
+                EndAllDatAccess();
+                return false;
+            }
+
+            return true;
+        }
 
         #region IDisposable Members
         public void Dispose()
