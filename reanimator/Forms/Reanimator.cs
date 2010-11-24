@@ -195,7 +195,7 @@ namespace Reanimator
         private void OpenIndexFile(String filePath)
         {
             byte[] buffer;
-            Hellgate.Index indexFile;
+            Hellgate.IndexFile indexFile;
             TableForm tableForm;
 
             // Check if the form is already open.
@@ -224,7 +224,7 @@ namespace Reanimator
             }
 
             // Initialize the indexFile.
-            indexFile = new Hellgate.Index(buffer)
+            indexFile = new Hellgate.IndexFile(buffer)
             {
                 FilePath = filePath
             };
@@ -576,6 +576,7 @@ namespace Reanimator
                     _tablesLoaded.Show();
 
                     _fileExplorer = new FileExplorer(_hellgateFileManager) { MdiParent = this };
+                    _fileExplorer.Show();
                 }
 
 

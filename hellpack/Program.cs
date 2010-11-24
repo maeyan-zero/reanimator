@@ -13,7 +13,7 @@ namespace Hellpack
             {
                 FileManager fileManager = new FileManager(@"D:\Games\Hellgate London");
                 fileManager.LoadTableFiles();
-                byte[] data = fileManager.DataFiles["SKILLS"].ExportCSV();
+                byte[] data = fileManager.DataFiles["QUEST"].ExportCSV();
                // byte[] scriptData = fileManager.DataFiles["SKILLS"].ExportScriptTable();
                 File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\SKILLS.orig.txt", data);
             }
@@ -67,7 +67,7 @@ namespace Hellpack
                 ExcelFile excelFile = new ExcelFile(excelBuffer);
                 if (!excelFile.IntegrityCheck)
                 {
-                    Console.WriteLine("Failed to uncook excel file: " + excelPath);
+                    Console.WriteLine("Failed to parse excel file: " + excelPath);
                     continue;
                 }
 
@@ -118,7 +118,7 @@ namespace Hellpack
             String packName = args.Length == 0 ? defaultDat : args[1];
             if (!(packName.EndsWith(".idx"))) packName += ".idx";
             packName = Path.Combine(currentDir, packName);
-            Index newPack = new Index()
+            IndexFile newPack = new IndexFile()
             {
                 FilePath = packName
             };

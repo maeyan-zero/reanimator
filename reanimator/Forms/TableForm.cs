@@ -5,14 +5,14 @@ using System.Windows.Forms;
 using System.IO;
 using Reanimator.Forms;
 using Hellgate;
-using FileEntry = Hellgate.Index.FileEntry;
+using FileEntry = Hellgate.IndexFile.FileEntry;
 
 namespace Reanimator
 {
     public partial class TableForm : ThreadedFormBase, IDisposable, IMdiChildBase
     {
         
-        Hellgate.Index IndexFile;
+        Hellgate.IndexFile IndexFile;
         Hellgate.StringsFile StringsFileData;
         List<int> foundIndices;
         int currentSelection;
@@ -23,7 +23,7 @@ namespace Reanimator
             get { return IndexFile == null ? false : true; }
         }
 
-        public TableForm(Hellgate.Index indexFile)
+        public TableForm(Hellgate.IndexFile indexFile)
         {
             IndexFile = indexFile;
             Text += ": " + FilePath;
@@ -435,7 +435,7 @@ namespace Reanimator
         {
             if (!IsIndexFile) return;
 
-            Index.FileEntry[] filesIndex = dataGridView.DataSource as Index.FileEntry[];
+            IndexFile.FileEntry[] filesIndex = dataGridView.DataSource as IndexFile.FileEntry[];
             DataGridViewSelectedRowCollection selectedRows = dataGridView.SelectedRows;
 
             foreach (DataGridViewRow row in selectedRows)
