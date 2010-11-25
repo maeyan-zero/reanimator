@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using Hellgate;
 
@@ -62,6 +63,7 @@ namespace Hellpack
 
             // Query XML Files
             xmlFilesToCook.AddRange(Directory.GetFiles(dataDir, "*.xml", SearchOption.AllDirectories));
+            xmlFilesToCook = xmlFilesToCook.Where(str => !str.Contains("uix")).ToList(); // remove uix xml files
 
 
             // cook all the excel files
