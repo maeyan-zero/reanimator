@@ -11,8 +11,8 @@ namespace Hellgate.Excel
         TableHeader header;
         [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        public String StringId;
+        public String name;
         [ExcelOutput(SortAscendingID = 2)]
-        public Int16 Code;
+        public Int16 code;
     }
 }

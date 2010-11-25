@@ -65,9 +65,9 @@ namespace Hellgate
         public ExcelFile(byte[] buffer) : this()
         {
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
-            bool isCSV = (peek != Token.cxeh);
+            bool isCooked = (peek == Token.cxeh);
 
-            IntegrityCheck = isCSV ? ParseCSV(buffer) : ParseData(buffer);
+            IntegrityCheck = isCooked ? ParseData(buffer) : ParseCSV(buffer);
         }
 
         /// <summary>
@@ -644,10 +644,16 @@ namespace Hellgate
             return csvBuffer;
         }
 
+        /// <summary>
+        /// Quick and dirty function to export mysh scripts as xml.
+        /// Only applicable to PROPERTIES and SKILLS tables.
+        /// </summary>
+        /// <returns>Byte array of XML document for writing, or null on error.</returns>
         public byte[] ExportScriptTable()
         {
-            // this functions is quick and dirty - ignore me
+            if (_rowScripts == null || _rowScripts.Count == 0) return null;
 
+            // this functions is quick and dirty - ignore me
             XmlDocument xmlDocument = new XmlDocument();
             XmlElement mainElement = xmlDocument.CreateElement("ExcelScript");
             xmlDocument.AppendChild(mainElement);
@@ -697,6 +703,7 @@ namespace Hellgate
                     Int32[] intArray = FileTools.ByteArrayToInt32Array(excelScript.ScriptValues, ref offset, intCount);
                     for (int i = 0; i < intArray.Length; i++)
                     {
+                        // testing if some of those huge numbers are actually two shorts...
                         //if (Math.Abs(intArray[i]) > 10000)
                         //{
                         //    short s1 = (short)(intArray[i] >> 16);
@@ -716,7 +723,7 @@ namespace Hellgate
                 scriptElement.AppendChild(scriptValues);
             }
 
-            // being lazy and want as byte array for consitancy
+            // being lazy and want as byte array for consistancy
             MemoryStream ms = new MemoryStream();
             xmlDocument.Save(ms);
             byte[] arr = ms.ToArray();

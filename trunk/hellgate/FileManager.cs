@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using FileEntry = Hellgate.IndexFile.FileEntry;
 
 namespace Hellgate
@@ -62,7 +63,7 @@ namespace Hellgate
                 Console.WriteLine("Error: No index files found at parth: " + HellgateDataPath);
                 return false;
             }
-            
+
             foreach (String idxPath in idxPaths)
             {
                 _LoadIndexFile(idxPath);
@@ -106,17 +107,17 @@ namespace Hellgate
                 //    int bp = 0;
                 //}
 
-                ulong hash = currFileEntry.LongPathHash;
+                ulong pathHash = currFileEntry.LongPathHash;
 
                 // have we added the file yet
-                if (!FileEntries.ContainsKey(hash))
+                if (!FileEntries.ContainsKey(pathHash))
                 {
-                    FileEntries.Add(hash, currFileEntry);
+                    FileEntries.Add(pathHash, currFileEntry);
                     continue;
                 }
 
                 // we haven't added the file, so we need to compare file times and backup states
-                FileEntry origFileEntry = FileEntries[hash];
+                FileEntry origFileEntry = FileEntries[pathHash];
 
                 // do backup checks first as they'll "override" the FileTime values (i.e. file not found causes game to go to older version)
                 // if currFile IS a backup, and orig is NOT, then add to Siblings as game will be loading orig over "backup" anyways
@@ -143,7 +144,7 @@ namespace Hellgate
                     // add the "orig" (now old) to the curr FileEntry.Siblings list
                     if (currFileEntry.Siblings == null) currFileEntry.Siblings = new List<FileEntry>();
                     currFileEntry.Siblings.Add(origFileEntry);
-                    FileEntries[hash] = currFileEntry;
+                    FileEntries[pathHash] = currFileEntry;
 
                     continue;
                 }
@@ -221,19 +222,83 @@ namespace Hellgate
         /// </summary>
         /// <param name="code">The code of the Excel Table to retrieve.</param>
         /// <returns>The Excel Table as a DataTable, or null if not found.</returns>
-        public DataTable GetExcelTableFromCode(uint code)
+        public ExcelFile GetExcelTableFromCode(uint code)
         {
-            if (DataFiles == null || DataFiles["EXCEL_TABLES"] == null) return null;
+            if (DataFiles == null || DataFiles["EXCELTABLES"] == null) return null;
 
-            ExcelFile excelTables = (ExcelFile)DataFiles["EXCEL_TABLES"];
-            Excel.ExcelTables tableRow = (Excel.ExcelTables)excelTables.Rows[(int)code];
-            String stringId = tableRow.StringId;
-            if (DataFiles[stringId] == null) return null;
+            ExcelFile excelTables = (ExcelFile)DataFiles["EXCELTABLES"];
+            for (int i = 0; i < excelTables.Count; i++)
+            {
+                Excel.ExcelTables excelTable = (Excel.ExcelTables)excelTables.Rows[i];
 
-            ExcelFile excelFile = (ExcelFile)DataFiles[stringId];
-            DataTable dataTable = LoadExcelTable(excelFile, false);
-            return dataTable;
+                if (excelTable.code == code) return (ExcelFile)DataFiles[excelTable.name];
+            }
+
+            return null;
         }
+
+        public int GetExcelRowIndex(uint code, String value)
+        {
+            if (DataFiles == null || DataFiles["EXCELTABLES"] == null) return -1;
+
+            ExcelFile excelTable = GetExcelTableFromCode(code);
+            if (excelTable == null) return -1;
+
+            Type type = excelTable.Rows[0].GetType();
+            FieldInfo[] fields = type.GetFields();
+            FieldInfo field = fields[0];
+
+            bool isStringField = (field.FieldType == typeof(String));
+            int i = 0;
+            foreach (Object row in excelTable.Rows)
+            {
+                if (isStringField)
+                {
+                    String val = (String)field.GetValue(row);
+                    if (val == value) return i;
+                }
+                else // string offset
+                {
+                    int offset = (int)field.GetValue(row);
+                    String stringVal = excelTable.ReadStringTable(offset);
+                    if (stringVal == value) return i;
+                }
+                i++;
+            }
+
+
+            return -1;
+        }
+
+        public String GetExcelRowStringFromIndex(uint code, int index)
+        {
+            if (DataFiles == null || DataFiles["EXCELTABLES"] == null || index < 0) return null;
+
+            ExcelFile excelTable = GetExcelTableFromCode(code);
+            if (excelTable == null) return null;
+
+            Type type = excelTable.Rows[0].GetType();
+            FieldInfo[] fields = type.GetFields();
+            FieldInfo field = fields[0];
+
+            bool isStringField = (field.FieldType == typeof(String));
+            Object row = excelTable.Rows[index];
+
+            if (isStringField) return (String)field.GetValue(row);
+
+            int offset = (int)field.GetValue(row);
+            String stringVal = excelTable.ReadStringTable(offset);
+            return stringVal;
+        }
+
+        //public String GetExcelTableStringIdFromCode(UInt32 code)
+        //{
+        //    DataTable excelTables = GetExcelTableFromStringId("EXCELTABLES");
+        //    if (excelTables == null) return null;
+
+        //    DataRow[] rows = excelTables.Select(String.Format("code = '{0}'", code));
+        //    return rows.Length == 0 ? null : rows[0][1].ToString();
+        //}
 
         /// <summary>
         /// Gets file byte data from most principle location; considering filetimes and backup status.
