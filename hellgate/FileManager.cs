@@ -101,10 +101,10 @@ namespace Hellgate
             // loop through index files
             foreach (FileEntry currFileEntry in index.Files)
             {
-                if (currFileEntry.FileNameString.Contains("sku") && currFileEntry.FileNameString.Contains(ExcelFile.FileExtention))
-                {
-                    int bp = 0;
-                }
+                //if (currFileEntry.FileNameString.Contains("sku") && currFileEntry.FileNameString.Contains(ExcelFile.FileExtention))
+                //{
+                //    int bp = 0;
+                //}
 
                 ulong hash = currFileEntry.LongPathHash;
 
