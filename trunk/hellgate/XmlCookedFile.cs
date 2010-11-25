@@ -33,6 +33,7 @@ namespace Hellgate
         /// <returns>The cooked bytes, or null upon failure.</returns>
         public static byte[] CookXmlDocument(XmlDocument xmlDocument)
         {
+            if (_xmlDefinitions == null) throw new Exceptions.NotInitializedException();
             if (!xmlDocument.HasChildNodes) return null;
 
             XmlNode rootElement = xmlDocument.FirstChild;
