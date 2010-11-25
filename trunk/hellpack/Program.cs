@@ -22,10 +22,6 @@ namespace Hellpack
                 File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\" + tableId + ".xml", scriptData);
             }
 
-            String test = "dot_phys";
-            UInt32 test1 = Crypt.GetStringHash(test);
-            UInt32 test2 = Crypt.GetStringSHA1UInt32(test);
-
             String currentDir = Directory.GetCurrentDirectory();
             String dataDir = Path.Combine(currentDir, Common.DataPath);
             String dataCommonDir = Path.Combine(currentDir, Common.DataCommonPath);
