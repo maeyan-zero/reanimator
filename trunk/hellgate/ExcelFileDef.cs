@@ -33,7 +33,7 @@ namespace Hellgate
                 new KeyValuePair<uint,TypeMap>((uint)0x11302F85, new TypeMap { DataType = typeof(Offer) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1481FC18, new TypeMap { DataType = typeof(Movies) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1A0A1C09, new TypeMap { DataType = typeof(QuestState) }),
-                //new KeyValuePair<uint,TypeMap>((uint)0x1A4CAF8A, new TypeMap { DataType = typeof(Sounds) }),
+                new KeyValuePair<uint,TypeMap>((uint)0x1A4CAF8A, new TypeMap { DataType = typeof(Sounds) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1ACBB8F7, new TypeMap { DataType = typeof(SubLevel) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1B82B5B5, new TypeMap { DataType = typeof(MusicStingerSets) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1CF9BDE9, new TypeMap { DataType = typeof(LevelsDrlgs) }),

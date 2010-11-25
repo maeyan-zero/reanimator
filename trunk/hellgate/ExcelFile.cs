@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Revival.Common;
+using Skills = Hellgate.Excel.Skills;
 
 namespace Hellgate
 {
@@ -479,6 +480,15 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.TyshValue);
                 if (ExcelMap.HasScriptTable)
                 {
+                    if (MyshBuffer == null)
+                    {
+                        // No need to use reflection here for 1 mysh table.
+                        // Would involve creating an interface etc
+                        if (StringId == "SKILLS")
+                        {
+                            MyshBuffer = Skills.Mysh.data;
+                        }
+                    }
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
                     FileTools.WriteToBuffer(ref buffer, ref offset, MyshBuffer);
                 }
