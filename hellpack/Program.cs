@@ -65,49 +65,49 @@ namespace Hellpack
 
 
             // cook all the excel files
-            //foreach (String excelPath in excelFilesToCook)
-            //{
-            //    byte[] excelBuffer = File.ReadAllBytes(excelPath);
-            //    ExcelFile excelFile = new ExcelFile(excelBuffer);
-            //    if (!excelFile.IntegrityCheck)
-            //    {
-            //        Console.WriteLine("Failed to parse excel file: " + excelPath);
-            //        continue;
-            //    }
+            foreach (String excelPath in excelFilesToCook)
+            {
+                byte[] excelBuffer = File.ReadAllBytes(excelPath);
+                ExcelFile excelFile = new ExcelFile(excelBuffer);
+                if (!excelFile.IntegrityCheck)
+                {
+                    Console.WriteLine("Failed to parse excel file: " + excelPath);
+                    continue;
+                }
 
-            //    Console.WriteLine("Cooking " + excelPath.Replace(currentDir + "\\", ""));
-            //    excelBuffer = excelFile.ToByteArray();
-            //    if (excelBuffer == null)
-            //    {
-            //        Console.WriteLine("Failed to cook excel file: " + excelFile.StringId);
-            //        continue;
-            //    }
+                Console.WriteLine("Cooking " + excelPath.Replace(currentDir + "\\", ""));
+                excelBuffer = excelFile.ToByteArray();
+                if (excelBuffer == null)
+                {
+                    Console.WriteLine("Failed to cook excel file: " + excelFile.StringId);
+                    continue;
+                }
 
-            //    String writeToPath = excelPath + ".cooked";
-            //    try
-            //    {
-            //        File.WriteAllBytes(writeToPath, excelBuffer);
-            //    }
-            //    catch (Exception)
-            //    {
-            //        Console.WriteLine("Failed to write cooked file: " + writeToPath);
-            //        continue;
-            //    }
-                
-            //}
+                String writeToPath = excelPath + ".cooked";
+                try
+                {
+                    File.WriteAllBytes(writeToPath, excelBuffer);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Failed to write cooked file: " + writeToPath);
+                    continue;
+                }
+
+            }
 
 
-            //// Cook String files
-            //foreach (String stringPath in stringFilesToCook)
-            //{
-            //    byte[] stringsBuffer = File.ReadAllBytes(stringPath);
-            //    StringsFile stringsFile = new StringsFile(stringsBuffer, Path.GetFileName(stringPath).ToUpper());
-            //    if (!(stringsFile.IntegrityCheck == true)) continue;
-            //    Console.WriteLine("Cooking " + stringPath.Replace(currentDir + "\\", ""));
-            //    stringsBuffer = stringsFile.ToByteArray();
-            //    if (stringsBuffer == null) continue;
-            //    File.WriteAllBytes(stringPath + ".cooked", stringsBuffer);
-            //}
+            // Cook String files
+            foreach (String stringPath in stringFilesToCook)
+            {
+                byte[] stringsBuffer = File.ReadAllBytes(stringPath);
+                StringsFile stringsFile = new StringsFile(stringsBuffer, Path.GetFileName(stringPath).ToUpper());
+                if (!(stringsFile.IntegrityCheck == true)) continue;
+                Console.WriteLine("Cooking " + stringPath.Replace(currentDir + "\\", ""));
+                stringsBuffer = stringsFile.ToByteArray();
+                if (stringsBuffer == null) continue;
+                File.WriteAllBytes(stringPath + ".cooked", stringsBuffer);
+            }
 
 
             // Cook XML Files
