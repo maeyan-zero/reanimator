@@ -21,7 +21,7 @@ namespace Hellgate
         /// Initialize XML Definitions and generate String Hash values for xml element names.
         /// Must be called before usage of the class.
         /// </summary>
-        /// <param name="tableDataSet">The loaded table data set of excel/strings for excel lookups.</param>
+        /// <param name="fileManager">The loaded table data set of excel/strings for excel lookups.</param>
         public static void Initialize(FileManager fileManager)
         {
             Debug.Assert(fileManager != null);
@@ -102,7 +102,7 @@ namespace Hellgate
         /// </summary>
         /// <param name="stringHash">The String Hash of the Root Element to find.</param>
         /// <returns>Found XML Definition or null if not found.</returns>
-        private static XmlDefinition GetXmlDefinition(UInt32 stringHash)
+        private static XmlDefinition _GetXmlDefinition(UInt32 stringHash)
         {
             return _xmlDefinitions.FirstOrDefault(xmlDefinition => xmlDefinition.RootHash == stringHash);
         }
@@ -113,7 +113,7 @@ namespace Hellgate
         /// <param name="xmlDefinition">The XML Definition to search through.</param>
         /// <param name="stringHash">The String Hash of the Element Name to find.</param>
         /// <returns>Found XML Cook Element or null if not found.</returns>
-        private static XmlCookElement GetXmlCookElement(XmlDefinition xmlDefinition, UInt32 stringHash)
+        private static XmlCookElement _GetXmlCookElement(XmlDefinition xmlDefinition, UInt32 stringHash)
         {
             return xmlDefinition.Elements.FirstOrDefault(xmlCookElement => xmlCookElement.NameHash == stringHash);
         }

@@ -21,7 +21,7 @@ namespace Hellgate
 
         private int _offset;
         private byte[] _data;
-        private XmlDocument XmlDoc { get; set; }
+        public XmlDocument XmlDoc { get; set; }
 
         public XmlCookedFile()
         {
@@ -39,7 +39,7 @@ namespace Hellgate
             XmlNode rootElement = xmlDocument.FirstChild;
             UInt32 xmlDefinitionHash = Crypt.GetStringHash(rootElement.Name);
 
-            XmlDefinition xmlDefinition = GetXmlDefinition(xmlDefinitionHash);
+            XmlDefinition xmlDefinition = _GetXmlDefinition(xmlDefinitionHash);
             if (xmlDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
 
 
@@ -278,7 +278,7 @@ namespace Hellgate
 
 
                     case ElementType.Table: // 0x0308
-                        XmlDefinition xmlTableDefinition = GetXmlDefinition(xmlCookElement.ChildTypeHash);
+                        XmlDefinition xmlTableDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
                         XmlNode xmlTable = xmlNode[xmlTableDefinition.RootElement];
 
                         int tableBytesWritten = _CookXmlDefinition(ref buffer, offset, xmlTableDefinition, xmlTable);
@@ -291,7 +291,7 @@ namespace Hellgate
                         FileTools.WriteToBuffer(ref buffer, ref offset, tableCount); // table count is always written
                         if (tableCount == 0) break;
 
-                        XmlDefinition xmlTableCountDefinition = GetXmlDefinition(xmlCookElement.ChildTypeHash);
+                        XmlDefinition xmlTableCountDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
                         int tablesAdded = 0;
                         foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
                         {
@@ -313,21 +313,16 @@ namespace Hellgate
                         byte byteLen = (byte)elementText.Length;
                         if (byteLen > 0)
                         {
-                            // get excel table index
-                            DataTable excelDataTable = _fileManager.GetExcelTableFromCode(xmlCookElement.ExcelTableCode);
-                            Debug.Assert(excelDataTable != null);
+                            int index = int.Parse(elementText);
+                            excelString = _fileManager.GetExcelRowStringFromIndex(xmlCookElement.ExcelTableCode, index);
 
-                            String columnName = excelDataTable.Columns[0].ColumnName;
-                            DataRow[] dataRows =
-                                excelDataTable.Select(String.Format("{0} = '{1}'", columnName, elementText));
-                            if (dataRows.Length == 0)
-                            { // not found
-                                byteLen = 0;
+                            if (String.IsNullOrEmpty(excelString))
+                            {
+                                byteLen = 0; // not found
                             }
                             else
                             {
-                                excelString = dataRows[0][1].ToString();
-                                byteLen = (byte)excelString.Length;
+                                byteLen = (byte) excelString.Length;
                             }
                         }
 
@@ -456,7 +451,7 @@ namespace Hellgate
                     // 8 bytes
                     case ElementType.Table: // 0x0308
                     case ElementType.TableCount: // 0x030A
-                        XmlDefinition xmlSubDefinition = GetXmlDefinition(xmlCookElement.ChildTypeHash);
+                        XmlDefinition xmlSubDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
                         if (xmlSubDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
 
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.ChildTypeHash);
@@ -521,7 +516,7 @@ namespace Hellgate
             if (header.MagicWord != FileMagicWord) throw new Exceptions.UnexpectedMagicWordException();
             if (header.Version != RequiredVersion) throw new Exceptions.NotSupportedFileVersionException();
 
-            XmlDefinition xmlDefinition = GetXmlDefinition(header.XmlRootDefinition);
+            XmlDefinition xmlDefinition = _GetXmlDefinition(header.XmlRootDefinition);
             if (xmlDefinition == null ||
                 xmlDefinition.ElementCount < header.XmlRootElementCount)
                 throw new Exceptions.NotSupportedFileDefinitionException();
@@ -708,7 +703,7 @@ namespace Hellgate
             {
                 uint elementHash = FileTools.ByteArrayToUInt32(_data, ref _offset);
 
-                XmlCookElement xmlCookElement = GetXmlCookElement(xmlDefinition, elementHash);
+                XmlCookElement xmlCookElement = _GetXmlCookElement(xmlDefinition, elementHash);
                 if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException("Unexpected xml element hash: 0x" + elementHash.ToString("X8"));
                 elements.Add(elementHash, xmlCookElement);
 
@@ -784,7 +779,7 @@ namespace Hellgate
                         UInt32 stringHash = _ReadUInt32(null, null);                    // table string hash
                         Int32 elementCount = _ReadInt32(null, null);                    // table element count
 
-                        XmlDefinition tableXmlDefition = GetXmlDefinition(stringHash);
+                        XmlDefinition tableXmlDefition = _GetXmlDefinition(stringHash);
                         if (tableXmlDefition == null ||
                             tableXmlDefition.ElementCount < elementCount)
                             throw new Exceptions.NotSupportedFileDefinitionException();
@@ -808,29 +803,12 @@ namespace Hellgate
             String excelString = _ReadByteString();
             if (String.IsNullOrEmpty(excelString)) return;
 
-            // get excel table index
-            DataTable excelDataTable = _fileManager.GetExcelTableFromCode(xmlCookElement.ExcelTableCode);
-            Debug.Assert(excelDataTable != null);
-
-            String columnName = excelDataTable.Columns[1].ColumnName;
-            DataRow[] dataRows = excelDataTable.Select(String.Format("{0} = '{1}'", columnName, excelString.Replace("'", "''")));
-            String index;
-            if (dataRows.Length == 0) 
-            {
-                throw new Exceptions.UnknownExcelElementException("excelString = " + excelString);
-            }
-            if (dataRows.Length > 1) // todo
-            {
-                int bp = 0;
-                index = dataRows[0][0].ToString();
-            }
-            else
-            {
-                index = dataRows[0][0].ToString();
-            }
-
             if (parentNode == null) return;
 
+            // get excel table index
+            int rowIndex = _fileManager.GetExcelRowIndex(xmlCookElement.ExcelTableCode, excelString);
+            if (rowIndex == -1) throw new Exceptions.UnknownExcelElementException("excelString = " + excelString);
+            
             XmlNode grandParentNode = parentNode.ParentNode;
             XmlNode descriptionNode = grandParentNode.LastChild.PreviousSibling;
 
@@ -838,7 +816,7 @@ namespace Hellgate
             descriptionNode.InnerText = excelString;
 
             XmlElement element = XmlDoc.CreateElement(xmlCookElement.Name);
-            element.InnerText = index;
+            element.InnerText = rowIndex.ToString();
             parentNode.AppendChild(element);
         }
 

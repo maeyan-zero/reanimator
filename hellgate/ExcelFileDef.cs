@@ -87,7 +87,7 @@ namespace Hellgate
                 new KeyValuePair<uint,TypeMap>((uint)0x7F15F865, new TypeMap { DataType = typeof(AiInit) }),
 
                 new KeyValuePair<uint,TypeMap>((uint)0x80DE708E, new TypeMap { DataType = typeof(MonsterNames) }),
-                new KeyValuePair<uint,TypeMap>((uint)0x86DC367C, new TypeMap { DataType = typeof(BookMarks) }),
+                new KeyValuePair<uint,TypeMap>((uint)0x86DC367C, new TypeMap { DataType = typeof(ExcelTables) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x887988C4, new TypeMap { DataType = typeof(Items), HasExtended = true }),
                 new KeyValuePair<uint,TypeMap>((uint)0x8A5FF6B8, new TypeMap { DataType = typeof(AiBehaviour) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x8B84B802, new TypeMap { DataType = typeof(ConditionFunctions) }),

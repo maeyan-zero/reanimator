@@ -14,7 +14,7 @@ namespace Reanimator
     {
         private FileExplorer _fileExplorer;
         private TablesLoaded _tablesLoaded;
-        private FileManager _hellgateFileManager;
+        private FileManager _fileManager;
         private readonly Options _optionsForm = new Options();
         private readonly List<TableForm> _openTableForms = new List<TableForm>();
         private readonly List<ExcelTableForm> _openExcelTableForms = new List<ExcelTableForm>();
@@ -25,6 +25,9 @@ namespace Reanimator
             InitializeComponent();
 
             #region alexs_stuff
+
+            if (true) return;
+
             //const String idxReadPath = @"D:\Games\Hellgate London\data\hellgate000.idx";
             //String idxWritePath = Path.Combine(Path.GetDirectoryName(idxReadPath),
             //                                   Path.GetFileNameWithoutExtension(idxReadPath) + ".dec.idx");
@@ -86,21 +89,77 @@ namespace Reanimator
 
             //tw = new StreamWriter(@"C:\asdf.txt");
             //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\monster\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\proc\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\quest\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\templar\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\");
+            _fileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
+            _fileManager.LoadTableFiles();
+            XmlCookedFile.Initialize(_fileManager);
+
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\monster\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\proc\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\quest\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\templar\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
+            _DoFolder(@"D:\Games\Hellgate London\data\skills\");
             //tw.Close();
             // this.Close();
             #endregion
         }
+
+        #region alexs_stuff
+        //private TextWriter tw;
+
+        private void _DoFolder(String folderDir)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
+            FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
+
+            XmlCookedFile xmlAdrenaline = null;
+            System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider();
+
+            foreach (FileInfo fileInfo in files)
+            {
+                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+
+                byte[] data = File.ReadAllBytes(fileInfo.FullName);
+                if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
+                {
+                    xmlAdrenaline = xmlCookedFile;
+                    int bp = 0;
+                }
+
+                Debug.Assert(xmlCookedFile.Uncook(data));
+
+                xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+
+                byte[] recookedData = XmlCookedFile.CookXmlDocument(xmlCookedFile.XmlDoc);
+
+                byte[] originalHash = x.ComputeHash(data);
+                byte[] recookedHash = x.ComputeHash(recookedData);
+
+                if (!originalHash.SequenceEqual(recookedHash))
+                {
+                    int bp = 0;
+                }
+
+
+                //String blah = xmlCookedFile.Blah();
+                //if (blah != null)
+                //{
+                //    //tw.WriteLine(fileInfo.FullName);
+                //    //tw.WriteLine(blah);
+                //}
+            }
+
+            if (xmlAdrenaline != null)
+            {
+                // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Checks the registry for the Hellgate path, if it doesn't exist prompt the user to find it.
@@ -566,17 +625,19 @@ namespace Reanimator
 
                 if (CheckInstallation())
                 {
-                    _hellgateFileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
-                    if (!_hellgateFileManager.LoadTableFiles())
+                    _fileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
+                    if (!_fileManager.LoadTableFiles())
                     {
                         MessageBox.Show("Failed to load excel files!", "Excel Table Error", MessageBoxButtons.OK,
                                         MessageBoxIcon.Error);
                     }
-                    _tablesLoaded = new TablesLoaded(_hellgateFileManager) { MdiParent = this };
+                    _tablesLoaded = new TablesLoaded(_fileManager) { MdiParent = this };
                     _tablesLoaded.Show();
 
-                    _fileExplorer = new FileExplorer(_hellgateFileManager) { MdiParent = this };
+                    _fileExplorer = new FileExplorer(_fileManager) { MdiParent = this };
                     _fileExplorer.Show();
+
+                    XmlCookedFile.Initialize(_fileManager);
                 }
 
 
