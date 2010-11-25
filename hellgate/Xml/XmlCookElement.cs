@@ -5,6 +5,7 @@ namespace Hellgate.Xml
     public enum ElementType : ushort 
     {
         Int32 = 0x0000,
+        RGBADoubleWordArray = 0x0006, // found in colorsets (pdwColors)
         Float = 0x0100,
         String = 0x0200,
         UnknownFloatT = 0x0600,

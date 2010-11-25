@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Xml;
 using System.IO;
@@ -68,7 +67,7 @@ namespace Hellgate
             // write data segment //
             FileTools.WriteToBuffer(ref buffer, ref offset, DataMagicWord);
             XmlNode xmlNode = xmlDocument.FirstChild;
-            bytesWritten = _CookXmlDefinition(ref buffer, offset, xmlDefinition, xmlNode);
+            bytesWritten = _CookXmlData(ref buffer, offset, xmlDefinition, xmlNode);
             if (bytesWritten == 0) return null;
             offset += bytesWritten;
 
@@ -78,14 +77,14 @@ namespace Hellgate
             return cookedBytes;
         }
 
-        private static int _CookXmlDefinition(ref byte[] buffer, int offset, XmlDefinition xmlDefinition, XmlNode xmlNode)
+        private static int _CookXmlData(ref byte[] buffer, int offset, XmlDefinition xmlDefinition, XmlNode xmlNode)
         {
             int offsetStart = offset;
             int elementCount = xmlDefinition.Elements.Count;
 
             // bitField info
             int bitFieldOffset = offset;
-            int bitFieldByteCount = (elementCount - 1 >> 3) + 1; // -1 as 16 >> 3 = 2 + 1 = 3, but should only be 2 bytes
+            int bitFieldByteCount = (elementCount - 1 >> 3) + 1; // -1 as 16 >> 3 = 2 + 1 = 3, but should only be 2 bytes, and +1 as 7 >> 3 = 0
             offset += bitFieldByteCount;
 
             // todo: this is a bit excessive for a couple of offsets, but meh, fix it later
@@ -155,6 +154,41 @@ namespace Hellgate
                         break;
 
 
+                    case ElementType.RGBADoubleWordArray: // 0x0006     // found in colorsets.xml.cooked
+                        int dwArrayCount = xmlCookElement.Count;
+                        List<UInt32> dwElements = new List<UInt32>();
+                        bool dwAllDefault = true;
+                        foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
+                        {
+                            if (xmlChildNode.Name != xmlCookElement.Name) continue;
+
+                            String arrayElementText = xmlChildNode.InnerText;
+                            UInt32 dwValue = UInt32.Parse(arrayElementText);
+                            dwElements.Add(dwValue);
+
+                            if ((UInt32)xmlCookElement.DefaultValue != dwValue)
+                            {
+                                dwAllDefault = false;
+                            }
+
+                            if (dwElements.Count == dwArrayCount) break;
+                        }
+
+                        if (dwAllDefault) continue;
+
+                        for (int i = 0; i < dwArrayCount; i++)
+                        {
+                            UInt32 dwWrite = (UInt32)xmlCookElement.DefaultValue;
+                            if (i < dwElements.Count)
+                            {
+                                dwWrite = dwElements[i];
+                            }
+
+                            FileTools.WriteToBuffer(ref buffer, ref offset, dwWrite);
+                        }
+                        break;
+
+
                     case ElementType.Float: // 0x0100
                         float floatValue = Convert.ToSingle(elementText);
                         if ((float)xmlCookElement.DefaultValue == floatValue) continue;
@@ -172,7 +206,7 @@ namespace Hellgate
                         if (xmlCookElement.TreatAsData)
                         {
                             String[] dataStrBytes = elementText.Split('-');
-                            strLen = dataStrBytes.Length-1; //+1 done down below
+                            strLen = dataStrBytes.Length - 1; //+1 done down below
 
                             strBytes = new byte[strLen];
                             for (int i = 0; i < strLen; i++)
@@ -182,11 +216,11 @@ namespace Hellgate
                         }
                         else
                         {
-                            strBytes = FileTools.StringToASCIIByteArray(elementText); 
+                            strBytes = FileTools.StringToASCIIByteArray(elementText);
                         }
 
                         FileTools.WriteToBuffer(ref buffer, ref offset, strLen + 1);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, strBytes);   
+                        FileTools.WriteToBuffer(ref buffer, ref offset, strBytes);
 
                         offset++; // \0
 
@@ -228,7 +262,7 @@ namespace Hellgate
                             {
                                 float fWrite;
 
-                                int index = i*floatTCount + j;
+                                int index = i * floatTCount + j;
                                 if (index < floatTValues.Count)
                                 {
                                     fWrite = floatTValues[index];
@@ -281,7 +315,7 @@ namespace Hellgate
                         XmlDefinition xmlTableDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
                         XmlNode xmlTable = xmlNode[xmlTableDefinition.RootElement];
 
-                        int tableBytesWritten = _CookXmlDefinition(ref buffer, offset, xmlTableDefinition, xmlTable);
+                        int tableBytesWritten = _CookXmlData(ref buffer, offset, xmlTableDefinition, xmlTable);
                         offset += tableBytesWritten;
                         break;
 
@@ -297,7 +331,7 @@ namespace Hellgate
                         {
                             if (xmlChildNode.Name != xmlTableCountDefinition.RootElement) continue;
 
-                            int tableCountBytes = _CookXmlDefinition(ref buffer, offset, xmlTableCountDefinition, xmlChildNode);
+                            int tableCountBytes = _CookXmlData(ref buffer, offset, xmlTableCountDefinition, xmlChildNode);
                             offset += tableCountBytes;
                             tablesAdded++;
 
@@ -322,7 +356,7 @@ namespace Hellgate
                             }
                             else
                             {
-                                byteLen = (byte) excelString.Length;
+                                byteLen = (byte)excelString.Length;
                             }
                         }
 
@@ -353,7 +387,7 @@ namespace Hellgate
                             String arrayElementText = xmlChildNode.InnerText;
                             float fValue = Convert.ToSingle(arrayElementText);
                             if (fValue == 0 && arrayElementText == "-0")
-                                fValue = -1.0f*0.0f;
+                                fValue = -1.0f * 0.0f;
                             elements.Add(fValue);
 
                             if ((float)xmlCookElement.DefaultValue != fValue)
@@ -477,6 +511,7 @@ namespace Hellgate
                         break;
 
                     // 8 bytes
+                    case ElementType.RGBADoubleWordArray: // 0x0006     // colorsets.xml.cooked (pdwColors)
                     case ElementType.FloatArray: // 0x0106
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.DefaultValue);
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.Count);
@@ -628,6 +663,13 @@ namespace Hellgate
                     case ElementType.UnknownPType: // 0x0007
                         Int32 pValue = _ReadInt32(rootElement, xmlCookElement.Name);
                         //Debug.Assert((Int32)xmlCookElement.DefaultValue != pValue);
+                        break;
+
+                    case ElementType.RGBADoubleWordArray: // 0x0006     // found in colorsets.xml.cooked pdwColors
+                        for (int dwIndex = 0; dwIndex < xmlCookElement.Count; dwIndex++)
+                        {
+                            _ReadUInt32(rootElement, xmlCookElement.Name);
+                        }
                         break;
 
                     default:
@@ -788,6 +830,13 @@ namespace Hellgate
                         elements[elementHash] = childElements;
                         break;
 
+                    case ElementType.RGBADoubleWordArray:                                    // 0x0006   // found in colorsets.xml.cooked
+                        UInt32 defaultDoubleWord = _ReadUInt32(null, null);
+                        Int32 arraySize = _ReadInt32(null, null);
+
+                        Debug.Assert((UInt32)xmlCookElement.DefaultValue == defaultDoubleWord);
+                        Debug.Assert(xmlCookElement.Count == arraySize);
+                        break;
 
                     default:
                         throw new Exceptions.UnexpectedTokenException(
@@ -808,12 +857,13 @@ namespace Hellgate
             // get excel table index
             int rowIndex = _fileManager.GetExcelRowIndex(xmlCookElement.ExcelTableCode, excelString);
             if (rowIndex == -1) throw new Exceptions.UnknownExcelElementException("excelString = " + excelString);
-            
+
             XmlNode grandParentNode = parentNode.ParentNode;
             XmlNode descriptionNode = grandParentNode.LastChild.PreviousSibling;
 
             Debug.Assert(descriptionNode != null);
-            descriptionNode.InnerText = excelString;
+            if (!String.IsNullOrEmpty(descriptionNode.InnerText)) descriptionNode.InnerText += ", ";
+            descriptionNode.InnerText += excelString;
 
             XmlElement element = XmlDoc.CreateElement(xmlCookElement.Name);
             element.InnerText = rowIndex.ToString();
@@ -941,7 +991,7 @@ namespace Hellgate
             bool isNegativeZero = false;
             if (value == 0)
             {
-                if (_TestBit(_data, _offset-1, 7))
+                if (_TestBit(_data, _offset - 1, 7))
                 {
                     isNegativeZero = true;
                 }

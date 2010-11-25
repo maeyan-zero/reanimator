@@ -34,6 +34,10 @@ namespace Hellgate
                 new AIBehaviorDefinitionTable(),
                 new AIBehaviorDefinition(),
 
+                // Colorsets
+                new ColorSetDefinition(),
+                new ColorDefinition(),
+
                 // Shared (used in States and Skills)
                 new ConditionDefinition(),
 

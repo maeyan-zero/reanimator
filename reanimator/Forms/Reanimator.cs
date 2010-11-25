@@ -93,17 +93,20 @@ namespace Reanimator
             _fileManager.LoadTableFiles();
             XmlCookedFile.Initialize(_fileManager);
 
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\monster\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\proc\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\quest\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\templar\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
-            _DoFolder(@"D:\Games\Hellgate London\data\skills\");
+            _UncookAllXml();
+
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\monster\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\proc\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\quest\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\templar\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\skills\");
+            //_DoFolder(@"D:\Games\Hellgate London\data\ai\");
             //tw.Close();
             // this.Close();
             #endregion
@@ -112,7 +115,30 @@ namespace Reanimator
         #region alexs_stuff
         //private TextWriter tw;
 
-        private void _DoFolder(String folderDir)
+        private static void _UncookAllXml()
+        {
+            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            const String root = @"D:\Games\Hellgate London\data";
+            DirectoryInfo directoryInfo = new DirectoryInfo(root);
+            FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked", SearchOption.AllDirectories);
+
+            foreach (FileInfo fileInfo in files)
+            {
+                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+                byte[] data = File.ReadAllBytes(fileInfo.FullName);
+                Debug.Assert(xmlCookedFile.Uncook(data));
+
+                xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+
+                byte[] recookedData = XmlCookedFile.CookXmlDocument(xmlCookedFile.XmlDoc);
+                byte[] originalHash = md5.ComputeHash(data);
+                byte[] recookedHash = md5.ComputeHash(recookedData);
+                File.WriteAllBytes(fileInfo.FullName + "2", recookedData);
+                Debug.Assert(originalHash.SequenceEqual(recookedHash));
+            }            
+        }
+
+        private static void _DoFolder(String folderDir)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
             FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");

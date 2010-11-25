@@ -264,6 +264,8 @@
     <Compile Include="Xml\AIBehaviorDefinition.cs" />
     <Compile Include="Xml\AIBehaviorDefinitionTable.cs" />
     <Compile Include="Xml\AIDefinition.cs" />
+    <Compile Include="Xml\ColorDefinition.cs" />
+    <Compile Include="Xml\ColorSetDefinition.cs" />
     <Compile Include="Xml\ConditionDefinition.cs" />
     <Compile Include="Xml\Material.cs" />
     <Compile Include="Xml\RoomLayoutGroup.cs" />
