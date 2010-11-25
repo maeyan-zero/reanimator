@@ -134,6 +134,9 @@
     <Compile Include="Forms\FileExplorer.Designer.cs">
       <DependentUpon>FileExplorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FileExplorerUtil.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\HeroEditor2.cs">
       <SubType>Form</SubType>
     </Compile>

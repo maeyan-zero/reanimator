@@ -13,13 +13,18 @@ namespace Hellpack
             {
                 FileManager fileManager = new FileManager(@"D:\Games\Hellgate London");
                 fileManager.LoadTableFiles();
-                byte[] data = fileManager.DataFiles["QUEST"].ExportCSV();
-               // byte[] scriptData = fileManager.DataFiles["SKILLS"].ExportScriptTable();
-                File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\SKILLS.orig.txt", data);
+
+                const String tableId = "PROPERTIES";
+                byte[] data = fileManager.DataFiles[tableId].ExportCSV();
+                byte[] scriptData = ((ExcelFile)fileManager.DataFiles[tableId]).ExportScriptTable();
+
+                File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\" + tableId + ".txt", data);
+                File.WriteAllBytes(@"D:\Projects\Hellgate London\Reanimator\trunk\bin\Hellpack\x64\Debug\data_common\excel\" + tableId + ".xml", scriptData);
             }
 
-
-
+            String test = "dot_phys";
+            UInt32 test1 = Crypt.GetStringHash(test);
+            UInt32 test2 = Crypt.GetStringSHA1UInt32(test);
 
             String currentDir = Directory.GetCurrentDirectory();
             String dataDir = Path.Combine(currentDir, Common.DataPath);
