@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Xml;
 using Revival.Common;
 using Skills = Hellgate.Excel.Skills;
 
@@ -644,7 +646,83 @@ namespace Hellgate
 
         public byte[] ExportScriptTable()
         {
-            return null;
+            // this functions is quick and dirty - ignore me
+
+            XmlDocument xmlDocument = new XmlDocument();
+            XmlElement mainElement = xmlDocument.CreateElement("ExcelScript");
+            xmlDocument.AppendChild(mainElement);
+
+            foreach (ExcelScript excelScript in _rowScripts)
+            {
+                XmlElement scriptElement = xmlDocument.CreateElement("Script");
+                mainElement.AppendChild(scriptElement);
+                
+                foreach (ExcelScript.Paramater paramater in excelScript.Paramaters)
+                {
+                    XmlElement paramElement = xmlDocument.CreateElement("Parameter");
+                    scriptElement.AppendChild(paramElement);
+
+                    XmlElement paramName = xmlDocument.CreateElement("Name");
+                    paramName.InnerText = paramater.Name;
+                    paramElement.AppendChild(paramName);
+
+                    XmlElement paramUnknown = xmlDocument.CreateElement("Unknown");
+                    paramUnknown.InnerText = paramater.Unknown.ToString("X8");
+                    paramElement.AppendChild(paramUnknown);
+
+                    XmlElement paramTypeId = xmlDocument.CreateElement("TypeId");
+                    paramTypeId.InnerText = paramater.TypeId.ToString();
+                    paramElement.AppendChild(paramTypeId);
+
+                    XmlElement paramTypeValues = xmlDocument.CreateElement("TypeValues");
+                    paramElement.AppendChild(paramTypeValues);
+
+                    // temp
+                    String text = String.Empty;
+                    for (int i = 0; i < paramater.TypeValues.Length; i++)
+                    {
+                        text += paramater.TypeValues[i].ToString();
+                        if (i < paramater.TypeValues.Length-1) text += ",";
+                    }
+                    paramTypeValues.InnerText = text;
+                }
+
+                XmlElement scriptValues = xmlDocument.CreateElement("Values");
+
+                if (excelScript.ScriptValues != null)
+                {
+                    int intCount = excelScript.ScriptValues.Length/4;
+                    String text = String.Empty;
+                    int offset = 0;
+                    Int32[] intArray = FileTools.ByteArrayToInt32Array(excelScript.ScriptValues, ref offset, intCount);
+                    for (int i = 0; i < intArray.Length; i++)
+                    {
+                        //if (Math.Abs(intArray[i]) > 10000)
+                        //{
+                        //    short s1 = (short)(intArray[i] >> 16);
+                        //    short s2 = (short)(intArray[i] & 0xFFFF);
+                        //    text += s1 + "," + s2;
+                        //    if (i < intArray.Length - 1) text += ",";
+                        //}
+                        //else
+                        //{
+                            text += intArray[i].ToString();
+                            if (i < intArray.Length - 1) text += ",";
+                        //}
+
+                    }
+                    scriptValues.InnerText = text;
+                }
+                scriptElement.AppendChild(scriptValues);
+            }
+
+            // being lazy and want as byte array for consitancy
+            MemoryStream ms = new MemoryStream();
+            xmlDocument.Save(ms);
+            byte[] arr = ms.ToArray();
+            ms.Close();
+
+            return arr;
         }
 
         /// <summary>

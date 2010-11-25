@@ -101,6 +101,11 @@ namespace Hellgate
             // loop through index files
             foreach (FileEntry currFileEntry in index.Files)
             {
+                if (currFileEntry.FileNameString.Contains("sku") && currFileEntry.FileNameString.Contains(ExcelFile.FileExtention))
+                {
+                    int bp = 0;
+                }
+
                 ulong hash = currFileEntry.LongPathHash;
 
                 // have we added the file yet
@@ -138,6 +143,7 @@ namespace Hellgate
                     // add the "orig" (now old) to the curr FileEntry.Siblings list
                     if (currFileEntry.Siblings == null) currFileEntry.Siblings = new List<FileEntry>();
                     currFileEntry.Siblings.Add(origFileEntry);
+                    FileEntries[hash] = currFileEntry;
 
                     continue;
                 }
@@ -179,7 +185,14 @@ namespace Hellgate
                     String stringsStringId = fileEntry.FileNameString.Replace(StringsFile.FileExtention, "").ToUpper();
                     dataFile = new StringsFile(fileBytes, stringsStringId) { FilePath = fileEntry.RelativeFullPathWithoutBackup };
                 }
-                if (dataFile.IntegrityCheck) DataFiles.Add(dataFile.StringId, dataFile);
+
+                if (!dataFile.IntegrityCheck)
+                {
+                    Console.WriteLine("Error: Failed to load data file: " + dataFile.StringId);
+                    continue;
+                }
+
+                DataFiles.Add(dataFile.StringId, dataFile);
             }
 
             EndAllDatAccess();
