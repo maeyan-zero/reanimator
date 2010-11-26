@@ -75,7 +75,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
                 BitIndex = 0,
-                Count = 7
+                BitCount = 7
             },
             new XmlCookElement
             {
@@ -83,7 +83,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
                 BitIndex = 2,
-                Count = 7
+                BitCount = 7
             },
             new XmlCookElement
             {
@@ -91,7 +91,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
                 BitIndex = 1,
-                Count = 7
+                BitCount = 7
             },
             new XmlCookElement
             {
@@ -99,7 +99,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
                 BitIndex = 3,
-                Count = 7
+                BitCount = 7
             },
             new XmlCookElement
             {
@@ -107,7 +107,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
                 BitIndex = 4,
-                Count = 7
+                BitCount = 7
             },
             new XmlCookElement
             {
@@ -115,7 +115,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
                 BitIndex = 5,
-                Count = 7
+                BitCount = 7
             },
             new XmlCookElement
             {
@@ -123,7 +123,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
                 BitIndex = 6,
-                Count = 7
+                BitCount = 7
             }
         };
 
@@ -131,7 +131,7 @@ namespace Hellgate.Xml
         {
             RootElement = "CONDITION_DEFINITION";
             base.Elements.AddRange(Elements);
-            BitFields = new Int32[] {-1};
+            BitFlags = new UInt32[1]; // 7 / 32 = 1
         }
     }
 }
