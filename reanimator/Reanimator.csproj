@@ -127,7 +127,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions.cs" />
     <Compile Include="Forms\FileExplorer.cs">
       <SubType>Form</SubType>
     </Compile>

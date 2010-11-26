@@ -2,7 +2,7 @@
 
 namespace Hellgate.Xml
 {
-    public enum ElementType : ushort 
+    public enum ElementType : ushort
     {
         Int32 = 0x0000,
         RGBADoubleWordArray = 0x0006, // found in colorsets (pdwColors)
@@ -32,6 +32,7 @@ namespace Hellgate.Xml
         public ElementType ElementType;
         public Int32 FlagId;
         public Int32 BitIndex;
+        public Int32 BitCount; // used for BitIndex, total field BitCount
         public UInt32 BitMask;
         public Int32 Count;
         public UInt32 NameHash;

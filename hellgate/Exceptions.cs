@@ -63,5 +63,15 @@ namespace Hellgate
                 CustomMessage = "An unknown Excel Element was encountered!\n" + excelElement;
             }
         }
+
+        public class NotSupportedXMLElementCount : ReanimatorException
+        {
+            public NotSupportedXMLElementCount(String excelElement)
+            {
+                if (String.IsNullOrEmpty(excelElement)) excelElement = String.Empty;
+
+                CustomMessage = "The XML Definition for the file has less elements than the file has defined!\n" + excelElement;
+            }
+        }
     }
 }

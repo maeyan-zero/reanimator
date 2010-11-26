@@ -267,6 +267,8 @@
     <Compile Include="Xml\ColorDefinition.cs" />
     <Compile Include="Xml\ColorSetDefinition.cs" />
     <Compile Include="Xml\ConditionDefinition.cs" />
+    <Compile Include="Xml\ConfigDefinition.cs" />
+    <Compile Include="Xml\GlobalDefinition.cs" />
     <Compile Include="Xml\Material.cs" />
     <Compile Include="Xml\RoomLayoutGroup.cs" />
     <Compile Include="Xml\RoomLayoutGroupDefinition.cs" />

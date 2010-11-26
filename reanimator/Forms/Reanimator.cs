@@ -118,22 +118,33 @@ namespace Reanimator
         private static void _UncookAllXml()
         {
             System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            const String root = @"D:\Games\Hellgate London\data";
+            const String root = @"D:\Games\Hellgate London\data\";
             DirectoryInfo directoryInfo = new DirectoryInfo(root);
-            FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked", SearchOption.AllDirectories);
+            List<String> xmlFiles = new List<String>(Directory.GetFiles(root, "*.xml.cooked", SearchOption.AllDirectories));
 
-            foreach (FileInfo fileInfo in files)
+            foreach (String xmlFilePath in xmlFiles)
             {
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();
-                byte[] data = File.ReadAllBytes(fileInfo.FullName);
-                Debug.Assert(xmlCookedFile.Uncook(data));
+                byte[] data = File.ReadAllBytes(xmlFilePath);
 
-                xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+                Console.WriteLine("Uncooking: " + Path.GetFileName(xmlFilePath));
+                try
+                {
+                    xmlCookedFile.Uncook(data);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    Debug.Assert(false, "Failed to uncook: " + e);
+                }
+                
+
+                xmlCookedFile.SaveXml(xmlFilePath.Replace(".cooked", ""));
 
                 byte[] recookedData = XmlCookedFile.CookXmlDocument(xmlCookedFile.XmlDoc);
                 byte[] originalHash = md5.ComputeHash(data);
                 byte[] recookedHash = md5.ComputeHash(recookedData);
-                File.WriteAllBytes(fileInfo.FullName + "2", recookedData);
+                //File.WriteAllBytes(xmlFilePath + "2", recookedData);
                 Debug.Assert(originalHash.SequenceEqual(recookedHash));
             }            
         }
