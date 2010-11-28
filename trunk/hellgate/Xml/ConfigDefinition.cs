@@ -39,7 +39,7 @@
                 Name = "fMouseSensitivity",
                 DefaultValue = 1.5f,
                 ElementType = ElementType.Float
-            },
+            }
         };
 
 
