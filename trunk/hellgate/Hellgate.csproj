@@ -264,10 +264,13 @@
     <Compile Include="Xml\AIBehaviorDefinition.cs" />
     <Compile Include="Xml\AIBehaviorDefinitionTable.cs" />
     <Compile Include="Xml\AIDefinition.cs" />
+    <Compile Include="Xml\BlendRLE.cs" />
+    <Compile Include="Xml\BlendRun.cs" />
     <Compile Include="Xml\ColorDefinition.cs" />
     <Compile Include="Xml\ColorSetDefinition.cs" />
     <Compile Include="Xml\ConditionDefinition.cs" />
     <Compile Include="Xml\ConfigDefinition.cs" />
+    <Compile Include="Xml\GameGlobalDefinition.cs" />
     <Compile Include="Xml\GlobalDefinition.cs" />
     <Compile Include="Xml\Material.cs" />
     <Compile Include="Xml\RoomLayoutGroup.cs" />
@@ -284,6 +287,7 @@
     <Compile Include="Xml\SoundEffectDefinition.cs" />
     <Compile Include="Xml\StateDefinition.cs" />
     <Compile Include="Xml\StateEvent.cs" />
+    <Compile Include="Xml\TextureDefinition.cs" />
     <Compile Include="Xml\XmlCookElement.cs" />
     <Compile Include="Xml\XmlDefinition.cs" />
   </ItemGroup>

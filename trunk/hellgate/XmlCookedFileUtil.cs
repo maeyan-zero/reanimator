@@ -80,7 +80,12 @@ namespace Hellgate
 
                 // States
                 new StateDefinition(),
-                new StateEvent()
+                new StateEvent(),
+
+                // Textures
+                new TextureDefinition(),
+                new BlendRLE(),
+                new BlendRun()
             };
 
             // create hashes

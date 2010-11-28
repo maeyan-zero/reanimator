@@ -8,17 +8,18 @@ namespace Hellgate.Xml
         RGBADoubleWordArray = 0x0006, // found in colorsets (pdwColors)
         Float = 0x0100,
         String = 0x0200,
+        Table = 0x0308,
         UnknownFloatT = 0x0600,
         NonCookedInt32 = 0x0700,
         UnknownFloat = 0x0800,
         UnknownPTypeD = 0x0D00,
         Flag = 0x0B01,
         BitFlag = 0x0C02,
-        Table = 0x0308,
         ExcelIndex = 0x0903,
         FloatArray = 0x0106,
         UnknownPType = 0x0007,
-        TableCount = 0x030A
+        TableCount = 0x030A,
+        ByteArray = 0x1007
     }
 
     public class XmlCookElement
