@@ -14,7 +14,7 @@ namespace Hellgate.Xml
         public bool NeedToReadBitFlags;
         public int BitFlagsWriteOffset;
 
-        protected XmlDefinition()
+        public XmlDefinition()
         {
             Elements = new List<XmlCookElement>();
         }

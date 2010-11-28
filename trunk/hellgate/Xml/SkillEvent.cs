@@ -465,7 +465,7 @@ namespace Hellgate.Xml
                 DefaultValue = null,
                 ElementType = ElementType.Table,
                 ChildType = typeof(ConditionDefinition)
-            },
+            }
         };
 
         public SkillEvent()
