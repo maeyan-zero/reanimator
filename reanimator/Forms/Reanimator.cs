@@ -53,30 +53,35 @@ namespace Reanimator
 
 
 
-            const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
-            String[] strings = File.ReadAllLines(filePath);
-            foreach (String str in strings)
-            {
-                if (str.Length <= 37) continue;
+            //const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
+            //String[] strings = File.ReadAllLines(filePath);
+            //foreach (String str in strings)
+            //{
+            //    if (str.Length <= 37) continue;
 
-                String subStr = str.Substring(37);
-                UInt32 strHash = Crypt.GetStringHash(subStr);
+            //    String subStr = str.Substring(37);
+            //    UInt32 strHash = Crypt.GetStringHash(subStr);
 
-                if (strHash == 7339135) // APPEARANCE_DEFINITION     0x006FFC7F
-                {
-                    int bp = 0;
-                }
+            //    if (strHash == 7339135) // APPEARANCE_DEFINITION     0x006FFC7F
+            //    {
+            //        int bp = 0;
+            //    }
 
-                if (strHash == 278967514) // BLEND_RLE
-                {
-                    int bp = 0;
-                }
+            //    if (strHash == 3985396893) // "ANIMATION_DEFINITION"
+            //    {
+            //        int bp = 0;
+            //    }
 
-                if (strHash == 1944806950) // BLEND_RUN
-                {
-                    int bp = 0;
-                }
-            }
+            //    if (strHash == 346458888) // "ANIM_EVENT"
+            //    {
+            //        int bp = 0;
+            //    }
+
+            //    if (strHash == 3788988200) // "INVENTORY_VIEW_INFO"
+            //    {
+            //        int bp = 0;
+            //    }
+            //}
 
 
 
@@ -130,7 +135,9 @@ namespace Reanimator
 
                 String fileName = Path.GetFileName(xmlFilePath);
                 Console.WriteLine("Uncooking: " + fileName);
-                if (fileName == "test_appearance.xml.cooked")
+                if (fileName != "test_appearance.xml.cooked") continue;
+
+
                 {
                     int bp = 0;
                 }

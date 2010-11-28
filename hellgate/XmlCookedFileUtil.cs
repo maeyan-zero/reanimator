@@ -38,6 +38,12 @@ namespace Hellgate
                 new AIBehaviorDefinitionTable(),
                 new AIBehaviorDefinition(),
 
+                // Appearance
+                new AppearanceDefinition(),
+                new AnimationDefinition(),
+                new AnimEvent(),
+                new InventoryViewInfo(),
+
                 // Colorsets (colorsets.xml)
                 new ColorSetDefinition(),
                 new ColorDefinition(),
@@ -51,7 +57,7 @@ namespace Hellgate
                 // GlobalDefinition (default.xml)
                 new GlobalDefinition(),
 
-                // Shared (used in States and Skills)
+                // Shared (used in States, Skills amd Appearance)
                 new ConditionDefinition(),
 
                 // Level Layout (contains object positions etc)
@@ -88,7 +94,7 @@ namespace Hellgate
                 new BlendRun()
             };
 
-            // create hashes
+            // create hashes;
             foreach (XmlDefinition xmlDefinition in _xmlDefinitions)
             {
                 xmlDefinition.RootHash = Crypt.GetStringHash(xmlDefinition.RootElement);

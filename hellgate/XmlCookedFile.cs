@@ -142,7 +142,7 @@ namespace Hellgate
                 {
                     case ElementType.NonCookedInt32: // 0x0700
                     case ElementType.UnknownFloat: // 0x0800
-                    case ElementType.UnknownPTypeD: // 0x0D00
+                    case ElementType.UnknownPTypeD_0x0D00: // 0x0D00
                         // not cooked.... (I think...)
                         continue;
 
@@ -462,7 +462,7 @@ namespace Hellgate
                 switch (xmlCookElement.ElementType)
                 {
                     // 0 bytes
-                    case ElementType.UnknownPTypeD:         // 0x0D00
+                    case ElementType.UnknownPTypeD_0x0D00:         // 0x0D00
                         break;
 
                     // 4 bytes
@@ -597,6 +597,7 @@ namespace Hellgate
             xmlParent.AppendChild(rootElement);
 
             // actual present element count - not total count possible
+            // i.e. some definitions have fields that aren't always present (e.g. TCv4), but those fields aren't counted unless they appear in the xml definition header
             int elementCount = elements.Count;
 
             // bitField info
@@ -671,12 +672,19 @@ namespace Hellgate
                     // todo: any point this being here?
                     case ElementType.NonCookedInt32:                // 0x0700
                     case ElementType.UnknownFloat:                  // 0x0800
-                    case ElementType.UnknownPTypeD:                 // 0x0D00
+                    case ElementType.UnknownPTypeD_0x0D00:          // 0x0D00
                         int bp = 0;
                         break;
 
                     case ElementType.ExcelIndex:                    // 0x0903
                         _ReadExcelIndex(rootElement, xmlCookElement);
+                        break;
+
+                    case ElementType.ExcelIndexArray_0x0905:        // 0x0905
+                        for (int j = 0; j < xmlCookElement.Count; j++)
+                        {
+                            _ReadExcelIndex(rootElement, xmlCookElement);
+                        }
                         break;
 
                     case ElementType.Flag:                          // 0x0B01
@@ -733,20 +741,18 @@ namespace Hellgate
              * =Token=		=Type=          =FoundIn=       =Details= (* = variable length)
              * 0x0000       Int32           Skills          4 bytes     e.g. tAttachmentDef.eType = -1 in some cases - also used with tAttachmentDef.dwFlags
              * 0x0100       Float           Skills          4 bytes     Float value
+             * 0x0106       Float Array     AI              4 bytes     First 4 bytes (Float)  = Default Value, Second 4 bytes (Int32) = Array Size
              * 0x0200       String          Skills          1 byte*     Str Length (NOT inc \0), then if != 0, string WITH \0 follows
+             * 0x030A       TableCount      Skills          8 bytes     First 4 bytes (UInt32) = XML Definition Hash, Second 4 bytes (Int32) = XML Definition Element Count
+             * 0x0500       Float           Appearance      4 bytes     Same as Float 0x0100
              * 0x0600       RGBA dwArray    Colorsets       8 bytes     First 4 bytes (UInt32) = Default Value, Second 4 bytes (Int32) = Array Size
              * 0x0700       NonCookedInt32  Skills          4 bytes     Used for nPreviewAppearance, but doesn't appear to be cooked by game
-             * 0x0B01       Flag            Skills          4 bytes*    First 4 bytes (UInt32) = Bitmask of Flag in field (In DATA segment, Flag is only read in once per "chunk" i.e. After 32 flags, the next flag will be read 4 bytes again)
-             * 0x0C02       BitFlag         Skills          8 bytes*    First 4 bytes (Int32)  = Bit Index of Flag in field, Second 4 bytes (Int32) = Total bit count of fields, BitFlag is read as int array, 32 bits per int
              * 0x0803       Table           Skills          8 bytes     First 4 bytes (UInt32) = XML Definition Hash, Second 4 bytes (Int32) = XML Definition Element Count - this always exists in cooked file, below TableCount type may not
              * 0x0903       ExcelIndex      Skills          4 bytes     First 4 bytes (UInt32) = Code of Excel Table - Cooking reads index and places from table
-             * 0x0106       Float Array     AI              4 bytes     First 4 bytes (Float)  = Default Value, Second 4 bytes (Int32) = Array Size
-             * 0x030A       TableCount      Skills          8 bytes     First 4 bytes (UInt32) = XML Definition Hash, Second 4 bytes (Int32) = XML Definition Element Count
+             * 0x0A00       Int32           Appearance      4 bytes     Same as Int32 0x0000
+             * 0x0B01       Flag            Skills          4 bytes*    First 4 bytes (UInt32) = Bitmask of Flag in field (In DATA segment, Flag is only read in once per "chunk" i.e. After 32 flags, the next flag will be read 4 bytes again)
+             * 0x0C02       BitFlag         Skills          8 bytes*    First 4 bytes (Int32)  = Bit Index of Flag in field, Second 4 bytes (Int32) = Total bit count of fields, BitFlag is read as int array, 32 bits per int
              * 0x1007       Byte Array      Textures        4 bytes     First 4 bytes (??) = ??
-
-             * // extras found in particle effects
-             *  00 0A       4 bytes (Int32?)
-             *  00 05       4 bytes (Float)
              */
 
             Hashtable elements = new Hashtable();
@@ -761,31 +767,53 @@ namespace Hellgate
                 ElementType token = (ElementType)FileTools.ByteArrayToUShort(_data, ref _offset);
                 switch (token)
                 {
-                    case ElementType.UnknownPTypeD:                                     // 0x0D00
+                    case ElementType.UnknownPTypeD_0x0D00:                              // 0x0D00
                         // nothing to do                                                // found in paths
                         break;                                                          // only token then next element
 
 
                     case ElementType.String:                                            // 0x0200
-                        String str = _ReadByteString();                                 // default value
-                        if (str != null) _offset++; // +1 for \0
+                    case ElementType.StringArrayUnknown_0x0207:                         // 0x0207   // not sure of structure as non-default, but as default has same as String
+                        String strValue = _ReadByteString();                            // default value
+                        if (strValue != null) _offset++; // +1 for \0
 
-                        Debug.Assert((String)xmlCookElement.DefaultValue == str);
+                        Debug.Assert((String)xmlCookElement.DefaultValue == strValue);
+                        break;
+
+                    case ElementType.StringArray_0x0206:                                // 0x0206
+                        String strArrValue = _ReadByteString();                         // default value
+                        if (strArrValue != null) _offset++; // +1 for \0
+                        Int32 strArrCount = _ReadInt32(null, null);
+
+                        Debug.Assert((String)xmlCookElement.DefaultValue == strArrValue);
+                        Debug.Assert(xmlCookElement.Count == strArrCount);
                         break;
 
 
                     case ElementType.Int32:                                             // 0x0000
-                    case ElementType.NonCookedInt32:                                    // 0x0700
                     case ElementType.UnknownPType:                                      // 0x0007
+                    case ElementType.NonCookedInt32:                                    // 0x0700
+                    case ElementType.Int32_0x0A00:                                      // 0x0A00
                         Int32 defaultInt32 = _ReadInt32(null, null);                    // default value
 
                         Debug.Assert((Int32)xmlCookElement.DefaultValue == defaultInt32);
                         break;
 
 
+                    case ElementType.RGBADoubleWordArray:                               // 0x0006   // found in colorsets.xml.cooked
+                        UInt32 defaultDoubleWord = _ReadUInt32(null, null);
+                        Int32 arraySize = _ReadInt32(null, null);
+
+                        Debug.Assert((UInt32)xmlCookElement.DefaultValue == defaultDoubleWord);
+                        Debug.Assert(xmlCookElement.Count == arraySize);
+                        break;
+
+
                     case ElementType.Float:                                             // 0x0100
-                    case ElementType.UnknownFloat:                                      // 0x0800
+                    case ElementType.FloatArrayUnknown_0x0107:                          // 0x0107   // not sure of structure as non-default, but as default has same as Float
+                    case ElementType.Float_0x0500:                                      // 0x0500
                     case ElementType.UnknownFloatT:                                     // 0x0600 //materials "tScatterColor"
+                    case ElementType.UnknownFloat:                                      // 0x0800
                         float defaultFloat = _ReadFloat(null, null);                    // default value
 
                         Debug.Assert((float)xmlCookElement.DefaultValue == defaultFloat);
@@ -816,6 +844,14 @@ namespace Hellgate
                         Debug.Assert(xmlCookElement.ExcelTableCode == excelTableCode);
                         break;
 
+                    case ElementType.ExcelIndexArray_0x0905:                            // 0x0905
+                        Int32 excelTableArrCode = _ReadInt32(null, null);               // excel table code
+                        Int32 excelTableArrCount = _ReadInt32(null, null);
+
+                        Debug.Assert(xmlCookElement.ExcelTableCode == excelTableArrCode);
+                        Debug.Assert(xmlCookElement.Count == excelTableArrCount);
+                        break;
+
 
                     case ElementType.FloatArray:                                        // 0x0106
                         float defaultFloatArr = _ReadFloat(null, null);                 // default value
@@ -832,27 +868,30 @@ namespace Hellgate
                         Int32 elementCount = _ReadInt32(null, null);                    // table element count
 
                         XmlDefinition tableXmlDefition = _GetXmlDefinition(stringHash);
-                        if (tableXmlDefition == null ||
-                            tableXmlDefition.Count < elementCount)
-                            throw new Exceptions.NotSupportedFileDefinitionException();
+                        if (tableXmlDefition == null) throw new Exceptions.NotSupportedFileDefinitionException();
+                        if (tableXmlDefition.Count < elementCount) throw new Exceptions.NotSupportedXMLElementCount(tableXmlDefition.RootElement);
+                            
 
                         Hashtable childElements = _UncookFileXmlDefinition(tableXmlDefition, elementCount);
                         elements[elementHash] = childElements;
                         break;
 
-                    case ElementType.RGBADoubleWordArray:                               // 0x0006   // found in colorsets.xml.cooked
-                        UInt32 defaultDoubleWord = _ReadUInt32(null, null);
-                        Int32 arraySize = _ReadInt32(null, null);
 
-                        Debug.Assert((UInt32)xmlCookElement.DefaultValue == defaultDoubleWord);
-                        Debug.Assert(xmlCookElement.Count == arraySize);
+                    case ElementType.Int32Array_0x0A06:                                 // 0x0A06
+                        Int32 int32ArrDef = _ReadInt32(null, null);
+                        Int32 int32ArrCount = _ReadInt32(null, null);
+
+                        Debug.Assert((Int32)xmlCookElement.DefaultValue == int32ArrDef);
+                        Debug.Assert(xmlCookElement.Count == int32ArrCount);
                         break;
+
 
                     case ElementType.ByteArray:                                         // 0x1007   // found in textures
                         Int32 unknown = _ReadInt32(null, null);
 
                         Debug.Assert((Int32)xmlCookElement.DefaultValue == unknown);
                         break;
+
 
                     default:
                         throw new Exceptions.UnexpectedTokenException(

@@ -261,9 +261,13 @@
     <Compile Include="Unit.cs" />
     <Compile Include="XmlCookedFile.cs" />
     <Compile Include="XmlCookedFileUtil.cs" />
+    <Compile Include="XmlCookedFileTree.cs" />
     <Compile Include="Xml\AIBehaviorDefinition.cs" />
     <Compile Include="Xml\AIBehaviorDefinitionTable.cs" />
     <Compile Include="Xml\AIDefinition.cs" />
+    <Compile Include="Xml\AnimationDefinition.cs" />
+    <Compile Include="Xml\AnimEvent.cs" />
+    <Compile Include="Xml\AppearanceDefinition.cs" />
     <Compile Include="Xml\BlendRLE.cs" />
     <Compile Include="Xml\BlendRun.cs" />
     <Compile Include="Xml\ColorDefinition.cs" />
@@ -272,6 +276,7 @@
     <Compile Include="Xml\ConfigDefinition.cs" />
     <Compile Include="Xml\GameGlobalDefinition.cs" />
     <Compile Include="Xml\GlobalDefinition.cs" />
+    <Compile Include="Xml\InventoryViewInfo.cs" />
     <Compile Include="Xml\Material.cs" />
     <Compile Include="Xml\RoomLayoutGroup.cs" />
     <Compile Include="Xml\RoomLayoutGroupDefinition.cs" />

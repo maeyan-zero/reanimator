@@ -13,7 +13,7 @@
             new XmlCookElement
             {
                     Name = "pConnection",
-                    ElementType = ElementType.UnknownPTypeD,
+                    ElementType = ElementType.UnknownPTypeD_0x0D00,
                     DefaultValue = 0
             },
             new XmlCookElement
