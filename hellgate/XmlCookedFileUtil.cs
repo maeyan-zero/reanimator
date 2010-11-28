@@ -45,6 +45,9 @@ namespace Hellgate
                 // Config (config.xml)
                 new ConfigDefinition(),
 
+                // GameGlobalDefinition (gamedefault.xml)
+                new GameGlobalDefinition(),
+
                 // GlobalDefinition (default.xml)
                 new GlobalDefinition(),
 
@@ -174,9 +177,11 @@ namespace Hellgate
             XmlNode grandParentNode = parentNode.ParentNode;
             XmlNode descriptionNode = grandParentNode.LastChild.PreviousSibling;
 
-            Debug.Assert(descriptionNode != null);
-            if (!String.IsNullOrEmpty(descriptionNode.InnerText)) descriptionNode.InnerText += ", ";
-            descriptionNode.InnerText += excelString;
+            if (descriptionNode != null)
+            {
+                if (!String.IsNullOrEmpty(descriptionNode.InnerText)) descriptionNode.InnerText += ", ";
+                descriptionNode.InnerText += excelString;
+            }
 
             XmlElement element = XmlDoc.CreateElement(xmlCookElement.Name);
             element.InnerText = rowIndex.ToString();
