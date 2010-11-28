@@ -8,22 +8,22 @@ namespace Hellgate
 {
     public partial class StringsFile : DataFile
     {
-        public StringsFile()
+        public StringsFile(String stringId) : base(stringId)
         {
             IsStringsFile = true;
             DataType = typeof(StringBlock);
             Rows = new List<Object>();
         }
 
-        public StringsFile(byte[] buffer, String stringId) : this()
+        public StringsFile(byte[] buffer, String filePath) : this(filePath)
         {
-            StringId = stringId;
+            StringId = GetStringId(filePath);
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCSV = (peek != Token.Header);
             IntegrityCheck = ((isCSV)) ? ParseCSV(buffer) : ParseData(buffer);
         }
 
-        public override sealed String StringId { get; protected set; }
+        //public override sealed String StringId { get; protected set; }
 
         public override sealed bool ParseData(byte[] buffer)
         {

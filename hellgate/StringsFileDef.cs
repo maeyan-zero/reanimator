@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 namespace Hellgate
@@ -44,6 +46,13 @@ namespace Hellgate
                 Attribute3 = String.Empty;
                 Attribute4 = String.Empty;
             }
+        }
+
+        private static String GetStringId(String filePath)
+        {
+            // there are less than a dozen strings files, so might as well do case-insensitive search
+            String stringId = Path.GetFileName(filePath).Replace(FileExtention, "");
+            return DataTableMap.Keys.FirstOrDefault(key => key.ToLower() == stringId);
         }
     }
 }
