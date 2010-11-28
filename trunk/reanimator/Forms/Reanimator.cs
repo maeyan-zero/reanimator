@@ -53,31 +53,30 @@ namespace Reanimator
 
 
 
-            //const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
-            //String[] strings = File.ReadAllLines(filePath);
-            //foreach (String str in strings)
-            //{
-            //    if (str.Length <= 37) continue;
+            const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
+            String[] strings = File.ReadAllLines(filePath);
+            foreach (String str in strings)
+            {
+                if (str.Length <= 37) continue;
 
-            //    String subStr = str.Substring(37);
-            //    UInt32 strHash = Crypt.GetStringHash(subStr);
+                String subStr = str.Substring(37);
+                UInt32 strHash = Crypt.GetStringHash(subStr);
 
-            //    if (strHash == 1578484633)
-            //    {
-            //        int bp = 0;
-            //    }
+                if (strHash == 7339135) // APPEARANCE_DEFINITION     0x006FFC7F
+                {
+                    int bp = 0;
+                }
 
-            //    if (strHash == 284639281)
-            //    {
-            //        int bp = 0;
-            //    }
+                if (strHash == 278967514) // BLEND_RLE
+                {
+                    int bp = 0;
+                }
 
-            //    // achievements.txt.cooked
-            //    if (strHash == 2138164252) // 2466221064??
-            //    {
-            //        int bp = 0;
-            //    }
-            //}
+                if (strHash == 1944806950) // BLEND_RUN
+                {
+                    int bp = 0;
+                }
+            }
 
 
 
@@ -124,10 +123,18 @@ namespace Reanimator
 
             foreach (String xmlFilePath in xmlFiles)
             {
+                if (xmlFilePath.Contains("datChecksum")) continue;
+
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();
                 byte[] data = File.ReadAllBytes(xmlFilePath);
 
-                Console.WriteLine("Uncooking: " + Path.GetFileName(xmlFilePath));
+                String fileName = Path.GetFileName(xmlFilePath);
+                Console.WriteLine("Uncooking: " + fileName);
+                if (fileName == "test_appearance.xml.cooked")
+                {
+                    int bp = 0;
+                }
+
                 try
                 {
                     xmlCookedFile.Uncook(data);
@@ -136,6 +143,7 @@ namespace Reanimator
                 {
                     Console.WriteLine(e);
                     Debug.Assert(false, "Failed to uncook: " + e);
+                    continue;
                 }
                 
 

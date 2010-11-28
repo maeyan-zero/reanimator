@@ -70,7 +70,7 @@ namespace Hellpack
             foreach (String excelPath in excelFilesToCook)
             {
                 byte[] excelBuffer = File.ReadAllBytes(excelPath);
-                ExcelFile excelFile = new ExcelFile(excelBuffer);
+                ExcelFile excelFile = new ExcelFile(excelBuffer, excelPath);
                 if (!excelFile.IntegrityCheck)
                 {
                     Console.WriteLine("Failed to parse excel file: " + excelPath);

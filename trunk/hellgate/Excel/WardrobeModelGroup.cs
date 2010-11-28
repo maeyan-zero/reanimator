@@ -6,7 +6,7 @@ using TableHeader = Hellgate.ExcelFile.TableHeader;
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class WardrobeModelGroupRow
+    class WardrobeModelGroup
     {
         TableHeader header;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]

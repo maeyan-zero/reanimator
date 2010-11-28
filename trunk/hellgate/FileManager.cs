@@ -175,16 +175,21 @@ namespace Hellgate
             {
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
+                //if (fileEntry.FileNameString.Contains("levels_room_index.txt"))
+                //{
+                //    int bp = 0;
+                //}
+
+
                 // parse file data
                 DataFile dataFile;
                 if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention))
                 {
-                    dataFile = new ExcelFile(fileBytes) { FilePath = fileEntry.RelativeFullPathWithoutBackup };
+                    dataFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutBackup);
                 }
                 else
                 {
-                    String stringsStringId = fileEntry.FileNameString.Replace(StringsFile.FileExtention, "").ToUpper();
-                    dataFile = new StringsFile(fileBytes, stringsStringId) { FilePath = fileEntry.RelativeFullPathWithoutBackup };
+                    dataFile = new StringsFile(fileBytes, fileEntry.RelativeFullPathWithoutBackup);
                 }
 
                 if (!dataFile.IntegrityCheck)

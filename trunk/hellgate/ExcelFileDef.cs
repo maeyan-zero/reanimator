@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -39,7 +40,7 @@ namespace Hellgate
                 new KeyValuePair<uint,TypeMap>((uint)0x1CF9BDE9, new TypeMap { DataType = typeof(LevelsDrlgs) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1E760FB1, new TypeMap { DataType = typeof(SoundBuses) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1EE32EF6, new TypeMap { DataType = typeof(Bones) }),
-                new KeyValuePair<uint,TypeMap>((uint)0x1F0513C5, new TypeMap { DataType = typeof(WardrobeModelGroupRow) }),
+                new KeyValuePair<uint,TypeMap>((uint)0x1F0513C5, new TypeMap { DataType = typeof(WardrobeModelGroup) }),
                 new KeyValuePair<uint,TypeMap>((uint)0x1F9DDC98, new TypeMap { DataType = typeof(UnitTypes), HasIndexBitRelations = true }),
 
                 new KeyValuePair<uint,TypeMap>((uint)0x22FCCFEB, new TypeMap { DataType = typeof(StringFiles) }),
@@ -233,12 +234,12 @@ namespace Hellgate
                 new KeyValuePair<String, UInt32>("ITEMQUALITY", 0x2D83EDCC),
                 new KeyValuePair<String, UInt32>("ITEMS", 0x887988C4),
 
-                new KeyValuePair<String, UInt32>("LEVELS", 0x51C1C606),
+                new KeyValuePair<String, UInt32>("LEVEL", 0x51C1C606),
                 new KeyValuePair<String, UInt32>("LEVELS_DRLG_CHOICE", 0xBCDCE6DE),
-                new KeyValuePair<String, UInt32>("LEVELS_DRLGS", 0x1CF9BDE9),
+                new KeyValuePair<String, UInt32>("LEVEL_DRLGS", 0x1CF9BDE9),
                 new KeyValuePair<String, UInt32>("LEVELS_ENV", 0x4CC2F23D),
                 new KeyValuePair<String, UInt32>("LEVELS_FILE_PATH", 0xB28448F5),
-                new KeyValuePair<String, UInt32>("LEVELS_ROOM_INDEX", 0x8EF00B17),
+                new KeyValuePair<String, UInt32>("ROOM_INDEX", 0x8EF00B17),
                 new KeyValuePair<String, UInt32>("LEVELS_RULES", 0xB7A70C96),
                 new KeyValuePair<String, UInt32>("LEVELS_THEMES", 0xD1136038),
                 new KeyValuePair<String, UInt32>("LEVELSCALING", 0xACB1C3DD),
@@ -408,7 +409,7 @@ namespace Hellgate
             public const Int32 DnehValue = 0;
         }
 
-        public class ColumnTypeKeys
+        public abstract class ColumnTypeKeys
         {
             public const String IsFinalData = "IsFinalData";
             public const String IsExtendedProps = "IsExtendedProps";
@@ -421,22 +422,22 @@ namespace Hellgate
             public const String IsIntOffset = "IsIntOffset";
             public const String IsSecondaryString = "IsSecondaryString";
             public const String RequiresDefault = "RequiresDefault";
-            public const String SortAscendingID = "SortAscendingID";
+            public const String SortAscendingId = "SortAscendingId";
             public const String SortColumnTwo = "SortColumnTwo";
-            public const String SortDistinctID = "SortDistinctID";
-            public const String SortPostOrderID = "SortPostOrderID";
+            public const String SortDistinctId = "SortDistinctId";
+            public const String SortPostOrderId = "SortPostOrderId";
         }
 
         static class IntTableDef
         {
             // t, x, 0
-            public static int[] Case01 = new int[] { 2, 98, 707 };
+            public static readonly int[] Case01 = new[] { 2, 98, 707 };
             // t, x
-            public static int[] Case02 = new int[] { 1, 3, 4, 5, 6, 14, 26, 50, 86, 516, 527, 700 };
+            public static readonly int[] Case02 = new[] { 1, 3, 4, 5, 6, 14, 26, 50, 86, 516, 527, 700 };
             // t
-            public static int[] Case03 = new int[] { 320, 333, 339, 347, 358, 369, 388, 399, 418, 426, 437, 448, 459, 470, 481, 538, 708, 709, 710, 711, 712 };
+            public static readonly int[] Case03 = new[] { 320, 333, 339, 347, 358, 369, 388, 399, 418, 426, 437, 448, 459, 470, 481, 538, 708, 709, 710, 711, 712 };
             // t, x
-            public static int[] BitField = new int[] { 666, 667, 669, 673, 674, 680, 683, 687, 688 };
+            public static readonly int[] BitField = new[] { 666, 667, 669, 673, 674, 680, 683, 687, 688 };
         }
 
         class ExcelScript
@@ -465,26 +466,37 @@ namespace Hellgate
             return (query.Length != 0) ? (OutputAttribute)query[0] : null;
         }
 
-        private String _stringId;
-        public override String StringId
+        private static String GetStringId(String filePath)
         {
-            get
-            {
-                if (!String.IsNullOrEmpty(_stringId)) return _stringId;
+            // check if the file name is the same as the string id
+            String stringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
+            if (DataTableMap.ContainsKey(stringId)) return stringId;
 
-                var query = DataTables.Where(dt => dt.Value == StructureId);
-                if (query.Count() == 1) return _stringId = query.First().Key;
-
-                if (String.IsNullOrEmpty(FilePath)) return String.Empty;
-
-                return _stringId = FileName.ToUpper();
-            }
-
-            protected set
-            {
-                _stringId = value;
-            }
+            // file name is different to string id, then we have to loop through and check for name replace elements
+            return DataTableMap.Where(dataTableEntry => dataTableEntry.Value.FileName == stringId).Select(dataTableEntry => dataTableEntry.Key).FirstOrDefault();
         }
+
+        //private String _stringId;
+        //public override String StringId
+        //{
+        //    get
+        //    {
+        //        if (!String.IsNullOrEmpty(_stringId)) return _stringId;
+
+        //        var query = DataTables.Where(dt => dt.Value == StructureId);
+        //        int count = query.Count();
+        //        if (query.Count() == 1) return _stringId = query.First().Key;
+
+        //        if (String.IsNullOrEmpty(FilePath)) return String.Empty;
+
+        //        return _stringId = FileName.ToUpper();
+        //    }
+
+        //    protected set
+        //    {
+        //        _stringId = value;
+        //    }
+        //}
 
         public static uint GetStructureId(string stringId)
         {
@@ -736,7 +748,7 @@ namespace Hellgate
             if (String.IsNullOrEmpty(attribute.SortColumnTwo)) return;
 
             FieldInfo fieldInfo2 = DataType.GetField(attribute.SortColumnTwo);
-            if (fieldInfo2.FieldType != typeof (string)) return;
+            if (fieldInfo2.FieldType != typeof(string)) return;
 
             foreach (object row in Rows)
             {

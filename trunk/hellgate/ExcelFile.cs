@@ -53,7 +53,7 @@ namespace Hellgate
         /// <summary>
         /// Default ExcelFile constructor.
         /// </summary>
-        public ExcelFile()
+        public ExcelFile(String stringId) : base(stringId)
         {
             IsExcelFile = true;
         }
@@ -62,8 +62,11 @@ namespace Hellgate
         /// Creates a new ExcelFile object.
         /// </summary>
         /// <param name="buffer">Byte array of the given Excel file object.</param>
-        public ExcelFile(byte[] buffer) : this()
+        public ExcelFile(byte[] buffer, String filePath) : this(null)
         {
+            FilePath = filePath;
+            StringId = GetStringId(filePath);
+
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCooked = (peek == Token.cxeh);
 
