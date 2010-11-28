@@ -448,7 +448,7 @@ namespace Hellgate
         /// <param name="xmlDefinition">The XML Definition to cook.</param>
         /// <param name="cookedDefinitions">A list to track already cooked XML Definitions (stops recursion).</param>
         /// <returns>The amount of bytes written.</returns>
-        private static int _CookXmlDefinition(ref byte[] buffer, int offset, XmlDefinition xmlDefinition, List<UInt32> cookedDefinitions)
+        private static int _CookXmlDefinition(ref byte[] buffer, int offset, XmlDefinition xmlDefinition, ICollection<UInt32> cookedDefinitions)
         {
             cookedDefinitions.Add(xmlDefinition.RootHash);
 
@@ -462,21 +462,22 @@ namespace Hellgate
                 switch (xmlCookElement.ElementType)
                 {
                     // 0 bytes
-                    case ElementType.UnknownPTypeD: // 0x0D00
+                    case ElementType.UnknownPTypeD:         // 0x0D00
                         break;
 
                     // 4 bytes
-                    case ElementType.Int32: // 0x0000
-                    case ElementType.Float: // 0x0100
-                    case ElementType.UnknownFloatT: // 0x0600
-                    case ElementType.NonCookedInt32: // 0x0700
-                    case ElementType.UnknownFloat: // 0x0800
-                    case ElementType.UnknownPType: // 0x0007
+                    case ElementType.Int32:                 // 0x0000
+                    case ElementType.Float:                 // 0x0100
+                    case ElementType.UnknownFloatT:         // 0x0600
+                    case ElementType.NonCookedInt32:        // 0x0700
+                    case ElementType.UnknownFloat:          // 0x0800
+                    case ElementType.UnknownPType:          // 0x0007
+                    case ElementType.ByteArray:             // 0x1007   // found in TEXTURE_DEFINITION child BLEND_RUN
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.DefaultValue);
                         break;
 
                     // 1 + x bytes
-                    case ElementType.String: // 0x0200
+                    case ElementType.String:                // 0x0200
                         byte strLen = (byte)((xmlCookElement.DefaultValue == null)
                                          ? 0
                                          : ((String)xmlCookElement.DefaultValue).Length);
@@ -491,21 +492,21 @@ namespace Hellgate
                         break;
 
                     // 8 bytes
-                    case ElementType.Flag: // 0x0B01
+                    case ElementType.Flag:                  // 0x0B01
                         Int32 defaultFlagged = (bool)xmlCookElement.DefaultValue ? 1 : 0;
                         FileTools.WriteToBuffer(ref buffer, ref offset, defaultFlagged);
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.BitMask);
                         break;
 
                     // 8 bytes
-                    case ElementType.BitFlag: // 0x0C02
+                    case ElementType.BitFlag:               // 0x0C02
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.BitIndex);
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.BitCount);
                         break;
 
                     // 8 bytes
-                    case ElementType.Table: // 0x0308
-                    case ElementType.TableCount: // 0x030A
+                    case ElementType.Table:                 // 0x0308
+                    case ElementType.TableCount:            // 0x030A
                         XmlDefinition xmlSubDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
                         if (xmlSubDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
 
@@ -527,13 +528,13 @@ namespace Hellgate
                         break;
 
                     // 4 bytes
-                    case ElementType.ExcelIndex: // 0x0903
+                    case ElementType.ExcelIndex:            // 0x0903
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.ExcelTableCode);
                         break;
 
                     // 8 bytes
-                    case ElementType.RGBADoubleWordArray: // 0x0006     // colorsets.xml.cooked (pdwColors)
-                    case ElementType.FloatArray: // 0x0106
+                    case ElementType.RGBADoubleWordArray:   // 0x0006     // colorsets.xml.cooked (pdwColors)
+                    case ElementType.FloatArray:            // 0x0106
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.DefaultValue);
                         FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.Count);
                         break;
@@ -698,6 +699,13 @@ namespace Hellgate
                         //Debug.Assert((bool)xmlCookElement.DefaultValue != bValue);
                         break;
 
+                    case ElementType.ByteArray:                     // 0x1007
+                        UInt32 byteArraySize = _ReadUInt32(null, null);
+
+                        int bp1 = 0;
+
+                        break;
+
                     default:
                         Debug.Assert(false, "ElementType not set!");
                         break;
@@ -734,6 +742,7 @@ namespace Hellgate
              * 0x0903       ExcelIndex      Skills          4 bytes     First 4 bytes (UInt32) = Code of Excel Table - Cooking reads index and places from table
              * 0x0106       Float Array     AI              4 bytes     First 4 bytes (Float)  = Default Value, Second 4 bytes (Int32) = Array Size
              * 0x030A       TableCount      Skills          8 bytes     First 4 bytes (UInt32) = XML Definition Hash, Second 4 bytes (Int32) = XML Definition Element Count
+             * 0x1007       Byte Array      Textures        4 bytes     First 4 bytes (??) = ??
 
              * // extras found in particle effects
              *  00 0A       4 bytes (Int32?)
@@ -831,12 +840,18 @@ namespace Hellgate
                         elements[elementHash] = childElements;
                         break;
 
-                    case ElementType.RGBADoubleWordArray:                                    // 0x0006   // found in colorsets.xml.cooked
+                    case ElementType.RGBADoubleWordArray:                               // 0x0006   // found in colorsets.xml.cooked
                         UInt32 defaultDoubleWord = _ReadUInt32(null, null);
                         Int32 arraySize = _ReadInt32(null, null);
 
                         Debug.Assert((UInt32)xmlCookElement.DefaultValue == defaultDoubleWord);
                         Debug.Assert(xmlCookElement.Count == arraySize);
+                        break;
+
+                    case ElementType.ByteArray:                                         // 0x1007   // found in textures
+                        Int32 unknown = _ReadInt32(null, null);
+
+                        Debug.Assert((Int32)xmlCookElement.DefaultValue == unknown);
                         break;
 
                     default:
