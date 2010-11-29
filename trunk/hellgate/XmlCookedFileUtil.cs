@@ -94,7 +94,7 @@ namespace Hellgate
                 new BlendRun()
             };
 
-            // create hashes;
+            // create hashes
             foreach (XmlDefinition xmlDefinition in _xmlDefinitions)
             {
                 xmlDefinition.RootHash = Crypt.GetStringHash(xmlDefinition.RootElement);
@@ -199,7 +199,7 @@ namespace Hellgate
             parentNode.AppendChild(element);
         }
 
-        private void _ReadTable(XmlNode parentNode, XmlCookElement xmlCookElement, Hashtable elements)
+        private void _ReadTable(XmlNode parentNode, XmlCookElement xmlCookElement, XmlCookedFileTree xmlTree)
         {
             String elementName = xmlCookElement.Name;
             Debug.Assert(xmlCookElement.ChildType != null);
@@ -221,10 +221,7 @@ namespace Hellgate
                 XmlElement tableDesc = XmlDoc.CreateElement(xmlCookElement.Name);
                 parentNode.AppendChild(tableDesc);
 
-                XmlDefinition xmlCountDefinition = (XmlDefinition)Activator.CreateInstance(xmlCookElement.ChildType);
-                Hashtable childElements = (Hashtable)elements[xmlCookElement.NameHash];
-
-                _UncookXmlData(xmlCountDefinition, parentNode, childElements);
+                _UncookXmlData(xmlTree.Definition, parentNode, xmlTree.TwinRoot);
             }
         }
 
@@ -370,12 +367,12 @@ namespace Hellgate
             }
             else
             {
-                value = FileTools.ByteArrayToStringASCII(_data, _offset);
+                value = strLen == 1 ? String.Empty : FileTools.ByteArrayToStringASCII(_data, _offset);
             }
 
             _offset += strLen;
 
-            if (parentNode != null)
+            if (parentNode != null && !String.IsNullOrEmpty(value))
             {
                 XmlElement element = XmlDoc.CreateElement(xmlCookElement.Name);
                 element.InnerText = value;
@@ -383,6 +380,36 @@ namespace Hellgate
             }
 
             return value;
+        }
+
+        private void _ReadZeroStringArray(XmlNode parentNode, XmlCookElement xmlCookElement)
+        {
+            int count = _ReadInt32(null, null);
+            Debug.Assert(count != 0);
+
+            XmlElement countElement = XmlDoc.CreateElement(xmlCookElement.Name + "Count");
+            countElement.InnerText = count.ToString();
+            parentNode.AppendChild(countElement);
+
+            for (int i = 0; i < count; i++)
+            {
+                _ReadZeroString(parentNode, xmlCookElement);
+            }
+        }
+
+        private void _ReadVariableLengthFloatArray(XmlNode parentNode, XmlCookElement xmlCookElement)
+        {
+            int count = _ReadInt32(null, null);
+            Debug.Assert(count != 0);
+
+            XmlElement countElement = XmlDoc.CreateElement(xmlCookElement.Name + "Count");
+            countElement.InnerText = count.ToString();
+            parentNode.AppendChild(countElement);
+
+            for (int i = 0; i < count; i++)
+            {
+                _ReadFloat(parentNode, xmlCookElement.Name);
+            }
         }
 
         private void _ReadTFloatArray(XmlNode parentNode, XmlCookElement xmlCookElement)

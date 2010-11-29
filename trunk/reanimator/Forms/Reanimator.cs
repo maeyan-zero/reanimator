@@ -135,9 +135,7 @@ namespace Reanimator
 
                 String fileName = Path.GetFileName(xmlFilePath);
                 Console.WriteLine("Uncooking: " + fileName);
-                if (fileName != "test_appearance.xml.cooked") continue;
-
-
+                if (fileName != "cocomoko_appearance.xml.cooked") continue;
                 {
                     int bp = 0;
                 }
