@@ -42,7 +42,7 @@ namespace Hellgate
         readonly TableHeader ExcelTableHeader = new TableHeader
         {
             Unknown1 = 0x03,
-            Unknown2 = 0x3F,
+            Unknown2 = 0x3E,
             VersionMajor = 0,
             Reserved1 = -1,
             VersionMinor = 0,
@@ -102,7 +102,7 @@ namespace Hellgate
 
 
             // Mutate the buffer into a string array
-            int colCount = ExcelMap.HasExtended ? DataType.GetFields().Count() + 1 : DataType.GetFields().Count();
+            int colCount = ExcelMap.HasExtended ? DataType.GetFields().Count() + 2 : DataType.GetFields().Count() + 1;
             string[][] tableRows = FileTools.CSVToStringArray(buffer, colCount, delimiter);
             if ((tableRows == null)) return false;
 
@@ -122,7 +122,9 @@ namespace Hellgate
                     {
                         if ((fieldInfo.FieldType == typeof(TableHeader)))
                         {
-                            fieldInfo.SetValue(rowInstance, ExcelTableHeader);
+                            string headerString = tableRows[row][col++];
+                            TableHeader tableHeader = (TableHeader)FileTools.StringToObject(headerString, ",", typeof(TableHeader));
+                            fieldInfo.SetValue(rowInstance, tableHeader);
                             continue;
                         }
                         if ((fieldInfo.FieldType.BaseType == typeof(Array)))
@@ -367,6 +369,7 @@ namespace Hellgate
 
 
             // final data block; why is this not allocated? - no need to save? automatically generated when cooked?
+            // -> automatically generated via CreateIndexBitRelations() method
             if (!CheckToken(buffer, offset, 0))
             {
                 if (!CheckToken(buffer, ref offset, Token.cxeh)) return false;
@@ -556,24 +559,22 @@ namespace Hellgate
 
             int row = 0;
             int col = 0;
-            
 
-            // First dump column headers, replace the first with the table string id
+
+            // Table Header - put stringID in this field
+            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(StringId));
+            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+            // Public Field Headers
             foreach (FieldInfo fieldInfo in DataType.GetFields())
             {
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, ((col == 0)) ?
-                    FileTools.StringToASCIIByteArray(StringId) :
-                    FileTools.StringToASCIIByteArray(fieldInfo.Name));
-
-                if (col != noCols - 1) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-
-                col++;
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(fieldInfo.Name));
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
             }
             // Add extra column for extended properties
             if ((ExcelMap.HasExtended))
             {
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("ExtendedProps"));
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
             }
             // End of line
             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(Environment.NewLine));
@@ -582,12 +583,15 @@ namespace Hellgate
             // Parse each row, resolve buffers if needed
             foreach (Object rowObject in Rows)
             {
-                col = 0; // reset
+                // Write Table Header
+                FieldInfo headerField = DataType.GetField("header", BindingFlags.Instance | BindingFlags.NonPublic);
+                TableHeader tableHeader = (TableHeader)headerField.GetValue(rowObject);
+                string tableHeaderString = FileTools.ObjectToStringGeneric(tableHeader, ",");
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(tableHeaderString));
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+
                 foreach (FieldInfo fieldInfo in DataType.GetFields())
                 {
-                    if (col != 0) FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-                    col++;
-
                     OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
                     if (attribute != null)
                     {
@@ -630,12 +634,16 @@ namespace Hellgate
                         }
                     }
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(fieldInfo.GetValue(rowObject).ToString()));
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                 }
+
+                // Extended Buffer if applies
                 if (ExcelMap.HasExtended)
                 {
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(ExtendedBuffer[row], ',', typeof(byte))));
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                 }
+
                 row++;
                 if (row != noRows - 1)
                 {
