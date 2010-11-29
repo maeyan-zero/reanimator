@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Revival.Common
 {
@@ -503,6 +504,37 @@ namespace Revival.Common
             }
 
             return outputString;
+        }
+
+        public static string ObjectToStringGeneric(Object obj, string delimiter)
+        {
+            string outputString = String.Empty;
+            BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            FieldInfo[] fieldInfo = obj.GetType().GetFields(bindingFlags);
+            for (int i = 0; i < fieldInfo.Length; i++)
+            {
+                outputString += fieldInfo[i].GetValue(obj).ToString();
+                if (i != fieldInfo.Length - 1)
+                    outputString += delimiter;
+            }
+            return outputString;
+        }
+
+        public static Object StringToObject(string str, string delimiter, Type type)
+        {
+            string[] strFields = str.Split(delimiter.ToCharArray());
+            FieldInfo[] fieldInfo = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            // Check strFields has the same amount of fields
+            if (strFields.Length != fieldInfo.Length) return null;
+
+            Object obj = Activator.CreateInstance(type);
+            for (int i = 0; i < fieldInfo.Length; i++)
+            {
+                Object value = FileTools.StringToObject(strFields[i], fieldInfo[i].FieldType);
+                fieldInfo[i].SetValue(obj, value);
+            }
+
+            return obj;
         }
 
         public static string ByteArrayToDelimitedASCIIString(byte[] data, char delimiter, Type castAs)
