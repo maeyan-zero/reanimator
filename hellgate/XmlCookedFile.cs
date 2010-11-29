@@ -565,6 +565,8 @@ namespace Hellgate
             /* Header Structure
              * UInt32           Magic Word          'CO0k'
              * Int32            Version             Must be 8
+             * UInt32           Root XML Element
+             * Int32            Element Count
              */
 
             // check file infos
@@ -579,26 +581,27 @@ namespace Hellgate
 
 
             XmlDoc = new XmlDocument();
-            Hashtable elements = _UncookFileXmlDefinition(xmlDefinition, header.XmlRootElementCount);
+            XmlCookedFileTree xmlTree = new XmlCookedFileTree(xmlDefinition);
+            _UncookFileXmlDefinition(xmlDefinition, header.XmlRootElementCount, xmlTree);
 
             UInt32 dataMagicWord = FileTools.ByteArrayToUInt32(_data, ref _offset);
             if (dataMagicWord != DataMagicWord) throw new Exceptions.UnexpectedTokenException("'DATA' Token MagicWord expected but not found!");
 
-            _UncookXmlData(xmlDefinition, XmlDoc, elements);
+            _UncookXmlData(xmlDefinition, XmlDoc, xmlTree);
 
             Debug.Assert(_offset == _data.Length);
 
             return true;
         }
 
-        private void _UncookXmlData(XmlDefinition xmlDefinition, XmlNode xmlParent, Hashtable elements)
+        private void _UncookXmlData(XmlDefinition xmlDefinition, XmlNode xmlParent, XmlCookedFileTree xmlTree)
         {
             XmlElement rootElement = XmlDoc.CreateElement(xmlDefinition.RootElement);
             xmlParent.AppendChild(rootElement);
 
             // actual present element count - not total count possible
             // i.e. some definitions have fields that aren't always present (e.g. TCv4), but those fields aren't counted unless they appear in the xml definition header
-            int elementCount = elements.Count;
+            int elementCount = xmlTree.Count;
 
             // bitField info
             int bitFieldOffset = _offset;
@@ -606,16 +609,18 @@ namespace Hellgate
             _offset += bitFieldByteCount;
 
 
-            // loop through all elements
-            for (int i = 0; i < xmlDefinition.Count; i++)
+            // loop through elements
+            //for (int i = 0; i < xmlDefinition.Count; i++)
+            for (int i = 0; i < elementCount; i++)
             {
                 // is the field present?
                 if (!_TestBit(_data, bitFieldOffset, i)) continue;
 
-                XmlCookElement xmlCookElement = xmlDefinition[i];
+                //XmlCookElement xmlCookElement = xmlDefinition[i];
+                XmlCookElement xmlCookElement = xmlTree[i];
 
                 // sanity check - ensure it was in the definition segment
-                Debug.Assert(elements.ContainsKey(xmlCookElement.NameHash));
+                Debug.Assert(xmlTree.ContainsElement(xmlCookElement.NameHash));
 
                 //if (xmlCookElement.Name == "tAttachmentDef.eType")
                 //{
@@ -638,7 +643,7 @@ namespace Hellgate
 
                     case ElementType.UnknownPType:                  // 0x0007
                         Int32 pValue = _ReadInt32(rootElement, xmlCookElement.Name);
-                        //Debug.Assert((Int32)xmlCookElement.DefaultValue != pValue);
+                        Debug.Assert((Int32)xmlCookElement.DefaultValue != pValue);
                         break;
 
                     case ElementType.Float:                         // 0x0100
@@ -653,14 +658,29 @@ namespace Hellgate
                         }
                         break;
 
+                    case ElementType.FloatArrayUnknown_0x0107:
+                        _ReadVariableLengthFloatArray(rootElement, xmlCookElement);
+                        break;
+
                     case ElementType.String:                        // 0x0200
                         String szValue = _ReadZeroString(rootElement, xmlCookElement);
                         Debug.Assert((String)xmlCookElement.DefaultValue != szValue);
                         break;
 
+                    case ElementType.StringArray_0x0206:
+                        for (int strIndex = 0; strIndex < xmlCookElement.Count; strIndex++)
+                        {
+                            _ReadZeroString(rootElement, xmlCookElement);
+                        }
+                        break;
+
+                    case ElementType.StringArrayUnknown_0x0207:
+                        _ReadZeroStringArray(rootElement, xmlCookElement);
+                        break;
+
                     case ElementType.Table:                         // 0x0308
                     case ElementType.TableCount:                    // 0x030A
-                        _ReadTable(rootElement, xmlCookElement, elements);
+                        _ReadTable(rootElement, xmlCookElement, xmlTree.GetTree(i));
                         break;
 
                     case ElementType.UnknownFloatT:                 // 0x0600
@@ -735,7 +755,7 @@ namespace Hellgate
         /// <param name="xmlDefinition">The base XML Definition to check for elements.</param>
         /// <param name="xmlDefElementCount">The number of elements expect to be in use.</param>
         /// <returns>Hashtable of elements in use within the xml file.</returns>
-        private Hashtable _UncookFileXmlDefinition(XmlDefinition xmlDefinition, int xmlDefElementCount)
+        private void _UncookFileXmlDefinition(XmlDefinition xmlDefinition, int xmlDefElementCount, XmlCookedFileTree xmlTree)
         {
             /* Default Element Values Array & General Structure
              * =Token=		=Type=          =FoundIn=       =Details= (* = variable length)
@@ -755,14 +775,13 @@ namespace Hellgate
              * 0x1007       Byte Array      Textures        4 bytes     First 4 bytes (??) = ??
              */
 
-            Hashtable elements = new Hashtable();
             for (int i = 0; i < xmlDefElementCount && _offset < _data.Length; i++)
             {
                 uint elementHash = FileTools.ByteArrayToUInt32(_data, ref _offset);
 
                 XmlCookElement xmlCookElement = _GetXmlCookElement(xmlDefinition, elementHash);
                 if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException("Unexpected xml element hash: 0x" + elementHash.ToString("X8"));
-                elements.Add(elementHash, xmlCookElement);
+                xmlTree.AddElement(xmlCookElement);
 
                 ElementType token = (ElementType)FileTools.ByteArrayToUShort(_data, ref _offset);
                 switch (token)
@@ -870,10 +889,17 @@ namespace Hellgate
                         XmlDefinition tableXmlDefition = _GetXmlDefinition(stringHash);
                         if (tableXmlDefition == null) throw new Exceptions.NotSupportedFileDefinitionException();
                         if (tableXmlDefition.Count < elementCount) throw new Exceptions.NotSupportedXMLElementCount(tableXmlDefition.RootElement);
-                            
 
-                        Hashtable childElements = _UncookFileXmlDefinition(tableXmlDefition, elementCount);
-                        elements[elementHash] = childElements;
+                        if (elementCount == -1)
+                        {
+                            xmlTree.AddExistingTree(stringHash);
+                        }
+                        else
+                        {
+                            XmlCookedFileTree xmlChildTree = new XmlCookedFileTree(tableXmlDefition, xmlCookElement, xmlTree);
+                            xmlTree.AddTree(xmlChildTree);
+                            _UncookFileXmlDefinition(tableXmlDefition, elementCount, xmlChildTree);
+                        }
                         break;
 
 
@@ -898,8 +924,6 @@ namespace Hellgate
                             "Unexpected .xml.cooked definition array token: 0x" + ((ushort)token).ToString("X4"));
                 }
             }
-
-            return elements;
         }
 
         /// <summary>

@@ -19,7 +19,7 @@ namespace Hellgate
         public string FilePath { get; set; }
         public string FileExtension { get; set; }
         public string FileName { get { return Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(FilePath)); } }
-        public List<object> Rows { get; protected set; }
+        public List<Object> Rows { get; protected set; }
 
         protected DataFile(String stringId)
         {
