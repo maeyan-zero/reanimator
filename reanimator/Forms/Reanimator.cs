@@ -135,7 +135,7 @@ namespace Reanimator
 
                 String fileName = Path.GetFileName(xmlFilePath);
                 Console.WriteLine("Uncooking: " + fileName);
-                if (fileName != "cocomoko_appearance.xml.cooked") continue;
+                if (fileName != "test_appearance.xml.cooked") continue;
                 {
                     int bp = 0;
                 }
@@ -154,7 +154,8 @@ namespace Reanimator
 
                 xmlCookedFile.SaveXml(xmlFilePath.Replace(".cooked", ""));
 
-                byte[] recookedData = XmlCookedFile.CookXmlDocument(xmlCookedFile.XmlDoc);
+                XmlCookedFile recookedXmlFile = new XmlCookedFile();
+                byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
                 byte[] originalHash = md5.ComputeHash(data);
                 byte[] recookedHash = md5.ComputeHash(recookedData);
                 //File.WriteAllBytes(xmlFilePath + "2", recookedData);
@@ -185,8 +186,8 @@ namespace Reanimator
 
                 xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
 
-                byte[] recookedData = XmlCookedFile.CookXmlDocument(xmlCookedFile.XmlDoc);
-
+                XmlCookedFile recookedXmlFile = new XmlCookedFile();
+                byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
                 byte[] originalHash = x.ComputeHash(data);
                 byte[] recookedHash = x.ComputeHash(recookedData);
 

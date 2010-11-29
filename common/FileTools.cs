@@ -458,7 +458,7 @@ namespace Revival.Common
 
             if (offset + lengthToWrite > buffer.Length || insert)
             {
-                byte[] newBuffer = new byte[buffer.Length + lengthToWrite + 1024];
+                byte[] newBuffer = new byte[buffer.Length + lengthToWrite + offset + 1024];
                 Buffer.BlockCopy(buffer, 0, newBuffer, 0, buffer.Length);
                 buffer = newBuffer;
             }

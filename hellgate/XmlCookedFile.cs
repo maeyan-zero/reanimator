@@ -11,7 +11,7 @@ namespace Hellgate
 {
     public partial class XmlCookedFile
     {
-        public const String FileExtention = "xml.cooked";
+        public const String FileExtention = ".xml.cooked";
         private const UInt32 FileMagicWord = 0x6B304F43; // 'CO0k'
         private const Int32 RequiredVersion = 8;
         private const UInt32 DataMagicWord = 0x41544144;
@@ -19,8 +19,8 @@ namespace Hellgate
         private static FileManager _fileManager;
 
         private int _offset;
-        private byte[] _data;
-        public XmlDocument XmlDoc { get; set; }
+        private byte[] _buffer;
+        public XmlDocument XmlDoc { get; private set; }
 
         public XmlCookedFile()
         {
@@ -31,7 +31,7 @@ namespace Hellgate
         /// </summary>
         /// <param name="xmlDocument">An XML Document to Cook.</param>
         /// <returns>The cooked bytes, or null upon failure.</returns>
-        public static byte[] CookXmlDocument(XmlDocument xmlDocument)
+        public byte[] CookXmlDocument(XmlDocument xmlDocument)
         {
             if (_xmlDefinitions == null) throw new Exceptions.NotInitializedException();
             if (!xmlDocument.HasChildNodes) return null;
@@ -42,10 +42,8 @@ namespace Hellgate
             XmlDefinition xmlDefinition = _GetXmlDefinition(xmlDefinitionHash);
             if (xmlDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
 
-
-            byte[] buffer = new byte[1024];
-            int offset = 0;
-
+            _offset = 0;
+            _buffer = new byte[1024];
 
             // header details //
             XmlCookFileHeader xmlCookFileHeader = new XmlCookFileHeader
@@ -55,38 +53,38 @@ namespace Hellgate
                 XmlRootDefinition = xmlDefinitionHash,
                 XmlRootElementCount = xmlDefinition.Count
             };
-            FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookFileHeader);
+            FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookFileHeader);
 
 
             // write default element array //
             List<UInt32> cookedDefinitions = new List<UInt32>();
-            int bytesWritten = _CookXmlDefinition(ref buffer, offset, xmlDefinition, cookedDefinitions);
+            int bytesWritten = _CookXmlDefinition(xmlDefinition, cookedDefinitions);
             if (bytesWritten == 0) return null;
-            offset += bytesWritten;
+            _offset += bytesWritten;
 
 
             // write data segment //
-            FileTools.WriteToBuffer(ref buffer, ref offset, DataMagicWord);
+            FileTools.WriteToBuffer(ref _buffer, ref _offset, DataMagicWord);
             XmlNode xmlNode = xmlDocument.FirstChild;
-            bytesWritten = _CookXmlData(ref buffer, offset, xmlDefinition, xmlNode);
+            bytesWritten = _CookXmlData(xmlDefinition, xmlNode);
             if (bytesWritten == 0) return null;
-            offset += bytesWritten;
+            _offset += bytesWritten;
 
-            byte[] cookedBytes = new byte[offset];
-            Buffer.BlockCopy(buffer, 0, cookedBytes, 0, offset);
+            byte[] cookedBytes = new byte[_offset];
+            Buffer.BlockCopy(_buffer, 0, cookedBytes, 0, _offset);
 
             return cookedBytes;
         }
 
-        private static int _CookXmlData(ref byte[] buffer, int offset, XmlDefinition xmlDefinition, XmlNode xmlNode)
+        private int _CookXmlData(XmlDefinition xmlDefinition, XmlNode xmlNode)
         {
-            int offsetStart = offset;
+            int offsetStart = _offset;
             int elementCount = xmlDefinition.Elements.Count;
 
             // bitField info
-            int bitFieldOffset = offset;
+            int bitFieldOffset = _offset;
             int bitFieldByteCount = (elementCount - 1 >> 3) + 1; // -1 as 16 >> 3 = 2 + 1 = 3, but should only be 2 bytes, and +1 as 7 >> 3 = 0
-            offset += bitFieldByteCount;
+            _offset += bitFieldByteCount;
 
             // todo: this is a bit excessive for a couple of offsets, but meh, fix it later
             Hashtable bitFieldOffsts = new Hashtable();
@@ -103,14 +101,14 @@ namespace Hellgate
                     {
                         case ElementType.ExcelIndex:
                             const byte noEntry = 0xFF;
-                            FileTools.WriteToBuffer(ref buffer, ref offset, noEntry);
-                            _FlagBit(buffer, bitFieldOffset, bitIndex);
+                            FileTools.WriteToBuffer(ref _buffer, ref _offset, noEntry);
+                            _FlagBit(_buffer, bitFieldOffset, bitIndex);
                             break;
 
                         case ElementType.TableCount:
                             const Int32 zeroTables = 0;
-                            FileTools.WriteToBuffer(ref buffer, ref offset, zeroTables);
-                            _FlagBit(buffer, bitFieldOffset, bitIndex);
+                            FileTools.WriteToBuffer(ref _buffer, ref _offset, zeroTables);
+                            _FlagBit(_buffer, bitFieldOffset, bitIndex);
                             break;
                     }
 
@@ -140,408 +138,197 @@ namespace Hellgate
 
                 switch (xmlCookElement.ElementType)
                 {
-                    case ElementType.NonCookedInt32: // 0x0700
-                    case ElementType.UnknownFloat: // 0x0800
-                    case ElementType.UnknownPTypeD_0x0D00: // 0x0D00
-                        // not cooked.... (I think...)
+                    case ElementType.NonCookedInt32:                    // 0x0700
+                    case ElementType.UnknownFloat:                      // 0x0800
+                    case ElementType.UnknownPTypeD_0x0D00:              // 0x0D00
+                        int bp = 0;     // not cooked.... (I think...)
                         continue;
 
-
-                    case ElementType.Int32: // 0x0000
-                    case ElementType.UnknownPType: // 0x0007    // I think this is just an int32...
-                        Int32 intValue = Convert.ToInt32(elementText);
-                        if ((Int32)xmlCookElement.DefaultValue == intValue) continue;
-                        FileTools.WriteToBuffer(ref buffer, ref offset, intValue);
+                    case ElementType.Int32:                             // 0x0000
+                    //case ElementType.UnknownPType:                    // 0x0007       // I think this is just an int32...
+                        _WriteInt32(elementText, xmlCookElement);
                         break;
 
-
-                    case ElementType.RGBADoubleWordArray: // 0x0006     // found in colorsets.xml.cooked
-                        int dwArrayCount = xmlCookElement.Count;
-                        List<UInt32> dwElements = new List<UInt32>();
-                        bool dwAllDefault = true;
-                        foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
-                        {
-                            if (xmlChildNode.Name != xmlCookElement.Name) continue;
-
-                            String arrayElementText = xmlChildNode.InnerText;
-                            UInt32 dwValue = UInt32.Parse(arrayElementText);
-                            dwElements.Add(dwValue);
-
-                            if ((UInt32)xmlCookElement.DefaultValue != dwValue)
-                            {
-                                dwAllDefault = false;
-                            }
-
-                            if (dwElements.Count == dwArrayCount) break;
-                        }
-
-                        if (dwAllDefault) continue;
-
-                        for (int i = 0; i < dwArrayCount; i++)
-                        {
-                            UInt32 dwWrite = (UInt32)xmlCookElement.DefaultValue;
-                            if (i < dwElements.Count)
-                            {
-                                dwWrite = dwElements[i];
-                            }
-
-                            FileTools.WriteToBuffer(ref buffer, ref offset, dwWrite);
-                        }
+                    case ElementType.RGBADoubleWordArray:               // 0x0006       // found in colorsets.xml.cooked
+                        _WriteRGBADoubleWordArray(elementText, xmlCookElement, xmlNode);
                         break;
 
-
-                    case ElementType.Float: // 0x0100
-                        float floatValue = Convert.ToSingle(elementText);
-                        if ((float)xmlCookElement.DefaultValue == floatValue) continue;
-                        FileTools.WriteToBuffer(ref buffer, ref offset, floatValue);
+                    case ElementType.Float:                             // 0x0100
+                        _WriteFloat(elementText, xmlCookElement);
                         break;
 
-
-                    case ElementType.String: // 0x0200
-                        if ((String)xmlCookElement.DefaultValue == elementText) continue;
-
-                        Int32 strLen = elementText.Length;
-                        if (strLen == 0 && xmlCookElement.DefaultValue == null) continue;
-
-                        byte[] strBytes;
-                        if (xmlCookElement.TreatAsData)
-                        {
-                            String[] dataStrBytes = elementText.Split('-');
-                            strLen = dataStrBytes.Length - 1; //+1 done down below
-
-                            strBytes = new byte[strLen];
-                            for (int i = 0; i < strLen; i++)
-                            {
-                                strBytes[i] = Byte.Parse(dataStrBytes[i], System.Globalization.NumberStyles.HexNumber);
-                            }
-                        }
-                        else
-                        {
-                            strBytes = FileTools.StringToASCIIByteArray(elementText);
-                        }
-
-                        FileTools.WriteToBuffer(ref buffer, ref offset, strLen + 1);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, strBytes);
-
-                        offset++; // \0
-
+                    case ElementType.FloatArray:                        // 0x0106
+                        _WriteFloatArray(elementText, xmlCookElement, xmlNode);
                         break;
 
-
-                    case ElementType.UnknownFloatT: // 0x0600
-                        Int32 count = Convert.ToInt32(elementText);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, count);
-
-                        int floatTCount = xmlCookElement.Count;
-                        List<float> floatTValues = new List<float>();
-                        bool floatTAllDefault = true;
-
-                        int totalFloatTCount = count * floatTCount;
-                        foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
-                        {
-                            if (xmlChildNode.Name != xmlCookElement.Name) continue;
-
-                            String arrayElementText = xmlChildNode.InnerText;
-                            float fValue = Convert.ToSingle(arrayElementText);
-                            if (fValue == 0 && arrayElementText == "-0")
-                                fValue = -1.0f * 0.0f;
-                            floatTValues.Add(fValue);
-
-                            if ((float)xmlCookElement.DefaultValue != fValue)
-                            {
-                                floatTAllDefault = false;
-                            }
-
-                            if (floatTValues.Count == totalFloatTCount) break;
-                        }
-
-                        if (floatTAllDefault) continue;
-
-                        for (int i = 0; i < count; i++)
-                        {
-                            for (int j = 0; j < floatTCount; j++)
-                            {
-                                float fWrite;
-
-                                int index = i * floatTCount + j;
-                                if (index < floatTValues.Count)
-                                {
-                                    fWrite = floatTValues[index];
-                                }
-                                else
-                                {
-                                    fWrite = (float)xmlCookElement.DefaultValue;
-                                }
-
-                                FileTools.WriteToBuffer(ref buffer, ref offset, fWrite);
-                            }
-                        }
+                    case ElementType.String:                            // 0x0200
+                        _WriteString(elementText, xmlCookElement);
                         break;
 
-
-                    case ElementType.Flag: // 0x0B01
-                        bool flagged = elementText == "0" ? false : true;
-                        if ((bool)xmlCookElement.DefaultValue == flagged) continue;
-
-                        int flagIndex = xmlCookElement.FlagId - 1;
-                        if (xmlCookElement.ElementType == ElementType.BitFlag) flagIndex = 0;
-
-                        // has it been written yet
-                        if (xmlDefinition.BitFields[flagIndex] == -1 || bitFieldOffsts[flagIndex] == null)
-                        {
-                            bitFieldOffsts.Add(flagIndex, offset);
-                            xmlDefinition.BitFields[flagIndex] = 0;
-                            offset += 4; // bit field bytes
-                        }
-
-
-                        UInt32 flag = (UInt32)xmlDefinition.BitFields[flagIndex];
-                        if (xmlCookElement.ElementType == ElementType.Flag)
-                        {
-                            flag |= xmlCookElement.BitMask;
-                        }
-                        else
-                        {
-                            flag |= ((UInt32)1 << xmlCookElement.BitIndex);
-                        }
-
-                        int writeOffset = (int)bitFieldOffsts[flagIndex];
-                        FileTools.WriteToBuffer(ref buffer, ref writeOffset, flag);
-                        xmlDefinition.BitFields[flagIndex] = (Int32)flag;
+                    case ElementType.Table:                             // 0x0308
+                        _WriteTable(xmlCookElement, xmlNode);
                         break;
 
-                    case ElementType.BitFlag: // 0x0C02
-                        bool bitFlagIsFlagged = elementText == "0" ? false : true;
-                        if ((bool)xmlCookElement.DefaultValue == bitFlagIsFlagged) continue;
-
-                        if (xmlDefinition.BitFlagsWriteOffset == -1)
-                        {
-                            int intCount = xmlDefinition.BitFlags.Length;
-
-                            xmlDefinition.BitFlagsWriteOffset = offset;
-                            offset += intCount * sizeof(UInt32);
-                        }
-
-                        int intIndex = xmlCookElement.BitIndex >> 5;
-                        int bitFlagIndex = xmlCookElement.BitIndex - (intIndex << 5);
-                        UInt32 bitFlagField = xmlDefinition.BitFlags[intIndex] | ((UInt32)1 << bitFlagIndex);
-                        xmlDefinition.BitFlags[intIndex] = bitFlagField;
-
-                        int bitFlagWriteOffset = xmlDefinition.BitFlagsWriteOffset + (intIndex << 2);
-                        FileTools.WriteToBuffer(ref buffer, ref bitFlagWriteOffset, bitFlagField);
+                    case ElementType.TableCount:                        // 0x030A
+                        if (_WriteTableCount(elementText, xmlCookElement, xmlNode) == -1) return 0; // we found less tables than we were supposed to cook
                         break;
 
-
-                    case ElementType.Table: // 0x0308
-                        XmlDefinition xmlTableDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
-                        XmlNode xmlTable = xmlNode[xmlTableDefinition.RootElement];
-
-                        int tableBytesWritten = _CookXmlData(ref buffer, offset, xmlTableDefinition, xmlTable);
-                        offset += tableBytesWritten;
+                    case ElementType.UnknownFloatT:                     // 0x0600
+                        _WriteUnknownFloatT(elementText, xmlCookElement, xmlNode);
                         break;
 
-
-                    case ElementType.TableCount: // 0x030A
-                        int tableCount = String.IsNullOrEmpty(elementText) ? 0 : Convert.ToInt32(elementText);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, tableCount); // table count is always written
-                        if (tableCount == 0) break;
-
-                        XmlDefinition xmlTableCountDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
-                        int tablesAdded = 0;
-                        foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
-                        {
-                            if (xmlChildNode.Name != xmlTableCountDefinition.RootElement) continue;
-
-                            int tableCountBytes = _CookXmlData(ref buffer, offset, xmlTableCountDefinition, xmlChildNode);
-                            offset += tableCountBytes;
-                            tablesAdded++;
-
-                            if (tableCount == tablesAdded) break;
-                        }
-                        if (tablesAdded < tableCount) return 0;
-
+                    case ElementType.ExcelIndex:                        // 0x0903
+                        _WriteExcelIndex(elementText, xmlCookElement);
                         break;
 
-
-                    case ElementType.ExcelIndex: // 0x0903
-                        String excelString = String.Empty;
-                        byte byteLen = (byte)elementText.Length;
-                        if (byteLen > 0)
-                        {
-                            int index = int.Parse(elementText);
-                            excelString = _fileManager.GetExcelRowStringFromIndex(xmlCookElement.ExcelTableCode, index);
-
-                            if (String.IsNullOrEmpty(excelString))
-                            {
-                                byteLen = 0; // not found
-                            }
-                            else
-                            {
-                                byteLen = (byte)excelString.Length;
-                            }
-                        }
-
-                        if (byteLen == 0)
-                        {
-                            byteLen = 0xFF;
-                            FileTools.WriteToBuffer(ref buffer, ref offset, byteLen);
-                        }
-                        else
-                        {
-                            FileTools.WriteToBuffer(ref buffer, ref offset, byteLen);
-                            byte[] stringBytes = FileTools.StringToASCIIByteArray(excelString);
-                            FileTools.WriteToBuffer(ref buffer, ref offset, stringBytes);
-                            // no \0
-                        }
-
+                    case ElementType.Flag:                              // 0x0B01
+                        _WriteFlag(elementText, xmlCookElement, xmlDefinition, bitFieldOffsts);
                         break;
 
+                    case ElementType.BitFlag:                           // 0x0C02
+                        _WriteBitFlag(elementText, xmlCookElement, xmlDefinition);
+                        break;
 
-                    case ElementType.FloatArray: // 0x0106
-                        int arrayCount = xmlCookElement.Count;
-                        List<float> elements = new List<float>();
-                        bool allDefault = true;
-                        foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
-                        {
-                            if (xmlChildNode.Name != xmlCookElement.Name) continue;
-
-                            String arrayElementText = xmlChildNode.InnerText;
-                            float fValue = Convert.ToSingle(arrayElementText);
-                            if (fValue == 0 && arrayElementText == "-0")
-                                fValue = -1.0f * 0.0f;
-                            elements.Add(fValue);
-
-                            if ((float)xmlCookElement.DefaultValue != fValue)
-                            {
-                                allDefault = false;
-                            }
-
-                            if (elements.Count == arrayCount) break;
-                        }
-
-                        if (allDefault) continue;
-
-                        for (int i = 0; i < arrayCount; i++)
-                        {
-                            float fWrite = (float)xmlCookElement.DefaultValue;
-                            if (i < elements.Count)
-                            {
-                                fWrite = elements[i];
-                            }
-
-                            FileTools.WriteToBuffer(ref buffer, ref offset, fWrite);
-                        }
+                    default:
+                        Debug.Assert(false, "ElementType not set!");
                         break;
                 }
 
-                _FlagBit(buffer, bitFieldOffset, bitIndex);
+                _FlagBit(_buffer, bitFieldOffset, bitIndex);
             }
 
-            return offset - offsetStart;
+            return _offset - offsetStart;
         }
 
         /// <summary>
         /// Cooks an XML Definition and its children into the supplied byte array.
         /// </summary>
-        /// <param name="buffer">A reference to the byte array buffer.</param>
-        /// <param name="offset">The buffer offset to begin writing.</param>
         /// <param name="xmlDefinition">The XML Definition to cook.</param>
         /// <param name="cookedDefinitions">A list to track already cooked XML Definitions (stops recursion).</param>
         /// <returns>The amount of bytes written.</returns>
-        private static int _CookXmlDefinition(ref byte[] buffer, int offset, XmlDefinition xmlDefinition, ICollection<UInt32> cookedDefinitions)
+        private int _CookXmlDefinition(XmlDefinition xmlDefinition, ICollection<UInt32> cookedDefinitions)
         {
             cookedDefinitions.Add(xmlDefinition.RootHash);
 
-            int offsetStart = offset;
+            int offsetStart = _offset;
             foreach (XmlCookElement xmlCookElement in xmlDefinition.Elements)
             {
                 // write name hash and token
-                FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.NameHash);
-                FileTools.WriteToBuffer(ref buffer, ref offset, (ushort)xmlCookElement.ElementType);
+                FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.NameHash);
+                FileTools.WriteToBuffer(ref _buffer, ref _offset, (ushort)xmlCookElement.ElementType);
 
                 switch (xmlCookElement.ElementType)
                 {
                     // 0 bytes
-                    case ElementType.UnknownPTypeD_0x0D00:         // 0x0D00
+                    case ElementType.UnknownPTypeD_0x0D00:          // 0x0D00
                         break;
 
                     // 4 bytes
-                    case ElementType.Int32:                 // 0x0000
-                    case ElementType.Float:                 // 0x0100
-                    case ElementType.UnknownFloatT:         // 0x0600
-                    case ElementType.NonCookedInt32:        // 0x0700
-                    case ElementType.UnknownFloat:          // 0x0800
-                    case ElementType.UnknownPType:          // 0x0007
-                    case ElementType.ByteArray:             // 0x1007   // found in TEXTURE_DEFINITION child BLEND_RUN
-                        FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.DefaultValue);
+                    case ElementType.Int32:                         // 0x0000
+                    case ElementType.UnknownPType:                  // 0x0007
+                    case ElementType.Float:                         // 0x0100
+                    case ElementType.FloatArrayUnknown_0x0107:      // 0x0107
+                    case ElementType.Float_0x0500:                  // 0x0500
+                    case ElementType.UnknownFloatT:                 // 0x0600
+                    case ElementType.NonCookedInt32:                // 0x0700
+                    case ElementType.UnknownFloat:                  // 0x0800
+                    case ElementType.Int32_0x0A00:                  // 0x0A00
+                    case ElementType.ByteArray:                     // 0x1007       // found in TEXTURE_DEFINITION child BLEND_RUN
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.DefaultValue);
                         break;
 
                     // 1 + x bytes
-                    case ElementType.String:                // 0x0200
-                        byte strLen = (byte)((xmlCookElement.DefaultValue == null)
-                                         ? 0
-                                         : ((String)xmlCookElement.DefaultValue).Length);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, strLen);
+                    case ElementType.String:                        // 0x0200
+                    case ElementType.StringArrayUnknown_0x0207:     // 0x0207       // AppearanceDefinition - not tested DefaultValue != null
+                        String strDefault = xmlCookElement.DefaultValue as String;
+                        byte strLen = (byte)((strDefault == null) ? 0 : strDefault.Length);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, strLen);
 
                         if (xmlCookElement.DefaultValue == null) continue;
 
-
                         byte[] stringBytes = FileTools.StringToASCIIByteArray(xmlCookElement.DefaultValue.ToString());
-                        FileTools.WriteToBuffer(ref buffer, ref offset, stringBytes);
-                        offset++;
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, stringBytes);
+                        _offset++; // \0
+                        break;
+
+                    // 1 + x bytes + 4 bytes
+                    case ElementType.StringArray_0x0206:            // 0x0206
+                        String strArrDefault = xmlCookElement.DefaultValue as String;
+                        byte strArrStrLen = (byte)((strArrDefault == null) ? 0 : strArrDefault.Length);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, strArrStrLen);
+
+                        if (xmlCookElement.DefaultValue != null)
+                        {
+                            byte[] strArrStringBytes = FileTools.StringToASCIIByteArray(xmlCookElement.DefaultValue.ToString());
+                            FileTools.WriteToBuffer(ref _buffer, ref _offset, strArrStringBytes);
+                            _offset++; // \0
+                        }
+
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.Count);
                         break;
 
                     // 8 bytes
-                    case ElementType.Flag:                  // 0x0B01
+                    case ElementType.Flag:                          // 0x0B01
                         Int32 defaultFlagged = (bool)xmlCookElement.DefaultValue ? 1 : 0;
-                        FileTools.WriteToBuffer(ref buffer, ref offset, defaultFlagged);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.BitMask);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, defaultFlagged);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.BitMask);
                         break;
 
                     // 8 bytes
-                    case ElementType.BitFlag:               // 0x0C02
-                        FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.BitIndex);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.BitCount);
+                    case ElementType.BitFlag:                       // 0x0C02
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.BitIndex);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.BitCount);
                         break;
 
                     // 8 bytes
-                    case ElementType.Table:                 // 0x0308
-                    case ElementType.TableCount:            // 0x030A
+                    case ElementType.Table:                         // 0x0308
+                    case ElementType.TableCount:                    // 0x030A
                         XmlDefinition xmlSubDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
                         if (xmlSubDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
 
-                        FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.ChildTypeHash);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.ChildTypeHash);
 
                         // make sure we haven't already cooked it
                         if (cookedDefinitions.Contains(xmlCookElement.ChildTypeHash))
                         {
                             const Int32 alreadyCooked = -1;
-                            FileTools.WriteToBuffer(ref buffer, ref offset, alreadyCooked);
+                            FileTools.WriteToBuffer(ref _buffer, ref _offset, alreadyCooked);
                             break;
                         }
 
-                        FileTools.WriteToBuffer(ref buffer, ref offset, xmlSubDefinition.Count);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlSubDefinition.Count);
 
-                        int bytesWritten = _CookXmlDefinition(ref buffer, offset, xmlSubDefinition, cookedDefinitions);
+                        int bytesWritten = _CookXmlDefinition(xmlSubDefinition, cookedDefinitions);
                         if (bytesWritten == 0) return 0;
-                        offset += bytesWritten;
+                        _offset += bytesWritten;
                         break;
 
                     // 4 bytes
-                    case ElementType.ExcelIndex:            // 0x0903
-                        FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.ExcelTableCode);
+                    case ElementType.ExcelIndex:                    // 0x0903
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.ExcelTableCode);
                         break;
 
                     // 8 bytes
-                    case ElementType.RGBADoubleWordArray:   // 0x0006     // colorsets.xml.cooked (pdwColors)
-                    case ElementType.FloatArray:            // 0x0106
-                        FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.DefaultValue);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, xmlCookElement.Count);
+                    case ElementType.ExcelIndexArray_0x0905:        // 0x0905
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.ExcelTableCode);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.Count);
+                        break;
+
+                    // 8 bytes
+                    case ElementType.RGBADoubleWordArray:           // 0x0006       // colorsets.xml.cooked (pdwColors)
+                    case ElementType.FloatArray:                    // 0x0106
+                    case ElementType.Int32Array_0x0A06:             // 0x0A06       // AppearanceDefinition
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.DefaultValue);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.Count);
+                        break;
+
+                    default:
+                        Debug.Assert(false, "ElementType not set!");
                         break;
                 }
             }
 
-            return offset - offsetStart;
+            return _offset - offsetStart;
         }
 
         /// <summary>
@@ -560,7 +347,7 @@ namespace Hellgate
             if (_xmlDefinitions == null) throw new Exceptions.NotInitializedException();
 
             if (data == null) return false;
-            _data = data;
+            _buffer = data;
 
             /* Header Structure
              * UInt32           Magic Word          'CO0k'
@@ -570,7 +357,7 @@ namespace Hellgate
              */
 
             // check file infos
-            XmlCookFileHeader header = FileTools.ByteArrayToStructure<XmlCookFileHeader>(_data, ref _offset);
+            XmlCookFileHeader header = FileTools.ByteArrayToStructure<XmlCookFileHeader>(_buffer, ref _offset);
 
             if (header.MagicWord != FileMagicWord) throw new Exceptions.UnexpectedMagicWordException();
             if (header.Version != RequiredVersion) throw new Exceptions.NotSupportedFileVersionException();
@@ -584,12 +371,12 @@ namespace Hellgate
             XmlCookedFileTree xmlTree = new XmlCookedFileTree(xmlDefinition);
             _UncookFileXmlDefinition(xmlDefinition, header.XmlRootElementCount, xmlTree);
 
-            UInt32 dataMagicWord = FileTools.ByteArrayToUInt32(_data, ref _offset);
+            UInt32 dataMagicWord = FileTools.ByteArrayToUInt32(_buffer, ref _offset);
             if (dataMagicWord != DataMagicWord) throw new Exceptions.UnexpectedTokenException("'DATA' Token MagicWord expected but not found!");
 
             _UncookXmlData(xmlDefinition, XmlDoc, xmlTree);
 
-            Debug.Assert(_offset == _data.Length);
+            Debug.Assert(_offset == _buffer.Length);
 
             return true;
         }
@@ -614,7 +401,7 @@ namespace Hellgate
             for (int i = 0; i < elementCount; i++)
             {
                 // is the field present?
-                if (!_TestBit(_data, bitFieldOffset, i)) continue;
+                if (!_TestBit(_buffer, bitFieldOffset, i)) continue;
 
                 //XmlCookElement xmlCookElement = xmlDefinition[i];
                 XmlCookElement xmlCookElement = xmlTree[i];
@@ -658,7 +445,7 @@ namespace Hellgate
                         }
                         break;
 
-                    case ElementType.FloatArrayUnknown_0x0107:
+                    case ElementType.FloatArrayUnknown_0x0107:      // 0x0107
                         _ReadVariableLengthFloatArray(rootElement, xmlCookElement);
                         break;
 
@@ -667,7 +454,7 @@ namespace Hellgate
                         Debug.Assert((String)xmlCookElement.DefaultValue != szValue);
                         break;
 
-                    case ElementType.StringArray_0x0206:
+                    case ElementType.StringArray_0x0206:            // 0x0206
                         for (int strIndex = 0; strIndex < xmlCookElement.Count; strIndex++)
                         {
                             _ReadZeroString(rootElement, xmlCookElement);
@@ -693,6 +480,7 @@ namespace Hellgate
                     case ElementType.NonCookedInt32:                // 0x0700
                     case ElementType.UnknownFloat:                  // 0x0800
                     case ElementType.UnknownPTypeD_0x0D00:          // 0x0D00
+                    case ElementType.Int32_0x0A00:                  // 0x0A00
                         int bp = 0;
                         break;
 
@@ -775,15 +563,15 @@ namespace Hellgate
              * 0x1007       Byte Array      Textures        4 bytes     First 4 bytes (??) = ??
              */
 
-            for (int i = 0; i < xmlDefElementCount && _offset < _data.Length; i++)
+            for (int i = 0; i < xmlDefElementCount && _offset < _buffer.Length; i++)
             {
-                uint elementHash = FileTools.ByteArrayToUInt32(_data, ref _offset);
+                uint elementHash = FileTools.ByteArrayToUInt32(_buffer, ref _offset);
 
                 XmlCookElement xmlCookElement = _GetXmlCookElement(xmlDefinition, elementHash);
                 if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException("Unexpected xml element hash: 0x" + elementHash.ToString("X8"));
                 xmlTree.AddElement(xmlCookElement);
 
-                ElementType token = (ElementType)FileTools.ByteArrayToUShort(_data, ref _offset);
+                ElementType token = (ElementType)FileTools.ByteArrayToUShort(_buffer, ref _offset);
                 switch (token)
                 {
                     case ElementType.UnknownPTypeD_0x0D00:                              // 0x0D00
