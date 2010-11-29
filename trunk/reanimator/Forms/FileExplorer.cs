@@ -1099,7 +1099,7 @@ namespace Reanimator.Forms
 
                 if (!File.Exists(filePath)) continue;
                 XmlDocument xmlDocument = new XmlDocument();
-                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+                XmlCookedFile cookedXmlFile = new XmlCookedFile();
 
                 DialogResult dr = DialogResult.Retry;
                 byte[] cookedBytes = null;
@@ -1108,7 +1108,7 @@ namespace Reanimator.Forms
                     try
                     {
                         xmlDocument.Load(filePath);
-                        cookedBytes = XmlCookedFile.CookXmlDocument(xmlDocument);
+                        cookedBytes = cookedXmlFile.CookXmlDocument(xmlDocument);
                     }
                     catch (Exception e)
                     {

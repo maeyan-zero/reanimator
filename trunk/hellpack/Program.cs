@@ -127,7 +127,9 @@ namespace Hellpack
 
                         XmlDocument xmlDocument = new XmlDocument();
                         xmlDocument.Load(xmlPath);
-                        byte[] xmlCookedData = XmlCookedFile.CookXmlDocument(xmlDocument);
+
+                        XmlCookedFile cookedXmlFile = new XmlCookedFile();
+                        byte[] xmlCookedData = cookedXmlFile.CookXmlDocument(xmlDocument);
                         File.WriteAllBytes(xmlPath + ".cooked", xmlCookedData);
                     }
                     catch (Exception e)
