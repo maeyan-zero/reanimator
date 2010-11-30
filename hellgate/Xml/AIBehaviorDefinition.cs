@@ -22,7 +22,7 @@ namespace Hellgate.Xml
             {
                 Name = "pfParams",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.FloatArray,
+                ElementType = ElementType.FloatArrayFixed,
                 Count = 6
             },
             new XmlCookElement

@@ -189,7 +189,7 @@
             {
                 Name = "nAnimationCondition",
                 DefaultValue = null,
-                ElementType = ElementType.ExcelIndexArray_0x0905,
+                ElementType = ElementType.ExcelIndexArrayFixed,
                 ExcelTableCode = 26416, // ANIMATION_CONDITION
                 Count = 4
             },

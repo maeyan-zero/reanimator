@@ -74,14 +74,14 @@
             {
                 Name = "tAttachmentDef.vPosition",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.FloatArray,
+                ElementType = ElementType.FloatArrayFixed,
                 Count = 3
             },
             new XmlCookElement
             {
                 Name = "tAttachmentDef.vNormal",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.FloatArray,
+                ElementType = ElementType.FloatArrayFixed,
                 Count = 3
             },
             new XmlCookElement
