@@ -62,17 +62,17 @@ namespace Reanimator
             //    String subStr = str.Substring(37);
             //    UInt32 strHash = Crypt.GetStringHash(subStr);
 
-            //    if (strHash == 7339135) // APPEARANCE_DEFINITION     0x006FFC7F
+            //    if (strHash == 453228184) // "SOUND_REVERB_DEFINITION"
             //    {
             //        int bp = 0;
             //    }
 
-            //    if (strHash == 3985396893) // "ANIMATION_DEFINITION"
+            //    if (strHash == 4203813319) // "FMOD_REVERB_PROPERTIES"
             //    {
             //        int bp = 0;
             //    }
 
-            //    if (strHash == 346458888) // "ANIM_EVENT"
+            //    if (strHash == 1869381994) // "DecayLFRatio"
             //    {
             //        int bp = 0;
             //    }
@@ -130,7 +130,7 @@ namespace Reanimator
             foreach (String xmlFilePath in xmlFiles)
             {
                 String path = xmlFilePath;
-                //path = @"D:\Games\Hellgate London\data\states\activeblock.xml.cooked";
+                //path = @"D:\Games\Hellgate London\data\sounds\reverb\activeblock_reverb.xml.cooked";
 
                 if (path.Contains("datChecksum")) continue;
 
