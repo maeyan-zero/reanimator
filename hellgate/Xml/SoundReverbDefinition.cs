@@ -14,7 +14,7 @@
             {
                 Name = "pReverb",
                 DefaultValue = 0,
-                ElementType = ElementType.TableMultiple,
+                ElementType = ElementType.TableArrayVariable,
                 ChildType = typeof(FmodReverbProperties)
             }
         };

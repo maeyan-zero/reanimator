@@ -16,14 +16,15 @@ namespace Hellgate.Xml
         StringArrayFixed = 0x0206,          // found in AppearanceDefinition, like any other array type but as String
         StringArrayVariable = 0x0207,       // found in AppearanceDefinition
 
-        TableSingle = 0x0308,
-        TableMultiple = 0x030A,
+        Table = 0x0308,
+        TableArrayFixed = 0x0309,           // found in EnvironmentDefinition
+        TableArrayVariable = 0x030A,
 
         FloatTripletArrayVariable = 0x0500, // found in AppearanceDefinition and children, appears on types like tSelfIllumation, tSelfIllumationBlend, etc
         FloatQuadArrayVariable = 0x0600,    // found in Screen FX
 
         NonCookedInt32 = 0x0700,
-        UnknownFloat = 0x0800,
+        NonCookedFloat = 0x0800,
 
         ExcelIndex = 0x0903,
         ExcelIndexArrayFixed = 0x0905,      // found in AppearanceDefinition, like any other array type but as ExcelIndex
@@ -47,6 +48,7 @@ namespace Hellgate.Xml
         public UInt32 ExcelTableCode;
         public ElementType ElementType;
         public Int32 FlagId;
+        public Int32 FlagOffsetChange;      // EnvironmentDefinition has a dwDefFlags first, which actually reads in the following 5 flag elements causing an offset error.
         public Int32 BitIndex;
         public Int32 BitCount;              // used for BitIndex, total field BitCount
         public UInt32 BitMask;

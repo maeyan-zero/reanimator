@@ -51,21 +51,21 @@
             new XmlCookElement
             {
                     Name = "pConnections",
-                    ElementType = ElementType.TableMultiple,
+                    ElementType = ElementType.TableArrayVariable,
                     DefaultValue = null,
                     ChildType = typeof (RoomPathNodeConnection)
             },
             new XmlCookElement
             {
                     Name = "pLongConnections",
-                    ElementType = ElementType.TableMultiple,
+                    ElementType = ElementType.TableArrayVariable,
                     DefaultValue = null,
                     ChildType = typeof (RoomPathNodeConnectionRef)
             },
             new XmlCookElement
             {
                     Name = "pShortConnections",
-                    ElementType = ElementType.TableMultiple,
+                    ElementType = ElementType.TableArrayVariable,
                     DefaultValue = null,
                     ChildType = typeof (RoomPathNodeConnectionRef)
             },

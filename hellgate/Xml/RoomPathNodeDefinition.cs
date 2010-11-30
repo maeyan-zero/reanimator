@@ -9,7 +9,7 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "pPathNodeSets",
-                ElementType = ElementType.TableMultiple,
+                ElementType = ElementType.TableArrayVariable,
                 DefaultValue = null,
                 ChildType = typeof (RoomPathNodeSet)
             },
@@ -58,13 +58,13 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "fDiagDistBetweenNodesSq",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 1.0f
             },
             new XmlCookElement
             {
                 Name = "fDiagDistBetweenNodes",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 1.0f
             },
             new XmlCookElement
@@ -103,7 +103,7 @@ namespace Hellgate.Xml
         {
             RootElement = "ROOM_PATH_NODE_DEFINITION";
             base.Elements.AddRange(Elements);
-            BitFlags = new Int32[] {-1};
+            Flags = new Int32[] {-1};
         }
     }
 }

@@ -88,7 +88,7 @@
             {
                 Name = "tCondition",
                 DefaultValue = null,
-                ElementType = ElementType.TableSingle,
+                ElementType = ElementType.Table,
                 ChildType = typeof(ConditionDefinition)
             }
         };

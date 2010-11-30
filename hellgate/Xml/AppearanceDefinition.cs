@@ -284,14 +284,14 @@ namespace Hellgate.Xml
             {
                 Name = "pAnimations",
                 DefaultValue = 0,
-                ElementType = ElementType.TableMultiple,
+                ElementType = ElementType.TableArrayVariable,
                 ChildType = typeof (AnimationDefinition)
             },
             new XmlCookElement
             {
                 Name = "tInitAnimation",
                 DefaultValue = null,
-                ElementType = ElementType.TableSingle,
+                ElementType = ElementType.Table,
                 ChildType = typeof (AnimationDefinition)
             },
             new XmlCookElement
@@ -323,7 +323,7 @@ namespace Hellgate.Xml
             {
                 Name = "pInventoryViews",
                 DefaultValue = 0,
-                ElementType = ElementType.TableMultiple,
+                ElementType = ElementType.TableArrayVariable,
                 ChildType = typeof (InventoryViewInfo)
             },
             new XmlCookElement

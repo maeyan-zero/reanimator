@@ -124,7 +124,7 @@ namespace Hellgate.Xml
             {
                 Name = "tTable",
                 DefaultValue = null,
-                ElementType = ElementType.TableSingle,
+                ElementType = ElementType.Table,
                 ChildType = typeof (AIBehaviorDefinitionTable)
             }
         };
@@ -133,7 +133,7 @@ namespace Hellgate.Xml
         {
             RootElement = "AI_BEHAVIOR_DEFINITION";
             base.Elements.AddRange(Elements);
-            BitFlags = new Int32[] {-1};
+            Flags = new Int32[] {-1};
         }
     }
 }

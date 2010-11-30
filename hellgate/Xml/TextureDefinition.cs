@@ -68,7 +68,7 @@
             {
                 Name = "pBlendRLE",
                 DefaultValue = 0,
-                ElementType = ElementType.TableMultiple,
+                ElementType = ElementType.TableArrayVariable,
                 ChildType = typeof(BlendRLE)
             },
             new XmlCookElement

@@ -22,7 +22,7 @@
                 Name = "pEvents",
                 DefaultValue = 0,
                 ChildType = typeof(SkillEvent),
-                ElementType = ElementType.TableMultiple
+                ElementType = ElementType.TableArrayVariable
             }
         };
 

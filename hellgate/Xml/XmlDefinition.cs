@@ -9,9 +9,9 @@ namespace Hellgate.Xml
         public UInt32 RootHash;
         public String Value;
         public readonly List<XmlCookElement> Elements;
-        public Int32[] BitFlags;
-        public UInt32 BitFlagsBaseMask;          // mostly a hack to ensure 100% cooking fidelity; some bit fields are 0xFDFDFDFD with 0 at flags not high, 1 at flags high
-        public UInt32[] Flags;
+        public Int32[] Flags;
+        public UInt32 FlagsBaseMask;          // mostly a hack to ensure 100% cooking fidelity; some bit fields are 0xFDFDFDFD with 0 at flags not high, 1 at flags high
+        public UInt32[] BitFlags;
         public bool NeedToReadBitFlags;
         public int BitFlagsWriteOffset;
 
@@ -34,16 +34,16 @@ namespace Hellgate.Xml
         {
             NeedToReadBitFlags = true;
             BitFlagsWriteOffset = -1;
-            if (BitFlags != null)
-            {
-                for (int i = 0; i < BitFlags.Length; i++)
-                {
-                    BitFlags[i] = -1;
-                }
-            }
             if (Flags != null)
             {
-                Flags = new UInt32[Flags.Length];
+                for (int i = 0; i < Flags.Length; i++)
+                {
+                    Flags[i] = -1;
+                }
+            }
+            if (BitFlags != null)
+            {
+                BitFlags = new UInt32[BitFlags.Length];
             }
         }
     }

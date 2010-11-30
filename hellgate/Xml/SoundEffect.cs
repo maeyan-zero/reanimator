@@ -59,7 +59,7 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "pEffects",
-                ElementType = ElementType.TableMultiple,
+                ElementType = ElementType.TableArrayVariable,
                 DefaultValue = null,
                 ChildType = typeof (SoundEffect)
             },
