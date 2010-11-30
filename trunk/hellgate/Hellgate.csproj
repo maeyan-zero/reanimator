@@ -274,6 +274,7 @@
     <Compile Include="Xml\ColorSetDefinition.cs" />
     <Compile Include="Xml\ConditionDefinition.cs" />
     <Compile Include="Xml\ConfigDefinition.cs" />
+    <Compile Include="Xml\DemoLevelDefinition.cs" />
     <Compile Include="Xml\FmodReverbProperties.cs" />
     <Compile Include="Xml\GameGlobalDefinition.cs" />
     <Compile Include="Xml\GlobalDefinition.cs" />
