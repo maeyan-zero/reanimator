@@ -7,7 +7,7 @@
             new XmlCookElement
             {
                 Name = "pColorDefinitions",
-                ElementType = ElementType.TableCount,
+                ElementType = ElementType.TableMultiple,
                 DefaultValue = null,
                 ChildType = typeof (ColorDefinition)
             }

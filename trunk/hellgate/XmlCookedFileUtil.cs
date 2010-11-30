@@ -76,6 +76,12 @@ namespace Hellgate
                 // Material (makes things look like things)
                 new Material(),
 
+                // Particles
+                new ParticleSystemDefinition(),
+
+                // Screen Effect
+                new ScreenEffectDefinition(),
+
                 // Skills (defines skill effect/appearance mostly, not so much the skill itself)
                 new SkillEventsDefinition(),
                 new SkillEventHolder(),
@@ -214,7 +220,7 @@ namespace Hellgate
             Debug.Assert(xmlCookElement.ChildType != null);
 
             int count = 1;
-            if (xmlCookElement.ElementType == ElementType.TableCount)
+            if (xmlCookElement.ElementType == ElementType.TableMultiple)
             {
                 elementName += "Count";
                 count = _ReadInt32(parentNode, elementName);
@@ -240,20 +246,20 @@ namespace Hellgate
             if (xmlCookElement.ElementType == ElementType.Flag) flagIndex--;
 
             Debug.Assert(flagIndex >= 0);
-            if (xmlDefinition.BitFields[flagIndex] == -1)
+            if (xmlDefinition.BitFlags[flagIndex] == -1)
             {
-                xmlDefinition.BitFields[flagIndex] = _ReadInt32(null, null);
+                xmlDefinition.BitFlags[flagIndex] = _ReadInt32(null, null);
             }
 
             bool flagged = false;
             switch (xmlCookElement.ElementType)
             {
                 case ElementType.BitFlag:
-                    flagged = (xmlDefinition.BitFields[flagIndex] & (1 << xmlCookElement.BitIndex)) > 0;
+                    flagged = (xmlDefinition.BitFlags[flagIndex] & (1 << xmlCookElement.BitIndex)) > 0;
                     break;
 
                 case ElementType.Flag:
-                    flagged = (xmlDefinition.BitFields[flagIndex] & xmlCookElement.BitMask) > 0;
+                    flagged = (xmlDefinition.BitFlags[flagIndex] & xmlCookElement.BitMask) > 0;
                     break;
             }
 
@@ -272,10 +278,10 @@ namespace Hellgate
         {
             if (xmlDefinition.NeedToReadBitFlags)
             {
-                int intCount = xmlDefinition.BitFlags.Length;
+                int intCount = xmlDefinition.Flags.Length;
                 for (int i = 0; i < intCount; i++)
                 {
-                    xmlDefinition.BitFlags[i] = _ReadUInt32(null, null);
+                    xmlDefinition.Flags[i] = _ReadUInt32(null, null);
                 }
 
                 xmlDefinition.NeedToReadBitFlags = false;
@@ -283,7 +289,7 @@ namespace Hellgate
 
             int intIndex = xmlCookElement.BitIndex >> 5;
             int bitOffset = xmlCookElement.BitIndex - (intIndex << 5);
-            bool flagged = (xmlDefinition.BitFlags[intIndex] & (1 << bitOffset)) > 0;
+            bool flagged = (xmlDefinition.Flags[intIndex] & (1 << bitOffset)) > 0;
 
             if (parentNode != null)
             {
@@ -379,6 +385,51 @@ namespace Hellgate
 
         private void _ReadFloatTripletArrayVariable(XmlNode parentNode, XmlCookElement xmlCookElement)
         {
+            // todo: add default check (particle has defaults)
+            _ReadFloatMultipleArrayVariable(parentNode, xmlCookElement, 3);
+
+            //int count = _ReadInt32(null, null);
+            //Debug.Assert(count != 0);
+
+            //XmlElement countElement = XmlDoc.CreateElement(xmlCookElement.Name + "Count");
+            //countElement.InnerText = count.ToString();
+            //parentNode.AppendChild(countElement);
+
+            //for (int i = 0; i < count; i++)
+            //{
+            //    float value1 = FileTools.ByteArrayToFloat(_buffer, ref _offset);
+            //    float value2 = FileTools.ByteArrayToFloat(_buffer, ref _offset);
+            //    float value3 = FileTools.ByteArrayToFloat(_buffer, ref _offset);
+
+            //    XmlElement element = XmlDoc.CreateElement(xmlCookElement.Name);
+            //    element.InnerText = String.Format("{0}, {1}, {2}", value1, value2, value3);
+            //    parentNode.AppendChild(element);
+            //}
+        }
+
+        private void _ReadFloatQuadArrayVariable(XmlNode parentNode, XmlCookElement xmlCookElement)
+        {
+            // todo: add default check (particle has defaults)
+            _ReadFloatMultipleArrayVariable(parentNode, xmlCookElement, 4);
+
+            //int count = _ReadInt32(null, null);
+            //Debug.Assert(count == 1); // not seen with anything other than 1 - not even sure if it's a count
+
+            //XmlElement countElement = XmlDoc.CreateElement(xmlCookElement.Name + "Count");
+            //countElement.InnerText = count.ToString();
+            //parentNode.AppendChild(countElement);
+
+            //for (int i = 0; i < count; i++)
+            //{
+            //    for (int f = 0; f < 4; f++)
+            //    {
+            //        _ReadFloat(parentNode, xmlCookElement.Name);
+            //    }
+            //}
+        }
+
+        private void _ReadFloatMultipleArrayVariable(XmlNode parentNode, XmlCookElement xmlCookElement, int floatCount)
+        {
             int count = _ReadInt32(null, null);
             Debug.Assert(count != 0);
 
@@ -388,12 +439,16 @@ namespace Hellgate
 
             for (int i = 0; i < count; i++)
             {
-                float value1 = FileTools.ByteArrayToFloat(_buffer, ref _offset);
-                float value2 = FileTools.ByteArrayToFloat(_buffer, ref _offset);
-                float value3 = FileTools.ByteArrayToFloat(_buffer, ref _offset);
+                String floatText = String.Empty;
+                for (int f = 0; f < floatCount; f++)
+                {
+                    float fValue = FileTools.ByteArrayToFloat(_buffer, ref _offset);
+                    floatText += fValue.ToString();
+                    if (f < floatCount - 1) floatText += ", ";
+                }
 
                 XmlElement element = XmlDoc.CreateElement(xmlCookElement.Name);
-                element.InnerText = String.Format("{0}, {1}, {2}", value1, value2, value3);
+                element.InnerText = floatText;
                 parentNode.AppendChild(element);
             }
         }
@@ -445,24 +500,6 @@ namespace Hellgate
             for (int i = 0; i < count; i++)
             {
                 _ReadString(parentNode, xmlCookElement);
-            }
-        }
-
-        private void _ReadTFloatArray(XmlNode parentNode, XmlCookElement xmlCookElement)
-        {
-            int count = _ReadInt32(null, null);
-            Debug.Assert(count == 1); // not tested with anything other than 1 - not even sure if it's a count
-
-            XmlElement countElement = XmlDoc.CreateElement(xmlCookElement.Name + "Count");
-            countElement.InnerText = count.ToString();
-            parentNode.AppendChild(countElement);
-
-            for (int i = 0; i < count; i++)
-            {
-                for (int f = 0; f < 4; f++)
-                {
-                    _ReadFloat(parentNode, xmlCookElement.Name);
-                }
             }
         }
 
@@ -587,7 +624,85 @@ namespace Hellgate
             FileTools.WriteToBuffer(ref _buffer, ref _offset, elements.ToArray().ToByteArray());
         }
 
-        private void _WriteFloatTripletArrayVariable(XmlCookElement xmlCookElement, XmlNode xmlNode, String elementText)
+        private void _WriteFloatTripletArrayVariable(String elementText, XmlCookElement xmlCookElement, XmlNode xmlNode)
+        {
+            // todo: add default check (particle has defaults)
+            _WriteFloatMultipleArrayVariable(elementText, xmlCookElement, xmlNode, 3);
+
+            //int arrayCount = int.Parse(elementText);
+            //bool allDefault = true;
+            //List<String> elements = _GetArrayElementValues<String>(xmlCookElement, xmlNode, ref allDefault, arrayCount, false);
+
+            //Int32 count = elements.Count;
+            //FileTools.WriteToBuffer(ref _buffer, ref _offset, count);
+
+            //for (int i = 0; i < arrayCount && i < count; i++)
+            //{
+            //    String[] floatStrs = elements[i].Split(',');
+            //    for (int j = 0; j < 3; j++)
+            //    {
+            //        float fValue = 0.0f;
+            //        if (j < floatStrs.Length) fValue = float.Parse(floatStrs[j]);
+            //        FileTools.WriteToBuffer(ref _buffer, ref _offset, fValue);
+            //    }
+            //}
+        }
+
+        private void _WriteFloatQuadArrayVariable(String elementText, XmlCookElement xmlCookElement, XmlNode xmlNode)
+        {
+            // todo: add default check (particle has defaults)
+            _WriteFloatMultipleArrayVariable(elementText, xmlCookElement, xmlNode, 4);
+
+            //Int32 count = Convert.ToInt32(elementText);
+            //FileTools.WriteToBuffer(ref _buffer, ref _offset, count);
+
+            //int floatTCount = xmlCookElement.Count;
+            //List<float> floatTValues = new List<float>();
+            //bool floatTAllDefault = true;
+
+            //int totalFloatTCount = count * floatTCount;
+            //foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
+            //{
+            //    if (xmlChildNode.Name != xmlCookElement.Name) continue;
+
+            //    String arrayElementText = xmlChildNode.InnerText;
+            //    float fValue = Convert.ToSingle(arrayElementText);
+            //    if (fValue == 0 && arrayElementText == "-0")
+            //        fValue = -1.0f * 0.0f;
+            //    floatTValues.Add(fValue);
+
+            //    if ((float)xmlCookElement.DefaultValue != fValue)
+            //    {
+            //        floatTAllDefault = false;
+            //    }
+
+            //    if (floatTValues.Count == totalFloatTCount) break;
+            //}
+
+            //if (floatTAllDefault) return;
+
+            //for (int i = 0; i < count; i++)
+            //{
+            //    for (int j = 0; j < floatTCount; j++)
+            //    {
+            //        float fWrite;
+
+            //        int index = i * floatTCount + j;
+            //        if (index < floatTValues.Count)
+            //        {
+            //            fWrite = floatTValues[index];
+            //        }
+            //        else
+            //        {
+            //            fWrite = (float)xmlCookElement.DefaultValue;
+            //        }
+
+            //        FileTools.WriteToBuffer(ref _buffer, ref _offset, fWrite);
+            //    }
+            //}
+        }
+
+        private void _WriteFloatMultipleArrayVariable(String elementText, XmlCookElement xmlCookElement, XmlNode xmlNode, int floatCount)
         {
             int arrayCount = int.Parse(elementText);
             bool allDefault = true;
@@ -599,10 +714,10 @@ namespace Hellgate
             for (int i = 0; i < arrayCount && i < count; i++)
             {
                 String[] floatStrs = elements[i].Split(',');
-                for (int j = 0; j < 3; j++)
+                for (int f = 0; f < floatCount; f++)
                 {
                     float fValue = 0.0f;
-                    if (j < floatStrs.Length) fValue = float.Parse(floatStrs[j]);
+                    if (f < floatStrs.Length) fValue = float.Parse(floatStrs[f]);
                     FileTools.WriteToBuffer(ref _buffer, ref _offset, fValue);
                 }
             }
@@ -680,57 +795,6 @@ namespace Hellgate
             }
         }
 
-        private void _WriteUnknownFloatT(String elementText, XmlCookElement xmlCookElement, XmlNode xmlNode)
-        {
-            Int32 count = Convert.ToInt32(elementText);
-            FileTools.WriteToBuffer(ref _buffer, ref _offset, count);
-
-            int floatTCount = xmlCookElement.Count;
-            List<float> floatTValues = new List<float>();
-            bool floatTAllDefault = true;
-
-            int totalFloatTCount = count * floatTCount;
-            foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
-            {
-                if (xmlChildNode.Name != xmlCookElement.Name) continue;
-
-                String arrayElementText = xmlChildNode.InnerText;
-                float fValue = Convert.ToSingle(arrayElementText);
-                if (fValue == 0 && arrayElementText == "-0")
-                    fValue = -1.0f * 0.0f;
-                floatTValues.Add(fValue);
-
-                if ((float)xmlCookElement.DefaultValue != fValue)
-                {
-                    floatTAllDefault = false;
-                }
-
-                if (floatTValues.Count == totalFloatTCount) break;
-            }
-
-            if (floatTAllDefault) return;
-
-            for (int i = 0; i < count; i++)
-            {
-                for (int j = 0; j < floatTCount; j++)
-                {
-                    float fWrite;
-
-                    int index = i * floatTCount + j;
-                    if (index < floatTValues.Count)
-                    {
-                        fWrite = floatTValues[index];
-                    }
-                    else
-                    {
-                        fWrite = (float)xmlCookElement.DefaultValue;
-                    }
-
-                    FileTools.WriteToBuffer(ref _buffer, ref _offset, fWrite);
-                }
-            }
-        }
-
         private void _WriteFlag(String elementText, XmlCookElement xmlCookElement, XmlDefinition xmlDefinition, Hashtable bitFieldOffsts)
         {
             // todo: fix up/remove hashtable
@@ -741,15 +805,15 @@ namespace Hellgate
             if (xmlCookElement.ElementType == ElementType.BitFlag) flagIndex = 0;
 
             // has it been written yet
-            if (xmlDefinition.BitFields[flagIndex] == -1 || bitFieldOffsts[flagIndex] == null)
+            if (xmlDefinition.BitFlags[flagIndex] == -1 || bitFieldOffsts[flagIndex] == null)
             {
                 bitFieldOffsts.Add(flagIndex, _offset);
-                xmlDefinition.BitFields[flagIndex] = 0;
+                xmlDefinition.BitFlags[flagIndex] = (Int32)xmlDefinition.BitFlagsBaseMask;
                 _offset += 4; // bit field bytes
             }
 
 
-            UInt32 flag = (UInt32)xmlDefinition.BitFields[flagIndex];
+            UInt32 flag = (UInt32)xmlDefinition.BitFlags[flagIndex];
             if (xmlCookElement.ElementType == ElementType.Flag)
             {
                 flag |= xmlCookElement.BitMask;
@@ -761,7 +825,7 @@ namespace Hellgate
 
             int writeOffset = (int)bitFieldOffsts[flagIndex];
             FileTools.WriteToBuffer(ref _buffer, ref writeOffset, flag);
-            xmlDefinition.BitFields[flagIndex] = (Int32)flag;
+            xmlDefinition.BitFlags[flagIndex] = (Int32)flag;
         }
 
         private void _WriteBitFlag(String elementText, XmlCookElement xmlCookElement, XmlDefinition xmlDefinition)
@@ -771,7 +835,7 @@ namespace Hellgate
 
             if (xmlDefinition.BitFlagsWriteOffset == -1)
             {
-                int intCount = xmlDefinition.BitFlags.Length;
+                int intCount = xmlDefinition.Flags.Length;
 
                 xmlDefinition.BitFlagsWriteOffset = _offset;
                 _offset += intCount * sizeof(UInt32);
@@ -779,8 +843,8 @@ namespace Hellgate
 
             int intIndex = xmlCookElement.BitIndex >> 5;
             int bitFlagIndex = xmlCookElement.BitIndex - (intIndex << 5);
-            UInt32 bitFlagField = xmlDefinition.BitFlags[intIndex] | ((UInt32)1 << bitFlagIndex);
-            xmlDefinition.BitFlags[intIndex] = bitFlagField;
+            UInt32 bitFlagField = xmlDefinition.Flags[intIndex] | ((UInt32)1 << bitFlagIndex);
+            xmlDefinition.Flags[intIndex] = bitFlagField;
 
             int bitFlagWriteOffset = xmlDefinition.BitFlagsWriteOffset + (intIndex << 2);
             FileTools.WriteToBuffer(ref _buffer, ref bitFlagWriteOffset, bitFlagField);

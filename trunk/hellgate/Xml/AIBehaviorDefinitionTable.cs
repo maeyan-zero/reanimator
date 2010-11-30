@@ -8,7 +8,7 @@
             {
                 Name = "pBehaviors",
                 DefaultValue = 0,
-                ElementType = ElementType.TableCount,
+                ElementType = ElementType.TableMultiple,
                 ChildType = typeof(AIBehaviorDefinition)
             }
         };

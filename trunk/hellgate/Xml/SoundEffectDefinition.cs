@@ -7,7 +7,7 @@
             new XmlCookElement
             {
                 Name = "tEffect",
-                ElementType = ElementType.Table,
+                ElementType = ElementType.TableSingle,
                 DefaultValue = null,
                 ChildType = typeof (SoundEffect)
             }

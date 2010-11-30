@@ -22,7 +22,7 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "pGroups",
-                ElementType = ElementType.TableCount,
+                ElementType = ElementType.TableMultiple,
                 DefaultValue = null,
                 ChildType = typeof (RoomLayoutGroup)
             },
@@ -258,7 +258,7 @@ namespace Hellgate.Xml
         {
             RootElement = "ROOM_LAYOUT_GROUP";
             base.Elements.AddRange(Elements);
-            BitFields = new Int32[] {-1};
+            BitFlags = new Int32[] {-1};
         }
     }
 }

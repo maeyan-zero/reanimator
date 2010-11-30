@@ -431,8 +431,8 @@ namespace Hellgate.Xml
         {
             RootElement = "GLOBAL_DEFINITION";
             base.Elements.AddRange(Elements);
-            BitFields = new Int32[] { -1 };
-            BitFlags = new UInt32[8]; // 256 / 32 = 8
+            BitFlags = new Int32[] { -1 };
+            Flags = new UInt32[8]; // 256 / 32 = 8
         }
     }
 }

@@ -369,7 +369,7 @@
             new XmlCookElement
             {
                 Name = "tScatterColor",
-                ElementType = ElementType.UnknownFloatT,
+                ElementType = ElementType.FloatQuadArrayVariable,
                 DefaultValue = 0.7f,
                 Count = 4
             }

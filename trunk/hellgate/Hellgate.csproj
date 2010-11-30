@@ -279,6 +279,7 @@
     <Compile Include="Xml\GlobalDefinition.cs" />
     <Compile Include="Xml\InventoryViewInfo.cs" />
     <Compile Include="Xml\Material.cs" />
+    <Compile Include="Xml\ParticleSystemDefinition.cs" />
     <Compile Include="Xml\RoomLayoutGroup.cs" />
     <Compile Include="Xml\RoomLayoutGroupDefinition.cs" />
     <Compile Include="Xml\RoomPathNode.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="Xml\RoomPathNodeConnectionRef.cs" />
     <Compile Include="Xml\RoomPathNodeDefinition.cs" />
     <Compile Include="Xml\RoomPathNodeSet.cs" />
+    <Compile Include="Xml\ScreenEffectDefinition.cs" />
     <Compile Include="Xml\SkillEvent.cs" />
     <Compile Include="Xml\SkillEventHolder.cs" />
     <Compile Include="Xml\SkillEventsDefinition.cs" />

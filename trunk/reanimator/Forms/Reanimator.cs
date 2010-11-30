@@ -53,35 +53,35 @@ namespace Reanimator
 
 
 
-            //const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
-            //String[] strings = File.ReadAllLines(filePath);
-            //foreach (String str in strings)
-            //{
-            //    if (str.Length <= 37) continue;
+            const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
+            String[] strings = File.ReadAllLines(filePath);
+            foreach (String str in strings)
+            {
+                if (str.Length <= 37) continue;
 
-            //    String subStr = str.Substring(37);
-            //    UInt32 strHash = Crypt.GetStringHash(subStr);
+                String subStr = str.Substring(37);
+                UInt32 strHash = Crypt.GetStringHash(subStr);
 
-            //    if (strHash == 453228184) // "SOUND_REVERB_DEFINITION"
-            //    {
-            //        int bp = 0;
-            //    }
+                if (strHash == 2367361032) // "PARTICLE_SYSTEM_DEFINITION"
+                {
+                    int bp = 0;
+                }
 
-            //    if (strHash == 4203813319) // "FMOD_REVERB_PROPERTIES"
-            //    {
-            //        int bp = 0;
-            //    }
+                if (strHash == 4203813319) // "FMOD_REVERB_PROPERTIES"
+                {
+                    int bp = 0;
+                }
 
-            //    if (strHash == 1869381994) // "DecayLFRatio"
-            //    {
-            //        int bp = 0;
-            //    }
+                if (strHash == 1869381994) // "DecayLFRatio"
+                {
+                    int bp = 0;
+                }
 
-            //    if (strHash == 3788988200) // "INVENTORY_VIEW_INFO"
-            //    {
-            //        int bp = 0;
-            //    }
-            //}
+                if (strHash == 3788988200) // "INVENTORY_VIEW_INFO"
+                {
+                    int bp = 0;
+                }
+            }
 
 
 
@@ -130,7 +130,7 @@ namespace Reanimator
             foreach (String xmlFilePath in xmlFiles)
             {
                 String path = xmlFilePath;
-                //path = @"D:\Games\Hellgate London\data\sounds\reverb\activeblock_reverb.xml.cooked";
+                //path = @"D:\Games\Hellgate London\data\particles\monsters\bloodcoil\bloodcoil projectile 1.xml.cooked";
 
                 if (path.Contains("datChecksum")) continue;
 
@@ -164,7 +164,6 @@ namespace Reanimator
                 byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
                 byte[] originalHash = md5.ComputeHash(data);
                 byte[] recookedHash = md5.ComputeHash(recookedData);
-                //File.WriteAllBytes(xmlFilePath + "2", recookedData);
                 if (!originalHash.SequenceEqual(recookedHash))
                 {
                     File.WriteAllBytes(path + "2", recookedData);
