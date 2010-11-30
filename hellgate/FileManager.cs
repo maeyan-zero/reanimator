@@ -197,7 +197,11 @@ namespace Hellgate
                     Console.WriteLine("Error: Failed to load data file: " + dataFile.StringId);
                     continue;
                 }
-
+                if (dataFile.StringId == null)
+                {
+                    Console.WriteLine(String.Format("Error: StringId is null. {0} was not indexed.", fileEntry.FileNameString));
+                    continue;
+                }
                 DataFiles.Add(dataFile.StringId, dataFile);
             }
 

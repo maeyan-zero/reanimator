@@ -9,8 +9,10 @@ namespace Hellgate.Excel
     class Skills
     {
         TableHeader header;
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String skill;
+        [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
         public Int32 buffer;
         [ExcelOutput(IsBitmask = true)]
