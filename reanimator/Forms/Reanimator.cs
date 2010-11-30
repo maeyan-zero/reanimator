@@ -62,7 +62,7 @@ namespace Reanimator
                 String subStr = str.Substring(37);
                 UInt32 strHash = Crypt.GetStringHash(subStr);
 
-                if (strHash == 1714110234) // "LIGHT_DEFINITION"
+                if (strHash == 111384616) // "DEMO_LEVEL_DEFINITION"
                 {
                     int bp = 0;
                 }
@@ -130,7 +130,7 @@ namespace Reanimator
             foreach (String xmlFilePath in xmlFiles)
             {
                 String path = xmlFilePath;
-                //path = @"D:\Games\Hellgate London\data\lights\arc jumper impact light.xml.cooked";
+                //path = @"D:\Games\Hellgate London\data\demolevel\streets.xml.cooked";
 
                 if (path.Contains("datChecksum") || path.Contains("mp_hellgate")) continue;
 

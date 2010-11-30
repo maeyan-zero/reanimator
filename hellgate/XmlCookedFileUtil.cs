@@ -52,6 +52,9 @@ namespace Hellgate
                 // Config (config.xml)
                 new ConfigDefinition(),
 
+                // Demo Levels
+                new DemoLevelDefinition(),
+
                 // GameGlobalDefinition (gamedefault.xml)
                 new GameGlobalDefinition(),
 
