@@ -278,6 +278,7 @@
     <Compile Include="Xml\GameGlobalDefinition.cs" />
     <Compile Include="Xml\GlobalDefinition.cs" />
     <Compile Include="Xml\InventoryViewInfo.cs" />
+    <Compile Include="Xml\LightDefinition.cs" />
     <Compile Include="Xml\Material.cs" />
     <Compile Include="Xml\ParticleSystemDefinition.cs" />
     <Compile Include="Xml\RoomLayoutGroup.cs" />
