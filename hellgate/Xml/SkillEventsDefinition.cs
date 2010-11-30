@@ -21,7 +21,7 @@
                 Name = "pEventHolders",
                 DefaultValue = 0,
                 ChildType = typeof(SkillEventHolder),
-                ElementType = ElementType.TableCount
+                ElementType = ElementType.TableMultiple
             }
         };
 

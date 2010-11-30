@@ -234,7 +234,7 @@ namespace Hellgate.Xml
         {
             RootElement = "FMOD_REVERB_PROPERTIES";
             base.Elements.AddRange(Elements);
-            BitFields = new Int32[] { -1 };
+            BitFlags = new Int32[] { -1 };
         }
     }
 }

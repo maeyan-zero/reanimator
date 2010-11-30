@@ -170,7 +170,7 @@
             {
                 Name = "pEvents",
                 DefaultValue = 0,
-                ElementType = ElementType.TableCount,
+                ElementType = ElementType.TableMultiple,
                 ChildType = typeof (AnimEvent)
             },
             new XmlCookElement
@@ -197,7 +197,7 @@
             {
                 Name = "tCondition",
                 DefaultValue = null,
-                ElementType = ElementType.Table,
+                ElementType = ElementType.TableSingle,
                 ChildType = typeof (ConditionDefinition)
             }
         };

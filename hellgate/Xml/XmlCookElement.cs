@@ -16,10 +16,12 @@ namespace Hellgate.Xml
         StringArrayFixed = 0x0206,          // found in AppearanceDefinition, like any other array type but as String
         StringArrayVariable = 0x0207,       // found in AppearanceDefinition
 
-        Table = 0x0308,
-        TableCount = 0x030A,
+        TableSingle = 0x0308,
+        TableMultiple = 0x030A,
+
         FloatTripletArrayVariable = 0x0500, // found in AppearanceDefinition and children, appears on types like tSelfIllumation, tSelfIllumationBlend, etc
-        UnknownFloatT = 0x0600,
+        FloatQuadArrayVariable = 0x0600,    // found in Screen FX
+
         NonCookedInt32 = 0x0700,
         UnknownFloat = 0x0800,
 
@@ -38,7 +40,7 @@ namespace Hellgate.Xml
     public class XmlCookElement
     {
         public String Name;
-        public String TrueName; // some element names have illegal xml chars in them (bad FSS), so we need the "true" name if we want the correct string hash
+        public String TrueName;             // some element names have illegal xml chars in them (bad FSS), so we need the "true" name if we want the correct string hash
         public Object DefaultValue;
         public Type ChildType;
         public UInt32 ChildTypeHash;
@@ -46,7 +48,7 @@ namespace Hellgate.Xml
         public ElementType ElementType;
         public Int32 FlagId;
         public Int32 BitIndex;
-        public Int32 BitCount; // used for BitIndex, total field BitCount
+        public Int32 BitCount;              // used for BitIndex, total field BitCount
         public UInt32 BitMask;
         public Int32 Count;
         public UInt32 NameHash;

@@ -9,7 +9,7 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "pPathNodeSets",
-                ElementType = ElementType.TableCount,
+                ElementType = ElementType.TableMultiple,
                 DefaultValue = null,
                 ChildType = typeof (RoomPathNodeSet)
             },
@@ -103,7 +103,7 @@ namespace Hellgate.Xml
         {
             RootElement = "ROOM_PATH_NODE_DEFINITION";
             base.Elements.AddRange(Elements);
-            BitFields = new Int32[] {-1};
+            BitFlags = new Int32[] {-1};
         }
     }
 }

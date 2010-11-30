@@ -131,7 +131,7 @@ namespace Hellgate.Xml
         {
             RootElement = "CONDITION_DEFINITION";
             base.Elements.AddRange(Elements);
-            BitFlags = new UInt32[1]; // 7 / 32 = 1
+            Flags = new UInt32[1]; // 7 / 32 = 1
         }
     }
 }

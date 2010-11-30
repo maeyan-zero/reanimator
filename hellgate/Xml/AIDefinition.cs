@@ -8,7 +8,7 @@
             {
                 Name = "tTable",
                 DefaultValue = null,
-                ElementType = ElementType.Table,
+                ElementType = ElementType.TableSingle,
                 ChildType = typeof(AIBehaviorDefinitionTable)
             }
         };

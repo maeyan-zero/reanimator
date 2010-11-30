@@ -13,7 +13,7 @@
             new XmlCookElement
             {
                 Name = "pPathNodes",
-                ElementType = ElementType.TableCount,
+                ElementType = ElementType.TableMultiple,
                 DefaultValue = null,
                 ChildType = typeof (RoomPathNode)
             },
