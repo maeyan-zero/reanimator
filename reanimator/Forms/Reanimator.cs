@@ -62,7 +62,7 @@ namespace Reanimator
                 String subStr = str.Substring(37);
                 UInt32 strHash = Crypt.GetStringHash(subStr);
 
-                if (strHash == 2367361032) // "PARTICLE_SYSTEM_DEFINITION"
+                if (strHash == 1714110234) // "LIGHT_DEFINITION"
                 {
                     int bp = 0;
                 }
@@ -130,9 +130,9 @@ namespace Reanimator
             foreach (String xmlFilePath in xmlFiles)
             {
                 String path = xmlFilePath;
-                //path = @"D:\Games\Hellgate London\data\particles\monsters\bloodcoil\bloodcoil projectile 1.xml.cooked";
+                //path = @"D:\Games\Hellgate London\data\lights\arc jumper impact light.xml.cooked";
 
-                if (path.Contains("datChecksum")) continue;
+                if (path.Contains("datChecksum") || path.Contains("mp_hellgate")) continue;
 
 
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();

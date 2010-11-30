@@ -73,13 +73,16 @@ namespace Hellgate
                 //new RoomPathNodeConnection(),
                 //new RoomPathNodeConnectionRef(),
 
-                // Material (makes things look like things)
+                // Lights
+                new LightDefinition(),
+
+                // Materials (makes things look like things)
                 new Material(),
 
                 // Particles
                 new ParticleSystemDefinition(),
 
-                // Screen Effect
+                // Screen Effects
                 new ScreenEffectDefinition(),
 
                 // Skills (defines skill effect/appearance mostly, not so much the skill itself)
@@ -91,7 +94,7 @@ namespace Hellgate
                 new SoundEffectDefinition(),
                 new SoundEffect(),
 
-                // Sound Reverb
+                // Sound Reverbs
                 new SoundReverbDefinition(),
                 new FmodReverbProperties(),
 
