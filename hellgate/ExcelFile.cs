@@ -562,7 +562,7 @@ namespace Hellgate
 
 
             // Table Header - put stringID in this field
-            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(StringId));
+            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(GetStringId(FilePath)));
             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
             // Public Field Headers
             foreach (FieldInfo fieldInfo in DataType.GetFields())
