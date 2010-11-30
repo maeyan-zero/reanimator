@@ -128,25 +128,25 @@
             {
                 Name = "tRagdollBlend",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float_0x0500
+                ElementType = ElementType.FloatTripletArrayVariable
             },
             new XmlCookElement
             {
                 Name = "tRagdollPower",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float_0x0500
+                ElementType = ElementType.FloatTripletArrayVariable
             },
             new XmlCookElement
             {
                 Name = "tSelfIllumation",
                 DefaultValue = 1.0f,
-                ElementType = ElementType.Float_0x0500
+                ElementType = ElementType.FloatTripletArrayVariable
             },
             new XmlCookElement
             {
                 Name = "tSelfIllumationBlend",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.Float_0x0500
+                ElementType = ElementType.FloatTripletArrayVariable
             },
             new XmlCookElement
             {

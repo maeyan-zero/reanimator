@@ -126,16 +126,21 @@ namespace Reanimator
             DirectoryInfo directoryInfo = new DirectoryInfo(root);
             List<String> xmlFiles = new List<String>(Directory.GetFiles(root, "*.xml.cooked", SearchOption.AllDirectories));
 
+            int count = 0;
             foreach (String xmlFilePath in xmlFiles)
             {
-                if (xmlFilePath.Contains("datChecksum")) continue;
+                String path = xmlFilePath;
+                //path = @"D:\Games\Hellgate London\data\states\activeblock.xml.cooked";
+
+                if (path.Contains("datChecksum")) continue;
+
 
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();
-                byte[] data = File.ReadAllBytes(xmlFilePath);
+                byte[] data = File.ReadAllBytes(path);
 
-                String fileName = Path.GetFileName(xmlFilePath);
+                String fileName = path.Replace(@"D:\Games\Hellgate London\", "");
                 Console.WriteLine("Uncooking: " + fileName);
-                if (fileName != "test_appearance.xml.cooked") continue;
+                //if (fileName != "test_appearance.xml.cooked") continue;
                 {
                     int bp = 0;
                 }
@@ -150,17 +155,23 @@ namespace Reanimator
                     Debug.Assert(false, "Failed to uncook: " + e);
                     continue;
                 }
-                
 
-                xmlCookedFile.SaveXml(xmlFilePath.Replace(".cooked", ""));
+
+                xmlCookedFile.SaveXml(path.Replace(".cooked", ""));
+                count++;
 
                 XmlCookedFile recookedXmlFile = new XmlCookedFile();
                 byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
                 byte[] originalHash = md5.ComputeHash(data);
                 byte[] recookedHash = md5.ComputeHash(recookedData);
-                File.WriteAllBytes(xmlFilePath + "2", recookedData);
-                Debug.Assert(originalHash.SequenceEqual(recookedHash));
-            }            
+                //File.WriteAllBytes(xmlFilePath + "2", recookedData);
+                if (!originalHash.SequenceEqual(recookedHash))
+                {
+                    File.WriteAllBytes(path + "2", recookedData);
+                    int bp = 0;
+                }
+            }
+            Console.WriteLine("XML Files Uncooked: " + count);
         }
 
         private static void _DoFolder(String folderDir)

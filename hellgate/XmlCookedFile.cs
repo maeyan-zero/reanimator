@@ -87,14 +87,14 @@ namespace Hellgate
             // todo: this is a bit excessive for a couple of offsets, but meh, fix it later
             Hashtable bitFieldOffsts = new Hashtable();
             int bitIndex = -1;
-            //bool bpTest = true;
+            bool bpTest = true;
             foreach (XmlCookElement xmlCookElement in xmlDefinition.Elements)
             {
-                //if (bpTest && _offset >= 0x720)
-                //{
-                //    int bp = 0;
-                //    bpTest = false;
-                //}
+                if (bpTest && _offset >= 0x6AA)
+                {
+                    int bp = 0;
+                    bpTest = false;
+                }
 
 
                 bitIndex++;
@@ -126,7 +126,8 @@ namespace Hellgate
                 if (xmlCookElement.ElementType == ElementType.TableCount ||
                     xmlCookElement.ElementType == ElementType.UnknownFloatT ||
                     xmlCookElement.ElementType == ElementType.StringArrayVariable ||
-                    xmlCookElement.ElementType == ElementType.FloatArrayVariable)
+                    xmlCookElement.ElementType == ElementType.FloatArrayVariable ||
+                    xmlCookElement.ElementType == ElementType.FloatTripletArrayVariable)
                 {
                     elementName += "Count";
                 }
@@ -137,7 +138,10 @@ namespace Hellgate
                     xmlCookElement.ElementType != ElementType.ExcelIndex &&             // want excel index even if null/empty
                     xmlCookElement.ElementType != ElementType.ExcelIndexArrayFixed &&   // want excel index even if null/empty
                     xmlCookElement.ElementType != ElementType.Table &&                  // want table even if null/empty
-                    xmlCookElement.ElementType != ElementType.TableCount                // want table count even if null/empty
+                    xmlCookElement.ElementType != ElementType.TableCount &&             // want table count even if null/empty
+                    xmlCookElement.ElementType != ElementType.ByteArrayVariable &&      // need count written even if null/empty
+                    xmlCookElement.ElementType != ElementType.StringArrayVariable &&    // need count written even if null/empty
+                    xmlCookElement.ElementType != ElementType.FloatArrayVariable        // need count written even if null/empty
                     ) continue;
 
                 if (xmlElement != null)
@@ -158,7 +162,7 @@ namespace Hellgate
                         break;
 
                     case ElementType.Int32ArrayFixed:                   // 0x0006       // found in colorsets.xml.cooked
-                        _WriteInt32ArrayFixed(elementText, xmlCookElement, xmlNode);
+                        _WriteInt32ArrayFixed(xmlCookElement, xmlNode);
                         break;
 
                     case ElementType.Float:                             // 0x0100
@@ -174,7 +178,11 @@ namespace Hellgate
                         break;
 
                     case ElementType.String:                            // 0x0200
-                        _WriteString(elementText, xmlCookElement);
+                        _WriteString(elementText, xmlCookElement, xmlElement);
+                        break;
+
+                    case ElementType.StringArrayFixed:                  // 0x0206
+                        _WriteStringArrayFixed(xmlCookElement, xmlNode);
                         break;
 
                     case ElementType.StringArrayVariable:               // 0x0207
@@ -189,7 +197,11 @@ namespace Hellgate
                         if (_WriteTableCount(elementText, xmlCookElement, xmlNode) == -1) return -1; // we found less tables than we were supposed to cook
                         break;
 
-                    case ElementType.ExcelIndexArrayFixed:            // 0x0509
+                    case ElementType.FloatTripletArrayVariable:         // 0x0500
+                        _WriteFloatTripletArrayVariable(xmlCookElement, xmlNode, elementText);
+                        break;
+
+                    case ElementType.ExcelIndexArrayFixed:              // 0x0509
                         _WriteExcelIndexArrayFixed(xmlCookElement, xmlNode);
                         break;
 
@@ -207,6 +219,10 @@ namespace Hellgate
 
                     case ElementType.BitFlag:                           // 0x0C02
                         _WriteBitFlag(elementText, xmlCookElement, xmlDefinition);
+                        break;
+
+                    case ElementType.ByteArrayVariable:                         // 0x1007
+                        _WriteByteArrayVariable(elementText, xmlCookElement);
                         break;
 
                     default:
@@ -248,12 +264,12 @@ namespace Hellgate
                     case ElementType.Int32ArrayVariable:                  // 0x0007
                     case ElementType.Float:                         // 0x0100
                     case ElementType.FloatArrayVariable:      // 0x0107
-                    case ElementType.Float_0x0500:                  // 0x0500
+                    case ElementType.FloatTripletArrayVariable:                  // 0x0500
                     case ElementType.UnknownFloatT:                 // 0x0600
                     case ElementType.NonCookedInt32:                // 0x0700
                     case ElementType.UnknownFloat:                  // 0x0800
                     case ElementType.Int32_0x0A00:                  // 0x0A00
-                    case ElementType.ByteArray:                     // 0x1007       // found in TEXTURE_DEFINITION child BLEND_RUN
+                    case ElementType.ByteArrayVariable:                     // 0x1007       // found in TEXTURE_DEFINITION child BLEND_RUN
                         FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.DefaultValue);
                         break;
 
@@ -416,9 +432,15 @@ namespace Hellgate
 
 
             // loop through elements
-            //for (int i = 0; i < xmlDefinition.Count; i++)
+            bool bpTest = true;
             for (int i = 0; i < elementCount; i++)
             {
+                if (bpTest && _offset >= 870)
+                {
+                    int bp = 0;
+                    bpTest = false;
+                }
+
                 // is the field present?
                 if (!_TestBit(_buffer, bitFieldOffset, i)) continue;
 
@@ -440,14 +462,14 @@ namespace Hellgate
                         Debug.Assert((Int32)xmlCookElement.DefaultValue != iValue);
                         break;
 
-                    case ElementType.Int32ArrayFixed:           // 0x0006     // found in colorsets.xml.cooked pdwColors
+                    case ElementType.Int32ArrayFixed:               // 0x0006     // found in colorsets.xml.cooked pdwColors
                         for (int dwIndex = 0; dwIndex < xmlCookElement.Count; dwIndex++)
                         {
                             _ReadUInt32(rootElement, xmlCookElement.Name);
                         }
                         break;
 
-                    case ElementType.Int32ArrayVariable:                  // 0x0007
+                    case ElementType.Int32ArrayVariable:            // 0x0007
                         Int32 pValue = _ReadInt32(rootElement, xmlCookElement.Name);
                         Debug.Assert((Int32)xmlCookElement.DefaultValue != pValue);
                         break;
@@ -457,36 +479,40 @@ namespace Hellgate
                         Debug.Assert((float)xmlCookElement.DefaultValue != fValue);
                         break;
 
-                    case ElementType.FloatArrayFixed:                    // 0x0106
+                    case ElementType.FloatArrayFixed:               // 0x0106
                         for (int fIndex = 0; fIndex < xmlCookElement.Count; fIndex++)
                         {
                             _ReadFloat(rootElement, xmlCookElement.Name);
                         }
                         break;
 
-                    case ElementType.FloatArrayVariable:      // 0x0107
+                    case ElementType.FloatArrayVariable:            // 0x0107
                         _ReadFloatArrayVariable(rootElement, xmlCookElement);
                         break;
 
                     case ElementType.String:                        // 0x0200
-                        String szValue = _ReadZeroString(rootElement, xmlCookElement);
+                        String szValue = _ReadString(rootElement, xmlCookElement);
                         Debug.Assert((String)xmlCookElement.DefaultValue != szValue);
                         break;
 
-                    case ElementType.StringArrayFixed:            // 0x0206
+                    case ElementType.StringArrayFixed:              // 0x0206
                         for (int strIndex = 0; strIndex < xmlCookElement.Count; strIndex++)
                         {
-                            _ReadZeroString(rootElement, xmlCookElement);
+                            _ReadString(rootElement, xmlCookElement);
                         }
                         break;
 
                     case ElementType.StringArrayVariable:
-                        _ReadZeroStringArray(rootElement, xmlCookElement);
+                        _ReadStringArray(rootElement, xmlCookElement);
                         break;
 
                     case ElementType.Table:                         // 0x0308
                     case ElementType.TableCount:                    // 0x030A
                         _ReadTable(rootElement, xmlCookElement, xmlTree.GetTree(i));
+                        break;
+
+                    case ElementType.FloatTripletArrayVariable:     // 0x0500
+                        _ReadFloatTripletArrayVariable(rootElement, xmlCookElement);    // not tested with HGL (un)cooking
                         break;
 
                     case ElementType.UnknownFloatT:                 // 0x0600
@@ -507,7 +533,7 @@ namespace Hellgate
                         _ReadExcelIndex(rootElement, xmlCookElement);
                         break;
 
-                    case ElementType.ExcelIndexArrayFixed:        // 0x0905
+                    case ElementType.ExcelIndexArrayFixed:          // 0x0905
                         for (int j = 0; j < xmlCookElement.Count; j++)
                         {
                             _ReadExcelIndex(rootElement, xmlCookElement);
@@ -534,11 +560,9 @@ namespace Hellgate
                         //Debug.Assert((bool)xmlCookElement.DefaultValue != bValue);
                         break;
 
-                    case ElementType.ByteArray:                     // 0x1007
-                        UInt32 byteArraySize = _ReadUInt32(null, null);
-
-                        int bp1 = 0;
-
+                    case ElementType.ByteArrayVariable:             // 0x1007
+                        int byteArraySize = _ReadByteArray(rootElement, xmlCookElement);
+                        //Debug.Assert((Int32)xmlCookElement.DefaultValue != byteArraySize); // always written?
                         break;
 
                     default:
@@ -553,6 +577,8 @@ namespace Hellgate
             {
                 xmlParent.RemoveChild(rootElement);
             }
+
+            xmlDefinition.ResetFields();
         }
 
         /// <summary>
@@ -637,7 +663,7 @@ namespace Hellgate
 
                     case ElementType.Float:                                             // 0x0100
                     case ElementType.FloatArrayVariable:                          // 0x0107   // not sure of structure as non-default, but as default has same as Float
-                    case ElementType.Float_0x0500:                                      // 0x0500
+                    case ElementType.FloatTripletArrayVariable:                                      // 0x0500
                     case ElementType.UnknownFloatT:                                     // 0x0600 //materials "tScatterColor"
                     case ElementType.UnknownFloat:                                      // 0x0800
                         float defaultFloat = _ReadFloat(null, null);                    // default value
@@ -719,7 +745,7 @@ namespace Hellgate
                         break;
 
 
-                    case ElementType.ByteArray:                                         // 0x1007   // found in textures
+                    case ElementType.ByteArrayVariable:                                         // 0x1007   // found in textures
                         Int32 unknown = _ReadInt32(null, null);
 
                         Debug.Assert((Int32)xmlCookElement.DefaultValue == unknown);

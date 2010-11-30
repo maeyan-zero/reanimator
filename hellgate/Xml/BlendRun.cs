@@ -26,7 +26,7 @@
             {
                 Name = "pbAlpha",
                 DefaultValue = 0,
-                ElementType = ElementType.ByteArray
+                ElementType = ElementType.ByteArrayVariable
             }
         };
 
