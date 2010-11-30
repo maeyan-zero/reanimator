@@ -18,7 +18,7 @@ namespace Hellgate.Xml
 
         Table = 0x0308,
         TableCount = 0x030A,
-        Float_0x0500 = 0x0500,              // found in AppearanceDefinition and children; appears to be treated like normal float but name usually "tName"
+        FloatTripletArrayVariable = 0x0500, // found in AppearanceDefinition and children, appears on types like tSelfIllumation, tSelfIllumationBlend, etc
         UnknownFloatT = 0x0600,
         NonCookedInt32 = 0x0700,
         UnknownFloat = 0x0800,
@@ -31,7 +31,8 @@ namespace Hellgate.Xml
         Flag = 0x0B01,
         BitFlag = 0x0C02,
         UnknownPTypeD_0x0D00 = 0x0D00,      // found in RoomPath and AppearanceDefinition and children; no known use/occurance - name usually "pName"
-        ByteArray = 0x1007
+
+        ByteArrayVariable = 0x1007          // found in BlendRun (TextureDefinition child)
     }
 
     public class XmlCookElement
