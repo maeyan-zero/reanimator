@@ -274,6 +274,7 @@
     <Compile Include="Xml\ColorSetDefinition.cs" />
     <Compile Include="Xml\ConditionDefinition.cs" />
     <Compile Include="Xml\ConfigDefinition.cs" />
+    <Compile Include="Xml\FmodReverbProperties.cs" />
     <Compile Include="Xml\GameGlobalDefinition.cs" />
     <Compile Include="Xml\GlobalDefinition.cs" />
     <Compile Include="Xml\InventoryViewInfo.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="Xml\SkillEventsDefinition.cs" />
     <Compile Include="Xml\SoundEffect.cs" />
     <Compile Include="Xml\SoundEffectDefinition.cs" />
+    <Compile Include="Xml\SoundReverbDefinition.cs" />
     <Compile Include="Xml\StateDefinition.cs" />
     <Compile Include="Xml\StateEvent.cs" />
     <Compile Include="Xml\TextureDefinition.cs" />

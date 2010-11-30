@@ -85,6 +85,10 @@ namespace Hellgate
                 new SoundEffectDefinition(),
                 new SoundEffect(),
 
+                // Sound Reverb
+                new SoundReverbDefinition(),
+                new FmodReverbProperties(),
+
                 // States
                 new StateDefinition(),
                 new StateEvent(),
