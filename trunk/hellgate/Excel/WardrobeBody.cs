@@ -16,8 +16,14 @@ namespace Hellgate.Excel
         public Int32 layers2;
         public Int32 layers3;
         public Int32 layers4;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        Int32[] layersUnused;
+        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+        //Int32[] layersUnused;
+        public Int32 undefined01;
+        public Int32 undefined02;
+        public Int32 undefined03;
+        public Int32 undefined04;
+        public Int32 undefined05;
+        public Int32 undefined06;
         public Int32 Base;//idx
         public Int32 head;//idx
         public Int32 hair;//idx
@@ -32,6 +38,6 @@ namespace Hellgate.Excel
         public Int32 randomLayerSets1;
         public Int32 randomLayerSets2;
         public Int32 randomLayerSets3;
-        Int32 randomLayerSets4;
+        public Int32 randomLayerSets4;
     }
 }
