@@ -1,480 +1,480 @@
-WARDROBE_MODEL	modelGroup	appearanceGroup	appearanceGroup2	undefined2	fileName	defaultMaterial	undefined3	partGroup	undefinedBool1	undefinedBool2	undefinedBool3	undefined4	undefined5	boxMinX	boxMinY	boxMinZ	boxMaxX	boxMaxY	boxMaxZ
-0	1	2	-1	0	data/units/players/bodies/male_fp/male_bare_arms.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	1	3	-1	1	data/units/players/bodies/female_fp/female_bare_arms.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	2			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	3			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	7	4	-1	4	data/units/players/templar/templar_male_fp/powered_light/tm_powered_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	8	4	-1	5	data/units/players/templar/templar_male_fp/powered_heavy/tm_powered_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	9	4	-1	6	data/units/players/templar/templar_male_fp/tech_light/tm_fp_tech_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	3	4	-1	7	data/units/players/templar/templar_male_fp/arcane_light/tm_fp_arcane_light_mesh.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	4	4	-1	8	data/units/players/templar/templar_male_fp/arcane_heavy/tm_fp_arcane_heavy_mesh.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	10	4	-1	9	data/units/players/templar/templar_male_fp/tech_heavy/tm_tech_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	10			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	11			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	7	7	-1	12	data/units/players/templar/templar_female_fp/power_light/tf_power_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	8	7	-1	13	data/units/players/templar/templar_female_fp/power_heavy/tf_power_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	9	7	-1	14	data/units/players/templar/templar_female_fp/tech_light/tf_tech_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	10	7	-1	15	data/units/players/templar/templar_female_fp/tech_heavy/tf_tech_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	3	7	-1	16	data/units/players/templar/templar_female_fp/power_light/tf_power_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	4	7	-1	17	data/units/players/templar/templar_female_fp/power_heavy/tf_power_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	11	5	-1	18	data/units/players/cabalist/cabalist_male_fp/focus_a/FocusItem_A.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	2	5	-1	19	data/units/players/cabalist/cabalist_male_fp/apprentice/cm_apprentice.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	3	5	-1	20	data/units/players/cabalist/cabalist_male_fp/arcane_light/cm_arcane_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	21			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	11	8	-1	22	data/units/players/cabalist/cabalist_female_fp/focus_a/Female_focus_a.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	2	8	-1	23	data/units/players/cabalist/cabalist_female_fp/apprentice/cf_apprentice.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	3	8	-1	24	data/units/players/cabalist/cabalist_female_fp/arcane_light/cf_arcane_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	25			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	2	6	-1	26	data/units/players/hunter/hunter_male_fp/apprentice/hm_apprentice.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	4	6	-1	27	data/units/players/hunter/hunter_male_fp/arcane_heavy/hm_arcane_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	3	6	-1	28	data/units/players/hunter/hunter_male_fp/arcane_light/hm_arcane_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	6	6	-1	29	data/units/players/hunter/hunter_male_fp/mystic_heavy/hm_mystic_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	5	6	-1	30	data/units/players/hunter/hunter_male_fp/mystic_light/hm_mystic_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	10	6	-1	31	data/units/players/hunter/hunter_male_fp/tech_heavy/hm_tech_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	9	6	-1	32	data/units/players/hunter/hunter_male_fp/tech_light/hm_tech_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	2	9	-1	33	data/units/players/hunter/hunter_female_fp/apprentice/hf_apprentice.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	4	9	-1	34	data/units/players/hunter/hunter_female_fp/arcane_heavy/hf_arcane_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	3	9	-1	35	data/units/players/hunter/hunter_female_fp/arcane_light/hf_arcane_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	6	9	-1	36	data/units/players/hunter/hunter_female_fp/mystic_heavy/hf_mystic_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	5	9	-1	37	data/units/players/hunter/hunter_female_fp/mystic_light/hf_mystic_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	10	9	-1	38	data/units/players/hunter/hunter_female_fp/tech_heavy/hf_tech_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	9	9	-1	39	data/units/players/hunter/hunter_female_fp/tech_light/hf_tech_light.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	12	2	-1	40	data/units/players/hunter/hunter_male_fp/arcane_heavy/hm_arcane_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	12	3	-1	41	data/units/players/hunter/hunter_female_fp/arcane_heavy/hf_arcane_heavy.GR2	ActorTemplar_3p	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	14	10	-1	42	data/units/players/templar/templar_male_3p/starter/tm_street_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	15	10	-1	43	data/units/players/templar/templar_male_3p/apprentice/tm_apprentice.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	16	10	-1	44	data/units/players/templar/templar_male_3p/arcane_light/tm_arcane_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	17	10	-1	45	data/units/players/templar/templar_male_3p/arcane_heavy/tm_arcane_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	46			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	47			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	20	10	-1	48	data/units/players/templar/templar_male_3p/power_light/tm_power_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	21	10	-1	49	data/units/players/templar/templar_male_3p/power_heavy/tm_power_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	23	10	-1	50	data/units/players/templar/templar_male_3p/tech_light/tm_tech_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	24	10	-1	51	data/units/players/templar/templar_male_3p/tech_heavy/tm_tech_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	25	10	-1	52	data/units/players/templar/templar_male_3p/tech_heavy/tm_tech_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	33	10	-1	53	data/units/players/templar/templar_male_3p/apprentice/tm_apprentice_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	34	10	-1	54	data/units/players/templar/templar_male_3p/arcane_light/tm_arcane_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	35	10	-1	55	data/units/players/templar/templar_male_3p/arcane_heavy/tm_arcane_heavy_helmet.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	56			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	57			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	38	10	-1	58	data/units/players/templar/templar_male_3p/power_light/tm_power_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	39	10	-1	59	data/units/players/templar/templar_male_3p/power_heavy/tm_power_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	41	10	-1	60	data/units/players/templar/templar_male_3p/tech_light/tm_tech_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	42	10	-1	61	data/units/players/templar/templar_male_3p/tech_heavy/tm_tech_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	62			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	63			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	14	14	-1	64	data/units/players/templar/templar_female_3p/starter/tf_3p_starter.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	15	14	-1	65	data/units/players/templar/templar_female_3p/apprentice/tf_apprentice.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	16	14	-1	66	data/units/players/templar/templar_female_3p/arcane_light/tf_arcane_light_mesh.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	17	14	-1	67	data/units/players/templar/templar_female_3p/arcane_heavy/tf_arcane_heavy_mesh.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	68			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	69			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	20	14	-1	70	data/units/players/templar/templar_female_3p/power_light/tf_power_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	21	14	-1	71	data/units/players/templar/templar_female_3p/power_heavy/tf_power_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	23	14	-1	72	data/units/players/templar/templar_female_3p/tech_light/tf_tech_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	24	14	-1	73	data/units/players/templar/templar_female_3p/tech_heavy/tf_tech_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	33	14	-1	74	data/units/players/templar/templar_female_3p/apprentice/tf_apprentice_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	34	14	-1	75	data/units/players/templar/templar_female_3p/arcane_light/tf_arcane_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	35	14	-1	76	data/units/players/templar/templar_female_3p/arcane_heavy/tf_arcane_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	77			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	78			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	38	14	-1	79	data/units/players/templar/templar_female_3p/power_light/tf_power_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	39	14	-1	80	data/units/players/templar/templar_female_3p/power_heavy/tf_power_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	41	14	-1	81	data/units/players/templar/templar_female_3p/tech_light/tf_tech_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	42	14	-1	82	data/units/players/templar/templar_female_3p/tech_heavy/tf_tech_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	83			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	84			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	14	11	-1	85	data/units/players/templar/templar_male_3p/starter/tm_street_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	15	11	-1	86	data/units/players/cabalist/cabalist_male_3p/apprentice/cm_apprentice.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	16	11	-1	87	data/units/players/cabalist/cabalist_male_3p/arcane_light/cm_arcane_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	17	11	-1	88	data/units/players/cabalist/cabalist_male_3p/arcane_heavy/cm_arcane_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	89			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	90			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	20	11	-1	91	data/units/players/cabalist/cabalist_male_3p/power_light/cm_power_light_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	21	11	-1	92	data/units/players/cabalist/cabalist_male_3p/power_heavy/cm_power_heavy_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	93			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	23	11	-1	94	data/units/players/cabalist/cabalist_male_3p/tech_light/cm_tech_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	24	11	-1	95	data/units/players/cabalist/cabalist_male_3p/tech_heavy/cm_tech_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	33	11	-1	96	data/units/players/cabalist/cabalist_male_3p/apprentice/cm_apprentice_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	34	11	-1	97	data/units/players/cabalist/cabalist_male_3p/arcane_light/cm_arcane_light_helmet.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	35	11	-1	98	data/units/players/cabalist/cabalist_male_3p/arcane_heavy/cm_arcane_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	99			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	100			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	38	11	-1	101	data/units/players/cabalist/cabalist_male_3p/power_light/cm_power_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	39	11	-1	102	data/units/players/cabalist/cabalist_male_3p/power_heavy/cm_power_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	103			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	41	11	-1	104	data/units/players/cabalist/cabalist_male_3p/tech_light/cm_tech_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	42	11	-1	105	data/units/players/cabalist/cabalist_male_3p/tech_heavy/cm_tech_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	106			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	107			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	14	15	-1	108	data/units/players/templar/templar_female_3p/starter/tf_3p_starter.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	15	15	-1	109	data/units/players/cabalist/cabalist_female_3p/apprentice/cf_apprentice.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	16	15	-1	110	data/units/players/cabalist/cabalist_female_3p/arcane_light/cf_3p_arcane_light_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	17	15	-1	111	data/units/players/cabalist/cabalist_female_3p/arcane_heavy/cf_arcane_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	112			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	113			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	20	15	-1	114	data/units/players/cabalist/cabalist_female_3p/power_light/cf_power_light_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	21	15	-1	115	data/units/players/cabalist/cabalist_female_3p/power_heavy/cf_power_heavy_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	116			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	23	15	-1	117	data/units/players/cabalist/cabalist_female_3p/tech_light/cf_tech_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	24	15	-1	118	data/units/players/cabalist/cabalist_female_3p/tech_heavy/cf_tech_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	33	15	-1	119	data/units/players/cabalist/cabalist_female_3p/apprentice/cf_apprentice_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	34	15	-1	120	data/units/players/cabalist/cabalist_female_3p/arcane_light/cf_arcane_helmet.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	35	15	-1	121	data/units/players/cabalist/cabalist_female_3p/arcane_heavy/cf_arcane_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	122			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	123			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	38	15	-1	124	data/units/players/cabalist/cabalist_female_3p/power_light/cf_power_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	39	15	-1	125	data/units/players/cabalist/cabalist_female_3p/power_heavy/cf_power_heavy_helmet.gr2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	126			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	41	15	-1	127	data/units/players/cabalist/cabalist_female_3p/tech_light/cf_tech_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	42	15	-1	128	data/units/players/cabalist/cabalist_female_3p/tech_heavy/cf_tech_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	129			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	130			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	63	11	-1	131	data/units/players/cabalist/cabalist_male_3p/focus_a/cm_focus_a.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	63	15	-1	132	data/units/players/cabalist/cabalist_female_3p/focus_a/cf_3p_focus_a.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	14	13	-1	133	data/units/players/templar/templar_female_3p/starter/tf_3p_starter.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	15	13	-1	134	data/units/players/hunter/hunter_female_3p/apprentice/hf_apprentice.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	16	13	-1	135	data/units/players/hunter/hunter_female_3p/arcane_light/hf_arcane_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	17	13	-1	136	data/units/players/hunter/hunter_female_3p/arcane_heavy/hf_arcane_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	18	13	-1	137	data/units/players/hunter/hunter_female_3p/mystic_light/hf_mystic_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	19	13	-1	138	data/units/players/hunter/hunter_female_3p/mystic_heavy/hf_mystic_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	139			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	140			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	23	13	-1	141	data/units/players/hunter/hunter_female_3p/tech_light/hf_tech_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	24	13	-1	142	data/units/players/hunter/hunter_female_3p/tech_heavy/hf_tech_heavy_suit.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	143			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	33	13	-1	144	data/units/players/hunter/hunter_female_3p/apprentice/hf_apprentice_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	34	13	-1	145	data/units/players/hunter/hunter_female_3p/arcane_light/hf_arcane_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	35	13	-1	146	data/units/players/hunter/hunter_female_3p/arcane_heavy/hf_arcane_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	36	13	-1	147	data/units/players/hunter/hunter_female_3p/mystic_light/hf_mystic_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	37	13	-1	148	data/units/players/hunter/hunter_female_3p/mystic_heavy/hf_mystic_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	149			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	150			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	41	13	-1	151	data/units/players/hunter/hunter_female_3p/tech_light/hf_tech_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	42	13	-1	152	data/units/players/hunter/hunter_female_3p/tech_heavy/hf_tech_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	153			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	154			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	155			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	14	12	-1	156	data/units/players/templar/templar_male_3p/starter/tm_street_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	15	12	-1	157	data/units/players/hunter/hunter_male_3p/apprentice/hm_apprentice.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	16	12	-1	158	data/units/players/hunter/hunter_male_3p/arcane_light/hm_arcane_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	17	12	-1	159	data/units/players/hunter/hunter_male_3p/arcane_heavy/hm_arcane_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	18	12	-1	160	data/units/players/hunter/hunter_male_3p/mystic_light/hm_mystic_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	19	12	-1	161	data/units/players/hunter/hunter_male_3p/mystic_heavy/hm_mystic_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	162			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	21	12	-1	163	data/units/players/hunter/hunter_male_3p/power_heavy/hm_power_heavy_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	23	12	-1	164	data/units/players/hunter/hunter_male_3p/tech_light/hm_tech_light.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	24	12	-1	165	data/units/players/hunter/hunter_male_3p/tech_heavy/hm_tech_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	166			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	33	12	-1	167	data/units/players/hunter/hunter_male_3p/apprentice/hm_apprentice_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	34	12	-1	168	data/units/players/hunter/hunter_male_3p/arcane_light/hm_arcane_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	35	12	-1	169	data/units/players/hunter/hunter_male_3p/arcane_heavy/hm_arcane_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	36	12	-1	170	data/units/players/hunter/hunter_male_3p/mystic_light/hm_mystic_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	37	12	-1	171	data/units/players/hunter/hunter_male_3p/mystic_heavy/hm_mystic_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	172			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	39	12	-1	173	data/units/players/hunter/hunter_male_3p/power_heavy/hm_power_heavy_helmet.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	41	12	-1	174	data/units/players/hunter/hunter_male_3p/tech_light/hm_tech_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	42	12	-1	175	data/units/players/hunter/hunter_male_3p/tech_heavy/hm_tech_heavy_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	176			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	177			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	178			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	27	63	-1	179	data/units/players/street/female_3p/military01/gf_military01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	28	63	-1	180	data/units/players/street/female_3p/mechanic01/gf_mechanic01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	29	63	-1	181	data/units/players/street/female_3p/vagrant01/gf_vagrant01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	30	63	-1	182	data/units/players/street/female_3p/apocalyptic01/gf_apocalyptic01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	31	63	-1	183	data/units/players/street/female_3p/veteran01/gf_veteran01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	32	63	-1	184	data/units/players/street/female_3p/proper01/gf_proper01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	27	16	-1	185	data/units/players/street/male_3p/military01/gm_military01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	28	16	-1	186	data/units/players/street/male_3p/mechanic01/gm_mechanic01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	29	16	-1	187	data/units/players/street/male_3p/vagrant01/gm_vagrant01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	30	16	-1	188	data/units/players/street/male_3p/apocalyptic01/gm_apocalyptic01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	31	16	-1	189	data/units/players/street/male_3p/veteran01/gm_veteran01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	32	16	-1	190	data/units/players/street/male_3p/proper01/gm_proper01.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	46	16	-1	191	data/units/players/npc/npc_male_3p/murmur/npc_murmur_body.GR2	ActorTemplar_Leather	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	28	-1	192	data/units/players/heads/male/murmur/murmur_head.GR2	ActorTemplar_Head	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	47	16	-1	193	data/units/players/npc/npc_male_3p/murmur_ruined/npc_murmur_ruined.GR2	ActorTemplar_Leather	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	29	-1	194	data/units/players/heads/male/murmur/murmur_head.GR2	ActorTemplar_Head	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	31	-1	195	data/units/players/heads/male/npc_consul/npc_consul_head.GR2	ActorTemplar_Head	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	30	-1	196	data/units/players/heads/male/lucious/lucious_head.GR2	ActorTemplar_Head	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	48	-1	197	data/units/players/heads/male/Hair/lucious_hair/lucious_hair.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	30	62	198	data/units/players/heads/male/facial_hair/lucious_beard/lucious_beard.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	49	16	-1	199	data/units/players/npc/npc_male_3p/lucious/npc_lucious_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	48	16	-1	200	data/units/players/npc/npc_male_3p/bodger/npc_bodger_body.GR2	ActorTemplar_Leather	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	50	16	-1	201	data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_body.GR2	T314	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	51	16	-1	202	data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_helm.GR2	T314	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	52	16	-1	203	data/units/players/heads/male/male_4/male_4_head.GR2	T314	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	53	16	-1	204	data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage2_body.GR2	T314	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	54	16	-1	205	data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage2_helm.GR2	T314	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	55	16	-1	206	data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage2_face.GR2	T314	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	56	16	-1	207	data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage3_body.GR2	T314	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	57	16	-1	208	data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage3_head.GR2	T314	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	58	63	-1	209	data/units/players/npc/npc_female_3p/emmera/npc_emmera_body.GR2	ActorTemplar_Leather	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	90	-1	210	data/units/players/heads/female/hair/emmera_hair/emmera_hair.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	74	-1	211	data/units/players/heads/female/emmera/emmera_head.GR2	ActorTemplar_Head	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	59	16	-1	212	data/units/players/npc/npc_male_3p/Truth/npc_truth_male_body.GR2	ActorTemplar_Leather	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	59	63	-1	213	data/units/players/npc/npc_female_3p/gf_truth/gf_truth_pristine.GR2	ActorTemplar_Leather	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	60	63	-1	214	data/units/players/npc/npc_female_3p/child_truth/child_truth_pristine.GR2	ActorTemplar_Leather	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	75	-1	215	data/units/players/heads/female/child_truth/child_truth_head.GR2	ActorTemplar_Head	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	13	16	-1	216	data/units/players/bodies/male/male_bare_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	61	16	-1	217	data/units/players/heads/male/male_eyepiece/monocle_male.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	61	63	-1	218	data/units/players/heads/female/female_eyepiece/monocle_female.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	64	16	-1	219	data/units/players/heads/male/Male_Skull/Male_Skull.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	64	63	-1	220	data/units/players/heads/female/Female_Skull/Female_Skull.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	65	16	-1	221	data/units/players/general/general_male_3p/santa_helm/gm_santa_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	65	63	-1	222	data/units/players/general/general_female_3p/santa_helm/gf_santa_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	66	16	-1	223	data/units/players/hunter/hunter_male_3p/arcane_heavy/hm_arcane_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	66	63	-1	224	data/units/players/hunter/hunter_female_3p/arcane_heavy/hf_arcane_heavy.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	62	16	-1	225	data/units/players/hunter/hunter_male_3p/tech_light/hm_tech_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	62	63	-1	226	data/units/players/hunter/hunter_female_3p/tech_light/hf_tech_light_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	32	-1	227	data/units/players/heads/male/hair/male_hair_01/male_hair_01.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	33	-1	228	data/units/players/heads/male/hair/male_hair_02/male_hair_02.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	34	-1	229	data/units/players/heads/male/hair/male_hair_03/male_hair_03.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	35	-1	230	data/units/players/heads/male/hair/male_hair_04/male_hair_04.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	36	-1	231	data/units/players/heads/male/hair/male_hair_05/male_hair_05.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	37	-1	232	data/units/players/heads/male/hair/male_hair_06/male_hair_06.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	38	-1	233	data/units/players/heads/male/hair/male_hair_07/male_hair_07.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	39	-1	234	data/units/players/heads/male/hair/male_hair_08/male_hair_08.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	40	-1	235	data/units/players/heads/male/hair/male_hair_09/male_hair_09.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	41	-1	236	data/units/players/heads/male/hair/male_hair_10/male_hair_10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	42	-1	237	data/units/players/heads/male/hair/male_hair_11/male_hair_11.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	43	-1	238	data/units/players/heads/male/hair/male_hair_12/male_hair_12.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	44	-1	239	data/units/players/heads/male/hair/male_hair_13/male_hair_13.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	45	-1	240	data/units/players/heads/male/hair/male_hair_14/male_hair_14.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	46	-1	241	data/units/players/heads/male/hair/male_hair_15/male_hair_15.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	47	-1	242	data/units/players/heads/male/hair/male_hair_16/male_hair_16.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	17	-1	243	data/units/players/heads/male/male_1/male_1_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	49	244	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	50	245	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	51	246	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	52	247	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	53	248	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	54	249	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	55	250	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	56	251	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	57	252	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	58	253	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	59	254	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	60	255	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	17	61	256	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	18	-1	257	data/units/players/heads/male/male_2/male_2_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	49	258	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	50	259	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	51	260	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	52	261	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	53	262	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	54	263	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	55	264	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	56	265	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	57	266	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	58	267	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	59	268	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	60	269	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	18	61	270	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h2.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	19	-1	271	data/units/players/heads/male/male_3/male_3_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	49	272	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	50	273	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	51	274	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	52	275	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	53	276	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	54	277	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	55	278	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	56	279	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	57	280	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	58	281	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	59	282	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	60	283	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	19	61	284	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h3.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	20	-1	285	data/units/players/heads/male/male_4/male_4_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	49	286	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	50	287	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	51	288	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	52	289	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	53	290	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	54	291	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	55	292	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	56	293	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	57	294	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	58	295	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	59	296	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	60	297	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	20	61	298	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h4.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	21	-1	299	data/units/players/heads/male/male_5/male_5_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	49	300	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	50	301	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	51	302	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	52	303	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	53	304	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	54	305	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	55	306	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	56	307	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	57	308	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	58	309	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	59	310	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	60	311	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	21	61	312	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h5.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	22	-1	313	data/units/players/heads/male/male_6/male_6_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	49	314	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	50	315	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	51	316	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	52	317	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	53	318	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	54	319	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	55	320	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	56	321	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	57	322	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	58	323	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	59	324	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	60	325	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	22	61	326	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h6.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	23	-1	327	data/units/players/heads/male/male_7/male_7_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	49	328	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	50	329	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	51	330	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	52	331	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	53	332	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	54	333	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	55	334	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	56	335	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	57	336	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	58	337	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	59	338	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	60	339	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	23	61	340	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h7.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	24	-1	341	data/units/players/heads/male/male_8/male_8_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	49	342	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	50	343	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	51	344	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	52	345	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	53	346	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	54	347	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	55	348	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	56	349	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	57	350	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	58	351	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	59	352	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	60	353	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	24	61	354	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h8.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	25	-1	355	data/units/players/heads/male/male_9/male_9_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	49	356	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	50	357	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	51	358	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	52	359	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	53	360	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	54	361	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	55	362	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	56	363	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	57	364	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	58	365	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	59	366	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	60	367	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	25	61	368	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h9.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	26	-1	369	data/units/players/heads/male/male_10/male_10_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	49	370	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	50	371	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	51	372	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	52	373	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	53	374	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	54	375	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	55	376	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	56	377	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	57	378	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	58	379	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	59	380	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	60	381	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	26	61	382	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h10.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	27	-1	383	data/units/players/heads/male/male_11/male_11_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	49	384	data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	50	385	data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	51	386	data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	52	387	data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	53	388	data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	54	389	data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	55	390	data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	56	391	data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	57	392	data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	58	393	data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	59	394	data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	60	395	data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	69	27	61	396	data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h11.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	13	63	-1	397	data/units/players/bodies/female/female_bare_body.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	64	-1	398	data/units/players/heads/female/female_1/female_1_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	91	-1	399	data/units/players/heads/female/Female_Accessories/Female_1_Acc1.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	92	-1	400	data/units/players/heads/female/Female_Accessories/Female_1_Acc2.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	93	-1	401	data/units/players/heads/female/Female_Accessories/Female_1_Acc3.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	94	-1	402	data/units/players/heads/female/Female_Accessories/Female_1_Acc4.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	95	-1	403	data/units/players/heads/female/Female_Accessories/Female_1_Acc5.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	96	-1	404	data/units/players/heads/female/Female_Accessories/Female_1_Acc6.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	97	-1	405	data/units/players/heads/female/Female_Accessories/Female_1_Acc7.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	98	-1	406	data/units/players/heads/female/Female_Accessories/Female_1_Acc8.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	99	-1	407	data/units/players/heads/female/Female_Accessories/Female_1_Acc9.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	100	-1	408	data/units/players/heads/female/Female_Accessories/Female_1_Acc10.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	101	-1	409	data/units/players/heads/female/Female_Accessories/Female_1_Acc11.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	102	-1	410	data/units/players/heads/female/Female_Accessories/Female_1_Acc12.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	103	-1	411	data/units/players/heads/female/Female_Accessories/Female_1_Acc13.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	104	-1	412	data/units/players/heads/female/Female_Accessories/Female_1_Acc14.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	70	105	-1	413	data/units/players/heads/female/Female_Accessories/Female_1_Acc15.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	65	-1	414	data/units/players/heads/female/female_2/female_2_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	66	-1	415	data/units/players/heads/female/female_3/female_3_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	67	-1	416	data/units/players/heads/female/female_4/female_4_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	68	-1	417	data/units/players/heads/female/female_5/female_5_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	69	-1	418	data/units/players/heads/female/female_6/female_6_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	70	-1	419	data/units/players/heads/female/female_7/female_7_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	71	-1	420	data/units/players/heads/female/female_8/female_8_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	72	-1	421	data/units/players/heads/female/female_9/female_9_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	67	73	-1	422	data/units/players/heads/female/female_10/female_10_head.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	423			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	424			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	425			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	426			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	68	76	-1	427	data/units/players/heads/female/hair/female_hair_01/female_hair_01.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	77	-1	428	data/units/players/heads/female/hair/female_hair_02/female_hair_02.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	78	-1	429	data/units/players/heads/female/hair/female_hair_03/female_hair_03.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	79	-1	430	data/units/players/heads/female/hair/female_hair_04/female_hair_04.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	80	-1	431	data/units/players/heads/female/hair/female_hair_05/female_hair_05.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	81	-1	432	data/units/players/heads/female/hair/female_hair_06/female_hair_06.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	82	-1	433	data/units/players/heads/female/hair/female_hair_07/female_hair_07.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	83	-1	434	data/units/players/heads/female/hair/female_hair_08/female_hair_08.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	84	-1	435	data/units/players/heads/female/hair/female_hair_09/female_hair_09.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	85	-1	436	data/units/players/heads/female/hair/female_hair_10/female_hair_10.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	86	-1	437	data/units/players/heads/female/hair/female_hair_11/female_hair_11.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	87	-1	438	data/units/players/heads/female/hair/female_hair_12/female_hair_12.GR2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	88	-1	439	data/units/players/heads/female/hair/female_hair_14/female_hair_14.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	68	89	-1	440	data/units/players/heads/female/hair/female_hair_15/female_hair_15.GR2	Hair_Soft	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	71	64	-1	441	data/units/players/heads/female/female_1/female_1_cf_accessory_1.gr2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	71	65	-1	442	data/units/players/heads/female/female_2/female_2_cf_accessory_1.gr2	ActorTemplar_Hair	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	72	16	-1	443	data/units/items/misc/dye_kit/wardrobe/dye_kit_mesh.gr2	dye_kit	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	1
-0	72	63	-1	444	data/units/items/misc/dye_kit/wardrobe/dye_kit_mesh.gr2	dye_kit	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	1
-0	73	106	-1	445	data/units/players/test/male_3p/suit.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	74	106	-1	446	data/units/players/test/male_3p/suit.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	73	107	-1	447	data/units/players/test/female_3p/suit.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	74	107	-1	448	data/units/players/test/female_3p/suit.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	449			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	450			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	451			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	452			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	45	15	-1	453	data/units/players/cabalist/cabalist_female_3p/ong1_misc2/cf_ong1_misc2_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	44	15	-1	454	data/units/players/cabalist/cabalist_female_3p/ong1_misc1/cf_ong1_misc1_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	45	11	-1	455	data/units/players/cabalist/cabalist_male_3p/ong1_misc2/cm_ong1_misc2_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	44	11	-1	456	data/units/players/cabalist/cabalist_male_3p/ong1_misc1/cm_ong1_misc1_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	45	13	-1	457	data/units/players/hunter/hunter_female_3p/ong1_misc2/hf_ong1_misc2_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	44	13	-1	458	data/units/players/hunter/hunter_female_3p/ong1_misc1/hf_ong1_misc1_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	45	12	-1	459	data/units/players/hunter/hunter_male_3p/ong1_misc2/hm_ong1_misc2_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	44	12	-1	460	data/units/players/hunter/hunter_male_3p/ong1_misc1/hm_ong1_misc1_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	45	14	-1	461	data/units/players/templar/templar_female_3p/ong1_misc2/tf_ong1_misc2_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	44	14	-1	462	data/units/players/templar/templar_female_3p/ong1_misc1/tf_ong1_misc1_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	45	10	-1	463	data/units/players/templar/templar_male_3p/ong1_misc2/tm_ong1_misc2_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	44	10	-1	464	data/units/players/templar/templar_male_3p/ong1_misc1/tm_ong1_misc1_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	0	0	0	465			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	0	0	0	466			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
-0	26	12	-1	467	data/units/players/hunter/hunter_male_3p/tech_uber/hm_tech_uber.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	43	12	-1	468	data/units/players/hunter/hunter_male_3p/tech_uber/hm_tech_uber_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	43	13	-1	469	data/units/players/hunter/hunter_female_3p/tech_uber/hf_tech_uber_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	26	13	-1	470	data/units/players/hunter/hunter_female_3p/tech_uber/hf_tech_uber.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	40	15	-1	471	data/units/players/cabalist/cabalist_female_3p/power_uber/cf_power_uber_helm.gr2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	22	15	-1	472	data/units/players/cabalist/cabalist_female_3p/power_uber/cf_power_uber.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	40	11	-1	473	data/units/players/cabalist/cabalist_male_3p/power_uber/cm_power_uber_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	22	11	-1	474	data/units/players/cabalist/cabalist_male_3p/power_uber/cm_power_uber.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	40	14	-1	475	data/units/players/templar/templar_female_3p/power_uber/tf_power_uber_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	22	14	-1	476	data/units/players/templar/templar_female_3p/power_uber/tf_power_uber.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	40	10	-1	477	data/units/players/templar/templar_male_3p/power_uber/tm_power_uber_helm.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
-0	22	10	-1	478	data/units/players/templar/templar_male_3p/power_uber/tm_power_uber.GR2	ActorTemplar_3p	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"WARDROBE_MODEL"	"wardrobe"	"modelGroup"	"appearanceGroup"	"appearanceGroup2"	"undefined2"	"fileName"	"defaultMaterial"	"undefined3"	"partGroup"	"undefinedBool1"	"undefinedBool2"	"undefinedBool3"	"undefined4"	"undefined5"	"boxMinX"	"boxMinY"	"boxMinZ"	"boxMaxX"	"boxMaxY"	"boxMaxZ"
+"3,62,0,-1,0,-1"	0	1	2	-1	0	"data/units/players/bodies/male_fp/male_bare_arms.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	1	3	-1	1	"data/units/players/bodies/female_fp/female_bare_arms.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	2			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	3			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	7	4	-1	4	"data/units/players/templar/templar_male_fp/powered_light/tm_powered_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	8	4	-1	5	"data/units/players/templar/templar_male_fp/powered_heavy/tm_powered_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	9	4	-1	6	"data/units/players/templar/templar_male_fp/tech_light/tm_fp_tech_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	3	4	-1	7	"data/units/players/templar/templar_male_fp/arcane_light/tm_fp_arcane_light_mesh.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	4	4	-1	8	"data/units/players/templar/templar_male_fp/arcane_heavy/tm_fp_arcane_heavy_mesh.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	10	4	-1	9	"data/units/players/templar/templar_male_fp/tech_heavy/tm_tech_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	10			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	11			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	7	7	-1	12	"data/units/players/templar/templar_female_fp/power_light/tf_power_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	8	7	-1	13	"data/units/players/templar/templar_female_fp/power_heavy/tf_power_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	9	7	-1	14	"data/units/players/templar/templar_female_fp/tech_light/tf_tech_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	10	7	-1	15	"data/units/players/templar/templar_female_fp/tech_heavy/tf_tech_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	3	7	-1	16	"data/units/players/templar/templar_female_fp/power_light/tf_power_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	4	7	-1	17	"data/units/players/templar/templar_female_fp/power_heavy/tf_power_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	11	5	-1	18	"data/units/players/cabalist/cabalist_male_fp/focus_a/FocusItem_A.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	2	5	-1	19	"data/units/players/cabalist/cabalist_male_fp/apprentice/cm_apprentice.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	3	5	-1	20	"data/units/players/cabalist/cabalist_male_fp/arcane_light/cm_arcane_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	21			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	11	8	-1	22	"data/units/players/cabalist/cabalist_female_fp/focus_a/Female_focus_a.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	2	8	-1	23	"data/units/players/cabalist/cabalist_female_fp/apprentice/cf_apprentice.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	3	8	-1	24	"data/units/players/cabalist/cabalist_female_fp/arcane_light/cf_arcane_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	25			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	2	6	-1	26	"data/units/players/hunter/hunter_male_fp/apprentice/hm_apprentice.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	4	6	-1	27	"data/units/players/hunter/hunter_male_fp/arcane_heavy/hm_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	3	6	-1	28	"data/units/players/hunter/hunter_male_fp/arcane_light/hm_arcane_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	6	6	-1	29	"data/units/players/hunter/hunter_male_fp/mystic_heavy/hm_mystic_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	5	6	-1	30	"data/units/players/hunter/hunter_male_fp/mystic_light/hm_mystic_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	10	6	-1	31	"data/units/players/hunter/hunter_male_fp/tech_heavy/hm_tech_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	9	6	-1	32	"data/units/players/hunter/hunter_male_fp/tech_light/hm_tech_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	2	9	-1	33	"data/units/players/hunter/hunter_female_fp/apprentice/hf_apprentice.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	4	9	-1	34	"data/units/players/hunter/hunter_female_fp/arcane_heavy/hf_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	3	9	-1	35	"data/units/players/hunter/hunter_female_fp/arcane_light/hf_arcane_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	6	9	-1	36	"data/units/players/hunter/hunter_female_fp/mystic_heavy/hf_mystic_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	5	9	-1	37	"data/units/players/hunter/hunter_female_fp/mystic_light/hf_mystic_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	10	9	-1	38	"data/units/players/hunter/hunter_female_fp/tech_heavy/hf_tech_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	9	9	-1	39	"data/units/players/hunter/hunter_female_fp/tech_light/hf_tech_light.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	12	2	-1	40	"data/units/players/hunter/hunter_male_fp/arcane_heavy/hm_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	12	3	-1	41	"data/units/players/hunter/hunter_female_fp/arcane_heavy/hf_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	1	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	14	10	-1	42	"data/units/players/templar/templar_male_3p/starter/tm_street_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	15	10	-1	43	"data/units/players/templar/templar_male_3p/apprentice/tm_apprentice.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	16	10	-1	44	"data/units/players/templar/templar_male_3p/arcane_light/tm_arcane_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	17	10	-1	45	"data/units/players/templar/templar_male_3p/arcane_heavy/tm_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	46			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	47			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	20	10	-1	48	"data/units/players/templar/templar_male_3p/power_light/tm_power_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	21	10	-1	49	"data/units/players/templar/templar_male_3p/power_heavy/tm_power_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	23	10	-1	50	"data/units/players/templar/templar_male_3p/tech_light/tm_tech_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	24	10	-1	51	"data/units/players/templar/templar_male_3p/tech_heavy/tm_tech_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	25	10	-1	52	"data/units/players/templar/templar_male_3p/tech_heavy/tm_tech_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	33	10	-1	53	"data/units/players/templar/templar_male_3p/apprentice/tm_apprentice_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	34	10	-1	54	"data/units/players/templar/templar_male_3p/arcane_light/tm_arcane_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	35	10	-1	55	"data/units/players/templar/templar_male_3p/arcane_heavy/tm_arcane_heavy_helmet.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	56			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	57			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	38	10	-1	58	"data/units/players/templar/templar_male_3p/power_light/tm_power_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	39	10	-1	59	"data/units/players/templar/templar_male_3p/power_heavy/tm_power_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	41	10	-1	60	"data/units/players/templar/templar_male_3p/tech_light/tm_tech_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	42	10	-1	61	"data/units/players/templar/templar_male_3p/tech_heavy/tm_tech_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,10,-1,0,-1"	0	0	0	0	62			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,10,-1,0,-1"	0	0	0	0	63			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	14	14	-1	64	"data/units/players/templar/templar_female_3p/starter/tf_3p_starter.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	15	14	-1	65	"data/units/players/templar/templar_female_3p/apprentice/tf_apprentice.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	16	14	-1	66	"data/units/players/templar/templar_female_3p/arcane_light/tf_arcane_light_mesh.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	17	14	-1	67	"data/units/players/templar/templar_female_3p/arcane_heavy/tf_arcane_heavy_mesh.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	68			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	69			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	20	14	-1	70	"data/units/players/templar/templar_female_3p/power_light/tf_power_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	21	14	-1	71	"data/units/players/templar/templar_female_3p/power_heavy/tf_power_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	23	14	-1	72	"data/units/players/templar/templar_female_3p/tech_light/tf_tech_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	24	14	-1	73	"data/units/players/templar/templar_female_3p/tech_heavy/tf_tech_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	33	14	-1	74	"data/units/players/templar/templar_female_3p/apprentice/tf_apprentice_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	34	14	-1	75	"data/units/players/templar/templar_female_3p/arcane_light/tf_arcane_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	35	14	-1	76	"data/units/players/templar/templar_female_3p/arcane_heavy/tf_arcane_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	77			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	78			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	38	14	-1	79	"data/units/players/templar/templar_female_3p/power_light/tf_power_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	39	14	-1	80	"data/units/players/templar/templar_female_3p/power_heavy/tf_power_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	41	14	-1	81	"data/units/players/templar/templar_female_3p/tech_light/tf_tech_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	42	14	-1	82	"data/units/players/templar/templar_female_3p/tech_heavy/tf_tech_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,10,-1,0,-1"	0	0	0	0	83			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,10,-1,0,-1"	0	0	0	0	84			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	14	11	-1	85	"data/units/players/templar/templar_male_3p/starter/tm_street_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	15	11	-1	86	"data/units/players/cabalist/cabalist_male_3p/apprentice/cm_apprentice.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	16	11	-1	87	"data/units/players/cabalist/cabalist_male_3p/arcane_light/cm_arcane_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	17	11	-1	88	"data/units/players/cabalist/cabalist_male_3p/arcane_heavy/cm_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	89			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	90			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	20	11	-1	91	"data/units/players/cabalist/cabalist_male_3p/power_light/cm_power_light_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	21	11	-1	92	"data/units/players/cabalist/cabalist_male_3p/power_heavy/cm_power_heavy_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	93			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	23	11	-1	94	"data/units/players/cabalist/cabalist_male_3p/tech_light/cm_tech_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	24	11	-1	95	"data/units/players/cabalist/cabalist_male_3p/tech_heavy/cm_tech_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	33	11	-1	96	"data/units/players/cabalist/cabalist_male_3p/apprentice/cm_apprentice_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	34	11	-1	97	"data/units/players/cabalist/cabalist_male_3p/arcane_light/cm_arcane_light_helmet.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	35	11	-1	98	"data/units/players/cabalist/cabalist_male_3p/arcane_heavy/cm_arcane_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	99			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	100			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	38	11	-1	101	"data/units/players/cabalist/cabalist_male_3p/power_light/cm_power_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	39	11	-1	102	"data/units/players/cabalist/cabalist_male_3p/power_heavy/cm_power_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	103			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	41	11	-1	104	"data/units/players/cabalist/cabalist_male_3p/tech_light/cm_tech_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	42	11	-1	105	"data/units/players/cabalist/cabalist_male_3p/tech_heavy/cm_tech_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,10,-1,0,-1"	0	0	0	0	106			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,10,-1,0,-1"	0	0	0	0	107			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	14	15	-1	108	"data/units/players/templar/templar_female_3p/starter/tf_3p_starter.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	15	15	-1	109	"data/units/players/cabalist/cabalist_female_3p/apprentice/cf_apprentice.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	16	15	-1	110	"data/units/players/cabalist/cabalist_female_3p/arcane_light/cf_3p_arcane_light_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	17	15	-1	111	"data/units/players/cabalist/cabalist_female_3p/arcane_heavy/cf_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	112			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	113			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	20	15	-1	114	"data/units/players/cabalist/cabalist_female_3p/power_light/cf_power_light_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	21	15	-1	115	"data/units/players/cabalist/cabalist_female_3p/power_heavy/cf_power_heavy_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	116			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	23	15	-1	117	"data/units/players/cabalist/cabalist_female_3p/tech_light/cf_tech_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	24	15	-1	118	"data/units/players/cabalist/cabalist_female_3p/tech_heavy/cf_tech_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	33	15	-1	119	"data/units/players/cabalist/cabalist_female_3p/apprentice/cf_apprentice_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	34	15	-1	120	"data/units/players/cabalist/cabalist_female_3p/arcane_light/cf_arcane_helmet.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	35	15	-1	121	"data/units/players/cabalist/cabalist_female_3p/arcane_heavy/cf_arcane_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	122			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	123			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	38	15	-1	124	"data/units/players/cabalist/cabalist_female_3p/power_light/cf_power_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	39	15	-1	125	"data/units/players/cabalist/cabalist_female_3p/power_heavy/cf_power_heavy_helmet.gr2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	126			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	41	15	-1	127	"data/units/players/cabalist/cabalist_female_3p/tech_light/cf_tech_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	42	15	-1	128	"data/units/players/cabalist/cabalist_female_3p/tech_heavy/cf_tech_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,10,-1,0,-1"	0	0	0	0	129			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,10,-1,0,-1"	0	0	0	0	130			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	63	11	-1	131	"data/units/players/cabalist/cabalist_male_3p/focus_a/cm_focus_a.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	63	15	-1	132	"data/units/players/cabalist/cabalist_female_3p/focus_a/cf_3p_focus_a.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	14	13	-1	133	"data/units/players/templar/templar_female_3p/starter/tf_3p_starter.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	15	13	-1	134	"data/units/players/hunter/hunter_female_3p/apprentice/hf_apprentice.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	16	13	-1	135	"data/units/players/hunter/hunter_female_3p/arcane_light/hf_arcane_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	17	13	-1	136	"data/units/players/hunter/hunter_female_3p/arcane_heavy/hf_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	18	13	-1	137	"data/units/players/hunter/hunter_female_3p/mystic_light/hf_mystic_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	19	13	-1	138	"data/units/players/hunter/hunter_female_3p/mystic_heavy/hf_mystic_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	139			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	140			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	23	13	-1	141	"data/units/players/hunter/hunter_female_3p/tech_light/hf_tech_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	24	13	-1	142	"data/units/players/hunter/hunter_female_3p/tech_heavy/hf_tech_heavy_suit.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	143			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	33	13	-1	144	"data/units/players/hunter/hunter_female_3p/apprentice/hf_apprentice_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	34	13	-1	145	"data/units/players/hunter/hunter_female_3p/arcane_light/hf_arcane_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	35	13	-1	146	"data/units/players/hunter/hunter_female_3p/arcane_heavy/hf_arcane_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	36	13	-1	147	"data/units/players/hunter/hunter_female_3p/mystic_light/hf_mystic_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	37	13	-1	148	"data/units/players/hunter/hunter_female_3p/mystic_heavy/hf_mystic_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	149			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,100,-1,0,-1"	0	0	0	0	150			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	41	13	-1	151	"data/units/players/hunter/hunter_female_3p/tech_light/hf_tech_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	42	13	-1	152	"data/units/players/hunter/hunter_female_3p/tech_heavy/hf_tech_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	153			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,10,-1,0,-1"	0	0	0	0	154			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,10,-1,0,-1"	0	0	0	0	155			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	14	12	-1	156	"data/units/players/templar/templar_male_3p/starter/tm_street_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	15	12	-1	157	"data/units/players/hunter/hunter_male_3p/apprentice/hm_apprentice.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	16	12	-1	158	"data/units/players/hunter/hunter_male_3p/arcane_light/hm_arcane_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	17	12	-1	159	"data/units/players/hunter/hunter_male_3p/arcane_heavy/hm_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	18	12	-1	160	"data/units/players/hunter/hunter_male_3p/mystic_light/hm_mystic_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	19	12	-1	161	"data/units/players/hunter/hunter_male_3p/mystic_heavy/hm_mystic_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	162			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	21	12	-1	163	"data/units/players/hunter/hunter_male_3p/power_heavy/hm_power_heavy_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	23	12	-1	164	"data/units/players/hunter/hunter_male_3p/tech_light/hm_tech_light.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	24	12	-1	165	"data/units/players/hunter/hunter_male_3p/tech_heavy/hm_tech_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	166			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	33	12	-1	167	"data/units/players/hunter/hunter_male_3p/apprentice/hm_apprentice_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	34	12	-1	168	"data/units/players/hunter/hunter_male_3p/arcane_light/hm_arcane_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	35	12	-1	169	"data/units/players/hunter/hunter_male_3p/arcane_heavy/hm_arcane_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	36	12	-1	170	"data/units/players/hunter/hunter_male_3p/mystic_light/hm_mystic_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	37	12	-1	171	"data/units/players/hunter/hunter_male_3p/mystic_heavy/hm_mystic_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,100,-1,0,-1"	0	0	0	0	172			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,60,0,-1,0,-1"	0	39	12	-1	173	"data/units/players/hunter/hunter_male_3p/power_heavy/hm_power_heavy_helmet.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	41	12	-1	174	"data/units/players/hunter/hunter_male_3p/tech_light/hm_tech_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	42	12	-1	175	"data/units/players/hunter/hunter_male_3p/tech_heavy/hm_tech_heavy_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	176			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,10,-1,0,-1"	0	0	0	0	177			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,10,-1,0,-1"	0	0	0	0	178			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	27	63	-1	179	"data/units/players/street/female_3p/military01/gf_military01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	28	63	-1	180	"data/units/players/street/female_3p/mechanic01/gf_mechanic01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	29	63	-1	181	"data/units/players/street/female_3p/vagrant01/gf_vagrant01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	30	63	-1	182	"data/units/players/street/female_3p/apocalyptic01/gf_apocalyptic01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	31	63	-1	183	"data/units/players/street/female_3p/veteran01/gf_veteran01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	32	63	-1	184	"data/units/players/street/female_3p/proper01/gf_proper01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	27	16	-1	185	"data/units/players/street/male_3p/military01/gm_military01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	28	16	-1	186	"data/units/players/street/male_3p/mechanic01/gm_mechanic01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	29	16	-1	187	"data/units/players/street/male_3p/vagrant01/gm_vagrant01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	30	16	-1	188	"data/units/players/street/male_3p/apocalyptic01/gm_apocalyptic01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	31	16	-1	189	"data/units/players/street/male_3p/veteran01/gm_veteran01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	32	16	-1	190	"data/units/players/street/male_3p/proper01/gm_proper01.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	46	16	-1	191	"data/units/players/npc/npc_male_3p/murmur/npc_murmur_body.GR2"	"ActorTemplar_Leather"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	28	-1	192	"data/units/players/heads/male/murmur/murmur_head.GR2"	"ActorTemplar_Head"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	47	16	-1	193	"data/units/players/npc/npc_male_3p/murmur_ruined/npc_murmur_ruined.GR2"	"ActorTemplar_Leather"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	67	29	-1	194	"data/units/players/heads/male/murmur/murmur_head.GR2"	"ActorTemplar_Head"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	67	31	-1	195	"data/units/players/heads/male/npc_consul/npc_consul_head.GR2"	"ActorTemplar_Head"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	67	30	-1	196	"data/units/players/heads/male/lucious/lucious_head.GR2"	"ActorTemplar_Head"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	68	48	-1	197	"data/units/players/heads/male/Hair/lucious_hair/lucious_hair.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	69	30	62	198	"data/units/players/heads/male/facial_hair/lucious_beard/lucious_beard.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	49	16	-1	199	"data/units/players/npc/npc_male_3p/lucious/npc_lucious_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	48	16	-1	200	"data/units/players/npc/npc_male_3p/bodger/npc_bodger_body.GR2"	"ActorTemplar_Leather"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	50	16	-1	201	"data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_body.GR2"	"T314"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	51	16	-1	202	"data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_helm.GR2"	"T314"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	52	16	-1	203	"data/units/players/heads/male/male_4/male_4_head.GR2"	"T314"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	53	16	-1	204	"data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage2_body.GR2"	"T314"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	54	16	-1	205	"data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage2_helm.GR2"	"T314"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	55	16	-1	206	"data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage2_face.GR2"	"T314"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	56	16	-1	207	"data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage3_body.GR2"	"T314"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	57	16	-1	208	"data/units/players/npc/npc_male_3p/techsmith/npc_techsmith_stage3_head.GR2"	"T314"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	58	63	-1	209	"data/units/players/npc/npc_female_3p/emmera/npc_emmera_body.GR2"	"ActorTemplar_Leather"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	68	90	-1	210	"data/units/players/heads/female/hair/emmera_hair/emmera_hair.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	67	74	-1	211	"data/units/players/heads/female/emmera/emmera_head.GR2"	"ActorTemplar_Head"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	59	16	-1	212	"data/units/players/npc/npc_male_3p/Truth/npc_truth_male_body.GR2"	"ActorTemplar_Leather"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	59	63	-1	213	"data/units/players/npc/npc_female_3p/gf_truth/gf_truth_pristine.GR2"	"ActorTemplar_Leather"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	60	63	-1	214	"data/units/players/npc/npc_female_3p/child_truth/child_truth_pristine.GR2"	"ActorTemplar_Leather"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	67	75	-1	215	"data/units/players/heads/female/child_truth/child_truth_head.GR2"	"ActorTemplar_Head"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	13	16	-1	216	"data/units/players/bodies/male/male_bare_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	61	16	-1	217	"data/units/players/heads/male/male_eyepiece/monocle_male.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	61	63	-1	218	"data/units/players/heads/female/female_eyepiece/monocle_female.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	64	16	-1	219	"data/units/players/heads/male/Male_Skull/Male_Skull.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	64	63	-1	220	"data/units/players/heads/female/Female_Skull/Female_Skull.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	65	16	-1	221	"data/units/players/general/general_male_3p/santa_helm/gm_santa_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	65	63	-1	222	"data/units/players/general/general_female_3p/santa_helm/gf_santa_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	66	16	-1	223	"data/units/players/hunter/hunter_male_3p/arcane_heavy/hm_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	66	63	-1	224	"data/units/players/hunter/hunter_female_3p/arcane_heavy/hf_arcane_heavy.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	62	16	-1	225	"data/units/players/hunter/hunter_male_3p/tech_light/hm_tech_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,60,0,-1,0,-1"	0	62	63	-1	226	"data/units/players/hunter/hunter_female_3p/tech_light/hf_tech_light_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	32	-1	227	"data/units/players/heads/male/hair/male_hair_01/male_hair_01.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	33	-1	228	"data/units/players/heads/male/hair/male_hair_02/male_hair_02.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	34	-1	229	"data/units/players/heads/male/hair/male_hair_03/male_hair_03.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	35	-1	230	"data/units/players/heads/male/hair/male_hair_04/male_hair_04.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	36	-1	231	"data/units/players/heads/male/hair/male_hair_05/male_hair_05.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	37	-1	232	"data/units/players/heads/male/hair/male_hair_06/male_hair_06.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	38	-1	233	"data/units/players/heads/male/hair/male_hair_07/male_hair_07.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	39	-1	234	"data/units/players/heads/male/hair/male_hair_08/male_hair_08.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	40	-1	235	"data/units/players/heads/male/hair/male_hair_09/male_hair_09.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	41	-1	236	"data/units/players/heads/male/hair/male_hair_10/male_hair_10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	42	-1	237	"data/units/players/heads/male/hair/male_hair_11/male_hair_11.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	43	-1	238	"data/units/players/heads/male/hair/male_hair_12/male_hair_12.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	44	-1	239	"data/units/players/heads/male/hair/male_hair_13/male_hair_13.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	45	-1	240	"data/units/players/heads/male/hair/male_hair_14/male_hair_14.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	46	-1	241	"data/units/players/heads/male/hair/male_hair_15/male_hair_15.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	47	-1	242	"data/units/players/heads/male/hair/male_hair_16/male_hair_16.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	17	-1	243	"data/units/players/heads/male/male_1/male_1_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	49	244	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	50	245	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	51	246	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	52	247	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	53	248	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	54	249	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	55	250	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	56	251	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	57	252	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	58	253	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	59	254	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	60	255	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	17	61	256	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	18	-1	257	"data/units/players/heads/male/male_2/male_2_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	49	258	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	50	259	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	51	260	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	52	261	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	53	262	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	54	263	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	55	264	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	56	265	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	57	266	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	58	267	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	59	268	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	60	269	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	18	61	270	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h2.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	19	-1	271	"data/units/players/heads/male/male_3/male_3_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	49	272	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	50	273	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	51	274	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	52	275	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	53	276	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	54	277	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	55	278	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	56	279	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	57	280	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	58	281	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	59	282	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	60	283	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	19	61	284	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h3.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	20	-1	285	"data/units/players/heads/male/male_4/male_4_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	49	286	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	50	287	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	51	288	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	52	289	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	53	290	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	54	291	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	55	292	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	56	293	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	57	294	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	58	295	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	59	296	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	60	297	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	20	61	298	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h4.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	21	-1	299	"data/units/players/heads/male/male_5/male_5_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	49	300	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	50	301	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	51	302	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	52	303	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	53	304	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	54	305	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	55	306	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	56	307	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	57	308	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	58	309	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	59	310	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	60	311	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	21	61	312	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h5.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	22	-1	313	"data/units/players/heads/male/male_6/male_6_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	49	314	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	50	315	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	51	316	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	52	317	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	53	318	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	54	319	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	55	320	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	56	321	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	57	322	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	58	323	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	59	324	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	60	325	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	22	61	326	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h6.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	23	-1	327	"data/units/players/heads/male/male_7/male_7_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	49	328	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	50	329	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	51	330	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	52	331	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	53	332	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	54	333	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	55	334	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	56	335	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	57	336	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	58	337	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	59	338	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	60	339	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	23	61	340	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h7.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	24	-1	341	"data/units/players/heads/male/male_8/male_8_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	49	342	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	50	343	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	51	344	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	52	345	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	53	346	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	54	347	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	55	348	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	56	349	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	57	350	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	58	351	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	59	352	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	60	353	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	24	61	354	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h8.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	25	-1	355	"data/units/players/heads/male/male_9/male_9_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	49	356	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	50	357	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	51	358	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	52	359	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	53	360	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	54	361	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	55	362	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	56	363	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	57	364	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	58	365	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	59	366	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	60	367	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	25	61	368	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h9.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	26	-1	369	"data/units/players/heads/male/male_10/male_10_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	49	370	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	50	371	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	51	372	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	52	373	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	53	374	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	54	375	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	55	376	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	56	377	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	57	378	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	58	379	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	59	380	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	60	381	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	26	61	382	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h10.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	27	-1	383	"data/units/players/heads/male/male_11/male_11_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	49	384	"data/units/players/heads/male/facial_hair/facial_hair_01/facial_hair_01_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	50	385	"data/units/players/heads/male/facial_hair/facial_hair_02/facial_hair_02_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	51	386	"data/units/players/heads/male/facial_hair/facial_hair_03/facial_hair_03_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	52	387	"data/units/players/heads/male/facial_hair/facial_hair_04/facial_hair_04_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	53	388	"data/units/players/heads/male/facial_hair/facial_hair_05/facial_hair_05_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	54	389	"data/units/players/heads/male/facial_hair/facial_hair_06/facial_hair_06_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	55	390	"data/units/players/heads/male/facial_hair/facial_hair_07/facial_hair_07_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	56	391	"data/units/players/heads/male/facial_hair/facial_hair_08/facial_hair_08_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	57	392	"data/units/players/heads/male/facial_hair/facial_hair_09/facial_hair_09_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	58	393	"data/units/players/heads/male/facial_hair/facial_hair_10/facial_hair_10_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	59	394	"data/units/players/heads/male/facial_hair/facial_hair_11/facial_hair_11_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	60	395	"data/units/players/heads/male/facial_hair/facial_hair_12/facial_hair_12_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	69	27	61	396	"data/units/players/heads/male/facial_hair/facial_hair_13/facial_hair_13_h11.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	13	63	-1	397	"data/units/players/bodies/female/female_bare_body.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	64	-1	398	"data/units/players/heads/female/female_1/female_1_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	91	-1	399	"data/units/players/heads/female/Female_Accessories/Female_1_Acc1.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	92	-1	400	"data/units/players/heads/female/Female_Accessories/Female_1_Acc2.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	93	-1	401	"data/units/players/heads/female/Female_Accessories/Female_1_Acc3.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	94	-1	402	"data/units/players/heads/female/Female_Accessories/Female_1_Acc4.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	95	-1	403	"data/units/players/heads/female/Female_Accessories/Female_1_Acc5.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	96	-1	404	"data/units/players/heads/female/Female_Accessories/Female_1_Acc6.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	97	-1	405	"data/units/players/heads/female/Female_Accessories/Female_1_Acc7.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	98	-1	406	"data/units/players/heads/female/Female_Accessories/Female_1_Acc8.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	99	-1	407	"data/units/players/heads/female/Female_Accessories/Female_1_Acc9.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	100	-1	408	"data/units/players/heads/female/Female_Accessories/Female_1_Acc10.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	101	-1	409	"data/units/players/heads/female/Female_Accessories/Female_1_Acc11.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	102	-1	410	"data/units/players/heads/female/Female_Accessories/Female_1_Acc12.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	103	-1	411	"data/units/players/heads/female/Female_Accessories/Female_1_Acc13.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	104	-1	412	"data/units/players/heads/female/Female_Accessories/Female_1_Acc14.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	70	105	-1	413	"data/units/players/heads/female/Female_Accessories/Female_1_Acc15.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	65	-1	414	"data/units/players/heads/female/female_2/female_2_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	66	-1	415	"data/units/players/heads/female/female_3/female_3_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	67	-1	416	"data/units/players/heads/female/female_4/female_4_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	68	-1	417	"data/units/players/heads/female/female_5/female_5_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	69	-1	418	"data/units/players/heads/female/female_6/female_6_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	70	-1	419	"data/units/players/heads/female/female_7/female_7_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	71	-1	420	"data/units/players/heads/female/female_8/female_8_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	72	-1	421	"data/units/players/heads/female/female_9/female_9_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	67	73	-1	422	"data/units/players/heads/female/female_10/female_10_head.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	423			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,20,-1,0,-1"	0	0	0	0	424			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,20,-1,0,-1"	0	0	0	0	425			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,20,-1,0,-1"	0	0	0	0	426			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	68	76	-1	427	"data/units/players/heads/female/hair/female_hair_01/female_hair_01.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	77	-1	428	"data/units/players/heads/female/hair/female_hair_02/female_hair_02.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	78	-1	429	"data/units/players/heads/female/hair/female_hair_03/female_hair_03.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	79	-1	430	"data/units/players/heads/female/hair/female_hair_04/female_hair_04.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	80	-1	431	"data/units/players/heads/female/hair/female_hair_05/female_hair_05.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	81	-1	432	"data/units/players/heads/female/hair/female_hair_06/female_hair_06.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	82	-1	433	"data/units/players/heads/female/hair/female_hair_07/female_hair_07.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	83	-1	434	"data/units/players/heads/female/hair/female_hair_08/female_hair_08.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	84	-1	435	"data/units/players/heads/female/hair/female_hair_09/female_hair_09.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	85	-1	436	"data/units/players/heads/female/hair/female_hair_10/female_hair_10.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	86	-1	437	"data/units/players/heads/female/hair/female_hair_11/female_hair_11.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	87	-1	438	"data/units/players/heads/female/hair/female_hair_12/female_hair_12.GR2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	88	-1	439	"data/units/players/heads/female/hair/female_hair_14/female_hair_14.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	68	89	-1	440	"data/units/players/heads/female/hair/female_hair_15/female_hair_15.GR2"	"Hair_Soft"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	71	64	-1	441	"data/units/players/heads/female/female_1/female_1_cf_accessory_1.gr2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	71	65	-1	442	"data/units/players/heads/female/female_2/female_2_cf_accessory_1.gr2"	"ActorTemplar_Hair"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	72	16	-1	443	"data/units/items/misc/dye_kit/wardrobe/dye_kit_mesh.gr2"	"dye_kit"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	1
+"3,62,0,-1,0,-1"	0	72	63	-1	444	"data/units/items/misc/dye_kit/wardrobe/dye_kit_mesh.gr2"	"dye_kit"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	1
+"3,62,0,-1,0,-1"	0	73	106	-1	445	"data/units/players/test/male_3p/suit.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	74	106	-1	446	"data/units/players/test/male_3p/suit.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	73	107	-1	447	"data/units/players/test/female_3p/suit.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	74	107	-1	448	"data/units/players/test/female_3p/suit.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	449			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,20,-1,0,-1"	0	0	0	0	450			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,20,-1,0,-1"	0	0	0	0	451			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,20,-1,0,-1"	0	0	0	0	452			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	45	15	-1	453	"data/units/players/cabalist/cabalist_female_3p/ong1_misc2/cf_ong1_misc2_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	44	15	-1	454	"data/units/players/cabalist/cabalist_female_3p/ong1_misc1/cf_ong1_misc1_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	45	11	-1	455	"data/units/players/cabalist/cabalist_male_3p/ong1_misc2/cm_ong1_misc2_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	44	11	-1	456	"data/units/players/cabalist/cabalist_male_3p/ong1_misc1/cm_ong1_misc1_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	45	13	-1	457	"data/units/players/hunter/hunter_female_3p/ong1_misc2/hf_ong1_misc2_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	44	13	-1	458	"data/units/players/hunter/hunter_female_3p/ong1_misc1/hf_ong1_misc1_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	45	12	-1	459	"data/units/players/hunter/hunter_male_3p/ong1_misc2/hm_ong1_misc2_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	44	12	-1	460	"data/units/players/hunter/hunter_male_3p/ong1_misc1/hm_ong1_misc1_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	45	14	-1	461	"data/units/players/templar/templar_female_3p/ong1_misc2/tf_ong1_misc2_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	44	14	-1	462	"data/units/players/templar/templar_female_3p/ong1_misc1/tf_ong1_misc1_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	45	10	-1	463	"data/units/players/templar/templar_male_3p/ong1_misc2/tm_ong1_misc2_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	44	10	-1	464	"data/units/players/templar/templar_male_3p/ong1_misc1/tm_ong1_misc1_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,48,20,-1,0,-1"	0	0	0	0	465			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,48,20,-1,0,-1"	0	0	0	0	466			-1	-1	0	0	0	0	0	-1	-1	0	1	1	2
+"3,62,0,-1,0,-1"	0	26	12	-1	467	"data/units/players/hunter/hunter_male_3p/tech_uber/hm_tech_uber.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	43	12	-1	468	"data/units/players/hunter/hunter_male_3p/tech_uber/hm_tech_uber_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	43	13	-1	469	"data/units/players/hunter/hunter_female_3p/tech_uber/hf_tech_uber_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	26	13	-1	470	"data/units/players/hunter/hunter_female_3p/tech_uber/hf_tech_uber.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	40	15	-1	471	"data/units/players/cabalist/cabalist_female_3p/power_uber/cf_power_uber_helm.gr2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	22	15	-1	472	"data/units/players/cabalist/cabalist_female_3p/power_uber/cf_power_uber.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	40	11	-1	473	"data/units/players/cabalist/cabalist_male_3p/power_uber/cm_power_uber_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	22	11	-1	474	"data/units/players/cabalist/cabalist_male_3p/power_uber/cm_power_uber.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	40	14	-1	475	"data/units/players/templar/templar_female_3p/power_uber/tf_power_uber_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	22	14	-1	476	"data/units/players/templar/templar_female_3p/power_uber/tf_power_uber.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	40	10	-1	477	"data/units/players/templar/templar_male_3p/power_uber/tm_power_uber_helm.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2
+"3,62,0,-1,0,-1"	0	22	10	-1	478	"data/units/players/templar/templar_male_3p/power_uber/tm_power_uber.GR2"	"ActorTemplar_3p"	-1	0	0	0	0	0	0	-0.5	-0.5	0	0.5	0.5	2

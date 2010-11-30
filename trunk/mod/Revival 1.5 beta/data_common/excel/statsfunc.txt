@@ -1,48 +1,48 @@
-STATSFUNC	app	controlUnit	formula
-7	1	6	(hp_max +% hp_max_pct) + (hp_max_bonus << hp_max.shift) + ((stamina * (5 << hp_max.shift)) +% hp_max_pct)
-7	2	6	(hp_max +% hp_max_pct) + (hp_max_bonus << hp_max.shift) + vitality * (2 << hp_max.shift) ) +% hp_max_pct)
-15	1	6	(power_max +% power_max_pct) + (power_max_bonus + power_max_penalty_pets) + (willpower * (2 << power_max.shift) +% power_max_pct)
-15	2	6	(power_max +% power_max_pct) + (power_max_bonus + power_max_penalty_pets) + ((( wisdom + level ) << power_max.shift) +% power_max_pct)
-19	1	6	power_regen + ((willpower << power_max.shift) / 30)
-19	2	6	power_regen / 2 * (power_max) / 15000
-81	1	6	critical_mult_pct + accuracy * 2
-125	1	6	sfx_defense + sfx_defense_bonus
-125	2	6	sfx_defense + sfx_defense_bonus
-22	1	6	accuracy + accuracy_bonus
-34	1	6	strength + strength_bonus
-24	1	6	stamina + stamina_bonus
-26	1	6	willpower + willpower_bonus
-28	2	6	dexterity + dexterity_bonus
-30	2	6	wisdom + wisdom_bonus
-32	2	6	vitality + vitality_bonus
-34	2	6	strength + strength_bonus
-90	0	3	(armor +% armor_pct) + armor_bonus
-90	0	6	armor +% armor_pct_bonus
-36	2	6	tohit + tohit_bonus + dexterity + level
-38	2	6	ac + ac_bonus + dexterity / 2
-59	1	6	strength * 3
-59	2	6	strength
-69	0	-1	damage_radius.0 +% (damage_radius_pct.0 + damage_radius_pct.N) + damage_radius_bonus.0 + damage_radius_bonus.N
-73	0	-1	damage_field.0 +% (damage_field_pct.0 + damage_field_pct.N)
-51	0	-1	loc_dmg_min
-52	0	-1	loc_dmg_max
-53	0	-1	spl_dmg_min
-54	0	-1	spl_dmg_max
-525	2	6	luck_degen + luck_regen
-678	0	-1	damage_increment_field
-679	0	-1	damage_increment_radial
-680	0	-1	damage_increment_dot
-681	0	-1	damage_increment_ai_changer
-108	1	3	shields + shields_bonus
-318	2	3	melee_speed + melee_speed_bonus
-320	2	3	ranged_speed + ranged_speed_bonus
-44	2	9	stamina_max + ( ( level / 2 ) << stamina_max.shift )
-730	0	-1	tho_dmg_min
-731	0	-1	tho_dmg_max
-60	2	6	wisdom
-61	2	6	dexterity / 2
-186	0	6	(ai_awake_range +% ai_range_bonus_pct) + ai_range_bonus
-187	0	6	(ai_sight_range +% ai_range_bonus_pct) + ai_range_bonus
-188	0	6	(ai_follow_range +% ai_range_bonus_pct) + ai_range_bonus
-552	1	6	sfx_effect_defense + sfx_effect_defense_bonus
-552	2	6	sfx_effect_defense + sfx_effect_defense_bonus
+"STATSFUNC"	"stat"	"app"	"controlUnit"	"formula"
+"3,63,0,-1,0,-1"	7	1	6	"(hp_max +% hp_max_pct) + (hp_max_bonus << hp_max.shift) + ((stamina * (5 << hp_max.shift)) +% hp_max_pct)"
+"3,63,0,-1,0,-1"	7	2	6	"(hp_max +% hp_max_pct) + (hp_max_bonus << hp_max.shift) + vitality * (2 << hp_max.shift) ) +% hp_max_pct)"
+"3,63,0,-1,0,-1"	15	1	6	"(power_max +% power_max_pct) + (power_max_bonus + power_max_penalty_pets) + (willpower * (2 << power_max.shift) +% power_max_pct)"
+"3,63,0,-1,0,-1"	15	2	6	"(power_max +% power_max_pct) + (power_max_bonus + power_max_penalty_pets) + ((( wisdom + level ) << power_max.shift) +% power_max_pct)"
+"3,63,0,-1,0,-1"	19	1	6	"power_regen + ((willpower << power_max.shift) / 30)"
+"3,63,0,-1,0,-1"	19	2	6	"power_regen / 2 * (power_max) / 15000"
+"3,63,0,-1,0,-1"	81	1	6	"critical_mult_pct + accuracy * 2"
+"3,63,0,-1,0,-1"	125	1	6	"sfx_defense + sfx_defense_bonus"
+"3,63,0,-1,0,-1"	125	2	6	"sfx_defense + sfx_defense_bonus"
+"3,63,0,-1,0,-1"	22	1	6	"accuracy + accuracy_bonus"
+"3,63,0,-1,0,-1"	34	1	6	"strength + strength_bonus"
+"3,63,0,-1,0,-1"	24	1	6	"stamina + stamina_bonus"
+"3,63,0,-1,0,-1"	26	1	6	"willpower + willpower_bonus"
+"3,63,0,-1,0,-1"	28	2	6	"dexterity + dexterity_bonus"
+"3,63,0,-1,0,-1"	30	2	6	"wisdom + wisdom_bonus"
+"3,63,0,-1,0,-1"	32	2	6	"vitality + vitality_bonus"
+"3,63,0,-1,0,-1"	34	2	6	"strength + strength_bonus"
+"3,63,0,-1,0,-1"	90	0	3	"(armor +% armor_pct) + armor_bonus"
+"3,63,0,-1,0,-1"	90	0	6	"armor +% armor_pct_bonus"
+"3,63,0,-1,0,-1"	36	2	6	"tohit + tohit_bonus + dexterity + level"
+"3,63,0,-1,0,-1"	38	2	6	"ac + ac_bonus + dexterity / 2"
+"3,63,0,-1,0,-1"	59	1	6	"strength * 3"
+"3,63,0,-1,0,-1"	59	2	6	"strength"
+"3,63,0,-1,0,-1"	69	0	-1	"damage_radius.0 +% (damage_radius_pct.0 + damage_radius_pct.N) + damage_radius_bonus.0 + damage_radius_bonus.N"
+"3,63,0,-1,0,-1"	73	0	-1	"damage_field.0 +% (damage_field_pct.0 + damage_field_pct.N)"
+"3,63,0,-1,0,-1"	51	0	-1	"loc_dmg_min"
+"3,63,0,-1,0,-1"	52	0	-1	"loc_dmg_max"
+"3,63,0,-1,0,-1"	53	0	-1	"spl_dmg_min"
+"3,63,0,-1,0,-1"	54	0	-1	"spl_dmg_max"
+"3,63,0,-1,0,-1"	525	2	6	"luck_degen + luck_regen"
+"3,63,0,-1,0,-1"	678	0	-1	"damage_increment_field"
+"3,63,0,-1,0,-1"	679	0	-1	"damage_increment_radial"
+"3,63,0,-1,0,-1"	680	0	-1	"damage_increment_dot"
+"3,63,0,-1,0,-1"	681	0	-1	"damage_increment_ai_changer"
+"3,63,0,-1,0,-1"	108	1	3	"shields + shields_bonus"
+"3,63,0,-1,0,-1"	318	2	3	"melee_speed + melee_speed_bonus"
+"3,63,0,-1,0,-1"	320	2	3	"ranged_speed + ranged_speed_bonus"
+"3,63,0,-1,0,-1"	44	2	9	"stamina_max + ( ( level / 2 ) << stamina_max.shift )"
+"3,63,0,-1,0,-1"	730	0	-1	"tho_dmg_min"
+"3,63,0,-1,0,-1"	731	0	-1	"tho_dmg_max"
+"3,63,0,-1,0,-1"	60	2	6	"wisdom"
+"3,63,0,-1,0,-1"	61	2	6	"dexterity / 2"
+"3,63,0,-1,0,-1"	186	0	6	"(ai_awake_range +% ai_range_bonus_pct) + ai_range_bonus"
+"3,63,0,-1,0,-1"	187	0	6	"(ai_sight_range +% ai_range_bonus_pct) + ai_range_bonus"
+"3,63,0,-1,0,-1"	188	0	6	"(ai_follow_range +% ai_range_bonus_pct) + ai_range_bonus"
+"3,63,0,-1,0,-1"	552	1	6	"sfx_effect_defense + sfx_effect_defense_bonus"
+"3,63,0,-1,0,-1"	552	2	6	"sfx_effect_defense + sfx_effect_defense_bonus"

@@ -588,10 +588,10 @@ namespace Hellgate
                 TableHeader tableHeader = (TableHeader)headerField.GetValue(rowObject);
                 string tableHeaderString = FileTools.ObjectToStringGeneric(tableHeader, ",");
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(tableHeaderString));
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
 
                 foreach (FieldInfo fieldInfo in DataType.GetFields())
                 {
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                     OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
                     if (attribute != null)
                     {
@@ -634,19 +634,20 @@ namespace Hellgate
                         }
                     }
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(fieldInfo.GetValue(rowObject).ToString()));
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                 }
 
                 // Extended Buffer if applies
                 if (ExcelMap.HasExtended)
                 {
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(ExtendedBuffer[row], ',', typeof(byte))));
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(ExtendedBuffer[row], ',', typeof(byte))));
+                    
                 }
 
                 row++;
                 if (row != noRows - 1)
                 {
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(Environment.NewLine));
                 }
             }

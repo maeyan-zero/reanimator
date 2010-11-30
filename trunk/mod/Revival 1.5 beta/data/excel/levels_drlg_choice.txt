@@ -1,575 +1,575 @@
-LEVELS_DRLG_CHOICE	undefined1	namedMonsterChance	undefined2	levelName	difficulty	drlg	spawnClass	namedMonsterClass	weight	music	environmentOverRide	environmentSpawnClassRoomDensity	environmentSpawnClass	code	undefined3	
-Russell Square	0	0	-1	0	0	8	6	-1	1	42	2	0	-1	16705	0
-Holborn Station	0	0	-1	1	0	0	1	-1	1	48	-1	0	-1	16961	0
-Tottenham Court	0	25	-1	2	0	2	122	201	1	45	2	0	-1	17217	0
-Holborn Access Shafts	0	33	-1	3	0	15	515	467	1	36	0	0	-1	17473	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-Covent Garden Approach 1	0	0	-1	6	0	21	148	-1	10	18	1	0	-1	17729	0
-Covent Garden Approach 2	0	0	-1	6	0	11	148	-1	10	18	1	0	-1	17985	0
-Covent Garden Station	0	0	-1	7	0	1	1	-1	1	50	-1	0	-1	18241	0
-Upper Kingsway Sewers 1	0	50	-1	8	0	35	515	116	10	12	0	0	-1	18497	0
-Upper Kingsway Sewers 2	0	50	-1	8	0	34	515	116	5	12	0	0	-1	18753	0
-Lower Kingsway Sewers 1	0	100	-1	9	0	35	515	174	5	12	0	0	-1	19009	0
-Lower Kingsway Sewers 2	0	100	-1	9	0	34	515	174	10	12	0	0	-1	19265	0
-Covent Garden Steam Tunnels	0	0	-1	10	0	15	515	-1	1	36	0	0	-1	19521	0
-Covent Garden Train Depot	0	0	-1	11	0	15	515	-1	1	36	0	0	-1	20033	0
-Covent Garden Market	0	0	-1	12	0	47	167	-1	1	43	-1	0	-1	20545	0
-Bloomsbury	0	50	-1	13	0	15	515	276	1	36	0	0	-1	20801	0
-British Museum	0	0	-1	14	0	48	212	-1	1	46	-1	0	-1	21569	0
-Leicester Square 1	0	0	-1	15	0	12	199	-1	7	19	4	0	-1	21825	0
-Leicester Square 2	0	0	-1	15	0	21	54	-1	3	19	4	0	-1	22081	0
-St. Martin's	0	25	-1	16	0	13	152	576	1	19	4	0	-1	22337	0
-Charing Cross Approach 1	0	50	-1	17	0	11	199	4	7	19	4	0	-1	22849	0
-Charing Cross Approach 2	0	50	-1	17	0	12	54	4	3	19	4	0	-1	23105	0
-Charing Cross Station	0	0	-1	18	0	3	1	-1	1	50	-1	0	-1	24897	0
-Piccadilly Approach	0	33	-1	19	0	38	519	337	1	1	6	0	-1	25409	0
-Piccadilly Circus	0	33	-1	20	0	46	519	181	1	1	6	0	-1	25921	0
-Piccadilly Hell	0	50	-1	21	0	75	268	195	1	8	-1	0	-1	26433	0
-Green Park Approach	0	100	-1	22	0	32	523	290	1	14	5	0	-1	26945	0
-Green Park Station 1	0	0	-1	23	0	9	249	-1	5	48	-1	0	-1	27457	0
-Green Park Station 2	0	0	-1	23	0	9	74	-1	1	48	-1	0	-1	27713	0
-Death's Sewers 1	0	50	-1	24	0	36	523	77	5	14	8	0	-1	27969	0
-Death's Sewers 2	0	100	-1	24	0	36	74	77	1	14	8	0	-1	28225	0
-Death's Tunnels 1	0	33	-1	25	0	14	523	238	5	20	7	0	-1	28481	0
-Death's Tunnels 2	0	100	-1	25	0	14	74	238	1	20	7	0	-1	28737	0
-Death's City 1	0	0	-1	26	0	37	519	-1	5	2	9	0	-1	28993	0
-Death's City 2	0	0	-1	26	0	37	64	-1	1	2	9	0	-1	29249	0
-Savile Row 1	0	0	-1	27	0	35	523	-1	5	14	5	0	-1	29505	0
-Savile Row 2	0	0	-1	27	0	35	64	-1	1	14	5	0	-1	30017	0
-Oxford Circus Station	0	0	-1	28	0	127	1	-1	1	48	-1	0	-1	30273	0
-Admiralty Arch 1	0	0	-1	29	0	33	523	-1	10	14	5	0	-1	30529	0
-Admiralty Arch 2	0	0	-1	29	0	34	523	-1	5	14	5	0	-1	30785	0
-Chocolate Park	0	0	-1	30	0	44	222	-1	1	51	-1	0	-1	16706	0
-Whitehall 1	0	0	-1	31	0	35	523	-1	10	14	5	0	-1	16962	0
-Whitehall 2	0	0	-1	31	0	32	523	-1	5	14	5	0	-1	17218	0
-Downing Street 1	0	20	-1	32	0	38	519	60	5	2	6	0	-1	17986	0
-Downing Street 2	0	100	-1	32	0	38	74	60	1	2	6	0	-1	18242	0
-Millennium Battle	0	0	-1	33	0	64	273	-1	1	26	6	0	-1	19010	0
-Craven Street 1	0	10	-1	34	0	38	519	248	5	2	6	0	-1	19266	0
-Craven Street 2	0	33	-1	34	0	38	64	248	1	2	6	0	-1	19522	0
-Embankment Approach 1	0	100	-1	35	0	38	519	480	5	2	6	0	-1	20290	0
-Embankment Approach 2	0	100	-1	35	0	38	64	480	1	2	6	0	-1	20546	0
-Embankment Redout	0	0	-1	36	0	49	225	-1	1	53	6	0	-1	21314	0
-The Mind of 314	0	0	-1	37	0	122	323	-1	1	52	-1	0	-1	21570	0
-Waterloo Bridge 1	0	0	-1	38	0	21	74	-1	1	21	11	0	-1	21826	0
-Waterloo Bridge 2	0	0	-1	38	0	11	245	-1	4	21	11	0	-1	22082	0
-Waterloo Bridge 3	0	0	-1	38	0	13	245	-1	8	21	11	0	-1	22338	0
-Savoy	0	0	-1	39	0	25	292	-1	1	21	11	0	-1	22594	0
-Temple Approach 1	0	0	-1	40	0	11	292	-1	8	21	11	0	-1	22850	0
-Temple Approach 2	0	0	-1	40	0	21	292	-1	4	21	11	0	-1	23106	0
-Temple Approach 3	0	0	-1	40	0	13	74	-1	1	21	11	0	-1	24898	0
-Temple Station	0	0	-1	41	0	4	1	-1	1	50	-1	0	-1	25154	0
-Templar Base	0	0	-1	42	0	56	1	-1	1	47	-1	0	-1	25410	0
-Aldwych	0	0	-1	43	0	20	296	-1	1	39	-1	1	560	25666	0
-Waterloo 1	0	100	-1	44	0	63	527	423	5	27	13	0.5	560	25922	0
-Waterloo 2	0	100	-1	44	0	63	74	423	1	27	13	0.5	560	26178	0
-Upper Ground 1	0	10	-1	45	0	41	531	326	10	3	13	0.85	560	26690	0
-Upper Ground 2	0	33	-1	45	0	40	531	248	5	3	13	0.85	560	26946	0
-Barge House	0	0	-1	46	0	50	287	-1	1	3	13	0.5	560	27714	0
-New Bridge 1	0	100	-1	47	0	63	527	385	5	27	13	0.25	560	27970	0
-New Bridge 2	0	100	-1	47	0	63	64	385	1	27	13	0.25	560	28226	0
-The Big Gundown	0	0	-1	48	0	57	324	-1	1	63	13	0	-1	28738	0
-The Strand 1	0	0	-1	49	0	63	527	-1	5	27	13	0.25	560	28994	0
-The Strand 2	0	0	-1	49	0	63	64	-1	1	27	13	0.25	560	29250	0
-Blackfriars 1	0	10	-1	50	0	41	531	55	5	3	13	0.5	560	29506	0
-Blackfriars 2	0	33	-1	50	0	40	531	248	10	3	13	0.5	560	29762	0
-Puddle Dock	0	0	-1	51	0	51	531	-1	1	3	13	0.25	560	30530	0
-The Exospector	0	0	-1	52	0	121	323	-1	1	54	-1	0	-1	30786	0
-Temple Access Ducts 1	0	0	-1	53	0	15	296	-1	5	39	12	0.7	560	31042	0
-Temple Access Ducts 2	0	0	-1	53	0	23	74	-1	1	39	10	0.5	560	31298	0
-Forgotten Ducts 1	0	0	-1	54	0	23	296	-1	5	39	10	0.5	560	16707	0
-Forgotten Ducts 2	0	0	-1	54	0	15	74	-1	1	39	12	0.7	560	16963	0
-Mansion House 1	0	0	-1	55	0	21	292	-1	10	21	11	0.4	560	17219	0
-Mansion House 2	0	0	-1	55	0	11	292	-1	5	21	11	0.4	560	17475	0
-Mansion House 3	0	0	-1	55	0	13	74	-1	1	21	11	0.6	560	17731	0
-Cannon Street 1	0	0	-1	56	0	13	292	-1	5	21	11	0.6	560	17987	0
-Cannon Street 2	0	0	-1	56	0	11	74	-1	1	21	11	0.4	560	18243	0
-Angel Passage	0	0	-1	57	0	52	1	-1	1	55	-1	0	-1	18499	0
-Monument Station	0	0	-1	58	0	5	1	-1	1	50	-1	0	-1	18755	0
-Monument Tunnels	0	0	-1	59	0	15	296	-1	1	39	16	0	-1	19011	0
-Monument Crawlway	0	0	-1	60	0	15	296	-1	1	39	16	0	-1	19267	0
-Eastcheap 1	0	10	-1	61	0	99	535	103	5	33	17	0	-1	19523	0
-Eastcheap 2	0	33	-1	61	0	105	74	248	1	33	16	0	-1	19779	0
-Tudor Street 1	0	10	-1	62	0	38	539	326	5	3	18	0	-1	20035	0
-Tudor Street 2	0	33	-1	62	0	38	74	248	1	3	18	0	-1	20291	0
-Temple Place	0	0	-1	63	0	110	535	-1	1	33	15	0	-1	21059	0
-Bell Yard 1	0	10	-1	64	0	101	535	389	5	33	17	0.9	559	21315	0
-Bell Yard 2	0	33	-1	64	0	105	74	248	1	33	16	0.8	559	21571	0
-Fleet Street 1	0	10	-1	65	0	38	539	55	5	4	18	0.24	559	22083	0
-Fleet Street 2	0	33	-1	65	0	38	74	248	1	4	18	0.24	559	22595	0
-Ludgate Hill 1	0	10	-1	66	0	38	539	103	5	4	18	0.24	559	22851	0
-Ludgate Hill 2	0	33	-1	66	0	38	74	248	1	4	18	0.24	559	28748	0
-Kingsway 1	0	10	-1	67	0	38	539	389	5	4	18	0.24	559	25155	0
-Kingsway 2	0	33	-1	67	0	38	74	248	1	4	18	0.24	559	25411	0
-Stonecutter 1	0	10	-1	68	0	103	535	326	5	34	17	0.8	559	26179	0
-Stonecutter 2	0	33	-1	68	0	105	74	248	1	34	16	0.8	559	26435	0
-Bishop's Court	0	0	-1	69	0	53	539	-1	1	4	18	0.24	559	26947	0
-Old Bailey	0	0	-1	70	0	111	535	-1	1	34	15	0	-1	27203	0
-Upper Thames	0	0	-1	71	0	63	543	-1	1	28	18	0	-1	27459	0
-Waterman's Walk 1	0	0	-1	72	0	63	543	-1	5	28	18	0	-1	27715	0
-Waterman's Walk 2	0	0	-1	72	0	63	84	-1	1	28	18	0	-1	27971	0
-Lower Thames 1	0	0	-1	73	0	63	543	-1	5	28	18	0	-1	28739	0
-Lower Thames 2	0	0	-1	73	0	63	84	-1	1	28	18	0	-1	28995	0
-Tower Gateway 1	0	10	-1	74	0	38	539	55	5	4	18	0	-1	29251	0
-Tower Gateway 2	0	33	-1	74	0	38	94	248	1	4	18	0	-1	29507	0
-Tower of London	0	0	-1	75	0	126	1	-1	1	56	-1	0	-1	30275	0
-Fenchurch 1	0	10	-1	76	0	99	535	103	5	34	17	0	-1	30531	0
-Fenchurch 2	0	33	-1	76	0	105	94	248	1	40	16	0	-1	30787	0
-Trinity Square 1	0	10	-1	77	0	38	539	389	5	28	18	0	-1	31299	0
-Trinity Square 2	0	33	-1	77	0	38	94	248	1	28	18	0	-1	16708	0
-Aldgate	0	0	-1	78	0	54	539	-1	1	4	18	0	-1	17220	0
-King William Street 1	0	10	-1	79	0	101	535	326	5	34	17	0	-1	17476	0
-King William Street 2	0	33	-1	79	0	105	94	248	1	34	16	0	-1	17732	0
-Threadneedle 1	0	10	-1	80	0	38	539	55	5	4	18	0	-1	17988	0
-Threadneedle 2	0	33	-1	80	0	38	94	248	1	4	18	0	-1	18244	0
-Cannon Street Rail	0	0	-1	81	0	26	336	-1	1	22	-1	0	-1	18756	0
-Exodus	0	0	-1	82	0	27	336	-1	1	22	-1	0	-1	19012	0
-Crown Office Row	0	0	-1	83	0	55	311	-1	1	4	23	0	-1	19268	0
-Mark Lane Approach 1	0	0	-1	84	0	21	336	-1	7	22	21	0	-1	19524	0
-Mark Lane Approach 2	0	0	-1	84	0	25	336	-1	4	22	21	0	-1	19780	0
-Mark Lane Approach 3	0	0	-1	84	0	21	94	-1	1	22	21	0	-1	20036	0
-Mark Lane Station	0	0	-1	85	0	22	336	-1	1	22	21	0	-1	20292	0
-Liverpool Approach 1	0	0	-1	86	0	11	336	-1	7	22	21	0	-1	20548	0
-Liverpool Approach 2	0	0	-1	86	0	13	336	-1	4	22	21	0	-1	20804	0
-Liverpool Approach 3	0	0	-1	86	0	11	94	-1	1	22	21	0	-1	21060	0
-Liverpool Street Station	0	0	-1	87	0	6	1	-1	1	50	-1	0	-1	21316	0
-Liverpool Tunnels 1	0	0	-1	88	0	23	555	-1	5	41	20	0	-1	21572	0
-Liverpool Tunnels 2	0	0	-1	88	0	24	94	-1	1	41	20	0	-1	22340	0
-Abandoned Tunnels 1	0	0	-1	89	0	24	555	-1	5	41	20	0	-1	22596	0
-Abandoned Tunnels 2	0	0	-1	89	0	23	94	-1	1	41	20	0	-1	22852	0
-Devonshire Square 1	0	10	-1	90	0	45	551	103	5	5	23	0	-1	24900	0
-Devonshire Square 2	0	33	-1	90	0	41	94	248	1	5	23	0	-1	25156	0
-Houndsditch 1	0	10	-1	91	0	41	551	389	5	5	23	0	-1	25668	0
-Houndsditch 2	0	33	-1	91	0	45	94	248	1	5	23	0	-1	25924	0
-Primrose 1	0	10	-1	92	0	45	551	326	5	5	23	0	-1	26436	0
-Primrose 2	0	33	-1	92	0	41	94	248	1	5	23	0	-1	26692	0
-Shoreditch 1	0	10	-1	93	0	41	551	55	5	5	23	0	-1	27204	0
-Shoreditch 2	0	33	-1	93	0	45	94	248	1	5	23	0	-1	27460	0
-Necropolis Level 1	0	0	-1	94	0	116	547	-1	5	11	-1	0	-1	27972	0
-Necropolis Level 1a	0	0	-1	94	0	116	94	-1	1	11	-1	0	-1	25932	0
-Necropolis Level 2	0	0	-1	95	0	117	394	-1	4	11	-1	0	-1	28228	0
-Necropolis Level 2a	0	0	-1	95	0	117	94	-1	1	11	-1	0	-1	26188	0
-Necropolis Level 3	0	0	-1	96	0	118	547	-1	3	11	-1	0	-1	28484	0
-Necropolis Level 3a	0	0	-1	96	0	118	94	-1	1	11	-1	0	-1	26444	0
-Necropolis Level 4	0	0	-1	97	0	119	394	-1	2	11	-1	0	-1	28740	0
-Necropolis Level 4a	0	0	-1	97	0	119	94	-1	1	11	-1	0	-1	26700	0
-Necropolis Level 5	0	0	-1	98	0	120	547	-1	1	11	-1	0	-1	28996	0
-Necropolis Level 5a	0	0	-1	98	0	120	94	-1	1	11	-1	0	-1	26956	0
-Bishopsgate 1	0	10	-1	99	0	41	551	103	5	5	23	0	-1	29252	0
-Bishopsgate 2	0	33	-1	99	0	45	94	248	1	5	23	0	-1	29508	0
-Wormwood 1	0	0	-1	100	0	112	547	-1	5	17	19	0	-1	29764	0
-Wormwood 2	0	0	-1	100	0	114	94	-1	1	17	19	0	-1	30020	0
-Undershaft 1	0	0	-1	101	0	23	555	-1	5	41	20	0	-1	30276	0
-Undershaft 2	0	0	-1	101	0	23	84	-1	1	41	20	0	-1	30532	0
-Finsbury Square	0	0	-1	102	0	130	1	-1	1	49	-1	0	-1	30788	0
-Finsbury Circus 1	0	0	-1	103	0	23	555	-1	5	41	24	0	-1	31044	0
-Finsbury Circus 2	0	0	-1	103	0	24	84	-1	1	41	24	0	-1	31300	0
-London Wall	0	0	-1	104	0	131	1	-1	1	58	-1	0	-1	16709	0
-Moorgate 1	0	0	-1	105	0	24	555	-1	5	41	24	0	-1	16965	0
-Moorgate 2	0	0	-1	105	0	23	84	-1	1	41	24	0	-1	17221	0
-Ropemaker Street	0	0	-1	106	0	132	1	-1	1	59	-1	0	-1	17477	0
-Lamb's Passage 1	0	0	-1	107	0	23	555	-1	1	41	24	0	-1	17733	0
-Lamb's Passage 2	0	0	-1	107	0	24	84	-1	1	41	24	0	-1	17989	0
-Whitecross	0	0	-1	108	0	134	1	-1	1	60	-1	0	-1	18757	0
-Mark Square 1	0	0	-1	109	0	24	555	-1	5	41	24	0	-1	19013	0
-Mark Square 2	0	0	-1	109	0	23	84	-1	1	41	24	0	-1	19269	0
-Old Street	0	0	-1	110	0	133	1	-1	1	62	-1	0	-1	19525	0
-Finsbury Market 1	0	0	-1	111	0	23	555	-1	5	41	24	0	-1	19781	0
-Finsbury Market 2	0	0	-1	111	0	24	84	-1	1	41	24	0	-1	20037	0
-Ploughyard	0	0	-1	112	0	135	402	-1	1	61	-1	0	-1	20293	0
-Guildhall 1	0	0	-1	113	0	13	375	-1	7	23	21	0	-1	20549	0
-Guildhall 2	0	0	-1	113	0	11	375	-1	4	23	21	0	-1	20805	0
-Guildhall 3	0	0	-1	113	0	25	94	-1	1	23	21	0	-1	21061	0
-St. Paul's Approach 1	0	0	-1	114	0	21	375	-1	7	23	21	0	-1	21317	0
-St. Paul's Approach 2	0	0	-1	114	0	11	375	-1	4	23	21	0	-1	21573	0
-St. Paul's Approach 3	0	0	-1	114	0	13	94	-1	1	23	21	0	-1	21829	0
-St. Paul's Station	0	0	-1	115	0	7	1	-1	1	49	-1	0	-1	22085	0
-Church Yard 1	0	0	-1	116	0	114	547	-1	5	17	19	0	-1	22341	0
-Church Yard 2	0	0	-1	116	0	113	94	-1	1	17	22	0	-1	22597	0
-Paternoster Row 1	0	0	-1	117	0	71	398	-1	5	11	-1	0	-1	22853	0
-Paternoster Row 2	0	0	-1	117	0	71	84	-1	1	11	-1	0	-1	23109	0
-Cheapside 1	0	0	-1	118	0	113	547	-1	5	17	22	0	-1	24901	0
-Cheapside 2	0	0	-1	118	0	114	94	-1	1	17	19	0	-1	25157	0
-Little Britain 1	0	0	-1	119	0	71	398	-1	5	11	-1	0	-1	25413	0
-Little Britain 2	0	0	-1	119	0	71	84	-1	1	11	-1	0	-1	25669	0
-St. Paul's Hellgate	0	0	-1	120	0	128	405	-1	1	43	26	0	-1	25925	0
-Hell	0	0	-1	121	0	73	408	-1	1	57	-1	0	-1	26181	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-Duel Arena City	0	0	-1	149	0	148	1	-1	1	45	2	0	-1	20301	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-Town Portal	0	0	-1	150	0	86	1	-1	1	-1	-1	0	-1	26437	0
-TheDark	0	0	-1	151	0	19	224	-1	1	-1	-1	0	-1	26693	0
-FPS Action Test	0	0	-1	152	0	60	167	-1	1	-1	-1	0	-1	26949	0
-RTS Test	0	0	-1	153	0	49	208	-1	1	-1	-1	0	-1	27205	0
-Sewers	0	0	-1	154	0	32	179	-1	1	-1	-1	0	-1	27461	0
-SoundField	0	0	-1	155	0	95	1	-1	1	-1	-1	0	-1	27717	0
-Soundfield_Part_Deux	0	0	-1	156	0	96	1	-1	1	-1	-1	0	-1	27973	0
-MonsterField	0	0	-1	157	0	97	1	-1	1	-1	-1	0	-1	28229	0
-TubeStation	0	0	-1	158	0	123	1	-1	1	-1	-1	0	-1	28485	0
-CoventGarden	0	0	-1	159	0	124	1	-1	1	-1	-1	0	-1	28741	0
-LeicesterSquare	0	0	-1	160	0	125	1	-1	1	-1	-1	0	-1	28997	0
-ParkingLot	0	0	-1	161	0	98	1	-1	1	-1	-1	0	-1	29253	0
-TubeB	0	0	-1	162	0	87	1	-1	1	-1	-1	0	-1	29509	0
-TubeB_Crypts	0	0	-1	163	0	99	1	-1	1	-1	-1	0	-1	29765	0
-PerformanceTestLevel	0	0	-1	164	0	88	1	-1	1	-1	-1	0	-1	30021	0
-PerformanceTestLevelA	0	0	-1	165	0	89	1	-1	1	-1	-1	0	-1	30277	0
-PerformanceTestLevelB	0	0	-1	166	0	90	1	-1	1	-1	-1	0	-1	30533	0
-PerformanceTestLevelC	0	0	-1	167	0	91	1	-1	1	-1	-1	0	-1	30789	0
-MonsterTestLevel	0	0	-1	168	0	92	1	-1	1	-1	-1	0	-1	31045	0
-LevelExperiment	0	0	-1	169	0	93	54	-1	1	-1	-1	0	-1	31301	0
-UndergroundPassage	0	0	-1	170	0	10	54	-1	1	-1	-1	0	-1	16710	0
-MiniTubesDepot	0	0	-1	171	0	11	54	-1	1	-1	-1	0	-1	16966	0
-MiniTubesShort	0	0	-1	172	0	12	54	-1	1	-1	-1	0	-1	25164	0
-MiniTubesAndRooms	0	0	-1	173	0	13	54	-1	1	-1	-1	0	-1	17222	0
-MiniTubes	0	0	-1	174	0	21	54	-1	1	-1	-1	0	-1	17478	0
-MiniTubesStationA	0	0	-1	175	0	22	54	-1	1	-1	-1	0	-1	17734	0
-IndustrialRooms	0	0	-1	176	0	23	54	-1	1	-1	-1	0	-1	17990	0
-IndustrialHalls	0	0	-1	177	0	24	54	-1	1	-1	-1	0	-1	18246	0
-IndustrialTubes	0	0	-1	178	0	25	54	-1	1	-1	-1	0	-1	18502	0
-MiniRooms	0	0	-1	179	0	15	54	-1	1	-1	-1	0	-1	18758	0
-MiniRoomsAdventure	0	0	-1	180	0	16	54	-1	1	-1	-1	0	-1	19014	0
-MiniRoomsAdventureChampion	0	0	-1	181	0	17	54	-1	1	-1	-1	0	-1	19270	0
-MiniRoomsAdventureTreasure	0	0	-1	182	0	18	1	-1	1	-1	-1	0	-1	19526	0
-MiniRoomsDark	0	0	-1	183	0	19	224	-1	1	-1	-1	0	-1	19782	0
-MiniTubesHole	0	0	-1	184	0	28	54	-1	1	-1	-1	0	-1	20038	0
-MiniSewersAdventure	0	0	-1	185	0	29	54	-1	1	-1	-1	0	-1	20294	0
-MiniSewersAdventureChampion	0	0	-1	186	0	30	54	-1	1	-1	-1	0	-1	20550	0
-MiniSewersAdventureTreasure	0	0	-1	187	0	31	1	-1	1	-1	-1	0	-1	20806	0
-HellTower	0	0	-1	188	0	67	189	-1	1	-1	-1	0	-1	21062	0
-HellTowerFawkes	0	0	-1	189	0	66	189	-1	1	-1	-1	0	-1	21318	0
-HellTowerHellPortal	0	0	-1	190	0	68	1	-1	1	-1	-1	0	-1	21574	0
-HellTowerHellPortalPrevious	0	0	-1	191	0	69	1	-1	1	-1	-1	0	-1	21830	0
-HellTowerAdventure	0	0	-1	192	0	70	1	-1	1	-1	-1	0	-1	22086	0
-HellDungeon	0	0	-1	193	0	71	189	-1	1	-1	-1	0	-1	22342	0
-HellDungeonAdventure	0	100	-1	194	0	72	44	358	1	-1	-1	0	-1	22598	0
-MiniCavesAdventure	0	0	-1	195	0	107	54	-1	1	-1	-1	0	-1	22854	0
-MiniCavesAdventureChampion	0	0	-1	196	0	108	54	-1	1	-1	-1	0	-1	23110	0
-MiniCavesAdventureTreasure	0	0	-1	197	0	109	1	-1	1	-1	-1	0	-1	24902	0
-MiniCity	0	0	-1	198	0	38	1	-1	1	-1	-1	0	-1	25158	0
-MiniCityRare	0	0	-1	199	0	39	1	-1	1	-1	-1	0	-1	25414	0
-AlleyCity	0	0	-1	200	0	40	1	-1	1	-1	-1	0	-1	25670	0
-BoulevardCity	0	0	-1	201	0	43	1	-1	1	-1	-1	0	-1	25926	0
-ParkCity	0	0	-1	202	0	42	1	-1	1	-1	-1	0	-1	26182	0
-River	0	0	-1	203	0	63	1	-1	1	-1	-1	0	-1	26438	0
-CharacterCreation	0	0	-1	204	0	58	1	-1	1	-1	-1	0	-1	26694	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-HavokDemo	0	0	-1	207	0	61	1	-1	1	-1	-1	0	-1	27206	0
-NVIDIADemo	0	0	-1	208	0	62	167	-1	1	-1	-1	0	-1	27462	0
-LowPolyTest	0	0	-1	209	0	94	54	-1	1	-1	-1	0	-1	27718	0
-HellNarration	0	0	-1	210	0	136	1	-1	1	-1	-1	0	-1	27974	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-Russell Square Nightmare	0	0	0	0	1	8	7	-1	1	42	2	0	-1	28230	0
-Holborn Station Nightmare	0	0	1	1	1	0	1	-1	1	48	-1	0	-1	28486	0
-Tottenham Court Nightmare	0	25	2	2	1	2	451	201	1	45	2	0	-1	28742	0
-Holborn Access Shafts Nightmare	0	33	3	3	1	15	452	467	1	36	0	0	-1	28998	0
-Covent Garden Approach 1 Nightmare	0	0	6	6	1	21	475	-1	10	18	1	0	-1	29254	0
-Covent Garden Approach 2 Nightmare	0	0	7	6	1	11	475	-1	10	18	1	0	-1	29510	0
-Covent Garden Station Nightmare	0	0	8	7	1	1	1	-1	1	50	-1	0	-1	29766	0
-Upper Kingsway Sewers 1 Nightmare	0	50	9	8	1	35	456	116	10	12	0	0	-1	30022	0
-Upper Kingsway Sewers 2 Nightmare	0	50	10	8	1	34	456	116	5	12	0	0	-1	30278	0
-Lower Kingsway Sewers 1 Nightmare	0	100	11	9	1	35	460	174	5	12	0	0	-1	30534	0
-Lower Kingsway Sewers 2 Nightmare	0	100	12	9	1	34	460	174	10	12	0	0	-1	30790	0
-Covent Garden Steam Tunnels Nightmare	0	0	13	10	1	15	464	-1	1	36	0	0	-1	31046	0
-Covent Garden Train Depot Nightmare	0	0	14	11	1	15	467	-1	1	36	0	0	-1	16711	0
-Covent Garden Market Nightmare	0	0	15	12	1	47	418	-1	1	43	-1	0	-1	17223	0
-Bloomsbury Nightmare	0	50	16	13	1	15	471	276	1	36	0	0	-1	17479	0
-British Museum Nightmare	0	0	17	14	1	48	506	-1	1	46	-1	0	-1	18247	0
-Leicester Square 1 Nightmare	0	0	18	15	1	12	422	-1	7	19	4	0	-1	18503	0
-Leicester Square 2 Nightmare	0	0	19	15	1	21	112	-1	3	19	4	0	-1	18759	0
-St. Martin's Nightmare	0	25	20	16	1	13	479	576	1	19	4	0	-1	19015	0
-Charing Cross Approach 1 Nightmare	0	50	21	17	1	11	422	4	7	19	4	0	-1	19527	0
-Charing Cross Approach 2 Nightmare	0	50	22	17	1	12	112	4	3	19	4	0	-1	19783	0
-Charing Cross Station Nightmare	0	0	23	18	1	3	1	-1	1	50	-1	0	-1	20039	0
-Piccadilly Approach Nightmare	0	33	24	19	1	38	418	337	1	1	6	0	-1	20551	0
-Piccadilly Circus Nightmare	0	33	25	20	1	46	418	181	1	1	6	0	-1	21063	0
-Piccadilly Hell Nightmare	0	50	26	21	1	75	268	195	1	8	-1	0	-1	21575	0
-Green Park Approach Nightmare	0	100	27	22	1	32	483	290	1	14	5	0	-1	22087	0
-Green Park Station 1 Nightmare	0	0	28	23	1	9	249	-1	5	48	-1	0	-1	22599	0
-Green Park Station 2 Nightmare	0	0	29	23	1	9	112	-1	1	48	-1	0	-1	22855	0
-Death's Sewers 1 Nightmare	0	50	30	24	1	36	523	77	5	14	8	0	-1	23111	0
-Death's Sewers 2 Nightmare	0	100	31	24	1	36	112	77	1	14	8	0	-1	24903	0
-Death's Tunnels 1 Nightmare	0	33	32	25	1	14	523	238	5	20	7	0	-1	25159	0
-Death's Tunnels 2 Nightmare	0	100	33	25	1	14	112	238	1	20	7	0	-1	25415	0
-Death's City 1 Nightmare	0	0	34	26	1	37	519	-1	5	2	9	0	-1	25671	0
-Death's City 2 Nightmare	0	0	35	26	1	37	104	-1	1	2	9	0	-1	25927	0
-Savile Row 1 Nightmare	0	0	36	27	1	35	523	-1	5	14	5	0	-1	26183	0
-Savile Row 2 Nightmare	0	0	37	27	1	35	104	-1	1	14	5	0	-1	26439	0
-Oxford Circus Station Nightmare	0	0	38	28	1	127	1	-1	1	48	-1	0	-1	26951	0
-Admiralty Arch 1 Nightmare	0	0	39	29	1	33	523	-1	10	14	5	0	-1	27207	0
-Admiralty Arch 2 Nightmare	0	0	40	29	1	34	523	-1	5	14	5	0	-1	27463	0
-Chocolate Park Nightmare	0	0	41	30	1	44	222	-1	1	51	-1	0	-1	28231	0
-Whitehall 1 Nightmare	0	0	42	31	1	35	486	-1	10	14	5	0	-1	28487	0
-Whitehall 2 Nightmare	0	0	43	31	1	32	486	-1	5	14	5	0	-1	28743	0
-Downing Street 1 Nightmare	0	20	44	32	1	38	519	60	5	2	6	0	-1	29511	0
-Downing Street 2 Nightmare	0	100	45	32	1	38	112	60	1	2	6	0	-1	29767	0
-Millennium Battle Nightmare	0	0	46	33	1	64	273	-1	1	26	6	0	-1	30535	0
-Craven Street 1 Nightmare	0	10	47	34	1	38	519	248	5	2	6	0	-1	30791	0
-Craven Street 2 Nightmare	0	33	48	34	1	38	64	248	1	2	6	0	-1	31047	0
-Embankment Approach 1 Nightmare	0	100	49	35	1	38	519	480	5	2	6	0	-1	16968	0
-Embankment Approach 2 Nightmare	0	100	50	35	1	38	104	480	1	2	6	0	-1	17224	0
-Embankment Redout Nightmare	0	0	51	36	1	49	225	-1	1	53	6	0	-1	17992	0
-The Mind of 314 Nightmare	0	0	52	37	1	122	323	-1	1	52	-1	0	-1	18248	0
-Waterloo Bridge 1 Nightmare	0	0	53	38	1	21	112	-1	1	21	11	0	-1	18504	0
-Waterloo Bridge 2 Nightmare	0	0	54	38	1	11	422	-1	4	21	11	0	-1	18760	0
-Waterloo Bridge 3 Nightmare	0	0	55	38	1	13	422	-1	8	21	11	0	-1	19016	0
-Savoy Nightmare	0	0	56	39	1	25	422	-1	1	21	11	0	-1	19272	0
-Temple Approach 1 Nightmare	0	0	57	40	1	11	422	-1	8	21	11	0	-1	19528	0
-Temple Approach 2 Nightmare	0	0	58	40	1	21	422	-1	4	21	11	0	-1	19784	0
-Temple Approach 3 Nightmare	0	0	59	40	1	13	104	-1	1	21	11	0	-1	20040	0
-Temple Station Nightmare	0	0	60	41	1	4	1	-1	1	50	-1	0	-1	20296	0
-Templar Base Nightmare	0	0	61	42	1	56	1	-1	1	47	-1	0	-1	20552	0
-Aldwych Nightmare	0	0	62	43	1	20	426	-1	1	39	-1	1	560	20808	0
-Waterloo 1 Nightmare	0	100	63	44	1	63	426	423	5	27	13	0.5	560	21064	0
-Waterloo 2 Nightmare	0	100	64	44	1	63	112	423	1	27	13	0.5	560	21320	0
-Upper Ground 1 Nightmare	0	10	65	45	1	41	418	326	10	3	13	0.85	560	21832	0
-Upper Ground 2 Nightmare	0	33	66	45	1	40	104	248	5	3	13	0.85	560	22088	0
-Barge House Nightmare	0	0	67	46	1	50	287	-1	1	3	13	0.5	560	22856	0
-New Bridge 1 Nightmare	0	100	68	47	1	63	414	385	5	27	13	0.25	560	23112	0
-New Bridge 2 Nightmare	0	100	69	47	1	63	104	385	1	27	13	0.25	560	24904	0
-The Big Gundown Nightmare	0	0	70	48	1	57	324	-1	1	63	13	0	-1	25416	0
-The Strand 1 Nightmare	0	0	71	49	1	63	414	-1	5	27	13	0.25	560	25672	0
-The Strand 2 Nightmare	0	0	72	49	1	63	104	-1	1	27	13	0.25	560	25928	0
-Blackfriars 1 Nightmare	0	10	73	50	1	41	430	55	5	3	13	0.5	560	26184	0
-Blackfriars 2 Nightmare	0	33	74	50	1	40	112	248	10	3	13	0.5	560	26440	0
-Puddle Dock Nightmare	0	0	75	51	1	51	430	-1	1	3	13	0.25	560	27208	0
-The Exospector Nightmare	0	0	76	52	1	121	323	-1	1	54	-1	0	-1	27464	0
-Temple Access Ducts 1 Nightmare	0	0	77	53	1	15	426	-1	5	39	12	0.7	560	27720	0
-Temple Access Ducts 2 Nightmare	0	0	78	53	1	23	112	-1	1	39	10	0.5	560	27976	0
-Forgotten Ducts 1 Nightmare	0	0	79	54	1	23	426	-1	5	39	10	0.5	560	28232	0
-Forgotten Ducts 2 Nightmare	0	0	80	54	1	15	112	-1	1	39	12	0.7	560	28488	0
-Mansion House 1 Nightmare	0	0	81	55	1	21	422	-1	10	21	11	0.4	560	28744	0
-Mansion House 2 Nightmare	0	0	82	55	1	11	422	-1	5	21	11	0.4	560	29000	0
-Mansion House 3 Nightmare	0	0	83	55	1	13	112	-1	1	21	11	0.6	560	29256	0
-Cannon Street 1 Nightmare	0	0	84	56	1	13	422	-1	5	21	11	0.6	560	29512	0
-Cannon Street 2 Nightmare	0	0	85	56	1	11	112	-1	1	21	11	0.4	560	29768	0
-Angel Passage Nightmare	0	0	86	57	1	52	1	-1	1	55	-1	0	-1	30024	0
-Monument Station Nightmare	0	0	87	58	1	5	1	-1	1	50	-1	0	-1	30280	0
-Monument Tunnels Nightmare	0	0	88	59	1	15	426	-1	1	39	16	0	-1	30536	0
-Monument Crawlway Nightmare	0	0	89	60	1	15	426	-1	1	39	16	0	-1	30792	0
-Eastcheap 1 Nightmare	0	10	90	61	1	99	414	103	5	33	17	0	-1	31048	0
-Eastcheap 2 Nightmare	0	33	91	61	1	105	112	248	1	33	16	0	-1	31304	0
-Tudor Street 1 Nightmare	0	10	92	62	1	38	418	326	5	3	18	0	-1	16713	0
-Tudor Street 2 Nightmare	0	33	93	62	1	38	112	248	1	3	18	0	-1	16969	0
-Temple Place Nightmare	0	0	94	63	1	110	430	-1	1	33	15	0	-1	17737	0
-Bell Yard 1 Nightmare	0	10	95	64	1	101	426	389	5	33	17	0.9	559	17993	0
-Bell Yard 2 Nightmare	0	33	96	64	1	105	112	248	1	33	16	0.8	559	18249	0
-Fleet Street 1 Nightmare	0	10	97	65	1	38	426	55	5	4	18	0.24	559	18761	0
-Fleet Street 2 Nightmare	0	33	98	65	1	38	112	248	1	4	18	0.24	559	19017	0
-Ludgate Hill 1 Nightmare	0	10	99	66	1	38	418	103	5	4	18	0.24	559	19529	0
-Ludgate Hill 2 Nightmare	0	33	100	66	1	38	418	248	1	4	18	0.24	559	29004	0
-Kingsway 1 Nightmare	0	10	101	67	1	38	430	389	5	4	18	0.24	559	20297	0
-Kingsway 2 Nightmare	0	33	102	67	1	38	112	248	1	4	18	0.24	559	20553	0
-Stonecutter 1 Nightmare	0	10	103	68	1	103	434	326	5	34	17	0.8	559	21321	0
-Stonecutter 2 Nightmare	0	33	104	68	1	105	104	248	1	34	16	0.8	559	21577	0
-Bishop's Court Nightmare	0	0	105	69	1	53	418	-1	1	4	18	0.24	559	22089	0
-Old Bailey Nightmare	0	0	106	70	1	111	442	-1	1	34	15	0	-1	22345	0
-Upper Thames Nightmare	0	0	107	71	1	63	414	-1	1	28	18	0	-1	22601	0
-Waterman's Walk 1 Nightmare	0	0	108	72	1	63	414	-1	5	28	18	0	-1	22857	0
-Waterman's Walk 2 Nightmare	0	0	109	72	1	63	104	-1	1	28	18	0	-1	23113	0
-Lower Thames 1 Nightmare	0	0	110	73	1	63	414	-1	5	28	18	0	-1	25417	0
-Lower Thames 2 Nightmare	0	0	111	73	1	63	104	-1	1	28	18	0	-1	25673	0
-Tower Gateway 1 Nightmare	0	10	112	74	1	38	430	55	5	4	18	0	-1	25929	0
-Tower Gateway 2 Nightmare	0	33	113	74	1	38	112	248	1	4	18	0	-1	26185	0
-Tower of London Nightmare	0	0	114	75	1	126	1	-1	1	56	-1	0	-1	26953	0
-Fenchurch 1 Nightmare	0	10	115	76	1	99	426	103	5	34	17	0	-1	27209	0
-Fenchurch 2 Nightmare	0	33	116	76	1	105	112	248	1	40	16	0	-1	27465	0
-Trinity Square 1 Nightmare	0	10	117	77	1	38	418	389	5	28	18	0	-1	27977	0
-Trinity Square 2 Nightmare	0	33	118	77	1	38	104	248	1	28	18	0	-1	28233	0
-Aldgate Nightmare	0	0	119	78	1	54	418	-1	1	4	18	0	-1	28745	0
-King William Street 1 Nightmare	0	10	120	79	1	101	442	326	5	34	17	0	-1	29001	0
-King William Street 2 Nightmare	0	33	121	79	1	105	112	248	1	34	16	0	-1	29257	0
-Threadneedle 1 Nightmare	0	10	122	80	1	38	426	55	5	4	18	0	-1	29513	0
-Threadneedle 2 Nightmare	0	33	123	80	1	38	112	248	1	4	18	0	-1	29769	0
-Cannon Street Rail Nightmare	0	0	124	81	1	26	422	-1	1	22	-1	0	-1	30281	0
-Exodus Nightmare	0	0	125	82	1	27	422	-1	1	22	-1	0	-1	30537	0
-Crown Office Row Nightmare	0	0	126	83	1	55	418	-1	1	4	23	0	-1	30793	0
-Mark Lane Approach 1 Nightmare	0	0	127	84	1	21	422	-1	7	22	21	0	-1	31049	0
-Mark Lane Approach 2 Nightmare	0	0	128	84	1	25	422	-1	4	22	21	0	-1	31305	0
-Mark Lane Approach 3 Nightmare	0	0	129	84	1	21	112	-1	1	22	21	0	-1	16714	0
-Mark Lane Station Nightmare	0	0	130	85	1	22	422	-1	1	22	21	0	-1	16970	0
-Liverpool Approach 1 Nightmare	0	0	131	86	1	11	422	-1	7	22	21	0	-1	17226	0
-Liverpool Approach 2 Nightmare	0	0	132	86	1	13	422	-1	4	22	21	0	-1	17482	0
-Liverpool Approach 3 Nightmare	0	0	133	86	1	11	112	-1	1	22	21	0	-1	17738	0
-Liverpool Street Station Nightmare	0	0	134	87	1	6	1	-1	1	50	-1	0	-1	17994	0
-Liverpool Tunnels 1 Nightmare	0	0	135	88	1	23	426	-1	5	41	20	0	-1	18250	0
-Liverpool Tunnels 2 Nightmare	0	0	136	88	1	24	112	-1	1	41	20	0	-1	18506	0
-Abandoned Tunnels 1 Nightmare	0	0	137	89	1	24	426	-1	5	41	20	0	-1	19274	0
-Abandoned Tunnels 2 Nightmare	0	0	138	89	1	23	112	-1	1	41	20	0	-1	19530	0
-Devonshire Square 1 Nightmare	0	10	139	90	1	45	418	103	5	5	23	0	-1	20042	0
-Devonshire Square 2 Nightmare	0	33	140	90	1	41	112	248	1	5	23	0	-1	20298	0
-Houndsditch 1 Nightmare	0	10	141	91	1	41	418	389	5	5	23	0	-1	20810	0
-Houndsditch 2 Nightmare	0	33	142	91	1	45	112	248	1	5	23	0	-1	21066	0
-Primrose 1 Nightmare	0	10	143	92	1	45	430	326	5	5	23	0	-1	21578	0
-Primrose 2 Nightmare	0	33	144	92	1	41	112	248	1	5	23	0	-1	21834	0
-Shoreditch 1 Nightmare	0	10	145	93	1	41	430	55	5	5	23	0	-1	22346	0
-Shoreditch 2 Nightmare	0	33	146	93	1	45	112	248	1	5	23	0	-1	22602	0
-Necropolis Level 1 Nightmare	0	0	147	94	1	116	442	-1	5	11	-1	0	-1	23114	0
-Necropolis Level 1a Nightmarea	0	0	148	94	1	116	112	-1	1	11	-1	0	-1	28492	0
-Necropolis Level 2 Nightmare	0	0	149	95	1	117	442	-1	4	11	-1	0	-1	24906	0
-Necropolis Level 2a Nightmare	0	0	150	95	1	117	112	-1	1	11	-1	0	-1	27468	0
-Necropolis Level 3 Nightmare	0	0	151	96	1	118	442	-1	3	11	-1	0	-1	25162	0
-Necropolis Level 3a Nightmare	0	0	152	96	1	118	112	-1	1	11	-1	0	-1	27724	0
-Necropolis Level 4 Nightmare	0	0	153	97	1	119	442	-1	2	11	-1	0	-1	25418	0
-Necropolis Level 4a Nightmare	0	0	154	97	1	119	112	-1	1	11	-1	0	-1	27980	0
-Necropolis Level 5 Nightmare	0	0	155	98	1	120	442	-1	1	11	-1	0	-1	25674	0
-Necropolis Level 5a Nightmare	0	0	156	98	1	120	112	-1	1	11	-1	0	-1	28236	0
-Bishopsgate 1 Nightmare	0	10	157	99	1	41	434	103	5	5	23	0	-1	25930	0
-Bishopsgate 2 Nightmare	0	33	158	99	1	45	112	248	1	5	23	0	-1	26186	0
-Wormwood 1 Nightmare	0	0	159	100	1	112	442	-1	5	17	19	0	-1	26442	0
-Wormwood 2 Nightmare	0	0	160	100	1	114	112	-1	1	17	19	0	-1	26698	0
-Undershaft 1 Nightmare	0	0	161	101	1	23	414	-1	5	41	20	0	-1	26954	0
-Undershaft 2 Nightmare	0	0	162	101	1	23	104	-1	1	41	20	0	-1	27210	0
-Finsbury Square Nightmare	0	0	163	102	1	130	1	-1	1	49	-1	0	-1	27466	0
-Finsbury Circus 1 Nightmare	0	0	164	103	1	23	418	-1	5	41	24	0	-1	27722	0
-Finsbury Circus 2 Nightmare	0	0	165	103	1	24	104	-1	1	41	24	0	-1	27978	0
-London Wall Nightmare	0	0	166	104	1	131	1	-1	1	58	-1	0	-1	28234	0
-Moorgate 1 Nightmare	0	0	167	105	1	24	418	-1	5	41	24	0	-1	28490	0
-Moorgate 2 Nightmare	0	0	168	105	1	23	104	-1	1	41	24	0	-1	28746	0
-Ropemaker Street Nightmare	0	0	169	106	1	132	1	-1	1	59	-1	0	-1	29002	0
-Lamb's Passage 1 Nightmare	0	0	170	107	1	23	430	-1	1	41	24	0	-1	29258	0
-Lamb's Passage 2 Nightmare	0	0	171	107	1	24	104	-1	1	41	24	0	-1	29514	0
-Whitecross Nightmare	0	0	172	108	1	134	1	-1	1	60	-1	0	-1	30282	0
-Mark Square 1 Nightmare	0	0	173	109	1	24	418	-1	5	41	24	0	-1	30538	0
-Mark Square 2 Nightmare	0	0	174	109	1	23	104	-1	1	41	24	0	-1	30794	0
-Old Street Nightmare	0	0	175	110	1	133	1	-1	1	62	-1	0	-1	31050	0
-Finsbury Market 1 Nightmare	0	0	176	111	1	23	418	-1	5	41	24	0	-1	31306	0
-Finsbury Market 2 Nightmare	0	0	177	111	1	24	104	-1	1	41	24	0	-1	16715	0
-Ploughyard Nightmare	0	0	178	112	1	135	402	-1	1	61	-1	0	-1	16971	0
-Guildhall 1 Nightmare	0	0	179	113	1	13	422	-1	7	23	21	0	-1	17227	0
-Guildhall 2 Nightmare	0	0	180	113	1	11	422	-1	4	23	21	0	-1	17483	0
-Guildhall 3 Nightmare	0	0	181	113	1	25	104	-1	1	23	21	0	-1	17739	0
-St. Paul's Approach 1 Nightmare	0	0	182	114	1	21	422	-1	7	23	21	0	-1	17995	0
-St. Paul's Approach 2 Nightmare	0	0	183	114	1	11	422	-1	4	23	21	0	-1	18251	0
-St. Paul's Approach 3 Nightmare	0	0	184	114	1	13	104	-1	1	23	21	0	-1	18507	0
-St. Paul's Station Nightmare	0	0	185	115	1	7	1	-1	1	49	-1	0	-1	18763	0
-Church Yard 1 Nightmare	0	0	186	116	1	114	104	-1	5	17	19	0	-1	19019	0
-Church Yard 2 Nightmare	0	0	187	116	1	113	112	-1	1	17	22	0	-1	19275	0
-Paternoster Row 1 Nightmare	0	0	188	117	1	71	446	-1	5	11	-1	0	-1	19531	0
-Paternoster Row 2 Nightmare	0	0	189	117	1	71	104	-1	1	11	-1	0	-1	19787	0
-Cheapside 1 Nightmare	0	0	190	118	1	113	442	-1	5	17	22	0	-1	20043	0
-Cheapside 2 Nightmare	0	0	191	118	1	114	104	-1	1	17	19	0	-1	20299	0
-Little Britain 1 Nightmare	0	0	192	119	1	71	446	-1	5	11	-1	0	-1	20555	0
-Little Britain 2 Nightmare	0	0	193	119	1	71	104	-1	1	11	-1	0	-1	20811	0
-St. Paul's Hellgate Nightmare	0	0	194	120	1	128	405	-1	1	43	26	0	-1	21067	0
-Hell Nightmare	0	0	195	121	1	73	408	-1	1	57	-1	0	-1	21323	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-Town Portal Nightmare	0	0	229	150	1	86	1	-1	1	-1	-1	0	-1	21579	0
-TheDark Nightmare	0	0	230	151	1	19	495	-1	1	-1	-1	0	-1	21835	0
-FPS Action Test Nightmare	0	0	231	152	1	60	167	-1	1	-1	-1	0	-1	22091	0
-RTS Test Nightmare	0	0	232	153	1	49	208	-1	1	-1	-1	0	-1	22347	0
-Sewers Nightmare	0	0	233	154	1	32	179	-1	1	-1	-1	0	-1	22603	0
-SoundField Nightmare	0	0	234	155	1	95	1	-1	1	-1	-1	0	-1	22859	0
-Soundfield_Part_Deux Nightmare	0	0	235	156	1	96	1	-1	1	-1	-1	0	-1	23115	0
-MonsterField Nightmare	0	0	236	157	1	97	1	-1	1	-1	-1	0	-1	24907	0
-TubeStation Nightmare	0	0	237	158	1	123	1	-1	1	-1	-1	0	-1	25163	0
-CoventGarden Nightmare	0	0	238	159	1	124	1	-1	1	-1	-1	0	-1	25419	0
-LeicesterSquare Nightmare	0	0	239	160	1	125	1	-1	1	-1	-1	0	-1	25675	0
-ParkingLot Nightmare	0	0	240	161	1	98	1	-1	1	-1	-1	0	-1	25931	0
-TubeB Nightmare	0	0	241	162	1	87	1	-1	1	-1	-1	0	-1	26187	0
-TubeB_Crypts Nightmare	0	0	242	163	1	99	1	-1	1	-1	-1	0	-1	26443	0
-PerformanceTestLevel Nightmare	0	0	243	164	1	88	1	-1	1	-1	-1	0	-1	26699	0
-PerformanceTestLevelA Nightmare	0	0	244	165	1	89	1	-1	1	-1	-1	0	-1	26955	0
-PerformanceTestLevelB Nightmare	0	0	245	166	1	90	1	-1	1	-1	-1	0	-1	27211	0
-PerformanceTestLevelC Nightmare	0	0	246	167	1	91	1	-1	1	-1	-1	0	-1	27467	0
-MonsterTestLevel Nightmare	0	0	247	168	1	92	1	-1	1	-1	-1	0	-1	27723	0
-LevelExperiment Nightmare	0	0	248	169	1	93	112	-1	1	-1	-1	0	-1	27979	0
-UndergroundPassage Nightmare	0	0	249	170	1	10	112	-1	1	-1	-1	0	-1	28235	0
-MiniTubesDepot Nightmare	0	0	250	171	1	11	112	-1	1	-1	-1	0	-1	28491	0
-MiniTubesShort Nightmare	0	0	251	172	1	12	112	-1	1	-1	-1	0	-1	24908	0
-MiniTubesAndRooms Nightmare	0	0	252	173	1	13	112	-1	1	-1	-1	0	-1	28747	0
-MiniTubes Nightmare	0	0	253	174	1	21	112	-1	1	-1	-1	0	-1	29003	0
-MiniTubesStationA Nightmare	0	0	254	175	1	22	112	-1	1	-1	-1	0	-1	29259	0
-IndustrialRooms Nightmare	0	0	255	176	1	23	112	-1	1	-1	-1	0	-1	29515	0
-IndustrialHalls Nightmare	0	0	256	177	1	24	112	-1	1	-1	-1	0	-1	29771	0
-IndustrialTubes Nightmare	0	0	257	178	1	25	112	-1	1	-1	-1	0	-1	30027	0
-MiniRooms Nightmare	0	0	258	179	1	15	112	-1	1	-1	-1	0	-1	30283	0
-MiniRoomsAdventure Nightmare	0	0	259	180	1	16	112	-1	1	-1	-1	0	-1	30539	0
-MiniRoomsAdventureChampion Nightmare	0	0	260	181	1	17	112	-1	1	-1	-1	0	-1	30795	0
-MiniRoomsAdventureTreasure Nightmare	0	0	261	182	1	18	1	-1	1	-1	-1	0	-1	31051	0
-MiniRoomsDark Nightmare	0	0	262	183	1	19	495	-1	1	-1	-1	0	-1	31307	0
-MiniTubesHole Nightmare	0	0	263	184	1	28	112	-1	1	-1	-1	0	-1	16716	0
-MiniSewersAdventure Nightmare	0	0	264	185	1	29	112	-1	1	-1	-1	0	-1	16972	0
-MiniSewersAdventureChampion Nightmare	0	0	265	186	1	30	112	-1	1	-1	-1	0	-1	17228	0
-MiniSewersAdventureTreasure Nightmare	0	0	266	187	1	31	1	-1	1	-1	-1	0	-1	17484	0
-HellTower Nightmare	0	0	267	188	1	67	494	-1	1	-1	-1	0	-1	17740	0
-HellTowerFawkes Nightmare	0	0	268	189	1	66	494	-1	1	-1	-1	0	-1	17996	0
-HellTowerHellPortal Nightmare	0	0	269	190	1	68	1	-1	1	-1	-1	0	-1	18252	0
-HellTowerHellPortalPrevious Nightmare	0	0	270	191	1	69	1	-1	1	-1	-1	0	-1	18508	0
-HellTowerAdventure Nightmare	0	0	271	192	1	70	1	-1	1	-1	-1	0	-1	18764	0
-HellDungeon Nightmare	0	0	272	193	1	71	494	-1	1	-1	-1	0	-1	19020	0
-HellDungeonAdventure Nightmare	0	100	273	194	1	72	104	358	1	-1	-1	0	-1	19276	0
-MiniCavesAdventure Nightmare	0	0	274	195	1	107	112	-1	1	-1	-1	0	-1	19532	0
-MiniCavesAdventureChampion Nightmare	0	0	275	196	1	108	112	-1	1	-1	-1	0	-1	19788	0
-MiniCavesAdventureTreasure Nightmare	0	0	276	197	1	109	1	-1	1	-1	-1	0	-1	20044	0
-MiniCity Nightmare	0	0	277	198	1	38	1	-1	1	-1	-1	0	-1	20300	0
-MiniCityRare Nightmare	0	0	278	199	1	39	1	-1	1	-1	-1	0	-1	20556	0
-AlleyCity Nightmare	0	0	279	200	1	40	1	-1	1	-1	-1	0	-1	20812	0
-BoulevardCity Nightmare	0	0	280	201	1	43	1	-1	1	-1	-1	0	-1	21068	0
-ParkCity Nightmare	0	0	281	202	1	42	1	-1	1	-1	-1	0	-1	21324	0
-River Nightmare	0	0	282	203	1	63	1	-1	1	-1	-1	0	-1	21580	0
-CharacterCreation Nightmare	0	0	283	204	1	58	1	-1	1	-1	-1	0	-1	21836	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-HavokDemo Nightmare	0	0	286	207	1	61	1	-1	1	-1	-1	0	-1	22348	0
-NVIDIADemo Nightmare	0	0	287	208	1	62	167	-1	1	-1	-1	0	-1	22604	0
-LowPolyTest Nightmare	0	0	288	209	1	94	54	-1	1	-1	-1	0	-1	22860	0
-HellNarration Nightmare	0	0	289	210	1	136	1	-1	1	-1	-1	0	-1	23116	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
-Duel Arena City Nightmare	0	0	227	149	1	148	1	-1	1	45	2	0	-1	21070	0
-	0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"LEVELS_DRLG_CHOICE"	"name"	"undefined1"	"namedMonsterChance"	"undefined2"	"levelName"	"difficulty"	"drlg"	"spawnClass"	"namedMonsterClass"	"weight"	"music"	"environmentOverRide"	"environmentSpawnClassRoomDensity"	"environmentSpawnClass"	"code"	"undefined3"
+"3,62,0,-1,0,-1"	"Russell Square"	0	0	-1	0	0	8	6	-1	1	42	2	0	-1	16705	0
+"3,62,0,-1,0,-1"	"Holborn Station"	0	0	-1	1	0	0	1	-1	1	48	-1	0	-1	16961	0
+"3,62,0,-1,0,-1"	"Tottenham Court"	0	25	-1	2	0	2	122	201	1	45	2	0	-1	17217	0
+"3,62,0,-1,0,-1"	"Holborn Access Shafts"	0	33	-1	3	0	15	515	467	1	36	0	0	-1	17473	0
+"3,2,0,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,2,0,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,60,0,-1,0,-1"	"Covent Garden Approach 1"	0	0	-1	6	0	21	148	-1	10	18	1	0	-1	17729	0
+"3,60,0,-1,0,-1"	"Covent Garden Approach 2"	0	0	-1	6	0	11	148	-1	10	18	1	0	-1	17985	0
+"3,60,0,-1,0,-1"	"Covent Garden Station"	0	0	-1	7	0	1	1	-1	1	50	-1	0	-1	18241	0
+"3,60,0,-1,0,-1"	"Upper Kingsway Sewers 1"	0	50	-1	8	0	35	515	116	10	12	0	0	-1	18497	0
+"3,60,0,-1,0,-1"	"Upper Kingsway Sewers 2"	0	50	-1	8	0	34	515	116	5	12	0	0	-1	18753	0
+"3,60,0,-1,0,-1"	"Lower Kingsway Sewers 1"	0	100	-1	9	0	35	515	174	5	12	0	0	-1	19009	0
+"3,60,0,-1,0,-1"	"Lower Kingsway Sewers 2"	0	100	-1	9	0	34	515	174	10	12	0	0	-1	19265	0
+"3,60,0,-1,0,-1"	"Covent Garden Steam Tunnels"	0	0	-1	10	0	15	515	-1	1	36	0	0	-1	19521	0
+"3,60,0,-1,0,-1"	"Covent Garden Train Depot"	0	0	-1	11	0	15	515	-1	1	36	0	0	-1	20033	0
+"3,60,0,-1,0,-1"	"Covent Garden Market"	0	0	-1	12	0	47	167	-1	1	43	-1	0	-1	20545	0
+"3,60,0,-1,0,-1"	"Bloomsbury"	0	50	-1	13	0	15	515	276	1	36	0	0	-1	20801	0
+"3,60,0,-1,0,-1"	"British Museum"	0	0	-1	14	0	48	212	-1	1	46	-1	0	-1	21569	0
+"3,60,0,-1,0,-1"	"Leicester Square 1"	0	0	-1	15	0	12	199	-1	7	19	4	0	-1	21825	0
+"3,60,0,-1,0,-1"	"Leicester Square 2"	0	0	-1	15	0	21	54	-1	3	19	4	0	-1	22081	0
+"3,60,0,-1,0,-1"	"St. Martin's"	0	25	-1	16	0	13	152	576	1	19	4	0	-1	22337	0
+"3,60,0,-1,0,-1"	"Charing Cross Approach 1"	0	50	-1	17	0	11	199	4	7	19	4	0	-1	22849	0
+"3,60,0,-1,0,-1"	"Charing Cross Approach 2"	0	50	-1	17	0	12	54	4	3	19	4	0	-1	23105	0
+"3,60,0,-1,0,-1"	"Charing Cross Station"	0	0	-1	18	0	3	1	-1	1	50	-1	0	-1	24897	0
+"3,60,0,-1,0,-1"	"Piccadilly Approach"	0	33	-1	19	0	38	519	337	1	1	6	0	-1	25409	0
+"3,60,0,-1,0,-1"	"Piccadilly Circus"	0	33	-1	20	0	46	519	181	1	1	6	0	-1	25921	0
+"3,60,0,-1,0,-1"	"Piccadilly Hell"	0	50	-1	21	0	75	268	195	1	8	-1	0	-1	26433	0
+"3,60,0,-1,0,-1"	"Green Park Approach"	0	100	-1	22	0	32	523	290	1	14	5	0	-1	26945	0
+"3,60,0,-1,0,-1"	"Green Park Station 1"	0	0	-1	23	0	9	249	-1	5	48	-1	0	-1	27457	0
+"3,60,0,-1,0,-1"	"Green Park Station 2"	0	0	-1	23	0	9	74	-1	1	48	-1	0	-1	27713	0
+"3,60,0,-1,0,-1"	"Death's Sewers 1"	0	50	-1	24	0	36	523	77	5	14	8	0	-1	27969	0
+"3,60,0,-1,0,-1"	"Death's Sewers 2"	0	100	-1	24	0	36	74	77	1	14	8	0	-1	28225	0
+"3,60,0,-1,0,-1"	"Death's Tunnels 1"	0	33	-1	25	0	14	523	238	5	20	7	0	-1	28481	0
+"3,60,0,-1,0,-1"	"Death's Tunnels 2"	0	100	-1	25	0	14	74	238	1	20	7	0	-1	28737	0
+"3,60,0,-1,0,-1"	"Death's City 1"	0	0	-1	26	0	37	519	-1	5	2	9	0	-1	28993	0
+"3,60,0,-1,0,-1"	"Death's City 2"	0	0	-1	26	0	37	64	-1	1	2	9	0	-1	29249	0
+"3,60,0,-1,0,-1"	"Savile Row 1"	0	0	-1	27	0	35	523	-1	5	14	5	0	-1	29505	0
+"3,60,0,-1,0,-1"	"Savile Row 2"	0	0	-1	27	0	35	64	-1	1	14	5	0	-1	30017	0
+"3,60,0,-1,0,-1"	"Oxford Circus Station"	0	0	-1	28	0	127	1	-1	1	48	-1	0	-1	30273	0
+"3,60,0,-1,0,-1"	"Admiralty Arch 1"	0	0	-1	29	0	33	523	-1	10	14	5	0	-1	30529	0
+"3,60,0,-1,0,-1"	"Admiralty Arch 2"	0	0	-1	29	0	34	523	-1	5	14	5	0	-1	30785	0
+"3,60,0,-1,0,-1"	"Chocolate Park"	0	0	-1	30	0	44	222	-1	1	51	-1	0	-1	16706	0
+"3,60,0,-1,0,-1"	"Whitehall 1"	0	0	-1	31	0	35	523	-1	10	14	5	0	-1	16962	0
+"3,60,0,-1,0,-1"	"Whitehall 2"	0	0	-1	31	0	32	523	-1	5	14	5	0	-1	17218	0
+"3,60,0,-1,0,-1"	"Downing Street 1"	0	20	-1	32	0	38	519	60	5	2	6	0	-1	17986	0
+"3,60,0,-1,0,-1"	"Downing Street 2"	0	100	-1	32	0	38	74	60	1	2	6	0	-1	18242	0
+"3,60,0,-1,0,-1"	"Millennium Battle"	0	0	-1	33	0	64	273	-1	1	26	6	0	-1	19010	0
+"3,60,0,-1,0,-1"	"Craven Street 1"	0	10	-1	34	0	38	519	248	5	2	6	0	-1	19266	0
+"3,60,0,-1,0,-1"	"Craven Street 2"	0	33	-1	34	0	38	64	248	1	2	6	0	-1	19522	0
+"3,60,0,-1,0,-1"	"Embankment Approach 1"	0	100	-1	35	0	38	519	480	5	2	6	0	-1	20290	0
+"3,60,0,-1,0,-1"	"Embankment Approach 2"	0	100	-1	35	0	38	64	480	1	2	6	0	-1	20546	0
+"3,60,0,-1,0,-1"	"Embankment Redout"	0	0	-1	36	0	49	225	-1	1	53	6	0	-1	21314	0
+"3,60,0,-1,0,-1"	"The Mind of 314"	0	0	-1	37	0	122	323	-1	1	52	-1	0	-1	21570	0
+"3,60,0,-1,0,-1"	"Waterloo Bridge 1"	0	0	-1	38	0	21	74	-1	1	21	11	0	-1	21826	0
+"3,60,0,-1,0,-1"	"Waterloo Bridge 2"	0	0	-1	38	0	11	245	-1	4	21	11	0	-1	22082	0
+"3,60,0,-1,0,-1"	"Waterloo Bridge 3"	0	0	-1	38	0	13	245	-1	8	21	11	0	-1	22338	0
+"3,60,0,-1,0,-1"	"Savoy"	0	0	-1	39	0	25	292	-1	1	21	11	0	-1	22594	0
+"3,60,0,-1,0,-1"	"Temple Approach 1"	0	0	-1	40	0	11	292	-1	8	21	11	0	-1	22850	0
+"3,60,0,-1,0,-1"	"Temple Approach 2"	0	0	-1	40	0	21	292	-1	4	21	11	0	-1	23106	0
+"3,60,0,-1,0,-1"	"Temple Approach 3"	0	0	-1	40	0	13	74	-1	1	21	11	0	-1	24898	0
+"3,60,0,-1,0,-1"	"Temple Station"	0	0	-1	41	0	4	1	-1	1	50	-1	0	-1	25154	0
+"3,60,0,-1,0,-1"	"Templar Base"	0	0	-1	42	0	56	1	-1	1	47	-1	0	-1	25410	0
+"3,60,0,-1,0,-1"	"Aldwych"	0	0	-1	43	0	20	296	-1	1	39	-1	1	560	25666	0
+"3,60,0,-1,0,-1"	"Waterloo 1"	0	100	-1	44	0	63	527	423	5	27	13	0.5	560	25922	0
+"3,60,0,-1,0,-1"	"Waterloo 2"	0	100	-1	44	0	63	74	423	1	27	13	0.5	560	26178	0
+"3,60,0,-1,0,-1"	"Upper Ground 1"	0	10	-1	45	0	41	531	326	10	3	13	0.85	560	26690	0
+"3,60,0,-1,0,-1"	"Upper Ground 2"	0	33	-1	45	0	40	531	248	5	3	13	0.85	560	26946	0
+"3,60,0,-1,0,-1"	"Barge House"	0	0	-1	46	0	50	287	-1	1	3	13	0.5	560	27714	0
+"3,60,0,-1,0,-1"	"New Bridge 1"	0	100	-1	47	0	63	527	385	5	27	13	0.25	560	27970	0
+"3,60,0,-1,0,-1"	"New Bridge 2"	0	100	-1	47	0	63	64	385	1	27	13	0.25	560	28226	0
+"3,60,0,-1,0,-1"	"The Big Gundown"	0	0	-1	48	0	57	324	-1	1	63	13	0	-1	28738	0
+"3,60,0,-1,0,-1"	"The Strand 1"	0	0	-1	49	0	63	527	-1	5	27	13	0.25	560	28994	0
+"3,60,0,-1,0,-1"	"The Strand 2"	0	0	-1	49	0	63	64	-1	1	27	13	0.25	560	29250	0
+"3,60,0,-1,0,-1"	"Blackfriars 1"	0	10	-1	50	0	41	531	55	5	3	13	0.5	560	29506	0
+"3,60,0,-1,0,-1"	"Blackfriars 2"	0	33	-1	50	0	40	531	248	10	3	13	0.5	560	29762	0
+"3,60,0,-1,0,-1"	"Puddle Dock"	0	0	-1	51	0	51	531	-1	1	3	13	0.25	560	30530	0
+"3,60,0,-1,0,-1"	"The Exospector"	0	0	-1	52	0	121	323	-1	1	54	-1	0	-1	30786	0
+"3,60,0,-1,0,-1"	"Temple Access Ducts 1"	0	0	-1	53	0	15	296	-1	5	39	12	0.7	560	31042	0
+"3,60,0,-1,0,-1"	"Temple Access Ducts 2"	0	0	-1	53	0	23	74	-1	1	39	10	0.5	560	31298	0
+"3,60,0,-1,0,-1"	"Forgotten Ducts 1"	0	0	-1	54	0	23	296	-1	5	39	10	0.5	560	16707	0
+"3,60,0,-1,0,-1"	"Forgotten Ducts 2"	0	0	-1	54	0	15	74	-1	1	39	12	0.7	560	16963	0
+"3,60,0,-1,0,-1"	"Mansion House 1"	0	0	-1	55	0	21	292	-1	10	21	11	0.4	560	17219	0
+"3,60,0,-1,0,-1"	"Mansion House 2"	0	0	-1	55	0	11	292	-1	5	21	11	0.4	560	17475	0
+"3,60,0,-1,0,-1"	"Mansion House 3"	0	0	-1	55	0	13	74	-1	1	21	11	0.6	560	17731	0
+"3,60,0,-1,0,-1"	"Cannon Street 1"	0	0	-1	56	0	13	292	-1	5	21	11	0.6	560	17987	0
+"3,60,0,-1,0,-1"	"Cannon Street 2"	0	0	-1	56	0	11	74	-1	1	21	11	0.4	560	18243	0
+"3,60,0,-1,0,-1"	"Angel Passage"	0	0	-1	57	0	52	1	-1	1	55	-1	0	-1	18499	0
+"3,60,0,-1,0,-1"	"Monument Station"	0	0	-1	58	0	5	1	-1	1	50	-1	0	-1	18755	0
+"3,60,0,-1,0,-1"	"Monument Tunnels"	0	0	-1	59	0	15	296	-1	1	39	16	0	-1	19011	0
+"3,60,0,-1,0,-1"	"Monument Crawlway"	0	0	-1	60	0	15	296	-1	1	39	16	0	-1	19267	0
+"3,60,0,-1,0,-1"	"Eastcheap 1"	0	10	-1	61	0	99	535	103	5	33	17	0	-1	19523	0
+"3,60,0,-1,0,-1"	"Eastcheap 2"	0	33	-1	61	0	105	74	248	1	33	16	0	-1	19779	0
+"3,60,0,-1,0,-1"	"Tudor Street 1"	0	10	-1	62	0	38	539	326	5	3	18	0	-1	20035	0
+"3,60,0,-1,0,-1"	"Tudor Street 2"	0	33	-1	62	0	38	74	248	1	3	18	0	-1	20291	0
+"3,60,0,-1,0,-1"	"Temple Place"	0	0	-1	63	0	110	535	-1	1	33	15	0	-1	21059	0
+"3,60,0,-1,0,-1"	"Bell Yard 1"	0	10	-1	64	0	101	535	389	5	33	17	0.9	559	21315	0
+"3,60,0,-1,0,-1"	"Bell Yard 2"	0	33	-1	64	0	105	74	248	1	33	16	0.8	559	21571	0
+"3,60,0,-1,0,-1"	"Fleet Street 1"	0	10	-1	65	0	38	539	55	5	4	18	0.24	559	22083	0
+"3,60,0,-1,0,-1"	"Fleet Street 2"	0	33	-1	65	0	38	74	248	1	4	18	0.24	559	22595	0
+"3,60,0,-1,0,-1"	"Ludgate Hill 1"	0	10	-1	66	0	38	539	103	5	4	18	0.24	559	22851	0
+"3,60,0,-1,0,-1"	"Ludgate Hill 2"	0	33	-1	66	0	38	74	248	1	4	18	0.24	559	28748	0
+"3,60,0,-1,0,-1"	"Kingsway 1"	0	10	-1	67	0	38	539	389	5	4	18	0.24	559	25155	0
+"3,60,0,-1,0,-1"	"Kingsway 2"	0	33	-1	67	0	38	74	248	1	4	18	0.24	559	25411	0
+"3,60,0,-1,0,-1"	"Stonecutter 1"	0	10	-1	68	0	103	535	326	5	34	17	0.8	559	26179	0
+"3,60,0,-1,0,-1"	"Stonecutter 2"	0	33	-1	68	0	105	74	248	1	34	16	0.8	559	26435	0
+"3,60,0,-1,0,-1"	"Bishop's Court"	0	0	-1	69	0	53	539	-1	1	4	18	0.24	559	26947	0
+"3,60,0,-1,0,-1"	"Old Bailey"	0	0	-1	70	0	111	535	-1	1	34	15	0	-1	27203	0
+"3,60,0,-1,0,-1"	"Upper Thames"	0	0	-1	71	0	63	543	-1	1	28	18	0	-1	27459	0
+"3,60,0,-1,0,-1"	"Waterman's Walk 1"	0	0	-1	72	0	63	543	-1	5	28	18	0	-1	27715	0
+"3,60,0,-1,0,-1"	"Waterman's Walk 2"	0	0	-1	72	0	63	84	-1	1	28	18	0	-1	27971	0
+"3,60,0,-1,0,-1"	"Lower Thames 1"	0	0	-1	73	0	63	543	-1	5	28	18	0	-1	28739	0
+"3,60,0,-1,0,-1"	"Lower Thames 2"	0	0	-1	73	0	63	84	-1	1	28	18	0	-1	28995	0
+"3,60,0,-1,0,-1"	"Tower Gateway 1"	0	10	-1	74	0	38	539	55	5	4	18	0	-1	29251	0
+"3,60,0,-1,0,-1"	"Tower Gateway 2"	0	33	-1	74	0	38	94	248	1	4	18	0	-1	29507	0
+"3,60,0,-1,0,-1"	"Tower of London"	0	0	-1	75	0	126	1	-1	1	56	-1	0	-1	30275	0
+"3,60,0,-1,0,-1"	"Fenchurch 1"	0	10	-1	76	0	99	535	103	5	34	17	0	-1	30531	0
+"3,60,0,-1,0,-1"	"Fenchurch 2"	0	33	-1	76	0	105	94	248	1	40	16	0	-1	30787	0
+"3,60,0,-1,0,-1"	"Trinity Square 1"	0	10	-1	77	0	38	539	389	5	28	18	0	-1	31299	0
+"3,60,0,-1,0,-1"	"Trinity Square 2"	0	33	-1	77	0	38	94	248	1	28	18	0	-1	16708	0
+"3,60,0,-1,0,-1"	"Aldgate"	0	0	-1	78	0	54	539	-1	1	4	18	0	-1	17220	0
+"3,60,0,-1,0,-1"	"King William Street 1"	0	10	-1	79	0	101	535	326	5	34	17	0	-1	17476	0
+"3,60,0,-1,0,-1"	"King William Street 2"	0	33	-1	79	0	105	94	248	1	34	16	0	-1	17732	0
+"3,60,0,-1,0,-1"	"Threadneedle 1"	0	10	-1	80	0	38	539	55	5	4	18	0	-1	17988	0
+"3,60,0,-1,0,-1"	"Threadneedle 2"	0	33	-1	80	0	38	94	248	1	4	18	0	-1	18244	0
+"3,60,0,-1,0,-1"	"Cannon Street Rail"	0	0	-1	81	0	26	336	-1	1	22	-1	0	-1	18756	0
+"3,60,0,-1,0,-1"	"Exodus"	0	0	-1	82	0	27	336	-1	1	22	-1	0	-1	19012	0
+"3,60,0,-1,0,-1"	"Crown Office Row"	0	0	-1	83	0	55	311	-1	1	4	23	0	-1	19268	0
+"3,60,0,-1,0,-1"	"Mark Lane Approach 1"	0	0	-1	84	0	21	336	-1	7	22	21	0	-1	19524	0
+"3,60,0,-1,0,-1"	"Mark Lane Approach 2"	0	0	-1	84	0	25	336	-1	4	22	21	0	-1	19780	0
+"3,60,0,-1,0,-1"	"Mark Lane Approach 3"	0	0	-1	84	0	21	94	-1	1	22	21	0	-1	20036	0
+"3,60,0,-1,0,-1"	"Mark Lane Station"	0	0	-1	85	0	22	336	-1	1	22	21	0	-1	20292	0
+"3,60,0,-1,0,-1"	"Liverpool Approach 1"	0	0	-1	86	0	11	336	-1	7	22	21	0	-1	20548	0
+"3,60,0,-1,0,-1"	"Liverpool Approach 2"	0	0	-1	86	0	13	336	-1	4	22	21	0	-1	20804	0
+"3,60,0,-1,0,-1"	"Liverpool Approach 3"	0	0	-1	86	0	11	94	-1	1	22	21	0	-1	21060	0
+"3,60,0,-1,0,-1"	"Liverpool Street Station"	0	0	-1	87	0	6	1	-1	1	50	-1	0	-1	21316	0
+"3,60,0,-1,0,-1"	"Liverpool Tunnels 1"	0	0	-1	88	0	23	555	-1	5	41	20	0	-1	21572	0
+"3,60,0,-1,0,-1"	"Liverpool Tunnels 2"	0	0	-1	88	0	24	94	-1	1	41	20	0	-1	22340	0
+"3,60,0,-1,0,-1"	"Abandoned Tunnels 1"	0	0	-1	89	0	24	555	-1	5	41	20	0	-1	22596	0
+"3,60,0,-1,0,-1"	"Abandoned Tunnels 2"	0	0	-1	89	0	23	94	-1	1	41	20	0	-1	22852	0
+"3,60,0,-1,0,-1"	"Devonshire Square 1"	0	10	-1	90	0	45	551	103	5	5	23	0	-1	24900	0
+"3,60,0,-1,0,-1"	"Devonshire Square 2"	0	33	-1	90	0	41	94	248	1	5	23	0	-1	25156	0
+"3,60,0,-1,0,-1"	"Houndsditch 1"	0	10	-1	91	0	41	551	389	5	5	23	0	-1	25668	0
+"3,60,0,-1,0,-1"	"Houndsditch 2"	0	33	-1	91	0	45	94	248	1	5	23	0	-1	25924	0
+"3,60,0,-1,0,-1"	"Primrose 1"	0	10	-1	92	0	45	551	326	5	5	23	0	-1	26436	0
+"3,60,0,-1,0,-1"	"Primrose 2"	0	33	-1	92	0	41	94	248	1	5	23	0	-1	26692	0
+"3,60,0,-1,0,-1"	"Shoreditch 1"	0	10	-1	93	0	41	551	55	5	5	23	0	-1	27204	0
+"3,60,0,-1,0,-1"	"Shoreditch 2"	0	33	-1	93	0	45	94	248	1	5	23	0	-1	27460	0
+"3,60,0,-1,0,-1"	"Necropolis Level 1"	0	0	-1	94	0	116	547	-1	5	11	-1	0	-1	27972	0
+"3,60,0,-1,0,-1"	"Necropolis Level 1a"	0	0	-1	94	0	116	94	-1	1	11	-1	0	-1	25932	0
+"3,60,0,-1,0,-1"	"Necropolis Level 2"	0	0	-1	95	0	117	394	-1	4	11	-1	0	-1	28228	0
+"3,60,0,-1,0,-1"	"Necropolis Level 2a"	0	0	-1	95	0	117	94	-1	1	11	-1	0	-1	26188	0
+"3,60,0,-1,0,-1"	"Necropolis Level 3"	0	0	-1	96	0	118	547	-1	3	11	-1	0	-1	28484	0
+"3,60,0,-1,0,-1"	"Necropolis Level 3a"	0	0	-1	96	0	118	94	-1	1	11	-1	0	-1	26444	0
+"3,60,0,-1,0,-1"	"Necropolis Level 4"	0	0	-1	97	0	119	394	-1	2	11	-1	0	-1	28740	0
+"3,60,0,-1,0,-1"	"Necropolis Level 4a"	0	0	-1	97	0	119	94	-1	1	11	-1	0	-1	26700	0
+"3,60,0,-1,0,-1"	"Necropolis Level 5"	0	0	-1	98	0	120	547	-1	1	11	-1	0	-1	28996	0
+"3,60,0,-1,0,-1"	"Necropolis Level 5a"	0	0	-1	98	0	120	94	-1	1	11	-1	0	-1	26956	0
+"3,60,0,-1,0,-1"	"Bishopsgate 1"	0	10	-1	99	0	41	551	103	5	5	23	0	-1	29252	0
+"3,60,0,-1,0,-1"	"Bishopsgate 2"	0	33	-1	99	0	45	94	248	1	5	23	0	-1	29508	0
+"3,60,0,-1,0,-1"	"Wormwood 1"	0	0	-1	100	0	112	547	-1	5	17	19	0	-1	29764	0
+"3,60,0,-1,0,-1"	"Wormwood 2"	0	0	-1	100	0	114	94	-1	1	17	19	0	-1	30020	0
+"3,60,0,-1,0,-1"	"Undershaft 1"	0	0	-1	101	0	23	555	-1	5	41	20	0	-1	30276	0
+"3,60,0,-1,0,-1"	"Undershaft 2"	0	0	-1	101	0	23	84	-1	1	41	20	0	-1	30532	0
+"3,60,0,-1,0,-1"	"Finsbury Square"	0	0	-1	102	0	130	1	-1	1	49	-1	0	-1	30788	0
+"3,60,0,-1,0,-1"	"Finsbury Circus 1"	0	0	-1	103	0	23	555	-1	5	41	24	0	-1	31044	0
+"3,60,0,-1,0,-1"	"Finsbury Circus 2"	0	0	-1	103	0	24	84	-1	1	41	24	0	-1	31300	0
+"3,60,0,-1,0,-1"	"London Wall"	0	0	-1	104	0	131	1	-1	1	58	-1	0	-1	16709	0
+"3,60,0,-1,0,-1"	"Moorgate 1"	0	0	-1	105	0	24	555	-1	5	41	24	0	-1	16965	0
+"3,60,0,-1,0,-1"	"Moorgate 2"	0	0	-1	105	0	23	84	-1	1	41	24	0	-1	17221	0
+"3,60,0,-1,0,-1"	"Ropemaker Street"	0	0	-1	106	0	132	1	-1	1	59	-1	0	-1	17477	0
+"3,60,0,-1,0,-1"	"Lamb's Passage 1"	0	0	-1	107	0	23	555	-1	1	41	24	0	-1	17733	0
+"3,60,0,-1,0,-1"	"Lamb's Passage 2"	0	0	-1	107	0	24	84	-1	1	41	24	0	-1	17989	0
+"3,60,0,-1,0,-1"	"Whitecross"	0	0	-1	108	0	134	1	-1	1	60	-1	0	-1	18757	0
+"3,60,0,-1,0,-1"	"Mark Square 1"	0	0	-1	109	0	24	555	-1	5	41	24	0	-1	19013	0
+"3,60,0,-1,0,-1"	"Mark Square 2"	0	0	-1	109	0	23	84	-1	1	41	24	0	-1	19269	0
+"3,60,0,-1,0,-1"	"Old Street"	0	0	-1	110	0	133	1	-1	1	62	-1	0	-1	19525	0
+"3,60,0,-1,0,-1"	"Finsbury Market 1"	0	0	-1	111	0	23	555	-1	5	41	24	0	-1	19781	0
+"3,60,0,-1,0,-1"	"Finsbury Market 2"	0	0	-1	111	0	24	84	-1	1	41	24	0	-1	20037	0
+"3,60,0,-1,0,-1"	"Ploughyard"	0	0	-1	112	0	135	402	-1	1	61	-1	0	-1	20293	0
+"3,60,0,-1,0,-1"	"Guildhall 1"	0	0	-1	113	0	13	375	-1	7	23	21	0	-1	20549	0
+"3,60,0,-1,0,-1"	"Guildhall 2"	0	0	-1	113	0	11	375	-1	4	23	21	0	-1	20805	0
+"3,60,0,-1,0,-1"	"Guildhall 3"	0	0	-1	113	0	25	94	-1	1	23	21	0	-1	21061	0
+"3,60,0,-1,0,-1"	"St. Paul's Approach 1"	0	0	-1	114	0	21	375	-1	7	23	21	0	-1	21317	0
+"3,60,0,-1,0,-1"	"St. Paul's Approach 2"	0	0	-1	114	0	11	375	-1	4	23	21	0	-1	21573	0
+"3,60,0,-1,0,-1"	"St. Paul's Approach 3"	0	0	-1	114	0	13	94	-1	1	23	21	0	-1	21829	0
+"3,60,0,-1,0,-1"	"St. Paul's Station"	0	0	-1	115	0	7	1	-1	1	49	-1	0	-1	22085	0
+"3,60,0,-1,0,-1"	"Church Yard 1"	0	0	-1	116	0	114	547	-1	5	17	19	0	-1	22341	0
+"3,60,0,-1,0,-1"	"Church Yard 2"	0	0	-1	116	0	113	94	-1	1	17	22	0	-1	22597	0
+"3,60,0,-1,0,-1"	"Paternoster Row 1"	0	0	-1	117	0	71	398	-1	5	11	-1	0	-1	22853	0
+"3,60,0,-1,0,-1"	"Paternoster Row 2"	0	0	-1	117	0	71	84	-1	1	11	-1	0	-1	23109	0
+"3,60,0,-1,0,-1"	"Cheapside 1"	0	0	-1	118	0	113	547	-1	5	17	22	0	-1	24901	0
+"3,60,0,-1,0,-1"	"Cheapside 2"	0	0	-1	118	0	114	94	-1	1	17	19	0	-1	25157	0
+"3,60,0,-1,0,-1"	"Little Britain 1"	0	0	-1	119	0	71	398	-1	5	11	-1	0	-1	25413	0
+"3,60,0,-1,0,-1"	"Little Britain 2"	0	0	-1	119	0	71	84	-1	1	11	-1	0	-1	25669	0
+"3,60,0,-1,0,-1"	"St. Paul's Hellgate"	0	0	-1	120	0	128	405	-1	1	43	26	0	-1	25925	0
+"3,60,0,-1,0,-1"	"Hell"	0	0	-1	121	0	73	408	-1	1	57	-1	0	-1	26181	0
+"3,48,100,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,100,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,100,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,100,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,100,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,100,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,60,0,-1,0,-1"	"Duel Arena City"	0	0	-1	149	0	148	1	-1	1	45	2	0	-1	20301	0
+"3,48,20,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,1,0,-1,0,-1"	"Town Portal"	0	0	-1	150	0	86	1	-1	1	-1	-1	0	-1	26437	0
+"3,63,0,-1,0,-1"	"TheDark"	0	0	-1	151	0	19	224	-1	1	-1	-1	0	-1	26693	0
+"3,1,0,-1,0,-1"	"FPS Action Test"	0	0	-1	152	0	60	167	-1	1	-1	-1	0	-1	26949	0
+"3,1,0,-1,0,-1"	"RTS Test"	0	0	-1	153	0	49	208	-1	1	-1	-1	0	-1	27205	0
+"3,1,0,-1,0,-1"	"Sewers"	0	0	-1	154	0	32	179	-1	1	-1	-1	0	-1	27461	0
+"3,1,0,-1,0,-1"	"SoundField"	0	0	-1	155	0	95	1	-1	1	-1	-1	0	-1	27717	0
+"3,1,0,-1,0,-1"	"Soundfield_Part_Deux"	0	0	-1	156	0	96	1	-1	1	-1	-1	0	-1	27973	0
+"3,1,0,-1,0,-1"	"MonsterField"	0	0	-1	157	0	97	1	-1	1	-1	-1	0	-1	28229	0
+"3,1,0,-1,0,-1"	"TubeStation"	0	0	-1	158	0	123	1	-1	1	-1	-1	0	-1	28485	0
+"3,1,0,-1,0,-1"	"CoventGarden"	0	0	-1	159	0	124	1	-1	1	-1	-1	0	-1	28741	0
+"3,1,0,-1,0,-1"	"LeicesterSquare"	0	0	-1	160	0	125	1	-1	1	-1	-1	0	-1	28997	0
+"3,1,0,-1,0,-1"	"ParkingLot"	0	0	-1	161	0	98	1	-1	1	-1	-1	0	-1	29253	0
+"3,1,0,-1,0,-1"	"TubeB"	0	0	-1	162	0	87	1	-1	1	-1	-1	0	-1	29509	0
+"3,1,0,-1,0,-1"	"TubeB_Crypts"	0	0	-1	163	0	99	1	-1	1	-1	-1	0	-1	29765	0
+"3,1,0,-1,0,-1"	"PerformanceTestLevel"	0	0	-1	164	0	88	1	-1	1	-1	-1	0	-1	30021	0
+"3,1,0,-1,0,-1"	"PerformanceTestLevelA"	0	0	-1	165	0	89	1	-1	1	-1	-1	0	-1	30277	0
+"3,1,0,-1,0,-1"	"PerformanceTestLevelB"	0	0	-1	166	0	90	1	-1	1	-1	-1	0	-1	30533	0
+"3,1,0,-1,0,-1"	"PerformanceTestLevelC"	0	0	-1	167	0	91	1	-1	1	-1	-1	0	-1	30789	0
+"3,1,0,-1,0,-1"	"MonsterTestLevel"	0	0	-1	168	0	92	1	-1	1	-1	-1	0	-1	31045	0
+"3,1,0,-1,0,-1"	"LevelExperiment"	0	0	-1	169	0	93	54	-1	1	-1	-1	0	-1	31301	0
+"3,1,0,-1,0,-1"	"UndergroundPassage"	0	0	-1	170	0	10	54	-1	1	-1	-1	0	-1	16710	0
+"3,1,0,-1,0,-1"	"MiniTubesDepot"	0	0	-1	171	0	11	54	-1	1	-1	-1	0	-1	16966	0
+"3,1,0,-1,0,-1"	"MiniTubesShort"	0	0	-1	172	0	12	54	-1	1	-1	-1	0	-1	25164	0
+"3,1,0,-1,0,-1"	"MiniTubesAndRooms"	0	0	-1	173	0	13	54	-1	1	-1	-1	0	-1	17222	0
+"3,1,0,-1,0,-1"	"MiniTubes"	0	0	-1	174	0	21	54	-1	1	-1	-1	0	-1	17478	0
+"3,1,0,-1,0,-1"	"MiniTubesStationA"	0	0	-1	175	0	22	54	-1	1	-1	-1	0	-1	17734	0
+"3,1,0,-1,0,-1"	"IndustrialRooms"	0	0	-1	176	0	23	54	-1	1	-1	-1	0	-1	17990	0
+"3,1,0,-1,0,-1"	"IndustrialHalls"	0	0	-1	177	0	24	54	-1	1	-1	-1	0	-1	18246	0
+"3,1,0,-1,0,-1"	"IndustrialTubes"	0	0	-1	178	0	25	54	-1	1	-1	-1	0	-1	18502	0
+"3,1,0,-1,0,-1"	"MiniRooms"	0	0	-1	179	0	15	54	-1	1	-1	-1	0	-1	18758	0
+"3,60,0,-1,0,-1"	"MiniRoomsAdventure"	0	0	-1	180	0	16	54	-1	1	-1	-1	0	-1	19014	0
+"3,60,0,-1,0,-1"	"MiniRoomsAdventureChampion"	0	0	-1	181	0	17	54	-1	1	-1	-1	0	-1	19270	0
+"3,60,0,-1,0,-1"	"MiniRoomsAdventureTreasure"	0	0	-1	182	0	18	1	-1	1	-1	-1	0	-1	19526	0
+"3,1,0,-1,0,-1"	"MiniRoomsDark"	0	0	-1	183	0	19	224	-1	1	-1	-1	0	-1	19782	0
+"3,1,0,-1,0,-1"	"MiniTubesHole"	0	0	-1	184	0	28	54	-1	1	-1	-1	0	-1	20038	0
+"3,60,0,-1,0,-1"	"MiniSewersAdventure"	0	0	-1	185	0	29	54	-1	1	-1	-1	0	-1	20294	0
+"3,60,0,-1,0,-1"	"MiniSewersAdventureChampion"	0	0	-1	186	0	30	54	-1	1	-1	-1	0	-1	20550	0
+"3,60,0,-1,0,-1"	"MiniSewersAdventureTreasure"	0	0	-1	187	0	31	1	-1	1	-1	-1	0	-1	20806	0
+"3,60,0,-1,0,-1"	"HellTower"	0	0	-1	188	0	67	189	-1	1	-1	-1	0	-1	21062	0
+"3,60,0,-1,0,-1"	"HellTowerFawkes"	0	0	-1	189	0	66	189	-1	1	-1	-1	0	-1	21318	0
+"3,60,0,-1,0,-1"	"HellTowerHellPortal"	0	0	-1	190	0	68	1	-1	1	-1	-1	0	-1	21574	0
+"3,60,0,-1,0,-1"	"HellTowerHellPortalPrevious"	0	0	-1	191	0	69	1	-1	1	-1	-1	0	-1	21830	0
+"3,60,0,-1,0,-1"	"HellTowerAdventure"	0	0	-1	192	0	70	1	-1	1	-1	-1	0	-1	22086	0
+"3,60,0,-1,0,-1"	"HellDungeon"	0	0	-1	193	0	71	189	-1	1	-1	-1	0	-1	22342	0
+"3,60,0,-1,0,-1"	"HellDungeonAdventure"	0	100	-1	194	0	72	44	358	1	-1	-1	0	-1	22598	0
+"3,60,0,-1,0,-1"	"MiniCavesAdventure"	0	0	-1	195	0	107	54	-1	1	-1	-1	0	-1	22854	0
+"3,60,0,-1,0,-1"	"MiniCavesAdventureChampion"	0	0	-1	196	0	108	54	-1	1	-1	-1	0	-1	23110	0
+"3,60,0,-1,0,-1"	"MiniCavesAdventureTreasure"	0	0	-1	197	0	109	1	-1	1	-1	-1	0	-1	24902	0
+"3,1,0,-1,0,-1"	"MiniCity"	0	0	-1	198	0	38	1	-1	1	-1	-1	0	-1	25158	0
+"3,1,0,-1,0,-1"	"MiniCityRare"	0	0	-1	199	0	39	1	-1	1	-1	-1	0	-1	25414	0
+"3,1,0,-1,0,-1"	"AlleyCity"	0	0	-1	200	0	40	1	-1	1	-1	-1	0	-1	25670	0
+"3,1,0,-1,0,-1"	"BoulevardCity"	0	0	-1	201	0	43	1	-1	1	-1	-1	0	-1	25926	0
+"3,1,0,-1,0,-1"	"ParkCity"	0	0	-1	202	0	42	1	-1	1	-1	-1	0	-1	26182	0
+"3,1,0,-1,0,-1"	"River"	0	0	-1	203	0	63	1	-1	1	-1	-1	0	-1	26438	0
+"3,63,0,-1,0,-1"	"CharacterCreation"	0	0	-1	204	0	58	1	-1	1	-1	-1	0	-1	26694	0
+"3,48,100,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,20,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,1,0,-1,0,-1"	"HavokDemo"	0	0	-1	207	0	61	1	-1	1	-1	-1	0	-1	27206	0
+"3,1,0,-1,0,-1"	"NVIDIADemo"	0	0	-1	208	0	62	167	-1	1	-1	-1	0	-1	27462	0
+"3,1,0,-1,0,-1"	"LowPolyTest"	0	0	-1	209	0	94	54	-1	1	-1	-1	0	-1	27718	0
+"3,1,0,-1,0,-1"	"HellNarration"	0	0	-1	210	0	136	1	-1	1	-1	-1	0	-1	27974	0
+"3,48,20,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,30,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,60,0,-1,0,-1"	"Russell Square Nightmare"	0	0	0	0	1	8	7	-1	1	42	2	0	-1	28230	0
+"3,60,0,-1,0,-1"	"Holborn Station Nightmare"	0	0	1	1	1	0	1	-1	1	48	-1	0	-1	28486	0
+"3,60,0,-1,0,-1"	"Tottenham Court Nightmare"	0	25	2	2	1	2	451	201	1	45	2	0	-1	28742	0
+"3,60,0,-1,0,-1"	"Holborn Access Shafts Nightmare"	0	33	3	3	1	15	452	467	1	36	0	0	-1	28998	0
+"3,60,0,-1,0,-1"	"Covent Garden Approach 1 Nightmare"	0	0	6	6	1	21	475	-1	10	18	1	0	-1	29254	0
+"3,60,0,-1,0,-1"	"Covent Garden Approach 2 Nightmare"	0	0	7	6	1	11	475	-1	10	18	1	0	-1	29510	0
+"3,60,0,-1,0,-1"	"Covent Garden Station Nightmare"	0	0	8	7	1	1	1	-1	1	50	-1	0	-1	29766	0
+"3,60,0,-1,0,-1"	"Upper Kingsway Sewers 1 Nightmare"	0	50	9	8	1	35	456	116	10	12	0	0	-1	30022	0
+"3,60,0,-1,0,-1"	"Upper Kingsway Sewers 2 Nightmare"	0	50	10	8	1	34	456	116	5	12	0	0	-1	30278	0
+"3,60,0,-1,0,-1"	"Lower Kingsway Sewers 1 Nightmare"	0	100	11	9	1	35	460	174	5	12	0	0	-1	30534	0
+"3,60,0,-1,0,-1"	"Lower Kingsway Sewers 2 Nightmare"	0	100	12	9	1	34	460	174	10	12	0	0	-1	30790	0
+"3,60,0,-1,0,-1"	"Covent Garden Steam Tunnels Nightmare"	0	0	13	10	1	15	464	-1	1	36	0	0	-1	31046	0
+"3,60,0,-1,0,-1"	"Covent Garden Train Depot Nightmare"	0	0	14	11	1	15	467	-1	1	36	0	0	-1	16711	0
+"3,60,0,-1,0,-1"	"Covent Garden Market Nightmare"	0	0	15	12	1	47	418	-1	1	43	-1	0	-1	17223	0
+"3,60,0,-1,0,-1"	"Bloomsbury Nightmare"	0	50	16	13	1	15	471	276	1	36	0	0	-1	17479	0
+"3,60,0,-1,0,-1"	"British Museum Nightmare"	0	0	17	14	1	48	506	-1	1	46	-1	0	-1	18247	0
+"3,60,0,-1,0,-1"	"Leicester Square 1 Nightmare"	0	0	18	15	1	12	422	-1	7	19	4	0	-1	18503	0
+"3,60,0,-1,0,-1"	"Leicester Square 2 Nightmare"	0	0	19	15	1	21	112	-1	3	19	4	0	-1	18759	0
+"3,60,0,-1,0,-1"	"St. Martin's Nightmare"	0	25	20	16	1	13	479	576	1	19	4	0	-1	19015	0
+"3,60,0,-1,0,-1"	"Charing Cross Approach 1 Nightmare"	0	50	21	17	1	11	422	4	7	19	4	0	-1	19527	0
+"3,60,0,-1,0,-1"	"Charing Cross Approach 2 Nightmare"	0	50	22	17	1	12	112	4	3	19	4	0	-1	19783	0
+"3,60,0,-1,0,-1"	"Charing Cross Station Nightmare"	0	0	23	18	1	3	1	-1	1	50	-1	0	-1	20039	0
+"3,60,0,-1,0,-1"	"Piccadilly Approach Nightmare"	0	33	24	19	1	38	418	337	1	1	6	0	-1	20551	0
+"3,60,0,-1,0,-1"	"Piccadilly Circus Nightmare"	0	33	25	20	1	46	418	181	1	1	6	0	-1	21063	0
+"3,60,0,-1,0,-1"	"Piccadilly Hell Nightmare"	0	50	26	21	1	75	268	195	1	8	-1	0	-1	21575	0
+"3,60,0,-1,0,-1"	"Green Park Approach Nightmare"	0	100	27	22	1	32	483	290	1	14	5	0	-1	22087	0
+"3,60,0,-1,0,-1"	"Green Park Station 1 Nightmare"	0	0	28	23	1	9	249	-1	5	48	-1	0	-1	22599	0
+"3,60,0,-1,0,-1"	"Green Park Station 2 Nightmare"	0	0	29	23	1	9	112	-1	1	48	-1	0	-1	22855	0
+"3,60,0,-1,0,-1"	"Death's Sewers 1 Nightmare"	0	50	30	24	1	36	523	77	5	14	8	0	-1	23111	0
+"3,60,0,-1,0,-1"	"Death's Sewers 2 Nightmare"	0	100	31	24	1	36	112	77	1	14	8	0	-1	24903	0
+"3,60,0,-1,0,-1"	"Death's Tunnels 1 Nightmare"	0	33	32	25	1	14	523	238	5	20	7	0	-1	25159	0
+"3,60,0,-1,0,-1"	"Death's Tunnels 2 Nightmare"	0	100	33	25	1	14	112	238	1	20	7	0	-1	25415	0
+"3,60,0,-1,0,-1"	"Death's City 1 Nightmare"	0	0	34	26	1	37	519	-1	5	2	9	0	-1	25671	0
+"3,60,0,-1,0,-1"	"Death's City 2 Nightmare"	0	0	35	26	1	37	104	-1	1	2	9	0	-1	25927	0
+"3,60,0,-1,0,-1"	"Savile Row 1 Nightmare"	0	0	36	27	1	35	523	-1	5	14	5	0	-1	26183	0
+"3,60,0,-1,0,-1"	"Savile Row 2 Nightmare"	0	0	37	27	1	35	104	-1	1	14	5	0	-1	26439	0
+"3,60,0,-1,0,-1"	"Oxford Circus Station Nightmare"	0	0	38	28	1	127	1	-1	1	48	-1	0	-1	26951	0
+"3,60,0,-1,0,-1"	"Admiralty Arch 1 Nightmare"	0	0	39	29	1	33	523	-1	10	14	5	0	-1	27207	0
+"3,60,0,-1,0,-1"	"Admiralty Arch 2 Nightmare"	0	0	40	29	1	34	523	-1	5	14	5	0	-1	27463	0
+"3,60,0,-1,0,-1"	"Chocolate Park Nightmare"	0	0	41	30	1	44	222	-1	1	51	-1	0	-1	28231	0
+"3,60,0,-1,0,-1"	"Whitehall 1 Nightmare"	0	0	42	31	1	35	486	-1	10	14	5	0	-1	28487	0
+"3,60,0,-1,0,-1"	"Whitehall 2 Nightmare"	0	0	43	31	1	32	486	-1	5	14	5	0	-1	28743	0
+"3,60,0,-1,0,-1"	"Downing Street 1 Nightmare"	0	20	44	32	1	38	519	60	5	2	6	0	-1	29511	0
+"3,60,0,-1,0,-1"	"Downing Street 2 Nightmare"	0	100	45	32	1	38	112	60	1	2	6	0	-1	29767	0
+"3,60,0,-1,0,-1"	"Millennium Battle Nightmare"	0	0	46	33	1	64	273	-1	1	26	6	0	-1	30535	0
+"3,60,0,-1,0,-1"	"Craven Street 1 Nightmare"	0	10	47	34	1	38	519	248	5	2	6	0	-1	30791	0
+"3,60,0,-1,0,-1"	"Craven Street 2 Nightmare"	0	33	48	34	1	38	64	248	1	2	6	0	-1	31047	0
+"3,60,0,-1,0,-1"	"Embankment Approach 1 Nightmare"	0	100	49	35	1	38	519	480	5	2	6	0	-1	16968	0
+"3,60,0,-1,0,-1"	"Embankment Approach 2 Nightmare"	0	100	50	35	1	38	104	480	1	2	6	0	-1	17224	0
+"3,60,0,-1,0,-1"	"Embankment Redout Nightmare"	0	0	51	36	1	49	225	-1	1	53	6	0	-1	17992	0
+"3,60,0,-1,0,-1"	"The Mind of 314 Nightmare"	0	0	52	37	1	122	323	-1	1	52	-1	0	-1	18248	0
+"3,60,0,-1,0,-1"	"Waterloo Bridge 1 Nightmare"	0	0	53	38	1	21	112	-1	1	21	11	0	-1	18504	0
+"3,60,0,-1,0,-1"	"Waterloo Bridge 2 Nightmare"	0	0	54	38	1	11	422	-1	4	21	11	0	-1	18760	0
+"3,60,0,-1,0,-1"	"Waterloo Bridge 3 Nightmare"	0	0	55	38	1	13	422	-1	8	21	11	0	-1	19016	0
+"3,60,0,-1,0,-1"	"Savoy Nightmare"	0	0	56	39	1	25	422	-1	1	21	11	0	-1	19272	0
+"3,60,0,-1,0,-1"	"Temple Approach 1 Nightmare"	0	0	57	40	1	11	422	-1	8	21	11	0	-1	19528	0
+"3,60,0,-1,0,-1"	"Temple Approach 2 Nightmare"	0	0	58	40	1	21	422	-1	4	21	11	0	-1	19784	0
+"3,60,0,-1,0,-1"	"Temple Approach 3 Nightmare"	0	0	59	40	1	13	104	-1	1	21	11	0	-1	20040	0
+"3,60,0,-1,0,-1"	"Temple Station Nightmare"	0	0	60	41	1	4	1	-1	1	50	-1	0	-1	20296	0
+"3,60,0,-1,0,-1"	"Templar Base Nightmare"	0	0	61	42	1	56	1	-1	1	47	-1	0	-1	20552	0
+"3,60,0,-1,0,-1"	"Aldwych Nightmare"	0	0	62	43	1	20	426	-1	1	39	-1	1	560	20808	0
+"3,60,0,-1,0,-1"	"Waterloo 1 Nightmare"	0	100	63	44	1	63	426	423	5	27	13	0.5	560	21064	0
+"3,60,0,-1,0,-1"	"Waterloo 2 Nightmare"	0	100	64	44	1	63	112	423	1	27	13	0.5	560	21320	0
+"3,60,0,-1,0,-1"	"Upper Ground 1 Nightmare"	0	10	65	45	1	41	418	326	10	3	13	0.85	560	21832	0
+"3,60,0,-1,0,-1"	"Upper Ground 2 Nightmare"	0	33	66	45	1	40	104	248	5	3	13	0.85	560	22088	0
+"3,60,0,-1,0,-1"	"Barge House Nightmare"	0	0	67	46	1	50	287	-1	1	3	13	0.5	560	22856	0
+"3,60,0,-1,0,-1"	"New Bridge 1 Nightmare"	0	100	68	47	1	63	414	385	5	27	13	0.25	560	23112	0
+"3,60,0,-1,0,-1"	"New Bridge 2 Nightmare"	0	100	69	47	1	63	104	385	1	27	13	0.25	560	24904	0
+"3,60,0,-1,0,-1"	"The Big Gundown Nightmare"	0	0	70	48	1	57	324	-1	1	63	13	0	-1	25416	0
+"3,60,0,-1,0,-1"	"The Strand 1 Nightmare"	0	0	71	49	1	63	414	-1	5	27	13	0.25	560	25672	0
+"3,60,0,-1,0,-1"	"The Strand 2 Nightmare"	0	0	72	49	1	63	104	-1	1	27	13	0.25	560	25928	0
+"3,60,0,-1,0,-1"	"Blackfriars 1 Nightmare"	0	10	73	50	1	41	430	55	5	3	13	0.5	560	26184	0
+"3,60,0,-1,0,-1"	"Blackfriars 2 Nightmare"	0	33	74	50	1	40	112	248	10	3	13	0.5	560	26440	0
+"3,60,0,-1,0,-1"	"Puddle Dock Nightmare"	0	0	75	51	1	51	430	-1	1	3	13	0.25	560	27208	0
+"3,60,0,-1,0,-1"	"The Exospector Nightmare"	0	0	76	52	1	121	323	-1	1	54	-1	0	-1	27464	0
+"3,60,0,-1,0,-1"	"Temple Access Ducts 1 Nightmare"	0	0	77	53	1	15	426	-1	5	39	12	0.7	560	27720	0
+"3,60,0,-1,0,-1"	"Temple Access Ducts 2 Nightmare"	0	0	78	53	1	23	112	-1	1	39	10	0.5	560	27976	0
+"3,60,0,-1,0,-1"	"Forgotten Ducts 1 Nightmare"	0	0	79	54	1	23	426	-1	5	39	10	0.5	560	28232	0
+"3,60,0,-1,0,-1"	"Forgotten Ducts 2 Nightmare"	0	0	80	54	1	15	112	-1	1	39	12	0.7	560	28488	0
+"3,60,0,-1,0,-1"	"Mansion House 1 Nightmare"	0	0	81	55	1	21	422	-1	10	21	11	0.4	560	28744	0
+"3,60,0,-1,0,-1"	"Mansion House 2 Nightmare"	0	0	82	55	1	11	422	-1	5	21	11	0.4	560	29000	0
+"3,60,0,-1,0,-1"	"Mansion House 3 Nightmare"	0	0	83	55	1	13	112	-1	1	21	11	0.6	560	29256	0
+"3,60,0,-1,0,-1"	"Cannon Street 1 Nightmare"	0	0	84	56	1	13	422	-1	5	21	11	0.6	560	29512	0
+"3,60,0,-1,0,-1"	"Cannon Street 2 Nightmare"	0	0	85	56	1	11	112	-1	1	21	11	0.4	560	29768	0
+"3,60,0,-1,0,-1"	"Angel Passage Nightmare"	0	0	86	57	1	52	1	-1	1	55	-1	0	-1	30024	0
+"3,60,0,-1,0,-1"	"Monument Station Nightmare"	0	0	87	58	1	5	1	-1	1	50	-1	0	-1	30280	0
+"3,60,0,-1,0,-1"	"Monument Tunnels Nightmare"	0	0	88	59	1	15	426	-1	1	39	16	0	-1	30536	0
+"3,60,0,-1,0,-1"	"Monument Crawlway Nightmare"	0	0	89	60	1	15	426	-1	1	39	16	0	-1	30792	0
+"3,60,0,-1,0,-1"	"Eastcheap 1 Nightmare"	0	10	90	61	1	99	414	103	5	33	17	0	-1	31048	0
+"3,60,0,-1,0,-1"	"Eastcheap 2 Nightmare"	0	33	91	61	1	105	112	248	1	33	16	0	-1	31304	0
+"3,60,0,-1,0,-1"	"Tudor Street 1 Nightmare"	0	10	92	62	1	38	418	326	5	3	18	0	-1	16713	0
+"3,60,0,-1,0,-1"	"Tudor Street 2 Nightmare"	0	33	93	62	1	38	112	248	1	3	18	0	-1	16969	0
+"3,60,0,-1,0,-1"	"Temple Place Nightmare"	0	0	94	63	1	110	430	-1	1	33	15	0	-1	17737	0
+"3,60,0,-1,0,-1"	"Bell Yard 1 Nightmare"	0	10	95	64	1	101	426	389	5	33	17	0.9	559	17993	0
+"3,60,0,-1,0,-1"	"Bell Yard 2 Nightmare"	0	33	96	64	1	105	112	248	1	33	16	0.8	559	18249	0
+"3,60,0,-1,0,-1"	"Fleet Street 1 Nightmare"	0	10	97	65	1	38	426	55	5	4	18	0.24	559	18761	0
+"3,60,0,-1,0,-1"	"Fleet Street 2 Nightmare"	0	33	98	65	1	38	112	248	1	4	18	0.24	559	19017	0
+"3,60,0,-1,0,-1"	"Ludgate Hill 1 Nightmare"	0	10	99	66	1	38	418	103	5	4	18	0.24	559	19529	0
+"3,60,0,-1,0,-1"	"Ludgate Hill 2 Nightmare"	0	33	100	66	1	38	418	248	1	4	18	0.24	559	29004	0
+"3,60,0,-1,0,-1"	"Kingsway 1 Nightmare"	0	10	101	67	1	38	430	389	5	4	18	0.24	559	20297	0
+"3,60,0,-1,0,-1"	"Kingsway 2 Nightmare"	0	33	102	67	1	38	112	248	1	4	18	0.24	559	20553	0
+"3,60,0,-1,0,-1"	"Stonecutter 1 Nightmare"	0	10	103	68	1	103	434	326	5	34	17	0.8	559	21321	0
+"3,60,0,-1,0,-1"	"Stonecutter 2 Nightmare"	0	33	104	68	1	105	104	248	1	34	16	0.8	559	21577	0
+"3,60,0,-1,0,-1"	"Bishop's Court Nightmare"	0	0	105	69	1	53	418	-1	1	4	18	0.24	559	22089	0
+"3,60,0,-1,0,-1"	"Old Bailey Nightmare"	0	0	106	70	1	111	442	-1	1	34	15	0	-1	22345	0
+"3,60,0,-1,0,-1"	"Upper Thames Nightmare"	0	0	107	71	1	63	414	-1	1	28	18	0	-1	22601	0
+"3,60,0,-1,0,-1"	"Waterman's Walk 1 Nightmare"	0	0	108	72	1	63	414	-1	5	28	18	0	-1	22857	0
+"3,60,0,-1,0,-1"	"Waterman's Walk 2 Nightmare"	0	0	109	72	1	63	104	-1	1	28	18	0	-1	23113	0
+"3,60,0,-1,0,-1"	"Lower Thames 1 Nightmare"	0	0	110	73	1	63	414	-1	5	28	18	0	-1	25417	0
+"3,60,0,-1,0,-1"	"Lower Thames 2 Nightmare"	0	0	111	73	1	63	104	-1	1	28	18	0	-1	25673	0
+"3,60,0,-1,0,-1"	"Tower Gateway 1 Nightmare"	0	10	112	74	1	38	430	55	5	4	18	0	-1	25929	0
+"3,60,0,-1,0,-1"	"Tower Gateway 2 Nightmare"	0	33	113	74	1	38	112	248	1	4	18	0	-1	26185	0
+"3,60,0,-1,0,-1"	"Tower of London Nightmare"	0	0	114	75	1	126	1	-1	1	56	-1	0	-1	26953	0
+"3,60,0,-1,0,-1"	"Fenchurch 1 Nightmare"	0	10	115	76	1	99	426	103	5	34	17	0	-1	27209	0
+"3,60,0,-1,0,-1"	"Fenchurch 2 Nightmare"	0	33	116	76	1	105	112	248	1	40	16	0	-1	27465	0
+"3,60,0,-1,0,-1"	"Trinity Square 1 Nightmare"	0	10	117	77	1	38	418	389	5	28	18	0	-1	27977	0
+"3,60,0,-1,0,-1"	"Trinity Square 2 Nightmare"	0	33	118	77	1	38	104	248	1	28	18	0	-1	28233	0
+"3,60,0,-1,0,-1"	"Aldgate Nightmare"	0	0	119	78	1	54	418	-1	1	4	18	0	-1	28745	0
+"3,60,0,-1,0,-1"	"King William Street 1 Nightmare"	0	10	120	79	1	101	442	326	5	34	17	0	-1	29001	0
+"3,60,0,-1,0,-1"	"King William Street 2 Nightmare"	0	33	121	79	1	105	112	248	1	34	16	0	-1	29257	0
+"3,60,0,-1,0,-1"	"Threadneedle 1 Nightmare"	0	10	122	80	1	38	426	55	5	4	18	0	-1	29513	0
+"3,60,0,-1,0,-1"	"Threadneedle 2 Nightmare"	0	33	123	80	1	38	112	248	1	4	18	0	-1	29769	0
+"3,60,0,-1,0,-1"	"Cannon Street Rail Nightmare"	0	0	124	81	1	26	422	-1	1	22	-1	0	-1	30281	0
+"3,60,0,-1,0,-1"	"Exodus Nightmare"	0	0	125	82	1	27	422	-1	1	22	-1	0	-1	30537	0
+"3,60,0,-1,0,-1"	"Crown Office Row Nightmare"	0	0	126	83	1	55	418	-1	1	4	23	0	-1	30793	0
+"3,60,0,-1,0,-1"	"Mark Lane Approach 1 Nightmare"	0	0	127	84	1	21	422	-1	7	22	21	0	-1	31049	0
+"3,60,0,-1,0,-1"	"Mark Lane Approach 2 Nightmare"	0	0	128	84	1	25	422	-1	4	22	21	0	-1	31305	0
+"3,60,0,-1,0,-1"	"Mark Lane Approach 3 Nightmare"	0	0	129	84	1	21	112	-1	1	22	21	0	-1	16714	0
+"3,60,0,-1,0,-1"	"Mark Lane Station Nightmare"	0	0	130	85	1	22	422	-1	1	22	21	0	-1	16970	0
+"3,60,0,-1,0,-1"	"Liverpool Approach 1 Nightmare"	0	0	131	86	1	11	422	-1	7	22	21	0	-1	17226	0
+"3,60,0,-1,0,-1"	"Liverpool Approach 2 Nightmare"	0	0	132	86	1	13	422	-1	4	22	21	0	-1	17482	0
+"3,60,0,-1,0,-1"	"Liverpool Approach 3 Nightmare"	0	0	133	86	1	11	112	-1	1	22	21	0	-1	17738	0
+"3,60,0,-1,0,-1"	"Liverpool Street Station Nightmare"	0	0	134	87	1	6	1	-1	1	50	-1	0	-1	17994	0
+"3,60,0,-1,0,-1"	"Liverpool Tunnels 1 Nightmare"	0	0	135	88	1	23	426	-1	5	41	20	0	-1	18250	0
+"3,60,0,-1,0,-1"	"Liverpool Tunnels 2 Nightmare"	0	0	136	88	1	24	112	-1	1	41	20	0	-1	18506	0
+"3,60,0,-1,0,-1"	"Abandoned Tunnels 1 Nightmare"	0	0	137	89	1	24	426	-1	5	41	20	0	-1	19274	0
+"3,60,0,-1,0,-1"	"Abandoned Tunnels 2 Nightmare"	0	0	138	89	1	23	112	-1	1	41	20	0	-1	19530	0
+"3,60,0,-1,0,-1"	"Devonshire Square 1 Nightmare"	0	10	139	90	1	45	418	103	5	5	23	0	-1	20042	0
+"3,60,0,-1,0,-1"	"Devonshire Square 2 Nightmare"	0	33	140	90	1	41	112	248	1	5	23	0	-1	20298	0
+"3,60,0,-1,0,-1"	"Houndsditch 1 Nightmare"	0	10	141	91	1	41	418	389	5	5	23	0	-1	20810	0
+"3,60,0,-1,0,-1"	"Houndsditch 2 Nightmare"	0	33	142	91	1	45	112	248	1	5	23	0	-1	21066	0
+"3,60,0,-1,0,-1"	"Primrose 1 Nightmare"	0	10	143	92	1	45	430	326	5	5	23	0	-1	21578	0
+"3,60,0,-1,0,-1"	"Primrose 2 Nightmare"	0	33	144	92	1	41	112	248	1	5	23	0	-1	21834	0
+"3,60,0,-1,0,-1"	"Shoreditch 1 Nightmare"	0	10	145	93	1	41	430	55	5	5	23	0	-1	22346	0
+"3,60,0,-1,0,-1"	"Shoreditch 2 Nightmare"	0	33	146	93	1	45	112	248	1	5	23	0	-1	22602	0
+"3,60,0,-1,0,-1"	"Necropolis Level 1 Nightmare"	0	0	147	94	1	116	442	-1	5	11	-1	0	-1	23114	0
+"3,60,0,-1,0,-1"	"Necropolis Level 1a Nightmarea"	0	0	148	94	1	116	112	-1	1	11	-1	0	-1	28492	0
+"3,60,0,-1,0,-1"	"Necropolis Level 2 Nightmare"	0	0	149	95	1	117	442	-1	4	11	-1	0	-1	24906	0
+"3,60,0,-1,0,-1"	"Necropolis Level 2a Nightmare"	0	0	150	95	1	117	112	-1	1	11	-1	0	-1	27468	0
+"3,60,0,-1,0,-1"	"Necropolis Level 3 Nightmare"	0	0	151	96	1	118	442	-1	3	11	-1	0	-1	25162	0
+"3,60,0,-1,0,-1"	"Necropolis Level 3a Nightmare"	0	0	152	96	1	118	112	-1	1	11	-1	0	-1	27724	0
+"3,60,0,-1,0,-1"	"Necropolis Level 4 Nightmare"	0	0	153	97	1	119	442	-1	2	11	-1	0	-1	25418	0
+"3,60,0,-1,0,-1"	"Necropolis Level 4a Nightmare"	0	0	154	97	1	119	112	-1	1	11	-1	0	-1	27980	0
+"3,60,0,-1,0,-1"	"Necropolis Level 5 Nightmare"	0	0	155	98	1	120	442	-1	1	11	-1	0	-1	25674	0
+"3,60,0,-1,0,-1"	"Necropolis Level 5a Nightmare"	0	0	156	98	1	120	112	-1	1	11	-1	0	-1	28236	0
+"3,60,0,-1,0,-1"	"Bishopsgate 1 Nightmare"	0	10	157	99	1	41	434	103	5	5	23	0	-1	25930	0
+"3,60,0,-1,0,-1"	"Bishopsgate 2 Nightmare"	0	33	158	99	1	45	112	248	1	5	23	0	-1	26186	0
+"3,60,0,-1,0,-1"	"Wormwood 1 Nightmare"	0	0	159	100	1	112	442	-1	5	17	19	0	-1	26442	0
+"3,60,0,-1,0,-1"	"Wormwood 2 Nightmare"	0	0	160	100	1	114	112	-1	1	17	19	0	-1	26698	0
+"3,60,0,-1,0,-1"	"Undershaft 1 Nightmare"	0	0	161	101	1	23	414	-1	5	41	20	0	-1	26954	0
+"3,60,0,-1,0,-1"	"Undershaft 2 Nightmare"	0	0	162	101	1	23	104	-1	1	41	20	0	-1	27210	0
+"3,60,0,-1,0,-1"	"Finsbury Square Nightmare"	0	0	163	102	1	130	1	-1	1	49	-1	0	-1	27466	0
+"3,60,0,-1,0,-1"	"Finsbury Circus 1 Nightmare"	0	0	164	103	1	23	418	-1	5	41	24	0	-1	27722	0
+"3,60,0,-1,0,-1"	"Finsbury Circus 2 Nightmare"	0	0	165	103	1	24	104	-1	1	41	24	0	-1	27978	0
+"3,60,0,-1,0,-1"	"London Wall Nightmare"	0	0	166	104	1	131	1	-1	1	58	-1	0	-1	28234	0
+"3,60,0,-1,0,-1"	"Moorgate 1 Nightmare"	0	0	167	105	1	24	418	-1	5	41	24	0	-1	28490	0
+"3,60,0,-1,0,-1"	"Moorgate 2 Nightmare"	0	0	168	105	1	23	104	-1	1	41	24	0	-1	28746	0
+"3,60,0,-1,0,-1"	"Ropemaker Street Nightmare"	0	0	169	106	1	132	1	-1	1	59	-1	0	-1	29002	0
+"3,60,0,-1,0,-1"	"Lamb's Passage 1 Nightmare"	0	0	170	107	1	23	430	-1	1	41	24	0	-1	29258	0
+"3,60,0,-1,0,-1"	"Lamb's Passage 2 Nightmare"	0	0	171	107	1	24	104	-1	1	41	24	0	-1	29514	0
+"3,60,0,-1,0,-1"	"Whitecross Nightmare"	0	0	172	108	1	134	1	-1	1	60	-1	0	-1	30282	0
+"3,60,0,-1,0,-1"	"Mark Square 1 Nightmare"	0	0	173	109	1	24	418	-1	5	41	24	0	-1	30538	0
+"3,60,0,-1,0,-1"	"Mark Square 2 Nightmare"	0	0	174	109	1	23	104	-1	1	41	24	0	-1	30794	0
+"3,60,0,-1,0,-1"	"Old Street Nightmare"	0	0	175	110	1	133	1	-1	1	62	-1	0	-1	31050	0
+"3,60,0,-1,0,-1"	"Finsbury Market 1 Nightmare"	0	0	176	111	1	23	418	-1	5	41	24	0	-1	31306	0
+"3,60,0,-1,0,-1"	"Finsbury Market 2 Nightmare"	0	0	177	111	1	24	104	-1	1	41	24	0	-1	16715	0
+"3,60,0,-1,0,-1"	"Ploughyard Nightmare"	0	0	178	112	1	135	402	-1	1	61	-1	0	-1	16971	0
+"3,60,0,-1,0,-1"	"Guildhall 1 Nightmare"	0	0	179	113	1	13	422	-1	7	23	21	0	-1	17227	0
+"3,60,0,-1,0,-1"	"Guildhall 2 Nightmare"	0	0	180	113	1	11	422	-1	4	23	21	0	-1	17483	0
+"3,60,0,-1,0,-1"	"Guildhall 3 Nightmare"	0	0	181	113	1	25	104	-1	1	23	21	0	-1	17739	0
+"3,60,0,-1,0,-1"	"St. Paul's Approach 1 Nightmare"	0	0	182	114	1	21	422	-1	7	23	21	0	-1	17995	0
+"3,60,0,-1,0,-1"	"St. Paul's Approach 2 Nightmare"	0	0	183	114	1	11	422	-1	4	23	21	0	-1	18251	0
+"3,60,0,-1,0,-1"	"St. Paul's Approach 3 Nightmare"	0	0	184	114	1	13	104	-1	1	23	21	0	-1	18507	0
+"3,60,0,-1,0,-1"	"St. Paul's Station Nightmare"	0	0	185	115	1	7	1	-1	1	49	-1	0	-1	18763	0
+"3,60,0,-1,0,-1"	"Church Yard 1 Nightmare"	0	0	186	116	1	114	104	-1	5	17	19	0	-1	19019	0
+"3,60,0,-1,0,-1"	"Church Yard 2 Nightmare"	0	0	187	116	1	113	112	-1	1	17	22	0	-1	19275	0
+"3,60,0,-1,0,-1"	"Paternoster Row 1 Nightmare"	0	0	188	117	1	71	446	-1	5	11	-1	0	-1	19531	0
+"3,60,0,-1,0,-1"	"Paternoster Row 2 Nightmare"	0	0	189	117	1	71	104	-1	1	11	-1	0	-1	19787	0
+"3,60,0,-1,0,-1"	"Cheapside 1 Nightmare"	0	0	190	118	1	113	442	-1	5	17	22	0	-1	20043	0
+"3,60,0,-1,0,-1"	"Cheapside 2 Nightmare"	0	0	191	118	1	114	104	-1	1	17	19	0	-1	20299	0
+"3,60,0,-1,0,-1"	"Little Britain 1 Nightmare"	0	0	192	119	1	71	446	-1	5	11	-1	0	-1	20555	0
+"3,60,0,-1,0,-1"	"Little Britain 2 Nightmare"	0	0	193	119	1	71	104	-1	1	11	-1	0	-1	20811	0
+"3,60,0,-1,0,-1"	"St. Paul's Hellgate Nightmare"	0	0	194	120	1	128	405	-1	1	43	26	0	-1	21067	0
+"3,60,0,-1,0,-1"	"Hell Nightmare"	0	0	195	121	1	73	408	-1	1	57	-1	0	-1	21323	0
+"3,48,100,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,1,0,-1,0,-1"	"Town Portal Nightmare"	0	0	229	150	1	86	1	-1	1	-1	-1	0	-1	21579	0
+"3,60,0,-1,0,-1"	"TheDark Nightmare"	0	0	230	151	1	19	495	-1	1	-1	-1	0	-1	21835	0
+"3,1,0,-1,0,-1"	"FPS Action Test Nightmare"	0	0	231	152	1	60	167	-1	1	-1	-1	0	-1	22091	0
+"3,1,0,-1,0,-1"	"RTS Test Nightmare"	0	0	232	153	1	49	208	-1	1	-1	-1	0	-1	22347	0
+"3,1,0,-1,0,-1"	"Sewers Nightmare"	0	0	233	154	1	32	179	-1	1	-1	-1	0	-1	22603	0
+"3,1,0,-1,0,-1"	"SoundField Nightmare"	0	0	234	155	1	95	1	-1	1	-1	-1	0	-1	22859	0
+"3,1,0,-1,0,-1"	"Soundfield_Part_Deux Nightmare"	0	0	235	156	1	96	1	-1	1	-1	-1	0	-1	23115	0
+"3,1,0,-1,0,-1"	"MonsterField Nightmare"	0	0	236	157	1	97	1	-1	1	-1	-1	0	-1	24907	0
+"3,1,0,-1,0,-1"	"TubeStation Nightmare"	0	0	237	158	1	123	1	-1	1	-1	-1	0	-1	25163	0
+"3,1,0,-1,0,-1"	"CoventGarden Nightmare"	0	0	238	159	1	124	1	-1	1	-1	-1	0	-1	25419	0
+"3,1,0,-1,0,-1"	"LeicesterSquare Nightmare"	0	0	239	160	1	125	1	-1	1	-1	-1	0	-1	25675	0
+"3,1,0,-1,0,-1"	"ParkingLot Nightmare"	0	0	240	161	1	98	1	-1	1	-1	-1	0	-1	25931	0
+"3,1,0,-1,0,-1"	"TubeB Nightmare"	0	0	241	162	1	87	1	-1	1	-1	-1	0	-1	26187	0
+"3,1,0,-1,0,-1"	"TubeB_Crypts Nightmare"	0	0	242	163	1	99	1	-1	1	-1	-1	0	-1	26443	0
+"3,1,0,-1,0,-1"	"PerformanceTestLevel Nightmare"	0	0	243	164	1	88	1	-1	1	-1	-1	0	-1	26699	0
+"3,1,0,-1,0,-1"	"PerformanceTestLevelA Nightmare"	0	0	244	165	1	89	1	-1	1	-1	-1	0	-1	26955	0
+"3,1,0,-1,0,-1"	"PerformanceTestLevelB Nightmare"	0	0	245	166	1	90	1	-1	1	-1	-1	0	-1	27211	0
+"3,1,0,-1,0,-1"	"PerformanceTestLevelC Nightmare"	0	0	246	167	1	91	1	-1	1	-1	-1	0	-1	27467	0
+"3,1,0,-1,0,-1"	"MonsterTestLevel Nightmare"	0	0	247	168	1	92	1	-1	1	-1	-1	0	-1	27723	0
+"3,1,0,-1,0,-1"	"LevelExperiment Nightmare"	0	0	248	169	1	93	112	-1	1	-1	-1	0	-1	27979	0
+"3,1,0,-1,0,-1"	"UndergroundPassage Nightmare"	0	0	249	170	1	10	112	-1	1	-1	-1	0	-1	28235	0
+"3,1,0,-1,0,-1"	"MiniTubesDepot Nightmare"	0	0	250	171	1	11	112	-1	1	-1	-1	0	-1	28491	0
+"3,1,0,-1,0,-1"	"MiniTubesShort Nightmare"	0	0	251	172	1	12	112	-1	1	-1	-1	0	-1	24908	0
+"3,1,0,-1,0,-1"	"MiniTubesAndRooms Nightmare"	0	0	252	173	1	13	112	-1	1	-1	-1	0	-1	28747	0
+"3,1,0,-1,0,-1"	"MiniTubes Nightmare"	0	0	253	174	1	21	112	-1	1	-1	-1	0	-1	29003	0
+"3,1,0,-1,0,-1"	"MiniTubesStationA Nightmare"	0	0	254	175	1	22	112	-1	1	-1	-1	0	-1	29259	0
+"3,1,0,-1,0,-1"	"IndustrialRooms Nightmare"	0	0	255	176	1	23	112	-1	1	-1	-1	0	-1	29515	0
+"3,1,0,-1,0,-1"	"IndustrialHalls Nightmare"	0	0	256	177	1	24	112	-1	1	-1	-1	0	-1	29771	0
+"3,1,0,-1,0,-1"	"IndustrialTubes Nightmare"	0	0	257	178	1	25	112	-1	1	-1	-1	0	-1	30027	0
+"3,1,0,-1,0,-1"	"MiniRooms Nightmare"	0	0	258	179	1	15	112	-1	1	-1	-1	0	-1	30283	0
+"3,60,0,-1,0,-1"	"MiniRoomsAdventure Nightmare"	0	0	259	180	1	16	112	-1	1	-1	-1	0	-1	30539	0
+"3,60,0,-1,0,-1"	"MiniRoomsAdventureChampion Nightmare"	0	0	260	181	1	17	112	-1	1	-1	-1	0	-1	30795	0
+"3,60,0,-1,0,-1"	"MiniRoomsAdventureTreasure Nightmare"	0	0	261	182	1	18	1	-1	1	-1	-1	0	-1	31051	0
+"3,1,0,-1,0,-1"	"MiniRoomsDark Nightmare"	0	0	262	183	1	19	495	-1	1	-1	-1	0	-1	31307	0
+"3,1,0,-1,0,-1"	"MiniTubesHole Nightmare"	0	0	263	184	1	28	112	-1	1	-1	-1	0	-1	16716	0
+"3,60,0,-1,0,-1"	"MiniSewersAdventure Nightmare"	0	0	264	185	1	29	112	-1	1	-1	-1	0	-1	16972	0
+"3,60,0,-1,0,-1"	"MiniSewersAdventureChampion Nightmare"	0	0	265	186	1	30	112	-1	1	-1	-1	0	-1	17228	0
+"3,60,0,-1,0,-1"	"MiniSewersAdventureTreasure Nightmare"	0	0	266	187	1	31	1	-1	1	-1	-1	0	-1	17484	0
+"3,60,0,-1,0,-1"	"HellTower Nightmare"	0	0	267	188	1	67	494	-1	1	-1	-1	0	-1	17740	0
+"3,60,0,-1,0,-1"	"HellTowerFawkes Nightmare"	0	0	268	189	1	66	494	-1	1	-1	-1	0	-1	17996	0
+"3,60,0,-1,0,-1"	"HellTowerHellPortal Nightmare"	0	0	269	190	1	68	1	-1	1	-1	-1	0	-1	18252	0
+"3,60,0,-1,0,-1"	"HellTowerHellPortalPrevious Nightmare"	0	0	270	191	1	69	1	-1	1	-1	-1	0	-1	18508	0
+"3,60,0,-1,0,-1"	"HellTowerAdventure Nightmare"	0	0	271	192	1	70	1	-1	1	-1	-1	0	-1	18764	0
+"3,60,0,-1,0,-1"	"HellDungeon Nightmare"	0	0	272	193	1	71	494	-1	1	-1	-1	0	-1	19020	0
+"3,60,0,-1,0,-1"	"HellDungeonAdventure Nightmare"	0	100	273	194	1	72	104	358	1	-1	-1	0	-1	19276	0
+"3,60,0,-1,0,-1"	"MiniCavesAdventure Nightmare"	0	0	274	195	1	107	112	-1	1	-1	-1	0	-1	19532	0
+"3,60,0,-1,0,-1"	"MiniCavesAdventureChampion Nightmare"	0	0	275	196	1	108	112	-1	1	-1	-1	0	-1	19788	0
+"3,60,0,-1,0,-1"	"MiniCavesAdventureTreasure Nightmare"	0	0	276	197	1	109	1	-1	1	-1	-1	0	-1	20044	0
+"3,1,0,-1,0,-1"	"MiniCity Nightmare"	0	0	277	198	1	38	1	-1	1	-1	-1	0	-1	20300	0
+"3,1,0,-1,0,-1"	"MiniCityRare Nightmare"	0	0	278	199	1	39	1	-1	1	-1	-1	0	-1	20556	0
+"3,1,0,-1,0,-1"	"AlleyCity Nightmare"	0	0	279	200	1	40	1	-1	1	-1	-1	0	-1	20812	0
+"3,1,0,-1,0,-1"	"BoulevardCity Nightmare"	0	0	280	201	1	43	1	-1	1	-1	-1	0	-1	21068	0
+"3,1,0,-1,0,-1"	"ParkCity Nightmare"	0	0	281	202	1	42	1	-1	1	-1	-1	0	-1	21324	0
+"3,1,0,-1,0,-1"	"River Nightmare"	0	0	282	203	1	63	1	-1	1	-1	-1	0	-1	21580	0
+"3,60,0,-1,0,-1"	"CharacterCreation Nightmare"	0	0	283	204	1	58	1	-1	1	-1	-1	0	-1	21836	0
+"3,48,100,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,1,0,-1,0,-1"	"HavokDemo Nightmare"	0	0	286	207	1	61	1	-1	1	-1	-1	0	-1	22348	0
+"3,1,0,-1,0,-1"	"NVIDIADemo Nightmare"	0	0	287	208	1	62	167	-1	1	-1	-1	0	-1	22604	0
+"3,1,0,-1,0,-1"	"LowPolyTest Nightmare"	0	0	288	209	1	94	54	-1	1	-1	-1	0	-1	22860	0
+"3,1,0,-1,0,-1"	"HellNarration Nightmare"	0	0	289	210	1	136	1	-1	1	-1	-1	0	-1	23116	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,48,10,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
+"3,60,0,-1,0,-1"	"Duel Arena City Nightmare"	0	0	227	149	1	148	1	-1	1	45	2	0	-1	21070	0
+"3,48,30,-1,0,-1"		0	0	-1	-1	-1	-1	-1	-1	0	-1	-1	0	-1	0	0
