@@ -7,7 +7,7 @@
             new XmlCookElement
             {
                     Name = "pEvents",
-                    ElementType = ElementType.TableMultiple,
+                    ElementType = ElementType.TableArrayVariable,
                     DefaultValue = 0,
                     ChildType = typeof (StateEvent)
             }

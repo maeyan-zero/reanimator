@@ -13,7 +13,7 @@
             new XmlCookElement
             {
                 Name = "pPathNodes",
-                ElementType = ElementType.TableMultiple,
+                ElementType = ElementType.TableArrayVariable,
                 DefaultValue = null,
                 ChildType = typeof (RoomPathNode)
             },
@@ -44,25 +44,25 @@
             new XmlCookElement
             {
                 Name = "fMinX",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 0.0f
             },
             new XmlCookElement
             {
                 Name = "fMaxX",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 0.0f
             },
             new XmlCookElement
             {
                 Name = "fMinY",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 0.0f
             },
             new XmlCookElement
             {
                 Name = "fMaxY",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 0.0f
             },
             new XmlCookElement

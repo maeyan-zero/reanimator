@@ -256,14 +256,14 @@
             {
                 Name = "fScrollPhaseU0",
                 TrueName = "fScrollPhaseU[0]",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 0.0f
             },
             new XmlCookElement
             {
                 Name = "fScrollPhaseV0",
                 TrueName = "fScrollPhaseV[0]",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 0.0f
             },
             new XmlCookElement
@@ -298,14 +298,14 @@
             {
                 Name = "fScrollPhaseU1",
                 TrueName = "fScrollPhaseU[1]",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 0.0f
             },
             new XmlCookElement
             {
                 Name = "fScrollPhaseV1",
                 TrueName = "fScrollPhaseV[1]",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 0.0f
             },
             new XmlCookElement
@@ -339,7 +339,7 @@
             new XmlCookElement
             {
                 Name = "fScrollAmtLCM",
-                ElementType = ElementType.UnknownFloat,
+                ElementType = ElementType.NonCookedFloat,
                 DefaultValue = 1.0f
             },
             new XmlCookElement

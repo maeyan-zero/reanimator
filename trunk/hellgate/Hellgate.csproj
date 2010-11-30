@@ -275,6 +275,8 @@
     <Compile Include="Xml\ConditionDefinition.cs" />
     <Compile Include="Xml\ConfigDefinition.cs" />
     <Compile Include="Xml\DemoLevelDefinition.cs" />
+    <Compile Include="Xml\EnvironmentDefinition.cs" />
+    <Compile Include="Xml\EnvLightDefinition.cs" />
     <Compile Include="Xml\FmodReverbProperties.cs" />
     <Compile Include="Xml\GameGlobalDefinition.cs" />
     <Compile Include="Xml\GlobalDefinition.cs" />

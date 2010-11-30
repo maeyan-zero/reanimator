@@ -463,7 +463,7 @@ namespace Hellgate.Xml
             {
                 Name = "tCondition",
                 DefaultValue = null,
-                ElementType = ElementType.TableSingle,
+                ElementType = ElementType.Table,
                 ChildType = typeof(ConditionDefinition)
             }
         };
@@ -472,7 +472,7 @@ namespace Hellgate.Xml
         {
             RootElement = "SKILL_EVENT";
             base.Elements.AddRange(Elements);
-            BitFlags = new Int32[] { -1, -1 };
+            Flags = new Int32[] { -1, -1 };
         }
     }
 }

@@ -7,7 +7,7 @@
             new XmlCookElement
             {
                 Name = "tGroup",
-                ElementType = ElementType.TableSingle,
+                ElementType = ElementType.Table,
                 DefaultValue = null,
                 ChildType = typeof (RoomLayoutGroup)
             },

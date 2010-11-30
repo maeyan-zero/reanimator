@@ -62,17 +62,17 @@ namespace Reanimator
                 String subStr = str.Substring(37);
                 UInt32 strHash = Crypt.GetStringHash(subStr);
 
-                if (strHash == 111384616) // "DEMO_LEVEL_DEFINITION"
+                if (strHash == 1168325581) // "ENVIRONMENT_DEFINITION"
                 {
                     int bp = 0;
                 }
 
-                if (strHash == 4203813319) // "FMOD_REVERB_PROPERTIES"
+                if (strHash == 3896768623) // "ENV_LIGHT_DEFINITION"
                 {
                     int bp = 0;
                 }
 
-                if (strHash == 1869381994) // "DecayLFRatio"
+                if (strHash == 4254997457) // "DecayLFRatio"
                 {
                     int bp = 0;
                 }
@@ -130,7 +130,7 @@ namespace Reanimator
             foreach (String xmlFilePath in xmlFiles)
             {
                 String path = xmlFilePath;
-                //path = @"D:\Games\Hellgate London\data\demolevel\streets.xml.cooked";
+                //path = @"D:\Games\Hellgate London\data\background\_environments\act3_outside_env.xml.cooked";
 
                 if (path.Contains("datChecksum") || path.Contains("mp_hellgate")) continue;
 

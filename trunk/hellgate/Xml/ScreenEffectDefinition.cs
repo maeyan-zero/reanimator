@@ -132,8 +132,8 @@ namespace Hellgate.Xml
         {
             RootElement = "SCREEN_EFFECT_DEFINITION";
             base.Elements.AddRange(Elements);
-            BitFlags = new Int32[] { -1 };
-            BitFlagsBaseMask = 0xFDFDFDFC;
+            Flags = new Int32[] { -1 };
+            FlagsBaseMask = 0xFDFDFDFC;
         }
     }
 }
