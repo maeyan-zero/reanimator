@@ -813,5 +813,22 @@ namespace Revival.Common
 
             return false;
         }
+
+        [StructLayout(LayoutKind.Explicit)]
+        struct ArrayTypeConverter
+        {
+            [FieldOffset(0)] public byte[] Bytes;
+            [FieldOffset(0)] public float[] Floats;
+        }
+
+        public static byte[] ToByteArray(this float[] floatArray)
+        {
+            ArrayTypeConverter typeConvert = new ArrayTypeConverter { Floats = floatArray };
+
+            byte[] bytes = new byte[floatArray.Length*4];
+            Buffer.BlockCopy(typeConvert.Bytes, 0, bytes, 0, bytes.Length);
+
+            return bytes;
+        }
     }
 }

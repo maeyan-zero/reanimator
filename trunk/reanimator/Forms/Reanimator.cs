@@ -158,7 +158,7 @@ namespace Reanimator
                 byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
                 byte[] originalHash = md5.ComputeHash(data);
                 byte[] recookedHash = md5.ComputeHash(recookedData);
-                //File.WriteAllBytes(xmlFilePath + "2", recookedData);
+                File.WriteAllBytes(xmlFilePath + "2", recookedData);
                 Debug.Assert(originalHash.SequenceEqual(recookedHash));
             }            
         }

@@ -19,14 +19,14 @@
             new XmlCookElement
             {
                     Name = "vPosition",
-                    ElementType = ElementType.FloatArray,
+                    ElementType = ElementType.FloatArrayFixed,
                     DefaultValue = 0.0f,
                     Count = 3
             },
             new XmlCookElement
             {
                     Name = "vNormal",
-                    ElementType = ElementType.FloatArray,
+                    ElementType = ElementType.FloatArrayFixed,
                     DefaultValue = 0.0f,
                     Count = 3
             },

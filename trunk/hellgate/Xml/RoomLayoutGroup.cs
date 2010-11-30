@@ -42,14 +42,14 @@ namespace Hellgate.Xml
             {
                 Name = "vPosition",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.FloatArray,
+                ElementType = ElementType.FloatArrayFixed,
                 Count = 3
             },
             new XmlCookElement
             {
                 Name = "vNormal",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.FloatArray,
+                ElementType = ElementType.FloatArrayFixed,
                 Count = 3
             },
             new XmlCookElement
@@ -203,7 +203,7 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "vScale",
-                ElementType = ElementType.FloatArray,
+                ElementType = ElementType.FloatArrayFixed,
                 DefaultValue = 1.0f,
                 Count = 3,
                 IsTCv4 = true

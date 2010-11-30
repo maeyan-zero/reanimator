@@ -21,14 +21,14 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "pfParamsBase",
-                ElementType = ElementType.FloatArray,
+                ElementType = ElementType.FloatArrayFixed,
                 Count = 8,
                 DefaultValue = 0.0f,
             },
             new XmlCookElement
             {
                 Name = "pfParamsVariation",
-                ElementType = ElementType.FloatArray,
+                ElementType = ElementType.FloatArrayFixed,
                 Count = 8,
                 DefaultValue = 0.0f,
             },

@@ -112,14 +112,14 @@ namespace Hellgate.Xml
             {
                 Name = "pszLeftWeaponBone",
                 DefaultValue = null,
-                ElementType = ElementType.StringArray_0x0206,
+                ElementType = ElementType.StringArrayFixed,
                 Count = 2
             },
             new XmlCookElement
             {
                 Name = "pszRightWeaponBone",
                 DefaultValue = null,
-                ElementType = ElementType.StringArray_0x0206,
+                ElementType = ElementType.StringArrayFixed,
                 Count = 2
             },
             new XmlCookElement
@@ -186,7 +186,7 @@ namespace Hellgate.Xml
             {
                 Name = "pvMuzzleOffset",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.FloatArray,
+                ElementType = ElementType.FloatArrayFixed,
                 Count = 6
             },
             new XmlCookElement
@@ -200,7 +200,7 @@ namespace Hellgate.Xml
             {
                 Name = "pnWardrobeLayerIds",
                 DefaultValue = null,
-                ElementType = ElementType.ExcelIndexArray_0x0905,
+                ElementType = ElementType.ExcelIndexArrayFixed,
                 ExcelTableCode = 25649, // WARDROBE_LAYER
                 Count = 5
             },
@@ -208,7 +208,7 @@ namespace Hellgate.Xml
             {
                 Name = "pnWardrobeLayerParams",
                 DefaultValue = (UInt32)0,
-                ElementType = ElementType.RGBADoubleWordArray,
+                ElementType = ElementType.Int32ArrayFixed,
                 Count = 5
             },
             new XmlCookElement
@@ -270,7 +270,7 @@ namespace Hellgate.Xml
             {
                 Name = "pszTextureOverrides",
                 DefaultValue = null,
-                ElementType = ElementType.StringArray_0x0206,
+                ElementType = ElementType.StringArrayFixed,
                 Count = 7
             },
             new XmlCookElement
@@ -342,19 +342,19 @@ namespace Hellgate.Xml
             {
                 Name = "pszBoneNames",
                 DefaultValue = null,
-                ElementType = ElementType.StringArrayUnknown_0x0207
+                ElementType = ElementType.StringArrayVariable
             },
             new XmlCookElement
             {
                 Name = "pszWeightGroups",
                 DefaultValue = null,
-                ElementType = ElementType.StringArrayUnknown_0x0207
+                ElementType = ElementType.StringArrayVariable
             },
             new XmlCookElement
             {
                 Name = "pfWeights",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.FloatArrayUnknown_0x0107
+                ElementType = ElementType.FloatArrayVariable
             },
             new XmlCookElement
             {

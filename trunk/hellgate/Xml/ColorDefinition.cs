@@ -23,7 +23,7 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "pdwColors",
-                ElementType = ElementType.RGBADoubleWordArray,
+                ElementType = ElementType.Int32ArrayFixed,
                 DefaultValue = (UInt32)0x00000000,
                 Count = 6
             }

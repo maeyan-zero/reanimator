@@ -20,7 +20,7 @@
             new XmlCookElement
             {
                 Name = "pHappyNodes",
-                ElementType = ElementType.UnknownPType,
+                ElementType = ElementType.Int32ArrayVariable,
                 DefaultValue = 0
             },
             new XmlCookElement
