@@ -1574,131 +1574,131 @@
         <!--<OnMouseHover>UIStatesDisplayOnMouseHover</OnMouseHover>
         <OnMouseLeave>UIStatesDisplayOnMouseLeave</OnMouseLeave>-->
       </panel>      
-              <label name="knockdown def label">
-			    <x>25</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>left</align>				
-        <autosizefont>1</autosizefont>
-                <string>ui char panel label knockdown def</string>
-                <red>150</red>
-                <green>150</green>
-                <blue>150</blue>
-              </label>
-              <statdispl name="knockdown def">
-			    <x>75</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>center</align>
-                <autosize>1</autosize>
-                <red>150</red>
-                <green>150</green>
-                <blue>150</blue>
-                <chardisplay>def_knockdown</chardisplay>
-                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
-              </statdispl>
-              <label name="ignite def label">
-			    <x>126</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>left</align>				
-        <autosizefont>1</autosizefont>
-                <string>ui char panel label ignite def</string>
-                <red>196</red>
-                <green>17</green>
-                <blue>26</blue>
-              </label>
-              <statdispl name="ignite def">
-			    <x>176</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>center</align>
-                <autosize>1</autosize>
-                <red>196</red>
-                <green>17</green>
-                <blue>26</blue>
-                <chardisplay>def_ignite</chardisplay>
-                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
-              </statdispl>
-              <label name="stun def label">
-			    <x>227</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>left</align>				
-        <autosizefont>1</autosizefont>
-                <string>ui char panel label stun def</string>
-                <red>0</red>
-                <green>174</green>
-                <blue>239</blue>
-              </label>
-              <statdispl name="stun def">
-			    <x>277</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>center</align>
-                <autosize>1</autosize>
-                <red>0</red>
-                <green>174</green>
-                <blue>239</blue>
-                <chardisplay>def_stun</chardisplay>
-                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
-              </statdispl>
-              <label name="phase def label">
-			    <x>328</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>left</align>				
-        <autosizefont>1</autosizefont>
-                <string>ui char panel label phase def</string>
-                <red>205</red>
-                <green>130</green>
-                <blue>190</blue>
-              </label>
-              <statdispl name="phase def">
-			    <x>378</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>center</align>
-                <autosize>1</autosize>
-                <red>205</red>
-                <green>130</green>
-                <blue>190</blue>
-                <chardisplay>def_phase</chardisplay>
-                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
-              </statdispl>
-              <label name="poison def label">
-			    <x>429</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>left</align>				
-        <autosizefont>1</autosizefont>
-                <string>ui char panel label poison def</string>
-                <red>34</red>
-                <green>178</green>
-                <blue>75</blue>
-              </label>
-              <statdispl name="poison def">
-			    <x>479</x>
-				<y>10</y>
-                <width>48</width>
-                <height>25</height>
-                <align>center</align>
-                <autosize>1</autosize>
-                <red>34</red>
-                <green>178</green>
-                <blue>75</blue>
-                <chardisplay>def_poison</chardisplay>
-                <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
-              </statdispl>
+	  <label name="knockdown def label">
+		<x>25</x>
+		<y>10</y>
+		<width>48</width>
+		<height>25</height>
+		<align>left</align>				
+		<autosizefont>1</autosizefont>
+		<string>ui char panel label knockdown def</string>
+		<red>150</red>
+		<green>150</green>
+		<blue>150</blue>
+	  </label>
+	  <statdispl name="knockdown def">
+		<x>75</x>
+		<y>10</y>
+		<width>48</width>
+		<height>25</height>
+		<align>center</align>
+		<autosize>1</autosize>
+		<red>150</red>
+		<green>150</green>
+		<blue>150</blue>
+		<chardisplay>def_knockdown</chardisplay>
+		<OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+	  </statdispl>
+	  <label name="ignite def label">
+		<x>126</x>
+		<y>10</y>
+		<width>48</width>
+		<height>25</height>
+		<align>left</align>				
+		<autosizefont>1</autosizefont>
+		<string>ui char panel label ignite def</string>
+		<red>196</red>
+		<green>17</green>
+		<blue>26</blue>
+	  </label>
+	  <statdispl name="ignite def">
+		<x>176</x>
+		<y>10</y>
+		<width>48</width>
+		<height>25</height>
+		<align>center</align>
+		<autosize>1</autosize>
+		<red>196</red>
+		<green>17</green>
+		<blue>26</blue>
+		<chardisplay>def_ignite</chardisplay>
+		<OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+	  </statdispl>
+	  <label name="stun def label">
+		<x>227</x>
+		<y>10</y>
+		<width>48</width>
+		<height>25</height>
+		<align>left</align>				
+		<autosizefont>1</autosizefont>
+		<string>ui char panel label stun def</string>
+		<red>0</red>
+		<green>174</green>
+		<blue>239</blue>
+	  </label>
+	  <statdispl name="stun def">
+		<x>277</x>
+		<y>10</y>
+		<width>48</width>
+		<height>25</height>
+		<align>center</align>
+		<autosize>1</autosize>
+		<red>0</red>
+		<green>174</green>
+		<blue>239</blue>
+		<chardisplay>def_stun</chardisplay>
+		<OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+	  </statdispl>
+        <label name="phase def label">
+		  <x>328</x>
+		  <y>10</y>
+          <width>48</width>
+          <height>25</height>
+          <align>left</align>				
+          <autosizefont>1</autosizefont>
+          <string>ui char panel label phase def</string>
+          <red>205</red>
+          <green>130</green>
+          <blue>190</blue>
+        </label>
+        <statdispl name="phase def">
+		  <x>378</x>
+		  <y>10</y>
+          <width>48</width>
+          <height>25</height>
+          <align>center</align>
+          <autosize>1</autosize>
+          <red>205</red>
+          <green>130</green>
+          <blue>190</blue>
+          <chardisplay>def_phase</chardisplay>
+          <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+        </statdispl>
+        <label name="poison def label">
+		  <x>429</x>
+		  <y>10</y>
+          <width>48</width>
+          <height>25</height>
+          <align>left</align>				
+          <autosizefont>1</autosizefont>
+          <string>ui char panel label poison def</string>
+          <red>34</red>
+          <green>178</green>
+          <blue>75</blue>
+        </label>
+        <statdispl name="poison def">
+		<x>479</x>
+		<y>10</y>
+          <width>48</width>
+          <height>25</height>
+          <align>center</align>
+          <autosize>1</autosize>
+          <red>34</red>
+          <green>178</green>
+          <blue>75</blue>
+        <chardisplay>def_poison</chardisplay>
+        <OnSetFocusStat stat="sfx_defense">UIStatDisplOnPaint</OnSetFocusStat>
+        </statdispl>
     </panel>
 
     <tooltip name="minimal selection panel">
@@ -3977,9 +3977,6 @@
         <height>64</height>
         <align>top</align>
         <alpha>255</alpha>
-		<red>255</red>
-        <green>255</green>
-        <blue>0</blue>
         <menuorder>0</menuorder>
         <OnLClick>UIGameMenuDoReturn</OnLClick>
       </label>
@@ -3992,9 +3989,6 @@
         <height>64</height>
         <align>top</align>
         <alpha>255</alpha>
-		<red>255</red>
-        <green>255</green>
-        <blue>0</blue>
         <menuorder>1</menuorder>
         <OnLClick>UIGameMenuDoOptions</OnLClick>
 		    <OnLClickSnd>TitleScreenSinglePlayer</OnLClickSnd>
@@ -4008,9 +4002,6 @@
         <ws_width>1920</ws_width>
         <align>top</align>
         <alpha>255</alpha>
-		<red>255</red>
-        <green>255</green>
-        <blue>0</blue>
         <menuorder>2</menuorder>
         <OnLClick>UIGameMenuDoRestart</OnLClick>
     		<OnLClickSnd>TitleScreenQuit</OnLClickSnd>
@@ -4099,7 +4090,7 @@
       <zdelta>-0.002</zdelta>
       <animtime>5000</animtime>
       <red>255</red>
-      <green>0</green>
+      <green>200</green>
       <blue>0</blue>
     </label>
 
@@ -4492,7 +4483,7 @@
         <fontsize>40</fontsize>
         <red>0</red>
         <green>0</green>
-        <blue>255</blue>
+        <blue>0</blue>
           <dropshadowred>180</dropshadowred>
           <dropshadowgreen>180</dropshadowgreen>
           <dropshadowblue>180</dropshadowblue>
@@ -4514,9 +4505,6 @@
           <width>430</width>
           <height>68</height>
           <align>center</align>
-		  <red>255</red>
-          <green>0</green>
-          <blue>0</blue>
         </label>
       </button>
       <reference refname="waypoint button 1" name="waypoint button 2"> <y_rel>70</y_rel> <param>2</param> </reference>
@@ -7188,9 +7176,6 @@
         <align>center</align>
         <font>Upper_Font</font>
         <fontsize>30</fontsize>
-		<red>0</red>
-        <green>0</green>
-        <blue>255</blue>
         <autosizefont>1</autosizefont>
       </label>
 
@@ -7208,9 +7193,9 @@
           <height>40</height>
           <string>ui_achievements_total_ap</string>
           <align>Left</align>
-          <red>255</red>
-          <green>0</green>
-          <blue>0</blue>
+          <red>192</red>
+          <green>192</green>
+          <blue>192</blue>
         </label>
         <statdispl name="achievement points">
           <x>10</x>
@@ -7220,7 +7205,7 @@
           <string>ui_achievements_total_ap</string>
           <align>Right</align>
           <red>255</red>
-          <green>255</green>
+          <green>128</green>
           <blue>0</blue>
           <chardisplay>achievement_points</chardisplay>
         </statdispl>
@@ -7297,7 +7282,7 @@
         <fontsize>24</fontsize>
         <red>0</red>
         <green>0</green>
-        <blue>255</blue>
+        <blue>0</blue>
         <dropshadowred>180</dropshadowred>
         <dropshadowgreen>180</dropshadowgreen>
         <dropshadowblue>180</dropshadowblue>
@@ -7336,7 +7321,7 @@
         <fontsize>24</fontsize>
         <red>0</red>
         <green>0</green>
-        <blue>255</blue>
+        <blue>0</blue>
         <dropshadowred>180</dropshadowred>
         <dropshadowgreen>180</dropshadowgreen>
         <dropshadowblue>180</dropshadowblue>
@@ -7365,7 +7350,7 @@
         <fontsize>24</fontsize>
         <red>0</red>
         <green>0</green>
-        <blue>255</blue>
+        <blue>0</blue>
         <dropshadowred>180</dropshadowred>
         <dropshadowgreen>180</dropshadowgreen>
         <dropshadowblue>180</dropshadowblue>
@@ -7404,7 +7389,7 @@
         <fontsize>24</fontsize>
         <red>0</red>
         <green>0</green>
-        <blue>255</blue>
+        <blue>0</blue>
         <dropshadowred>180</dropshadowred>
         <dropshadowgreen>180</dropshadowgreen>
         <dropshadowblue>180</dropshadowblue>
