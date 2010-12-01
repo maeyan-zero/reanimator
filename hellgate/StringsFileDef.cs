@@ -8,6 +8,7 @@ namespace Hellgate
     partial class StringsFile
     {
         public const String FileExtention = ".xls.uni.cooked";
+        public const String FileExtentionClean = ".xls.uni";
         public const String FolderPath = @"excel\strings\english\";
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
