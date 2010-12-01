@@ -12,6 +12,7 @@ namespace Hellgate
     public partial class XmlCookedFile
     {
         public const String FileExtention = ".xml.cooked";
+        public const String FileExtentionClean = ".xml";
         private const UInt32 FileMagicWord = 0x6B304F43; // 'CO0k'
         private const Int32 RequiredVersion = 8;
         private const UInt32 DataMagicWord = 0x41544144;
