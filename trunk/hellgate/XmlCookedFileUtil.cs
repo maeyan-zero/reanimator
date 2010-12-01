@@ -73,12 +73,11 @@ namespace Hellgate
                 new RoomLayoutGroup(),
 
                 // Level Pathing (huge-ass list of nodes/points)
-                // todo: not all are completely parsing
-                //new RoomPathNodeDefinition(),
-                //new RoomPathNodeSet(),
-                //new RoomPathNode(),
-                //new RoomPathNodeConnection(),
-                //new RoomPathNodeConnectionRef(),
+                new RoomPathNodeDefinition(),
+                new RoomPathNodeSet(),
+                new RoomPathNode(),
+                new RoomPathNodeConnection(),
+                new RoomPathNodeConnectionRef(),
 
                 // Lights
                 new LightDefinition(),
@@ -265,11 +264,11 @@ namespace Hellgate
             switch (xmlCookElement.ElementType)
             {
                 case ElementType.BitFlag:
-                    flagged = (xmlDefinition.Flags[flagIndex] & (1 << xmlCookElement.BitIndex)) > 0;
+                    flagged = (xmlDefinition.Flags[flagIndex] & (1 << xmlCookElement.BitFlagIndex)) > 0;
                     break;
 
                 case ElementType.Flag:
-                    flagged = (xmlDefinition.Flags[flagIndex] & xmlCookElement.BitMask) > 0;
+                    flagged = (xmlDefinition.Flags[flagIndex] & xmlCookElement.FlagMask) > 0;
                     break;
             }
 
@@ -297,8 +296,8 @@ namespace Hellgate
                 xmlDefinition.NeedToReadBitFlags = false;
             }
 
-            int intIndex = xmlCookElement.BitIndex >> 5;
-            int bitOffset = xmlCookElement.BitIndex - (intIndex << 5);
+            int intIndex = xmlCookElement.BitFlagIndex >> 5;
+            int bitOffset = xmlCookElement.BitFlagIndex - (intIndex << 5);
             bool flagged = (xmlDefinition.BitFlags[intIndex] & (1 << bitOffset)) > 0;
 
             if (parentNode != null)
@@ -324,6 +323,21 @@ namespace Hellgate
             }
 
             return value;
+        }
+
+        private void _ReadInt32ArrayVariable(XmlNode parentNode, XmlCookElement xmlCookElement)
+        {
+            int count = _ReadInt32(null, null);
+            // Debug.Assert(count != 0);    // always written
+
+            XmlElement countElement = XmlDoc.CreateElement(xmlCookElement.Name + "Count");
+            countElement.InnerText = count.ToString();
+            parentNode.AppendChild(countElement);
+
+            for (int i = 0; i < count; i++)
+            {
+                _ReadInt32(parentNode, xmlCookElement.Name);
+            }
         }
 
         private bool _ReadBool32(XmlNode parentNode, String elementName)
@@ -578,6 +592,18 @@ namespace Hellgate
             }
         }
 
+        private void _WriteInt32ArrayVariable(XmlCookElement xmlCookElement, XmlNode xmlNode, String elementText)
+        {
+            int arrayCount = int.Parse(elementText);
+            bool allDefault = true;
+            List<Int32> elements = _GetArrayElementValues<Int32>(xmlCookElement, xmlNode, ref allDefault, arrayCount);
+            //if (allDefault) return;       // appears to be written even if all default
+
+            Int32 count = elements.Count;
+            FileTools.WriteToBuffer(ref _buffer, ref _offset, count);
+            FileTools.WriteToBuffer(ref _buffer, ref _offset, elements.ToArray().ToByteArray());
+        }
+
         private void _WriteFloat(String elementText, XmlCookElement xmlCookElement)
         {
             float floatValue = Convert.ToSingle(elementText);
@@ -826,11 +852,11 @@ namespace Hellgate
             UInt32 flag = (UInt32)xmlDefinition.Flags[flagIndex];
             if (xmlCookElement.ElementType == ElementType.Flag)
             {
-                flag |= xmlCookElement.BitMask;
+                flag |= xmlCookElement.FlagMask;
             }
             else
             {
-                flag |= ((UInt32)1 << xmlCookElement.BitIndex);
+                flag |= ((UInt32)1 << xmlCookElement.BitFlagIndex);
             }
 
             int writeOffset = (int)bitFieldOffsts[flagIndex];
@@ -851,8 +877,8 @@ namespace Hellgate
                 _offset += intCount * sizeof(UInt32);
             }
 
-            int intIndex = xmlCookElement.BitIndex >> 5;
-            int bitFlagIndex = xmlCookElement.BitIndex - (intIndex << 5);
+            int intIndex = xmlCookElement.BitFlagIndex >> 5;
+            int bitFlagIndex = xmlCookElement.BitFlagIndex - (intIndex << 5);
             UInt32 bitFlagField = xmlDefinition.BitFlags[intIndex] | ((UInt32)1 << bitFlagIndex);
             xmlDefinition.BitFlags[intIndex] = bitFlagField;
 
@@ -875,10 +901,24 @@ namespace Hellgate
 
         private int _WriteTableArrayFixed(XmlCookElement xmlCookElement, XmlNode xmlNode)
         {
+            return _WriteTableArray(xmlCookElement, xmlNode, xmlCookElement.Count);
+        }
+
+        private int _WriteTableArrayVariable(String elementText, XmlCookElement xmlCookElement, XmlNode xmlNode)
+        {
+            int tableCount = String.IsNullOrEmpty(elementText) ? 0 : Convert.ToInt32(elementText);
+            FileTools.WriteToBuffer(ref _buffer, ref _offset, tableCount); // table count is always written
+            if (xmlNode == null) return 0;
+
+            return _WriteTableArray(xmlCookElement, xmlNode.NextSibling, tableCount);
+        }
+
+        private int _WriteTableArray(XmlCookElement xmlCookElement, XmlNode xmlNode, int tableCount)
+        {
             XmlDefinition xmlTableCountDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
             int tablesAdded = 0;
 
-            for (int i = 0; i < xmlCookElement.Count; i++)
+            for (int i = 0; i < tableCount; i++)
             {
                 XmlNode tableNode = xmlNode.NextSibling;
                 if (tableNode.Name != xmlTableCountDefinition.RootElement) return -1;
@@ -887,27 +927,6 @@ namespace Hellgate
                 tablesAdded++;
 
                 xmlNode = tableNode.NextSibling;
-            }
-
-            return tablesAdded;
-        }
-
-        private int _WriteTableArrayVariable(String elementText, XmlCookElement xmlCookElement, XmlNode xmlNode)
-        {
-            int tableCount = String.IsNullOrEmpty(elementText) ? 0 : Convert.ToInt32(elementText);
-            FileTools.WriteToBuffer(ref _buffer, ref _offset, tableCount); // table count is always written
-            if (tableCount == 0) return 0;
-
-            XmlDefinition xmlTableCountDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
-            int tablesAdded = 0;
-            foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
-            {
-                if (xmlChildNode.Name != xmlTableCountDefinition.RootElement) continue;
-
-                if (_CookXmlData(xmlTableCountDefinition, xmlChildNode) == -1) return -1;
-                tablesAdded++;
-
-                if (tableCount == tablesAdded) break;
             }
 
             if (tablesAdded < tableCount) return -1;

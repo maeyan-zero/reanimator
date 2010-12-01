@@ -55,7 +55,7 @@ namespace Hellgate
         {
             CookElement = xmlCookElement;
             _parentTree = parentTree;
-            Definition = parentTree.Definition;
+            Definition = twinTree.Definition;
             _twinTree = twinTree;
         }
 
@@ -92,12 +92,12 @@ namespace Hellgate
             AddTree(newTree);
         }
 
-        private XmlCookedFileTree _GetExistingTree(XmlCookedFileTree xmlTree, UInt32 elementHash)
+        private static XmlCookedFileTree _GetExistingTree(XmlCookedFileTree xmlTree, UInt32 elementHash)
         {
             XmlCookedFileTree existingTree = xmlTree.GetTree(elementHash); // check current tree
             if (existingTree != null) return existingTree;
 
-            foreach (XmlCookedFileTree xmlChildTree in _elements.Select(keyValuePair => keyValuePair.Value).OfType<XmlCookedFileTree>())
+            foreach (XmlCookedFileTree xmlChildTree in xmlTree._elements.Select(keyValuePair => keyValuePair.Value).OfType<XmlCookedFileTree>())
             {
                 if (xmlChildTree.DefinitionNameHash == elementHash) return xmlChildTree;
 

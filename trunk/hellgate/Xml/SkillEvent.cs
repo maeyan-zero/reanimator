@@ -19,7 +19,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 0)
+                FlagMask = (1 << 0)
             },
             new XmlCookElement
             {
@@ -27,7 +27,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 1)
+                FlagMask = (1 << 1)
             },
             new XmlCookElement
             {
@@ -35,7 +35,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 2)
+                FlagMask = (1 << 2)
             },
             new XmlCookElement
             {
@@ -43,7 +43,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 3)
+                FlagMask = (1 << 3)
             },
             new XmlCookElement
             {
@@ -51,7 +51,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 4)
+                FlagMask = (1 << 4)
             },
             new XmlCookElement
             {
@@ -59,7 +59,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 5)
+                FlagMask = (1 << 5)
             },
             new XmlCookElement
             {
@@ -67,7 +67,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 6)
+                FlagMask = (1 << 6)
             },
             new XmlCookElement
             {
@@ -75,7 +75,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 7)
+                FlagMask = (1 << 7)
             },
             new XmlCookElement
             {
@@ -83,7 +83,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 8)
+                FlagMask = (1 << 8)
             },
             new XmlCookElement
             {
@@ -91,7 +91,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 9)
+                FlagMask = (1 << 9)
             },
             new XmlCookElement
             {
@@ -99,7 +99,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 10)
+                FlagMask = (1 << 10)
             },
             new XmlCookElement
             {
@@ -107,7 +107,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 11)
+                FlagMask = (1 << 11)
             },
             new XmlCookElement
             {
@@ -115,7 +115,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 12)
+                FlagMask = (1 << 12)
             },
             new XmlCookElement
             {
@@ -123,7 +123,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 13)
+                FlagMask = (1 << 13)
             },
             new XmlCookElement
             {
@@ -131,7 +131,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 14)
+                FlagMask = (1 << 14)
             },
             new XmlCookElement
             {
@@ -139,7 +139,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 15)
+                FlagMask = (1 << 15)
             },
             new XmlCookElement
             {
@@ -147,7 +147,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 16)
+                FlagMask = (1 << 16)
             },
             new XmlCookElement
             {
@@ -155,7 +155,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 17)
+                FlagMask = (1 << 17)
             },
             new XmlCookElement
             {
@@ -163,7 +163,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 18)
+                FlagMask = (1 << 18)
             },
             new XmlCookElement
             {
@@ -171,7 +171,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 19)
+                FlagMask = (1 << 19)
             },
             new XmlCookElement
             {
@@ -179,7 +179,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 20)
+                FlagMask = (1 << 20)
             },
             new XmlCookElement
             {
@@ -187,7 +187,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 21)
+                FlagMask = (1 << 21)
             },
             new XmlCookElement
             {
@@ -195,7 +195,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 22)
+                FlagMask = (1 << 22)
             },
             new XmlCookElement
             {
@@ -203,7 +203,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 23)
+                FlagMask = (1 << 23)
             },
             new XmlCookElement
             {
@@ -211,7 +211,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 24)
+                FlagMask = (1 << 24)
             },
             new XmlCookElement
             {
@@ -219,7 +219,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 25)
+                FlagMask = (1 << 25)
             },
             new XmlCookElement
             {
@@ -227,7 +227,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 26)
+                FlagMask = (1 << 26)
             },
             new XmlCookElement
             {
@@ -235,7 +235,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 27)
+                FlagMask = (1 << 27)
             },
             new XmlCookElement
             {
@@ -243,7 +243,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 28)
+                FlagMask = (1 << 28)
             },
             new XmlCookElement
             {
@@ -251,7 +251,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 29)
+                FlagMask = (1 << 29)
             },
             new XmlCookElement
             {
@@ -259,7 +259,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = (1 << 30)
+                FlagMask = (1 << 30)
             },
             new XmlCookElement
             {
@@ -267,7 +267,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 1,
-                BitMask = ((UInt32)1 << 31)
+                FlagMask = ((UInt32)1 << 31)
             },
             new XmlCookElement
             {
@@ -275,7 +275,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 2,
-                BitMask = (1 << 0)
+                FlagMask = (1 << 0)
             },
             new XmlCookElement
             {
@@ -283,7 +283,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 2,
-                BitMask = (1 << 1)
+                FlagMask = (1 << 1)
             },
             new XmlCookElement
             {
@@ -291,7 +291,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 2,
-                BitMask = (1 << 2)
+                FlagMask = (1 << 2)
             },
             new XmlCookElement
             {
@@ -299,7 +299,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 2,
-                BitMask = (1 << 3)
+                FlagMask = (1 << 3)
             },
             new XmlCookElement
             {
@@ -307,7 +307,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 2,
-                BitMask = (1 << 4)
+                FlagMask = (1 << 4)
             },
             new XmlCookElement
             {
@@ -315,7 +315,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 2,
-                BitMask = (1 << 5)
+                FlagMask = (1 << 5)
             },
             new XmlCookElement
             {
@@ -323,7 +323,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 2,
-                BitMask = (1 << 6)
+                FlagMask = (1 << 6)
             },
             new XmlCookElement
             {
@@ -331,7 +331,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 2,
-                BitMask = (1 << 7)
+                FlagMask = (1 << 7)
             },
             new XmlCookElement
             {
@@ -339,7 +339,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 DefaultValue = false,
                 FlagId = 2,
-                BitMask = (1 << 8)
+                FlagMask = (1 << 8)
             },
             new XmlCookElement
             {

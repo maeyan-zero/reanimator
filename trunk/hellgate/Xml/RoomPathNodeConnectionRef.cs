@@ -15,7 +15,7 @@
                     Name = "pConnection",
                     ElementType = ElementType.UnknownPTypeD_0x0D00,
                     DefaultValue = 0
-            },
+            }
         };
 
         public RoomPathNodeConnectionRef()

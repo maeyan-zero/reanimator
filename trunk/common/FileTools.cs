@@ -819,6 +819,7 @@ namespace Revival.Common
         {
             [FieldOffset(0)] public byte[] Bytes;
             [FieldOffset(0)] public float[] Floats;
+            [FieldOffset(0)] public Int32[] Int32s;
         }
 
         public static byte[] ToByteArray(this float[] floatArray)
@@ -826,6 +827,16 @@ namespace Revival.Common
             ArrayTypeConverter typeConvert = new ArrayTypeConverter { Floats = floatArray };
 
             byte[] bytes = new byte[floatArray.Length*4];
+            Buffer.BlockCopy(typeConvert.Bytes, 0, bytes, 0, bytes.Length);
+
+            return bytes;
+        }
+
+        public static byte[] ToByteArray(this Int32[] int32Array)
+        {
+            ArrayTypeConverter typeConvert = new ArrayTypeConverter { Int32s = int32Array };
+
+            byte[] bytes = new byte[int32Array.Length * 4];
             Buffer.BlockCopy(typeConvert.Bytes, 0, bytes, 0, bytes.Length);
 
             return bytes;

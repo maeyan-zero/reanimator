@@ -74,56 +74,56 @@ namespace Hellgate.Xml
                 Name = "CONDITION_BIT_CHECK_OWNER",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 0,
-                BitCount = 7
+                BitFlagIndex = 0,
+                BitFlagCount = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_CHECK_TARGET",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 2,
-                BitCount = 7
+                BitFlagIndex = 2,
+                BitFlagCount = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_CHECK_WEAPON",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 1,
-                BitCount = 7
+                BitFlagIndex = 1,
+                BitFlagCount = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_NOT_DEAD_OR_DYING",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 3,
-                BitCount = 7
+                BitFlagIndex = 3,
+                BitFlagCount = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_IS_YOUR_PLAYER",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 4,
-                BitCount = 7
+                BitFlagIndex = 4,
+                BitFlagCount = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_OWNER_IS_YOUR_PLAYER",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 5,
-                BitCount = 7
+                BitFlagIndex = 5,
+                BitFlagCount = 7
             },
             new XmlCookElement
             {
                 Name = "CONDITION_BIT_CHECK_STATE_SOURCE",
                 ElementType = ElementType.BitFlag,
                 DefaultValue = false,
-                BitIndex = 6,
-                BitCount = 7
+                BitFlagIndex = 6,
+                BitFlagCount = 7
             }
         };
 
