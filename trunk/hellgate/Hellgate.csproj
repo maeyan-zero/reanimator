@@ -295,6 +295,8 @@
     <Compile Include="Xml\SkillEvent.cs" />
     <Compile Include="Xml\SkillEventHolder.cs" />
     <Compile Include="Xml\SkillEventsDefinition.cs" />
+    <Compile Include="Xml\SkyboxDefinition.cs" />
+    <Compile Include="Xml\SkyboxModel.cs" />
     <Compile Include="Xml\SoundEffect.cs" />
     <Compile Include="Xml\SoundEffectDefinition.cs" />
     <Compile Include="Xml\SoundReverbDefinition.cs" />

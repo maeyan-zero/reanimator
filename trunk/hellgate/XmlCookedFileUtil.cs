@@ -96,6 +96,10 @@ namespace Hellgate
                 new SkillEventHolder(),
                 new SkillEvent(),
 
+                // Skybox
+                new SkyboxDefinition(),
+                new SkyboxModel(),
+
                 // Sound Effects
                 new SoundEffectDefinition(),
                 new SoundEffect(),
@@ -208,7 +212,12 @@ namespace Hellgate
 
             // get excel table index
             int rowIndex = _fileManager.GetExcelRowIndex(xmlCookElement.ExcelTableCode, excelString);
-            if (rowIndex == -1) throw new Exceptions.UnknownExcelElementException("excelString = " + excelString);
+            if (rowIndex == -1)
+            {
+                HasExcelStringCookError = true;
+                if (ThrowOnMissingExcelString) throw new Exceptions.UnknownExcelElementException("excelString = " + excelString);
+                Console.WriteLine("Warning: Inaccurate cook - Unknown ExcelString = " + excelString);
+            }
 
             XmlNode grandParentNode = parentNode.ParentNode;
             XmlNode descriptionNode = grandParentNode.LastChild.PreviousSibling;
@@ -1023,6 +1032,10 @@ namespace Hellgate
                     if (fValue == 0 && arrayElementText == "-0")
                         fValue = -1.0f * 0.0f;
                     elementValue = fValue;
+                }
+                else if (typeof(T) == typeof(Int32))
+                {
+                    elementValue = Convert.ToInt32(arrayElementText);
                 }
                 else
                 {

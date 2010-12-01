@@ -23,10 +23,14 @@ namespace Hellgate
         private byte[] _buffer;
         public XmlDocument XmlDoc { get; private set; }
         private bool CookExcludeTCv4 { get; set; }
+        private bool ThrowOnMissingExcelString { get; set; }
+        public bool HasExcelStringCookError { get; set; }
 
         public XmlCookedFile()
         {
             CookExcludeTCv4 = true;
+            ThrowOnMissingExcelString = false;
+            HasExcelStringCookError = false;
         }
 
         /// <summary>
@@ -95,11 +99,11 @@ namespace Hellgate
             {
                 if (xmlCookElement.IsTCv4 && CookExcludeTCv4) continue;
 
-                if (bpTest && _offset >= 597)
-                {
-                    int bp = 0;
-                    bpTest = false;
-                }
+                //if (bpTest && _offset >= 597)
+                //{
+                //    int bp = 0;
+                //    bpTest = false;
+                //}
 
 
                 bitIndex++;
@@ -155,7 +159,7 @@ namespace Hellgate
                     elementText = xmlElement.InnerText;
                 }
 
-                //if (xmlCookElement.Name == "pShortConnections" && xmlElement == null)
+                //if (xmlCookElement.Name == "pfParams")
                 //{
                 //    int bp = 0;
                 //}
@@ -447,6 +451,7 @@ namespace Hellgate
 
         private void _UncookXmlData(XmlDefinition xmlDefinition, XmlNode xmlParent, XmlCookedFileTree xmlTree)
         {
+            xmlDefinition.ResetFields();
             XmlElement rootElement = XmlDoc.CreateElement(xmlDefinition.RootElement);
             xmlParent.AppendChild(rootElement);
 
@@ -459,16 +464,15 @@ namespace Hellgate
             int bitFieldByteCount = (elementCount - 1 >> 3) + 1; // -1 as 16 >> 3 = 2 + 1 = 3, but should only be 2 bytes
             _offset += bitFieldByteCount;
 
-
             // loop through elements
             bool bpTest = true;
             for (int i = 0; i < elementCount; i++)
             {
-                if (bpTest && _offset >= 870)
-                {
-                    int bp = 0;
-                    bpTest = false;
-                }
+                //if (bpTest && _offset >= 870)
+                //{
+                //    int bp = 0;
+                //    bpTest = false;
+                //}
 
                 // is the field present?
                 if (!_TestBit(_buffer, bitFieldOffset, i)) continue;
@@ -478,11 +482,6 @@ namespace Hellgate
 
                 // sanity check - ensure it was in the definition segment
                 Debug.Assert(xmlTree.ContainsElement(xmlCookElement.NameHash));
-
-                //if (xmlCookElement.Name == "pShortConnections")
-                //{
-                //    int bp = 0;
-                //}
 
                 switch (xmlCookElement.ElementType)
                 {
@@ -562,7 +561,7 @@ namespace Hellgate
                     case ElementType.NonCookedFloat:                // 0x0800
                     case ElementType.UnknownPTypeD_0x0D00:          // 0x0D00
                     case ElementType.Int32_0x0A00:                  // 0x0A00
-                        int bp = 0;
+                        int bp1 = 0;
                         break;
 
                     case ElementType.ExcelIndex:                    // 0x0903
@@ -652,10 +651,10 @@ namespace Hellgate
                 if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException("Unexpected xml element hash: 0x" + elementHash.ToString("X8"));
                 xmlTree.AddElement(xmlCookElement);
 
-                if (xmlCookElement.Name == "pShortConnections")
-                {
-                    int bp = 0;
-                }
+                //if (xmlCookElement.Name == "pShortConnections")
+                //{
+                //    int bp = 0;
+                //}
 
                 ElementType token = (ElementType)FileTools.ByteArrayToUShort(_buffer, ref _offset);
                 switch (token)

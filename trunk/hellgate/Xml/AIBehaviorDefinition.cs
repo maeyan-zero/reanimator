@@ -133,7 +133,7 @@ namespace Hellgate.Xml
         {
             RootElement = "AI_BEHAVIOR_DEFINITION";
             base.Elements.AddRange(Elements);
-            Flags = new Int32[] {-1};
+            Flags = new Int32[] { -1 };
         }
     }
 }
