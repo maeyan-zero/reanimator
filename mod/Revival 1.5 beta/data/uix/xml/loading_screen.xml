@@ -1,0 +1,123 @@
+<ui>
+  <widthbasis>1024</widthbasis>
+  <ws_widthbasis>1360</ws_widthbasis>
+  <heightbasis>768</heightbasis>
+  <screen name="loading screen">
+    <texture>loading_atlas</texture>
+    <ws_texture>WSloading_atlas</ws_texture>
+    <texture lang="Korean">loading_kor_atlas</texture>
+    <ws_texture lang="Korean">WSloading_kor_atlas</ws_texture>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <ws_width>1360</ws_width>
+    <height>768</height>
+    <visible>0</visible>
+    <usescursor>1</usescursor>
+    <!--<rendersection>CursorContents</rendersection>-->
+    <rendersection>LoadingScreen</rendersection>
+    <animtime>2000</animtime>
+
+    <ignoresmouse>0</ignoresmouse>
+    <OnLButtonUp>UIEatMsgHandler</OnLButtonUp>
+    <OnLButtonDown>UIEatMsgHandler</OnLButtonDown>
+    <OnRButtonDown>UIEatMsgHandler</OnRButtonDown>
+    <OnRButtonUp>UIEatMsgHandler</OnRButtonUp>
+    <OnLClick>UIEatMsgHandler</OnLClick>
+    <OnRClick>UIEatMsgHandler</OnRClick>
+    <OnKeyDown>UIEatMsgHandler</OnKeyDown>
+    <OnKeyUp>UIEatMsgHandler</OnKeyUp>
+    <OnKeyChar>UIEatMsgHandler</OnKeyChar>    
+    
+    <panel name="loading">
+      <frame>loading</frame>
+      <x>0</x>
+      <y>0</y>
+      <width>1024</width>
+      <ws_width>1360</ws_width>
+      <height>768</height>
+      <stretch>1</stretch>
+    </panel>
+    <label name="level change text">
+      <x>0</x>
+      <y>550</y>
+      <font>Upper_Font_Bold</font>
+      <fontsize>64</fontsize>
+      <width>1024</width>
+      <ws_width>1360</ws_width>
+      <height>64</height>
+      <align>center</align>
+    </label>
+    <label name="level change subtext">
+      <x>0</x>
+      <y>440</y>
+      <font>Upper_Font_Bold</font>
+      <fontsize>32</fontsize>
+      <width>1024</width>
+      <ws_width>1360</ws_width>
+      <height>32</height>
+      <align>center</align>
+    </label>
+    <!--<panel name="loading progress bar">
+      <texture>main_atlas</texture>
+      <frame>allglyphs</frame>
+      <rendersection>Cursor</rendersection>
+      <x>10</x>
+      <y>660</y>
+      <width>1004</width>
+      <height>64</height>
+      <ws_width>1340</ws_width>
+      <alpha>80</alpha>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+      <animtime>100</animtime>
+      <rendersection>UpOne</rendersection>
+      <visible>1</visible>
+      <OnPaint>UILoadingBarAnimate</OnPaint>
+    </panel>-->
+    <!--<panel name="loading progress circle">
+      <frame>glyphs</frame>
+      <rendersection>Cursor</rendersection>
+      <x>512</x>
+      <ws_x>680</ws_x>
+      <y>384</y>
+      <width>560</width>
+      <height>560</height>
+      <alpha>180</alpha>
+      <red>255</red>
+      <green>255</green>
+      <blue>255</blue>
+      <animtime>100</animtime>
+      <rendersection>UpOne</rendersection>
+      <visible>1</visible>
+      <OnPaint>UILoadingCircleAnimate</OnPaint>
+    </panel>-->           
+    <label name="loading tip">
+      <x>174</x>
+      <y>675</y>
+      <font>Upper_Font_Bold</font>
+      <fontsize>32</fontsize>
+      <width>676</width>
+      <ws_width>996</ws_width>
+      <height>92</height>
+      <align>center</align>
+      <wordwrap>1</wordwrap>
+    </label>
+    <label name="level progress text">
+      <x>0</x>
+      <y>490</y>
+      <font>Upper_Font_Bold</font>
+      <fontsize>26</fontsize>
+      <width>1024</width>
+      <ws_width>1360</ws_width>
+      <height>40</height>
+      <alpha>255</alpha>
+      <red>192</red>
+      <green>192</green>
+      <blue>192</blue>
+      <visible>1</visible>
+      <align>center</align>
+    </label>
+  </screen>
+</ui>
