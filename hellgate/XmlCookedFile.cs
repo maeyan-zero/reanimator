@@ -21,9 +21,11 @@ namespace Hellgate
         private int _offset;
         private byte[] _buffer;
         public XmlDocument XmlDoc { get; private set; }
+        private bool CookExcludeTCv4 { get; set; }
 
         public XmlCookedFile()
         {
+            CookExcludeTCv4 = true;
         }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace Hellgate
                 MagicWord = FileMagicWord,
                 Version = RequiredVersion,
                 XmlRootDefinition = xmlDefinitionHash,
-                XmlRootElementCount = xmlDefinition.Count
+                XmlRootElementCount = CookExcludeTCv4 ? xmlDefinition.CountExcludeTCv4 : xmlDefinition.Count
             };
             FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookFileHeader);
 
@@ -77,7 +79,7 @@ namespace Hellgate
         private int _CookXmlData(XmlDefinition xmlDefinition, XmlNode xmlNode)
         {
             int offsetStart = _offset;
-            int elementCount = xmlDefinition.Elements.Count;
+            int elementCount = CookExcludeTCv4 ? xmlDefinition.CountExcludeTCv4 : xmlDefinition.Count;
 
             // bitField info
             int bitFieldOffset = _offset;
@@ -90,7 +92,9 @@ namespace Hellgate
             bool bpTest = true;
             foreach (XmlCookElement xmlCookElement in xmlDefinition.Elements)
             {
-                if (bpTest && _offset >= 0x6AA)
+                if (xmlCookElement.IsTCv4 && CookExcludeTCv4) continue;
+
+                if (bpTest && _offset >= 597)
                 {
                     int bp = 0;
                     bpTest = false;
@@ -122,7 +126,8 @@ namespace Hellgate
                 }
 
                 String elementName = xmlCookElement.Name;
-                if (xmlCookElement.ElementType == ElementType.StringArrayVariable ||
+                if (xmlCookElement.ElementType == ElementType.Int32ArrayVariable ||
+                    xmlCookElement.ElementType == ElementType.StringArrayVariable ||
                     xmlCookElement.ElementType == ElementType.FloatArrayVariable ||
                     xmlCookElement.ElementType == ElementType.TableArrayVariable ||
                     xmlCookElement.ElementType == ElementType.FloatTripletArrayVariable ||
@@ -134,6 +139,7 @@ namespace Hellgate
                 XmlElement xmlElement = xmlNode[elementName];
                 String elementText = String.Empty;
                 if (xmlElement == null &&
+                    xmlCookElement.ElementType != ElementType.Int32ArrayVariable &&    // need count written even if null/empty
                     xmlCookElement.ElementType != ElementType.StringArrayVariable &&    // need count written even if null/empty
                     xmlCookElement.ElementType != ElementType.FloatArrayVariable &&     // need count written even if null/empty
                     xmlCookElement.ElementType != ElementType.Table &&                  // want table even if null/empty
@@ -147,6 +153,11 @@ namespace Hellgate
                 {
                     elementText = xmlElement.InnerText;
                 }
+
+                //if (xmlCookElement.Name == "pShortConnections" && xmlElement == null)
+                //{
+                //    int bp = 0;
+                //}
 
                 switch (xmlCookElement.ElementType)
                 {
@@ -163,6 +174,10 @@ namespace Hellgate
 
                     case ElementType.Int32ArrayFixed:                   // 0x0006       // found in colorsets.xml.cooked
                         _WriteInt32ArrayFixed(xmlCookElement, xmlNode);
+                        break;
+
+                    case ElementType.Int32ArrayVariable:                // 0x0007       // found in RoomPathNodeSet
+                        _WriteInt32ArrayVariable(xmlCookElement, xmlNode, elementText);
                         break;
 
                     case ElementType.Float:                             // 0x0100
@@ -198,7 +213,7 @@ namespace Hellgate
                         break;
 
                     case ElementType.TableArrayVariable:                // 0x030A
-                        if (_WriteTableArrayVariable(elementText, xmlCookElement, xmlNode) == -1) return -1; // we found less tables than we were supposed to cook
+                        if (_WriteTableArrayVariable(elementText, xmlCookElement, xmlElement) == -1) return -1; // we found less tables than we were supposed to cook
                         break;
 
                     case ElementType.FloatTripletArrayVariable:         // 0x0500
@@ -253,6 +268,8 @@ namespace Hellgate
             int offsetStart = _offset;
             foreach (XmlCookElement xmlCookElement in xmlDefinition.Elements)
             {
+                if (xmlCookElement.IsTCv4 && CookExcludeTCv4) continue;
+
                 // write name hash and token
                 FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.NameHash);
                 FileTools.WriteToBuffer(ref _buffer, ref _offset, (ushort)xmlCookElement.ElementType);
@@ -311,13 +328,13 @@ namespace Hellgate
                     case ElementType.Flag:                          // 0x0B01
                         Int32 defaultFlagged = (bool)xmlCookElement.DefaultValue ? 1 : 0;
                         FileTools.WriteToBuffer(ref _buffer, ref _offset, defaultFlagged);
-                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.BitMask);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.FlagMask);
                         break;
 
                     // 8 bytes
                     case ElementType.BitFlag:                       // 0x0C02
-                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.BitIndex);
-                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.BitCount);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.BitFlagIndex);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.BitFlagCount);
                         break;
 
                     // 8 bytes
@@ -329,8 +346,8 @@ namespace Hellgate
                             FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.Count);
                         }
 
-                        XmlDefinition xmlSubDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
-                        if (xmlSubDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
+                        XmlDefinition xmlChildDefinition = _GetXmlDefinition(xmlCookElement.ChildTypeHash);
+                        if (xmlChildDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
 
                         FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.ChildTypeHash);
 
@@ -342,9 +359,10 @@ namespace Hellgate
                             break;
                         }
 
-                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlSubDefinition.Count);
+                        int elementCount = CookExcludeTCv4 ? xmlChildDefinition.CountExcludeTCv4 : xmlChildDefinition.Count;
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, elementCount);
 
-                        int bytesWritten = _CookXmlDefinition(xmlSubDefinition, cookedDefinitions);
+                        int bytesWritten = _CookXmlDefinition(xmlChildDefinition, cookedDefinitions);
                         if (bytesWritten == 0) return 0;
                         break;
 
@@ -460,10 +478,10 @@ namespace Hellgate
                 // sanity check - ensure it was in the definition segment
                 Debug.Assert(xmlTree.ContainsElement(xmlCookElement.NameHash));
 
-                //if (xmlCookElement.Name == "tAttachmentDef.eType")
+                //if (xmlCookElement.Name == "pShortConnections")
                 //{
                 //    int bp = 0;
-                //});
+                //}
 
                 switch (xmlCookElement.ElementType)
                 {
@@ -481,8 +499,7 @@ namespace Hellgate
                         break;
 
                     case ElementType.Int32ArrayVariable:            // 0x0007
-                        Int32 pValue = _ReadInt32(rootElement, xmlCookElement.Name);
-                        Debug.Assert((Int32)xmlCookElement.DefaultValue != pValue);
+                        _ReadInt32ArrayVariable(rootElement, xmlCookElement);
                         break;
 
                     case ElementType.Float:                         // 0x0100
@@ -634,6 +651,11 @@ namespace Hellgate
                 if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException("Unexpected xml element hash: 0x" + elementHash.ToString("X8"));
                 xmlTree.AddElement(xmlCookElement);
 
+                if (xmlCookElement.Name == "pShortConnections")
+                {
+                    int bp = 0;
+                }
+
                 ElementType token = (ElementType)FileTools.ByteArrayToUShort(_buffer, ref _offset);
                 switch (token)
                 {
@@ -695,7 +717,7 @@ namespace Hellgate
                         UInt32 bitMask = _ReadUInt32(null, null);                       // bit mask
 
                         Debug.Assert((bool)xmlCookElement.DefaultValue == defaultFlagged);
-                        Debug.Assert(xmlCookElement.BitMask == bitMask);
+                        Debug.Assert(xmlCookElement.FlagMask == bitMask);
                         break;
 
 
@@ -703,8 +725,8 @@ namespace Hellgate
                         Int32 bitIndex = _ReadInt32(null, null);                        // bit index
                         Int32 bitCount = _ReadInt32(null, null);                        // bit count
 
-                        Debug.Assert(xmlCookElement.BitIndex == bitIndex);
-                        Debug.Assert(xmlCookElement.BitCount == bitCount);
+                        Debug.Assert(xmlCookElement.BitFlagIndex == bitIndex);
+                        Debug.Assert(xmlCookElement.BitFlagCount == bitCount);
                         break;
 
 

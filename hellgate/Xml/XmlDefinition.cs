@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hellgate.Xml
 {
@@ -28,6 +29,23 @@ namespace Hellgate.Xml
         public int Count
         {
             get { return Elements.Count; }
+        }
+
+        private int _countExcludeTCv4;
+        public int CountExcludeTCv4
+        {
+            get
+            {
+                if (_countExcludeTCv4 == 0 && Count != 0)
+                {
+                    foreach (XmlCookElement xmlCookElement in Elements.Where(xmlCookElement => !xmlCookElement.IsTCv4))
+                    {
+                        _countExcludeTCv4++;
+                    }
+                }
+
+                return _countExcludeTCv4;
+            }
         }
 
         public void ResetFields()

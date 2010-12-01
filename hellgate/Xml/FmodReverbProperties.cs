@@ -170,7 +170,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 0)
+                FlagMask = (1 << 0)
             },
             new XmlCookElement
             {
@@ -178,7 +178,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 1)
+                FlagMask = (1 << 1)
             },
             new XmlCookElement
             {
@@ -186,7 +186,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 2)
+                FlagMask = (1 << 2)
             },
             new XmlCookElement
             {
@@ -194,7 +194,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 3)
+                FlagMask = (1 << 3)
             },
             new XmlCookElement
             {
@@ -202,7 +202,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 4)
+                FlagMask = (1 << 4)
             },
             new XmlCookElement
             {
@@ -210,7 +210,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 5)
+                FlagMask = (1 << 5)
             },
             new XmlCookElement
             {
@@ -218,7 +218,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 6)
+                FlagMask = (1 << 6)
             },
             new XmlCookElement
             {
@@ -226,7 +226,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 7)
+                FlagMask = (1 << 7)
             }
         };
 

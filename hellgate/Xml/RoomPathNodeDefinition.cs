@@ -18,7 +18,7 @@ namespace Hellgate.Xml
                 Name = "ROOM_PATH_NODE_DEF_INDOOR_FLAG",
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 0), // 1
+                FlagMask = (1 << 0), // 1
                 DefaultValue = false
             },
             new XmlCookElement
@@ -26,7 +26,7 @@ namespace Hellgate.Xml
                 Name = "ROOM_PATH_NODE_DEF_NO_PATHNODES_FLAG",
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 1), // 2
+                FlagMask = (1 << 1), // 2
                 DefaultValue = false
             },
             new XmlCookElement
@@ -34,7 +34,7 @@ namespace Hellgate.Xml
                 Name = "ROOM_PATH_NODE_DEF_USE_TUGBOAT",
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                BitMask = (1 << 1), // 2
+                FlagMask = (1 << 1), // 2
                 DefaultValue = false
             },
             new XmlCookElement
@@ -96,7 +96,7 @@ namespace Hellgate.Xml
                 Name = "fNodeMaxZ",
                 ElementType = ElementType.Float,
                 DefaultValue = 0.5f
-            },
+            }
         };
 
         public RoomPathNodeDefinition()

@@ -68,7 +68,7 @@
                     ElementType = ElementType.TableArrayVariable,
                     DefaultValue = null,
                     ChildType = typeof (RoomPathNodeConnectionRef)
-            },
+            }
         };
 
         public RoomPathNode()

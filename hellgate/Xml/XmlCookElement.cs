@@ -14,7 +14,7 @@ namespace Hellgate.Xml
 
         String = 0x0200,
         StringArrayFixed = 0x0206,          // found in AppearanceDefinition, like any other array type but as String
-        StringArrayVariable = 0x0207,       // found in AppearanceDefinition
+        StringArrayVariable = 0x0207,       // found in AppearanceDefinition and Material
 
         Table = 0x0308,
         TableArrayFixed = 0x0309,           // found in EnvironmentDefinition
@@ -42,6 +42,7 @@ namespace Hellgate.Xml
     {
         public String Name;
         public String TrueName;             // some element names have illegal xml chars in them (bad FSS), so we need the "true" name if we want the correct string hash
+        public UInt32 NameHash;
         public Object DefaultValue;
         public Type ChildType;
         public UInt32 ChildTypeHash;
@@ -49,13 +50,11 @@ namespace Hellgate.Xml
         public ElementType ElementType;
         public Int32 FlagId;
         public Int32 FlagOffsetChange;      // EnvironmentDefinition has a dwDefFlags first, which actually reads in the following 5 flag elements causing an offset error.
-        public Int32 BitIndex;
-        public Int32 BitCount;              // used for BitIndex, total field BitCount
-        public UInt32 BitMask;
-        public Int32 Count;
-        public UInt32 NameHash;
+        public UInt32 FlagMask;
+        public Int32 BitFlagIndex;
+        public Int32 BitFlagCount;          // used for BitIndex, total field BitCount
+        public Int32 Count;                 // general array-type count
         public bool TreatAsData;
-        public bool IsTCv4;
-        public bool IsPresent;
+        public bool IsTCv4;                 // TCv4 elements only
     }
 }

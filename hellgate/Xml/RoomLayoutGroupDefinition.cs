@@ -21,7 +21,7 @@
             {
                 Name = "nEditType",
                 ElementType = ElementType.Int32,
-                DefaultValue = 0, // EDIT_TYPE_POLY_PICK // todo: fix me?
+                DefaultValue = 0, // EDIT_TYPE_POLY_PICK
             },
             new XmlCookElement
             {
@@ -34,7 +34,7 @@
                 Name = "bFixup",
                 ElementType = ElementType.Int32,
                 DefaultValue = 0, // FALSE
-            },
+            }
         };
 
         public RoomLayoutGroupDefinition()
