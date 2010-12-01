@@ -15,8 +15,8 @@ namespace Hellgate
         private readonly List<KeyValuePair<UInt32, Object>> _elements;
         public int Count {get { return (_elements == null) ? -1 : _elements.Count; } }
 
-        private readonly XmlCookedFileTree _parentTree;
-        public XmlCookedFileTree Root { get { return (_parentTree == null) ? this : _parentTree.Root; } }
+        public XmlCookedFileTree Parent { get; private set; }
+        public XmlCookedFileTree Root { get { return (Parent == null) ? this : Parent.Root; } }
 
         private readonly XmlCookedFileTree _twinTree;
         public XmlCookedFileTree TwinRoot { get { return (_twinTree == null) ? this : _twinTree.TwinRoot; } }
@@ -41,7 +41,7 @@ namespace Hellgate
         {
             Definition = xmlDefinition;
             CookElement = xmlCookElement;
-            _parentTree = parentTree;
+            Parent = parentTree;
             _elements = new List<KeyValuePair<UInt32, Object>>();
         }
 
@@ -54,7 +54,7 @@ namespace Hellgate
         private XmlCookedFileTree(XmlCookElement xmlCookElement, XmlCookedFileTree parentTree, XmlCookedFileTree twinTree)
         {
             CookElement = xmlCookElement;
-            _parentTree = parentTree;
+            Parent = parentTree;
             Definition = twinTree.Definition;
             _twinTree = twinTree;
         }

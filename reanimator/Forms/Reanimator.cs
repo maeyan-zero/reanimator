@@ -62,17 +62,17 @@ namespace Reanimator
                 String subStr = str.Substring(37);
                 UInt32 strHash = Crypt.GetStringHash(subStr);
 
-                if (strHash == 3479992004) // "ROOM_LAYOUT_FLAG_AI_NODE_STONE"
+                if (strHash == 99226059) // "SKYBOX_DEFINITION"
                 {
                     int bp = 0;
                 }
 
-                if (strHash == 3896768623) // "ENV_LIGHT_DEFINITION"
+                if (strHash == 4194617108) // "SKYBOX_MODEL"
                 {
                     int bp = 0;
                 }
 
-                if (strHash == 4254997457) // "DecayLFRatio"
+                if (strHash == 1756745884) // "TEXTURE_DEFINITION"
                 {
                     int bp = 0;
                 }
@@ -127,13 +127,18 @@ namespace Reanimator
             List<String> xmlFiles = new List<String>(Directory.GetFiles(root, "*.xml.cooked", SearchOption.AllDirectories));
 
             int count = 0;
+            int cookWarnings = 0;
             foreach (String xmlFilePath in xmlFiles)
             {
                 String path = xmlFilePath;
-                //path = @"D:\Games\Hellgate London\data\background\tunneltransb\tunneltransb_path.xml.cooked";
+                //path = @"D:\Games\Hellgate London\data\background\tubestations\stpauls\sp_platform_layout.xml.cooked";
 
-                if (path.Contains("datChecksum") || path.Contains("mp_hellgate")) continue;
+                if (path.Contains("mp_hellgate")) continue;                 // todo: can't do these yet
 
+                //if (path.Contains("cratepecker"))
+                //{
+                //    int bp = 0;
+                //}
 
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();
                 byte[] data = File.ReadAllBytes(path);
@@ -141,9 +146,9 @@ namespace Reanimator
                 String fileName = path.Replace(@"D:\Games\Hellgate London\", "");
                 Console.WriteLine("Uncooking: " + fileName);
                 //if (fileName != "test_appearance.xml.cooked") continue;
-                {
-                    int bp = 0;
-                }
+                //{
+                //    int bp = 0;
+                //}
 
                 try
                 {
@@ -156,9 +161,14 @@ namespace Reanimator
                     continue;
                 }
 
-
                 xmlCookedFile.SaveXml(path.Replace(".cooked", ""));
                 count++;
+
+                if (xmlCookedFile.HasExcelStringCookError)
+                {
+                    cookWarnings++;
+                    continue;
+                }
 
                 XmlCookedFile recookedXmlFile = new XmlCookedFile();
                 byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
@@ -170,7 +180,12 @@ namespace Reanimator
                     int bp = 0;
                 }
             }
+
             Console.WriteLine("XML Files Uncooked: " + count);
+            if (cookWarnings > 0)
+            {
+                Console.WriteLine("Warning: " + cookWarnings + " files had excel strings missing.");
+            }
         }
 
         private static void _DoFolder(String folderDir)

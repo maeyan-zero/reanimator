@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Hellgate;
-using FileEntry = Hellgate.IndexFile.FileEntry;
 
 namespace Hellpack
 {
