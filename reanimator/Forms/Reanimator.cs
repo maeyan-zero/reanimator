@@ -135,30 +135,21 @@ namespace Reanimator
             List<String> xmlFiles = new List<String>(Directory.GetFiles(root, "*.xml.cooked", SearchOption.AllDirectories));
 
             int count = 0;
-            List<String> cookWarnings = new List<String>();
+            List<XmlCookedFile> excelStringWarnings = new List<XmlCookedFile>();
             List<String> tcv4Warnings = new List<String>();
             foreach (String xmlFilePath in xmlFiles)
             {
                 String path = xmlFilePath;
-                path = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\city\treasury\cap_path.xml.cooked";
+                //path = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\city\treasury\cap_path.xml.cooked";
 
                 //if (path.Contains("mp_hellgate")) continue;                 // todo: can't do these yet
-                if (!path.Contains("path")) continue;                 // todo: can't do these yet
+                //if (path.Contains("path")) continue;                 // todo: can't do these yet
 
-                //if (path.Contains("cratepecker"))
-                //{
-                //    int bp = 0;
-                //}
-
-                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+                XmlCookedFile xmlCookedFile = new XmlCookedFile(Path.GetFileName(path));
                 byte[] data = File.ReadAllBytes(path);
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\", "");
-                Console.WriteLine("Uncooking: " + fileName);
-                //if (fileName != "test_appearance.xml.cooked") continue;
-                //{
-                //    int bp = 0;
-                //}
+                //Console.WriteLine("Uncooking: " + fileName);
 
                 try
                 {
@@ -166,26 +157,22 @@ namespace Reanimator
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
-                    Debug.Assert(false, "Failed to uncook: " + e);
-                    xmlCookedFile.SaveXml(path.Replace(".cooked", ""));
+                    Console.WriteLine("Failed to uncooked!\n" + e);
                     continue;
                 }
 
                 xmlCookedFile.SaveXml(path.Replace(".cooked", ""));
                 count++;
 
-                if (xmlCookedFile.HasExcelStringCookError) cookWarnings.Add(fileName);
-                if (xmlCookedFile.HasTCv4Elements) tcv4Warnings.Add(fileName);
-                if (xmlCookedFile.HasExcelStringCookError || xmlCookedFile.HasTCv4Elements) continue;
+                if (xmlCookedFile.HasExcelStringsMissing) excelStringWarnings.Add(xmlCookedFile);
+                if (xmlCookedFile.HasTCv4Elements) tcv4Warnings.Add(Path.GetFileName(fileName));
+                if (xmlCookedFile.HasExcelStringsMissing || xmlCookedFile.HasTCv4Elements) continue;
 
                 XmlCookedFile recookedXmlFile = new XmlCookedFile();
                 byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
-                //byte[] originalHash = md5.ComputeHash(data);
-                //byte[] recookedHash = md5.ComputeHash(recookedData);
 
                 // if file passes byte-byte test, then continue
-                if (data.SequenceEqual(recookedData) || //originalHash.SequenceEqual(recookedHash) ||
+                if (data.SequenceEqual(recookedData) ||
                     path.Contains("sevenbranchsword_mesh_appearance.xml") ||    // this file has some weird bytes in a string element
                     path.Contains("focus_item11_mesh_appearance.xml") ||        // this file has non-zeroed flag base masks (all differing)
                     path.Contains("focus_item10_mesh_appearance.xml") ||        // as above     // (all 3 probably from not zeroing a ptr at original cooking)
@@ -194,20 +181,28 @@ namespace Reanimator
                    ) continue;
 
                 File.WriteAllBytes(path + "2", recookedData);
-                int bp = 0;
             }
 
+            TextWriter consoleOut = Console.Out;
+            TextWriter textWriter = new StreamWriter("uncook_results.txt");
+            Console.SetOut(textWriter);
             Console.WriteLine("XML Files Uncooked: " + count);
-            if (cookWarnings.Count > 0)
+            if (excelStringWarnings.Count > 0)
             {
-                Console.WriteLine("Warning: " + cookWarnings.Count + " files had excel strings missing:");
-                foreach (String str in cookWarnings) Console.WriteLine(str);
+                Console.WriteLine("Warning: " + excelStringWarnings.Count + " files had excel strings missing:");
+                foreach (XmlCookedFile xmlCookedFile in excelStringWarnings)
+                {
+                    Console.WriteLine("\t" + xmlCookedFile.FileName);
+                    foreach (String str in xmlCookedFile.ExcelStringsMissing) Console.WriteLine("\t\t- \"" + str + "\"");
+                }
             }
             if (tcv4Warnings.Count > 0)
             {
                 Console.WriteLine("Warning: " + tcv4Warnings.Count + " files had TCv4-specific elements:");
-                foreach (String str in tcv4Warnings) Console.WriteLine(str);
+                foreach (String str in tcv4Warnings) Console.WriteLine("\t" + str);
             }
+            textWriter.Close();
+            Console.SetOut(consoleOut);
         }
 
         private static void _DoFolder(String folderDir)
