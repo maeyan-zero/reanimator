@@ -284,7 +284,7 @@ namespace Hellgate
             if (DataFiles == null || DataFiles["EXCELTABLES"] == null || index < 0) return null;
 
             ExcelFile excelTable = GetExcelTableFromCode(code);
-            if (excelTable == null) return null;
+            if (excelTable == null || index >= excelTable.Rows.Count) return null;
 
             Type type = excelTable.Rows[0].GetType();
             FieldInfo[] fields = type.GetFields();

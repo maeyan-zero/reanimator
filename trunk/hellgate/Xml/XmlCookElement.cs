@@ -24,6 +24,7 @@ namespace Hellgate.Xml
         FloatQuadArrayVariable = 0x0600,    // found in Screen FX
 
         NonCookedInt32 = 0x0700,
+        NonCookedInt3207 = 0x0707,          // found in TCv4 Path files; probably variable array version - not cooked though so doesn't really matter
         NonCookedFloat = 0x0800,
 
         ExcelIndex = 0x0903,
@@ -56,5 +57,6 @@ namespace Hellgate.Xml
         public Int32 Count;                 // general array-type count
         public bool TreatAsData;
         public bool IsTCv4;                 // TCv4 elements only
+        public UInt32 HashOverride;         // Elements with unknown strings
     }
 }

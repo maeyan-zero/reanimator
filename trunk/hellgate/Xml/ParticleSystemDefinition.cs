@@ -48,6 +48,13 @@
             },
             new XmlCookElement
             {
+                Name = "fMinParticlesPercentDropRate",
+                DefaultValue = 0.0f,
+                ElementType = ElementType.Float,
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
                 Name = "pszTextureName",
                 DefaultValue = "glow1.tga",
                 ElementType = ElementType.String

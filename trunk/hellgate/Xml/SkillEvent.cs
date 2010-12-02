@@ -343,6 +343,24 @@ namespace Hellgate.Xml
             },
             new XmlCookElement
             {
+                Name = "SKILL_EVENT_FLAG2_LASER_DONT_TARGET_UNITS",
+                ElementType = ElementType.Flag,
+                DefaultValue = false,
+                FlagId = 2,
+                FlagMask = 0x0800,
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
+                Name = "SKILL_EVENT_FLAG2_DONT_EXECUTE_STATS",
+                ElementType = ElementType.Flag,
+                DefaultValue = false,
+                FlagId = 2,
+                FlagMask = 0x1000,
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
                 Name = "fTime",
                 DefaultValue = 0.0f,
                 ElementType = ElementType.Float

@@ -55,6 +55,15 @@ namespace Hellgate.Xml
             },
             new XmlCookElement
             {
+                Name = "ENVIRONMENTDEF_FLAG_USE_BLOB_SHADOWS",
+                DefaultValue = false,
+                ElementType = ElementType.Flag,
+                FlagId = 1,
+                FlagMask = 0x20,
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
                 Name = "dwFlags",
                 DefaultValue = 0,
                 ElementType = ElementType.NonCookedInt32

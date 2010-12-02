@@ -60,19 +60,25 @@ namespace Reanimator
                 if (str.Length <= 37) continue;
 
                 String subStr = str.Substring(37);
+                if (subStr == "pszSpineSidesTop")
+                {
+                    int bp = 0;
+                }
+
+
                 UInt32 strHash = Crypt.GetStringHash(subStr);
 
-                if (strHash == 99226059) // "SKYBOX_DEFINITION"
+                if (strHash == 2790358698) // "bReadOnly"
                 {
                     int bp = 0;
                 }
 
-                if (strHash == 4194617108) // "SKYBOX_MODEL"
+                if (strHash == 2263477051) // "iSpawnClassExecuteXTimes"
                 {
                     int bp = 0;
                 }
 
-                if (strHash == 1756745884) // "TEXTURE_DEFINITION"
+                if (strHash == 3199925438) // unknown
                 {
                     int bp = 0;
                 }
@@ -122,18 +128,22 @@ namespace Reanimator
         private static void _UncookAllXml()
         {
             System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            const String root = @"D:\Games\Hellgate London\data\";
+            //const String root = @"D:\Games\Hellgate London\data\";
+            const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\";
+            //const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\";
             DirectoryInfo directoryInfo = new DirectoryInfo(root);
             List<String> xmlFiles = new List<String>(Directory.GetFiles(root, "*.xml.cooked", SearchOption.AllDirectories));
 
             int count = 0;
-            int cookWarnings = 0;
+            List<String> cookWarnings = new List<String>();
+            List<String> tcv4Warnings = new List<String>();
             foreach (String xmlFilePath in xmlFiles)
             {
                 String path = xmlFilePath;
-                //path = @"D:\Games\Hellgate London\data\background\tubestations\stpauls\sp_platform_layout.xml.cooked";
+                path = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\city\treasury\cap_path.xml.cooked";
 
-                if (path.Contains("mp_hellgate")) continue;                 // todo: can't do these yet
+                //if (path.Contains("mp_hellgate")) continue;                 // todo: can't do these yet
+                if (!path.Contains("path")) continue;                 // todo: can't do these yet
 
                 //if (path.Contains("cratepecker"))
                 //{
@@ -158,33 +168,45 @@ namespace Reanimator
                 {
                     Console.WriteLine(e);
                     Debug.Assert(false, "Failed to uncook: " + e);
+                    xmlCookedFile.SaveXml(path.Replace(".cooked", ""));
                     continue;
                 }
 
                 xmlCookedFile.SaveXml(path.Replace(".cooked", ""));
                 count++;
 
-                if (xmlCookedFile.HasExcelStringCookError)
-                {
-                    cookWarnings++;
-                    continue;
-                }
+                if (xmlCookedFile.HasExcelStringCookError) cookWarnings.Add(fileName);
+                if (xmlCookedFile.HasTCv4Elements) tcv4Warnings.Add(fileName);
+                if (xmlCookedFile.HasExcelStringCookError || xmlCookedFile.HasTCv4Elements) continue;
 
                 XmlCookedFile recookedXmlFile = new XmlCookedFile();
                 byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
-                byte[] originalHash = md5.ComputeHash(data);
-                byte[] recookedHash = md5.ComputeHash(recookedData);
-                if (!originalHash.SequenceEqual(recookedHash))
-                {
-                    File.WriteAllBytes(path + "2", recookedData);
-                    int bp = 0;
-                }
+                //byte[] originalHash = md5.ComputeHash(data);
+                //byte[] recookedHash = md5.ComputeHash(recookedData);
+
+                // if file passes byte-byte test, then continue
+                if (data.SequenceEqual(recookedData) || //originalHash.SequenceEqual(recookedHash) ||
+                    path.Contains("sevenbranchsword_mesh_appearance.xml") ||    // this file has some weird bytes in a string element
+                    path.Contains("focus_item11_mesh_appearance.xml") ||        // this file has non-zeroed flag base masks (all differing)
+                    path.Contains("focus_item10_mesh_appearance.xml") ||        // as above     // (all 3 probably from not zeroing a ptr at original cooking)
+                    path.Contains("thirdpersononly.xml.cooked") ||              // this file has 3xBitFlag Elements (from ConditionsDefinition) exceeding the file buffer
+                    path.Contains("dizzy_reverb.xml.cooked")                    // as above, but in SoundReverbDefinition
+                   ) continue;
+
+                File.WriteAllBytes(path + "2", recookedData);
+                int bp = 0;
             }
 
             Console.WriteLine("XML Files Uncooked: " + count);
-            if (cookWarnings > 0)
+            if (cookWarnings.Count > 0)
             {
-                Console.WriteLine("Warning: " + cookWarnings + " files had excel strings missing.");
+                Console.WriteLine("Warning: " + cookWarnings.Count + " files had excel strings missing:");
+                foreach (String str in cookWarnings) Console.WriteLine(str);
+            }
+            if (tcv4Warnings.Count > 0)
+            {
+                Console.WriteLine("Warning: " + tcv4Warnings.Count + " files had TCv4-specific elements:");
+                foreach (String str in tcv4Warnings) Console.WriteLine(str);
             }
         }
 

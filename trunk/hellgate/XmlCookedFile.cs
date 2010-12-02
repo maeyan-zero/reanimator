@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 using System.Xml;
 using System.IO;
 using Hellgate.Xml;
@@ -13,6 +14,7 @@ namespace Hellgate
     {
         public const String FileExtention = ".xml.cooked";
         public const String FileExtentionClean = ".xml";
+        private const String ConfigDefault = "Default";
         private const UInt32 FileMagicWord = 0x6B304F43; // 'CO0k'
         private const Int32 RequiredVersion = 8;
         private const UInt32 DataMagicWord = 0x41544144;
@@ -21,16 +23,21 @@ namespace Hellgate
 
         private int _offset;
         private byte[] _buffer;
+
         public XmlDocument XmlDoc { get; private set; }
+        private XmlNode _xmlNodeConfig;
+
         private bool CookExcludeTCv4 { get; set; }
         private bool ThrowOnMissingExcelString { get; set; }
-        public bool HasExcelStringCookError { get; set; }
+        public bool HasExcelStringCookError { get; private set; }
+        public bool HasTCv4Elements { get; private set; }
 
         public XmlCookedFile()
         {
             CookExcludeTCv4 = true;
             ThrowOnMissingExcelString = false;
             HasExcelStringCookError = false;
+            HasTCv4Elements = false;
         }
 
         /// <summary>
@@ -158,11 +165,6 @@ namespace Hellgate
                 {
                     elementText = xmlElement.InnerText;
                 }
-
-                //if (xmlCookElement.Name == "pfParams")
-                //{
-                //    int bp = 0;
-                //}
 
                 switch (xmlCookElement.ElementType)
                 {
@@ -436,6 +438,7 @@ namespace Hellgate
 
 
             XmlDoc = new XmlDocument();
+            //XmlDeclaration xmlDeclaration = new XmlDeclaration("1.0", "utf-8", null, XmlDoc);
             XmlCookedFileTree xmlTree = new XmlCookedFileTree(xmlDefinition);
             _UncookFileXmlDefinition(xmlDefinition, header.XmlRootElementCount, xmlTree);
 
@@ -468,7 +471,7 @@ namespace Hellgate
             bool bpTest = true;
             for (int i = 0; i < elementCount; i++)
             {
-                //if (bpTest && _offset >= 870)
+                //if (bpTest && _offset >= 2488)
                 //{
                 //    int bp = 0;
                 //    bpTest = false;
@@ -486,15 +489,15 @@ namespace Hellgate
                 switch (xmlCookElement.ElementType)
                 {
                     case ElementType.Int32:                         // 0x0000
-                        Int32 iValue = _ReadInt32(rootElement, xmlCookElement.Name);
-                        Debug.Assert((Int32)xmlCookElement.DefaultValue != iValue);
+                        Int32 iValue = _ReadInt32(rootElement, xmlCookElement);
+                        Debug.Assert((Int32)xmlCookElement.DefaultValue != iValue, "(Int32)xmlCookElement.DefaultValue != iValue");
                         _offset += xmlCookElement.FlagOffsetChange;
                         break;
 
                     case ElementType.Int32ArrayFixed:               // 0x0006     // found in colorsets.xml.cooked pdwColors
                         for (int dwIndex = 0; dwIndex < xmlCookElement.Count; dwIndex++)
                         {
-                            _ReadUInt32(rootElement, xmlCookElement.Name);
+                            _ReadInt32(rootElement, xmlCookElement);
                         }
                         break;
 
@@ -503,14 +506,14 @@ namespace Hellgate
                         break;
 
                     case ElementType.Float:                         // 0x0100
-                        float fValue = _ReadFloat(rootElement, xmlCookElement.Name);
-                        Debug.Assert((float)xmlCookElement.DefaultValue != fValue);
+                        float fValue = _ReadFloat(rootElement, xmlCookElement);
+                        Debug.Assert((float)xmlCookElement.DefaultValue != fValue, "(float)xmlCookElement.DefaultValue != fValue");
                         break;
 
                     case ElementType.FloatArrayFixed:               // 0x0106
                         for (int fIndex = 0; fIndex < xmlCookElement.Count; fIndex++)
                         {
-                            _ReadFloat(rootElement, xmlCookElement.Name);
+                            _ReadFloat(rootElement, xmlCookElement);
                         }
                         break;
 
@@ -520,18 +523,15 @@ namespace Hellgate
 
                     case ElementType.String:                        // 0x0200
                         String szValue = _ReadString(rootElement, xmlCookElement);
-                        Debug.Assert((String)xmlCookElement.DefaultValue != szValue);
+                        Debug.Assert((String)xmlCookElement.DefaultValue != szValue, "(String)xmlCookElement.DefaultValue != szValue");
                         break;
 
                     case ElementType.StringArrayFixed:              // 0x0206
-                        for (int strIndex = 0; strIndex < xmlCookElement.Count; strIndex++)
-                        {
-                            _ReadString(rootElement, xmlCookElement);
-                        }
+                        _ReadStringArrayFixed(rootElement, xmlCookElement);
                         break;
 
-                    case ElementType.StringArrayVariable:
-                        _ReadStringArray(rootElement, xmlCookElement);
+                    case ElementType.StringArrayVariable:           // 0x0207
+                        _ReadStringArrayVariable(rootElement, xmlCookElement);
                         break;
 
                     case ElementType.Table:                         // 0x0308
@@ -577,27 +577,16 @@ namespace Hellgate
 
                     case ElementType.Flag:                          // 0x0B01
                         bool flagValue = _ReadFlag(rootElement, xmlDefinition, xmlCookElement);
-                        Debug.Assert((bool)xmlCookElement.DefaultValue != flagValue);
+                        Debug.Assert((bool)xmlCookElement.DefaultValue != flagValue, "(bool)xmlCookElement.DefaultValue != flagValue");
                         break;
 
                     case ElementType.BitFlag:                       // 0x0C02
                         bool bitFlagValue = _ReadBitFlag(rootElement, xmlDefinition, xmlCookElement);
-                        Debug.Assert((bool)xmlCookElement.DefaultValue != bitFlagValue);
-
-                        //if (xmlCookElement.Name == "ROOM_PATH_NODE_DEF_INDOOR_FLAG")
-                        //{
-                        //    int b2p = 0;
-                        //}
-
-                        // note: do flags need to be included for cooking no matter their default value??
-                        // ROOM_PATH_NODE_DEF_INDOOR_FLAG in set to 0 for some reason in catacombs_test_path.xml.cooked
-                        // and caves_d_path.xml.cooked - old version cooking?
-                        //Debug.Assert((bool)xmlCookElement.DefaultValue != bValue);
+                        Debug.Assert((bool)xmlCookElement.DefaultValue != bitFlagValue, "(bool)xmlCookElement.DefaultValue != bitFlagValue");
                         break;
 
                     case ElementType.ByteArrayVariable:             // 0x1007
-                        int byteArraySize = _ReadByteArray(rootElement, xmlCookElement);
-                        //Debug.Assert((Int32)xmlCookElement.DefaultValue != byteArraySize); // always written?
+                        _ReadByteArray(rootElement, xmlCookElement);
                         break;
 
                     default:
@@ -621,7 +610,8 @@ namespace Hellgate
         /// Determines what elements and definitions are in use, and returns them as a tree-like hash table.
         /// </summary>
         /// <param name="xmlDefinition">The base XML Definition to check for elements.</param>
-        /// <param name="xmlDefElementCount">The number of elements expect to be in use.</param>
+        /// <param name="xmlDefElementCount">The number of elements expected to be in use.</param>
+        /// <param name="xmlTree">The Parent XML Tree.</param>
         /// <returns>Hashtable of elements in use within the xml file.</returns>
         private void _UncookFileXmlDefinition(XmlDefinition xmlDefinition, int xmlDefElementCount, XmlCookedFileTree xmlTree)
         {
@@ -651,6 +641,8 @@ namespace Hellgate
                 if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException("Unexpected xml element hash: 0x" + elementHash.ToString("X8"));
                 xmlTree.AddElement(xmlCookElement);
 
+                if (xmlCookElement.IsTCv4) HasTCv4Elements = true;
+
                 //if (xmlCookElement.Name == "pShortConnections")
                 //{
                 //    int bp = 0;
@@ -665,26 +657,31 @@ namespace Hellgate
 
 
                     case ElementType.String:                                            // 0x0200
-                    case ElementType.StringArrayVariable:                               // 0x0207   // not sure of structure as non-default, but as default has same as String
-                        String strValue = _ReadByteString();                            // default value
-                        if (strValue != null) _offset++; // +1 for \0
+                    case ElementType.StringArrayFixed:                                  // 0x0206
+                    case ElementType.StringArrayVariable:                               // 0x0207
+                        byte strLen = _buffer[_offset++];
+                        String strValue = null;
+                        if (strLen > 0)
+                        {
+                            strValue = FileTools.ByteArrayToStringASCII(_buffer, ref _offset, strLen);
+                            _offset++; // \0
+                        }
 
                         Debug.Assert((String)xmlCookElement.DefaultValue == strValue);
-                        break;
 
-                    case ElementType.StringArrayFixed:                                  // 0x0206
-                        String strArrValue = _ReadByteString();                         // default value
-                        if (strArrValue != null) _offset++; // +1 for \0
-                        Int32 strArrCount = _ReadInt32(null, null);
+                        if (token == ElementType.StringArrayFixed)
+                        {
+                            Int32 strArrCount = _ReadInt32(null, null);
 
-                        Debug.Assert((String)xmlCookElement.DefaultValue == strArrValue);
-                        Debug.Assert(xmlCookElement.Count == strArrCount);
+                            Debug.Assert(xmlCookElement.Count == strArrCount);
+                        }
                         break;
 
 
                     case ElementType.Int32:                                             // 0x0000
                     case ElementType.Int32ArrayVariable:                                // 0x0007
                     case ElementType.NonCookedInt32:                                    // 0x0700
+                    case ElementType.NonCookedInt3207:                                  // 0x0707
                     case ElementType.Int32_0x0A00:                                      // 0x0A00
                         Int32 defaultInt32 = _ReadInt32(null, null);                    // default value
 
@@ -708,7 +705,10 @@ namespace Hellgate
                     case ElementType.NonCookedFloat:                                    // 0x0800
                         float defaultFloat = _ReadFloat(null, null);                    // default value
 
-                        Debug.Assert((float)xmlCookElement.DefaultValue == defaultFloat);
+                        if ((float)xmlCookElement.DefaultValue != defaultFloat)
+                        {
+                            _AddToConfig(ConfigDefault, xmlCookElement.Name, defaultFloat.ToString("r"));
+                        }
                         break;
 
 
@@ -812,7 +812,7 @@ namespace Hellgate
         /// <param name="path">The path to save the XML Document.</param>
         public void SaveXml(String path)
         {
-            if (XmlDoc == null || String.IsNullOrEmpty(path)) return;
+            if (XmlDoc == null || !XmlDoc.HasChildNodes || String.IsNullOrEmpty(path)) return;
 
             string directory = Path.GetDirectoryName(path);
             if (!(Directory.Exists(directory)))
