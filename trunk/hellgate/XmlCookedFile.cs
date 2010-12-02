@@ -14,7 +14,6 @@ namespace Hellgate
     {
         public const String FileExtention = ".xml.cooked";
         public const String FileExtentionClean = ".xml";
-        private const String ConfigDefault = "Default";
         private const UInt32 FileMagicWord = 0x6B304F43; // 'CO0k'
         private const Int32 RequiredVersion = 8;
         private const UInt32 DataMagicWord = 0x41544144;
@@ -25,19 +24,25 @@ namespace Hellgate
         private byte[] _buffer;
 
         public XmlDocument XmlDoc { get; private set; }
-        private XmlNode _xmlNodeConfig;
+        //private XmlNode _xmlNodeConfig;
 
+        public String FileName { get; private set; }
         private bool CookExcludeTCv4 { get; set; }
         private bool ThrowOnMissingExcelString { get; set; }
-        public bool HasExcelStringCookError { get; private set; }
+        public HashSet<String> ExcelStringsMissing { get; private set; }
+        public bool HasExcelStringsMissing { get { return (ExcelStringsMissing != null); } }
         public bool HasTCv4Elements { get; private set; }
 
         public XmlCookedFile()
         {
             CookExcludeTCv4 = true;
             ThrowOnMissingExcelString = false;
-            HasExcelStringCookError = false;
             HasTCv4Elements = false;
+        }
+
+        public XmlCookedFile(String fileName) : this()
+        {
+            FileName = fileName;
         }
 
         /// <summary>
@@ -447,6 +452,12 @@ namespace Hellgate
 
             _UncookXmlData(xmlDefinition, XmlDoc, xmlTree);
 
+            //if (_xmlNodeConfig != null && XmlDoc.DocumentElement != null)
+            //{
+            //    XmlNode root = XmlDoc.DocumentElement;
+            //    root.InsertBefore(_xmlNodeConfig, root.FirstChild);
+            //}
+
             Debug.Assert(_offset == _buffer.Length);
 
             return true;
@@ -468,7 +479,7 @@ namespace Hellgate
             _offset += bitFieldByteCount;
 
             // loop through elements
-            bool bpTest = true;
+            //bool bpTest = true;
             for (int i = 0; i < elementCount; i++)
             {
                 //if (bpTest && _offset >= 2488)
@@ -507,7 +518,8 @@ namespace Hellgate
 
                     case ElementType.Float:                         // 0x0100
                         float fValue = _ReadFloat(rootElement, xmlCookElement);
-                        Debug.Assert((float)xmlCookElement.DefaultValue != fValue, "(float)xmlCookElement.DefaultValue != fValue");
+                        // ignore it; some MP RoomPath definitions have changed default values - not completely implemented (doesn't really matter anyways)
+                        //Debug.Assert((float)xmlCookElement.DefaultValue != fValue, "(float)xmlCookElement.DefaultValue != fValue");
                         break;
 
                     case ElementType.FloatArrayFixed:               // 0x0106
@@ -551,13 +563,15 @@ namespace Hellgate
                         break;
 
                     case ElementType.FloatQuadArrayVariable:        // 0x0600
-                        // todo: not tested with HGL cooking it
-                        _ReadFloatQuadArrayVariable(rootElement, xmlCookElement);
+                        _ReadFloatQuadArrayVariable(rootElement, xmlCookElement);       // not tested with HGL (un)cooking
                         break;
 
+                    case ElementType.NonCookedInt32:                // 0x0700           // found in MP version RoomPath definitions
+                        int val = _ReadInt32(rootElement, xmlCookElement);              // this will be reading in the 0 element count
+                        Debug.Assert(val == 0, "case ElementType.NonCookedInt32 != 0");
+                        break;
 
                     // todo: any point this being here?
-                    case ElementType.NonCookedInt32:                // 0x0700
                     case ElementType.NonCookedFloat:                // 0x0800
                     case ElementType.UnknownPTypeD_0x0D00:          // 0x0D00
                     case ElementType.Int32_0x0A00:                  // 0x0A00
@@ -685,6 +699,11 @@ namespace Hellgate
                     case ElementType.Int32_0x0A00:                                      // 0x0A00
                         Int32 defaultInt32 = _ReadInt32(null, null);                    // default value
 
+                        //if (token == ElementType.NonCookedInt3207)
+                        //{
+                        //    int bp = 0;
+                        //}
+
                         Debug.Assert((Int32)xmlCookElement.DefaultValue == defaultInt32);
                         break;
 
@@ -705,9 +724,9 @@ namespace Hellgate
                     case ElementType.NonCookedFloat:                                    // 0x0800
                         float defaultFloat = _ReadFloat(null, null);                    // default value
 
-                        if ((float)xmlCookElement.DefaultValue != defaultFloat)
+                        if ((float)xmlCookElement.DefaultValue != defaultFloat) // seen in MP PathNode definitions only (not completely implemented - no point)
                         {
-                            _AddToConfig(ConfigDefault, xmlCookElement.Name, defaultFloat.ToString("r"));
+                            //_AddToConfig(ElementStrings.Defaults, xmlCookElement.Name, defaultFloat.ToString("r"));
                         }
                         break;
 

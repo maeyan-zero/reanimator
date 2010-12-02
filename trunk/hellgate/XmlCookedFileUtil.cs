@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Xml;
-using Hellgate.Excel;
 using Hellgate.Xml;
 using Revival.Common;
 
@@ -20,6 +19,12 @@ namespace Hellgate
             public Int32 Version;
             public UInt32 XmlRootDefinition;
             public Int32 XmlRootElementCount;
+        }
+
+        private struct ElementStrings
+        {
+            public const String Config = "XMLConfig";
+            public const String Defaults = "Defaults";
         }
 
         /// <summary>
@@ -213,19 +218,15 @@ namespace Hellgate
         private void _ReadExcelIndex(XmlNode parentNode, XmlCookElement xmlCookElement)
         {
             String excelString = _ReadByteString();
-            if (excelString == null) // the empty element is always written
-            {
-                //_AddChildElement(parentNode, xmlCookElement, xmlCookElement.Name, excelString);
-                return;
-            }
-
-            if (parentNode == null) return;
+            if (excelString == null || parentNode == null) return;
 
             // get excel table index
             int rowIndex = _fileManager.GetExcelRowIndex(xmlCookElement.ExcelTableCode, excelString);
             if (rowIndex == -1)
             {
-                HasExcelStringCookError = true;
+                if (ExcelStringsMissing == null) ExcelStringsMissing = new HashSet<String>();
+                if (!ExcelStringsMissing.Contains(excelString)) ExcelStringsMissing.Add(excelString);
+                
                 if (ThrowOnMissingExcelString) throw new Exceptions.UnknownExcelElementException("excelString = " + excelString);
                 Console.WriteLine("Warning: Inaccurate uncook - Unknown ExcelString = " + excelString);
             }
@@ -381,8 +382,7 @@ namespace Hellgate
 
         private UInt32 _ReadUInt32(XmlNode parentNode, XmlCookElement xmlCookElement)
         {
-            // todo: mp_hellgate_1.10.180.3416_1.0.86.4580\states\thirdpersononly.x.c has this issue with BitFlag past buffer-end... Are the flags still supposed to be high?
-            if (_offset >= _buffer.Length) return 0;
+            //if (_offset >= _buffer.Length) return 0;
 
             UInt32 value = FileTools.ByteArrayToUInt32(_buffer, ref _offset);
 
@@ -995,26 +995,25 @@ namespace Hellgate
         }
         #endregion
 
-        #region Config
-        private void _AddToConfig(String parentName, String elementName, String elementText)
-        {
-            //if (_xmlNodeConfig == null)
-            //{
-            //    _xmlNodeConfig = XmlDoc.CreateElement("Config");
-            //    XmlDoc.InsertBefore(_xmlNodeConfig, XmlDoc.FirstChild);
-            //}
+        //#region Config
+        //private void _AddToConfig(String parentName, String elementName, String elementText)
+        //{
+        //    if (_xmlNodeConfig == null)
+        //    {
+        //        _xmlNodeConfig = XmlDoc.CreateElement(ElementStrings.Config);
+        //    }
 
-            //XmlNode parentNode = _xmlNodeConfig[parentName];
-            //if (parentNode == null)
-            //{
-            //    parentNode = XmlDoc.CreateElement(parentName);
-            //    _xmlNodeConfig.AppendChild(parentNode);
-            //}
+        //    XmlNode parentNode = _xmlNodeConfig[parentName];
+        //    if (parentNode == null)
+        //    {
+        //        parentNode = XmlDoc.CreateElement(parentName);
+        //        _xmlNodeConfig.AppendChild(parentNode);
+        //    }
 
-            //XmlNode xmlNode = XmlDoc.CreateElement(elementName);
-            //xmlNode.InnerText = elementText;
-            //parentNode.AppendChild(xmlNode);
-        }
-        #endregion
+        //    XmlNode xmlNode = XmlDoc.CreateElement(elementName);
+        //    xmlNode.InnerText = elementText;
+        //    parentNode.AppendChild(xmlNode);
+        //}
+        //#endregion
     }
 }
