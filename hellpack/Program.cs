@@ -35,22 +35,22 @@ namespace Revival
             List<string> stringFilesToCook = new List<string>();
             List<string> xmlFilesToCook = new List<string>();
 
-            if (true)
-            {
-                fileManager = new FileManager(@"D:\Games\Hellgate London");
-                fileManager.LoadTableFiles();
-                foreach (DataFile dataFile in fileManager.DataFiles.Values)
-                {
-                    if (dataFile.StringId == "SOUNDS") continue;
-                    if (dataFile.IsStringsFile) continue;
-                    Console.WriteLine(dataFile.FileName);
-                    string dir = Path.GetDirectoryName(dataFile.FilePath);
-                    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-                    byte[] ebuffer = dataFile.ExportCSV();
-                    File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
-                }
-                return;
-            }
+            //if (true)
+            //{
+            //    fileManager = new FileManager(@"D:\Games\Hellgate London");
+            //    fileManager.LoadTableFiles();
+            //    foreach (DataFile dataFile in fileManager.DataFiles.Values)
+            //    {
+            //        if (dataFile.StringId == "SOUNDS") continue;
+            //        if (dataFile.IsStringsFile) continue;
+            //        Console.WriteLine(dataFile.FileName);
+            //        string dir = Path.GetDirectoryName(dataFile.FilePath);
+            //        if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+            //        byte[] ebuffer = dataFile.ExportCSV();
+            //        File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
+            //    }
+            //    return;
+            //}
 
             Console.WriteLine(welcomeMsg);
             Console.WriteLine(String.Empty);
