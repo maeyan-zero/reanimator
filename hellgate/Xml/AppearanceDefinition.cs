@@ -92,6 +92,14 @@ namespace Hellgate.Xml
             },
             new XmlCookElement
             {
+                Name = "pszSpineSidesTop",
+                DefaultValue = null,
+                ElementType = ElementType.StringArrayFixed,
+                Count = 2,
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
                 Name = "pszAimBone",
                 DefaultValue = null,
                 ElementType = ElementType.String
@@ -133,6 +141,14 @@ namespace Hellgate.Xml
                 Name = "nSpineTop",
                 DefaultValue = -1,
                 ElementType = ElementType.Int32_0x0A00
+            },
+            new XmlCookElement
+            {
+                Name = "pnSpineSidesTop",
+                DefaultValue = -1,
+                ElementType = ElementType.Int32Array_0x0A06,
+                Count = 2,
+                IsTCv4 = true
             },
             new XmlCookElement
             {

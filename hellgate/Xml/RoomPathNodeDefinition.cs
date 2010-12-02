@@ -96,6 +96,14 @@ namespace Hellgate.Xml
                 Name = "fNodeMaxZ",
                 ElementType = ElementType.Float,
                 DefaultValue = 0.5f
+            },
+            new XmlCookElement
+            {
+                Name = "vCorner",
+                ElementType = ElementType.FloatArrayFixed,
+                DefaultValue = 0.0f,
+                Count = 3,
+                IsTCv4 = true
             }
         };
 

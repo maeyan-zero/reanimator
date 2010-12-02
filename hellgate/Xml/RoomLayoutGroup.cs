@@ -179,7 +179,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
                 FlagId = 1,
-                FlagMask = (1 << 8),
+                FlagMask = 0x0200,
                 IsTCv4 = true
             },
             new XmlCookElement
@@ -220,6 +220,14 @@ namespace Hellgate.Xml
                 Name = "iSpawnClassExecuteXTimes",
                 ElementType = ElementType.Int32,
                 DefaultValue = 1,
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
+                Name = "UNKNOWN",
+                ElementType = ElementType.Float,
+                DefaultValue = 1.0f,
+                HashOverride = 0xBEBAFCBE, // 3199925438
                 IsTCv4 = true
             },
             new XmlCookElement

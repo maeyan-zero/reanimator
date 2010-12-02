@@ -50,6 +50,14 @@ namespace Hellgate.Xml
             },
             new XmlCookElement
             {
+                Name = "nItemClass",
+                DefaultValue = null,
+                ExcelTableCode = 27953, // ITEMS
+                ElementType = ElementType.ExcelIndex,
+                IsTCv4 = true
+            },
+            new XmlCookElement
+            {
                 Name = "nStat",
                 DefaultValue = null,
                 ExcelTableCode = 23088, // STATS
