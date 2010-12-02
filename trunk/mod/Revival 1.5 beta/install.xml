@@ -4,7 +4,7 @@
 		<release>Revival</release>
 		<version>1.5 beta</version>
 		<author>Maeyan, Malachor, Alex2069, Kite &amp; The Revival Team</author>
-		<www>http://www.hellgateaus.net/</www>
+		<website>http://www.hellgateaus.net/</website>
 		<email>maeyan.zero@gmail.com</email>
 		<dependencies>
 			<patch>sp_hellgate_1.10.180.3416_1.18074.70.4256</patch>
@@ -88,8 +88,9 @@
 		* Add a new slot for goggles.
 		</description>
 		<script type="hidden">
-			<description>Extracts files from the MP data packs</description>
-			<extract id="mp_hellgate_1.10.180.3416_1.0.86.4580">
+			<title>Test Center Extraction</title>
+			<description>Extracts files from the MP test center dat for use with Single Player.</description>
+			<extract source="mp_hellgate_1.10.180.3416_1.0.86.4580" destination="sp_hellgate_1.10.180.3416_1.0.86.4580_2">
 				<path>data/units/items/*</path>
 				<path>data/particles/*</path>
 				<path>data/background/*</path>
@@ -99,6 +100,7 @@
 			</extract>
 		</script>
 		<script type="optional">
+			<title>Remove censoring.</title>
 			<description>Remove regional censoring.</description>
 			<table id="items">
 				<entity id="*">
@@ -111,9 +113,10 @@
 			</table>
 		</script>
 		<script type="optional">
+			<title>Purchasable Retrainers</title>
 			<description>Enable retrainers to be purchased.</description>
 			<table id="treasure">
-				<entity id="bodger">
+				<entity id="23"><!--bodger-->
 					<attribute id="item06m">123</attribute>
 					<attribute id="item06">12</attribute>
 					<attribute id="item06z">1</attribute>

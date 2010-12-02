@@ -7,13 +7,13 @@ using System.Data;
 using System.Linq;
 using Hellgate;
 
-namespace Launcher
+namespace Revival
 {
     public class Modification
     {
-        Revival RevivalMod { get; set; }
+        public Revival Data { get; private set; }
         FileManager HellgateFileManager { get; set; }
-        public bool IntegrityCheck { get { return RevivalMod != null ? true : false; } }
+        public bool IntegrityCheck { get { return Data != null ? true : false; } }
 
         public Modification(string path)
         {
@@ -22,7 +22,7 @@ namespace Launcher
                 using (TextReader textReader = new StreamReader(path))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(Revival));
-                    RevivalMod = serializer.Deserialize(textReader) as Revival;
+                    Data = serializer.Deserialize(textReader) as Revival;
                 }
             }
             catch
@@ -154,27 +154,7 @@ namespace Launcher
         //    //    }
         //    //}
         //}
-        //public void Save(ProgressForm progress, Object argument)
-        //{
 
-        //}
-        //private bool Unzip(string path)
-        //{
-        //    try
-        //    {
-        //        using (Ionic.Zip.ZipFile zipFile = new Ionic.Zip.ZipFile(path))
-        //        {
-        //            zipFile.ExtractAll(ModPackPath, Ionic.Zip.ExtractExistingFileAction.OverwriteSilently);
-        //        }
-
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ExceptionLogger.LogException(ex, "Modification.Unzip", false);
-        //        return false;
-        //    }
-        //}
         //private bool Manipulate(File file)
         //{
         //    try
@@ -354,7 +334,7 @@ namespace Launcher
         public class Revival
         {
             [XmlElement("modification", typeof(Modification))]
-            public Modification Modification { get; set; }
+            public Modification Modifications { get; set; }
 
             /// <summary>
             /// This contains the entire modification.
@@ -373,8 +353,8 @@ namespace Launcher
                 public string Website { get; set; }
                 [XmlElement("email")]
                 public string Email { get; set; }
-                [XmlElement("dependencies", typeof(Dependencies))]
-                public Dependencies Dependencies { get; set; }
+                [XmlElement("dependencies", typeof(Dependency))]
+                public Dependency Dependencies { get; set; }
                 [XmlElement("description")]
                 public string Description { get; set; }
                 [XmlElement("script", typeof(Script))]
@@ -383,7 +363,7 @@ namespace Launcher
                 /// <summary>
                 /// List of prequisite dats that must be installed before this patch can be used.
                 /// </summary>
-                public class Dependencies
+                public class Dependency
                 {
                     [XmlElement("patch")]
                     public string[] Patch { get; set; }
@@ -416,14 +396,14 @@ namespace Launcher
                         public class Entity
                         {
                             [XmlAttribute("id")]
-                            public int ID { get; set; }
+                            public string ID { get; set; }
                             [XmlElement("attribute", typeof(Attribute))]
                             public Attribute[] Attributes { get; set; }
 
                             public class Attribute
                             {
                                 [XmlAttribute("id")]
-                                public int ID { get; set; }
+                                public string ID { get; set; }
                                 [XmlText]
                                 public string Data { get; set; }
                             }
@@ -435,8 +415,17 @@ namespace Launcher
                     /// </summary>
                     public class Extract
                     {
-                        [XmlAttribute("id")]
-                        public string ID { get; set; }
+                        [XmlAttribute("source")]
+                        public string Source { get; set; }
+                        [XmlAttribute("destination")]
+                        public string Destination { get; set; }
+                        [XmlElement("path")]
+                        public string[] paths;
+                    }
+
+                    public override string ToString()
+                    {
+                        return Title;
                     }
                 }
             }
