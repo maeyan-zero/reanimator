@@ -19,6 +19,7 @@ namespace Hellgate
         private const UInt32 DataMagicWord = 0x41544144;
         private static XmlDefinition[] _xmlDefinitions;
         private static FileManager _fileManager;
+        public static bool IsInitialized { get { return _fileManager != null ? true : false; } }
 
         private int _offset;
         private byte[] _buffer;

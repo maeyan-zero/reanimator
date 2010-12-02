@@ -113,8 +113,16 @@
       <Project>{B6CC99E9-8371-43C3-A20B-D8AA4B7DACCC}</Project>
       <Name>Hellgate</Name>
     </ProjectReference>
+    <ProjectReference Include="..\hellpack\Hellpack.csproj">
+      <Project>{8D60B505-8F80-45F5-B8C2-A0C90848367D}</Project>
+      <Name>Hellpack</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if $(PlatformName) == x86 copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll"
+if $(PlatformName) == x64 copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

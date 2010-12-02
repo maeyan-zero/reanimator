@@ -5,37 +5,53 @@ using System.Linq;
 using System.Xml;
 using Hellgate;
 
-namespace Hellpack
+namespace Revival
 {
-    static class Program
+    public static class Hellpack
     {
-        static String currentDir = Directory.GetCurrentDirectory();
-        static String dataDir = Path.Combine(currentDir, Common.DataPath);
-        static String dataCommonDir = Path.Combine(currentDir, Common.DataCommonPath);
-        static String defaultDat = "sp_hellgate_1337";
-        static String searchPattern = "*{0}";
-
-        // Messages
+        static string defaultDat = "sp_hellgate_1337";
+        static string searchPattern = "*{0}";
         static string welcomeMsg = "Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2010\nhttp://www.hellgateaus.net";
         static string noPathsMsg = "Sorry, no data paths were found. Check error.xml for details.";
         static string badSyntaxMsg = "Incorrect argument given: {0}";
         static string usageMsg = "Usage: todo";
 
-        // Program options / switches
-        static bool doCookTxt = false;
-        static bool doCookXml = false;
-        static bool doPackDat = false;
-        static bool doSearchCd = false;
-        static bool doExcludeRaw = false;
-
-        // Queues
-        static List<String> filesToPack = new List<String>();
-        static List<String> excelFilesToCook = new List<String>();
-        static List<String> stringFilesToCook = new List<String>();
-        static List<String> xmlFilesToCook = new List<String>();
-
         static void Main(string[] args)
         {
+            FileManager fileManager;
+            string currentDir = Directory.GetCurrentDirectory();
+            string dataDir = Path.Combine(currentDir, Common.DataPath);
+            string dataCommonDir = Path.Combine(currentDir, Common.DataCommonPath);
+            string hellgatePath = String.Empty;
+
+            bool doCookTxt = false;
+            bool doCookXml = false;
+            bool doPackDat = false;
+            bool doSearchCd = false;
+            bool doExcludeRaw = false;
+
+            List<string> filesToPack = new List<string>();
+            List<string> excelFilesToCook = new List<string>();
+            List<string> stringFilesToCook = new List<string>();
+            List<string> xmlFilesToCook = new List<string>();
+
+            if (true)
+            {
+                fileManager = new FileManager(@"D:\Games\Hellgate London");
+                fileManager.LoadTableFiles();
+                foreach (DataFile dataFile in fileManager.DataFiles.Values)
+                {
+                    if (dataFile.StringId == "SOUNDS") continue;
+                    if (dataFile.IsStringsFile) continue;
+                    Console.WriteLine(dataFile.FileName);
+                    string dir = Path.GetDirectoryName(dataFile.FilePath);
+                    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+                    byte[] ebuffer = dataFile.ExportCSV();
+                    File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
+                }
+                return;
+            }
+
             Console.WriteLine(welcomeMsg);
             Console.WriteLine(String.Empty);
 
@@ -107,45 +123,64 @@ namespace Hellpack
             // Search for Txt files to cook
             if (doSearchCd && doCookTxt)
             {
-                SearchForTxtFiles();
+                excelFilesToCook.AddRange(SearchForExcelFiles(currentDir));
+                stringFilesToCook.AddRange(SearchForStringFiles(currentDir));
             }
 
             // Search for Xml files to cook
             if (doSearchCd && doCookXml)
             {
-                SearchForXmlFiles();
+                xmlFilesToCook.AddRange(SearchForXmlFiles(currentDir));
             }
 
             // Cook Txt files
             if (doCookTxt)
             {
-                CookExcelFiles();
-                CookStringFiles();
+                CookExcelFiles(excelFilesToCook.ToArray());
+                CookStringFiles(stringFilesToCook.ToArray());
             }
 
             // Cook Xml files
             if (doCookXml)
             {
-                CookXmlFiles();
+                // This requires the Hellgate London directory, be sure to set via the switch
+                if (hellgatePath != String.Empty)
+                {
+                    fileManager = new FileManager(hellgatePath);
+                    if (fileManager.IntegrityCheck == false)
+                    {
+                        Console.WriteLine("Warning: XML could not be cooked.");
+                    }
+                    else
+                    {
+                        CookXmlFiles(xmlFilesToCook.ToArray(), fileManager);
+                    }
+                }
             }
 
             // Files to pack
             if (doPackDat)
             {
-                SearchForFilesToPack();
-                PackDatFile();
+                filesToPack.AddRange(SearchForFilesToPack(currentDir, doExcludeRaw));
+                PackDatFile(filesToPack.ToArray(), Path.Combine(currentDir, defaultDat + ".idx"));
             }
 
             return;
         }
 
-        static void SearchForTxtFiles()
+        /// <summary>
+        /// Searches the path for raw excel files to cook.
+        /// </summary>
+        /// <param name="hellgatePath">The path the search.</param>
+        /// <returns>Paths found as an array.</returns>
+        public static string[] SearchForExcelFiles(string hellgatePath)
         {
-            String excelDataDir = Path.Combine(dataDir, ExcelFile.FolderPath);
-            String excelDataCommonDir = Path.Combine(dataCommonDir, ExcelFile.FolderPath);
-            String stringDataDir = Path.Combine(dataDir, StringsFile.FolderPath);
-            String excelWildCard = String.Format(searchPattern, ExcelFile.FileExtentionClean);
-            String stringWildCard = String.Format(searchPattern, StringsFile.FileExtentionClean);
+            List<string> excelFilesToCook = new List<string>();
+            string dataDir = Path.Combine(hellgatePath, "data");
+            string dataCommonDir = Path.Combine(hellgatePath, "data_common");
+            string excelDataDir = Path.Combine(dataDir, ExcelFile.FolderPath);
+            string excelDataCommonDir = Path.Combine(dataCommonDir, ExcelFile.FolderPath);
+            string excelWildCard = String.Format(searchPattern, ExcelFile.FileExtentionClean);
 
             if (Directory.Exists(excelDataDir))
             {
@@ -159,26 +194,47 @@ namespace Hellpack
                 excelFilesToCook.AddRange(result);
             }
 
-            if (Directory.Exists(stringDataDir))
-            {
-                string[] result = Directory.GetFiles(stringDataDir, stringWildCard, SearchOption.AllDirectories);
-                stringFilesToCook.AddRange(result);
-            }
+            return excelFilesToCook.ToArray();
         }
 
-        static void SearchForXmlFiles()
+        public static string[] SearchForStringFiles(string hellgatePath)
         {
+            string[] stringPaths = null;
+            string dataDir = Path.Combine(hellgatePath, "data");
+            string dataCommonDir = Path.Combine(hellgatePath, "data_common");
+            string stringDataDir = Path.Combine(dataDir, StringsFile.FolderPath);
+            string stringWildCard = String.Format(searchPattern, StringsFile.FileExtentionClean);
+
+            if (Directory.Exists(stringDataDir))
+            {
+                stringPaths = Directory.GetFiles(stringDataDir, stringWildCard, SearchOption.AllDirectories);
+            }
+
+            return stringPaths;
+        }
+
+
+        public static string[] SearchForXmlFiles(string hellgatePath)
+        {
+            string[] xmlPaths = null;
+            string dataDir = Path.Combine(hellgatePath, "data");
+
             if (Directory.Exists(dataDir))
             {
                 string xmlWildCard = String.Format(searchPattern, XmlCookedFile.FileExtentionClean);
-                string[] result = Directory.GetFiles(dataDir, xmlWildCard, SearchOption.AllDirectories);
-                xmlFilesToCook.AddRange(result);
-                xmlFilesToCook = xmlFilesToCook.Where(str => !str.Contains("uix")).ToList(); // remove uix xml files
+                xmlPaths = Directory.GetFiles(dataDir, xmlWildCard, SearchOption.AllDirectories);
+                xmlPaths = xmlPaths.Where(str => !str.Contains("uix")).ToArray(); // remove uix xml files
             }
+
+            return xmlPaths;
         }
 
-        static void SearchForFilesToPack()
+        public static string[] SearchForFilesToPack(string hellgatePath, bool excludeRaw)
         {
+            List<string> filesToPack = new List<string>();
+            string dataDir = Path.Combine(hellgatePath, "data");
+            string dataCommonDir = Path.Combine(hellgatePath, "data_common");
+
             if (Directory.Exists(dataDir))
             {
                 string[] result = Directory.GetFiles(dataDir, "*", SearchOption.AllDirectories);
@@ -191,21 +247,17 @@ namespace Hellpack
                 filesToPack.AddRange(result);
             }
 
-            if (doExcludeRaw)
+            if (excludeRaw == true)
             {
                 // todo
             }
+
+            return filesToPack.ToArray();
         }
 
-        static void PackDatFile()
+        public static bool PackDatFile(string[] filesToPack, string outputPath)
         {
-            String packName = defaultDat;
-            if (!(packName.EndsWith(".idx"))) packName += ".idx";
-            packName = Path.Combine(currentDir, packName);
-            IndexFile newPack = new IndexFile()
-            {
-                FilePath = packName
-            };
+            IndexFile newPack = new IndexFile() { FilePath = outputPath };
 
             // Pack the files!
             foreach (String filePath in filesToPack)
@@ -233,89 +285,114 @@ namespace Hellpack
                 }
             }
 
-            string thisPack = packName.Replace(currentDir + "\\", "");
+            string thisPack = Path.GetFileNameWithoutExtension(outputPath);
             byte[] indexBytes = newPack.ToByteArray();
             Crypt.Encrypt(indexBytes);
             Console.WriteLine("Writing " + thisPack);
-            File.WriteAllBytes(packName, indexBytes);
+            try
+            {
+                File.WriteAllBytes(outputPath, indexBytes);
+            }
+            catch
+            {
+                return false;
+            }
             Console.WriteLine(thisPack + " generation complete.");
+            return true;
         }
 
-        static void CookExcelFiles()
+        public static void CookExcelFiles(string[] excelFilesToCook)
         {
             foreach (String excelPath in excelFilesToCook)
             {
-                byte[] excelBuffer = File.ReadAllBytes(excelPath);
-                ExcelFile excelFile = new ExcelFile(excelBuffer, excelPath);
-                if (!excelFile.IntegrityCheck)
-                {
-                    Console.WriteLine("Failed to parse excel file: " + excelPath);
-                    continue;
-                }
-
-                Console.WriteLine("Cooking " + excelPath.Replace(currentDir + "\\", ""));
-                excelBuffer = excelFile.ToByteArray();
-                if (excelBuffer == null)
-                {
-                    Console.WriteLine("Failed to cook excel file: " + excelFile.StringId);
-                    continue;
-                }
-
-                String writeToPath = excelPath + ".cooked";
-                try
-                {
-                    File.WriteAllBytes(writeToPath, excelBuffer);
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Failed to write cooked file: " + writeToPath);
-                    continue;
-                }
+                CookExcelFile(excelPath);
             }
         }
 
-        static void CookStringFiles()
+        public static void CookExcelFile(string excelPath)
+        {
+            byte[] excelBuffer = File.ReadAllBytes(excelPath);
+            ExcelFile excelFile = new ExcelFile(excelBuffer, excelPath);
+            if (!excelFile.IntegrityCheck)
+            {
+                Console.WriteLine("Failed to parse excel file: " + excelPath);
+                return;
+            }
+
+            Console.WriteLine(String.Format("Cooking {0}", Path.GetFileNameWithoutExtension(excelPath)));
+            excelBuffer = excelFile.ToByteArray();
+            if (excelBuffer == null)
+            {
+                Console.WriteLine("Failed to cook excel file: " + excelFile.StringId);
+                return;
+            }
+
+            String writeToPath = excelPath + ".cooked";
+            try
+            {
+                File.WriteAllBytes(writeToPath, excelBuffer);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to write cooked file: " + writeToPath);
+                return;
+            }
+        }
+
+        public static void CookStringFiles(string[] stringFilesToCook)
         {
             foreach (String stringPath in stringFilesToCook)
             {
-                byte[] stringsBuffer = File.ReadAllBytes(stringPath);
-                StringsFile stringsFile = new StringsFile(stringsBuffer, Path.GetFileName(stringPath).ToUpper());
-                if (!(stringsFile.IntegrityCheck == true)) continue;
-                Console.WriteLine("Cooking " + stringPath.Replace(currentDir + "\\", ""));
-                stringsBuffer = stringsFile.ToByteArray();
-                if (stringsBuffer == null) continue;
-                File.WriteAllBytes(stringPath + ".cooked", stringsBuffer);
+                CookStringFile(stringPath);
             }
         }
 
-        static void CookXmlFiles()
+        public static void CookStringFile(string stringPath)
         {
-            // Cook XML Files
-            if (xmlFilesToCook.Count > 0)
+            byte[] stringsBuffer = File.ReadAllBytes(stringPath);
+            StringsFile stringsFile = new StringsFile(stringsBuffer, Path.GetFileName(stringPath).ToUpper());
+            if (!(stringsFile.IntegrityCheck == true)) return;
+            Console.WriteLine(String.Format("Cooking {0}", Path.GetFileNameWithoutExtension(stringPath)));
+            stringsBuffer = stringsFile.ToByteArray();
+            if (stringsBuffer == null) return;
+            File.WriteAllBytes(stringPath + ".cooked", stringsBuffer);
+        }
+
+        public static void CookXmlFiles(string[] xmlFilesToCook, FileManager fileManager)
+        {
+            if (xmlFilesToCook.Length > 0)
             {
+                if (XmlCookedFile.IsInitialized == false)
+                    XmlCookedFile.Initialize(fileManager);
+
                 Console.WriteLine("Cooking XML Files... Loading Data Tables...");
-                FileManager fileManager = new FileManager(@"D:\Games\Hellgate London");
-                fileManager.LoadTableFiles();
-                XmlCookedFile.Initialize(fileManager);
+
                 foreach (String xmlPath in xmlFilesToCook)
                 {
-                    try
-                    {
-                        Console.WriteLine("Cooking " + xmlPath.Replace(currentDir + "\\", ""));
-
-                        XmlDocument xmlDocument = new XmlDocument();
-                        xmlDocument.Load(xmlPath);
-
-                        XmlCookedFile cookedXmlFile = new XmlCookedFile();
-                        byte[] xmlCookedData = cookedXmlFile.CookXmlDocument(xmlDocument);
-                        File.WriteAllBytes(xmlPath + ".cooked", xmlCookedData);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("Error: Failed to cook XML file: " + e);
-                        continue;
-                    }
+                    CookXmlFile(xmlPath, fileManager);
                 }
+            }
+        }
+
+        public static void CookXmlFile(string xmlPath, FileManager fileManager)
+        {
+            try
+            {
+                if (XmlCookedFile.IsInitialized == false)
+                    XmlCookedFile.Initialize(fileManager);
+
+                Console.WriteLine(String.Format("Cooking {0}", Path.GetFileNameWithoutExtension(xmlPath)));
+
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load(xmlPath);
+
+                XmlCookedFile cookedXmlFile = new XmlCookedFile();
+                byte[] xmlCookedData = cookedXmlFile.CookXmlDocument(xmlDocument);
+                File.WriteAllBytes(xmlPath + ".cooked", xmlCookedData);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: Failed to cook XML file: " + e);
             }
         }
     }
