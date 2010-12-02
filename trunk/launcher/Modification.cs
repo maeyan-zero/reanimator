@@ -12,11 +12,12 @@ namespace Revival
     public class Modification
     {
         public Revival Data { get; private set; }
-        FileManager HellgateFileManager { get; set; }
         public bool IntegrityCheck { get { return Data != null ? true : false; } }
+        public string DataPath { get; private set; }
 
         public Modification(string path)
         {
+            DataPath = Path.GetDirectoryName(path);
             try
             {
                 using (TextReader textReader = new StreamReader(path))

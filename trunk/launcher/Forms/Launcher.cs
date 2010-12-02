@@ -59,7 +59,7 @@ namespace Launcher.Forms
             if (result == DialogResult.Cancel) return;
 
             string tempPath = Path.GetTempPath();
-            string fileName = Path.GetFileNameWithoutExtension(fileDialog.FileName);
+            string fileName = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(fileDialog.FileName));
             string extractPath = Path.Combine(tempPath, fileName);
             string installFilePath = Path.Combine(extractPath, "install.xml");
 
@@ -120,6 +120,39 @@ namespace Launcher.Forms
         private void labelTradeItems_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void label_MouseEnter(object sender, EventArgs e)
+        {
+            Label label = sender as Label;
+            if (label == null) return;
+
+            Font prototype = label.Font;
+            label.Font = new Font(prototype, FontStyle.Underline);
+
+            if (label.Text == "Unleash Hell")
+            {
+                toolStripStatusLabel1.Text = "Launch Hellgate London: " + Path.GetFileName(Config.GameClientPath);
+            }
+            if (label.Text == "Trade Items")
+            {
+                toolStripStatusLabel1.Text = "Trade Items between your characters.";
+            }
+            if (label.Text == "Visit Website")
+            {
+                toolStripStatusLabel1.Text = "Join us at www.hellgateaus.net!";
+            }
+        }
+
+        private void label_MouseLeave(object sender, EventArgs e)
+        {
+            Label label = sender as Label;
+            if (label == null) return;
+
+            Font prototype = label.Font;
+            label.Font = new Font(prototype, FontStyle.Regular);
+
+            toolStripStatusLabel1.Text = String.Empty;
         }
     }
 }

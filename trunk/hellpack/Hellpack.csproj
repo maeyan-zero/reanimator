@@ -44,7 +44,7 @@
     <ProjectGuid>{8D60B505-8F80-45F5-B8C2-A0C90848367D}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hellpack</RootNamespace>
+    <RootNamespace>Revival</RootNamespace>
     <AssemblyName>Hellpack</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
