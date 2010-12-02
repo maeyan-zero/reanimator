@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using Hellgate;
+using Revival;
 using Ionic.Zip;
 
 namespace Launcher.Forms
@@ -88,14 +89,17 @@ namespace Launcher.Forms
                 return;
             }
 
-            try
+            Modification modification = new Modification(installFilePath);
+            if (modification.IntegrityCheck == false)
             {
-
+                string errCaption = "Error";
+                string errMessage = "The modification install.xml contains bad syntax, could not install.";
+                MessageBox.Show(errMessage, errCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            catch
-            {
 
-            }
+            ModificationForm modificationForm = new ModificationForm(modification);
+            modificationForm.Show(this);
         }
 
         private void revertToolStripMenuItem_Click(object sender, EventArgs e)

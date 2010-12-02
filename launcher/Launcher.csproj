@@ -51,11 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="Forms\Modification.cs">
+    <Compile Include="Forms\ModificationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Modification.Designer.cs">
-      <DependentUpon>Modification.cs</DependentUpon>
+    <Compile Include="Forms\ModificationForm.Designer.cs">
+      <DependentUpon>ModificationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Options.cs">
       <SubType>Form</SubType>
@@ -75,8 +75,8 @@
     <EmbeddedResource Include="Forms\Launcher.resx">
       <DependentUpon>Launcher.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Modification.resx">
-      <DependentUpon>Modification.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ModificationForm.resx">
+      <DependentUpon>ModificationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Options.resx">
       <DependentUpon>Options.cs</DependentUpon>
