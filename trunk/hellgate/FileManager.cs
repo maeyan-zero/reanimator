@@ -33,7 +33,14 @@ namespace Hellgate
             HellgatePath = hellgatePath;
             MPVersion = mpVersion;
             Language = "english"; // do we need to bother with anything other than english?
+            Reload();
+        }
 
+        /// <summary>
+        /// Reinitializes the FileManager. This is useful after a modification has been installed.
+        /// </summary>
+        public void Reload()
+        {
             DataFiles = new SortedDictionary<String, DataFile>();
             IndexFiles = new List<IndexFile>();
             FileEntries = new Dictionary<ulong, FileEntry>();
