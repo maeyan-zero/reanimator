@@ -471,6 +471,8 @@ namespace Hellgate
             String value;
 
             byte b = _buffer[_offset];
+
+            // todo: check http://msdn.microsoft.com/en-us/library/system.text.encoding.ascii.aspx
             bool manualTreatAsData = ((b < 0x20 || b > 0x7F) && b != 0x00); // if not a valid string, then treat as data
 
             if ((xmlCookElement.TreatAsData && strLen > 0) || manualTreatAsData)

@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.TCv4
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class BadgeRewards
+    class UnitModeGroupsTCv4
     {
-        TableHeader header;
+        ExcelFile.TableHeader header;
+
         [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        public string badgeRewardName;
+        public String name;
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;
-        public Int32 badgeName;
-        public Int32 item;//idx
-        public Int32 dontApplyIfPlayerHasRewardItemFor;
-        public Int32 state;//idx
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
+        Int32[] undefined;
+        public Int32 undefined_tcv4;
     }
 }

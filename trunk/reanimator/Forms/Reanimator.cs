@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
-using Reanimator.Forms;
 using Hellgate;
 using Revival.Common;
 
-namespace Reanimator
+namespace Reanimator.Forms
 {
     public partial class Reanimator : Form
     {
@@ -53,41 +53,41 @@ namespace Reanimator
 
 
 
-            const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
-            String[] strings = File.ReadAllLines(filePath);
-            foreach (String str in strings)
-            {
-                if (str.Length <= 37) continue;
+            //const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
+            //String[] strings = File.ReadAllLines(filePath);
+            //foreach (String str in strings)
+            //{
+            //    if (str.Length <= 37) continue;
 
-                String subStr = str.Substring(37);
-                if (subStr == "pszSpineSidesTop")
-                {
-                    int bp = 0;
-                }
+            //    String subStr = str.Substring(37);
+            //    if (subStr == "pszSpineSidesTop")
+            //    {
+            //        int bp = 0;
+            //    }
 
 
-                UInt32 strHash = Crypt.GetStringHash(subStr);
+            //    UInt32 strHash = Crypt.GetStringHash(subStr);
 
-                if (strHash == 2790358698) // "bReadOnly"
-                {
-                    int bp = 0;
-                }
+            //    if (strHash == 2790358698) // "bReadOnly"
+            //    {
+            //        int bp = 0;
+            //    }
 
-                if (strHash == 2263477051) // "iSpawnClassExecuteXTimes"
-                {
-                    int bp = 0;
-                }
+            //    if (strHash == 2263477051) // "iSpawnClassExecuteXTimes"
+            //    {
+            //        int bp = 0;
+            //    }
 
-                if (strHash == 3199925438) // unknown
-                {
-                    int bp = 0;
-                }
+            //    if (strHash == 3199925438) // unknown
+            //    {
+            //        int bp = 0;
+            //    }
 
-                if (strHash == 3788988200) // "INVENTORY_VIEW_INFO"
-                {
-                    int bp = 0;
-                }
-            }
+            //    if (strHash == 3788988200) // "INVENTORY_VIEW_INFO"
+            //    {
+            //        int bp = 0;
+            //    }
+            //}
 
 
 
@@ -205,53 +205,53 @@ namespace Reanimator
             Console.SetOut(consoleOut);
         }
 
-        private static void _DoFolder(String folderDir)
-        {
-            DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
-            FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
+        //private static void _DoFolder(String folderDir)
+        //{
+        //    DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
+        //    FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
 
-            XmlCookedFile xmlAdrenaline = null;
-            System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider();
+        //    XmlCookedFile xmlAdrenaline = null;
+        //    System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider();
 
-            foreach (FileInfo fileInfo in files)
-            {
-                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+        //    foreach (FileInfo fileInfo in files)
+        //    {
+        //        XmlCookedFile xmlCookedFile = new XmlCookedFile();
 
-                byte[] data = File.ReadAllBytes(fileInfo.FullName);
-                if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
-                {
-                    xmlAdrenaline = xmlCookedFile;
-                    int bp = 0;
-                }
+        //        byte[] data = File.ReadAllBytes(fileInfo.FullName);
+        //        if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
+        //        {
+        //            xmlAdrenaline = xmlCookedFile;
+        //            int bp = 0;
+        //        }
 
-                Debug.Assert(xmlCookedFile.Uncook(data));
+        //        Debug.Assert(xmlCookedFile.Uncook(data));
 
-                xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
+        //        xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
 
-                XmlCookedFile recookedXmlFile = new XmlCookedFile();
-                byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
-                byte[] originalHash = x.ComputeHash(data);
-                byte[] recookedHash = x.ComputeHash(recookedData);
+        //        XmlCookedFile recookedXmlFile = new XmlCookedFile();
+        //        byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
+        //        byte[] originalHash = x.ComputeHash(data);
+        //        byte[] recookedHash = x.ComputeHash(recookedData);
 
-                if (!originalHash.SequenceEqual(recookedHash))
-                {
-                    int bp = 0;
-                }
+        //        if (!originalHash.SequenceEqual(recookedHash))
+        //        {
+        //            int bp = 0;
+        //        }
 
 
-                //String blah = xmlCookedFile.Blah();
-                //if (blah != null)
-                //{
-                //    //tw.WriteLine(fileInfo.FullName);
-                //    //tw.WriteLine(blah);
-                //}
-            }
+        //        //String blah = xmlCookedFile.Blah();
+        //        //if (blah != null)
+        //        //{
+        //        //    //tw.WriteLine(fileInfo.FullName);
+        //        //    //tw.WriteLine(blah);
+        //        //}
+        //    }
 
-            if (xmlAdrenaline != null)
-            {
-                // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
-            }
-        }
+        //    if (xmlAdrenaline != null)
+        //    {
+        //        // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
+        //    }
+        //}
         #endregion
 
         /// <summary>
@@ -260,8 +260,7 @@ namespace Reanimator
         /// <returns>True if the installation is okay.</returns>
         private static bool CheckInstallation()
         {
-            if ((Directory.Exists(Config.HglDir)))
-                return true;
+            if (Directory.Exists(Config.HglDir)) return true;
 
             string caption = "Reanimator Installation";
             string message = "Please locate your Hellgate London installation directory.\n" +
@@ -724,44 +723,21 @@ namespace Reanimator
                         MessageBox.Show("Failed to load excel files!", "Excel Table Error", MessageBoxButtons.OK,
                                         MessageBoxIcon.Error);
                     }
-                    _tablesLoaded = new TablesLoaded(_fileManager) { MdiParent = this };
-                    _tablesLoaded.Show();
-
                     _fileExplorer = new FileExplorer(_fileManager) { MdiParent = this };
                     _fileExplorer.Show();
 
+                    _tablesLoaded = new TablesLoaded(_fileManager)
+                    {
+                        MdiParent = this,
+                        Bounds = new Rectangle(_fileExplorer.Size.Width + 10, 0, 300, 350),
+                        Text = "Hellgate Tables Loaded [" + _fileManager.DataFiles.Count + "]"
+                    };
+                    _tablesLoaded.Show();
+
+
+
                     XmlCookedFile.Initialize(_fileManager);
                 }
-
-
-                //ProgressForm fileExplorerProgress = new ProgressForm(_fileExplorer.LoadIndexFiles, Config.LoadMPVersion);
-                //fileExplorerProgress.ShowDialog(this);
-                //_fileExplorer.Show();
-
-                ////_indexFiles = _fileExplorer.IndexFiles;
-                //_tableFiles.FileExplorer = _fileExplorer;
-
-                //ProgressForm progress = new ProgressForm(_LoadTables, null);
-                //progress.ShowDialog(this);
-                //_tableDataSet.TableFiles = _tableFiles;
-                //_LoadAndDisplayCurrentlyLoadedExcelTables();
-
-                //XmlCookedFile.Initialize(_tableDataSet);
-
-          //      if (false)
-                //{
-                //XmlDocument xmlDocument = new XmlDocument();
-                //xmlDocument.Load(@"D:\Games\Hellgate London\data\skills\consumable\summoncocomoko.xml");
-                ////xmlDocument.Load(@"D:\Games\Hellgate London\data\materials\agitator.xml");
-
-                //    XmlCookedFile asdf = new XmlCookedFile();
-                //    byte[] bytes = asdf.CookXmlDocument(xmlDocument);
-                //    if (bytes != null)
-                //        File.WriteAllBytes(
-                //            @"D:\Games\Hellgate London\data\skills\consumable\summoncocomoko.xml.cooked2", bytes);
-                    //asdf.Uncook(File.ReadAllBytes(@"D:\Games\Hellgate London\data\skills\consumable\summoncocomoko.xml.cooked"));
-
-                //}
             }
             catch (Exception ex)
             {
@@ -805,23 +781,22 @@ namespace Reanimator
 
         private void _ShowExcelTablesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    if (showExcelTablesToolStripMenuItem.Checked)
-            //    {
-            //        _tablesLoaded.StartPosition = FormStartPosition.Manual;
-            //        _tablesLoaded.Location = new Point(0, 0);
-            //        _tablesLoaded.Show();
-            //    }
-            //    else
-            //    {
-            //        _tablesLoaded.Hide();
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    ExceptionLogger.LogException(ex, "_ShowExcelTablesToolStripMenuItem_Click", false);
-            //}
+            try
+            {
+                if (showExcelTablesToolStripMenuItem.Checked)
+                {
+                    _tablesLoaded.Location = new Point(0, 0);
+                    _tablesLoaded.Show();
+                }
+                else
+                {
+                    _tablesLoaded.Hide();
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, "_ShowExcelTablesToolStripMenuItem_Click", false);
+            }
         }
 
         private void _ApplyModificationsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -997,16 +972,6 @@ namespace Reanimator
         //        }
 
         //        File.WriteAllBytes(path + filename, buffer);
-        //    }
-        //}
-
-        //private void _LoadAllExcelTables(ProgressForm progress, object obj)
-        //{
-        //    foreach (DictionaryEntry rawDataFile in _tableDataSet.TableFiles.DataFiles)
-        //    {
-        //        DataFile dataFile = (DataFile)rawDataFile.Value;
-        //        if (dataFile.IsStringsFile) continue;
-        //        _tableDataSet.LoadTable(progress, dataFile);
         //    }
         //}
 

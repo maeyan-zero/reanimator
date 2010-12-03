@@ -12,7 +12,7 @@ namespace Hellgate
 {
     public partial class FileManager : IDisposable
     {
-        public bool IntegrityCheck { get; private set; }
+        public bool HasIntegrity { get; private set; }
         public bool MPVersion { get; private set; }
         public string HellgatePath { get; private set; }
         public string HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
@@ -50,14 +50,14 @@ namespace Hellgate
                 RemotingFormat = SerializationFormat.Binary
             };
 
-            IntegrityCheck = LoadFileTable();
+            HasIntegrity = _LoadFileTable();
         }
 
         /// <summary>
         /// Generates of a list of all the files inside the .idx .dat files from the Hellgate path.
         /// </summary>
         /// <returns>Result of the initialization. Occurance of an error will return false.</returns>
-        private bool LoadFileTable()
+        private bool _LoadFileTable()
         {
             List<String> idxPaths = new List<String>();
             string[] query = MPVersion ? Common.MPFiles : Common.SPFiles;
@@ -199,7 +199,7 @@ namespace Hellgate
                     dataFile = new StringsFile(fileBytes, fileEntry.RelativeFullPathWithoutBackup);
                 }
 
-                if (!dataFile.IntegrityCheck)
+                if (!dataFile.HasIntegrity)
                 {
                     Console.WriteLine("Error: Failed to load data file: " + dataFile.StringId);
                     continue;

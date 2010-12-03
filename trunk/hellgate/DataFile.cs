@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using Hellgate.Excel;
+using Hellgate.Excel.TCv4;
+using SkillEventTypes = Hellgate.Excel.SkillEventTypes;
+using Stats = Hellgate.Excel.Stats;
+using UnitModes = Hellgate.Excel.UnitModes;
 
 namespace Hellgate
 {
@@ -12,7 +16,7 @@ namespace Hellgate
         public String StringId { get; protected set; }
         public Type DataType { get; protected set; }
         public uint StructureId { get; protected set; }
-        public bool IntegrityCheck { get; protected set; }
+        public bool HasIntegrity { get; protected set; }
         public bool IsExcelFile { get; protected set; }
         public bool IsStringsFile { get; protected set; }
         public int Count { get { return (Rows != null) ? Rows.Count : 0; } }
@@ -20,11 +24,6 @@ namespace Hellgate
         public string FileExtension { get; set; }
         public string FileName { get { return Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(FilePath)); } }
         public List<Object> Rows { get; protected set; }
-
-        protected DataFile(String stringId)
-        {
-            //StringId = stringId;
-        }
 
         public override string ToString()
         {
@@ -206,40 +205,40 @@ namespace Hellgate
 
                 
             // TCv4 - different
-            //{"_TCv4_ACHIEVEMENTS", new TableEntry {IsTCv4 = true, RowType = typeof(AchievementsTCv4)}},
-            //{"_TCv4_ACT", new TableEntry {IsTCv4 = true, RowType = typeof(ActTCv4)}},
-            //{"_TCv4_AFFIXES", new TableEntry {IsTCv4 = true, RowType = typeof(AffixesTCv4)}},
-            //{"_TCv4_BACKGROUNDSOUNDS2D", new TableEntry {IsTCv4 = true, RowType = typeof(BackGroundSounds2DTCv4)}},
-            //{"_TCv4_BADGE_REWARDS", new TableEntry {IsTCv4 = true, RowType = typeof(BadgeRewardsTCv4)}},
-            //{"_TCv4_CHARACTER_CLASS", new TableEntry {IsTCv4 = true, RowType = typeof(CharacterClassTCv4)}},
-            //{"_TCv4_DAMAGE_EFFECTS", new TableEntry {IsTCv4 = true, NameReplace = "DAMAGEEFFECTS", RowType = typeof(DamageEffectsTCv4)}},
-            //{"_TCv4_DAMAGETYPES", new TableEntry {IsTCv4 = true, RowType = typeof(DamageTypesTCv4)}},
-            //{"_TCv4_INVENTORY", new TableEntry {IsTCv4 = true, RowType = typeof(InventoryTCv4)}},
-            //{"_TCv4_ITEM_LOOKS", new TableEntry {IsTCv4 = true, RowType = typeof(ItemLooksTCv4)}},
-            //{"_TCv4_ITEM_QUALITY", new TableEntry {IsTCv4 = true, NameReplace = "ITEMQUALITY", RowType = typeof(ItemQualityTCv4)}},
-            //{"_TCv4_ITEMS", new TableEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
-            //{"_TCv4_OBJECTS", new TableEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
-            //{"_TCv4_MONSTERS", new TableEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
-            //{"_TCv4_PLAYERS", new TableEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
-            //{"_TCv4_MISSILES", new TableEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
-            //{"_TCv4_MATERIALS_COLLISION", new TableEntry {IsTCv4 = true, RowType = typeof(MaterialsCollisionTCv4)}},
-            //{"_TCv4_LEVEL", new TableEntry {IsTCv4 = true, NameReplace = "LEVELS", RowType = typeof(LevelsTCv4)}},
-            //{"_TCv4_LEVEL_SCALING", new TableEntry {IsTCv4 = true, NameReplace = "LEVELSCALING", RowType = typeof(LevelScalingTCv4)}},
-            //{"_TCv4_ROOM_INDEX", new TableEntry {IsTCv4 = true, NameReplace = "LEVELS_ROOM_INDEX", RowType = typeof(LevelsRoomIndexTCv4)}},
-            //{"_TCv4_PLAYERLEVELS", new TableEntry {IsTCv4 = true, RowType = typeof(PlayerLevelsTCv4)}},
-            //{"_TCv4_PROPS", new TableEntry {IsTCv4 = true, RowType = typeof(LevelsRoomIndexTCv4)}},
-            //{"_TCv4_RECIPES", new TableEntry {IsTCv4 = true, RowType = typeof(RecipesTCv4)}},
-            //{"_TCv4_SKILLS", new TableEntry {IsTCv4 = true, RowType = typeof(SkillsTCv4)}},
-            //{"_TCv4_SKILLEVENTTYPES", new TableEntry {IsTCv4 = true, RowType = typeof(SkillEventTypesTCv4)}},
-            //{"_TCv4_SKILLTABS", new TableEntry {IsTCv4 = true, RowType = typeof(SkillTabsTCv4)}},
-            //{"_TCv4_SOUND_MIXSTATES", new TableEntry {IsTCv4 = true, NameReplace = "SOUNDMIXSTATES", RowType = typeof(SoundMixStatesTCv4)}},
-            //{"_TCv4_SOUNDS", new TableEntry {IsTCv4 = true, RowType = typeof(SoundsTCv4)}},
-            //{"_TCv4_STATS", new TableEntry {IsTCv4 = true, RowType = typeof(StatsTCv4)}},
-            //{"_TCv4_TREASURE", new TableEntry {IsTCv4 = true, RowType = typeof(TreasureTCv4)}},
-            //{"_TCv4_UNITMODE_GROUPS", new TableEntry {IsTCv4 = true, RowType = typeof(UnitModeGroupsTCv4)}},
-            //{"_TCv4_UNITMODES", new TableEntry {IsTCv4 = true, RowType = typeof(UnitModesTCv4)}},
-            //{"_TCv4_UNITTYPES", new TableEntry {IsTCv4 = true, RowType = typeof(UnitTypesTCv4), HasIndexBitRelations = true}},
-            //{"_TCv4_WARDROBE_LAYER", new TableEntry {IsTCv4 = true, NameReplace = "WARDROBE", RowType = typeof(WardrobeTCv4)}},
+            {"_TCv4_ACHIEVEMENTS", new MapEntry {IsTCv4 = true, RowType = typeof(AchievementsTCv4)}},
+            {"_TCv4_ACT", new MapEntry {IsTCv4 = true, RowType = typeof(ActTCv4)}},
+            {"_TCv4_AFFIXES", new MapEntry {IsTCv4 = true, RowType = typeof(AffixesTCv4)}},
+            {"_TCv4_BACKGROUNDSOUNDS2D", new MapEntry {IsTCv4 = true, RowType = typeof(BackGroundSounds2DTCv4)}},
+            {"_TCv4_BADGE_REWARDS", new MapEntry {IsTCv4 = true, RowType = typeof(BadgeRewardsTCv4)}},
+            {"_TCv4_CHARACTER_CLASS", new MapEntry {IsTCv4 = true, RowType = typeof(CharacterClassTCv4)}},
+            {"_TCv4_DAMAGE_EFFECTS", new MapEntry {IsTCv4 = true, FileName = "DAMAGEEFFECTS", RowType = typeof(DamageEffectsTCv4)}},
+            {"_TCv4_DAMAGETYPES", new MapEntry {IsTCv4 = true, RowType = typeof(DamageTypesTCv4)}},
+            {"_TCv4_INVENTORY", new MapEntry {IsTCv4 = true, RowType = typeof(InventoryTCv4)}},
+            {"_TCv4_ITEM_LOOKS", new MapEntry {IsTCv4 = true, RowType = typeof(ItemLooksTCv4)}},
+            {"_TCv4_ITEM_QUALITY", new MapEntry {IsTCv4 = true, FileName = "ITEMQUALITY", RowType = typeof(ItemQualityTCv4)}},
+            {"_TCv4_ITEMS", new MapEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
+            {"_TCv4_OBJECTS", new MapEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
+            {"_TCv4_MONSTERS", new MapEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
+            {"_TCv4_PLAYERS", new MapEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
+            {"_TCv4_MISSILES", new MapEntry {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
+            {"_TCv4_MATERIALS_COLLISION", new MapEntry {IsTCv4 = true, RowType = typeof(MaterialsCollisionTCv4)}},
+            {"_TCv4_LEVEL", new MapEntry {IsTCv4 = true, FileName = "LEVELS", RowType = typeof(LevelsTCv4)}},
+            {"_TCv4_LEVEL_SCALING", new MapEntry {IsTCv4 = true, FileName = "LEVELSCALING", RowType = typeof(LevelScalingTCv4)}},
+            {"_TCv4_ROOM_INDEX", new MapEntry {IsTCv4 = true, FileName = "LEVELS_ROOM_INDEX", RowType = typeof(LevelsRoomIndexTCv4)}},
+            {"_TCv4_PLAYERLEVELS", new MapEntry {IsTCv4 = true, RowType = typeof(PlayerLevelsTCv4)}},
+            {"_TCv4_PROPS", new MapEntry {IsTCv4 = true, RowType = typeof(LevelsRoomIndexTCv4)}},
+            {"_TCv4_RECIPES", new MapEntry {IsTCv4 = true, RowType = typeof(RecipesTCv4)}},
+            {"_TCv4_SKILLS", new MapEntry {IsTCv4 = true, RowType = typeof(SkillsTCv4)}},
+            {"_TCv4_SKILLEVENTTYPES", new MapEntry {IsTCv4 = true, RowType = typeof(SkillEventTypesTCv4)}},
+            {"_TCv4_SKILLTABS", new MapEntry {IsTCv4 = true, RowType = typeof(SkillTabsTCv4)}},
+            {"_TCv4_SOUND_MIXSTATES", new MapEntry {IsTCv4 = true, FileName = "SOUNDMIXSTATES", RowType = typeof(SoundMixStatesTCv4)}},
+            {"_TCv4_SOUNDS", new MapEntry {IsTCv4 = true, RowType = typeof(SoundsTCv4)}},
+            {"_TCv4_STATS", new MapEntry {IsTCv4 = true, RowType = typeof(StatsTCv4)}},
+            {"_TCv4_TREASURE", new MapEntry {IsTCv4 = true, RowType = typeof(TreasureTCv4)}},
+            {"_TCv4_UNITMODE_GROUPS", new MapEntry {IsTCv4 = true, RowType = typeof(UnitModeGroupsTCv4)}},
+            {"_TCv4_UNITMODES", new MapEntry {IsTCv4 = true, RowType = typeof(UnitModesTCv4)}},
+            {"_TCv4_UNITTYPES", new MapEntry {IsTCv4 = true, RowType = typeof(UnitTypesTCv4), HasIndexBitRelations = true}},
+            {"_TCv4_WARDROBE_LAYER", new MapEntry {IsTCv4 = true, FileName = "WARDROBE", RowType = typeof(WardrobeTCv4)}},
 
 
             //TCv4 - Same
@@ -268,7 +267,7 @@ namespace Hellgate
             {"_TCv4_EFFECTS_FILES", new MapEntry {IsTCv4 = true, RowType = typeof(EffectsFiles)}},
             {"_TCv4_EFFECTS", new MapEntry {IsTCv4 = true, FileName = "EFFECTS_INDEX", RowType = typeof(EffectsIndex)}},
             {"_TCv4_EFFECTS_SHADERS", new MapEntry {IsTCv4 = true, RowType = typeof(EffectsShaders)}},
-            //{"_TCv4_EXCELTABLES", new TableEntry {IsTCv4 = true, RowType = typeof(ExcelTables)}},
+            //{"_TCv4_EXCELTABLES", new MapEntry {IsTCv4 = true, RowType = typeof(ExcelTables)}},
             {"_TCv4_FACTION", new MapEntry {IsTCv4 = true, RowType = typeof(Faction)}},
             {"_TCv4_FACTION_STANDING", new MapEntry {IsTCv4 = true, RowType = typeof(FactionStanding)}},
             {"_TCv4_FILTER_CHATFILTER", new MapEntry {IsTCv4 = true, FileName = "CHATFILTER", RowType = typeof(Filter)}},
@@ -277,7 +276,7 @@ namespace Hellgate
             {"_TCv4_FONTCOLORS", new MapEntry {IsTCv4 = true, FileName = "FONTCOLOR", RowType = typeof(FontColor)}},
             {"_TCv4_FOOTSTEPS", new MapEntry {IsTCv4 = true, RowType = typeof(FootSteps)}},
             {"_TCv4_GAME_GLOBALS", new MapEntry {IsTCv4 = true, FileName = "GAMEGLOBALS", RowType = typeof(GameGlobals)}},
-            //{"_TCv4_GLOBAL_INDEX", new TableEntry {IsTCv4 = true, NameReplace = "GLOBALINDEX", RowType = typeof(Global)}},
+            //{"_TCv4_GLOBAL_INDEX", new MapEntry {IsTCv4 = true, FileName = "GLOBALINDEX", RowType = typeof(Global)}},
             {"_TCv4_GLOBAL_STRING", new MapEntry {IsTCv4 = true, FileName = "GLOBALSTRING", RowType = typeof(Global)}},
             {"_TCv4_GLOBAL_THEMES", new MapEntry {IsTCv4 = true, RowType = typeof(GlobalThemes)}},
             {"_TCv4_INITDB", new MapEntry {IsTCv4 = true, RowType = typeof(InitDb)}},
@@ -341,12 +340,12 @@ namespace Hellgate
             {"_TCv4_STATES", new MapEntry {IsTCv4 = true, RowType = typeof(States), HasIndexBitRelations = true}},
             {"_TCv4_STATS_FUNC", new MapEntry {IsTCv4 = true, FileName = "STATSFUNC", RowType = typeof(StatsFunc)}},
             {"_TCv4_STATS_SELECTOR", new MapEntry {IsTCv4 = true, FileName = "STATSSELECTOR", RowType = typeof(ExcelTables)}},
-            //{"_TCv4_STRING_FILES", new TableEntry {IsTCv4 = true, RowType = typeof(StringFiles)}},
+            //{"_TCv4_STRING_FILES", new MapEntry {IsTCv4 = true, RowType = typeof(StringFiles)}},
             {"_TCv4_TASK_STATUS", new MapEntry {IsTCv4 = true, RowType = typeof(ExcelTables)}},
             {"_TCv4_TAG", new MapEntry {IsTCv4 = true, RowType = typeof(Tag)}},
             {"_TCv4_TASKS", new MapEntry {IsTCv4 = true, RowType = typeof(Tasks)}},
             {"_TCv4_TEXTURE_TYPES", new MapEntry {IsTCv4 = true, FileName = "TEXTURETYPES", RowType = typeof(TextureTypes)}},
-            //{"_TCv4_UI_COMPONENT", new TableEntry {IsTCv4 = true, RowType = typeof(UIComponent)}},
+            //{"_TCv4_UI_COMPONENT", new MapEntry {IsTCv4 = true, RowType = typeof(UIComponent)}},
             {"_TCv4_UNIT_EVENT_TYPES", new MapEntry {IsTCv4 = true, FileName = "UNITEVENTS", RowType = typeof(UnitEvents)}},
             {"_TCv4_WARDROBE_APPEARANCE_GROUP", new MapEntry {IsTCv4 = true, RowType = typeof(WardrobeAppearanceGroup)}},
             {"_TCv4_WARDROBE_BLENDOP", new MapEntry {IsTCv4 = true, RowType = typeof(WardrobeBlendOp)}},

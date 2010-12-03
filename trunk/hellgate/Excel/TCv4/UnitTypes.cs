@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.TCv4
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class UnitTypes
+    class UnitTypesTCv4
     {
-        TableHeader header;
+        ExcelFile.TableHeader header;
+
         [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String type;
@@ -46,7 +46,12 @@ namespace Hellgate.Excel
         public Int32 isA14;
         [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
         public Int32 isA15;
-        //[ExcelOutput(IsStringIndex = true)]?
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 String;//stridx
+        public Int32 hellgateAuctionFaction_tcv4;
+        public Int32 hellgateAuctionType_tcv4;
+        public Int32 hellgateAuctionString_tcv4;
+        public Int32 mythosAuctionType_tcv4;
+        public Int32 mythosAuctionString_tcv4;
     }
 }

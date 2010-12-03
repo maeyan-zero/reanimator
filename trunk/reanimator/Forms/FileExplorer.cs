@@ -83,7 +83,7 @@ namespace Reanimator.Forms
                 {
                     fileInfo = new FileInfo(filePath);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // todo remove file from tree as it has been moved(?)
                     return;

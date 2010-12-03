@@ -223,15 +223,25 @@ namespace Revival.Common
         }
 
         /// <summary>
-        /// Converts an array of bytes to an ASCII String from offset up to the
-        /// first null character from offset or remaining bytes if null can't be found.
+        /// Converts an array of bytes to an ASCII String from offset up to the first null character.
         /// </summary>
         /// <param name="byteArray">The byte array containing the ASCII String.</param>
         /// <param name="offset">The initial offset within byteArray.</param>
         /// <returns>The converted ASCII String.</returns>
         public static String ByteArrayToStringASCII(byte[] byteArray, int offset)
         {
-            return ByteArrayToStringASCII(byteArray, offset, 0x00);
+            String result;
+
+            unsafe
+            {
+                fixed (byte* pAscii = &byteArray[offset])
+                {
+                    result = new String((sbyte*)pAscii);
+                }
+            }
+
+            return result;
+            //return ByteArrayToStringASCII(byteArray, offset, 0x00);
         }
 
         /// <summary>
@@ -681,7 +691,7 @@ namespace Revival.Common
         /// <returns></returns>
         public static byte[] GetDelimintedByteArray(byte[] source, ref int offset, byte delimiter)
         {
-            List<byte> buffer = new List<byte>();
+            //List<byte> buffer = new List<byte>();
             int length = source.Length;
             const byte endrow = 0x0D;
 
@@ -693,10 +703,16 @@ namespace Revival.Common
             }
 
             // not empty
+            int startOffset = offset;
             while (offset < length && source[offset] != delimiter && source[offset] != endrow)
             {
-                buffer.Add(source[offset++]);
+                offset++;
+                //buffer.Add(source[offset++]);
             }
+
+            int byteCount = offset - startOffset;
+            byte[] bytes = new byte[byteCount];
+            Buffer.BlockCopy(source, startOffset, bytes, 0, byteCount);
 
             if (offset < length && source[offset] == delimiter)
             {
@@ -707,7 +723,9 @@ namespace Revival.Common
                 offset++;
                 offset++;
             }
-            return buffer.ToArray();
+
+            return bytes;
+            //return buffer.ToArray();
         }
 
         /// <summary>
@@ -817,16 +835,19 @@ namespace Revival.Common
         [StructLayout(LayoutKind.Explicit)]
         struct ArrayTypeConverter
         {
-            [FieldOffset(0)] public byte[] Bytes;
-            [FieldOffset(0)] public float[] Floats;
-            [FieldOffset(0)] public Int32[] Int32s;
+            [FieldOffset(0)]
+            public byte[] Bytes;
+            [FieldOffset(0)]
+            public float[] Floats;
+            [FieldOffset(0)]
+            public Int32[] Int32s;
         }
 
         public static byte[] ToByteArray(this float[] floatArray)
         {
             ArrayTypeConverter typeConvert = new ArrayTypeConverter { Floats = floatArray };
 
-            byte[] bytes = new byte[floatArray.Length*4];
+            byte[] bytes = new byte[floatArray.Length * 4];
             Buffer.BlockCopy(typeConvert.Bytes, 0, bytes, 0, bytes.Length);
 
             return bytes;

@@ -232,6 +232,93 @@
     <Compile Include="Excel\SubLevel.cs" />
     <Compile Include="Excel\Tag.cs" />
     <Compile Include="Excel\Tasks.cs" />
+    <Compile Include="Excel\TCv4\Achievements.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Act.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Affixes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\BackGroundSounds2D.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\BadgeRewards.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\CharacterClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\DamageEffects.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\DamageTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Inventory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\ItemLooks.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\ItemQuality.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Items.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Levels.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\LevelScaling.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\LevelsRoomIndex.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\MaterialsCollision.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\PlayerLevels.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Recipes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\SkillEventTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Skills.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\SkillTabs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\SoundMixStates.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Sounds.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Stats.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Treasure.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\UnitModeGroups.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\UnitModes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\UnitTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Excel\TCv4\Wardrobe.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Excel\TextureTypes.cs" />
     <Compile Include="Excel\Treasure.cs" />
     <Compile Include="Excel\UIComponent.cs" />
