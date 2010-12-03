@@ -593,7 +593,7 @@ namespace Revival.Common
                 for (int i = 0; i < columns; i++)
                 {
                     byte[] buffer = (!(offset >= length)) ? GetDelimintedByteArray(source, ref offset, delimiter) : null;
-                    String newString = buffer == null ? String.Empty : ByteArrayToStringASCII(buffer, 0);
+                    String newString = (buffer == null || buffer.Length == 0) ? String.Empty : ByteArrayToStringASCII(buffer, 0);
                     newString = newString.Replace("\"", "");
                     newRow[i] = newString;
                 }
