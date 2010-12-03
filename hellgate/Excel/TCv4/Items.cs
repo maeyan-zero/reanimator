@@ -1,95 +1,96 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.TCv4
 {
+    // size = 0x0000000000000DB8 (not including header)
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public class Items
+    public class ItemsTCv4
     {
-        TableHeader header;
+        ExcelFile.TableHeader header;                               // ReadOrder   OffsetFromHeader     ReadFunction
+
         [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
-        public Int32 name;
+        public Int32 name;//pchar                                   // 1    0x0000000000000000  XLS_ReadCharPtr1
         Int32 buffer1;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 folder;
+        public Int32 folder;//pchar                                 // 2    0x0000000000000008  XLS_ReadCharPtr1
         Int32 buffer2;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 appearance;
+        public Int32 appearance;//pchar                             // 3    0x0000000000000010  XLS_ReadCharPtr1
         Int32 buffer3;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 appearenceFirst;
+        public Int32 appearenceFirst;//pchar                        // 4    0x0000000000000018  XLS_ReadCharPtr1
         Int32 buffer4;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 icon;
+        public Int32 icon;//pchar                                   // 5    0x0000000000000020  XLS_ReadCharPtr1
         Int32 buffer5;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 holyRadius;
+        public Int32 holyRadius;//pchar                             // 20   0x0000000000000028  XLS_ReadCharPtr1
         Int32 buffer6;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 tinyHitParticle;
+        public Int32 tinyHitParticle;//pchar                        // 22   0x0000000000000030  XLS_ReadCharPtr2
         Int32 buffer7;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 lightHitParticle;
+        public Int32 lightHitParticle;//pchar                       // 23   0x0000000000000038  XLS_ReadCharPtr2
         Int32 buffer8;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 mediumHitParticle;
+        public Int32 mediumHitParticle;//pchar                      // 24   0x0000000000000040  XLS_ReadCharPtr2
         Int32 buffer9;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 hardHitParticle;
+        public Int32 hardHitParticle;//pchar                        // 25   0x0000000000000048  XLS_ReadCharPtr2
         Int32 buffer10;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 killedParticle;
+        public Int32 killedParticle;//pchar                         // 26   0x0000000000000050  XLS_ReadCharPtr2
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
         byte[] unknown00;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 fizzleParticle;
+        public Int32 fizzleParticle;//pchar                         // 27   0x0000000000000060  XLS_ReadCharPtr1
         Int32 buffer12;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 reflectParticle;
+        public Int32 reflectParticle;//pchar                        // 28   0x0000000000000068  XLS_ReadCharPtr1
         Int32 buffer13;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 restoreVitalsParticle;
+        public Int32 restoreVitalsParticle;//pchar                  // 29   0x0000000000000070  XLS_ReadCharPtr1
         Int32 buffer14;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 diffuse;
+        public Int32 diffuse;//pchar                                // 6    0x0000000000000078  XLS_ReadCharPtr2
         Int32 buffer15;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 normal;
+        public Int32 normal;//pchar                                 // 7    0x0000000000000080  XLS_ReadCharPtr2
         Int32 buffer16;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 specular;
+        public Int32 specular;//pchar                               // 8    0x0000000000000088  XLS_ReadCharPtr2
         Int32 buffer17;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 lightmap;
+        public Int32 lightmap;//pchar                               // 9    0x0000000000000090  XLS_ReadCharPtr2
         Int32 buffer18;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource1;
+        public Int32 overrideSource1;//pchar                        // 10   0x0000000000000098  XLS_ReadCharPtr2
         Int32 buffer19;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest1;
+        public Int32 overrideDest1;//pchar                          // 15   0x00000000000000A0  XLS_ReadCharPtr2
         Int32 buffer20;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource2;
+        public Int32 overrideSource2;//pchar                        // 11   0x00000000000000A8  XLS_ReadCharPtr2
         Int32 buffer21;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest2;
+        public Int32 overrideDest2;//pchar                          // 16   0x00000000000000B0  XLS_ReadCharPtr2
         Int32 buffer22;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource3;
+        public Int32 overrideSource3;//pchar                        // 12   0x00000000000000B8  XLS_ReadCharPtr2
         Int32 buffer23;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest3;
+        public Int32 overrideDest3;//pchar                          // 17   0x00000000000000C0  XLS_ReadCharPtr2
         Int32 buffer24;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource4;
+        public Int32 overrideSource4;//pchar                        // 13   0x00000000000000C8  XLS_ReadCharPtr2
         Int32 buffer25;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideDest4;
+        public Int32 overrideDest4;//pchar                          // 18   0x00000000000000D0  XLS_ReadCharPtr2
         Int32 buffer26;
         [ExcelOutput(IsStringOffset = true)]
-        public Int32 overrideSource5;
+        public Int32 overrideSource5;//pchar                        // 14   0x00000000000000D8  XLS_ReadCharPtr2
         Int32 buffer27;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 overrideDest5;//pchar                          // 19   0x00000000000000E0  XLS_ReadCharPtr2
@@ -239,7 +240,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsStringOffset = true)]
         public Int32 impWallToxic;//pchar                           // 443  0x0000000000000410  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 116)]
-        byte[] unknown32;
+        byte[] unknown32;                                           // 0x0000000000000414 to 0x0000000000000487
         [ExcelOutput(IsStringOffset = true)]
         public Int32 impactUnit;//pchar                             // 448  0x0000000000000488  XLS_ReadCharPtr1
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
@@ -283,6 +284,8 @@ namespace Hellgate.Excel
         public Items.BitMask06 bitmask06;                           // 56   0x0000000000000578
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Items.BitMask07 bitmask07;                           // 56   0x000000000000057C
+        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        public Items.BitMask08 bitmask09;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 String;                                        // 375  0x0000000000000580  XLS_ReadStringIndex
         [ExcelOutput(IsStringIndex = true)]
@@ -294,11 +297,21 @@ namespace Hellgate.Excel
         [ExcelOutput(IsStringIndex = true)]
         public Int32 additionalRaceDescription;                     // 381  0x0000000000000590  XLS_ReadStringIndex
         [ExcelOutput(IsStringIndex = true)]
+        public Int32 additionalRaceBonusDescription;
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 analyze;                                       // 382  0x0000000000000594  XLS_ReadStringIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "RECIPELISTS")]
         public Int32 recipeList;//index                                    // 62   0x0000000000000598  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "RECIPES")]
         public Int32 recipeSingleUse;//index                        // 63   0x000000000000059C  XLS_ReadIndex
+        public Int32 recipesToSellByUnittype1;
+        public Int32 recipesToSellByUnittype2;
+        public Int32 recipesToSellByUnittype3;
+        public Int32 recipesToSellByNotUnittype1;
+        public Int32 recipesToSellByNotUnittype2;
+        public Int32 recipesToSellByNotUnittype3;
+        public Int32 recipePane;
+        public Int32 merchantNotAvailableTillQuestTaskComplete;
         [ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL")]
         public Int32 paperdollBackgroundLevel;//index               // 43   0x00000000000005A0  XLS_ReadIndex
         public Int32 paperdollWeapon1;                              // 44   0x00000000000005A4  XLS_ReadIntArray,2
@@ -310,12 +323,16 @@ namespace Hellgate.Excel
         public Int32 respawnChance;                                 // 35   0x00000000000005B4  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringID = "SPAWN_CLASS")]
         public Int32 respawnSpawnClass;//index                             // 34   0x00000000000005B8  XLS_ReadIndex,90
+        public Int32 respawnMonsterClass;
+        public Int32 respawnRadius;
         [ExcelOutput(SortAscendingID = 2)]
         public Int32 code;                                          // 32   0x00000000000005BC  XLS_ReadCode
         Int32 unknown41;
         public Int32 densityValueOverride;                          // 54   0x00000000000005C4  XLS_ReadInt32
         [ExcelOutput(IsIntOffset = true)]
         public Int32 minionPackSize;                                // 55   0x00000000000005C8  XLS_ReadIntPtr
+        public Int32 respawnPeriod;
+        public Int32 petExecuteSkillByOwner;
         public float spinSpeed;                                     // 303  0x00000000000005CC  XLS_ReadFloat
         public float maxTurnRate;                                   // 304  0x00000000000005D0  XLS_ReadFloat
         [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
@@ -339,11 +356,11 @@ namespace Hellgate.Excel
         public Int32 level;                                         // 89   0x0000000000000600  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_QUALITY")]
         public Int32 monsterQuality;//index                         // 48   0x0000000000000604  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")] // todo: is this MONSTER_QUALITY
         public Int32 monsterClassAtUniqueQuality;//index            // 49   0x0000000000000608  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")] // todo: is this MONSTER_QUALITY
         public Int32 monsterClassAtChampionQuality;//index          // 50   0x000000000000060C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")] // todo: is this MONSTER_QUALITY
         public Int32 minionClass;//index                            // 52   0x0000000000000610  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_NAME_TYPES")]
         public Int32 monsterNameType;//index                        // 53   0x0000000000000614  XLS_ReadIndex
@@ -351,12 +368,14 @@ namespace Hellgate.Excel
         public Int32 itemQuality;//index                            // 51   0x0000000000000618  XLS_ReadIndex
         public Int32 angerRange;                                    // 416  0x000000000000061C  XLS_ReadInt32
         public Int32 baseLevel;                                     // 90   0x0000000000000620  XLS_ReadInt32
+        public Int32 objectDowngradesTo;
         public Int32 capLevel;                                      // 91   0x0000000000000624  XLS_ReadInt32
         public Int32 minMerchantLevel;                              // 92   0x0000000000000628  XLS_ReadInt32
         public Int32 maxMerchantLevel;                              // 93   0x000000000000062C  XLS_ReadInt32
         public Int32 minSpawnLevel;                                 // 94   0x0000000000000630  XLS_ReadInt32
         public Int32 maxSpawnLevel;                                 // 95   0x0000000000000634  XLS_ReadInt32       .text:00000001402E7A4C mov     dword ptr [rsp+0A8h+var_88], 186A0h (186A0h = 100,000....)
         public Int32 maxLevel;                                      // 96   0x0000000000000638  XLS_ReadInt32
+        public Int32 maxRank;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 fixedLevel;//intptr                            // 97   0x000000000000063C  XLS_ReadIntPtr
         public Int32 hpMin;                                         // 98   0x0000000000000640  XLS_ReadInt32
@@ -395,7 +414,7 @@ namespace Hellgate.Excel
         public float collidableAfterXSeconds;                       // 77   0x00000000000006AC  XLS_ReadFloat
         public float homeAfterXSeconds;                             // 78   0x00000000000006B0  XLS_ReadFloat
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public Items.BitMask08 bitmask08;                           // 85   0x00000000000006B4  XLS_ReadBitmask
+        public Items.BitMask09 bitmask08;                           // 85   0x00000000000006B4  XLS_ReadBitmask
         public float impactCameraShakeDuration;                     // 80   0x00000000000006B8  XLS_ReadFloat
         public float impactCameraShakeMagnitude;                    // 81   0x00000000000006BC  XLS_ReadFloat
         public float impactCameraShakeDegrade;                      // 82   0x00000000000006C0  XLS_ReadFloat
@@ -406,15 +425,15 @@ namespace Hellgate.Excel
         public Int32 questDescription;//index                       // 260  0x00000000000006CC  XLS_ReadIndex
         [ExcelOutput(IsIntOffset = true)]
         public Int32 pickUpCondition;                               // 258  0x00000000000006D0  XLS_ReadIntPtr
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        byte[] unknownBytes04;
+        public Int32 useCondition;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 scriptOnUse;                                   // 248  0x00000000000006D8  XLS_ReadIntPtr
         [ExcelOutput(IsIntOffset = true)]
         public Int32 stackSize;                                     // 227  0x00000000000006DC  XLS_ReadIntPtr
+        public Int32 initScriptClient;
         public Int32 maxPickUp;                                     // 228  0x00000000000006E0  XLS_ReadInt32
         public Int32 baseCost;                                      // 221  0x00000000000006E4  XLS_ReadInt32
-        public Int32 realWorldCost;                                 // 222  0x00000000000006E8  XLS_ReadInt32
+        public Int32 pvpPointCost;                                 // 222  0x00000000000006E8  XLS_ReadInt32
         [ExcelOutput(IsIntOffset = true)]
         public Int32 buyPriceMult;                                  // 223  0x00000000000006EC  XLS_ReadIntPtr
         [ExcelOutput(IsIntOffset = true)]
@@ -441,8 +460,9 @@ namespace Hellgate.Excel
         public Int32 wardrobeAppearanceGroup1st;                    // 117  0x000000000000071C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "ANIMATION_STANCE")]
         public Int32 startingStance;                                // 120  0x0000000000000720  XLS_ReadIndex
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknownBytes06;
+        public Int32 summonedInvLoc;
         [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
         public Int32 containerUnitType1;                            // 261  0x0000000000000738  XLS_ReadUNITTYPEIndexArray,4
         [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
@@ -464,6 +484,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringID = "MELEEWEAPONS")]
         public Int32 meleeWeapon;//index                            // 122  0x0000000000000770  XLS_ReadIndex
         public Int32 cdTicks;                                       // 131  0x0000000000000774  XLS_ReadInt32
+        public Int32 duration;
         public float approxDps;                                     // 132  0x0000000000000778  XLS_ReadFloat
         [ExcelOutput(IsStringIndex = true)]
         public Int32 tooltipDamageString;//stridx                   // 137  0x000000000000077C  XLS_ReadStringIndex
@@ -574,6 +595,7 @@ namespace Hellgate.Excel
         public Int32 startingStrength;                              // 204  0x0000000000000994  XLS_ReadInt32
         public Int32 startingStamina;                               // 205  0x0000000000000998  XLS_ReadInt32
         public Int32 startingWillpower;                             // 206  0x000000000000099C  XLS_ReadInt32
+        public Int32 recipeProps;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 props1;                                        // 207  0x00000000000009A0  XLS_ReadIntPtr
         [ExcelOutput(IsIntOffset = true)]
@@ -584,6 +606,9 @@ namespace Hellgate.Excel
         public Int32 props4;                                        // 210  0x00000000000009AC  XLS_ReadIntPtr
         [ExcelOutput(IsIntOffset = true)]
         public Int32 props5;                                        // 211  0x00000000000009B0  XLS_ReadIntPtr
+        public Int32 skillProps1;
+        public Int32 skillProps2;
+        public Int32 skillProps3;
         [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
         public Int32 props1AppliesToUnitype;//index                 // 212  0x00000000000009B4  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
@@ -612,14 +637,18 @@ namespace Hellgate.Excel
         public Int32 affix5;//index                                 // 220  0x00000000000009E4
         [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXES")]
         public Int32 affix6;//index                                 // 220  0x00000000000009E8
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 36)]
+        byte[] undefinedP;
         [ExcelOutput(IsTableIndex = true, TableStringID = "TREASURE")]
         public Int32 treasure;//index                               // 104  0x00000000000009EC  XLS_ReadIndex,65
         [ExcelOutput(IsTableIndex = true, TableStringID = "TREASURE")]
         public Int32 championTreasure;//index                       // 105  0x00000000000009F0  XLS_ReadIndex,65
         [ExcelOutput(IsTableIndex = true, TableStringID = "TREASURE")]
         public Int32 firstTimeTreasure;//index                      // 106  0x00000000000009F4  XLS_ReadIndex,65
-        [ExcelOutput(IsTableIndex = true, TableStringID = "INVENTORY")]
+        public Int32 craftingTreasure;
+        [ExcelOutput(IsTableIndex = true, TableStringID = "INVENTORY_TYPES")]
         public Int32 inventory;//index                              // 229  0x00000000000009F8  XLS_ReadIndex
+        public Int32 craftingInventory;
         [ExcelOutput(IsTableIndex = true, TableStringID = "INVLOC")]
         public Int32 recipeIngredientInvLoc;//index                 // 230  0x00000000000009FC  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "INVLOC")]
@@ -687,19 +716,23 @@ namespace Hellgate.Excel
         public Int32 rightSkill;//index                             // 241  0x0000000000000ABC  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
         public Int32 initSkill;//index                              // 242  0x0000000000000AC0  XLS_ReadIndex
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+        Int32[] undefinedTCV4_1;
+        public Int32 classSkill;
+        public Int32 raceSkill;
         [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
         public Int32 skillLevelActive;//index                       // 243  0x0000000000000AC4  XLS_ReadIndex
         public Int32 initState1;                                    // 244  0x0000000000000AC8  XLS_ReadIntArray,4
         public Int32 initState2;                                    // 244  0x0000000000000ACC
         public Int32 initState3;                                    // 244  0x0000000000000AD0
-        public Int32 initState4;                                    // 244  0x0000000000000AD4
+        public Int32 initState4;                                    // 244  0x0000000000000AD4        
         public Int32 initStateTicks;                                // 245  0x0000000000000AD8  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringID = "STATES")]
         public Int32 dyingState;//index                             // 246  0x0000000000000ADC  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
         public Int32 skillWhenUsed;//index                          // 247  0x0000000000000AE0  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
-        public Int32 SkillTab1;//index                              // 249  0x0000000000000AE4  XLS_ReadIndex
+        public Int32 SkillTab1;//index                               // 249  0x0000000000000AE4  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
         public Int32 SkillTab2;//index                              // 250  0x0000000000000AE8  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
@@ -714,6 +747,7 @@ namespace Hellgate.Excel
         public Int32 SkillTab7;//index                              // 255  0x0000000000000AFC  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "STATES")]
         public Int32 levelUpState;//index                           // 263  0x0000000000000B00  XLS_ReadIndex
+        public Int32 rankUpState;
         [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
         public Int32 sounds;//index                                 // 264  0x0000000000000B04  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
@@ -750,6 +784,7 @@ namespace Hellgate.Excel
         public Int32 interactSound;//index                          // 280  0x0000000000000B44  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
         public Int32 damagingSound;//index                          // 281  0x0000000000000B48  XLS_ReadIndex
+        public Int32 musicOverride;
         [ExcelOutput(IsTableIndex = true, TableStringID = "FOOTSTEPS")]
         public Int32 forwardFootStepLeft;//index                    // 282  0x0000000000000B4C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "FOOTSTEPS")]
@@ -788,6 +823,7 @@ namespace Hellgate.Excel
         public float warpPlaneForwardMultiplier;                    // 302  0x0000000000000B9C  XLS_ReadFloat
         public float warpOutDistance;                               // 305  0x0000000000000BA0  XLS_ReadFloat
         public Int32 snapToAngleInDegrees;                          // 306  0x0000000000000BA4  XLS_ReadInt32
+        public Int32 vanityHeight;
         public float offsetUp;                                      // 307  0x0000000000000BA8  XLS_ReadFloat
         public float scale;                                         // 309  0x0000000000000BAC  XLS_ReadFloat
         public float weaponScale;                                   // 308  0x0000000000000BB0  XLS_ReadFloat
@@ -851,6 +887,7 @@ namespace Hellgate.Excel
         public Int32 missileHitBackground;//index                   // 389  0x0000000000000C8C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "MISSILES")]
         public Int32 missileOnFreeOrFuse;//index                    // 390  0x0000000000000C90  XLS_ReadIndex
+        public Int32 missielOnMissed;
         public Int32 missileTag;                                    // 400  0x0000000000000C94  XLS_ReadInt32
         public Int32 damageRepeatRate;                              // 396  0x0000000000000C98  XLS_ReadInt32
         public Int32 damageRepeatChance;                            // 397  0x0000000000000C9C  XLS_ReadInt32
@@ -861,6 +898,7 @@ namespace Hellgate.Excel
         public Int32 monster;//index                                // 402  0x0000000000000CAC  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "OBJECTTRIGGERS")]
         public Int32 triggerType;//index                            // 403  0x0000000000000CB0  XLS_ReadIndex
+        public Int32 triggerSound;
         public Int32 operatorStatesTriggerProhibited;               // 404  0x0000000000000CB4  XLS_ReadIntArray,01
         [ExcelOutput(IsTableIndex = true, TableStringID = "SUBLEVEL")]
         public Int32 sublevelDest;//index                           // 405  0x0000000000000CB8  XLS_ReadIndex
@@ -897,9 +935,9 @@ namespace Hellgate.Excel
         public Int32 corpseExplodePoints;                           // 471  0x0000000000000D00  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
         public Int32 requiredAttackerUnitType;//index               // 472  0x0000000000000D04  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREA_AFFIXS")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREAS_AFFIXS")]
         public Int32 startingLevelArea;//index                      // 474  0x0000000000000D08  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREA_AFFIXS")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREAS_AFFIXS")]
         public Int32 warpToLevelArea;//index                        // 476  0x0000000000000D0C  XLS_ReadIndex
         public Int32 warpToFloor;                                   // 477  0x0000000000000D10  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringID = "GLOBAL_THEMES")]
@@ -911,270 +949,317 @@ namespace Hellgate.Excel
         public Int32 cameraTarget;                                         // 455  0x0000000000000D20  XLS_ReadInt32
         public Int32 null2;                                         // 456  0x0000000000000D24  XLS_ReadInt32
         public Int32 null3;                                         // 457  0x0000000000000D28  XLS_ReadInt32
+        public Int32 cameraEye;
+        public Int32 null4;
+        public Int32 null5;
+        public Int32 RMTAvailable;
+        public Int32 realWorldCost;
+        public Int32 RMTBadges;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
+        byte[] undefined2_1;
+        public Int32 RMTTangibility;
+        public Int32 RMTPricing;
+        public Int32 undefined1_1;
+        public Int32 undefined1_2;
+        public Int32 undefined1_3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 88)]
-        byte[] unknownBytes26;                                      // 0x0000000000000D2C to 0x0000000000000D84
-        public Int32 null4;                                         // 458  0x0000000000000D84  XLS_ReadInt32
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 48)]
-        byte[] unknownBytes27;                                      // 0x0000000000000D88 to 0x0000000000000DB8
+        byte[] undefined2_2;
+        public Int32 undefined1_4;
+        public Int32 undefined1_5;
+        public Int32 setStateOnHit;
+        public Int32 durationMSStateOnHit;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)] // add 4
+        byte[] undefined2_3;
 
-        [FlagsAttribute]
-        public enum BitMask01 : uint
+        public abstract class Items
         {
-            spawn = 1,                                          // 472,1, 00
-            spawnAtMerchant = 2,                                // 472,2, 01
-            forceIgnoresScale = 4,                              // 472,3, 02
-            impactOnFuse = 8,                                   // 472,4, 03
-            impactOnFree = 16,                                  // 472,5, 04
-            impactOnHitUnit = 32,                               // 472,6, 05
-            impactOnHitBackground = 64,                         // 472,7, 06
-            havokIgnoresDirection = 128,                        // 472,8, 07
-            damagesOnFuse = 256,                                // 472,9, 08
-            hitsUnits = 512,                                    // 472,10, 09
-            killOnUnitHit = 1024,                               // 472,11, 0A
-            hitsBackground = 2048,                              // 472,12, 0B
-            noRayCollision = 4096,                              // 472,13, 0C
-            killOnBackground = 8192,                            // 472,14, 0D
-            stickOnHit = 16384,                                 // 472,15, 0E
-            stickOnInit = 32768,                                // 472,16, 0F
-            sync = 65536,                                       // 472,20, 10
-            clientOnly = 131072,                                // 472,21, 11
-            serverOnly = 262144,                                // 472,22, 12
-            useSourceVel = 524288,                              // 472,23, 13
-            mustHit = 1048576,                                  // 472,24, 14
-            prioritizeTarget = 2097152,                         // 472,26, 15
-            trailEffectsUseProjectile = 4194304,                // 472,27, 16
-            impactEffectsUseProjectile = 8388608,               // 472,28, 17
-            destroyOtherMissiles = 16777216,                    // 472,29, 18
-            dontHitSkillTarget = 33554432,                      // 472,30, 19
-            flipFaceDirection = 67108864,                       // 472,31, 1A
-            dontUseRangeForSkill = 134217728,                   // 472,32, 1B
-            pullsTarget = 268435456,                            // 472,33, 1C
-            damagesOnHitUnit = 536870912,                       // 472,18, 1D
-            pulsesStatsOnHitUnit = 1073741824,                  // 472,19, 1E
-            damagesOnHitBackground = 2147483648                 // 472,17, 1F
-        }
+            [FlagsAttribute]
+            public enum BitMask01 : uint
+            {
+                spawn = (1 << 0),//0
+                spawnAtMerchant = (1 << 1),//1
+                forceIgnoreScale = (1 << 2),//2
+                impactOnFuse = (1 << 3),//3
+                impactOnFree = (1 << 4),//4
+                impactOnHitUnit = (1 << 5),//5
+                impactOnHitBackground = (1 << 6),//6
+                havokIgnoresDirection = (1 << 7),//7
+                damagesOnFuse = (1 << 8),//8
+                hitsUnits = (1 << 9),//9
+                killOnUnitHit = (1 << 10),//10
+                hitsBackground = (1 << 11),//11
+                noRayCollision = (1 << 12),//12
+                killOnBackground = (1 << 13),//13
+                stickOnHit = (1 << 14),//14
+                stickOnInit = (1 << 15),//15
+                sync = (1 << 16),//16
+                clientOnly = (1 << 17),//17
+                serverOnly = (1 << 18),//18
+                useSourceVel = (1 << 19),//19
+                mustHit = (1 << 20),//20
+                prioritizeTarget = (1 << 21),//21
+                trailEffectsUseProjectile = (1 << 22),//22
+                impactEffectsUseProjectile = (1 << 23),//23
+                destroyOtherMissiles = (1 << 24),//24
+                dontHitSkillTarget = (1 << 25),//25
+                flipFaceDirection = (1 << 26),//26
+                dontUseRangeForSkill = (1 << 27),//27
+                pullsTarget = (1 << 28),//28
+                damagesOnHitUnit = (1 << 29),//29
+                pulsesStatsOnHitUnit = (1 << 30),//30
+                damagesOnHitBackground = ((uint)1 << 31),//31
+            }
 
-        [FlagsAttribute]
-        public enum BitMask02 : uint
-        {
-            alwaysCheckForCollisions = 1,                       // 472,34, 20
-            setShapePercentages = 2,                            // 472,36, 21
-            useSourceAppearance = 4,                            // 472,35, 22
-            dontTransferRidersFromOwner = 8,                    // 472,37, 23
-            dontTransferDamagesOnClient = 16,                   // 472,38, 24
-            missileIgnorePostLaunch = 32,                       // 472,40, 25
-            attacksLocationOnHitUnit = 64,                      // 472,41, 26
-            dontDeactivateWithRoom = 128,                       // 472,42, 27
-            angerOthersOnDamaged = 256,                         // 472,44, 28
-            angerOthersOnDeath = 512,                           // 472,45, 29
-            alwaysFaceSkillTarget = 1024,                       // 472,46, 2A
-            setRopeEndWithNoTarget = 2048,                      // 472,47, 2B
-            forceDrawDirectionToMoveDirection = 4096,           // 472,48, 2C
-            questNameColor = 8192,                              // 472,49, 2D
-            doNotSortWeapons = 16384,                           // 472,50, 2E
-            ignoresEquipClassReqs = 32768,                      // 472,51, 2F
-            doNotUseSorceForToHit = 65536,                      // 472,52, 30
-            angleWhilePathing = 131072,                         // 472,53, 31
-            dontAddWardrobeLayer = 262144,                      // 472,54, 32
-            dontUseContainerAppearance = 524288,                // 472,55, 33
-            subscriberOnly = 1048576,                           // 472,56, 34
-            computeLevelRequirement = 2097152,                  // 472,57, 35
-            dontFattenCollision = 4194304,                      // 472,58, 36
-            automapSave = 8388608,                              // 472,59, 37
-            requiresCanOperateToBeKnown = 16777216,             // 472,60, 38
-            forceFreeOnRoomReset = 33554432,                    // 472,61, 39
-            canReflect = 67108864,                              // 472,62, 3A
-            selectTargetIgnoresAimPos = 134217728,              // 472,63, 3B
-            canMeleeAboveHeight = 268435456,                    // 472,64, 3C
-            getFlavorTextFromQuest = 536870912,                 // 318,1, 3D
-            unIdentifiedNameFromBaseRow = 1073741824,           // 56,1, 3E
-            noRandomProperName = 2147483648                     // 56,2, 3F
-        }
+            [FlagsAttribute]
+            public enum BitMask02 : uint
+            {
+                alwaysCheckForCollisions = (1 << 0),//0
+                setShapePercentages = (1 << 1),//1
+                useSourceAppearance = (1 << 2),//2
+                dontTransferRidersFromOwner = (1 << 3),//3
+                dontTransferDamagesOnClient = (1 << 4),//4
+                missileIgnorePostlaunch = (1 << 5),//5
+                missileUseUltimateOwner = (1 << 6),//6
+                attacksLocationOnHitUnit = (1 << 7),//7
+                dontDeactivateWithRoom = (1 << 8),//8
+                angerOthersOnDamaged = (1 << 9),//9
+                angerOthersOnDeath = (1 << 10),//10
+                alwaysFaceSkillTarget = (1 << 11),//11
+                setRopeEndWithNoTarget = (1 << 12),//12
+                forceDrawDirectionToMoveDirection = (1 << 13),//13
+                questNameColor = (1 << 14),//14
+                doNotSortWeapons = (1 << 15),//15
+                ignoresEquipClassReqs = (1 << 16),//16
+                doNotUseSorceForTohit = (1 << 17),//17
+                angleWhilePathing = (1 << 18),//18
+                dontAddWardrobeLayer = (1 << 19),//19
+                dontUseContainerAppearance = (1 << 20),//20
+                subscriberOnly = (1 << 21),//21
+                computeLevelRequirement = (1 << 22),//22
+                dontFattenCollision = (1 << 23),//23
+                automapSave = (1 << 24),//24
+                requiresCanOperateToBeKnown = (1 << 25),//25
+                forceFreeOnRoomReset = (1 << 26),//26
+                canReflect = (1 << 27),//27
+                selectTargetIgnoresAimPos = (1 << 28),//28
+                canMeleeAboveHeight = (1 << 29),//29
+                getFlavortextFromQuest = (1 << 30),//30
+                unidentifiedNameFromBaseRow = ((uint)1 << 31),//31
+            }
 
-        [FlagsAttribute]
-        public enum BitMask03 : uint
-        {
-            noNameModifications = 1,                            // 56,3, 40
-            preLoad = 2,                                        // 58,1, 41
-            ignoreInDat = 4,                                    // 58,2, 42
-            ignoreSavedStates = 8,                              // 58,3, 43
-            drawUsingCutUpWardrobe = 16,                        // 56,4, 44
-            isGood = 32,                                        // 58,4, 45
-            isNpc = 64,                                         // 58,5, 46
-            canNotBeMoved = 128,                                // 58,7, 47
-            noLevel = 256,                                      // 106,1, 48
-            usesSkills = 512,                                   // 57,3, 49
-            autoPickup = 1024,                                  // 85,7, 4A
-            trigger = 2048,                                     // 57,2, 4B
-            dieOnClientTrigger = 4096,                          // 57,1, 4C
-            neverDestroyDead = 8192,                            // 57,4, 4D
-            collideWhenDead = 16384,                            // 57,5, 4E
-            startDead = 32768,                                  // 57,6, 4F
-            givesLoot = 65536,                                  // 57,7, 50
-            dontTriggerByProximity = 131072,                    // 57,8, 51
-            triggerOnEnterRoom = 262144,                        // 57,10, 52
-            destructible = 524288,                              // 57,11, 53
-            inAir = 1048576,                                    // 58,8, 54
-            wallWalk = 2097152,                                 // 58,9, 55
-            startInTownIdle = 4194304,                          // 87,1, 56
-            onDieDestroy = 8388608,                             // 69,1, 57
-            onDieEndDestroy = 16777216,                         // 69,2, 58
-            onDieHideModel = 33554432,                          // 69,3, 59
-            selectableDeadOrDying = 67108864,                   // 69,4, 5A
-            interactive = 134217728,                            // 73,1, 5B
-            hideDialogHead = 268435456, // 28                   // 73,2, 5C
-            collideBad = 536870912,                             // 78,9, 5D
-            collideGood = 1073741824,                           // 78,2, 5E
-            modesIgnoreAI = 2147483648                          // 78,8, 5F
-        }
+            [FlagsAttribute]
+            public enum BitMask03 : uint
+            {
+                noRandomProperName = (1 << 0),//0
+                noNameModifications = (1 << 1),//1
+                preload = (1 << 2),//2
+                ignoreInDat = (1 << 3),//3
+                ignoreSavedStates = (1 << 4),//4
+                drawUsingCutUpWardrobe = (1 << 5),//5
+                isGood = (1 << 6),//6
+                isNpc = (1 << 7),//7
+                cannotBeMoved = (1 << 8),//8
+                nolevel = (1 << 9),//9
+                usesSkills = (1 << 10),//10
+                autopickup = (1 << 11),//11
+                trigger = (1 << 12),//12
+                dieOnClientTrigger = (1 << 13),//13
+                neverDestroyDead = (1 << 14),//14
+                collideWhenDead = (1 << 15),//15
+                startDead = (1 << 16),//16
+                givesLoot = (1 << 17),//17
+                dontTriggerByProximity = (1 << 18),//18
+                triggerOnEnterRoom = (1 << 19),//19
+                destructible = (1 << 20),//20
+                inAir = (1 << 21),//21
+                wallWalk = (1 << 22),//22
+                startInTownIdle = (1 << 23),//23
+                onDieDestroy = (1 << 24),//24
+                onDieEndDestroy = (1 << 25),//25
+                onDieHideModel = (1 << 26),//26
+                selectableDeadOrDying = (1 << 27),//27
+                interactive = (1 << 28),//28
+                hideDialogHead = (1 << 29),//29
+                collideBad = (1 << 30),//30
+                collideGood = ((uint)1 << 31),//31
+            }
 
-        [FlagsAttribute]
-        public enum BitMask04 : uint
-        {
-            dontPath = 1,                                       // 78,3, 60
-            snapToPathnodeOnCreate = 2,                         // 78,4, 61
-            unTargetable = 4,                                   // 78,5, 62
-            FaceDuringInteraction = 8,                          // 78,6, 63
-            noSync = 16,                                        // 78,7, 64
-            canNotTurn = 32,                                    // 58,11, 65
-            turnNeckInsteadOfBody = 64,                         // 58,12, 66
-            merchant = 128,                                     // 58,13, 67
-            merchantSharedInventory = 256,                      // 58,14, 68
-            trader = 512,                                       // 61,1, 69
-            tradesman = 1024,                                   // 61,6, 6A
-            gambler = 2048,                                     // 61,7, 6B
-            mapVendor = 4096,                                   // 61,8, 6C
-            godQuestMessanger = 8192,                           // 61,11, 6D
-            trainer = 16384,                                    // 61,9, 6E
-            healer = 32768,                                     // 61,2, 6F
-            graveKeeper = 65536,                                // 61,3, 70
-            taskGiver = 131072,                                 // 61,4, 71
-            canUpgradeItems = 262144,                           // 63,1, 72
-            canAugmentItems = 524288,                           // 63,2, 73
-            autoIdentifiesInventory = 1048576,                  // 63,3, 74
-            npcDungeonWarp = 2097152,                           // 63,6, 75
-            PvPSignerUpper = 4194304,                           // 63,7, 76
-            foreman = 8388608,                                  // 63,8, 77
-            transporter = 16777216,                             // 61,10, 78
-            showsPortrait = 33554432,                           // 470,1, 79
-            petGetsStatPointsPerLevel = 67108864,               // 470,2, 7A
-            ignoresSkillPowerCost = 134217728,                  // 57,9, 7B
-            checkRadiusWhenPathing = 268435456,                 // 87,2, 7C
-            checkHeightWhenPathing = 536870912,                 // 87,3, 7D
-            questImportantInfo = 1073741824,                    // 63,9, 7E
-            ignoresToHit = 2147483648                           // 85,6, 7F
-        }
+            [FlagsAttribute]
+            public enum BitMask04 : uint
+            {
+                modesIgnoreAI = (1 << 0),//0
+                dontPath = (1 << 1),//1
+                snapToPathnodeOnCreate = (1 << 2),//2
+                unTargetable = (1 << 3),//3
+                faceDuringInteraction = (1 << 4),//4
+                noSynch = (1 << 5),//5
+                cannotTurn = (1 << 6),//6
+                turnNeckInsteadOfBody = (1 << 7),//7
+                merchant = (1 << 8),//8
+                merchantSharedInventory = (1 << 9),//9
+                trader = (1 << 10),//10
+                tradesman = (1 << 11),//11
+                gambler = (1 << 12),//12
+                statTrader = (1 << 13),//13
+                mapVendor = (1 << 14),//14
+                godQuestMessanger = (1 << 15),//15
+                trainer = (1 << 16),//16
+                healer = (1 << 17),//17
+                graveKeeper = (1 << 18),//18
+                taskGiver = (1 << 19),//19
+                canUpgradeItems = (1 << 20),//20
+                canAugmentItems = (1 << 21),//21
+                autoIdentifiesInventory = (1 << 22),//22
+                nPCDungeonWarp = (1 << 23),//23
+                pvPSignerUpper = (1 << 24),//24
+                foreman = (1 << 25),//25
+                transporter = (1 << 26),//26
+                showsPortrait = (1 << 27),//27
+                petGetsStatPointsPerLevel = (1 << 28),//28
+                petCanAttributeRespec = (1 << 29),//29
+                ignoresSkillPowerCost = (1 << 30),//30
+                checkRadiusWhenPathing = ((uint)1 << 31),//31
+            }
 
-        [FlagsAttribute]
-        public enum BitMask05 : uint
-        {
-            askQuestsForOperate = 1,                            // 63,10, 80
-            askFactionForOperate = 2,                           // 63,13, 81
-            askPvPCensorshipForOperate = 4,                     // 63,14, 82
-            structural = 8,                                     // 63,15, 83
-            askQuestsForKnown = 16,                             // 63,11, 84
-            askQuestsForVisible = 32,                           // 63,12, 85
-            informQuestsOnInit = 64,                            // 63,16, 86
-            informQuestsOfLootDrop = 128,                       // 63,17, 87
-            informQuestsOnDeath = 256,                          // 63,18, 88
-            noTrade = 512,                                      // 64,1, 89
-            flagRoomAsNoSpawn = 1024,                           // 67,2, 8A
-            monitorPlayerApproach = 2048,                       // 67,3, 8B
-            monitorApproachClearLOS = 4096,                     // 68,1, 8C
-            canFizzle = 8192,                                   // 73,3, 8D
-            inheritsDirection = 16384,                          // 73,4, 8E
-            canNotBeDismantled = 32768,                         // 226,1, 8F
-            canNotBeUpgraded = 65536,                           // 226,2, 90
-            canNotBeAugmented = 131072,                         // 226,3, 91
-            canNotBeDeModded = 262144,                          // 226,4, 92
-            ignoreSellWithInventoryConfirm = 524288,            // 222,1, 93
-            wardrobePerUnit = 1048576,                          // 117,1, 94
-            wardrobeSharesModelDef = 2097152,                   // 117,3, 95
-            noWeaponModel = 4194304,                            // 117,2, 96
-            _undefined1 = 8388608,
-            noDrop = 16777216,                                  // 259,1, 98
-            noDropExceptForDuplicates = 33554432,               // 259,2, 99
-            askQuestsForPickup = 67108864,                      // 259,3, 9A
-            informQuestsOnPickup = 134217728,                   // 259,4, 9B
-            examinable = 268435456,                             // 260,1, 9C
-            informQuestsToUse = 536870912,                      // 260,3, 9D
-            consumeWhenUsed = 1073741824,                       // 260,4, 9E
-            immuneToCritical = 2147483648                       // 176,1, 9F
-        }
+            [FlagsAttribute]
+            public enum BitMask05 : uint
+            {
+                checkHeightWhenPathing = (1 << 0),//0
+                questImportantInfo = (1 << 1),//1
+                ignoresToHit = (1 << 2),//2
+                askQuestsForOperate = (1 << 3),//3
+                askFactionForOperate = (1 << 4),//4
+                askPvPCensorshipForOperate = (1 << 5),//5
+                structural = (1 << 6),//6
+                askQuestsForKnown = (1 << 7),//7
+                askQuestsForVisible = (1 << 8),//8
+                informQuestsOnInit = (1 << 9),//9
+                informQuestsOfLootDrop = (1 << 10),//10
+                informQuestsOnDeath = (1 << 11),//11
+                noTrade = (1 << 12),//12
+                noAuction = (1 << 13),//13
+                flagRoomAsNoSpawn = (1 << 14),//14
+                monitorPlayerApproach = (1 << 15),//15
+                monitorApproachClearLOS = (1 << 16),//16
+                canFizzle = (1 << 17),//17
+                inheritsDirection = (1 << 18),//18
+                cannotBeDismantled = (1 << 19),//19
+                cannotBeUpgraded = (1 << 20),//20
+                cannotBeAugmented = (1 << 21),//21
+                cannotBeDeModded = (1 << 22),//22
+                ignoreSellWithInventoryConfirm = (1 << 23),//23
+                wardrobePerUnit = (1 << 24),//24
+                wardrobeSharesModelDef = (1 << 25),//25
+                noWeaponModel = (1 << 26),//26
+                undefined5a = (1 << 27),//27
+                noDrop = (1 << 28),//28
+                noDropExceptForDuplicates = (1 << 29),//29
+                askQuestsForPickup = (1 << 30),//30
+                informQuestsOnPickup = ((uint)1 << 31),//31
+            }
 
-        [FlagsAttribute]
-        public enum BitMask06 : uint
-        {
-            NoRandomAffixes = 1,                                // 220,1, A0
-            canBeChampion = 2,                                  // 104,1, A1
-            noQualityDowngrade = 4,                             // 125,1, A2
-            noDrawOnInit = 8,                                   // 255,1, A3
-            mustFaceMeleeTarget = 16,                           // 320,1, A4
-            dontDestroyIfVelocityIsZero = 32,                   // 341,1, A5
-            ignoreInteractDistance = 64,                        // 472,65, A6
-            operateRequiresGoodQuestStatus = 128,               // 406,1, A7
-            reverseArriveDirection = 256,                       // 410,1, A8
-            faceAfterWarp = 512,                                // 410,2, A9
-            neverAStartLocation = 1024,                         // 410,3, AA
-            alwaysShowLabel = 2048,                             // 412,1, AB
-            _undefined2 = 4096,//12
-            null0 = 8192,                                       // 454,1, AD
-            _undefined3 = 16384,//14
-            isNonweaponMissile = 32768,                         // 472,39, AF
-            cullByScreensize = 65536,                           // 472,66, B0
-            linkWarpDestByLevelType = 131072,                   // 472,68, B1
-            isBoss = 262144,                                    // 472,67, B2
-            _undefined4 = 524288,//19
-            takeResponsibilityOnKill = 1048576,                 // 472,69, B4
-            alwaysKnownForSounds = 2097152,                     // 472,70, B5
-            ignoreTargetOnRepeatDmg = 4194304,                  // 472,25, B6
-            bindToLevelArea = 8388608,                          // 64,2, B7
-            dontCollideWithDestructibles = 16777216,            // 472,71, B8
-            blocksEverything = 33554432,                        // 472,72, B9
-            everyoneCanTarget = 67108864,                       // 472,73, BA
-            missilePlotArc = 134217728,                         // 472,74, BB
-            petDiesOnWarp = 268435456,                          // 470,3, BC
-            missileIsGore = 536870912,                          // 472,75, BD
-            canAttackFriends = 1073741824,                      // 78,1, BE
-            ignoreItemRequirements = 2147483648                 // 141,1, BF
-        }
+            [FlagsAttribute]
+            public enum BitMask06 : uint
+            {
+                examinable = (1 << 0),//0
+                informFromQuestsToUse = (1 << 1),//1
+                 consumeWhenUsed = (1 << 2),//2
+                 alwaysDoTransactionLogging = (1 << 3),//3
+                 immuneToCritical = (1 << 4),//4
+                 noRandomAffixes = (1 << 5),//5
+                canBeChampion = (1 << 6),//6
+                noQualityDowngrade = (1 << 7),//7
+                noDrawOnInit = (1 << 8),//8
+                ignoreDontDrawWeapons = (1 << 9),//9
+                mustFaceMeleeTarget = (1 << 10),//10
+                dontDestroyIfVelocityIsZero = (1 << 11),//11
+                ignoreInteractDistance = (1 << 12),//12
+                operateRequiresGoodQuestStatus = (1 << 13),//13
+                reverseArriveDirection = (1 << 14),//14
+                faceAfterWarp = (1 << 15),//15
+                neverAStartLocation = (1 << 16),//16
+                alwaysShowLabel = (1 << 17),//17
+                undefined6a = (1 << 18),//18
+                null6 = (1 << 19),//19
+                undefined6b = (1 << 20),//20
+                isNonweaponMissile = (1 << 21),//21
+                cullByScreensize = (1 << 22),//22
+                linkWarpDestByLevelType = (1 << 23),//23
+                isBoss = (1 << 24),//24
+                undefined6c = (1 << 25),//25
+                takeResponsibilityOnKill = (1 << 26),//26
+                alwaysKnownForSounds = (1 << 27),//27
+                ignoreTargetOnRepeatDmg = (1 << 28),//28
+                bindToLevelArea = (1 << 29),//29
+                dontCollideWithDestructibles = (1 << 30),//30
+                blocksEverything = ((uint)1 << 31),//31
+            }
 
-        [FlagsAttribute]
-        public enum BitMask07 : uint
-        {
-            lowLodInTown = 1,                                   // 472,76, C0
-            treasureClassBeforeRoom = 2,                        // 67,1, C1
-            taskGiverNoStartingIcon = 4,                        // 61,5, C2
-            assignGUID = 8,                                     // 471,1, C3
-            merchantDoesNotRefresh = 16,                        // 59,1, C4
-            dontDepopulate = 32,                                // 472,43, C5
-            dontShrinkBones = 64,                               // 472,77, C6
-            _undefined4 = 128,//7
-            hasQuestInfo = 256,                                 // 58,6, C8
-            multiplayerOnly = 512,                              // 472,81, C9
-            noSpin = 1024,                                      // 260,2, CA
-            npcGuildMaster = 2048,                              // 63,4, CB
-            autoIdentifyAffixs = 4096,                          // 472,78, CC
-            npcRespeccer = 8192,                                // 63,5, CD
-            allowObjectStepping = 16384,                        // 472,79, CE
-            alwaysUseFallback = 32768,                          // 115,1, CF
-            canNotSpawnRandomLevelTreasure = 65536,             // 472,80, D0
-            xferMissileStats = 131072,                          // 472,82, D1
-            specificToDifficulty = 262144,                      // 472,83, D2
-            isFieldMissile = 524288,                            // 472,84, D3
-            ignoreFuseMsStat = 1048576,                         // 472,85, D4
-            usesPetLevel = 2097152                              // 58,10, D5
-        }
+            [FlagsAttribute]
+            public enum BitMask07 : uint
+            {
+                everyoneCanTarget = (1 << 0),//0
+                missilePlotArc = (1 << 1),//1
+                petDiesOnWarp = (1 << 2),//2
+                missileIsGore = (1 << 3),//3
+                canAttackFriends = (1 << 4),//4
+                ignoreItemRequirements = (1 << 5),//5
+                lowLodInTown = (1 << 6),//6
+                treasureClassBeforeRoom = (1 << 7),//7
+                taskGiverNoStartingIcon = (1 << 8),//8
+                assignGUID = (1 << 9),//9
+                merchantDoesNotRefresh = (1 << 10),//10
+                dontDepopulate = (1 << 11),//11
+                dontShrinkBones = (1 << 12),//12
+                undefined7a = (1 << 13),//13
+                hasQuestInfo = (1 << 14),//14
+                multiplayerOnly = (1 << 15),//15
+                noSpin = (1 << 16),//16
+                nPCGuildMaster = (1 << 17),//17
+                autoIdentifyAffixs = (1 << 18),//18
+                nPCRespeccer = (1 << 19),//19
+                nPCCraftingRespeccer = (1 << 20),//20
+                allowObjectStepping = (1 << 21),//21
+                alwaysUseFallback = (1 << 22),//22
+                cannotSpawnRandomLevelTreasure = (1 << 23),//23
+                xferMissileStats = (1 << 24),//24
+                specificToDifficulty = (1 << 25),//25
+                isFieldMissile = (1 << 26),//26
+                ignoreFuseMsStat = (1 << 27),//27
+                matchObjLvlToLevel = (1 << 28),//28
+                usesPetLevel = (1 << 29),//29
+                itemIsTargeted = (1 << 30),//30
+                undefined7b = ((uint)1 << 31),//31
+            }
 
-        //these are probably only for missiles.t.c
-        [FlagsAttribute]
-        public enum BitMask08 : uint
-        {
-            bounceOnUnitHit = 1,                                // 85,1, 0
-            bounceOnBackGroundHit = 2,                          // 85,2, 1
-            newDirectionOnBounce = 4,                           // 85,3, 2
-            canNotRicochet = 8,                                 // 85,4, 3
-            reTargetOnBounce = 16                               // 85,5, 4
+            [FlagsAttribute]
+            public enum BitMask08 : uint
+            {
+                undefined8a = (1 << 0),//0
+                undefined8b = (1 << 1),//1
+                undefined8c = (1 << 2),//2
+                noGenderForIcon = (1 << 3),//3
+                fadeOnDestroy = (1 << 4),//4
+                dontDisplayName = (1 << 5),//5
+                isPointOfInterest = (1 << 6),//6
+                undefined8d = (1 << 7),//7
+                confirmOnUse = (1 << 8),//8
+                followGround = (1 << 9),//9
+                mirrorInLeftHand = (1 << 10),//10
+                preCollide = (1 << 11),//11
+            }
+
+            //these are probably only for missiles.t.c
+            [FlagsAttribute]
+            public enum BitMask09 : uint
+            {
+                bounceOnUnitHit = 1,                                // 85,1, 0
+                bounceOnBackGroundHit = 2,                          // 85,2, 1
+                newDirectionOnBounce = 4,                           // 85,3, 2
+                canNotRicochet = 8,                                 // 85,4, 3
+                reTargetOnBounce = 16                               // 85,5, 4
+            }
+
         }
     }
 }

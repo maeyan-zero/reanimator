@@ -13,7 +13,7 @@ namespace Reanimator
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Reanimator());
+            Application.Run(new Forms.Reanimator());
         }
     }
 }

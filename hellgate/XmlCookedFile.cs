@@ -177,7 +177,7 @@ namespace Hellgate
                     case ElementType.NonCookedInt32:                    // 0x0700
                     case ElementType.NonCookedFloat:                    // 0x0800
                     case ElementType.UnknownPTypeD_0x0D00:              // 0x0D00
-                        int bp = 0;     // not cooked.... (I think...)
+                        //int bp = 0;     // not cooked.... (I think...)
                         continue;
 
                     case ElementType.Int32:                             // 0x0000

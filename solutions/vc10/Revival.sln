@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hellgate", "..\..\hellgate\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\..\common\Common.csproj", "{F2C2B5C8-8ACE-44BE-A3CF-A3C045A64A61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "..\..\Launcher\Launcher.csproj", "{D4722813-8F53-409B-B750-B493C4C456C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "..\..\launcher\Launcher.csproj", "{D4722813-8F53-409B-B750-B493C4C456C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

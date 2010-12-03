@@ -8,22 +8,17 @@ namespace Hellgate
 {
     public partial class StringsFile : DataFile
     {
-        public StringsFile(String stringId) : base(stringId)
+        public StringsFile(byte[] buffer, String filePath)
         {
             IsStringsFile = true;
             DataType = typeof(StringBlock);
             Rows = new List<Object>();
-        }
 
-        public StringsFile(byte[] buffer, String filePath) : this(filePath)
-        {
             StringId = GetStringId(filePath);
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCSV = (peek != Token.Header);
-            IntegrityCheck = ((isCSV)) ? ParseCSV(buffer) : ParseData(buffer);
+            HasIntegrity = ((isCSV)) ? ParseCSV(buffer) : ParseData(buffer);
         }
-
-        //public override sealed String StringId { get; protected set; }
 
         public override sealed bool ParseData(byte[] buffer)
         {
@@ -78,7 +73,7 @@ namespace Hellgate
                 Rows.Add(stringBlock);
             }
 
-            return IntegrityCheck = ((offset == buffer.Length)) ? true : false;
+            return HasIntegrity = ((offset == buffer.Length)) ? true : false;
         }
 
         public override sealed bool ParseCSV(byte[] buffer)
@@ -99,7 +94,7 @@ namespace Hellgate
                 }
                 Rows.Add(stringBlock);
             }
-            return IntegrityCheck = true;
+            return HasIntegrity = true;
         }
 
         public override bool ParseDataTable(DataTable table)

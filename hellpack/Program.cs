@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -35,22 +36,33 @@ namespace Revival
             List<string> stringFilesToCook = new List<string>();
             List<string> xmlFilesToCook = new List<string>();
 
-            //if (true)
-            //{
-            //    fileManager = new FileManager(@"D:\Games\Hellgate London");
-            //    fileManager.LoadTableFiles();
-            //    foreach (DataFile dataFile in fileManager.DataFiles.Values)
-            //    {
-            //        if (dataFile.StringId == "SOUNDS") continue;
-            //        if (dataFile.IsStringsFile) continue;
-            //        Console.WriteLine(dataFile.FileName);
-            //        string dir = Path.GetDirectoryName(dataFile.FilePath);
-            //        if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-            //        byte[] ebuffer = dataFile.ExportCSV();
-            //        File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
-            //    }
-            //    return;
-            //}
+            if (false)
+            {
+                fileManager = new FileManager(@"D:\Games\Hellgate London");
+                fileManager.LoadTableFiles();
+                foreach (DataFile dataFile in fileManager.DataFiles.Values)
+                {
+                    if (dataFile.StringId == "SOUNDS") continue;
+                    if (dataFile.IsStringsFile) continue;
+
+                    Console.WriteLine(dataFile.FileName);
+                    String dir = Path.GetDirectoryName(dataFile.FilePath);
+                    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+
+                    byte[] ebuffer = dataFile.ExportCSV();
+                    //for (int i = 0; i < 10; i++)
+                    //{
+                    //    Stopwatch stopwatch = new Stopwatch();
+                    //    stopwatch.Start();
+                    //    ebuffer = dataFile.ExportCSV();
+                    //    stopwatch.Stop();
+                    //    Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
+                    //}
+                    
+                    File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
+                }
+                return;
+            }
 
             Console.WriteLine(welcomeMsg);
             Console.WriteLine(String.Empty);
@@ -147,7 +159,7 @@ namespace Revival
                 if (hellgatePath != String.Empty)
                 {
                     fileManager = new FileManager(hellgatePath);
-                    if (fileManager.IntegrityCheck == false)
+                    if (fileManager.HasIntegrity == false)
                     {
                         Console.WriteLine("Warning: XML could not be cooked.");
                     }
@@ -313,7 +325,7 @@ namespace Revival
         {
             byte[] excelBuffer = File.ReadAllBytes(excelPath);
             ExcelFile excelFile = new ExcelFile(excelBuffer, excelPath);
-            if (!excelFile.IntegrityCheck)
+            if (!excelFile.HasIntegrity)
             {
                 Console.WriteLine("Failed to parse excel file: " + excelPath);
                 return;
@@ -351,7 +363,7 @@ namespace Revival
         {
             byte[] stringsBuffer = File.ReadAllBytes(stringPath);
             StringsFile stringsFile = new StringsFile(stringsBuffer, Path.GetFileName(stringPath).ToUpper());
-            if (!(stringsFile.IntegrityCheck == true)) return;
+            if (!(stringsFile.HasIntegrity == true)) return;
             Console.WriteLine(String.Format("Cooking {0}", Path.GetFileNameWithoutExtension(stringPath)));
             stringsBuffer = stringsFile.ToByteArray();
             if (stringsBuffer == null) return;
@@ -362,8 +374,7 @@ namespace Revival
         {
             if (xmlFilesToCook.Length > 0)
             {
-                if (XmlCookedFile.IsInitialized == false)
-                    XmlCookedFile.Initialize(fileManager);
+                if (XmlCookedFile.IsInitialized == false) XmlCookedFile.Initialize(fileManager);
 
                 Console.WriteLine("Cooking XML Files... Loading Data Tables...");
 

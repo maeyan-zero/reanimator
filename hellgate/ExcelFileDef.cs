@@ -467,7 +467,7 @@ namespace Hellgate
             return (query.Length != 0) ? (OutputAttribute)query[0] : null;
         }
 
-        private static String GetStringId(String filePath)
+        private static String _GetStringId(String filePath)
         {
             // check if the file name is the same as the string id
             String stringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
@@ -524,7 +524,7 @@ namespace Hellgate
         public int[] ReadIntegerTable(int offset)
         {
             int position = offset;
-            int value = FileTools.ByteArrayToInt32(IntegerBuffer, position);
+            int value = FileTools.ByteArrayToInt32(_integerBuffer, position);
 
             while (value != 0)
             {
@@ -534,32 +534,32 @@ namespace Hellgate
                 else if (IntTableDef.BitField.Contains(value)) position += (2 * sizeof(int));
                 else return null;
 
-                value = FileTools.ByteArrayToInt32(IntegerBuffer, position);
+                value = FileTools.ByteArrayToInt32(_integerBuffer, position);
             }
 
             int length = (position + sizeof(int) - offset) / sizeof(int);
 
-            return FileTools.ByteArrayToInt32Array(IntegerBuffer, ref offset, length);
+            return FileTools.ByteArrayToInt32Array(_integerBuffer, ref offset, length);
         }
 
         public string ReadStringTable(int offset)
         {
-            return offset == -1 ? String.Empty : FileTools.ByteArrayToStringASCII(StringBuffer, offset);
+            return offset == -1 ? String.Empty : FileTools.ByteArrayToStringASCII(_stringBuffer, offset);
         }
 
         public byte[] ReadStringTableAsBytes(int offset)
         {
-            return FileTools.GetDelimintedByteArray(StringBuffer, ref offset, 0);
+            return FileTools.GetDelimintedByteArray(_stringBuffer, ref offset, 0);
         }
 
         public byte[] ReadExtendedProperties(int index)
         {
-            return (ExtendedBuffer != null) ? ExtendedBuffer[index] : null;
+            return (_extendedBuffer != null) ? _extendedBuffer[index] : null;
         }
 
         public string ReadSecondaryStringTable(int index)
         {
-            return SecondaryStrings[index];
+            return _secondaryStrings[index];
         }
 
         private bool _ParseScriptTable(byte[] data, ref int offset)
@@ -732,15 +732,15 @@ namespace Hellgate
 
             if ((attribute.IsStringOffset))
             {
-                for (int i = 0; i < StringBuffer.Length; i++)
+                for (int i = 0; i < _stringBuffer.Length; i++)
                 {
-                    switch (StringBuffer[i])
+                    switch (_stringBuffer[i])
                     {
                         case (byte)'-':
-                            StringBuffer[i] = (byte)'8';
+                            _stringBuffer[i] = (byte)'8';
                             break;
                         case (byte)'_':
-                            StringBuffer[i] = (byte)'9';
+                            _stringBuffer[i] = (byte)'9';
                             break;
                     }
                 }
