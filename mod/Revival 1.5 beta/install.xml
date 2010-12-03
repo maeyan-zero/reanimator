@@ -99,10 +99,10 @@
 				<path>data/lighting/*</path>
 			</extract>
 		</script>
-		<script type="optional">
+		<script type="recommended">
 			<title>Remove censoring.</title>
 			<description>Remove regional censoring.</description>
-			<table id="items">
+			<table id="sku">
 				<entity id="*">
 					<attribute id="censorLocked">0</attribute>
 					<attribute id="censorParticles">0</attribute>
