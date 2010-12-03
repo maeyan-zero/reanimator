@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Reflection;
 using Revival.Common;
 
@@ -79,21 +80,31 @@ namespace Hellgate
         public override sealed bool ParseCSV(byte[] buffer)
         {
             if ((buffer == null)) return false;
+
             string[][] stringBuffer = FileTools.UnicodeCSVToStringArray(buffer, 0x09, 0x22);
             if ((stringBuffer == null)) return false;
+
             int row = 0;
             Rows = new List<Object>();
+            FieldInfo[] stringFields = typeof(StringBlock).GetFields();
             foreach (string[] bufferRow in stringBuffer)
             {
-                if ((row == 0)) { row++; continue; }
+                if (row == 0)
+                {
+                    row++;
+                    continue;
+                }
+
                 int col = 0;
                 StringBlock stringBlock = new StringBlock();
-                foreach (FieldInfo fieldInfo in typeof(StringBlock).GetFields())
+                foreach (FieldInfo fieldInfo in stringFields)
                 {
                     fieldInfo.SetValue(stringBlock, FileTools.StringToObject(bufferRow[col++], fieldInfo.FieldType));
                 }
+
                 Rows.Add(stringBlock);
             }
+
             return HasIntegrity = true;
         }
 
@@ -155,7 +166,7 @@ namespace Hellgate
                     byteCount += stringBytes.Length;
                     FileTools.WriteToBuffer(ref buffer, ref offset, byteCount);
                     FileTools.WriteToBuffer(ref buffer, ref offset, stringBytes);
-                    
+
                 }
                 offset += 2; // \0
 
@@ -257,12 +268,37 @@ namespace Hellgate
         }
 
         /// <summary>
-        /// Converts the StringsFile to a CSV
+        /// Converts the StringsFile to a tab-delimited CSV
         /// </summary>
         /// <returns>The CSV as a byte array.</returns>
         public override byte[] ExportCSV()
         {
-            throw new NotImplementedException();
+            StringWriter writer = new StringWriter();
+
+            // hard-code ftw (it's very unlikely we're going to change it, so meh)
+            const String fields = "\"id\"	\"fk\"	\"stringid\"	\"u1\"	\"string\"	\"a1\"	\"a2\"	\"a3\"	\"a4\"";
+            writer.WriteLine(fields);
+
+            foreach (StringBlock stringBlock in Rows)
+            {
+                writer.WriteLine(String.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+                                               stringBlock.ReferenceId,
+                                               stringBlock.Unknown,
+                                               _EncapsulateString(stringBlock.StringId),
+                                               stringBlock.Reserved,
+                                               _EncapsulateString(stringBlock.String),
+                                               _EncapsulateString(stringBlock.Attribute1),
+                                               _EncapsulateString(stringBlock.Attribute2),
+                                               _EncapsulateString(stringBlock.Attribute3),
+                                               _EncapsulateString(stringBlock.Attribute4)));
+            }
+
+            return writer.ToString().ToUnicodeByteArray();
+        }
+
+        private static String _EncapsulateString(String str)
+        {
+            return String.IsNullOrEmpty(str) ? String.Empty : String.Format("\"{0}\"", str);
         }
     }
 }
