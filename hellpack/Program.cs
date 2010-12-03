@@ -36,33 +36,70 @@ namespace Revival
             List<string> stringFilesToCook = new List<string>();
             List<string> xmlFilesToCook = new List<string>();
 
+            #region alexs_stuff
             if (false)
             {
+
                 fileManager = new FileManager(@"D:\Games\Hellgate London");
                 fileManager.LoadTableFiles();
-                foreach (DataFile dataFile in fileManager.DataFiles.Values)
-                {
-                    if (dataFile.StringId != "SOUNDS") continue;
-                    if (dataFile.IsStringsFile) continue;
+                //foreach (DataFile dataFile in fileManager.DataFiles.Values)
+                //{
+                //    if (dataFile.IsStringsFile) continue;
 
-                    Console.WriteLine(dataFile.FileName);
-                    String dir = Path.GetDirectoryName(dataFile.FilePath);
-                    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+                //    Console.WriteLine(dataFile.FileName);
+                //    String dir = Path.GetDirectoryName(dataFile.FilePath);
+                //    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
 
-                    byte[] ebuffer = dataFile.ExportCSV();
-                    //for (int i = 0; i < 10; i++)
-                    //{
-                    //    Stopwatch stopwatch = new Stopwatch();
-                    //    stopwatch.Start();
-                    //    ebuffer = dataFile.ExportCSV();
-                    //    stopwatch.Stop();
-                    //    Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
-                    //}
+                //    byte[] ebuffer = dataFile.ExportCSV();
+                //    //for (int i = 0; i < 10; i++)
+                //    //{
+                //    //    Stopwatch stopwatch = new Stopwatch();
+                //    //    stopwatch.Start();
+                //    //    ebuffer = dataFile.ExportCSV();
+                //    //    stopwatch.Stop();
+                //    //    Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
+                //    //}
                     
-                    File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
-                }
-                return;
+                //    File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
+                //}
+
+
+
+                //const String pathExcel = @"data\excel\affixes.txt";
+                //byte[] excelBytes = File.ReadAllBytes(pathExcel);
+                //ExcelFile excelFile = new ExcelFile(excelBytes, pathExcel);
+                //byte[] excelCsvBytes = excelFile.ExportCSV();
+
+
+
+                //const String path = @"data\excel\strings\english\strings_revival.xls.uni2";
+                //byte[] cookedBytes = File.ReadAllBytes(path);
+                //StringsFile stringsFile = new StringsFile(cookedBytes, path);
+                //byte[] csvBytes = stringsFile.ExportCSV();
+                //if (!cookedBytes.SequenceEqual(csvBytes))
+                //{
+                //    File.WriteAllBytes(path + "2", csvBytes);
+                //    int bp = 0;
+                //}
+                
+
+                //doSearchCd = true;
+                //doCookTxt = true;
+                //if (doSearchCd && doCookTxt)
+                //{
+                //    excelFilesToCook.AddRange(SearchForExcelFiles(currentDir));
+                //    stringFilesToCook.AddRange(SearchForStringFiles(currentDir));
+                //}
+
+                //if (doCookTxt)
+                //{
+                //    CookExcelFiles(excelFilesToCook.ToArray());
+                //    CookStringFiles(stringFilesToCook.ToArray());
+                //}
+
+                //return;
             }
+            #endregion
 
             Console.WriteLine(welcomeMsg);
             Console.WriteLine(String.Empty);

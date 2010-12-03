@@ -862,5 +862,10 @@ namespace Revival.Common
 
             return bytes;
         }
+
+        public static byte[] ToUnicodeByteArray(this String str)
+        {
+            return StringToUnicodeByteArray(str);
+        }
     }
 }
