@@ -250,7 +250,7 @@ namespace Hellgate
             }
 
             // resize the integer and string buffers if they were used
-            if (_stringBuffer != null)  Array.Resize(ref _stringBuffer, stringBufferOffset);
+            if (_stringBuffer != null) Array.Resize(ref _stringBuffer, stringBufferOffset);
             if (_integerBuffer != null) Array.Resize(ref _integerBuffer, integerBufferOffset);
 
             return true;
@@ -457,7 +457,7 @@ namespace Hellgate
             // Generate custom sorts
             int[][] customSorts = CreateSortIndices();
             foreach (int[] intArray in customSorts)
-            {                
+            {
                 if (intArray != null)
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
@@ -518,7 +518,7 @@ namespace Hellgate
             {
                 int blockSize = (Count >> 5) + 1; // need 1 bit for every row; 32 bits per int - blockSize = no. of Int's
                 UInt32[,] indexBitRelations = CreateIndexBitRelations();
-                byte[] relationsData = new byte[Count*blockSize*sizeof (UInt32)];
+                byte[] relationsData = new byte[Count * blockSize * sizeof(UInt32)];
                 Buffer.BlockCopy(indexBitRelations, 0, relationsData, 0, relationsData.Length);
 
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
@@ -544,22 +544,21 @@ namespace Hellgate
         /// <returns>The CSV as a byte array.</returns>
         public override byte[] ExportCSV()
         {
-            int noCols = DataType.GetFields().Count();
+            FieldInfo[] dataTypeFields = DataType.GetFields();
+            int noCols = dataTypeFields.Count();
             int noRows = Count + 1; // +1 for column headers
             const byte delimiter = (byte)'\t';
 
             byte[] csvBuffer = new byte[1024];
             int csvOffset = 0;
-
             int row = 0;
-            int col = 0;
 
 
             // Table Header - put stringID in this field
             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(_GetStringId(FilePath)));
             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
             // Public Field Headers
-            foreach (FieldInfo fieldInfo in DataType.GetFields())
+            foreach (FieldInfo fieldInfo in dataTypeFields)
             {
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(fieldInfo.Name));
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
@@ -576,8 +575,7 @@ namespace Hellgate
 
             // Parse each row, resolve buffers if needed
             bool needOutputAttributes = true;
-            FieldInfo[] dataTypeFields = DataType.GetFields();
-            OutputAttribute[] outputAttributes = new OutputAttribute[dataTypeFields.Length];
+            OutputAttribute[] outputAttributes = new OutputAttribute[noCols];
             foreach (Object rowObject in Rows)
             {
                 // Write Table Header
@@ -586,14 +584,19 @@ namespace Hellgate
                 string tableHeaderString = FileTools.ObjectToStringGeneric(tableHeader, ",");
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(tableHeaderString));
 
-                int outputAttributeIndex = -1;
+                int col = -1;
                 foreach (FieldInfo fieldInfo in dataTypeFields)
                 {
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
 
-                    outputAttributeIndex++;
-                    if (needOutputAttributes) outputAttributes[outputAttributeIndex] = GetExcelOutputAttribute(fieldInfo);
-                    OutputAttribute attribute = outputAttributes[outputAttributeIndex];
+                    col++;
+                    if (needOutputAttributes) outputAttributes[col] = GetExcelOutputAttribute(fieldInfo);
+                    OutputAttribute attribute = outputAttributes[col];
+
+                    //if (col == 22 && row == 29)
+                    //{
+                    //    int bp = 0;
+                    //}
 
                     if (attribute != null)
                     {
@@ -602,7 +605,10 @@ namespace Hellgate
                             int offset = (int)fieldInfo.GetValue(rowObject);
                             if (offset != -1)
                             {
-                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, ReadStringTableAsBytes(offset));
+                                byte[] stringBytes = ReadStringTableAsBytes(offset);
+                                if (stringBytes == null) continue;
+
+                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, stringBytes);
                             }
                             continue;
                         }
@@ -637,7 +643,6 @@ namespace Hellgate
                     }
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(fieldInfo.GetValue(rowObject).ToString()));
                 }
-
                 needOutputAttributes = false;
 
                 // Extended Buffer if applies
@@ -645,7 +650,7 @@ namespace Hellgate
                 {
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(_extendedBuffer[row], ',', typeof(byte))));
-                    
+
                 }
 
                 row++;
@@ -678,7 +683,7 @@ namespace Hellgate
             {
                 XmlElement scriptElement = xmlDocument.CreateElement("Script");
                 mainElement.AppendChild(scriptElement);
-                
+
                 foreach (ExcelScript.Paramater paramater in excelScript.Paramaters)
                 {
                     XmlElement paramElement = xmlDocument.CreateElement("Parameter");
@@ -704,7 +709,7 @@ namespace Hellgate
                     for (int i = 0; i < paramater.TypeValues.Length; i++)
                     {
                         text += paramater.TypeValues[i].ToString();
-                        if (i < paramater.TypeValues.Length-1) text += ",";
+                        if (i < paramater.TypeValues.Length - 1) text += ",";
                     }
                     paramTypeValues.InnerText = text;
                 }
@@ -713,7 +718,7 @@ namespace Hellgate
 
                 if (excelScript.ScriptValues != null)
                 {
-                    int intCount = excelScript.ScriptValues.Length/4;
+                    int intCount = excelScript.ScriptValues.Length / 4;
                     String text = String.Empty;
                     int offset = 0;
                     Int32[] intArray = FileTools.ByteArrayToInt32Array(excelScript.ScriptValues, ref offset, intCount);
@@ -729,8 +734,8 @@ namespace Hellgate
                         //}
                         //else
                         //{
-                            text += intArray[i].ToString();
-                            if (i < intArray.Length - 1) text += ",";
+                        text += intArray[i].ToString();
+                        if (i < intArray.Length - 1) text += ",";
                         //}
 
                     }
@@ -771,7 +776,7 @@ namespace Hellgate
                         convertedRow[columnName] = tcRow[columnName];
                         continue;
                     }
-                    if (column.DataType.BaseType != typeof (Enum)) continue;
+                    if (column.DataType.BaseType != typeof(Enum)) continue;
 
                     Type spBitMask = column.DataType;
                     Type tcBitMask = tcDataTable.Columns[columnName].DataType;

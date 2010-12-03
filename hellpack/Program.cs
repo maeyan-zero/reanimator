@@ -42,7 +42,7 @@ namespace Revival
                 fileManager.LoadTableFiles();
                 foreach (DataFile dataFile in fileManager.DataFiles.Values)
                 {
-                    if (dataFile.StringId == "SOUNDS") continue;
+                    if (dataFile.StringId != "SOUNDS") continue;
                     if (dataFile.IsStringsFile) continue;
 
                     Console.WriteLine(dataFile.FileName);
