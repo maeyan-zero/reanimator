@@ -73,6 +73,12 @@ namespace Launcher.Forms
             set { SetValue("SaveDir", value); }
         }
 
+        public static string BackupDir
+        {
+            get { return GetValue("BackupDir", String.Format(@"C:\Users\{0}\Documents\My Games\Hellgate\Save\Singleplayer\Backup", Environment.UserName)); }
+            set { SetValue("BackupDir", value); }
+        }
+
         public static string ScriptDir
         {
             get { return GetValue("ScriptDir", @"C:\Program Files\Flagship Studios\Hellgate London\Reanimator\Scripts"); }

@@ -2,12 +2,12 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO;
-using System.Drawing;
-using System.Data;
 using System.Linq;
 using Hellgate;
 using Revival.Common;
+using FileEntry = Hellgate.IndexFile.FileEntry;
 using Script = Revival.Modification.Revival.Modification.Script;
+using System.Text.RegularExpressions;
 
 namespace Revival
 {
@@ -44,160 +44,221 @@ namespace Revival
         /// <param name="script"></param>
         /// <param name="fileManager"></param>
         /// <returns></returns>
-        public static bool ApplyScript(Script script, FileManager fileManager)
+        public static bool ApplyScript(Script script, ref FileManager fileManager)
         {
-            foreach (Script.Table table in script.Tables)
+            #region Table Modifications
+            if (script.Tables != null)
             {
-                string tableID = table.ID.ToUpper();
-                if (fileManager.DataFiles.ContainsKey(tableID) == false) return false;
-                ExcelFile dataTable = fileManager.DataFiles[tableID] as ExcelFile;
-                if (dataTable == null) return false;
-
-                foreach (Script.Table.Entity entity in table.Entities)
+                foreach (Script.Table table in script.Tables)
                 {
-                    foreach (Script.Table.Entity.Attribute attribute in entity.Attributes)
+                    string tableID = table.ID.ToUpper();
+                    if (fileManager.DataFiles.ContainsKey(tableID) == false) return false;
+                    ExcelFile dataTable = fileManager.DataFiles[tableID] as ExcelFile;
+                    if (dataTable == null) return false;
+
+                    foreach (Script.Table.Entity entity in table.Entities)
                     {
-                        int step = 0;
-                        int min = 1;
-                        int max = 0;
-                        int last = 0; //for recursive function
-                        string function;
-                        int[] list;
-
-                        //determine the range
-                        if (entity.ID.Contains(","))
+                        foreach (Script.Table.Entity.Attribute attribute in entity.Attributes)
                         {
-                            string[] explode = entity.ID.Split(',');
-                            list = new int[explode.Length];
+                            int step = 0;
+                            int min = 1;
+                            int max = 0;
+                            int last = 0; //for recursive function
+                            string function;
+                            int[] list;
 
-                            for (int i = 0; i < list.Length; i++)
+                            //determine the range
+                            if (entity.ID.Contains(","))
                             {
-                                list[i] = Convert.ToInt32(explode[i]);
-                            }
-                        }
-                        else
-                        {
-                            if (entity.ID.Contains("*"))
-                            {
-                                min = 0;
-                                max = dataTable.Count - 1;
-                            }
-                            else if (entity.ID.Contains("-"))
-                            {
-                                int idx = entity.ID.IndexOf('-');
-                                int len = entity.ID.Length - idx - 1;
-                                min = Convert.ToInt32(entity.ID.Substring(0, idx));
-                                max = Convert.ToInt32(entity.ID.Substring(idx + 1, len));
+                                string[] explode = entity.ID.Split(',');
+                                list = new int[explode.Length];
+
+                                for (int i = 0; i < list.Length; i++)
+                                {
+                                    list[i] = Convert.ToInt32(explode[i]);
+                                }
                             }
                             else
                             {
-                                min = Convert.ToInt32(entity.ID);
-                                max = Convert.ToInt32(entity.ID);
+                                if (entity.ID.Contains("*"))
+                                {
+                                    min = 0;
+                                    max = dataTable.Count - 1;
+                                }
+                                else if (entity.ID.Contains("-"))
+                                {
+                                    int idx = entity.ID.IndexOf('-');
+                                    int len = entity.ID.Length - idx - 1;
+                                    min = Convert.ToInt32(entity.ID.Substring(0, idx));
+                                    max = Convert.ToInt32(entity.ID.Substring(idx + 1, len));
+                                }
+                                else
+                                {
+                                    min = Convert.ToInt32(entity.ID);
+                                    max = Convert.ToInt32(entity.ID);
+                                }
+
+                                int listlen = max - min + 1;
+                                list = new int[listlen];
+                                int i = 0;
+
+                                for (int row = min; row <= max; row++)
+                                {
+                                    list[i++] = row;
+                                }
                             }
 
-                            int listlen = max - min + 1;
-                            list = new int[listlen];
-                            int i = 0;
-
-                            for (int row = min; row <= max; row++)
+                            //determine function
+                            if (attribute.Bit != null)
                             {
-                                list[i++] = row;
+                                function = "bitwise";
                             }
-                        }
-
-                        //determine function
-                        if (attribute.Bit != null)
-                        {
-                            function = "bitwise";
-                        }
-                        else if (attribute.Operation == null)
-                        {
-                            function = "replace";
-                        }
-                        else if (attribute.Operation.Contains("*"))
-                        {
-                            function = "multiply";
-                        }
-                        else if (attribute.Operation.Contains("/"))
-                        {
-                            function = "divide";
-                        }
-                        else if (attribute.Operation.Contains("+"))
-                        {
-                            string s = attribute.Operation.Remove(0);
-                            step = Convert.ToInt32(s);
-                            function = "recursive";
-                        }
-                        else if (attribute.Operation.Contains("-"))
-                        {
-                            step = Convert.ToInt32(attribute.Operation);
-                            function = "recursive";
-                        }
-                        else
-                        {
-                            continue; // syntax error
-                        }
-
-                        //main loop, alters the dataset
-                        foreach (int row in list)
-                        {
-                            object obj = null;
-                            string col = attribute.ID;
-                            Type type = dataTable.DataType.GetField(col).FieldType;//table.Columns[col].DataType;
-                            Object currentValue = dataTable.DataType.GetField(col).GetValue(dataTable.Rows[row]);
-
-                            switch (function)
+                            else if (attribute.Operation == null)
                             {
-                                case "replace":
-                                    obj = FileTools.StringToObject(attribute.Data, type);
-                                    break;
+                                function = "replace";
+                            }
+                            else if (attribute.Operation.Contains("*"))
+                            {
+                                function = "multiply";
+                            }
+                            else if (attribute.Operation.Contains("/"))
+                            {
+                                function = "divide";
+                            }
+                            else if (attribute.Operation.Contains("+"))
+                            {
+                                string s = attribute.Operation.Remove(0);
+                                step = Convert.ToInt32(s);
+                                function = "recursive";
+                            }
+                            else if (attribute.Operation.Contains("-"))
+                            {
+                                step = Convert.ToInt32(attribute.Operation);
+                                function = "recursive";
+                            }
+                            else
+                            {
+                                continue; // syntax error
+                            }
 
-                                case "multiply":
-                                    if (type.Equals(typeof(int)))
-                                        obj = (int)currentValue * Convert.ToInt32(attribute.Data);
-                                    else if (type.Equals(typeof(float)))
-                                        obj = (float)currentValue * Convert.ToSingle(attribute.Data);
-                                    break;
+                            //main loop, alters the dataset
+                            foreach (int row in list)
+                            {
+                                object obj = null;
+                                string col = attribute.ID;
+                                Type type = dataTable.DataType.GetField(col).FieldType;//table.Columns[col].DataType;
+                                Object currentValue = dataTable.DataType.GetField(col).GetValue(dataTable.Rows[row]);
 
-                                case "divide":
-                                    if (type.Equals(typeof(int)))
-                                        obj = (int)currentValue / Convert.ToInt32(attribute.Data);
-                                    else if (type.Equals(typeof(float)))
-                                        obj = (float)currentValue / Convert.ToSingle(attribute.Data);
-                                    break;
+                                switch (function)
+                                {
+                                    case "replace":
+                                        obj = FileTools.StringToObject(attribute.Data, type);
+                                        break;
 
-                                case "bitwise":
-                                    uint bit = (uint)Enum.Parse(type, attribute.Bit, true);
-                                    uint mask = (uint)currentValue;
-                                    bool flick = Convert.ToBoolean(attribute.Data);
-                                    bool current = (mask & bit) > 0;
-                                    if (flick != current)
-                                        obj = mask ^= bit;
-                                    else
-                                        obj = mask;
-                                    break;
-
-                                case "recursive":
-                                    if (row.Equals(min))//first time only
-                                    {
+                                    case "multiply":
                                         if (type.Equals(typeof(int)))
+                                            obj = (int)currentValue * Convert.ToInt32(attribute.Data);
+                                        else if (type.Equals(typeof(float)))
+                                            obj = (float)currentValue * Convert.ToSingle(attribute.Data);
+                                        break;
+
+                                    case "divide":
+                                        if (type.Equals(typeof(int)))
+                                            obj = (int)currentValue / Convert.ToInt32(attribute.Data);
+                                        else if (type.Equals(typeof(float)))
+                                            obj = (float)currentValue / Convert.ToSingle(attribute.Data);
+                                        break;
+
+                                    case "bitwise":
+                                        uint bit = (uint)Enum.Parse(type, attribute.Bit, true);
+                                        uint mask = (uint)currentValue;
+                                        bool flick = Convert.ToBoolean(attribute.Data);
+                                        bool current = (mask & bit) > 0;
+                                        if (flick != current)
+                                            obj = mask ^= bit;
+                                        else
+                                            obj = mask;
+                                        break;
+
+                                    case "recursive":
+                                        if (row.Equals(min))//first time only
                                         {
-                                            obj = Convert.ToInt32(attribute.Data);
-                                            last = (int)obj;
+                                            if (type.Equals(typeof(int)))
+                                            {
+                                                obj = Convert.ToInt32(attribute.Data);
+                                                last = (int)obj;
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        last += step;
-                                        obj = last;
-                                    }
-                                    break;
+                                        else
+                                        {
+                                            last += step;
+                                            obj = last;
+                                        }
+                                        break;
+                                }
+                                dataTable.DataType.GetField(col).SetValue(dataTable.Rows[row], obj);
                             }
-                            dataTable.DataType.GetField(col).SetValue(dataTable.Rows[row], obj);
                         }
                     }
+                    fileManager.DataFiles[tableID] = dataTable;
                 }
             }
+            #endregion
+
+            #region Extraction Script
+            if (script.Extraction != null)
+            {
+                string sourcePath = Path.Combine(fileManager.HellgateDataPath, script.Extraction.Source + ".idx");
+                string destinationPath = sourcePath.Replace(script.Extraction.Source, script.Extraction.Destination);
+
+                // Check source index exists
+                if (File.Exists(sourcePath) == false) return false;
+
+                // Try open the index file
+                byte[] sbuffer;
+                IndexFile sourceIndex;
+                IndexFile destinationIndex;
+                try
+                {
+                    sbuffer = File.ReadAllBytes(sourcePath);
+                }
+                catch
+                {
+                    return false;
+                }
+                sourceIndex = new IndexFile(sbuffer) { FilePath = sourcePath };
+                destinationIndex = new IndexFile() { FilePath = destinationPath };
+                if (sourceIndex.HasIntegrity == false) return false;
+                sourceIndex.BeginDatReading();
+
+                // Extract each path/file
+                foreach (FileEntry fileEntry in sourceIndex.Files)
+                {
+                    if (script.Extraction.paths.Where(p => Regex.IsMatch(fileEntry.RelativeFullPath, p.Replace(@"\", @"\\"))).Any())
+                    {
+                        destinationIndex.AddFile(fileEntry.DirectoryString, fileEntry.FileNameString, sourceIndex.GetFileBytes(fileEntry));
+                    }
+                }
+
+                // Write the file
+                byte[] ibuffer = destinationIndex.ToByteArray();
+                Crypt.Encrypt(ibuffer);
+                try
+                {
+                    File.WriteAllBytes(destinationIndex.FilePath, ibuffer);
+                }
+                catch
+                {
+                    sourceIndex.Dispose();
+                    return false;
+                }
+
+                // Clean up
+                sourceIndex.Dispose();
+                destinationIndex.Dispose();
+            }
+            #endregion
+
             return true;
         }
 
@@ -256,6 +317,8 @@ namespace Revival
                     public string Description { get; set; }
                     [XmlElement("table", typeof(Table))]
                     public Table[] Tables { get; set; }
+                    [XmlElement("extract", typeof(Extract))]
+                    public Extract Extraction { get; set; }
 
                     /// <summary>
                     /// Used for manipulating Excel tables.

@@ -12,95 +12,124 @@
 		</dependencies>
 		<description>Welcome to the amazing 1.5 beta release of Revival.
 		
-		Levels
-		* Environment updates from the Abyss added.
-		* Moloch spawns in Anchient Blood - 4/5 chance to spawn.
-		* Passageways and Hellriffs are a lot rarer 1/10.
-		* Elite passageways champion spawn chance increased by 100%.
-		* Treasure passageways contain 100% more treasure.
-		* Monster density increased by 15%.
-		* Champion spawn chance increased by x4.
-		TODO
-		* Certain levels are now marked elite zones and enemies are much tougher.
-		
-		Players
-		* Players are no longer assigned a default skill.
-		* The initial skill is placed on the starter weapons.
-		* Level cap increased to 55.
-		* Power regeneration decreased from 3 to 2 per willpower point.
-		* Melee damage increased from 1% to 3% per strength point.
-		
-		Skills
-		* The sprint skill caps at 4 points and no cooldown.
-		
-		Monsters
-		* Moloch has been added into the game.
-		* New champion spawn: Zomper. - Skin by Tirex
-		* Champion monster are slightly bigger 50%.
-		* Champion mob health and experience increased 100%-300%.
-		* Shield overload reduced and capped at 100%.
-		* Killing monsters 3 levels above you grants you more experience up to 95%.
+Levels
+* Environment updates from the Abyss added.
+* Moloch spawns in Anchient Blood - 4/5 chance to spawn.
+* Passageways and Hellriffs are a lot rarer 1/10.
+* Elite passageways champion spawn chance increased by 100%.
+* Treasure passageways contain 100% more treasure.
+* Monster density increased by 15%.
+* Champion spawn chance increased by x4.
+TODO
+* Certain levels are now marked elite zones and enemies are much tougher.
 
-		NPCs
-		* Original voices have been restored for about 15 npcs.
-		* Techsmith 314 has been reskinned into his 3rd stage state.
+Players
+* Players are no longer assigned a default skill.
+* The initial skill is placed on the starter weapons.
+* Level cap increased to 55.
+* Power regeneration decreased from 3 to 2 per willpower point.
+* Melee damage increased from 1% to 3% per strength point.
 
-		Items
-		* Templar items added: Sunblade, Sunshield, Moonblade, Dissector, Dissector Shield &amp; Gleamcarver.
-		* 6x new unique items inspired by hellgateaus.
-		* Shield overload on Swords halved and capped at 100%.
-		* Boss/Mutant items are now of unique quality.
-		* Only unique retrainers can be bought and sold.
-		* Common retrainers are gained from Sydonai the first time you complete the game.
-		* Rare and Legendary augmentation cost reduced by 50%.
-		* Bosses have a 1/100 chance to drop an egg.
-		* Scrap stack size increased to 10,000.
-		* Consumables stack size increased to 100.
+Skills
+* The sprint skill caps at 4 points and no cooldown.
 
-		Recipies
-		* The cube recipes are hidden until discovered.
-		* New recipe to create pets.
-		TODO:
-		* Create more basic consumable recipes.
-		* Create more recipes to create random items.
-		
-		Treasure
-		* Champion mobs have a fixed chance of dropping legendary or better loot!
-		  * Rare mobs 1/100
-			* Epic/Legendary mobs 1/50
-			* Named/Unique mobs 1/25
-		* Sydonai drops a skill and attribute retrainer when you finish the game.
-		* Moloch drops the Stonehenge dye kits. 1/10 chance to drop.
-		* Sydonai and Moloch have a chance to drop unique retrainers. 1/25 chance to drop.
-		* Zomper drops new items.
-		  * 1/2 chance to drop a special item (not telling what it is ;))
-			* 1/10 chance to drop hellgateaus unique items.
-		* Vendor modification and consumable quantities balanced.
-		* Chests and crates are generally more exciting.
-		  * Crates will only drop palladium and consumables.
-			* Common chests will drop up to 3 consumables and palladium.
-			* There is a 1/1000 chance a common chest will drop a legendary of better item.
-			* Elite chests drop a lot more palladium and drop 2 rare or better items.
-			
-		Inventory
-		* Increased stash (x10) and inventory (2x).
-		TODO:
-		* Add a new slot for goggles.
+Monsters
+* Moloch has been added into the game.
+* New champion spawn: Zomper. - Skin by Tirex
+* Champion monster are slightly bigger 50%.
+* Champion mob health and experience increased 100%-300%.
+* Shield overload reduced and capped at 100%.
+* Killing monsters 3 levels above you grants you more experience up to 95%.
+
+NPCs
+* Original voices have been restored for about 15 npcs.
+* Techsmith 314 has been reskinned into his 3rd stage state.
+
+Items
+* Templar items added: Sunblade, Sunshield, Moonblade, Dissector, Dissector Shield &amp; Gleamcarver.
+* 6x new unique items inspired by hellgateaus.
+* Shield overload on Swords halved and capped at 100%.
+* Boss/Mutant items are now of unique quality.
+* Only unique retrainers can be bought and sold.
+* Common retrainers are gained from Sydonai the first time you complete the game.
+* Rare and Legendary augmentation cost reduced by 50%.
+* Bosses have a 1/100 chance to drop an egg.
+* Scrap stack size increased to 10,000.
+* Consumables stack size increased to 100.
+
+Recipies
+* The cube recipes are hidden until discovered.
+* New recipe to create pets.
+TODO:
+* Create more basic consumable recipes.
+* Create more recipes to create random items.
+
+Treasure
+* Champion mobs have a fixed chance of dropping legendary or better loot!
+	* Rare mobs 1/100
+	* Epic/Legendary mobs 1/50
+	* Named/Unique mobs 1/25
+* Sydonai drops a skill and attribute retrainer when you finish the game.
+* Moloch drops the Stonehenge dye kits. 1/10 chance to drop.
+* Sydonai and Moloch have a chance to drop unique retrainers. 1/25 chance to drop.
+* Zomper drops new items.
+	* 1/2 chance to drop a special item (not telling what it is ;))
+	* 1/10 chance to drop hellgateaus unique items.
+* Vendor modification and consumable quantities balanced.
+* Chests and crates are generally more exciting.
+	* Crates will only drop palladium and consumables.
+	* Common chests will drop up to 3 consumables and palladium.
+	* There is a 1/1000 chance a common chest will drop a legendary of better item.
+	* Elite chests drop a lot more palladium and drop 2 rare or better items.
+	
+Inventory
+* Increased stash (x10) and inventory (2x).
+TODO:
+* Add a new slot for goggles.
 		</description>
 		<script type="hidden">
 			<title>Test Center Extraction</title>
 			<description>Extracts files from the MP test center dat for use with Single Player.</description>
 			<extract source="mp_hellgate_1.10.180.3416_1.0.86.4580" destination="sp_hellgate_1.10.180.3416_1.0.86.4580_2">
-				<path>data/units/items/*</path>
-				<path>data/particles/*</path>
-				<path>data/background/*</path>
-				<path>data/states/*</path>
-				<path>data/ai/*</path>
-				<path>data/lighting/*</path>
+				<!--<path>data\ai\*</path>-->
+				<!--<path>data\background\*</path>-->
+				<path>data\effects\*</path>
+				<!--<path>data\lights\*</path>-->
+				<!--<path>data\materials\*</path>-->
+				<path>data\particles\*</path>
+				<!--<path>data\screenfx\*</path>-->
+				<!--<path>data\skills\*</path>-->
+				<!--<path>data\sounds\*</path>-->
+				<!--<path>data\states\*</path>-->
+				<path>data\uix\automap_atlas.dds</path>
+				<path>data\uix\char_create_atlas.dds</path>
+				<path>data\uix\cube_atlas.dds</path>
+				<path>data\uix\cube_atlas.xml.cooked</path>
+				<path>data\uix\inventory_atlas.dds</path>
+				<path>data\uix\main_atlas.dds</path>
+				<path>data\uix\main_atlas.xml.cooked</path>
+				<path>data\uix\main_new_atlas.dds</path>
+				<path>data\uix\radialmenu_atlas.dds</path>
+				<path>data\uix\radialmenu_icon_atlas.dds</path>
+				<path>data\uix\radialmenu_icon_atlas.xml.cooked</path>
+				<path>data\uix\skill_tree_atlas.dds</path>
+				<path>data\uix\xml\automap_atlas.xml</path>
+				<path>data\uix\xml\char_create_atlas.xml</path>
+				<path>data\uix\xml\cube_atlas.xml</path>
+				<path>data\uix\xml\inventory_atlas.xml</path>
+				<path>data\uix\xml\inventory_screen.xml</path>
+				<path>data\uix\xml\main_atlas.xml</path>
+				<path>data\uix\xml\main_new_atlas.xml</path>
+				<path>data\uix\xml\radialmenu_atlas.xml</path>
+				<path>data\uix\xml\radialmenu_icon_atlas.xml</path>
+				<path>data\uix\xml\skilltree_atlas.xml</path>
+				<path>data\units\items\*</path>
+				<!--<path>data\units\objects\*</path>-->
+				<path>data_common\effects\*</path>
 			</extract>
 		</script>
 		<script type="recommended">
-			<title>Remove censoring.</title>
+			<title>Remove Censoring</title>
 			<description>Remove regional censoring.</description>
 			<table id="sku">
 				<entity id="*">
@@ -117,12 +146,32 @@
 			<description>Enable retrainers to be purchased.</description>
 			<table id="treasure">
 				<entity id="23"><!--bodger-->
-					<attribute id="item06m">123</attribute>
-					<attribute id="item06">12</attribute>
-					<attribute id="item06z">1</attribute>
-					<attribute id="item06m">123</attribute>
-					<attribute id="item06">12</attribute>
-					<attribute id="item06z">1</attribute>
+					<attribute id="item6m">123</attribute>
+					<attribute id="item6">12</attribute>
+					<attribute id="item6z">1</attribute>
+					<attribute id="item6m">123</attribute>
+					<attribute id="item6">12</attribute>
+					<attribute id="item6z">1</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
+			<title>Auto-pickup Quest Items</title>
+			<description>Your character will automatically pickup quest items when you are close enough. This does not apply to Fawkes drops.</description>
+			<table id="items">
+				<entity id="16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177">
+					<attribute id="bitmask03" bit="autoPickup">true</attribute>
+					<attribute id="autoPickupDistance">4</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
+			<title>Auto-pickup Consumables</title>
+			<description>Your character will automatically pickup consumables when you are close enough. This does not apply to Fawkes drops.</description>
+			<table id="items">
+				<entity id="2,3,4,5,6,10,11,12,13,14,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,247,248,249,250,251">
+					<attribute id="bitmask03" bit="autoPickup">true</attribute>
+					<attribute id="autoPickupDistance">4</attribute>
 				</entity>
 			</table>
 		</script>

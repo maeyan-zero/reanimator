@@ -22,7 +22,6 @@ namespace Launcher.Forms
         static extern IntPtr SendMessage(IntPtr h, int msg, int wParam, int[] lParam);
         
         Modification RevivalMod { get; set; }
-        FileManager HellgateFileManager { get; set; }
 
         public ModificationForm(Modification modification)
         {
@@ -105,6 +104,7 @@ namespace Launcher.Forms
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
+            FileManager HellgateFileManager;
 
             string cookingMessage = "Cooking {0}...";
             string path = RevivalMod.DataPath;
@@ -112,6 +112,19 @@ namespace Launcher.Forms
             string[] stringsToCook = null;
             string[] xmlToCook = null;
             string[] filesToPack = null;
+
+
+            // Initialize the FileManager
+            // In some cases it isnt even needed, but its a lot easier to simply initialize it anyway
+            backgroundWorker.ReportProgress(0, String.Format("Initializing the File Manager..."));
+            HellgateFileManager = new FileManager(Config.HglDir);
+            if (backgroundWorker.CancellationPending)
+            {
+                e.Cancel = true;
+                return;
+            }
+            HellgateFileManager.LoadTableFiles();
+
 
             // There is a check box that will allow the main mod compilation to be skipped
             if (optionalOnlycheckBox.Checked == false)
@@ -133,6 +146,7 @@ namespace Launcher.Forms
                 {
                     for (int i = 0; i < excelToCook.Length; i++)
                     {
+                        // Check if Canceled
                         if (backgroundWorker.CancellationPending)
                         {
                             e.Cancel = true;
@@ -153,6 +167,7 @@ namespace Launcher.Forms
                 {
                     for (int i = 0; i < stringsToCook.Length; i++)
                     {
+                        // Check if Canceled
                         if (backgroundWorker.CancellationPending)
                         {
                             e.Cancel = true;
@@ -171,18 +186,9 @@ namespace Launcher.Forms
                 // XML
                 if (xmlToCook != null)
                 {
-                    if (HellgateFileManager == null && xmlToCook.Length > 0)
-                    {
-                        HellgateFileManager = new FileManager(Config.HglDir);
-                        if (backgroundWorker.CancellationPending)
-                        {
-                            e.Cancel = true;
-                            return;
-                        }
-                        HellgateFileManager.LoadTableFiles();
-                    }
                     for (int i = 0; i < xmlToCook.Length; i++)
                     {
+                        // Check if Canceled
                         if (backgroundWorker.CancellationPending)
                         {
                             e.Cancel = true;
@@ -210,65 +216,99 @@ namespace Launcher.Forms
 
                 if (packResult == false)
                 {
+                    HellgateFileManager.Dispose();
+
+                    string caption = "Fatal Error";
                     string message = "An error occurred while packing the modification.";
-                    MessageBox.Show(message);
+                    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
 
+
             // Apply scripts
-            if (optionalCheckedListBox.CheckedItems.Count == 0 &&
-                RevivalMod.Data.Modifications.Scripts.Where(s => s.Type == "hidden").Any() == false)
+            // Scripts are only applied if they are checked or are hidden
+            if (optionalCheckedListBox.CheckedItems.Count != 0 ||
+                RevivalMod.Data.Modifications.Scripts.Where(s => s.Type == "hidden").Any() == true)
             {
-                return; // no scripts
-            }
-
-            backgroundWorker.ReportProgress(0, String.Format("Initializing the File Manager..."));
-            if (HellgateFileManager == null)
-            {
-                HellgateFileManager = new FileManager(Config.HglDir);
-            }
-            else
-            {
-                HellgateFileManager.Reload();
-            }
-            HellgateFileManager.LoadTableFiles();
-
-            int scriptCount = optionalCheckedListBox.CheckedItems.Count;
-            int scriptProgress = 1;
-
-            List<string> modifiedTables = new List<string>();
-            foreach (Script script in optionalCheckedListBox.CheckedItems)
-            {
-                int progress = (scriptProgress * 100) / scriptCount;
-                backgroundWorker.ReportProgress(progress, String.Format("Applying {0} script...", script.Title));
-                Modification.ApplyScript(script, HellgateFileManager);
-                foreach (Script.Table table in script.Tables)
+                List<Script> scriptList = new List<Script>();
+                foreach (Script script in optionalCheckedListBox.CheckedItems)
                 {
-                    modifiedTables.Add(table.ID.ToUpper());
+                    scriptList.Add(script);
+                }
+                foreach (Script script in RevivalMod.Data.Modifications.Scripts.Where(s => s.Type == "hidden"))
+                {
+                    scriptList.Add(script);
+                }
+
+                // If a base modification above has been installed, reinitialize the filemanager
+                if (optionalOnlycheckBox.Checked == false)
+                {
+                    HellgateFileManager.Reload();
+                    HellgateFileManager.LoadTableFiles();
+                }
+
+                int scriptCount = scriptList.Count;
+                int scriptProgress = 1;
+
+                // Apply the scripts
+                List<string> modifiedTables = new List<string>();
+                foreach (Script script in scriptList)
+                {
+                    int progress = (scriptProgress * 100) / scriptCount;
+                    backgroundWorker.ReportProgress(progress, String.Format("Applying {0} script...", script.Title));
+                    if (script.Extraction != null)
+                    {
+                        backgroundWorker.ReportProgress(progress, "Extaction taking place, this may take up to 10 minutes.");
+                    }
+                    Modification.ApplyScript(script, ref HellgateFileManager);
+                    if (script.Tables != null)
+                    {
+                        foreach (Script.Table table in script.Tables)
+                        {
+                            string tableID = table.ID.ToUpper();
+                            if (modifiedTables.Contains(tableID) == false)
+                                modifiedTables.Add(tableID);
+                        }
+                    }
+                    scriptProgress++;
+                }
+
+                // Repack the modified Tables
+                string indexPath = Path.Combine(Config.HglDir, "data", RevivalMod.Data.Modifications.ID + "_125.idx");
+                IndexFile indexFile = new IndexFile() { FilePath = indexPath };
+                foreach (string tableID in modifiedTables)
+                {
+                    DataFile dataTable = HellgateFileManager.DataFiles[tableID];
+                    byte[] ebuffer = dataTable.ToByteArray();
+                    string fileName = Path.GetFileName(dataTable.FilePath);
+                    string fileDir = Path.GetDirectoryName(dataTable.FilePath) + "\\";
+                    indexFile.AddFile(fileName, fileDir, ebuffer);
+                }
+
+                // Write the index
+                byte[] ibuffer = indexFile.ToByteArray();
+                Crypt.Encrypt(ibuffer);
+                try
+                {
+                    File.WriteAllBytes(indexPath, ibuffer);
+                }
+                catch
+                {
+                    HellgateFileManager.Dispose();
+
+                    string caption = "Fatal Error";
+                    string message = "An error occurred while packing the optional modification.";
+                    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
 
-            // Repack the modified Tables
-            string indexPath = Path.Combine(Config.HglDir, "data", RevivalMod.Data.Modifications.ID + "_125.idx");
-            IndexFile indexFile = new IndexFile() { FilePath = indexPath };
-            foreach (string tableID in modifiedTables)
-            {
-                DataFile dataTable = HellgateFileManager.DataFiles[tableID];
-                byte[] ebuffer = dataTable.ToByteArray();
-                indexFile.AddFile(dataTable.FileName, Path.GetDirectoryName(dataTable.FilePath), ebuffer);
-            }
+            HellgateFileManager.Dispose();
 
-            byte[] ibuffer = indexFile.ToByteArray();
-            Crypt.Encrypt(ibuffer);
-            try
-            {
-                File.WriteAllBytes(indexPath, ibuffer);
-            }
-            catch
-            {
-
-            }
+            string msgCaption = "Success";
+            string msgDescription = "Modification successfully installed!";
+            MessageBox.Show(msgDescription, msgCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
