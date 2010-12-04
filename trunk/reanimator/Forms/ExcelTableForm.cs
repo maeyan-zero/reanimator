@@ -119,7 +119,7 @@ namespace Reanimator.Forms
             }
             else
             {
-                tableData_DataGridView.DataMember = _dataFile.StringId;
+                tableData_DataGridView.DataMember = _dataFile.IsStringsFile ? FileManager.StringsTableName : _dataFile.StringId;
             }
             tableData_DataGridView.ResumeLayout();
 

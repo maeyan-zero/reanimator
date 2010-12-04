@@ -182,10 +182,10 @@ namespace Hellgate
             {
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
-                //if (fileEntry.FileNameString.Contains("soundoverrides"))
-                //{
-                //    int bp = 0;
-                //}
+                if (fileEntry.FileNameString.Contains("strings_cin"))
+                {
+                    int bp = 0;
+                }
 
                 // parse file data
                 DataFile dataFile;

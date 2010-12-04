@@ -301,15 +301,16 @@ namespace Revival.Common
             // get first null location etc
             int arrayLenth = byteArray.Length;
             int strLength = 0;
-            for (int i = offset; i < arrayLenth; i++, i++)
+            int currOffset = offset;
+            for (; currOffset < arrayLenth; currOffset++, currOffset++)
             {
-                if (byteArray[i] != 0x00) continue;
+                if (byteArray[currOffset] != 0x00) continue;
 
-                strLength = i - offset;
+                strLength = currOffset - offset;
                 break;
             }
 
-            if (strLength == 0)
+            if (strLength == 0 && currOffset != offset /*make sure not empty string*/)
             {
                 strLength = byteArray.Length - offset;
             }
