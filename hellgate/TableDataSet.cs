@@ -114,7 +114,7 @@ namespace Hellgate
                 }
             }
 
-            if ((excelFile.ExcelMap.HasExtended)) // items, missiles, monsters, objects, players
+            if ((excelFile.Attributes.HasExtended)) // items, missiles, monsters, objects, players
             {
                 DataColumn extendedDataColumn = dataTable.Columns.Add("ExtendedProperties");
                 extendedDataColumn.DataType = typeof(String);
@@ -144,14 +144,14 @@ namespace Hellgate
                     if ((excelOutputAttribute.IsStringOffset))
                     {
                         int valueInt = (int)value;
-                        baseRow[col++] = (!(valueInt == -1)) ? excelFile.ReadStringTable(valueInt) : String.Empty;
+                        baseRow[col++] = (valueInt != -1) ? excelFile.ReadStringTable(valueInt) : String.Empty;
                         continue;
                     }
 
                     if ((excelOutputAttribute.IsSecondaryString))
                     {
                         int valueInt = (int)value;
-                        baseRow[col++] = (!(valueInt == -1)) ? excelFile.ReadSecondaryStringTable(valueInt) : String.Empty;
+                        baseRow[col++] = (valueInt != -1) ? excelFile.ReadSecondaryStringTable(valueInt) : String.Empty;
                         continue;
                     }
 
@@ -175,7 +175,7 @@ namespace Hellgate
                 }
 
                 // Extended properties, only a component of the items class
-                if ((excelFile.ExcelMap.HasExtended))
+                if ((excelFile.Attributes.HasExtended))
                 {
                     baseRow[col++] = FileTools.ArrayToStringGeneric(excelFile.ReadExtendedProperties(row - 1), ",");
                 }

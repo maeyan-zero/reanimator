@@ -12,10 +12,14 @@ namespace Hellgate
         public StringsFile(byte[] buffer, String filePath)
         {
             IsStringsFile = true;
-            DataType = typeof(StringBlock);
-            Rows = new List<Object>();
 
-            StringId = GetStringId(filePath);
+            FilePath = filePath;
+            StringId = _GetStringId(filePath);
+            if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
+            Attributes = DataFileMap[StringId];
+
+            Rows = new List<Object>();
+            
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCSV = (peek != Token.Header);
             HasIntegrity = ((isCSV)) ? ParseCSV(buffer) : ParseData(buffer);

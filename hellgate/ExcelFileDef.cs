@@ -471,10 +471,10 @@ namespace Hellgate
         {
             // check if the file name is the same as the string id
             String stringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
-            if (DataTableMap.ContainsKey(stringId)) return stringId;
+            if (DataFileMap.ContainsKey(stringId)) return stringId;
 
             // file name is different to string id, then we have to loop through and check for name replace elements
-            return DataTableMap.Where(dataTableEntry => dataTableEntry.Value.FileName == stringId).Select(dataTableEntry => dataTableEntry.Key).FirstOrDefault();
+            return DataFileMap.Where(dataTableEntry => dataTableEntry.Value.FileName == stringId).Select(dataTableEntry => dataTableEntry.Key).FirstOrDefault();
         }
 
         //private String _stringId;
@@ -499,17 +499,17 @@ namespace Hellgate
         //    }
         //}
 
-        public static uint GetStructureId(string stringId)
-        {
-            var query = DataTables.Where(dt => dt.Key == stringId);
-            return (query.Count() != 0) ? query.First().Value : 0;
-        }
+        //public static uint GetStructureId(string stringId)
+        //{
+        //    var query = DataTables.Where(dt => dt.Key == stringId);
+        //    return (query.Count() != 0) ? query.First().Value : 0;
+        //}
 
-        public static TypeMap GetTypeMap(uint structureId)
-        {
-            var query = DataTypes.Where(dt => dt.Key == structureId);
-            return (query.Count() != 0) ? query.First().Value : null;
-        }
+        //public static TypeMap GetTypeMap(uint structureId)
+        //{
+        //    var query = DataTypes.Where(dt => dt.Key == structureId);
+        //    return (query.Count() != 0) ? query.First().Value : null;
+        //}
 
         static bool CheckToken(byte[] buffer, ref int offset, int token)
         {

@@ -59,18 +59,25 @@ namespace Hellgate
             public UnknownExcelElementException(String excelElement)
             {
                 if (String.IsNullOrEmpty(excelElement)) excelElement = String.Empty;
-
                 CustomMessage = "An unknown Excel Element was encountered!\n" + excelElement;
             }
         }
 
-        public class NotSupportedXMLElementCount : ReanimatorException
+        public class NotSupportedXmlElementCount : ReanimatorException
         {
-            public NotSupportedXMLElementCount(String excelElement)
+            public NotSupportedXmlElementCount(String excelElement)
             {
                 if (String.IsNullOrEmpty(excelElement)) excelElement = String.Empty;
-
                 CustomMessage = "The XML Definition for the file has less elements than the file has defined!\n" + excelElement;
+            }
+        }
+
+        public class DataFileStringIdNotFound : ReanimatorException
+        {
+            public DataFileStringIdNotFound(String filePath)
+            {
+                if (String.IsNullOrEmpty(filePath)) filePath = String.Empty;
+                CustomMessage = "Unable to find an appropriate StringId for the DataFile: " + filePath + "\n";
             }
         }
     }
