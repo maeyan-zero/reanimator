@@ -440,7 +440,7 @@ namespace Hellgate
 
             XmlDefinition xmlDefinition = _GetXmlDefinition(header.XmlRootDefinition);
             if (xmlDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
-            if (xmlDefinition.Count < header.XmlRootElementCount) throw new Exceptions.NotSupportedXMLElementCount(xmlDefinition.RootElement);
+            if (xmlDefinition.Count < header.XmlRootElementCount) throw new Exceptions.NotSupportedXmlElementCount(xmlDefinition.RootElement);
 
 
             XmlDoc = new XmlDocument();
@@ -788,7 +788,7 @@ namespace Hellgate
 
                         XmlDefinition tableXmlDefition = _GetXmlDefinition(stringHash);
                         if (tableXmlDefition == null) throw new Exceptions.NotSupportedFileDefinitionException();
-                        if (tableXmlDefition.Count < elementCount) throw new Exceptions.NotSupportedXMLElementCount(tableXmlDefition.RootElement);
+                        if (tableXmlDefition.Count < elementCount) throw new Exceptions.NotSupportedXmlElementCount(tableXmlDefition.RootElement);
 
                         if (elementCount == -1)
                         {

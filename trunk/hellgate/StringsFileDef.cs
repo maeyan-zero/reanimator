@@ -49,11 +49,11 @@ namespace Hellgate
             }
         }
 
-        private static String GetStringId(String filePath)
+        private static String _GetStringId(String filePath)
         {
             // there are less than a dozen strings files, so might as well do case-insensitive search
             String stringId = Path.GetFileName(filePath).Replace(FileExtention, "");
-            return DataTableMap.Keys.FirstOrDefault(key => key.ToLower() == stringId);
+            return DataFileMap.Keys.FirstOrDefault(key => key.ToLower() == stringId);
         }
     }
 }

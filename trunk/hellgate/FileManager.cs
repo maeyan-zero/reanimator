@@ -182,17 +182,17 @@ namespace Hellgate
             {
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
-                //if (fileEntry.FileNameString.Contains("levels_room_index.txt"))
+                //if (fileEntry.FileNameString.Contains("soundoverrides"))
                 //{
                 //    int bp = 0;
                 //}
-
 
                 // parse file data
                 DataFile dataFile;
                 if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention))
                 {
                     dataFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutBackup);
+                    if (dataFile.Attributes.IsEmpty) continue;
                 }
                 else
                 {

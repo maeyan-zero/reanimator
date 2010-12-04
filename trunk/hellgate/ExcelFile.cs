@@ -8,8 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
+using Hellgate.Excel;
 using Revival.Common;
-using Skills = Hellgate.Excel.Skills;
 
 namespace Hellgate
 {
@@ -23,11 +23,10 @@ namespace Hellgate
         private StringCollection _secondaryStrings;
         private List<ExcelScript> _rowScripts;
 
-        public TypeMap ExcelMap { get; set; }
-        public new Type DataType { get { return ExcelMap.DataType; } }
-        public new UInt32 StructureId { get { return ExcelFileHeader.StructureID; } set { ExcelFileHeader.StructureID = value; } }
+        //public TypeMap ExcelMap { get; set; }
+        //public new UInt32 StructureId { get { return ExcelFileHeader.StructureID; } set { ExcelFileHeader.StructureID = value; } }
 
-        private ExcelHeader ExcelFileHeader = new ExcelHeader
+        private ExcelHeader _excelFileHeader = new ExcelHeader
         {
             Unknown321 = 0x01,
             Unknown322 = 0x09,
@@ -38,16 +37,6 @@ namespace Hellgate
             Unknown165 = 0x0A,
             Unknown166 = 0x00
         };
-
-        //private readonly TableHeader ExcelTableHeader = new TableHeader
-        //{
-        //    Unknown1 = 0x03,
-        //    Unknown2 = 0x3E,
-        //    VersionMajor = 0,
-        //    Reserved1 = -1,
-        //    VersionMinor = 0,
-        //    Reserved2 = -1
-        //};
         #endregion
 
         /// <summary>
@@ -58,8 +47,11 @@ namespace Hellgate
         public ExcelFile(byte[] buffer, String filePath)
         {
             IsExcelFile = true;
+
             FilePath = filePath;
             StringId = _GetStringId(filePath);
+            if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
+            Attributes = DataFileMap[StringId];
 
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCooked = (peek == Token.cxeh);
@@ -88,15 +80,15 @@ namespace Hellgate
             StringId = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(buffer, ref offset, delimiter), 0);
             StringId = StringId.Replace("\"", "");//in case strings embedded
 
-            StructureId = GetStructureId(StringId);
-            if ((StructureId == 0)) return false;
+            //StructureId = GetStructureId(StringId);
+            //if ((StructureId == 0)) return false;
 
-            ExcelMap = GetTypeMap(StructureId);
-            if ((ExcelMap == null)) return false;
+            //ExcelMap = GetTypeMap(StructureId);
+            //if ((ExcelMap == null)) return false;
 
 
             // Mutate the buffer into a string array
-            int colCount = ExcelMap.HasExtended ? DataType.GetFields().Count() + 2 : DataType.GetFields().Count() + 1;
+            int colCount = Attributes.HasExtended ? DataType.GetFields().Count() + 2 : DataType.GetFields().Count() + 1;
             string[][] tableRows = FileTools.CSVToStringArray(buffer, colCount, delimiter);
             if ((tableRows == null)) return false;
 
@@ -229,7 +221,7 @@ namespace Hellgate
 
                 // For item types, items, missiles, monsters etc
                 // This must be a hex byte delimited array
-                if ((ExcelMap.HasExtended))
+                if ((Attributes.HasExtended))
                 {
                     if ((_extendedBuffer == null))
                     {
@@ -269,9 +261,9 @@ namespace Hellgate
 
             // File Header
             if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
-            ExcelFileHeader = FileTools.ByteArrayToStructure<ExcelHeader>(buffer, ref offset);
-            ExcelMap = GetTypeMap(StructureId);
-            if ((ExcelMap == null)) return false;
+            _excelFileHeader = FileTools.ByteArrayToStructure<ExcelHeader>(buffer, ref offset);
+            //ExcelMap = GetTypeMap(StructureId);
+            //if ((ExcelMap == null)) return false;
 
             // Strings Block
             if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
@@ -293,22 +285,24 @@ namespace Hellgate
             }
 
             // Primary Indice Block
-            if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
-            if (!(ExcelMap.HasExtended))
-            {
-                offset += (Count * sizeof(int)); // do not allocate this array
-            }
-            else
+            if (!CheckToken(buffer, ref offset, Token.cxeh)) return false;
+            if (Attributes.HasExtended) // items, objects, missles, players
             {
                 _extendedBuffer = new byte[Count][];
                 for (int i = 0; i < Count; i++)
                 {
                     offset += sizeof(int); // Skip the indice
+
                     int size = FileTools.ByteArrayToInt32(buffer, ref offset);
                     _extendedBuffer[i] = new byte[size];
+
                     Buffer.BlockCopy(buffer, offset, _extendedBuffer[i], 0, size);
                     offset += size;
                 }
+            }
+            else
+            {
+                offset += (Count * sizeof(int)); // do not allocate this array
             }
 
             // Secondary String Block
@@ -342,7 +336,7 @@ namespace Hellgate
                 if (!CheckToken(buffer, ref offset, Token.tysh)) return false;
                 if (!CheckToken(buffer, ref offset, Token.TyshValue)) return false;
 
-                if (ExcelMap.HasScriptTable && !_ParseScriptTable(buffer, ref offset)) return false;
+                if (Attributes.HasScriptTable && !_ParseScriptTable(buffer, ref offset)) return false;
 
                 if (!CheckToken(buffer, ref offset, Token.dneh)) return false;
                 if (!CheckToken(buffer, ref offset, Token.DnehValue)) return false;
@@ -402,7 +396,7 @@ namespace Hellgate
 
             // The Excel File header
             FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-            FileTools.WriteToBuffer(ref buffer, ref offset, ExcelFileHeader);
+            FileTools.WriteToBuffer(ref buffer, ref offset, _excelFileHeader);
 
 
             // strings Block
@@ -432,7 +426,7 @@ namespace Hellgate
             for (int i = 0; i < Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, i);
-                if (!ExcelMap.HasExtended) continue;
+                if (!Attributes.HasExtended) continue;
 
                 FileTools.WriteToBuffer(ref buffer, ref offset, _extendedBuffer[i].Length);
                 FileTools.WriteToBuffer(ref buffer, ref offset, _extendedBuffer[i]);
@@ -473,14 +467,14 @@ namespace Hellgate
 
             // Rcsh, Tysh, Mysh, Dneh
             // This section exists when there is a string or integer block or a mysh table
-            if (_integerBuffer != null || ExcelMap.HasScriptTable)
+            if (_integerBuffer != null || Attributes.HasScriptTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.rcsh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.RcshValue);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.tysh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.TyshValue);
-                if (ExcelMap.HasScriptTable)
+                if (Attributes.HasScriptTable)
                 {
                     if (_myshBuffer == null)
                     {
@@ -514,7 +508,7 @@ namespace Hellgate
 
             // row-row index bit relations - generated from isA0, isA1, isA2 etc
             // only applicable on the UNITTYPES and STATES tables
-            if (ExcelMap.HasIndexBitRelations)
+            if (Attributes.HasIndexBitRelations)
             {
                 int blockSize = (Count >> 5) + 1; // need 1 bit for every row; 32 bits per int - blockSize = no. of Int's
                 UInt32[,] indexBitRelations = CreateIndexBitRelations();
@@ -564,7 +558,7 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
             }
             // Add extra column for extended properties
-            if ((ExcelMap.HasExtended))
+            if ((Attributes.HasExtended))
             {
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("ExtendedProps"));
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
@@ -646,11 +640,10 @@ namespace Hellgate
                 needOutputAttributes = false;
 
                 // Extended Buffer if applies
-                if (ExcelMap.HasExtended)
+                if (Attributes.HasExtended)
                 {
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(_extendedBuffer[row], ',', typeof(byte))));
-
                 }
 
                 row++;
