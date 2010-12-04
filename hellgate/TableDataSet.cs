@@ -10,22 +10,24 @@ namespace Hellgate
 {
     public partial class FileManager
     {
+        public const String StringsTableName = "StringsTable";
+
         public DataTable LoadTable(DataFile dataFile, bool doRelations)
         {
             DataTable dataTable = null;
             if (dataFile.IsStringsFile)
             {
-                dataTable = LoadStringsTable(dataFile as StringsFile);
+                dataTable = _LoadStringsTable();
             }
             else if (dataFile.IsExcelFile)
             {
-                dataTable = LoadExcelTable(dataFile as ExcelFile, doRelations);
+                dataTable = _LoadExcelTable(dataFile as ExcelFile, doRelations);
             }
 
             return dataTable;
         }
 
-        private DataTable LoadExcelTable(ExcelFile excelFile, bool doRelations)
+        private DataTable _LoadExcelTable(ExcelFile excelFile, bool doRelations)
         {
             String tableName = excelFile.StringId;
             DataTable dataTable = XlsDataSet.Tables[tableName];
@@ -191,37 +193,78 @@ namespace Hellgate
             return dataTable;
         }
 
-        private DataTable LoadStringsTable(StringsFile stringsFile)
+        private DataTable _LoadStringsTable()
         {
-            String tableName = stringsFile.StringId;
-            DataTable dataTable = XlsDataSet.Tables[tableName];
+            DataTable dataTable = XlsDataSet.Tables[StringsTableName];
             if (dataTable != null) return dataTable;
 
-            dataTable = XlsDataSet.Tables.Add(tableName);
-            dataTable.TableName = tableName;
+            dataTable = XlsDataSet.Tables.Add(StringsTableName);
+            dataTable.TableName = StringsTableName;
 
             Type dataType = typeof(StringsFile.StringBlock);
-            
-            // Generate Columns
-            foreach (FieldInfo fieldInfo in dataType.GetFields())
+            FieldInfo[] fieldInfos = dataType.GetFields();
+
+            // generate columns)
+            foreach (FieldInfo fieldInfo in fieldInfos)
             {
                 dataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
             }
 
-            // Generate Rows
-            foreach (StringsFile.StringBlock tableRow in stringsFile.Rows)
+            // we want all strings within a single table
+            foreach (DataFile dataFile in DataFiles.Values)
             {
-                DataRow dataRow = dataTable.NewRow();
-                int col = 0;
-                foreach (FieldInfo fieldInfo in dataType.GetFields())
+                if (!dataFile.IsStringsFile) continue;
+                StringsFile stringsFile = (StringsFile) dataFile;
+
+                // generate rows
+                foreach (StringsFile.StringBlock tableRow in stringsFile.Rows)
                 {
-                    dataRow[col++] = fieldInfo.GetValue(tableRow);
+                    DataRow dataRow = dataTable.NewRow();
+
+                    int col = 0;
+                    foreach (FieldInfo fieldInfo in fieldInfos)
+                    {
+                        dataRow[col++] = fieldInfo.GetValue(tableRow);
+                    }
+
+                    dataTable.Rows.Add(dataRow);
                 }
-                dataTable.Rows.Add(dataRow);
             }
 
             return dataTable;
         }
+
+        //private DataTable _LoadStringsTable(StringsFile stringsFile)
+        //{
+        //    String tableName = stringsFile.StringId;
+        //    DataTable dataTable = XlsDataSet.Tables[tableName];
+        //    if (dataTable != null) return dataTable;
+
+        //    dataTable = XlsDataSet.Tables.Add(tableName);
+        //    dataTable.TableName = tableName;
+
+        //    Type dataType = typeof(StringsFile.StringBlock);
+
+        //    // Generate Columns
+        //    foreach (FieldInfo fieldInfo in dataType.GetFields())
+        //    {
+        //        dataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
+        //    }
+
+        //    // Generate Rows
+        //    foreach (StringsFile.StringBlock tableRow in stringsFile.Rows)
+        //    {
+        //        DataRow dataRow = dataTable.NewRow();
+        //        int col = 0;
+        //        foreach (FieldInfo fieldInfo in dataType.GetFields())
+        //        {
+        //            dataRow[col++] = fieldInfo.GetValue(tableRow);
+        //        }
+        //        dataTable.Rows.Add(dataRow);
+        //    }
+
+        //    return dataTable;
+        //}
 
         private DataTable LoadRelatedTable(String stringId)
         {
@@ -272,8 +315,7 @@ namespace Hellgate
 
                 if ((excelOutputAttribute.IsStringIndex))
                 {
-                    DataTable dtStrings = XlsDataSet.Tables[excelOutputAttribute.TableStringID] ??
-                                          LoadRelatedTable(excelOutputAttribute.TableStringID);
+                    DataTable dtStrings = XlsDataSet.Tables[StringsTableName] ?? _LoadStringsTable();
 
                     if (dtStrings != null)
                     {
