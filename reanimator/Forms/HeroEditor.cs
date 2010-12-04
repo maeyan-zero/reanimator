@@ -364,7 +364,7 @@ namespace Reanimator.Forms
 
         private void saveCharButton_Click(object sender, EventArgs e)
         {
-            String filePath = FileTools.SaveFileDialogBox("hg1", "HGL Character", _heroUnit.Name, Config.SaveDir);
+            String filePath = FormTools.SaveFileDialogBox("hg1", "HGL Character", _heroUnit.Name, Config.SaveDir);
             if (String.IsNullOrEmpty(filePath)) return;
 
             //_panel.GetSkillControls(_heroUnit);
@@ -1093,7 +1093,7 @@ namespace Reanimator.Forms
             Unit unit = currentlyEditing_ComboBox.SelectedItem as Unit;
             if (unit == null) return;
 
-            String savePath = FileTools.SaveFileDialogBox("dat", "Data", unit.Name, null);
+            String savePath = FormTools.SaveFileDialogBox("dat", "Data", unit.Name, null);
             if (String.IsNullOrEmpty(savePath)) return;
 
             using (FileStream fs = new FileStream(savePath, FileMode.Create, FileAccess.ReadWrite))
@@ -1112,7 +1112,7 @@ namespace Reanimator.Forms
             //unit.inventoryPositionX++;
             //unit.inventoryPositionY++;
 
-            String filePath = FileTools.OpenFileDialogBox("dat", "Data", null);
+            String filePath = FormTools.OpenFileDialogBox("dat", "Data", null);
             if (String.IsNullOrEmpty(filePath)) return;
 
             Unit unit;
@@ -1322,7 +1322,7 @@ namespace Reanimator.Forms
 
         private void b_loadXML_Click(object sender, EventArgs e)
         {
-            String filePath = FileTools.OpenFileDialogBox("xml", "XML", null);
+            String filePath = FormTools.OpenFileDialogBox("xml", "XML", null);
             if (String.IsNullOrEmpty(filePath)) return;
 
             Unit unit = XmlUtilities<Unit>.Deserialize(filePath);

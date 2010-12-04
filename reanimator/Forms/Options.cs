@@ -83,7 +83,7 @@ namespace Reanimator.Forms
 
         private void _TxtEditor_Button_Click(object sender, EventArgs e)
         {
-            String filePath = FileTools.OpenFileDialogBox("exe", "Executable", Path.GetDirectoryName(Config.TxtEditor));
+            String filePath = FormTools.OpenFileDialogBox("exe", "Executable", Path.GetDirectoryName(Config.TxtEditor));
             if (filePath == null) return;
 
             Config.TxtEditor = filePath;
@@ -92,7 +92,7 @@ namespace Reanimator.Forms
 
         private void _XmlEditor_Button_Click(object sender, EventArgs e)
         {
-            String filePath = FileTools.OpenFileDialogBox("exe", "Executable", Path.GetDirectoryName(Config.TxtEditor));
+            String filePath = FormTools.OpenFileDialogBox("exe", "Executable", Path.GetDirectoryName(Config.TxtEditor));
             if (filePath == null) return;
 
             Config.XmlEditor = filePath;
@@ -101,7 +101,7 @@ namespace Reanimator.Forms
 
         private void _CsvEditor_Button_Click(object sender, EventArgs e)
         {
-            String filePath = FileTools.OpenFileDialogBox("exe", "Executable", Path.GetDirectoryName(Config.TxtEditor));
+            String filePath = FormTools.OpenFileDialogBox("exe", "Executable", Path.GetDirectoryName(Config.TxtEditor));
             if (filePath == null) return;
 
             Config.CsvEditor = filePath;

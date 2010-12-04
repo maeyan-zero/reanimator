@@ -237,6 +237,22 @@ namespace Reanimator.Forms
         }
 
         /// <summary>
+        /// Recursivly checks a specified node and its children are checked.
+        /// </summary>
+        /// <param name="parentNode">The TreeNode to recursivly check.</param>
+        private static void _CheckChildNodes(TreeNode parentNode)
+        {
+            foreach (TreeNode childNode in parentNode.Nodes)
+            {
+                childNode.Checked = parentNode.Checked;
+                if (childNode.Nodes.Count > 0)
+                {
+                    _CheckChildNodes(childNode);
+                }
+            }
+        }
+
+        /// <summary>
         /// Adds all checked nodes from a TreeNodeCollection to a Collection of TreeNodes.<br />
         /// If the node is a folder, it is not added; instead its children are checked.
         /// </summary>
@@ -266,5 +282,202 @@ namespace Reanimator.Forms
 
             return checkedNodes.Count;
         }
+
+        /// <summary>
+        /// Shared threaded function for extracting and/or patching out files.
+        /// </summary>
+        /// <param name="progressForm">A valid user progress display form.</param>
+        /// <param name="param">The operation arguments to perform.</param>
+        private void _DoExtractPatch(ProgressForm progressForm, Object param)
+        {
+            ExtractPackPatchArgs extractPatchArgs = (ExtractPackPatchArgs)param;
+            DialogResult overwrite = DialogResult.None;
+            Hashtable indexToWrite = new Hashtable();
+
+            const int progressStepRate = 50;
+            progressForm.ConfigBar(1, extractPatchArgs.CheckedNodes.Count, progressStepRate);
+            progressForm.SetCurrentItemText("Extracting file(s)...");
+
+            if (!_fileManager.BeginAllDatReadAccess())
+            {
+                MessageBox.Show(
+                    "Failed to open dat files for reading!\nEnsure no other programs are using them and try again.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            int i = 0;
+            foreach (TreeNode extractNode in extractPatchArgs.CheckedNodes)
+            {
+                if (i % 50 == 0)
+                {
+                    progressForm.SetCurrentItemText(extractNode.FullPath);
+                }
+                i++;
+
+                if (_ExtractPatchFile(extractNode, ref overwrite, indexToWrite, extractPatchArgs)) continue;
+
+                if (overwrite != DialogResult.Cancel)
+                {
+                    MessageBox.Show("Unexpected error, extraction process terminated!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+
+                return;
+            }
+            _fileManager.EndAllDatAccess();
+
+            // are we patching?
+            if (!extractPatchArgs.PatchFiles)
+            {
+                MessageBox.Show("Extraction process completed sucessfully!", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (indexToWrite.Count == 0)
+            {
+                MessageBox.Show("Extraction process completed sucessfully!\nNo index files require modifications.", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            progressForm.SetCurrentItemText("Performing index modifications...");
+            foreach (IndexFile idx in
+                from DictionaryEntry indexDictionary in indexToWrite select (IndexFile)indexDictionary.Value)
+            {
+                byte[] idxData = idx.ToByteArray();
+                Crypt.Encrypt(idxData);
+                File.WriteAllBytes(idx.FilePath, idxData);
+            }
+            MessageBox.Show("Index modification process completed sucessfully!", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        }
+
+        /// <summary>
+        /// Singlular file extract and patch worker function.
+        /// </summary>
+        /// <param name="treeNode">The current file/folder tree node.</param>
+        /// <param name="overwrite">A referenced and static file overwrite option.</param>
+        /// <param name="indexToWrite">A Hashtable of IndexFiles that require writing due to patching.</param>
+        /// <param name="extractPatchArgs">The operation arguments to perform.</param>
+        /// <returns>True upon successful extraction and/or patching of the file.</returns>
+        private bool _ExtractPatchFile(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite, ExtractPackPatchArgs extractPatchArgs)
+        {
+            if (treeNode == null) return false;
+
+            //if (treeNode.Text == "affixes.txt.cooked")
+            //{
+            //    int bp = 0;
+            //}
+
+            // loop through for folders, etc
+            NodeObject nodeObject = (NodeObject)treeNode.Tag;
+            if (nodeObject.IsFolder)
+            {
+                foreach (TreeNode childNode in treeNode.Nodes)
+                {
+                    if (!_ExtractPatchFile(childNode, ref overwrite, indexToWrite, extractPatchArgs)) return false;
+                }
+
+                return true;
+            }
+
+
+            // make sure we want to extract this file
+            if (!treeNode.Checked || nodeObject.Index == null || nodeObject.FileEntry == null) return true;
+
+
+            // get path
+            IndexFile.FileEntry file = nodeObject.FileEntry;
+            String filePath = extractPatchArgs.KeepStructure
+                                  ? Path.Combine(extractPatchArgs.RootDir, treeNode.FullPath)
+                                  : Path.Combine(extractPatchArgs.RootDir, file.FileNameString);
+
+
+            // does it exist?
+            bool fileExists = File.Exists(filePath);
+            if (fileExists && overwrite == DialogResult.None)
+            {
+                overwrite = MessageBox.Show("An extract file already exists, do you wish to overwrite the file, and all following?\nFile: " + filePath,
+                    "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (overwrite == DialogResult.Cancel) return false;
+            }
+            if (fileExists && overwrite == DialogResult.No) return true;
+
+
+            // save file
+            DialogResult extractDialogResult = DialogResult.Retry;
+            while (extractDialogResult == DialogResult.Retry)
+            {
+                byte[] fileBytes = _fileManager.GetFileBytes(file);
+                if (fileBytes == null)
+                {
+                    extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
+                                                   MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+
+                    if (extractDialogResult == DialogResult.Abort)
+                    {
+                        overwrite = DialogResult.Cancel;
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                File.WriteAllBytes(filePath, fileBytes);
+                break;
+            }
+
+
+            // are we patching?
+            if (!extractPatchArgs.PatchFiles) return true;
+
+
+            // don't patch out string files or music/movie files
+            if (file.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                file.FileNameString.EndsWith(".ogg") ||
+                file.FileNameString.EndsWith(".mp2") ||
+                file.FileNameString.EndsWith(".bik")) return true;
+
+
+            // if we're patching out the file, then change its bgColor and set its nodeObject state to backup
+            treeNode.ForeColor = BackupColor;
+            nodeObject.IsBackup = true;
+
+
+            // is this file located else where? (i.e. does it have Siblings)
+            String indexFileKey;
+            if (nodeObject.Siblings != null && nodeObject.Siblings.Count > 0)
+            {
+                // this file has siblings - loop through
+                foreach (NodeObject siblingNodeObject in nodeObject.Siblings)
+                {
+                    IndexFile.FileEntry siblingFileEntry = siblingNodeObject.FileEntry;
+                    IndexFile siblingIndex = siblingFileEntry.Index;
+
+                    siblingIndex.PatchOutFile(siblingNodeObject.FileEntry);
+
+                    indexFileKey = siblingIndex.FileNameWithoutExtension;
+                    if (!indexToWrite.ContainsKey(indexFileKey))
+                    {
+                        indexToWrite.Add(indexFileKey, siblingIndex);
+                    }
+                }
+            }
+
+
+            // now patch the curr file as well
+            // only add index to list if it needs to be
+            IndexFile indexFile = nodeObject.Index;
+            if (!indexFile.PatchOutFile(file)) return true;
+
+
+            // add index to indexToWrite list
+            indexFileKey = indexFile.FileNameWithoutExtension;
+            if (!indexToWrite.ContainsKey(indexFileKey))
+            {
+                indexToWrite.Add(indexFileKey, file.Index);
+            }
+            return true;
+        }
+
     }
 }

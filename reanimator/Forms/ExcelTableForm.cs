@@ -394,12 +394,12 @@ namespace Reanimator.Forms
             String saveExtension = _dataFile.FileExtension;
             String saveInitialPath = Path.Combine(Config.HglDir, _dataFile.FilePath);
 
-            String savePath = FileTools.SaveFileDialogBox(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
+            String savePath = FormTools.SaveFileDialogBox(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
             if (String.IsNullOrEmpty(savePath)) return;
 
             MessageBox.Show("REWRITE");
             byte[] data = null; // todo: rewrite _dataFile.GenerateFile(table);
-            if (FileTools.WriteFileWithRetry(savePath, data))
+            if (FormTools.WriteFileWithRetry(savePath, data))
             {
                 MessageBox.Show("Table saved Successfully!", "Completed", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
