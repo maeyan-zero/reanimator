@@ -15,6 +15,10 @@ namespace Reanimator.Forms
     {
         private readonly FileManager _fileManager;
 
+        /// <summary>
+        /// Main constructor. Initialises the file tree system from a valid FileManager.
+        /// </summary>
+        /// <param name="fileManager">The FileManager to base the explorer tree on.</param>
         public FileExplorer(FileManager fileManager)
         {
             // init stuffs
@@ -39,6 +43,22 @@ namespace Reanimator.Forms
             _files_fileTreeView.EndUpdate();
         }
 
+        /// <summary>
+        /// Attempt to decrease user wait time by hiding until completely filled.
+        /// </summary>
+        /// <param name="sender">The TreeView clicked.</param>
+        /// <param name="e">The Shown event args.</param>
+        private void FileExplorer_Shown(object sender, EventArgs e)
+        {
+            _files_fileTreeView.EndUpdate();
+        }
+
+        /// <summary>
+        /// Event Function for Tree View - After Select.
+        /// Will update the file details based upon selection.
+        /// </summary>
+        /// <param name="sender">The TreeView clicked.</param>
+        /// <param name="e">The After Select event args.</param>
         private void _FilesTreeView_AfterSelect(Object sender, TreeViewEventArgs e)
         {
             TreeView treeView = (TreeView)sender;
@@ -76,7 +96,8 @@ namespace Reanimator.Forms
 
                 // if it's the uncooked version, we need to use the parents node path
                 TreeNode parentNode = selectedNode.Parent;
-                String filePath = Path.Combine(Config.HglDir, parentNode.Name.Replace(".cooked", ""));
+                String fileDataPath = parentNode.Name.Replace(".cooked", "");
+                String filePath = Path.Combine(Config.HglDir, fileDataPath);
 
                 FileInfo fileInfo;
                 try
@@ -94,7 +115,7 @@ namespace Reanimator.Forms
                 fileSize_textBox.Text = fileInfo.Length.ToString();
                 fileCompressed_textBox.Text = String.Empty;
                 fileTime_textBox.Text = fileInfo.CreationTime.ToString();
-                loadingLocation_textBox.Text = filePath;
+                loadingLocation_textBox.Text = fileDataPath;
 
                 return;
             }
@@ -108,23 +129,24 @@ namespace Reanimator.Forms
 
             if (fileIndex.IsBackup)
             {
-                String fileDataPath = Path.Combine(fileIndex.DirectoryString.Replace(IndexFile.BackupPrefix, ""), fileIndex.FileNameString);
-                String filePath = Config.HglDir + fileDataPath;
+                String fileDataPath = selectedNode.FullPath;
+                String filePath = Path.Combine(Config.HglDir, fileDataPath);
                 if (File.Exists(filePath))
                 {
-                    loadingLocation_textBox.Text = filePath;
+                    loadingLocation_textBox.Text = fileDataPath;
                 }
                 else
                 {
-                    loadingLocation_textBox.DataBindings.Add("Text", fileIndex, "InIndex");
+                    loadingLocation_textBox.DataBindings.Add("Text", fileIndex, "Index");
                 }
             }
             else
             {
-                loadingLocation_textBox.DataBindings.Add("Text", fileIndex, "InIndex");
+                loadingLocation_textBox.DataBindings.Add("Text", fileIndex, "Index");
             }
         }
 
+        // todo: update/fix me
         private void _FilesTreeView_DoubleClick(Object sender, EventArgs e)
         {
             TreeView treeView = (TreeView)sender;
@@ -228,13 +250,19 @@ namespace Reanimator.Forms
             }
         }
 
+        /// <summary>
+        /// Event Function for "Extract to..." Button -  Click.
+        /// Checks and extracts files to prompted location.
+        /// </summary>
+        /// <param name="sender">The button clicked.</param>
+        /// <param name="e">The Click event args.</param>
         private void _ExtractButton_Click(object sender, EventArgs e)
         {
             // make sure we have at least 1 checked file
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for extraction!", "Need Tables", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }
@@ -260,13 +288,19 @@ namespace Reanimator.Forms
             progressForm.Show(this);
         }
 
+        /// <summary>
+        /// Event Function for "Extract and Patch Index" Button -  Click.
+        /// Checks and extracts files to HGL data locations, then patches out files and saves updated index files.
+        /// </summary>
+        /// <param name="sender">The button clicked.</param>
+        /// <param name="e">The Click event args.</param>
         private void _ExtractPatchButton_Click(object sender, EventArgs e)
         {
             // make sure we have at least 1 checked file
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for extraction!", "Need Tables", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }
@@ -289,196 +323,14 @@ namespace Reanimator.Forms
             progressForm.Show(this);
         }
 
-        private void _DoExtractPatch(ProgressForm progressForm, Object param)
-        {
-            ExtractPackPatchArgs extractPatchArgs = (ExtractPackPatchArgs)param;
-            DialogResult overwrite = DialogResult.None;
-            Hashtable indexToWrite = new Hashtable();
-
-            const int progressStepRate = 50;
-            progressForm.ConfigBar(1, extractPatchArgs.CheckedNodes.Count, progressStepRate);
-            progressForm.SetCurrentItemText("Extracting file(s)...");
-
-            if (!_fileManager.BeginAllDatReadAccess())
-            {
-                MessageBox.Show(
-                    "Failed to open dat files for reading!\nEnsure no other programs are using them and try again.",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            int i = 0;
-            foreach (TreeNode extractNode in extractPatchArgs.CheckedNodes)
-            {
-                if (i % 50 == 0)
-                {
-                    progressForm.SetCurrentItemText(extractNode.FullPath);
-                }
-                i++;
-
-                if (_ExtractPatchFile(extractNode, ref overwrite, indexToWrite, extractPatchArgs)) continue;
-
-                if (overwrite != DialogResult.Cancel)
-                {
-                    MessageBox.Show("Unexpected error, extraction process terminated!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-
-                return;
-            }
-            _fileManager.EndAllDatAccess();
-
-            // are we patching?
-            if (!extractPatchArgs.PatchFiles)
-            {
-                MessageBox.Show("Extraction process completed sucessfully!", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            if (indexToWrite.Count == 0)
-            {
-                MessageBox.Show("Extraction process completed sucessfully!\nNo index files require modifications.", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            progressForm.SetCurrentItemText("Performing index modifications...");
-            foreach (IndexFile idx in
-                from DictionaryEntry indexDictionary in indexToWrite select (IndexFile)indexDictionary.Value)
-            {
-                byte[] idxData = idx.ToByteArray();
-                Crypt.Encrypt(idxData);
-                File.WriteAllBytes(idx.FilePath, idxData);
-            }
-            MessageBox.Show("Index modification process completed sucessfully!", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-        }
-
-        private bool _ExtractPatchFile(TreeNode treeNode, ref DialogResult overwrite, Hashtable indexToWrite, ExtractPackPatchArgs extractPatchArgs)
-        {
-            if (treeNode == null) return false;
-
-            //if (treeNode.Text == "affixes.txt.cooked")
-            //{
-            //    int bp = 0;
-            //}
-
-            // loop through for folders, etc
-            NodeObject nodeObject = (NodeObject)treeNode.Tag;
-            if (nodeObject.IsFolder)
-            {
-                foreach (TreeNode childNode in treeNode.Nodes)
-                {
-                    if (!_ExtractPatchFile(childNode, ref overwrite, indexToWrite, extractPatchArgs)) return false;
-                }
-
-                return true;
-            }
-
-
-            // make sure we want to extract this file
-            if (!treeNode.Checked || nodeObject.Index == null || nodeObject.FileEntry == null) return true;
-
-
-            // get path
-            IndexFile.FileEntry file = nodeObject.FileEntry;
-            String filePath = extractPatchArgs.KeepStructure
-                                  ? Path.Combine(extractPatchArgs.RootDir, treeNode.FullPath)
-                                  : Path.Combine(extractPatchArgs.RootDir, file.FileNameString);
-
-
-            // does it exist?
-            bool fileExists = File.Exists(filePath);
-            if (fileExists && overwrite == DialogResult.None)
-            {
-                overwrite = MessageBox.Show("An extract file already exists, do you wish to overwrite the file, and all following?\nTablele: " + filePath,
-                    "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                if (overwrite == DialogResult.Cancel) return false;
-            }
-            if (fileExists && overwrite == DialogResult.No) return true;
-
-
-            // save file
-            DialogResult extractDialogResult = DialogResult.Retry;
-            while (extractDialogResult == DialogResult.Retry)
-            {
-                byte[] fileBytes = _fileManager.GetFileBytes(file);
-                if (fileBytes == null)
-                {
-                    extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
-                                                   MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
-
-                    if (extractDialogResult == DialogResult.Abort)
-                    {
-                        overwrite = DialogResult.Cancel;
-                        return false;
-                    }
-
-                    continue;
-                }
-
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-                File.WriteAllBytes(filePath, fileBytes);
-                break;
-            }
-
-
-            // are we patching?
-            if (!extractPatchArgs.PatchFiles) return true;
-
-
-            // don't patch out string files or music/movie files
-            if (file.FileNameString.EndsWith(StringsFile.FileExtention) ||
-                file.FileNameString.EndsWith(".ogg") ||
-                file.FileNameString.EndsWith(".mp2") ||
-                file.FileNameString.EndsWith(".bik")) return true;
-
-
-            // if we're patching out the file, then change its bgColor and set its nodeObject state to backup
-            treeNode.ForeColor = BackupColor;
-            nodeObject.IsBackup = true;
-
-
-            // is this file located else where? (i.e. does it have Siblings)
-            String fileIndexKey;
-            if (nodeObject.Siblings != null && nodeObject.Siblings.Count > 0)
-            {
-                // this file has siblings - loop through
-                foreach (NodeObject siblingNodeObject in nodeObject.Siblings)
-                {
-                    IndexFile.FileEntry siblingFileEntry = siblingNodeObject.FileEntry;
-                    IndexFile siblingIndex = null; // todo: rewrite siblingFileEntry.InIndex;
-
-                    siblingIndex.PatchOutFile(siblingNodeObject.FileEntry);
-
-                    fileIndexKey = siblingIndex.FileNameWithoutExtension;
-                    if (!indexToWrite.ContainsKey(fileIndexKey))
-                    {
-                        indexToWrite.Add(fileIndexKey, siblingIndex);
-                    }
-                }
-            }
-
-
-            // now patch the curr file as well
-            // only add index to list if it needs to be
-            IndexFile fileIndex = nodeObject.Index;
-            if (!fileIndex.PatchOutFile(file)) return true;
-
-
-            // add index to indexToWrite list
-            fileIndexKey = fileIndex.FileNameWithoutExtension;
-            if (!indexToWrite.ContainsKey(fileIndexKey))
-            {
-                // todo: rewrite indexToWrite.Add(fileIndexKey, file.InIndex);
-            }
-            return true;
-        }
-
+        // todo: rewrite me
         private void _PackPatchButton_Click(object sender, EventArgs e)
         {
             // make sure we have at least 1 checked file
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for packing!", "Need Tables", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for packing!", "Need Files", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }
@@ -547,7 +399,7 @@ namespace Reanimator.Forms
                 // ensure exists
                 if (!File.Exists(filePath))
                 {
-                    packResults.WriteLine("{0} - Table Not Found", filePath);
+                    packResults.WriteLine("{0} - File Not Found", filePath);
                     continue;
                 }
 
@@ -558,7 +410,7 @@ namespace Reanimator.Forms
                     nodeObject.FileEntry.FileStruct == null ||
                     nodeObject.FileEntry.FileStruct.FileNameSHA1Hash == 0)
                 {
-                    packResults.WriteLine("{0} - Table Has No Base Version", filePath);
+                    packResults.WriteLine("{0} - File Has No Base Version", filePath);
                     continue;
                 }
 
@@ -737,15 +589,25 @@ namespace Reanimator.Forms
                 return;
             }
 
-            MessageBox.Show("Table packing and idx/dat writing completed!", "Success", MessageBoxButtons.OK,
+            MessageBox.Show("File packing and idx/dat writing completed!", "Success", MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
         }
 
+        /// <summary>
+        /// todo: finish me
+        /// </summary>
+        /// <param name="sender">The button clicked.</param>
+        /// <param name="e">The Click event args.</param>
         private void _RevertRestoreButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Todo");
         }
 
+        /// <summary>
+        /// Changes the folder icon in the TreeView to reflect tree expansion status.
+        /// </summary>
+        /// <param name="sender">The TreeView clicked.</param>
+        /// <param name="e">The After Expand event args.</param>
         private void _FilesTreeView_AfterExpand(object sender, TreeViewEventArgs e)
         {
             NodeObject nodeObject = (NodeObject)e.Node.Tag;
@@ -755,6 +617,11 @@ namespace Reanimator.Forms
             e.Node.SelectedImageIndex = e.Node.ImageIndex;
         }
 
+        /// <summary>
+        /// Changes the folder icon in the TreeView to reflect tree expansion status.
+        /// </summary>
+        /// <param name="sender">The TreeView clicked.</param>
+        /// <param name="e">The After Expand event args.</param>
         private void _FilesTreeView_AfterCollapse(object sender, TreeViewEventArgs e)
         {
             NodeObject nodeObject = (NodeObject)e.Node.Tag;
@@ -764,11 +631,11 @@ namespace Reanimator.Forms
             e.Node.SelectedImageIndex = e.Node.ImageIndex;
         }
 
-        private void FileExplorer_Shown(object sender, EventArgs e)
-        {
-            _files_fileTreeView.EndUpdate();
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender">The TreeView clicked.</param>
+        /// <param name="e">The After Check event args.</param>
         private void _FilesTreeView_AfterCheck(object sender, TreeViewEventArgs e)
         {
             _files_fileTreeView.AfterCheck -= _FilesTreeView_AfterCheck;
@@ -792,18 +659,7 @@ namespace Reanimator.Forms
             _files_fileTreeView.AfterCheck += _FilesTreeView_AfterCheck;
         }
 
-        private static void _CheckChildNodes(TreeNode parentNode)
-        {
-            foreach (TreeNode childNode in parentNode.Nodes)
-            {
-                childNode.Checked = parentNode.Checked;
-                if (childNode.Nodes.Count > 0)
-                {
-                    _CheckChildNodes(childNode);
-                }
-            }
-        }
-
+        // todo: finish me
         private void _FilterApplyButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show("todo");
@@ -812,6 +668,7 @@ namespace Reanimator.Forms
             //byte[] asdf = GetFileBytes(@"data\ai\carnagorpet.xml.cooked", true);
         }
 
+        // todo: finish me
         private void _FilterResetButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show("todo");
@@ -843,6 +700,7 @@ namespace Reanimator.Forms
             //File.WriteAllBytes(idx.FilePath, data);
         }
 
+        // todo: finish me
         //TreeView filteredTreeView = new TreeView();
         //List<TreeNode> filterNodes = new List<TreeNode>();
         private void _DoApplyFilter()
@@ -865,6 +723,7 @@ namespace Reanimator.Forms
             //// files_treeView.EndUpdate();
         }
 
+        // todo: finish me
         private void _ApplyFilter(TreeNode treeNode, String filterText)
         {
             //NodeObject nodeObject = (NodeObject) treeNode.Tag;
@@ -950,13 +809,19 @@ namespace Reanimator.Forms
         //    return null;// todo: rewrite  fileBytes;
         //}
 
+        /// <summary>
+        /// Event Function for "Uncook" Button -  Click.
+        /// Uncooks checked files to their respective HGL file system location.
+        /// </summary>
+        /// <param name="sender">The button clicked.</param>
+        /// <param name="e">The Click event args.</param>
         private void _UncookButton_Click(object sender, EventArgs e)
         {
             // make sure we have at least 1 checked file
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for extraction!", "Need Tables", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }
@@ -998,7 +863,7 @@ namespace Reanimator.Forms
 
                 if (!nodeFullPath.EndsWith(XmlCookedFile.FileExtention)) continue;
 
-                byte[] fileBytes = null; // todo: rewrite GetFileBytes(nodeFullPath);
+                byte[] fileBytes = _fileManager.GetFileBytes(nodeFullPath);
                 Debug.Assert(fileBytes != null);
 
                 //if (nodeFullPath.Contains("actor_ghost.xml.cooked"))
@@ -1033,7 +898,6 @@ namespace Reanimator.Forms
                 if (!uncooked) continue;
 
                 // todo: add newly uncooked file to file tree
-                // note: assuming all cooked files end in .cooked - is this true anyways?
                 String savePath = Path.Combine(Config.HglDir, nodeFullPath.Replace(".cooked", ""));
                 xmlCookedFile.SaveXml(savePath);
             }
@@ -1045,7 +909,7 @@ namespace Reanimator.Forms
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
             {
-                MessageBox.Show("No files checked for extraction!", "Need Tables", MessageBoxButtons.OK,
+                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
                 return;
             }
@@ -1144,6 +1008,13 @@ namespace Reanimator.Forms
                 //    int bp = 0;
                 //}
             }
+        }
+
+        private void _QuickXmlButton_Click(object sender, EventArgs e)
+        {
+            // get all .xml.cooked within .dat files
+            //_fileManager.
+            MessageBox.Show("do it tomorrow");
         }
     }
 }
