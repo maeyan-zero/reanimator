@@ -4,7 +4,7 @@
   <ws_widthbasis>1920</ws_widthbasis>
   <screen name="inventory screen">
     <texture>inventory_atlas</texture>
-    <ws_texture>WSinventory_atlas</ws_texture>
+    <!-- js --<ws_texture>WSinventory_atlas</ws_texture>-->
     <font>Upper_Font</font>
     <fontsize>32</fontsize>
     <x>0</x>
@@ -847,6 +847,7 @@
       <tgtx>-497</tgtx>
       <ws_tgtx>-657</ws_tgtx>
       <x>0</x>
+      <ws_x>160</ws_x>
       <width>482</width>
       <ws_width>642</ws_width>
       <height>1144</height>
@@ -866,15 +867,26 @@
       <OnPostInvisible>UISetChatActive</OnPostInvisible>
       <statdispl name="char name">
         <x>38</x>
-        <ws_x>198</ws_x>
+        <!-- js --<ws_x>198</ws_x>-->
         <y>24</y>
         <fontsize>28</fontsize>
         <autosize>0</autosize>
         <height>28</height>
         <width>430</width>
         <chardisplay>name</chardisplay>
+		
+    <panel name="widescreen bumper left">
+	  <ws_texture>inventory_atlas</ws_texture>
+	  <frame>ws_bumper_l</frame>
+	  <x>-500</x>
+	  <ws_x>-185</ws_x>
+	  <y>42</y>
+	  <width>160</width>
+	  <height>864</height>
+	</panel>
+      
 	<panel name="hardcore char icon">
-	  <texture>guild_icons_atlas</texture>
+	  <texture>main_atlas</texture>
 	  <frame>sm_icon_hardcore</frame>
 	  <x>390</x>
 	  <y>0</y>
@@ -885,7 +897,7 @@
 	</panel>
 	<!--Elite and roleplay are mutually exclusive, so they can take the same spot... -->
 	<panel name="elite char icon">
-	  <texture>guild_icons_atlas</texture>
+	  <texture>main_atlas</texture>
 	  <frame>sm_icon_elite</frame>
 	  <x>360</x>
 	  <y>0</y>
@@ -907,7 +919,7 @@
       </statdispl>
       <label name="char level label">
         <x>38</x>
-        <ws_x>198</ws_x>
+        <!-- js --<ws_x>198</ws_x>-->
         <y>90</y>
         <width>300</width>
         <height>24</height>
@@ -919,14 +931,14 @@
       </label>
       <statdispl name="char level">
         <x>146</x>
-        <ws_x>306</ws_x>
+        <!-- js --<ws_x>306</ws_x>-->
         <y>90</y>
         <chardisplay>level</chardisplay>
         <OnSetFocusStat stat="level">UIStatDisplOnPaint</OnSetFocusStat>
       </statdispl>
       <label name="char class label">
         <x>38</x>
-        <ws_x>198</ws_x>
+        <!-- js --<ws_x>198</ws_x>-->
         <y>66</y>
         <width>300</width>
         <height>24</height>
@@ -938,14 +950,14 @@
       </label>
       <statdispl name="char class">
         <x>146</x>
-        <ws_x>306</ws_x>
+        <!-- js --<ws_x>306</ws_x>-->
         <y>66</y>
         <chardisplay>class</chardisplay>
       </statdispl>
       <label name="char xp label">
         <x>38</x>
         <y>114</y>
-        <ws_x>198</ws_x>
+        <!-- js --<ws_x>198</ws_x>-->
         <width>300</width>
         <height>24</height>
         <autosize>0</autosize>
@@ -957,7 +969,7 @@
       <statdispl name="char xp">
         <x>183</x>
         <y>114</y>
-        <ws_x>343</ws_x>
+        <!-- js --<ws_x>343</ws_x>-->
         <width>235</width>
         <height>24</height>
         <autosize>0</autosize>
@@ -968,7 +980,7 @@
       </statdispl>
       <panel name="character stats">
         <x>25</x>
-        <ws_x>190</ws_x>
+        <!-- js --<ws_x>190</ws_x>-->
         <y>175</y>
         <width>360</width>
         <height>800</height>
@@ -1470,7 +1482,7 @@
           </button>
           <panel name="base statistics">
             <y>35</y>
-            <tgty>-300</tgty>
+            <tgty>-304</tgty>
             <width>359</width>
             <height>339</height>
             <visible>1</visible>
@@ -2244,11 +2256,11 @@
       <scrollbar name="char sheet scrollbar">
         <frame tile="1">scrollbar line</frame>
         <ws_frame tile="1">scrollbar line</ws_frame>
-        <x>387</x>
-        <ws_x>554</ws_x>
-        <y>175</y>
-        <width>16</width>
-        <height>825</height>
+        <x>390</x>
+        <!-- js --<ws_x>554</ws_x>-->
+        <y>177</y>
+        <width>32</width>
+        <height>810</height>
         <visible>0</visible>
         <independentactivate>1</independentactivate>
         <OnScroll>UIScrollBarOnScroll</OnScroll>
@@ -2314,6 +2326,17 @@
       <OnPostVisible>UIContextHelpLabelOnPaint</OnPostVisible>
       <OnPostInvisible>UIContextHelpLabelOnPaint</OnPostInvisible>
   	  <OnInactivateSnd>CloseInventory</OnInactivateSnd>
+  	  
+			<panel name="widescreen bumper right">
+				<ws_texture>inventory_atlas</ws_texture>
+				<frame>ws_bumper_r</frame>
+				<x>500</x>
+				<ws_x>391</ws_x>
+				<y>42</y>
+				<width>160</width>
+				<height>864</height>
+			</panel>
+  	  
       <label>
         <x>-3</x>
         <y>25</y>
@@ -2433,14 +2456,6 @@
         <green>132</green>
         <blue>30</blue>
       </label>
-	  <!--panel name="big pack panel top">
-        <x>-17</x>
-        <ws_x>-22</ws_x>
-        <y>137</y>
-		<height>25</height>
-		<stretch>1</stretch>
-        <frame>stash grid panel top</frame>
-      </panel-->
       <button name="big pack scrollup">
         <frame>merchant scrollup active</frame>
         <litframe>merchant scrollup mouseover</litframe>
@@ -2456,14 +2471,6 @@
         <hideonscrollextent>1</hideonscrollextent>
         <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
       </button>
-      <!--panel name="big pack panel btm">
-        <x>-17</x>
-        <ws_x>-22</ws_x>
-        <y>962</y>
-		<height>25</height>
-		<stretch>1</stretch>
-        <frame>stash grid panel btm</frame>
-      </panel-->
       <button name="big pack scrolldown">
         <frame>merchant scrolldown active</frame>
         <litframe>merchant scrolldown mouseover</litframe>
@@ -2522,7 +2529,7 @@
       
       <label name="MODIFICATION PANEL">
         <x>154</x>
-        <y>968</y>
+        <y>906</y>
         <width>400</width>
         <height>32</height>
         <align>center</align>
@@ -2540,7 +2547,7 @@
       </label>
       <statdispl name="mod panel statdisp-name">
         <x>81</x>
-        <y>100</y>
+        <y>40</y>
         <width>475</width>
         <height>32</height>
         <align>left</align>
@@ -2557,7 +2564,7 @@
         <texture>main_atlas</texture>
         <rendersection>DynamicBottom</rendersection>
         <x>565</x>
-        <y>91</y>
+        <y>35</y>
         <width>64</width>
         <height>64</height>
         <specialspacing>-10</specialspacing>
@@ -2570,7 +2577,7 @@
       </statdispl>
       <statdispl name="mod panel statdisp-itemtype">
         <x>81</x>
-        <y>130</y>
+        <y>74</y>
         <height>16</height>
         <width>300</width>
         <visible>1</visible>
@@ -2580,7 +2587,7 @@
       </statdispl>
       <panel name="mod item stats panel">
         <x>50</x>
-        <y>637</y>
+        <y>575</y>
         <width>573</width>
         <height>321</height>
         <clipchildren>1</clipchildren>
@@ -2671,7 +2678,8 @@
             <ttlineorder>1</ttlineorder>
             <ttjustify>left</ttjustify>
             <wordwrap>1</wordwrap>
-            <itemdisplayarea>otherpropshdr</itemdisplayarea>
+<!--            <itemdisplayarea>otherpropshdr</itemdisplayarea> -->
+            <itemdisplay>otherpropshdr</itemdisplay>
             <ttyoffs>8</ttyoffs>
             <ttpaddingy>0</ttpaddingy>
           </statdispl>
@@ -2716,7 +2724,7 @@
         <frame tile="1">scrollbar line</frame>
         <ws_frame tile="1">scrollbar line</ws_frame>
         <x>636</x>
-        <y>637</y>
+        <y>575</y>
         <width>16</width>
         <height>321</height>
         <visible>0</visible>
@@ -2734,7 +2742,7 @@
         <font lang="Korean">Alt_Font</font>
         <fontsize>20</fontsize>
         <x>61</x>
-        <y>169</y>
+        <y>102</y>
         <width>586</width>
         <height>380</height>
         <red>128</red>
@@ -2751,7 +2759,7 @@
         <downframe>button_accept_lit</downframe>
         <litframe>button_accept mouse</litframe>
         <x>577</x>
-        <y>966</y>
+        <y>908</y>
         <width>65</width>
         <height>65</height>
 		    <OnLButtonDownSnd>ButtonAccept</OnLButtonDownSnd>
@@ -2760,7 +2768,7 @@
       <modbox name="modbox 1">
         <frame>modbox</frame>
         <x>35</x>
-        <y>565</y>
+        <y>504</y>
         <width>65</width>
         <height>65</height>
         <cellborder>0</cellborder>
@@ -2821,9 +2829,9 @@
       <tgtx>-497</tgtx>
       <ws_tgtx>-657</ws_tgtx>
       <x>0</x>
-      <width>471</width>
-      <ws_width>631</ws_width>
-      <height>1144</height>
+      <ws_x>160</ws_x>
+      <width>482</width>
+      <ws_width>642</ws_width>
       <visible>0</visible>
       <animtime>300</animtime>
       <starttab>0</starttab>
@@ -2848,9 +2856,20 @@
 	    <OnInactivateSnd></OnInactivateSnd>
       <OnPostVisible>UISetChatActive</OnPostVisible>
       <OnPostInvisible>UISetChatActive</OnPostInvisible>
+      
+			<panel name="widescreen bumper left">
+	      <ws_texture>inventory_atlas</ws_texture>
+	      <frame>ws_bumper_l</frame>
+	      <x>-500</x>
+	      <ws_x>-147</ws_x>
+	      <y>42</y>
+	      <width>160</width>
+	      <height>864</height>
+	    </panel>
+      
       <label name="merchant panel label">
         <x>20</x>
-        <ws_x>180</ws_x>
+        <!-- jps - <ws_x>180</ws_x>-->
         <y>25</y>
         <width>441</width>
         <height>32</height>
@@ -2869,7 +2888,7 @@
       </label>
       <panel name="merchant panel tab 1">
         <x>0</x>
-        <ws_x>160</ws_x>
+        <!-- jps - <ws_x>160</ws_x>-->
         <width>471</width>
         <ws_width>631</ws_width>
         <height>1144</height>
@@ -2890,7 +2909,7 @@
           <lowstatsicon>inv sm no use2</lowstatsicon>
           <x>29</x>
           <y>279</y>
-          <width>400</width>
+          <width>390</width>
           <height>660</height>
           <ScrollVertMax>1200</ScrollVertMax>
           <invloc>active_personal_store_page_1</invloc>
@@ -2951,7 +2970,7 @@
       </panel>
       <panel name="merchant panel tab 2">
         <x>0</x>
-        <ws_x>160</ws_x>
+        <!-- jps - <ws_x>160</ws_x>-->
         <width>471</width>
         <ws_width>631</ws_width>
         <height>1144</height>
@@ -2972,7 +2991,7 @@
           <lowstatsicon>inv sm no use2</lowstatsicon>
           <x>29</x>
           <y>279</y>
-          <width>400</width>
+          <width>390</width>
           <height>660</height>
           <ScrollVertMax>700</ScrollVertMax>
           <invloc>active_personal_store_page_2</invloc>
@@ -3032,7 +3051,7 @@
       </panel>
       <panel name="merchant panel tab 3">
         <x>0</x>
-        <ws_x>160</ws_x>
+        <!-- jps - <ws_x>160</ws_x>-->
         <width>471</width>
         <ws_width>631</ws_width>
         <height>1144</height>
@@ -3053,7 +3072,7 @@
           <lowstatsicon>inv sm no use2</lowstatsicon>
           <x>29</x>
           <y>279</y>
-          <width>400</width>
+          <width>390</width>
           <height>660</height>
           <ScrollVertMax>700</ScrollVertMax>
 					<invloc>active_personal_store_page_3</invloc>          
@@ -3083,7 +3102,7 @@
       </panel>
       <panel name="merchant panel tab 4">
         <x>0</x>
-        <ws_x>160</ws_x>
+        <!-- jps - <ws_x>160</ws_x>-->
         <width>471</width>
         <ws_width>631</ws_width>
         <height>1144</height>
@@ -3104,9 +3123,9 @@
           <lowstatsicon>inv sm no use2</lowstatsicon>
           <x>29</x>
           <y>279</y>
-          <width>400</width>
+          <width>390</width>
           <height>660</height>
-          <ScrollVertMax>9900</ScrollVertMax>
+          <ScrollVertMax>660</ScrollVertMax>
 					<invloc>merchant_buyback</invloc>          
           <rendersection>Models</rendersection>
           <OnSetFocusUnit>UIMerchantInvGridOnSetControlUnit</OnSetFocusUnit>
@@ -3169,16 +3188,17 @@
       <button name="merchant tab button 1">
         <x>32</x>
         <y>178</y>
-        <ws_x>192</ws_x>
+        <!-- jps - <ws_x>192</ws_x>-->
         <width>116</width>
         <height>52</height>
         <frame>merchant tab</frame>
         <litframe>merchant tab highlight</litframe>
         <downframe>merchant tab on</downframe>
-		    <OnLButtonDownSnd>ButtonMerchantPanelTabs</OnLButtonDownSnd>
+		<OnLButtonDownSnd>ButtonMerchantPanelTabs</OnLButtonDownSnd>
         <visible>1</visible>
         <tab>0</tab>
         <toggle>1</toggle>
+        <rendersection>UpOne</rendersection>
         <label>
           <x>5</x>
           <y>0</y>
@@ -3202,12 +3222,13 @@
 		    <OnLButtonDownSnd>ButtonMerchantPanelTabs</OnLButtonDownSnd>
 		    <x>164</x>
         <y>178</y>
-        <ws_x>324</ws_x>
+        <!-- jps - <ws_x>324</ws_x>-->
         <width>116</width>
         <height>49</height>
         <visible>1</visible>
         <tab>1</tab>
         <toggle>1</toggle>
+        <rendersection>UpOne</rendersection>
         <label>
           <x>5</x>
           <y>0</y>
@@ -3231,10 +3252,11 @@
 		    <OnLButtonDownSnd>ButtonMerchantPanelTabs</OnLButtonDownSnd>
 		    <x>296</x>
         <y>178</y>
-        <ws_x>456</ws_x>
+        <!-- jps - <ws_x>456</ws_x>-->
         <width>116</width>
         <height>49</height>
         <tab>2</tab>
+        <rendersection>UpOne</rendersection>
         <label>
           <x>5</x>
           <y>0</y>
@@ -3258,7 +3280,7 @@
 		    <OnLButtonDownSnd>ButtonMerchantPanelTabs</OnLButtonDownSnd>
 		    <x>214</x>
         <y>990</y>
-        <ws_x>374</ws_x>
+        <!-- jps - <ws_x>374</ws_x>-->
         <width>189</width>
         <height>41</height>
         <stretch>0</stretch>
@@ -3408,6 +3430,7 @@
       <tgtx>-497</tgtx>
       <ws_tgtx>-657</ws_tgtx>
       <x>0</x>
+      <ws_x>160</ws_x>
       <width>471</width>
       <ws_width>631</ws_width>
       <height>1144</height>
@@ -3430,9 +3453,20 @@
       <OnInactivate>UIStashOnInactivate</OnInactivate>
       <OnPostVisible>UISetChatActive</OnPostVisible>
       <OnPostInvisible>UIStashOnPostInvisible</OnPostInvisible>
+
+      <panel name="widescreen bumper left">
+	      <ws_texture>inventory_atlas</ws_texture>
+	      <frame>ws_bumper_l</frame>
+	      <x>-500</x>
+	      <ws_x>-147</ws_x>
+	      <y>42</y>
+	      <width>160</width>
+	      <height>864</height>
+	    </panel>
+      
       <label>
         <x>20</x>
-        <ws_x>180</ws_x>
+        <!-- jps - <ws_x>180</ws_x>-->
         <y>25</y>
         <width>441</width>
         <height>32</height>
@@ -3451,7 +3485,7 @@
       </label>
       <panel name="stash holder">
         <x>29</x>
-        <ws_x>189</ws_x>
+        <!-- jps - <ws_x>189</ws_x>-->
         <y>216</y>
         <width>390</width>
         <height>720</height>
@@ -3477,6 +3511,7 @@
           <lowstatsicon>inv sm no use2</lowstatsicon>
           <invloc>stash</invloc>
           <rendersection>Models</rendersection>
+            <OnPostActivate>UIInvGridOnPaint</OnPostActivate>
           <label name="quantity text">
             <x>-4</x>
             <y>-4</y>
@@ -3495,7 +3530,7 @@
         </invgrid>
 
         <invgrid name="extra stash grid">
-          <y>675</y>
+          <y>6600</y>
           <width>390</width>
           <height>528</height>
           <cellx>65</cellx>
@@ -3513,6 +3548,7 @@
           <rendersection>Models</rendersection>
           <visible>0</visible>
           <independentactivate>1</independentactivate>
+            <OnPostActivate>UIInvGridOnPaint</OnPostActivate>
           <label name="quantity text">
             <x>-4</x>
             <y>-4</y>
@@ -3533,7 +3569,7 @@
 
       <panel name="stash grid panel top">
         <x>24</x>
-        <ws_x>184</ws_x>
+        <!-- jps - <ws_x>184</ws_x>-->
         <y>166</y>
         <frame>stash grid panel top</frame>
       </panel>
@@ -3542,7 +3578,7 @@
         <litframe>merchant scrollup mouseover</litframe>
         <downframe>merchant scrollup pressed</downframe>
         <x>30</x>
-        <ws_x>190</ws_x>
+          <!-- jps - <ws_x>190</ws_x>-->
         <y>172</y>
         <!--<y>-39</y>-->
         <width>383</width>
@@ -3551,10 +3587,11 @@
         <scrollcontrol inc="-68">stash holder</scrollcontrol>
         <hideonscrollextent>1</hideonscrollextent>
         <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
+          <rendersection>UpOne</rendersection>
       </button>
       <panel name="stash grid panel btm">
         <x>24</x>
-        <ws_x>184</ws_x>
+        <!--<ws_x>184</ws_x>-->
         <y>936</y>
         <frame>stash grid panel btm</frame>
       </panel>
@@ -3563,7 +3600,7 @@
         <litframe>merchant scrolldown mouseover</litframe>
         <downframe>merchant scrolldown pressed</downframe>
         <x>30</x>
-        <ws_x>190</ws_x>
+          <!-- jps - <ws_x>190</ws_x>-->
         <y>944</y>
         <!--<y>645</y>-->
         <width>383</width>
@@ -3572,6 +3609,7 @@
         <scrollcontrol inc="68">stash holder</scrollcontrol>
         <OnInventoryChange>UIButtonOnPaint</OnInventoryChange>
         <hideonscrollextent>1</hideonscrollextent>
+          <rendersection>UpOne</rendersection>
       </button>
     </panel>
   </screen>

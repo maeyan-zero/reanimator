@@ -7,7 +7,7 @@
 		<texture>cube_atlas</texture>
     <font>Upper_Font</font>
     <fontsize>46</fontsize>
-    <x>0</x>
+    <x>4</x>
     <y>0</y>
 		<font>Eurostile</font>
 		<fontsize>32</fontsize>
@@ -17,7 +17,7 @@
 
     <panel name="cube panel">
       <frame>cube_panel_top</frame>
-      <x>448</x>
+      <x>432</x>
       <y>12</y>
       <tgty>-640</tgty>
       <ws_x>592</ws_x>
@@ -55,7 +55,7 @@
         <celly>66</celly>
         <cellborder>0</cellborder>
         <texture>inventory_atlas</texture>
-        <ws_texture>WSinventory_atlas</ws_texture>
+        <!-- jps - <ws_texture>WSinventory_atlas</ws_texture>-->
         <litframe>verybighighlight</litframe>
         <useableborder>verybighighlightborder</useableborder>
         <unidentifiedicon>inv small no id</unidentifiedicon>
@@ -71,9 +71,10 @@
         <width>390</width>
         <height>396</height>
         <invloc>cube</invloc>
-        <zdelta>-0.001</zdelta>
+<!--       <zdelta>-0.001</zdelta> -->
         <rendersection>Models</rendersection>
         <OnInventoryChange>UICubeOnChangeIngredients</OnInventoryChange>
+        <OnPostActivate>UIInvGridOnPaint</OnPostActivate>        
         <label>
           <name>quantity text</name>
           <x>-4</x>
@@ -316,7 +317,7 @@
           <thumbpadframe>scroll_thumbpad</thumbpadframe>
           <orientation>top</orientation>
           <OnScroll>UICubeScrollBarOnScroll</OnScroll>
-        <wheelscrollincrement>66</wheelscrollincrement>
+          <wheelscrollincrement>66</wheelscrollincrement>
           <OnMouseWheel>UICubeScrollBarOnMouseWheel</OnMouseWheel>
         </scrollbar>
         <button name="cube scroll button up">
