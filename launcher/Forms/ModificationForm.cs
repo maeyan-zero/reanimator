@@ -283,24 +283,31 @@ namespace Launcher.Forms
                     byte[] ebuffer = dataTable.ToByteArray();
                     string fileName = Path.GetFileName(dataTable.FilePath);
                     string fileDir = Path.GetDirectoryName(dataTable.FilePath) + "\\";
-                    indexFile.AddFile(fileName, fileDir, ebuffer);
+                    indexFile.AddFile(fileDir, fileName, ebuffer);
                 }
 
-                // Write the index
-                byte[] ibuffer = indexFile.ToByteArray();
-                Crypt.Encrypt(ibuffer);
-                try
+                if (indexFile.Count > 0)
                 {
-                    File.WriteAllBytes(indexPath, ibuffer);
-                }
-                catch
-                {
-                    HellgateFileManager.Dispose();
+                    // Write the index
+                    byte[] ibuffer = indexFile.ToByteArray();
+                    Crypt.Encrypt(ibuffer);
+                    try
+                    {
+                        File.WriteAllBytes(indexPath, ibuffer);
+                        indexFile.EndDatAccess();
+                        indexFile.Dispose();
+                    }
+                    catch
+                    {
+                        HellgateFileManager.Dispose();
+                        indexFile.EndDatAccess();
+                        indexFile.Dispose();
 
-                    string caption = "Fatal Error";
-                    string message = "An error occurred while packing the optional modification.";
-                    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
+                        string caption = "Fatal Error";
+                        string message = "An error occurred while packing the optional modification.";
+                        MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
                 }
             }
 

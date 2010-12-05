@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <revival>
 	<modification id="sp_hellgate_1337_1.5.0">
-		<release>Revival</release>
-		<version>1.5 beta</version>
-		<author>Maeyan, Malachor, Alex2069, Kite &amp; The Revival Team</author>
+		<release>Hellgate: Revival SP Modification</release>
+		<version>1.5b beta</version>
+		<author>Maeyan, Malachor, Alex2069, Kite</author>
 		<website>http://www.hellgateaus.net/</website>
 		<email>maeyan.zero@gmail.com</email>
 		<dependencies>
@@ -90,14 +90,14 @@ TODO:
 		<script type="hidden">
 			<title>Test Center Extraction</title>
 			<description>Extracts files from the MP test center dat for use with Single Player.</description>
-			<extract source="mp_hellgate_1.10.180.3416_1.0.86.4580" destination="sp_hellgate_1.10.180.3416_1.0.86.4580_2">
+			<extract source="mp_hellgate_1.10.180.3416_1.0.86.4580" destination="sp_hellgate_1.10.180.3416_1.0.86.4580">
 				<!--<path>data\ai\*</path>-->
 				<!--<path>data\background\*</path>-->
 				<path>data\effects\*</path>
-				<!--<path>data\lights\*</path>-->
+				<path>data\lights\*</path>
 				<!--<path>data\materials\*</path>-->
 				<path>data\particles\*</path>
-				<!--<path>data\screenfx\*</path>-->
+				<path>data\screenfx\*</path>
 				<!--<path>data\skills\*</path>-->
 				<!--<path>data\sounds\*</path>-->
 				<!--<path>data\states\*</path>-->
@@ -113,8 +113,10 @@ TODO:
 				<path>data\uix\radialmenu_icon_atlas.dds</path>
 				<path>data\uix\radialmenu_icon_atlas.xml.cooked</path>
 				<path>data\uix\skill_tree_atlas.dds</path>
+				<path>data\uix\wsinventory_atlas.dds</path>
 				<path>data\uix\xml\automap_atlas.xml</path>
 				<path>data\uix\xml\char_create_atlas.xml</path>
+				<path>data\uix\xml\cube.xml</path>
 				<path>data\uix\xml\cube_atlas.xml</path>
 				<path>data\uix\xml\inventory_atlas.xml</path>
 				<path>data\uix\xml\inventory_screen.xml</path>
@@ -123,6 +125,7 @@ TODO:
 				<path>data\uix\xml\radialmenu_atlas.xml</path>
 				<path>data\uix\xml\radialmenu_icon_atlas.xml</path>
 				<path>data\uix\xml\skilltree_atlas.xml</path>
+				<path>data\uix\xml\wsinventory_atlas.xml</path>
 				<path>data\units\items\*</path>
 				<!--<path>data\units\objects\*</path>-->
 				<path>data_common\effects\*</path>
@@ -145,13 +148,10 @@ TODO:
 			<title>Purchasable Retrainers</title>
 			<description>Enable retrainers to be purchased.</description>
 			<table id="treasure">
-				<entity id="23"><!--bodger-->
-					<attribute id="item6m">123</attribute>
-					<attribute id="item6">12</attribute>
-					<attribute id="item6z">1</attribute>
-					<attribute id="item6m">123</attribute>
-					<attribute id="item6">12</attribute>
-					<attribute id="item6z">1</attribute>
+				<entity id="63"><!--bodger-->
+					<attribute id="item7m">3</attribute>
+					<attribute id="item7">556</attribute>
+					<attribute id="value7">1</attribute>
 				</entity>
 			</table>
 		</script>

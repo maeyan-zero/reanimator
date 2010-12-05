@@ -116,21 +116,6 @@ namespace Launcher.Forms
             }
         }
 
-        private void deepCleanToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult dialogResult;
-            string caption = "Deep Clean";
-            string message = "This will revert all modifications and delete all miscellaneous files. If you are a modder, you may not want to use this utility. Do you want to continue?";
-            dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (dialogResult == DialogResult.Yes)
-            {
-                backgroundWorker.DoWork += new DoWorkEventHandler(bw_DoWorkRevert);
-                backgroundWorker.DoWork += new DoWorkEventHandler(bw_DoWorkDeepClean);
-                backgroundWorker.RunWorkerAsync();
-            }
-        }
-
         private void tradeItemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Coming Soon...");
@@ -209,6 +194,8 @@ namespace Launcher.Forms
                 return;
             }
 
+            bool errorOccurred = false;
+
             // Remove the backup prefix, used in pre 1.5 patches or Reanimator/Hellzap
             foreach (IndexFile indexFile in HellgateFileManager.IndexFiles)
             {
@@ -231,7 +218,7 @@ namespace Launcher.Forms
                     }
                     catch
                     {
-                        // Error
+                        errorOccurred = true;
                     }
                 }
             }
@@ -244,8 +231,8 @@ namespace Launcher.Forms
             foreach (string datPath in hellgateDats)
             {
                 string fileName = Path.GetFileName(datPath);
-                if (Common.OriginalDats.Where(dat => String.Format("{0}.idx", dat) != fileName &&
-                                                     String.Format("{0}.dat", dat) != fileName).Any())
+                if (Common.OriginalDats.Where(dat => String.Format("{0}.idx", dat) == fileName ||
+                                                      String.Format("{0}.dat", dat) == fileName).Any() == false)
                 {
                     try
                     {
@@ -253,10 +240,14 @@ namespace Launcher.Forms
                     }
                     catch
                     {
-                        // bad
+                        errorOccurred = true;
                     }
                 }
             }
+
+            string captionMsg = "Revert Complete";
+            string revertMsg = errorOccurred ? "Revert complete but with errors." : "Revert successfully complete";
+            MessageBox.Show(revertMsg, captionMsg, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void bw_DoWorkDeepClean(object sender, DoWorkEventArgs e)
