@@ -57,6 +57,11 @@ namespace Hellgate
             bool isCooked = (peek == Token.cxeh);
 
             HasIntegrity = isCooked ? ParseData(buffer) : ParseCSV(buffer);
+
+            if (_excelFileHeader.StructureID == 0) // CSV file
+            {
+                _excelFileHeader.StructureID = DataTables.Where(dt => dt.Key == StringId).FirstOrDefault().Value;
+            }
         }
 
         /// <summary>
@@ -79,12 +84,6 @@ namespace Hellgate
 
             StringId = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(buffer, ref offset, delimiter), 0);
             StringId = StringId.Replace("\"", "");//in case strings embedded
-
-            //StructureId = GetStructureId(StringId);
-            //if ((StructureId == 0)) return false;
-
-            //ExcelMap = GetTypeMap(StructureId);
-            //if ((ExcelMap == null)) return false;
 
 
             // Mutate the buffer into a string array

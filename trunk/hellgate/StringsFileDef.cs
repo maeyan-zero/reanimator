@@ -53,6 +53,7 @@ namespace Hellgate
         {
             // there are less than a dozen strings files, so might as well do case-insensitive search
             String stringId = Path.GetFileName(filePath).Replace(FileExtention, "");
+            stringId = Path.GetFileName(stringId.ToLower()).Replace(FileExtentionClean, ""); // this line is added for uncooked
             return DataFileMap.Keys.FirstOrDefault(key => key.ToLower() == stringId);
         }
     }

@@ -24,7 +24,10 @@
             "mp_hellgate_1.10.180.3416_1.0.86.4580",
             "mp_hellgate_localized_1.10.180.3416_1.0.86.4580",
             "sp_hellgate_1.10.180.3416_1.18074.70.4256",
-            "sp_hellgate_localized_1.10.180.3416_1.18074.70.4256"
+            "sp_hellgate_localized_1.10.180.3416_1.18074.70.4256",
+            "language",
+            "region",
+            "mvp"
         };
     }
 }

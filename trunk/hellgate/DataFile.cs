@@ -14,7 +14,7 @@ namespace Hellgate
     {
         public String StringId { get; protected set; }
         public DataFileAttributes Attributes { get; protected set; }
-        protected Type DataType { get { return Attributes.RowType; } }
+        public Type DataType { get { return Attributes.RowType; } }
         //public uint StructureId { get; protected set; }
         public bool HasIntegrity { get; protected set; }
         public bool IsExcelFile { get; protected set; }

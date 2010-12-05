@@ -268,6 +268,7 @@ namespace Hellgate
         private FileStream DatFile { get; set; }
         public bool DatFileOpen { get { return DatFile == null ? false : true; } }
         public bool Modified { get { return Files.Any(file => file.DirectoryString.Contains(BackupPrefix)); } }
+        public int Count { get { return FileDetails.Count; } }
         #endregion
 
 
