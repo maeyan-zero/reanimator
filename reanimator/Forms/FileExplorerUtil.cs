@@ -308,7 +308,7 @@ namespace Reanimator.Forms
             int i = 0;
             foreach (TreeNode extractNode in extractPatchArgs.CheckedNodes)
             {
-                if (i % 50 == 0)
+                if (i % progressStepRate == 0)
                 {
                     progressForm.SetCurrentItemText(extractNode.FullPath);
                 }

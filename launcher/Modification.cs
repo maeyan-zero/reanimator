@@ -236,7 +236,21 @@ namespace Revival
                 {
                     if (script.Extraction.paths.Where(p => Regex.IsMatch(fileEntry.RelativeFullPath, p.Replace(@"\", @"\\"))).Any())
                     {
-                        destinationIndex.AddFile(fileEntry.DirectoryString, fileEntry.FileNameString, sourceIndex.GetFileBytes(fileEntry));
+                        byte[] fileBytes = sourceIndex.GetFileBytes(fileEntry);
+                        //if (fileEntry.FileNameString.Contains(XmlCookedFile.FileExtention))
+                        //{
+                        //    try
+                        //    {
+                        //        XmlCookedFile xmlCookedFile = new XmlCookedFile();
+                        //        xmlCookedFile.Uncook(fileBytes);
+
+                        //        XmlCookedFile reCooked = new XmlCookedFile();
+                        //        fileBytes = reCooked.CookXmlDocument(xmlCookedFile.XmlDoc);
+                        //    }
+                        //    catch (Exception) { }
+                        //}
+
+                        destinationIndex.AddFile(fileEntry.DirectoryString, fileEntry.FileNameString, fileBytes);
                     }
                 }
 

@@ -165,7 +165,7 @@ namespace Reanimator.Forms
             // todo: current implementation overwites already extracted/uncooked file without asking - open it instead or ask?
             if (nodeFullPath.EndsWith(ExcelFile.FileExtention))
             {
-                 MessageBox.Show("todo");
+                MessageBox.Show("todo");
             }
             else if (nodeFullPath.EndsWith(StringsFile.FileExtention))
             {
@@ -863,7 +863,7 @@ namespace Reanimator.Forms
 
                 if (!nodeFullPath.EndsWith(XmlCookedFile.FileExtention)) continue;
 
-                byte[] fileBytes = _fileManager.GetFileBytes(nodeFullPath);
+                byte[] fileBytes = null;// _fileManager.GetFileBytes(nodeFullPath);
                 Debug.Assert(fileBytes != null);
 
                 //if (nodeFullPath.Contains("actor_ghost.xml.cooked"))
@@ -1012,9 +1012,138 @@ namespace Reanimator.Forms
 
         private void _QuickXmlButton_Click(object sender, EventArgs e)
         {
-            // get all .xml.cooked within .dat files
-            //_fileManager.
-            MessageBox.Show("do it tomorrow");
+            // where do we want to save it
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog { SelectedPath = Config.HglDir };
+            if (folderBrowserDialog.ShowDialog(this) != DialogResult.OK) return;
+
+            ExtractPackPatchArgs extractPatchArgs = new ExtractPackPatchArgs
+            {
+                RootDir = folderBrowserDialog.SelectedPath
+            };
+
+            ProgressForm progressForm = new ProgressForm(_QuickXmlWorker, extractPatchArgs);
+            progressForm.SetLoadingText("Extracting an Uncooking .xml.cooked files...");
+            progressForm.Show(this);
+        }
+
+        private void _QuickXmlWorker(ProgressForm progressForm, Object param)
+        {
+            const int progressStepRate = 50;
+            const String outputResultsName = "uncook_results.txt";
+            ExtractPackPatchArgs extractPatchArgs = (ExtractPackPatchArgs)param;
+
+            TextWriter consoleOut = Console.Out;
+            TextWriter textWriter = new StreamWriter(outputResultsName);
+            Console.SetOut(textWriter);
+            Console.WriteLine("Results of most recent uncooking of .xml.cooked files. Please scroll to end for tallied results.");
+
+
+            // get all .xml.cooked
+            IEnumerable<IndexFile.FileEntry> xmlCookedFiles =
+                _fileManager.FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(XmlCookedFile.FileExtention));
+
+
+            // loop through file entries
+            int count = xmlCookedFiles.Count();
+            progressForm.ConfigBar(1, count, progressStepRate);
+            progressForm.SetCurrentItemText("Extracting and Uncooking .xml.cooked files... (" + count + ")");
+            int i = 0;
+            int uncooked = 0;
+            int readFailed = 0;
+            int uncookFailed = 0;
+            int tcv4Warnings = 0;
+            int excelWarnings = 0;
+            foreach (IndexFile.FileEntry fileEntry in xmlCookedFiles)
+            {
+                // update progress
+                if (i % progressStepRate == 0)
+                {
+                    progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutBackup);
+                }
+                i++;
+
+                // get file and uncook
+                Console.WriteLine(fileEntry.RelativeFullPathWithoutBackup);
+                byte[] fileBytes;
+                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+
+                try
+                {
+                    fileBytes = _fileManager.GetFileBytes(fileEntry);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Error: FileManager failed to read file!\n");
+                    readFailed++;
+                    continue;
+                }
+
+                try
+                {
+                    xmlCookedFile.Uncook(fileBytes);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Warning: Failed to uncook file: " + fileEntry.FileNameString + "\n");
+                    uncookFailed++;
+                    continue;
+                }
+
+                // did we have any uncooking issues?
+                bool hadWarning = false;
+                if (xmlCookedFile.HasTCv4Elements)
+                {
+                    Console.WriteLine("Warning: File has TCv4-specific elements.");
+                    hadWarning = true;
+                    tcv4Warnings++;
+                }
+                if (xmlCookedFile.HasExcelStringsMissing)
+                {
+                    Console.WriteLine("Warning: File has " + xmlCookedFile.ExcelStringsMissing.Count + " unknown excel strings: ");
+                    foreach (String str in xmlCookedFile.ExcelStringsMissing) Console.WriteLine("\t- \"" + str + "\"");
+                    hadWarning = true;
+                    excelWarnings++;
+                }
+
+                // save file
+                String savePath = Path.Combine(extractPatchArgs.RootDir, fileEntry.RelativeFullPathWithoutBackup);
+                Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+
+                try
+                {
+                    xmlCookedFile.SaveXml(savePath.Replace(".cooked", ""));
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Warning: Failed to save XML file: " + savePath + "\n");
+                    continue;
+                }
+
+                if (hadWarning) Console.WriteLine();
+                uncooked++;
+            }
+
+
+            // output final results
+            Console.WriteLine("\nXML Files Uncooked: " + uncooked);
+            if (readFailed > 0) Console.WriteLine(readFailed + " file(s) could not be read from the data files.");
+            if (uncookFailed > 0) Console.WriteLine(uncookFailed + " file(s) failed to uncook at all.");
+            if (tcv4Warnings > 0) Console.WriteLine(tcv4Warnings + " file(s) had TCv4-specific XML elements which wont be included when recooked.");
+            if (excelWarnings > 0) Console.WriteLine(excelWarnings + " file(s) had excel warnings and cannot be safely recooked.");
+            textWriter.Close();
+            Console.SetOut(consoleOut);
+
+            try
+            {
+                Process process = new Process { StartInfo = { FileName = Config.TxtEditor, Arguments = outputResultsName } };
+                process.Start();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(
+                    "Failed to open results!\nThe " + outputResultsName + " can be found in your Reanimator folder.\n" +
+                    e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -676,8 +676,8 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(707, 74);
             this.label5.TabIndex = 1;
-            this.label5.Text = "Will extract and then uncook all .xml.cooked files from whole HGL filesystem to a" +
-                " user specified location.";
+            this.label5.Text = "Will uncook all .xml.cooked files from entire HGL filesystem to a user specified " +
+                "location.\r\n(requires ~800 MB free space)";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FileExplorer
