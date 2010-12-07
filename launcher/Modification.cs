@@ -32,10 +32,78 @@ namespace Revival
                     Data = serializer.Deserialize(textReader) as Revival;
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                ExceptionLogger.LogException(ex);
                 Console.WriteLine("Invalid or malformed XML structure.");
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fileManager"></param>
+        /// <returns></returns>
+        public static bool RemoveModifications(FileManager fileManager)
+        {
+            bool errorOccurred = false;
+
+            // Step one: Remove any "backup" prefixes from directory strings.
+            foreach (IndexFile indexFile in fileManager.IndexFiles)
+            {
+                bool isModified = false;
+                
+                foreach (FileEntry fileEntry in indexFile.Files)
+                {
+                    if (fileEntry.IsBackup)
+                    {
+                        indexFile.PatchInFile(fileEntry);
+                        isModified = true;
+                    }
+                }
+
+                if (isModified)
+                {
+                    byte[] ibuffer = indexFile.ToByteArray();
+                    Crypt.Encrypt(ibuffer);
+                    try
+                    {
+                        File.WriteAllBytes(indexFile.FilePath, ibuffer);
+                    }
+                    catch(Exception ex)
+                    {
+                        ExceptionLogger.LogException(ex);
+                        Console.WriteLine(String.Format("Error writing file {0}", indexFile.FilePath));
+                        errorOccurred = true;
+                    }
+                }
+            }
+
+            // Step two: Remove any .idx and .dats that arn't FSS original
+            string hellgateDatPath = fileManager.HellgateDataPath;
+            List<string> hellgateDats = new List<string>();
+            hellgateDats.AddRange(Directory.GetFiles(hellgateDatPath, "*.idx"));
+            hellgateDats.AddRange(Directory.GetFiles(hellgateDatPath, "*.dat"));
+            foreach (string datPath in hellgateDats)
+            {
+                string fileName = Path.GetFileName(datPath);
+                if (Hellgate.Common.OriginalDats.Where(dat => String.Format("{0}.idx", dat) == fileName ||
+                                                              String.Format("{0}.dat", dat) == fileName).Any() == false)
+                {
+                    try
+                    {
+                        File.Delete(datPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        ExceptionLogger.LogException(ex);
+                        Console.WriteLine(String.Format("Error deleting file {0}", datPath));
+                        errorOccurred = true;
+                    }
+                }
+            }
+
+            return errorOccurred;
         }
 
         /// <summary>
@@ -52,9 +120,18 @@ namespace Revival
                 foreach (Script.Table table in script.Tables)
                 {
                     string tableID = table.ID.ToUpper();
-                    if (fileManager.DataFiles.ContainsKey(tableID) == false) return false;
+                    if (fileManager.DataFiles.ContainsKey(tableID) == false)
+                    {
+                        Console.WriteLine(String.Format("Error: The table id is incorrect or does not exist: {0} ", tableID));
+                        continue;
+                    }
+
                     ExcelFile dataTable = fileManager.DataFiles[tableID] as ExcelFile;
-                    if (dataTable == null) return false;
+                    if (dataTable == null)
+                    {
+                        Console.WriteLine(String.Format("Error: Could not open {0} due to null reference.", tableID));
+                        continue;
+                    }
 
                     foreach (Script.Table.Entity entity in table.Entities)
                     {
@@ -67,136 +144,144 @@ namespace Revival
                             string function;
                             int[] list;
 
-                            //determine the range
-                            if (entity.ID.Contains(","))
+                            try
                             {
-                                string[] explode = entity.ID.Split(',');
-                                list = new int[explode.Length];
+                                //determine the range
+                                if (entity.ID.Contains(","))
+                                {
+                                    string[] explode = entity.ID.Split(',');
+                                    list = new int[explode.Length];
 
-                                for (int i = 0; i < list.Length; i++)
-                                {
-                                    list[i] = Convert.ToInt32(explode[i]);
-                                }
-                            }
-                            else
-                            {
-                                if (entity.ID.Contains("*"))
-                                {
-                                    min = 0;
-                                    max = dataTable.Count - 1;
-                                }
-                                else if (entity.ID.Contains("-"))
-                                {
-                                    int idx = entity.ID.IndexOf('-');
-                                    int len = entity.ID.Length - idx - 1;
-                                    min = Convert.ToInt32(entity.ID.Substring(0, idx));
-                                    max = Convert.ToInt32(entity.ID.Substring(idx + 1, len));
+                                    for (int i = 0; i < list.Length; i++)
+                                    {
+                                        list[i] = Convert.ToInt32(explode[i]);
+                                    }
                                 }
                                 else
                                 {
-                                    min = Convert.ToInt32(entity.ID);
-                                    max = Convert.ToInt32(entity.ID);
+                                    if (entity.ID.Contains("*"))
+                                    {
+                                        min = 0;
+                                        max = dataTable.Count - 1;
+                                    }
+                                    else if (entity.ID.Contains("-"))
+                                    {
+                                        int idx = entity.ID.IndexOf('-');
+                                        int len = entity.ID.Length - idx - 1;
+                                        min = Convert.ToInt32(entity.ID.Substring(0, idx));
+                                        max = Convert.ToInt32(entity.ID.Substring(idx + 1, len));
+                                    }
+                                    else
+                                    {
+                                        min = Convert.ToInt32(entity.ID);
+                                        max = Convert.ToInt32(entity.ID);
+                                    }
+
+                                    int listlen = max - min + 1;
+                                    list = new int[listlen];
+                                    int i = 0;
+
+                                    for (int row = min; row <= max; row++)
+                                    {
+                                        list[i++] = row;
+                                    }
                                 }
 
-                                int listlen = max - min + 1;
-                                list = new int[listlen];
-                                int i = 0;
-
-                                for (int row = min; row <= max; row++)
+                                //determine function
+                                if (attribute.Bit != null)
                                 {
-                                    list[i++] = row;
+                                    function = "bitwise";
                                 }
-                            }
-
-                            //determine function
-                            if (attribute.Bit != null)
-                            {
-                                function = "bitwise";
-                            }
-                            else if (attribute.Operation == null)
-                            {
-                                function = "replace";
-                            }
-                            else if (attribute.Operation.Contains("*"))
-                            {
-                                function = "multiply";
-                            }
-                            else if (attribute.Operation.Contains("/"))
-                            {
-                                function = "divide";
-                            }
-                            else if (attribute.Operation.Contains("+"))
-                            {
-                                string s = attribute.Operation.Remove(0);
-                                step = Convert.ToInt32(s);
-                                function = "recursive";
-                            }
-                            else if (attribute.Operation.Contains("-"))
-                            {
-                                step = Convert.ToInt32(attribute.Operation);
-                                function = "recursive";
-                            }
-                            else
-                            {
-                                continue; // syntax error
-                            }
-
-                            //main loop, alters the dataset
-                            foreach (int row in list)
-                            {
-                                object obj = null;
-                                string col = attribute.ID;
-                                Type type = dataTable.DataType.GetField(col).FieldType;//table.Columns[col].DataType;
-                                Object currentValue = dataTable.DataType.GetField(col).GetValue(dataTable.Rows[row]);
-
-                                switch (function)
+                                else if (attribute.Operation == null)
                                 {
-                                    case "replace":
-                                        obj = FileTools.StringToObject(attribute.Data, type);
-                                        break;
+                                    function = "replace";
+                                }
+                                else if (attribute.Operation.Contains("*"))
+                                {
+                                    function = "multiply";
+                                }
+                                else if (attribute.Operation.Contains("/"))
+                                {
+                                    function = "divide";
+                                }
+                                else if (attribute.Operation.Contains("+"))
+                                {
+                                    string s = attribute.Operation.Remove(0);
+                                    step = Convert.ToInt32(s);
+                                    function = "recursive";
+                                }
+                                else if (attribute.Operation.Contains("-"))
+                                {
+                                    step = Convert.ToInt32(attribute.Operation);
+                                    function = "recursive";
+                                }
+                                else
+                                {
+                                    continue; // syntax error
+                                }
 
-                                    case "multiply":
-                                        if (type.Equals(typeof(int)))
-                                            obj = (int)currentValue * Convert.ToInt32(attribute.Data);
-                                        else if (type.Equals(typeof(float)))
-                                            obj = (float)currentValue * Convert.ToSingle(attribute.Data);
-                                        break;
+                                //main loop, alters the dataset
+                                foreach (int row in list)
+                                {
+                                    object obj = null;
+                                    string col = attribute.ID;
+                                    Type type = dataTable.DataType.GetField(col).FieldType;//table.Columns[col].DataType;
+                                    Object currentValue = dataTable.DataType.GetField(col).GetValue(dataTable.Rows[row]);
 
-                                    case "divide":
-                                        if (type.Equals(typeof(int)))
-                                            obj = (int)currentValue / Convert.ToInt32(attribute.Data);
-                                        else if (type.Equals(typeof(float)))
-                                            obj = (float)currentValue / Convert.ToSingle(attribute.Data);
-                                        break;
+                                    switch (function)
+                                    {
+                                        case "replace":
+                                            obj = FileTools.StringToObject(attribute.Data, type);
+                                            break;
 
-                                    case "bitwise":
-                                        uint bit = (uint)Enum.Parse(type, attribute.Bit, true);
-                                        uint mask = (uint)currentValue;
-                                        bool flick = Convert.ToBoolean(attribute.Data);
-                                        bool current = (mask & bit) > 0;
-                                        if (flick != current)
-                                            obj = mask ^= bit;
-                                        else
-                                            obj = mask;
-                                        break;
-
-                                    case "recursive":
-                                        if (row.Equals(min))//first time only
-                                        {
+                                        case "multiply":
                                             if (type.Equals(typeof(int)))
+                                                obj = (int)currentValue * Convert.ToInt32(attribute.Data);
+                                            else if (type.Equals(typeof(float)))
+                                                obj = (float)currentValue * Convert.ToSingle(attribute.Data);
+                                            break;
+
+                                        case "divide":
+                                            if (type.Equals(typeof(int)))
+                                                obj = (int)currentValue / Convert.ToInt32(attribute.Data);
+                                            else if (type.Equals(typeof(float)))
+                                                obj = (float)currentValue / Convert.ToSingle(attribute.Data);
+                                            break;
+
+                                        case "bitwise":
+                                            uint bit = (uint)Enum.Parse(type, attribute.Bit, true);
+                                            uint mask = (uint)currentValue;
+                                            bool flick = Convert.ToBoolean(attribute.Data);
+                                            bool current = (mask & bit) > 0;
+                                            if (flick != current)
+                                                obj = mask ^= bit;
+                                            else
+                                                obj = mask;
+                                            break;
+
+                                        case "recursive":
+                                            if (row.Equals(min))//first time only
                                             {
-                                                obj = Convert.ToInt32(attribute.Data);
-                                                last = (int)obj;
+                                                if (type.Equals(typeof(int)))
+                                                {
+                                                    obj = Convert.ToInt32(attribute.Data);
+                                                    last = (int)obj;
+                                                }
                                             }
-                                        }
-                                        else
-                                        {
-                                            last += step;
-                                            obj = last;
-                                        }
-                                        break;
+                                            else
+                                            {
+                                                last += step;
+                                                obj = last;
+                                            }
+                                            break;
+                                    }
+                                    dataTable.DataType.GetField(col).SetValue(dataTable.Rows[row], obj);
                                 }
-                                dataTable.DataType.GetField(col).SetValue(dataTable.Rows[row], obj);
+                            }
+                            catch (Exception ex)
+                            {
+                                ExceptionLogger.LogException(ex);
+                                return false;
                             }
                         }
                     }
@@ -222,13 +307,19 @@ namespace Revival
                 {
                     sbuffer = File.ReadAllBytes(sourcePath);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    ExceptionLogger.LogException(ex);
                     return false;
                 }
                 sourceIndex = new IndexFile(sbuffer) { FilePath = sourcePath };
+                if (sourceIndex.HasIntegrity == false)
+                {
+                    Console.WriteLine("Error: {0} has no integrity. Make sure you have run Hellgate London at least once (MP version for MP files) before installating this modification.", sourceIndex);
+                    return false;
+                }
+
                 destinationIndex = new IndexFile() { FilePath = destinationPath };
-                if (sourceIndex.HasIntegrity == false) return false;
                 sourceIndex.BeginDatReading();
 
                 // Extract each path/file
@@ -260,16 +351,16 @@ namespace Revival
                 try
                 {
                     File.WriteAllBytes(destinationIndex.FilePath, ibuffer);
-                }
-                catch
-                {
                     sourceIndex.Dispose();
+                    destinationIndex.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLogger.LogException(ex);
+                    sourceIndex.Dispose();
+                    destinationIndex.Dispose();
                     return false;
                 }
-
-                // Clean up
-                sourceIndex.Dispose();
-                destinationIndex.Dispose();
             }
             #endregion
 
@@ -302,6 +393,8 @@ namespace Revival
                 public string Website { get; set; }
                 [XmlElement("email")]
                 public string Email { get; set; }
+                [XmlElement("revert")]
+                public bool DoRevert { get; set; }
                 [XmlElement("dependencies", typeof(Dependency))]
                 public Dependency Dependencies { get; set; }
                 [XmlElement("description")]

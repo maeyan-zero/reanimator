@@ -34,6 +34,7 @@
             this.optionalCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.releaseNotesTextBox = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.pictureBox = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.titleLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -49,15 +50,13 @@
             this.optionalTextBox = new System.Windows.Forms.TextBox();
             this.installButton = new System.Windows.Forms.Button();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
-            this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.optionalOnlycheckBox = new System.Windows.Forms.CheckBox();
             this.statusStrip.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -73,8 +72,10 @@
             // 
             // toolStripProgressBar
             // 
+            this.toolStripProgressBar.MarqueeAnimationSpeed = 0;
             this.toolStripProgressBar.Name = "toolStripProgressBar";
             this.toolStripProgressBar.Size = new System.Drawing.Size(100, 16);
+            this.toolStripProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             // 
             // toolStripStatusLabel
             // 
@@ -88,7 +89,7 @@
             this.optionalCheckedListBox.FormattingEnabled = true;
             this.optionalCheckedListBox.Location = new System.Drawing.Point(3, 3);
             this.optionalCheckedListBox.Name = "optionalCheckedListBox";
-            this.optionalCheckedListBox.Size = new System.Drawing.Size(205, 109);
+            this.optionalCheckedListBox.Size = new System.Drawing.Size(205, 135);
             this.optionalCheckedListBox.TabIndex = 1;
             this.optionalCheckedListBox.SelectedIndexChanged += new System.EventHandler(this.optionalCheckedListBox_SelectedIndexChanged);
             // 
@@ -115,6 +116,14 @@
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Modification";
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.Location = new System.Drawing.Point(7, 16);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(70, 70);
+            this.pictureBox.TabIndex = 1;
+            this.pictureBox.TabStop = false;
             // 
             // tableLayoutPanel2
             // 
@@ -251,15 +260,13 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.optionalOnlycheckBox, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.optionalCheckedListBox, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.optionalTextBox, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(423, 141);
             this.tableLayoutPanel1.TabIndex = 0;
@@ -271,7 +278,7 @@
             this.optionalTextBox.Multiline = true;
             this.optionalTextBox.Name = "optionalTextBox";
             this.optionalTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.optionalTextBox.Size = new System.Drawing.Size(206, 109);
+            this.optionalTextBox.Size = new System.Drawing.Size(206, 135);
             this.optionalTextBox.TabIndex = 2;
             // 
             // installButton
@@ -289,27 +296,7 @@
             // 
             // backgroundWorker
             // 
-            this.backgroundWorker.WorkerReportsProgress = true;
             this.backgroundWorker.WorkerSupportsCancellation = true;
-            // 
-            // pictureBox
-            // 
-            this.pictureBox.Location = new System.Drawing.Point(7, 16);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(70, 70);
-            this.pictureBox.TabIndex = 1;
-            this.pictureBox.TabStop = false;
-            // 
-            // optionalOnlycheckBox
-            // 
-            this.optionalOnlycheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.optionalOnlycheckBox.AutoSize = true;
-            this.optionalOnlycheckBox.Location = new System.Drawing.Point(69, 121);
-            this.optionalOnlycheckBox.Name = "optionalOnlycheckBox";
-            this.optionalOnlycheckBox.Size = new System.Drawing.Size(139, 17);
-            this.optionalOnlycheckBox.TabIndex = 11;
-            this.optionalOnlycheckBox.Text = "Install Components Only";
-            this.optionalOnlycheckBox.UseVisualStyleBackColor = true;
             // 
             // ModificationForm
             // 
@@ -328,6 +315,7 @@
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -335,7 +323,6 @@
             this.groupBox4.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -365,6 +352,5 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.PictureBox pictureBox;
-        private System.Windows.Forms.CheckBox optionalOnlycheckBox;
     }
 }

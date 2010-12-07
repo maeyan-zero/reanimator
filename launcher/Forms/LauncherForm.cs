@@ -25,6 +25,25 @@ namespace Launcher.Forms
         private void Launcher_Load(object sender, EventArgs e)
         {
             CheckEnvironment();
+            StartConsoleLogging();
+        }
+
+        private void StartConsoleLogging()
+        {
+            FileStream ostrm;
+            StreamWriter writer;
+            TextWriter oldOut = Console.Out;
+            try
+            {
+                ostrm = new FileStream("./output.txt", FileMode.OpenOrCreate, FileAccess.Write);
+                writer = new StreamWriter(ostrm);
+            }
+            catch (Exception ex)
+            {
+                Revival.Common.ExceptionLogger.LogException(ex);
+                return;
+            }
+            Console.SetOut(writer);
         }
 
         private void CheckEnvironment()
