@@ -6,6 +6,7 @@
 		<author>Maeyan, Malachor, Alex2069, Kite</author>
 		<website>http://www.hellgateaus.net/</website>
 		<email>maeyan.zero@gmail.com</email>
+		<revert>true</revert>
 		<dependencies>
 			<patch>sp_hellgate_1.10.180.3416_1.18074.70.4256</patch>
 			<patch>mp_hellgate_1.10.180.3416_1.0.86.4580</patch>
@@ -92,6 +93,7 @@ TODO:
 			<description>Extracts files from the MP test center dat for use with Single Player.</description>
 			<extract source="mp_hellgate_1.10.180.3416_1.0.86.4580" destination="sp_hellgate_1.10.180.3416_1.0.86.4580">
 				<!--<path>data\ai\*</path>-->
+				<path>data\ai\turret.xml.cooked</path>
 				<!--<path>data\background\*</path>-->
 				<path>data\effects\*</path>
 				<path>data\lights\*</path>
@@ -101,6 +103,10 @@ TODO:
 				<!--<path>data\skills\*</path>-->
 				<!--<path>data\sounds\*</path>-->
 				<!--<path>data\states\*</path>-->
+				<path>data\states\item core.xml.cooked</path>
+				<path>data\states\item cursed.xml.cooked</path>
+				<path>data\states\item epic.xml.cooked</path>
+				<path>data\states\item mythic.xml.cooked</path>
 				<path>data\uix\automap_atlas.dds</path>
 				<path>data\uix\char_create_atlas.dds</path>
 				<path>data\uix\cube_atlas.dds</path>
@@ -116,10 +122,10 @@ TODO:
 				<path>data\uix\wsinventory_atlas.dds</path>
 				<path>data\uix\xml\automap_atlas.xml</path>
 				<path>data\uix\xml\char_create_atlas.xml</path>
-				<path>data\uix\xml\cube.xml</path>
+				<!--<path>data\uix\xml\cube.xml</path>-->
 				<path>data\uix\xml\cube_atlas.xml</path>
 				<path>data\uix\xml\inventory_atlas.xml</path>
-				<path>data\uix\xml\inventory_screen.xml</path>
+				<!--<path>data\uix\xml\inventory_screen.xml</path>-->
 				<path>data\uix\xml\main_atlas.xml</path>
 				<path>data\uix\xml\main_new_atlas.xml</path>
 				<path>data\uix\xml\radialmenu_atlas.xml</path>

@@ -10,9 +10,11 @@ using System.Text;
 using System.Windows.Forms;
 using Hellgate;
 using Revival;
+using Revival.Common;
 using ModData = Revival.Modification.Revival;
 using Script = Revival.Modification.Revival.Modification.Script;
 using Hellpack = Revival.Hellpack;
+using FileEntry = Hellgate.IndexFile.FileEntry;
 
 namespace Launcher.Forms
 {
@@ -99,13 +101,13 @@ namespace Launcher.Forms
             backgroundWorker.RunWorkerAsync();
 
             installButton.Text = "Cancel";
+            toolStripProgressBar.MarqueeAnimationSpeed = 30;
         }
 
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             FileManager HellgateFileManager;
-
             string cookingMessage = "Cooking {0}...";
             string path = RevivalMod.DataPath;
             string[] excelToCook = null;
@@ -114,153 +116,189 @@ namespace Launcher.Forms
             string[] filesToPack = null;
 
 
-            // Initialize the FileManager
-            // In some cases it isnt even needed, but its a lot easier to simply initialize it anyway
-            backgroundWorker.ReportProgress(0, String.Format("Initializing the File Manager..."));
+            // Step One: Initialize the FileManager
+            toolStripStatusLabel.Text = "Initializing the Hellgate File Manager...";
             HellgateFileManager = new FileManager(Config.HglDir);
+
+            if (HellgateFileManager.HasIntegrity == false)
+            {
+                Console.WriteLine("Could not initialize the File Manager, Integrity check failed.");
+                e.Cancel = true;
+
+                string caption = "Integrity Error";
+                string message = "Could not initialize the File Manager. Check Hellgate London is not running and that the installation is not corrupt.";
+                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
+                return;
+            }
+
+            // Check if the user wants to cancel.
             if (backgroundWorker.CancellationPending)
             {
                 e.Cancel = true;
                 return;
             }
-            HellgateFileManager.LoadTableFiles();
 
-
-            // There is a check box that will allow the main mod compilation to be skipped
-            if (optionalOnlycheckBox.Checked == false)
+            // Step Two: Revert modifications automatically if flagged in the mod install xml.
+            if (RevivalMod.Data.Modifications.DoRevert == true)
             {
-                // Search for files to cook
-                excelToCook = Hellpack.SearchForExcelFiles(path);
-                stringsToCook = Hellpack.SearchForStringFiles(path);
-                xmlToCook = Hellpack.SearchForXmlFiles(path);
-
-                int cookingProgress = 1;
-                int totalFilesToCook = 0;
-                totalFilesToCook += excelToCook != null ? excelToCook.Length : 0;
-                totalFilesToCook += stringsToCook != null ? stringsToCook.Length : 0;
-                totalFilesToCook += xmlToCook != null ? xmlToCook.Length : 0;
-
-                // Cook files
-                // Excel
-                if (excelToCook != null)
+                DialogResult dialogResult = DialogResult.Retry;
+                while (dialogResult == DialogResult.Retry)
                 {
-                    for (int i = 0; i < excelToCook.Length; i++)
+                    toolStripStatusLabel.Text = "Reverting previous Hellgate London modifications...";
+                    bool error = Modification.RemoveModifications(HellgateFileManager);
+                    if (error == true)
                     {
-                        // Check if Canceled
-                        if (backgroundWorker.CancellationPending)
+                        string caption = "Reversion Error";
+                        string message = "One or more errors occurred while reverting Hellgate London modifications. Check Hellgate London is not running and the files are not in use. It is highly recommended you ammend this before continuing, even if it means reinstalling the game.";
+                        dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+
+                        if (dialogResult == DialogResult.Abort)
                         {
                             e.Cancel = true;
                             return;
                         }
-                        string epath = excelToCook[i];
-                        string hglPath = epath.Substring(epath.IndexOf("data"), epath.Length - epath.IndexOf("data"));
-                        string reportMsg = String.Format(cookingMessage, hglPath);
-                        int progress = ((cookingProgress * 100) / totalFilesToCook);
-                        backgroundWorker.ReportProgress(progress, reportMsg);
-                        Hellpack.CookExcelFile(epath);
-                        cookingProgress++;
                     }
-                }
-
-                // Strings
-                if (stringsToCook != null)
-                {
-                    for (int i = 0; i < stringsToCook.Length; i++)
+                    else
                     {
-                        // Check if Canceled
-                        if (backgroundWorker.CancellationPending)
-                        {
-                            e.Cancel = true;
-                            return;
-                        }
-                        string epath = stringsToCook[i];
-                        string hglPath = epath.Substring(epath.IndexOf("data"), epath.Length - epath.IndexOf("data"));
-                        string reportMsg = String.Format(cookingMessage, hglPath);
-                        int progress = ((cookingProgress * 100) / totalFilesToCook);
-                        backgroundWorker.ReportProgress(progress, reportMsg);
-                        Hellpack.CookStringFile(epath);
-                        cookingProgress++;
+                        break;
                     }
                 }
+                toolStripStatusLabel.Text = "Reloading the Hellgate File Manager...";
+                HellgateFileManager.Reload();
+            }
 
-                // XML
-                if (xmlToCook != null)
-                {
-                    for (int i = 0; i < xmlToCook.Length; i++)
-                    {
-                        // Check if Canceled
-                        if (backgroundWorker.CancellationPending)
-                        {
-                            e.Cancel = true;
-                            return;
-                        }
-                        string epath = xmlToCook[i];
-                        string hglPath = epath.Substring(epath.IndexOf("data"), epath.Length - epath.IndexOf("data"));
-                        string reportMsg = String.Format(cookingMessage, hglPath);
-                        int progress = ((cookingProgress * 100) / totalFilesToCook);
-                        backgroundWorker.ReportProgress(progress, reportMsg);
-                        Hellpack.CookXmlFile(epath, HellgateFileManager);
-                        cookingProgress++;
-                    }
-                }
-
-                // Search for files to pack
-                backgroundWorker.ReportProgress(100, "Searching for files to pack...");
-                filesToPack = Hellpack.SearchForFilesToPack(path, true);
-
-                // Pack files
-                backgroundWorker.ReportProgress(100, String.Format("Packing {0}...", RevivalMod.Data.Modifications.ID + ".idx"));
-                string hglDataPath = Path.Combine(Config.HglDir, "data");
-                string datPath = Path.Combine(hglDataPath, RevivalMod.Data.Modifications.ID) + ".idx";
-                bool packResult = Hellpack.PackDatFile(filesToPack, datPath);
-
-                if (packResult == false)
-                {
-                    HellgateFileManager.Dispose();
-
-                    string caption = "Fatal Error";
-                    string message = "An error occurred while packing the modification.";
-                    MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+            // Check if the user wants to cancel.
+            if (backgroundWorker.CancellationPending)
+            {
+                e.Cancel = true;
+                return;
             }
 
 
-            // Apply scripts
-            // Scripts are only applied if they are checked or are hidden
+            // Load the Excel tables
+            toolStripStatusLabel.Text = "Caching the Hellgate London excel tables...";
+            HellgateFileManager.LoadTableFiles();
+
+
+            // Step Three: Cook Excel, String and XML files.
+
+            // Search for files to cook
+            excelToCook = Hellpack.SearchForExcelFiles(path);
+            stringsToCook = Hellpack.SearchForStringFiles(path);
+            xmlToCook = Hellpack.SearchForXmlFiles(path);
+
+            if (excelToCook != null)
+            {
+                for (int i = 0; i < excelToCook.Length; i++)
+                {
+                    // Check if the user wants to cancel.
+                    if (backgroundWorker.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+
+                    string epath = excelToCook[i];
+                    string hglPath = epath.Substring(epath.IndexOf("data"), epath.Length - epath.IndexOf("data"));
+                    string report = String.Format(cookingMessage, hglPath);
+                    toolStripStatusLabel.Text = report;
+                    Hellpack.CookExcelFile(epath);
+                }
+            }
+
+            if (stringsToCook != null)
+            {
+                for (int i = 0; i < stringsToCook.Length; i++)
+                {
+                    // Check if the user wants to cancel.
+                    if (backgroundWorker.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+
+                    string epath = stringsToCook[i];
+                    string hglPath = epath.Substring(epath.IndexOf("data"), epath.Length - epath.IndexOf("data"));
+                    string report = String.Format(cookingMessage, hglPath);
+                    toolStripStatusLabel.Text = report;
+                    Hellpack.CookStringFile(epath);
+                }
+            }
+
+            if (xmlToCook != null)
+            {
+                for (int i = 0; i < xmlToCook.Length; i++)
+                {
+                    // Check if the user wants to cancel.
+                    if (backgroundWorker.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+
+                    string epath = xmlToCook[i];
+                    string hglPath = epath.Substring(epath.IndexOf("data"), epath.Length - epath.IndexOf("data"));
+                    string report = String.Format(cookingMessage, hglPath);
+                    toolStripStatusLabel.Text = report;
+                    Hellpack.CookXmlFile(epath, HellgateFileManager);
+                }
+            }
+
+            // Step Four: Pack the base idx/dat.
+            filesToPack = Hellpack.SearchForFilesToPack(path, true);
+            toolStripStatusLabel.Text = String.Format("Packing {0}...", RevivalMod.Data.Modifications.ID + ".idx");
+            string hglDataPath = Path.Combine(Config.HglDir, "data");
+            string modDatPath = Path.Combine(hglDataPath, RevivalMod.Data.Modifications.ID) + ".idx";
+            bool packResult = Hellpack.PackDatFile(filesToPack, modDatPath);
+
+            if (packResult == false)
+            {
+                HellgateFileManager.Dispose();
+
+                string caption = "Fatal Error";
+                string message = "An error occurred while packing the modification.";
+                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+
+            // Step Five: Apply scripts. Scripts are only applied if they are checked or are hidden.
             if (optionalCheckedListBox.CheckedItems.Count != 0 ||
                 RevivalMod.Data.Modifications.Scripts.Where(s => s.Type == "hidden").Any() == true)
             {
                 List<Script> scriptList = new List<Script>();
+
+                // Append optional list
                 foreach (Script script in optionalCheckedListBox.CheckedItems)
                 {
                     scriptList.Add(script);
                 }
+
+                // Append hidden list
                 foreach (Script script in RevivalMod.Data.Modifications.Scripts.Where(s => s.Type == "hidden"))
                 {
                     scriptList.Add(script);
                 }
 
-                // If a base modification above has been installed, reinitialize the filemanager
-                if (optionalOnlycheckBox.Checked == false)
-                {
-                    HellgateFileManager.Reload();
-                    HellgateFileManager.LoadTableFiles();
-                }
 
-                int scriptCount = scriptList.Count;
-                int scriptProgress = 1;
+                // Reinitalize the File Manager
+                HellgateFileManager.Reload();
+                HellgateFileManager.LoadTableFiles();
+
 
                 // Apply the scripts
                 List<string> modifiedTables = new List<string>();
                 foreach (Script script in scriptList)
                 {
-                    int progress = (scriptProgress * 100) / scriptCount;
-                    backgroundWorker.ReportProgress(progress, String.Format("Applying {0} script...", script.Title));
+                    // Interface stuff
+                    toolStripStatusLabel.Text =  String.Format("Applying {0} script...", script.Title);
                     if (script.Extraction != null)
                     {
-                        backgroundWorker.ReportProgress(progress, "Extaction taking place, this may take up to 10 minutes.");
+                        toolStripStatusLabel.Text = "Extaction taking place, this may take over 5 minutes.";
                     }
+
+                    // The script
                     Modification.ApplyScript(script, ref HellgateFileManager);
                     if (script.Tables != null)
                     {
@@ -271,10 +309,10 @@ namespace Launcher.Forms
                                 modifiedTables.Add(tableID);
                         }
                     }
-                    scriptProgress++;
                 }
 
-                // Repack the modified Tables
+                // Repack the modified Tables.
+                // These go in their own idx/dat under the same name as the base modification with the string _125 appended.
                 string indexPath = Path.Combine(Config.HglDir, "data", RevivalMod.Data.Modifications.ID + "_125.idx");
                 IndexFile indexFile = new IndexFile() { FilePath = indexPath };
                 foreach (string tableID in modifiedTables)
@@ -294,11 +332,13 @@ namespace Launcher.Forms
                     try
                     {
                         File.WriteAllBytes(indexPath, ibuffer);
+                        HellgateFileManager.Dispose();
                         indexFile.EndDatAccess();
                         indexFile.Dispose();
                     }
-                    catch
+                    catch(Exception ex)
                     {
+                        ExceptionLogger.LogException(ex);
                         HellgateFileManager.Dispose();
                         indexFile.EndDatAccess();
                         indexFile.Dispose();
@@ -311,8 +351,6 @@ namespace Launcher.Forms
                 }
             }
 
-            HellgateFileManager.Dispose();
-
             string msgCaption = "Success";
             string msgDescription = "Modification successfully installed!";
             MessageBox.Show(msgDescription, msgCaption, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -323,7 +361,6 @@ namespace Launcher.Forms
             toolStripProgressBar.Value = e.ProgressPercentage;
             toolStripStatusLabel.Text = e.UserState as string ?? toolStripStatusLabel.Text;
         }
-
 
         private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -339,9 +376,11 @@ namespace Launcher.Forms
             {
                 toolStripStatusLabel.Text = "Done!";
             }
+
+            // Back to normal
             installButton.Text = "Install";
             installButton.Enabled = true;
-            toolStripProgressBar.Value = 0;
+            toolStripProgressBar.MarqueeAnimationSpeed = 0;
         }
     }
 }

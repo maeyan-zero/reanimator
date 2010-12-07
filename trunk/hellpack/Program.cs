@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Hellgate;
+using ExceptionLogger = Revival.Common.ExceptionLogger;
 
 namespace Revival
 {
@@ -21,8 +22,8 @@ namespace Revival
         {
             FileManager fileManager;
             string currentDir = Directory.GetCurrentDirectory();
-            string dataDir = Path.Combine(currentDir, Common.DataPath);
-            string dataCommonDir = Path.Combine(currentDir, Common.DataCommonPath);
+            string dataDir = Path.Combine(currentDir, Hellgate.Common.DataPath);
+            string dataCommonDir = Path.Combine(currentDir, Hellgate.Common.DataCommonPath);
             string hellgatePath = String.Empty;
 
             bool doCookTxt = false;
@@ -307,8 +308,6 @@ namespace Revival
         public static bool PackDatFile(string[] filesToPack, string outputPath)
         {
             IndexFile newPack = new IndexFile() { FilePath = outputPath };
-
-            // Pack the files!
             foreach (String filePath in filesToPack)
             {
                 String fileName = Path.GetFileName(filePath);
@@ -321,14 +320,15 @@ namespace Revival
                 {
                     buffer = File.ReadAllBytes(filePath);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    ExceptionLogger.LogException(ex);
+                    Console.WriteLine(String.Format("Warning: Could not read file {0}", filePath));
                     continue;
                 }
 
                 Console.WriteLine("Packing " + directory + fileName);
-
-                if (!newPack.AddFile(directory, fileName, buffer))
+                if (newPack.AddFile(directory, fileName, buffer) == false)
                 {
                     Console.WriteLine("Warning: Failed to add file to index...");
                 }
@@ -342,11 +342,14 @@ namespace Revival
             {
                 File.WriteAllBytes(outputPath, indexBytes);
             }
-            catch
+            catch (Exception ex)
             {
+                ExceptionLogger.LogException(ex);
+                Console.WriteLine(String.Format("Fatal error: Could not write index {0}", thisPack));
                 return false;
             }
-            Console.WriteLine(thisPack + " generation complete.");
+
+            Console.WriteLine(String.Format("{0} generation complete.", thisPack));
             return true;
         }
 
@@ -358,22 +361,33 @@ namespace Revival
             }
         }
 
-        public static void CookExcelFile(string excelPath)
+        public static bool CookExcelFile(string excelPath)
         {
-            byte[] excelBuffer = File.ReadAllBytes(excelPath);
-            ExcelFile excelFile = new ExcelFile(excelBuffer, excelPath);
-            if (!excelFile.HasIntegrity)
+            byte[] excelBuffer = null;
+            try
             {
-                Console.WriteLine("Failed to parse excel file: " + excelPath);
-                return;
+                excelBuffer = File.ReadAllBytes(excelPath);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex);
+                Console.WriteLine(String.Format("Error reading file {0}", excelPath));
+                return false;
+            }
+
+            ExcelFile excelFile = new ExcelFile(excelBuffer, excelPath);
+            if (excelFile.HasIntegrity == false)
+            {
+                Console.WriteLine(String.Format("Failed to parse excel file {0}", excelPath));
+                return false;
             }
 
             Console.WriteLine(String.Format("Cooking {0}", Path.GetFileNameWithoutExtension(excelPath)));
             excelBuffer = excelFile.ToByteArray();
             if (excelBuffer == null)
             {
-                Console.WriteLine("Failed to cook excel file: " + excelFile.StringId);
-                return;
+                Console.WriteLine(String.Format("Failed to serialize excel file {0}", excelFile.StringId));
+                return false;
             }
 
             String writeToPath = excelPath + ".cooked";
@@ -381,11 +395,14 @@ namespace Revival
             {
                 File.WriteAllBytes(writeToPath, excelBuffer);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Failed to write cooked file: " + writeToPath);
-                return;
+                ExceptionLogger.LogException(ex);
+                Console.WriteLine(String.Format("Failed to write cooked file {0} ", writeToPath));
+                return false;
             }
+
+            return true;
         }
 
         public static void CookStringFiles(string[] stringFilesToCook)
@@ -396,15 +413,48 @@ namespace Revival
             }
         }
 
-        public static void CookStringFile(string stringPath)
+        public static bool CookStringFile(string stringPath)
         {
-            byte[] stringsBuffer = File.ReadAllBytes(stringPath);
+            byte[] stringsBuffer = null;
+            try
+            {
+                stringsBuffer = File.ReadAllBytes(stringPath);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex);
+                Console.WriteLine(String.Format("Error reading file {0}", stringPath));
+                return false;
+            }
+
             StringsFile stringsFile = new StringsFile(stringsBuffer, Path.GetFileName(stringPath).ToUpper());
-            if (!(stringsFile.HasIntegrity == true)) return;
+            if (stringsFile.HasIntegrity == false)
+            {
+                Console.WriteLine(String.Format("Failed to parse strings file {0}", stringPath));
+                return false;
+            }
+
             Console.WriteLine(String.Format("Cooking {0}", Path.GetFileNameWithoutExtension(stringPath)));
             stringsBuffer = stringsFile.ToByteArray();
-            if (stringsBuffer == null) return;
-            File.WriteAllBytes(stringPath + ".cooked", stringsBuffer);
+            if (stringsBuffer == null)
+            {
+                Console.WriteLine(String.Format("Failed to serialize strings file {0}", stringsFile.StringId));
+                return false;
+            }
+
+            String writeToPath = stringPath + ".cooked";
+            try
+            {
+                File.WriteAllBytes(writeToPath, stringsBuffer);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex);
+                Console.WriteLine(String.Format("Failed to write cooked file {0} ", writeToPath));
+                return false;
+            }
+
+            return true;
         }
 
         public static void CookXmlFiles(string[] xmlFilesToCook, FileManager fileManager)
@@ -422,7 +472,7 @@ namespace Revival
             }
         }
 
-        public static void CookXmlFile(string xmlPath, FileManager fileManager)
+        public static bool CookXmlFile(string xmlPath, FileManager fileManager)
         {
             try
             {
@@ -437,10 +487,13 @@ namespace Revival
                 XmlCookedFile cookedXmlFile = new XmlCookedFile();
                 byte[] xmlCookedData = cookedXmlFile.CookXmlDocument(xmlDocument);
                 File.WriteAllBytes(xmlPath + ".cooked", xmlCookedData);
+                return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine("Error: Failed to cook XML file: " + e);
+                ExceptionLogger.LogException(ex);
+                Console.WriteLine("Error: Failed to cook XML file: " + ex.Message);
+                return false;
             }
         }
     }

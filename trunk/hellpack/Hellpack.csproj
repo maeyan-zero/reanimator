@@ -97,6 +97,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\common\Common.csproj">
+      <Project>{F2C2B5C8-8ACE-44BE-A3CF-A3C045A64A61}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\hellgate\Hellgate.csproj">
       <Project>{B6CC99E9-8371-43C3-A20B-D8AA4B7DACCC}</Project>
       <Name>Hellgate</Name>
