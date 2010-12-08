@@ -160,7 +160,8 @@ namespace Hellgate
                     if ((excelOutputAttribute.IsIntOffset))
                     {
                         int valueInt = (int)value;
-                        baseRow[col++] = (!(valueInt == 0)) ? FileTools.ArrayToStringGeneric(excelFile.ReadIntegerTable(valueInt), ",") : String.Empty;
+                        int[] intTable = excelFile.ReadIntegerTable(valueInt);
+                        baseRow[col++] = (intTable != null) ? FileTools.ArrayToStringGeneric(intTable, ",") : String.Empty;
                         continue;
                     }
 

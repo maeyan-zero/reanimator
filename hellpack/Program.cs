@@ -24,7 +24,7 @@ namespace Revival
             string currentDir = Directory.GetCurrentDirectory();
             string dataDir = Path.Combine(currentDir, Hellgate.Common.DataPath);
             string dataCommonDir = Path.Combine(currentDir, Hellgate.Common.DataCommonPath);
-            string hellgatePath = String.Empty;
+            string hellgatePath = @"D:\Program Files\Flagship Studios\Hellgate London";
 
             bool doCookTxt = false;
             bool doCookXml = false;
@@ -43,6 +43,10 @@ namespace Revival
 
                 fileManager = new FileManager(@"D:\Games\Hellgate London");
                 fileManager.LoadTableFiles();
+                
+                //byte[] buffer = fileManager.DataFiles["SKILLS"].ExportCSV();
+                //File.WriteAllBytes(@"D:\skills.txt", buffer);
+
                 //foreach (DataFile dataFile in fileManager.DataFiles.Values)
                 //{
                 //    if (dataFile.IsStringsFile) continue;
