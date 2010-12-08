@@ -37,8 +37,11 @@ namespace Hellgate.Excel
         public String skillBonusFunction;//doesn't appear to be used
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 192)]
         public String accumulationStringFunction;//doesn't appear to be used
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        byte[] unknown1;
+        public Int32 unknown101;
+        public Int32 unknown102;
+        public Int32 unknown103;
+        public Int32 unknown104;
+        public Int32 unknown105;
         [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
         public Int32 descriptionString;//stridx
         [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
@@ -91,8 +94,7 @@ namespace Hellgate.Excel
         public Int32 maxLevel;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String summonedAi;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        byte[] unknown4;
+        public Int32 unknown201;
         public Int32 summonedInvLocation1;
         public Int32 summonedInvLocation2;
         public Int32 summonedInvLocation3;
@@ -108,36 +110,36 @@ namespace Hellgate.Excel
         public Int32 priority;
         public Int32 requiredStats1;
         public Int32 requiredStats2;
-        Int32 requiredStatValuesA1;//these seem to be unused
-        Int32 requiredStatValuesA2;
-        Int32 requiredStatValuesA3;
-        Int32 requiredStatValuesA4;
-        Int32 requiredStatValuesA5;
-        Int32 requiredStatValuesA6;
-        Int32 requiredStatValuesA7;
-        Int32 requiredStatValuesA8;
-        Int32 requiredStatValuesA9;
-        Int32 requiredStatValuesA10;
-        Int32 requiredStatValuesA11;
-        Int32 requiredStatValuesA12;
-        Int32 requiredStatValuesA13;
-        Int32 requiredStatValuesA14;
-        Int32 requiredStatValuesA15;
-        Int32 requiredStatValuesB1;
-        Int32 requiredStatValuesB2;
-        Int32 requiredStatValuesB3;
-        Int32 requiredStatValuesB4;
-        Int32 requiredStatValuesB5;
-        Int32 requiredStatValuesB6;
-        Int32 requiredStatValuesB7;
-        Int32 requiredStatValuesB8;
-        Int32 requiredStatValuesB9;
-        Int32 requiredStatValuesB10;
-        Int32 requiredStatValuesB11;
-        Int32 requiredStatValuesB12;
-        Int32 requiredStatValuesB13;
-        Int32 requiredStatValuesB14;
-        Int32 requiredStatValuesB15;
+        public Int32 requiredStatValuesA1;//these seem to be unused
+        public Int32 requiredStatValuesA2;
+        public Int32 requiredStatValuesA3;
+        public Int32 requiredStatValuesA4;
+        public Int32 requiredStatValuesA5;
+        public Int32 requiredStatValuesA6;
+        public Int32 requiredStatValuesA7;
+        public Int32 requiredStatValuesA8;
+        public Int32 requiredStatValuesA9;
+        public Int32 requiredStatValuesA10;
+        public Int32 requiredStatValuesA11;
+        public Int32 requiredStatValuesA12;
+        public Int32 requiredStatValuesA13;
+        public Int32 requiredStatValuesA14;
+        public Int32 requiredStatValuesA15;
+        public Int32 requiredStatValuesB1;
+        public Int32 requiredStatValuesB2;
+        public Int32 requiredStatValuesB3;
+        public Int32 requiredStatValuesB4;
+        public Int32 requiredStatValuesB5;
+        public Int32 requiredStatValuesB6;
+        public Int32 requiredStatValuesB7;
+        public Int32 requiredStatValuesB8;
+        public Int32 requiredStatValuesB9;
+        public Int32 requiredStatValuesB10;
+        public Int32 requiredStatValuesB11;
+        public Int32 requiredStatValuesB12;
+        public Int32 requiredStatValuesB13;
+        public Int32 requiredStatValuesB14;
+        public Int32 requiredStatValuesB15;
         public Int32 requiredSkills1;
         public Int32 requiredSkills2;
         public Int32 requiredSkills3;
@@ -163,8 +165,7 @@ namespace Hellgate.Excel
         public Int32 ignoreTargetsWithState2;
         public Int32 selectTargetsWithState1;
         public Int32 selectTargetsWithState2;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        byte[] unknown7;
+        public Int32 unknown301;
         public Int32 modeOverride;//idx
         public Int32 bonusSkills0;
         public Int32 bonusSkills1;

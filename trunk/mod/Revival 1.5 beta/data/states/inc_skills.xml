@@ -1,0 +1,14 @@
+<STATE_DEFINITION>
+  <pEventsCount>1</pEventsCount>
+  <pEvents>stat - inc</pEvents>
+  <STATE_EVENT>
+    <eType>81</eType>
+    <tAttachmentDef.eType>2</tAttachmentDef.eType>
+    <tAttachmentDef.pszAttached>skill_points</tAttachmentDef.pszAttached>
+    <tAttachmentDef.vNormal.fX>0</tAttachmentDef.vNormal.fX>
+    <tAttachmentDef.vNormal.fY>1</tAttachmentDef.vNormal.fY>
+    <fParam>1</fParam>
+    <tCondition />
+    <CONDITION_DEFINITION />
+  </STATE_EVENT>
+</STATE_DEFINITION>

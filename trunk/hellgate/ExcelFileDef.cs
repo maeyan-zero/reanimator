@@ -523,9 +523,10 @@ namespace Hellgate
 
         public int[] ReadIntegerTable(int offset)
         {
+            if (offset == 0) return null;
             int position = offset;
             int value = FileTools.ByteArrayToInt32(_integerBuffer, position);
-
+            
             while (value != 0)
             {
                 if (IntTableDef.Case01.Contains(value)) position += (3 * sizeof(int));

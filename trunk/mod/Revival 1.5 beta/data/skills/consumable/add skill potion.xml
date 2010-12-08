@@ -1,0 +1,26 @@
+<SKILL_EVENTS_DEFINITION>
+  <pEventHoldersCount>1</pEventHoldersCount>
+  <pEventHolders>melee_right</pEventHolders>
+  <SKILL_EVENT_HOLDER>
+    <nUnitMode>60</nUnitMode>
+    <pEventsCount>1</pEventsCount>
+    <pEvents>State - Set</pEvents>
+    <SKILL_EVENT>
+      <nType>33</nType>
+      <tAttachmentDef.eType>-1</tAttachmentDef.eType>
+      <tAttachmentDef.pszAttached>skill_point_potion</tAttachmentDef.pszAttached>
+      <tAttachmentDef.vNormal.fX>0</tAttachmentDef.vNormal.fX>
+      <tAttachmentDef.vNormal.fY>1</tAttachmentDef.vNormal.fY>
+      <tCondition />
+      <CONDITION_DEFINITION>
+        <nType />
+        <nState />
+        <nUnitType />
+        <nSkill />
+        <nMonsterClass />
+        <nObjectClass />
+        <nStat />
+      </CONDITION_DEFINITION>
+    </SKILL_EVENT>
+  </SKILL_EVENT_HOLDER>
+</SKILL_EVENTS_DEFINITION>

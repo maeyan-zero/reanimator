@@ -25,38 +25,45 @@ namespace Launcher.Forms
         private void Launcher_Load(object sender, EventArgs e)
         {
             CheckEnvironment();
+#if !DEBUG
             StartConsoleLogging();
+#endif
         }
 
         private void StartConsoleLogging()
         {
-            FileStream ostrm;
-            StreamWriter writer;
-            TextWriter oldOut = Console.Out;
+            FileStream fileStream;
+            StreamWriter streamWriter;
             try
             {
-                ostrm = new FileStream("./output.txt", FileMode.OpenOrCreate, FileAccess.Write);
-                writer = new StreamWriter(ostrm);
+                fileStream = new FileStream("./output.txt", FileMode.OpenOrCreate, FileAccess.Write);
+                streamWriter = new StreamWriter(fileStream);
             }
             catch (Exception ex)
             {
                 Revival.Common.ExceptionLogger.LogException(ex);
                 return;
             }
-            Console.SetOut(writer);
+            Console.SetOut(streamWriter);
         }
 
         private void CheckEnvironment()
         {
-            if (Directory.Exists(Config.HglDir)) return;
+            if (Directory.Exists(Config.HglDir) == false)
+            {
+                String caption = "Installation";
+                String message = "Before the Hellgate: Revival Launcher can be used, you must configure the paths.\nPress okay to continue.";
+                DialogResult result = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                if (result == DialogResult.Cancel) return;
 
-            String caption = "Installation";
-            String message = "Before the Hellgate: Revival Launcher can be used, you must configure the paths.\nPress okay to continue.";
-            DialogResult result = MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-            if (result == DialogResult.Cancel) return;
+                OptionsForm optionsForm = new OptionsForm();
+                optionsForm.ShowDialog(this);
+            }
 
-            OptionsForm optionsForm = new OptionsForm();
-            optionsForm.ShowDialog(this);
+            if (File.Exists(Config.GameClientPath) == false)
+            {
+                Config.GameClientPath = Path.Combine(Config.HglDir, @"SP_x86\hellgate_sp_dx9_x86.exe");
+            }
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -79,7 +86,7 @@ namespace Launcher.Forms
 
             string tempPath = Path.GetTempPath();
             string fileName = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(fileDialog.FileName));
-            string extractPath = Path.Combine(tempPath, fileName);
+            string extractPath = Path.Combine(tempPath, fileName + DateTime.Now.ToFileTime().ToString());
             string installFilePath = Path.Combine(extractPath, "install.xml");
 
             try
