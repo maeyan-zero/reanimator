@@ -56,7 +56,7 @@ namespace Launcher.Forms
 
             foreach (Script script in RevivalMod.Data.Modifications.Scripts)
             {
-                if (script.Type == "hidden") continue;
+                if (script.Type != "optional" && script.Type != "recommended") continue;
                 optionalCheckedListBox.Items.Add(script, script.Type == "recommended" ? true : false);
             }
         }
@@ -295,7 +295,7 @@ namespace Launcher.Forms
                     toolStripStatusLabel.Text =  String.Format("Applying {0} script...", script.Title);
                     if (script.Extraction != null)
                     {
-                        toolStripStatusLabel.Text = "Extaction taking place, this may take over 5 minutes.";
+                        toolStripStatusLabel.Text = "MP conversion in progress, this may between 5 and 10 minutes.";
                     }
 
                     // The script

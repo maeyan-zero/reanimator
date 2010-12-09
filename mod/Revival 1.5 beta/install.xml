@@ -41,6 +41,10 @@ Players
 
 Engineer
 * + Improved Engineer drone AI.
+* + Can spawn Drone in stations.
+
+Summoner
+* + Can spawn minions in stations.
 
 Inventory
 * Increased stash (x10) and inventory (2x).
@@ -142,6 +146,9 @@ Treasure
 	* There is a 1/1000 chance a common chest will drop a legendary of better item.
 	* Elite chests drop a lot more palladium and drop 2 rare or better items.
 
+Achievements
+* Speed leveling achievments repaired.
+	
 Misc
 * Particle updates from Abyss expansion added.
 
@@ -160,7 +167,7 @@ Known Issues
 			<extract source="mp_hellgate_1.10.180.3416_1.0.86.4580" destination="sp_hellgate_1.10.180.3416_1.0.86.4580">
 				<!--<path>data\ai\*</path>-->
 				<path>data\ai\turret.xml.cooked</path>
-				<path>data\background\*</path>
+				<!--<path>data\background\*</path>-->
 				<path>data\effects\*</path>
 				<path>data\lights\*</path>
 				<!--<path>data\materials\*</path>-->
