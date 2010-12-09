@@ -269,7 +269,7 @@ Known Issues
 				</entity>
 			</table>
 		</script>
-		<script type="optional">
+		<script type="optional" id="expanded storage">
 			<title>Expanded Storage Mod</title>
 			<description>Inventory and stash now have 3 tabbed pages like merchants</description>
 			<table id="inventory">
