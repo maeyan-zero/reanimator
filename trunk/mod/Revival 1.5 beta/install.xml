@@ -6,13 +6,98 @@
 		<author>Maeyan, Malachor, Alex2069, Kite</author>
 		<website>http://www.hellgateaus.net/</website>
 		<email>maeyan.zero@gmail.com</email>
-		<revert>true</revert>
+		<revert>true</revert><!--Automatically revert all modifications without warning. Not recommended for fan mods.-->
 		<dependencies>
-			<patch>sp_hellgate_1.10.180.3416_1.18074.70.4256</patch>
-			<patch>mp_hellgate_1.10.180.3416_1.0.86.4580</patch>
+			<patch>sp_hellgate_1.10.180.3416_1.18074.70.4256</patch><!-- FSS SP 1.2 -->
+			<patch>mp_hellgate_1.10.180.3416_1.0.86.4580</patch><!-- FSS MP TC 2.0 -->
 		</dependencies>
-		<description>Welcome to the amazing 1.5 beta release of Revival.
-		
+		<description>Welcome to the amazing 1.5b beta release of Revival.
+
+This patch is far from complete, but is a milestone release in the Revival 1.5 beta branch. A new massive amount of content has been added, including Mythic and Doubled Edged item qualites, over 15 items from the Stonehenge and Abysss expansions and a wealth of cube recipes that can be used in conjuction with 'gambling' tokens, purchased from the gambling vendor in Holborn Station.
+
+As always with the beta releases, don't get too attached to your characters because things will change between updates that might make your characters incompatible. New changes from the 1.5a release are marked with a + and removed changes are marked with a -. Chances are I have forgotten a few changes, these will be noted on the forum as they are recalled.
+
+As always, thank you for your support and patience. This has taken us a really long time, and there is still so much to do. But for now, please enjoy!
+
+Maeyan
+
+1.5b Patch Notes
+-----------------
+Difficulty
+* Normal mode has the same Champion spawn rate and monster density as Elite mode.
+
+Players
+* - Players are no longer assigned a default skill. (1.5a dropped)
+* + Evoker, Summoner, Marksman and Engineer have had there starting skills changed.
+	* Evoker: Firestorm
+	* Summoner: Summon Carngore
+	* Marksman: Fire Grenade
+	* Engineer: Construct Drone
+* - The initial skill is placed on the starter weapons. (1.5a dropped)
+* Level cap increased to 55.
+* Power regeneration decreased from 3 to 2 per willpower point.
+* + Base power regeneration increased to 520.
+* Melee damage increased from 1% to 3% per strength point.
+
+Engineer
+* + Improved Engineer drone AI.
+
+Inventory
+* Increased stash (x10) and inventory (2x).
+* + Inventory slot added for googles.
+* + Inventory slots added for rings.
+* Scrap stack size increased to 10,000.
+* Consumables stack size increased to 100.
+
+Recipies
+* The cube recipes are hidden until discovered.
+* Recipe to create pets - requires and egg drop from bosses.
+* + Recipies to 'reroll' ehanced, rare and legendary items.
+* + Recipies to create various random items.
+* + Recipies to create rings.
+* + Recipies to create demon, beast, necro and spectral mods.
+
+Item Quality
+* Enhanced and Rare items are identified by default.
+* + Mythic quality items added. These items have affixes approximatley 1.5x stronger than legendary affixes.
+* + Double Edged quality items added. These items have 1x Mythic affix and 1x negative affix.
+
+Augmentrix
+* Rare and Legendary augmentation cost reduced by 50%.
+* + Skills are not augmented onto weapons.
+
+Items
+* Templar items added:
+	* Sunblade
+	* Sunshield
+	* Moonblade
+	* Dissector
+	* Dissector Shield
+	* Gleamcarver
+	* + Starburst
+* + Marksmans items added:
+	* + Core Magnum
+	* + Stringray
+	* + Discombobulator
+	* + Thumper
+	* + Thunderclash
+* + Cabalist items added: 
+	* + Fire Seeds
+	* + Vampire PistolMK3
+	* + Negatron
+	* + Singularity Node
+	* + Purification Ray
+	* + Munticle
+* + All new items can not be purchased from a vendor and drop at only legendary or better qualities.
+* - 6x new unique items inspired by hellgateaus. (1.5a dropped) - These items require more though and planning sorry! Will be back in a future update.
+* Shield overload on Swords halved and capped at 100%.
+* Boss/Mutant items are now of unique quality.
+* Only unique retrainers can be bought and sold.
+* Common retrainers are gained from Sydonai the first time you complete the game.
+
+Interface
+* Most of the updated interface elements have been imported from the Abyss expansion.
+
 Levels
 * Environment updates from the Abyss added.
 * Moloch spawns in Anchient Blood - 4/5 chance to spawn.
@@ -20,19 +105,9 @@ Levels
 * Elite passageways champion spawn chance increased by 100%.
 * Treasure passageways contain 100% more treasure.
 * Monster density increased by 15%.
-* Champion spawn chance increased by x4.
-TODO
-* Certain levels are now marked elite zones and enemies are much tougher.
-
-Players
-* Players are no longer assigned a default skill.
-* The initial skill is placed on the starter weapons.
-* Level cap increased to 55.
-* Power regeneration decreased from 3 to 2 per willpower point.
-* Melee damage increased from 1% to 3% per strength point.
 
 Skills
-* The sprint skill caps at 4 points and no cooldown.
+* - The sprint skill caps at 4 points and no cooldown. (1.5a dropped)
 
 Monsters
 * Moloch has been added into the game.
@@ -41,29 +116,13 @@ Monsters
 * Champion mob health and experience increased 100%-300%.
 * Shield overload reduced and capped at 100%.
 * Killing monsters 3 levels above you grants you more experience up to 95%.
+* Bosses have a 1/100 chance to drop an egg.
+* + Champion mobs drop essense according to their class type 1/5.
 
 NPCs
-* Original voices have been restored for about 15 npcs.
+* Original voices have been restored for about 15 npcs, including 'sexy holloway'.
 * Techsmith 314 has been reskinned into his 3rd stage state.
-
-Items
-* Templar items added: Sunblade, Sunshield, Moonblade, Dissector, Dissector Shield &amp; Gleamcarver.
-* 6x new unique items inspired by hellgateaus.
-* Shield overload on Swords halved and capped at 100%.
-* Boss/Mutant items are now of unique quality.
-* Only unique retrainers can be bought and sold.
-* Common retrainers are gained from Sydonai the first time you complete the game.
-* Rare and Legendary augmentation cost reduced by 50%.
-* Bosses have a 1/100 chance to drop an egg.
-* Scrap stack size increased to 10,000.
-* Consumables stack size increased to 100.
-
-Recipies
-* The cube recipes are hidden until discovered.
-* New recipe to create pets.
-TODO:
-* Create more basic consumable recipes.
-* Create more recipes to create random items.
+* + A gambling merchant added in Holborn station.
 
 Treasure
 * Champion mobs have a fixed chance of dropping legendary or better loot!
@@ -82,11 +141,18 @@ Treasure
 	* Common chests will drop up to 3 consumables and palladium.
 	* There is a 1/1000 chance a common chest will drop a legendary of better item.
 	* Elite chests drop a lot more palladium and drop 2 rare or better items.
-	
-Inventory
-* Increased stash (x10) and inventory (2x).
-TODO:
-* Add a new slot for goggles.
+
+Misc
+* Particle updates from Abyss expansion added.
+
+Optional Components
+* + Auto Pickup Consumables
+* + Auto Pickup Quest Items
+* + Remove Regional Censoring
+
+Known Issues
+* Various graphical glitches for Nvidia players.
+* Some Doubled Edged text descriptions are not displayed correctly, but they work.
 		</description>
 		<script type="hidden">
 			<title>Test Center Extraction</title>
@@ -94,7 +160,7 @@ TODO:
 			<extract source="mp_hellgate_1.10.180.3416_1.0.86.4580" destination="sp_hellgate_1.10.180.3416_1.0.86.4580">
 				<!--<path>data\ai\*</path>-->
 				<path>data\ai\turret.xml.cooked</path>
-				<!--<path>data\background\*</path>-->
+				<path>data\background\*</path>
 				<path>data\effects\*</path>
 				<path>data\lights\*</path>
 				<!--<path>data\materials\*</path>-->
@@ -150,7 +216,7 @@ TODO:
 				</entity>
 			</table>
 		</script>
-		<script type="optional">
+		<script type="disabled">
 			<title>Purchasable Retrainers</title>
 			<description>Enable retrainers to be purchased.</description>
 			<table id="treasure">
@@ -181,12 +247,12 @@ TODO:
 				</entity>
 			</table>
 		</script>
-		<script type="optional">
+		<script type="disabled">
 			<title>Remove Starting Skill</title>
 			<description>If you want the freedom to change the players first starting skill, select this option and you will be allocated a device in your inventory that will grant you one skill point. Note the in the latest Revival patch, the starting skills have already been modified to more desirable choices.
  * Guardian: Shield Bash (no change)
  * Blademaster: Sword of Reckoning (no change)
- * Engineer: Summon Drone
+ * Engineer: Construct Drone
  * Marksman: Fire Grenade
  * Evoker: Firestorm
  * Summoner: Summon Carnagore</description>
