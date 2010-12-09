@@ -13,7 +13,7 @@
 		</dependencies>
 		<description>Welcome to the amazing 1.5b beta release of Revival.
 
-This patch is far from complete, but is a milestone release in the Revival 1.5 beta branch. A new massive amount of content has been added, including Mythic and Doubled Edged item qualites, over 15 items from the Stonehenge and Abysss expansions and a wealth of cube recipes that can be used in conjuction with 'gambling' tokens, purchased from the gambling vendor in Holborn Station.
+This patch is far from complete, but is a milestone release in the Revival 1.5 beta branch. A new massive amount of content has been added, including Mythic and Doubled Edged item qualites, over 15 items from the Stonehenge and Abyss expansions and a wealth of cube recipes that can be used in conjuction with 'gambling' tokens, purchased from the gambling vendor in Holborn Station.
 
 As always with the beta releases, don't get too attached to your characters because things will change between updates that might make your characters incompatible. New changes from the 1.5a release are marked with a + and removed changes are marked with a -. Chances are I have forgotten a few changes, these will be noted on the forum as they are recalled.
 
@@ -28,9 +28,9 @@ Difficulty
 
 Players
 * - Players are no longer assigned a default skill. (1.5a dropped)
-* + Evoker, Summoner, Marksman and Engineer have had there starting skills changed.
+* + Evoker, Summoner, Marksman and Engineer have had their starting skills changed.
 	* Evoker: Firestorm
-	* Summoner: Summon Carngore
+	* Summoner: Summon Carngor
 	* Marksman: Fire Grenade
 	* Engineer: Construct Drone
 * - The initial skill is placed on the starter weapons. (1.5a dropped)
@@ -81,7 +81,7 @@ Items
 	* + Starburst
 * + Marksmans items added:
 	* + Core Magnum
-	* + Stringray
+	* + Stingray
 	* + Discombobulator
 	* + Thumper
 	* + Thunderclash
@@ -91,9 +91,9 @@ Items
 	* + Negatron
 	* + Singularity Node
 	* + Purification Ray
-	* + Munticle
+	* + Mutentacle
 * + All new items can not be purchased from a vendor and drop at only legendary or better qualities.
-* - 6x new unique items inspired by hellgateaus. (1.5a dropped) - These items require more though and planning sorry! Will be back in a future update.
+* - 6x new unique items inspired by hellgateaus. (1.5a dropped) - These items require more thought and planning sorry! Will be back in a future update.
 * Shield overload on Swords halved and capped at 100%.
 * Boss/Mutant items are now of unique quality.
 * Only unique retrainers can be bought and sold.
@@ -104,8 +104,8 @@ Interface
 
 Levels
 * Environment updates from the Abyss added.
-* Moloch spawns in Anchient Blood - 4/5 chance to spawn.
-* Passageways and Hellriffs are a lot rarer 1/10.
+* Moloch spawns in Ancient Blood - 4/5 chance to spawn.
+* Passageways and Hellrifts are a lot rarer 1/10.
 * Elite passageways champion spawn chance increased by 100%.
 * Treasure passageways contain 100% more treasure.
 * Monster density increased by 15%.
@@ -279,15 +279,23 @@ Known Issues
 					<attribute id="types2">305</attribute>
 				</entity>
 				<entity id="11"><!-- smallgrid -->
-					<attribute id="bitmask">536870948</attribute>
+					<attribute id="bitmask" bit="onesize">false</attribute>
+					<attribute id="bitmask" bit="grid">true</attribute>
+					<attribute id="bitmask" bit="autopickup">true</attribute>
+					<attribute id="bitmask" bit="disableCacheLocation">true</attribute>
 					<attribute id="types0">17</attribute>
 					<attribute id="types1">-74</attribute>					
 					<attribute id="height">24</attribute>
 				</entity>
 				<entity id="17"><!-- back -->
-					<attribute id="bitmask">536870948</attribute>
-					<attribute id="types0">17</attribute>
-					<attribute id="types1">-74</attribute>					
+					<attribute id="bitmask" bit="onesize">false</attribute>
+					<attribute id="bitmask" bit="grid">true</attribute>
+					<attribute id="bitmask" bit="wardrobe">false</attribute>
+					<attribute id="bitmask" bit="autopickup">true</attribute>
+					<attribute id="bitmask" bit="disableCacheLocation">true</attribute>
+					<attribute id="types0">16</attribute>
+					<attribute id="types1">-74</attribute>								
+					<attribute id="width">6</attribute>	
 					<attribute id="height">24</attribute>
 					<attribute id="filter">0</attribute>					
 					<attribute id="checkClass">0</attribute>
@@ -296,7 +304,12 @@ Known Issues
 					<attribute id="allowedHotkeySourceLocation">1</attribute>
 				</entity>
 				<entity id="18"><!-- trade -->
-					<attribute id="bitmask">271581188</attribute>
+					<attribute id="bitmask" bit="grid">true</attribute>
+					<attribute id="bitmask" bit="knownOnlyWhenStashOpen">true</attribute>
+					<attribute id="bitmask" bit="stashLocation">true</attribute>
+					<attribute id="bitmask" bit="cannotAcceptNoDropItems">false</attribute>
+					<attribute id="bitmask" bit="cannotAcceptNoTradeItems">false</attribute>
+					<attribute id="bitmask" bit="enableCacheLocation">true</attribute>
 					<attribute id="types0">17</attribute>
 					<attribute id="types1">-74</attribute>		
 					<attribute id="height">250</attribute>			
@@ -306,8 +319,11 @@ Known Issues
 				<entity id="26"><!-- stash -->				
 					<attribute id="height">250</attribute>
 				</entity>
-				<entity id="11"><!-- extra_stash -->
-					<attribute id="bitmask">271581188</attribute>
+				<entity id="53"><!-- extra_stash -->
+					<attribute id="bitmask" bit="grid">true</attribute>
+					<attribute id="bitmask" bit="knownOnlyWhenStashOpen">true</attribute>
+					<attribute id="bitmask" bit="stashLocation">true</attribute>
+					<attribute id="bitmask" bit="enableCacheLocation">true</attribute>
 					<attribute id="types0">16</attribute>
 					<attribute id="types1">-74</attribute>					
 					<attribute id="height">250</attribute>
