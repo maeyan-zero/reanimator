@@ -367,6 +367,8 @@ namespace Revival
             return true;
         }
 
+
+
         /// <summary>
         /// The basic root XML node.
         /// </summary>
@@ -418,6 +420,8 @@ namespace Revival
                 {
                     [XmlAttribute("type")]
                     public string Type { get; set; }
+                    [XmlAttribute("id")]
+                    public string ID { get; set; }
                     [XmlElement("title")]
                     public string Title { get; set; }
                     [XmlElement("description")]
@@ -426,6 +430,8 @@ namespace Revival
                     public Table[] Tables { get; set; }
                     [XmlElement("extract", typeof(Extract))]
                     public Extract Extraction { get; set; }
+                    [XmlElement("copy", typeof(Copy))]
+                    public Copy FileCopy { get; set; }
 
                     /// <summary>
                     /// Used for manipulating Excel tables.
@@ -467,6 +473,12 @@ namespace Revival
                         public string Source { get; set; }
                         [XmlAttribute("destination")]
                         public string Destination { get; set; }
+                        [XmlElement("path")]
+                        public string[] paths;
+                    }
+
+                    public class Copy
+                    {
                         [XmlElement("path")]
                         public string[] paths;
                     }

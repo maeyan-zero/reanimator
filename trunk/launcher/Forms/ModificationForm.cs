@@ -287,6 +287,10 @@ namespace Launcher.Forms
                 HellgateFileManager.LoadTableFiles();
 
 
+
+                string indexPath = Path.Combine(Config.HglDir, "data", RevivalMod.Data.Modifications.ID + "_125.idx");
+                IndexFile indexFile = new IndexFile() { FilePath = indexPath };
+
                 // Apply the scripts
                 List<string> modifiedTables = new List<string>();
                 foreach (Script script in scriptList)
@@ -309,12 +313,39 @@ namespace Launcher.Forms
                                 modifiedTables.Add(tableID);
                         }
                     }
+
+                    // Copy files if any
+                    if (String.IsNullOrEmpty(script.ID) == false)
+                    {
+                        string optionalPath = Path.Combine(path, "optional", script.ID);
+                        if (Directory.Exists(optionalPath) == false) continue;
+
+                        string[] fileList = Directory.GetFiles(optionalPath, "*", SearchOption.AllDirectories);
+                        if (fileList == null) continue;
+                        if (fileList.Length == 0) continue;
+
+                        foreach (string filePath in fileList)
+                        {
+                            string relativePath = filePath.Replace(optionalPath + "\\", "");
+                            string directory = Path.GetDirectoryName(relativePath) + "\\";
+                            string fileName = Path.GetFileName(relativePath);
+                            byte[] fbuffer = null;
+                            try
+                            {
+                                fbuffer = File.ReadAllBytes(filePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                ExceptionLogger.LogException(ex);
+                                continue;
+                            }
+                            indexFile.AddFile(directory, fileName, fbuffer);
+                        }
+                    }
                 }
 
                 // Repack the modified Tables.
                 // These go in their own idx/dat under the same name as the base modification with the string _125 appended.
-                string indexPath = Path.Combine(Config.HglDir, "data", RevivalMod.Data.Modifications.ID + "_125.idx");
-                IndexFile indexFile = new IndexFile() { FilePath = indexPath };
                 foreach (string tableID in modifiedTables)
                 {
                     DataFile dataTable = HellgateFileManager.DataFiles[tableID];
