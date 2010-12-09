@@ -269,5 +269,52 @@ Known Issues
 				</entity>
 			</table>
 		</script>
+		<script type="optional">
+			<title>Expanded Storage Mod</title>
+			<description>Inventory and stash now have 3 tabbed pages like merchants</description>
+			<table id="inventory">
+				<entity id="10"><!-- biggrid -->
+					<attribute id="types0">18</attribute>
+					<attribute id="types1">-74</attribute>					
+					<attribute id="types2">305</attribute>
+				</entity>
+				<entity id="11"><!-- smallgrid -->
+					<attribute id="bitmask">536870948</attribute>
+					<attribute id="types0">17</attribute>
+					<attribute id="types1">-74</attribute>					
+					<attribute id="height">24</attribute>
+				</entity>
+				<entity id="17"><!-- back -->
+					<attribute id="bitmask">536870948</attribute>
+					<attribute id="types0">17</attribute>
+					<attribute id="types1">-74</attribute>					
+					<attribute id="height">24</attribute>
+					<attribute id="filter">0</attribute>					
+					<attribute id="checkClass">0</attribute>
+					<attribute id="standardLocation">1</attribute>					
+					<attribute id="onPersonLocation">1</attribute>
+					<attribute id="allowedHotkeySourceLocation">1</attribute>
+				</entity>
+				<entity id="18"><!-- trade -->
+					<attribute id="bitmask">271581188</attribute>
+					<attribute id="types0">17</attribute>
+					<attribute id="types1">-74</attribute>		
+					<attribute id="height">250</attribute>			
+					<attribute id="tradeLocation">0</attribute>
+					<attribute id="returnStuckItemsToStandardLoc">0</attribute>
+				</entity>
+				<entity id="26"><!-- stash -->				
+					<attribute id="height">250</attribute>
+				</entity>
+				<entity id="11"><!-- extra_stash -->
+					<attribute id="bitmask">271581188</attribute>
+					<attribute id="types0">16</attribute>
+					<attribute id="types1">-74</attribute>					
+					<attribute id="height">250</attribute>
+					<attribute id="playerPutRestricted">0</attribute>					
+					<attribute id="playerTakeRestricted">0</attribute>
+				</entity>
+			</table>
+		</script>
 	</modification>
 </revival>
