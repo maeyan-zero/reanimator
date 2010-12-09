@@ -64,6 +64,10 @@ namespace Launcher.Forms
             {
                 Config.GameClientPath = Path.Combine(Config.HglDir, @"SP_x86\hellgate_sp_dx9_x86.exe");
             }
+            if (File.Exists(Config.GameClientPath) == false)
+            {
+                Config.GameClientPath = Path.Combine(Config.HglDir, @"SP_x64\hellgate_sp_dx9_x64.exe");
+            }
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -160,7 +164,7 @@ namespace Launcher.Forms
             else
             {
                 string errCaption = "File not found";
-                string errMessage = "The file {0} does not exist, please check the program options and try again.";
+                string errMessage = String.Format("The file {0} does not exist, please check the program options and try again.", Config.GameClientPath);
                 MessageBox.Show(errMessage, errCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
