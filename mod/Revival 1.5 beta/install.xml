@@ -332,5 +332,59 @@ Known Issues
 				</entity>
 			</table>
 		</script>
+		<script type="optional">
+			<title>Improved Sniper Rifle Accuracy 12</title>
+			<description>Improves sniper rifle accuracy by 12 percent. This is compatible with any of the increased fire rate mods, but not the other improved accuracy mods.</description>
+			<table id="items">
+				<entity id="393,396,397,398,399,400,401,402,424,425,426,427">
+					<attribute id="firingErrorMax">350</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
+			<title>Improved Sniper Rifle Accuracy 25</title>
+			<description>Improves sniper rifle accuracy by 25 percent. This is compatible with any of the increased fire rate mods, but not the other improved accuracy mods.</description>
+			<table id="items">
+				<entity id="393,396,397,398,399,400,401,402,424,425,426,427">
+					<attribute id="firingErrorMax">300</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
+			<title>Improved Sniper Rifle Accuracy 50</title>
+			<description>Improves sniper rifle accuracy by 50 percent. This is compatible with any of the increased fire rate mods, but not the other improved accuracy mods.</description>
+			<table id="items">
+				<entity id="393,396,397,398,399,400,401,402,424,425,426,427">
+					<attribute id="firingErrorMax">200</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
+			<title>Improved Sniper Rifle Fire Rate 34</title>
+			<description>Changes all sniper rifles rate of fire to 34. This is compatible with any of the improved accuracy mods, but not the other increase fire rate mods.</description>
+			<table id="items">
+				<entity id="393,396,397,398,399,400,401,402,424,425,426,427">
+					<attribute id="cdTicks">4571</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
+			<title>Improved Sniper Rifle Fire Rate 38</title>
+			<description>Changes all sniper rifles rate of fire to 38. This is compatible with any of the improved accuracy mods, but not the other increase fire rate mods.</description>
+			<table id="items">
+				<entity id="393,396,397,398,399,400,401,402,424,425,426,427">
+					<attribute id="cdTicks">4044</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
+			<title>Improved Sniper Rifle Fire Rate 46</title>
+			<description>Changes all sniper rifles rate of fire to 46. This is compatible with any of the improved accuracy mods, but not the other increase fire rate mods.</description>
+			<table id="items">
+				<entity id="393,396,397,398,399,400,401,402,424,425,426,427">
+					<attribute id="cdTicks">3413</attribute>
+				</entity>
+			</table>
+		</script>
 	</modification>
 </revival>
