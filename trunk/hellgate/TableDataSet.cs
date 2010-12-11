@@ -46,9 +46,18 @@ namespace Hellgate
             dataTable.PrimaryKey = new[] { indexColumn };
             outputAttributes.Add(null);
 
-            foreach (FieldInfo fieldInfo in dataType.GetFields())
+            foreach (FieldInfo fieldInfo in dataType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
                 OutputAttribute excelAttribute = ExcelFile.GetExcelOutputAttribute(fieldInfo);
+
+                // The only private field we add is the TableHeader
+                if (fieldInfo.IsPrivate)
+                {
+                    if (fieldInfo.FieldType != typeof(ExcelFile.TableHeader)) continue;
+                    outputAttributes.Add(null);
+                    dataTable.Columns.Add(fieldInfo.Name, typeof(string));
+                    continue;
+                }
 
                 if ((excelAttribute == null))
                 {
@@ -132,9 +141,19 @@ namespace Hellgate
             foreach (Object tableRow in excelFile.Rows)
             {
                 int col = 1;
-                foreach (FieldInfo fieldInfo in dataType.GetFields())
+                foreach (FieldInfo fieldInfo in dataType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                 {
+
                     Object value = fieldInfo.GetValue(tableRow);
+
+                    if (fieldInfo.IsPrivate)
+                    {
+
+                        if (fieldInfo.FieldType != typeof(ExcelFile.TableHeader)) continue;
+                        baseRow[col++] = FileTools.ObjectToStringGeneric(value, ",");
+                        continue;
+                    }
+
                     OutputAttribute excelOutputAttribute = outputAttributes[col];
 
                     if ((excelOutputAttribute == null))
@@ -301,8 +320,18 @@ namespace Hellgate
 
             col = 1;
             // regenerate relations
-            foreach (FieldInfo fieldInfo in type.GetFields())
+            foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
             {
+
+                if (fieldInfo.IsPrivate)
+                {
+                    if (fieldInfo.FieldType == typeof(ExcelFile.TableHeader))
+                    {
+                        col++;
+                    }
+                    continue;
+                }
+
                 OutputAttribute excelOutputAttribute =
                     ExcelFile.GetExcelOutputAttribute(fieldInfo);
 
@@ -346,7 +375,7 @@ namespace Hellgate
                     {
                         DataColumn dcParent = dt.Columns["Index"];
 
-                        string relatedColumn = dt.Columns[1].ColumnName;
+                        string relatedColumn = dt.Columns[2].ColumnName;
 
 
                         String relationName = excelFile.StringId + dcChild.ColumnName + ExcelFile.ColumnTypeKeys.IsTableIndex;
