@@ -157,20 +157,20 @@
             this.installToolStripMenuItem,
             this.revertToolStripMenuItem});
             this.modificationsToolStripMenuItem.Name = "modificationsToolStripMenuItem";
-            this.modificationsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.modificationsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.modificationsToolStripMenuItem.Text = "&Modifications";
             // 
             // installToolStripMenuItem
             // 
             this.installToolStripMenuItem.Name = "installToolStripMenuItem";
-            this.installToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.installToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.installToolStripMenuItem.Text = "&Install";
             this.installToolStripMenuItem.Click += new System.EventHandler(this.installToolStripMenuItem_Click);
             // 
             // revertToolStripMenuItem
             // 
             this.revertToolStripMenuItem.Name = "revertToolStripMenuItem";
-            this.revertToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.revertToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.revertToolStripMenuItem.Text = "&Revert";
             this.revertToolStripMenuItem.Click += new System.EventHandler(this.revertToolStripMenuItem_Click);
             // 
@@ -237,6 +237,7 @@
             this.Name = "Launcher";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hellgate: Revival Launcher";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Launcher_FormClosing);
             this.Load += new System.EventHandler(this.Launcher_Load);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();

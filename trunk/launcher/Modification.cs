@@ -137,6 +137,8 @@ namespace Revival
                     {
                         foreach (Script.Table.Entity.Attribute attribute in entity.Attributes)
                         {
+                            string whereColumn = String.Empty;
+                            string[] whereValue = null;
                             int step = 0;
                             int min = 1;
                             int max = 0;
@@ -187,6 +189,27 @@ namespace Revival
                                     }
                                 }
 
+                                //check for where condition
+                                if (attribute.Where != null)
+                                {
+                                    int equalsIndex = attribute.Where.IndexOf('=');
+                                    if (equalsIndex == -1)
+                                    {
+                                        Console.WriteLine("Bad syntax in where condition.");
+                                        return false;
+                                    }
+                                    whereColumn = attribute.Where.Substring(0, equalsIndex);
+                                    string whereValueString = attribute.Where.Substring(equalsIndex + 1, attribute.Where.Length - equalsIndex - 1);
+                                    if (whereValueString.Contains('|'))
+                                    {
+                                        whereValue = whereValueString.Split('|');
+                                    }
+                                    else
+                                    {
+                                        whereValue = new string[] { whereValueString };
+                                    }
+                                }
+
                                 //determine function
                                 if (attribute.Bit != null)
                                 {
@@ -225,8 +248,15 @@ namespace Revival
                                 {
                                     object obj = null;
                                     string col = attribute.ID;
-                                    Type type = dataTable.DataType.GetField(col).FieldType;//table.Columns[col].DataType;
+                                    Type type = dataTable.DataType.GetField(col).FieldType;
                                     Object currentValue = dataTable.DataType.GetField(col).GetValue(dataTable.Rows[row]);
+
+                                    if (String.IsNullOrEmpty(whereColumn) == false)
+                                    {
+                                        Type typeWhere = dataTable.DataType.GetField(whereColumn).FieldType;
+                                        Object currentValueWhere = dataTable.DataType.GetField(whereColumn).GetValue(dataTable.Rows[row]);
+                                        if (whereValue.Where(val => FileTools.StringToObject(val, typeWhere).Equals(currentValueWhere)).Any() == false) continue;
+                                    }
 
                                     switch (function)
                                     {
@@ -454,6 +484,8 @@ namespace Revival
                             {
                                 [XmlAttribute("id")]
                                 public string ID { get; set; }
+                                [XmlAttribute("where")]
+                                public string Where { get; set; }
                                 [XmlAttribute("operation")]
                                 public string Operation { get; set; }
                                 [XmlAttribute("bit")]

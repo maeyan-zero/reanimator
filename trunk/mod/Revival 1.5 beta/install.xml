@@ -355,6 +355,15 @@ Known Issues
 			</table>
 		</script>
 		<script type="optional">
+			<title>No Faction Requirements</title>
+			<description>Removes faction requirements from all weapons.</description>
+			<table id="items">
+				<entity id="*">
+					<attribute id="containerUnitType1" where="unitType=319|320|331|332|317|513|337|419|329|44|42|386|321|322|333|338|334|402|387|325">9</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
 			<title>Improved Sniper Rifle Accuracy 12</title>
 			<description>Improves sniper rifle accuracy by 12 percent. This is compatible with any of the increased fire rate mods, but not the other improved accuracy mods.</description>
 			<table id="items">
