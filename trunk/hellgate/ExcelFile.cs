@@ -23,9 +23,6 @@ namespace Hellgate
         private StringCollection _secondaryStrings;
         private List<ExcelScript> _rowScripts;
 
-        //public TypeMap ExcelMap { get; set; }
-        //public new UInt32 StructureId { get { return ExcelFileHeader.StructureID; } set { ExcelFileHeader.StructureID = value; } }
-
         private ExcelHeader _excelFileHeader = new ExcelHeader
         {
             Unknown321 = 0x01,
@@ -96,11 +93,12 @@ namespace Hellgate
             bool failedParsing = false;
             Rows = new List<Object>();
             const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo[] dataFields = DataType.GetFields(bindingFlags);
             for (int row = 0; row < tableRows.Count(); row++)
             {
                 int col = 0;
                 Object rowInstance = Activator.CreateInstance(DataType);
-                foreach (FieldInfo fieldInfo in DataType.GetFields(bindingFlags))
+                foreach (FieldInfo fieldInfo in dataFields)
                 {
                     // Initialize private fields 
                     if ((fieldInfo.IsPrivate))
@@ -380,6 +378,187 @@ namespace Hellgate
         /// <returns>True if the DataTable parsed okay.</returns>
         public override bool ParseDataTable(DataTable dataTable)
         {
+            if (dataTable == null) throw new ArgumentNullException();
+
+            byte[] newStringBuffer = null;
+            int newStringBufferOffset = 0;
+            byte[] newIntegerBuffer = null;
+            int newIntegerBufferOffset = 1;
+            byte[][] newExtendedBuffer = null;
+            StringCollection newSecondaryStrings = null;
+            List<object> newTable = new List<object>(); 
+
+            bool failedParsing = false;
+            const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            FieldInfo[] dataFields = DataType.GetFields(bindingFlags);
+
+            for (int row = 0; row < dataTable.Rows.Count; row++)
+            {
+                int col = 1; // Skip the indice column (column 0)
+                Object rowInstance = Activator.CreateInstance(DataType);
+                foreach (FieldInfo fieldInfo in dataFields)
+                {
+                    // Initialize private fields 
+                    if ((fieldInfo.IsPrivate))
+                    {
+                        if ((fieldInfo.FieldType == typeof(TableHeader)))
+                        {
+                            string headerString = (string)dataTable.Rows[row][col++];
+                            TableHeader tableHeader = (TableHeader)FileTools.StringToObject(headerString, ",", typeof(TableHeader));
+                            fieldInfo.SetValue(rowInstance, tableHeader);
+                            continue;
+                        }
+                        if ((fieldInfo.FieldType.BaseType == typeof(Array)))
+                        {
+                            MarshalAsAttribute marshal = (MarshalAsAttribute)fieldInfo.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                            Array arrayInstance = (Array)Activator.CreateInstance(fieldInfo.FieldType, marshal.SizeConst);
+                            fieldInfo.SetValue(rowInstance, arrayInstance);
+                            continue;
+                        }
+                        if ((fieldInfo.FieldType == typeof(String)))
+                        {
+                            fieldInfo.SetValue(rowInstance, String.Empty);
+                            continue;
+                        }
+                        continue;
+                    }
+
+                    // Public fields -> these are inside the datatable
+                    object value = dataTable.Rows[row][col++];
+                    OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
+                    if (attribute != null)
+                    {
+                        if (attribute.IsStringOffset)
+                        {
+                            if (newStringBuffer == null)
+                            {
+                                newStringBuffer = new byte[1024];
+                            }
+
+                            string strValue = value as string;
+                            if (strValue == null) return false;
+
+                            if (String.IsNullOrEmpty(strValue))
+                            {
+                                fieldInfo.SetValue(rowInstance, -1);
+                                continue;
+                            }
+
+                            fieldInfo.SetValue(rowInstance, newStringBufferOffset);
+                            FileTools.WriteToBuffer(ref newStringBuffer, ref newStringBufferOffset, FileTools.StringToASCIIByteArray(strValue));
+                            FileTools.WriteToBuffer(ref newStringBuffer, ref newStringBufferOffset, (byte)0x00);
+                            continue;
+                        }
+
+                        if ((attribute.IsIntOffset))
+                        {
+                            if ((newIntegerBuffer == null))
+                            {
+                                newIntegerBuffer = new byte[1024];
+                                newIntegerBuffer[0] = 0x00;
+                            }
+                            if ((value == "0"))
+                            {
+                                fieldInfo.SetValue(rowInstance, 0);
+                                continue;
+                            }
+
+                            string strValue = value as string;
+                            if (strValue == null) return false;
+
+                            strValue = strValue.Replace("\"", "");
+                            string[] splitValue = strValue.Split(',');
+                            int count = splitValue.Length;
+                            int[] intValue = new int[count];
+                            for (int i = 0; i < count; i++)
+                            {
+                                intValue[i] = int.Parse(splitValue[i]);
+                            }
+                            fieldInfo.SetValue(rowInstance, newIntegerBufferOffset);
+                            FileTools.WriteToBuffer(ref newIntegerBuffer, ref newIntegerBufferOffset, FileTools.IntArrayToByteArray(intValue));
+                            continue;
+                        }
+
+                        if ((attribute.IsSecondaryString))
+                        {
+                            if (newSecondaryStrings == null)
+                            {
+                                newSecondaryStrings = new StringCollection();
+                            }
+
+                            string strValue = value as string;
+                            if (strValue == null) return false;
+
+                            if (String.IsNullOrEmpty(strValue))
+                            {
+                                fieldInfo.SetValue(rowInstance, -1);
+                                continue;
+                            }
+                            if (newSecondaryStrings.Contains(strValue) == false)
+                            {
+                                newSecondaryStrings.Add(strValue);
+                            }
+                            fieldInfo.SetValue(rowInstance, newSecondaryStrings.IndexOf(strValue));
+                            continue;
+                        }
+
+                        if (attribute.IsStringIndex || attribute.IsTableIndex)
+                        {
+                            fieldInfo.SetValue(rowInstance, value);
+                            col++; // Skip lookup
+                            continue;
+                        }
+                    }
+
+                    try
+                    {
+                        fieldInfo.SetValue(rowInstance, dataTable.Rows[row][col++]);
+                    }
+                    catch (Exception e)
+                    {
+                        ExceptionLogger.LogException(e);
+                        Console.WriteLine("Critical Parsing Error: " + e.Message);
+                        failedParsing = true;
+                        break;
+                    }
+
+                }
+                if (failedParsing) break;
+
+                // For item types, items, missiles, monsters etc
+                // This must be a hex byte delimited array
+                if ((Attributes.HasExtended))
+                {
+                    if (newExtendedBuffer == null)
+                    {
+                        newExtendedBuffer = new byte[dataTable.Rows.Count][];
+                    }
+                    const char split = ',';
+                    string value = dataTable.Rows[row][col] as string;
+                    if (String.IsNullOrEmpty(value))
+                    {
+                        Console.WriteLine("Error parsing Extended property string.");
+                        return false;
+                    }
+                    string[] stringArray = value.Split(split);
+                    byte[] byteArray = new byte[stringArray.Length];
+                    for (int i = 0; i < byteArray.Length; i++)
+                    {
+                        byteArray[i] = Byte.Parse(stringArray[i], NumberStyles.HexNumber);
+                    }
+                    newExtendedBuffer[row] = byteArray;
+                }
+
+                Rows.Add(rowInstance);
+            }
+
+            // Parsing Complete, assign new references. These arn't assigned before now incase of a parsing error.
+            Rows = newTable;
+            _stringBuffer = newStringBuffer;
+            _integerBuffer = newIntegerBuffer;
+            _extendedBuffer = newExtendedBuffer;
+            _secondaryStrings = newSecondaryStrings;
+
             return true;
         }
 
