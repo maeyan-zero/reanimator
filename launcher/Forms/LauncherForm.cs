@@ -10,12 +10,16 @@ using Hellgate;
 using Revival;
 using Ionic.Zip;
 using FileEntry = Hellgate.IndexFile.FileEntry;
+using System.Threading;
+using System.Globalization;
 
 namespace Launcher.Forms
 {
     public partial class Launcher : Form
     {
         FileManager HellgateFileManager { get; set; }
+        FileStream fileStream { get; set; } // Console loggin
+        StreamWriter streamWriter { get; set; }
 
         public Launcher()
         {
@@ -24,16 +28,13 @@ namespace Launcher.Forms
 
         private void Launcher_Load(object sender, EventArgs e)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             CheckEnvironment();
-#if !DEBUG
             StartConsoleLogging();
-#endif
         }
 
         private void StartConsoleLogging()
         {
-            FileStream fileStream;
-            StreamWriter streamWriter;
             try
             {
                 fileStream = new FileStream("./output.txt", FileMode.OpenOrCreate, FileAccess.Write);
@@ -45,6 +46,12 @@ namespace Launcher.Forms
                 return;
             }
             Console.SetOut(streamWriter);
+        }
+
+        private void EndConsoleLogging()
+        {
+            streamWriter.Close();
+            fileStream.Close();
         }
 
         private void CheckEnvironment()
@@ -280,16 +287,9 @@ namespace Launcher.Forms
             MessageBox.Show(revertMsg, captionMsg, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void bw_DoWorkDeepClean(object sender, DoWorkEventArgs e)
+        private void Launcher_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Delete useless MP exes
-
-            // Delete data_common dir
-
-            // Delete Reanimator dir
-
-            // Delete crap inside data directory
-
+            EndConsoleLogging();
         }
     }
 }
