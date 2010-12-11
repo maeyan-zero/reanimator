@@ -228,9 +228,19 @@ Known Issues
 			<description>Enable retrainers to be purchased.</description>
 			<table id="treasure">
 				<entity id="63"><!--bodger-->
-					<attribute id="item7m">3</attribute>
-					<attribute id="item7">556</attribute>
-					<attribute id="value7">1</attribute>
+					<!-- the excessive number of attributes is because we want to override the ordering. -->
+					<attribute id="item4m">3</attribute>
+					<attribute id="item4">556</attribute><!-- Retrainer class -->
+					<attribute id="value4">1</attribute>
+					<attribute id="item5m">3</attribute>
+					<attribute id="item5">71</attribute>
+					<attribute id="value5">1</attribute>
+					<attribute id="item6m">1</attribute>
+					<attribute id="item6">3</attribute>
+					<attribute id="value6">72</attribute>
+					<attribute id="item7m">1</attribute>
+					<attribute id="item7">202</attribute><!-- Consumable unittypes -->
+					<attribute id="value7">12</attribute>
 				</entity>
 			</table>
 		</script>
@@ -251,6 +261,18 @@ Known Issues
 				<entity id="2,3,4,5,6,10,11,12,13,14,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,247,248,249,250,251">
 					<attribute id="bitmask03" bit="autoPickup">true</attribute>
 					<attribute id="autoPickupDistance">4</attribute>
+				</entity>
+			</table>
+		</script>
+		<script type="optional">
+			<title>Enable Fawkes Event</title>
+			<description>Permenantly enables the Fawkes Event throughout the year.</description>
+			<table id="global_themes">
+				<entity id="0"><!-- guy_fawkes -->
+					<attribute id="startMonth">1</attribute>
+					<attribute id="startDay">1</attribute>
+					<attribute id="endMonth">12</attribute>
+					<attribute id="endDay">31</attribute>
 				</entity>
 			</table>
 		</script>
