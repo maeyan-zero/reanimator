@@ -493,13 +493,11 @@ namespace Reanimator.Forms
 
         private void ImportButton_Click(object sender, EventArgs e)
         {
-            OpenFileDialog fileDialog = new OpenFileDialog()
-            {
-                InitialDirectory = Config.ScriptDir
-            };
-
+            OpenFileDialog fileDialog = new OpenFileDialog() { InitialDirectory = Config.LastDirectory };
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
+                Config.LastDirectory = Path.GetDirectoryName(fileDialog.FileName);
+
                 byte[] buffer = null;
                 try
                 {
@@ -510,166 +508,55 @@ namespace Reanimator.Forms
                     MessageBox.Show("There was a problem opening the file. Make sure the file isn't locked by another program (like Excel)");
                     return;
                 }
-                _dataTable.Clear();
-                _dataTable.Columns[0].AutoIncrementStep = -1;
-                _dataTable.Columns[0].AutoIncrementSeed = -1;
-                _dataTable.Columns[0].AutoIncrementStep = 1;
-                _dataTable.Columns[0].AutoIncrementSeed = 0;
 
-
-                if (CSVtoDataTable(buffer, _dataTable))
+                if (_excelFile.ParseCSV(buffer) == true)
                 {
-                    MessageBox.Show("Import okay!");
+                    _dataTable = _fileManager.LoadTable(_excelFile, true);
+                    tableData_DataGridView.DataSource = _dataTable;
+                    tableData_DataGridView.Refresh();
                 }
                 else
                 {
                     MessageBox.Show("Error importing this table. Make sure the table has the correct number of columns and the correct data. If you have a string where a number is expected, the import will not work.");
+                    return;
                 }
             }
-        }
-
-        /// <summary>
-        /// Reads the source array in the column sequence of the destination datatable.
-        /// </summary>
-        /// <param name="source">The array of the CSV data.</param>
-        /// <param name="destination">The datatable it is being loaded into.</param>
-        /// <returns></returns>
-        public static bool CSVtoDataTable(byte[] source, DataTable destination)
-        {
-            if (source == null) return false;
-            if (destination == null) return false;
-            if (source.Length == 0) return false;
-
-            int offset = 0;
-            int length = source.Length;
-            bool ignoreFirstRow = true;
-            byte deliminter = (byte)'\t';
-            DataRow dataRow;
-            Type dataType;
-            int column = 0;
-
-            if (ignoreFirstRow)
-            {
-                while (offset < length)
-                {
-                    if (source[offset++] == (byte)0x0A)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            dataRow = destination.NewRow();
-
-            while (!(offset >= length))
-            {
-                foreach (DataColumn dataColumn in destination.Columns)
-                {
-                    if (dataColumn.ColumnName == "Index")
-                    {
-                        column++;
-                        continue;
-                    }
-                    if (dataColumn.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated))
-                    {
-                        column++;
-                        continue;
-                    }
-
-                    if (offset == length) break;
-
-                    dataType = dataColumn.DataType;
-                    byte[] newStringBuffer = FileTools.GetDelimintedByteArray(source, ref offset, deliminter);
-                    string newString = newStringBuffer == null ? String.Empty : System.Text.Encoding.ASCII.GetString(newStringBuffer);
-
-                    try
-                    {
-                        if (dataType.BaseType == typeof(Enum))
-                        {
-                            dataType = typeof(UInt32);
-                        }
-
-                        if (dataType == typeof(String)) //hellgate thing only
-                        {
-                            newString = newString.Replace("\\\\n", "\n");
-                            newString = newString.Replace("\"", "");
-                            dataRow[column] = newString;
-                        }
-                        else if (dataType == typeof(Int32))
-                        {
-                            dataRow[column] = Int32.Parse(newString);
-                        }
-                        else if (dataType == typeof(UInt32))
-                        {
-                            dataRow[column] = UInt32.Parse(newString);
-                        }
-                        else if (dataType == typeof(Single))
-                        {
-                            dataRow[column] = Single.Parse(newString);
-                        }
-                        else if (dataType == typeof(byte))
-                        {
-                            dataRow[column] = Byte.Parse(newString);
-                        }
-                        else if (dataType == typeof(Int64))
-                        {
-                            dataRow[column] = Int64.Parse(newString);
-                        }
-                        else if (dataType == typeof(UInt64))
-                        {
-                            dataRow[column] = UInt64.Parse(newString);
-                        }
-                        else if (dataType == typeof(short))
-                        {
-                            dataRow[column] = short.Parse(newString);
-                        }
-                    }
-                    catch
-                    {
-                        // bad data type
-                    }
-                    column++;
-                }
-
-                column = 0;
-                destination.Rows.Add(dataRow);
-                dataRow = destination.NewRow();
-            }
-
-            return true;
         }
 
         private void ExportButton_Click(object sender, EventArgs e)
         {
-            try
+            if (_excelFile.ParseDataTable(_dataTable) == true)
             {
-                // ensure we're trying to export from a valid form
-                ExcelTableForm excelTable = this;
-                if (excelTable == null) return;
-
-                // what columns do we want to export?
-                CSVSelection select = new CSVSelection(_dataTable);
-                if (select.ShowDialog(this) != DialogResult.OK) return;
-
-                // compiles the CSV string
-                string strValue = Export.CSV(_dataTable, select.Selected, '\t');
+                byte[] buffer = _excelFile.ExportCSV();
+                if (buffer == null)
+                {
+                    MessageBox.Show("Error exporting CSV. Contact developer");
+                    return;
+                }
 
                 // prompts the user to choose where to save the file
                 SaveFileDialog saveFileDialog = new SaveFileDialog
                 {
-                    Filter = "Text Tables (*.txt)|*.txt|All Tables (*.*)|*.*",
+                    Filter = "Text Tables|*.txt",
                     InitialDirectory = Config.ScriptDir,
                     FileName = _dataFile.FileName
                 };
                 if (saveFileDialog.ShowDialog(this) != DialogResult.OK) return;
 
-                // done
-                File.WriteAllText(saveFileDialog.FileName, strValue);
+                try
+                {
+                    File.WriteAllBytes(saveFileDialog.FileName, buffer);
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLogger.LogException(ex, false);
+                    return;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Export of this form not supported at this time or unknown error!\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                ExceptionLogger.LogException(ex, "_ExportCSVToolStripMenuItem_Click", false);
+                MessageBox.Show("Error parsing dataTable. Contact developer.");
+                return;
             }
         }
     }

@@ -457,14 +457,15 @@ namespace Hellgate
                                 newIntegerBuffer = new byte[1024];
                                 newIntegerBuffer[0] = 0x00;
                             }
-                            if ((value == "0"))
+
+                            string strValue = value as string;
+                            if (strValue == null) return false;
+
+                            if (strValue == "0" || String.IsNullOrEmpty(strValue))
                             {
                                 fieldInfo.SetValue(rowInstance, 0);
                                 continue;
                             }
-
-                            string strValue = value as string;
-                            if (strValue == null) return false;
 
                             strValue = strValue.Replace("\"", "");
                             string[] splitValue = strValue.Split(',');
@@ -512,7 +513,7 @@ namespace Hellgate
 
                     try
                     {
-                        fieldInfo.SetValue(rowInstance, dataTable.Rows[row][col++]);
+                        fieldInfo.SetValue(rowInstance, value);
                     }
                     catch (Exception e)
                     {
@@ -549,7 +550,7 @@ namespace Hellgate
                     newExtendedBuffer[row] = byteArray;
                 }
 
-                Rows.Add(rowInstance);
+                newTable.Add(rowInstance);
             }
 
             // Parsing Complete, assign new references. These arn't assigned before now incase of a parsing error.
