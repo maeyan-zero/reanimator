@@ -283,7 +283,7 @@ namespace Reanimator.Forms
 
                 caption = "Installation Error";
                 message = "You must have Hellgate: London installed and the directory set to use Reanimator.";
-                installResult =  MessageBox.Show(message, caption, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                installResult = MessageBox.Show(message, caption, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
             }
             while (installResult == DialogResult.Retry);
 
@@ -295,7 +295,7 @@ namespace Reanimator.Forms
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 InitialDirectory = (!(String.IsNullOrEmpty(Config.LastDirectory))) ? Config.LastDirectory : Config.HglDataDir,
-                Filter = "Hellgate London Files (*.*)|*.idx;*.txt.cooked;*.xls.uni.cooked;*.xml.cooked;*.hg1|" + 
+                Filter = "Hellgate London Files (*.*)|*.idx;*.txt.cooked;*.xls.uni.cooked;*.xml.cooked;*.hg1|" +
                          "Index Files|*.idx|" +
                          "Excel Files|*.txt.cooked|" +
                          "String Files|*.xls.uni.cooked|" +
@@ -714,29 +714,24 @@ namespace Reanimator.Forms
                 Show();
                 Refresh();
 
-
                 if (CheckInstallation())
                 {
-                    _fileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
-                    if (!_fileManager.LoadTableFiles())
+                    ProgressForm progressForm = new ProgressForm(_DoLoading, null);
+                    progressForm.SetStyle(ProgressBarStyle.Marquee);
+                    progressForm.SetLoadingText("Initializing Reanimator subsystems...");
+                    progressForm.Disposed += delegate
                     {
-                        MessageBox.Show("Failed to load excel files!", "Excel Table Error", MessageBoxButtons.OK,
-                                        MessageBoxIcon.Error);
-                    }
-                    _fileExplorer = new FileExplorer(_fileManager) { MdiParent = this };
-                    _fileExplorer.Show();
+                        _fileExplorer.MdiParent = this;
+                        _fileExplorer.Show();
 
-                    _tablesLoaded = new TablesLoaded(_fileManager)
-                    {
-                        MdiParent = this,
-                        Bounds = new Rectangle(_fileExplorer.Size.Width + 10, 0, 300, 350),
-                        Text = "Hellgate Tables Loaded [" + _fileManager.DataFiles.Count + "]"
+                        _tablesLoaded.MdiParent = this;
+                        _tablesLoaded.Bounds = new Rectangle(_fileExplorer.Size.Width + 10, 0, 300, 350);
+                        _tablesLoaded.Text = "Hellgate Tables Loaded [" + _fileManager.DataFiles.Count + "]";
+                        _tablesLoaded.Show();
+
+                        XmlCookedFile.Initialize(_fileManager);
                     };
-                    _tablesLoaded.Show();
-
-
-
-                    XmlCookedFile.Initialize(_fileManager);
+                    progressForm.Show(this);
                 }
             }
             catch (Exception ex)
@@ -744,6 +739,25 @@ namespace Reanimator.Forms
                 ExceptionLogger.LogException(ex, "Reanimator_Load", false);
                 MessageBox.Show(ex.Message, "Reanimator_Load");
             }
+        }
+
+        private void _DoLoading(ProgressForm progressForm, Object var)
+        {
+            progressForm.SetCurrentItemText("Loading File Manager...");
+            _fileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
+
+            progressForm.SetCurrentItemText("Loading Excel Tables...");
+            if (!_fileManager.LoadTableFiles())
+            {
+                MessageBox.Show("Failed to load excel files!", "Excel Table Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+
+            progressForm.SetCurrentItemText("Loading File Explorer...");
+            _fileExplorer = new FileExplorer(_fileManager);
+
+            progressForm.SetCurrentItemText("Loading Table View...");
+            _tablesLoaded = new TablesLoaded(_fileManager);
         }
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)
@@ -920,28 +934,28 @@ namespace Reanimator.Forms
 
         private void _SaveSinglePlayerFiles(ProgressForm progress, object obj)
         {
-        //    string savePath = (string)obj;
+            //    string savePath = (string)obj;
 
-        //    foreach (DataTable spDataTable in _tableDataSet.XlsDataSet.Tables)
-        //    {
-        //        if (spDataTable.TableName.Contains("_TCv4_")) continue;
-        //        if (spDataTable.TableName.Contains("Strings_")) continue;
+            //    foreach (DataTable spDataTable in _tableDataSet.XlsDataSet.Tables)
+            //    {
+            //        if (spDataTable.TableName.Contains("_TCv4_")) continue;
+            //        if (spDataTable.TableName.Contains("Strings_")) continue;
 
-        //        progress.SetCurrentItemText("Current table... " + spDataTable.TableName);
+            //        progress.SetCurrentItemText("Current table... " + spDataTable.TableName);
 
-        //        ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spDataTable.TableName);
+            //        ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spDataTable.TableName);
 
-        //        byte[] buffer = spExcelFile.GenerateFile(spDataTable);
-        //        string path = Path.Combine(savePath, spExcelFile.FilePath);
-        //        string filename = spExcelFile.FileName + "." + spExcelFile.FileExtension;
+            //        byte[] buffer = spExcelFile.GenerateFile(spDataTable);
+            //        string path = Path.Combine(savePath, spExcelFile.FilePath);
+            //        string filename = spExcelFile.FileName + "." + spExcelFile.FileExtension;
 
-        //        if (!Directory.Exists(path))
-        //        {
-        //            Directory.CreateDirectory(path);
-        //        }
+            //        if (!Directory.Exists(path))
+            //        {
+            //            Directory.CreateDirectory(path);
+            //        }
 
-        //        File.WriteAllBytes(path + filename, buffer);
-        //    }
+            //        File.WriteAllBytes(path + filename, buffer);
+            //    }
         }
 
         //private void _ConvertTestCenterFiles(ProgressForm progress, object obj)
