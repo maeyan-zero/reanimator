@@ -94,6 +94,8 @@ namespace Hellgate
             Rows = new List<Object>();
             const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             FieldInfo[] dataFields = DataType.GetFields(bindingFlags);
+            bool needOutputAttributes = true;
+            OutputAttribute[] outputAttributes = new OutputAttribute[dataFields.Length];
             for (int row = 0; row < tableRows.Count(); row++)
             {
                 int col = 0;
@@ -127,8 +129,9 @@ namespace Hellgate
 
                     // Parse public fields
                     // All public fields must be inside the CSV
+                    if (needOutputAttributes) outputAttributes[col] = GetExcelOutputAttribute(fieldInfo);
+                    OutputAttribute attribute = outputAttributes[col];
                     string value = tableRows[row][col++];
-                    OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
                     if (attribute != null)
                     {
                         if (attribute.IsStringOffset)
@@ -215,6 +218,7 @@ namespace Hellgate
 
                 }
                 if (failedParsing) break;
+                needOutputAttributes = false;
 
                 // For item types, items, missiles, monsters etc
                 // This must be a hex byte delimited array
