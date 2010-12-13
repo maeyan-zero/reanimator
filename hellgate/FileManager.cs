@@ -67,7 +67,7 @@ namespace Hellgate
             }
             if (idxPaths.Count == 0)
             {
-                Console.WriteLine("Error: No index files found at parth: " + HellgateDataPath);
+                Console.WriteLine("Error: No index files found at path: " + HellgateDataPath);
                 return false;
             }
 
@@ -209,7 +209,15 @@ namespace Hellgate
                     Console.WriteLine(String.Format("Error: StringId is null. {0} was not indexed.", fileEntry.FileNameString));
                     continue;
                 }
-                DataFiles.Add(dataFile.StringId, dataFile);
+
+                try
+                {
+                    DataFiles.Add(dataFile.StringId, dataFile);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Critical Error: Cannot add table data file to dictionary: " + dataFile + "\n" + e);
+                }
             }
 
             EndAllDatAccess();
