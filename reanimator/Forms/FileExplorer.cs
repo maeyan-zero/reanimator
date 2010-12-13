@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -14,6 +13,7 @@ namespace Reanimator.Forms
     public partial class FileExplorer : Form
     {
         private readonly FileManager _fileManager;
+        private TreeView _clonedTreeView;
 
         /// <summary>
         /// Main constructor. Initialises the file tree system from a valid FileManager.
@@ -251,7 +251,7 @@ namespace Reanimator.Forms
         }
 
         /// <summary>
-        /// Event Function for "Extract to..." Button -  Click.
+        /// Event Function for "Extract to..." Button - Click.
         /// Checks and extracts files to prompted location.
         /// </summary>
         /// <param name="sender">The button clicked.</param>
@@ -632,7 +632,7 @@ namespace Reanimator.Forms
         }
 
         /// <summary>
-        /// 
+        /// Function to recursivly check the checked node children.
         /// </summary>
         /// <param name="sender">The TreeView clicked.</param>
         /// <param name="e">The After Check event args.</param>
@@ -659,87 +659,77 @@ namespace Reanimator.Forms
             _files_fileTreeView.AfterCheck += _FilesTreeView_AfterCheck;
         }
 
-        // todo: finish me
+        /// <summary>
+        /// Event function to apply a filter to the TreeView for button "Apply"-filter.
+        /// </summary>
+        /// <param name="sender">The Button clicked.</param>
+        /// <param name="e">The ButtonClick event args.</param>
         private void _FilterApplyButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("todo");
-            //_DoApplyFilter();
+            String filterText = filter_textBox.Text;
+            if (String.IsNullOrEmpty(filterText)) return;
 
-            //byte[] asdf = GetFileBytes(@"data\ai\carnagorpet.xml.cooked", true);
+
+            // if "reset"
+            if (filterText == "*.*")
+            {
+                _ResetFilter();
+                return;
+            }
+
+
+            // clone tree for filtering
+            if (_clonedTreeView == null)
+            {
+                _clonedTreeView = new TreeView();
+                foreach (TreeNode treeNode in _files_fileTreeView.Nodes)
+                {
+                    _clonedTreeView.Nodes.Add((TreeNode)treeNode.Clone());
+                }
+            }
+            else // if not null, then we need to "reset" the current view to original
+            {
+                _files_fileTreeView.Nodes.Clear();
+                foreach (TreeNode treeNode in _clonedTreeView.Nodes)
+                {
+                    _files_fileTreeView.Nodes.Add((TreeNode)treeNode.Clone());
+                }
+            }
+
+
+            // apply filter
+            _files_fileTreeView.BeginUpdate();
+            int nodeCount = _files_fileTreeView.Nodes.Count;
+            for (int i = 0; i < nodeCount; i++)
+            {
+                if (!_ApplyFilter(_files_fileTreeView.Nodes[i], filterText)) continue;
+
+                i--;
+                nodeCount--;
+            }
+
+            // some aesthetics
+            foreach (TreeNode treeNode in _files_fileTreeView.Nodes)
+            {
+                if (treeNode.Index == 0)
+                {
+                    _files_fileTreeView.SelectedNode = treeNode;
+                }
+
+                treeNode.Expand();
+            }
+            _files_fileTreeView.EndUpdate();
         }
 
-        // todo: finish me
+        /// <summary>
+        /// Event Function for "Reset"-filter Button - Click.
+        /// Calls ResetFilter() function to reset the TreeView filter.
+        /// </summary>
+        /// <param name="sender">The Button clicked.</param>
+        /// <param name="e">The ButtonClick event args.</param>
         private void _FilterResetButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("todo");
-            //filter_textBox.Text = "*.*";
-            //_DoApplyFilter();
-
-
-            //// ignore me - alex's testing stuffs ////
-
-            //byte[] asdf = GetFileBytes(@"data\excel\strings\english\strings_affix.xls.uni.cooked", true);
-
-
-            //Index idx = _indexFiles.FirstOrDefault(i => i.FileNameWithoutExtension == "hellgate000");
-            //Index idx = _indexFiles.FirstOrDefault(i => i.FileNameWithoutExtension == ReanimatorIndex);
-            //Debug.Assert(idx != null);
-            //byte[] data = idx.GenerateIndexFile();
-            //File.WriteAllBytes(idx.FilePath + ".decrypt", data);
-            //Crypt.Encrypt(data);
-            //File.WriteAllBytes(idx.FilePath, data);
-
-
-
-
-            //idx = _indexFiles.FirstOrDefault(i => i.FileNameWithoutExtension == "sp_hellgate_1.10.180.3416_1.18074.70.4256");
-            //Debug.Assert(idx != null);
-            //data = idx.GenerateIndexFile();
-            //File.WriteAllBytes(idx.FilePath + ".decrypt", data);
-            //Crypt.Encrypt(data);
-            //File.WriteAllBytes(idx.FilePath, data);
-        }
-
-        // todo: finish me
-        //TreeView filteredTreeView = new TreeView();
-        //List<TreeNode> filterNodes = new List<TreeNode>();
-        private void _DoApplyFilter()
-        {
-            // String filterText = ".*heal.*";
-            // if (String.IsNullOrEmpty(filterText)) return;
-
-            // foreach (TreeNode treeNode in files_treeView.Nodes)
-            // {
-            //     _ApplyFilter(treeNode, filterText);
-            // }
-
-            // if (filterNodes.Count <= 0) return;
-
-            // ////files_treeView.BeginUpdate();
-            // //foreach (TreeNode removeNode in filterNodes)
-            // //{
-            // //    removeNode.Remove();
-            // //}
-            //// files_treeView.EndUpdate();
-        }
-
-        // todo: finish me
-        private void _ApplyFilter(TreeNode treeNode, String filterText)
-        {
-            //NodeObject nodeObject = (NodeObject) treeNode.Tag;
-            //if (nodeObject.IsFolder)
-            //{
-            //    foreach (TreeNode childNode in treeNode.Nodes)
-            //    {
-            //        _ApplyFilter(childNode, filterText);
-            //    }
-
-            //    return;
-            //}
-
-            //if (!Regex.IsMatch(treeNode.Text, filterText)) return;
-
-            ////filterNodes.Add(treeNode);
+            _ResetFilter();
         }
 
         /// <summary>

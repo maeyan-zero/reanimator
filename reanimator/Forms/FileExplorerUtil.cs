@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Hellgate;
 using Reanimator.Properties;
@@ -111,19 +112,8 @@ namespace Reanimator.Forms
                 // need to have canEdit check before we update the node below or it'll be false for newer versions);
                 if (fileEntry.FileNameString.EndsWith(XmlCookedFile.FileExtention))
                 {
-                    // we can't edit all .xml.cooked yet...
-                    if (nodeKeys.Contains("skills") ||
-                        nodeKeys.Contains("ai") ||
-                        (nodeKeys.Contains("states") && !nodeKeys.Contains("particles")) ||
-                        nodeKeys.Contains("effects") ||
-                        (nodeKeys.Contains("background") &&
-                         (fileEntry.FileNameString.Contains("layout")
-                        /* todo: not parsing 100% || currFile.FileNameString.Contains("path")*/)) ||
-                        (nodeKeys.Contains("materials") && !nodeKeys.Contains("textures")))
-                    {
-                        nodeObject.CanEdit = true;
-                        nodeObject.CanCookWith = true;
-                    }
+                    nodeObject.CanEdit = true;
+                    nodeObject.CanCookWith = true;
                 }
                 else if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention) ||
                          fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) ||
@@ -479,5 +469,78 @@ namespace Reanimator.Forms
             return true;
         }
 
+        /// <summary>
+        /// Recursivly compares and removes nodes not satisfying the filter text.
+        /// </summary>
+        /// <param name="treeNode">The tree node and siblings to recursivly check.</param>
+        /// <param name="filterText">The text to compare the node text to.</param>
+        /// <returns>True if the node was removed from tree, false otherwise.</returns>
+        private static bool _ApplyFilter(TreeNode treeNode, String filterText)
+        {
+            NodeObject nodeObject = (NodeObject)treeNode.Tag;
+            if (nodeObject.IsFolder)
+            {
+                int nodeCount = treeNode.Nodes.Count;
+                for (int i = 0; i < nodeCount; i++)
+                {
+                    if (!_ApplyFilter(treeNode.Nodes[i], filterText)) continue;
+
+                    i--;
+                    nodeCount--;
+                }
+
+                if (treeNode.Nodes.Count != 0) return false;
+
+                treeNode.Remove();
+                return true;
+            }
+
+            if (PathMatchSpec(treeNode.Text, filterText)) return false;
+
+            treeNode.Remove();
+            return true;
+        }
+
+        /// <summary>
+        /// Escapes any path special characters and performs a Regex match against the compare string to the supplied filter string.
+        /// </summary>
+        /// <param name="compare">The string to be checked.</param>
+        /// <param name="filter">The filter string to use to compare.</param>
+        /// <returns>True if the path contains the filter text.</returns>
+        private static bool PathMatchSpec(String compare, String filter)
+        {
+            String specAsRegex = Regex.Escape(filter).Replace("\\*", ".*").Replace("\\?", ".") + "$";
+            return Regex.IsMatch(compare, specAsRegex);
+        }
+
+        /// <summary>
+        /// Resets the TreeView filter.
+        /// </summary>
+        private void _ResetFilter()
+        {
+            // make sure we even have a filter
+            if (_clonedTreeView == null) return;
+
+            // clear current tree and clone original nodes back
+            _files_fileTreeView.BeginUpdate();
+            _files_fileTreeView.Nodes.Clear();
+            foreach (TreeNode treeNode in _clonedTreeView.Nodes)
+            {
+                _files_fileTreeView.Nodes.Add((TreeNode)treeNode.Clone());
+
+                // some aesthetics
+                int nodeIndex = _files_fileTreeView.Nodes.Count - 1;
+                if (nodeIndex == 0)
+                {
+                    _files_fileTreeView.SelectedNode = _files_fileTreeView.Nodes[0];
+                }
+                _files_fileTreeView.Nodes[nodeIndex].Expand();
+            }
+            _files_fileTreeView.EndUpdate();
+
+            // remove cloned tree - we no longer have a filter
+            _clonedTreeView.Dispose();
+            _clonedTreeView = null;
+        }
     }
 }
