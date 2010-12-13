@@ -11,12 +11,13 @@ namespace Revival
 {
     public static class Hellpack
     {
-        static string defaultDat = "sp_hellgate_1337";
-        static string searchPattern = "*{0}";
-        static string welcomeMsg = "Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2010\nhttp://www.hellgateaus.net";
-        static string noPathsMsg = "Sorry, no data paths were found. Check error.xml for details.";
-        static string badSyntaxMsg = "Incorrect argument given: {0}";
-        static string usageMsg = "Usage: todo";
+        static string _defaultDat = "sp_hellgate_1337";
+        const string SearchPattern = "*{0}";
+        const string WelcomeMsg = "Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2010\nhttp://www.hellgateaus.net";
+        const string NoPathsMsg = "Sorry, no data paths were found. Check error.xml for details.";
+        const string BadSyntaxMsg = "Incorrect argument given: {0}";
+        const string UsageMsg = "Usage: todo";
+        const string HellgatePath = @"D:\Program Files\Flagship Studios\Hellgate London";
 
         static void Main(string[] args)
         {
@@ -24,7 +25,6 @@ namespace Revival
             string currentDir = Directory.GetCurrentDirectory();
             string dataDir = Path.Combine(currentDir, Hellgate.Common.DataPath);
             string dataCommonDir = Path.Combine(currentDir, Hellgate.Common.DataCommonPath);
-            string hellgatePath = @"D:\Program Files\Flagship Studios\Hellgate London";
 
             bool doCookTxt = false;
             bool doCookXml = false;
@@ -69,13 +69,15 @@ namespace Revival
                 //}
 
 
-
-                //const String pathExcel = @"data\excel\affixes.txt";
-                //byte[] excelBytes = File.ReadAllBytes(pathExcel);
-                //ExcelFile excelFile = new ExcelFile(excelBytes, pathExcel);
-                //byte[] excelCsvBytes = excelFile.ExportCSV();
-
-
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                const String pathExcel = @"data\excel\items.txt";
+                byte[] excelBytes = File.ReadAllBytes(pathExcel);
+                ExcelFile excelFile = new ExcelFile(excelBytes, pathExcel);
+                byte[] excelCsvBytes = excelFile.ToByteArray();
+                stopwatch.Stop();
+                Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
+                
 
                 //const String path = @"data\excel\strings\english\strings_revival.xls.uni2";
                 //byte[] cookedBytes = File.ReadAllBytes(path);
@@ -102,11 +104,11 @@ namespace Revival
                 //    CookStringFiles(stringFilesToCook.ToArray());
                 //}
 
-                //return;
+                return;
             }
             #endregion
 
-            Console.WriteLine(welcomeMsg);
+            Console.WriteLine(WelcomeMsg);
             Console.WriteLine(String.Empty);
 
             if (args.Length == 0)
@@ -142,12 +144,12 @@ namespace Revival
                         default:
                             if (arg.StartsWith("/p:"))
                             {
-                                defaultDat = arg.Replace("/p:", "");
+                                _defaultDat = arg.Replace("/p:", "");
                                 // Trim in case someone has appended the extention
-                                if (defaultDat.EndsWith(".idx"))
-                                    defaultDat = defaultDat.Replace(".idx", "");
-                                if (defaultDat.EndsWith(".dat"))
-                                    defaultDat = defaultDat.Replace(".dat", "");
+                                if (_defaultDat.EndsWith(".idx"))
+                                    _defaultDat = _defaultDat.Replace(".idx", "");
+                                if (_defaultDat.EndsWith(".dat"))
+                                    _defaultDat = _defaultDat.Replace(".dat", "");
                                 break;
                             }
                             if (arg.EndsWith(ExcelFile.FileExtentionClean))
@@ -167,7 +169,7 @@ namespace Revival
                             }
                             else
                             {
-                                Console.WriteLine(String.Format(badSyntaxMsg, arg));
+                                Console.WriteLine(String.Format(BadSyntaxMsg, arg));
                                 break;
                             }
                     }
@@ -198,9 +200,9 @@ namespace Revival
             if (doCookXml)
             {
                 // This requires the Hellgate London directory, be sure to set via the switch
-                if (hellgatePath != String.Empty)
+                if (HellgatePath != String.Empty)
                 {
-                    fileManager = new FileManager(hellgatePath);
+                    fileManager = new FileManager(HellgatePath);
                     if (fileManager.HasIntegrity == false)
                     {
                         Console.WriteLine("Warning: XML could not be cooked.");
@@ -216,7 +218,7 @@ namespace Revival
             if (doPackDat)
             {
                 filesToPack.AddRange(SearchForFilesToPack(currentDir, doExcludeRaw));
-                PackDatFile(filesToPack.ToArray(), Path.Combine(currentDir, defaultDat + ".idx"));
+                PackDatFile(filesToPack.ToArray(), Path.Combine(currentDir, _defaultDat + ".idx"));
             }
 
             return;
@@ -234,7 +236,7 @@ namespace Revival
             string dataCommonDir = Path.Combine(hellgatePath, "data_common");
             string excelDataDir = Path.Combine(dataDir, ExcelFile.FolderPath);
             string excelDataCommonDir = Path.Combine(dataCommonDir, ExcelFile.FolderPath);
-            string excelWildCard = String.Format(searchPattern, ExcelFile.FileExtentionClean);
+            string excelWildCard = String.Format(SearchPattern, ExcelFile.FileExtentionClean);
 
             if (Directory.Exists(excelDataDir))
             {
@@ -257,7 +259,7 @@ namespace Revival
             string dataDir = Path.Combine(hellgatePath, "data");
             string dataCommonDir = Path.Combine(hellgatePath, "data_common");
             string stringDataDir = Path.Combine(dataDir, StringsFile.FolderPath);
-            string stringWildCard = String.Format(searchPattern, StringsFile.FileExtentionClean);
+            string stringWildCard = String.Format(SearchPattern, StringsFile.FileExtentionClean);
 
             if (Directory.Exists(stringDataDir))
             {
@@ -275,7 +277,7 @@ namespace Revival
 
             if (Directory.Exists(dataDir))
             {
-                string xmlWildCard = String.Format(searchPattern, XmlCookedFile.FileExtentionClean);
+                string xmlWildCard = String.Format(SearchPattern, XmlCookedFile.FileExtentionClean);
                 xmlPaths = Directory.GetFiles(dataDir, xmlWildCard, SearchOption.AllDirectories);
                 xmlPaths = xmlPaths.Where(str => !str.Contains("uix")).ToArray(); // remove uix xml files
             }
