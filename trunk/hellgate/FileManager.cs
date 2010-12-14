@@ -105,11 +105,10 @@ namespace Hellgate
             if (!index.HasIntegrity) return;
             IndexFiles.Add(index);
 
-
             // loop through index files
             foreach (FileEntry currFileEntry in index.Files)
             {
-                //if (currFileEntry.FileNameString.Contains("sku") && currFileEntry.FileNameString.Contains(ExcelFile.FileExtention))
+                //if (currFileEntry.FileNameString.Contains("recipes.txt.cooked"))
                 //{
                 //    int bp = 0;
                 //}
