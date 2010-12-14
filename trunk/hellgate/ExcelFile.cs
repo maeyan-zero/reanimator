@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using Hellgate.Excel;
 using Revival.Common;
+using System.Threading;
 
 namespace Hellgate
 {
@@ -43,6 +44,8 @@ namespace Hellgate
         /// <param name="filePath">Path to file being loaded.</param>
         public ExcelFile(byte[] buffer, String filePath, bool isTCv4 = false)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+
             IsExcelFile = true;
 
             FilePath = filePath;
