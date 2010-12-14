@@ -17,14 +17,17 @@ namespace Revival
         const string NoPathsMsg = "Sorry, no data paths were found. Check error.xml for details.";
         const string BadSyntaxMsg = "Incorrect argument given: {0}";
         const string UsageMsg = "Usage: todo";
-        const string HellgatePath = @"D:\Program Files\Flagship Studios\Hellgate London";
+        const string HellgateMissingMsg = "Warning: Can not cook XML, Hellgate London directory missing.";
+
 
         static void Main(string[] args)
         {
             FileManager fileManager;
+            string HellgatePath = Hellgate.Common.DefaultHellgatePath;
             string currentDir = Directory.GetCurrentDirectory();
             string dataDir = Path.Combine(currentDir, Hellgate.Common.DataPath);
             string dataCommonDir = Path.Combine(currentDir, Hellgate.Common.DataCommonPath);
+
 
             bool doCookTxt = false;
             bool doCookXml = false;
@@ -152,19 +155,27 @@ namespace Revival
                                     _defaultDat = _defaultDat.Replace(".dat", "");
                                 break;
                             }
+                            if (arg.StartsWith("/h:"))
+                            {
+                                HellgatePath = arg.Replace("/h:", "");
+                                break;
+                            }
                             if (arg.EndsWith(ExcelFile.FileExtentionClean))
                             {
                                 excelFilesToCook.Add(arg);
+                                doCookTxt = true;
                                 break;
                             }
                             if (arg.EndsWith(StringsFile.FileExtentionClean))
                             {
                                 stringFilesToCook.Add(arg);
+                                doCookTxt = true;
                                 break;
                             }
                             if (arg.EndsWith(XmlCookedFile.FileExtentionClean))
                             {
                                 xmlFilesToCook.Add(arg);
+                                doCookXml = true;
                                 break;
                             }
                             else
@@ -199,18 +210,27 @@ namespace Revival
             // Cook Xml files
             if (doCookXml)
             {
-                // This requires the Hellgate London directory, be sure to set via the switch
-                if (HellgatePath != String.Empty)
+                // If the default or switch is wrong, try check the registry
+                if (Directory.Exists(HellgatePath) == false)
+                {
+                    HellgatePath = Config.HglDir;
+                }
+
+                if (Directory.Exists(HellgatePath) == true)
                 {
                     fileManager = new FileManager(HellgatePath);
                     if (fileManager.HasIntegrity == false)
                     {
-                        Console.WriteLine("Warning: XML could not be cooked.");
+                        Console.WriteLine("Warning: XML could not be cooked - fileManager.Integrity = false");
                     }
                     else
                     {
                         CookXmlFiles(xmlFilesToCook.ToArray(), fileManager);
                     }
+                }
+                else
+                {
+                    Console.WriteLine(HellgateMissingMsg);
                 }
             }
 
