@@ -41,14 +41,20 @@ namespace Hellgate
         /// </summary>
         /// <param name="buffer">Byte array of the given Excel file object.</param>
         /// <param name="filePath">Path to file being loaded.</param>
-        public ExcelFile(byte[] buffer, String filePath)
+        public ExcelFile(byte[] buffer, String filePath, bool isTCv4 = false)
         {
             IsExcelFile = true;
 
             FilePath = filePath;
-            StringId = _GetStringId(filePath);
+            StringId = _GetStringId(filePath, isTCv4);
             if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
+
             Attributes = DataFileMap[StringId];
+            if (Attributes.IsEmpty)
+            {
+                HasIntegrity = true;
+                return;
+            }
 
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCooked = (peek == Token.cxeh);
@@ -390,7 +396,7 @@ namespace Hellgate
             int newIntegerBufferOffset = 1;
             byte[][] newExtendedBuffer = null;
             StringCollection newSecondaryStrings = null;
-            List<object> newTable = new List<object>(); 
+            List<object> newTable = new List<object>();
 
             bool failedParsing = false;
             const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);

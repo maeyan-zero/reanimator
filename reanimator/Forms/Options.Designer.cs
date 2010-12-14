@@ -41,6 +41,8 @@
             this.ok_Button = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tcv4_CheckBox = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.relationsCheck = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -59,6 +61,7 @@
             this.pathSettings_GroupBox.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -77,7 +80,7 @@
             this.pathSettings_GroupBox.Controls.Add(this.hglDir_TextBox);
             this.pathSettings_GroupBox.Location = new System.Drawing.Point(6, 6);
             this.pathSettings_GroupBox.Name = "pathSettings_GroupBox";
-            this.pathSettings_GroupBox.Size = new System.Drawing.Size(419, 258);
+            this.pathSettings_GroupBox.Size = new System.Drawing.Size(419, 172);
             this.pathSettings_GroupBox.TabIndex = 0;
             this.pathSettings_GroupBox.TabStop = false;
             this.pathSettings_GroupBox.Text = "Path Settings";
@@ -185,14 +188,36 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.pathSettings_GroupBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(436, 270);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Paths";
+            this.tabPage1.Text = "General";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tcv4_CheckBox);
+            this.groupBox1.Location = new System.Drawing.Point(4, 185);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(421, 79);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Advanced";
+            // 
+            // tcv4_CheckBox
+            // 
+            this.tcv4_CheckBox.AutoSize = true;
+            this.tcv4_CheckBox.Location = new System.Drawing.Point(7, 20);
+            this.tcv4_CheckBox.Name = "tcv4_CheckBox";
+            this.tcv4_CheckBox.Size = new System.Drawing.Size(332, 17);
+            this.tcv4_CheckBox.TabIndex = 1;
+            this.tcv4_CheckBox.Text = "Load TCv4 Excel and Strings files. (requires restart to take effect)\r\n";
+            this.tcv4_CheckBox.UseVisualStyleBackColor = true;
+            this.tcv4_CheckBox.CheckedChanged += new System.EventHandler(this._TCv4_CheckBox_CheckedChanged);
             // 
             // tabPage2
             // 
@@ -379,6 +404,8 @@
             this.pathSettings_GroupBox.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
@@ -421,6 +448,8 @@
         private System.Windows.Forms.Button csvEditor_Button;
         private System.Windows.Forms.Button xmlEditor_Button;
         private System.Windows.Forms.Button txtEditor_Button;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox tcv4_CheckBox;
 
     }
 }
