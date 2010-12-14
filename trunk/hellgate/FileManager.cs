@@ -27,7 +27,7 @@ namespace Hellgate
         /// Initialize the File Manager by the given Hellgate path.
         /// </summary>
         /// <param name="hellgatePath">Path to the Hellgate installation.</param>
-        /// <param name="mpVersion">Set true to initialize MP data.</param>
+        /// <param name="mpVersion">Set true to initialize only the MP files data.</param>
         public FileManager(String hellgatePath, bool mpVersion = false)
         {
             HellgatePath = hellgatePath;
@@ -179,6 +179,16 @@ namespace Hellgate
                 FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention) ||
                     (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) && fileEntry.RelativeFullPath.Contains(Language))))
             {
+                if (MPVersion &&
+                    // todo: crashing
+                    (fileEntry.FileNameString.Contains("items.txt.cooked") ||
+                    fileEntry.FileNameString.Contains("monsters.txt.cooked") ||
+                    fileEntry.FileNameString.Contains("objects.txt.cooked") ||
+                    fileEntry.FileNameString.Contains("players.txt.cooked") ||
+                    fileEntry.FileNameString.Contains("missiles.txt.cooked") ||
+                    fileEntry.FileNameString.Contains("sounds.txt.cooked") ||
+                    fileEntry.FileNameString.Contains("skills.txt.cooked"))) continue;
+
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
                 //if (fileEntry.FileNameString.Contains("strings_cin"))
@@ -190,11 +200,12 @@ namespace Hellgate
                 DataFile dataFile;
                 if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention))
                 {
-                    dataFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
+                    dataFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch, MPVersion);
                     if (dataFile.Attributes.IsEmpty) continue;
                 }
                 else
                 {
+                    if (MPVersion) continue; // todo: need to add _TCv4_ stringId keys to DataFileMap before we can load them 
                     dataFile = new StringsFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
                 }
 

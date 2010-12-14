@@ -14,7 +14,9 @@ namespace Reanimator.Forms
     {
         private FileExplorer _fileExplorer;
         private TablesLoaded _tablesLoaded;
+        private TablesLoaded _tablesLoadedTCv4;
         private FileManager _fileManager;
+        private FileManager _fileManagerTCv4;
         private readonly Options _optionsForm = new Options();
         private readonly List<TableForm> _openTableForms = new List<TableForm>();
         private readonly List<ExcelTableForm> _openExcelTableForms = new List<ExcelTableForm>();
@@ -99,7 +101,7 @@ namespace Reanimator.Forms
 
             //tw = new StreamWriter(@"C:\asdf.txt");
             //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
-            _fileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
+            _fileManager = new FileManager(Config.HglDir, Config.LoadTCv4DataFiles);
             _fileManager.LoadTableFiles();
             XmlCookedFile.Initialize(_fileManager);
 
@@ -729,6 +731,14 @@ namespace Reanimator.Forms
                         _tablesLoaded.Text = "Hellgate Tables Loaded [" + _fileManager.DataFiles.Count + "]";
                         _tablesLoaded.Show();
 
+                        if (_tablesLoadedTCv4 != null)
+                        {
+                            _tablesLoadedTCv4.MdiParent = this;
+                            _tablesLoadedTCv4.Bounds = new Rectangle(_fileExplorer.Size.Width + 10 + 300 + 10, 0, 300, 350);
+                            _tablesLoadedTCv4.Text = "Hellgate TCv4 Tables Loaded [" + _fileManagerTCv4.DataFiles.Count + "]";
+                            _tablesLoadedTCv4.Show();
+                        }
+
                         XmlCookedFile.Initialize(_fileManager);
                     };
                     progressForm.Show(this);
@@ -744,12 +754,12 @@ namespace Reanimator.Forms
         private void _DoLoading(ProgressForm progressForm, Object var)
         {
             progressForm.SetCurrentItemText("Loading File Manager...");
-            _fileManager = new FileManager(Config.HglDir, Config.LoadMPVersion);
+            _fileManager = new FileManager(Config.HglDir, false);
 
-            progressForm.SetCurrentItemText("Loading Excel Tables...");
+            progressForm.SetCurrentItemText("Loading Excel and Strings Tables...");
             if (!_fileManager.LoadTableFiles())
             {
-                MessageBox.Show("Failed to load excel files!", "Excel Table Error", MessageBoxButtons.OK,
+                MessageBox.Show("Failed to load excel and strings files!", "Data Table Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
 
@@ -758,6 +768,22 @@ namespace Reanimator.Forms
 
             progressForm.SetCurrentItemText("Loading Table View...");
             _tablesLoaded = new TablesLoaded(_fileManager);
+
+
+            if (!Config.LoadTCv4DataFiles) return;
+
+            progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
+            _fileManagerTCv4 = new FileManager(Config.HglDir, true);
+
+            progressForm.SetCurrentItemText("Loading TCv4 Excel and Strings Tables...");
+            if (!_fileManagerTCv4.LoadTableFiles())
+            {
+                MessageBox.Show("Failed to load TCv4 excel and strings files!", "Data Table Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+
+            progressForm.SetCurrentItemText("Loading TCv4 Table View...");
+            _tablesLoadedTCv4 = new TablesLoaded(_fileManagerTCv4);
         }
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)

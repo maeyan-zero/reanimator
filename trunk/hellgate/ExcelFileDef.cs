@@ -467,14 +467,26 @@ namespace Hellgate
             return (query.Length != 0) ? (OutputAttribute)query[0] : null;
         }
 
-        private static String _GetStringId(String filePath)
+        private static String _GetStringId(String filePath, bool isTCv4 = false)
         {
+            String stringIdPrepend = isTCv4 ? "_TCv4_" : "";
+
             // check if the file name is the same as the string id
-            String stringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
+            String baseStringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
+            String stringId = stringIdPrepend + baseStringId;
             if (DataFileMap.ContainsKey(stringId)) return stringId;
 
             // file name is different to string id, then we have to loop through and check for name replace elements
-            return DataFileMap.Where(dataTableEntry => dataTableEntry.Value.FileName == stringId).Select(dataTableEntry => dataTableEntry.Key).FirstOrDefault();
+            stringId = null;
+            foreach (KeyValuePair<String, DataFileAttributes> keyValuePair in DataFileMap)
+            {
+                DataFileAttributes dataFileAttribute = keyValuePair.Value;
+                if (dataFileAttribute.FileName != baseStringId || dataFileAttribute.IsTCv4 != isTCv4) continue;
+
+                stringId = keyValuePair.Key;
+            }
+
+            return stringId;
         }
 
         //private String _stringId;

@@ -109,6 +109,12 @@ namespace Reanimator
             set { SetValue("GenerateRelations", value); }
         }
 
+        public static bool LoadTCv4DataFiles
+        {
+            get { return GetValue("LoadTCv4DataFiles", false); }
+            set { SetValue("LoadTCv4DataFiles", value); }
+        }
+
         public static bool LoadMPVersion
         {
             get { return GetValue("LoadMPVersion", false); }

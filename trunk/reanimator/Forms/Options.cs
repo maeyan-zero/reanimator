@@ -107,5 +107,10 @@ namespace Reanimator.Forms
             Config.CsvEditor = filePath;
             csvEditor_TextBox.Text = Config.CsvEditor;
         }
+
+        private void _TCv4_CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.LoadTCv4DataFiles = tcv4_CheckBox.Checked;
+        }
     }
 }

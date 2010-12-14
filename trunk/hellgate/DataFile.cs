@@ -15,12 +15,11 @@ namespace Hellgate
         public String StringId { get; protected set; }
         public DataFileAttributes Attributes { get; protected set; }
         public Type DataType { get { return Attributes.RowType; } }
-        //public uint StructureId { get; protected set; }
         public bool HasIntegrity { get; protected set; }
         public bool IsExcelFile { get; protected set; }
         public bool IsStringsFile { get; protected set; }
         public int Count { get { return (Rows != null) ? Rows.Count : 0; } }
-        public string FilePath { get; set; }
+        public string FilePath { get; protected set; }
         public string FileExtension { get; set; }
         public string FileName { get { return Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(FilePath)); } }
         public List<Object> Rows { get; protected set; }
@@ -42,8 +41,6 @@ namespace Hellgate
             public Type RowType { get; set; }
             public bool IsEmpty { get; set; }
             public bool IsMythos { get; set; }
-            public DataFile LoadedFile { get; set; }
-            public bool ManualLoad { get; set; }
             public bool HasIndexBitRelations { get; set; }
             public bool HasScriptTable { get; set; }
             public bool HasExtended { get; set; }
@@ -241,7 +238,22 @@ namespace Hellgate
             {"_TCv4_WARDROBE_LAYER", new DataFileAttributes {IsTCv4 = true, FileName = "WARDROBE", RowType = typeof(WardrobeTCv4)}},
 
 
-            //TCv4 - Same
+            // TCv4 - No Definition
+            {"_TCv4_ACHIEVEMENTSLOTS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_AFFIX_GROUPS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_DONATION_REWARDS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_LOADING_SCREEN", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_PLAYERRANKS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_SOUNDMIXSTATESETS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_VERSIONINGAFFIXES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_VERSIONINGUNITS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_CMD_MENUS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_EMOTES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+            {"_TCv4_RECIPE_PROPERTIES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
+
+
+
+            // TCv4 - Same
             {"_TCv4_AFFIXTYPES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(AffixTypes)}},
             {"_TCv4_AI_BEHAVIOR", new DataFileAttributes {IsTCv4 = true, RowType = typeof(AiBehaviour)}},
             {"_TCv4_AICOMMON_STATE", new DataFileAttributes {IsTCv4 = true, RowType = typeof(AiCommonState)}},
@@ -267,7 +279,7 @@ namespace Hellgate
             {"_TCv4_EFFECTS_FILES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(EffectsFiles)}},
             {"_TCv4_EFFECTS", new DataFileAttributes {IsTCv4 = true, FileName = "EFFECTS_INDEX", RowType = typeof(EffectsIndex)}},
             {"_TCv4_EFFECTS_SHADERS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(EffectsShaders)}},
-            //{"_TCv4_EXCELTABLES", new MapEntry {IsTCv4 = true, RowType = typeof(ExcelTables)}},
+            {"_TCv4_EXCELTABLES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ExcelTables)}},
             {"_TCv4_FACTION", new DataFileAttributes {IsTCv4 = true, RowType = typeof(Faction)}},
             {"_TCv4_FACTION_STANDING", new DataFileAttributes {IsTCv4 = true, RowType = typeof(FactionStanding)}},
             {"_TCv4_FILTER_CHATFILTER", new DataFileAttributes {IsTCv4 = true, FileName = "CHATFILTER", RowType = typeof(Filter)}},
@@ -276,7 +288,7 @@ namespace Hellgate
             {"_TCv4_FONTCOLORS", new DataFileAttributes {IsTCv4 = true, FileName = "FONTCOLOR", RowType = typeof(FontColor)}},
             {"_TCv4_FOOTSTEPS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(FootSteps)}},
             {"_TCv4_GAME_GLOBALS", new DataFileAttributes {IsTCv4 = true, FileName = "GAMEGLOBALS", RowType = typeof(GameGlobals)}},
-            //{"_TCv4_GLOBAL_INDEX", new MapEntry {IsTCv4 = true, FileName = "GLOBALINDEX", RowType = typeof(Global)}},
+            {"_TCv4_GLOBAL_INDEX", new DataFileAttributes {IsTCv4 = true, FileName = "GLOBALINDEX", RowType = typeof(Global)}},
             {"_TCv4_GLOBAL_STRING", new DataFileAttributes {IsTCv4 = true, FileName = "GLOBALSTRING", RowType = typeof(Global)}},
             {"_TCv4_GLOBAL_THEMES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(GlobalThemes)}},
             {"_TCv4_INITDB", new DataFileAttributes {IsTCv4 = true, RowType = typeof(InitDb)}},
@@ -340,12 +352,12 @@ namespace Hellgate
             {"_TCv4_STATES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(States), HasIndexBitRelations = true}},
             {"_TCv4_STATS_FUNC", new DataFileAttributes {IsTCv4 = true, FileName = "STATSFUNC", RowType = typeof(StatsFunc)}},
             {"_TCv4_STATS_SELECTOR", new DataFileAttributes {IsTCv4 = true, FileName = "STATSSELECTOR", RowType = typeof(ExcelTables)}},
-            //{"_TCv4_STRING_FILES", new MapEntry {IsTCv4 = true, RowType = typeof(StringFiles)}},
+            {"_TCv4_STRING_FILES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(StringFiles)}},
             {"_TCv4_TASK_STATUS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ExcelTables)}},
             {"_TCv4_TAG", new DataFileAttributes {IsTCv4 = true, RowType = typeof(Tag)}},
             {"_TCv4_TASKS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(Tasks)}},
             {"_TCv4_TEXTURE_TYPES", new DataFileAttributes {IsTCv4 = true, FileName = "TEXTURETYPES", RowType = typeof(TextureTypes)}},
-            //{"_TCv4_UI_COMPONENT", new MapEntry {IsTCv4 = true, RowType = typeof(UIComponent)}},
+            {"_TCv4_UI_COMPONENT", new DataFileAttributes {IsTCv4 = true, RowType = typeof(UIComponent)}},
             {"_TCv4_UNIT_EVENT_TYPES", new DataFileAttributes {IsTCv4 = true, FileName = "UNITEVENTS", RowType = typeof(UnitEvents)}},
             {"_TCv4_WARDROBE_APPEARANCE_GROUP", new DataFileAttributes {IsTCv4 = true, RowType = typeof(WardrobeAppearanceGroup)}},
             {"_TCv4_WARDROBE_BLENDOP", new DataFileAttributes {IsTCv4 = true, RowType = typeof(WardrobeBlendOp)}},
@@ -366,9 +378,14 @@ namespace Hellgate
             {"SOUNDOVERRIDES", new DataFileAttributes {IsEmpty = true}},
 
 
+            // TCv4 - Empty Excel files
+            {"_TCv4_GOSSIP", new DataFileAttributes {IsEmpty = true}},
+            {"_TCv4_SOUNDOVERRIDES", new DataFileAttributes {IsEmpty = true}},
+
+
             // Non-Indexed Excel file
-            {"LANGUAGE", new DataFileAttributes {ManualLoad = true, RowType = typeof(Language)}},
-            {"REGION", new DataFileAttributes {ManualLoad = true, RowType = typeof(Region)}},
+            {"LANGUAGE", new DataFileAttributes {RowType = typeof(Language)}},
+            {"REGION", new DataFileAttributes {RowType = typeof(Region)}},
 
 
             // Mythos Excel files
@@ -400,6 +417,7 @@ namespace Hellgate
             {"QUEST_TITLES_FOR_TUGBOAT", new DataFileAttributes {IsMythos = true}},
             {"QUESTS_TASKS_FOR_TUGBOAT", new DataFileAttributes {IsMythos = true}},
 
+
             // I think these are Mythos
             {"ACHIEVEMENT_SLOTS", new DataFileAttributes {IsMythos = true}},
             {"CRAFTING_SLOTS", new DataFileAttributes {IsMythos = true}},
@@ -407,6 +425,7 @@ namespace Hellgate
             {"RENDER_FLAGS", new DataFileAttributes {IsMythos = true}},
             {"SKILL_LEVELS", new DataFileAttributes {IsMythos = true}},
             {"SKILL_STATS", new DataFileAttributes {IsMythos = true}},
+
 
             // Strings files
             {"Strings_Affix", new DataFileAttributes {RowType = typeof(StringsFile)}},
@@ -424,6 +443,7 @@ namespace Hellgate
             {"Strings_Skills", new DataFileAttributes {RowType = typeof(StringsFile)}},
             {"Strings_Strings", new DataFileAttributes {RowType = typeof(StringsFile)}},
             {"Strings_Revival", new DataFileAttributes {RowType = typeof(StringsFile)}},
+
 
             // Empty Strings files
             {"Strings_Install_MSI", new DataFileAttributes {IsEmpty = true}}
