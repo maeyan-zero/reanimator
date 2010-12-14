@@ -127,7 +127,7 @@ namespace Hellgate
 
                 // do backup checks first as they'll "override" the FileTime values (i.e. file not found causes game to go to older version)
                 // if currFile IS a backup, and orig is NOT, then add to Siblings as game will be loading orig over "backup" anyways
-                if (currFileEntry.IsBackup && !origFileEntry.IsBackup)
+                if (currFileEntry.IsPatchedOut && !origFileEntry.IsPatchedOut)
                 {
                     if (origFileEntry.Siblings == null) origFileEntry.Siblings = new List<FileEntry>();
                     origFileEntry.Siblings.Add(currFileEntry);
@@ -137,7 +137,7 @@ namespace Hellgate
 
                 // if curr is NOT a backup, but orig IS, then we want to update (i.e. don't care about FileTime; as above)
                 // OR if orig is older than curr, we also want to update/re-arrange Siblings, etc
-                if ((!currFileEntry.IsBackup && origFileEntry.IsBackup) ||
+                if ((!currFileEntry.IsPatchedOut && origFileEntry.IsPatchedOut) ||
                     origFileEntry.FileTime < currFileEntry.FileTime)
                 {
                     // set the Siblings list to the updated FileEntry and null out other
@@ -190,12 +190,12 @@ namespace Hellgate
                 DataFile dataFile;
                 if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention))
                 {
-                    dataFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutBackup);
+                    dataFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
                     if (dataFile.Attributes.IsEmpty) continue;
                 }
                 else
                 {
-                    dataFile = new StringsFile(fileBytes, fileEntry.RelativeFullPathWithoutBackup);
+                    dataFile = new StringsFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
                 }
 
                 if (!dataFile.HasIntegrity)
@@ -336,7 +336,7 @@ namespace Hellgate
 
             // if file is backed up, check for unpacked copy
             String filePath = fileEntry.RelativeFullPath;
-            if (fileEntry.DirectoryString.Contains(IndexFile.BackupPrefix))
+            if (fileEntry.IsPatchedOut)
             {
                 filePath = filePath.Replace(@"backup\", "");
 

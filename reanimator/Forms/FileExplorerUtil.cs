@@ -36,7 +36,6 @@ namespace Reanimator.Forms
             public IndexFile Index;
             public IndexFile.FileEntry FileEntry;
             public bool IsFolder;
-            public bool IsBackup;
             public bool CanEdit;
             public bool CanCookWith;
             public bool IsUncookedVersion;
@@ -90,9 +89,13 @@ namespace Reanimator.Forms
             foreach (IndexFile.FileEntry fileEntry in _fileManager.FileEntries.Values)
             {
                 NodeObject nodeObject = new NodeObject { Index = fileEntry.Index, FileEntry = fileEntry };
-                String[] nodeKeys = fileEntry.DirectoryStringWithoutBackup.Split('\\');
+                String[] nodeKeys = fileEntry.DirectoryStringWithoutPatch.Split('\\');
                 TreeNode treeNode = null;
 
+                //if (fileEntry.FileNameString == "ct_conna.mop")
+                //{
+                //    int bp = 0;
+                //}
 
                 // set up folders and get applicable root folder
                 foreach (String nodeKey in nodeKeys.Where(nodeKey => !String.IsNullOrEmpty(nodeKey)))
@@ -124,7 +127,7 @@ namespace Reanimator.Forms
 
 
                 // our new node
-                TreeNode node = treeNode.Nodes.Add(fileEntry.RelativeFullPathWithoutBackup, fileEntry.FileNameString);
+                TreeNode node = treeNode.Nodes.Add(fileEntry.RelativeFullPathWithoutPatch, fileEntry.FileNameString);
                 _AssignIcons(node);
 
 
@@ -155,7 +158,7 @@ namespace Reanimator.Forms
 
 
                 // final nodeObject setups
-                if (nodeObject.IsBackup)
+                if (nodeObject.FileEntry.IsPatchedOut)
                 {
                     node.ForeColor = BackupColor;
                 }
@@ -177,6 +180,37 @@ namespace Reanimator.Forms
 
                 treeNode.Expand();
                 _FlagFolderNodes(treeNode);
+            }
+        }
+
+        /// <summary>
+        /// Recursively sets the node colors to match the node object states.
+        /// </summary>
+        /// <param name="treeNodeCollection">The tree nodes to recursively check.</param>
+        private static void _AssignColors(TreeNodeCollection treeNodeCollection)
+        {
+            foreach (TreeNode treeNode in treeNodeCollection)
+            {
+                if (treeNode.Nodes != null && treeNode.Nodes.Count > 1)
+                {
+                    _AssignColors(treeNode.Nodes);
+                    continue;
+                }
+
+                //if (treeNode.Text == "ct_conna.mop")
+                //{
+                //    int bp = 0;
+                //}
+
+                NodeObject nodeObject = (NodeObject) treeNode.Tag;
+                if (nodeObject.FileEntry != null && nodeObject.FileEntry.IsPatchedOut)
+                {
+                    treeNode.ForeColor = BackupColor;
+                }
+                else if (!nodeObject.CanEdit)
+                {
+                    treeNode.ForeColor = NoEditColor;
+                }
             }
         }
 
@@ -430,7 +464,6 @@ namespace Reanimator.Forms
 
             // if we're patching out the file, then change its bgColor and set its nodeObject state to backup
             treeNode.ForeColor = BackupColor;
-            nodeObject.IsBackup = true;
 
 
             // is this file located else where? (i.e. does it have Siblings)
@@ -536,6 +569,7 @@ namespace Reanimator.Forms
                 }
                 _files_fileTreeView.Nodes[nodeIndex].Expand();
             }
+            _AssignColors(_files_fileTreeView.Nodes);
             _files_fileTreeView.EndUpdate();
 
             // remove cloned tree - we no longer have a filter

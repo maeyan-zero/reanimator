@@ -224,16 +224,16 @@ namespace Hellgate
             {
                 if (_directoryString == null || _fileNameString == null) return;
                 RelativeFullPath = _directoryString + _fileNameString;
-                RelativeFullPathWithoutBackup = RelativeFullPath.Replace(@"backup\", "");
-                DirectoryStringWithoutBackup = _directoryString.Replace(@"backup\", "");
+                RelativeFullPathWithoutPatch = RelativeFullPath.Replace(PatchPrefix, "");
+                DirectoryStringWithoutPatch = _directoryString.Replace(PatchPrefix, "");
             }
 
-            public String DirectoryStringWithoutBackup { get; private set; }
-            public String RelativeFullPathWithoutBackup { get; private set; }
+            public String DirectoryStringWithoutPatch { get; private set; }
+            public String RelativeFullPathWithoutPatch { get; private set; }
 
-            public bool IsBackup
+            public bool IsPatchedOut
             {
-                get { return DirectoryString != null && DirectoryString.Contains(BackupPrefix); }
+                get { return DirectoryString != null && DirectoryString.Contains(PatchPrefix); }
             }
 
             public UInt64 LongPathHash
@@ -254,7 +254,7 @@ namespace Hellgate
         #region Members
         public const String FileExtension = ".idx";
         public const String DatFileExtension = ".dat";
-        public const String BackupPrefix = "backup";
+        private const String PatchPrefix = @"backup\";
         private const UInt32 RequiredVersion = 0x04;
         private readonly static String[] NoCompressionExt = new[] { ".bik", ".ogg", ".mp2" };
 
@@ -267,7 +267,7 @@ namespace Hellgate
         private List<FileDetailsStruct> FileDetails { get; set; }
         private FileStream DatFile { get; set; }
         public bool DatFileOpen { get { return DatFile == null ? false : true; } }
-        public bool Modified { get { return Files.Any(file => file.DirectoryString.Contains(BackupPrefix)); } }
+        public bool Modified { get { return Files.Any(file => file.DirectoryString.Contains(PatchPrefix)); } }
         public int Count { get { return FileDetails.Count; } }
         #endregion
 
@@ -659,10 +659,10 @@ namespace Hellgate
             Debug.Assert(fileEntry != null);
 
             // has it already be patched out?
-            if (fileEntry.DirectoryString.Contains(BackupPrefix)) return false;
+            if (fileEntry.DirectoryString.Contains(PatchPrefix)) return false;
 
             // does the backup dir exist?
-            String dir = BackupPrefix + @"\" + Strings[fileEntry.DirectoryIndex];
+            String dir = PatchPrefix + Strings[fileEntry.DirectoryIndex];
             int index = Strings.IndexOf(dir);
 
             // if the directory doesn't exist, add it.
@@ -673,6 +673,7 @@ namespace Hellgate
             }
 
             fileEntry.DirectoryIndex = index;
+            fileEntry.DirectoryString = dir;
             return true;
         }
 
@@ -687,19 +688,20 @@ namespace Hellgate
             Debug.Assert(fileEntry != null);
 
             // does it even need to be patched in?
-            if (!fileEntry.DirectoryString.Contains(BackupPrefix)) return false;
+            if (!fileEntry.DirectoryString.Contains(PatchPrefix)) return false;
 
             // does the original dir exist?
-            int index = Strings.IndexOf(fileEntry.DirectoryStringWithoutBackup);
+            int index = Strings.IndexOf(fileEntry.DirectoryStringWithoutPatch);
 
             // if the directory doesn't exist, add it.
             if (index == -1)
             {
                 index = Strings.Count;
-                Strings.Add(fileEntry.DirectoryStringWithoutBackup);
+                Strings.Add(fileEntry.DirectoryStringWithoutPatch);
             }
 
             fileEntry.DirectoryIndex = index;
+            fileEntry.DirectoryString = fileEntry.DirectoryStringWithoutPatch;
             return true;
         }
 
@@ -714,7 +716,7 @@ namespace Hellgate
             // check all files entries
             foreach (FileEntry fileEntry in Files)
             {
-                if (fileEntry.IsBackup)
+                if (fileEntry.IsPatchedOut)
                 {
                     PatchInFile(fileEntry);
                     modified = true;

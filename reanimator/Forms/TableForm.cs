@@ -239,7 +239,7 @@ namespace Reanimator
                         string keepPathString = "\\";
                         if (keepPath)
                         {
-                            keepPathString += file.DirectoryString;
+                            keepPathString += file.DirectoryStringWithoutPatch;
                             Directory.CreateDirectory(extractToPath + keepPathString);
                         }
 
