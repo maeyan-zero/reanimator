@@ -127,7 +127,7 @@ namespace Reanimator.Forms
             fileCompressed_textBox.DataBindings.Add("Text", fileIndex, "CompressedSize");
             fileTime_textBox.Text = (DateTime.FromFileTime(fileIndex.FileStruct.FileTime)).ToString();
 
-            if (fileIndex.IsBackup)
+            if (fileIndex.IsPatchedOut)
             {
                 String fileDataPath = selectedNode.FullPath;
                 String filePath = Path.Combine(Config.HglDir, fileDataPath);
@@ -318,8 +318,10 @@ namespace Reanimator.Forms
                 CheckedNodes = checkedNodes
             };
 
+            _files_fileTreeView.BeginUpdate();
             ProgressForm progressForm = new ProgressForm(_DoExtractPatch, extractPatchArgs);
             progressForm.SetLoadingText(String.Format("Extracting and Patching file(s)... ({0})", checkedNodes.Count));
+            progressForm.Disposed += delegate { _files_fileTreeView.EndUpdate(); };
             progressForm.Show(this);
         }
 
@@ -535,7 +537,6 @@ namespace Reanimator.Forms
                     CanEdit = oldNodeObject.CanEdit,
                     FileEntry = fileEntry,
                     Index = args.PackIndex,
-                    IsBackup = false,
                     IsFolder = false
                 };
 
@@ -678,6 +679,7 @@ namespace Reanimator.Forms
             }
 
 
+            _files_fileTreeView.BeginUpdate();
             // clone tree for filtering
             if (_clonedTreeView == null)
             {
@@ -694,11 +696,11 @@ namespace Reanimator.Forms
                 {
                     _files_fileTreeView.Nodes.Add((TreeNode)treeNode.Clone());
                 }
+                _AssignColors(_files_fileTreeView.Nodes);
             }
 
 
             // apply filter
-            _files_fileTreeView.BeginUpdate();
             int nodeCount = _files_fileTreeView.Nodes.Count;
             for (int i = 0; i < nodeCount; i++)
             {
@@ -729,6 +731,7 @@ namespace Reanimator.Forms
         /// <param name="e">The ButtonClick event args.</param>
         private void _FilterResetButton_Click(object sender, EventArgs e)
         {
+            filter_textBox.Text = "*.*";
             _ResetFilter();
         }
 
@@ -1048,12 +1051,12 @@ namespace Reanimator.Forms
                 // update progress
                 if (i % progressStepRate == 0)
                 {
-                    progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutBackup);
+                    progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutPatch);
                 }
                 i++;
 
                 // get file and uncook
-                Console.WriteLine(fileEntry.RelativeFullPathWithoutBackup);
+                Console.WriteLine(fileEntry.RelativeFullPathWithoutPatch);
                 byte[] fileBytes;
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();
 
@@ -1096,7 +1099,7 @@ namespace Reanimator.Forms
                 }
 
                 // save file
-                String savePath = Path.Combine(extractPatchArgs.RootDir, fileEntry.RelativeFullPathWithoutBackup);
+                String savePath = Path.Combine(extractPatchArgs.RootDir, fileEntry.RelativeFullPathWithoutPatch);
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
 
                 try

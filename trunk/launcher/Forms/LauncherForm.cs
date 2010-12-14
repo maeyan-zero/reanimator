@@ -239,7 +239,7 @@ namespace Launcher.Forms
                 bool isModified = false;
                 foreach (FileEntry fileEntry in indexFile.Files)
                 {
-                    if (fileEntry.IsBackup)
+                    if (fileEntry.IsPatchedOut)
                     {
                         indexFile.PatchInFile(fileEntry);
                         isModified = true;
