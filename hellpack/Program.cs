@@ -23,7 +23,7 @@ namespace Revival
         static void Main(string[] args)
         {
             FileManager fileManager;
-            string HellgatePath = Hellgate.Common.DefaultHellgatePath;
+            string hellgatePath = Config.HglDir;
             string currentDir = Directory.GetCurrentDirectory();
             string dataDir = Path.Combine(currentDir, Hellgate.Common.DataPath);
             string dataCommonDir = Path.Combine(currentDir, Hellgate.Common.DataCommonPath);
@@ -157,7 +157,7 @@ namespace Revival
                             }
                             if (arg.StartsWith("/h:"))
                             {
-                                HellgatePath = arg.Replace("/h:", "");
+                                hellgatePath = arg.Replace("/h:", "");
                                 break;
                             }
                             if (arg.EndsWith(ExcelFile.FileExtentionClean))
@@ -210,15 +210,10 @@ namespace Revival
             // Cook Xml files
             if (doCookXml)
             {
-                // If the default or switch is wrong, try check the registry
-                if (Directory.Exists(HellgatePath) == false)
+                // ensure we have the correct hellgate installation path
+                if (Directory.Exists(hellgatePath) == true)
                 {
-                    HellgatePath = Config.HglDir;
-                }
-
-                if (Directory.Exists(HellgatePath) == true)
-                {
-                    fileManager = new FileManager(HellgatePath);
+                    fileManager = new FileManager(hellgatePath);
                     if (fileManager.HasIntegrity == false)
                     {
                         Console.WriteLine("Warning: XML could not be cooked - fileManager.Integrity = false");
