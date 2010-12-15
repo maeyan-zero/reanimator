@@ -465,6 +465,7 @@ namespace Revival.Common
         /// <summary>
         /// Serializes an object and appends it to the supplied buffer, increasing offset by object size.<br />
         /// If the buffer is too small the bufer size is increaed by the object size + 1024 bytes.
+        /// A string object will be serialized to an ASCII byte array.
         /// </summary>
         /// <param name="buffer">A reference to a byte array (not null).</param>
         /// <param name="offset">A reference to the write offset (offset is increased by the size of object).</param>
@@ -477,12 +478,16 @@ namespace Revival.Common
         /// <summary>
         /// Serializes an object and appends it to the supplied buffer, increasing offset by object size.<br />
         /// If the buffer is too small the bufer size is increaed by the object size + 1024 bytes.
+        /// A string object will be serialized to an ASCII byte array.
         /// </summary>
         /// <param name="buffer">A reference to a byte array (not null).</param>
         /// <param name="offset">A reference to the write offset (offset is increased by the size of object).</param>
         /// <param name="toWrite">A sersializable object to write.</param>
         public static void WriteToBuffer(ref byte[] buffer, ref int offset, Object toWrite)
         {
+            String str = toWrite as String;
+            if (str != null) toWrite = str.ToASCIIByteArray();
+
             byte[] toWriteBytes = toWrite as byte[] ?? StructureToByteArray(toWrite);
 
             WriteToBuffer(ref buffer, ref offset, toWriteBytes, toWriteBytes.Length, false);
@@ -795,6 +800,36 @@ namespace Revival.Common
             Buffer.BlockCopy(typeConvert.Bytes, 0, bytes, 0, bytes.Length);
 
             return bytes;
+        }
+
+        public static byte[] ToByteArray(this Object[][] objectArrayArray)
+        {
+            int arrayCount = objectArrayArray.Length;
+            if (arrayCount == 0) return new byte[0];
+
+            throw new NotImplementedException();
+        }
+
+        public static byte[] ToByteArray(this Object[] objectArray)
+        {
+            int arrayCount = objectArray.Length;
+            if (arrayCount == 0) return new byte[0];
+
+            int length = Marshal.SizeOf(objectArray[0]);
+            int arrayLength = arrayCount * length;
+            byte[] byteArray = new byte[arrayLength];
+            for (int i = 0; i < arrayCount; i++)
+            {
+                byte[] bytes = StructureToByteArray(objectArray[i]);
+                Buffer.BlockCopy(bytes, 0, byteArray, i*length, length);
+            }
+
+            return byteArray;
+        }
+
+        public static byte[] ToASCIIByteArray(this String str)
+        {
+            return StringToASCIIByteArray(str);
         }
 
         public static byte[] ToUnicodeByteArray(this String str)

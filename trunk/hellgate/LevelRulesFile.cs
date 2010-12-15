@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.XPath;
 using Revival.Common;
 
 namespace Hellgate
 {
-    public class LevelRulesFile
+    public class LevelRulesFile : IDisposable
     {
-        private const String FileExtention = ".drl";
+        public const String FileExtention = ".drl";
         private const UInt32 FileMagicWord = 0xD2D21D25; // '%.ÒÒ'
         private const UInt32 RequiredVersion = 0x1E; // 30
 
         // total size = 408 bytes (0x198)
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class LevelRulesRandomFooter
+        private class LevelRulesRandomFooter
         {
             public Int64 ConnectorRoomCount;                            // I *think* this is the connector rule - rule_pmt01.drl ends with bldg_E_PedMall which is what rule_pmt02.drl starts with
             public Int64 ConnectorRuleOffset;                           // offset to connector rule
@@ -30,9 +28,18 @@ namespace Hellgate
             public Int64[] RuleOffsets;                                 // offset to rules
         }
 
-        // total size = 328 bytes (0x148)
+        // total size = 16 bytes (0x10)
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class LevelRoom
+        private class LevelRulesStaticFooter
+        {
+            public Int64 RoomCount;                                     // room count in rule
+            public Int64 RuleOffset;                                    // offset to rule
+        }
+
+        // total size = 328 bytes (0x148)
+        [Serializable]
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public class Room
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
             public String RoomName;             // has zero terminated string
@@ -116,43 +123,166 @@ namespace Hellgate
             private Int32 _internalUnknown5;    // not seen used, but tested on all files - always 0
         }
 
+        [XmlRootAttribute("LevelRules")]
+        public class XmlLevelRules
+        {
+            public class XmlLevelRule
+            {
+                [XmlArray("ConnectorRule")]
+                public Room[] ConnectorRooms;
+
+                [XmlArrayItem("Rule")]
+                public Room[][] Rules;
+
+                [XmlElement("Room")]
+                public Room[] StaticRooms;
+            }
+
+            public String LevelRulesName;
+
+            [XmlElement("LevelRule")]
+            public XmlLevelRule[] LevelRules;
+        }
+        private XmlLevelRules _xmlLevelRules;
+
         private byte[] _fileBytes;
-        private String _filePath;
 
         private XmlDocument _xmlDocument;
         private XmlWriter _xmlWriter;
-        private LevelRoom[][] _levelRules;
 
         public LevelRulesFile()
         {
+
         }
 
-        public void ParseFileBytes(byte[] fileBytes, String filePath)
+        public byte[] ParseXmlDocument(XmlDocument xmlDocument)
+        {
+            XmlNodeReader xmlNodeReader = new XmlNodeReader(xmlDocument);
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(XmlLevelRules));
+            XmlLevelRules xmlLevelRules = (XmlLevelRules)xmlSerializer.Deserialize(xmlNodeReader);
+
+            int offset = 0;
+            _fileBytes = new byte[1024];
+            
+
+            // some sanity checks
+            if (String.IsNullOrEmpty(xmlLevelRules.LevelRulesName)) throw new Exceptions.InvalidXmlElement("LevelRulesName", "Cannot be empty.");
+            if (xmlLevelRules.LevelRules == null) throw new Exceptions.InvalidXmlElement("LevelRules", "Cannot be empty.");
+            int ruleCount = xmlLevelRules.LevelRules.Length;
+            if (ruleCount == 0) throw new Exceptions.InvalidXmlElement("LevelRules", "Cannot be empty.");
+            
+
+            // write header
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, FileMagicWord);
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, RequiredVersion);
+
+
+            // level rules name
+            FileTools.WriteToBuffer(ref _fileBytes, offset, xmlLevelRules.LevelRulesName);
+            offset += 256;
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, -1); // has 0xFFFFFFFF at end of 256 bytes for some reason
+
+
+            // level rules
+            offset = 0x238; // 568
+            LevelRulesStaticFooter[] levelRulesStaticFooters = null;
+            LevelRulesRandomFooter[] levelRulesRandomFooters = null;
+            for (int i = 0; i < ruleCount; i++)
+            {
+                XmlLevelRules.XmlLevelRule xmlLevelRule = xmlLevelRules.LevelRules[i];
+
+                // static rules
+                if (xmlLevelRules.LevelRules[i].StaticRooms != null)
+                {
+                    if (xmlLevelRule.StaticRooms.Length == 0) throw new Exceptions.InvalidXmlElement("StaticRooms", "Cannot be empty");
+
+                    if (levelRulesStaticFooters == null) levelRulesStaticFooters = new LevelRulesStaticFooter[ruleCount];
+                    levelRulesStaticFooters[i] = new LevelRulesStaticFooter
+                    {
+                        RoomCount = xmlLevelRule.StaticRooms.Length,
+                        RuleOffset = offset
+                    };
+
+                    foreach (Room room in xmlLevelRule.StaticRooms) FileTools.WriteToBuffer(ref _fileBytes, ref offset, room);
+                }
+                else if (xmlLevelRules.LevelRules[i].Rules != null) // random rules
+                {
+                    if (xmlLevelRule.Rules.Length == 0) throw new Exceptions.InvalidXmlElement("Rules", "Cannot be empty");
+
+                    if (levelRulesRandomFooters == null) levelRulesRandomFooters = new LevelRulesRandomFooter[ruleCount];
+                    levelRulesRandomFooters[i] = new LevelRulesRandomFooter();
+
+                    if (xmlLevelRule.ConnectorRooms != null && xmlLevelRule.ConnectorRooms.Length > 0)
+                    {
+                        levelRulesRandomFooters[i].ConnectorRoomCount = xmlLevelRule.ConnectorRooms.Length;
+                        levelRulesRandomFooters[i].ConnectorRuleOffset = offset;
+                        foreach (Room room in xmlLevelRule.ConnectorRooms) FileTools.WriteToBuffer(ref _fileBytes, ref offset, room);
+                    }
+
+                    levelRulesRandomFooters[i].RuleCount = xmlLevelRule.Rules.Length;
+                    levelRulesRandomFooters[i].RoomCounts = new Int32[32];
+                    levelRulesRandomFooters[i].RuleOffsets = new Int64[32];
+                    for (int j = 0; j < xmlLevelRule.Rules.Length; j++)
+                    {
+                        levelRulesRandomFooters[i].RoomCounts[j] = xmlLevelRule.Rules[j].Length;
+                        levelRulesRandomFooters[i].RuleOffsets[j] = offset;
+                        foreach (Room room in xmlLevelRule.Rules[j]) FileTools.WriteToBuffer(ref _fileBytes, ref offset, room);
+                    }
+                }
+                else
+                {
+                    throw new Exceptions.InvalidXmlDocument("No StaticRooms or Rules elements found!");
+                }
+            }
+
+
+            // footer details and initial offsets
+            if (levelRulesStaticFooters != null)
+            {
+                FileTools.WriteToBuffer(ref _fileBytes, 0x218, ruleCount); // 536
+                FileTools.WriteToBuffer(ref _fileBytes, 0x220, offset); // 544
+                FileTools.WriteToBuffer(ref _fileBytes, ref offset, levelRulesStaticFooters.ToByteArray());
+            }
+            if (levelRulesRandomFooters != null)
+            {
+                FileTools.WriteToBuffer(ref _fileBytes, 0x228, ruleCount); // 552
+                FileTools.WriteToBuffer(ref _fileBytes, 0x230, offset); // 560
+                FileTools.WriteToBuffer(ref _fileBytes, ref offset, levelRulesRandomFooters.ToByteArray());
+            }
+
+
+            // and we're done
+            Array.Resize(ref _fileBytes, offset);
+            return _fileBytes;
+        }
+
+        public void ParseFileBytes(byte[] fileBytes)
         {
             Debug.Assert(fileBytes != null);
             _fileBytes = fileBytes;
-            _filePath = filePath;
 
+
+            // our XML document stuffs
             _xmlDocument = new XmlDocument();
-            //XmlElement levelRules = _xmlDocument.CreateElement("LevelRules");
-            //_xmlDocument.AppendChild(levelRules);
-
-            
-            XmlWriterSettings settings = new XmlWriterSettings
-            {
-                Indent = true,
-                IndentChars = "  ",
-                NewLineOnAttributes = true
-            };
-            _xmlWriter = XmlWriter.Create(_filePath.Replace(FileExtention, ".xml"), settings);
+            XPathNavigator xPathNavigator = _xmlDocument.CreateNavigator();
+            Debug.Assert(xPathNavigator != null);
+            _xmlWriter = xPathNavigator.AppendChild();
             Debug.Assert(_xmlWriter != null);
 
+
             // file header checks
-            UInt32 fileMagicWord = FileTools.ByteArrayToUInt32(fileBytes, 0);
+            UInt32 fileMagicWord = FileTools.ByteArrayToUInt32(fileBytes, 0x00);
             if (fileMagicWord != FileMagicWord) throw new Exceptions.UnexpectedMagicWordException();
 
-            UInt32 fileVersion = FileTools.ByteArrayToUInt32(fileBytes, 4);
+            UInt32 fileVersion = FileTools.ByteArrayToUInt32(fileBytes, 0x04);
             if (fileVersion != RequiredVersion) throw new Exceptions.NotSupportedFileVersionException();
+
+
+            // get rule name
+            _xmlLevelRules = new XmlLevelRules
+            {
+                LevelRulesName = FileTools.ByteArrayToStringASCII(_fileBytes, 0x08)
+            };
 
 
             // static rules
@@ -160,6 +290,7 @@ namespace Hellgate
             int staticRulesDetailsOffset = FileTools.ByteArrayToInt32(fileBytes, 0x220); // 544
             if (staticRulesCount != 0 && staticRulesDetailsOffset != 0)
             {
+                _xmlLevelRules.LevelRules = new XmlLevelRules.XmlLevelRule[staticRulesCount];
                 _ParseStaticRooms(staticRulesCount, staticRulesDetailsOffset);
             }
 
@@ -169,57 +300,66 @@ namespace Hellgate
             int randomRulesDetailsOffset = FileTools.ByteArrayToInt32(fileBytes, 0x230); // 560
             if (randomRulesCount != 0 && randomRulesDetailsOffset != 0)
             {
+                _xmlLevelRules.LevelRules = new XmlLevelRules.XmlLevelRule[randomRulesCount]; // checked all files an no files have both static and random, so no chance of overwriting static above
                 _ParseRandomRules(randomRulesCount, randomRulesDetailsOffset);
             }
 
 
+            // write xml object
+            XmlSerializer xmlSerializer = new XmlSerializer(_xmlLevelRules.GetType());
+            xmlSerializer.Serialize(_xmlWriter, _xmlLevelRules);
+
             _xmlWriter.Close();
+        }
+
+        public void SaveXmlDocument(String filePath)
+        {
+            if (_xmlDocument == null) return;
+
+            _xmlDocument.Save(filePath);
         }
 
         private void _ParseStaticRooms(int count, int offset)
         {
-            _xmlWriter.WriteStartElement("LevelRules");
-
-            _levelRules = new LevelRoom[count][];
             for (int i = 0; i < count; i++)
             {
                 int roomsCount = FileTools.ByteArrayToInt32(_fileBytes, offset);
                 offset += 8;
                 int roomsOffset = FileTools.ByteArrayToInt32(_fileBytes, offset);
                 offset += 8;
-                
-                _levelRules[i] = FileTools.ByteArrayToArray<LevelRoom>(_fileBytes, roomsOffset, roomsCount);
-            }
 
-            XmlSerializer xmlSerializer = new XmlSerializer(_levelRules.GetType());
-            xmlSerializer.Serialize(_xmlWriter, _levelRules);
-            _xmlWriter.WriteEndElement();
+                _xmlLevelRules.LevelRules[i] = new XmlLevelRules.XmlLevelRule
+                {
+                    StaticRooms = FileTools.ByteArrayToArray<Room>(_fileBytes, roomsOffset, roomsCount)
+                };
+            }
         }
 
         private void _ParseRandomRules(int count, int offset)
         {
-            _xmlWriter.WriteStartElement("LevelRules");
             LevelRulesRandomFooter[] levelRulesFooters = FileTools.ByteArrayToArray<LevelRulesRandomFooter>(_fileBytes, offset, count);
 
             for (int i = 0; i < count; i++)
             {
-                // get first "connector" (?) rule
-                LevelRoom[] connectorRooms = FileTools.ByteArrayToArray<LevelRoom>(_fileBytes, (Int32)levelRulesFooters[i].ConnectorRuleOffset, (Int32)levelRulesFooters[i].ConnectorRoomCount);
-                XmlSerializer xmlSerializer1 = new XmlSerializer(connectorRooms.GetType());
-                xmlSerializer1.Serialize(_xmlWriter, connectorRooms);
+                _xmlLevelRules.LevelRules[i] = new XmlLevelRules.XmlLevelRule
+                {
+                    // get first "connector" (?) rule
+                    ConnectorRooms = FileTools.ByteArrayToArray<Room>(_fileBytes, (Int32)levelRulesFooters[i].ConnectorRuleOffset, (Int32)levelRulesFooters[i].ConnectorRoomCount),
 
-                // then the actual level rules
-                _levelRules = new LevelRoom[levelRulesFooters[i].RuleCount][];
+                    // then the actual level rules
+                    Rules = new Room[levelRulesFooters[i].RuleCount][]
+                };
+
                 for (int j = 0; j < levelRulesFooters[i].RuleCount; j++)
                 {
-                    _levelRules[j] = FileTools.ByteArrayToArray<LevelRoom>(_fileBytes, (Int32)levelRulesFooters[i].RuleOffsets[j], levelRulesFooters[i].RoomCounts[j]);
+                    _xmlLevelRules.LevelRules[i].Rules[j] = FileTools.ByteArrayToArray<Room>(_fileBytes, (Int32)levelRulesFooters[i].RuleOffsets[j], levelRulesFooters[i].RoomCounts[j]);
                 }
-
-                XmlSerializer xmlSerializer2 = new XmlSerializer(_levelRules.GetType());
-                xmlSerializer2.Serialize(_xmlWriter, _levelRules);
             }
+        }
 
-            _xmlWriter.WriteEndElement();
+        public void Dispose()
+        {
+            if (_xmlWriter != null) _xmlWriter.Close();
         }
     }
 }
