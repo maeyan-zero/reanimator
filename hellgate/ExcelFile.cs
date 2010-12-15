@@ -42,9 +42,10 @@ namespace Hellgate
         /// </summary>
         /// <param name="buffer">Byte array of the given Excel file object.</param>
         /// <param name="filePath">Path to file being loaded.</param>
+        /// <param name="isTCv4">Set to true if the buffer contains TCv4 data.</param>
         public ExcelFile(byte[] buffer, String filePath, bool isTCv4 = false)
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
 
             IsExcelFile = true;
 

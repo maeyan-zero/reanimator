@@ -46,6 +46,9 @@ namespace Reanimator.Forms
             Init();
 
             ProgressForm progress = new ProgressForm(LoadTable, _dataFile);
+            progress.SetStyle(ProgressBarStyle.Marquee);
+            progress.SetLoadingText("Generating DataTable...");
+            progress.SetCurrentItemText(String.Empty);
             progress.ShowDialog(this);
             _dataTable.RowChanged += (sender, e) => { _dataChanged = true; };
 
