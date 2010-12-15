@@ -291,6 +291,10 @@ Known Issues
 				</entity>
 			</table>
 		</script>
+		<script type="recommended" id="monster info">
+			<title>Increased Monster Information</title>
+			<description>Adds more information to the in game monster info window. Not just shields and health, but also their elemental resistances, damage absorbtion percentage, and more.</description>
+		</script>
 		<script type="optional" id="expanded storage">
 			<title>Expanded Storage Mod</title>
 			<description>Inventory and stash now have 3 tabbed pages like merchants</description>
