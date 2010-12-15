@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using System.IO;
 using Hellgate.Xml;
@@ -23,9 +25,7 @@ namespace Hellgate
 
         private int _offset;
         private byte[] _buffer;
-
         public XmlDocument XmlDoc { get; private set; }
-        //private XmlNode _xmlNodeConfig;
 
         public String FileName { get; private set; }
         private bool CookExcludeTCv4 { get; set; }
@@ -36,6 +36,7 @@ namespace Hellgate
 
         public XmlCookedFile()
         {
+            Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
             CookExcludeTCv4 = true;
             ThrowOnMissingExcelString = false;
             HasTCv4Elements = false;
@@ -444,7 +445,6 @@ namespace Hellgate
 
 
             XmlDoc = new XmlDocument();
-            //XmlDeclaration xmlDeclaration = new XmlDeclaration("1.0", "utf-8", null, XmlDoc);
             XmlCookedFileTree xmlTree = new XmlCookedFileTree(xmlDefinition);
             _UncookFileXmlDefinition(xmlDefinition, header.XmlRootElementCount, xmlTree);
 

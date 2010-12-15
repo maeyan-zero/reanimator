@@ -1,4 +1,6 @@
-﻿namespace Hellgate
+﻿using System.Globalization;
+
+namespace Hellgate
 {
     public static class Common
     {
@@ -29,5 +31,6 @@
             "region",
             "mvp"
         };
+        public static CultureInfo EnglishUSCulture = new CultureInfo("en-US");
     }
 }
