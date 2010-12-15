@@ -190,6 +190,21 @@ namespace Revival.Common
 
         /// <summary>
         /// Converts an array of bytes to an array of T values.<br />
+        /// <b>This function should not be used for standard types (e.g. Int32).<br />
+        /// (The Marshal.Copy() function can do standard types)</b>
+        /// </summary>
+        /// <typeparam name="T">The type of array elements.</typeparam>
+        /// <param name="byteArray">The byte array containing the T array.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="count">The number of T array elements.</param>
+        /// <returns>The converted T array.</returns>
+        public static unsafe T[] ByteArrayToArray<T>(byte[] byteArray, int offset, int count)
+        {
+            return ByteArrayToArray<T>(byteArray, ref offset, count);
+        }
+
+        /// <summary>
+        /// Converts an array of bytes to an array of T values.<br />
         /// <i>offset</i> is incremented by the size of the T array.<br />
         /// <b>This function should not be used for standard types (e.g. Int32).<br />
         /// (The Marshal.Copy() function can do standard types)</b>
