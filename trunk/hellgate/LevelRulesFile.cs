@@ -12,7 +12,7 @@ namespace Hellgate
 {
     public class LevelRulesFile
     {
-        public const String FileExtention = ".drl";
+        private const String FileExtention = ".drl";
         private const UInt32 FileMagicWord = 0xD2D21D25; // '%.ÒÒ'
         private const UInt32 RequiredVersion = 0x1E; // 30
 
@@ -20,14 +20,14 @@ namespace Hellgate
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class LevelRulesRandomFooter
         {
-            public Int64 ConnectorRoomCount;
-            public Int64 ConnectorRuleOffset;
-            public Int32 RuleCount;
+            public Int64 ConnectorRoomCount;                            // I *think* this is the connector rule - rule_pmt01.drl ends with bldg_E_PedMall which is what rule_pmt02.drl starts with
+            public Int64 ConnectorRuleOffset;                           // offset to connector rule
+            public Int32 RuleCount;                                     // below rule counts
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            public Int32[] RoomCounts;
-            public Int32 Null;
+            public Int32[] RoomCounts;                                  // counts of LevelRooms in the rule
+            public Int32 Null;                                          // tested on all files - always 0
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-            public Int64[] RuleOffsets;
+            public Int64[] RuleOffsets;                                 // offset to rules
         }
 
         // total size = 328 bytes (0x148)
@@ -35,12 +35,12 @@ namespace Hellgate
         public class LevelRoom
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-            public String RoomName;         // has zero terminated string
+            public String RoomName;             // has zero terminated string
 
-            public Int32 Uknown1;           // not seen used, but is used - haven't finished going through entire function
-            private Int32 Uknown2;           // not seen used
-            private Int32 Uknown3;           // not seen used
-            private Int32 Uknown4;           // not seen used
+            public Int32 Unknown;               // not seen used, but is used - haven't finished going through entire function
+            private Int32 _internalUnknown1;    // not seen used, but tested on all files - always 0
+            private Int32 _internalUnknown2;    // not seen used, but tested on all files - always 0
+            private Int32 _internalUnknown3;    // not seen used, but tested on all files - always 0
 
             // the three position floats have some weird calcs done to them, however they always seem to just be set to their same value. todo: look into.
             /*
@@ -57,15 +57,15 @@ namespace Hellgate
                 ParseLevelRuleRooms+12F  10A8 movss   dword ptr [rsi+118h], xmm0
                 ParseLevelRuleRooms+137  10A8 mov     [rsi+120h], eax
              */
-            public float xPostion;          // x offset of room                                 // ParseLevelRuleRooms+EA   10A8 movss   xmm0, dword ptr [rsi+110h]
-            public float yPosition;         // y offset of room                                 // ParseLevelRuleRooms+103  10A8 addss   xmm1, dword ptr [rsi+114h]
-            public float zPosition;         // z offset of room                                 // ParseLevelRuleRooms+113  10A8 movss   xmm0, dword ptr [rsi+118h]
-            public float rotation;          // rotation of room (about as yet unknown axis)     // ParseLevelRuleRooms+2AB  10A8 movss   xmm0, dword ptr [rsi+11Ch]
+            public float xPostion;              // x offset of room                                     // ParseLevelRuleRooms+EA   10A8 movss   xmm0, dword ptr [rsi+110h]
+            public float yPosition;             // y offset of room                                     // ParseLevelRuleRooms+103  10A8 addss   xmm1, dword ptr [rsi+114h]
+            public float zPosition;             // z offset of room                                     // ParseLevelRuleRooms+113  10A8 movss   xmm0, dword ptr [rsi+118h]
+            public float rotation;              // rotation of room (about as yet unknown axis)         // ParseLevelRuleRooms+2AB  10A8 movss   xmm0, dword ptr [rsi+11Ch]
             // must be in radians - e.g. 90 degrees = pi/2 = 1.57079633
 
-            private int unknownEAXValue;     // see above float calcs - has value being assigned
+            private int _internalEAXValue;      // not seen used, but tested on all files - always 0    // see above float calcs - has value being assigned
 
-            // only seen these six floats as 0x00 in file, but are used/set further down. todo: look into
+            // only seen these six floats as 0x00 in file, but are used/set further down - all internal so doesn't matter
             /* RSI = ptr to start of room
                 ParseLevelRuleRooms+392      loc_140340FE2:          ; Logical AND
                 ParseLevelRuleRooms+392  10A8 and     qword ptr [rsi+140h], 0
@@ -104,16 +104,16 @@ namespace Hellgate
                 ParseLevelRuleRooms+480  10A8 addss   xmm0, dword ptr [rsi+138h]
                 ParseLevelRuleRooms+488  10A8 movss   dword ptr [rsi+138h], xmm0
              */
-            private float UnknownFloat1;
-            private float UnknownFloat2;
-            private float UnknownFloat3;
-            private float UnknownFloat4;
-            private float UnknownFloat5;
-            private float UnknownFloat6;
+            private float _internalFloat1;      // not seen used, but tested on all files - always 0
+            private float _internalFloat2;      // not seen used, but tested on all files - always 0
+            private float _internalFloat3;      // not seen used, but tested on all files - always 0
+            private float _internalFloat4;      // not seen used, but tested on all files - always 0
+            private float _internalFloat5;      // not seen used, but tested on all files - always 0
+            private float _internalFloat6;      // not seen used, but tested on all files - always 0
 
-            private Int32 Unknown5;          // not seen used
-            private int UnknownRAXValue;     // not read in, but assigned as rax or 0            // ParseLevelRuleRooms+386  10A8 mov     [rsi+140h], rax
-            private Int32 Unknown6;          // not seen used
+            private Int32 _internalUnknown4;    // not seen used, but tested on all files - always 0
+            private Int32 _internalRAXValue;    // not seen used, but tested on all files - always 0    // ParseLevelRuleRooms+386  10A8 mov     [rsi+140h], rax (rax or 0x00)
+            private Int32 _internalUnknown5;    // not seen used, but tested on all files - always 0
         }
 
         private byte[] _fileBytes;
@@ -127,13 +127,17 @@ namespace Hellgate
         {
         }
 
-        public bool ParseFileBytes(byte[] fileBytes, String filePath)
+        public void ParseFileBytes(byte[] fileBytes, String filePath)
         {
             Debug.Assert(fileBytes != null);
             _fileBytes = fileBytes;
             _filePath = filePath;
 
             _xmlDocument = new XmlDocument();
+            //XmlElement levelRules = _xmlDocument.CreateElement("LevelRules");
+            //_xmlDocument.AppendChild(levelRules);
+
+            
             XmlWriterSettings settings = new XmlWriterSettings
             {
                 Indent = true,
@@ -170,8 +174,6 @@ namespace Hellgate
 
 
             _xmlWriter.Close();
-
-            return true;
         }
 
         private void _ParseStaticRooms(int count, int offset)
