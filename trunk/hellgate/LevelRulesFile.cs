@@ -16,6 +16,20 @@ namespace Hellgate
         private const UInt32 FileMagicWord = 0xD2D21D25; // '%.ÒÒ'
         private const UInt32 RequiredVersion = 0x1E; // 30
 
+        // total size = 408 bytes (0x198)
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public class LevelRulesRandomFooter
+        {
+            public Int64 ConnectorRoomCount;
+            public Int64 ConnectorRuleOffset;
+            public Int32 RuleCount;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+            public Int32[] RoomCounts;
+            public Int32 Null;
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+            public Int64[] RuleOffsets;
+        }
+
         // total size = 328 bytes (0x148)
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class LevelRoom
@@ -142,11 +156,6 @@ namespace Hellgate
             int staticRulesDetailsOffset = FileTools.ByteArrayToInt32(fileBytes, 0x220); // 544
             if (staticRulesCount != 0 && staticRulesDetailsOffset != 0)
             {
-                if (staticRulesCount > 1)
-                {
-                    int bp = 0;
-                }
-
                 _ParseStaticRooms(staticRulesCount, staticRulesDetailsOffset);
             }
 
@@ -188,36 +197,26 @@ namespace Hellgate
         private void _ParseRandomRules(int count, int offset)
         {
             _xmlWriter.WriteStartElement("LevelRules");
-            for (int i = 0; i < count; i++, offset += 248)
+            LevelRulesRandomFooter[] levelRulesFooters = FileTools.ByteArrayToArray<LevelRulesRandomFooter>(_fileBytes, offset, count);
+
+            for (int i = 0; i < count; i++)
             {
-                int connectorRoomsCount = FileTools.ByteArrayToInt32(_fileBytes, offset);
-                offset += 8;
-                int connectorRoomsOffset = FileTools.ByteArrayToInt32(_fileBytes, offset);
-                offset += 8;
-                int ruleCount = FileTools.ByteArrayToInt32(_fileBytes, offset);
-                offset += 4;
-
-
                 // get first "connector" (?) rule
-                LevelRoom[] connectorRooms = FileTools.ByteArrayToArray<LevelRoom>(_fileBytes, connectorRoomsOffset, connectorRoomsCount);
+                LevelRoom[] connectorRooms = FileTools.ByteArrayToArray<LevelRoom>(_fileBytes, (Int32)levelRulesFooters[i].ConnectorRuleOffset, (Int32)levelRulesFooters[i].ConnectorRoomCount);
                 XmlSerializer xmlSerializer1 = new XmlSerializer(connectorRooms.GetType());
                 xmlSerializer1.Serialize(_xmlWriter, connectorRooms);
 
-
                 // then the actual level rules
-                _levelRules = new LevelRoom[ruleCount][];
-                for (int j = 0; j < ruleCount; j++, offset += 4)
+                _levelRules = new LevelRoom[levelRulesFooters[i].RuleCount][];
+                for (int j = 0; j < levelRulesFooters[i].RuleCount; j++)
                 {
-                    int roomCount = FileTools.ByteArrayToInt32(_fileBytes, offset);
-                    int ruleOffset = FileTools.ByteArrayToInt32(_fileBytes, offset + 132 + j * 4);
-
-                    _levelRules[j] = FileTools.ByteArrayToArray<LevelRoom>(_fileBytes, ruleOffset, roomCount);
+                    _levelRules[j] = FileTools.ByteArrayToArray<LevelRoom>(_fileBytes, (Int32)levelRulesFooters[i].RuleOffsets[j], levelRulesFooters[i].RoomCounts[j]);
                 }
-                offset += 128 + ruleCount * 8;
 
                 XmlSerializer xmlSerializer2 = new XmlSerializer(_levelRules.GetType());
                 xmlSerializer2.Serialize(_xmlWriter, _levelRules);
             }
+
             _xmlWriter.WriteEndElement();
         }
     }

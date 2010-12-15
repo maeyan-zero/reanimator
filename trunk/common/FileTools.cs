@@ -132,6 +132,27 @@ namespace Revival.Common
         }
 
         /// <summary>
+        /// Converts an array of bytes to an array of Int64 values.<br />
+        /// <i>offset</i> is incremented by the size of the Int64 array.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Int32 array.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="count">The number of Int64 array elements.</param>
+        /// <returns>The converted Int64 array.</returns>
+        public static Int64[] ByteArrayToInt64Array(byte[] byteArray, ref int offset, int count)
+        {
+            Int64[] int64Array = new Int64[count];
+
+            GCHandle pinnedArray = GCHandle.Alloc(byteArray, GCHandleType.Pinned);
+            IntPtr bytePtr = new IntPtr((int)pinnedArray.AddrOfPinnedObject() + offset);
+            Marshal.Copy(bytePtr, int64Array, 0, count);
+            pinnedArray.Free();
+            offset += count * 8;
+
+            return int64Array;
+        }
+
+        /// <summary>
         /// Converts an array of bytes to a structure.<br />
         /// <i>offset</i> is incremented by the size of the structure.
         /// </summary>
@@ -752,6 +773,8 @@ namespace Revival.Common
             public float[] Floats;
             [FieldOffset(0)]
             public Int32[] Int32s;
+            [FieldOffset(0)]
+            public Int32[] Int64s;
         }
 
         public static byte[] ToByteArray(this float[] floatArray)
