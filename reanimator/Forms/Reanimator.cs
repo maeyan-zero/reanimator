@@ -138,7 +138,7 @@ namespace Reanimator.Forms
             foreach (String drlFilePath in drlFiles)
             {
                 String path = drlFilePath;
-                //path = @"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl";
+                //path = @"D:\Games\Hellgate London\data\background\sewers\sr_rule_03.drl";
 
                 byte[] levelRulesBytes = File.ReadAllBytes(path);
                 LevelRulesFile levelRulesFile = new LevelRulesFile();
