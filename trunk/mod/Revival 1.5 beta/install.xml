@@ -165,9 +165,26 @@ Known Issues
 			<title>Test Center Extraction</title>
 			<description>Extracts files from the MP test center dat for use with Single Player.</description>
 			<extract source="mp_hellgate_1.10.180.3416_1.0.86.4580" destination="sp_hellgate_1.10.180.3416_1.0.86.4580">
+			
 				<!--<path>data\ai\*</path>-->
 				<path>data\ai\turret.xml.cooked</path>
+				
 				<!--<path>data\background\*</path>-->
+				<path>data\background\buildinterior\*</path>
+				<path>data\background\catacombs\*</path>
+				<path>data\background\caves\*</path>
+				<path>data\background\city\*</path>
+				<path>data\background\crypts\*</path>
+				<path>data\background\foetidtunnels2\*</path>
+				<path>data\background\hell\*</path>
+				<path>data\background\industrial_rooms\*</path>
+				<!--<path>data\background\props\*</path>-->
+				<path>data\background\river\*</path>
+				<path>data\background\sewers\*</path>
+				<path>data\background\skyboxes\*</path>
+				<!--<path>data\background\templarbase\*</path>-->
+				<!--<path>data\background\truthroomknowledge\*</path>-->
+
 				<path>data\effects\*</path>
 				<path>data\lights\*</path>
 				<!--<path>data\materials\*</path>-->
@@ -223,7 +240,11 @@ Known Issues
 				</entity>
 			</table>
 		</script>
-		<script type="disabled">
+		<script type="recommended" id="monster info">
+			<title>Increased Monster Information</title>
+			<description>Adds more information to the in game monster info window. Not just shields and health, but also their elemental resistances, damage absorbtion percentage, and more.</description>
+		</script>
+		<script type="optional">
 			<title>Purchasable Retrainers</title>
 			<description>Enable retrainers to be purchased.</description>
 			<table id="treasure">
@@ -235,10 +256,10 @@ Known Issues
 					<attribute id="item5m">3</attribute>
 					<attribute id="item5">71</attribute>
 					<attribute id="value5">1</attribute>
-					<attribute id="item6m">1</attribute>
-					<attribute id="item6">3</attribute>
-					<attribute id="value6">72</attribute>
-					<attribute id="item7m">1</attribute>
+					<attribute id="item6m">3</attribute>
+					<attribute id="item6">72</attribute>
+					<attribute id="value6">1</attribute>
+					<attribute id="item7m">2</attribute>
 					<attribute id="item7">202</attribute><!-- Consumable unittypes -->
 					<attribute id="value7">12</attribute>
 				</entity>
@@ -290,10 +311,6 @@ Known Issues
 					<attribute id="startingskills6">-1</attribute>
 				</entity>
 			</table>
-		</script>
-		<script type="recommended" id="monster info">
-			<title>Increased Monster Information</title>
-			<description>Adds more information to the in game monster info window. Not just shields and health, but also their elemental resistances, damage absorbtion percentage, and more.</description>
 		</script>
 		<script type="optional" id="expanded storage">
 			<title>Expanded Storage Mod</title>
