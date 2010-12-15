@@ -51,17 +51,7 @@ namespace Revival
             // Step one: Remove any "backup" prefixes from directory strings.
             foreach (IndexFile indexFile in fileManager.IndexFiles)
             {
-                bool isModified = false;
-                
-                foreach (FileEntry fileEntry in indexFile.Files)
-                {
-                    if (fileEntry.IsPatchedOut)
-                    {
-                        indexFile.PatchInFile(fileEntry);
-                        isModified = true;
-                    }
-                }
-
+                bool isModified = indexFile.Repair();
                 if (isModified)
                 {
                     byte[] ibuffer = indexFile.ToByteArray();
