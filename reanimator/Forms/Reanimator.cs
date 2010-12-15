@@ -30,6 +30,9 @@ namespace Reanimator.Forms
 
             if (true) return;
 
+            _LoadAllLevelRules();
+            return;
+
             //const String idxReadPath = @"D:\Games\Hellgate London\data\hellgate000.idx";
             //String idxWritePath = Path.Combine(Path.GetDirectoryName(idxReadPath),
             //                                   Path.GetFileNameWithoutExtension(idxReadPath) + ".dec.idx");
@@ -126,6 +129,34 @@ namespace Reanimator.Forms
 
         #region alexs_stuff
         //private TextWriter tw;
+
+        private static void _LoadAllLevelRules()
+        {
+            const String root = @"D:\Games\Hellgate London\data\background\";
+            List<String> drlFiles = new List<String>(Directory.GetFiles(root, "*.drl", SearchOption.AllDirectories));
+
+            foreach (String drlFilePath in drlFiles)
+            {
+                String path = drlFilePath;
+                //path = @"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl";
+
+                byte[] levelRulesBytes = File.ReadAllBytes(path);
+                LevelRulesFile levelRulesFile = new LevelRulesFile();
+
+                String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
+                Console.WriteLine("Loading: " + fileName);
+                try
+                {
+                    levelRulesFile.ParseFileBytes(levelRulesBytes, path);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Failed to load file!\n" + e);
+                    continue;
+                }
+
+            }
+        }
 
         private static void _UncookAllXml()
         {
