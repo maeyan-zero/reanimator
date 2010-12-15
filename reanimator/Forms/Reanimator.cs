@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
+using System.Xml;
 using Hellgate;
 using Revival.Common;
 
@@ -138,16 +139,25 @@ namespace Reanimator.Forms
             foreach (String drlFilePath in drlFiles)
             {
                 String path = drlFilePath;
-                //path = @"D:\Games\Hellgate London\data\background\sewers\sr_rule_03.drl";
+                //path = @"D:\Games\Hellgate London\data\background\sewers\bsb_rule_01.drl";
+                //path = @"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl";
 
                 byte[] levelRulesBytes = File.ReadAllBytes(path);
                 LevelRulesFile levelRulesFile = new LevelRulesFile();
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
+                String xmlPath = path.Replace(LevelRulesFile.FileExtention, ".xml");
                 Console.WriteLine("Loading: " + fileName);
                 try
                 {
-                    levelRulesFile.ParseFileBytes(levelRulesBytes, path);
+                    levelRulesFile.ParseFileBytes(levelRulesBytes);
+                    levelRulesFile.SaveXmlDocument(xmlPath);
+
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(xmlPath);
+                    LevelRulesFile levelRulesFile2 = new LevelRulesFile();
+                    byte[] bytes = levelRulesFile2.ParseXmlDocument(xmlDocument);
+                    File.WriteAllBytes(path + "2", bytes);
                 }
                 catch (Exception e)
                 {

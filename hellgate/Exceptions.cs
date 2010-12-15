@@ -80,5 +80,22 @@ namespace Hellgate
                 CustomMessage = "Unable to find an appropriate StringId for the DataFile: " + filePath + "\n";
             }
         }
+
+        public class InvalidXmlElement : ReanimatorException
+        {
+            public InvalidXmlElement(String element, String reason)
+            {
+                CustomMessage = String.Format("The XML Element \"{0}\" is invalid: {1}", element, reason);
+            }
+        }
+
+        public class InvalidXmlDocument : ReanimatorException
+        {
+            public InvalidXmlDocument(String reason)
+            {
+                CustomMessage = "The XML Document is invalid.\n" + reason;
+            }
+        }
+
     }
 }

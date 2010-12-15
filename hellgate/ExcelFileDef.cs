@@ -489,40 +489,6 @@ namespace Hellgate
             return stringId;
         }
 
-        //private String _stringId;
-        //public override String StringId
-        //{
-        //    get
-        //    {
-        //        if (!String.IsNullOrEmpty(_stringId)) return _stringId;
-
-        //        var query = DataTables.Where(dt => dt.Value == StructureId);
-        //        int count = query.Count();
-        //        if (query.Count() == 1) return _stringId = query.First().Key;
-
-        //        if (String.IsNullOrEmpty(FilePath)) return String.Empty;
-
-        //        return _stringId = FileName.ToUpper();
-        //    }
-
-        //    protected set
-        //    {
-        //        _stringId = value;
-        //    }
-        //}
-
-        //public static uint GetStructureId(string stringId)
-        //{
-        //    var query = DataTables.Where(dt => dt.Key == stringId);
-        //    return (query.Count() != 0) ? query.First().Value : 0;
-        //}
-
-        //public static TypeMap GetTypeMap(uint structureId)
-        //{
-        //    var query = DataTypes.Where(dt => dt.Key == structureId);
-        //    return (query.Count() != 0) ? query.First().Value : null;
-        //}
-
         static bool CheckToken(byte[] buffer, ref int offset, int token)
         {
             return token == FileTools.ByteArrayToInt32(buffer, ref offset);

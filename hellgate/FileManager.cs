@@ -191,7 +191,7 @@ namespace Hellgate
 
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
-                //if (fileEntry.FileNameString.Contains("strings_cin"))
+                //if (MPVersion && fileEntry.FileNameString.Contains("affix"))
                 //{
                 //    int bp = 0;
                 //}
