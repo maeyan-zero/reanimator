@@ -559,7 +559,7 @@ namespace Hellgate
                     byte[] byteArray = new byte[stringArray.Length];
                     for (int i = 0; i < byteArray.Length; i++)
                     {
-                        byteArray[i] = Byte.Parse(stringArray[i], NumberStyles.HexNumber);
+                        byteArray[i] = Byte.Parse(stringArray[i]);
                     }
                     newExtendedBuffer[row] = byteArray;
                 }
