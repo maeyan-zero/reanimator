@@ -9,8 +9,10 @@ namespace Hellgate.Excel
     class DamageTypes
     {
         TableHeader header;
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
+        [ExcelOutput(SortAscendingID = 2)]
         public short code;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string miniIcon;

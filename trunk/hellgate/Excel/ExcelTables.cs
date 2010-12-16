@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class ExcelTables
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String name;
         [ExcelOutput(SortAscendingID = 2)]

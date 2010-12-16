@@ -11,6 +11,7 @@ namespace Hellgate
 {
     public partial class ExcelFile
     {
+        public static bool Debug;
         public const String FolderPath = "excel\\";
         public const String FileExtention = ".txt.cooked";
         public const String FileExtentionClean = ".txt";
@@ -696,10 +697,8 @@ namespace Hellgate
         }
 
 
-        void DoPrecedenceHack(FieldInfo fieldInfo)
+        void DoPrecedenceHack(FieldInfo fieldInfo, OutputAttribute outputAttribute)
         {
-            OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
-
             if ((fieldInfo.FieldType == typeof(string)))
             {
                 foreach (object row in Rows)
@@ -709,7 +708,7 @@ namespace Hellgate
                 }
             }
 
-            if ((attribute.IsStringOffset))
+            if ((outputAttribute.IsStringOffset))
             {
                 for (int i = 0; i < _stringBuffer.Length; i++)
                 {
@@ -725,9 +724,9 @@ namespace Hellgate
                 }
             }
 
-            if (String.IsNullOrEmpty(attribute.SortColumnTwo)) return;
+            if (String.IsNullOrEmpty(outputAttribute.SortColumnTwo)) return;
 
-            FieldInfo fieldInfo2 = DataType.GetField(attribute.SortColumnTwo);
+            FieldInfo fieldInfo2 = DataType.GetField(outputAttribute.SortColumnTwo);
             if (fieldInfo2.FieldType != typeof(string)) return;
 
             foreach (object row in Rows)
@@ -744,6 +743,11 @@ namespace Hellgate
 
         int[][] CreateSortIndices()
         {
+            //if (StringId == "SOUNDS")
+            //{
+            //    int bp = 0;
+            //}
+
             int[][] customSorts = new int[4][];
 
             foreach (FieldInfo fieldInfo in DataType.GetFields())
@@ -754,7 +758,7 @@ namespace Hellgate
 
                 // Precedence Hack
                 // This Excel files order special characters differently to convention
-                DoPrecedenceHack(fieldInfo);
+                DoPrecedenceHack(fieldInfo, attribute);
 
                 #region Ascending Sort
                 // Standard Ascending Sort
@@ -769,7 +773,7 @@ namespace Hellgate
                     if (String.IsNullOrEmpty(attribute.SortColumnTwo))
                     {
                         // Requires Default
-                        if ((attribute.RequiresDefault))
+                        if (attribute.RequiresDefault)
                         {
                             int defaultRow = (from element in Rows
                                               orderby fieldInfo.GetValue(element)
@@ -804,25 +808,37 @@ namespace Hellgate
                             // Doesnt contain a code column
                             else
                             {
-                                var sortedList = from element in Rows
-                                                 where ((fieldInfo.GetValue(element).ToString() != "-1" &&
-                                                         !String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())) ||
-                                                         Rows.IndexOf(element) == defaultRow)
-                                                 orderby fieldInfo.GetValue(element)
-                                                 select Rows.IndexOf(element);
-                                customSorts[pos] = sortedList.ToArray();
+                                // is string offset, with default, no code field, sort ascending, single column
+                                if (attribute.IsStringOffset)
+                                {
+                                    var sortedList = from element in Rows
+                                                     group element by (Int32)fieldInfo.GetValue(element) into groupedElements
+                                                     orderby ReadStringTable((int)fieldInfo.GetValue(groupedElements.First()))
+                                                     select Rows.IndexOf(groupedElements.First());
+                                    customSorts[pos] = sortedList.ToArray();
+                                }
+                                else
+                                {
+                                    var sortedList = from element in Rows
+                                                     where ((fieldInfo.GetValue(element).ToString() != "-1" &&
+                                                             !String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())) ||
+                                                            Rows.IndexOf(element) == defaultRow)
+                                                     orderby fieldInfo.GetValue(element)
+                                                     select Rows.IndexOf(element);
+                                    customSorts[pos] = sortedList.ToArray();
+                                }
                             }
                         }
                         // Doesnt require a default row
                         else
                         {
                             // Contains a code column
-                            if (!(codeFieldInfo == null))
+                            if (codeFieldInfo != null)
                             {
                                 if (codeFieldInfo.FieldType == typeof(short))
                                 {
                                     var sortedList = from element in Rows
-                                                     where (!((short)codeFieldInfo.GetValue(element) == 0) &&
+                                                     where ((short)codeFieldInfo.GetValue(element) != 0 &&
                                                             !(fieldInfo.GetValue(element).ToString() == "-1") &&
                                                             !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())))
                                                      orderby fieldInfo.GetValue(element)
@@ -843,7 +859,7 @@ namespace Hellgate
                                     else
                                     {
                                         var sortedList = from element in Rows
-                                                         where (!((int)codeFieldInfo.GetValue(element) == 0) &&
+                                                         where ((int)codeFieldInfo.GetValue(element) != 0 &&
                                                                 !(fieldInfo.GetValue(element).ToString() == "-1") &&
                                                                 !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())))
                                                          orderby fieldInfo.GetValue(element)
@@ -855,12 +871,24 @@ namespace Hellgate
                             // Doesn't contain a code column
                             else
                             {
-                                var sortedList = from element in Rows
-                                                 where (!(fieldInfo.GetValue(element).ToString() == "-1") &&
-                                                        !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())))
-                                                 orderby fieldInfo.GetValue(element)
-                                                 select Rows.IndexOf(element);
-                                customSorts[pos] = sortedList.ToArray();
+                                // is string offset, no default, no code field, sort ascending, single column
+                                if (attribute.IsStringOffset)
+                                {
+                                    var sortedList = from element in Rows
+                                                     orderby ReadStringTable((int)fieldInfo.GetValue(element))
+                                                     select Rows.IndexOf(element);
+                                    customSorts[pos] = sortedList.ToArray();
+                                }
+                                else
+                                {
+                                    var sortedList = from element in Rows
+                                                     where (!(fieldInfo.GetValue(element).ToString() == "-1") &&
+                                                            !(String.IsNullOrEmpty(
+                                                                fieldInfo.GetValue(element).ToString())))
+                                                     orderby fieldInfo.GetValue(element)
+                                                     select Rows.IndexOf(element);
+                                    customSorts[pos] = sortedList.ToArray();
+                                }
                             }
                         }
                     }
@@ -879,7 +907,7 @@ namespace Hellgate
 
                 #region Distinct Sort
                 // A distinct sort
-                if (!(attribute.SortDistinctID == 0))
+                if (attribute.SortDistinctID != 0)
                 {
                     int pos = attribute.SortDistinctID - 1;
                     var sortedList = from element in Rows
@@ -890,7 +918,7 @@ namespace Hellgate
                     List<int> distinctList = new List<int>();
                     foreach (Object element in sortedList)
                     {
-                        if (!(lastValue == (int)fieldInfo.GetValue(element)))
+                        if (lastValue != (int)fieldInfo.GetValue(element))
                         {
                             lastValue = (int)fieldInfo.GetValue(element);
                             distinctList.Add(Rows.IndexOf(element));
@@ -902,7 +930,7 @@ namespace Hellgate
 
                 #region Post Order Sort
                 // Post order tree sort. only used in the affix class
-                if (!(attribute.SortPostOrderID == 0))
+                if (attribute.SortPostOrderID != 0)
                 {
                     int pos = attribute.SortPostOrderID - 1;
                     var sortedList = from element in Rows
