@@ -23,6 +23,7 @@ namespace Hellgate
         private byte[][] _extendedBuffer;
         private StringCollection _secondaryStrings;
         private List<ExcelScript> _rowScripts;
+        public List<Int32[]> IndexSortArray;
 
         private ExcelHeader _excelFileHeader = new ExcelHeader
         {
@@ -80,7 +81,7 @@ namespace Hellgate
         {
             // Pre-checks
             if (buffer == null) return false;
-            if (buffer.Length < 64) return false;
+            if (buffer.Length < 32) return false;
 
             // Initialization
             int offset = 0;
@@ -334,7 +335,16 @@ namespace Hellgate
             {
                 if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
                 int count = FileTools.ByteArrayToInt32(buffer, ref offset);
-                offset += (count * sizeof(int)); // do not allocate
+
+                if (Debug)
+                {
+                    if (IndexSortArray == null) IndexSortArray = new List<Int32[]>();
+                    IndexSortArray.Add(FileTools.ByteArrayToInt32Array(buffer, ref offset, count));
+                }
+                else
+                {
+                    offset += (count * sizeof(int)); // do not allocate
+                }
             }
 
             // rcsh, tysh, mysh, dneh blocks
@@ -629,17 +639,15 @@ namespace Hellgate
             // Secondary Strings
             if (_secondaryStrings != null)
             {
-                byte[] secondaryStringBuffer = new byte[1024];
-                int secondaryStringBufferOffset = 0;
+                FileTools.WriteToBuffer(ref buffer, ref offset, _secondaryStrings.Count);
                 foreach (string str in _secondaryStrings)
                 {
-                    FileTools.WriteToBuffer(ref secondaryStringBuffer, ref secondaryStringBufferOffset, str.Length + 1);
-                    FileTools.WriteToBuffer(ref secondaryStringBuffer, ref secondaryStringBufferOffset, FileTools.StringToASCIIByteArray(str));
-                    FileTools.WriteToBuffer(ref secondaryStringBuffer, ref secondaryStringBufferOffset, (byte)0x00);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, str.Length + 1); // +1 for \0
+                    FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(str));
+                    offset++; // \0
                 }
-                FileTools.WriteToBuffer(ref buffer, ref offset, _secondaryStrings.Count);
-                FileTools.WriteToBuffer(ref buffer, ref offset, secondaryStringBuffer, secondaryStringBufferOffset, false);
             }
+
 
             // Generate custom sorts
             int[][] customSorts = CreateSortIndices();

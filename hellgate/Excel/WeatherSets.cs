@@ -9,6 +9,7 @@ namespace Hellgate.Excel
     class WeatherSets
     {
         TableHeader header;
+        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public Int32 weather1;//idx

@@ -175,6 +175,8 @@ namespace Hellgate
         /// <returns>Returns true on success.</returns>
         public bool LoadTableFiles()
         {
+            ExcelFile.Debug = false;
+
             // want excel files and strings files
             foreach (FileEntry fileEntry in
                 FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention) ||
@@ -192,10 +194,10 @@ namespace Hellgate
 
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
-                //if (MPVersion && fileEntry.FileNameString.Contains("affix"))
-                //{
-                //    int bp = 0;
-                //}
+                if (fileEntry.FileNameString.Contains("drlg"))
+                {
+                    int bp = 0;
+                }
 
                 // parse file data
                 DataFile dataFile;
@@ -208,25 +210,67 @@ namespace Hellgate
                     catch (Exception e)
                     {
                         ExceptionLogger.LogException(e);
-                        Console.WriteLine("Critical Error: Failed to load excel file: " + fileEntry.FileNameString);
+                        Console.WriteLine(String.Format("Critical Error: Failed to load excel file {0} (MPVersion={1})", fileEntry.FileNameString, MPVersion));
                         continue;
                     }
                     if (dataFile.Attributes.IsEmpty) continue;
 
-                    //try
-                    //{
-                    //    ExcelFile csvExcel = new ExcelFile(dataFile.ExportCSV(), fileEntry.RelativeFullPathWithoutPatch);
-                    //    byte[] recookedExcelBytes = csvExcel.ToByteArray();
+                    if (ExcelFile.Debug && !MPVersion)
+                    {
+                        //Console.WriteLine("Loading " + fileEntry.FileNameString);
 
-                    //    if (fileBytes.Length != recookedExcelBytes.Length)
-                    //    {
-                    //        Console.WriteLine("Recooked Excel file has differing length: " + dataFile.StringId);
-                    //    }
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    Console.WriteLine("Excel file Exception: " + dataFile.StringId);
-                    //}
+                        try
+                        {
+                            byte[] dataFileBytes = dataFile.ToByteArray();
+                            if (fileBytes.Length != dataFileBytes.Length)
+                            {
+                                Console.WriteLine("ToByteArray() dataFileBytes has differing length: " + dataFile.StringId);
+                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
+                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArray", dataFileBytes);
+                            }
+                            else
+                            {
+                                ExcelFile fromBytesExcel = new ExcelFile(dataFileBytes, fileEntry.RelativeFullPathWithoutPatch);
+                                if (!fromBytesExcel.HasIntegrity)
+                                {
+                                    Console.WriteLine("fromBytesExcel = new Excel from ToByteArray() failed: " + dataFile.StringId);
+                                }
+                                else
+                                {
+                                    byte[] dataFileBytesFromToByteArray = fromBytesExcel.ToByteArray();
+                                    if (fileBytes.Length != dataFileBytesFromToByteArray.Length)
+                                    {
+                                        Console.WriteLine("ToByteArray() dataFileBytesFromToByteArray has differing length: " + dataFile.StringId);
+                                    }
+                                    else
+                                    {
+                                        ExcelFile csvExcel = new ExcelFile(fromBytesExcel.ExportCSV(), fileEntry.RelativeFullPathWithoutPatch);
+                                        if (!csvExcel.HasIntegrity)
+                                        {
+                                            Console.WriteLine("csvExcel = new Excel from ExportCSV() failed: " + dataFile.StringId);
+                                        }
+                                        else
+                                        {
+                                            byte[] recookedExcelBytes = csvExcel.ToByteArray();
+                                            if (fileBytes.Length != recookedExcelBytes.Length)
+                                            {
+                                                Console.WriteLine("Recooked Excel file has differing length: " + dataFile.StringId);
+
+                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
+                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArray", dataFileBytes);
+                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
+                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".recookedExcelBytes", recookedExcelBytes);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Excel file Exception: " + dataFile.StringId);
+                        }
+                    }
                 }
                 else
                 {

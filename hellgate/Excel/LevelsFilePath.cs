@@ -14,6 +14,7 @@ namespace Hellgate.Excel
          it's SF01, yet if they're reversed, 10FS. #34 is 2nd CR01, or 10RC.
          On another note, for some reason only the first 3 digits of code are displayed*/
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
+        [ExcelOutput(SortAscendingID = 1)]
         public Int32 code;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string path;
