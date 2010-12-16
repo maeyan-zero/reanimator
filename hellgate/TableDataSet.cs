@@ -367,7 +367,7 @@ namespace Hellgate
 
                 if ((excelOutputAttribute.IsTableIndex))
                 {
-                    String tableStringId = excelOutputAttribute.TableStringID;
+                    String tableStringId = excelOutputAttribute.TableStringId;
 
                     DataTable dt = XlsDataSet.Tables[tableStringId] ?? LoadRelatedTable(tableStringId);
 

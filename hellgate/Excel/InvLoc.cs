@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 using TableHeader = Hellgate.ExcelFile.TableHeader;
 
@@ -9,10 +8,10 @@ namespace Hellgate.Excel
     class InvLoc
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string name;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public short code;
     }
 }

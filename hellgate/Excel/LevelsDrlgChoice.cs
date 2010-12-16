@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class LevelsDrlgChoice
     {
         TableHeader header;
-        [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
+        [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 name; //pchar
         public Int32 undefined1;
         public float namedMonsterChance;
@@ -24,7 +24,7 @@ namespace Hellgate.Excel
         public Int32 environmentOverRide;//idx
         public float environmentSpawnClassRoomDensity;
         public Int32 environmentSpawnClass;//idx
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 undefined3;
     }

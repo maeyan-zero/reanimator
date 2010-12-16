@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class BudgetTextureMips
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         public Int32 group;
         public float diffuse;
         public float normal;

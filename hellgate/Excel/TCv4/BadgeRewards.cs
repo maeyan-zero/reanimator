@@ -9,10 +9,10 @@ namespace Hellgate.Excel.TCv4
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string badgeRewardName;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 badgeName;
         public Int32 item;//idx

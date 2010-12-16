@@ -9,7 +9,7 @@ namespace Hellgate.Excel.TCv4
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(IsStringOffset = true, SortAscendingID = 1, RequiresDefault = true)]
+        [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 name; //pchar
         public Int32 undefined1;
         [ExcelOutput(IsStringOffset = true)]

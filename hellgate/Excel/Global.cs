@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class Global
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]

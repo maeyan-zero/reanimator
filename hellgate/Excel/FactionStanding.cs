@@ -9,14 +9,14 @@ namespace Hellgate.Excel
     class FactionStanding
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
         public Int32 displayString;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
         public Int32 displayStringNumbers;
         public Int32 minScore;
         public Int32 maxScore;

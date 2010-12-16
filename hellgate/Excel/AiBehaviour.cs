@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class AiBehaviour
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 60)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]

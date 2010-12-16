@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class WardrobeAppearanceGroup
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
@@ -18,7 +18,7 @@ namespace Hellgate.Excel
         public string textureFolder;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string appearance;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         [ExcelOutput(IsBool = true)]
         public Int32 subscriberOnly;//bool;

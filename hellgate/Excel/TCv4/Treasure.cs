@@ -9,22 +9,22 @@ namespace Hellgate.Excel.TCv4
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string treasureClass;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowUnitTypes1;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowUnitTypes2;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowUnitTypes3;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowUnitTypes4;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowUnitTypes5;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowUnitTypes6;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "GLOBAL_THEMES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
         public Int32 globalThemeRequired;
         public Int32 unknown02;
         public Int32 pickTypes;

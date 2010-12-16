@@ -9,16 +9,16 @@ namespace Hellgate.Excel
     class MonsterQuality
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string quality;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 rarity;
         public Int32 nameColor;//idx
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
         public Int32 displayNameStringKey;//stridx
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Affix")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Affix")]
         public Int32 championFormatStringKey;//stridx
         [ExcelOutput(IsBool = true)]
         public Int32 pickProperName;//bool

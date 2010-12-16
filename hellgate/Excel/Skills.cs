@@ -9,10 +9,10 @@ namespace Hellgate.Excel
     class Skills
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String skill;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 buffer;
         [ExcelOutput(IsBitmask = true)]
@@ -27,7 +27,7 @@ namespace Hellgate.Excel
         public Bitmask05 bitmask5;
         [ExcelOutput(IsBitmask = true)]
         public Bitmask06 bitmask6;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Skills")]
         public Int32 displayName;//stridx
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String descriptionStringFunction;
@@ -42,15 +42,15 @@ namespace Hellgate.Excel
         public Int32 unknown103;
         public Int32 unknown104;
         public Int32 unknown105;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Skills")]
         public Int32 descriptionString;//stridx
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Skills")]
         public Int32 effectString;//stridx
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Skills")]
         public Int32 skillBonusString;//stridx
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Skills")]
         public Int32 accumulationString;//stridx
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Skills")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Skills")]
         public Int32 stringAfterRequiredWeapon;//stridx
         public Int32 skillsToAccumulate1;
         public Int32 skillsToAccumulate2;
@@ -545,7 +545,7 @@ namespace Hellgate.Excel
 
         public static class Mysh
         {
-            public static byte[] data = new byte[]
+            public static readonly byte[] Data = new byte[]
             {
                 0x03, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
                 0x78, 0x78, 0x00, 0x00, 0x00, 0x39, 0x00, 0x00,

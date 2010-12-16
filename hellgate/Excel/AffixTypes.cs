@@ -9,10 +9,10 @@ namespace Hellgate.Excel
     class AffixTypes
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string AffixType;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FONTCOLORS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 NameColor;
         public Int32 DownGrade;//idx
         [ExcelOutput(IsBool = true)]

@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class EffectsIndex
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string name;
         public Int32 fixedFunc;//idx

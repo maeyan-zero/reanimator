@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class LevelsRules
     {
         TableHeader header;
-        [ExcelOutput(SortDistinctID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]//Except it's by unique drlgFileName, and it starts at 918 which is an empty entry?
         public string drlgFileName;
         public Int32 undefined1;

@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class MusicGrooveLevels
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//seems to be by name, but with an empty entry first.
         public Int32 grooveLevelType;//idx
