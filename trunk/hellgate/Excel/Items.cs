@@ -331,7 +331,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")]
         public Int32 censorClassNoGore;//index                      // 40   0x00000000000005E8  XLS_ReadIndex
         public Int32 sex;                                           // 41   0x00000000000005EC  XLS_ReadInternalIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "PLAYERRACE")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "PLAYER_RACE")]
         public Int32 race;//index                                   // 42   0x00000000000005F0  XLS_ReadIndex
         public Int32 rarity;                                        // 107  0x00000000000005F4  XLS_ReadInt32
         public Int32 spawnChance;                                   // 109  0x00000000000005F8  XLS_ReadInt32
@@ -347,7 +347,7 @@ namespace Hellgate.Excel
         public Int32 minionClass;//index                            // 52   0x0000000000000610  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_NAME_TYPES")]
         public Int32 monsterNameType;//index                        // 53   0x0000000000000614  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "ITEMQUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "ITEM_QUALITY")]
         public Int32 itemQuality;//index                            // 51   0x0000000000000618  XLS_ReadIndex
         public Int32 angerRange;                                    // 416  0x000000000000061C  XLS_ReadInt32
         public Int32 baseLevel;                                     // 90   0x0000000000000620  XLS_ReadInt32
@@ -435,9 +435,9 @@ namespace Hellgate.Excel
         public Int32 wardrobeFallback;                              // 114  0x000000000000070C  XLS_ReadIndex
         public Int32 null0;                                         // 115  0x0000000000000710  XLS_ReadInt32
         public Int32 wardrobeMip;                                   // 118  0x0000000000000714  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_APPEARENCE_GROUP")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 wardrobeAppearanceGroup;                       // 116  0x0000000000000718  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_APPEARENCE_GROUP")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 wardrobeAppearanceGroup1st;                    // 117  0x000000000000071C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "ANIMATION_STANCE")]
         public Int32 startingStance;                                // 120  0x0000000000000720  XLS_ReadIndex
@@ -629,7 +629,7 @@ namespace Hellgate.Excel
         public Int32 invWidth;                                      // 256  0x0000000000000A08  XLS_ReadInt32
         public Int32 invHeight;                                     // 257  0x0000000000000A0C  XLS_ReadInt32
         public Int64 qualities;                                     // 123  0x0000000000000A10  XLS_ReadBits - I think this reads 8 bytes (64 bits); input = 0x40 = 64
-        [ExcelOutput(IsTableIndex = true, TableStringID = "ITEMQUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringID = "ITEM_QUALITY")]
         public Int32 requiredQuality;//index                        // 124  0x0000000000000A18  XLS_ReadIndex
         public Int32 qualityName;                                   // 125  0x0000000000000A1C  XLS_ReadInternalIndex
         [ExcelOutput(IsTableIndex = true, TableStringID = "MISSILES")]
@@ -897,9 +897,9 @@ namespace Hellgate.Excel
         public Int32 corpseExplodePoints;                           // 471  0x0000000000000D00  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
         public Int32 requiredAttackerUnitType;//index               // 472  0x0000000000000D04  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREA_AFFIXS")]
+        //[ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREA_AFFIXS")]
         public Int32 startingLevelArea;//index                      // 474  0x0000000000000D08  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREA_AFFIXS")]
+        //[ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREA_AFFIXS")]
         public Int32 warpToLevelArea;//index                        // 476  0x0000000000000D0C  XLS_ReadIndex
         public Int32 warpToFloor;                                   // 477  0x0000000000000D10  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringID = "GLOBAL_THEMES")]
