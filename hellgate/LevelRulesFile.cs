@@ -10,7 +10,8 @@ namespace Hellgate
 {
     public class LevelRulesFile : IDisposable
     {
-        public const String FileExtention = ".drl";
+        public const String FileExtension = ".drl";
+        public const String FileExtensionXml = ".drl.xml";
         private const UInt32 FileMagicWord = 0xD2D21D25; // '%.ÒÒ'
         private const UInt32 RequiredVersion = 0x1E; // 30
 
@@ -64,7 +65,7 @@ namespace Hellgate
                 ParseLevelRuleRooms+12F  10A8 movss   dword ptr [rsi+118h], xmm0
                 ParseLevelRuleRooms+137  10A8 mov     [rsi+120h], eax
              */
-            public float xPostion;              // x offset of room                                     // ParseLevelRuleRooms+EA   10A8 movss   xmm0, dword ptr [rsi+110h]
+            public float xPosition;              // x offset of room                                     // ParseLevelRuleRooms+EA   10A8 movss   xmm0, dword ptr [rsi+110h]
             public float yPosition;             // y offset of room                                     // ParseLevelRuleRooms+103  10A8 addss   xmm1, dword ptr [rsi+114h]
             public float zPosition;             // z offset of room                                     // ParseLevelRuleRooms+113  10A8 movss   xmm0, dword ptr [rsi+118h]
             public float rotation;              // rotation of room (about as yet unknown axis)         // ParseLevelRuleRooms+2AB  10A8 movss   xmm0, dword ptr [rsi+11Ch]
@@ -353,6 +354,11 @@ namespace Hellgate
                 for (int j = 0; j < levelRulesFooters[i].RuleCount; j++)
                 {
                     _xmlLevelRules.LevelRules[i].Rules[j] = FileTools.ByteArrayToArray<Room>(_fileBytes, (Int32)levelRulesFooters[i].RuleOffsets[j], levelRulesFooters[i].RoomCounts[j]);
+
+                    //foreach (Room room in _xmlLevelRules.LevelRules[i].Rules[j])
+                    //{
+                    //    Console.WriteLine(room.Unknown);
+                    //}
                 }
             }
         }

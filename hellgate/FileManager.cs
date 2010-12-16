@@ -339,15 +339,16 @@ namespace Hellgate
         /// The user must manually call EndAllDatAccess to close access to any opened .dat files during the process.
         /// </summary>
         /// <param name="fileEntry">The file entry details to read.</param>
+        /// <param name="ignorePatchedOut">If true, will ignore the files patched out state effectivly forcing file reading from .dats as if it was never patched out.</param>
         /// <returns>The file byte array, or null on error.</returns>
-        public byte[] GetFileBytes(FileEntry fileEntry)
+        public byte[] GetFileBytes(FileEntry fileEntry, bool ignorePatchedOut=false)
         {
             byte[] fileBytes = null;
 
 
             // if file is backed up, check for unpacked copy
             String filePath = fileEntry.RelativeFullPath;
-            if (fileEntry.IsPatchedOut)
+            if (fileEntry.IsPatchedOut && !ignorePatchedOut)
             {
                 filePath = filePath.Replace(@"backup\", "");
 
