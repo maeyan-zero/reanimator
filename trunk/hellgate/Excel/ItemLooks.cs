@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class ItemLooks
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "lookGroup")]
         public Int32 item;//idx
         public Int32 lookGroup;//idx
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]

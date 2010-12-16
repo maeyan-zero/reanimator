@@ -391,12 +391,9 @@ namespace Hellgate
             public bool IsStringIndex { get; set; }
             public bool IsTableIndex { get; set; }
             public bool IsSecondaryString { get; set; }
-            public string TableStringID { get; set; }
-            public int SortAscendingID { get; set; }
-            public int SortDistinctID { get; set; }
-            public int SortPostOrderID { get; set; }
-            public bool RequiresDefault { get; set; }
-            public string SortColumnTwo { get; set; }
+            public string TableStringId { get; set; }
+            public int SortColumnOrder { get; set; }
+            public string SecondarySortColumn { get; set; }
         }
 
         abstract class Token
@@ -505,7 +502,7 @@ namespace Hellgate
             if (offset == 0) return null;
             int position = offset;
             int value = FileTools.ByteArrayToInt32(_integerBuffer, position);
-            
+
             while (value != 0)
             {
                 if (IntTableDef.Case01.Contains(value)) position += (3 * sizeof(int));
@@ -724,9 +721,9 @@ namespace Hellgate
                 }
             }
 
-            if (String.IsNullOrEmpty(outputAttribute.SortColumnTwo)) return;
+            if (String.IsNullOrEmpty(outputAttribute.SecondarySortColumn)) return;
 
-            FieldInfo fieldInfo2 = DataType.GetField(outputAttribute.SortColumnTwo);
+            FieldInfo fieldInfo2 = DataType.GetField(outputAttribute.SecondarySortColumn);
             if (fieldInfo2.FieldType != typeof(string)) return;
 
             foreach (object row in Rows)
@@ -741,211 +738,90 @@ namespace Hellgate
 
         }
 
-        int[][] CreateSortIndices()
+        IEnumerable<int[]> _GenerateSortedIndexArrays()
         {
             //if (StringId == "SOUNDS")
             //{
             //    int bp = 0;
             //}
 
-            int[][] customSorts = new int[4][];
-
+            int[][] sortedIndexArrays = new int[4][];
+            FieldInfo headerField = DataType.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (FieldInfo fieldInfo in DataType.GetFields())
             {
                 OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
-                if ((attribute == null)) continue;
-                if ((attribute.SortAscendingID == 0) && (attribute.SortDistinctID == 0) && (attribute.SortPostOrderID == 0)) continue;
+                if (attribute == null || attribute.SortColumnOrder == 0) continue;
 
                 // Precedence Hack
-                // This Excel files order special characters differently to convention
+                // excel files order special characters differently to convention
                 DoPrecedenceHack(fieldInfo, attribute);
 
-                #region Ascending Sort
-                // Standard Ascending Sort
-                if (attribute.SortAscendingID != 0)
+                int pos = attribute.SortColumnOrder - 1;
+
+                    // need to order by string, not string offset
+                if (attribute.IsStringOffset)
                 {
-                    // Gets the sort array position
-                    int pos = attribute.SortAscendingID - 1;
-                    // Checks for code field
-                    FieldInfo codeFieldInfo = DataType.GetField("code");
-
-                    // 1 Ascending Sort Column
-                    if (String.IsNullOrEmpty(attribute.SortColumnTwo))
-                    {
-                        // Requires Default
-                        if (attribute.RequiresDefault)
-                        {
-                            int defaultRow = (from element in Rows
-                                              orderby fieldInfo.GetValue(element)
-                                              select Rows.IndexOf(element)).First();
-
-                            // Contains a code column
-                            if (codeFieldInfo != null)
-                            {
-                                if (codeFieldInfo.FieldType == typeof(short))
-                                {
-                                    var sortedList = from element in Rows
-                                                     where (((short)codeFieldInfo.GetValue(element) != 0 &&
-                                                             fieldInfo.GetValue(element).ToString() != "-1" &&
-                                                             !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString()))) ||
-                                                             Rows.IndexOf(element) == defaultRow)
-                                                     orderby fieldInfo.GetValue(element)
-                                                     select Rows.IndexOf(element);
-                                    customSorts[pos] = sortedList.ToArray();
-                                }
-                                else
-                                {
-                                    var sortedList = from element in Rows
-                                                     where (((int)codeFieldInfo.GetValue(element) != 0 &&
-                                                             fieldInfo.GetValue(element).ToString() != "-1" &&
-                                                             !String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())) ||
-                                                             Rows.IndexOf(element) == defaultRow)
-                                                     orderby fieldInfo.GetValue(element)
-                                                     select Rows.IndexOf(element);
-                                    customSorts[pos] = sortedList.ToArray();
-                                }
-                            }
-                            // Doesnt contain a code column
-                            else
-                            {
-                                // is string offset, with default, no code field, sort ascending, single column
-                                if (attribute.IsStringOffset)
-                                {
-                                    var sortedList = from element in Rows
-                                                     group element by (Int32)fieldInfo.GetValue(element) into groupedElements
-                                                     orderby ReadStringTable((int)fieldInfo.GetValue(groupedElements.First()))
-                                                     select Rows.IndexOf(groupedElements.First());
-                                    customSorts[pos] = sortedList.ToArray();
-                                }
-                                else
-                                {
-                                    var sortedList = from element in Rows
-                                                     where ((fieldInfo.GetValue(element).ToString() != "-1" &&
-                                                             !String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())) ||
-                                                            Rows.IndexOf(element) == defaultRow)
-                                                     orderby fieldInfo.GetValue(element)
-                                                     select Rows.IndexOf(element);
-                                    customSorts[pos] = sortedList.ToArray();
-                                }
-                            }
-                        }
-                        // Doesnt require a default row
-                        else
-                        {
-                            // Contains a code column
-                            if (codeFieldInfo != null)
-                            {
-                                if (codeFieldInfo.FieldType == typeof(short))
-                                {
-                                    var sortedList = from element in Rows
-                                                     where ((short)codeFieldInfo.GetValue(element) != 0 &&
-                                                            !(fieldInfo.GetValue(element).ToString() == "-1") &&
-                                                            !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())))
-                                                     orderby fieldInfo.GetValue(element)
-                                                     select Rows.IndexOf(element);
-                                    customSorts[pos] = sortedList.ToArray();
-                                }
-                                else
-                                {
-                                    // Is a string offset
-                                    if (attribute.IsStringOffset)
-                                    {
-                                        var sortedList = from element in Rows
-                                                         where (int)codeFieldInfo.GetValue(element) != 0
-                                                         orderby ReadStringTable((int)fieldInfo.GetValue(element))
-                                                         select Rows.IndexOf(element);
-                                        customSorts[pos] = sortedList.ToArray();
-                                    }
-                                    else
-                                    {
-                                        var sortedList = from element in Rows
-                                                         where ((int)codeFieldInfo.GetValue(element) != 0 &&
-                                                                !(fieldInfo.GetValue(element).ToString() == "-1") &&
-                                                                !(String.IsNullOrEmpty(fieldInfo.GetValue(element).ToString())))
-                                                         orderby fieldInfo.GetValue(element)
-                                                         select Rows.IndexOf(element);
-                                        customSorts[pos] = sortedList.ToArray();
-                                    }
-                                }
-                            }
-                            // Doesn't contain a code column
-                            else
-                            {
-                                // is string offset, no default, no code field, sort ascending, single column
-                                if (attribute.IsStringOffset)
-                                {
-                                    var sortedList = from element in Rows
-                                                     orderby ReadStringTable((int)fieldInfo.GetValue(element))
-                                                     select Rows.IndexOf(element);
-                                    customSorts[pos] = sortedList.ToArray();
-                                }
-                                else
-                                {
-                                    var sortedList = from element in Rows
-                                                     where (!(fieldInfo.GetValue(element).ToString() == "-1") &&
-                                                            !(String.IsNullOrEmpty(
-                                                                fieldInfo.GetValue(element).ToString())))
-                                                     orderby fieldInfo.GetValue(element)
-                                                     select Rows.IndexOf(element);
-                                    customSorts[pos] = sortedList.ToArray();
-                                }
-                            }
-                        }
-                    }
-                    // Sort by 2 columns - only used in wardrobe tables
-                    else
-                    {
-                        FieldInfo fieldInfo2 = DataType.GetField(attribute.SortColumnTwo);
-                        var sortedList = from element in Rows
-                                         where (int)fieldInfo.GetValue(element) != 0 // wardrobe tables exclude index 0
-                                         orderby fieldInfo.GetValue(element), fieldInfo2.GetValue(element)
-                                         select Rows.IndexOf(element);
-                        customSorts[pos] = sortedList.ToArray();
-                    }
-                }
-                #endregion
-
-                #region Distinct Sort
-                // A distinct sort
-                if (attribute.SortDistinctID != 0)
-                {
-                    int pos = attribute.SortDistinctID - 1;
                     var sortedList = from element in Rows
-                                     where (!(fieldInfo.GetValue(element).ToString() == "-1"))
-                                     orderby fieldInfo.GetValue(element)
-                                     select element;
-                    int lastValue = -1;
-                    List<int> distinctList = new List<int>();
-                    foreach (Object element in sortedList)
-                    {
-                        if (lastValue != (int)fieldInfo.GetValue(element))
-                        {
-                            lastValue = (int)fieldInfo.GetValue(element);
-                            distinctList.Add(Rows.IndexOf(element));
-                        }
-                    }
-                    customSorts[pos] = distinctList.ToArray();
+                                     let tableHeader = (TableHeader)headerField.GetValue(element)
+                                     where (tableHeader.Unknown1 != 0x02 &&
+                                            (tableHeader.Unknown2 >= 0x38 && tableHeader.Unknown2 <= 0x3F || tableHeader.Unknown2 == 0x01) &&
+                                            (tableHeader.VersionMajor == 0 || tableHeader.VersionMajor == 10))
+                                     group element by fieldInfo.GetValue(element) into groupedElements
+                                     let elementFirst = groupedElements.First()
+                                     orderby ReadStringTable((int)fieldInfo.GetValue(elementFirst))
+                                     select Rows.IndexOf(elementFirst);
+                    sortedIndexArrays[pos] = sortedList.ToArray();
                 }
-                #endregion
 
-                #region Post Order Sort
-                // Post order tree sort. only used in the affix class
-                if (attribute.SortPostOrderID != 0)
+                    // we don't want '-1' rows for not-present secondary strings
+                else if (attribute.IsSecondaryString)
                 {
-                    int pos = attribute.SortPostOrderID - 1;
                     var sortedList = from element in Rows
-                                     where (!(fieldInfo.GetValue(element).ToString() == "0"))
-                                     orderby fieldInfo.GetValue(element)
+                                     let tableHeader = (TableHeader)headerField.GetValue(element)
+                                     where (tableHeader.Unknown1 != 0x02 &&
+                                            (tableHeader.Unknown2 >= 0x38 && tableHeader.Unknown2 <= 0x3F || tableHeader.Unknown2 == 0x01) &&
+                                            (tableHeader.VersionMajor == 0 || tableHeader.VersionMajor == 10)) && fieldInfo.GetValue(element).ToString() != "-1"
+                                     group element by fieldInfo.GetValue(element) into groupedElements
+                                     let elementFirst = groupedElements.First()
+                                     orderby fieldInfo.GetValue(elementFirst)
+                                     select Rows.IndexOf(elementFirst);
+                    sortedIndexArrays[pos] = sortedList.ToArray();
+                }
+
+                    // with two column sorting we don't group
+                else if (!String.IsNullOrEmpty(attribute.SecondarySortColumn))
+                {
+                    FieldInfo sortBy2 = DataType.GetField(attribute.SecondarySortColumn);
+                    var sortedList = from element in Rows
+                                     let tableHeader = (TableHeader)headerField.GetValue(element)
+                                     where (tableHeader.Unknown1 != 0x02 &&
+                                            (tableHeader.Unknown2 >= 0x38 && tableHeader.Unknown2 <= 0x3F || tableHeader.Unknown2 == 0x01) &&
+                                            (tableHeader.VersionMajor == 0 || tableHeader.VersionMajor == 10))
+                                     orderby fieldInfo.GetValue(element), sortBy2.GetValue(element)
                                      select Rows.IndexOf(element);
-                    customSorts[pos] = sortedList.ToArray();
+                    sortedIndexArrays[pos] = sortedList.ToArray();
                 }
-                #endregion
+
+                    // main sorting
+                else
+                {
+                    var sortedList = from element in Rows
+                                     let tableHeader = (TableHeader)headerField.GetValue(element)
+                                     where (tableHeader.Unknown1 != 0x02 &&
+                                            (tableHeader.Unknown2 >= 0x38 && tableHeader.Unknown2 <= 0x3F || tableHeader.Unknown2 == 0x01) &&
+                                            (tableHeader.VersionMajor == 0 || tableHeader.VersionMajor == 10))
+                                     group element by fieldInfo.GetValue(element) into groupedElements
+                                     let elementFirst = groupedElements.First()
+                                     orderby fieldInfo.GetValue(elementFirst)
+                                     select Rows.IndexOf(elementFirst);
+                    sortedIndexArrays[pos] = sortedList.ToArray();
+                }
 
                 // Remove precedence hack
                 // UndoPrecedenceHack(fieldInfo);
             }
 
-            return customSorts;
+            return sortedIndexArrays;
         }
     }
 }

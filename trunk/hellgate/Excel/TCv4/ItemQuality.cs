@@ -9,10 +9,10 @@ namespace Hellgate.Excel.TCv4
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String quality;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         Int32 craftingBreakdownTreasure;
         [ExcelOutput(IsStringIndex = true)]
@@ -25,9 +25,9 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsStringIndex = true)]
         public Int32 baseDescFormatString;
         public Int32 unknown01;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FONTCOLORS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 nameColor;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FONTCOLORS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 bkgdColor;
         [ExcelOutput(IsBool = true)]
         public Int32 doTransactionLogging;
@@ -47,14 +47,14 @@ namespace Hellgate.Excel.TCv4
         public Int32 state;
         public Int32 flippySound;
         public Int32 usable;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "ITEM_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 scrapQuality;
         public Int32 isSpecialScrapQuality;
         public Int32 scrapQualityDefault;
         public Int32 extraScrapChance;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "ITEMS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 extraScrapItem;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "ITEM_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 extraScrapQuality;
         public Int32 dismantleResultSound;
         public Int32 downgrade;
@@ -83,17 +83,17 @@ namespace Hellgate.Excel.TCv4
         public Int32 affix1Type5Weight;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 affix1Type6Weight;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix1Type1;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix1Type2;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix1Type3;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix1Type4;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix1Type5;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix1Type6;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 affix2Chance;

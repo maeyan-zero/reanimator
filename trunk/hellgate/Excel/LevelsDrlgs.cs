@@ -9,14 +9,14 @@ namespace Hellgate.Excel
     class LevelsDrlgs
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string drlgRuleSet;
         public Int32 drlgDisplayName;//stridx
         public Int32 undefined1;
-        [ExcelOutput(SortDistinctID = 2)]
+        [ExcelOutput(IsSecondaryString = true, SortColumnOrder = 2)]
         public Int32 style;
         public Int32 theme0;
         public Int32 theme1;

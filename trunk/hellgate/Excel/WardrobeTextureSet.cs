@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class WardrobeTextureSet
     {
         TableHeader header;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_TEXTURESET_GROUP", SortAscendingID = 1, SortColumnTwo = "appearanceGroup1")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_TEXTURESET_GROUP", SortColumnOrder = 1, SecondarySortColumn = "appearanceGroup1")]
         public Int32 textureSetGroup;//idx;
         public Int32 appearanceGroupFolder;//idx;
         public Int32 appearanceGroup1;//idx;

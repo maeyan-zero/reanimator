@@ -9,10 +9,10 @@ namespace Hellgate.Excel
     class Quest
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 style;
         [ExcelOutput(IsStringIndex = true)]
@@ -64,13 +64,13 @@ namespace Hellgate.Excel
         public Int32 levelsPreLoadedWith16;
         public Int32 startingItemsTreasureClass;//idx
         public Int32 removeStartingItemsOnComplete;
-        [ExcelOutput(SortAscendingID = 3, RequiresDefault = true)]
+        [ExcelOutput(SortColumnOrder = 3)]
         public Int32 offerReward;//idx
         public Int32 castGiver;//idx
         public Int32 levelStoryQuestStartsIn;//idx
         public Int32 castRewarder;//idx
         public Int32 levelRewarderNpc;//idx
-        [ExcelOutput(SortAscendingID = 4, RequiresDefault = true)]
+        [ExcelOutput(SortColumnOrder = 4)]
         public Int32 giverItem;//idx
         public Int32 giverItemMonster;//idx
         public Int32 giverItemLevel;//idx

@@ -8,8 +8,8 @@ namespace Hellgate.Excel
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class MusicStingerSets
     {
-        ExcelFile.TableHeader header;
-        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
+        TableHeader header;
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//empty entry is first in index.
         public Int32 musicRef;

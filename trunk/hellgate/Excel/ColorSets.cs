@@ -9,12 +9,12 @@ namespace Hellgate.Excel
     class ColorSets
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string color;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         [ExcelOutput(IsBool = true)]
         public Int32 canBeRandomPick;

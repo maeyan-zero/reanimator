@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class SkillEventTypes
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 48)]
         public string name;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]

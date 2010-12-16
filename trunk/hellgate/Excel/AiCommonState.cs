@@ -9,10 +9,10 @@ namespace Hellgate.Excel
     class AiCommonState
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public short code;
     }
 }

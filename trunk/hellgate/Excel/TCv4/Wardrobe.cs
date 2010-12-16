@@ -9,10 +9,10 @@ namespace Hellgate.Excel.TCv4
     {
         ExcelFile.TableHeader header;
 
-        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [ExcelOutput(SortAscendingID = 2, RequiresDefault = true)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 undefined1;
         public Int32 rowCollection;
@@ -34,23 +34,23 @@ namespace Hellgate.Excel.TCv4
         public Int32 layerSet3;
         public Int32 layerSet4;
         public Int32 layerSet5;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_MODEL_GROUP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_MODEL_GROUP")]
         public Int32 modelGroup;//idx;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_TEXTURESET_GROUP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_TEXTURESET_GROUP")]
         public Int32 textureSetGroup;//idx;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_BLENDOP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOp;//idx;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_BLENDOP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpTemplar;//idx;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_BLENDOP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpCabalist;//idx;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_BLENDOP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpHunter;//idx;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_BLENDOP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpSatyr;//idx;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_BLENDOP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpCyclops;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_BLENDOP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpCyclopsFemale;
         public Int32 offHandlayer;//idx;
         public Int32 undefined2;

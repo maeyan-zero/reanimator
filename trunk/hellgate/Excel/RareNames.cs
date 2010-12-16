@@ -9,14 +9,13 @@ namespace Hellgate.Excel
     class RareNames
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [ExcelOutput(IsBool = true)]
+        [ExcelOutput(IsBool = true, SortColumnOrder = 1, SecondarySortColumn = "code")]
         public Int32 suffix;//bool
         public Int32 level;
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)] // changed to int.. problem reading last character
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 types1;
         public Int32 types2;

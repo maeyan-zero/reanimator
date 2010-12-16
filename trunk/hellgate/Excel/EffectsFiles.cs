@@ -9,10 +9,10 @@ namespace Hellgate.Excel
     class EffectsFiles
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string FXOName;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string fxFile;
         public Int32 folder;

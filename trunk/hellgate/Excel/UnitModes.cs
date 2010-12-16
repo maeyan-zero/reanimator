@@ -9,11 +9,11 @@ namespace Hellgate.Excel
     class UnitModes
     {
         TableHeader header;
-        [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
+        [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 mode;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] undefined1;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
         Int32[] block;

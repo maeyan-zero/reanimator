@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class Music
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//this seems to be unique names, since it starts with an empty entry, like similar indices
         public Int32 undefined1;

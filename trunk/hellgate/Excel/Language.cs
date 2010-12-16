@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     public class Language
     {
         TableHeader header;
-        [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
+        [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 language;
         Int32 null1;
         [ExcelOutput(IsStringOffset = true)]

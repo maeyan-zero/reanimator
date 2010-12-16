@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class MusicRef
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public Int32 undefined1;

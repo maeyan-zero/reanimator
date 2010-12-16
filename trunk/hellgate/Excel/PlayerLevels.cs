@@ -9,6 +9,7 @@ namespace Hellgate.Excel
     class PlayerLevels
     {
         TableHeader header;
+        [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "level")]
         public Int32 unitType;//idx
         public Int32 level;
         public Int32 experience;

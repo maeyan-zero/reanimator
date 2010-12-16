@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     public class Region
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string regionLong;
         public Int32 isDefault;

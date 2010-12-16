@@ -9,23 +9,23 @@ namespace Hellgate.Excel
     class Levels
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string levelName;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         byte[] reserved;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 bitfieldIndex;
         public Int32 unknown1;
         public Int32 defaultSubLevel;
         public Int32 previousLevel;
         public Int32 nextLevel;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Level")]
         public Int32 levelDisplayName;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Level")]
         public Int32 floorSuffixName;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Level")]
         public Int32 finalSuffixFloorName;
         [ExcelOutput(IsBool = true)]
         public Int32 town;
@@ -102,9 +102,9 @@ namespace Hellgate.Excel
         public Int32 partySizeRecommended;
         public Int32 questSpawnClass;
         public Int32 interactableSpawnClass;
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Level")]
         public Int32 stringEnter;//stridx
-        [ExcelOutput(IsStringIndex = true, TableStringID = "Strings_Level")]
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Level")]
         public Int32 stringLeave;//stridx
         public float championSpawnChancePercentAtEachSpawnLocation;
         public float uniqueMonsterChancePercent;

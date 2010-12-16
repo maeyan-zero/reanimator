@@ -194,10 +194,11 @@ namespace Hellgate
 
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
-                if (fileEntry.FileNameString.Contains("drlg"))
-                {
-                    int bp = 0;
-                }
+                //if (fileEntry.FileNameString.Contains("sounds")) continue;
+                //if (fileEntry.FileNameString.Contains("missile"))
+                //{
+                //    int bp = 0;
+                //}
 
                 // parse file data
                 DataFile dataFile;
@@ -215,8 +216,10 @@ namespace Hellgate
                     }
                     if (dataFile.Attributes.IsEmpty) continue;
 
-                    if (ExcelFile.Debug && !MPVersion)
+                    #region ExcelFileDebug
+                    if (ExcelFile.Debug && !MPVersion && false)
                     {
+                        ExcelFile excelFile = (ExcelFile) dataFile;
                         //Console.WriteLine("Loading " + fileEntry.FileNameString);
 
                         try
@@ -238,13 +241,43 @@ namespace Hellgate
                                 else
                                 {
                                     byte[] dataFileBytesFromToByteArray = fromBytesExcel.ToByteArray();
+
+                                    // check generated sort index arrays
+                                    if (excelFile.IndexSortArray != null)
+                                    {
+                                        if (fromBytesExcel.IndexSortArray == null || excelFile.IndexSortArray.Count != fromBytesExcel.IndexSortArray.Count)
+                                        {
+                                            Console.WriteLine("fromBytesExcel has not-matching IndexSortArray count: " + excelFile.StringId);
+                                        }
+                                        else
+                                        {
+                                            bool hasError = false;
+                                            for (int i = 0; i < excelFile.IndexSortArray.Count; i++)
+                                            {
+                                                if (excelFile.IndexSortArray[i].SequenceEqual(fromBytesExcel.IndexSortArray[i])) continue;
+
+                                                Console.WriteLine(String.Format("IndexSortArray[{0}] NOT EQUAL to original: {1}", i, excelFile.StringId));
+                                                hasError = true;
+                                            }
+
+                                            if (hasError)
+                                            {
+                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
+                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
+                                            }
+                                        }
+                                    }
+
+
+                                    // more checks
                                     if (fileBytes.Length != dataFileBytesFromToByteArray.Length)
                                     {
                                         Console.WriteLine("ToByteArray() dataFileBytesFromToByteArray has differing length: " + dataFile.StringId);
                                     }
                                     else
                                     {
-                                        ExcelFile csvExcel = new ExcelFile(fromBytesExcel.ExportCSV(), fileEntry.RelativeFullPathWithoutPatch);
+                                        byte[] csvBytes = fromBytesExcel.ExportCSV();
+                                        ExcelFile csvExcel = new ExcelFile(csvBytes, fileEntry.RelativeFullPathWithoutPatch);
                                         if (!csvExcel.HasIntegrity)
                                         {
                                             Console.WriteLine("csvExcel = new Excel from ExportCSV() failed: " + dataFile.StringId);
@@ -257,6 +290,7 @@ namespace Hellgate
                                                 Console.WriteLine("Recooked Excel file has differing length: " + dataFile.StringId);
 
                                                 File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
+                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".csv", csvBytes);
                                                 File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArray", dataFileBytes);
                                                 File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
                                                 File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".recookedExcelBytes", recookedExcelBytes);
@@ -271,6 +305,7 @@ namespace Hellgate
                             Console.WriteLine("Excel file Exception: " + dataFile.StringId);
                         }
                     }
+                    #endregion
                 }
                 else
                 {

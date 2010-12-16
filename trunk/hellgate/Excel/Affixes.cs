@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class Affixes
     {
         TableHeader header;
-        [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
+        [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 affix;
         public Int32 unknown02;
         [ExcelOutput(IsBool = true)]
@@ -28,22 +28,22 @@ namespace Hellgate.Excel
         public Int32 nameColor;
         public Int32 gridColor;
         public Int32 dom;
-        [ExcelOutput(SortPostOrderID = 2, SortAscendingID = 3)]
+        [ExcelOutput(SortColumnOrder = 3)]
         public Int32 code;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", SortColumnOrder = 2, SecondarySortColumn = "code")]
         public Int32 affixType1;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType2;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType3;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType4;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType5;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType6;
         public Int32 suffix;
-        [ExcelOutput(SortDistinctID = 4, IsSecondaryString = true)]
+        [ExcelOutput(SortColumnOrder = 4, IsSecondaryString = true)]
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]
@@ -52,17 +52,17 @@ namespace Hellgate.Excel
         public Int32 spawn;
         public Int32 minLevel;
         public Int32 maxLevel;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes1;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes2;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes3;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes4;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes5;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes6;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 groupWeight;
@@ -104,7 +104,7 @@ namespace Hellgate.Excel
         public Int32 property5;
         [ExcelOutput(IsIntOffset = true)]
         public Int32 property6;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyOnItemsRequiringUnitType;
     }
 }

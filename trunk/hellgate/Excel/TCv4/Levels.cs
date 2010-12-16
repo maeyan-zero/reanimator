@@ -8,13 +8,13 @@ namespace Hellgate.Excel.TCv4
     class LevelsTCv4
     {
         ExcelFile.TableHeader header;
-        [ExcelOutput(SortAscendingID = 1)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string levelName;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         byte[] reserved;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 bitfieldIndex;
         public Int32 unknown1;

@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class BackGroundSounds2D
     {
         TableHeader header;
-        [ExcelOutput(SortAscendingID = 1, RequiresDefault = true)]
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public float undefined1;

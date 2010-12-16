@@ -650,7 +650,7 @@ namespace Hellgate
 
 
             // Generate custom sorts
-            int[][] customSorts = CreateSortIndices();
+            IEnumerable<int[]> customSorts = _GenerateSortedIndexArrays();
             foreach (int[] intArray in customSorts)
             {
                 if (intArray != null)
@@ -677,17 +677,19 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.TyshValue);
                 if (Attributes.HasScriptTable)
                 {
-                    if (_myshBuffer == null)
+                    if (_myshBuffer != null)
+                    {
+                        FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
+                        FileTools.WriteToBuffer(ref buffer, ref offset, _myshBuffer);
+                    }
+                    else if (_myshBuffer == null && StringId == "SKILLS")
                     {
                         // No need to use reflection here for 1 mysh table.
                         // Would involve creating an interface etc
-                        if (StringId == "SKILLS")
-                        {
-                            _myshBuffer = Skills.Mysh.data;
-                        }
+                        _myshBuffer = Skills.Mysh.Data;
+                        FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
+                        FileTools.WriteToBuffer(ref buffer, ref offset, _myshBuffer);
                     }
-                    FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
-                    FileTools.WriteToBuffer(ref buffer, ref offset, _myshBuffer);
                 }
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.dneh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.DnehValue);

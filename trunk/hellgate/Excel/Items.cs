@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     public class Items
     {
         TableHeader header;
-        [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
+        [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 name;
         Int32 buffer1;
         [ExcelOutput(IsStringOffset = true)]
@@ -295,22 +295,22 @@ namespace Hellgate.Excel
         public Int32 additionalRaceDescription;                     // 381  0x0000000000000590  XLS_ReadStringIndex
         [ExcelOutput(IsStringIndex = true)]
         public Int32 analyze;                                       // 382  0x0000000000000594  XLS_ReadStringIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "RECIPELISTS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPELISTS")]
         public Int32 recipeList;//index                                    // 62   0x0000000000000598  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "RECIPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPES")]
         public Int32 recipeSingleUse;//index                        // 63   0x000000000000059C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 paperdollBackgroundLevel;//index               // 43   0x00000000000005A0  XLS_ReadIndex
         public Int32 paperdollWeapon1;                              // 44   0x00000000000005A4  XLS_ReadIntArray,2
         public Int32 paperdollWeapon2;                              // 44   0x00000000000005A8
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 paperdollSkill;//index                         // 45   0x00000000000005AC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "COLORSETS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "COLORSETS")]
         public Int32 paperdollColorset;//index                      // 46   0x00000000000005B0  XLS_ReadIndex
         public Int32 respawnChance;                                 // 35   0x00000000000005B4  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SPAWN_CLASS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 respawnSpawnClass;//index                             // 34   0x00000000000005B8  XLS_ReadIndex,90
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;                                          // 32   0x00000000000005BC  XLS_ReadCode
         Int32 unknown41;
         public Int32 densityValueOverride;                          // 54   0x00000000000005C4  XLS_ReadInt32
@@ -318,36 +318,36 @@ namespace Hellgate.Excel
         public Int32 minionPackSize;                                // 55   0x00000000000005C8  XLS_ReadIntPtr
         public float spinSpeed;                                     // 303  0x00000000000005CC  XLS_ReadFloat
         public float maxTurnRate;                                   // 304  0x00000000000005D0  XLS_ReadFloat
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType;//index                               // 33   0x00000000000005D4  XLS_ReadIndex,17
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitTypeForLeveling;//index                           // 36   0x00000000000005D8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 preferedByUnitType;//index                     // 37   0x00000000000005DC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 family;//index                                 // 38   0x00000000000005E0  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 censorClassNoHumans;//index                    // 39   0x00000000000005E4  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 censorClassNoGore;//index                      // 40   0x00000000000005E8  XLS_ReadIndex
         public Int32 sex;                                           // 41   0x00000000000005EC  XLS_ReadInternalIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "PLAYER_RACE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "PLAYER_RACE")]
         public Int32 race;//index                                   // 42   0x00000000000005F0  XLS_ReadIndex
         public Int32 rarity;                                        // 107  0x00000000000005F4  XLS_ReadInt32
         public Int32 spawnChance;                                   // 109  0x00000000000005F8  XLS_ReadInt32
         public Int32 minMonsterExperienceLevel;                     // 88   0x00000000000005FC  XLS_ReadInt32
         public Int32 level;                                         // 89   0x0000000000000600  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
         public Int32 monsterQuality;//index                         // 48   0x0000000000000604  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
         public Int32 monsterClassAtUniqueQuality;//index            // 49   0x0000000000000608  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
         public Int32 monsterClassAtChampionQuality;//index          // 50   0x000000000000060C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
         public Int32 minionClass;//index                            // 52   0x0000000000000610  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTER_NAME_TYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_NAME_TYPES")]
         public Int32 monsterNameType;//index                        // 53   0x0000000000000614  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "ITEM_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 itemQuality;//index                            // 51   0x0000000000000618  XLS_ReadIndex
         public Int32 angerRange;                                    // 416  0x000000000000061C  XLS_ReadInt32
         public Int32 baseLevel;                                     // 90   0x0000000000000620  XLS_ReadInt32
@@ -371,22 +371,22 @@ namespace Hellgate.Excel
         public Int32 weaponBoneIndex;                               // 57   0x0000000000000660  XLS_ReadInternalIndex
         public Int32 requiresAffixOrSuffix;                         // 108  0x0000000000000664  XLS_ReadInt32
         public float autoPickupDistance;                            // 86   0x0000000000000668  XLS_ReadFloat
-        [ExcelOutput(IsTableIndex = true, TableStringID = "STATES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 pickupPullState;//index                        // 87   0x000000000000066C  XLS_ReadIndex
         public float extraDyingTimeInSeconds;                       // 70   0x0000000000000670  XLS_ReadFloat
-        [ExcelOutput(IsTableIndex = true, TableStringID = "NPC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "NPC")]
         public Int32 npcInfo;//index                                // 71   0x0000000000000674  XLS_ReadIndex
         public Int32 balanceTestCount;                              // 72   0x0000000000000678  XLS_ReadInt32
         public Int32 balanceTestGroup;                              // 73   0x000000000000067C  XLS_ReadInt32
         public Int32 merchantStartingPane;                          // 59   0x0000000000000680  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FACTION")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FACTION")]
         public Int32 merchantFactionType;//index                    // 60   0x0000000000000684  XLS_ReadIndex
         public Int32 merchantFactionValueNeeded;                    // 61   0x0000000000000688  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "QUEST")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST")]
         public Int32 questRequirement;//index                       // 64   0x000000000000068C  XLS_ReadIndex
         public float noSpawnRadius;                                 // 65   0x0000000000000690  XLS_ReadFloat
         public float monitorApproachRadius;                         // 68   0x0000000000000694  XLS_ReadFloat
-        [ExcelOutput(IsTableIndex = true, TableStringID = "STATS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 tasksGeneratedStat;//index                     // 69   0x0000000000000698  XLS_ReadIndex,1B       text:00000001402E7392 mov     dword ptr [rsp+0A8h+var_88], 1Bh      0x1B == 27 (27 = STATS table)
         public float serverMissileOffset;                           // 119  0x000000000000069C  XLS_ReadFloat
         public float homingTurnAngleRadians;                        // 74   0x00000000000006A0  XLS_ReadFloat
@@ -400,9 +400,9 @@ namespace Hellgate.Excel
         public float impactCameraShakeMagnitude;                    // 81   0x00000000000006BC  XLS_ReadFloat
         public float impactCameraShakeDegrade;                      // 82   0x00000000000006C0  XLS_ReadFloat
         public Int32 maximumImpactFrequency;                        // 83   0x00000000000006C4  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyCollideWithUnitType;//index                // 79   0x00000000000006C8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "DIALOG")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "DIALOG")]
         public Int32 questDescription;//index                       // 260  0x00000000000006CC  XLS_ReadIndex
         [ExcelOutput(IsIntOffset = true)]
         public Int32 pickUpCondition;                               // 258  0x00000000000006D0  XLS_ReadIntPtr
@@ -423,33 +423,33 @@ namespace Hellgate.Excel
         public Int32 sellPriceMult;                                 // 225  0x00000000000006F4  XLS_ReadIntPtr
         [ExcelOutput(IsIntOffset = true)]
         public Int32 sellPriceAdd;                                  // 226  0x00000000000006F8  XLS_ReadIntPtr
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_LAYER")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 inventoryWardrobe;                             // 110  0x00000000000006FC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_LAYER")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 characterScreenWardrobe;                       // 111  0x0000000000000700  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "STATES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 characterScreenState;                          // 112  0x0000000000000704  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_BODY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BODY")]
         public Int32 wardrobeBody;                                  // 113  0x0000000000000708  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 wardrobeFallback;                              // 114  0x000000000000070C  XLS_ReadIndex
         public Int32 null0;                                         // 115  0x0000000000000710  XLS_ReadInt32
         public Int32 wardrobeMip;                                   // 118  0x0000000000000714  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_APPEARANCE_GROUP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 wardrobeAppearanceGroup;                       // 116  0x0000000000000718  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "WARDROBE_APPEARANCE_GROUP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 wardrobeAppearanceGroup1st;                    // 117  0x000000000000071C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "ANIMATION_STANCE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_STANCE")]
         public Int32 startingStance;                                // 120  0x0000000000000720  XLS_ReadIndex
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknownBytes06;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 containerUnitType1;                            // 261  0x0000000000000738  XLS_ReadUNITTYPEIndexArray,4
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 containerUnitType2;                            // 261  0x000000000000073C
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 containerUnitType3;// always 0                 // 261  0x0000000000000740
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 containerUnitType4;// but we could use them    // 261  0x0000000000000744
         public Int32 firingErrorIncrease;                           // 127  0x0000000000000748  XLS_ReadInt32
         public Int32 firingErrorDecrease;                           // 128  0x000000000000074C  XLS_ReadInt32
@@ -457,11 +457,11 @@ namespace Hellgate.Excel
         public Int32 accuracyBase;                                  // 130  0x0000000000000754  XLS_ReadInt32
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknownBytes07;
-        [ExcelOutput(IsTableIndex = true, TableStringID = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
         public Int32 refillHotKey;//index                           // 262  0x0000000000000768  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "ANIMATION_GROUP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_GROUP")]
         public Int32 animGroup;//index                              // 121  0x000000000000076C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MELEEWEAPONS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MELEEWEAPONS")]
         public Int32 meleeWeapon;//index                            // 122  0x0000000000000770  XLS_ReadIndex
         public Int32 cdTicks;                                       // 131  0x0000000000000774  XLS_ReadInt32
         public float approxDps;                                     // 132  0x0000000000000778  XLS_ReadFloat
@@ -475,15 +475,15 @@ namespace Hellgate.Excel
         public Int32 requiredAffixGroups6;                          // 126  0x0000000000000794
         public Int32 requiredAffixGroups7;                          // 126  0x0000000000000798
         public Int32 requiredAffixGroups8;                          // 126  0x000000000000079C
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 spawnMonsterClass;//index                      // 133  0x00000000000007A0  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "STATES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 safeState;//index                              // 134  0x00000000000007A4  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillGhost;//index                             // 135  0x00000000000007A8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillRef;//index                               // 233  0x00000000000007AC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "DAMAGETYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "DAMAGETYPES")]
         public Int32 dmgType;//index                                // 138  0x00000000000007B0  XLS_ReadIndex
         public Int32 weaponDamageScale;                             // 142  0x00000000000007B4  XLS_ReadInt32
         public Int32 dontUseWeaponDamage;                           // 141  0x00000000000007B8  XLS_ReadInt32
@@ -584,15 +584,15 @@ namespace Hellgate.Excel
         public Int32 props4;                                        // 210  0x00000000000009AC  XLS_ReadIntPtr
         [ExcelOutput(IsIntOffset = true)]
         public Int32 props5;                                        // 211  0x00000000000009B0  XLS_ReadIntPtr
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 props1AppliesToUnitype;//index                 // 212  0x00000000000009B4  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 props2AppliesToUnitype;//index                 // 213  0x00000000000009B8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 props3AppliesToUnitype;//index                 // 214  0x00000000000009BC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 props4AppliesToUnitype;//index                 // 215  0x00000000000009C0  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 props5AppliesToUnitype;//index                 // 216  0x00000000000009C4  XLS_ReadIndex
         [ExcelOutput(IsIntOffset = true)]
         public Int32 perLevelProps1;                                // 218  0x00000000000009C8  XLS_ReadIntPtr
@@ -600,43 +600,43 @@ namespace Hellgate.Excel
         public Int32 perLevelProps2;                                // 219  0x00000000000009CC  XLS_ReadIntPtr
         [ExcelOutput(IsIntOffset = true)]
         public Int32 propsElite;                                    // 217  0x00000000000009D0  XLS_ReadIntPtr
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix1;//index                                 // 220  0x00000000000009D4  XLS_ReadIntArray,6
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix2;//index                                 // 220  0x00000000000009D8
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix3;//index                                 // 220  0x00000000000009DC
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix4;//index                                 // 220  0x00000000000009E0
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix5;//index                                 // 220  0x00000000000009E4
-        [ExcelOutput(IsTableIndex = true, TableStringID = "AFFIXES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix6;//index                                 // 220  0x00000000000009E8
-        [ExcelOutput(IsTableIndex = true, TableStringID = "TREASURE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure;//index                               // 104  0x00000000000009EC  XLS_ReadIndex,65
-        [ExcelOutput(IsTableIndex = true, TableStringID = "TREASURE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 championTreasure;//index                       // 105  0x00000000000009F0  XLS_ReadIndex,65
-        [ExcelOutput(IsTableIndex = true, TableStringID = "TREASURE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 firstTimeTreasure;//index                      // 106  0x00000000000009F4  XLS_ReadIndex,65
-        [ExcelOutput(IsTableIndex = true, TableStringID = "INVENTORY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVENTORY")]
         public Int32 inventory;//index                              // 229  0x00000000000009F8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
         public Int32 recipeIngredientInvLoc;//index                 // 230  0x00000000000009FC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
         public Int32 recipeResultInvLoc;//index                     // 231  0x0000000000000A00  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "TREASURE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 startingTreasure;//index                       // 232  0x0000000000000A04  XLS_ReadIndex,65
         public Int32 invWidth;                                      // 256  0x0000000000000A08  XLS_ReadInt32
         public Int32 invHeight;                                     // 257  0x0000000000000A0C  XLS_ReadInt32
         public Int64 qualities;                                     // 123  0x0000000000000A10  XLS_ReadBits - I think this reads 8 bytes (64 bits); input = 0x40 = 64
-        [ExcelOutput(IsTableIndex = true, TableStringID = "ITEM_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 requiredQuality;//index                        // 124  0x0000000000000A18  XLS_ReadIndex
         public Int32 qualityName;                                   // 125  0x0000000000000A1C  XLS_ReadInternalIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MISSILES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
         public Int32 fieldMissile;//index                           // 84   0x0000000000000A20  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillHitUnit;//index                           // 391  0x0000000000000A24  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillHitBackground;//index                     // 392  0x0000000000000A28  XLS_ReadIndex
         public Int32 skillMissed1;                                         // 393  0x0000000000000A2C  XLS_ReadIntArray,0F
         public Int32 skillMissed2;                                         // 393  0x0000000000000A30
@@ -655,9 +655,9 @@ namespace Hellgate.Excel
         public Int32 skillMissed15;                                        // 393  0x0000000000000A64
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknownBytes20;                                      // 0x0000000000000A68 to 0x0000000000000A6C
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillOnFuse;//index                            // 394  0x0000000000000A6C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillOnDamageRepeat;//index                    // 395  0x0000000000000A70  XLS_ReadIndex
         public Int32 startingskills1;                               // 234  0x0000000000000A74  XLS_ReadIntArray,0C
         public Int32 startingskills2;                               // 234  0x0000000000000A78
@@ -671,114 +671,114 @@ namespace Hellgate.Excel
         public Int32 startingskills10;                              // 234  0x0000000000000A98
         public Int32 startingskills11;                              // 234  0x0000000000000A9C
         public Int32 startingskills12;                              // 234  0x0000000000000AA0
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 unitDieBeginSkill;//index                      // 235  0x0000000000000AA4  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 unitDieBeginSkillClient;//index                // 236  0x0000000000000AA8  XLS_ReadIndex
         [ExcelOutput(IsIntOffset = true)]
         public Int32 scriptOnUnitDieEnd;//intptr                    // 237  0x0000000000000AAC  XLS_ReadIntPtr
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 unitDieEndSkill;//index                        // 238  0x0000000000000AB0  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 deadSkill;//index                              // 239  0x0000000000000AB4  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 kickSkill;//index                              // 240  0x0000000000000AB8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 rightSkill;//index                             // 241  0x0000000000000ABC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 initSkill;//index                              // 242  0x0000000000000AC0  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillLevelActive;//index                       // 243  0x0000000000000AC4  XLS_ReadIndex
         public Int32 initState1;                                    // 244  0x0000000000000AC8  XLS_ReadIntArray,4
         public Int32 initState2;                                    // 244  0x0000000000000ACC
         public Int32 initState3;                                    // 244  0x0000000000000AD0
         public Int32 initState4;                                    // 244  0x0000000000000AD4
         public Int32 initStateTicks;                                // 245  0x0000000000000AD8  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "STATES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 dyingState;//index                             // 246  0x0000000000000ADC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillWhenUsed;//index                          // 247  0x0000000000000AE0  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLTABS")]
         public Int32 SkillTab1;//index                              // 249  0x0000000000000AE4  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLTABS")]
         public Int32 SkillTab2;//index                              // 250  0x0000000000000AE8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLTABS")]
         public Int32 SkillTab3;//index                              // 251  0x0000000000000AEC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLTABS")]
         public Int32 SkillTab4;//index                              // 252  0x0000000000000AF0  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLTABS")]
         public Int32 SkillTab5;//index                              // 253  0x0000000000000AF4  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLTABS")]
         public Int32 SkillTab6;//index                              // 254  0x0000000000000AF8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SKILLTABS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLTABS")]
         public Int32 SkillTab7;//index                              // 255  0x0000000000000AFC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "STATES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 levelUpState;//index                           // 263  0x0000000000000B00  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 sounds;//index                                 // 264  0x0000000000000B04  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 flippySound;//index                            // 265  0x0000000000000B08  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 invPickUpSound;//index                         // 266  0x0000000000000B0C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 invPutDownSound;//index                        // 267  0x0000000000000B10  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 invEquipSound;//index                          // 268  0x0000000000000B14  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 pickUpSound;//index                            // 269  0x0000000000000B18  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 useSound;//index                               // 270  0x0000000000000B1C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantUseSound;//index                           // 271  0x0000000000000B20  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantFireSound;//index                          // 272  0x0000000000000B24  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 blockSound;//index                             // 273  0x0000000000000B28  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 getHit0;//index                                // 274  0x0000000000000B2C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 getHit1;//index                                // 275  0x0000000000000B30  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 getHit2;//index                                // 276  0x0000000000000B34  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 getHit3;//index                                // 277  0x0000000000000B38  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 getHit4;//index                                // 278  0x0000000000000B3C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 getHit5;//index                                // 279  0x0000000000000B40  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 interactSound;//index                          // 280  0x0000000000000B44  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 damagingSound;//index                          // 281  0x0000000000000B48  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FOOTSTEPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FOOTSTEPS")]
         public Int32 forwardFootStepLeft;//index                    // 282  0x0000000000000B4C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FOOTSTEPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FOOTSTEPS")]
         public Int32 forwardFootStepRight;//index                   // 283  0x0000000000000B50  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FOOTSTEPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FOOTSTEPS")]
         public Int32 backwardFootStepLeft;//index                   // 284  0x0000000000000B54  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FOOTSTEPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FOOTSTEPS")]
         public Int32 backwardFootStepRight;//index                  // 285  0x0000000000000B58  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FOOTSTEPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FOOTSTEPS")]
         public Int32 firstPersonJumpFootStep;//index                // 286  0x0000000000000B5C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "FOOTSTEPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FOOTSTEPS")]
         public Int32 firstPersonLandFootStep;//index                // 287  0x0000000000000B60  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 outOfManaSound;//index                         // 288  0x0000000000000B64  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 inventoryFullSound;//index                     // 289  0x0000000000000B68  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantSound;//index                              // 292  0x0000000000000B6C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 CantUseSound;//index                           // 290  0x0000000000000B70  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantUseYetSound;//index                        // 291  0x0000000000000B74  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantCastSound;//index                          // 293  0x0000000000000B78  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantCastYetSound;//index                       // 294  0x0000000000000B7C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantCastHereSound;//index                      // 295  0x0000000000000B80  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SOUNDS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 lockedSound;//index                            // 296  0x0000000000000B84  XLS_ReadIndex
         public float pathingCollisionRadius;                        // 299  0x0000000000000B88  XLS_ReadFloat
         public float collisionRadius;                               // 297  0x0000000000000B8C  XLS_ReadFloat
@@ -842,14 +842,14 @@ namespace Hellgate.Excel
         public float walkAndRunDelta;                               // 342  0x0000000000000C74  XLS_ReadFloat
         public Int32 rangeMin;                                      // 326  0x0000000000000C78  XLS_ReadInt32
         public Int32 rangeMax;                                      // 327  0x0000000000000C7C  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 decoyMonster;//index                           // 415  0x0000000000000C80  XLS_ReadIndex
         public Int32 havokShape;                                    // 374  0x0000000000000C84  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MISSILES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
         public Int32 missileHitUnit;//index                         // 388  0x0000000000000C88  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MISSILES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
         public Int32 missileHitBackground;//index                   // 389  0x0000000000000C8C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MISSILES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
         public Int32 missileOnFreeOrFuse;//index                    // 390  0x0000000000000C90  XLS_ReadIndex
         public Int32 missileTag;                                    // 400  0x0000000000000C94  XLS_ReadInt32
         public Int32 damageRepeatRate;                              // 396  0x0000000000000C98  XLS_ReadInt32
@@ -857,24 +857,24 @@ namespace Hellgate.Excel
         public Int32 repeatDamageImmediately;                       // 398  0x0000000000000CA0  XLS_ReadInt32
         public Int32 serverSrcDamage;                               // 399  0x0000000000000CA4  XLS_ReadInt32
         public Int32 blockGhosts;                                   // 401  0x0000000000000CA8  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "MONSTERS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster;//index                                // 402  0x0000000000000CAC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "OBJECTTRIGGERS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTTRIGGERS")]
         public Int32 triggerType;//index                            // 403  0x0000000000000CB0  XLS_ReadIndex
         public Int32 operatorStatesTriggerProhibited;               // 404  0x0000000000000CB4  XLS_ReadIntArray,01
-        [ExcelOutput(IsTableIndex = true, TableStringID = "SUBLEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 sublevelDest;//index                           // 405  0x0000000000000CB8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "QUEST")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST")]
         public Int32 operateRequiredQuest;//index                   // 406  0x0000000000000CBC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "QUEST_STATE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST_STATE")]
         public Int32 operateRequiredQuestState;//index              // 407  0x0000000000000CC0  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "QUEST_STATE_VALUE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST_STATE_VALUE")]
         public Int32 operateRequiredQuestStateValue;//index         // 408  0x0000000000000CC4  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "QUEST_STATE_VALUE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST_STATE_VALUE")]
         public Int32 operateProhibitedQuestStateValue;//index       // 409  0x0000000000000CC8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 requiresItemOfUnitType1;//index                // 66   0x0000000000000CCC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "TREASURE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 spawnTreasureClassInLevel;//index              // 67   0x0000000000000CD0  XLS_ReadIndex
         public Int32 oneWayVisualPortalDir;                         // 410  0x0000000000000CD4  XLS_ReadInternalIndex
         public Int32 warpResolveTime;                               // 473  0x0000000000000CD8  XLS_ReadInternalIndex
@@ -892,21 +892,21 @@ namespace Hellgate.Excel
         public byte appearanceTallSkinny;                           // 466  0x0000000000000CF6  XLS_ReadByte
         public byte appearanceShortFat;                             // 467  0x0000000000000CF7  XLS_ReadByte
         public byte appearanceTallFat;                              // 468  0x0000000000000CF8  XLS_ReadByte
-        [ExcelOutput(IsTableIndex = true, TableStringID = "COLORSETS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "COLORSETS")]
         public Int32 colorSet;//index                               // 31   0x0000000000000CFC  XLS_ReadIndex
         public Int32 corpseExplodePoints;                           // 471  0x0000000000000D00  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 requiredAttackerUnitType;//index               // 472  0x0000000000000D04  XLS_ReadIndex
         //[ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREA_AFFIXS")]
         public Int32 startingLevelArea;//index                      // 474  0x0000000000000D08  XLS_ReadIndex
         //[ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_AREA_AFFIXS")]
         public Int32 warpToLevelArea;//index                        // 476  0x0000000000000D0C  XLS_ReadIndex
         public Int32 warpToFloor;                                   // 477  0x0000000000000D10  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringID = "GLOBAL_THEMES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
         public Int32 globalThemeRequired;//index                    // 478  0x0000000000000D14  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "LEVEL_THEMES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_THEMES")]
         public Int32 levelThemeRequired;//index                     // 479  0x0000000000000D18  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringID = "UNITMODE_GROUPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 modeGroupOnClient;//index                      // 475  0x0000000000000D1C  XLS_ReadIndex
         public Int32 cameraTarget;                                         // 455  0x0000000000000D20  XLS_ReadInt32
         public Int32 null2;                                         // 456  0x0000000000000D24  XLS_ReadInt32

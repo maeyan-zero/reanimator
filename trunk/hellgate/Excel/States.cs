@@ -9,10 +9,10 @@ namespace Hellgate.Excel
     class States
     {
         TableHeader header;
-        [ExcelOutput(IsStringOffset = true, SortAscendingID = 1)]
+        [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 name;
         Int32 buffer;
-        [ExcelOutput(SortAscendingID = 2)]
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         Int32 buffer1;              // always 0
         [ExcelOutput(IsStringOffset = true)]
