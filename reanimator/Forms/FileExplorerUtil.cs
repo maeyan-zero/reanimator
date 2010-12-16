@@ -39,17 +39,17 @@ namespace Reanimator.Forms
             public bool CanEdit;
             public bool CanCookWith;
             public bool IsUncookedVersion;
-            public List<NodeObject> Siblings;
+            //public List<NodeObject> Siblings;
 
-            public void AddSibling(NodeObject siblingNodeObject)
-            {
-                if (Siblings == null)
-                {
-                    Siblings = new List<NodeObject>();
-                }
+            //public void AddSibling(NodeObject siblingNodeObject)
+            //{
+            //    if (Siblings == null)
+            //    {
+            //        Siblings = new List<NodeObject>();
+            //    }
 
-                Siblings.Add(siblingNodeObject);
-            }
+            //    Siblings.Add(siblingNodeObject);
+            //}
         }
 
         private class NodeSorter : IComparer
@@ -409,10 +409,10 @@ namespace Reanimator.Forms
 
 
             // get path
-            IndexFile.FileEntry file = nodeObject.FileEntry;
+            IndexFile.FileEntry fileEntry = nodeObject.FileEntry;
             String filePath = extractPatchArgs.KeepStructure
                                   ? Path.Combine(extractPatchArgs.RootDir, treeNode.FullPath)
-                                  : Path.Combine(extractPatchArgs.RootDir, file.FileNameString);
+                                  : Path.Combine(extractPatchArgs.RootDir, fileEntry.FileNameString);
 
 
             // does it exist?
@@ -430,7 +430,7 @@ namespace Reanimator.Forms
             DialogResult extractDialogResult = DialogResult.Retry;
             while (extractDialogResult == DialogResult.Retry)
             {
-                byte[] fileBytes = _fileManager.GetFileBytes(file, extractPatchArgs.PatchFiles);
+                byte[] fileBytes = _fileManager.GetFileBytes(fileEntry, extractPatchArgs.PatchFiles);
                 if (fileBytes == null)
                 {
                     extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
@@ -456,10 +456,10 @@ namespace Reanimator.Forms
 
 
             // don't patch out string files or music/movie files
-            if (file.FileNameString.EndsWith(StringsFile.FileExtention) ||
-                file.FileNameString.EndsWith(".ogg") ||
-                file.FileNameString.EndsWith(".mp2") ||
-                file.FileNameString.EndsWith(".bik")) return true;
+            if (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                fileEntry.FileNameString.EndsWith(".ogg") ||
+                fileEntry.FileNameString.EndsWith(".mp2") ||
+                fileEntry.FileNameString.EndsWith(".bik")) return true;
 
 
             // if we're patching out the file, then change its bgColor and set its nodeObject state to backup
@@ -468,15 +468,14 @@ namespace Reanimator.Forms
 
             // is this file located else where? (i.e. does it have Siblings)
             String indexFileKey;
-            if (nodeObject.Siblings != null && nodeObject.Siblings.Count > 0)
+            if (fileEntry.Siblings != null && fileEntry.Siblings.Count > 0)
             {
                 // this file has siblings - loop through
-                foreach (NodeObject siblingNodeObject in nodeObject.Siblings)
+                foreach (IndexFile.FileEntry siblingFileEntry in fileEntry.Siblings)
                 {
-                    IndexFile.FileEntry siblingFileEntry = siblingNodeObject.FileEntry;
                     IndexFile siblingIndex = siblingFileEntry.Index;
 
-                    siblingIndex.PatchOutFile(siblingNodeObject.FileEntry);
+                    siblingIndex.PatchOutFile(siblingFileEntry);
 
                     indexFileKey = siblingIndex.FileNameWithoutExtension;
                     if (!indexToWrite.ContainsKey(indexFileKey))
@@ -490,14 +489,14 @@ namespace Reanimator.Forms
             // now patch the curr file as well
             // only add index to list if it needs to be
             IndexFile indexFile = nodeObject.Index;
-            if (!indexFile.PatchOutFile(file)) return true;
+            if (!indexFile.PatchOutFile(fileEntry)) return true;
 
 
             // add index to indexToWrite list
             indexFileKey = indexFile.FileNameWithoutExtension;
             if (!indexToWrite.ContainsKey(indexFileKey))
             {
-                indexToWrite.Add(indexFileKey, file.Index);
+                indexToWrite.Add(indexFileKey, fileEntry.Index);
             }
             return true;
         }

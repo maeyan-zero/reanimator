@@ -530,18 +530,18 @@ namespace Reanimator.Forms
                 packResults.WriteLine(filePath);
 
                 // update our node object while we're here
-                oldNodeObject.AddSibling(oldNodeObject);
-                NodeObject newNodeObject = new NodeObject
-                {
-                    Siblings = oldNodeObject.Siblings,
-                    CanEdit = oldNodeObject.CanEdit,
-                    FileEntry = fileEntry,
-                    Index = args.PackIndex,
-                    IsFolder = false
-                };
+                //oldNodeObject.AddSibling(oldNodeObject);
+                //NodeObject newNodeObject = new NodeObject
+                //{
+                //    Siblings = oldNodeObject.Siblings,
+                //    CanEdit = oldNodeObject.CanEdit,
+                //    FileEntry = fileEntry,
+                //    Index = args.PackIndex,
+                //    IsFolder = false
+                //};
 
-                packNode.Tag = newNodeObject;
-                packNode.ForeColor = BaseColor;
+                //packNode.Tag = newNodeObject;
+                //packNode.ForeColor = BaseColor;
             }
 
 

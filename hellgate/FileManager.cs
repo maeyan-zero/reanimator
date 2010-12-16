@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Revival.Common;
 using FileEntry = Hellgate.IndexFile.FileEntry;
 
 namespace Hellgate
@@ -108,7 +109,7 @@ namespace Hellgate
             // loop through index files
             foreach (FileEntry currFileEntry in index.Files)
             {
-                //if (currFileEntry.FileNameString.Contains("recipes.txt.cooked"))
+                //if (currFileEntry.FileNameString.Contains("levels_rules.txt.cooked"))
                 //{
                 //    int bp = 0;
                 //}
@@ -179,15 +180,15 @@ namespace Hellgate
                 FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention) ||
                     (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) && fileEntry.RelativeFullPath.Contains(Language))))
             {
-                if (MPVersion &&
-                    // todo: crashing
-                    (fileEntry.FileNameString.Contains("items.txt.cooked") ||
-                    fileEntry.FileNameString.Contains("monsters.txt.cooked") ||
-                    fileEntry.FileNameString.Contains("objects.txt.cooked") ||
-                    fileEntry.FileNameString.Contains("players.txt.cooked") ||
-                    fileEntry.FileNameString.Contains("missiles.txt.cooked") ||
-                    fileEntry.FileNameString.Contains("sounds.txt.cooked") ||
-                    fileEntry.FileNameString.Contains("skills.txt.cooked"))) continue;
+                //if (MPVersion &&
+                //    // todo: crashing
+                //    (fileEntry.FileNameString.Contains("items.txt.cooked") ||
+                //    fileEntry.FileNameString.Contains("monsters.txt.cooked") ||
+                //    fileEntry.FileNameString.Contains("objects.txt.cooked") ||
+                //    fileEntry.FileNameString.Contains("players.txt.cooked") ||
+                //    fileEntry.FileNameString.Contains("missiles.txt.cooked") ||
+                //    fileEntry.FileNameString.Contains("sounds.txt.cooked") ||
+                //    fileEntry.FileNameString.Contains("skills.txt.cooked"))) continue;
 
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
@@ -200,8 +201,32 @@ namespace Hellgate
                 DataFile dataFile;
                 if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention))
                 {
-                    dataFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch, MPVersion);
+                    try
+                    {
+                        dataFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch, MPVersion);
+                    }
+                    catch (Exception e)
+                    {
+                        ExceptionLogger.LogException(e);
+                        Console.WriteLine("Critical Error: Failed to load excel file: " + fileEntry.FileNameString);
+                        continue;
+                    }
                     if (dataFile.Attributes.IsEmpty) continue;
+
+                    //try
+                    //{
+                    //    ExcelFile csvExcel = new ExcelFile(dataFile.ExportCSV(), fileEntry.RelativeFullPathWithoutPatch);
+                    //    byte[] recookedExcelBytes = csvExcel.ToByteArray();
+
+                    //    if (fileBytes.Length != recookedExcelBytes.Length)
+                    //    {
+                    //        Console.WriteLine("Recooked Excel file has differing length: " + dataFile.StringId);
+                    //    }
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    Console.WriteLine("Excel file Exception: " + dataFile.StringId);
+                    //}
                 }
                 else
                 {
@@ -324,15 +349,6 @@ namespace Hellgate
             String stringVal = excelTable.ReadStringTable(offset);
             return stringVal;
         }
-
-        //public String GetExcelTableStringIdFromCode(UInt32 code)
-        //{
-        //    DataTable excelTables = GetExcelTableFromStringId("EXCELTABLES");
-        //    if (excelTables == null) return null;
-
-        //    DataRow[] rows = excelTables.Select(String.Format("code = '{0}'", code));
-        //    return rows.Length == 0 ? null : rows[0][1].ToString();
-        //}
 
         /// <summary>
         /// Gets file byte data from most principle location; considering filetimes and backup status.
