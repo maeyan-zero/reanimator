@@ -34,11 +34,13 @@ namespace Revival
             bool doPackDat = false;
             bool doSearchCd = false;
             bool doExcludeRaw = false;
+            bool doLevelRules = false;
 
             List<string> filesToPack = new List<string>();
             List<string> excelFilesToCook = new List<string>();
             List<string> stringFilesToCook = new List<string>();
             List<string> xmlFilesToCook = new List<string>();
+            List<string> levelRulesFilesToCook = new List<string>();
 
             #region alexs_stuff
             if (false)
@@ -47,8 +49,9 @@ namespace Revival
                 fileManager = new FileManager(@"D:\Games\Hellgate London");
                 fileManager.LoadTableFiles();
                 
-                //byte[] buffer = fileManager.DataFiles["SKILLS"].ExportCSV();
-                //File.WriteAllBytes(@"D:\skills.txt", buffer);
+
+                byte[] buffer = fileManager.DataFiles["LEVEL_RULES"].ExportCSV();
+                File.WriteAllBytes(@"D:\levels_rules.txt", buffer);
 
                 //foreach (DataFile dataFile in fileManager.DataFiles.Values)
                 //{
@@ -122,6 +125,7 @@ namespace Revival
                 doPackDat = true;
                 doSearchCd = true;
                 doExcludeRaw = true;
+                doLevelRules = true;
             }
             else
             {
@@ -143,6 +147,9 @@ namespace Revival
                             break;
                         case "/e":
                             doExcludeRaw = true;
+                            break;
+                        case "/lr":
+                            doLevelRules = true;
                             break;
                         default:
                             if (arg.StartsWith("/p:"))
@@ -170,6 +177,12 @@ namespace Revival
                             {
                                 stringFilesToCook.Add(arg);
                                 doCookTxt = true;
+                                break;
+                            }
+                            if (arg.EndsWith(LevelRulesFile.FileExtensionXml))
+                            {
+                                levelRulesFilesToCook.Add(arg);
+                                doLevelRules = true;
                                 break;
                             }
                             if (arg.EndsWith(XmlCookedFile.FileExtentionClean))
@@ -200,6 +213,12 @@ namespace Revival
                 xmlFilesToCook.AddRange(SearchForXmlFiles(currentDir));
             }
 
+            // Search for .drl Level Rules files to cook
+            if (doSearchCd && doLevelRules)
+            {
+                // todo
+            }
+
             // Cook Txt files
             if (doCookTxt)
             {
@@ -227,6 +246,12 @@ namespace Revival
                 {
                     Console.WriteLine(HellgateMissingMsg);
                 }
+            }
+
+            // cook .drl Level Rules files
+            if (doLevelRules)
+            {
+                CookLevelRulesFiles(levelRulesFilesToCook);
             }
 
             // Files to pack
@@ -373,6 +398,29 @@ namespace Revival
             Console.WriteLine(String.Format("{0} generation complete.", thisPack));
             return true;
         }
+
+        public static void CookLevelRulesFiles(IEnumerable<String> levelRulesFiles)
+        {
+            foreach (String filePath in levelRulesFiles)
+            {
+                try
+                {
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(filePath);
+
+                    LevelRulesFile levelRulesFile = new LevelRulesFile();
+                    byte[] fileBytes = levelRulesFile.ParseXmlDocument(xmlDocument);
+
+                    File.WriteAllBytes(filePath.Replace(LevelRulesFile.FileExtensionXml, LevelRulesFile.FileExtension), fileBytes);
+                }
+                catch (Exception e)
+                {
+                    ExceptionLogger.LogException(e);
+                    Console.WriteLine(String.Format("Error: Failed to cook file {0}", filePath));
+                }
+            }
+        }
+
 
         public static void CookExcelFiles(string[] excelFilesToCook)
         {
