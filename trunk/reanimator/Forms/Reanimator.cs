@@ -146,18 +146,18 @@ namespace Reanimator.Forms
                 LevelRulesFile levelRulesFile = new LevelRulesFile();
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
-                String xmlPath = path.Replace(LevelRulesFile.FileExtention, ".xml");
+                String xmlPath = path.Replace(LevelRulesFile.FileExtension, LevelRulesFile.FileExtensionXml);
                 Console.WriteLine("Loading: " + fileName);
                 try
                 {
                     levelRulesFile.ParseFileBytes(levelRulesBytes);
                     levelRulesFile.SaveXmlDocument(xmlPath);
 
-                    XmlDocument xmlDocument = new XmlDocument();
-                    xmlDocument.Load(xmlPath);
-                    LevelRulesFile levelRulesFile2 = new LevelRulesFile();
-                    byte[] bytes = levelRulesFile2.ParseXmlDocument(xmlDocument);
-                    File.WriteAllBytes(path + "2", bytes);
+                    //XmlDocument xmlDocument = new XmlDocument();
+                    //xmlDocument.Load(xmlPath);
+                    //LevelRulesFile levelRulesFile2 = new LevelRulesFile();
+                    //byte[] bytes = levelRulesFile2.ParseXmlDocument(xmlDocument);
+                    //File.WriteAllBytes(path + "2", bytes);
                 }
                 catch (Exception e)
                 {

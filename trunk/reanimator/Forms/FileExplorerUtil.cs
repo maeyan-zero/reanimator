@@ -430,7 +430,7 @@ namespace Reanimator.Forms
             DialogResult extractDialogResult = DialogResult.Retry;
             while (extractDialogResult == DialogResult.Retry)
             {
-                byte[] fileBytes = _fileManager.GetFileBytes(file);
+                byte[] fileBytes = _fileManager.GetFileBytes(file, extractPatchArgs.PatchFiles);
                 if (fileBytes == null)
                 {
                     extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
