@@ -108,8 +108,7 @@ namespace Hellgate
             }
 
             string[][] tableRows = FileTools.CSVToStringArray(buffer, colCount, delimiter);
-            if ((tableRows == null)) return false;
-
+            if (tableRows == null) return false;
 
             // Parse the tableRows
             bool failedParsing = false;
@@ -171,7 +170,7 @@ namespace Hellgate
 
                             fieldInfo.SetValue(rowInstance, stringBufferOffset);
                             FileTools.WriteToBuffer(ref _stringBuffer, ref stringBufferOffset, FileTools.StringToASCIIByteArray(value));
-                            FileTools.WriteToBuffer(ref _stringBuffer, ref stringBufferOffset, (byte)0x00);
+                            stringBufferOffset++; // \0
                             continue;
                         }
 

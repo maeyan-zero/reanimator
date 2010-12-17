@@ -36,8 +36,7 @@ namespace Hellgate.Excel
         public Int32 undefined6a;
         public Int32 undefined6b;
         public Int32 undefined6c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined6d;//information
+        public Int32 undefined6d;//information - is NOT string offset
         public Int32 undefined6e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined6f;//information
@@ -49,8 +48,7 @@ namespace Hellgate.Excel
         public Int32 undefined8a;
         public Int32 undefined8b;
         public Int32 undefined8c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined8d;//information
+        public Int32 undefined8d;//information - is NOT string offset
         public Int32 undefined8e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined8f;//information
@@ -62,8 +60,7 @@ namespace Hellgate.Excel
         public Int32 undefined10a;
         public Int32 undefined10b;
         public Int32 undefined10c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined10d;//information
+        public Int32 undefined10d;//information - is NOT string offset
         public Int32 undefined10e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined10f;//information
@@ -75,8 +72,7 @@ namespace Hellgate.Excel
         public Int32 undefined12a;
         public Int32 undefined12b;
         public Int32 undefined12c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined12d;//information
+        public Int32 undefined12d;//information - is NOT string offset
         public Int32 undefined12e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined12f;//information
@@ -88,8 +84,7 @@ namespace Hellgate.Excel
         public Int32 undefined14a;
         public Int32 undefined14b;
         public Int32 undefined14c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined14d;//information
+        public Int32 undefined14d;//information - is NOT string offset
         public Int32 undefined14e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined14f;//information
@@ -101,8 +96,7 @@ namespace Hellgate.Excel
         public Int32 undefined16a;
         public Int32 undefined16b;
         public Int32 undefined16c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined16d;//information
+        public Int32 undefined16d;//information - is NOT string offset
         public Int32 undefined16e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined16f;//information
@@ -114,8 +108,7 @@ namespace Hellgate.Excel
         public Int32 undefined18a;
         public Int32 undefined18b;
         public Int32 undefined18c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined18d;//information
+        public Int32 undefined18d;//information - is NOT string offset
         public Int32 undefined18e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined18f;//information
@@ -127,8 +120,7 @@ namespace Hellgate.Excel
         public Int32 undefined20a;
         public Int32 undefined20b;
         public Int32 undefined20c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined20d;//information
+        public Int32 undefined20d;//information - is NOT string offset
         public Int32 undefined20e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined20f;//information
@@ -140,8 +132,7 @@ namespace Hellgate.Excel
         public Int32 undefined22a;
         public Int32 undefined22b;
         public Int32 undefined22c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined22d;//information
+        public Int32 undefined22d;//information - is NOT string offset
         public Int32 undefined22e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined22f;//information
@@ -153,8 +144,7 @@ namespace Hellgate.Excel
         public Int32 undefined24a;
         public Int32 undefined24b;
         public Int32 undefined24c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined24d;//information
+        public Int32 undefined24d;//information - is NOT string offset
         public Int32 undefined24e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined24f;//information
@@ -166,8 +156,7 @@ namespace Hellgate.Excel
         public Int32 undefined26a;
         public Int32 undefined26b;
         public Int32 undefined26c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined26d;//information
+        public Int32 undefined26d;//information - is NOT string offset
         public Int32 undefined26e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined26f;//information
@@ -179,8 +168,7 @@ namespace Hellgate.Excel
         public Int32 undefined28a;
         public Int32 undefined28b;
         public Int32 undefined28c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined28d;//information
+        public Int32 undefined28d;//information - is NOT string offset
         public Int32 undefined28e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined28f;//information
@@ -192,8 +180,7 @@ namespace Hellgate.Excel
         public Int32 undefined30a;
         public Int32 undefined30b;
         public Int32 undefined30c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined30d;//information
+        public Int32 undefined30d;//information - is NOT string offset
         public Int32 undefined30e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined30f;//information
@@ -205,8 +192,7 @@ namespace Hellgate.Excel
         public Int32 undefined32a;
         public Int32 undefined32b;
         public Int32 undefined32c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined32d;//information
+        public Int32 undefined32d;//information - is NOT string offset
         public Int32 undefined32e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined32f;//information
