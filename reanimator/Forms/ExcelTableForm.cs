@@ -238,7 +238,11 @@ namespace Reanimator.Forms
             //    tabControl1.TabPages.RemoveByKey("stringsPage");
             //}
 
-            if (!ExcelFile.Debug || _excelFile.IndexSortArray == null) return;
+            if (!ExcelFile.Debug || _excelFile.IndexSortArray == null)
+            {
+                tabControl1.TabPages.RemoveByKey("indexArraysPage");
+                return;
+            }
 
             // is messy, but all we need for debugging
             List<TableIndexDataSource> tidsList = new List<TableIndexDataSource>();

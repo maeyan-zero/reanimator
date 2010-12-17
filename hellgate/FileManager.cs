@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -194,7 +195,7 @@ namespace Hellgate
 
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
-                //if (fileEntry.FileNameString.Contains("sounds")) continue;
+                //if (!fileEntry.FileNameString.Contains("sounds")) continue;
                 //if (fileEntry.FileNameString.Contains("properties"))
                 //{
                 //    int bp = 0;
@@ -217,14 +218,58 @@ namespace Hellgate
                     if (dataFile.Attributes.IsEmpty) continue;
 
                     #region ExcelFileDebug
-                    if (ExcelFile.Debug && !MPVersion && false)
+                    if (ExcelFile.Debug && !MPVersion & false)
                     {
-                        ExcelFile excelFile = (ExcelFile) dataFile;
+                        ExcelFile excelFile = (ExcelFile)dataFile;
                         //Console.WriteLine("Loading " + fileEntry.FileNameString);
 
                         try
                         {
                             byte[] dataFileBytes = dataFile.ToByteArray();
+                            if (dataFile.StringId == "SOUNDS" && false)
+                            {
+                                byte[] csvBytes = dataFile.ExportCSV();
+                                ExcelFile soundsCSV = new ExcelFile(csvBytes, fileEntry.RelativeFullPathWithoutPatch);
+                                byte[] soundsBytes = soundsCSV.ToByteArray();
+                                //byte[] soundsBytesFromCSV = soundsCSV.ExportCSV();
+                                //ExcelFile soundsCSVFromBytesFromCSV = new ExcelFile(soundsBytesFromCSV, fileEntry.RelativeFullPathWithoutPatch);
+
+                                // some brute force ftw
+                                byte[][] bytesArrays = new[] {fileBytes, soundsBytes};
+                                for (int z = 0; z < bytesArrays.Length; z++)
+                                {
+                                    byte[] bytes = bytesArrays[z];
+
+                                    int offset = 0x20;
+                                    int stringsBytesCount = FileTools.ByteArrayToInt32(bytes, ref offset);
+
+                                    StringWriter stringWriterByteStrings = new StringWriter();
+                                    stringWriterByteStrings.WriteLine(stringsBytesCount + " bytes");
+                                    List<String> strings = new List<String>();
+                                    List<int> offsets = new List<int>();
+
+                                    while (offset < stringsBytesCount + 0x20)
+                                    {
+                                        String str = FileTools.ByteArrayToStringASCII(bytes, offset);
+                                        strings.Add(str);
+                                        offsets.Add(offset);
+
+                                        offset += str.Length + 1;
+                                    }
+
+                                    String[] sortedStrings = strings.ToArray();
+                                    int[] sortedOffsets = offsets.ToArray();
+                                    Array.Sort(sortedStrings, sortedOffsets);
+                                    stringWriterByteStrings.WriteLine(strings.Count + " strings");
+                                    for (int i = 0; i < strings.Count; i++)
+                                    {
+                                        stringWriterByteStrings.WriteLine(sortedStrings[i] + "\t\t\t" + sortedOffsets[i]);
+                                    }
+                                    
+                                    File.WriteAllText(@"C:\excel_debug\strings" + z + ".txt", stringWriterByteStrings.ToString());
+                                }
+                            }
+
                             if (fileBytes.Length != dataFileBytes.Length)
                             {
                                 Console.WriteLine("ToByteArray() dataFileBytes has differing length: " + dataFile.StringId);
@@ -304,7 +349,7 @@ namespace Hellgate
                                                 ExcelFile finalExcel = new ExcelFile(recookedExcelBytes, fileEntry.RelativeFullPathWithoutPatch);
                                                 Debug.Assert(finalExcel.HasIntegrity);
                                                 byte[] finalCheck = finalExcel.ToByteArray();
-                                                if (excelFile.StringId == "SKILLS") Debug.Assert(finalCheck.Length+12 == dataFileBytes.Length);
+                                                if (excelFile.StringId == "SKILLS") Debug.Assert(finalCheck.Length + 12 == dataFileBytes.Length);
                                                 else Debug.Assert(finalCheck.Length == dataFileBytes.Length);
                                             }
                                         }
@@ -448,7 +493,7 @@ namespace Hellgate
         /// <param name="fileEntry">The file entry details to read.</param>
         /// <param name="ignorePatchedOut">If true, will ignore the files patched out state effectivly forcing file reading from .dats as if it was never patched out.</param>
         /// <returns>The file byte array, or null on error.</returns>
-        public byte[] GetFileBytes(FileEntry fileEntry, bool ignorePatchedOut=false)
+        public byte[] GetFileBytes(FileEntry fileEntry, bool ignorePatchedOut = false)
         {
             byte[] fileBytes = null;
 
