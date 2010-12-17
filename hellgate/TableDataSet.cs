@@ -46,7 +46,8 @@ namespace Hellgate
             dataTable.PrimaryKey = new[] { indexColumn };
             outputAttributes.Add(null);
 
-            foreach (FieldInfo fieldInfo in dataType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            FieldInfo[] fieldInfos = dataType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            foreach (FieldInfo fieldInfo in fieldInfos)
             {
                 OutputAttribute excelAttribute = ExcelFile.GetExcelOutputAttribute(fieldInfo);
 
@@ -137,14 +138,13 @@ namespace Hellgate
             #region Generate Rows
             int row = 1;
             object[] baseRow = new object[outputAttributes.Count];
-
+            ObjectDelegator objectDelegator = new ObjectDelegator(fieldInfos, "GetValue");
             foreach (Object tableRow in excelFile.Rows)
             {
                 int col = 1;
-                foreach (FieldInfo fieldInfo in dataType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+                foreach (FieldInfo fieldInfo in fieldInfos)
                 {
-
-                    Object value = fieldInfo.GetValue(tableRow);
+                    Object value = objectDelegator[fieldInfo.Name](tableRow);
 
                     if (fieldInfo.IsPrivate)
                     {
@@ -205,6 +205,7 @@ namespace Hellgate
                 dataTable.Rows.Add(baseRow);
                 row++;
             }
+
             #endregion
 
             // Generate Relationships as required
@@ -215,6 +216,8 @@ namespace Hellgate
 
         private DataTable _LoadStringsTable()
         {
+            ObjectDelegator objectDelegator = new ObjectDelegator(typeof(StringsFile.StringBlock), "GetValue");
+
             DataTable dataTable = XlsDataSet.Tables[StringsTableName];
             if (dataTable != null) return dataTable;
 
@@ -224,7 +227,7 @@ namespace Hellgate
             Type dataType = typeof(StringsFile.StringBlock);
             FieldInfo[] fieldInfos = dataType.GetFields();
 
-            // generate columns)
+            // generate columns
             foreach (FieldInfo fieldInfo in fieldInfos)
             {
                 dataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
@@ -241,10 +244,9 @@ namespace Hellgate
                 {
                     DataRow dataRow = dataTable.NewRow();
 
-                    int col = 0;
-                    foreach (FieldInfo fieldInfo in fieldInfos)
+                    for (int col = 0; col < fieldInfos.Length; col++)
                     {
-                        dataRow[col++] = fieldInfo.GetValue(tableRow);
+                        dataRow[col] = objectDelegator[col](tableRow);
                     }
 
                     dataTable.Rows.Add(dataRow);
@@ -254,38 +256,6 @@ namespace Hellgate
             return dataTable;
         }
 
-        //private DataTable _LoadStringsTable(StringsFile stringsFile)
-        //{
-        //    String tableName = stringsFile.StringId;
-        //    DataTable dataTable = XlsDataSet.Tables[tableName];
-        //    if (dataTable != null) return dataTable;
-
-        //    dataTable = XlsDataSet.Tables.Add(tableName);
-        //    dataTable.TableName = tableName;
-
-        //    Type dataType = typeof(StringsFile.StringBlock);
-
-        //    // Generate Columns
-        //    foreach (FieldInfo fieldInfo in dataType.GetFields())
-        //    {
-        //        dataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
-        //    }
-
-        //    // Generate Rows
-        //    foreach (StringsFile.StringBlock tableRow in stringsFile.Rows)
-        //    {
-        //        DataRow dataRow = dataTable.NewRow();
-        //        int col = 0;
-        //        foreach (FieldInfo fieldInfo in dataType.GetFields())
-        //        {
-        //            dataRow[col++] = fieldInfo.GetValue(tableRow);
-        //        }
-        //        dataTable.Rows.Add(dataRow);
-        //    }
-
-        //    return dataTable;
-        //}
-
         private DataTable LoadRelatedTable(String stringId)
         {
             if ((String.IsNullOrEmpty(stringId))) return null;
@@ -294,15 +264,14 @@ namespace Hellgate
             if (dataTable != null) return dataTable;
 
             DataFile dataFile = GetDataFile(stringId);
-            return (dataFile != null) ? LoadTable(dataFile, false) : null;
+            return (dataFile != null) ? LoadTable(dataFile, true) : null;
         }
 
         private void GenerateRelations(ExcelFile excelFile)
         {
             if ((excelFile == null)) return;
 
-            List<object> array = excelFile.Rows;
-            Type type = excelFile.Rows[0].GetType();
+            Type type = excelFile.Attributes.RowType;
             int col;
 
             String mainTableName = excelFile.StringId;
