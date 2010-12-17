@@ -9,6 +9,7 @@ namespace Hellgate.Excel
     class Affixes
     {
         TableHeader header;
+
         [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 affix;
         public Int32 unknown02;

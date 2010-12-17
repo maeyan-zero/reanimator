@@ -196,7 +196,7 @@ namespace Hellgate
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
                 //if (!fileEntry.FileNameString.Contains("sounds")) continue;
-                //if (fileEntry.FileNameString.Contains("properties"))
+                //if (fileEntry.FileNameString.Contains("affix"))
                 //{
                 //    int bp = 0;
                 //}
@@ -218,7 +218,7 @@ namespace Hellgate
                     if (dataFile.Attributes.IsEmpty) continue;
 
                     #region ExcelFileDebug
-                    if (ExcelFile.Debug && !MPVersion && false)
+                    if (ExcelFile.Debug && MPVersion && false)
                     {
                         ExcelFile excelFile = (ExcelFile)dataFile;
                         //Console.WriteLine("Loading " + fileEntry.FileNameString);
