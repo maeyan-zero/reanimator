@@ -195,7 +195,7 @@ namespace Hellgate
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
                 //if (fileEntry.FileNameString.Contains("sounds")) continue;
-                //if (fileEntry.FileNameString.Contains("missile"))
+                //if (fileEntry.FileNameString.Contains("music"))
                 //{
                 //    int bp = 0;
                 //}
@@ -285,7 +285,11 @@ namespace Hellgate
                                         else
                                         {
                                             byte[] recookedExcelBytes = csvExcel.ToByteArray();
-                                            if (fileBytes.Length != recookedExcelBytes.Length)
+
+                                            int recookedLength = recookedExcelBytes.Length;
+                                            if (excelFile.StringId == "SKILLS") recookedLength += 12; // 12 bytes in int ptr data not used/referenced at all and are removed/lost in bytes -> csv -> bytes
+
+                                            if (fileBytes.Length != recookedLength)
                                             {
                                                 Console.WriteLine("Recooked Excel file has differing length: " + dataFile.StringId);
 
@@ -294,6 +298,14 @@ namespace Hellgate
                                                 File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArray", dataFileBytes);
                                                 File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
                                                 File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".recookedExcelBytes", recookedExcelBytes);
+                                            }
+                                            else
+                                            {
+                                                ExcelFile finalExcel = new ExcelFile(recookedExcelBytes, fileEntry.RelativeFullPathWithoutPatch);
+                                                Debug.Assert(finalExcel.HasIntegrity);
+                                                byte[] finalCheck = finalExcel.ToByteArray();
+                                                if (excelFile.StringId == "SKILLS") Debug.Assert(finalCheck.Length+12 == dataFileBytes.Length);
+                                                else Debug.Assert(finalCheck.Length == dataFileBytes.Length);
                                             }
                                         }
                                     }

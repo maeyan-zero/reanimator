@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -694,29 +696,40 @@ namespace Hellgate
         }
 
 
-        void DoPrecedenceHack(FieldInfo fieldInfo, OutputAttribute outputAttribute)
+        private void _DoPrecedenceHack(FieldInfo fieldInfo, OutputAttribute outputAttribute)
         {
-            if ((fieldInfo.FieldType == typeof(string)))
+            const char dash = '-';
+            const char score = '_';
+            //const char slash = '\\';
+            const char dashReplace = '0';
+            const char scoreReplace = '9';
+            //const char slashReplace = '/';
+
+
+            if (fieldInfo.FieldType == typeof(string))
             {
                 foreach (object row in Rows)
                 {
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "8"));
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "9"));
+                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace(dash, dashReplace)
+                        .Replace(score, scoreReplace));
                 }
             }
 
-            if ((outputAttribute.IsStringOffset))
+            if (outputAttribute.IsStringOffset)
             {
                 for (int i = 0; i < _stringBuffer.Length; i++)
                 {
                     switch (_stringBuffer[i])
                     {
-                        case (byte)'-':
-                            _stringBuffer[i] = (byte)'8';
+                        case (byte)dash:
+                            _stringBuffer[i] = (byte)dashReplace;
                             break;
-                        case (byte)'_':
-                            _stringBuffer[i] = (byte)'9';
+                        case (byte)score:
+                            _stringBuffer[i] = (byte)scoreReplace;
                             break;
+                        //case (byte)slash:
+                        //    _stringBuffer[i] = (byte)slashReplace;
+                        //    break;
                     }
                 }
             }
@@ -728,8 +741,8 @@ namespace Hellgate
 
             foreach (object row in Rows)
             {
-                fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("-", "8"));
-                fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace("_", "9"));
+                fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace(dash, dashReplace)
+                    .Replace(score, scoreReplace));
             }
         }
 
@@ -754,11 +767,11 @@ namespace Hellgate
 
                 // Precedence Hack
                 // excel files order special characters differently to convention
-                DoPrecedenceHack(fieldInfo, attribute);
+                _DoPrecedenceHack(fieldInfo, attribute);
 
                 int pos = attribute.SortColumnOrder - 1;
 
-                    // need to order by string, not string offset
+                // need to order by string, not string offset
                 if (attribute.IsStringOffset)
                 {
                     var sortedList = from element in Rows
