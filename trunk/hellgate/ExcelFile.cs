@@ -83,6 +83,8 @@ namespace Hellgate
         /// <returns>True if the buffer parsed okay.</returns>
         public override sealed bool ParseCSV(byte[] buffer)
         {
+            ObjectDelegator objectDelegator = new ObjectDelegator(Attributes.RowType, "SetValue");
+
             // Pre-checks
             if (buffer == null) return false;
             if (buffer.Length < 32) return false;
@@ -130,6 +132,7 @@ namespace Hellgate
                         {
                             string headerString = tableRows[row][col++];
                             TableHeader tableHeader = (TableHeader)FileTools.StringToObject(headerString, ",", typeof(TableHeader));
+                            //objectDelegator[col, rowInstance] = tableHeader; // only public fields are generated
                             fieldInfo.SetValue(rowInstance, tableHeader);
                             continue;
                         }
@@ -137,11 +140,13 @@ namespace Hellgate
                         {
                             MarshalAsAttribute marshal = (MarshalAsAttribute)fieldInfo.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
                             Array arrayInstance = (Array)Activator.CreateInstance(fieldInfo.FieldType, marshal.SizeConst);
+                            //objectDelegator[col, rowInstance] = arrayInstance;
                             fieldInfo.SetValue(rowInstance, arrayInstance);
                             continue;
                         }
                         if ((fieldInfo.FieldType == typeof(String)))
                         {
+                            //objectDelegator[col, rowInstance] = String.Empty;
                             fieldInfo.SetValue(rowInstance, String.Empty);
                             continue;
                         }
@@ -152,6 +157,7 @@ namespace Hellgate
                     // All public fields must be inside the CSV
                     if (needOutputAttributes) outputAttributes[col] = GetExcelOutputAttribute(fieldInfo);
                     OutputAttribute attribute = outputAttributes[col];
+                    int publicCol = col - 1;
                     string value = tableRows[row][col++];
                     if (attribute != null)
                     {
@@ -164,7 +170,7 @@ namespace Hellgate
 
                             if (String.IsNullOrEmpty(value))
                             {
-                                fieldInfo.SetValue(rowInstance, -1);
+                                objectDelegator[publicCol, rowInstance] = -1;
                                 continue;
                             }
 
@@ -178,7 +184,7 @@ namespace Hellgate
                         {
                             if (value == "0")
                             {
-                                fieldInfo.SetValue(rowInstance, 0);
+                                objectDelegator[publicCol, rowInstance] = 0;
                                 continue;
                             }
                             if (_integerBuffer == null)
@@ -195,7 +201,7 @@ namespace Hellgate
                             {
                                 intValue[i] = int.Parse(splitValue[i]);
                             }
-                            fieldInfo.SetValue(rowInstance, integerBufferOffset);
+                            objectDelegator[publicCol, rowInstance] = integerBufferOffset;
                             FileTools.WriteToBuffer(ref _integerBuffer, ref integerBufferOffset, FileTools.IntArrayToByteArray(intValue));
                             continue;
                         }
@@ -208,20 +214,20 @@ namespace Hellgate
                             }
                             if ((String.IsNullOrEmpty(value)))
                             {
-                                fieldInfo.SetValue(rowInstance, -1);
+                                objectDelegator[publicCol, rowInstance] = -1;
                                 continue;
                             }
                             if (!(_secondaryStrings.Contains(value)))
                             {
                                 _secondaryStrings.Add(value);
                             }
-                            fieldInfo.SetValue(rowInstance, _secondaryStrings.IndexOf(value));
+                            objectDelegator[publicCol, rowInstance] = _secondaryStrings.IndexOf(value);
                             continue;
                         }
 
                         if ((attribute.IsBitmask))
                         {
-                            fieldInfo.SetValue(rowInstance, UInt32.Parse(value));
+                            objectDelegator[publicCol, rowInstance] = UInt32.Parse(value);
                             continue;
                         }
                     }
@@ -229,7 +235,7 @@ namespace Hellgate
                     try
                     {
                         Object objValue = FileTools.StringToObject(value, fieldInfo.FieldType);
-                        fieldInfo.SetValue(rowInstance, objValue);
+                        objectDelegator[publicCol, rowInstance] = objValue;
                     }
                     catch (Exception e)
                     {
@@ -304,7 +310,7 @@ namespace Hellgate
 
 
                     // last line will be script values if it exists
-                    if (i < scripts.Length-2)
+                    if (i < scripts.Length - 2)
                     {
                         String[] values = scripts[++i].Split(',');
                         int[] scriptValues = new int[values.Length];
@@ -805,6 +811,8 @@ namespace Hellgate
         /// <returns>The CSV as a byte array.</returns>
         public override byte[] ExportCSV()
         {
+            ObjectDelegator objectDelegator = new ObjectDelegator(Attributes.RowType, "GetValue");
+
             FieldInfo[] dataTypeFields = DataType.GetFields();
             int noCols = dataTypeFields.Count();
             int noRows = Count + 1; // +1 for column headers
@@ -870,7 +878,7 @@ namespace Hellgate
                     {
                         if ((attribute.IsStringOffset))
                         {
-                            int offset = (int)fieldInfo.GetValue(rowObject);
+                            int offset = (int)objectDelegator[col](rowObject);
                             if (offset != -1)
                             {
                                 byte[] stringBytes = ReadStringTableAsBytes(offset);
@@ -882,7 +890,7 @@ namespace Hellgate
                         }
                         if ((attribute.IsIntOffset))
                         {
-                            int offset = (int)fieldInfo.GetValue(rowObject);
+                            int offset = (int)objectDelegator[col](rowObject);
                             if ((offset == 0))
                             {
                                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("0"));
@@ -894,7 +902,7 @@ namespace Hellgate
                         }
                         if ((attribute.IsSecondaryString))
                         {
-                            int index = (int)fieldInfo.GetValue(rowObject);
+                            int index = (int)objectDelegator[col](rowObject);
                             if (index != -1)
                             {
                                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(_secondaryStrings[index]));
@@ -903,13 +911,13 @@ namespace Hellgate
                         }
                         if ((attribute.IsBitmask))
                         {
-                            uint uintValue = (uint)fieldInfo.GetValue(rowObject);
+                            uint uintValue = (uint)objectDelegator[col](rowObject);
                             string stringValue = uintValue.ToString();
                             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(stringValue));
                             continue;
                         }
                     }
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(fieldInfo.GetValue(rowObject).ToString()));
+                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(objectDelegator[col](rowObject).ToString()));
                 }
                 needOutputAttributes = false;
 

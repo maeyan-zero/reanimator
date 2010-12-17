@@ -28,7 +28,6 @@ namespace Revival
             string dataDir = Path.Combine(currentDir, Hellgate.Common.DataPath);
             string dataCommonDir = Path.Combine(currentDir, Hellgate.Common.DataCommonPath);
 
-
             bool doCookTxt = false;
             bool doCookXml = false;
             bool doPackDat = false;
@@ -50,8 +49,9 @@ namespace Revival
                 fileManager.LoadTableFiles();
                 
 
-                byte[] buffer = fileManager.DataFiles["LEVEL_RULES"].ExportCSV();
-                File.WriteAllBytes(@"D:\levels_rules.txt", buffer);
+                byte[] buffer = fileManager.DataFiles["SOUNDS"].ExportCSV();
+                return;
+                //File.WriteAllBytes(@"D:\levels_rules.txt", buffer);
 
                 //foreach (DataFile dataFile in fileManager.DataFiles.Values)
                 //{
