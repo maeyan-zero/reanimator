@@ -195,7 +195,7 @@ namespace Hellgate
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
                 //if (fileEntry.FileNameString.Contains("sounds")) continue;
-                //if (fileEntry.FileNameString.Contains("music"))
+                //if (fileEntry.FileNameString.Contains("properties"))
                 //{
                 //    int bp = 0;
                 //}
@@ -314,7 +314,7 @@ namespace Hellgate
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine("Excel file Exception: " + dataFile.StringId);
+                            Console.WriteLine("Excel file Exception: " + dataFile.StringId + "\n" + e);
                         }
                     }
                     #endregion

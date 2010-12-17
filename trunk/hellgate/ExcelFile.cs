@@ -19,7 +19,7 @@ namespace Hellgate
         #region Members
         private byte[] _stringBuffer;
         private byte[] _integerBuffer;
-        private byte[] _myshBuffer;
+        private readonly byte[] _myshBuffer;
         private byte[][] _extendedBuffer;
         private StringCollection _secondaryStrings;
         private List<ExcelScript> _rowScripts;
@@ -61,12 +61,16 @@ namespace Hellgate
                 return;
             }
 
+            // parse data
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCooked = (peek == Token.cxeh);
-
             HasIntegrity = isCooked ? ParseData(buffer) : ParseCSV(buffer);
 
-            if (_excelFileHeader.StructureID == 0) // CSV file
+            // we're using hard-coded mysh script table for SKILLS
+            if (HasIntegrity && StringId == "SKILLS") _myshBuffer = Skills.Mysh.Data;
+
+            // CSV file
+            if (_excelFileHeader.StructureID == 0)
             {
                 _excelFileHeader.StructureID = DataTables.Where(dt => dt.Key == StringId).FirstOrDefault().Value;
             }
@@ -88,7 +92,7 @@ namespace Hellgate
             const byte delimiter = (byte)'\t';
             int stringBufferOffset = 0;
             int integerBufferOffset = 1;
-
+            bool isProperties = (StringId == "PROPERTIES");
 
             StringId = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(buffer, ref offset, delimiter), 0);
             StringId = StringId.Replace("\"", "");//in case strings embedded
@@ -96,6 +100,13 @@ namespace Hellgate
 
             // Mutate the buffer into a string array
             int colCount = Attributes.HasExtended ? DataType.GetFields().Count() + 2 : DataType.GetFields().Count() + 1;
+            if (isProperties)
+            {
+                _rowScripts = new List<ExcelScript>();
+                _integerBuffer = new byte[1]; // properties is weird - do this just to ensure 100% byte-for-byte accuracy
+                colCount++;
+            }
+
             string[][] tableRows = FileTools.CSVToStringArray(buffer, colCount, delimiter);
             if ((tableRows == null)) return false;
 
@@ -164,18 +175,19 @@ namespace Hellgate
                             continue;
                         }
 
-                        if ((attribute.IsIntOffset))
+                        if (attribute.IsIntOffset)
                         {
-                            if ((_integerBuffer == null))
-                            {
-                                _integerBuffer = new byte[1024];
-                                _integerBuffer[0] = 0x00;
-                            }
-                            if ((value == "0"))
+                            if (value == "0")
                             {
                                 fieldInfo.SetValue(rowInstance, 0);
                                 continue;
                             }
+                            if (_integerBuffer == null)
+                            {
+                                _integerBuffer = new byte[1024];
+                                _integerBuffer[0] = 0x00;
+                            }
+
                             value = value.Replace("\"", "");
                             string[] splitValue = value.Split(',');
                             int count = splitValue.Length;
@@ -248,6 +260,63 @@ namespace Hellgate
                         byteArray[i] = Byte.Parse(stringArray[i], NumberStyles.HexNumber);
                     }
                     _extendedBuffer[row] = byteArray;
+                }
+
+                // properties has extra Scripts stuffs
+                // yea, this is a bit messy, but it's a single table only and mostly done out of curiosity
+                if (isProperties)
+                {
+                    String value = tableRows[row][col];
+                    String[] scripts = value.Split('\n');
+                    ExcelScript excelScript = new ExcelScript();
+                    if (scripts.Length > 1)
+                    {
+                        _rowScripts.Add(excelScript);
+                    }
+
+                    int i = 0;
+                    do
+                    {
+                        if (scripts.Length == 1) continue;
+
+                        i++;
+                        String[] values = scripts[i].Split(',');
+                        if (values.Length < 4) continue;
+
+
+                        // script parameters
+                        int typeValuesCount = values.Length - 3;
+                        ExcelScript.Parameter parameter = new ExcelScript.Parameter
+                        {
+                            Name = values[0],
+                            Unknown = UInt32.Parse(values[1]),
+                            TypeId = UInt32.Parse(values[2]),
+                            TypeValues = new int[typeValuesCount]
+                        };
+
+                        for (int j = 0; j < typeValuesCount; j++)
+                        {
+                            parameter.TypeValues[j] = Int32.Parse(values[3 + j]);
+                        }
+
+                        excelScript.Parameters.Add(parameter);
+
+                    } while (i < scripts.Length - 1 - 2); // -2 for: last line is blank, and line before *might* be script values
+
+
+                    // last line will be script values if it exists
+                    if (i < scripts.Length-2)
+                    {
+                        String[] values = scripts[++i].Split(',');
+                        int[] scriptValues = new int[values.Length];
+
+                        for (int j = 0; j < values.Length; j++)
+                        {
+                            scriptValues[j] = Int32.Parse(values[j]);
+                        }
+
+                        excelScript.ScriptValues = scriptValues.ToByteArray();
+                    }
                 }
 
                 Rows.Add(rowInstance);
@@ -666,7 +735,7 @@ namespace Hellgate
                 }
             }
 
-            // Rcsh, Tysh, Mysh, Dneh
+            // rcsh, tysh, mysh, dneh
             // This section exists when there is a string or integer block or a mysh table
             if (_integerBuffer != null || Attributes.HasScriptTable)
             {
@@ -682,13 +751,9 @@ namespace Hellgate
                         FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
                         FileTools.WriteToBuffer(ref buffer, ref offset, _myshBuffer);
                     }
-                    else if (_myshBuffer == null && StringId == "SKILLS")
+                    else if (_rowScripts != null)
                     {
-                        // No need to use reflection here for 1 mysh table.
-                        // Would involve creating an interface etc
-                        _myshBuffer = Skills.Mysh.Data;
-                        FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
-                        FileTools.WriteToBuffer(ref buffer, ref offset, _myshBuffer);
+                        _ScriptToByteArray(ref buffer, ref offset);
                     }
                 }
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.dneh);
@@ -696,7 +761,7 @@ namespace Hellgate
             }
 
             // Append the integer array.
-            if (_integerBuffer != null && _integerBuffer.Length > 1)
+            if (_integerBuffer != null && _integerBuffer.Length > 0)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, _integerBuffer.Length);
@@ -749,7 +814,7 @@ namespace Hellgate
             byte[] csvBuffer = new byte[1024];
             int csvOffset = 0;
             int row = 0;
-
+            int scriptRow = 0;
 
             // Table Header - put stringID in this field
             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(_GetStringId(FilePath)));
@@ -764,6 +829,13 @@ namespace Hellgate
             if ((Attributes.HasExtended))
             {
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("ExtendedProps"));
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+            }
+            // if properties we have the scripts to export as well
+            bool isProperties = (StringId == "PROPERTIES");
+            if (isProperties)
+            {
+                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("Script"));
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
             }
             // End of line
@@ -849,6 +921,36 @@ namespace Hellgate
                     FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(_extendedBuffer[row], ',', typeof(byte))));
                 }
 
+                // properties scripts
+                if (isProperties && scriptRow < _rowScripts.Count)
+                {
+                    if (tableHeader.Unknown1 != 2 || scriptRow == _rowScripts.Count - 1) // need 1 extra row for some reason
+                    {
+                        FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
+                        ExcelScript excelScript = _rowScripts[scriptRow++];
+                        String output = String.Empty;
+                        foreach (ExcelScript.Parameter paramater in excelScript.Parameters)
+                        {
+                            output += String.Format("\n{0},{1},{2},{3}", paramater.Name, paramater.Unknown,
+                                                    paramater.TypeId, paramater.TypeValues.ToString(","));
+                        }
+                        FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(output));
+
+                        if (excelScript.ScriptValues != null)
+                        {
+                            int offset = 0;
+                            String scriptValues = "\n" +
+                                                  FileTools.ByteArrayToInt32Array(excelScript.ScriptValues, ref offset,
+                                                                                  excelScript.ScriptValues.Length / 4).ToString(",") + "\n";
+                            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptValues));
+                        }
+                    }
+                    else
+                    {
+                        FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(Environment.NewLine));
+                    }
+                }
+
                 row++;
                 if (row != noRows - 1)
                 {
@@ -880,7 +982,7 @@ namespace Hellgate
                 XmlElement scriptElement = xmlDocument.CreateElement("Script");
                 mainElement.AppendChild(scriptElement);
 
-                foreach (ExcelScript.Paramater paramater in excelScript.Paramaters)
+                foreach (ExcelScript.Parameter paramater in excelScript.Parameters)
                 {
                     XmlElement paramElement = xmlDocument.CreateElement("Parameter");
                     scriptElement.AppendChild(paramElement);

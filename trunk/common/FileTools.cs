@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -835,6 +837,18 @@ namespace Revival.Common
         public static byte[] ToUnicodeByteArray(this String str)
         {
             return StringToUnicodeByteArray(str);
+        }
+
+        public static string ToString<T>(this IEnumerable<T> source, String separator)
+        {
+            String[] array = source.Where(n => n != null).Select(n => n.ToString()).ToArray();
+            return String.Join(separator, array);
+        }
+
+        public static string ToString(this IEnumerable source, String separator)
+        {
+            String[] array = source.Cast<object>().Where(n => n != null).Select(n => n.ToString()).ToArray();
+            return String.Join(separator, array);
         }
     }
 }
