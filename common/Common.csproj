@@ -115,6 +115,7 @@
     <Compile Include="FormTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TableTools.cs" />
+    <Compile Include="ObjectDelegator.cs" />
     <Compile Include="XmlUtilities.cs" />
   </ItemGroup>
   <ItemGroup>

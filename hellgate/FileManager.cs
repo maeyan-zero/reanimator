@@ -218,7 +218,7 @@ namespace Hellgate
                     if (dataFile.Attributes.IsEmpty) continue;
 
                     #region ExcelFileDebug
-                    if (ExcelFile.Debug && !MPVersion & false)
+                    if (ExcelFile.Debug && !MPVersion && false)
                     {
                         ExcelFile excelFile = (ExcelFile)dataFile;
                         //Console.WriteLine("Loading " + fileEntry.FileNameString);
