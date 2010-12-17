@@ -408,6 +408,7 @@ namespace Hellgate
             public const Int32 RcshValue = 4;
             public const Int32 TyshValue = 2;
             public const Int32 DnehValue = 0;
+            public const Int32 MyshVersion = 3;
         }
 
         public abstract class ColumnTypeKeys
@@ -443,7 +444,7 @@ namespace Hellgate
 
         class ExcelScript
         {
-            internal class Paramater
+            internal class Parameter
             {
                 public String Name { get; set; }                // short string name e.g. dmg_elec, dam, dur, etc
                 public UInt32 Unknown { get; set; }             // todo: check if is Name string-hash (quite sure it is, but need to check... doesn't really matter either way)
@@ -451,12 +452,12 @@ namespace Hellgate
                 public Int32[] TypeValues { get; set; }         // at least 1 int specifies the param element:  dmg_elec = 0xFC, dmg_fire = 0xFD
             }
 
-            public List<Paramater> Paramaters { get; private set; }
+            public List<Parameter> Parameters { get; private set; }
             public byte[] ScriptValues { get; set; }
 
             public ExcelScript()
             {
-                Paramaters = new List<Paramater>();
+                Parameters = new List<Parameter>();
             }
         }
         #endregion
@@ -559,12 +560,12 @@ namespace Hellgate
 
         private static bool _ParseScript(byte[] data, ref int offset, ref ExcelScript excelScript)
         {
-            ExcelScript.Paramater parameter = new ExcelScript.Paramater();
+            ExcelScript.Parameter parameter = new ExcelScript.Parameter();
 
             // token and version checks
             if (!CheckToken(data, ref offset, Token.mysh)) return false;
             UInt32 version = FileTools.ByteArrayToUInt32(data, ref offset);
-            if (version != 3) return false;
+            if (version != Token.MyshVersion) return false;
 
 
             // general parameter values
@@ -596,7 +597,7 @@ namespace Hellgate
             }
             parameter.TypeValues = FileTools.ByteArrayToInt32Array(data, ref offset, paramLength);
 
-            excelScript.Paramaters.Add(parameter);
+            excelScript.Parameters.Add(parameter);
             if (parameter.TypeId != 0x41) return true; // only 0x41 has paramaters and a script values block following it
 
 
@@ -616,6 +617,28 @@ namespace Hellgate
             offset += valuesByteCount;
 
             return true;
+        }
+
+        private void _ScriptToByteArray(ref byte[] buffer, ref int offset)
+        {
+            foreach (ExcelScript excelScript in _rowScripts)
+            {
+                foreach (ExcelScript.Parameter paramater in excelScript.Parameters)
+                {
+                    FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, Token.MyshVersion);
+
+                    FileTools.WriteToBuffer(ref buffer, ref offset, (Int32)paramater.Name.Length);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, paramater.Name);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, paramater.Unknown);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, paramater.TypeId);
+                    FileTools.WriteToBuffer(ref buffer, ref offset, paramater.TypeValues.ToByteArray());
+                }
+
+                if (excelScript.ScriptValues == null) continue;
+                FileTools.WriteToBuffer(ref buffer, ref offset, (Int32)excelScript.ScriptValues.Length);
+                FileTools.WriteToBuffer(ref buffer, ref offset, excelScript.ScriptValues);
+            }
         }
 
         UInt32[,] CreateIndexBitRelations()
@@ -703,15 +726,18 @@ namespace Hellgate
             //const char slash = '\\';
             const char dashReplace = '0';
             const char scoreReplace = '9';
-            //const char slashReplace = '/';
+            //const char slashReplace = '1';
 
 
             if (fieldInfo.FieldType == typeof(string))
             {
                 foreach (object row in Rows)
                 {
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace(dash, dashReplace)
-                        .Replace(score, scoreReplace));
+                    String str = ((string) fieldInfo.GetValue(row))
+                        .Replace(dash, dashReplace)
+                        .Replace(score, scoreReplace);
+
+                    fieldInfo.SetValue(row, str);
                 }
             }
 
@@ -771,7 +797,7 @@ namespace Hellgate
 
                 int pos = attribute.SortColumnOrder - 1;
 
-                // need to order by string, not string offset
+                    // need to order by string, not string offset
                 if (attribute.IsStringOffset)
                 {
                     var sortedList = from element in Rows
@@ -833,6 +859,8 @@ namespace Hellgate
                 // Remove precedence hack
                 // UndoPrecedenceHack(fieldInfo);
             }
+
+
 
             return sortedIndexArrays;
         }
