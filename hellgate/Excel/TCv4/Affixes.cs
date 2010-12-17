@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
+using TableHeader = Hellgate.ExcelFile.TableHeader;
 
 namespace Hellgate.Excel.TCv4
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class AffixesTCv4
     {
-        ExcelFile.TableHeader header;
+        TableHeader header;
 
         [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 affix;
@@ -30,7 +31,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 dom;
         [ExcelOutput(SortColumnOrder = 3)]
         public Int32 code;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", SortColumnOrder = 2, SecondarySortColumn = "code")]
         public Int32 affixType1;
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType2;
@@ -54,7 +55,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 affixType14;
         public Int32 affixType15;
         public Int32 suffix;
-        [ExcelOutput(SortColumnOrder = 4, IsSecondaryString = true)]
+        [ExcelOutput(SortColumnOrder = 4)] // not secondary string like SP version
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]
