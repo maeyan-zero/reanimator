@@ -12,7 +12,7 @@ namespace Hellgate
     {
         public const String FileExtension = ".mli";
         public const String FileExtensionXml = ".mli.xml";
-        private const UInt32 FileMagicWord = 0x1515CAFE; // 'þÊ..'
+        private const UInt32 FileMagicWord = 0x1515CAFE; // 'þÊ'
         private const UInt32 RequiredVersion = 0x3; // 3
 
         // total size = 12 bytes (0x0C)
@@ -66,8 +66,6 @@ namespace Hellgate
         }
 
         private MLIStruct _mliStruct;
-        private XmlDocument _xmlDocument;
-        private XmlWriter _xmlWriter;
 
         /// <summary>
         /// Parses a level rules file bytes.
@@ -75,16 +73,9 @@ namespace Hellgate
         /// <param name="fileBytes">The bytes of the level rules to parse.</param>
         public void ParseFileBytes(byte[] fileBytes)
         {
-            Debug.Assert(fileBytes != null);
-
-            // our XML document stuffs
-            _xmlDocument = new XmlDocument();
-            XPathNavigator xPathNavigator = _xmlDocument.CreateNavigator();
-            Debug.Assert(xPathNavigator != null);
-            _xmlWriter = xPathNavigator.AppendChild();
-            Debug.Assert(_xmlWriter != null);
+            // sanity check
+            if (fileBytes == null) throw new ArgumentNullException("fileBytes", "File bytes cannot be null!");
             _mliStruct = new MLIStruct();
-
 
             // file header checks
             int offset = 0;
@@ -119,27 +110,21 @@ namespace Hellgate
                 }
             }
 
+            // last two unknown blocks
             int count1 = FileTools.ByteArrayToInt32(fileBytes, fileBytes.Length - 8);
+            int count2 = FileTools.ByteArrayToInt32(fileBytes, fileBytes.Length - 4);
             if (count1 > 0)
             {
                 _mliStruct.UnknownStruct3Array1 = FileTools.ByteArrayToArray<UnknownStruct3>(fileBytes, ref offset, count1);
             }
-
-            int count2 = FileTools.ByteArrayToInt32(fileBytes, fileBytes.Length - 4);
             if (count2 > 0)
             {
                 _mliStruct.UnknownStruct3Array2 = FileTools.ByteArrayToArray<UnknownStruct3>(fileBytes, ref offset, count2);
             }
-
             offset += 8; // for 2x count fields
 
+            // final debug check
             Debug.Assert(offset == fileBytes.Length);
-
-
-            // create XmlDocument
-            XmlSerializer xmlSerializerHeader = new XmlSerializer(_mliStruct.GetType());
-            xmlSerializerHeader.Serialize(_xmlWriter, _mliStruct);
-            _xmlWriter.Close();
         }
 
         /// <summary>
@@ -149,9 +134,12 @@ namespace Hellgate
         /// <returns>The serialized byte array.</returns>
         public byte[] ParseXmlDocument(XmlDocument xmlDocument)
         {
+            // sanity checks
+            if (xmlDocument == null) throw new ArgumentNullException("xmlDocument", "XML Document cannot be null!");
+
             XmlNodeReader xmlNodeReader = new XmlNodeReader(xmlDocument);
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(MLIStruct));
-            MLIStruct mliStruct = (MLIStruct)xmlSerializer.Deserialize(xmlNodeReader);
+            _mliStruct = (MLIStruct)xmlSerializer.Deserialize(xmlNodeReader);
 
             int offset = 0;
             byte[] fileBytes = new byte[1024];
@@ -160,17 +148,71 @@ namespace Hellgate
             FileTools.WriteToBuffer(ref fileBytes, ref offset, FileMagicWord);
             FileTools.WriteToBuffer(ref fileBytes, ref offset, RequiredVersion);
 
+            // first block
+            if (_mliStruct.UnknownStruct1Array != null)
+            {
+                FileTools.WriteToBuffer(ref fileBytes, ref offset, 1); // flag
+                FileTools.WriteToBuffer(ref fileBytes, ref offset, _mliStruct.UnknownStruct1Array.Length);
+                FileTools.WriteToBuffer(ref fileBytes, ref offset, _mliStruct.UnknownStruct1Array);
+
+                // shorts block
+                if (_mliStruct.UnknownShortArray != null && _mliStruct.UnknownShortArray.Length > 0)
+                {
+                    FileTools.WriteToBuffer(ref fileBytes, ref offset, _mliStruct.UnknownShortArray.Length);
+                    FileTools.WriteToBuffer(ref fileBytes, ref offset, _mliStruct.UnknownShortArray.ToByteArray());
+                    _mliStruct.UnknownStruct1Array[0].UnknownInt321 = 0x0A;
+                }
+
+                // floats block
+                if (_mliStruct.UnknownStruct2Array != null && _mliStruct.UnknownStruct2Array.Length > 0)
+                {
+                    FileTools.WriteToBuffer(ref fileBytes, ref offset, _mliStruct.UnknownStruct2Array.Length);
+                    FileTools.WriteToBuffer(ref fileBytes, ref offset, _mliStruct.UnknownStruct2Array);
+                    _mliStruct.UnknownStruct1Array[0].UnknownInt321 = 0x0A;
+                }
+            }
+
+            // last two unknown blocks
+            Int32 count1 = 0;
+            Int32 count2 = 0;
+            if (_mliStruct.UnknownStruct3Array1 != null && _mliStruct.UnknownStruct3Array1.Length > 0)
+            {
+                FileTools.WriteToBuffer(ref fileBytes, ref offset, _mliStruct.UnknownStruct3Array1);
+                count1 = _mliStruct.UnknownStruct3Array1.Length;
+            }
+            if (_mliStruct.UnknownStruct3Array2 != null && _mliStruct.UnknownStruct3Array2.Length > 0)
+            {
+                FileTools.WriteToBuffer(ref fileBytes, ref offset, _mliStruct.UnknownStruct3Array2);
+                count2 = _mliStruct.UnknownStruct3Array2.Length;
+            }
+            FileTools.WriteToBuffer(ref fileBytes, ref offset, count1);
+            FileTools.WriteToBuffer(ref fileBytes, ref offset, count2);
 
             // and we're done
             Array.Resize(ref fileBytes, offset);
             return fileBytes;
         }
 
-        public void SaveXmlDocument(String filePath)
+        public void SaveAsXmlDocument(String filePath)
         {
-            if (_xmlDocument == null) return;
+            // sanity checks
+            if (String.IsNullOrEmpty(filePath)) throw new ArgumentNullException("filePath", "File path cannot be empty!");
+            if (_mliStruct == null) throw new Exceptions.NotInitializedException();
 
-            _xmlDocument.Save(filePath);
+            // create XmlDocument
+            XmlDocument xmlDocument = new XmlDocument();
+            XPathNavigator xPathNavigator = xmlDocument.CreateNavigator();
+            Debug.Assert(xPathNavigator != null);
+            XmlWriter xmlWriter = xPathNavigator.AppendChild();
+            Debug.Assert(xmlWriter != null);
+
+            // serialise object
+            XmlSerializer xmlSerializerHeader = new XmlSerializer(_mliStruct.GetType());
+            xmlSerializerHeader.Serialize(xmlWriter, _mliStruct);
+            xmlWriter.Close();
+
+            // and save
+            xmlDocument.Save(filePath);
         }
     }
 }

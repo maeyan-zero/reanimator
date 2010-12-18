@@ -154,7 +154,7 @@ namespace Reanimator.Forms
                 //path = @"D:\Games\Hellgate London\data\background\city\charactercreate.rom";
                 //path = "D:\\Games\\Hellgate London\\data\\background\\props\\vehicles\\ambulance_a.rom";
 
-                byte[] roomFileBytes = File.ReadAllBytes(path);
+                byte[] mliFileBytes = File.ReadAllBytes(path);
                 MLIFile roomDefinitionFile = new MLIFile();
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
@@ -162,19 +162,18 @@ namespace Reanimator.Forms
                 Console.WriteLine("Loading: " + fileName);
                 try
                 {
-                    roomDefinitionFile.ParseFileBytes(roomFileBytes);
-                    roomDefinitionFile.SaveXmlDocument(xmlPath);
+                    roomDefinitionFile.ParseFileBytes(mliFileBytes);
+                    roomDefinitionFile.SaveAsXmlDocument(xmlPath);
 
-                    //XmlDocument xmlDocument = new XmlDocument();
-                    //xmlDocument.Load(xmlPath);
-                    //MLIFile mliFile2 = new MLIFile();
-                    //byte[] bytes = mliFile2.ParseXmlDocument(xmlDocument);
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(xmlPath);
+                    MLIFile mliFile2 = new MLIFile();
+                    byte[] bytes = mliFile2.ParseXmlDocument(xmlDocument);
 
-                    //Debug.Assert(roomFileBytes.Length == bytes.Length);
-                    //if (!roomFileBytes.SequenceEqual(bytes))
-                    //{
-                    //    File.WriteAllBytes(path + "2", bytes);
-                    //}
+                    if (!mliFileBytes.SequenceEqual(bytes))
+                    {
+                        File.WriteAllBytes(path + "2", bytes);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -205,7 +204,7 @@ namespace Reanimator.Forms
                 try
                 {
                     roomDefinitionFile.ParseFileBytes(roomFileBytes);
-                    roomDefinitionFile.SaveXmlDocument(xmlPath);
+                    roomDefinitionFile.SaveAsXmlDocument(xmlPath);
 
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.Load(xmlPath);
