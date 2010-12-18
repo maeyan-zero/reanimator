@@ -478,6 +478,39 @@ namespace Revival.Common
         }
 
         /// <summary>
+        /// Serializes an array of object arrays and appends it to the supplied buffer, increasing offset by object size.<br />
+        /// If the buffer is too small the bufer size is increaed by the object size + 1024 bytes.
+        /// A string object will be serialized to an ASCII byte array.
+        /// </summary>
+        /// <param name="buffer">A reference to a byte array (not null).</param>
+        /// <param name="offset">A reference to the write offset (offset is increased by the size of object array).</param>
+        /// <param name="toWriteArray">A sersializable array of object arrays to write.</param>
+        public static void WriteToBuffer(ref byte[] buffer, ref int offset, Object[][] toWriteArray)
+        {
+            foreach (Object[] objArray in toWriteArray)
+            {
+                WriteToBuffer(ref buffer, ref offset, objArray);
+            }
+        }
+
+
+        /// <summary>
+        /// Serializes an object array and appends it to the supplied buffer, increasing offset by object size.<br />
+        /// If the buffer is too small the bufer size is increaed by the object size + 1024 bytes.
+        /// A string object will be serialized to an ASCII byte array.
+        /// </summary>
+        /// <param name="buffer">A reference to a byte array (not null).</param>
+        /// <param name="offset">A reference to the write offset (offset is increased by the size of object array).</param>
+        /// <param name="toWriteArray">A sersializable object array to write.</param>
+        public static void WriteToBuffer(ref byte[] buffer, ref int offset, Object[] toWriteArray)
+        {
+            foreach (Object obj in toWriteArray)
+            {
+                WriteToBuffer(ref buffer, ref offset, obj);
+            }
+        }
+
+        /// <summary>
         /// Serializes an object and appends it to the supplied buffer, increasing offset by object size.<br />
         /// If the buffer is too small the bufer size is increaed by the object size + 1024 bytes.
         /// A string object will be serialized to an ASCII byte array.

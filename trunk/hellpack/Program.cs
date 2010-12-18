@@ -34,12 +34,14 @@ namespace Revival
             bool doSearchCd = false;
             bool doExcludeRaw = false;
             bool doLevelRules = false;
+            bool doRoomDefinitions = false;
 
             List<string> filesToPack = new List<string>();
             List<string> excelFilesToCook = new List<string>();
             List<string> stringFilesToCook = new List<string>();
             List<string> xmlFilesToCook = new List<string>();
-            List<string> levelRulesFilesToCook = new List<string>();
+            List<string> levelRulesFilesToSerialize = new List<string>();
+            List<string> roomDefinitionFilesSerialize = new List<string>();
 
             #region alexs_stuff
             if (false)
@@ -126,6 +128,7 @@ namespace Revival
                 doSearchCd = true;
                 doExcludeRaw = true;
                 doLevelRules = true;
+                doRoomDefinitions = true;
             }
             else
             {
@@ -150,6 +153,9 @@ namespace Revival
                             break;
                         case "/lr":
                             doLevelRules = true;
+                            break;
+                        case "/rd":
+                            doRoomDefinitions = true;
                             break;
                         default:
                             if (arg.StartsWith("/p:"))
@@ -181,8 +187,14 @@ namespace Revival
                             }
                             if (arg.EndsWith(LevelRulesFile.FileExtensionXml))
                             {
-                                levelRulesFilesToCook.Add(arg);
+                                levelRulesFilesToSerialize.Add(arg);
                                 doLevelRules = true;
+                                break;
+                            }
+                            if (arg.EndsWith(RoomDefinitionFile.FileExtensionXml))
+                            {
+                                roomDefinitionFilesSerialize.Add(arg);
+                                doRoomDefinitions = true;
                                 break;
                             }
                             if (arg.EndsWith(XmlCookedFile.FileExtentionClean))
@@ -219,6 +231,12 @@ namespace Revival
                 // todo
             }
 
+            // Search for .rom Level Rules files to cook
+            if (doSearchCd && doRoomDefinitions)
+            {
+                // todo
+            }
+
             // Cook Txt files
             if (doCookTxt)
             {
@@ -251,7 +269,13 @@ namespace Revival
             // cook .drl Level Rules files
             if (doLevelRules)
             {
-                CookLevelRulesFiles(levelRulesFilesToCook);
+                CookLevelRulesFiles(levelRulesFilesToSerialize);
+            }
+
+            // cook .rom Room Definition files
+            if (doRoomDefinitions)
+            {
+                CookRoomDefinitionFiles(roomDefinitionFilesSerialize);
             }
 
             // Files to pack
@@ -399,6 +423,7 @@ namespace Revival
             return true;
         }
 
+        // really should make a base for .drl and .rom
         public static void CookLevelRulesFiles(IEnumerable<String> levelRulesFiles)
         {
             foreach (String filePath in levelRulesFiles)
@@ -416,10 +441,33 @@ namespace Revival
                 catch (Exception e)
                 {
                     ExceptionLogger.LogException(e);
-                    Console.WriteLine(String.Format("Error: Failed to cook file {0}", filePath));
+                    Console.WriteLine(String.Format("Error: Failed to serialize file {0}", filePath));
                 }
             }
         }
+
+        public static void CookRoomDefinitionFiles(IEnumerable<String> levelRulesFiles)
+        {
+            foreach (String filePath in levelRulesFiles)
+            {
+                try
+                {
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(filePath);
+
+                    RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
+                    byte[] fileBytes = roomDefinitionFile.ParseXmlDocument(xmlDocument);
+
+                    File.WriteAllBytes(filePath.Replace(RoomDefinitionFile.FileExtensionXml, RoomDefinitionFile.FileExtension), fileBytes);
+                }
+                catch (Exception e)
+                {
+                    ExceptionLogger.LogException(e);
+                    Console.WriteLine(String.Format("Error: Failed to serialize file {0}", filePath));
+                }
+            }
+        }
+
 
 
         public static void CookExcelFiles(string[] excelFilesToCook)
