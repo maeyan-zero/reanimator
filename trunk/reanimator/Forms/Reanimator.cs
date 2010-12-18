@@ -32,7 +32,8 @@ namespace Reanimator.Forms
 
             if (true) return;
 
-            _LoadAllRooms();
+            _LoadAllMLIFiles();
+            //_LoadAllRooms();
             return;
 
 
@@ -141,6 +142,48 @@ namespace Reanimator.Forms
 
         #region alexs_stuff
         //private TextWriter tw;
+
+        private static void _LoadAllMLIFiles()
+        {
+            const String root = @"D:\Games\Hellgate London\data\background\";
+            List<String> mliFiles = new List<String>(Directory.GetFiles(root, "*.mli", SearchOption.AllDirectories));
+
+            foreach (String mliFilePath in mliFiles)
+            {
+                String path = mliFilePath;
+                //path = @"D:\Games\Hellgate London\data\background\city\charactercreate.rom";
+                //path = "D:\\Games\\Hellgate London\\data\\background\\props\\vehicles\\ambulance_a.rom";
+
+                byte[] roomFileBytes = File.ReadAllBytes(path);
+                MLIFile roomDefinitionFile = new MLIFile();
+
+                String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
+                String xmlPath = path.Replace(MLIFile.FileExtension, MLIFile.FileExtensionXml);
+                Console.WriteLine("Loading: " + fileName);
+                try
+                {
+                    roomDefinitionFile.ParseFileBytes(roomFileBytes);
+                    roomDefinitionFile.SaveXmlDocument(xmlPath);
+
+                    //XmlDocument xmlDocument = new XmlDocument();
+                    //xmlDocument.Load(xmlPath);
+                    //MLIFile mliFile2 = new MLIFile();
+                    //byte[] bytes = mliFile2.ParseXmlDocument(xmlDocument);
+
+                    //Debug.Assert(roomFileBytes.Length == bytes.Length);
+                    //if (!roomFileBytes.SequenceEqual(bytes))
+                    //{
+                    //    File.WriteAllBytes(path + "2", bytes);
+                    //}
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Failed to load file!\n" + e);
+                    continue;
+                }
+            }
+        }
+
 
         private static void _LoadAllRooms()
         {

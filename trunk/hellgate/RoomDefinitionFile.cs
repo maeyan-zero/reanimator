@@ -469,6 +469,5 @@ namespace Hellgate
 
             _xmlDocument.Save(filePath);
         }
-
     }
 }
