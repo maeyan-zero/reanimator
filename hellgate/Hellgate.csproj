@@ -341,6 +341,7 @@
     <Compile Include="FileManager.cs" />
     <Compile Include="IndexFile.cs" />
     <Compile Include="LevelRulesFile.cs" />
+    <Compile Include="MLIFile.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoomDefinitionFile.cs" />

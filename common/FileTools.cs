@@ -113,6 +113,27 @@ namespace Revival.Common
         }
 
         /// <summary>
+        /// Converts an array of bytes to an array of short values.<br />
+        /// <i>offset</i> is incremented by the size of the short array.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the short array.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="count">The number of short array elements.</param>
+        /// <returns>The converted short array.</returns>
+        public static short[] ByteArrayToShortArray(byte[] byteArray, ref int offset, int count)
+        {
+            short[] shortArray = new short[count];
+
+            GCHandle pinnedArray = GCHandle.Alloc(byteArray, GCHandleType.Pinned);
+            IntPtr bytePtr = new IntPtr((int)pinnedArray.AddrOfPinnedObject() + offset);
+            Marshal.Copy(bytePtr, shortArray, 0, count);
+            pinnedArray.Free();
+            offset += count * 2;
+
+            return shortArray;
+        }
+
+        /// <summary>
         /// Converts an array of bytes to an array of Int32 values.<br />
         /// <i>offset</i> is incremented by the size of the Int32 array.
         /// </summary>
