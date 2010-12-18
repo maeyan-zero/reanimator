@@ -51,7 +51,7 @@ namespace Hellgate
             public Int32 Unknown7;                                  // 0x160    352     // is int32
             public Int32 Unknown8;                                  // 0x164    356     // unknown int32?
 
-            public Int64 Offset167;                                 // 0x168    360     // is offset, but not seen used
+            public Int64 Offset168;                                 // 0x168    360     // is offset, but not seen used
             public Int32 UnknownValue1;                             // 0x170    368     // is read in before next big function call         LoadRoomDefinition+4CA  898 mov     r9d, [rbx+170h]
             public Int32 Count174;                                  // 0x174    372     // i think this is the count...
             public Int64 Offset178;                                 // 0x178    376
@@ -205,6 +205,16 @@ namespace Hellgate
             // end of struct                    // 0x88     136
         }
 
+        // total size = 6 bytes (0x06)
+        [Serializable]
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public class UnknownStruct7
+        {
+            public short Short1;                // 0x00     0
+            public short Short2;                // 0x02     2
+            public short Short3;                // 0x04     4
+            // end of struct                    // 0x06     6
+        }
 
 
         private byte[] _fileBytes;
@@ -221,7 +231,8 @@ namespace Hellgate
         private UnknownStruct5[] _unknownStruct5Array;
         private UnknownStruct6[] _unknownStruct6Array;
         private UnknownStruct4[] _unknownStruct7Array;
-        private UnknownStruct5[] _unknownStruct8Array;
+        private UnknownStruct7[] _unknownStruct8Array;
+        private UnknownStruct5[] _unknownStructFooter;
         
 
         public RoomDefinitionFile()
@@ -357,15 +368,24 @@ namespace Hellgate
             Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset178, offset));
 
 
-            // read UnknownStruct8 array (not seen read like this - but it works) - has same structure (3xint32) as UnknownStruct5 - I think
-            // however we also have an offset (Offset170) that points to a value within it... e.o.f. struct needs checking
+            // read UnknownStruct8 array (not seen read like this - but it works)
             offset = (int)_fileHeader.Offset188;
             int count184 = _fileHeader.Count184;
             if (offset > 0 && count184 > 0)
             {
-                _unknownStruct8Array = FileTools.ByteArrayToArray<UnknownStruct5>(fileBytes, ref offset, count184);
+                _unknownStruct8Array = FileTools.ByteArrayToArray<UnknownStruct7>(fileBytes, ref offset, count184);
             }
             Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset188, offset));
+
+
+            // read UnknownStruct9 array (not seen read like this - but it works)
+            offset = (int)_fileHeader.Offset168;
+            int countUnknown7 = _fileHeader.Unknown7;
+            if (offset > 0 && countUnknown7 > 0)
+            {
+                _unknownStructFooter = FileTools.ByteArrayToArray<UnknownStruct5>(fileBytes, ref offset, countUnknown7);
+            }
+            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset168, offset));
 
 
             // create XmlDocument
@@ -386,17 +406,30 @@ namespace Hellgate
             XmlSerializer xmlSerializerStruct3Array = new XmlSerializer(_unknownStruct3Array.GetType());
             xmlSerializerStruct3Array.Serialize(_xmlWriter, _unknownStruct3Array);
 
-            XmlSerializer xmlSerializerStruct4Array = new XmlSerializer(_unknownStruct4Array.GetType());
-            xmlSerializerStruct4Array.Serialize(_xmlWriter, _unknownStruct4Array);
+            XmlSerializer xmlSerializerStruct4Array = new XmlSerializer(typeof(UnknownStruct4[]));
+            if (_unknownStruct4Array != null)
+            {
+                xmlSerializerStruct4Array.Serialize(_xmlWriter, _unknownStruct4Array);
+            }
 
-            XmlSerializer xmlSerializerStruct5Array = new XmlSerializer(_unknownStruct5Array.GetType());
-            xmlSerializerStruct5Array.Serialize(_xmlWriter, _unknownStruct5Array);
+            XmlSerializer xmlSerializerStruct5Array = new XmlSerializer(typeof(UnknownStruct5[]));
+            if (_unknownStruct5Array != null)
+            {
+                xmlSerializerStruct5Array.Serialize(_xmlWriter, _unknownStruct5Array);
+            }
 
-            XmlSerializer xmlSerializerStruct6Array = new XmlSerializer(_unknownStruct6Array.GetType());
-            xmlSerializerStruct6Array.Serialize(_xmlWriter, _unknownStruct6Array);
+            if (_unknownStruct6Array != null)
+            {
+                XmlSerializer xmlSerializerStruct6Array = new XmlSerializer(_unknownStruct6Array.GetType());
+                xmlSerializerStruct6Array.Serialize(_xmlWriter, _unknownStruct6Array);
+            }
 
             xmlSerializerStruct4Array.Serialize(_xmlWriter, _unknownStruct7Array);
-            xmlSerializerStruct5Array.Serialize(_xmlWriter, _unknownStruct8Array);
+
+            XmlSerializer xmlSerializerStruct8Array = new XmlSerializer(_unknownStruct8Array.GetType());
+            xmlSerializerStruct8Array.Serialize(_xmlWriter, _unknownStruct8Array);
+
+            xmlSerializerStruct5Array.Serialize(_xmlWriter, _unknownStructFooter);
 
             _xmlWriter.WriteEndElement();
             _xmlWriter.Close();
