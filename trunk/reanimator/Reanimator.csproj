@@ -167,6 +167,12 @@
     <Compile Include="Forms\ItemTransfer\ItemTransferForm.Designer.cs">
       <DependentUpon>ItemTransferForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\LevelRulesEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LevelRulesEditor.Designer.cs">
+      <DependentUpon>LevelRulesEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PatchForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -354,6 +360,9 @@
     <EmbeddedResource Include="Forms\FileExplorer.resx">
       <DependentUpon>FileExplorer.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LevelRulesEditor.resx">
+      <DependentUpon>LevelRulesEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TablesLoaded.resx">
       <DependentUpon>TablesLoaded.cs</DependentUpon>
