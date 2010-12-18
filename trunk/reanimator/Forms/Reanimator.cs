@@ -32,6 +32,10 @@ namespace Reanimator.Forms
 
             if (true) return;
 
+            _LoadAllRooms();
+            return;
+
+
             LevelRulesEditor levelRulesEditor = new LevelRulesEditor
                                                     {
                                                         MdiParent = this
@@ -137,6 +141,41 @@ namespace Reanimator.Forms
 
         #region alexs_stuff
         //private TextWriter tw;
+
+        private static void _LoadAllRooms()
+        {
+            const String root = @"D:\Games\Hellgate London\data\background\";
+            List<String> roomFiles = new List<String>(Directory.GetFiles(root, "*.rom", SearchOption.AllDirectories));
+
+            foreach (String roomFilePath in roomFiles)
+            {
+                String path = roomFilePath;
+                path = @"D:\Games\Hellgate London\data\background\city\charactercreate.rom";
+
+                byte[] roomFileBytes = File.ReadAllBytes(path);
+                RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
+
+                String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
+                String xmlPath = path.Replace(LevelRulesFile.FileExtension, LevelRulesFile.FileExtensionXml);
+                Console.WriteLine("Loading: " + fileName);
+                try
+                {
+                    roomDefinitionFile.ParseFileBytes(roomFileBytes);
+                    //roomDefinitionFile.SaveXmlDocument(xmlPath);
+
+                    //XmlDocument xmlDocument = new XmlDocument();
+                    //xmlDocument.Load(xmlPath);
+                    //LevelRulesFile levelRulesFile2 = new LevelRulesFile();
+                    //byte[] bytes = levelRulesFile2.ParseXmlDocument(xmlDocument);
+                    //File.WriteAllBytes(path + "2", bytes);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Failed to load file!\n" + e);
+                    continue;
+                }
+            }
+        }
 
         private static void _LoadAllLevelRules()
         {
