@@ -156,12 +156,12 @@ namespace Reanimator.Forms
                 RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
-                String xmlPath = path.Replace(LevelRulesFile.FileExtension, LevelRulesFile.FileExtensionXml);
+                String xmlPath = path.Replace(RoomDefinitionFile.FileExtension, RoomDefinitionFile.FileExtensionXml);
                 Console.WriteLine("Loading: " + fileName);
                 try
                 {
                     roomDefinitionFile.ParseFileBytes(roomFileBytes);
-                    //roomDefinitionFile.SaveXmlDocument(xmlPath);
+                    roomDefinitionFile.SaveXmlDocument(xmlPath);
 
                     //XmlDocument xmlDocument = new XmlDocument();
                     //xmlDocument.Load(xmlPath);
