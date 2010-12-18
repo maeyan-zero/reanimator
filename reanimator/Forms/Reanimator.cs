@@ -150,7 +150,7 @@ namespace Reanimator.Forms
             foreach (String roomFilePath in roomFiles)
             {
                 String path = roomFilePath;
-                //path = @"D:\Games\Hellgate London\data\background\city\ruins_a.rom";
+                //path = @"D:\Games\Hellgate London\data\background\city\charactercreate.rom";
                 //path = "D:\\Games\\Hellgate London\\data\\background\\props\\vehicles\\ambulance_a.rom";
 
                 byte[] roomFileBytes = File.ReadAllBytes(path);
@@ -164,11 +164,16 @@ namespace Reanimator.Forms
                     roomDefinitionFile.ParseFileBytes(roomFileBytes);
                     roomDefinitionFile.SaveXmlDocument(xmlPath);
 
-                    //XmlDocument xmlDocument = new XmlDocument();
-                    //xmlDocument.Load(xmlPath);
-                    //LevelRulesFile levelRulesFile2 = new LevelRulesFile();
-                    //byte[] bytes = levelRulesFile2.ParseXmlDocument(xmlDocument);
-                    //File.WriteAllBytes(path + "2", bytes);
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(xmlPath);
+                    RoomDefinitionFile roomDefinitionFile2 = new RoomDefinitionFile();
+                    byte[] bytes = roomDefinitionFile2.ParseXmlDocument(xmlDocument);
+
+                    Debug.Assert(roomFileBytes.Length == bytes.Length);
+                    if (!roomFileBytes.SequenceEqual(bytes))
+                    {
+                        File.WriteAllBytes(path + "2", bytes);
+                    }
                 }
                 catch (Exception e)
                 {

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
@@ -216,29 +213,26 @@ namespace Hellgate
             // end of struct                    // 0x06     6
         }
 
+        public class RoomDefinition
+        {
+            public RoomDefinitionHeader FileHeader;
+            public UnknownStruct1[][] UnknownStruct1Arrays;
+            public Int32[] UnknownStruct1Int32Array;
+            public UnknownStruct2[] UnknownStruct2Array;
+            public UnknownStruct3[] UnknownStruct3Array;
+            public UnknownStruct4[] UnknownStruct4Array;
+            public UnknownStruct5[] UnknownStruct5Array;
+            public UnknownStruct6[] UnknownStruct6Array;
+            public UnknownStruct4[] UnknownStruct7Array;
+            public UnknownStruct7[] UnknownStruct8Array;
+            public UnknownStruct5[] UnknownStructFooter;
+        }
 
         private byte[] _fileBytes;
 
         private XmlDocument _xmlDocument;
         private XmlWriter _xmlWriter;
-
-        private RoomDefinitionHeader _fileHeader;
-        private UnknownStruct1[][] _unknownStruct1Arrays;
-        private Int32[] _unknownStruct1Int32Array;
-        private UnknownStruct2[] _unknownStruct2Array;
-        private UnknownStruct3[] _unknownStruct3Array;
-        private UnknownStruct4[] _unknownStruct4Array;
-        private UnknownStruct5[] _unknownStruct5Array;
-        private UnknownStruct6[] _unknownStruct6Array;
-        private UnknownStruct4[] _unknownStruct7Array;
-        private UnknownStruct7[] _unknownStruct8Array;
-        private UnknownStruct5[] _unknownStructFooter;
-        
-
-        public RoomDefinitionFile()
-        {
-
-        }
+        private RoomDefinition _roomDefinition;
 
         /// <summary>
         /// Parses a level rules file bytes.
@@ -256,6 +250,7 @@ namespace Hellgate
             Debug.Assert(xPathNavigator != null);
             _xmlWriter = xPathNavigator.AppendChild();
             Debug.Assert(_xmlWriter != null);
+            _roomDefinition = new RoomDefinition();
 
 
             // file header checks
@@ -268,171 +263,221 @@ namespace Hellgate
 
 
             // main file header
-            _fileHeader = FileTools.ByteArrayToStructure<RoomDefinitionHeader>(fileBytes, ref offset);
-            Console.WriteLine(String.Format("Bytes used: 0 to {0}", offset));
+            _roomDefinition.FileHeader = FileTools.ByteArrayToStructure<RoomDefinitionHeader>(fileBytes, ref offset);
+            RoomDefinitionHeader header = _roomDefinition.FileHeader;
+            //Console.WriteLine(String.Format("Bytes used: 0 to {0}", offset));
 
 
-            // read UnknownStruct1 arrays (not seen read like this - but it works)
-            offset = (int)_fileHeader.Offset288;
-            int count29C = _fileHeader.Count29C;
-            int count298 = _fileHeader.Count298;
+            // read UnknownStruct1 arrays
+            offset = (int)header.Offset288;
+            int count29C = header.Count29C;
+            int count298 = header.Count298;
             if (offset > 0 && count29C > 0 && count298 > 0)
             {
-                _unknownStruct1Arrays = new UnknownStruct1[count29C][];
+                _roomDefinition.UnknownStruct1Arrays = new UnknownStruct1[count29C][];
                 for (int i = 0; i < count29C; i++)
                 {
-                    _unknownStruct1Arrays[i] = FileTools.ByteArrayToArray<UnknownStruct1>(fileBytes, ref offset, count298);
+                    _roomDefinition.UnknownStruct1Arrays[i] = FileTools.ByteArrayToArray<UnknownStruct1>(fileBytes, ref offset, count298);
                 }
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset288, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset288, offset));
 
 
             // read UnknownStruct1 Int32 array
-            offset = (int) _fileHeader.Offset2A0;
-            int count2A8 = _fileHeader.Count2A8;
+            offset = (int) header.Offset2A0;
+            int count2A8 = header.Count2A8;
             if (offset > 0 && count2A8 > 0)
             {
-                _unknownStruct1Int32Array = FileTools.ByteArrayToInt32Array(fileBytes, ref offset, count2A8);
+                _roomDefinition.UnknownStruct1Int32Array = FileTools.ByteArrayToInt32Array(fileBytes, ref offset, count2A8);
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset2A0, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset2A0, offset));
 
 
             // read UnknownStruct2 array
-            offset = (int)_fileHeader.Offset120;
-            int count118 = _fileHeader.Count118;
+            offset = (int)header.Offset120;
+            int count118 = header.Count118;
             if (offset > 0 && count118 > 0)
             {
-                _unknownStruct2Array = FileTools.ByteArrayToArray<UnknownStruct2>(fileBytes, ref offset, count118);
+                _roomDefinition.UnknownStruct2Array = FileTools.ByteArrayToArray<UnknownStruct2>(fileBytes, ref offset, count118);
 
                 // generate offsets
-                for (int i = 0; i < count118; i++)
-                {
-                    _unknownStruct2Array[i].Offset1 = (_unknownStruct2Array[i].Offset1 << 4) + _fileHeader.Offset110;
-                    _unknownStruct2Array[i].Offset2 = (_unknownStruct2Array[i].Offset2 << 4) + _fileHeader.Offset110;
-                    _unknownStruct2Array[i].Offset3 = (_unknownStruct2Array[i].Offset3 << 4) + _fileHeader.Offset110;
-                }
+                //for (int i = 0; i < count118; i++)
+                //{
+                //    _roomDefinition._unknownStruct2Array[i].Offset1 = (_roomDefinition._unknownStruct2Array[i].Offset1 << 4) + header.Offset110;
+                //    _roomDefinition._unknownStruct2Array[i].Offset2 = (_roomDefinition._unknownStruct2Array[i].Offset2 << 4) + header.Offset110;
+                //    _roomDefinition._unknownStruct2Array[i].Offset3 = (_roomDefinition._unknownStruct2Array[i].Offset3 << 4) + header.Offset110;
+                //}
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset120, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset120, offset));
 
 
             // read UnknownStruct3 array (not seen read like this - but it works)
-            offset = (int)_fileHeader.Offset110;
-            int unknownCount1 = _fileHeader.UnknownCount1; // pretty sure UnknownCount1 is for UnknownStruct3, but let's make sure
-            int unknownStruct3Bytes = (int)_fileHeader.Offset120 - (int)_fileHeader.Offset110;
-            int actualCount = unknownStruct3Bytes / Marshal.SizeOf(typeof(UnknownStruct3));
-            Debug.Assert(actualCount == unknownCount1);
+            offset = (int)header.Offset110;
+            int unknownCount1 = header.UnknownCount1;
             if (offset > 0 && unknownCount1 > 0)
             {
-                _unknownStruct3Array = FileTools.ByteArrayToArray<UnknownStruct3>(fileBytes, ref offset, unknownCount1);
+                _roomDefinition.UnknownStruct3Array = FileTools.ByteArrayToArray<UnknownStruct3>(fileBytes, ref offset, unknownCount1);
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset110, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset110, offset));
 
 
             // read UnknownStruct4 array (not seen read like this - but it works)
-            offset = (int) _fileHeader.Offset268;
-            int count270 = _fileHeader.Count270;
+            offset = (int) header.Offset268;
+            int count270 = header.Count270;
             if (offset > 0 && count270 > 0)
             {
-                _unknownStruct4Array = FileTools.ByteArrayToArray<UnknownStruct4>(fileBytes, ref offset, count270);
+                _roomDefinition.UnknownStruct4Array = FileTools.ByteArrayToArray<UnknownStruct4>(fileBytes, ref offset, count270);
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset268, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset268, offset));
 
 
             // read UnknownStruct5 array (not seen read like this - but it works)
-            offset = (int)_fileHeader.Offset278;
-            int count280 = _fileHeader.Count280;
+            offset = (int)header.Offset278;
+            int count280 = header.Count280;
             if (offset > 0 && count280 > 0)
             {
-                _unknownStruct5Array = FileTools.ByteArrayToArray<UnknownStruct5>(fileBytes, ref offset, count280);
+                _roomDefinition.UnknownStruct5Array = FileTools.ByteArrayToArray<UnknownStruct5>(fileBytes, ref offset, count280);
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset278, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset278, offset));
 
 
             // read UnknownStruct6 array (not seen read like this - but it works)
-            offset = (int)_fileHeader.Offset130;
-            int unknownCount2 = _fileHeader.UnknownCount2;
+            offset = (int)header.Offset130;
+            int unknownCount2 = header.UnknownCount2;
             if (offset > 0 && unknownCount2 > 0)
             {
-                _unknownStruct6Array = FileTools.ByteArrayToArray<UnknownStruct6>(fileBytes, ref offset, unknownCount2);
+                _roomDefinition.UnknownStruct6Array = FileTools.ByteArrayToArray<UnknownStruct6>(fileBytes, ref offset, unknownCount2);
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset130, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset130, offset));
 
 
             // read UnknownStruct7 array (not seen read like this - but it works) - has same structure (3xfloat) as UnknownStruct4
-            offset = (int)_fileHeader.Offset178;
-            int count174 = _fileHeader.Count174;
+            offset = (int)header.Offset178;
+            int count174 = header.Count174;
             if (offset > 0 && count174 > 0)
             {
-                _unknownStruct7Array = FileTools.ByteArrayToArray<UnknownStruct4>(fileBytes, ref offset, count174);
+                _roomDefinition.UnknownStruct7Array = FileTools.ByteArrayToArray<UnknownStruct4>(fileBytes, ref offset, count174);
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset178, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset178, offset));
 
 
             // read UnknownStruct8 array (not seen read like this - but it works)
-            offset = (int)_fileHeader.Offset188;
-            int count184 = _fileHeader.Count184;
+            offset = (int)header.Offset188;
+            int count184 = header.Count184;
             if (offset > 0 && count184 > 0)
             {
-                _unknownStruct8Array = FileTools.ByteArrayToArray<UnknownStruct7>(fileBytes, ref offset, count184);
+                _roomDefinition.UnknownStruct8Array = FileTools.ByteArrayToArray<UnknownStruct7>(fileBytes, ref offset, count184);
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset188, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset188, offset));
 
 
             // read UnknownStruct9 array (not seen read like this - but it works)
-            offset = (int)_fileHeader.Offset168;
-            int countUnknown7 = _fileHeader.Unknown7;
+            offset = (int)header.Offset168;
+            int countUnknown7 = header.Unknown7;
             if (offset > 0 && countUnknown7 > 0)
             {
-                _unknownStructFooter = FileTools.ByteArrayToArray<UnknownStruct5>(fileBytes, ref offset, countUnknown7);
+                _roomDefinition.UnknownStructFooter = FileTools.ByteArrayToArray<UnknownStruct5>(fileBytes, ref offset, countUnknown7);
             }
-            Console.WriteLine(String.Format("Bytes used: {0} to {1}", _fileHeader.Offset168, offset));
+            //Console.WriteLine(String.Format("Bytes used: {0} to {1}", header.Offset168, offset));
 
 
             // create XmlDocument
-            _xmlWriter.WriteStartElement("RoomDefinition");
-
-            XmlSerializer xmlSerializerHeader = new XmlSerializer(_fileHeader.GetType());
-            xmlSerializerHeader.Serialize(_xmlWriter, _fileHeader);
-
-            XmlSerializer xmlSerializerStruct1Arrays = new XmlSerializer(_unknownStruct1Arrays.GetType());
-            xmlSerializerStruct1Arrays.Serialize(_xmlWriter, _unknownStruct1Arrays);
-
-            XmlSerializer xmlSerializerStruct1Int32Array = new XmlSerializer(_unknownStruct1Int32Array.GetType());
-            xmlSerializerStruct1Int32Array.Serialize(_xmlWriter, _unknownStruct1Int32Array);
-
-            XmlSerializer xmlSerializerStruct2Array = new XmlSerializer(_unknownStruct2Array.GetType());
-            xmlSerializerStruct2Array.Serialize(_xmlWriter, _unknownStruct2Array);
-
-            XmlSerializer xmlSerializerStruct3Array = new XmlSerializer(_unknownStruct3Array.GetType());
-            xmlSerializerStruct3Array.Serialize(_xmlWriter, _unknownStruct3Array);
-
-            XmlSerializer xmlSerializerStruct4Array = new XmlSerializer(typeof(UnknownStruct4[]));
-            if (_unknownStruct4Array != null)
-            {
-                xmlSerializerStruct4Array.Serialize(_xmlWriter, _unknownStruct4Array);
-            }
-
-            XmlSerializer xmlSerializerStruct5Array = new XmlSerializer(typeof(UnknownStruct5[]));
-            if (_unknownStruct5Array != null)
-            {
-                xmlSerializerStruct5Array.Serialize(_xmlWriter, _unknownStruct5Array);
-            }
-
-            if (_unknownStruct6Array != null)
-            {
-                XmlSerializer xmlSerializerStruct6Array = new XmlSerializer(_unknownStruct6Array.GetType());
-                xmlSerializerStruct6Array.Serialize(_xmlWriter, _unknownStruct6Array);
-            }
-
-            xmlSerializerStruct4Array.Serialize(_xmlWriter, _unknownStruct7Array);
-
-            XmlSerializer xmlSerializerStruct8Array = new XmlSerializer(_unknownStruct8Array.GetType());
-            xmlSerializerStruct8Array.Serialize(_xmlWriter, _unknownStruct8Array);
-
-            xmlSerializerStruct5Array.Serialize(_xmlWriter, _unknownStructFooter);
-
-            _xmlWriter.WriteEndElement();
+            XmlSerializer xmlSerializerHeader = new XmlSerializer(_roomDefinition.GetType());
+            xmlSerializerHeader.Serialize(_xmlWriter, _roomDefinition);
             _xmlWriter.Close();
+        }
+
+        /// <summary>
+        /// Parses and XML document and returns the serialized byte array.
+        /// </summary>
+        /// <param name="xmlDocument">The XML Document to parse.</param>
+        /// <returns>The serialized byte array.</returns>
+        public byte[] ParseXmlDocument(XmlDocument xmlDocument)
+        {
+            XmlNodeReader xmlNodeReader = new XmlNodeReader(xmlDocument);
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof (RoomDefinition));
+            RoomDefinition roomDefinition = (RoomDefinition)xmlSerializer.Deserialize(xmlNodeReader);
+
+            int offset = 0;
+            _fileBytes = new byte[1024];
+
+            // write header
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, FileMagicWord);
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, RequiredVersion);
+            offset += Marshal.SizeOf(roomDefinition.FileHeader); // want to update offsets and counts first
+
+            // write unknown struct 3
+            roomDefinition.FileHeader.Offset110 = offset;
+            roomDefinition.FileHeader.UnknownCount1 = roomDefinition.UnknownStruct3Array.Length;
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStruct3Array);
+
+            // write unknown struct 2
+            roomDefinition.FileHeader.Offset120 = offset;
+            roomDefinition.FileHeader.Count118 = roomDefinition.UnknownStruct2Array.Length;
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStruct2Array);
+
+            // write int arrays
+            roomDefinition.FileHeader.Offset2A0 = offset;
+            roomDefinition.FileHeader.Count2A8 = roomDefinition.UnknownStruct1Int32Array.Length;
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStruct1Int32Array.ToByteArray());
+
+            // write unknown struct 1
+            roomDefinition.FileHeader.Offset288 = offset;
+            roomDefinition.FileHeader.Count29C = roomDefinition.UnknownStruct1Arrays.Length;
+            roomDefinition.FileHeader.Count298 = roomDefinition.UnknownStruct1Arrays[0].Length;
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStruct1Arrays);
+
+            // write unknown struct 4
+            roomDefinition.FileHeader.Offset268 = 0;
+            roomDefinition.FileHeader.Count270 = 0;
+            if (roomDefinition.UnknownStruct4Array != null)
+            {
+                roomDefinition.FileHeader.Offset268 = offset;
+                roomDefinition.FileHeader.Count270 = roomDefinition.UnknownStruct4Array.Length;
+                FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStruct4Array);
+            }
+
+            // write unknown struct 5
+            roomDefinition.FileHeader.Offset278 = 0;
+            roomDefinition.FileHeader.Count280 = 0;
+            if (roomDefinition.UnknownStruct5Array != null)
+            {
+                roomDefinition.FileHeader.Offset278 = offset;
+                roomDefinition.FileHeader.Count280 = roomDefinition.UnknownStruct5Array.Length;
+                FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStruct5Array);
+            }
+
+            // write unknown struct 6
+            roomDefinition.FileHeader.Offset130 = 0;
+            roomDefinition.FileHeader.UnknownCount2 = 0;
+            if (roomDefinition.UnknownStruct6Array != null)
+            {
+                roomDefinition.FileHeader.Offset130 = offset;
+                roomDefinition.FileHeader.UnknownCount2 = roomDefinition.UnknownStruct6Array.Length;
+                FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStruct6Array);
+            }
+
+            // write unknown struct 7
+            roomDefinition.FileHeader.Offset178 = offset;
+            roomDefinition.FileHeader.Count174 = roomDefinition.UnknownStruct7Array.Length;
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStruct7Array);
+
+            // write unknown struct 8
+            roomDefinition.FileHeader.Offset188 = offset;
+            roomDefinition.FileHeader.Count184 = roomDefinition.UnknownStruct8Array.Length;
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStruct8Array);
+
+            // write unknown struct footer
+            roomDefinition.FileHeader.Offset168 = offset;
+            roomDefinition.FileHeader.Unknown7 = roomDefinition.UnknownStructFooter.Length;
+            FileTools.WriteToBuffer(ref _fileBytes, ref offset, roomDefinition.UnknownStructFooter);
+
+            // write our updated header
+            FileTools.WriteToBuffer(ref _fileBytes, 8, roomDefinition.FileHeader);
+
+            // and we're done
+            Array.Resize(ref _fileBytes, offset);
+            return _fileBytes;
         }
 
         public void SaveXmlDocument(String filePath)
