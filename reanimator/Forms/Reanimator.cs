@@ -22,6 +22,7 @@ namespace Reanimator.Forms
         private readonly List<TableForm> _openTableForms = new List<TableForm>();
         private readonly List<ExcelTableForm> _openExcelTableForms = new List<ExcelTableForm>();
         private List<HeroEditor> _openHeroEditorForms = new List<HeroEditor>();
+        private bool alexInstaLoad = false;
 
         public Reanimator()
         {
@@ -31,8 +32,14 @@ namespace Reanimator.Forms
 
             if (true) return;
 
-            _LoadAllLevelRules();
-            return;
+            LevelRulesEditor levelRulesEditor = new LevelRulesEditor
+                                                    {
+                                                        MdiParent = this
+                                                    };
+            levelRulesEditor.Show();
+
+            //_LoadAllLevelRules();
+            //return;
 
             //const String idxReadPath = @"D:\Games\Hellgate London\data\hellgate000.idx";
             //String idxWritePath = Path.Combine(Path.GetDirectoryName(idxReadPath),
@@ -105,11 +112,11 @@ namespace Reanimator.Forms
 
             //tw = new StreamWriter(@"C:\asdf.txt");
             //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
-            _fileManager = new FileManager(Config.HglDir, Config.LoadTCv4DataFiles);
-            _fileManager.LoadTableFiles();
-            XmlCookedFile.Initialize(_fileManager);
+            //_fileManager = new FileManager(Config.HglDir, Config.LoadTCv4DataFiles);
+            //_fileManager.LoadTableFiles();
+            //XmlCookedFile.Initialize(_fileManager);
 
-            _UncookAllXml();
+            //_UncookAllXml();
 
             //_DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
             //_DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
@@ -750,6 +757,8 @@ namespace Reanimator.Forms
 
         private void _Reanimator_Load(object sender, EventArgs e)
         {
+            if (alexInstaLoad) return;
+
             try
             {
                 Height = Config.ClientHeight;
