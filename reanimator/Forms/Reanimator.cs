@@ -150,7 +150,8 @@ namespace Reanimator.Forms
             foreach (String roomFilePath in roomFiles)
             {
                 String path = roomFilePath;
-                path = @"D:\Games\Hellgate London\data\background\city\charactercreate.rom";
+                //path = @"D:\Games\Hellgate London\data\background\city\ruins_a.rom";
+                //path = "D:\\Games\\Hellgate London\\data\\background\\props\\vehicles\\ambulance_a.rom";
 
                 byte[] roomFileBytes = File.ReadAllBytes(path);
                 RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
