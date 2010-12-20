@@ -6,7 +6,7 @@ using TableHeader = Hellgate.ExcelFile.TableHeader;
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class LevelsFilePath
+    public class LevelsFilePath
     {
         TableHeader header;
         /*code is supposed to be the index, however, it appears that it's in
