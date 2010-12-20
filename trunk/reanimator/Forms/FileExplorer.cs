@@ -14,6 +14,7 @@ namespace Reanimator.Forms
     {
         private readonly FileManager _fileManager;
         private TreeView _clonedTreeView;
+        private bool _isFiltering;
 
         /// <summary>
         /// Main constructor. Initialises the file tree system from a valid FileManager.
@@ -153,6 +154,11 @@ namespace Reanimator.Forms
             NodeObject nodeObject = (NodeObject)selectedNode.Tag;
             Debug.Assert(nodeObject != null);
 
+            // can't do anything with a folder
+            if (nodeObject.IsFolder) return;
+
+
+
             if (selectedNode.Name.EndsWith(LevelRulesFile.Extension))
             {
                 LevelRulesEditor levelRulesEditor;
@@ -160,13 +166,14 @@ namespace Reanimator.Forms
                 {
                     levelRulesEditor = new LevelRulesEditor(_fileManager, nodeObject.FileEntry);
                 }
-                catch (Exception ee)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to open Level Rules Editor:\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to open Level Rules Editor:\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 levelRulesEditor.Show(MdiParent);
             }
+
             return;
 
 
@@ -681,6 +688,16 @@ namespace Reanimator.Forms
         }
 
         /// <summary>
+        /// Event function to apply the filter with an Enter key.
+        /// </summary>
+        /// <param name="sender">The TextBox selected.</param>
+        /// <param name="e">The TextBox on KeyDown event args.</param>
+        private void _Filter_TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) _FilterApplyButton_Click(filterApply_button, null);
+        }
+
+        /// <summary>
         /// Event function to apply a filter to the TreeView for button "Apply"-filter.
         /// </summary>
         /// <param name="sender">The Button clicked.</param>
@@ -688,13 +705,20 @@ namespace Reanimator.Forms
         private void _FilterApplyButton_Click(object sender, EventArgs e)
         {
             String filterText = filter_textBox.Text;
-            if (String.IsNullOrEmpty(filterText)) return;
+            if (String.IsNullOrEmpty(filterText) || _isFiltering) return;
+
+            _isFiltering = true;
+            filterApply_button.Enabled = false;
+            filterReset_button.Enabled = false;
 
 
             // if "reset"
             if (filterText == "*.*")
             {
                 _ResetFilter();
+                _isFiltering = false;
+                filterApply_button.Enabled = true;
+                filterReset_button.Enabled = true;
                 return;
             }
 
@@ -741,6 +765,9 @@ namespace Reanimator.Forms
                 treeNode.Expand();
             }
             _files_fileTreeView.EndUpdate();
+            _isFiltering = false;
+            filterApply_button.Enabled = true;
+            filterReset_button.Enabled = true;
         }
 
         /// <summary>
@@ -751,8 +778,18 @@ namespace Reanimator.Forms
         /// <param name="e">The ButtonClick event args.</param>
         private void _FilterResetButton_Click(object sender, EventArgs e)
         {
+            if (_isFiltering) return;
+
+            _isFiltering = true;
+            filterApply_button.Enabled = false;
+            filterReset_button.Enabled = false;
+
             filter_textBox.Text = "*.*";
             _ResetFilter();
+
+            _isFiltering = false;
+            filterApply_button.Enabled = true;
+            filterReset_button.Enabled = true;
         }
 
         /// <summary>

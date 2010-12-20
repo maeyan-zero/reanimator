@@ -30,7 +30,7 @@ namespace Reanimator.Forms
 
             #region alexs_stuff
 
-            if (false) return;
+            if (true) return;
 
             //_LoadAllMLIFiles();
             //_LoadAllRooms();

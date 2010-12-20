@@ -2,9 +2,9 @@
 
 namespace Hellgate
 {
-    static class Exceptions
+    public static class Exceptions
     {
-        internal class ReanimatorException : Exception
+        public class ReanimatorException : Exception
         {
             protected String CustomMessage;
 
@@ -60,6 +60,14 @@ namespace Hellgate
             {
                 if (String.IsNullOrEmpty(excelElement)) excelElement = String.Empty;
                 CustomMessage = "An unknown Excel Element was encountered!\n" + excelElement;
+            }
+        }
+
+        public class UnknownExcelCodeException : ReanimatorException
+        {
+            public UnknownExcelCodeException(int code)
+            {
+                CustomMessage = "Unknown Excel Table code value = " + code;
             }
         }
 

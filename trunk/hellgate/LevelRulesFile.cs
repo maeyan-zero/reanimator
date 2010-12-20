@@ -24,7 +24,7 @@ namespace Hellgate
         public class LevelRulesHeader
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-            public String RuleName;                                     // 0x00     0
+            public String RuleName;                                     // 0x00     0       // rule name is "RuleName[QuestScript].CODE, where "[QuestScript]" and ".CODE" are optional (CODE from LEVELS_FILES_PATHS)
             internal Int32 _internalInt321;                             // 0x100    256     // is always -1
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 67)]
             private Int32[] _internalUnknowns;                          // 0x104    260     // is all 0's or garbage in every file; probably internal/reserved

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Hellgate;
 
@@ -74,20 +77,67 @@ namespace Reanimator.Forms
             }
         }
 
+        private static String _GetRoomPathName(String roomName)
+        {
+            // remove quest script segment
+            int indexL = roomName.IndexOf('[');
+            if (indexL > 0)
+            {
+                roomName = roomName.Substring(0, indexL);
+            }
+
+            // remove excel level file paths code
+            int indexDot = roomName.IndexOf('.');
+            if (indexDot > 0)
+            {
+                roomName = roomName.Substring(0, indexDot);
+            }
+
+            return roomName;
+        }
+
         private void _LoadRooms(IEnumerable<LevelRulesFile.Room> rooms, String rootDir)
         {
             foreach (LevelRulesFile.Room room in rooms)
             {
-                // todo: create proper function - we are adding duplicates as RoomName and RoomName[Script]
-                if (_roomDefinitions.ContainsKey(room.RoomName)) continue;
+                String roomPathName = _GetRoomPathName(room.RoomName);
+                if (_roomDefinitions.ContainsKey(roomPathName)) continue;
 
-                String roomPathName = room.RoomName;
-                int indexL = room.RoomName.IndexOf('[');
-                if (indexL > 0)
+
+                // do we need to change our directory?
+                int codeDot = room.RoomName.IndexOf('.');
+                if (codeDot > 0)
                 {
-                    roomPathName = roomPathName.Substring(0, indexL);
+                    // debug check
+                    Debug.Assert(codeDot == room.RoomName.Length - 5);
+
+                    String excelError = "The level rule loaded has rooms that require a directory change.\n" +
+                                        "This act requires access to an initialised FileManager instance with loaded Excel files.\n" +
+                                        "The room \"" + room.RoomName + "\" cannot be loaded.";
+                    if (_fileManager == null)
+                    {
+                        MessageBox.Show(excelError, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        continue;
+                    }
+
+                    String codeString = room.RoomName.Substring(codeDot + 1);
+                    int code = codeString[3] << 24 | codeString[2] << 16 | codeString[1] << 8 | codeString [0];
+
+                    // get data table
+                    DataTable levelFilePathsTable = _fileManager.GetDataTable("LEVEL_FILE_PATHS");
+                    if (levelFilePathsTable == null)
+                    {
+                        MessageBox.Show(excelError, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        continue;
+                    }
+
+                    DataRow[] dataRows = levelFilePathsTable.Select(String.Format("code = {0}", code));
+                    if (dataRows.Length == 0) throw new Exceptions.UnknownExcelCodeException(code);
+
+                    rootDir = @"data\" + dataRows[0][3].ToString().ToLower();
                 }
 
+                // read file
                 byte[] fileBytes;
                 if (_fileManager != null)
                 {
@@ -103,7 +153,7 @@ namespace Reanimator.Forms
 
                 RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
                 roomDefinitionFile.ParseFileBytes(fileBytes);
-                _roomDefinitions.Add(room.RoomName, roomDefinitionFile);
+                _roomDefinitions.Add(roomPathName, roomDefinitionFile);
             }
         }
 
@@ -119,6 +169,7 @@ namespace Reanimator.Forms
         private bool _flipXYOffsets;
         private bool _disableWidthOffset;
         private bool _flipWidthHeightOffset;
+        private bool _disableRoomNames;
         private void _PaintRooms(Graphics g, IEnumerable<LevelRulesFile.Room> rooms, PointF offset, Color color, PaintType paintType)
         {
             int i = 0;
@@ -132,7 +183,8 @@ namespace Reanimator.Forms
                     xPos = room.xPosition * _graphicsScale + offset.Y + _graphicsOffsetY;
                 }
 
-                RoomDefinitionFile roomDefinition = _roomDefinitions[room.RoomName];
+                String roomPathName = _GetRoomPathName(room.RoomName);
+                RoomDefinitionFile roomDefinition = _roomDefinitions[roomPathName];
                 float roomWidth = roomDefinition.RoomDefinition.FileHeader.UnknownFloat1 * _graphicsScale;
                 float roomHeight = roomDefinition.RoomDefinition.FileHeader.UnknownFloat2 * _graphicsScale;
                 if (_flipWidthHeight)
@@ -142,7 +194,7 @@ namespace Reanimator.Forms
                 }
 
                 Matrix myMatrix = new Matrix();
-                float rotateDeg = -room.rotation*180.0f/(float) Math.PI;
+                float rotateDeg = -room.rotation * 180.0f / (float)Math.PI;
                 if (_reverseRotation) rotateDeg *= -1;
 
                 SolidBrush solidBrush = new SolidBrush(color);
@@ -182,13 +234,13 @@ namespace Reanimator.Forms
                 myMatrix.RotateAt(rotateDeg, new PointF(xPos, yPos));
                 g.Transform = myMatrix;
 
-                if (paintType ==PaintType.Block)
+                if (paintType == PaintType.Block)
                 {
                     g.FillRectangle(solidBrush, xPos, yPos, roomWidth, roomHeight);
-                    
-                   // g.Transform = new Matrix();
-                    
-                   //g.FillRectangle(new SolidBrush(Color.MistyRose), xPos, yPos, roomWidth, roomHeight);
+
+                    // g.Transform = new Matrix();
+
+                    //g.FillRectangle(new SolidBrush(Color.MistyRose), xPos, yPos, roomWidth, roomHeight);
                     //g.DrawString(rotateDeg.ToString(), _font, new SolidBrush(Color.Black), xPos, yPos);
                 }
                 if (paintType == PaintType.Outline) g.DrawRectangle(pn, xPos, yPos, roomWidth, roomHeight);
@@ -206,7 +258,7 @@ namespace Reanimator.Forms
                 //}
 
                 //g.Transform = new Matrix();
-                if (paintType == PaintType.Text) g.DrawString(room.RoomName, _font, new SolidBrush(Color.Black), strX, strY);
+                if (paintType == PaintType.Text && !_disableRoomNames) g.DrawString(room.RoomName, _font, new SolidBrush(Color.Black), strX, strY);
                 i++;
             }
         }
@@ -226,7 +278,7 @@ namespace Reanimator.Forms
                     int i = 0;
                     foreach (LevelRulesFile.Room[] levelRules in levelRule.Rules)
                     {
-                        float offsetX = 650 - i*350*_graphicsScale;
+                        float offsetX = 650 - i * 350 * _graphicsScale;
                         float offsetY = 200;
                         _PaintRooms(e.Graphics, levelRules, new PointF(offsetX, offsetY), _colors[i % _colors.Length], PaintType.Block);
                         _PaintRooms(e.Graphics, levelRules, new PointF(offsetX, offsetY), _colors[i % _colors.Length], PaintType.Outline);
@@ -310,6 +362,12 @@ namespace Reanimator.Forms
         private void flipWidthHeightOffset_checkBox_CheckedChanged(object sender, EventArgs e)
         {
             _flipWidthHeightOffset = flipWidthHeightOffset_checkBox.Checked;
+            Refresh();
+        }
+
+        private void disableRoomNames_checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _disableRoomNames = disableRoomNames_checkBox.Checked;
             Refresh();
         }
     }

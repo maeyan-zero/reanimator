@@ -33,6 +33,7 @@
             this.flipXYOffsets_checkBox = new System.Windows.Forms.CheckBox();
             this.disableWidthOffset_checkBox = new System.Windows.Forms.CheckBox();
             this.flipWidthHeightOffset_checkBox = new System.Windows.Forms.CheckBox();
+            this.disableRoomNames_checkBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // flipWidthHeight_checkBox
@@ -90,12 +91,24 @@
             this.flipWidthHeightOffset_checkBox.UseVisualStyleBackColor = true;
             this.flipWidthHeightOffset_checkBox.CheckedChanged += new System.EventHandler(this.flipWidthHeightOffset_checkBox_CheckedChanged);
             // 
+            // disableRoomNames_checkBox
+            // 
+            this.disableRoomNames_checkBox.AutoSize = true;
+            this.disableRoomNames_checkBox.Location = new System.Drawing.Point(13, 133);
+            this.disableRoomNames_checkBox.Name = "disableRoomNames_checkBox";
+            this.disableRoomNames_checkBox.Size = new System.Drawing.Size(128, 17);
+            this.disableRoomNames_checkBox.TabIndex = 5;
+            this.disableRoomNames_checkBox.Text = "Disable Room Names";
+            this.disableRoomNames_checkBox.UseVisualStyleBackColor = true;
+            this.disableRoomNames_checkBox.CheckedChanged += new System.EventHandler(this.disableRoomNames_checkBox_CheckedChanged);
+            // 
             // LevelRulesEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(556, 457);
+            this.Controls.Add(this.disableRoomNames_checkBox);
             this.Controls.Add(this.flipWidthHeightOffset_checkBox);
             this.Controls.Add(this.disableWidthOffset_checkBox);
             this.Controls.Add(this.flipXYOffsets_checkBox);
@@ -120,5 +133,6 @@
         private System.Windows.Forms.CheckBox flipXYOffsets_checkBox;
         private System.Windows.Forms.CheckBox disableWidthOffset_checkBox;
         private System.Windows.Forms.CheckBox flipWidthHeightOffset_checkBox;
+        private System.Windows.Forms.CheckBox disableRoomNames_checkBox;
     }
 }

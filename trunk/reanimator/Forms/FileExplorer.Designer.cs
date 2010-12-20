@@ -199,6 +199,7 @@
             this.filter_textBox.Size = new System.Drawing.Size(166, 20);
             this.filter_textBox.TabIndex = 5;
             this.filter_textBox.Text = "*.*";
+            this.filter_textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this._Filter_TextBox_KeyDown);
             // 
             // filter_label
             // 
