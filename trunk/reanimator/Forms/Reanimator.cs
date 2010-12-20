@@ -30,20 +30,22 @@ namespace Reanimator.Forms
 
             #region alexs_stuff
 
-            if (true) return;
+            if (false) return;
 
-            _LoadAllMLIFiles();
+            //_LoadAllMLIFiles();
             //_LoadAllRooms();
+            //_LoadAllLevelRules();
+            //return;
+
+
+            LevelRulesEditor levelRulesEditor = new LevelRulesEditor(@"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl")
+            {
+                MdiParent = this
+            };
+            levelRulesEditor.Show();
             return;
 
-
-            LevelRulesEditor levelRulesEditor = new LevelRulesEditor
-                                                    {
-                                                        MdiParent = this
-                                                    };
-            levelRulesEditor.Show();
-
-            //_LoadAllLevelRules();
+            //
             //return;
 
             //const String idxReadPath = @"D:\Games\Hellgate London\data\hellgate000.idx";
@@ -158,17 +160,19 @@ namespace Reanimator.Forms
                 MLIFile roomDefinitionFile = new MLIFile();
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
-                String xmlPath = path.Replace(MLIFile.FileExtension, MLIFile.FileExtensionXml);
+                String xmlPath = path.Replace(MLIFile.Extension, MLIFile.ExtensionDeserialised);
                 Console.WriteLine("Loading: " + fileName);
                 try
                 {
                     roomDefinitionFile.ParseFileBytes(mliFileBytes);
-                    roomDefinitionFile.SaveAsXmlDocument(xmlPath);
+                    byte[] xmlBytes = roomDefinitionFile.ExportAsDocument();
+                    File.WriteAllBytes(xmlPath, xmlBytes);
 
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.Load(xmlPath);
                     MLIFile mliFile2 = new MLIFile();
-                    byte[] bytes = mliFile2.ParseXmlDocument(xmlDocument);
+                    mliFile2.ParseXmlDocument(xmlDocument);
+                    byte[] bytes = mliFile2.ToByteArray();
 
                     if (!mliFileBytes.SequenceEqual(bytes))
                     {
@@ -199,19 +203,20 @@ namespace Reanimator.Forms
                 RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
-                String xmlPath = path.Replace(RoomDefinitionFile.FileExtension, RoomDefinitionFile.FileExtensionXml);
+                String xmlPath = path.Replace(RoomDefinitionFile.Extension, RoomDefinitionFile.ExtensionDeserialised);
                 Console.WriteLine("Loading: " + fileName);
                 try
                 {
                     roomDefinitionFile.ParseFileBytes(roomFileBytes);
-                    roomDefinitionFile.SaveAsXmlDocument(xmlPath);
+                    byte[] xmlBytes = roomDefinitionFile.ExportAsDocument();
+                    File.WriteAllBytes(xmlPath, xmlBytes);
 
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.Load(xmlPath);
                     RoomDefinitionFile roomDefinitionFile2 = new RoomDefinitionFile();
-                    byte[] bytes = roomDefinitionFile2.ParseXmlDocument(xmlDocument);
+                    roomDefinitionFile2.ParseXmlDocument(xmlDocument);
+                    byte[] bytes = roomDefinitionFile2.ToByteArray();
 
-                    Debug.Assert(roomFileBytes.Length == bytes.Length);
                     if (!roomFileBytes.SequenceEqual(bytes))
                     {
                         File.WriteAllBytes(path + "2", bytes);
@@ -233,25 +238,32 @@ namespace Reanimator.Forms
             foreach (String drlFilePath in drlFiles)
             {
                 String path = drlFilePath;
-                //path = @"D:\Games\Hellgate London\data\background\sewers\bsb_rule_01.drl";
+                //path = @"D:\Games\Hellgate London\data\background\catacombs\ct_rule_100.drl";
                 //path = @"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl";
 
                 byte[] levelRulesBytes = File.ReadAllBytes(path);
                 LevelRulesFile levelRulesFile = new LevelRulesFile();
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
-                String xmlPath = path.Replace(LevelRulesFile.FileExtension, LevelRulesFile.FileExtensionXml);
+                String xmlPath = path.Replace(LevelRulesFile.Extension, LevelRulesFile.ExtensionDeserialised);
                 Console.WriteLine("Loading: " + fileName);
                 try
                 {
                     levelRulesFile.ParseFileBytes(levelRulesBytes);
-                    levelRulesFile.SaveXmlDocument(xmlPath);
+                    byte[] xmlBytes = levelRulesFile.ExportAsDocument();
+                    File.WriteAllBytes(xmlPath, xmlBytes);
 
-                    //XmlDocument xmlDocument = new XmlDocument();
-                    //xmlDocument.Load(xmlPath);
-                    //LevelRulesFile levelRulesFile2 = new LevelRulesFile();
-                    //byte[] bytes = levelRulesFile2.ParseXmlDocument(xmlDocument);
-                    //File.WriteAllBytes(path + "2", bytes);
+                    XmlDocument xmlDocument = new XmlDocument();
+                    xmlDocument.Load(xmlPath);
+                    LevelRulesFile levelRulesFile2 = new LevelRulesFile();
+                    levelRulesFile2.ParseXmlDocument(xmlDocument);
+                    byte[] bytes = levelRulesFile2.ToByteArray();
+
+                    // note: ct_rule_100.drl has unreferenced rules (only one found out of all files)
+                    if (levelRulesBytes.Length != bytes.Length)
+                    {
+                        File.WriteAllBytes(path + "2", bytes);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -290,7 +302,7 @@ namespace Reanimator.Forms
 
                 try
                 {
-                    xmlCookedFile.Uncook(data);
+                    xmlCookedFile.ParseFileBytes(data);
                 }
                 catch (Exception e)
                 {
@@ -613,9 +625,13 @@ namespace Reanimator.Forms
             }
 
             XmlCookedFile xmlCookedFile = new XmlCookedFile();
-            if (!xmlCookedFile.Uncook(xmlCookedBytes))
+            try
             {
-                MessageBox.Show("Failed to uncook xml file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                xmlCookedFile.ParseFileBytes(xmlCookedBytes);
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show("Failed to uncook xml file!\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 

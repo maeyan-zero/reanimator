@@ -173,7 +173,7 @@ namespace Revival
                                 hellgatePath = arg.Replace("/h:", "");
                                 break;
                             }
-                            if (arg.EndsWith(ExcelFile.FileExtentionClean))
+                            if (arg.EndsWith(ExcelFile.ExtensionDeserialised))
                             {
                                 excelFilesToCook.Add(arg);
                                 doCookTxt = true;
@@ -185,19 +185,19 @@ namespace Revival
                                 doCookTxt = true;
                                 break;
                             }
-                            if (arg.EndsWith(LevelRulesFile.FileExtensionXml))
+                            if (arg.EndsWith(LevelRulesFile.ExtensionDeserialised))
                             {
                                 levelRulesFilesToSerialize.Add(arg);
                                 doLevelRules = true;
                                 break;
                             }
-                            if (arg.EndsWith(RoomDefinitionFile.FileExtensionXml))
+                            if (arg.EndsWith(RoomDefinitionFile.ExtensionDeserialised))
                             {
                                 roomDefinitionFilesSerialize.Add(arg);
                                 doRoomDefinitions = true;
                                 break;
                             }
-                            if (arg.EndsWith(XmlCookedFile.FileExtentionClean))
+                            if (arg.EndsWith(XmlCookedFile.ExtensionDeserialised))
                             {
                                 xmlFilesToCook.Add(arg);
                                 doCookXml = true;
@@ -300,7 +300,7 @@ namespace Revival
             string dataCommonDir = Path.Combine(hellgatePath, "data_common");
             string excelDataDir = Path.Combine(dataDir, ExcelFile.FolderPath);
             string excelDataCommonDir = Path.Combine(dataCommonDir, ExcelFile.FolderPath);
-            string excelWildCard = String.Format(SearchPattern, ExcelFile.FileExtentionClean);
+            string excelWildCard = String.Format(SearchPattern, ExcelFile.ExtensionDeserialised);
 
             if (Directory.Exists(excelDataDir))
             {
@@ -341,7 +341,7 @@ namespace Revival
 
             if (Directory.Exists(dataDir))
             {
-                string xmlWildCard = String.Format(SearchPattern, XmlCookedFile.FileExtentionClean);
+                string xmlWildCard = String.Format(SearchPattern, XmlCookedFile.ExtensionDeserialised);
                 xmlPaths = Directory.GetFiles(dataDir, xmlWildCard, SearchOption.AllDirectories);
                 xmlPaths = xmlPaths.Where(str => !str.Contains("uix")).ToArray(); // remove uix xml files
             }
@@ -434,9 +434,10 @@ namespace Revival
                     xmlDocument.Load(filePath);
 
                     LevelRulesFile levelRulesFile = new LevelRulesFile();
-                    byte[] fileBytes = levelRulesFile.ParseXmlDocument(xmlDocument);
+                    levelRulesFile.ParseXmlDocument(xmlDocument);
+                    byte[] fileBytes = levelRulesFile.ToByteArray();
 
-                    File.WriteAllBytes(filePath.Replace(LevelRulesFile.FileExtensionXml, LevelRulesFile.FileExtension), fileBytes);
+                    File.WriteAllBytes(filePath.Replace(LevelRulesFile.ExtensionDeserialised, LevelRulesFile.Extension), fileBytes);
                 }
                 catch (Exception e)
                 {
@@ -456,9 +457,10 @@ namespace Revival
                     xmlDocument.Load(filePath);
 
                     RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
-                    byte[] fileBytes = roomDefinitionFile.ParseXmlDocument(xmlDocument);
+                    roomDefinitionFile.ParseXmlDocument(xmlDocument);
+                    byte[] fileBytes = roomDefinitionFile.ToByteArray();
 
-                    File.WriteAllBytes(filePath.Replace(RoomDefinitionFile.FileExtensionXml, RoomDefinitionFile.FileExtension), fileBytes);
+                    File.WriteAllBytes(filePath.Replace(RoomDefinitionFile.ExtensionDeserialised, RoomDefinitionFile.Extension), fileBytes);
                 }
                 catch (Exception e)
                 {

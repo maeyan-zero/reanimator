@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml;
 using System.Xml.Serialization;
@@ -8,10 +9,10 @@ using Revival.Common;
 
 namespace Hellgate
 {
-    public class MLIFile
+    public class MLIFile : HellgateFile
     {
-        public const String FileExtension = ".mli";
-        public const String FileExtensionXml = ".mli.xml";
+        public new const String Extension = ".mli";
+        public new const String ExtensionDeserialised = ".mli.xml";
         private const UInt32 FileMagicWord = 0x1515CAFE; // 'þÊ'
         private const UInt32 RequiredVersion = 0x3; // 3
 
@@ -71,7 +72,7 @@ namespace Hellgate
         /// Parses a level rules file bytes.
         /// </summary>
         /// <param name="fileBytes">The bytes of the level rules to parse.</param>
-        public void ParseFileBytes(byte[] fileBytes)
+        public override void ParseFileBytes(byte[] fileBytes)
         {
             // sanity check
             if (fileBytes == null) throw new ArgumentNullException("fileBytes", "File bytes cannot be null!");
@@ -127,19 +128,25 @@ namespace Hellgate
             Debug.Assert(offset == fileBytes.Length);
         }
 
+
+
         /// <summary>
         /// Parses and XML document and returns the serialized byte array.
         /// </summary>
         /// <param name="xmlDocument">The XML Document to parse.</param>
         /// <returns>The serialized byte array.</returns>
-        public byte[] ParseXmlDocument(XmlDocument xmlDocument)
+        public void ParseXmlDocument(XmlDocument xmlDocument)
         {
-            // sanity checks
             if (xmlDocument == null) throw new ArgumentNullException("xmlDocument", "XML Document cannot be null!");
 
             XmlNodeReader xmlNodeReader = new XmlNodeReader(xmlDocument);
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(MLIStruct));
-            _mliStruct = (MLIStruct)xmlSerializer.Deserialize(xmlNodeReader);
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof (MLIStruct));
+            _mliStruct = (MLIStruct) xmlSerializer.Deserialize(xmlNodeReader);
+        }
+
+        public override byte[] ToByteArray()
+        {
+            if (_mliStruct == null) throw new Exceptions.NotInitializedException();
 
             int offset = 0;
             byte[] fileBytes = new byte[1024];
@@ -193,26 +200,15 @@ namespace Hellgate
             return fileBytes;
         }
 
-        public void SaveAsXmlDocument(String filePath)
+        public override byte[] ExportAsDocument()
         {
-            // sanity checks
-            if (String.IsNullOrEmpty(filePath)) throw new ArgumentNullException("filePath", "File path cannot be empty!");
             if (_mliStruct == null) throw new Exceptions.NotInitializedException();
 
-            // create XmlDocument
-            XmlDocument xmlDocument = new XmlDocument();
-            XPathNavigator xPathNavigator = xmlDocument.CreateNavigator();
-            Debug.Assert(xPathNavigator != null);
-            XmlWriter xmlWriter = xPathNavigator.AppendChild();
-            Debug.Assert(xmlWriter != null);
+            MemoryStream memoryStream = new MemoryStream();
+            XmlSerializer xmlSerializer = new XmlSerializer(_mliStruct.GetType());
+            xmlSerializer.Serialize(memoryStream, _mliStruct);
 
-            // serialise object
-            XmlSerializer xmlSerializerHeader = new XmlSerializer(_mliStruct.GetType());
-            xmlSerializerHeader.Serialize(xmlWriter, _mliStruct);
-            xmlWriter.Close();
-
-            // and save
-            xmlDocument.Save(filePath);
+            return memoryStream.ToArray();
         }
     }
 }

@@ -180,7 +180,7 @@ namespace Hellgate
 
             // want excel files and strings files
             foreach (FileEntry fileEntry in
-                FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention) ||
+                FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.Extension) ||
                     (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) && fileEntry.RelativeFullPath.Contains(Language))))
             {
                 //if (MPVersion &&
@@ -203,7 +203,7 @@ namespace Hellgate
 
                 // parse file data
                 DataFile dataFile;
-                if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention))
+                if (fileEntry.FileNameString.EndsWith(ExcelFile.Extension))
                 {
                     try
                     {
@@ -490,11 +490,29 @@ namespace Hellgate
         /// Gets file byte data from most principle location; considering filetimes and backup status.
         /// The user must manually call EndAllDatAccess to close access to any opened .dat files during the process.
         /// </summary>
+        /// <param name="relativeFilePath">The file path relative to HGL installation directory.</param>
+        /// <param name="ignorePatchedOut">If true, will ignore the files patched out state effectivly forcing file reading from .dats as if it was never patched out.</param>
+        /// <returns>The file byte array, or null on error.</returns>
+        public byte[] GetFileBytes(String relativeFilePath, bool ignorePatchedOut = false)
+        {
+            String directoryString = Path.GetDirectoryName(relativeFilePath) + "\\";
+            String fileName = Path.GetFileName(relativeFilePath).ToLower();
+            UInt64 filePathHash = Crypt.GetStringsSHA1UInt64(directoryString, fileName);
+
+            FileEntry fileEntry;
+            return FileEntries.TryGetValue(filePathHash, out fileEntry) ? GetFileBytes(fileEntry, ignorePatchedOut) : null;
+        }
+
+        /// <summary>
+        /// Gets file byte data from most principle location; considering filetimes and backup status.
+        /// The user must manually call EndAllDatAccess to close access to any opened .dat files during the process.
+        /// </summary>
         /// <param name="fileEntry">The file entry details to read.</param>
         /// <param name="ignorePatchedOut">If true, will ignore the files patched out state effectivly forcing file reading from .dats as if it was never patched out.</param>
         /// <returns>The file byte array, or null on error.</returns>
         public byte[] GetFileBytes(FileEntry fileEntry, bool ignorePatchedOut = false)
         {
+            if (fileEntry == null) return null;
             byte[] fileBytes = null;
 
 

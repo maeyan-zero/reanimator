@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Xml;
@@ -12,10 +11,10 @@ using Revival.Common;
 
 namespace Hellgate
 {
-    public partial class XmlCookedFile
+    public partial class XmlCookedFile : HellgateFile
     {
-        public const String FileExtention = ".xml.cooked";
-        public const String FileExtentionClean = ".xml";
+        public new const String Extension = ".xml.cooked";
+        public new const String ExtensionDeserialised = ".xml";
         private const UInt32 FileMagicWord = 0x6B304F43; // 'CO0k'
         private const Int32 RequiredVersion = 8;
         private const UInt32 DataMagicWord = 0x41544144;
@@ -412,19 +411,18 @@ namespace Hellgate
         /// Uncooks a file byte array to XmlDoc.<br />
         /// (automatically determines .xml definition)
         /// </summary>
-        /// <param name="data">The file bytes to uncook.</param>
+        /// <param name="fileBytes">The file bytes to uncook.</param>
         /// <returns>True on success, false otherwise.</returns>
         /// <exception cref="Exceptions.NotInitializedException">XmlCookedFile.Initialize() Not Called.</exception>
         /// <exception cref="Exceptions.UnexpectedMagicWordException">Bad file bytes - wrong file type (first 4 bytes wrong).</exception>
         /// <exception cref="Exceptions.NotSupportedFileVersionException">File version not supported (only version 8 supported).</exception>
         /// <exception cref="Exceptions.NotSupportedFileDefinitionException">The file contains an unsupported XML Definition type.</exception>
         /// <exception cref="Exceptions.UnexpectedTokenException">An error occured during file bytes parsing.</exception>
-        public bool Uncook(byte[] data)
+        public override void ParseFileBytes(byte[] fileBytes)
         {
+            if (fileBytes == null) throw new ArgumentNullException("fileBytes", "File bytes cannot be null!");
             if (_xmlDefinitions == null) throw new Exceptions.NotInitializedException();
-
-            if (data == null) return false;
-            _buffer = data;
+            _buffer = fileBytes;
 
             /* Header Structure
              * UInt32           Magic Word          'CO0k'
@@ -460,8 +458,6 @@ namespace Hellgate
             //}
 
             Debug.Assert(_offset == _buffer.Length);
-
-            return true;
         }
 
         private void _UncookXmlData(XmlDefinition xmlDefinition, XmlNode xmlParent, XmlCookedFileTree xmlTree)
@@ -841,6 +837,18 @@ namespace Hellgate
             }
 
             XmlDoc.Save(path);
+        }
+
+        public override byte[] ToByteArray()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override byte[] ExportAsDocument()
+        {
+            if (XmlDoc == null || !XmlDoc.HasChildNodes) return null;
+
+            return Encoding.ASCII.GetBytes(XmlDoc.OuterXml);
         }
     }
 }
