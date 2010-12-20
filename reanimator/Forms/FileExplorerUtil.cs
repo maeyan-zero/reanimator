@@ -39,17 +39,6 @@ namespace Reanimator.Forms
             public bool CanEdit;
             public bool CanCookWith;
             public bool IsUncookedVersion;
-            //public List<NodeObject> Siblings;
-
-            //public void AddSibling(NodeObject siblingNodeObject)
-            //{
-            //    if (Siblings == null)
-            //    {
-            //        Siblings = new List<NodeObject>();
-            //    }
-
-            //    Siblings.Add(siblingNodeObject);
-            //}
         }
 
         private class NodeSorter : IComparer
@@ -113,13 +102,17 @@ namespace Reanimator.Forms
 
 
                 // need to have canEdit check before we update the node below or it'll be false for newer versions);
-                if (fileEntry.FileNameString.EndsWith(XmlCookedFile.FileExtention))
+                if (fileEntry.FileNameString.EndsWith(XmlCookedFile.Extension))
+                    // todo: before we can do this, need to fix up the "sanity check" part just below
+                    //fileEntry.FileNameString.EndsWith(RoomDefinitionFile.Extension) ||
+                    //fileEntry.FileNameString.EndsWith(LevelRulesFile.Extension) ||
+                    //fileEntry.FileNameString.EndsWith(MLIFile.Extension))
                 {
                     nodeObject.CanEdit = true;
                     nodeObject.CanCookWith = true;
                 }
-                else if (fileEntry.FileNameString.EndsWith(ExcelFile.FileExtention) ||
-                         fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                else if (fileEntry.FileNameString.EndsWith(ExcelFile.Extension) ||
+                         fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) ||                      
                          fileEntry.FileNameString.EndsWith("txt"))
                 {
                     nodeObject.CanEdit = true;
@@ -222,7 +215,7 @@ namespace Reanimator.Forms
         {
             String nodePath = treeNode.FullPath;
 
-            if (nodePath.EndsWith(XmlCookedFile.FileExtention) || nodePath.EndsWith(".xml"))
+            if (nodePath.EndsWith(XmlCookedFile.Extension) || nodePath.EndsWith(".xml"))
             {
                 treeNode.ImageIndex = (int)IconIndex.XmlFile;
             }
@@ -575,5 +568,133 @@ namespace Reanimator.Forms
             _clonedTreeView.Dispose();
             _clonedTreeView = null;
         }
+
+        /// <summary>
+        /// User-friendly uncooking of Tree Node list.
+        /// </summary>
+        /// <param name="progressForm">A progress form to update.</param>
+        /// <param name="param">The Tree Node List.</param>
+        private void _DoUnooking(ProgressForm progressForm, Object param)
+        {
+            List<TreeNode> uncookingNodes = (List<TreeNode>)param;
+            const int progressUpdateFreq = 20;
+            if (progressForm != null)
+            {
+                progressForm.ConfigBar(1, uncookingNodes.Count, progressUpdateFreq);
+            }
+
+            int i = 0;
+            foreach (TreeNode treeNode in uncookingNodes)
+            {
+                NodeObject nodeObject = (NodeObject)treeNode.Tag;
+                IndexFile.FileEntry fileEntry = nodeObject.FileEntry;
+
+
+                // update progress if applicable
+                if (i % progressUpdateFreq == 0 && progressForm != null)
+                {
+                    progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutPatch);
+                }
+                i++;
+
+
+                // get the file bytes
+                String relativePath = fileEntry.RelativeFullPathWithoutPatch;
+                byte[] fileBytes;
+                try
+                {
+                    fileBytes = _fileManager.GetFileBytes(fileEntry, true);
+                    if (fileBytes == null) continue;
+                }
+                catch (Exception e)
+                {
+                    ExceptionLogger.LogException(e);
+                    continue;
+                }
+
+
+                // determine file type
+                HellgateFile hellgateFile;
+                if (relativePath.EndsWith(XmlCookedFile.Extension))
+                {
+                    hellgateFile = new XmlCookedFile();
+                }
+                else if (relativePath.EndsWith(RoomDefinitionFile.Extension))
+                {
+                    hellgateFile = new RoomDefinitionFile();
+                }
+                else if (relativePath.EndsWith(MLIFile.Extension))
+                {
+                    hellgateFile = new MLIFile();
+                }
+                else
+                {
+                    Debug.Assert(false, "wtf");
+                    continue;
+                }
+
+
+                // deserialise file
+                DialogResult dr = DialogResult.Retry;
+                bool uncooked = false;
+                while (dr == DialogResult.Retry && !uncooked)
+                {
+                    try
+                    {
+                        hellgateFile.ParseFileBytes(fileBytes);
+                        uncooked = true;
+                    }
+                    catch (Exception e)
+                    {
+                        ExceptionLogger.LogException(e, "_DoUnooking", true);
+
+                        String errorMsg = String.Format("Failed to uncooked file!\n{0}\n\n{1}", relativePath, e);
+                        dr = MessageBox.Show(errorMsg, "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation);
+                        if (dr == DialogResult.Abort) return;
+                        if (dr == DialogResult.Ignore) break;
+                    }
+                }
+                if (!uncooked) continue;
+
+
+                // save file
+                String relativeSavePath = relativePath.Replace(HellgateFile.Extension, HellgateFile.ExtensionDeserialised);
+                String savePath = Path.Combine(Config.HglDir, relativeSavePath);
+
+                dr = DialogResult.Retry;
+                bool saved = false;
+                byte[] documentBytes = null;
+                while (dr == DialogResult.Retry && !saved)
+                {
+                    try
+                    {
+                        if (documentBytes == null) documentBytes = hellgateFile.ExportAsDocument();
+                        File.WriteAllBytes(savePath, documentBytes);
+                        saved = true;
+                    }
+                    catch (Exception e)
+                    {
+                        ExceptionLogger.LogException(e, "_DoUnooking", true);
+
+                        String errorMsg = String.Format("Failed to save file!\n{0}\n\n{1}", relativePath, e);
+                        dr = MessageBox.Show(errorMsg, "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation);
+                        if (dr == DialogResult.Abort) return;
+                        if (dr == DialogResult.Ignore) break;
+                    }
+                }
+
+
+                // update tree view
+                TreeNode newTreeNode = new TreeNode();
+                NodeObject newNodeObject = new NodeObject
+                {
+                    CanEdit = true,
+                    IsUncookedVersion = true
+                };
+                newTreeNode.Tag = newNodeObject;
+                treeNode.Nodes.Add(newTreeNode);
+            }
+        }
+
     }
 }

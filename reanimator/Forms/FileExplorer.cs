@@ -146,24 +146,41 @@ namespace Reanimator.Forms
             }
         }
 
-        // todo: update/fix me
+        // todo: finish me
         private void _FilesTreeView_DoubleClick(Object sender, EventArgs e)
         {
-            TreeView treeView = (TreeView)sender;
-            TreeNode selectedNode = treeView.SelectedNode;
+            TreeNode selectedNode = _files_fileTreeView.SelectedNode;
             NodeObject nodeObject = (NodeObject)selectedNode.Tag;
             Debug.Assert(nodeObject != null);
 
+            if (selectedNode.Name.EndsWith(LevelRulesFile.Extension))
+            {
+                LevelRulesEditor levelRulesEditor;
+                try
+                {
+                    levelRulesEditor = new LevelRulesEditor(_fileManager, nodeObject.FileEntry);
+                }
+                catch (Exception ee)
+                {
+                    MessageBox.Show("Failed to open Level Rules Editor:\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                levelRulesEditor.Show(MdiParent);
+            }
+            return;
+
+
+
             if (nodeObject.IsFolder || !nodeObject.CanEdit) return;
 
-            String nodeFullPath = selectedNode.FullPath;
-            String filePath = Path.Combine(Config.HglDir, nodeFullPath); // todo: need to remove nested filename from path for uncooked files
             String editorPath = null;
 
             // todo: this section needs a good cleaning
             // todo: implementation of choosing default program in the options menu
             // todo: current implementation overwites already extracted/uncooked file without asking - open it instead or ask?
-            if (nodeFullPath.EndsWith(ExcelFile.FileExtention))
+            String nodeFullPath = String.Empty;
+            String filePath = String.Empty;
+            if (nodeFullPath.EndsWith(ExcelFile.Extension))
             {
                 MessageBox.Show("todo");
             }
@@ -171,7 +188,7 @@ namespace Reanimator.Forms
             {
                 MessageBox.Show("todo");
             }
-            else if (nodeFullPath.EndsWith(XmlCookedFile.FileExtention))
+            else if (nodeFullPath.EndsWith(XmlCookedFile.Extension))
             {
                 IndexFile.FileEntry fileIndex = nodeObject.FileEntry;
                 String xmlDataPath = Path.Combine(Config.HglDir, nodeFullPath.Replace(".cooked", ""));
@@ -185,9 +202,13 @@ namespace Reanimator.Forms
                 }
 
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();
-                if (!xmlCookedFile.Uncook(fileData))
+                try
                 {
-                    MessageBox.Show("Failed to uncook xml file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    xmlCookedFile.ParseFileBytes(fileData);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to uncook xml file!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -198,8 +219,7 @@ namespace Reanimator.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Failed to save uncooked xml file!\n\n" + ex, "Error", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to save uncooked xml file!\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -823,11 +843,10 @@ namespace Reanimator.Forms
             List<TreeNode> uncookingNodes = (from treeNode in checkedNodes
                                              let nodeObject = (NodeObject)treeNode.Tag
                                              where nodeObject.CanCookWith && !nodeObject.IsUncookedVersion
-                                             select treeNode).ToList();
+                                               select treeNode).ToList();
             if (uncookingNodes.Count == 0)
             {
-                MessageBox.Show("Unable to find any checked files that can be uncooked!", "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Exclamation);
+                MessageBox.Show("Unable to find any checked files that can be uncooked!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -836,68 +855,11 @@ namespace Reanimator.Forms
             progressForm.Show(this);
         }
 
-        private void _DoUnooking(ProgressForm progressForm, Object param)
-        {
-            List<TreeNode> uncookingNodes = (List<TreeNode>)param;
-            const int progressUpdateFreq = 20;
-            if (progressForm != null)
-            {
-                progressForm.ConfigBar(1, uncookingNodes.Count, progressUpdateFreq);
-            }
-
-            int i = 0;
-            foreach (String nodeFullPath in uncookingNodes.Select(treeNode => treeNode.FullPath))
-            {
-                if (i % progressUpdateFreq == 0 && progressForm != null)
-                {
-                    progressForm.SetCurrentItemText(nodeFullPath);
-                }
-                i++;
-
-                if (!nodeFullPath.EndsWith(XmlCookedFile.FileExtention)) continue;
-
-                byte[] fileBytes = null;// _fileManager.GetFileBytes(nodeFullPath);
-                Debug.Assert(fileBytes != null);
-
-                //if (nodeFullPath.Contains("actor_ghost.xml.cooked"))
-                //{
-                //    int bp = 0;
-                //}
-
-                XmlCookedFile xmlCookedFile = new XmlCookedFile();
-
-                DialogResult dr = DialogResult.Retry;
-                bool uncooked = false;
-                while (dr == DialogResult.Retry && !uncooked)
-                {
-                    try
-                    {
-                        xmlCookedFile.Uncook(fileBytes);
-                        uncooked = true;
-                    }
-                    catch (Exception e)
-                    {
-                        ExceptionLogger.LogException(e, "_DoUnooking", true);
-
-                        String errorMsg = String.Format("Failed to uncooked file!\n{0}\n\n{1}", nodeFullPath, e);
-                        dr = MessageBox.Show(errorMsg, "Error",
-                                             MessageBoxButtons.AbortRetryIgnore,
-                                             MessageBoxIcon.Exclamation);
-                        if (dr == DialogResult.Abort) return;
-                        if (dr == DialogResult.Ignore) break;
-                    }
-                }
-
-                if (!uncooked) continue;
-
-                // todo: add newly uncooked file to file tree
-                String savePath = Path.Combine(Config.HglDir, nodeFullPath.Replace(".cooked", ""));
-                xmlCookedFile.SaveXml(savePath);
-            }
-        }
-
         private void _CookButton_Click(object sender, EventArgs e)
         {
+            // todo fix me
+            return;
+
             // make sure we have at least 1 checked file
             List<TreeNode> checkedNodes = new List<TreeNode>();
             if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
@@ -1033,7 +995,7 @@ namespace Reanimator.Forms
 
             // get all .xml.cooked
             IEnumerable<IndexFile.FileEntry> xmlCookedFiles =
-                _fileManager.FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(XmlCookedFile.FileExtention));
+                _fileManager.FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(XmlCookedFile.Extension));
 
 
             // loop through file entries
@@ -1073,7 +1035,7 @@ namespace Reanimator.Forms
 
                 try
                 {
-                    xmlCookedFile.Uncook(fileBytes);
+                    xmlCookedFile.ParseFileBytes(fileBytes);
                 }
                 catch (Exception)
                 {

@@ -339,6 +339,7 @@
     <Compile Include="Excel\WeatherSets.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileManager.cs" />
+    <Compile Include="HellgateFile.cs" />
     <Compile Include="IndexFile.cs" />
     <Compile Include="LevelRulesFile.cs" />
     <Compile Include="MLIFile.cs" />

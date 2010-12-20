@@ -15,8 +15,8 @@ namespace Hellgate
     {
         public static bool Debug;
         public const String FolderPath = "excel\\";
-        public const String FileExtention = ".txt.cooked";
-        public const String FileExtentionClean = ".txt";
+        public const String Extension = ".txt.cooked";
+        public const String ExtensionDeserialised = ".txt";
         public static readonly KeyValuePair<uint, TypeMap>[] DataTypes;
         public static readonly KeyValuePair<string, uint>[] DataTables;
 

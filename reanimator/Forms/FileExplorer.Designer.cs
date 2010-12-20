@@ -263,6 +263,7 @@
             this._files_fileTreeView.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterCollapse);
             this._files_fileTreeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterExpand);
             this._files_fileTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterSelect);
+            this._files_fileTreeView.DoubleClick += new System.EventHandler(this._FilesTreeView_DoubleClick);
             // 
             // groupBox3
             // 
