@@ -1,0 +1,27 @@
+MATERIALS_GLOBAL	name	material	undefined
+"3,63,0,-1,0,-1"	Spectral	Spectral.xml	-1
+"3,63,0,-1,0,-1"	Escape	Escape.xml	-1
+"3,63,0,-1,0,-1"	Sniper Stealth	Sniper_Stealth.xml	-1
+"3,63,0,-1,0,-1"	Sniper Stealth 2	Sniper_Stealth2.xml	-1
+"3,63,0,-1,0,-1"	Critical	Critical.xml	-1
+"3,63,0,-1,0,-1"	Red	Red.xml	-1
+"3,63,0,-1,0,-1"	Ghost	Ghost.xml	-1
+"3,63,0,-1,0,-1"	Safe	Safe.xml	-1
+"3,63,0,-1,0,-1"	Converted	Converted.xml	-1
+"3,63,0,-1,0,-1"	Monster Bughive	Monster Bughive.xml	-1
+"3,63,0,-1,0,-1"	Monster Healing	Monster Healing.xml	-1
+"3,63,0,-1,0,-1"	Monster Health	Monster Health.xml	-1
+"3,63,0,-1,0,-1"	Monster Ignite	Monster Ignite.xml	-1
+"3,63,0,-1,0,-1"	Monster Jolt	Monster Jolt.xml	-1
+"3,63,0,-1,0,-1"	Fear	Fear.xml	-1
+"3,63,0,-1,0,-1"	Great Defender	Great Defender.xml	-1
+"3,63,0,-1,0,-1"	ShadowBlob	ShadowBlob.xml	-1
+"3,63,0,-1,0,-1"	On shock	On shock	-1
+"3,63,0,-1,0,-1"	Stone	Stone.xml	-1
+"3,63,0,-1,0,-1"	Hardcore Dead	Hardcore Dead.xml	-1
+"3,63,0,-1,0,-1"	Safe monster	Safe Monster.xml	-1
+"3,63,0,-1,0,-1"	FogOfWar	fogofwar.xml	-1
+"3,63,0,-1,0,-1"	Actor_Ghost	Actor_Ghost.xml	-1
+"3,63,0,-1,0,-1"	Surge_crusader	Surge_crusader.xml	-1
+"3,63,0,-1,0,-1"	Poison	Poison.xml	-1
+"3,63,0,-1,0,-1"	Hydra	Hydra.xml	-1

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -108,6 +109,7 @@ namespace Hellgate
                 _integerBuffer = new byte[1]; // properties is weird - do this just to ensure 100% byte-for-byte accuracy
                 colCount++;
             }
+
 
             string[][] tableRows = FileTools.CSVToStringArray(buffer, colCount, delimiter);
             if (tableRows == null) return false;

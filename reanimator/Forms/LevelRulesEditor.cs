@@ -161,7 +161,8 @@ namespace Reanimator.Forms
         {
             Block,
             Outline,
-            Text
+            Text,
+            DashedOutline
         }
 
         private bool _flipWidthHeight;
@@ -197,8 +198,6 @@ namespace Reanimator.Forms
                 float rotateDeg = -room.rotation * 180.0f / (float)Math.PI;
                 if (_reverseRotation) rotateDeg *= -1;
 
-                SolidBrush solidBrush = new SolidBrush(color);
-                Pen pn = new Pen(Color.Black);
 
                 if (roomWidth < 0)
                 {
@@ -236,15 +235,26 @@ namespace Reanimator.Forms
 
                 if (paintType == PaintType.Block)
                 {
-                    g.FillRectangle(solidBrush, xPos, yPos, roomWidth, roomHeight);
+                    g.FillRectangle(new SolidBrush(color), xPos, yPos, roomWidth, roomHeight);
 
                     // g.Transform = new Matrix();
 
                     //g.FillRectangle(new SolidBrush(Color.MistyRose), xPos, yPos, roomWidth, roomHeight);
                     //g.DrawString(rotateDeg.ToString(), _font, new SolidBrush(Color.Black), xPos, yPos);
                 }
-                if (paintType == PaintType.Outline) g.DrawRectangle(pn, xPos, yPos, roomWidth, roomHeight);
-
+                if (paintType == PaintType.Outline)
+                {
+                    g.DrawRectangle(new Pen(Color.Black), xPos, yPos, roomWidth, roomHeight);
+                }
+                if (paintType == PaintType.DashedOutline)
+                {
+                    Pen pen = new Pen(Color.Black)
+                    {
+                        DashStyle = DashStyle.DashDot,
+                        DashOffset = 20
+                    };
+                    g.DrawRectangle(pen, xPos, yPos, roomWidth, roomHeight);
+                }
 
                 float strX = xPos;
                 float strY = yPos;
@@ -258,7 +268,10 @@ namespace Reanimator.Forms
                 //}
 
                 //g.Transform = new Matrix();
-                if (paintType == PaintType.Text && !_disableRoomNames) g.DrawString(room.RoomName, _font, new SolidBrush(Color.Black), strX, strY);
+                if (paintType == PaintType.Text && !_disableRoomNames)
+                {
+                    g.DrawString(room.RoomName, _font, new SolidBrush(Color.Black), strX, strY);
+                }
                 i++;
             }
         }
@@ -280,6 +293,15 @@ namespace Reanimator.Forms
                     {
                         float offsetX = 650 - i * 350 * _graphicsScale;
                         float offsetY = 200;
+
+                        // connector rooms
+                        if (levelRule.ConnectorRooms != null)
+                        {
+                            _PaintRooms(e.Graphics, levelRule.ConnectorRooms, new PointF(offsetX, offsetY), _colors[i % _colors.Length], PaintType.Block);
+                            _PaintRooms(e.Graphics, levelRule.ConnectorRooms, new PointF(offsetX, offsetY), _colors[i % _colors.Length], PaintType.DashedOutline);
+                            _PaintRooms(e.Graphics, levelRule.ConnectorRooms, new PointF(offsetX, offsetY), _colors[i % _colors.Length], PaintType.Text);
+                        }
+
                         _PaintRooms(e.Graphics, levelRules, new PointF(offsetX, offsetY), _colors[i % _colors.Length], PaintType.Block);
                         _PaintRooms(e.Graphics, levelRules, new PointF(offsetX, offsetY), _colors[i % _colors.Length], PaintType.Outline);
                         _PaintRooms(e.Graphics, levelRules, new PointF(offsetX, offsetY), _colors[i % _colors.Length], PaintType.Text);

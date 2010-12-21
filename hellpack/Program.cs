@@ -494,7 +494,16 @@ namespace Revival
                 return false;
             }
 
-            ExcelFile excelFile = new ExcelFile(excelBuffer, excelPath);
+            ExcelFile excelFile;
+            try
+            {
+                excelFile = new ExcelFile(excelBuffer, excelPath);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Critical Error:\n" + e);
+                return false;
+            }
             if (excelFile.HasIntegrity == false)
             {
                 Console.WriteLine(String.Format("Failed to parse excel file {0}", excelPath));
