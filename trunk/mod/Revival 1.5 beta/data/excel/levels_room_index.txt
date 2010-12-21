@@ -1,0 +1,810 @@
+ROOM_INDEX	name	outDoor	outDoorVisibility	computeAmbientOcclusion	noMonsterSpawn	noAdventures	noSubLevelEntrance	occupiesNodes	raisesNodes	fullCollision	dontObstructSound	dontOccludeVisibility	thirdPersonCameraIgnore	rtsCameraIgnore	havokSliceType	roomVersion	nodeBuffer	reverbEnvironment	backGroundSound	noGore	noHumans
+"3,60,0,-1,0,-1"	Catacombs\Catacombs_Test	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CT_ConnA	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CT_ConnB	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CT_Next	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CT_NextDark	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CT_Prev	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTCombo_AC_RD	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTComboNew_AC_RD	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTCross_ACa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTHill_ACa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTHillNew_ACa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTHill_ADa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTHillNew_ADa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTHill_ADIa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTHillNew_ADIa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTTemp_N	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTTemp_Nb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTTemp_Nc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWall_ACa	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallNew_ACa	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallDark_ACa	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWall_ADa	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallNew_ADa	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallDark_ADa	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWall_Ta	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallNew_Ta	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWall_Xa	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallNew_Xa	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWall_Na	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallNew_Na	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallDark_Na	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWall_Nb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallNew_Nb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallDark_Nb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWall_Nc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallNew_Nc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTWallDark_Nc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTStairs	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Catacombs\CTHole	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Caves\Caves_A	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	3	-1	-1
+"3,60,0,-1,0,-1"	Caves\Caves_B	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	3	-1	-1
+"3,60,0,-1,0,-1"	Caves\Caves_C	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	3	-1	-1
+"3,60,0,-1,0,-1"	Caves\Caves_D	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	3	-1	-1
+"3,60,0,-1,0,-1"	Caves\Caves_E	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	3	-1	-1
+"3,60,0,-1,0,-1"	Caves\Caves_F	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	3	-1	-1
+"3,60,0,-1,0,-1"	Caves\Caves_G	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	3	-1	-1
+"3,62,0,-1,0,-1"	City\CharacterCreate	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\alley_E	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor_narrow	2	-1	-1
+"3,60,0,-1,0,-1"	City\alley_F	1	1	1	0	0	0	0	0	0	0	0	0	0	16	0	0	HG_Outdoor_narrow	2	-1	-1
+"3,60,0,-1,0,-1"	City\alley_HellRift	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor_narrow	2	-1	-1
+"3,60,0,-1,0,-1"	City\alley_I	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor_narrow	2	-1	-1
+"3,60,0,-1,0,-1"	City\alley_L	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor_narrow	2	-1	-1
+"3,60,0,-1,0,-1"	City\alley_T	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor_narrow	2	-1	-1
+"3,60,0,-1,0,-1"	City\alley_X	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor_narrow	2	-1	-1
+"3,62,0,-1,0,-1"	City\bend_Rup	1	1	1	0	0	0	0	0	0	0	0	0	0	245	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bend_up	1	1	1	0	0	0	0	0	0	0	0	0	0	245	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bend_Lup	1	1	1	0	0	0	0	0	0	0	0	0	0	245	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_C	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Ca	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Cb	1	1	1	0	0	0	0	0	0	0	0	0	0	213	2	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Cc	1	1	1	0	0	0	0	0	0	0	0	0	0	15	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Cd	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Ce	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_C_station	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_F	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Fa	1	1	1	0	0	0	0	0	0	0	0	0	0	16	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Fb	1	1	1	0	0	0	0	0	0	0	0	0	0	14	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Fc	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Fd	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Fe	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Ff	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Fg	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_E_PedMall	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_E_PedMall_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_E_PedMall_B	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\bldg_Fha	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_O	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Oa	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Ob	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Xa	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Xb	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\bldg_Xbigben	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\bldg_Xc	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\bldg_Xsky	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\bldg_Exospector	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_atrium	0	0	0	0	0	0	0	0	0	0	0	0	0	13	1	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_door	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_core	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_coreA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_coreB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_coreC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_cap	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_capA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_capB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_capC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_wing	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_wingA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_wingB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_wingC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_end	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_endA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_endB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_endC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_stairL	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_stairR	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Bloomsbury\Museum_facade	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	16	-1	-1
+"3,60,0,-1,0,-1"	City\bookstore_Fa	1	1	1	0	0	0	0	0	0	0	0	0	0	14	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\chambers	1	1	1	0	0	0	0	0	0	0	0	0	0	16	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\church	1	1	1	0	0	0	0	0	0	0	0	0	0	16	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\corner	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\jubilee	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\mkt_A	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\mkt_B	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\mkt_C	1	1	1	0	0	0	0	0	0	0	0	0	0	18	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\mkt_D	1	1	1	0	0	0	0	0	0	0	0	0	0	18	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\opera_A	1	1	1	0	0	0	0	0	0	0	0	0	0	14	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\opera_B	1	1	1	0	0	0	0	0	0	0	0	0	0	14	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\tuttons	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\CoventGarden\bldg_C_CGS	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\Interiors\interior_Fa	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\Interiors\interior_Fb	1	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\lot1x1a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\lot2x2a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\Park\Oracle_Quest	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_edge_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park1x1a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park1x1b	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park1x1d	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_edge_B	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_edge_inA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_edge_inB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_edge_outA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_edge_outB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_entrance_A	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_inA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_inB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_inC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_inD	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_outA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_sideA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_sideB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_sideC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_sideD	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_outB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_outC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\Park\park_outD	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	26	-1	-1
+"3,60,0,-1,0,-1"	City\PiccadillyCircus\Picc_A	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\PiccadillyCircus\Picc_B	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\PiccadillyCircus\Picc_C	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\PiccadillyCircus\Picc_D	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\PiccadillyCircus\Picc_E	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\PiccadillyCircus\Picc_F	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\StPauls\St_Pauls_A	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	25	-1	-1
+"3,60,0,-1,0,-1"	City\StPauls\St_Pauls_AA	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	25	-1	-1
+"3,60,0,-1,0,-1"	City\StPauls\St_Pauls_AB	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	25	-1	-1
+"3,60,0,-1,0,-1"	City\StPauls\St_Pauls_B	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	25	-1	-1
+"3,60,0,-1,0,-1"	City\StPauls\St_Pauls_C	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	25	-1	-1
+"3,60,0,-1,0,-1"	City\StPauls\St_Pauls_D	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	25	-1	-1
+"3,60,0,-1,0,-1"	City\StPauls\St_Pauls_E	1	1	1	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	25	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\AbbeyA	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\AbbeyB	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\AbbeyC	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\AbbeyD	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\AbbeyE	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\AbbeyF	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\AbbeyG	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\BigBen	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\Bookshop	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\HousesA	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\HousesB	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\HousesC	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\HousesD	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\HousesE	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\HousesF	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\HousesG	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\HousesH	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\HousesI	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\Margaret	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\Middlesex	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\Portcullis	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\RICS	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\SquareA	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\SquareB	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\SquareC	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\SquareD	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\SquareE	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\SquareF	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\SquareG	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\SquareH	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\SquareI	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\TreasuryA	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\TreasuryB	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\TreasuryC	1	1	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\YardA	1	1	0	1	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\YardB	1	1	0	1	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\YardC	1	1	0	1	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ParliamentSquare\YardD	1	1	0	1	0	0	0	0	0	0	0	0	0	14	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\park1x1a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\park1x1b	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\park1x1c	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\park2x2a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_E	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\road_E_Hellrift	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\road_E_Museum	0	0	0	0	0	0	0	0	0	0	0	0	0	16	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Ea	1	1	1	0	0	0	0	0	0	0	0	0	0	16	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Eb	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Ec	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Ex	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Ey	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_I	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\road_I_CGM	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\road_I_Museum	1	1	1	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Ia	1	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Ib	1	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Ic	1	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_hole_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_L	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_La	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Lb	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Lc	1	1	1	0	0	0	0	0	0	0	0	0	0	0	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_T	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Ta	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Tb	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_X	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Xa	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\road_Xb	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ruins_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ruins_B	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ruins_C	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ruins_D	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\ruins_E	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\Test_A_bldg	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\Test_A_road	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\Test_B_bldg	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\Test_B_road	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\Test_C_bldg	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\Test_C_road	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\Test_Start	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\warp_BL_bldg_C	1	1	1	1	0	1	0	0	0	0	0	0	0	15	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\warp_BL_tunnel	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\warp_next_A	1	1	1	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\warp_next_B	1	1	1	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\warp_PC_tunnel	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\warp_previous_A	1	1	1	1	0	1	0	0	0	0	0	0	0	215	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	City\warp_previous_B	1	1	1	1	0	1	0	0	0	0	0	0	0	215	1	0	HG_Outdoor	2	-1	-1
+"3,62,0,-1,0,-1"	City\warp_previous_C	1	1	1	1	0	1	0	0	0	0	0	0	0	215	1	0	HG_Outdoor	2	-1	-1
+"3,60,0,-1,0,-1"	Crypts\C_ConnD	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallBCa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallBCa_CopyNM	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallBCIa	0	1	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallC_Ca	0	1	0	1	0	0	0	0	0	0	0	0	0	12	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallC_End	0	1	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallC_Start	0	1	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallCa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallCa_CopyNM	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallCb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallCc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallNa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallNa_CopyNM	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallNa_CopyNLIGHT	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallNb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	Crypts\CWallStairs	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	3	-1	-1
+"3,60,0,-1,0,-1"	ExospectorInt\ESI_ACa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	21	-1	-1
+"3,60,0,-1,0,-1"	ExospectorInt\ESI_ACSplita	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	21	-1	-1
+"3,60,0,-1,0,-1"	ExospectorInt\ESI_ADa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	21	-1	-1
+"3,60,0,-1,0,-1"	ExospectorInt\ESI_ADUPa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	21	-1	-1
+"3,60,0,-1,0,-1"	ExospectorInt\ESI_CapEnd	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	21	-1	-1
+"3,60,0,-1,0,-1"	ExospectorInt\ESI_CapStart	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	21	-1	-1
+"3,60,0,-1,0,-1"	ExospectorInt\ESI_ConnA	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	21	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_E	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_E_dark_tunnel	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_E_end	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_E_hole	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_E_holeB	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_E_short	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_E_tutorial	0	0	0	1	0	1	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ea	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Eb	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_growerA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_growerB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_holborn_b	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_holborn_f	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_I	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_I_station	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ia	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ib	0	0	0	0	0	0	0	0	0	0	0	0	0	15	1	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ic	0	0	0	0	0	0	0	0	0	0	0	0	0	18	1	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Id	0	0	0	0	0	0	0	0	0	0	0	0	0	14	1	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ie	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_tubes	5	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ig	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ih	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ii	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ij	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ik	0	0	0	0	0	0	0	0	0	0	0	0	0	14	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_IL	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Im	0	0	0	0	0	0	0	0	0	0	0	0	0	15	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_In	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_L	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_La	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Lb	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Lc	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_Ld	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_station_a	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_station_b	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_station_c	0	0	0	0	0	1	0	0	0	0	0	0	0	12	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_station_d	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_station_e	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_station_f	0	0	0	0	0	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	5	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\ftube_X	0	0	0	0	0	0	0	0	0	0	0	0	0	230	1	0	HG_tubes	5	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_E	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_E_dark	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_E_small	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_growerA	0	0	0	0	0	0	0	0	0	0	0	0	0	257	2	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_I	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_I_dark	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_I_long_A	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_Ia	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_Ia_dark	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_L	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_L_dark	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_L_Large_A	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_T	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_T_dark	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_T_large_A	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_E	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_I	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_I_dark	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_I_short	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_Ibend	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_Ibend_dark	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_L	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_L_dark	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_La	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_Ldown	0	0	0	0	0	0	0	0	0	0	0	0	0	16	2	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_T	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	FoetidTunnels2\room_tunnel_T_dark	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,48,100,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	FoetidTunnels2\Station_X	0	0	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	14	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\cornerlarge	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\cornersmall	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\end_statue_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\middle	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\middle_flat	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\side_tunnel	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\Middle_Large_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\Middle_Stairs_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\side	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Dungeon\Entrance	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Tower\tower_a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Tower\tower_ground_warp	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell_Tower\tower_stairs_a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_out	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_arena	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_outA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_outB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_outC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_in	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_inA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_inB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_inC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_B	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_edge_C	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell1x1dummy	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell1x1a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell1x1b	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell1x1c	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell1x1d	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_entrance_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_in	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_inA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_inB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_inC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_inD	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_out	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_outA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_outB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_outC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_outD	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_side	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_sideA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_sideB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_sideC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_sideD	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_tower	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_towerB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\hell_towerC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Hell\pitboss_arena	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	24	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_E	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_I	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_Ia	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_Ib	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_Ic	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_L	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_L_Foundry	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_La	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_Lb	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	Industrial_Rooms\Room_T	0	0	0	0	0	0	0	0	0	0	0	0	0	280	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,62,0,-1,0,-1"	Level_Transitions\transition_a	0	0	0	1	0	1	0	0	0	0	0	0	0	279	1	0	HG_Maintenance_Rooms	8	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnBC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnBCI	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnBCIBR	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnC	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnCBR	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnCP	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnG	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\R_ConnW	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_BCa	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_BCb	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_BCIa	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_BCIBRa	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_C_Parliament	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Cc	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Ca	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Ce	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Cd	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Cb	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_CBRa	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_CBRe	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_CBRd	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_CTRNa	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Pa	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Pe	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Pb	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Pc	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Pca	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	River\RC_Pd	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	Sewers\Sew_ConnA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\Sew_ConnB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\Sew_ConnC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\Sew_ConnD	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeABa	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeAC_Ba	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeAC_Da	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeACa	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeACb	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeADa	0	0	0	0	0	0	0	0	0	0	0	0	0	16	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeADb	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeCCap	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeCCapB	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerLargeCCapX	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerSmallABa	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerSmallAC_Ba	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	15	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerSmallAC_Da	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	15	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerSmallACa	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	15	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerSmallACb	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	15	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerSmallADa	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	15	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerSmallADb	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	15	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SewerSmallCCap	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	15	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallBCa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallBCa_CopyNM	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallBCIa	0	1	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallC_Ca	0	1	0	1	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallC_Ca_CopyNM	0	1	0	1	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallC_Cstairs	0	1	0	1	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallC_CaManHole	0	1	0	1	0	0	0	0	0	0	0	0	0	12	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallC_End	0	1	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallC_Start	0	1	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallC_StartB	0	1	0	1	0	1	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallCa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallCa_CopyNM	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallCb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallNa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallNa_CopyNM	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallNb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallNc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\SWallNStairs	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	11	-1	-1
+"3,60,0,-1,0,-1"	Sewers\Warp_Next	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	10	-1	-1
+"3,60,0,-1,0,-1"	Sewers\Warp_Previous	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	10	-1	-1
+"3,1,0,-1,0,-1"	SoundField\SF_a	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	NoVerb	-1	-1	-1
+"3,1,0,-1,0,-1"	Soundfield_Part_Deux\MonsterField	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	NoVerb	-1	-1	-1
+"3,1,0,-1,0,-1"	Soundfield_Part_Deux\sf_B	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	NoVerb	-1	-1	-1
+"3,60,0,-1,0,-1"	Station\BossK	0	0	0	0	0	0	0	0	0	0	0	0	0	16	0	0	HG_tubes	4	-1	-1
+"3,60,0,-1,0,-1"	Station\DestroyedStation	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	4	-1	-1
+"3,60,0,-1,0,-1"	Station\DestroyedStationB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	4	-1	-1
+"3,60,0,-1,0,-1"	Station\DestroyedStationCon	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	4	-1	-1
+"3,60,0,-1,0,-1"	Station\DestroyedStationELS	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	4	-1	-1
+"3,60,0,-1,0,-1"	Station\DestroyedStationELSB	0	0	0	0	0	0	0	0	0	0	0	0	0	12	0	0	HG_tubes	4	-1	-1
+"3,60,0,-1,0,-1"	Station\DestroyedStationPA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	4	-1	-1
+"3,60,0,-1,0,-1"	Station\DestroyedStationPB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	4	-1	-1
+"3,60,0,-1,0,-1"	Station\DestroyedStationPC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	4	-1	-1
+"3,60,0,-1,0,-1"	Station\StationELS	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	14	-1	-1
+"3,60,0,-1,0,-1"	Station\StationELSB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	13	-1	-1
+"3,60,0,-1,0,-1"	Station\StationMain	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	13	-1	-1
+"3,60,0,-1,0,-1"	Station\StationMainB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	13	-1	-1
+"3,60,0,-1,0,-1"	Station\StationPA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	14	-1	-1
+"3,60,0,-1,0,-1"	Station\StationPB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	14	-1	-1
+"3,60,0,-1,0,-1"	Station\StationPC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	14	-1	-1
+"3,60,0,-1,0,-1"	StationTransB\StationTransB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	14	-1	-1
+"3,60,0,-1,0,-1"	StationTransB\StationTransBHall	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_nave	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_chapel	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_court	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_courtB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_round	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_roomA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_stairA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_stairB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_stairBb	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_stairC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_stairCc	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_connectA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_connectB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_connectBb	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\TB_doorcap	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	14	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\SectionA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\SectionB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\SectionC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\SectionD	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\SectionE	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TemplarBase\SectionF	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TowerOfLondon\TOLa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	2	-1	-1
+"3,60,0,-1,0,-1"	TowerOfLondon\TOLb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	2	-1	-1
+"3,60,0,-1,0,-1"	TowerOfLondon\TOLc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	2	-1	-1
+"3,60,0,-1,0,-1"	TowerOfLondon\TOLd	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	2	-1	-1
+"3,60,0,-1,0,-1"	TowerOfLondon\TOLe	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	2	-1	-1
+"3,60,0,-1,0,-1"	TowerOfLondon\TOLf	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	2	-1	-1
+"3,60,0,-1,0,-1"	TowerOfLondon\TOLg	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	2	-1	-1
+"3,60,0,-1,0,-1"	TowerOfLondon\TOLh	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	2	-1	-1
+"3,60,0,-1,0,-1"	TowerOfLondon\TOLi	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Sewers	2	-1	-1
+"3,62,0,-1,0,-1"	TownPortal\TownPortal	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	NoVerb	-1	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRK	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	17	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRKB	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	18	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRL	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	17	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRLB	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	18	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRB	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	19	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRBB	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	20	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRH	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	17	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRHB	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	18	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRBR	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	17	-1	-1
+"3,60,0,-1,0,-1"	TruthRoomKnowledge\TRBRB	0	0	0	0	0	0	0	0	0	0	0	0	0	13	0	0	HG_Sewers	18	-1	-1
+"3,1,0,-1,0,-1"	TubeB\TubeB_bendA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	-1	-1	-1
+"3,1,0,-1,0,-1"	TubeB\TubeB_bendB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	-1	-1	-1
+"3,1,0,-1,0,-1"	TubeB\TubeB_entry	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	-1	-1	-1
+"3,1,0,-1,0,-1"	TubeB\TubeB_stationA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	-1	-1	-1
+"3,1,0,-1,0,-1"	TubeB\TubeB_stationB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	-1	-1	-1
+"3,1,0,-1,0,-1"	TubeB\TubeB_stationC	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	-1	-1	-1
+"3,1,0,-1,0,-1"	TubeB\TubeB_tubestartA	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	-1	-1	-1
+"3,1,0,-1,0,-1"	TubeB\TubeB_tubestartB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_tubes	-1	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CharingCross\CC_center	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CharingCross\CC_escalator	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CharingCross\CC_hallA	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CharingCross\CC_hallB	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CharingCross\CC_southbound	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CoventGarden\CG_southbound	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CoventGarden\CG_northbound	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CoventGarden\CG_hall	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CoventGarden\CG_center	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CoventGarden\CG_stairA	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CoventGarden\CG_stairB	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\CoventGarden\CG_stairC	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,62,0,-1,0,-1"	TubeStations\Holborn\HB_platform	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	14	-1	-1
+"3,62,0,-1,0,-1"	TubeStations\Holborn\HB_hall	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	14	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\Temple\TM_platform	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	13	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\Monument\MN_platform	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\StPauls\SP_platform	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	13	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\StPauls\SP_hall	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	13	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\StPauls\SP_entry	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	13	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\LiverpoolStreet\LP_center	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\LiverpoolStreet\LP_hallA	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\LiverpoolStreet\LP_hallB	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\LiverpoolStreet\LP_southbound	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\LiverpoolStreet\LP_escalator	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,60,0,-1,0,-1"	TubeStations\OxfordCircus\OC_platform	0	0	0	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_tubes	12	-1	-1
+"3,1,0,-1,0,-1"	TunnelTransB\TunnelTransB	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	NoVerb	-1	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_edge	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_edgeA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_edgeB	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_edge_in	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_edge_out	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_Tube_Connect_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_entrance	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_exit	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flat	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_in	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_out	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_side	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_sideA	1	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flatA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flat_a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flat_b	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flat_c	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flat_d	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flat_e	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_road_I	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_road_L	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_road_T	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_road_E	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_Flat_Pond	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flat_large_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flat_large_B	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\Forest_flat_large_C	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Forest\CTTemp_Nc	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	27	-1	-1
+"3,60,0,-1,0,-1"	Stonehenge\PillarA	1	1	1	1	1	1	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	29	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_edge	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_flat	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_edge_in	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_edge_out	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_out	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_in	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_side	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_flat_a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_flat_b	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_flat_c	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_flat_d	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	Forest\Plains_flat_e	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	28	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_ConnA	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\111_A	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_A_Oa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_A_Xa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_A_Ob	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_A_Xb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_A_Oc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_A_Xc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_A_Stairs	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\111_AC	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_AC_Oa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_AC_Xa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_AC_Oa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_A_Oa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\112_SABD	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_SABD_Oa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_SABD_Oa_Light	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_SABD_Xa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_SABD_Xa_Light	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_SABD_Ob	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_SABD_Ob_Light	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_SABD_Xb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_112_SABD_Xb_Light	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\111_AD	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_AD_Oa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_AD_Xa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_AD_Ob	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_AD_Xb	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\Bint_111_AD_Oc	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\BWallBCa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\BWallBCIa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\BWallCa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	BuildInterior\BWallNa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Crypts	31	-1	-1
+"3,60,0,-1,0,-1"	Abyss\player_spawn_a	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\player_spawn_b	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_X	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_Xa	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_Xb	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_Xc	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_I	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_I_ramp_C	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_Ia	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_Ib	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_Ic	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_T	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_T_ramp_I	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_Ta	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_Tb	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_connect	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_I	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_I_cap	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_Ia	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_Ib	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_Ic	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_Tc	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_C	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\flat_1x	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\flat_2x	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\flat_2xa	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\flat_2xb	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\flat_2xc	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\flat_4x	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\room_1x	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\spiral	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\spiral_T	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\spiral_B	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\blockout	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_C	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_C_cap	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_Ca	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_Ca_cap	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_Ca_cap_A	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_Cb	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\ramp_Cc	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_cap	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_capA	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_end_A	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_end_B	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\path_end_C	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,60,0,-1,0,-1"	Abyss\flat_2xd	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	Abyss	30	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\door	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\core	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\coreA	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\coreB	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\coreC	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\cap	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\capA	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\capB	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\capC	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\wing	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\wingA	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\wingB	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\wingC	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\end	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\endA	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\endB	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\endC	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\end_Portal	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\stairL	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\stairLa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\stairR	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\stairRa	0	1	0	0	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,60,0,-1,0,-1"	City\Treasury\base	0	1	0	1	0	0	0	0	0	0	0	0	0	0	0	0	cathedral	16	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,48,30,-1,0,-1"		0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0		-1	-1	-1
+"3,60,0,-1,0,-1"	City\Park\cemetery_entrance_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	City\Park\cemetery1x1a	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	City\Park\cemetery_edge_A	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	City\Park\cemetery_edge_inA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	City\Park\cemetery_edge_outA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	City\Park\cemetery_inA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1
+"3,60,0,-1,0,-1"	City\Park\cemetery_sideA	1	1	1	0	0	0	0	0	0	0	0	0	0	0	0	0	HG_Outdoor	9	-1	-1

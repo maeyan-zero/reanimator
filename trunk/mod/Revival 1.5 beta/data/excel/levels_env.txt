@@ -1,0 +1,107 @@
+LEVELS_ENV	name	undefined	fileName
+"3,63,0,-1,0,-1"	Act1 inside	85	Act1_inside
+"3,63,0,-1,0,-1"	Act1 inside tubes	85	Act1_inside_tubes
+"3,63,0,-1,0,-1"	Act1 outside	85	Act1_outside
+"3,63,0,-1,0,-1"	Act2 inside	85	Act2_inside
+"3,63,0,-1,0,-1"	Act2 inside tubes	85	Act2_inside_tubes
+"3,63,0,-1,0,-1"	Act2 inside sewers	85	Act2_insidesewers
+"3,63,0,-1,0,-1"	Act2 outside	85	Act2_outside
+"3,63,0,-1,0,-1"	Death inside	85	Death_inside
+"3,63,0,-1,0,-1"	Death inside close	85	Death_insideclose
+"3,63,0,-1,0,-1"	Death outside	85	Death_outside
+"3,63,0,-1,0,-1"	Act3 inside	85	Act3_inside
+"3,63,0,-1,0,-1"	Act3 inside tubes	85	Act3_inside_tubes
+"3,63,0,-1,0,-1"	Act3 inside close	85	Act3_insideclose
+"3,63,0,-1,0,-1"	Act3 outside	85	Act3_outside
+"3,63,0,-1,0,-1"	Act3 outsideclose	85	Act3_outsideclose
+"3,63,0,-1,0,-1"	Act4 inside	85	Act4_inside
+"3,63,0,-1,0,-1"	Act4 inside close	85	Act4_insideclose
+"3,63,0,-1,0,-1"	Act4 crypts	85	Act4_crypts
+"3,63,0,-1,0,-1"	Act4 outside	85	Act4_outside
+"3,63,0,-1,0,-1"	Act5 Catacombs	85	Act5_catacombs
+"3,63,0,-1,0,-1"	Act5 inside	85	Act5_inside
+"3,63,0,-1,0,-1"	Act5 inside tubes	85	Act5_inside_tubes
+"3,63,0,-1,0,-1"	Act5 inside close	85	Act5_insideclose
+"3,63,0,-1,0,-1"	Act5 outside	85	Act5_outside
+"3,63,0,-1,0,-1"	Act5B inside	85	Act5B_inside
+"3,63,0,-1,0,-1"	Act5B outside	85	Act5B_outside
+"3,63,0,-1,0,-1"	Act5C outside	85	Act5_outside_Far
+"3,63,0,-1,0,-1"	StPaulsB	1	StPaulsB
+"3,63,0,-1,0,-1"	Hell_bossA	85	Hell_bossA
+"3,63,0,-1,0,-1"	Hell_bossB	85	Hell_bossB
+"3,63,0,-1,0,-1"	Hell_bossC	85	Hell_bossC
+"3,63,0,-1,0,-1"	pitboss_arena	85	pitboss_arena
+"3,63,0,-1,0,-1"	Station Holborn	63	_HB
+"3,63,0,-1,0,-1"	Station Covent Garden	63	_CG
+"3,63,0,-1,0,-1"	Station Charing Cross	63	_CC
+"3,63,0,-1,0,-1"	Station Temple	63	_TM
+"3,63,0,-1,0,-1"	Station Liverpool	63	_LP
+"3,63,0,-1,0,-1"	Station St. Paul's	63	_SP
+"3,63,0,-1,0,-1"	Station Leicester Square	63	_LS
+"3,63,0,-1,0,-1"	Station Oxford Circus	63	_OC
+"3,63,0,-1,0,-1"	Templar Base	35	_TemplarBase
+"3,63,0,-1,0,-1"	Destroyed Station	0	Destroyed
+"3,63,0,-1,0,-1"	Foetid Tunnels Stormy	2	Stormy
+"3,63,0,-1,0,-1"	Foetid Tunnels Shulgoth	2	Shulgoths_Carnage
+"3,63,0,-1,0,-1"	Foetid Tunnels MiniRooms	2	mini_rooms_drlg
+"3,63,0,-1,0,-1"	Foetid Tunnels Dark	2	Room_Dark
+"3,63,0,-1,0,-1"	Foetid Tunnels Holborn	2	Holborn_Route
+"3,63,0,-1,0,-1"	Foetid Tunnels Tutorial	2	tutorial
+"3,63,0,-1,0,-1"	Industrial	4	Industrial
+"3,63,0,-1,0,-1"	Sewers Stormy	8	Stormy
+"3,63,0,-1,0,-1"	Sewers Sewer	8	Sewer
+"3,63,0,-1,0,-1"	City Night	1	_Tutorial_night
+"3,63,0,-1,0,-1"	City Rare	1	_MiniCityRare
+"3,63,0,-1,0,-1"	City Gray Clouds	1	_GrayClouds
+"3,63,0,-1,0,-1"	City Midnight	1	_Midnight
+"3,63,0,-1,0,-1"	City Fog Dark	1	_Fog_Dark
+"3,63,0,-1,0,-1"	City Stars Boulevard	1	_StarsBoulevardCity
+"3,63,0,-1,0,-1"	City Stars	1	_Stars
+"3,63,0,-1,0,-1"	City Green Clouds	1	_GreenClouds
+"3,63,0,-1,0,-1"	Chocolate Park	16	_ChocolatePark
+"3,63,0,-1,0,-1"	City Covent Garden	1	_CoventGarden
+"3,63,0,-1,0,-1"	City CGM	1	_CGM
+"3,63,0,-1,0,-1"	City Bloomsbury	1	_Bloomsbury
+"3,63,0,-1,0,-1"	City St. Paul's	1	_StPauls
+"3,63,0,-1,0,-1"	River	24	Stormy_Blue
+"3,63,0,-1,0,-1"	Hell Tower	22	Hell_Tower
+"3,63,0,-1,0,-1"	Hell Dungeon	23	HellDungeon
+"3,63,0,-1,0,-1"	Hell	54	_Hell
+"3,63,0,-1,0,-1"	Truth Knowledge	29	TRK
+"3,63,0,-1,0,-1"	Truth Knowledge Clean	29	TRKB
+"3,63,0,-1,0,-1"	Truth Leadership Clean	29	TRLB
+"3,63,0,-1,0,-1"	Truth Beauty Clean	29	TRBB
+"3,63,0,-1,0,-1"	Truth Hope Clean	29	TRHB
+"3,63,0,-1,0,-1"	Truth Brotherhood Clean	29	TRBRB
+"3,63,0,-1,0,-1"	Crypts	34	Crypts
+"3,63,0,-1,0,-1"	CryptsB	34	CryptsB
+"3,63,0,-1,0,-1"	CryptsC	34	CryptsC
+"3,63,0,-1,0,-1"	CryptsD	34	CryptsD
+"3,63,0,-1,0,-1"	Caves	31	Caves
+"3,63,0,-1,0,-1"	Catacombs	37	Catacombs
+"3,63,0,-1,0,-1"	Catacombsb	37	Catacombsb
+"3,63,0,-1,0,-1"	Catacombsd	37	Catacombsd
+"3,63,0,-1,0,-1"	Necropolis 2	37	Catacombs2
+"3,63,0,-1,0,-1"	Necropolis 3	37	Catacombs3
+"3,63,0,-1,0,-1"	Necropolis 4	37	Catacombs4
+"3,63,0,-1,0,-1"	Necropolis 5	37	Catacombs5
+"3,63,0,-1,0,-1"	Exospector Interior	38	ExospectorInt
+"3,63,0,-1,0,-1"	Tower of London	30	TowerOfLondon
+"3,63,0,-1,0,-1"	Woods Yellow	85	Ongoing_A012Y
+"3,63,0,-1,0,-1"	Woods Green	85	Ongoing_A012Gr
+"3,63,0,-1,0,-1"	Character Create	1	_CharacterCreation
+"3,63,0,-1,0,-1"	Town Portal	32	_TownPortal
+"3,63,0,-1,0,-1"	SoundField	9	Stormy
+"3,63,0,-1,0,-1"	SoundField2	10	Stormy
+"3,63,0,-1,0,-1"	Tube B	5	Stormy
+"3,63,0,-1,0,-1"	Stonehenge	86	Stonehenge
+"3,63,0,-1,0,-1"	Ongoing Act1 Close	85	Ongoing_A01C
+"3,63,0,-1,0,-1"	Ongoing Act1 Far	85	Ongoing_A01F
+"3,63,0,-1,0,-1"	Crypts_Ice	34	Crypts_Ice
+"3,63,0,-1,0,-1"	BuildInterior	88	BuildInterior
+"3,63,0,-1,0,-1"	Abyss	89	Abyss
+"3,63,0,-1,0,-1"	Desert	91	Desert
+"3,63,0,-1,0,-1"	PSquare	85	PSquare
+"3,63,0,-1,0,-1"	Treasury	1	Treasury
+"3,63,0,-1,0,-1"	BuildIntX inside	85	BuildIntX_inside
+"3,63,0,-1,0,-1"	DesertCave	94	DesertCave

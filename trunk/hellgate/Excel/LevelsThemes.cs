@@ -12,8 +12,14 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        Int32[] undefined;
+        public Int32 undefined1;
+        public Int32 undefined2;
+        public Int32 undefined3;
+        public Int32 undefined4;
+        public Int32 undefined5;
+        public Int32 undefined6;
+        public Int32 undefined7;
+        public Int32 undefined8;
         [ExcelOutput(IsBool = true)]
         public Int32 dontDisplayInEditor;
         [ExcelOutput(IsBool = true)]
