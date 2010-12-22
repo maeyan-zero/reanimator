@@ -51,40 +51,40 @@ namespace Revival
                 fileManager.LoadTableFiles();
                 
 
-                byte[] buffer = fileManager.DataFiles["SOUNDS"].ExportCSV();
-                return;
+                //byte[] buffer = fileManager.DataFiles["SOUNDS"].ExportCSV();
+                //return;
                 //File.WriteAllBytes(@"D:\levels_rules.txt", buffer);
 
-                //foreach (DataFile dataFile in fileManager.DataFiles.Values)
-                //{
-                //    if (dataFile.IsStringsFile) continue;
+                foreach (DataFile dataFile in fileManager.DataFiles.Values)
+                {
+                    //if (dataFile.IsStringsFile) continue;
 
-                //    Console.WriteLine(dataFile.FileName);
-                //    String dir = Path.GetDirectoryName(dataFile.FilePath);
-                //    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+                    Console.WriteLine(dataFile.FileName);
+                    String dir = Path.GetDirectoryName(dataFile.FilePath);
+                    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
 
-                //    byte[] ebuffer = dataFile.ExportCSV();
-                //    //for (int i = 0; i < 10; i++)
-                //    //{
-                //    //    Stopwatch stopwatch = new Stopwatch();
-                //    //    stopwatch.Start();
-                //    //    ebuffer = dataFile.ExportCSV();
-                //    //    stopwatch.Stop();
-                //    //    Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
-                //    //}
-                    
-                //    File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
-                //}
+                    byte[] ebuffer = dataFile.ExportCSV();
+                    //for (int i = 0; i < 10; i++)
+                    //{
+                    //    Stopwatch stopwatch = new Stopwatch();
+                    //    stopwatch.Start();
+                    //    ebuffer = dataFile.ExportCSV();
+                    //    stopwatch.Stop();
+                    //    Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
+                    //}
+
+                    File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
+                }
 
 
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-                const String pathExcel = @"data\excel\items.txt";
-                byte[] excelBytes = File.ReadAllBytes(pathExcel);
-                ExcelFile excelFile = new ExcelFile(excelBytes, pathExcel);
-                byte[] excelCsvBytes = excelFile.ToByteArray();
-                stopwatch.Stop();
-                Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
+                //Stopwatch stopwatch = new Stopwatch();
+                //stopwatch.Start();
+                //const String pathExcel = @"data\excel\items.txt";
+                //byte[] excelBytes = File.ReadAllBytes(pathExcel);
+                //ExcelFile excelFile = new ExcelFile(excelBytes, pathExcel);
+                //byte[] excelCsvBytes = excelFile.ToByteArray();
+                //stopwatch.Stop();
+                //Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
                 
 
                 //const String path = @"data\excel\strings\english\strings_revival.xls.uni2";
@@ -112,6 +112,25 @@ namespace Revival
                 //    CookStringFiles(stringFilesToCook.ToArray());
                 //}
 
+                return;
+            }
+            #endregion
+
+            #region Model conversion testing
+            if (false)
+            {
+                fileManager = new FileManager(@"D:\Games\Hellgate London");
+                string filePath = @"data\units\items\weapons\agitator\low\agitator_mesh.am";
+                byte[] buffer = fileManager.GetFileBytes(filePath);
+                if (buffer == null)
+                {
+                    Console.WriteLine("Could not read specified file.");
+                    return;
+                }
+                string modelId = Path.GetFileNameWithoutExtension(filePath);
+                Model model = new Model(buffer, modelId);
+                buffer = model.ExportCollada();
+                File.WriteAllBytes(modelId + ".xml", buffer);
                 return;
             }
             #endregion
@@ -215,8 +234,10 @@ namespace Revival
             // Search for Txt files to cook
             if (doSearchCd && doCookTxt)
             {
-                excelFilesToCook.AddRange(SearchForExcelFiles(currentDir));
-                stringFilesToCook.AddRange(SearchForStringFiles(currentDir));
+                string[] result = SearchForExcelFiles(currentDir);
+                if (result != null) excelFilesToCook.AddRange(result);
+                result = SearchForStringFiles(currentDir);
+                if (result != null) stringFilesToCook.AddRange(result);
             }
 
             // Search for Xml files to cook

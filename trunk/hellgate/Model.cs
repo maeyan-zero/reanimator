@@ -3,45 +3,29 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Revival.Common;
+using System.Xml;
 
-namespace Revival
+namespace Hellgate
 {
     public class Model
     {
-        Int32 type;
-        Int32 minorVersion;
-        Int32 majorVersion;
-        Table[] fileStructure;
-
-        List<Index> _index;
-        List<Table> _indexMap;
-        List<Geometry> _geometry;
-#pragma warning disable 169
-        Reserved _reserved;
-#pragma warning restore 169
-        Footer _footer;
-
+        private Int32 type;
+        private Int32 minorVersion;
+        private Int32 majorVersion;
+        private Table[] fileStructure;
+        private List<Index> _index;
+        private List<Table> _indexMap; // Used by .m/player type models only
+        private List<Geometry> _geometry;
+        //private Reserved _reserved;
+        private Footer _footer;
         public string Id { get; private set; }
 
-        public List<Index> index
+        public Model(byte[] buffer, string modelId)
         {
-            get
-            {
-                return _index;
-            }
-        }
+            MemoryStream memStream = new MemoryStream(buffer);
+            BinaryReader binReader = new BinaryReader(memStream);
 
-        public List<Geometry> geometry
-        {
-            get
-            {
-                return _geometry;
-            }
-        }
-
-        public Model(BinaryReader binReader)
-        {
-            Id = "model";
+            Id = modelId;
             _index = new List<Index>();
             _indexMap = new List<Table>();
             _geometry = new List<Geometry>();
@@ -74,7 +58,197 @@ namespace Revival
             }
             binReader.ReadBytes(8); // this should bring to EOF
             binReader.Close();
+            memStream.Close();
         }
+
+        public byte[] ExportCollada()
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            XmlDeclaration xmlDeclaration = xmlDocument.CreateXmlDeclaration("1.0", "UTF-8", String.Empty);
+            xmlDocument.AppendChild(xmlDeclaration);
+
+            XmlElement colladaElement = xmlDocument.CreateElement("COLLADA");
+            colladaElement.SetAttribute("xmlns", "http://www.collada.org/2005/11/COLLADASchema");
+            colladaElement.SetAttribute("version", "1.4.1");
+            xmlDocument.AppendChild(colladaElement);
+            //
+            // Asset Section, contains meta data
+            //
+            XmlElement assetElement = xmlDocument.CreateElement("asset");
+            colladaElement.AppendChild(assetElement);
+                XmlElement contributorElement = xmlDocument.CreateElement("contributor");
+                assetElement.AppendChild(contributorElement);
+                    XmlElement authorElement = xmlDocument.CreateElement("author");
+                    authorElement.InnerText = "Flagship Studios";
+                    contributorElement.AppendChild(authorElement);
+                    XmlElement authoringToolElement = xmlDocument.CreateElement("authoring_tool");
+                    authoringToolElement.InnerText = "Autodesk 3ds Max 8";
+                    contributorElement.AppendChild(authoringToolElement);
+                    XmlElement commentsElement = xmlDocument.CreateElement("comments");
+                    commentsElement.InnerText = "Ripped via Reanimator - Hellgate London conversion tools. www.hellgateaus.net";
+                    contributorElement.AppendChild(commentsElement);
+                XmlElement createdElement = xmlDocument.CreateElement("created");
+                createdElement.InnerText = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                assetElement.AppendChild(createdElement);
+                XmlElement modifiedElement = xmlDocument.CreateElement("modified");
+                modifiedElement.InnerText = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+                assetElement.AppendChild(modifiedElement);
+                XmlElement unitElement = xmlDocument.CreateElement("unit");
+                unitElement.SetAttribute("meter", "0.01");
+                unitElement.SetAttribute("name", "centimeter");
+                assetElement.AppendChild(unitElement);
+                XmlElement upAxisElement = xmlDocument.CreateElement("up_axis");
+                upAxisElement.InnerText = "Y_UP";
+                assetElement.AppendChild(upAxisElement);
+            //
+            // Geometry Sections
+            //
+            XmlElement libraryGeometriesElement = xmlDocument.CreateElement("library_geometries");
+            colladaElement.AppendChild(libraryGeometriesElement);
+            XmlElement geometryElement = xmlDocument.CreateElement("geometry");
+            string geoLib = String.Format("{0}-lib", Id);
+            geometryElement.SetAttribute("id", geoLib);
+            geometryElement.SetAttribute("name", Id);
+            libraryGeometriesElement.AppendChild(geometryElement);
+            XmlElement meshElement = xmlDocument.CreateElement("mesh");
+            geometryElement.AppendChild(meshElement);
+
+            for (int i = 0; i < _geometry.Count; i++)
+            {
+                XmlElement meshSource = CreateColladaSource(xmlDocument, _geometry[i].position, "positions" + i.ToString());
+                meshElement.AppendChild(meshSource);
+                meshSource = CreateColladaSource(xmlDocument, _geometry[i].normal, "normals" + i.ToString());
+                meshElement.AppendChild(meshSource);
+                meshSource = CreateColladaSource(xmlDocument, _geometry[i].uv, "uvmap" + i.ToString());
+                meshElement.AppendChild(meshSource);
+
+                // Verticies
+                XmlElement verticiesElement = xmlDocument.CreateElement("vertices");
+                verticiesElement.SetAttribute("id", String.Format("{0}-{1}-{2}", Id, "lib", "verticies" + i.ToString()));
+                meshSource.AppendChild(verticiesElement);
+
+                XmlElement inputElement = xmlDocument.CreateElement("input");
+                inputElement.SetAttribute("semantic", "POSITION");
+                inputElement.SetAttribute("source", String.Format("#{0}-{1}-{2}", Id, "lib", "positions" + i.ToString()));
+                verticiesElement.AppendChild(inputElement);
+
+                // Triangles
+                XmlElement trianglesElement = xmlDocument.CreateElement("triangles");
+                trianglesElement.SetAttribute("count", _index[i].triangle.Length.ToString());
+                trianglesElement.SetAttribute("material", "default");
+                meshSource.AppendChild(trianglesElement);
+
+                inputElement = xmlDocument.CreateElement("input");
+                inputElement.SetAttribute("offset", "0");
+                inputElement.SetAttribute("semantic", "VERTEX");
+                inputElement.SetAttribute("source", String.Format("#{0}-{1}-{2}", Id, "lib", "verticies" + i.ToString()));
+                trianglesElement.AppendChild(inputElement);
+
+                inputElement = xmlDocument.CreateElement("input");
+                inputElement.SetAttribute("offset", "0");
+                inputElement.SetAttribute("semantic", "NORMAL");
+                inputElement.SetAttribute("source", String.Format("#{0}-{1}-{2}", Id, "lib", "normals" + i.ToString()));
+                trianglesElement.AppendChild(inputElement);
+
+                inputElement = xmlDocument.CreateElement("input");
+                inputElement.SetAttribute("offset", "0");
+                inputElement.SetAttribute("semantic", "TEXCOORD");
+                inputElement.SetAttribute("source", String.Format("#{0}-{1}-{2}", Id, "lib", "uvmap" + i.ToString()));
+                trianglesElement.AppendChild(inputElement);
+
+                XmlElement pElement = xmlDocument.CreateElement("p");
+                StringWriter pString = new StringWriter();
+                foreach (Triangle t in _index[0].triangle)
+                {
+                    pString.Write(t.ToString());
+                }
+                pElement.InnerText = pString.ToString();
+                trianglesElement.AppendChild(pElement);
+            }
+
+            //
+            // Material
+            //
+            for (int i = 0; i < _index.Count; i++)
+            {
+
+            }
+
+
+
+            MemoryStream ms = new MemoryStream();
+            xmlDocument.Save(ms);
+            byte[] arr = ms.ToArray();
+            ms.Close();
+
+            return arr;
+        }
+
+        private XmlElement CreateColladaSource<T>(XmlDocument xmlDocument, T[] source, string desc)
+        {
+            int positions = 0;
+            string[] coordDesc = null;
+            StringWriter elementsList = new StringWriter();
+
+            if (typeof(T) == typeof(Coordinate))
+            {
+                positions = Coordinate.positions;
+                coordDesc = Coordinate.coordDesc;
+                Coordinate[] cSource = source as Coordinate[];
+                foreach (Coordinate coordinate in cSource)
+                {
+                    elementsList.Write(coordinate.ToString());
+                }
+            }
+
+            if (typeof(T) == typeof(UV))
+            {
+                positions = UV.positions;
+                coordDesc = UV.coordDesc;
+                UV[] uSource = source as UV[];
+                foreach (UV coordinate in uSource)
+                {
+                    elementsList.Write(coordinate.ToString());
+                }
+            }
+            
+            int coordinates = source.Length;
+            int totalCoordinates = positions * coordinates;
+
+            XmlElement meshElement = xmlDocument.CreateElement("source");
+            string sourceDesc = String.Format("{0}-{1}-{2}", Id, "lib", desc);
+            meshElement.SetAttribute("id", sourceDesc);
+            meshElement.SetAttribute("name", desc);
+
+            XmlElement meshArrayElement = xmlDocument.CreateElement("float_array");
+            string sourceDescArray = String.Format("{0}-array", sourceDesc);
+            meshArrayElement.SetAttribute("id", sourceDescArray);
+            string noElements = totalCoordinates.ToString();
+            meshArrayElement.SetAttribute("count", noElements);
+            meshArrayElement.InnerText = elementsList.ToString();
+            meshElement.AppendChild(meshArrayElement);
+
+            XmlElement techniqueCommonElement = xmlDocument.CreateElement("technique_common");
+            meshElement.AppendChild(techniqueCommonElement);
+            XmlElement accessorElement = xmlDocument.CreateElement("accessor");
+            accessorElement.SetAttribute("count", coordinates.ToString());
+            string sourceRef = String.Format("#{0}", sourceDescArray);
+            accessorElement.SetAttribute("source", sourceRef);
+            accessorElement.SetAttribute("stride", positions.ToString());
+            techniqueCommonElement.AppendChild(accessorElement);
+
+            for (int i = 0; i < positions; i++)
+            {
+                XmlElement paramElement = xmlDocument.CreateElement("param");
+                paramElement.SetAttribute("name", coordDesc[i]);
+                paramElement.SetAttribute("type", "float");
+                techniqueCommonElement.AppendChild(paramElement);
+            }
+
+            return meshElement;
+        }
+
+
 
         // 1ST TIER FUNCTIONS
 
@@ -115,7 +289,10 @@ namespace Revival
             getGeometry.unknown04 = binReader.ReadUInt32();
             getGeometry.position = GetCoordinates(binReader, getGeometry.detail);
             getGeometry.uv = GetUVs(binReader);
-            if (getGeometry.detail != Detail.Simple) getGeometry.normal = GetCoordinates(binReader, getGeometry.detail);
+            if (getGeometry.detail != Detail.Simple)
+            {
+                getGeometry.normal = GetCoordinates(binReader, getGeometry.detail);
+            }
             return getGeometry;
         }
 
@@ -280,7 +457,6 @@ namespace Revival
         //
         // INTERNAL STRUCTURES:
         //
-
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class Table
         {
@@ -295,18 +471,25 @@ namespace Revival
             public UInt16 coordinate01 { get; set; }
             public UInt16 coordinate02 { get; set; }
             public UInt16 coordinate03 { get; set; }
+
+            new public String ToString()
+            {
+                return String.Format("{0} {1} {2} ", coordinate01.ToString(), coordinate02.ToString(), coordinate03.ToString());
+            }
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class Coordinate
         {
+            public static Int32 positions = 3;
+            public static String[] coordDesc = new string[] { "X", "Y", "Z" };
             public Single positionX { get; set; }
             public Single positionY { get; set; }
             public Single positionZ { get; set; }
 
             new public String ToString()
             {
-                return positionX.ToString() + " " + positionY.ToString() + " " + positionZ.ToString();
+                return String.Format("{0} {1} {2} ", positionX.ToString(), positionY.ToString(), positionZ.ToString());
             }
         }
 
@@ -322,12 +505,14 @@ namespace Revival
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public class UV
         {
+            public static Int32 positions = 2;
+            public static String[] coordDesc = new string[] { "S", "T" };
             public Single s { get; set; }
             public Single t { get; set; }
 
             new public string ToString()
             {
-                return s.ToString() + " " + t.ToString();
+                return String.Format("{0} {1} ", s.ToString() , t.ToString());
             }
         }
     }
