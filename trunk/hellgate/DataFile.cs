@@ -33,7 +33,7 @@ namespace Hellgate
         public abstract bool ParseDataTable(DataTable dataTable);
         public abstract byte[] ToByteArray();
         public abstract byte[] ExportCSV();
-        public abstract byte[] ExportSQL();
+        //public abstract byte[] ExportSQL();
 
         public class DataFileAttributes
         {
