@@ -237,7 +237,7 @@ namespace Reanimator.Forms
             //    tabControl1.TabPages.RemoveByKey("stringsPage");
             //}
 
-            if (!ExcelFile.Debug || _excelFile.IndexSortArray == null)
+            if (!ExcelFile.EnableDebug || _excelFile.IndexSortArray == null)
             {
                 tabControl1.TabPages.RemoveByKey("indexArraysPage");
                 return;

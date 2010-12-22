@@ -41,6 +41,7 @@ namespace Reanimator.Forms
             txtEditor_TextBox.Text = Config.TxtEditor;
             xmlEditor_TextBox.Text = Config.XmlEditor;
             csvEditor_TextBox.Text = Config.CsvEditor;
+            tcv4_CheckBox.Checked = Config.LoadTCv4DataFiles;
         }
 
         private void _GameClientPath_Button_Click(object sender, EventArgs e)

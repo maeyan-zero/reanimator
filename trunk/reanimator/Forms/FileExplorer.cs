@@ -1137,5 +1137,45 @@ namespace Reanimator.Forms
                     e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            foreach (IndexFile.FileEntry fileEntry in _fileManager.FileEntries.Values)
+            {
+                IndexFile indexFile = fileEntry.Index;
+
+
+                // don't patch out string files or sound/movie files
+                if (IndexFile.NoPatchExt.Any(ext => fileEntry.FileNameString.EndsWith(ext)))
+                {
+                    if ((indexFile.FileNameWithoutExtension == "sp_hellgate_1.10.180.3416_1.0.86.4580" ||
+                        indexFile.FileNameWithoutExtension == "sp_hellgate_localized_1.10.180.3416_1.0.86.4580") &&
+                        (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                        fileEntry.FileNameString.EndsWith(ExcelFile.Extension)))
+                    {
+                        indexFile.PatchOutFile(fileEntry);
+                    }
+
+                    continue;
+                }
+
+
+                indexFile.PatchOutFile(fileEntry);
+
+                if (fileEntry.Siblings == null) continue;
+
+                foreach (IndexFile.FileEntry siblingEntry in fileEntry.Siblings)
+                {
+                    siblingEntry.Index.PatchOutFile(siblingEntry);
+                }
+            }
+
+            foreach (IndexFile indexFile in _fileManager.IndexFiles)
+            {
+                byte[] indexBytes = indexFile.ToByteArray();
+                Crypt.Encrypt(indexBytes);
+                File.WriteAllBytes(indexFile.FilePath, indexBytes);
+            }
+        }
     }
 }
