@@ -2,7 +2,7 @@
 <revival>
 	<modification id="sp_hellgate_1337_1.5.0">
 		<release>Hellgate: Revival SP Modification</release>
-		<version>1.5b beta</version>
+		<version>1.5b1 beta</version>
 		<author>Maeyan, Malachor, Alex2069, Kite</author>
 		<website>http://www.hellgateaus.net/</website>
 		<email>maeyan.zero@gmail.com</email>
@@ -19,7 +19,7 @@ As always with the beta releases, don't get too attached to your characters beca
 
 As always, thank you for your support and patience. This has taken us a really long time, and there is still so much to do. But for now, please enjoy!
 
-Maeyan
+Maeyan, Kite, Malachor &amp; Alex2069
 
 1.5b Patch Notes
 -----------------
@@ -170,6 +170,7 @@ Known Issues
 				<path>data\ai\turret.xml.cooked</path>
 				
 				<!--<path>data\background\*</path>-->
+				<path>data\background\abyss\*</path>
 				<path>data\background\buildinterior\*</path>
 				<path>data\background\catacombs\*</path>
 				<path>data\background\caves\*</path>

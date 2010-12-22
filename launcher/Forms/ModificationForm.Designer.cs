@@ -66,7 +66,7 @@
             this.toolStripStatusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 550);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(453, 22);
+            this.statusStrip.Size = new System.Drawing.Size(547, 22);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -89,7 +89,7 @@
             this.optionalCheckedListBox.FormattingEnabled = true;
             this.optionalCheckedListBox.Location = new System.Drawing.Point(3, 3);
             this.optionalCheckedListBox.Name = "optionalCheckedListBox";
-            this.optionalCheckedListBox.Size = new System.Drawing.Size(205, 135);
+            this.optionalCheckedListBox.Size = new System.Drawing.Size(252, 135);
             this.optionalCheckedListBox.TabIndex = 1;
             this.optionalCheckedListBox.SelectedIndexChanged += new System.EventHandler(this.optionalCheckedListBox_SelectedIndexChanged);
             // 
@@ -101,7 +101,7 @@
             this.releaseNotesTextBox.Name = "releaseNotesTextBox";
             this.releaseNotesTextBox.ReadOnly = true;
             this.releaseNotesTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.releaseNotesTextBox.Size = new System.Drawing.Size(423, 204);
+            this.releaseNotesTextBox.Size = new System.Drawing.Size(517, 204);
             this.releaseNotesTextBox.TabIndex = 4;
             // 
             // groupBox2
@@ -112,7 +112,7 @@
             this.groupBox2.Controls.Add(this.tableLayoutPanel2);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(429, 92);
+            this.groupBox2.Size = new System.Drawing.Size(523, 92);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Modification";
@@ -147,7 +147,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(344, 73);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(438, 73);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // titleLabel
@@ -238,7 +238,7 @@
             this.groupBox3.Controls.Add(this.releaseNotesTextBox);
             this.groupBox3.Location = new System.Drawing.Point(12, 110);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(429, 223);
+            this.groupBox3.Size = new System.Drawing.Size(523, 223);
             this.groupBox3.TabIndex = 8;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Release Notes";
@@ -250,7 +250,7 @@
             this.groupBox4.Controls.Add(this.tableLayoutPanel1);
             this.groupBox4.Location = new System.Drawing.Point(12, 339);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(429, 160);
+            this.groupBox4.Size = new System.Drawing.Size(523, 160);
             this.groupBox4.TabIndex = 9;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Components";
@@ -267,18 +267,18 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(423, 141);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 141F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(517, 141);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // optionalTextBox
             // 
             this.optionalTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.optionalTextBox.Location = new System.Drawing.Point(214, 3);
+            this.optionalTextBox.Location = new System.Drawing.Point(261, 3);
             this.optionalTextBox.Multiline = true;
             this.optionalTextBox.Name = "optionalTextBox";
             this.optionalTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.optionalTextBox.Size = new System.Drawing.Size(206, 135);
+            this.optionalTextBox.Size = new System.Drawing.Size(253, 135);
             this.optionalTextBox.TabIndex = 2;
             // 
             // installButton
@@ -288,7 +288,7 @@
             this.installButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.installButton.Location = new System.Drawing.Point(12, 505);
             this.installButton.Name = "installButton";
-            this.installButton.Size = new System.Drawing.Size(429, 34);
+            this.installButton.Size = new System.Drawing.Size(523, 34);
             this.installButton.TabIndex = 10;
             this.installButton.Text = "Install";
             this.installButton.UseVisualStyleBackColor = true;
@@ -302,7 +302,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(453, 572);
+            this.ClientSize = new System.Drawing.Size(547, 572);
             this.Controls.Add(this.installButton);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);

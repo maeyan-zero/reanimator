@@ -325,7 +325,6 @@
       <DependentUpon>WayPointControl.cs</DependentUpon>
     </Compile>
     <Compile Include="IMdiChildBase.cs" />
-    <Compile Include="Model.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlDefinitions\AIBehaviorDefinition.cs" />

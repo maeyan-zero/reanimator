@@ -33,6 +33,7 @@ namespace Hellgate
         public abstract bool ParseDataTable(DataTable dataTable);
         public abstract byte[] ToByteArray();
         public abstract byte[] ExportCSV();
+        public abstract byte[] ExportSQL();
 
         public class DataFileAttributes
         {
@@ -213,11 +214,11 @@ namespace Hellgate
             {"_TCv4_INVENTORY", new DataFileAttributes {IsTCv4 = true, RowType = typeof(InventoryTCv4)}},
             {"_TCv4_ITEM_LOOKS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemLooksTCv4)}},
             {"_TCv4_ITEM_QUALITY", new DataFileAttributes {IsTCv4 = true, FileName = "ITEMQUALITY", RowType = typeof(ItemQualityTCv4)}},
-            {"_TCv4_ITEMS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
-            {"_TCv4_OBJECTS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
-            {"_TCv4_MONSTERS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
-            {"_TCv4_PLAYERS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
-            {"_TCv4_MISSILES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4)}},
+            {"_TCv4_ITEMS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4), HasExtended = true}},
+            {"_TCv4_OBJECTS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4), HasExtended = true}},
+            {"_TCv4_MONSTERS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4), HasExtended = true}},
+            {"_TCv4_PLAYERS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4), HasExtended = true}},
+            {"_TCv4_MISSILES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemsTCv4), HasExtended = true}},
             {"_TCv4_MATERIALS_COLLISION", new DataFileAttributes {IsTCv4 = true, RowType = typeof(MaterialsCollisionTCv4)}},
             {"_TCv4_LEVEL", new DataFileAttributes {IsTCv4 = true, FileName = "LEVELS", RowType = typeof(LevelsTCv4)}},
             {"_TCv4_LEVEL_SCALING", new DataFileAttributes {IsTCv4 = true, FileName = "LEVELSCALING", RowType = typeof(LevelScalingTCv4)}},
@@ -225,7 +226,7 @@ namespace Hellgate
             {"_TCv4_PLAYERLEVELS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(PlayerLevelsTCv4)}},
             {"_TCv4_PROPS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(LevelsRoomIndexTCv4)}},
             {"_TCv4_RECIPES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(RecipesTCv4)}},
-            {"_TCv4_SKILLS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(SkillsTCv4)}},
+            {"_TCv4_SKILLS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(SkillsTCv4), HasScriptTable = true}},
             {"_TCv4_SKILLEVENTTYPES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(SkillEventTypesTCv4)}},
             {"_TCv4_SKILLTABS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(SkillTabsTCv4)}},
             {"_TCv4_SOUND_MIXSTATES", new DataFileAttributes {IsTCv4 = true, FileName = "SOUNDMIXSTATES", RowType = typeof(SoundMixStatesTCv4)}},
