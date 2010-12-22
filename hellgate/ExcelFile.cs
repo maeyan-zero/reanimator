@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -24,7 +23,7 @@ namespace Hellgate
         private byte[][] _extendedBuffer;
         private StringCollection _secondaryStrings;
         private List<ExcelScript> _rowScripts;
-        public List<Int32[]> IndexSortArray;
+        public List<Int32[]> IndexSortArray; // is only available/set when ExcelFile.ExcelDebug = true
 
         private ExcelHeader _excelFileHeader = new ExcelHeader
         {
@@ -39,27 +38,6 @@ namespace Hellgate
         };
         #endregion
 
-
-        public ExcelFile(String filePath)
-        {
-            Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
-
-            IsExcelFile = true;
-
-            StringId = _GetStringId(filePath, false);
-            if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
-
-            Rows = new List<Object>();
-            Attributes = DataFileMap[StringId];
-        }
-
-        public void ConvertType(ExcelFile excelFile, IEnumerable<Object> newRows)
-        {
-            Attributes = excelFile.Attributes;
-            _excelFileHeader = excelFile._excelFileHeader;
-            Rows = new List<Object>(newRows);
-        }
-
         /// <summary>
         /// Creates a new ExcelFile object.
         /// </summary>
@@ -71,11 +49,11 @@ namespace Hellgate
             Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
 
             IsExcelFile = true;
-
             FilePath = filePath;
             StringId = _GetStringId(filePath, isTCv4);
             if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
 
+            // get the excel type attributes
             Attributes = DataFileMap[StringId];
             if (Attributes.IsEmpty)
             {
@@ -94,8 +72,21 @@ namespace Hellgate
             // CSV file
             if (_excelFileHeader.StructureID == 0)
             {
-                _excelFileHeader.StructureID = DataTables.Where(dt => dt.Key == StringId).FirstOrDefault().Value;
+                _excelFileHeader.StructureID = Attributes.StructureId;
             }
+        }
+
+        /// <summary>
+        /// Converts the Excel file to another Excel type, keeping all but the rows intact.
+        /// Used for TCv4 -> SP conversion.
+        /// </summary>
+        /// <param name="excelFile">An Excel object of type to convert to.</param>
+        /// <param name="newRows">The rows to replace the old.</param>
+        public void ConvertType(ExcelFile excelFile, IEnumerable<Object> newRows)
+        {
+            Attributes = excelFile.Attributes;
+            _excelFileHeader = excelFile._excelFileHeader;
+            Rows = new List<Object>(newRows);
         }
 
         /// <summary>
@@ -116,7 +107,7 @@ namespace Hellgate
             const byte delimiter = (byte)'\t';
             int stringBufferOffset = 0;
             int integerBufferOffset = 1;
-            bool isProperties = (StringId == "PROPERTIES");
+            bool isProperties = (StringId == "PROPERTIES" || StringId == "_TCv4_PROPERTIES");
 
             StringId = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(buffer, ref offset, delimiter), 0);
             StringId = StringId.Replace("\"", "");//in case strings embedded
@@ -369,13 +360,13 @@ namespace Hellgate
             int offset = 0;
 
             // File Header
-            if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
+            if (!(_CheckToken(buffer, ref offset, Token.cxeh))) return false;
             _excelFileHeader = FileTools.ByteArrayToStructure<ExcelHeader>(buffer, ref offset);
             //ExcelMap = GetTypeMap(StructureId);
             //if ((ExcelMap == null)) return false;
 
             // Strings Block
-            if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
+            if (!(_CheckToken(buffer, ref offset, Token.cxeh))) return false;
             int stringBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
             if (stringBufferOffset != 0)
             {
@@ -385,7 +376,7 @@ namespace Hellgate
             }
 
             // Dataset Block
-            if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
+            if (!(_CheckToken(buffer, ref offset, Token.cxeh))) return false;
             int rowCount = FileTools.ByteArrayToInt32(buffer, ref offset);
             Rows = new List<Object>(rowCount);
             for (int i = 0; i < rowCount; i++)
@@ -394,7 +385,7 @@ namespace Hellgate
             }
 
             // Primary Indice Block
-            if (!CheckToken(buffer, ref offset, Token.cxeh)) return false;
+            if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
             if (Attributes.HasExtended) // items, objects, missles, players
             {
                 _extendedBuffer = new byte[Count][];
@@ -415,7 +406,7 @@ namespace Hellgate
             }
 
             // Secondary String Block
-            if (!(CheckToken(buffer, offset, Token.cxeh)))
+            if (!(_CheckToken(buffer, offset, Token.cxeh)))
             {
                 int stringCount = FileTools.ByteArrayToInt32(buffer, ref offset);
                 if (stringCount != 0) _secondaryStrings = new StringCollection();
@@ -430,7 +421,7 @@ namespace Hellgate
             // Sorted Indices
             for (int i = 0; i < 4; i++)
             {
-                if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
+                if (!(_CheckToken(buffer, ref offset, Token.cxeh))) return false;
                 int count = FileTools.ByteArrayToInt32(buffer, ref offset);
 
                 if (EnableDebug)
@@ -445,24 +436,24 @@ namespace Hellgate
             }
 
             // rcsh, tysh, mysh, dneh blocks
-            if (!CheckToken(buffer, ref offset, Token.cxeh)) return false;
-            if (!CheckToken(buffer, offset, 0))
+            if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
+            if (!_CheckToken(buffer, offset, 0))
             {
-                if (!CheckToken(buffer, ref offset, Token.rcsh)) return false;
-                if (!CheckToken(buffer, ref offset, Token.RcshValue)) return false;
+                if (!_CheckToken(buffer, ref offset, Token.rcsh)) return false;
+                if (!_CheckToken(buffer, ref offset, Token.RcshValue)) return false;
 
-                if (!CheckToken(buffer, ref offset, Token.tysh)) return false;
-                if (!CheckToken(buffer, ref offset, Token.TyshValue)) return false;
+                if (!_CheckToken(buffer, ref offset, Token.tysh)) return false;
+                if (!_CheckToken(buffer, ref offset, Token.TyshValue)) return false;
 
                 if (Attributes.HasScriptTable && !_ParseScriptTable(buffer, ref offset)) return false;
 
-                if (!CheckToken(buffer, ref offset, Token.dneh)) return false;
-                if (!CheckToken(buffer, ref offset, Token.DnehValue)) return false;
+                if (!_CheckToken(buffer, ref offset, Token.dneh)) return false;
+                if (!_CheckToken(buffer, ref offset, Token.DnehValue)) return false;
             }
 
 
             // Integer Block
-            if ((CheckToken(buffer, ref offset, Token.cxeh)))
+            if ((_CheckToken(buffer, ref offset, Token.cxeh)))
             {
                 int integerBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
                 if (integerBufferOffset != 0)
@@ -476,9 +467,9 @@ namespace Hellgate
 
             // final data block; why is this not allocated? - no need to save? automatically generated when cooked?
             // -> automatically generated via CreateIndexBitRelations() method
-            if (!CheckToken(buffer, offset, 0))
+            if (!_CheckToken(buffer, offset, 0))
             {
-                if (!CheckToken(buffer, ref offset, Token.cxeh)) return false;
+                if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
 
                 int byteCount = FileTools.ByteArrayToInt32(buffer, ref offset);
                 int blockCount = FileTools.ByteArrayToInt32(buffer, ref offset);
@@ -807,7 +798,7 @@ namespace Hellgate
             if (Attributes.HasIndexBitRelations)
             {
                 int blockSize = (Count >> 5) + 1; // need 1 bit for every row; 32 bits per int - blockSize = no. of Int's
-                UInt32[,] indexBitRelations = CreateIndexBitRelations();
+                UInt32[,] indexBitRelations = _CreateIndexBitRelations();
                 byte[] relationsData = new byte[Count * blockSize * sizeof(UInt32)];
                 Buffer.BlockCopy(indexBitRelations, 0, relationsData, 0, relationsData.Length);
 
@@ -862,7 +853,7 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
             }
             // if properties we have the scripts to export as well
-            bool isProperties = (StringId == "PROPERTIES");
+            bool isProperties = (StringId == "PROPERTIES" || StringId == "_TCv4_PROPERTIES");
             if (isProperties)
             {
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("Script"));

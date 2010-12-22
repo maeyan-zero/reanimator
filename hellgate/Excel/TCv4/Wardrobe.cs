@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
+using TableHeader = Hellgate.ExcelFile.TableHeader;
 
 namespace Hellgate.Excel.TCv4
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class WardrobeTCv4
     {
-        ExcelFile.TableHeader header;
-
+        TableHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
@@ -62,8 +62,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 undefined5;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string attachBone;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
-        Int32[] undefined6;
+        public Int32 undefined6;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
+        Int32[] undefined7;
         public Int32 undefined_tcv4_1;
         public Int32 undefined_tcv4_2;
         public Int32 undefined_tcv4_3;

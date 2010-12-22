@@ -183,20 +183,10 @@ namespace Hellgate
                 FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.Extension) ||
                     (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) && fileEntry.RelativeFullPath.Contains(Language))))
             {
-                //if (MPVersion &&
-                //    // todo: crashing
-                //    (fileEntry.FileNameString.Contains("items.txt.cooked") ||
-                //    fileEntry.FileNameString.Contains("monsters.txt.cooked") ||
-                //    fileEntry.FileNameString.Contains("objects.txt.cooked") ||
-                //    fileEntry.FileNameString.Contains("players.txt.cooked") ||
-                //    fileEntry.FileNameString.Contains("missiles.txt.cooked") ||
-                //    fileEntry.FileNameString.Contains("sounds.txt.cooked") ||
-                //    fileEntry.FileNameString.Contains("skills.txt.cooked"))) continue;
-
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
                 //if (!fileEntry.FileNameString.Contains("sounds")) continue;
-                //if (fileEntry.FileNameString.Contains("skills"))
+                //if (fileEntry.FileNameString == "sounds.txt.cooked" && MPVersion)
                 //{
                 //    int bp = 0;
                 //}
@@ -330,6 +320,14 @@ namespace Hellgate
                                         else
                                         {
                                             byte[] recookedExcelBytes = csvExcel.ToByteArray();
+
+                                            UInt32 structureId = BitConverter.ToUInt32(fileBytes, 4);
+                                            UInt32 fromCSVStructureId = BitConverter.ToUInt32(recookedExcelBytes, 4);
+                                            if (structureId != fromCSVStructureId)
+                                            {
+                                                Console.WriteLine("Warning: Structure Id value do not match: " + structureId + " != " + fromCSVStructureId);
+                                            }
+
 
                                             int recookedLength = recookedExcelBytes.Length;
                                             if (excelFile.StringId == "SKILLS") recookedLength += 12; // 12 bytes in int ptr data not used/referenced at all and are removed/lost in bytes -> csv -> bytes
@@ -586,11 +584,29 @@ namespace Hellgate
             return true;
         }
 
+        /// <summary>
+        /// Extracts all Excel files to their \data\ locations.
+        /// Primarly a debug function.
+        /// </summary>
+        public void ExtractAllExcel()
+        {
+            foreach (FileEntry fileEntry in FileEntries.Values)
+            {
+                if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension)) continue;
+
+                byte[] fileBytes = GetFileBytes(fileEntry, true);
+                String filePath = Path.Combine(HellgatePath, fileEntry.RelativeFullPathWithoutPatch);
+                File.WriteAllBytes(filePath, fileBytes);
+            }
+        }
+
         #region IDisposable Members
+        /// <summary>
+        /// Disposes the Excel DataSet if created.
+        /// </summary>
         public void Dispose()
         {
-            if (!(XlsDataSet == null))
-                XlsDataSet.Dispose();
+            if (XlsDataSet != null) XlsDataSet.Dispose();
         }
         #endregion
     }
