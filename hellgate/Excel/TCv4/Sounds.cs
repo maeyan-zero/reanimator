@@ -187,7 +187,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 undefined28g;
         public float weight12;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public Int32[] undefined29;
+        Int32[] undefined29;
         public Int32 fileName13;
         public Int32 undefined30a;
         public Int32 undefined30b;
@@ -231,7 +231,7 @@ namespace Hellgate.Excel.TCv4
         public float centerSend;
         public float rearSend;
         public float sideSend;
-        public Int32 lfeSend;//lfe ?
+        public float lfeSend;//lfe ?
         public Int32 mixState;//idx
         public Int32 bus;
         public Int32 vcas1;//list
@@ -253,10 +253,6 @@ namespace Hellgate.Excel.TCv4
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined46;
         public Int32 adsr_tcv4;
-        public Int32 undefined2_tcv4;//these may not even be the new columns, but all of these undefined columns seem to be zero.
-        public Int32 undefined3_tcv4;
-        public Int32 undefined4_tcv4;
-        public Int32 undefined46d;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
         Int32[] undefined47;
 
