@@ -12,8 +12,8 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        public float undefined1;
-        public float undefined2;
+        public Int32 undefined1;
+        public Int32 undefined2;
         public float minVolume;
         public float maxVolume;
         public float silentChance;

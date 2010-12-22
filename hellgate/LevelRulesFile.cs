@@ -252,10 +252,9 @@ namespace Hellgate
         }
 
         /// <summary>
-        /// Parses and XML document and returns the serialized byte array.
+        /// Parses and XML document and initialises the class.
         /// </summary>
         /// <param name="xmlDocument">The XML Document to parse.</param>
-        /// <returns>The serialized byte array.</returns>
         public void ParseXmlDocument(XmlDocument xmlDocument)
         {
             XmlNodeReader xmlNodeReader = new XmlNodeReader(xmlDocument);
@@ -263,6 +262,10 @@ namespace Hellgate
             _xmlLevelRules = (XmlLevelRules) xmlSerializer.Deserialize(xmlNodeReader);
         }
 
+        /// <summary>
+        /// Generates a native file byte array of the object.
+        /// </summary>
+        /// <returns>The byte array to save.</returns>
         public override byte[] ToByteArray()
         {
             if (_xmlLevelRules == null) throw new Exceptions.NotInitializedException();
@@ -280,7 +283,7 @@ namespace Hellgate
             FileTools.WriteToBuffer(ref fileBytes, ref offset, RequiredVersion);
 
 
-            // level rules name
+            // level rules header
             offset += Marshal.SizeOf(typeof (LevelRulesHeader));
 
 

@@ -176,7 +176,7 @@ namespace Hellgate
         /// <returns>Returns true on success.</returns>
         public bool LoadTableFiles()
         {
-            ExcelFile.Debug = false;
+            ExcelFile.EnableDebug = false;
 
             // want excel files and strings files
             foreach (FileEntry fileEntry in
@@ -196,7 +196,7 @@ namespace Hellgate
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
                 //if (!fileEntry.FileNameString.Contains("sounds")) continue;
-                //if (fileEntry.FileNameString.Contains("treasure"))
+                //if (fileEntry.FileNameString.Contains("skills"))
                 //{
                 //    int bp = 0;
                 //}
@@ -218,7 +218,7 @@ namespace Hellgate
                     if (dataFile.Attributes.IsEmpty) continue;
 
                     #region ExcelFileDebug
-                    if (ExcelFile.Debug && !MPVersion && false)
+                    if (ExcelFile.EnableDebug && !MPVersion && false)
                     {
                         ExcelFile excelFile = (ExcelFile)dataFile;
                         //Console.WriteLine("Loading " + fileEntry.FileNameString);

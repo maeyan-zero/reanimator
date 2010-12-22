@@ -15,6 +15,8 @@ namespace Reanimator.Forms
             InitializeComponent();
 
             _fileManager = fileManager;
+
+            if (_fileManager == null || _fileManager.DataFiles.Count == 0) return;
             loadedTables_ListBox.DataSource = new BindingSource(_fileManager.DataFiles, null);
         }
 

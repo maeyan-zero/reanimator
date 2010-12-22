@@ -39,6 +39,27 @@ namespace Hellgate
         };
         #endregion
 
+
+        public ExcelFile(String filePath)
+        {
+            Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
+
+            IsExcelFile = true;
+
+            StringId = _GetStringId(filePath, false);
+            if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
+
+            Rows = new List<Object>();
+            Attributes = DataFileMap[StringId];
+        }
+
+        public void ConvertType(ExcelFile excelFile, IEnumerable<Object> newRows)
+        {
+            Attributes = excelFile.Attributes;
+            _excelFileHeader = excelFile._excelFileHeader;
+            Rows = new List<Object>(newRows);
+        }
+
         /// <summary>
         /// Creates a new ExcelFile object.
         /// </summary>
@@ -412,7 +433,7 @@ namespace Hellgate
                 if (!(CheckToken(buffer, ref offset, Token.cxeh))) return false;
                 int count = FileTools.ByteArrayToInt32(buffer, ref offset);
 
-                if (Debug)
+                if (EnableDebug)
                 {
                     if (IndexSortArray == null) IndexSortArray = new List<Int32[]>();
                     IndexSortArray.Add(FileTools.ByteArrayToInt32Array(buffer, ref offset, count));

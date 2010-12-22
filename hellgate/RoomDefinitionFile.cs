@@ -2,10 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using System.Xml.XPath;
 using Revival.Common;
 
 namespace Hellgate

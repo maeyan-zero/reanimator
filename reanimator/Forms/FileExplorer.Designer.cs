@@ -73,6 +73,7 @@
             this.loadingLocation_textBox = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.advancedCommands_tabPage = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.extractUncook_groupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.quickXml_button = new System.Windows.Forms.Button();
@@ -623,6 +624,7 @@
             // advancedCommands_tabPage
             // 
             this.advancedCommands_tabPage.BackColor = System.Drawing.SystemColors.Menu;
+            this.advancedCommands_tabPage.Controls.Add(this.button1);
             this.advancedCommands_tabPage.Controls.Add(this.extractUncook_groupBox);
             this.advancedCommands_tabPage.Location = new System.Drawing.Point(4, 22);
             this.advancedCommands_tabPage.Name = "advancedCommands_tabPage";
@@ -630,6 +632,16 @@
             this.advancedCommands_tabPage.Size = new System.Drawing.Size(829, 649);
             this.advancedCommands_tabPage.TabIndex = 1;
             this.advancedCommands_tabPage.Text = "Advanced Commands";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(61, 360);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(125, 54);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Patch out all files";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // extractUncook_groupBox
             // 
@@ -769,6 +781,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button quickXml_button;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button button1;
 
     }
 }

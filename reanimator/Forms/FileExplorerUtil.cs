@@ -448,11 +448,8 @@ namespace Reanimator.Forms
             if (!extractPatchArgs.PatchFiles) return true;
 
 
-            // don't patch out string files or music/movie files
-            if (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) ||
-                fileEntry.FileNameString.EndsWith(".ogg") ||
-                fileEntry.FileNameString.EndsWith(".mp2") ||
-                fileEntry.FileNameString.EndsWith(".bik")) return true;
+            // don't patch out string files or sound/movie files
+            if (IndexFile.NoPatchExt.Any(ext => fileEntry.FileNameString.EndsWith(ext))) return true;
 
 
             // if we're patching out the file, then change its bgColor and set its nodeObject state to backup
@@ -467,11 +464,10 @@ namespace Reanimator.Forms
                 foreach (IndexFile.FileEntry siblingFileEntry in fileEntry.Siblings)
                 {
                     IndexFile siblingIndex = siblingFileEntry.Index;
-
-                    siblingIndex.PatchOutFile(siblingFileEntry);
+                    bool wasPatchedOut = siblingIndex.PatchOutFile(siblingFileEntry);
 
                     indexFileKey = siblingIndex.FileNameWithoutExtension;
-                    if (!indexToWrite.ContainsKey(indexFileKey))
+                    if (wasPatchedOut && !indexToWrite.ContainsKey(indexFileKey))
                     {
                         indexToWrite.Add(indexFileKey, siblingIndex);
                     }

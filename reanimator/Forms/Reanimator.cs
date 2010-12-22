@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
@@ -32,6 +34,7 @@ namespace Reanimator.Forms
 
             if (true) return;
 
+            _ConvertTCv4ExcelToSP();
             //_LoadAllMLIFiles();
             //_LoadAllRooms();
             //_LoadAllLevelRules();
@@ -144,6 +147,177 @@ namespace Reanimator.Forms
 
         #region alexs_stuff
         //private TextWriter tw;
+
+        private static void _ConvertTCv4ExcelToSP()
+        {
+            return;
+
+            FileManager fileManager = new FileManager(Config.HglDir);
+            FileManager fileManagerTCv4 = new FileManager(Config.HglDir, true);
+
+            fileManager.LoadTableFiles();
+            fileManagerTCv4.LoadTableFiles();
+
+            if (fileManager.DataFiles.Count == 0)
+            {
+                Console.WriteLine("Error: No Excel files loaded!");
+                return;
+            }
+            if (fileManagerTCv4.DataFiles.Count == 0)
+            {
+                Console.WriteLine("Error: No TCv4 Excel files loaded!");
+                return;
+            }
+
+            Dictionary<String, ObjectDelegator> objectDelegators = new Dictionary<String, ObjectDelegator>();
+            foreach (ExcelFile excelFile in fileManager.DataFiles.Values.Where(dataFile => dataFile.IsExcelFile))
+            {
+                Console.WriteLine("Converting Excel table " + excelFile.StringId + "...");
+
+                // ensure we have a TCv4 version loaded
+                String stringIdTCv4 = "_TCv4_" + excelFile.StringId;
+                ExcelFile excelFileTCv4 = (ExcelFile)fileManagerTCv4.GetDataFile(stringIdTCv4);
+                if (excelFileTCv4 == null)
+                {
+                    Console.WriteLine("Error: TCv4 Excel file not found: " + stringIdTCv4);
+                    continue;
+                }
+
+
+                // genereal type-init stuffs; get our object delegators
+                ObjectDelegator excelDelegator;
+                ObjectDelegator excelDelegatorTCv4;
+                Type rowType = excelFile.Attributes.RowType;
+                Type rowTypeTCv4 = excelFileTCv4.Attributes.RowType;
+                FieldInfo[] fieldInfos = rowType.GetFields();
+                FieldInfo[] fieldInfosTCv4 = rowTypeTCv4.GetFields();
+
+                
+                // need to copy row headers (private field) as well
+                FieldInfo rowHeaderField = rowType.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                FieldInfo rowHeaderFieldTCv4 = rowTypeTCv4.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                Array.Resize(ref fieldInfos, fieldInfos.Length + 1);
+                Array.Resize(ref fieldInfosTCv4, fieldInfosTCv4.Length + 1);
+                fieldInfos[fieldInfos.Length - 1] = rowHeaderField;
+                fieldInfosTCv4[fieldInfosTCv4.Length - 1] = rowHeaderFieldTCv4;
+
+
+                // create delegates
+                if (!objectDelegators.TryGetValue(excelFile.StringId, out excelDelegator))
+                {
+                    excelDelegator = new ObjectDelegator(fieldInfos, new[] { "GetValue", "SetValue" });
+                    objectDelegators.Add(excelFile.StringId, excelDelegator);
+                }
+                if (!objectDelegators.TryGetValue(stringIdTCv4, out excelDelegatorTCv4))
+                {
+                    excelDelegatorTCv4 = new ObjectDelegator(fieldInfosTCv4, "GetValue");
+                    objectDelegators.Add(stringIdTCv4, excelDelegatorTCv4);
+                }
+
+
+                // debug: ensure we have same columns
+                bool hasSameFields = fieldInfos.All(fieldInfo => excelDelegatorTCv4.ContainsGetFieldDelegate(fieldInfo.Name));
+                if (!hasSameFields)
+                {
+                    Console.WriteLine("Error: The Excel types do not have the same fields!");
+                    continue;
+                }
+
+
+                // todo: _TCv4_AFFIX removed SecondaryStrings and put them into a table called AFFIX_GROUPS
+
+                // begin conversion process
+                Object[] rows = new Object[excelFileTCv4.Rows.Count];
+                bool failed = false;
+                foreach (FieldInfo fieldInfo in fieldInfos)
+                {
+                    ObjectDelegator.FieldGetValueDelegate getTCv4Value = excelDelegatorTCv4.GetFieldGetDelegate(fieldInfo.Name);
+                    ObjectDelegator.FieldSetValueDelegate setValue = excelDelegator.GetFieldSetDelegate(fieldInfo.Name);
+                    ExcelFile.OutputAttribute outputAttribute = ExcelFile.GetExcelOutputAttribute(fieldInfo);
+
+                    int col = -1;
+                    foreach (Object rowTCv4 in excelFileTCv4.Rows)
+                    {
+                        if (rows[++col] == null) rows[col] = Activator.CreateInstance(excelFile.Attributes.RowType);
+                        Object value = getTCv4Value(rowTCv4);
+
+                        if (outputAttribute == null)
+                        {
+                            setValue(rows[col], value);
+                            continue;
+                        }
+
+                        if (outputAttribute.IsBitmask)
+                        {
+                            if (value.GetType().BaseType != typeof(Enum))
+                            {
+                                Console.WriteLine("Error: IsBitmask is not of type Enum: " + fieldInfo.Name);
+                                failed = true;
+                                break;
+                            }
+
+                            Type spBitMask = fieldInfo.FieldType;
+                            Type tcBitMask = value.GetType();
+                            uint currentMask = (uint)value;
+                            uint convertedMask = 0;
+
+                            for (int i = 0; i < 32; i++)
+                            {
+                                uint testBit = (uint)1 << i;
+                                if ((currentMask & testBit) == 0) continue;
+
+                                String bitString = Enum.GetName(tcBitMask, testBit);
+                                if (bitString == null) continue;
+
+                                if (Enum.IsDefined(spBitMask, bitString))
+                                {
+                                    convertedMask += (uint)Enum.Parse(spBitMask, bitString);
+                                }
+                            }
+
+                            value = convertedMask;
+                        }
+                        else if (outputAttribute.IsIntOffset)
+                        {
+                            int bp = 0;
+                        }
+
+                        setValue(rows[col], value);
+                    }
+
+                    if (failed) break;
+                }
+                if (failed) continue;
+
+
+                // finish conversion process by "changing" the TCv4 type
+                excelFileTCv4.ConvertType(excelFile, rows);
+                byte[] convertedBytes = excelFileTCv4.ToByteArray();
+                String writePath = Path.Combine(Config.HglDir, excelFile.FilePath + ".conv");
+                File.WriteAllBytes(writePath, convertedBytes);
+
+                int bp2 = 0;
+            }
+
+            int bp1 = 0;
+        }
+
+        private static ObjectDelegator _GetExcelDelegator(DataFile excelFile, IDictionary<String, ObjectDelegator> objectDelegators)
+        {
+            ObjectDelegator excelDelegator;
+
+            if (!objectDelegators.TryGetValue(excelFile.StringId, out excelDelegator))
+            {
+                Type rowType = excelFile.Attributes.RowType;
+                FieldInfo[] fieldInfos = rowType.GetFields();
+
+                excelDelegator = new ObjectDelegator(fieldInfos, new[] { "GetValue", "SetValue" });
+
+                objectDelegators.Add(excelFile.StringId, excelDelegator);
+            }
+
+            return excelDelegator;
+        }
 
         private static void _LoadAllMLIFiles()
         {
@@ -629,7 +803,7 @@ namespace Reanimator.Forms
             {
                 xmlCookedFile.ParseFileBytes(xmlCookedBytes);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show("Failed to uncook xml file!\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

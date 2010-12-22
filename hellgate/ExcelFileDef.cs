@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Hellgate
 {
     public partial class ExcelFile
     {
-        public static bool Debug;
+        public static bool EnableDebug;
         public const String FolderPath = "excel\\";
         public const String Extension = ".txt.cooked";
         public const String ExtensionDeserialised = ".txt";
@@ -580,6 +581,10 @@ namespace Hellgate
             int paramLength;
             switch (parameter.TypeId)
             {
+                case 0x38: // 56 // "nPowerChange" from TCv4 Skills
+                    paramLength = 4;
+                    break;
+                    
                 case 0x39: // 57 // oldstats, x, sel, dmgtype, ?
                     paramLength = 4;
                     break;
@@ -593,6 +598,7 @@ namespace Hellgate
                     break;
 
                 default:
+                    Debug.Assert(false, "Unknown MYSH TypeId = " + parameter.TypeId);
                     return false;
             }
             parameter.TypeValues = FileTools.ByteArrayToInt32Array(data, ref offset, paramLength);
@@ -653,7 +659,19 @@ namespace Hellgate
                     endIndex = startIndex + 10;
                     break;
 
+                case "_TCv4_STATES":
+                    // states has 10x columns to check from 3 (zero based index)
+                    startIndex = 3;
+                    endIndex = startIndex + 10;
+                    break;
+
                 case "UNITTYPES":
+                    // unittypes has 16x columns to check from 2
+                    startIndex = 2;
+                    endIndex = startIndex + 15;
+                    break;
+
+                case "_TCv4_UNITTYPES":
                     // unittypes has 16x columns to check from 2
                     startIndex = 2;
                     endIndex = startIndex + 15;
@@ -785,7 +803,7 @@ namespace Hellgate
             //}
 
             int[][] sortedIndexArrays = new int[4][];
-            FieldInfo headerField = DataType.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo rowHeaderField = DataType.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (FieldInfo fieldInfo in DataType.GetFields())
             {
                 OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
@@ -801,10 +819,10 @@ namespace Hellgate
                 if (attribute.IsStringOffset)
                 {
                     var sortedList = from element in Rows
-                                     let tableHeader = (TableHeader)headerField.GetValue(element)
-                                     where (tableHeader.Unknown1 != 0x02 &&
-                                            (tableHeader.Unknown2 >= 0x38 && tableHeader.Unknown2 <= 0x3F || tableHeader.Unknown2 == 0x01) &&
-                                            (tableHeader.VersionMajor == 0 || tableHeader.VersionMajor == 10))
+                                     let rowHeader = (TableHeader)rowHeaderField.GetValue(element)
+                                     where (rowHeader.Unknown1 != 0x02 &&
+                                            (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
+                                            (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
                                      group element by fieldInfo.GetValue(element) into groupedElements
                                      let elementFirst = groupedElements.First()
                                      orderby ReadStringTable((int)fieldInfo.GetValue(elementFirst))
@@ -816,10 +834,10 @@ namespace Hellgate
                 else if (attribute.IsSecondaryString)
                 {
                     var sortedList = from element in Rows
-                                     let tableHeader = (TableHeader)headerField.GetValue(element)
-                                     where (tableHeader.Unknown1 != 0x02 &&
-                                            (tableHeader.Unknown2 >= 0x38 && tableHeader.Unknown2 <= 0x3F || tableHeader.Unknown2 == 0x01) &&
-                                            (tableHeader.VersionMajor == 0 || tableHeader.VersionMajor == 10)) && fieldInfo.GetValue(element).ToString() != "-1"
+                                     let rowHeader = (TableHeader)rowHeaderField.GetValue(element)
+                                     where (rowHeader.Unknown1 != 0x02 &&
+                                            (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
+                                            (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10)) && fieldInfo.GetValue(element).ToString() != "-1"
                                      group element by fieldInfo.GetValue(element) into groupedElements
                                      let elementFirst = groupedElements.First()
                                      orderby fieldInfo.GetValue(elementFirst)
@@ -832,10 +850,10 @@ namespace Hellgate
                 {
                     FieldInfo sortBy2 = DataType.GetField(attribute.SecondarySortColumn);
                     var sortedList = from element in Rows
-                                     let tableHeader = (TableHeader)headerField.GetValue(element)
-                                     where (tableHeader.Unknown1 != 0x02 &&
-                                            (tableHeader.Unknown2 >= 0x38 && tableHeader.Unknown2 <= 0x3F || tableHeader.Unknown2 == 0x01) &&
-                                            (tableHeader.VersionMajor == 0 || tableHeader.VersionMajor == 10))
+                                     let rowHeader = (TableHeader)rowHeaderField.GetValue(element)
+                                     where (rowHeader.Unknown1 != 0x02 &&
+                                            (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
+                                            (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
                                      orderby fieldInfo.GetValue(element), sortBy2.GetValue(element)
                                      select Rows.IndexOf(element);
                     sortedIndexArrays[pos] = sortedList.ToArray();
@@ -845,10 +863,10 @@ namespace Hellgate
                 else
                 {
                     var sortedList = from element in Rows
-                                     let tableHeader = (TableHeader)headerField.GetValue(element)
-                                     where (tableHeader.Unknown1 != 0x02 &&
-                                            (tableHeader.Unknown2 >= 0x38 && tableHeader.Unknown2 <= 0x3F || tableHeader.Unknown2 == 0x01) &&
-                                            (tableHeader.VersionMajor == 0 || tableHeader.VersionMajor == 10))
+                                     let rowHeader = (TableHeader)rowHeaderField.GetValue(element)
+                                     where (rowHeader.Unknown1 != 0x02 &&
+                                            (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
+                                            (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
                                      group element by fieldInfo.GetValue(element) into groupedElements
                                      let elementFirst = groupedElements.First()
                                      orderby fieldInfo.GetValue(elementFirst)
@@ -859,8 +877,6 @@ namespace Hellgate
                 // Remove precedence hack
                 // UndoPrecedenceHack(fieldInfo);
             }
-
-
 
             return sortedIndexArrays;
         }
