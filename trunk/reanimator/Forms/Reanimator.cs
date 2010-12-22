@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
@@ -24,7 +25,7 @@ namespace Reanimator.Forms
         private readonly List<TableForm> _openTableForms = new List<TableForm>();
         private readonly List<ExcelTableForm> _openExcelTableForms = new List<ExcelTableForm>();
         private List<HeroEditor> _openHeroEditorForms = new List<HeroEditor>();
-        private bool alexInstaLoad = false;
+        private const bool AlexInstaLoad = false;
 
         public Reanimator()
         {
@@ -34,18 +35,18 @@ namespace Reanimator.Forms
 
             if (true) return;
 
-            _ConvertTCv4ExcelToSP();
+            _DoCookTest();
+            //_ConvertTCv4ExcelToSP();
             //_LoadAllMLIFiles();
             //_LoadAllRooms();
             //_LoadAllLevelRules();
             //return;
 
-
-            LevelRulesEditor levelRulesEditor = new LevelRulesEditor(@"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl")
-            {
-                MdiParent = this
-            };
-            levelRulesEditor.Show();
+            //LevelRulesEditor levelRulesEditor = new LevelRulesEditor(@"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl")
+            //{
+            //    MdiParent = this
+            //};
+            //levelRulesEditor.Show(););
             return;
 
             //
@@ -87,72 +88,66 @@ namespace Reanimator.Forms
             //    {
             //        int bp = 0;
             //    }
-
-
-            //    UInt32 strHash = Crypt.GetStringHash(subStr);
-
-            //    if (strHash == 2790358698) // "bReadOnly"
-            //    {
-            //        int bp = 0;
-            //    }
-
-            //    if (strHash == 2263477051) // "iSpawnClassExecuteXTimes"
-            //    {
-            //        int bp = 0;
-            //    }
-
-            //    if (strHash == 3199925438) // unknown
-            //    {
-            //        int bp = 0;
-            //    }
-
-            //    if (strHash == 3788988200) // "INVENTORY_VIEW_INFO"
-            //    {
-            //        int bp = 0;
-            //    }
             //}
 
-
-
-
-            //String str2 = "achievements.txt.cooked";
-            //String str2 = @"data\background\catacombs\ct_connb_path.xml.cooked";
-            //String str2 = @"data\excel\"; //3188197601 0xBE0808E1
-            //UInt32 strHash2 = Crypt.GetStringHash(str2);
-
-            //tw = new StreamWriter(@"C:\asdf.txt");
-            //filestream = new FileStream(@"C:\asdf.txt", FileMode.Create, FileAccess.ReadWrite);
-            //_fileManager = new FileManager(Config.HglDir, Config.LoadTCv4DataFiles);
-            //_fileManager.LoadTableFiles();
-            //XmlCookedFile.Initialize(_fileManager);
-
             //_UncookAllXml();
-
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\consumable\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\destructible\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\cabalist\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\hunter\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\monster\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\proc\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\quest\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\templar\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\weapon\melee\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\skills\");
-            //_DoFolder(@"D:\Games\Hellgate London\data\ai\");
-            //tw.Close();
-            // this.Close();
             #endregion
         }
 
         #region alexs_stuff
-        //private TextWriter tw;
+
+        private void _DoCookTest()
+        {
+            const String exePath = @"D:\Games\Hellgate London\SP_x64\hellgate_sp_dx9_x64.exe - Shortcut";
+
+            FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.ExtractAllExcel();
+
+            return;
+            int i = 0;
+            foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
+            {
+                if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension)) continue;
+
+                byte[] fileBytes = fileManager.GetFileBytes(fileEntry, true);
+                Debug.Assert(fileBytes != null);
+                String filePath = Path.Combine(Config.HglDir, fileEntry.RelativeFullPathWithoutPatch);
+
+                ExcelFile excelFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
+                if (excelFile.Attributes.IsEmpty) continue;
+
+                if (i == 6) break;
+                Console.WriteLine("Cooking file: " + fileEntry.RelativeFullPathWithoutPatch);
+
+                byte[] csvBytes = excelFile.ExportCSV();
+                File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);
+                ExcelFile excelFileCSV = new ExcelFile(csvBytes, fileEntry.RelativeFullPathWithoutPatch);
+
+                byte[] recookedBytes = excelFileCSV.ToByteArray();
+
+                if (excelFile.StringId == "GLOBAL_STRING")
+                {
+                    ExcelFile temp = new ExcelFile(recookedBytes, fileEntry.RelativeFullPathWithoutPatch);
+                    int bp1 = 0;
+                }
+
+                
+                File.WriteAllBytes(filePath + "2", recookedBytes);
+                i++;
+            }
+
+            int bp = 0;
+        }
 
         private static void _ConvertTCv4ExcelToSP()
         {
-            return;
+            //return;
 
             FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.ExtractAllExcel();
+
+            return;
+
             FileManager fileManagerTCv4 = new FileManager(Config.HglDir, true);
 
             fileManager.LoadTableFiles();
@@ -172,6 +167,12 @@ namespace Reanimator.Forms
             Dictionary<String, ObjectDelegator> objectDelegators = new Dictionary<String, ObjectDelegator>();
             foreach (ExcelFile excelFile in fileManager.DataFiles.Values.Where(dataFile => dataFile.IsExcelFile))
             {
+                if (excelFile.Attributes.RowType == typeof(Hellgate.Excel.Items) ||
+                    excelFile.Attributes.RowType == typeof(Hellgate.Excel.Properties))
+                {
+                    continue;
+                }
+
                 Console.WriteLine("Converting Excel table " + excelFile.StringId + "...");
 
                 // ensure we have a TCv4 version loaded
@@ -192,7 +193,7 @@ namespace Reanimator.Forms
                 FieldInfo[] fieldInfos = rowType.GetFields();
                 FieldInfo[] fieldInfosTCv4 = rowTypeTCv4.GetFields();
 
-                
+
                 // need to copy row headers (private field) as well
                 FieldInfo rowHeaderField = rowType.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 FieldInfo rowHeaderFieldTCv4 = rowTypeTCv4.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
@@ -225,6 +226,7 @@ namespace Reanimator.Forms
 
 
                 // todo: _TCv4_AFFIX removed SecondaryStrings and put them into a table called AFFIX_GROUPS
+                // todo: Ensure BitRelations for TCv4 UNITTYPES and STATES are correct
 
                 // begin conversion process
                 Object[] rows = new Object[excelFileTCv4.Rows.Count];
@@ -287,13 +289,17 @@ namespace Reanimator.Forms
 
                     if (failed) break;
                 }
-                if (failed) continue;
+                if (failed)
+                {
+                    Console.WriteLine("Error: Excel conversion failed: " + excelFile.StringId);
+                    continue;
+                }
 
 
                 // finish conversion process by "changing" the TCv4 type
                 excelFileTCv4.ConvertType(excelFile, rows);
                 byte[] convertedBytes = excelFileTCv4.ToByteArray();
-                String writePath = Path.Combine(Config.HglDir, excelFile.FilePath + ".conv");
+                String writePath = Path.Combine(Config.HglDir, excelFile.FilePath);
                 File.WriteAllBytes(writePath, convertedBytes);
 
                 int bp2 = 0;
@@ -1034,7 +1040,7 @@ namespace Reanimator.Forms
 
         private void _Reanimator_Load(object sender, EventArgs e)
         {
-            if (alexInstaLoad) return;
+            if (AlexInstaLoad) return;
 
             try
             {

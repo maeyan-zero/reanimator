@@ -41,6 +41,23 @@ namespace Hellgate
         private const UInt32 StringKey1 = 0x80000000;
         private const Int32 StringKey2 = 0x4C11DB7;
 
+        public static UInt32 GetStringHash(byte[] bytes, UInt32 baseHash)
+        {
+            if (bytes == null || bytes.Length == 0) return 0;
+            if (_needStringHash) GenerateStringHash();
+
+            UInt32 stringHash = baseHash;
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                UInt32 hashIndex = stringHash >> 0x18;
+                UInt32 hashSalt = stringHash << 0x08;
+                hashIndex ^= bytes[i];
+                stringHash = StringHash[hashIndex] ^ hashSalt;
+            }
+
+            return stringHash;
+        }
+
         public static UInt32 GetStringHash(String str)
         {
             if (String.IsNullOrEmpty(str)) return 0;
