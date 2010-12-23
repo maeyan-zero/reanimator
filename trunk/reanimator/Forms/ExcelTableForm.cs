@@ -63,22 +63,22 @@ namespace Reanimator.Forms
 
         private void UseDataView()
         {
-            String temp = tableData_DataGridView.DataMember;
+            String temp = _tableData_DataGridView.DataMember;
             DataTable dataTable = _fileManager.XlsDataSet.Tables[temp];
             _dataView = dataTable.DefaultView;
-            tableData_DataGridView.DataMember = null;
-            tableData_DataGridView.DataSource = _dataView;
+            _tableData_DataGridView.DataMember = null;
+            _tableData_DataGridView.DataSource = _dataView;
         }
 
         private void Init()
         {
             InitializeComponent();
 
-            tableData_DataGridView.DoubleBuffered(true);
-            tableData_DataGridView.EnableHeadersVisualStyles = false;
-            tableData_DataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
-            tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
-            tableData_DataGridView.DataMember = null;
+            _tableData_DataGridView.DoubleBuffered(true);
+            _tableData_DataGridView.EnableHeadersVisualStyles = false;
+            _tableData_DataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
+            _tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
+            _tableData_DataGridView.DataMember = null;
         }
 
         private void LoadTable(ProgressForm progress, Object var)
@@ -88,7 +88,7 @@ namespace Reanimator.Forms
 
 
             // table tab
-            tableData_DataGridView.SuspendLayout();
+            _tableData_DataGridView.SuspendLayout();
             _dataTable = _fileManager.LoadTable(dataFile, true);
             if (_dataTable == null)
             {
@@ -99,7 +99,7 @@ namespace Reanimator.Forms
             // need to manually populate columns due to fillweight = 100 by default (overflow crap; 655 * 100 > max int)
             if (_dataTable.Columns.Count > 655)
             {
-                tableData_DataGridView.AutoGenerateColumns = false;
+                _tableData_DataGridView.AutoGenerateColumns = false;
                 DataGridViewColumn[] columns = new DataGridViewColumn[_dataTable.Columns.Count];
 
                 int i = 0;
@@ -115,14 +115,14 @@ namespace Reanimator.Forms
                     columns[i++] = dataGridViewColumn;
                 }
 
-                tableData_DataGridView.Columns.AddRange(columns);
-                tableData_DataGridView.DataMember = _dataFile.StringId;
+                _tableData_DataGridView.Columns.AddRange(columns);
+                _tableData_DataGridView.DataMember = _dataFile.StringId;
             }
             else
             {
-                tableData_DataGridView.DataMember = _dataFile.IsStringsFile ? FileManager.StringsTableName : _dataFile.StringId;
+                _tableData_DataGridView.DataMember = _dataFile.IsStringsFile ? FileManager.StringsTableName : _dataFile.StringId;
             }
-            tableData_DataGridView.ResumeLayout();
+            _tableData_DataGridView.ResumeLayout();
 
             // todo: rewrite
             //// list view tab
@@ -374,7 +374,7 @@ namespace Reanimator.Forms
 
         public void SaveButton()
         {
-            DataTable table = ((DataSet)tableData_DataGridView.DataSource).Tables[tableData_DataGridView.DataMember];
+            DataTable table = ((DataSet)_tableData_DataGridView.DataSource).Tables[_tableData_DataGridView.DataMember];
             if (table == null) return;
 
             String saveType = _dataFile.IsExcelFile ? "Cooked Excel Tables" : "Cooked String Tables";
@@ -400,8 +400,8 @@ namespace Reanimator.Forms
             if (!_fileManager.XlsDataSet.Tables.Contains(_dataFile.StringId)) return;
 
             // remove from view or die, lol
-            tableData_DataGridView.DataMember = null;
-            tableData_DataGridView.DataSource = null;
+            _tableData_DataGridView.DataMember = null;
+            _tableData_DataGridView.DataSource = null;
             strings_ListBox.DataSource = null;
 
             // remove and reload
@@ -425,9 +425,9 @@ namespace Reanimator.Forms
 
             // todo: when adding new columns the window will need to be close/reopened to show the changes
             // the dataGridView is storing its own little cache or something - 
-            tableData_DataGridView.Refresh();
-            tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
-            tableData_DataGridView.DataMember = _dataFile.StringId;
+            _tableData_DataGridView.Refresh();
+            _tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
+            _tableData_DataGridView.DataMember = _dataFile.StringId;
             // todo: rewrite strings_ListBox.DataSource = _excelFile.SecondaryStrings;
             _dataChanged = true;
 
@@ -441,7 +441,7 @@ namespace Reanimator.Forms
             int tableView = 0;
             if (tabControl1.SelectedIndex != tableView) return;
 
-            DataGridViewSelectedRowCollection dataRows = tableData_DataGridView.SelectedRows;
+            DataGridViewSelectedRowCollection dataRows = _tableData_DataGridView.SelectedRows;
             foreach (DataGridViewRow dataRow in dataRows)
             {
                 DataRow copiedRow = (dataRow.DataBoundItem as DataRowView).Row;
@@ -459,7 +459,7 @@ namespace Reanimator.Forms
 
             using (StringWriter sw = new StringWriter())
             {
-                DataGridViewSelectedRowCollection dataRows = tableData_DataGridView.SelectedRows;
+                DataGridViewSelectedRowCollection dataRows = _tableData_DataGridView.SelectedRows;
                 sw.Write("<file id=\"" + _dataTable.TableName + "\">\n");
                 foreach (DataGridViewRow dataRow in dataRows)
                 {
@@ -499,8 +499,8 @@ namespace Reanimator.Forms
                 if (_excelFile.ParseCSV(buffer) == true)
                 {
                     _dataTable = _fileManager.LoadTable(_excelFile, true);
-                    tableData_DataGridView.DataSource = _dataTable;
-                    tableData_DataGridView.Refresh();
+                    _tableData_DataGridView.DataSource = _dataTable;
+                    _tableData_DataGridView.Refresh();
                 }
                 else
                 {
@@ -545,6 +545,13 @@ namespace Reanimator.Forms
                 MessageBox.Show("Error parsing dataTable. Contact developer.");
                 return;
             }
+        }
+
+        private void _TableData_DataGridView_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.C || !e.Control) return;
+
+            Clipboard.SetDataObject(_tableData_DataGridView.GetClipboardContent());
         }
     }
 
