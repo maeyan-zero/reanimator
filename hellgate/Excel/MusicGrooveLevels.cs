@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class MusicGrooveLevels
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//seems to be by name, but with an empty entry first.
@@ -24,8 +24,10 @@ namespace Hellgate.Excel
         public Int32 mixState;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 isAction;//bool
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        Int32[] playStingerSets;
+        public Int32 playStingerSets1;
+        public Int32 playStingerSets2;
+        public Int32 playStingerSets3;
+        public Int32 playStingerSets4;
         public Int32 noCollide;//idx
         public Int32 forParticles;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 13)]

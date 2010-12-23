@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class QuestTemplate
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
@@ -16,8 +16,8 @@ namespace Hellgate.Excel
         [ExcelOutput(IsBool = true)]
         public Int32 updatePartyKillOnSetup; //boolean
         [ExcelOutput(IsBool = true)]
-        public Int32 removeOnJoinGame; //boolean
-        public Int32 undefined1;
+        Int32 removeOnJoinGame; //boolean // is always 0
+        Int32 undefined1; // is always 0
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string initFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]

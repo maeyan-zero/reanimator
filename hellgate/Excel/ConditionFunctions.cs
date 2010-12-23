@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class ConditionFunctions
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
@@ -16,8 +16,14 @@ namespace Hellgate.Excel
         public string function;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] undefined1;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        Int32[] undefinedBool;
+        [ExcelOutput(IsBool = true)]
+        public Int32 undefinedBool1;
+        [ExcelOutput(IsBool = true)]
+        public Int32 undefinedBool2;
+        [ExcelOutput(IsBool = true)]
+        public Int32 undefinedBool3;
+        [ExcelOutput(IsBool = true)]
+        public Int32 undefinedBool4;
         [ExcelOutput(IsBool = true)]
         public Int32 usesMonsterClass;
         [ExcelOutput(IsBool = true)]

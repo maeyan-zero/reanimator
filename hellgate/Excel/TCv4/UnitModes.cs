@@ -7,7 +7,7 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class UnitModesTCv4
     {
-        ExcelFile.TableHeader header;
+        ExcelFile.RowHeader header;
         [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 mode;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]

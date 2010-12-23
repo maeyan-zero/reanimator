@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class PlayerLevels
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "level")]
         public Int32 unitType;//idx
         public Int32 level;

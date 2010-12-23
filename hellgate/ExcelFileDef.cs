@@ -370,7 +370,7 @@ namespace Hellgate
         };
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public struct TableHeader
+        public struct RowHeader
         {
             public Int32 Unknown1;
             public Int32 Unknown2;
@@ -394,6 +394,8 @@ namespace Hellgate
             public string TableStringId { get; set; }
             public int SortColumnOrder { get; set; }
             public string SecondarySortColumn { get; set; }
+            public Object ConstantValue { get; set; }
+            public bool DebugIgnoreConstantCheck { get; set; }
         }
 
         private abstract class Token
@@ -803,7 +805,7 @@ namespace Hellgate
                 if (attribute.IsStringOffset)
                 {
                     var sortedList = from element in Rows
-                                     let rowHeader = (TableHeader)rowHeaderField.GetValue(element)
+                                     let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
                                      where (rowHeader.Unknown1 != 0x02 &&
                                             (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
                                             (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
@@ -818,7 +820,7 @@ namespace Hellgate
                 else if (attribute.IsSecondaryString)
                 {
                     var sortedList = from element in Rows
-                                     let rowHeader = (TableHeader)rowHeaderField.GetValue(element)
+                                     let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
                                      where (rowHeader.Unknown1 != 0x02 &&
                                             (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
                                             (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10)) && fieldInfo.GetValue(element).ToString() != "-1"
@@ -834,7 +836,7 @@ namespace Hellgate
                 {
                     FieldInfo sortBy2 = DataType.GetField(attribute.SecondarySortColumn);
                     var sortedList = from element in Rows
-                                     let rowHeader = (TableHeader)rowHeaderField.GetValue(element)
+                                     let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
                                      where (rowHeader.Unknown1 != 0x02 &&
                                             (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
                                             (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
@@ -847,7 +849,7 @@ namespace Hellgate
                 else
                 {
                     var sortedList = from element in Rows
-                                     let rowHeader = (TableHeader)rowHeaderField.GetValue(element)
+                                     let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
                                      where (rowHeader.Unknown1 != 0x02 &&
                                             (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
                                             (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))

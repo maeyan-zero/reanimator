@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class ItemLevels
     {
-        TableHeader header;
+        RowHeader header;
         public Int32 level;
         public Int32 baseDamageMultiplyer;
         public Int32 armor;

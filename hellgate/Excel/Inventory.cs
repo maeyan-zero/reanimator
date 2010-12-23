@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class Inventory
     {
-        TableHeader header;
+        RowHeader header;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string description;
         [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "inventoryType")]

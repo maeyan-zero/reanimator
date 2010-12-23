@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class DamageEffects
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
@@ -24,15 +24,15 @@ namespace Hellgate.Excel
         [ExcelOutput(IsIntOffset = true)]
         public Int32 missileStats;
         public Int32 invulnerableState;//idx
-        Int32 attackersProhibitingState;//idx
-        Int32 defendersProhibitingState;//idx
-        Int32 attackerRequiresState;//idx
-        Int32 defenderRequiresState;//idx
+        public Int32 attackersProhibitingState;//idx
+        public Int32 defendersProhibitingState;//idx
+        public Int32 attackerRequiresState;//idx
+        public Int32 defenderRequiresState;//idx
         public Int32 sfxState;//idx
         public Int32 missileToAttach;//idx
         public Int32 fieldMissile;//idx
         public Int32 executeSkill;//idx
-        Int32 executeSkillOnTarget;//idx
+        public Int32 executeSkillOnTarget;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 noRollIfParentDmgTypeSuccess;
         [ExcelOutput(IsBool = true)]

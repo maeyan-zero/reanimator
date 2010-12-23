@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class RecipeLists
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string recipeList;
@@ -22,10 +22,13 @@ namespace Hellgate.Excel
         public Int32 recipes6;
         public Int32 recipes7;
         public Int32 recipes8;
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 recipes9;
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 recipes10;
-        [ExcelOutput(IsBool = true)]
+        [ExcelOutput(IsBool = true, DebugIgnoreConstantCheck = true)]
         public Int32 randomlySelectable;//bool
-        public Int32 randomSelectWeight;
+        [ExcelOutput(IsBool = true, DebugIgnoreConstantCheck = true)]
+        public Int32 randomSelectWeight;//bool
     }
 }

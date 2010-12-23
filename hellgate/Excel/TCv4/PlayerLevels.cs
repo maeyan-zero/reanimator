@@ -7,7 +7,7 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class PlayerLevelsTCv4
     {
-        ExcelFile.TableHeader header;
+        ExcelFile.RowHeader header;
 
         public Int32 unitType;//idx
         public Int32 level;

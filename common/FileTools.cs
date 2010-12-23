@@ -916,5 +916,13 @@ namespace Revival.Common
             String[] array = source.Cast<object>().Where(n => n != null).Select(n => n.ToString()).ToArray();
             return String.Join(separator, array);
         }
+
+        public static void InitArray<T>(T[] arr, T val)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = val;
+            }
+        }
     }
 }

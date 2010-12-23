@@ -7,7 +7,7 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class InventoryTCv4
     {
-        ExcelFile.TableHeader header;
+        ExcelFile.RowHeader header;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string description;

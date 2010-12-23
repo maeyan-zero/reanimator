@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class LevelScaling
     {
-        TableHeader header;
+        RowHeader header;
         public Int32 levelDiff;
         public Int32 PlayerAttackMonsterDmg;
         public Int32 PlayerAttackMonsterExp;

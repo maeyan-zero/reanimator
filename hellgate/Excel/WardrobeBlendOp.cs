@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class WardrobeBlendOp
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
@@ -24,19 +24,22 @@ namespace Hellgate.Excel
         public Int32 removeParts6;
         public Int32 removeParts7;
         public Int32 removeParts8;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        Int32[] removePartsUnused;
+        public Int32 removeParts9;
+        public Int32 removeParts10;
         public Int32 addParts1;
         public Int32 addParts2;
         public Int32 addParts3;
         public Int32 addParts4;
         public Int32 addParts5;
         public Int32 addParts6;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        Int32[] addPartsUnused;
+        public Int32 addParts7;
+        public Int32 addParts8;
+        public Int32 addParts9;
+        public Int32 addParts10;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 50)]
         public string blend;
         short undefined1;
+        [ExcelOutput(ConstantValue = -1)]
         Int32 undefined2;
         public Int32 target;
         public Int32 covers1;
@@ -46,7 +49,8 @@ namespace Hellgate.Excel
         public Int32 covers5;
         public Int32 covers6;
         public Int32 covers7;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        Int32[] coversUnused;
+        public Int32 covers8;
+        public Int32 covers9;
+        public Int32 covers10;
     }
 }

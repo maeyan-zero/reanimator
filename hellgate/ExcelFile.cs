@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -96,8 +98,6 @@ namespace Hellgate
         /// <returns>True if the buffer parsed okay.</returns>
         public override sealed bool ParseCSV(byte[] buffer)
         {
-            ObjectDelegator objectDelegator = new ObjectDelegator(Attributes.RowType, "SetValue");
-
             // Pre-checks
             if (buffer == null) return false;
             if (buffer.Length < 32) return false;
@@ -130,65 +130,84 @@ namespace Hellgate
             bool failedParsing = false;
             Rows = new List<Object>();
             const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            FieldInfo[] dataFields = DataType.GetFields(bindingFlags);
+            FieldInfo[] fieldInfos = DataType.GetFields(bindingFlags);
+            ObjectDelegator objectDelegator = new ObjectDelegator(fieldInfos, "SetValue");
             bool needOutputAttributes = true;
-            OutputAttribute[] outputAttributes = new OutputAttribute[dataFields.Length];
+            OutputAttribute[] outputAttributes = new OutputAttribute[fieldInfos.Length];
             for (int row = 0; row < tableRows.Count(); row++)
             {
                 int col = 0;
+                int fieldCol = -1;
                 Object rowInstance = Activator.CreateInstance(DataType);
-                foreach (FieldInfo fieldInfo in dataFields)
+                foreach (FieldInfo fieldInfo in fieldInfos)
                 {
+                    fieldCol++;
+
+                    if (needOutputAttributes) outputAttributes[fieldCol] = GetExcelOutputAttribute(fieldInfo);
+                    OutputAttribute attribute = outputAttributes[fieldCol];
+
                     // Initialize private fields 
-                    if ((fieldInfo.IsPrivate))
+                    if (fieldInfo.IsPrivate)
                     {
-                        if ((fieldInfo.FieldType == typeof(TableHeader)))
+                        // create row header object
+                        if (fieldInfo.FieldType == typeof(RowHeader))
                         {
-                            string headerString = tableRows[row][col++];
-                            TableHeader tableHeader = (TableHeader)FileTools.StringToObject(headerString, ",", typeof(TableHeader));
-                            //objectDelegator[col, rowInstance] = tableHeader; // only public fields are generated
-                            fieldInfo.SetValue(rowInstance, tableHeader);
+                            String headerString = tableRows[row][col++];
+                            RowHeader rowHeader = (RowHeader)FileTools.StringToObject(headerString, ",", typeof(RowHeader));
+                            objectDelegator[fieldInfo.Name, rowInstance] = rowHeader;
                             continue;
                         }
-                        if ((fieldInfo.FieldType.BaseType == typeof(Array)))
+
+                        // assign default values
+                        MarshalAsAttribute arrayMarshal = null;
+                        Array arrayInstance = null;
+                        if (fieldInfo.FieldType.BaseType == typeof(Array))
                         {
-                            MarshalAsAttribute marshal = (MarshalAsAttribute)fieldInfo.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
-                            Array arrayInstance = (Array)Activator.CreateInstance(fieldInfo.FieldType, marshal.SizeConst);
-                            //objectDelegator[col, rowInstance] = arrayInstance;
-                            fieldInfo.SetValue(rowInstance, arrayInstance);
-                            continue;
+                            arrayMarshal = (MarshalAsAttribute)fieldInfo.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                            arrayInstance = (Array)Activator.CreateInstance(fieldInfo.FieldType, arrayMarshal.SizeConst);
+                            objectDelegator[fieldInfo.Name, rowInstance] = arrayInstance;
                         }
-                        if ((fieldInfo.FieldType == typeof(String)))
+                        else if (fieldInfo.FieldType == typeof(String))
                         {
-                            //objectDelegator[col, rowInstance] = String.Empty;
-                            fieldInfo.SetValue(rowInstance, String.Empty);
-                            continue;
+                            objectDelegator[fieldInfo.Name, rowInstance] = String.Empty;
                         }
+                        
+                        // assign constant non-zero values
+                        if (attribute == null || attribute.ConstantValue == null) continue;
+                        if (fieldInfo.FieldType.BaseType == typeof(Array))
+                        {
+                            Debug.Assert(arrayInstance != null, "arrayInstance == null");
+                            Debug.Assert(arrayMarshal != null, "arrayMarshal == null");
+
+                            for (int i = 0; i < arrayMarshal.SizeConst; i++)
+                            {
+                                arrayInstance.SetValue(attribute.ConstantValue, i);
+                            }
+                        }
+                        else
+                        {
+                            objectDelegator[fieldInfo.Name, rowInstance] = attribute.ConstantValue;
+                        }
+
                         continue;
                     }
 
                     // Parse public fields
                     // All public fields must be inside the CSV
-                    if (needOutputAttributes) outputAttributes[col] = GetExcelOutputAttribute(fieldInfo);
-                    OutputAttribute attribute = outputAttributes[col];
-                    int publicCol = col - 1;
                     string value = tableRows[row][col++];
                     if (attribute != null)
                     {
                         if (attribute.IsStringOffset)
                         {
-                            if (_stringBuffer == null)
-                            {
-                                _stringBuffer = new byte[1024];
-                            }
+                            if (_stringBuffer == null) _stringBuffer = new byte[1024];
 
                             if (String.IsNullOrEmpty(value))
                             {
-                                objectDelegator[publicCol, rowInstance] = -1;
+                                objectDelegator[fieldInfo.Name, rowInstance] = -1;
                                 continue;
                             }
 
-                            fieldInfo.SetValue(rowInstance, stringBufferOffset);
+                            objectDelegator[fieldInfo.Name, rowInstance] = stringBufferOffset;
                             FileTools.WriteToBuffer(ref _stringBuffer, ref stringBufferOffset, FileTools.StringToASCIIByteArray(value));
                             stringBufferOffset++; // \0
                             continue;
@@ -198,7 +217,7 @@ namespace Hellgate
                         {
                             if (value == "0")
                             {
-                                objectDelegator[publicCol, rowInstance] = 0;
+                                objectDelegator[fieldInfo.Name, rowInstance] = 0;
                                 continue;
                             }
                             if (_integerBuffer == null)
@@ -215,7 +234,7 @@ namespace Hellgate
                             {
                                 intValue[i] = int.Parse(splitValue[i]);
                             }
-                            objectDelegator[publicCol, rowInstance] = integerBufferOffset;
+                            objectDelegator[fieldInfo.Name, rowInstance] = integerBufferOffset;
                             FileTools.WriteToBuffer(ref _integerBuffer, ref integerBufferOffset, FileTools.IntArrayToByteArray(intValue));
                             continue;
                         }
@@ -228,20 +247,20 @@ namespace Hellgate
                             }
                             if ((String.IsNullOrEmpty(value)))
                             {
-                                objectDelegator[publicCol, rowInstance] = -1;
+                                objectDelegator[fieldInfo.Name, rowInstance] = -1;
                                 continue;
                             }
                             if (!(_secondaryStrings.Contains(value)))
                             {
                                 _secondaryStrings.Add(value);
                             }
-                            objectDelegator[publicCol, rowInstance] = _secondaryStrings.IndexOf(value);
+                            objectDelegator[fieldInfo.Name, rowInstance] = _secondaryStrings.IndexOf(value);
                             continue;
                         }
 
                         if ((attribute.IsBitmask))
                         {
-                            objectDelegator[publicCol, rowInstance] = UInt32.Parse(value);
+                            objectDelegator[fieldInfo.Name, rowInstance] = UInt32.Parse(value);
                             continue;
                         }
                     }
@@ -249,7 +268,7 @@ namespace Hellgate
                     try
                     {
                         Object objValue = FileTools.StringToObject(value, fieldInfo.FieldType);
-                        objectDelegator[publicCol, rowInstance] = objValue;
+                        objectDelegator[fieldInfo.Name, rowInstance] = objValue;
                     }
                     catch (Exception e)
                     {
@@ -513,10 +532,10 @@ namespace Hellgate
                     // Initialize private fields 
                     if ((fieldInfo.IsPrivate))
                     {
-                        if ((fieldInfo.FieldType == typeof(TableHeader)))
+                        if ((fieldInfo.FieldType == typeof(RowHeader)))
                         {
                             string headerString = (string)dataTable.Rows[row][col++];
-                            TableHeader tableHeader = (TableHeader)FileTools.StringToObject(headerString, ",", typeof(TableHeader));
+                            RowHeader tableHeader = (RowHeader)FileTools.StringToObject(headerString, ",", typeof(RowHeader));
                             fieldInfo.SetValue(rowInstance, tableHeader);
                             continue;
                         }
@@ -870,7 +889,7 @@ namespace Hellgate
             {
                 // Write Table Header
                 FieldInfo headerField = DataType.GetField("header", BindingFlags.Instance | BindingFlags.NonPublic);
-                TableHeader tableHeader = (TableHeader)headerField.GetValue(rowObject);
+                RowHeader tableHeader = (RowHeader)headerField.GetValue(rowObject);
                 string tableHeaderString = FileTools.ObjectToStringGeneric(tableHeader, ",");
                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(tableHeaderString));
 
