@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Revival.Common;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Hellgate
 {
@@ -63,125 +64,13 @@ namespace Hellgate
 
         public byte[] ExportCollada()
         {
-            XmlDocument xmlDocument = new XmlDocument();
-            XmlDeclaration xmlDeclaration = xmlDocument.CreateXmlDeclaration("1.0", "UTF-8", String.Empty);
-            xmlDocument.AppendChild(xmlDeclaration);
+            Collada colladaDoc = new Collada(_geometry.ToArray(), _index.ToArray(), Id);
 
-            XmlElement colladaElement = xmlDocument.CreateElement("COLLADA");
-            colladaElement.SetAttribute("xmlns", "http://www.collada.org/2005/11/COLLADASchema");
-            colladaElement.SetAttribute("version", "1.4.1");
-            xmlDocument.AppendChild(colladaElement);
-            //
-            // Asset Section, contains meta data
-            //
-            XmlElement assetElement = xmlDocument.CreateElement("asset");
-            colladaElement.AppendChild(assetElement);
-                XmlElement contributorElement = xmlDocument.CreateElement("contributor");
-                assetElement.AppendChild(contributorElement);
-                    XmlElement authorElement = xmlDocument.CreateElement("author");
-                    authorElement.InnerText = "Flagship Studios";
-                    contributorElement.AppendChild(authorElement);
-                    XmlElement authoringToolElement = xmlDocument.CreateElement("authoring_tool");
-                    authoringToolElement.InnerText = "Autodesk 3ds Max 8";
-                    contributorElement.AppendChild(authoringToolElement);
-                    XmlElement commentsElement = xmlDocument.CreateElement("comments");
-                    commentsElement.InnerText = "Ripped via Reanimator - Hellgate London conversion tools. www.hellgateaus.net";
-                    contributorElement.AppendChild(commentsElement);
-                XmlElement createdElement = xmlDocument.CreateElement("created");
-                createdElement.InnerText = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                assetElement.AppendChild(createdElement);
-                XmlElement modifiedElement = xmlDocument.CreateElement("modified");
-                modifiedElement.InnerText = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
-                assetElement.AppendChild(modifiedElement);
-                XmlElement unitElement = xmlDocument.CreateElement("unit");
-                unitElement.SetAttribute("meter", "0.01");
-                unitElement.SetAttribute("name", "centimeter");
-                assetElement.AppendChild(unitElement);
-                XmlElement upAxisElement = xmlDocument.CreateElement("up_axis");
-                upAxisElement.InnerText = "Y_UP";
-                assetElement.AppendChild(upAxisElement);
-            //
-            // Geometry Sections
-            //
-            XmlElement libraryGeometriesElement = xmlDocument.CreateElement("library_geometries");
-            colladaElement.AppendChild(libraryGeometriesElement);
-            XmlElement geometryElement = xmlDocument.CreateElement("geometry");
-            string geoLib = String.Format("{0}-lib", Id);
-            geometryElement.SetAttribute("id", geoLib);
-            geometryElement.SetAttribute("name", Id);
-            libraryGeometriesElement.AppendChild(geometryElement);
-            XmlElement meshElement = xmlDocument.CreateElement("mesh");
-            geometryElement.AppendChild(meshElement);
+            MemoryStream memoryStream = new MemoryStream();
+            XmlSerializer xmlSerializerHeader = new XmlSerializer(colladaDoc.GetType());
+            xmlSerializerHeader.Serialize(memoryStream, colladaDoc);
 
-            for (int i = 0; i < _geometry.Count; i++)
-            {
-                XmlElement meshSource = CreateColladaSource(xmlDocument, _geometry[i].position, "positions" + i.ToString());
-                meshElement.AppendChild(meshSource);
-                meshSource = CreateColladaSource(xmlDocument, _geometry[i].normal, "normals" + i.ToString());
-                meshElement.AppendChild(meshSource);
-                meshSource = CreateColladaSource(xmlDocument, _geometry[i].uv, "uvmap" + i.ToString());
-                meshElement.AppendChild(meshSource);
-
-                // Verticies
-                XmlElement verticiesElement = xmlDocument.CreateElement("vertices");
-                verticiesElement.SetAttribute("id", String.Format("{0}-{1}-{2}", Id, "lib", "verticies" + i.ToString()));
-                meshSource.AppendChild(verticiesElement);
-
-                XmlElement inputElement = xmlDocument.CreateElement("input");
-                inputElement.SetAttribute("semantic", "POSITION");
-                inputElement.SetAttribute("source", String.Format("#{0}-{1}-{2}", Id, "lib", "positions" + i.ToString()));
-                verticiesElement.AppendChild(inputElement);
-
-                // Triangles
-                XmlElement trianglesElement = xmlDocument.CreateElement("triangles");
-                trianglesElement.SetAttribute("count", _index[i].triangle.Length.ToString());
-                trianglesElement.SetAttribute("material", "default");
-                meshSource.AppendChild(trianglesElement);
-
-                inputElement = xmlDocument.CreateElement("input");
-                inputElement.SetAttribute("offset", "0");
-                inputElement.SetAttribute("semantic", "VERTEX");
-                inputElement.SetAttribute("source", String.Format("#{0}-{1}-{2}", Id, "lib", "verticies" + i.ToString()));
-                trianglesElement.AppendChild(inputElement);
-
-                inputElement = xmlDocument.CreateElement("input");
-                inputElement.SetAttribute("offset", "0");
-                inputElement.SetAttribute("semantic", "NORMAL");
-                inputElement.SetAttribute("source", String.Format("#{0}-{1}-{2}", Id, "lib", "normals" + i.ToString()));
-                trianglesElement.AppendChild(inputElement);
-
-                inputElement = xmlDocument.CreateElement("input");
-                inputElement.SetAttribute("offset", "0");
-                inputElement.SetAttribute("semantic", "TEXCOORD");
-                inputElement.SetAttribute("source", String.Format("#{0}-{1}-{2}", Id, "lib", "uvmap" + i.ToString()));
-                trianglesElement.AppendChild(inputElement);
-
-                XmlElement pElement = xmlDocument.CreateElement("p");
-                StringWriter pString = new StringWriter();
-                foreach (Triangle t in _index[0].triangle)
-                {
-                    pString.Write(t.ToString());
-                }
-                pElement.InnerText = pString.ToString();
-                trianglesElement.AppendChild(pElement);
-            }
-
-            //
-            // Material
-            //
-            for (int i = 0; i < _index.Count; i++)
-            {
-
-            }
-
-
-
-            MemoryStream ms = new MemoryStream();
-            xmlDocument.Save(ms);
-            byte[] arr = ms.ToArray();
-            ms.Close();
-
-            return arr;
+            return memoryStream.ToArray();
         }
 
         public byte[] ExportObj()
@@ -607,8 +496,6 @@ namespace Hellgate
             return meshElement;
         }
 
-
-
         // 1ST TIER FUNCTIONS
 
         Index GetIndex(BinaryReader binReader)
@@ -758,6 +645,41 @@ namespace Hellgate
             public UV[] uv { get; set; }
             public Coordinate[] position { get; set; }
             public Coordinate[] normal { get; set; }
+
+            public float[,] GetPositions()
+            {
+                float[,] positionArray = new float[3, position.Length];
+                for (int i = 0; i < position.Length; i++)
+                {
+                    positionArray[0, i] = position[i].positionX;
+                    positionArray[1, i] = position[i].positionY;
+                    positionArray[2, i] = position[i].positionZ;
+                }
+                return positionArray;
+            }
+
+            public float[,] GetNormals()
+            {
+                float[,] normalArray = new float[3, normal.Length];
+                for (int i = 0; i < normal.Length; i++)
+                {
+                    normalArray[0, i] = normal[i].positionX;
+                    normalArray[1, i] = normal[i].positionY;
+                    normalArray[2, i] = normal[i].positionZ;
+                }
+                return normalArray;
+            }
+
+            public float[,] GetUV()
+            {
+                float[,] uvArray = new float[2, uv.Length];
+                for (int i = 0; i < uv.Length; i++)
+                {
+                    uvArray[0, i] = uv[i].s;
+                    uvArray[1, i] = uv[i].t;
+                }
+                return uvArray;
+            }
         }
 
         class Reserved
@@ -873,6 +795,326 @@ namespace Hellgate
             {
                 return String.Format("{0} {1} ", s.ToString() , t.ToString());
             }
+        }
+
+        [XmlRoot("COLLADA")]
+        public class Collada
+        {
+            internal Model.Geometry[] GeometryData { get; private set; }
+            internal Model.Index[] IndexData { get; private set; }
+            internal string ModelID { get; private set; }
+            private Collada() { }
+
+            public Collada(Model.Geometry[] geometryData, Model.Index[] indexData, string modelID)
+            {
+                this.GeometryData = geometryData;
+                this.IndexData = indexData;
+                this.ModelID = modelID;
+            }
+
+            #region Asset
+            [XmlElement("asset")]
+            public Asset AssetElement { get { return new Asset(); } }
+
+            public class Asset
+            {
+                [XmlElement("contributor")]
+                public Contributor ContributorElement { get { return new Contributor(); } }
+
+                public class Contributor
+                {
+                    internal static string AuthorText = "Flagship Studios";
+                    internal static string AuthoringToolText = "3ds Max 7.0.0";
+                    internal static string CommentText = "Ripped via Reanimator.\nWebsite: http://www.hellgateaus.net\nSVN: http://code.google.com/p/reanimator/";
+
+                    [XmlElement("author")]
+                    public string Author { get { return AuthorText;  } }
+
+                    [XmlElement("authoring_tool")]
+                    public string AuthoringTool { get { return AuthoringToolText; } }
+
+                    [XmlElement("comments")]
+                    public string Comments { get { return CommentText; } }
+                }
+
+                [XmlElement("created")]
+                public string Created { get { return DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"); } }
+
+                [XmlElement("modified")]
+                public string Modified { get { return DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"); } }
+
+                [XmlElement("unit")]
+                public Unit UnitElement { get { return new Unit(); } }
+
+                public class Unit
+                {
+                    internal Unit(double meter = 0.01, string name = "centimeter")
+                    {
+                        this.Meter = meter;
+                        this.Name = name;
+                    }
+
+                    [XmlAttribute("meter")]
+                    public double Meter { get; private set; }
+
+                    [XmlAttribute("name")]
+                    public string Name { get; private set; }
+                }
+
+                [XmlElement("up_axis")]
+                public string UpAxis { get { return "Y_UP"; } }
+            }
+            #endregion
+
+            #region Library Geometries
+            [XmlElement("library_geometries")]
+            public LibraryGeometries LibraryGeometriesElement;
+
+            public class LibraryGeometries
+            {
+                internal Model.Geometry[] GeometryData { get; private set; }
+                internal Model.Index[] IndexData { get; private set; }
+                internal string ModelID { get; private set; }
+
+                internal LibraryGeometries(Model.Geometry[] geometryData, Model.Index[] indexData, string modelID)
+                {
+                    this.GeometryData = geometryData;
+                    this.IndexData = indexData;
+                    this.ModelID = modelID;
+                }
+
+                [XmlArray("geometry")]
+                public Geometry[] GeometryElement
+                {
+                    get
+                    {
+                        List<Geometry> geometeryList = new List<Geometry>();
+                        Geometry element = new Geometry(GeometryData, IndexData, ModelID);
+                        geometeryList.Add(element);
+                        return geometeryList.ToArray();
+                    }
+                }
+
+                public class Geometry
+                {
+                    internal Model.Geometry[] GeometryData { get; private set; }
+                    internal Model.Index[] IndexData { get; private set; }
+
+                    internal Geometry(Model.Geometry[] geometryData, Model.Index[] indexData, string modelID)
+                    {
+                        this.GeometryData = geometryData;
+                        this.IndexData = indexData;
+                        this.Name = modelID;
+                    }
+
+                    [XmlAttribute("id")]
+                    public string ID { get { return String.Format("{0}-lib", Name); } }
+
+                    [XmlAttribute("name")]
+                    public string Name { get; private set; }
+
+                    [XmlElement("mesh")]
+                    public Mesh MeshElement { get { return new Mesh(GeometryData, IndexData, ID); } }
+
+                    public class Mesh
+                    {
+                        internal Model.Geometry[] GeometryData { get; private set; }
+                        internal Model.Index[] IndexData { get; private set; }
+                        internal string LibraryID { get; private set; }
+
+                        internal Mesh(Model.Geometry[] geometryData, Model.Index[] indexData, string libraryID)
+                        {
+                            this.GeometryData = geometryData;
+                            this.IndexData = indexData;
+                            this.LibraryID = libraryID;
+                        }
+
+                        [XmlArray("source")]
+                        public Source[] SourceElement
+                        {
+                            get
+                            {
+                                float[,] positions;
+                                float[,] normals;
+                                float[,] uvmap;
+
+                                List<Source> sourceList = new List<Source>();
+
+                                int posLen = 0;
+                                int norLen = 0;
+                                int uvmLen = 0;
+
+                                foreach (Model.Geometry geometry in GeometryData)
+                                {
+                                    posLen += geometry.position.Length;
+                                    norLen += geometry.normal.Length;
+                                    uvmLen += geometry.uv.Length;
+                                }
+
+                                positions = new float[3, posLen];
+                                normals = new float[3, norLen];
+                                uvmap = new float[2, uvmLen];
+
+                                int posOffset = 0;
+                                int norOffset = 0;
+                                int uvmOffset = 0;
+
+                                foreach (Model.Geometry geometry in GeometryData)
+                                {
+                                    Buffer.BlockCopy(geometry.GetPositions(), 0, positions, posOffset, geometry.position.Length);
+                                    posOffset += geometry.position.Length;
+                                    Buffer.BlockCopy(geometry.GetNormals(), 0, normals, norOffset, geometry.normal.Length);
+                                    norOffset += geometry.normal.Length;
+                                    Buffer.BlockCopy(geometry.GetUV(), 0, uvmap, uvmOffset, geometry.uv.Length);
+                                    uvmOffset += geometry.uv.Length;
+                                }
+
+                                string[] xyzDesc = new string[] { "X", "Y", "Z" };
+                                string[] stDesc = new string[] { "S", "T" };
+
+                                Source positionSource = new Source(positions, LibraryID, "position", xyzDesc, "VERTEX");
+                                Source normalSource = new Source(normals, LibraryID, "normal", xyzDesc, "NORMAL");
+                                Source uvmapSource = new Source(uvmap, LibraryID, "map", stDesc, "TEXCOORD");
+
+                                sourceList.Add(positionSource);
+                                sourceList.Add(normalSource);
+                                sourceList.Add(uvmapSource);
+
+                                return sourceList.ToArray();
+                            }
+                        }
+
+                        public class Source
+                        {
+                            internal float[,] Data;
+                            internal string[] Coordinate;
+                            internal string Semantic;
+
+                            internal Source(float[,] data, string libraryID, string name, string[] coordinate, string semantic)
+                            {
+                                this.Data = data;
+                                this.ID = String.Format("{0}-{1}", libraryID, name);
+                                this.Name = name;
+                                this.Coordinate = coordinate;
+                                this.Semantic = semantic;
+                            }
+
+                            [XmlAttribute("id")]
+                            public string ID;
+
+                            [XmlAttribute("name")]
+                            public string Name;
+
+                            [XmlElement("float_array")]
+                            public FloatArray FloatArrayElement { get { return new FloatArray(Data, ID); } }
+
+                            public class FloatArray
+                            {
+                                internal float[,] Data { get; set; }
+
+                                internal FloatArray(float[,] data, string id)
+                                {
+                                    this.Data = data;
+                                    this.ID = String.Format("{0}-array", id);
+                                }
+
+                                [XmlAttribute("id")]
+                                public string ID { get; private set; }
+
+                                [XmlAttribute("count")]
+                                public int Count { get { return Data.Length; } }
+
+                                [XmlText]
+                                public string Text
+                                {
+                                    get
+                                    {
+                                        StringWriter stringWriter = new StringWriter();
+                                        foreach (double d in Data)
+                                        {
+                                            stringWriter.Write(d);
+                                            stringWriter.Write(" ");
+                                        }
+                                        return stringWriter.ToString();
+                                    }
+                                }
+                            }
+
+                            [XmlElement("technique_common")]
+                            public TechniqueCommon TechniqueCommonElement { get; set; }
+
+                            public class TechniqueCommon
+                            {
+                                internal float[,] Data;
+                                internal string SourceID;
+                                internal string[] Coordinate;
+
+                                internal TechniqueCommon(float[,] data, string id, string[] coordinate)
+                                {
+                                    this.Data = data;
+                                    this.SourceID = id;
+                                    this.Coordinate = coordinate;
+                                }
+
+                                [XmlElement("accessor")]
+                                public Accessor AccessorElement { get { return new Accessor(Data, SourceID, Coordinate); } }
+
+                                public class Accessor
+                                {
+                                    internal float[,] Data { get; set; }
+                                    internal string[] Coordinate { get; set; }
+
+                                    internal Accessor(float[,] data, string source, string[] dimension)
+                                    {
+                                        this.Data = data;
+                                        this.Coordinate = dimension;
+                                        this.Source = String.Format("#{0}", source);
+                                    }
+
+                                    [XmlAttribute("count")]
+                                    public int Count { get { return Data.GetLength(1); } }
+
+                                    [XmlAttribute("source")]
+                                    public string Source { get; private set; }
+
+                                    [XmlAttribute("stride")]
+                                    public int Stride { get { return Data.GetLength(0); } }
+
+                                    [XmlArray("param")]
+                                    public Param[] ParamElement
+                                    {
+                                        get
+                                        {
+                                            Param[] param = new Param[Stride];
+                                            for (int i = 0; i < Stride; i++)
+                                            {
+                                                param[0] = new Param(Coordinate[0]);
+                                            }
+                                            return param;
+                                        }
+                                    }
+
+                                    public class Param
+                                    {
+                                        public Param(string name, string type = "float")
+                                        {
+                                            this.Name = name;
+                                            this.Type = type;
+                                        }
+
+                                        [XmlAttribute("name")]
+                                        public string Name;
+
+                                        [XmlAttribute("type")]
+                                        public string Type;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
         }
     }
 }
