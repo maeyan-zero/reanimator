@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExcelTableForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tableDataPage = new System.Windows.Forms.TabPage();
-            this.tableData_DataGridView = new System.Windows.Forms.DataGridView();
+            this._tableData_DataGridView = new System.Windows.Forms.DataGridView();
             this.indexArraysPage = new System.Windows.Forms.TabPage();
             this.indexArrays_DataGridView = new System.Windows.Forms.DataGridView();
             this.stringsPage = new System.Windows.Forms.TabPage();
@@ -51,7 +51,7 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.tableDataPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).BeginInit();
             this.indexArraysPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.indexArrays_DataGridView)).BeginInit();
             this.stringsPage.SuspendLayout();
@@ -76,7 +76,7 @@
             // 
             // tableDataPage
             // 
-            this.tableDataPage.Controls.Add(this.tableData_DataGridView);
+            this.tableDataPage.Controls.Add(this._tableData_DataGridView);
             this.tableDataPage.Location = new System.Drawing.Point(4, 22);
             this.tableDataPage.Name = "tableDataPage";
             this.tableDataPage.Padding = new System.Windows.Forms.Padding(3);
@@ -87,11 +87,12 @@
             // 
             // tableData_DataGridView
             // 
-            this.tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableData_DataGridView.Location = new System.Drawing.Point(3, 3);
-            this.tableData_DataGridView.Name = "tableData_DataGridView";
-            this.tableData_DataGridView.Size = new System.Drawing.Size(738, 552);
-            this.tableData_DataGridView.TabIndex = 1;
+            this._tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._tableData_DataGridView.Location = new System.Drawing.Point(3, 3);
+            this._tableData_DataGridView.Name = "tableData_DataGridView";
+            this._tableData_DataGridView.Size = new System.Drawing.Size(738, 552);
+            this._tableData_DataGridView.TabIndex = 1;
+            this._tableData_DataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this._TableData_DataGridView_KeyUp);
             // 
             // indexArraysPage
             // 
@@ -99,7 +100,7 @@
             this.indexArraysPage.Location = new System.Drawing.Point(4, 22);
             this.indexArraysPage.Name = "indexArraysPage";
             this.indexArraysPage.Padding = new System.Windows.Forms.Padding(3);
-            this.indexArraysPage.Size = new System.Drawing.Size(744, 562);
+            this.indexArraysPage.Size = new System.Drawing.Size(744, 558);
             this.indexArraysPage.TabIndex = 1;
             this.indexArraysPage.Text = "Index Arrays";
             this.indexArraysPage.UseVisualStyleBackColor = true;
@@ -121,7 +122,7 @@
             this.stringsPage.Location = new System.Drawing.Point(4, 22);
             this.stringsPage.Name = "stringsPage";
             this.stringsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.stringsPage.Size = new System.Drawing.Size(744, 562);
+            this.stringsPage.Size = new System.Drawing.Size(744, 558);
             this.stringsPage.TabIndex = 2;
             this.stringsPage.Text = "Strings";
             this.stringsPage.UseVisualStyleBackColor = true;
@@ -141,7 +142,7 @@
             this.rowViewPage.Location = new System.Drawing.Point(4, 22);
             this.rowViewPage.Name = "rowViewPage";
             this.rowViewPage.Padding = new System.Windows.Forms.Padding(3);
-            this.rowViewPage.Size = new System.Drawing.Size(744, 562);
+            this.rowViewPage.Size = new System.Drawing.Size(744, 558);
             this.rowViewPage.TabIndex = 3;
             this.rowViewPage.Text = "Row View";
             this.rowViewPage.UseVisualStyleBackColor = true;
@@ -279,7 +280,7 @@
             this.Text = "ExcelTable";
             this.tabControl1.ResumeLayout(false);
             this.tableDataPage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.tableData_DataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).EndInit();
             this.indexArraysPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.indexArrays_DataGridView)).EndInit();
             this.stringsPage.ResumeLayout(false);
@@ -297,7 +298,7 @@
         private System.Windows.Forms.TabPage tableDataPage;
         private System.Windows.Forms.TabPage indexArraysPage;
         private System.Windows.Forms.DataGridView indexArrays_DataGridView;
-        public System.Windows.Forms.DataGridView tableData_DataGridView;
+        public System.Windows.Forms.DataGridView _tableData_DataGridView;
         private System.Windows.Forms.TabPage stringsPage;
         private System.Windows.Forms.ListBox strings_ListBox;
         private System.Windows.Forms.ToolStrip toolStrip1;
