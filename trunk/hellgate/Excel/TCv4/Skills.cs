@@ -7,7 +7,7 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class SkillsTCv4
     {
-        ExcelFile.TableHeader header;
+        ExcelFile.RowHeader header;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String skill;

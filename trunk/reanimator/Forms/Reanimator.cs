@@ -35,11 +35,13 @@ namespace Reanimator.Forms
 
             if (true) return;
 
-            _DoCookTest();
-            //_ConvertTCv4ExcelToSP();
+            //_ExcelValuesDeepScan();
+            //_DoCookTest();
+            _ConvertTCv4ExcelToSP();
             //_LoadAllMLIFiles();
             //_LoadAllRooms();
             //_LoadAllLevelRules();
+            //_UncookAllXml();
             //return;
 
             //LevelRulesEditor levelRulesEditor = new LevelRulesEditor(@"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl")
@@ -51,16 +53,6 @@ namespace Reanimator.Forms
 
             //
             //return;
-
-            //const String idxReadPath = @"D:\Games\Hellgate London\data\hellgate000.idx";
-            //String idxWritePath = Path.Combine(Path.GetDirectoryName(idxReadPath),
-            //                                   Path.GetFileNameWithoutExtension(idxReadPath) + ".dec.idx");
-            //byte[] idxBytes = File.ReadAllBytes(idxReadPath);
-            //Crypt.Decrypt(idxBytes);
-            //File.WriteAllBytes(idxWritePath, idxBytes);
-
-
-
 
 
             //const String hashStr1 = @"data\background\catacombs\";
@@ -76,7 +68,6 @@ namespace Reanimator.Forms
             //UInt64 cryptoValue = Crypt.GetStringsSHA1UInt64(hashStr1, hashStr2);
 
 
-
             //const String filePath = @"D:\Games\Hellgate London\MP_x64\hellgate_mp_dx9_x64.txt";
             //String[] strings = File.ReadAllLines(filePath);
             //foreach (String str in strings)
@@ -89,22 +80,252 @@ namespace Reanimator.Forms
             //        int bp = 0;
             //    }
             //}
-
-            //_UncookAllXml();
             #endregion
         }
 
         #region alexs_stuff
 
-        private void _DoCookTest()
+        /// <summary>
+        /// This function checks every row/col of every excel file, determining if it needs to be visible/public or not.
+        /// Any element non-zero for all rows, needs to be public (or add new OutputAttribute for "const" values?)
+        /// </summary>
+        private static void _ExcelValuesDeepScan()
         {
-            const String exePath = @"D:\Games\Hellgate London\SP_x64\hellgate_sp_dx9_x64.exe - Shortcut";
-
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.ExtractAllExcel();
 
-            return;
-            int i = 0;
+            Dictionary<uint, uint> rowTypeCounts = new Dictionary<uint, uint>();
+            Dictionary<String, uint[]> outputMessages = new Dictionary<String, uint[]>();
+
+            Dictionary<String, ObjectDelegator> objectDelegators = new Dictionary<String, ObjectDelegator>();
+            foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
+            {
+                if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension)) continue;
+
+                byte[] fileBytes = fileManager.GetFileBytes(fileEntry, true);
+                Debug.Assert(fileBytes != null);
+
+                ExcelFile excelFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
+                if (excelFile.Attributes.IsEmpty) continue;
+
+                Debug.WriteLine("Checking file: " + fileEntry.RelativeFullPathWithoutPatch);
+
+                uint structureId = excelFile.Attributes.StructureId;
+                uint structureUseCount = 0;
+                if (rowTypeCounts.TryGetValue(structureId, out structureUseCount))
+                {
+                    rowTypeCounts[structureId] = ++structureUseCount;
+                }
+                else
+                {
+                    rowTypeCounts.Add(structureId, 1);
+                }
+
+                ObjectDelegator excelDelegator;
+                Type rowType = excelFile.Attributes.RowType;
+                FieldInfo[] fieldInfos = rowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                int rowCount = excelFile.Rows.Count;
+
+                // create delegates
+                if (!objectDelegators.TryGetValue(excelFile.StringId, out excelDelegator))
+                {
+                    excelDelegator = new ObjectDelegator(fieldInfos, "GetValue");
+                    objectDelegators.Add(excelFile.StringId, excelDelegator);
+                }
+
+                // check by column, by row
+                int col = -1;
+                foreach (FieldInfo fieldInfo in fieldInfos)
+                {
+                    if (++col == 0) continue; // row header
+
+                    ObjectDelegator.FieldGetValueDelegate getValue = excelDelegator.GetFieldGetDelegate(fieldInfo.Name);
+                    ExcelFile.OutputAttribute outputAttribute = ExcelFile.GetExcelOutputAttribute(fieldInfo);
+
+                    bool isArray = false;
+                    bool allEqual = true;
+                    Object firstValue = null;
+                    Array firstValueArray = null;
+                    int arrayIndexFirstDifferent = -1;
+                    int row = -1;
+                    String message = null;
+                    foreach (Object value in excelFile.Rows.Select(rowObject => getValue(rowObject)))
+                    {
+                        arrayIndexFirstDifferent = -1;
+                        if (++row == 0)
+                        {
+                            if (fieldInfo.FieldType.BaseType == typeof(Array))
+                            {
+                                firstValueArray = (Array)value;
+                                isArray = true;
+                                IEnumerator enumerator = firstValueArray.GetEnumerator();
+                                enumerator.MoveNext();
+                                firstValue = enumerator.Current;
+                            }
+                            else
+                            {
+                                firstValue = value;
+                            }
+                            continue;
+                        }
+
+                        if (isArray)
+                        {
+                            Array objArray = (Array) value;
+                            Debug.Assert(firstValueArray != null);
+
+                            bool arrayEqual = true;
+                            IEnumerator enumeratorFirst = firstValueArray.GetEnumerator();
+                            IEnumerator enumeratorCurrent = objArray.GetEnumerator();
+                            while (enumeratorFirst.MoveNext())
+                            {
+                                enumeratorCurrent.MoveNext();
+                                arrayIndexFirstDifferent++;
+
+                                Object objFirst = enumeratorFirst.Current;
+                                Object objCurrent = enumeratorCurrent.Current;
+
+                                if (firstValue == null) firstValue = objFirst;
+                                if (objFirst.Equals(objCurrent)) continue;
+
+                                arrayEqual = false;
+                                break;
+                            }
+
+                            if (arrayEqual) continue;
+                            allEqual = false;
+                            break;                           
+                        }
+
+                        Debug.Assert(firstValue != null);
+                        if (firstValue.Equals(value)) continue;
+                        allEqual = false;
+                        break;
+                    }
+                    Debug.Assert(firstValue != null);
+
+                    Object constValue = null;
+                    bool ignoreConstCheck = false;
+                    if (outputAttribute != null)
+                    {
+                        constValue = outputAttribute.ConstantValue;
+                        ignoreConstCheck = outputAttribute.DebugIgnoreConstantCheck;
+                    }
+
+                    if (fieldInfo.IsPrivate)
+                    {
+                        if (!allEqual)
+                        {
+                            message = String.Format("Warning: Private column (Type = {1}, StructureId = 0x{2}) \"{0}\" has per-row differing values",
+                                fieldInfo.Name, fieldInfo.FieldType, structureId.ToString("X8")); // need to add structureId to ensure message is unique per structure type
+
+                            if (isArray)
+                            {
+                                message += ", first index differing: " + arrayIndexFirstDifferent;
+                            }
+                        }
+                        else // allEqual && IsPrivate
+                        {
+                            if (isArray)
+                            {
+                                if (fieldInfo.FieldType == typeof(Int32[]))
+                                {
+                                    if (firstValue.Equals((Int32)0)) continue;
+                                }
+                                else if (fieldInfo.FieldType == typeof(byte[]))
+                                {
+                                    if (firstValue.Equals((byte)0x00)) continue;
+                                }
+                                else
+                                {
+                                    Debug.Assert(false, "Unexpected Array Type: " + fieldInfo.FieldType);
+                                }
+
+                                if (outputAttribute != null && firstValue.Equals(outputAttribute.ConstantValue)) continue;
+
+                                message = String.Format("Warning: Private column (Type = {2}, StructureId = 0x{3}) \"{0}\" has constant value not zero \"{1}\"",
+                                    fieldInfo.Name, firstValue, fieldInfo.FieldType, structureId.ToString("X8"));
+                            }
+                            else // not array
+                            {
+                                if (firstValue.Equals(constValue)) continue;
+                                if (fieldInfo.FieldType == typeof(Int32) &&
+                                    ((Int32)firstValue == 0 && (firstValue.Equals(constValue) || constValue == null))) continue;
+                                if (fieldInfo.FieldType == typeof(Int16) &&
+                                    ((Int16)firstValue == 0 && (firstValue.Equals(constValue) || constValue == null))) continue;
+
+                                message = String.Format("Warning: Private column (Type = {2}, StructureId = 0x{3}) \"{0}\" has constant value not zero \"{1}\"",
+                                    fieldInfo.Name, firstValue, fieldInfo.FieldType, structureId.ToString("X8"));
+
+                                if (outputAttribute != null && outputAttribute.ConstantValue != null) message += " (outputAttribute.ConstantValue is set)";
+                            }
+                        }
+                    }
+                    else // IsPublic
+                    {
+                        if (ignoreConstCheck) continue;
+
+                        if (allEqual && fieldInfo.IsPublic && rowCount != 1 && (outputAttribute == null || outputAttribute.ConstantValue == null))
+                        {
+                            message = String.Format("Notice: Public column (Type = {2}, StructureId = 0x{3}) \"{0}\" has constant value \"{1}\"",
+                                fieldInfo.Name, firstValue, fieldInfo.FieldType, structureId.ToString("X8"));
+                        }
+                    }
+
+                    if (message == null) continue;
+
+                    uint[] messageCounts;
+                    if (outputMessages.TryGetValue(message, out messageCounts))
+                    {
+                        outputMessages[message] = new[] {messageCounts[0] + 1, structureId};
+                    }
+                    else
+                    {
+                        outputMessages.Add(message, new uint[] { 1, structureId });
+                    }
+                }
+
+                int bp3 = 0;
+            }
+
+            String previousStringId = null;
+            StringWriter stringWriter = new StringWriter();
+            foreach (KeyValuePair<String, uint[]> message in outputMessages)
+            {
+                String msg = message.Key;
+                uint msgCount = message.Value[0];
+                uint forStructureId = message.Value[1];
+                uint structureCount = rowTypeCounts[forStructureId];
+
+                if (structureCount != msgCount) continue; // if not equal, then we have a message in one table, but in another table it's not applicable
+
+                String[] stringIds = (from dataTableAttribute in DataFile.DataFileMap
+                                          where dataTableAttribute.Value.StructureId == forStructureId
+                                          select dataTableAttribute.Key).ToArray();
+                String stringIdPrepend = String.Join(",", stringIds);
+
+                if (previousStringId != stringIdPrepend)
+                {
+                    //Console.WriteLine(stringIdPrepend);
+                    stringWriter.WriteLine(stringIdPrepend);
+                    previousStringId = stringIdPrepend;
+                }
+
+                //Console.WriteLine(msg);
+                stringWriter.WriteLine(msg);
+            }
+            File.WriteAllText(@"C:\asdf.txt", stringWriter.ToString());
+        }
+
+        /// <summary>
+        /// This function is to test excel CSV cooking.
+        /// </summary>
+        private static void _DoCookTest()
+        {
+            FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.ExtractAllExcel();
+
+            //return;
             foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
             {
                 if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension)) continue;
@@ -116,7 +337,6 @@ namespace Reanimator.Forms
                 ExcelFile excelFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
                 if (excelFile.Attributes.IsEmpty) continue;
 
-                if (i == 6) break;
                 Console.WriteLine("Cooking file: " + fileEntry.RelativeFullPathWithoutPatch);
 
                 byte[] csvBytes = excelFile.ExportCSV();
@@ -125,15 +345,14 @@ namespace Reanimator.Forms
 
                 byte[] recookedBytes = excelFileCSV.ToByteArray();
 
-                if (excelFile.StringId == "GLOBAL_STRING")
-                {
-                    ExcelFile temp = new ExcelFile(recookedBytes, fileEntry.RelativeFullPathWithoutPatch);
-                    int bp1 = 0;
-                }
+                //if (excelFile.StringId == "GLOBAL_STRING")
+                //{
+                //    ExcelFile temp = new ExcelFile(recookedBytes, fileEntry.RelativeFullPathWithoutPatch);
+                //    int bp1 = 0;
+                //}
 
                 
-                File.WriteAllBytes(filePath + "2", recookedBytes);
-                i++;
+                File.WriteAllBytes(filePath, recookedBytes);
             }
 
             int bp = 0;
@@ -141,13 +360,10 @@ namespace Reanimator.Forms
 
         private static void _ConvertTCv4ExcelToSP()
         {
-            //return;
+            return;
 
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.ExtractAllExcel();
-
-            return;
-
             FileManager fileManagerTCv4 = new FileManager(Config.HglDir, true);
 
             fileManager.LoadTableFiles();
@@ -227,6 +443,7 @@ namespace Reanimator.Forms
 
                 // todo: _TCv4_AFFIX removed SecondaryStrings and put them into a table called AFFIX_GROUPS
                 // todo: Ensure BitRelations for TCv4 UNITTYPES and STATES are correct
+                // todo: check _extendedBuffer AI stuff
 
                 // begin conversion process
                 Object[] rows = new Object[excelFileTCv4.Rows.Count];

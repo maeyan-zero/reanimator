@@ -7,7 +7,7 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class MaterialsCollisionTCv4
     {
-        ExcelFile.TableHeader header;
+        ExcelFile.RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;

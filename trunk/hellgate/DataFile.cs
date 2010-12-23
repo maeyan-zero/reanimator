@@ -48,7 +48,7 @@ namespace Hellgate
             public UInt32 StructureId;
         }
 
-        protected static readonly Dictionary<String, DataFileAttributes> DataFileMap = new Dictionary<String, DataFileAttributes>
+        public static readonly Dictionary<String, DataFileAttributes> DataFileMap = new Dictionary<String, DataFileAttributes>
         {
             // Excel files
             {"ACHIEVEMENTS", new DataFileAttributes {RowType = typeof(Achievements), HasScriptTable = true, StructureId = 0x62ECA6E1}},

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class WardrobeAppearanceGroup
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
@@ -29,6 +29,7 @@ namespace Hellgate.Excel
         public Int32 blendOpGroup;
         public Int32 firstPerson;//idx;
         public Int32 Base1;
+        [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 23)]
         Int32[] BaseUnused;
         public Int32 heads1;
@@ -42,6 +43,7 @@ namespace Hellgate.Excel
         public Int32 heads9;
         public Int32 heads10;
         public Int32 heads11;
+        [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 13)]
         Int32[] headsUnused;
         public Int32 hair1;
@@ -62,6 +64,7 @@ namespace Hellgate.Excel
         public Int32 hair16;
         public Int32 hair17;
         public Int32 hair18;
+        [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
         Int32[] hairUnused;
         public Int32 facialHair1;
@@ -80,10 +83,13 @@ namespace Hellgate.Excel
         public Int32 facialHair14;
         public Int32 facialHair15;
         public Int32 facialHair16;
+        [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         Int32[] facialHairUnused;
+        [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
         Int32[] skin;
+        [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
         Int32[] hairColorTexture;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 31)]

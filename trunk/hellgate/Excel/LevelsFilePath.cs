@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class LevelsFilePath
     {
-        TableHeader header;
+        RowHeader header;
         /*code is supposed to be the index, however, it appears that it's in
          reverse, ie the four digits are reverse what is displayed. entry #9 is first, but 
          it's SF01, yet if they're reversed, 10FS. #34 is 2nd CR01, or 10RC.

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class GameGlobals
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 name;
-        UInt32 _buffer;
+        Int32 _buffer;
         public Int32 intValue;
         public float floatValue;
     }

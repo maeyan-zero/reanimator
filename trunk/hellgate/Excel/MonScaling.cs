@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class MonScaling
     {
-        TableHeader header;
+        RowHeader header;
         public Int32 playerCount;
         public float playerVsMonsterIncrementPct0;
         public float playerVsMonsterIncrementPct1;

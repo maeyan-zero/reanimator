@@ -8,7 +8,7 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class ItemsTCv4
     {
-        ExcelFile.TableHeader header;                               // ReadOrder   OffsetFromHeader     ReadFunction
+        ExcelFile.RowHeader header;                               // ReadOrder   OffsetFromHeader     ReadFunction
 
         [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 name;//pchar                                   // 1    0x0000000000000000  XLS_ReadCharPtr1

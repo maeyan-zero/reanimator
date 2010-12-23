@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class SoundMixStates
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
@@ -22,13 +22,13 @@ namespace Hellgate.Excel
         public Int32 values7;
         public Int32 values8;
         public float fadeInTimeInSeconds;
-        public Int32 undefined1;
+        Int32 undefined1; // is always 0
         public float fadeOutTimeInSeconds;
-        public Int32 undefined2;
+        Int32 undefined2; // is always 0
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string reverbOverRide;
-        public Int32 undefined3;
-        public Int32 undefined4;
-        public Int32 undefined5;
+        Int32 undefined3; // is always 0
+        Int32 undefined4; // is always 0
+        Int32 undefined5; // is always 0
     }
 }

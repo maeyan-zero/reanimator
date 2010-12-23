@@ -8,7 +8,7 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class AchievementsTCv4
     {
-        ExcelFile.TableHeader header;
+        ExcelFile.RowHeader header;
         Int32 undefined;                                                                        // ??       0x0000000000000000      ?? (Never Read?)
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]

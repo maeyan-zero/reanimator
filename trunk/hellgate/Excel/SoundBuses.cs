@@ -1,30 +1,40 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class SoundBuses
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         public Int32 volume;
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 undefined;
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string effects;
         public Int32 sendsTo;//idx
-        public Int32 vca1;
-        public Int32 vca2;
-        public Int32 vca3;
-        public Int32 vca4;
-        public Int32 vca5;
-        public Int32 vca6;
-        public Int32 vca7;
-        public Int32 vca8;
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 vca1;//idx
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 vca2;//idx
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 vca3;//idx
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 vca4;//idx
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 vca5;//idx
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 vca6;//idx
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 vca7;//idx
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 vca8;//idx
         public Int32 userControl;
     }
 }

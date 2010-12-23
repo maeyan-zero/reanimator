@@ -6,7 +6,7 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class LevelScalingTCv4
     {
-        ExcelFile.TableHeader header;
+        ExcelFile.RowHeader header;
 
         public Int32 levelDiff;
         public Int32 PlayerAttackMonsterDmg;

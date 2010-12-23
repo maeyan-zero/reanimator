@@ -54,7 +54,7 @@ namespace Hellgate
                 // The only private field we add is the TableHeader
                 if (fieldInfo.IsPrivate)
                 {
-                    if (fieldInfo.FieldType != typeof(ExcelFile.TableHeader)) continue;
+                    if (fieldInfo.FieldType != typeof(ExcelFile.RowHeader)) continue;
                     outputAttributes.Add(null);
                     dataTable.Columns.Add(fieldInfo.Name, typeof(string));
                     continue;
@@ -149,7 +149,7 @@ namespace Hellgate
                     if (fieldInfo.IsPrivate)
                     {
 
-                        if (fieldInfo.FieldType != typeof(ExcelFile.TableHeader)) continue;
+                        if (fieldInfo.FieldType != typeof(ExcelFile.RowHeader)) continue;
                         baseRow[col++] = FileTools.ObjectToStringGeneric(value, ",");
                         continue;
                     }
@@ -294,7 +294,7 @@ namespace Hellgate
 
                 if (fieldInfo.IsPrivate)
                 {
-                    if (fieldInfo.FieldType == typeof(ExcelFile.TableHeader))
+                    if (fieldInfo.FieldType == typeof(ExcelFile.RowHeader))
                     {
                         col++;
                     }

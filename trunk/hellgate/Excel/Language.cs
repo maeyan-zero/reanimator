@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class Language
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 language;
         Int32 null1;
@@ -26,6 +26,6 @@ namespace Hellgate.Excel
         public Int32 unknown2;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string languageShort;
-        public Int32 reserved;
+        Int32 reserved;
     }
 }

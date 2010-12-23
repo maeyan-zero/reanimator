@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using TableHeader = Hellgate.ExcelFile.TableHeader;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class WardrobeTextureSet
     {
-        TableHeader header;
+        RowHeader header;
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_TEXTURESET_GROUP", SortColumnOrder = 1, SecondarySortColumn = "appearanceGroup1")]
         public Int32 textureSetGroup;//idx;
         public Int32 appearanceGroupFolder;//idx;
