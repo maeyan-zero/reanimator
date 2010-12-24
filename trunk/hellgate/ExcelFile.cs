@@ -20,7 +20,7 @@ namespace Hellgate
     {
         #region Members
         private byte[] _stringBuffer;
-        private byte[] _integerBuffer;
+        private byte[] _scriptBuffer;
         private readonly byte[] _myshBuffer;
         private byte[][] _extendedBuffer;
         private StringCollection _secondaryStrings;
@@ -118,7 +118,7 @@ namespace Hellgate
             if (isProperties)
             {
                 _rowScripts = new List<ExcelPropertiesScript>();
-                _integerBuffer = new byte[1]; // properties is weird - do this just to ensure 100% byte-for-byte accuracy
+                _scriptBuffer = new byte[1]; // properties is weird - do this just to ensure 100% byte-for-byte accuracy
                 colCount++;
             }
 
@@ -213,17 +213,17 @@ namespace Hellgate
                             continue;
                         }
 
-                        if (attribute.IsIntOffset)
+                        if (attribute.IsScript)
                         {
                             if (value == "0")
                             {
                                 objectDelegator[fieldInfo.Name, rowInstance] = 0;
                                 continue;
                             }
-                            if (_integerBuffer == null)
+                            if (_scriptBuffer == null)
                             {
-                                _integerBuffer = new byte[1024];
-                                _integerBuffer[0] = 0x00;
+                                _scriptBuffer = new byte[1024];
+                                _scriptBuffer[0] = 0x00;
                             }
 
                             value = value.Replace("\"", "");
@@ -235,7 +235,7 @@ namespace Hellgate
                                 intValue[i] = int.Parse(splitValue[i]);
                             }
                             objectDelegator[fieldInfo.Name, rowInstance] = integerBufferOffset;
-                            FileTools.WriteToBuffer(ref _integerBuffer, ref integerBufferOffset, FileTools.IntArrayToByteArray(intValue));
+                            FileTools.WriteToBuffer(ref _scriptBuffer, ref integerBufferOffset, FileTools.IntArrayToByteArray(intValue));
                             continue;
                         }
 
@@ -362,7 +362,7 @@ namespace Hellgate
 
             // resize the integer and string buffers if they were used
             if (_stringBuffer != null) Array.Resize(ref _stringBuffer, stringBufferOffset);
-            if (_integerBuffer != null) Array.Resize(ref _integerBuffer, integerBufferOffset);
+            if (_scriptBuffer != null) Array.Resize(ref _scriptBuffer, integerBufferOffset);
 
             return true;
         }
@@ -477,8 +477,8 @@ namespace Hellgate
                 int integerBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
                 if (integerBufferOffset != 0)
                 {
-                    _integerBuffer = new byte[integerBufferOffset];
-                    Buffer.BlockCopy(buffer, offset, _integerBuffer, 0, integerBufferOffset);
+                    _scriptBuffer = new byte[integerBufferOffset];
+                    Buffer.BlockCopy(buffer, offset, _scriptBuffer, 0, integerBufferOffset);
                     offset += integerBufferOffset;
                 }
             }
@@ -581,7 +581,7 @@ namespace Hellgate
                             continue;
                         }
 
-                        if ((attribute.IsIntOffset))
+                        if ((attribute.IsScript))
                         {
                             if ((newIntegerBuffer == null))
                             {
@@ -687,7 +687,7 @@ namespace Hellgate
             // Parsing Complete, assign new references. These arn't assigned before now incase of a parsing error.
             Rows = newTable;
             _stringBuffer = newStringBuffer;
-            _integerBuffer = newIntegerBuffer;
+            _scriptBuffer = newIntegerBuffer;
             _extendedBuffer = newExtendedBuffer;
             _secondaryStrings = newSecondaryStrings;
 
@@ -775,7 +775,7 @@ namespace Hellgate
 
             // rcsh, tysh, mysh, dneh
             // This section exists when there is a string or integer block or a mysh table
-            if (_integerBuffer != null || Attributes.HasScriptTable)
+            if (_scriptBuffer != null || Attributes.HasScriptTable)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.rcsh);
@@ -791,7 +791,7 @@ namespace Hellgate
                     }
                     else if (_rowScripts != null)
                     {
-                        _ScriptToByteArray(ref buffer, ref offset);
+                        _PropertiesScriptToByteArray(ref buffer, ref offset);
                     }
                 }
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.dneh);
@@ -799,11 +799,11 @@ namespace Hellgate
             }
 
             // Append the integer array.
-            if (_integerBuffer != null && _integerBuffer.Length > 0)
+            if (_scriptBuffer != null && _scriptBuffer.Length > 0)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);
-                FileTools.WriteToBuffer(ref buffer, ref offset, _integerBuffer.Length);
-                FileTools.WriteToBuffer(ref buffer, ref offset, _integerBuffer);
+                FileTools.WriteToBuffer(ref buffer, ref offset, _scriptBuffer.Length);
+                FileTools.WriteToBuffer(ref buffer, ref offset, _scriptBuffer);
             }
             else
             {
@@ -921,7 +921,7 @@ namespace Hellgate
                             }
                             continue;
                         }
-                        if ((attribute.IsIntOffset))
+                        if ((attribute.IsScript))
                         {
                             int offset = (int)objectDelegator[col](rowObject);
                             if ((offset == 0))
@@ -929,7 +929,7 @@ namespace Hellgate
                                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("0"));
                                 continue;
                             }
-                            int[] buffer = ReadIntegerTable(offset);
+                            int[] buffer = ReadScriptTable(offset);
 
                             //Debug.Write(String.Format("row: {0}, col: {1}: ", row, col));
                             //String excelScript = ExcelScript.Decompile(_integerBuffer, offset);

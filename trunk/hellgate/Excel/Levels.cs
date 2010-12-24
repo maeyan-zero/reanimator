@@ -88,9 +88,9 @@ namespace Hellgate.Excel
         public Int32 waypoint;//index
         public Int32 srvLevelType;
         public Int32 playerMax;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 monsterLevel;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 monsterLevelNightmare;
         public Int32 unknown3;
         [ExcelOutput(IsBool = true)]
@@ -138,7 +138,7 @@ namespace Hellgate.Excel
         public Int32 worldMapConnectIDs7;
         public Int32 worldMapConnectIDs8;
         public Int32 adventureChancePercent;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 numAdventures;
         [ExcelOutput(IsBool = true)]
         public Int32 enableRoomReset;
@@ -147,7 +147,7 @@ namespace Hellgate.Excel
         public float monsterRoomDensityMultiplier;
         [ExcelOutput(IsBool = true)]
         public Int32 contentsAlwaysRevealed;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 scriptPlayerEnterLevel;
         [ExcelOutput(IsBool = true)]
         public Int32 allowOverworldTravel;

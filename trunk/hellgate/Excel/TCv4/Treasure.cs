@@ -40,7 +40,7 @@ namespace Hellgate.Excel.TCv4
         byte[] unknown04;
         public float noDrop;
         public Int32 mustDrop_tcv4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 levelBoost;
         public float gamblePriceRangeMin_tcv4;
         public float gamblePriceRangeMax_tcv4;

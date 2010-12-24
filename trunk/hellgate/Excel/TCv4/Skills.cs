@@ -210,117 +210,117 @@ namespace Hellgate.Excel.TCv4
         public Int32 bonusSkills2;
         public Int32 bonusSkills3;
         public Int32 bonusSkills4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 bonusSkillScript0;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 bonusSkillScript1;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 bonusSkillScript2;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 bonusSkillScript3;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 bonusSkillScript4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar0;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar1;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar2;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar3;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar5;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar6;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar7;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar8;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 skillVar9;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 craftingScript_tcv4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 craftingPropertiesScript_tcv4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 rangeMultScript;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 cost;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 coolDownPercentChange;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsSkillEvent;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsTransferOnAttack;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsSkillEventServer;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsSkillEventServerPostProcess;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsServerPostLaunch;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsServerPostLaunchPost;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsPostLaunch;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsOnStateSet;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsServerOnStateSet;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsServerOnStateSetPost;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsOnStateSetPost;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsOnPulseServerOnly;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsOnDeSelectServerOnly;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsOnPulse;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsOnLevelChange;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsOnSkillStart;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsScriptOnTarget;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 scriptFromScriptEvents;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 selectCost;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 startCondition;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 startConditionOntarget;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 stateDurationInTicks;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 stateDurationBonus;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 stateDurationPercentByTarget;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 activatorCondition;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 activatorConditionOnTarget;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 eventChance;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 eventParam0;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 eventParam1;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 eventParam2;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 eventParam3;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 infoScript;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 stateRemovedServer;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 powerCostScript;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 powerCostPctMultScript;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 coolDownSkillScript;
         public Int32 selectCondition;
         public Int32 skillOnpulse;//idx

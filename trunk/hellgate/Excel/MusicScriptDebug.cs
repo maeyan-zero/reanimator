@@ -12,7 +12,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 script;//intptr
     }
 }

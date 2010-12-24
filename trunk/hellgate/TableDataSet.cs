@@ -79,10 +79,10 @@ namespace Hellgate
                     dataColumn.DefaultValue = String.Empty;
                 }
 
-                if ((excelAttribute.IsIntOffset))
+                if ((excelAttribute.IsScript))
                 {
                     dataColumn.DataType = typeof(String);
-                    dataColumn.ExtendedProperties.Add(ColumnKeys.IsIntOffset, true);
+                    dataColumn.ExtendedProperties.Add(ColumnKeys.IsScript, true);
                     dataColumn.DefaultValue = String.Empty;
                 }
 
@@ -176,10 +176,10 @@ namespace Hellgate
                         continue;
                     }
 
-                    if ((excelOutputAttribute.IsIntOffset))
+                    if ((excelOutputAttribute.IsScript))
                     {
                         int valueInt = (int)value;
-                        int[] intTable = excelFile.ReadIntegerTable(valueInt);
+                        int[] intTable = excelFile.ReadScriptTable(valueInt);
                         baseRow[col++] = (intTable != null) ? FileTools.ArrayToStringGeneric(intTable, ",") : String.Empty;
                         continue;
                     }

@@ -39,7 +39,7 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32[] unknown04;
         public float noDrop;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 levelBoost;
         public float moneyChanceMultiplier;
         public float moneyLuckChanceMultiplier;

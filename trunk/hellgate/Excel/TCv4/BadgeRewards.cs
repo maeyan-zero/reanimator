@@ -22,7 +22,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 unitTypeLimiter_tcv4;
         public Int32 unitTypeLimitPerPlayer_tcv4;
         public Int32 forceOnRespec_tcv4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 filter_tcv4;
     }
 }

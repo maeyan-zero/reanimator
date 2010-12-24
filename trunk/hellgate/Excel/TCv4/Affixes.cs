@@ -76,7 +76,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 allowTypes5;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes6;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 weight;
         public Int32 luckWeight;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
@@ -85,15 +85,15 @@ namespace Hellgate.Excel.TCv4
         public Int32 colorSetPriority;
         public Int32 state;
         public Int32 saveState;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 buyPriceMulti;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 buyPriceAdd;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 sellPriceMulti;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 sellPriceAdd;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 cond;
         public Int32 itemLevel;
         public Int32 prop1Cond;
@@ -102,19 +102,19 @@ namespace Hellgate.Excel.TCv4
         public Int32 prop4Cond;
         public Int32 prop5Cond;
         public Int32 prop6Cond;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 property1;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 property2;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 property3;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 property4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 property5;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 property6;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 statsFeed_tcv4;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyOnItemsRequiringUnitType;

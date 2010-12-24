@@ -86,9 +86,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 serverOnlyLocation;
         [ExcelOutput(IsBool = true)]
         public Int32 cursorLocation;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 playerPutRestricted;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 playerTakeRestricted;
         public Int32 invLocFallbackOnLoadError;//idx
 

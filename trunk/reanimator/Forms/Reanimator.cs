@@ -501,7 +501,7 @@ namespace Reanimator.Forms
 
                             value = convertedMask;
                         }
-                        else if (outputAttribute.IsIntOffset)
+                        else if (outputAttribute.IsScript)
                         {
                             int bp = 0;
                         }

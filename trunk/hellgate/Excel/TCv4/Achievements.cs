@@ -119,7 +119,7 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 rewardSkill;
         public Int32 rewardTitle_tcv4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 rewardScript;                                                                     // 29       0x00000000000000F8      XLS_ReadIntPtr
     }
 }
