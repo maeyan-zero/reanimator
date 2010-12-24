@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
@@ -35,9 +34,10 @@ namespace Reanimator.Forms
 
             if (true) return;
 
+            //_ExtractFunctionList();
             //_ExcelValuesDeepScan();
             //_DoCookTest();
-            _ConvertTCv4ExcelToSP();
+            //_ConvertTCv4ExcelToSP();
             //_LoadAllMLIFiles();
             //_LoadAllRooms();
             //_LoadAllLevelRules();
@@ -85,6 +85,14 @@ namespace Reanimator.Forms
 
         #region alexs_stuff
 
+        private static void _ExtractFunctionList()
+        {
+            String path = @"C:\SP_FunctionNamePtrGeneration.txt";
+            String[] functionCode = File.ReadAllLines(path);
+
+            ExcelScript.ExtractFunctionList(functionCode);
+        }
+
         /// <summary>
         /// This function checks every row/col of every excel file, determining if it needs to be visible/public or not.
         /// Any element non-zero for all rows, needs to be public (or add new OutputAttribute for "const" values?)
@@ -96,7 +104,6 @@ namespace Reanimator.Forms
 
             Dictionary<uint, uint> rowTypeCounts = new Dictionary<uint, uint>();
             Dictionary<String, uint[]> outputMessages = new Dictionary<String, uint[]>();
-
             Dictionary<String, ObjectDelegator> objectDelegators = new Dictionary<String, ObjectDelegator>();
             foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
             {
@@ -171,7 +178,7 @@ namespace Reanimator.Forms
 
                         if (isArray)
                         {
-                            Array objArray = (Array) value;
+                            Array objArray = (Array)value;
                             Debug.Assert(firstValueArray != null);
 
                             bool arrayEqual = true;
@@ -194,7 +201,7 @@ namespace Reanimator.Forms
 
                             if (arrayEqual) continue;
                             allEqual = false;
-                            break;                           
+                            break;
                         }
 
                         Debug.Assert(firstValue != null);
@@ -277,7 +284,7 @@ namespace Reanimator.Forms
                     uint[] messageCounts;
                     if (outputMessages.TryGetValue(message, out messageCounts))
                     {
-                        outputMessages[message] = new[] {messageCounts[0] + 1, structureId};
+                        outputMessages[message] = new[] { messageCounts[0] + 1, structureId };
                     }
                     else
                     {
@@ -300,8 +307,8 @@ namespace Reanimator.Forms
                 if (structureCount != msgCount) continue; // if not equal, then we have a message in one table, but in another table it's not applicable
 
                 String[] stringIds = (from dataTableAttribute in DataFile.DataFileMap
-                                          where dataTableAttribute.Value.StructureId == forStructureId
-                                          select dataTableAttribute.Key).ToArray();
+                                      where dataTableAttribute.Value.StructureId == forStructureId
+                                      select dataTableAttribute.Key).ToArray();
                 String stringIdPrepend = String.Join(",", stringIds);
 
                 if (previousStringId != stringIdPrepend)
@@ -325,7 +332,6 @@ namespace Reanimator.Forms
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.ExtractAllExcel();
 
-            //return;
             foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
             {
                 if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension)) continue;
@@ -341,9 +347,9 @@ namespace Reanimator.Forms
 
                 byte[] csvBytes = excelFile.ExportCSV();
                 File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);
-                ExcelFile excelFileCSV = new ExcelFile(csvBytes, fileEntry.RelativeFullPathWithoutPatch);
+                //ExcelFile excelFileCSV = new ExcelFile(csvBytes, fileEntry.RelativeFullPathWithoutPatch);
 
-                byte[] recookedBytes = excelFileCSV.ToByteArray();
+                //byte[] recookedBytes = excelFileCSV.ToByteArray();
 
                 //if (excelFile.StringId == "GLOBAL_STRING")
                 //{
@@ -351,8 +357,7 @@ namespace Reanimator.Forms
                 //    int bp1 = 0;
                 //}
 
-                
-                File.WriteAllBytes(filePath, recookedBytes);
+                //File.WriteAllBytes(filePath, recookedBytes);
             }
 
             int bp = 0;
@@ -584,7 +589,6 @@ namespace Reanimator.Forms
             }
         }
 
-
         private static void _LoadAllRooms()
         {
             const String root = @"D:\Games\Hellgate London\data\background\";
@@ -751,53 +755,6 @@ namespace Reanimator.Forms
             Console.SetOut(consoleOut);
         }
 
-        //private static void _DoFolder(String folderDir)
-        //{
-        //    DirectoryInfo directoryInfo = new DirectoryInfo(folderDir);
-        //    FileInfo[] files = directoryInfo.GetFiles("*.xml.cooked");
-
-        //    XmlCookedFile xmlAdrenaline = null;
-        //    System.Security.Cryptography.MD5CryptoServiceProvider x = new System.Security.Cryptography.MD5CryptoServiceProvider();
-
-        //    foreach (FileInfo fileInfo in files)
-        //    {
-        //        XmlCookedFile xmlCookedFile = new XmlCookedFile();
-
-        //        byte[] data = File.ReadAllBytes(fileInfo.FullName);
-        //        if (fileInfo.FullName.Contains("electriclasers.xml.cooked"))
-        //        {
-        //            xmlAdrenaline = xmlCookedFile;
-        //            int bp = 0;
-        //        }
-
-        //        Debug.Assert(xmlCookedFile.Uncook(data));
-
-        //        xmlCookedFile.SaveXml(fileInfo.FullName.Replace(".cooked", ""));
-
-        //        XmlCookedFile recookedXmlFile = new XmlCookedFile();
-        //        byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
-        //        byte[] originalHash = x.ComputeHash(data);
-        //        byte[] recookedHash = x.ComputeHash(recookedData);
-
-        //        if (!originalHash.SequenceEqual(recookedHash))
-        //        {
-        //            int bp = 0;
-        //        }
-
-
-        //        //String blah = xmlCookedFile.Blah();
-        //        //if (blah != null)
-        //        //{
-        //        //    //tw.WriteLine(fileInfo.FullName);
-        //        //    //tw.WriteLine(blah);
-        //        //}
-        //    }
-
-        //    if (xmlAdrenaline != null)
-        //    {
-        //        // xmlAdrenaline.SaveXmlCooked(@"c:\asdf.xml.cooked");
-        //    }
-        //}
         #endregion
 
         /// <summary>

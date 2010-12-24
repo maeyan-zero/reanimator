@@ -105,5 +105,36 @@ namespace Hellgate
             }
         }
 
+        public class ExcelScriptInvalidStackState : ReanimatorException
+        {
+            public ExcelScriptInvalidStackState(String reason)
+            {
+                CustomMessage = reason;
+            }
+        }
+
+        public class ExcelScriptUnknownOpCode : ReanimatorException
+        {
+            public ExcelScriptUnknownOpCode(String function)
+            {
+                CustomMessage = function;
+            }
+        }
+
+        public class ExcelScriptInfiniteCheck : ReanimatorException
+        {
+            public ExcelScriptInfiniteCheck(String function)
+            {
+                CustomMessage = function;
+            }
+        }
+
+        public class ExcelScriptUnknownFunctionCall : ReanimatorException
+        {
+            public ExcelScriptUnknownFunctionCall(String function)
+            {
+                CustomMessage = function;
+            }
+        }
     }
 }
