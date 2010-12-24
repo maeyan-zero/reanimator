@@ -19,11 +19,11 @@ namespace Hellgate.Excel
         public Int32 hostileAreaOnly;//bool;
         [ExcelOutput(IsBool = true)]
         public Int32 accessibleAreaOnly;//bool;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 timeLimitInMinutes;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 exterminateCount;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 triggerPercent;//intptr
         public Int32 objectClass;//idx;
         [ExcelOutput(IsBool = true)]

@@ -49,7 +49,7 @@ namespace Hellgate
             public uint DefaultBitmask { get; set; }
             public bool IsBool { get; set; }
             public bool IsStringOffset { get; set; }
-            public bool IsIntOffset { get; set; }
+            public bool IsScript { get; set; }
             public bool IsStringIndex { get; set; }
             public bool IsTableIndex { get; set; }
             public bool IsSecondaryString { get; set; }
@@ -83,13 +83,8 @@ namespace Hellgate
             public const String IsTableIndex = "IsTableIndex";
             public const String IsBitmask = "IsBitmask";
             public const String IsBool = "IsBool";
-            public const String IsIntOffset = "IsIntOffset";
+            public const String IsScript = "IsScript";
             public const String IsSecondaryString = "IsSecondaryString";
-            public const String RequiresDefault = "RequiresDefault";
-            public const String SortAscendingId = "SortAscendingId";
-            public const String SortColumnTwo = "SortColumnTwo";
-            public const String SortDistinctId = "SortDistinctId";
-            public const String SortPostOrderId = "SortPostOrderId";
         }
 
         private static class IntTableDef
@@ -162,11 +157,11 @@ namespace Hellgate
             return token == BitConverter.ToInt32(buffer, offset);
         }
 
-        public int[] ReadIntegerTable(int offset)
+        public int[] ReadScriptTable(int offset)
         {
             if (offset == 0) return null;
             int position = offset;
-            int value = FileTools.ByteArrayToInt32(_integerBuffer, position);
+            int value = FileTools.ByteArrayToInt32(_scriptBuffer, position);
 
             while (value != 0)
             {
@@ -176,12 +171,12 @@ namespace Hellgate
                 else if (IntTableDef.BitField.Contains(value)) position += (2 * sizeof(int));
                 else return null;
 
-                value = FileTools.ByteArrayToInt32(_integerBuffer, position);
+                value = FileTools.ByteArrayToInt32(_scriptBuffer, position);
             }
 
             int length = (position + sizeof(int) - offset) / sizeof(int);
 
-            return FileTools.ByteArrayToInt32Array(_integerBuffer, ref offset, length);
+            return FileTools.ByteArrayToInt32Array(_scriptBuffer, ref offset, length);
         }
 
         public string ReadStringTable(int offset)
@@ -286,7 +281,7 @@ namespace Hellgate
             return true;
         }
 
-        private void _ScriptToByteArray(ref byte[] buffer, ref int offset)
+        private void _PropertiesScriptToByteArray(ref byte[] buffer, ref int offset)
         {
             foreach (ExcelPropertiesScript excelScript in _rowScripts)
             {

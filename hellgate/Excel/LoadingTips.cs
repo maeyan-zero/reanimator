@@ -14,7 +14,7 @@ namespace Hellgate.Excel
         public string name;
         public Int32 stringKey;//stridx
         public Int32 weight;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 condition;//intptr
         public Int32 dontUseWithoutAGame;
     }

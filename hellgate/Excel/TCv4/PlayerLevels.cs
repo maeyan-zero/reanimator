@@ -27,13 +27,13 @@ namespace Hellgate.Excel.TCv4
         public Int32 restartHealthPercent;
         public Int32 restartPowerPercent;
         public Int32 restartShieldPercent;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 prop1;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 prop2;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 prop3;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 prop4;//intptr
         public Int32 spellSlot1;//idx
         public Int32 spellSlot2;//idx

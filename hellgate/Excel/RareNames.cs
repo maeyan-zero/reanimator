@@ -23,7 +23,7 @@ namespace Hellgate.Excel
         public Int32 types4;
         public Int32 types5;
         public Int32 types6;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 cond;//intptr
     }
 }

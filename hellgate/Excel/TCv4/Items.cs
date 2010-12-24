@@ -329,7 +329,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 code;                                          // 32   0x00000000000005BC  XLS_ReadCode
         Int32 unknown41;
         public Int32 densityValueOverride;                          // 54   0x00000000000005C4  XLS_ReadInt32
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 minionPackSize;                                // 55   0x00000000000005C8  XLS_ReadIntPtr
         public Int32 respawnPeriod;
         public Int32 petExecuteSkillByOwner;
@@ -376,14 +376,14 @@ namespace Hellgate.Excel.TCv4
         public Int32 maxSpawnLevel;                                 // 95   0x0000000000000634  XLS_ReadInt32       .text:00000001402E7A4C mov     dword ptr [rsp+0A8h+var_88], 186A0h (186A0h = 100,000....)
         public Int32 maxLevel;                                      // 96   0x0000000000000638  XLS_ReadInt32
         public Int32 maxRank;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 fixedLevel;//intptr                            // 97   0x000000000000063C  XLS_ReadIntPtr
         public Int32 hpMin;                                         // 98   0x0000000000000640  XLS_ReadInt32
         public Int32 hpMax;                                         // 99   0x0000000000000644  XLS_ReadInt32
         public Int32 powerMax;                                      // 100  0x0000000000000648  XLS_ReadInt32
         public Int32 experience;                                    // 101  0x000000000000064C  XLS_ReadInt32
         public Int32 attackRating;                                  // 143  0x0000000000000650  XLS_ReadInt32
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 luckBonus;//intptr                             // 102  0x0000000000000654  XLS_ReadIntPtr
         public Int32 luckChanceToSpawn;                             // 103  0x0000000000000658  XLS_ReadInt32
         public Int32 roomPopulatePass;                              // 58   0x000000000000065C  XLS_ReadInternalIndex
@@ -423,24 +423,24 @@ namespace Hellgate.Excel.TCv4
         public Int32 onlyCollideWithUnitType;//index                // 79   0x00000000000006C8  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "DIALOG")]
         public Int32 questDescription;//index                       // 260  0x00000000000006CC  XLS_ReadIndex
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 pickUpCondition;                               // 258  0x00000000000006D0  XLS_ReadIntPtr
         public Int32 useCondition;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 scriptOnUse;                                   // 248  0x00000000000006D8  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 stackSize;                                     // 227  0x00000000000006DC  XLS_ReadIntPtr
         public Int32 initScriptClient;
         public Int32 maxPickUp;                                     // 228  0x00000000000006E0  XLS_ReadInt32
         public Int32 baseCost;                                      // 221  0x00000000000006E4  XLS_ReadInt32
         public Int32 pvpPointCost;                                 // 222  0x00000000000006E8  XLS_ReadInt32
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 buyPriceMult;                                  // 223  0x00000000000006EC  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 buyPriceAdd;                                   // 224  0x00000000000006F0  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 sellPriceMult;                                 // 225  0x00000000000006F4  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 sellPriceAdd;                                  // 226  0x00000000000006F8  XLS_ReadIntPtr
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 inventoryWardrobe;                             // 110  0x00000000000006FC  XLS_ReadIndex
@@ -508,9 +508,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 dmgType;//index                                // 138  0x00000000000007B0  XLS_ReadIndex
         public Int32 weaponDamageScale;                             // 142  0x00000000000007B4  XLS_ReadInt32
         public Int32 dontUseWeaponDamage;                           // 141  0x00000000000007B8  XLS_ReadInt32
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 minBaseDmg;                                    // 139  0x00000000000007BC  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 maxBaseDmg;                                    // 140  0x00000000000007C0  XLS_ReadIntPtr
         public Int32 sfxAttackPctFocus;                             // 144  0x00000000000007C4  XLS_ReadInt32
         public Int32 sfxUknown1;
@@ -596,15 +596,15 @@ namespace Hellgate.Excel.TCv4
         public Int32 startingStamina;                               // 205  0x0000000000000998  XLS_ReadInt32
         public Int32 startingWillpower;                             // 206  0x000000000000099C  XLS_ReadInt32
         public Int32 recipeProps;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 props1;                                        // 207  0x00000000000009A0  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 props2;                                        // 208  0x00000000000009A4  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 props3;                                        // 209  0x00000000000009A8  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 props4;                                        // 210  0x00000000000009AC  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 props5;                                        // 211  0x00000000000009B0  XLS_ReadIntPtr
         public Int32 skillProps1;
         public Int32 skillProps2;
@@ -619,11 +619,11 @@ namespace Hellgate.Excel.TCv4
         public Int32 props4AppliesToUnitype;//index                 // 215  0x00000000000009C0  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 props5AppliesToUnitype;//index                 // 216  0x00000000000009C4  XLS_ReadIndex
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 perLevelProps1;                                // 218  0x00000000000009C8  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 perLevelProps2;                                // 219  0x00000000000009CC  XLS_ReadIntPtr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 propsElite;                                    // 217  0x00000000000009D0  XLS_ReadIntPtr
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         public Int32 affix1;//index                                 // 220  0x00000000000009D4  XLS_ReadIntArray,6
@@ -704,7 +704,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 unitDieBeginSkill;//index                      // 235  0x0000000000000AA4  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 unitDieBeginSkillClient;//index                // 236  0x0000000000000AA8  XLS_ReadIndex
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 scriptOnUnitDieEnd;//intptr                    // 237  0x0000000000000AAC  XLS_ReadIntPtr
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 unitDieEndSkill;//index                        // 238  0x0000000000000AB0  XLS_ReadIndex

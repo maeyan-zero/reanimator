@@ -13,7 +13,7 @@ namespace Hellgate.Excel
         public string Channel;
         public Int32 unknown1;
         public Int32 unknown2;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 unknown3;
     }
 }

@@ -15,13 +15,13 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 damageType;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 codeSfxDurationInMS;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 codeSfxEffect;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         Int32 conditional;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 missileStats;
         public Int32 invulnerableState;//idx
         Int32 attackersProhibitingState;//idx

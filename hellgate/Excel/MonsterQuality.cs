@@ -37,23 +37,23 @@ namespace Hellgate.Excel
         public Int32 TreasureLevelBoost;
         public float HealthMultiplier;
         public float ToHitMultiplier;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 MinionPackSize;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 prop1;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 prop2;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 prop3;//intptr
         public Int32 AffixCount;
         public Int32 AffixType1;//idx
         public Int32 AffixType2;//idx
         public Int32 AffixType3;//idx
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 AffixProbability1;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 AffixProbability2;//intptr
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 AffixProbability3;//intptr
         public Int32 experienceMultiplier;
         public Int32 luckMultiplier;

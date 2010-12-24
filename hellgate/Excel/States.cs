@@ -34,7 +34,7 @@ namespace Hellgate.Excel
         public Int32 skillScriptParam;
         Int32 unknown18;            // always 0
         public Int32 element;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 pulseRateInMs;
         public Int32 pulseRateInMsClient;            // always 0
         [ExcelOutput(IsStringOffset = true)]

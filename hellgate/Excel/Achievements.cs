@@ -95,7 +95,7 @@ namespace Hellgate.Excel
         public Int32 rewardXP;
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 rewardSkill;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 rewardScript;
     }
 }

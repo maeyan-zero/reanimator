@@ -25,11 +25,11 @@ namespace Hellgate.Excel
         public Int32 inclUnitInCond2;
         [ExcelOutput(IsBool = true)]
         public Int32 inclUnitInCond3;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 displayCondition1;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 displayCondition2;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 displayCondition3;
         [ExcelOutput(IsBool = true)]
         public Int32 newLine;
@@ -48,18 +48,18 @@ namespace Hellgate.Excel
         public Int32 ctrl2;
         public Int32 ctrl3;
         public Int32 ctrl4;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 val1;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 val2;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 val3;
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 val4;
         public Int32 toolTipArea;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 toolTipText;//stridx
-        [ExcelOutput(IsIntOffset = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 color;
     }
 }
