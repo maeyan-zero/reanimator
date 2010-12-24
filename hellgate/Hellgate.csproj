@@ -113,6 +113,7 @@
     <Compile Include="DataFile.cs" />
     <Compile Include="ExcelFile.cs" />
     <Compile Include="ExcelFileDef.cs" />
+    <Compile Include="ExcelScript.cs" />
     <Compile Include="Excel\Achievements.cs" />
     <Compile Include="Excel\Act.cs" />
     <Compile Include="Excel\Affixes.cs" />
