@@ -131,11 +131,16 @@ namespace Hellgate
 
             // check if the file name is the same as the string id
             String baseStringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
-            String stringId = stringIdPrepend + baseStringId;
-            if (DataFileMap.ContainsKey(stringId)) return stringId;
+            String stringIdAsKey = stringIdPrepend + baseStringId;
+
+            DataFileAttributes dataFileAttributes;
+            if (DataFileMap.TryGetValue(stringIdAsKey, out dataFileAttributes))
+            {
+                if (!dataFileAttributes.IsEmpty && !dataFileAttributes.IsMythos) return stringIdAsKey;
+            }
 
             // file name is different to string id, then we have to loop through and check for name replace elements
-            stringId = null;
+            String stringId = null;
             foreach (KeyValuePair<String, DataFileAttributes> keyValuePair in DataFileMap)
             {
                 DataFileAttributes dataFileAttribute = keyValuePair.Value;
@@ -143,6 +148,10 @@ namespace Hellgate
 
                 stringId = keyValuePair.Key;
             }
+
+            // if the stringId isn't found from file name checks, but we have it as a key,
+            // then we have a file with the same name as an entry with a key that is empty or mythos. So return the original key.
+            if (dataFileAttributes != null && stringId == null) return stringIdAsKey;
 
             return stringId;
         }

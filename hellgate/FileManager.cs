@@ -24,6 +24,8 @@ namespace Hellgate
         public Dictionary<ulong, FileEntry> FileEntries { get; private set; }
         public SortedDictionary<String, DataFile> DataFiles { get; private set; }
         public DataSet XlsDataSet { get; private set; }
+        private List<uint> _excelIndexToCodeList;
+        private Dictionary<uint, ExcelFile> _excelCodeToTable;
 
         /// <summary>
         /// Initialize the File Manager by the given Hellgate path.
@@ -186,7 +188,7 @@ namespace Hellgate
                 byte[] fileBytes = GetFileBytes(fileEntry);
 
                 //if (!fileEntry.FileNameString.Contains("sounds")) continue;
-                //if (fileEntry.FileNameString == "sounds.txt.cooked" && MPVersion)
+                //if (fileEntry.FileNameString.Contains("invloc"))
                 //{
                 //    int bp = 0;
                 //}
@@ -417,17 +419,25 @@ namespace Hellgate
         /// <returns>The Excel Table as a DataTable, or null if not found.</returns>
         public ExcelFile GetExcelTableFromCode(uint code)
         {
-            if (DataFiles == null || DataFiles["EXCELTABLES"] == null) return null;
+            if (DataFiles == null || DataFiles.ContainsKey("EXCELTABLES") == false) return null;
 
-            ExcelFile excelTables = (ExcelFile)DataFiles["EXCELTABLES"];
-            for (int i = 0; i < excelTables.Count; i++)
+            if (_excelCodeToTable == null)
             {
-                Excel.ExcelTables excelTable = (Excel.ExcelTables)excelTables.Rows[i];
+                ExcelFile excelTables = (ExcelFile)DataFiles["EXCELTABLES"];
+                _excelCodeToTable = new Dictionary<uint, ExcelFile>();
 
-                if (excelTable.code == code) return (ExcelFile)DataFiles[excelTable.name];
+                foreach (Excel.ExcelTables excelTablesRow in excelTables.Rows)
+                {
+                    DataFile dataFile;
+                    if (DataFiles.TryGetValue(excelTablesRow.name, out dataFile))
+                    {
+                        _excelCodeToTable[(uint)excelTablesRow.code] = (ExcelFile)dataFile;
+                    }
+                }
             }
 
-            return null;
+            ExcelFile excelTable;
+            return _excelCodeToTable.TryGetValue(code, out excelTable) ? excelTable : null;
         }
 
         public int GetExcelRowIndex(uint code, String value)
@@ -463,19 +473,37 @@ namespace Hellgate
             return -1;
         }
 
-        public String GetExcelRowStringFromIndex(uint code, int index)
+        public String GetExcelRowStringFromExcelIndex(int excelIndex, int rowIndex)
         {
-            if (DataFiles == null || DataFiles["EXCELTABLES"] == null || index < 0) return null;
+            if (_excelIndexToCodeList == null)
+            {
+                DataFile excelTables;
+                if (!DataFiles.TryGetValue("EXCELTABLES", out excelTables)) return null;
+
+                _excelIndexToCodeList = new List<uint>();
+                foreach (Excel.ExcelTables excelTable in excelTables.Rows)
+                {
+                    _excelIndexToCodeList.Add((uint)excelTable.code);
+                }
+            }
+
+            uint tableCode = _excelIndexToCodeList[excelIndex];
+            return GetExcelRowStringFromRowIndex(tableCode, rowIndex);
+        }
+
+        public String GetExcelRowStringFromRowIndex(uint code, int rowIndex)
+        {
+            if (DataFiles == null || DataFiles.ContainsKey("EXCELTABLES") == false || rowIndex < 0) return null;
 
             ExcelFile excelTable = GetExcelTableFromCode(code);
-            if (excelTable == null || index >= excelTable.Rows.Count) return null;
+            if (excelTable == null || rowIndex >= excelTable.Rows.Count) return null;
 
             Type type = excelTable.Rows[0].GetType();
             FieldInfo[] fields = type.GetFields();
             FieldInfo field = fields[0];
 
             bool isStringField = (field.FieldType == typeof(String));
-            Object row = excelTable.Rows[index];
+            Object row = excelTable.Rows[rowIndex];
 
             if (isStringField) return (String)field.GetValue(row);
 

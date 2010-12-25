@@ -101,7 +101,7 @@ namespace Hellgate
             {"INTERACT_MENU", new DataFileAttributes {RowType = typeof(InteractMenu), StructureId = 0x6078CD93}},
             {"INVENTORY", new DataFileAttributes {RowType = typeof(Inventory), StructureId = 0x8FEEC9AC}},
             {"INVENTORY_TYPES", new DataFileAttributes {RowType = typeof(InventoryTypes), StructureId = 0x102ECE59}},
-            {"INVLOC", new DataFileAttributes {RowType = typeof(InvLoc), StructureId = 0x9923217F}},
+            {"INVLOCIDX", new DataFileAttributes {FileName = "INVLOC", RowType = typeof(InvLoc), StructureId = 0x9923217F}},
             {"ITEM_LEVELS", new DataFileAttributes {RowType = typeof(ItemLevels), StructureId = 0xCE724D43}},
             {"ITEM_LOOK_GROUPS", new DataFileAttributes {RowType = typeof(ItemLookGroups), StructureId = 0xEBE7DF6B}},
             {"ITEM_LOOKS", new DataFileAttributes {RowType = typeof(ItemLooks), StructureId = 0x4FC6AEA2}},
@@ -376,7 +376,7 @@ namespace Hellgate
 
             // Empty Excel files
             {"GOSSIP", new DataFileAttributes {IsEmpty = true}},
-            {"INVLOCIDX", new DataFileAttributes {IsEmpty = true}},
+            {"INVLOC", new DataFileAttributes {IsEmpty = true}},
             {"SOUNDOVERRIDES", new DataFileAttributes {IsEmpty = true}},
 
 
