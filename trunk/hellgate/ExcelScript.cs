@@ -70,16 +70,16 @@ namespace Hellgate
             { 41, new Function { Name = "roundstat", ReturnType = "int", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "value", Type = "int" } } }},
             { 42, new Function { Name = "getEventType", ReturnType = "void", Args = new[] { new Argument { Name = "nAffixID", Type = "index", TableIndex = 25 } } }},
             { 43, new Function { Name = "getAffixIDByName", ReturnType = "void", Args = new[] { new Argument { Name = "nAffixID", Type = "index", TableIndex = 52 } } }},
-            { 44, new Function { Name = "get_skill_level", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "nSkill", Type = "index", TableIndex = 41 } } }},
+            { 44, new Function { Name = "get_skill_level", ReturnType = "type6", Args = new[] { new Argument { Name = "nSkill", Type = "index", TableIndex = 41 } } }},
             { 45, new Function { Name = "get_skill_level_object", ReturnType = "void", Args = new[] { new Argument { Name = "nSkill", Type = "index", TableIndex = 41 } } }},
-            { 46, new Function { Name = "pickskill", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "stats", Type = "type6" }, new Argument { Name = "nSkillLevel", Type = "int" } } }},
-            { 47, new Function { Name = "pickskillbyunittype", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "stats", Type = "type6" }, new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 }, new Argument { Name = "nSkillLevel", Type = "int" } } }},
+            { 46, new Function { Name = "pickskill", ReturnType = "type6", Args = new[] { new Argument { Name = "stats", Type = "type6" }, new Argument { Name = "nSkillLevel", Type = "int" } } }},
+            { 47, new Function { Name = "pickskillbyunittype", ReturnType = "type6", Args = new[] { new Argument { Name = "stats", Type = "type6" }, new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 }, new Argument { Name = "nSkillLevel", Type = "int" } } }},
             { 48, new Function { Name = "removeoldestpetoftype", ReturnType = "void", Args = new[] { new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 } } }},
             { 49, new Function { Name = "killoldestpetoftype", ReturnType = "void", Args = new[] { new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 } } }},
-            { 50, new Function { Name = "pickskillbyskillgroup", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "stats", Type = "type6" }, new Argument { Name = "nSkillGroup", Type = "index", TableIndex = 39 }, new Argument { Name = "nSkillLevel", Type = "int" } } }},
-            { 51, new Function { Name = "learnskill", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "skill", Type = "index", TableIndex = 41 } } }},
+            { 50, new Function { Name = "pickskillbyskillgroup", ReturnType = "type6", Args = new[] { new Argument { Name = "stats", Type = "type6" }, new Argument { Name = "nSkillGroup", Type = "index", TableIndex = 39 }, new Argument { Name = "nSkillLevel", Type = "int" } } }},
+            { 51, new Function { Name = "learnskill", ReturnType = "type6", Args = new[] { new Argument { Name = "skill", Type = "index", TableIndex = 41 } } }},
             { 52, new Function { Name = "getStatOwnerDivBySkillVar", ReturnType = "void", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "nVar", Type = "int" } } }},
-            { 53, new Function { Name = "getStatOwnerDivBy", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "nDivBy", Type = "int" } } }},
+            { 53, new Function { Name = "getStatOwnerDivBy", ReturnType = "type6", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "nDivBy", Type = "int" } } }},
             { 54, new Function { Name = "switchUnitAndObject", ReturnType = "void" }},
             { 55, new Function { Name = "getAchievementCompleteCount", ReturnType = "void", Args = new[] { new Argument { Name = "nAchievementID", Type = "index", TableIndex = 180 } } }},
             { 56, new Function { Name = "getVarRange", ReturnType = "void" }},
@@ -120,8 +120,8 @@ namespace Hellgate
             { 91, new Function { Name = "addStateWithTimeMSScript", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" } } }},
             { 92, new Function { Name = "addStateWithTimeMSScriptParam", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" }, new Argument { Name = "paramIndex", Type = "int" } } }},
             { 93, new Function { Name = "setDmgEffect", ReturnType = "void", Args = new[] { new Argument { Name = "nDmgEffect", Type = "index", TableIndex = 31 }, new Argument { Name = "nChance", Type = "int" }, new Argument { Name = "nTime", Type = "int" }, new Argument { Name = "nRoll", Type = "int" } } }},
-            { 94, new Function { Name = "getStatOwner", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 95, new Function { Name = "getStatParent", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
+            { 94, new Function { Name = "getStatOwner", ReturnType = "type6", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
+            { 95, new Function { Name = "getStatParent", ReturnType = "type6", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
             { 96, new Function { Name = "addPCTStatOnOwner", ReturnType = "void", Args = new[] { new Argument { Name = "nStat", Type = "index", TableIndex = 27 }, new Argument { Name = "nValue", Type = "int" }, new Argument { Name = "nParam", Type = "int" } } }},
             { 97, new Function { Name = "setStatOnOwner", ReturnType = "void", Args = new[] { new Argument { Name = "nStat", Type = "index", TableIndex = 27 }, new Argument { Name = "nValue", Type = "int" }, new Argument { Name = "nParam", Type = "int" } } }},
             { 98, new Function { Name = "total", ReturnType = "unknown4", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
@@ -129,35 +129,35 @@ namespace Hellgate
             { 100, new Function { Name = "basestat", ReturnType = "unknown4", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
             { 101, new Function { Name = "getcur", ReturnType = "unknown4", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "param", Type = "type5" } } }},
             { 102, new Function { Name = "statidx", ReturnType = "index", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 103, new Function { Name = "invcount", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "location", Type = "index", TableIndex = 24 } } }},
+            { 103, new Function { Name = "invcount", ReturnType = "type6", Args = new[] { new Argument { Name = "location", Type = "index", TableIndex = 24 } } }},
             { 104, new Function { Name = "dmgrider", ReturnType = "unknown4" }},
             { 105, new Function { Name = "procrider", ReturnType = "unknown4" }},
             { 106, new Function { Name = "knockback", ReturnType = "void", Args = new[] { new Argument { Name = "a", Type = "int" } } }},
             { 107, new Function { Name = "colorcoderequirement", ReturnType = "void", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "param", Type = "type5" } } }},
             { 108, new Function { Name = "color_code_modunit_requirement", ReturnType = "void", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "param", Type = "type5" } } }},
             { 109, new Function { Name = "color_code_modunit_requirement2", ReturnType = "void", Args = new[] { new Argument { Name = "stat1", Type = "index", TableIndex = 27 }, new Argument { Name = "param1", Type = "type5" }, new Argument { Name = "stat2", Type = "index", TableIndex = 27 }, new Argument { Name = "param2", Type = "type5" } } }},
-            { 110, new Function { Name = "feedchange", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
+            { 110, new Function { Name = "feedchange", ReturnType = "type6", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
             { 111, new Function { Name = "feedcolorcode", ReturnType = "void", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
             { 112, new Function { Name = "colorposneg", ReturnType = "void" }},
-            { 113, new Function { Name = "colorcodeprice", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
+            { 113, new Function { Name = "colorcodeprice", ReturnType = "type6" }},
             { 114, new Function { Name = "colorcodeclassreq", ReturnType = "void" }},
             { 115, new Function { Name = "colorcodeskillslots", ReturnType = "void" }},
             { 116, new Function { Name = "colorcodeskillusable", ReturnType = "void" }},
             { 117, new Function { Name = "colorcodeskillgroupusable", ReturnType = "void" }},
-            { 118, new Function { Name = "meetsclassreqs", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
+            { 118, new Function { Name = "meetsclassreqs", ReturnType = "type6" }},
             { 119, new Function { Name = "fontcolorrow", ReturnType = "void", Args = new[] { new Argument { Name = "nColorIndex", Type = "index", TableIndex = 7 } } }},
-            { 120, new Function { Name = "nodrop", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 121, new Function { Name = "notrade", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 122, new Function { Name = "BuyPriceByValue", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "valueType", Type = "int" } } }},
-            { 123, new Function { Name = "SellPriceByValue", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "valueType", Type = "int" } } }},
-            { 124, new Function { Name = "buyprice", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 125, new Function { Name = "buypriceRealWorld", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 126, new Function { Name = "sellprice", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 127, new Function { Name = "sellpriceRealWorld", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 128, new Function { Name = "hitChance", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 129, new Function { Name = "dodgeChance", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 130, new Function { Name = "numaffixes", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 131, new Function { Name = "qualitypricemult", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
+            { 120, new Function { Name = "nodrop", ReturnType = "type6" }},
+            { 121, new Function { Name = "notrade", ReturnType = "type6" }},
+            { 122, new Function { Name = "BuyPriceByValue", ReturnType = "type6", Args = new[] { new Argument { Name = "valueType", Type = "int" } } }},
+            { 123, new Function { Name = "SellPriceByValue", ReturnType = "type6", Args = new[] { new Argument { Name = "valueType", Type = "int" } } }},
+            { 124, new Function { Name = "buyprice", ReturnType = "type6" }},
+            { 125, new Function { Name = "buypriceRealWorld", ReturnType = "type6" }},
+            { 126, new Function { Name = "sellprice", ReturnType = "type6" }},
+            { 127, new Function { Name = "sellpriceRealWorld", ReturnType = "type6" }},
+            { 128, new Function { Name = "hitChance", ReturnType = "type6" }},
+            { 129, new Function { Name = "dodgeChance", ReturnType = "type6" }},
+            { 130, new Function { Name = "numaffixes", ReturnType = "type6" }},
+            { 131, new Function { Name = "qualitypricemult", ReturnType = "type6" }},
             { 132, new Function { Name = "enemies_in_radius", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
             { 133, new Function { Name = "visible_enemies_in_radius", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
             { 134, new Function { Name = "champions_in_radius", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
@@ -167,51 +167,51 @@ namespace Hellgate
             { 138, new Function { Name = "distance_sq_to_boss", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
             { 139, new Function { Name = "boss_hp_pct", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
             { 140, new Function { Name = "enemy_corpses_in_radius", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 141, new Function { Name = "monsters_killed", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "time", Type = "int" } } }},
-            { 142, new Function { Name = "monsters_killed_nonteam", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "time", Type = "int" } } }},
-            { 143, new Function { Name = "monsters_pct_left", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 144, new Function { Name = "hp_lost", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "time", Type = "int" } } }},
-            { 145, new Function { Name = "meters_moved", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "time", Type = "int" } } }},
-            { 146, new Function { Name = "attacks", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "time", Type = "int" } } }},
-            { 147, new Function { Name = "is_alive", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 148, new Function { Name = "monster_level", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 149, new Function { Name = "has_active_task", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 150, new Function { Name = "is_usable", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 151, new Function { Name = "is_examinable", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 152, new Function { Name = "is_operatable", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 153, new Function { Name = "isa", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
-            { 154, new Function { Name = "is_subscriber", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 155, new Function { Name = "is_hardcore", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 156, new Function { Name = "is_elite", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 157, new Function { Name = "get_difficulty", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 158, new Function { Name = "get_act", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
+            { 141, new Function { Name = "monsters_killed", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
+            { 142, new Function { Name = "monsters_killed_nonteam", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
+            { 143, new Function { Name = "monsters_pct_left", ReturnType = "type6" }},
+            { 144, new Function { Name = "hp_lost", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
+            { 145, new Function { Name = "meters_moved", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
+            { 146, new Function { Name = "attacks", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
+            { 147, new Function { Name = "is_alive", ReturnType = "type6" }},
+            { 148, new Function { Name = "monster_level", ReturnType = "type6" }},
+            { 149, new Function { Name = "has_active_task", ReturnType = "type6" }},
+            { 150, new Function { Name = "is_usable", ReturnType = "type6" }},
+            { 151, new Function { Name = "is_examinable", ReturnType = "type6" }},
+            { 152, new Function { Name = "is_operatable", ReturnType = "type6" }},
+            { 153, new Function { Name = "isa", ReturnType = "type6", Args = new[] { new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
+            { 154, new Function { Name = "is_subscriber", ReturnType = "type6" }},
+            { 155, new Function { Name = "is_hardcore", ReturnType = "type6" }},
+            { 156, new Function { Name = "is_elite", ReturnType = "type6" }},
+            { 157, new Function { Name = "get_difficulty", ReturnType = "type6" }},
+            { 158, new Function { Name = "get_act", ReturnType = "type6" }},
             { 159, new Function { Name = "email_send_item_okay", ReturnType = "type6", Args = new[] { new Argument { Name = "", Type = "void" } } }},
             { 160, new Function { Name = "email_receive_item_okay", ReturnType = "type6", Args = new[] { new Argument { Name = "", Type = "void" } } }},
             { 161, new Function { Name = "colorcodesubscriber", ReturnType = "void" }},
-            { 162, new Function { Name = "item_requires_subscriber", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
+            { 162, new Function { Name = "item_requires_subscriber", ReturnType = "type6" }},
             { 163, new Function { Name = "colorcodenightmare", ReturnType = "void" }},
-            { 164, new Function { Name = "item_is_nightmare_specific", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 165, new Function { Name = "quality", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 166, new Function { Name = "meetsitemreqs", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 167, new Function { Name = "weapondps", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
+            { 164, new Function { Name = "item_is_nightmare_specific", ReturnType = "type6" }},
+            { 165, new Function { Name = "quality", ReturnType = "type6" }},
+            { 166, new Function { Name = "meetsitemreqs", ReturnType = "type6" }},
+            { 167, new Function { Name = "weapondps", ReturnType = "type6" }},
             { 168, new Function { Name = "SkillTargetIsA", ReturnType = "void", Args = new[] { new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
             { 169, new Function { Name = "GetObjectIsA", ReturnType = "void", Args = new[] { new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
             { 170, new Function { Name = "GetMissileSourceIsA", ReturnType = "void", Args = new[] { new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
-            { 171, new Function { Name = "GetSkillHasReqWeapon", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 172, new Function { Name = "has_use_skill", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 173, new Function { Name = "hasdomname", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 174, new Function { Name = "dps", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "time", Type = "int" } } }},
+            { 171, new Function { Name = "GetSkillHasReqWeapon", ReturnType = "type6", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
+            { 172, new Function { Name = "has_use_skill", ReturnType = "type6", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
+            { 173, new Function { Name = "hasdomname", ReturnType = "type6" }},
+            { 174, new Function { Name = "dps", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
             { 175, new Function { Name = "ObjectCanUpgrade", ReturnType = "void" }},
-            { 176, new Function { Name = "use_state_duration", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 177, new Function { Name = "uses_missiles", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 178, new Function { Name = "uses_lasers", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 179, new Function { Name = "has_damage_radius", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 180, new Function { Name = "missile_count", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 181, new Function { Name = "laser_count", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 182, new Function { Name = "shots_per_minute", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 183, new Function { Name = "milliseconds_per_shot", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 184, new Function { Name = "player_crit_chance", ReturnType = "type6", Args = new[] { new Argument { Name = "pUnit", Type = "type6" }, new Argument { Name = "nSlot", Type = "int" } } }},
-            { 185, new Function { Name = "player_crit_damage", ReturnType = "type6", Args = new[] { new Argument { Name = "pUnit", Type = "type6" }, new Argument { Name = "nSlot", Type = "int" } } }},
+            { 176, new Function { Name = "use_state_duration", ReturnType = "type6" }},
+            { 177, new Function { Name = "uses_missiles", ReturnType = "type6" }},
+            { 178, new Function { Name = "uses_lasers", ReturnType = "type6" }},
+            { 179, new Function { Name = "has_damage_radius", ReturnType = "type6" }},
+            { 180, new Function { Name = "missile_count", ReturnType = "type6" }},
+            { 181, new Function { Name = "laser_count", ReturnType = "type6" }},
+            { 182, new Function { Name = "shots_per_minute", ReturnType = "type6" }},
+            { 183, new Function { Name = "milliseconds_per_shot", ReturnType = "type6" }},
+            { 184, new Function { Name = "player_crit_chance", ReturnType = "type6", Args = new[] { new Argument { Name = "nSlot", Type = "int" } } }},
+            { 185, new Function { Name = "player_crit_damage", ReturnType = "type6", Args = new[] { new Argument { Name = "nSlot", Type = "int" } } }},
             { 186, new Function { Name = "add_item_level_armor", ReturnType = "void", Args = new[] { new Argument { Name = "nLevel", Type = "int" }, new Argument { Name = "nPercent", Type = "int" } } }},
             { 187, new Function { Name = "player_level_skill_power_cost_percent", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
             { 188, new Function { Name = "item_level_damage_mult", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
@@ -225,11 +225,11 @@ namespace Hellgate
             { 196, new Function { Name = "monster_level_damage_pct", ReturnType = "int", Args = new[] { new Argument { Name = "nLevel", Type = "int" }, new Argument { Name = "nPCT", Type = "int" } } }},
             { 197, new Function { Name = "monster_level_shields", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
             { 198, new Function { Name = "monster_level_armor", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 199, new Function { Name = "unit_ai_changer_attack", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 200, new Function { Name = "does_field_damage", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 201, new Function { Name = "distance_to_player", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 202, new Function { Name = "has_container", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 203, new Function { Name = "monster_armor", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "nDamageType", Type = "index", TableIndex = 30 }, new Argument { Name = "nPercent", Type = "int" } } }},
+            { 199, new Function { Name = "unit_ai_changer_attack", ReturnType = "type6" }},
+            { 200, new Function { Name = "does_field_damage", ReturnType = "type6" }},
+            { 201, new Function { Name = "distance_to_player", ReturnType = "type6" }},
+            { 202, new Function { Name = "has_container", ReturnType = "type6" }},
+            { 203, new Function { Name = "monster_armor", ReturnType = "type6", Args = new[] { new Argument { Name = "nDamageType", Type = "index", TableIndex = 30 }, new Argument { Name = "nPercent", Type = "int" } } }},
             { 204, new Function { Name = "getSkillDmgMult", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillLvl", Type = "int" }, new Argument { Name = "a", Type = "int" } } }},
             { 205, new Function { Name = "getSkillArmorMult", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillLvl", Type = "int" }, new Argument { Name = "a", Type = "int" } } }},
             { 206, new Function { Name = "getSkillAttackSpeedMult", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillLvl", Type = "int" }, new Argument { Name = "a", Type = "int" } } }},
@@ -246,16 +246,16 @@ namespace Hellgate
             { 217, new Function { Name = "getDMGAugmentationPCT", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillVar", Type = "int" }, new Argument { Name = "nLevel", Type = "int" }, new Argument { Name = "nPercentOfLevel", Type = "int" }, new Argument { Name = "nSkillPointsInvested", Type = "int" } } }},
             { 218, new Function { Name = "getMonsterHPAtLevel", ReturnType = "void", Args = new[] { new Argument { Name = "nLevel", Type = "int" } } }},
             { 219, new Function { Name = "getMonsterHPAtLevelByPCT", ReturnType = "void", Args = new[] { new Argument { Name = "nLevel", Type = "int" }, new Argument { Name = "nPCT", Type = "int" } } }},
-            { 220, new Function { Name = "display_dmg_absorbed_pct", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 221, new Function { Name = "dmg_percent_by_energy", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 222, new Function { Name = "weapon_range", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
+            { 220, new Function { Name = "display_dmg_absorbed_pct", ReturnType = "type6" }},
+            { 221, new Function { Name = "dmg_percent_by_energy", ReturnType = "type6" }},
+            { 222, new Function { Name = "weapon_range", ReturnType = "type6" }},
             { 223, new Function { Name = "IsObjectDestructable", ReturnType = "void" }},
             { 224, new Function { Name = "GlobalThemeIsEnabled", ReturnType = "void", Args = new[] { new Argument { Name = "nTheme", Type = "index", TableIndex = 167 } } }},
-            { 225, new Function { Name = "SetRespawnPlayer", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 226, new Function { Name = "AddSecondaryRespawnPlayer", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
-            { 227, new Function { Name = "RemoveHPAndCheckForDeath", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "nRemove", Type = "int" } } }},
+            { 225, new Function { Name = "SetRespawnPlayer", ReturnType = "type6" }},
+            { 226, new Function { Name = "AddSecondaryRespawnPlayer", ReturnType = "type6" }},
+            { 227, new Function { Name = "RemoveHPAndCheckForDeath", ReturnType = "type6", Args = new[] { new Argument { Name = "nRemove", Type = "int" } } }},
             { 228, new Function { Name = "getSkillStat", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillStat", Type = "index", TableIndex = 44 }, new Argument { Name = "nSkillLvl", Type = "int" } } }},
-            { 229, new Function { Name = "TownPortalIsAllowed", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" } } }},
+            { 229, new Function { Name = "TownPortalIsAllowed", ReturnType = "type6" }},
             { 230, new Function { Name = "lowerManaCostOnSkillByPct", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 }, new Argument { Name = "nPctPower", Type = "int" } } }},
             { 231, new Function { Name = "lowerCoolDownOnSkillByPct", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 }, new Argument { Name = "nPctCooldown", Type = "int" } } }},
             { 232, new Function { Name = "skillIsOn", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
@@ -271,13 +271,13 @@ namespace Hellgate
             { 242, new Function { Name = "executeSkill", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
             { 243, new Function { Name = "executeSkillOnObject", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
             { 244, new Function { Name = "stopSkill", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 245, new Function { Name = "powercost", ReturnType = "type6", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
+            { 245, new Function { Name = "powercost", ReturnType = "type6", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
             { 246, new Function { Name = "is_stash_ui_open", ReturnType = "" }},
             { 247, new Function { Name = "setRecipeLearned", ReturnType = "void" }},
             { 248, new Function { Name = "getRecipeLearned", ReturnType = "void" }},
             { 249, new Function { Name = "createRecipe", ReturnType = "void" }},
             { 250, new Function { Name = "createSpecificRecipe", ReturnType = "void", Args = new[] { new Argument { Name = "nRecipeID", Type = "index", TableIndex = 108 } } }},
-            { 251, new Function { Name = "getCurrentGameTick", ReturnType = "void" }},
+            { 251, new Function { Name = "getCurrentGameTick", ReturnType = "void" }}
         };
 
         /* OpCode           Function                                Action
@@ -285,13 +285,18 @@ namespace Hellgate
          * 
          * 3    0x03        Call Function                           Calls a client function.
          * e.g.
-         *      26,0, 3,185, 0                                      -> return player_crit_damage(0); // 0 = right hand
+         *      26,0, 3,185, 0                                      -> return player_crit_damage(0); // 0 = right hand, 1 = left hand
          *      
          * 
          * 26   0x1A        Push                                    Pushes a number onto the stack.
          * e.g.
          *      26,1000, 0                                          -> return 1000;
          * 
+         * 
+         * 339  0x166       Negation                                Performs a boolean-not operation.
+         * e.g.
+         *      26,42, 26,13, 470, 339, 0                           -> return !(42 == 13); // = true
+         *      
          * 
          * 358  0x166       Multiplication                          Product of the two most recently pushed numbers.
          * e.g.
@@ -313,6 +318,16 @@ namespace Hellgate
          *      26,13, 26,42, 388, 26,99, 358, 26,4108, 399, 0      -> return (13 + 42) * 99 - 4108; // = 1337
          *      
          * 
+         * 470  0x1D6       Equal To                                Performs an equal-to comparison test.
+         * e.g.
+         *      26,50, 26,50, 470, 0                                -> return (50 == 50); // = true
+         * 
+         * 
+         * 481  0x1E1       Not Equal To                            Performs a not equal-to comparison test.
+         * e.g.
+         *      26,130, 26,120, 470, 0                              -> return (130 != 120); // = true
+         * 
+         * 
          * 666  0x29A       GetStatValue                            Gets the value of a stat at the following supplied index (from STATS table).
          * e.g.
          *      666, 612368384, 0                                   -> return GetStatValue(612368384); // = GetStatValue(612368384 << 22 = 146) = GetStatValue("experience");
@@ -328,25 +343,68 @@ namespace Hellgate
 
         private enum ExcelOpCodes : uint
         {
-            Return = 0,         // 0x00
-            Call = 3,           // 0x03
-            Push = 26,          // 0x1A
-            Unknown339 = 339,   // 0x153
-            Mult = 358,         // 0x166
-            Div = 369,          // 0x171
-            Add = 388,          // 0x184
-            Sub = 399,          // 0x18F
-            Unknown437 = 437,   // 0x1B5
-            GetStat = 666,      // 0x29A
-            SetStat = 669,      // 0x29D
-            Modifier707 = 707,  // 0x2C3
-            Modifier708 = 708,  // 0x2C4    // String?
-            Modifier709 = 709,  // 0x2C5    // Color?
-            Modifier711 = 711   // 0x2C7
+            Return = 0,                     // 0x00
+            Call = 3,                       // 0x03
+            Push = 26,                      // 0x1A
+            Not = 339,                      // 0x153
+            Mult = 358,                     // 0x166
+            Div = 369,                      // 0x171
+            Add = 388,                      // 0x184
+            Sub = 399,                      // 0x18F
+            LessThan = 426,                 // 0x1AA
+            GreaterThan = 437,              // 0x1B5
+            LessThanOrEqual = 448,          // 0x1C0
+            GreaterThanOrEqual = 459,       // 0x1CB
+            EqualTo = 470,                  // 0x1D6
+            NotEqualTo = 481,               // 0x1E1
+            And = 516,                      // 0x204
+            Or = 527,                       // 0x20F
+            EndIf = 538,                    // 0x21A    // I think... Or something like that...
+            GetStat = 666,                  // 0x29A
+            SetStat = 669,                  // 0x29D
+            GetUnknown = 680,               // 0x2A8
+            Unknown700 = 700,               // 0x2BC    // not sure - simplest versions found: 700,6,0 and 26,5,700,6,358,0
+            Unknown707 = 707,               // 0x2BC    // not sure - is usually: 707,0,714,...  or sometimes 707,1,714...
+            CastTypeUnknown708 = 708,       // 0x2C4    // String I think - need to confirm this
+            CastTypeColor = 709,            // 0x2C5
+            CastTypeInt = 710,              // 0x2C6    // I think this is an int cast - need to confirm this
+            CastTypeUnknown6 = 711,         // 0x2C7
+            CastTypeUnknown714 = 714        // 0x2CA
+        }
+
+        private enum ExcelTableCodes : uint
+        {
+            Stats = 23088
         }
         #endregion
 
-        public static String Decompile(byte[] scriptBytes, int offset)
+        private static FileManager _fileManager;
+        public static void SetFileManager(FileManager fileManager)
+        {
+            if (fileManager == null) return;
+            if (fileManager.DataFiles == null || fileManager.DataFiles.Count == 0) fileManager.LoadTableFiles();
+            if (fileManager.DataFiles.Count == 0) return;
+
+            _fileManager = fileManager;
+        }
+
+        private static String _GetExcelValueFromCode(uint index, uint code)
+        {
+            if (_fileManager == null) return index.ToString();
+
+            String indexStr = _fileManager.GetExcelRowStringFromRowIndex(code, (int) index);
+            return String.IsNullOrEmpty(indexStr) ? index.ToString() : String.Format("'{0}'", indexStr);
+        }
+
+        /// <summary>
+        /// Decompiles an excel script from byte codes to human readable text.
+        /// </summary>
+        /// <param name="scriptBytes">The script byte-code array.</param>
+        /// <param name="offset">The starting offset within the byte code array.</param>
+        /// <param name="row">For debugging purposes only.</param>
+        /// <param name="col">For debugging purposes only.</param>
+        /// <returns></returns>
+        public static String Decompile(byte[] scriptBytes, int offset, int row=0, int col=0)
         {
             String script = String.Empty;
             Stack<String> stack = new Stack<String>();
@@ -357,11 +415,12 @@ namespace Hellgate
                 ExcelOpCodes opCode = (ExcelOpCodes)FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                 String value1;
                 String value2;
-                int index;
+                uint index;
+                uint unknown;
 
                 switch (opCode)
                 {
-                    case ExcelOpCodes.Return:               // 0    0x00
+                    case ExcelOpCodes.Return:                   // 0    0x00
                         if (stack.Count == 1)
                         {
                             script += stack.Pop();
@@ -370,7 +429,12 @@ namespace Hellgate
 
                         return script;
 
-                    case ExcelOpCodes.Call:                 // 3    0x03
+                    case ExcelOpCodes.Call:                     // 3    0x03
+                        if (row == 283)
+                        {
+                            int bp = 0;
+                        }
+
                         int functionIndex = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
 
                         Function excelScriptFunction;
@@ -379,38 +443,59 @@ namespace Hellgate
                             throw new Exceptions.ExcelScriptUnknownFunctionCall("Unknown function index: " + functionIndex);
                         }
 
-                        _CheckStack(stack, excelScriptFunction.ArgCount+1, ExcelOpCodes.Call); // +1 for modifier/return type
+                        int modifier = 1;
+                        if (excelScriptFunction.ReturnType == "int") modifier = 0;
+                        _CheckStack(stack, excelScriptFunction.ArgCount + modifier, ExcelOpCodes.Call); // +1 for modifier/return type
                         String argString = String.Empty;
 
                         // todo: is this backwards? doesn't really matter much I guess
                         for (int i = 0; i < excelScriptFunction.ArgCount; i++)
                         {
-                            argString += stack.Pop();
+                            String argStr = stack.Pop();
+
+                            int tableIndex = excelScriptFunction.Args[i].TableIndex;
+                            if (tableIndex >= 0)
+                            {
+                                int rowIndex = int.Parse(argStr);
+                                String excelString = _fileManager.GetExcelRowStringFromExcelIndex(tableIndex, rowIndex);
+
+                                if (excelString == null)
+                                {
+                                    Console.WriteLine(String.Format("Warning: Unknown row index '{0}' on table index '{1}'.", rowIndex, tableIndex));
+                                    argString += rowIndex.ToString();
+                                }
+                                else
+                                {
+                                    argString += String.Format("'{0}'", excelString);
+                                }
+                            }
+                            else
+                            {
+                                argString += argStr;
+                            }
+
                             if (i < excelScriptFunction.ArgCount - 1) argString += ", ";
                         }
 
-                        String functionCallString = String.Format("{0}{1}({2})", stack.Pop(), excelScriptFunction.Name, argString);
+                        String modifierStr = String.Empty;
+                        if (modifier > 0) modifierStr = stack.Pop();
 
-                        //if (stack.Count == 0)
-                        //{
-                        //    script += functionCallString + ";";
-                        //}
-                        //else
-                        //{
-                            stack.Push(functionCallString);
-                        //}
+                        String functionCallString = String.Format("{0}{1}({2})", modifierStr, excelScriptFunction.Name, argString);
+                        stack.Push(functionCallString);
                         break;
 
-                    case ExcelOpCodes.Push:                 // 26   0x1A
+                    case ExcelOpCodes.Push:                     // 26   0x1A
                         int value = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
                         stack.Push(value.ToString());
                         break;
 
-                    case ExcelOpCodes.Unknown339:           // 339  0x153
-                        // unknown
+                    case ExcelOpCodes.Not:                      // 339  0x153
+                        _CheckStack(stack, 1, opCode);
+
+                        stack.Push(String.Format("!{0}", stack.Pop()));
                         break;
 
-                    case ExcelOpCodes.Mult:                 // 358  0x166
+                    case ExcelOpCodes.Mult:                     // 358  0x166
                         _CheckStack(stack, 2, opCode);
 
                         value2 = stack.Pop();
@@ -418,7 +503,7 @@ namespace Hellgate
                         stack.Push(String.Format("{0} * {1}", value1, value2));
                         break;
 
-                    case ExcelOpCodes.Div:                  // 369  0x171
+                    case ExcelOpCodes.Div:                      // 369  0x171
                         _CheckStack(stack, 2, opCode);
 
                         value2 = stack.Pop();
@@ -426,61 +511,148 @@ namespace Hellgate
                         stack.Push(String.Format("{0} / {1}", value1, value2));
                         break;
 
-                    case ExcelOpCodes.Add:                  // 388  0x184
+                    case ExcelOpCodes.Add:                      // 388  0x184
                         _CheckStack(stack, 2, opCode);
 
                         value2 = stack.Pop();
                         value1 = stack.Pop();
-                        stack.Push(String.Format("{0} + {1}", value1, value2));
+                        stack.Push(String.Format("({0} + {1})", value1, value2));
                         break;
 
-                    case ExcelOpCodes.Sub:                  // 399  0x18F
+                    case ExcelOpCodes.Sub:                      // 399  0x18F
                         _CheckStack(stack, 2, opCode);
 
                         value2 = stack.Pop();
                         value1 = stack.Pop();
-                        stack.Push(String.Format("{0} - {1}", value1, value2));
+                        stack.Push(String.Format("({0} - {1})", value1, value2));
                         break;
 
-                    case ExcelOpCodes.Unknown437:           // 437  0x1B5
-                        // unknown - "==" or "!=" ???
+                    case ExcelOpCodes.LessThan:                 // 426  0x1AA
                         _CheckStack(stack, 2, opCode);
 
                         value2 = stack.Pop();
                         value1 = stack.Pop();
-                        stack.Push(String.Format("{0} == {1}", value1, value2)); // let's try ==
+                        stack.Push(String.Format("{0} < {1}", value1, value2));
                         break;
 
-                    case ExcelOpCodes.GetStat:              // 666  0x29A
-                        index = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
-                        index >>= 22;
+                    case ExcelOpCodes.GreaterThan:              // 437  0x1B5
+                        _CheckStack(stack, 2, opCode);
 
-                        script += "GetStat(" + index + ")";
+                        value2 = stack.Pop();
+                        value1 = stack.Pop();
+                        stack.Push(String.Format("{0} > {1}", value1, value2));
                         break;
 
-                    case ExcelOpCodes.SetStat:              // 669  0x29D
+                    case ExcelOpCodes.LessThanOrEqual:          // 448  0x1C0
+                        _CheckStack(stack, 2, opCode);
+
+                        value2 = stack.Pop();
+                        value1 = stack.Pop();
+                        stack.Push(String.Format("{0} >= {1}", value1, value2));
+                        break;
+
+                    case ExcelOpCodes.GreaterThanOrEqual:       // 459  0x1CB
+                        _CheckStack(stack, 2, opCode);
+
+                        value2 = stack.Pop();
+                        value1 = stack.Pop();
+                        stack.Push(String.Format("{0} >= {1}", value1, value2));
+                        break;
+
+                    case ExcelOpCodes.EqualTo:                  // 470  0x1D6
+                        _CheckStack(stack, 2, opCode);
+
+                        value2 = stack.Pop();
+                        value1 = stack.Pop();
+                        stack.Push(String.Format("{0} == {1}", value1, value2));
+                        break;
+
+                    case ExcelOpCodes.NotEqualTo:               // 481  0x1E1
+                        _CheckStack(stack, 2, opCode);
+
+                        value2 = stack.Pop();
+                        value1 = stack.Pop();
+                        stack.Push(String.Format("{0} != {1}", value1, value2));
+                        break;
+
+                    case ExcelOpCodes.And:                      // 516  0x204
                         _CheckStack(stack, 1, opCode);
 
-                        index = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
+                        unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                        stack.Push(String.Format("{0} &&[{1}]", stack.Pop(), unknown));
+                        break;
+
+                    case ExcelOpCodes.Or:                       // 527  0x20F
+                        _CheckStack(stack, 1, opCode);
+
+                        unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                        stack.Push(String.Format("{0} ||[{1}]", stack.Pop(), unknown));
+                        break;
+
+                    case ExcelOpCodes.EndIf:                    // 538  0x21A
+                        _CheckStack(stack, 2, opCode);
+
+                        value2 = stack.Pop();
+                        value1 = stack.Pop();
+                        stack.Push(String.Format("({0} {1})", value1, value2));
+                        break;
+
+                    case ExcelOpCodes.GetStat:                  // 666  0x29A
+                        index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                         index >>= 22;
 
-                        script += String.Format("SetStat({0}, {1})", index, stack.Pop());
+                        stack.Push(String.Format("GetStat({0})", _GetExcelValueFromCode(index, (uint)ExcelTableCodes.Stats)));
                         break;
 
-                    case ExcelOpCodes.Modifier707:          // 707  0x2C3
-                        //stack.Push("(Modifier707)");
+                    case ExcelOpCodes.SetStat:                  // 669  0x29D
+                        _CheckStack(stack, 1, opCode);
+
+                        index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                        index >>= 22;
+
+                        script += String.Format("SetStat({0}, {1})", _GetExcelValueFromCode(index, (uint)ExcelTableCodes.Stats), stack.Pop());
                         break;
 
-                    case ExcelOpCodes.Modifier708:          // 708  0x2C4   // String
+                    case ExcelOpCodes.GetUnknown:               // 680  0x2A8
+                        index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                        index >>= 22;
+
+                        stack.Push("GetUnknown(" + index + ")");
+                        break;
+
+                    case ExcelOpCodes.Unknown700:               // 0x2BC:
+                        unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                        script += String.Format("Unknown700[{0}]", unknown);
+                        break;
+
+                    case ExcelOpCodes.Unknown707:               // 0x2C3:
+                        uint unknown1 = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                        uint unknown2 = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                        Debug.Assert(unknown2 == 714);
+
+                        script += String.Format("Unknown707[{0},{1}]", unknown1, unknown2);
+                        break;
+
+                    case ExcelOpCodes.CastTypeUnknown708:       // 708  0x2C4   // String
                         stack.Push("(String)");
                         break;
 
-                    case ExcelOpCodes.Modifier709:          // 709  0x2C5   // Color
+                    case ExcelOpCodes.CastTypeColor:            // 709  0x2C5   // Color
                         stack.Push("(Color)");
                         break;
 
-                    case ExcelOpCodes.Modifier711:          // 711  0x2C7
-                        stack.Push("(bool)");
+                    case ExcelOpCodes.CastTypeInt:              // 710  0x2C6
+                        stack.Push("(int?)");
+                        break;
+
+                    case ExcelOpCodes.CastTypeUnknown6:         // 711  0x2C7
+                        stack.Push("(type6)");
+                        break;
+
+                    case ExcelOpCodes.CastTypeUnknown714:       // 714  0x2CA
+                        stack.Push("(unknown714)");
                         break;
 
                     default:
@@ -494,7 +666,7 @@ namespace Hellgate
 
         private static void _CheckStack(Stack<String> stack, int requiredCount, ExcelOpCodes opCode)
         {
-            if (stack.Count >= requiredCount) return;
+            if (requiredCount <= stack.Count) return;
 
             String error = String.Format("The OpCode {0} requires {1} values on the stack.\n{2}", opCode, requiredCount, _DumpStack(stack));
             throw new Exceptions.ExcelScriptInvalidStackState(error);
@@ -504,7 +676,8 @@ namespace Hellgate
         {
             String stackDump = "Stack Dump : LIFO\n";
 
-            for (int i = 0; i < stack.Count; i++)
+            int stackCount = stack.Count;
+            for (int i = 0; i < stackCount; i++)
             {
                 stackDump += String.Format("{0}\t{1}\n", i, stack.Pop());
             }
@@ -718,8 +891,10 @@ namespace Hellgate
                                 function.ReturnType = "type6";
                                 haveReturnType = true;
                             }
-
-                            function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = "type6" };
+                            else
+                            {
+                                function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = "type6" };
+                            }
                         }
                         else if (asmStr[1].Contains("sub_1402456F8")) // arg type
                         {

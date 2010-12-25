@@ -884,7 +884,7 @@ namespace Hellgate
             try
             {
                 int index = int.Parse(elementText);
-                excelString = _fileManager.GetExcelRowStringFromIndex(xmlCookElement.ExcelTableCode, index);
+                excelString = _fileManager.GetExcelRowStringFromRowIndex(xmlCookElement.ExcelTableCode, index);
             }
             catch (Exception)
             {

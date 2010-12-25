@@ -931,11 +931,24 @@ namespace Hellgate
                             }
                             int[] buffer = ReadScriptTable(offset);
 
-                            //Debug.Write(String.Format("row: {0}, col: {1}: ", row, col));
-                            //String excelScript = ExcelScript.Decompile(_integerBuffer, offset);
-                            //Debug.WriteLine(excelScript);
+                            String scriptString = FileTools.ArrayToStringGeneric(buffer, ",");
+                            //if (StringId == "CHARDISPLAY" || true)
+                            //{
+                            //    try
+                            //    {
+                            //        Console.WriteLine(String.Format("row: {0}, col: {1}: scriptBytes: {2}", row, col, scriptString));
+                            //        scriptString = "\"" + ExcelScript.Decompile(_scriptBuffer, offset, row, col) + "\"";
+                            //        Console.WriteLine(scriptString);
+                            //    }
+                            //    catch (Exception e)
+                            //    {
+                            //        Console.WriteLine(e.ToString());
+                            //        scriptString = "ScriptError(" + scriptString + ")";
+                            //        int bp = 0;
+                            //    }
+                            //}
 
-                            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ArrayToStringGeneric(buffer, ",")));
+                            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptString));
                             continue;
                         }
                         if ((attribute.IsSecondaryString))

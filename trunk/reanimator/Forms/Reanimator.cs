@@ -330,7 +330,9 @@ namespace Reanimator.Forms
         private static void _DoCookTest()
         {
             FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.LoadTableFiles();
             fileManager.ExtractAllExcel();
+            ExcelScript.SetFileManager(fileManager);
 
             foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
             {
