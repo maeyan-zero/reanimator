@@ -115,17 +115,17 @@ namespace Hellgate
 
         public class ExcelScriptUnknownOpCode : ReanimatorException
         {
-            public ExcelScriptUnknownOpCode(String function)
+            public ExcelScriptUnknownOpCode(String opCode, String stack)
             {
-                CustomMessage = function;
+                CustomMessage = String.Format("Unknown OpCode: {0}\n{1}", opCode, stack);
             }
         }
 
         public class ExcelScriptInfiniteCheck : ReanimatorException
         {
-            public ExcelScriptInfiniteCheck(String function)
+            public ExcelScriptInfiniteCheck(String opCode, String stack)
             {
-                CustomMessage = function;
+                CustomMessage = String.Format("Warning: Forced loop beak - infinite Loop check override (>= 1000 loops).\nLast Op Code = {0}\n{1}", opCode, stack);
             }
         }
 
