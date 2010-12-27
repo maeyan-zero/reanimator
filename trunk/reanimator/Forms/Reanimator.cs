@@ -36,7 +36,7 @@ namespace Reanimator.Forms
 
             //_ExtractFunctionList();
             //_ExcelValuesDeepScan();
-            //_DoCookTest();
+            _DoCookTest();
             //_ConvertTCv4ExcelToSP();
             //_LoadAllMLIFiles();
             //_LoadAllRooms();
@@ -333,6 +333,7 @@ namespace Reanimator.Forms
             fileManager.LoadTableFiles();
             fileManager.ExtractAllExcel();
             ExcelScript.SetFileManager(fileManager);
+            ExcelScript.EnableDebug(true);
 
             foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
             {
@@ -346,6 +347,8 @@ namespace Reanimator.Forms
                 if (excelFile.Attributes.IsEmpty) continue;
 
                 Console.WriteLine("Cooking file: " + fileEntry.RelativeFullPathWithoutPatch);
+
+                //if (!fileEntry.RelativeFullPathWithoutPatch.Contains("damageeffects")) continue;
 
                 byte[] csvBytes = excelFile.ExportCSV();
                 File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);

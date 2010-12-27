@@ -190,6 +190,8 @@ namespace Hellgate
 
         public string ReadStringTable(int offset)
         {
+            if (_stringBuffer == null) return null;
+
             return offset == -1 ? String.Empty : FileTools.ByteArrayToStringASCII(_stringBuffer, offset);
         }
 

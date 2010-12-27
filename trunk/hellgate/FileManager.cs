@@ -491,16 +491,49 @@ namespace Hellgate
             return GetExcelRowStringFromRowIndex(tableCode, rowIndex);
         }
 
-        public String GetExcelRowStringFromRowIndex(uint code, int rowIndex)
+        public String GetExcelRowStringFromStringId(String stringId, int rowIndex, int colIndex=0)
+        {
+            if (DataFiles == null || String.IsNullOrEmpty(stringId) || DataFiles.ContainsKey(stringId) == false) return null;
+
+            ExcelFile excelTable = DataFiles[stringId] as ExcelFile;
+            if (excelTable == null) return null;
+
+            String stringVal = _GetExcelRowStringFromExcelFile(excelTable, rowIndex, colIndex);
+            return stringVal;
+        }
+
+        public String GetExcelRowStringFromRowIndex(uint code, int rowIndex, int colIndex=0)
         {
             if (DataFiles == null || DataFiles.ContainsKey("EXCELTABLES") == false || rowIndex < 0) return null;
 
             ExcelFile excelTable = GetExcelTableFromCode(code);
+
+            String stringVal = _GetExcelRowStringFromExcelFile(excelTable, rowIndex, colIndex);
+            return stringVal;
+            //if (excelTable == null || rowIndex >= excelTable.Rows.Count) return null;
+
+
+            //Type type = excelTable.Rows[0].GetType();
+            //FieldInfo[] fields = type.GetFields();
+            //FieldInfo field = fields[0];
+
+            //bool isStringField = (field.FieldType == typeof(String));
+            //Object row = excelTable.Rows[rowIndex];
+
+            //if (isStringField) return (String)field.GetValue(row);
+
+            //int offset = (int)field.GetValue(row);
+            //String stringVal = excelTable.ReadStringTable(offset);
+            //return stringVal;
+        }
+
+        private static String _GetExcelRowStringFromExcelFile(ExcelFile excelTable, int rowIndex, int colIndex)
+        {
             if (excelTable == null || rowIndex >= excelTable.Rows.Count) return null;
 
-            Type type = excelTable.Rows[0].GetType();
+            Type type = excelTable.Attributes.RowType;
             FieldInfo[] fields = type.GetFields();
-            FieldInfo field = fields[0];
+            FieldInfo field = fields[colIndex];
 
             bool isStringField = (field.FieldType == typeof(String));
             Object row = excelTable.Rows[rowIndex];

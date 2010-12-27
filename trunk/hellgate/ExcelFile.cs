@@ -932,20 +932,14 @@ namespace Hellgate
                             int[] buffer = ReadScriptTable(offset);
 
                             String scriptString = FileTools.ArrayToStringGeneric(buffer, ",");
-                            //if (StringId == "CHARDISPLAY" || true)
+                            //try
                             //{
-                            //    try
-                            //    {
-                            //        Console.WriteLine(String.Format("row: {0}, col: {1}: scriptBytes: {2}", row, col, scriptString));
-                            //        scriptString = "\"" + ExcelScript.Decompile(_scriptBuffer, offset, row, col) + "\"";
-                            //        Console.WriteLine(scriptString);
-                            //    }
-                            //    catch (Exception e)
-                            //    {
-                            //        Console.WriteLine(e.ToString());
-                            //        scriptString = "ScriptError(" + scriptString + ")";
-                            //        int bp = 0;
-                            //    }
+                            //    scriptString = "\"" + ExcelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldInfo.Name) + "\"";
+                            //}
+                            //catch (Exception e)
+                            //{
+                            //    Debug.WriteLine(e.ToString());
+                            //    scriptString = "ScriptError(" + scriptString + ")";
                             //}
 
                             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptString));

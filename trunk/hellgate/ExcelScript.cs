@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using Revival.Common;
 
 namespace Hellgate
@@ -318,6 +319,11 @@ namespace Hellgate
          *      26,13, 26,42, 388, 26,99, 358, 26,4108, 399, 0      -> return (13 + 42) * 99 - 4108; // = 1337
          *      
          * 
+         * 426  0x1AA       Less Than                               Performs a less-than comparison test.
+         * e.g.
+         *      26,55, 26,50, 470, 0                                -> return (55 < 50); // = false
+         * 
+         * 
          * 470  0x1D6       Equal To                                Performs an equal-to comparison test.
          * e.g.
          *      26,50, 26,50, 470, 0                                -> return (50 == 50); // = true
@@ -344,9 +350,15 @@ namespace Hellgate
         private enum ExcelOpCodes : uint
         {
             Return = 0,                     // 0x00
+            Unknown2 = 2,                   // 0x02     // I think this might be calls to properties scripts
             Call = 3,                       // 0x03
+            Unknown4 = 4,                   // 0x04
+            Unknown6 = 6,                   // 0x06
+            Unknown14 = 14,                 // 0x0E
             Push = 26,                      // 0x1A
+            Complement = 320,               // 0x140
             Not = 339,                      // 0x153
+            Pow = 347,                      // 0x15B
             Mult = 358,                     // 0x166
             Div = 369,                      // 0x171
             Add = 388,                      // 0x184
@@ -361,14 +373,21 @@ namespace Hellgate
             Or = 527,                       // 0x20F
             EndIf = 538,                    // 0x21A    // I think... Or something like that...
             GetStat = 666,                  // 0x29A
+            GetUnknown667 = 667,            // 0x29B
             SetStat = 669,                  // 0x29D
-            GetUnknown = 680,               // 0x2A8
+            SetUnknown673 = 673,            // 0x2A1
+            SetUnknown674 = 674,            // 0x2A2
+            GetUnknown680 = 680,            // 0x2A8
+            GetUnknown683 = 683,            // 0x2AB
+            GetUnknown687 = 687,            // 0x2AF
+            GetUnknown688 = 688,            // 0x2B0
             Unknown700 = 700,               // 0x2BC    // not sure - simplest versions found: 700,6,0 and 26,5,700,6,358,0
-            Unknown707 = 707,               // 0x2BC    // not sure - is usually: 707,0,714,...  or sometimes 707,1,714...
+            Unknown707 = 707,               // 0x2C3    // not sure - is usually: 707,0,714,...  or sometimes 707,1,714...
             CastTypeUnknown708 = 708,       // 0x2C4    // String I think - need to confirm this
             CastTypeColor = 709,            // 0x2C5
             CastTypeInt = 710,              // 0x2C6    // I think this is an int cast - need to confirm this
             CastTypeUnknown6 = 711,         // 0x2C7
+            TypeUnknown12 = 712,            // 0x2C8
             CastTypeUnknown714 = 714        // 0x2CA
         }
 
@@ -377,6 +396,22 @@ namespace Hellgate
             Stats = 23088
         }
         #endregion
+
+        private static String _debugRoot = @"C:\excel_script_debug\";
+        private static bool _debug;
+        public static void EnableDebug(bool enableDebug)
+        {
+            _debug = enableDebug;
+
+            if (!_debug) return;
+
+            Directory.CreateDirectory(_debugRoot);
+            String[] oldLogs = Directory.GetFiles(_debugRoot);
+            foreach (String logPath in oldLogs)
+            {
+                File.Delete(logPath);
+            }
+        }
 
         private static FileManager _fileManager;
         public static void SetFileManager(FileManager fileManager)
@@ -401,266 +436,402 @@ namespace Hellgate
         /// </summary>
         /// <param name="scriptBytes">The script byte-code array.</param>
         /// <param name="offset">The starting offset within the byte code array.</param>
+        /// <param name="scriptString">For debugging purposes only.</param>
+        /// <param name="stringId">For debugging purposes only.</param>
         /// <param name="row">For debugging purposes only.</param>
         /// <param name="col">For debugging purposes only.</param>
-        /// <returns></returns>
-        public static String Decompile(byte[] scriptBytes, int offset, int row=0, int col=0)
+        /// <param name="colName">For debugging purposes only.</param>
+        /// <returns>Decompiled excel script byte codes as human readable script.</returns>
+        public static String Decompile(byte[] scriptBytes, int offset, String scriptString=null, String stringId=null, int row=0, int col=0, String colName=null)
         {
-            String script = String.Empty;
-            Stack<String> stack = new Stack<String>();
+            bool debug = (stringId != null) && _debug;
+            bool debugShowGoodScript = false;
+            String debugPos = null;
 
-            int infCheck = 0;
-            while (true)
+            if (debug)
             {
-                ExcelOpCodes opCode = (ExcelOpCodes)FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                String value1;
-                String value2;
-                uint index;
-                uint unknown;
-
-                switch (opCode)
+                debugShowGoodScript = true;
+                String rowName = String.Empty;
+                if (_fileManager != null)
                 {
-                    case ExcelOpCodes.Return:                   // 0    0x00
-                        if (stack.Count == 1)
-                        {
-                            script += stack.Pop();
-                        }
-                        Debug.Assert(stack.Count == 0);
+                    int colIndex = 0;
+                    if (stringId == "ITEMDISPLAY")
+                    {
+                        colIndex = 1;
+                        debugShowGoodScript = false;
+                    }
 
-                        return script;
+                    rowName = _fileManager.GetExcelRowStringFromStringId(stringId, row, colIndex);
+                }
 
-                    case ExcelOpCodes.Call:                     // 3    0x03
-                        if (row == 283)
-                        {
-                            int bp = 0;
-                        }
+                debugPos = String.Format("row({0}): '{1}', col({2}): '{3}', scriptBytes: {4}", row, rowName, col, colName, scriptString);
+                if (debugShowGoodScript) Debug.WriteLine(debugPos);
+            }
 
-                        int functionIndex = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
+            try
+            {
+                String script = String.Empty;
+                Stack<String> stack = new Stack<String>();
 
-                        Function excelScriptFunction;
-                        if (!ClientFunctions.TryGetValue(functionIndex, out excelScriptFunction))
-                        {
-                            throw new Exceptions.ExcelScriptUnknownFunctionCall("Unknown function index: " + functionIndex);
-                        }
+                int infCheck = 0;
+                while (true)
+                {
+                    ExcelOpCodes opCode = (ExcelOpCodes)FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                    String value1;
+                    String value2;
+                    uint index;
+                    uint unknown;
 
-                        int modifier = 1;
-                        if (excelScriptFunction.ReturnType == "int") modifier = 0;
-                        _CheckStack(stack, excelScriptFunction.ArgCount + modifier, ExcelOpCodes.Call); // +1 for modifier/return type
-                        String argString = String.Empty;
+                    //if (row == 4)
+                    //{
+                    //    int bp = 0;
+                    //}
 
-                        // todo: is this backwards? doesn't really matter much I guess
-                        for (int i = 0; i < excelScriptFunction.ArgCount; i++)
-                        {
-                            String argStr = stack.Pop();
+                    switch (opCode)
+                    {
+                        case ExcelOpCodes.Return:                   // 0    0x00
+                            _CheckStack(stack, 1, opCode);
 
-                            int tableIndex = excelScriptFunction.Args[i].TableIndex;
-                            if (tableIndex >= 0)
+                            if (stack.Count > 1)
                             {
-                                int rowIndex = int.Parse(argStr);
-                                String excelString = _fileManager.GetExcelRowStringFromExcelIndex(tableIndex, rowIndex);
+                                String error = String.Format("Error: Stack has more than 1 value upon script return: \n{0}", _DumpStack(stack));
+                                throw new Exceptions.ExcelScriptInvalidStackState(error);
+                            }
 
-                                if (excelString == null)
+                            script += stack.Pop();
+                            if (debugShowGoodScript) Debug.WriteLine(script);
+                            return script;
+                            break;
+
+                        case ExcelOpCodes.Unknown2:                 // 2    0x02
+                            _CheckStack(stack, 1, opCode);
+
+                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            stack.Push(String.Format("Unknown2[{0}]", unknown));
+                            break;
+
+                        case ExcelOpCodes.Call:                     // 3    0x03
+                            int functionIndex = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
+
+                            Function excelScriptFunction;
+                            if (!ClientFunctions.TryGetValue(functionIndex, out excelScriptFunction))
+                            {
+                                throw new Exceptions.ExcelScriptUnknownFunctionCall("Unknown function index: " + functionIndex);
+                            }
+
+                            int modifier = 1;
+                            if (excelScriptFunction.ReturnType == "int") modifier = 0;
+                            _CheckStack(stack, excelScriptFunction.ArgCount + modifier, ExcelOpCodes.Call); // +1 for modifier/return type
+                            String argString = String.Empty;
+
+                            // todo: is this backwards? doesn't really matter much I guess
+                            for (int i = 0; i < excelScriptFunction.ArgCount; i++)
+                            {
+                                String argStr = stack.Pop();
+
+                                int tableIndex = excelScriptFunction.Args[i].TableIndex;
+                                if (tableIndex >= 0)
                                 {
-                                    Console.WriteLine(String.Format("Warning: Unknown row index '{0}' on table index '{1}'.", rowIndex, tableIndex));
-                                    argString += rowIndex.ToString();
+                                    int rowIndex = int.Parse(argStr);
+                                    String excelString = _fileManager.GetExcelRowStringFromExcelIndex(tableIndex, rowIndex);
+
+                                    if (excelString == null)
+                                    {
+                                        Console.WriteLine(String.Format("Warning: Unknown row index '{0}' on table index '{1}'.", rowIndex, tableIndex));
+                                        argString += rowIndex.ToString();
+                                    }
+                                    else
+                                    {
+                                        argString += String.Format("'{0}'", excelString);
+                                    }
                                 }
                                 else
                                 {
-                                    argString += String.Format("'{0}'", excelString);
+                                    argString += argStr;
                                 }
-                            }
-                            else
-                            {
-                                argString += argStr;
+
+                                if (i < excelScriptFunction.ArgCount - 1) argString += ", ";
                             }
 
-                            if (i < excelScriptFunction.ArgCount - 1) argString += ", ";
-                        }
+                            String modifierStr = String.Empty;
+                            if (modifier > 0) modifierStr = stack.Pop();
 
-                        String modifierStr = String.Empty;
-                        if (modifier > 0) modifierStr = stack.Pop();
+                            String functionCallString = String.Format("{0}{1}({2})", modifierStr, excelScriptFunction.Name, argString);
+                            stack.Push(functionCallString);
+                            break;
 
-                        String functionCallString = String.Format("{0}{1}({2})", modifierStr, excelScriptFunction.Name, argString);
-                        stack.Push(functionCallString);
-                        break;
+                        case ExcelOpCodes.Unknown4:                 // 4    0x04
+                            _CheckStack(stack, 1, opCode);
 
-                    case ExcelOpCodes.Push:                     // 26   0x1A
-                        int value = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
-                        stack.Push(value.ToString());
-                        break;
+                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            stack.Push(String.Format("Unknown4[{0}]", unknown));
+                            break;
 
-                    case ExcelOpCodes.Not:                      // 339  0x153
-                        _CheckStack(stack, 1, opCode);
+                        case ExcelOpCodes.Unknown6:                 // 6    0x06
+                            _CheckStack(stack, 1, opCode);
 
-                        stack.Push(String.Format("!{0}", stack.Pop()));
-                        break;
+                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            stack.Push(String.Format("Unknown6[{0}]", unknown));
+                            break;
 
-                    case ExcelOpCodes.Mult:                     // 358  0x166
-                        _CheckStack(stack, 2, opCode);
+                        case ExcelOpCodes.Unknown14:                // 14    0x0E
+                            _CheckStack(stack, 1, opCode);
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("{0} * {1}", value1, value2));
-                        break;
+                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            stack.Push(String.Format("Unknown14[{0}]", unknown));
+                            break;
 
-                    case ExcelOpCodes.Div:                      // 369  0x171
-                        _CheckStack(stack, 2, opCode);
+                        case ExcelOpCodes.Push:                     // 26   0x1A
+                            int value = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
+                            stack.Push(value.ToString());
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("{0} / {1}", value1, value2));
-                        break;
+                        case ExcelOpCodes.Complement:               // 320  0x140
+                            _CheckStack(stack, 1, opCode);
 
-                    case ExcelOpCodes.Add:                      // 388  0x184
-                        _CheckStack(stack, 2, opCode);
+                            // todo: check stack value - if negative, remove negative, etc
+                            stack.Push(String.Format("-{0}", stack.Pop()));
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("({0} + {1})", value1, value2));
-                        break;
+                        case ExcelOpCodes.Not:                      // 339  0x153
+                            _CheckStack(stack, 1, opCode);
 
-                    case ExcelOpCodes.Sub:                      // 399  0x18F
-                        _CheckStack(stack, 2, opCode);
+                            stack.Push(String.Format("!{0}", stack.Pop()));
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("({0} - {1})", value1, value2));
-                        break;
+                        case ExcelOpCodes.Pow:                     // 347  0x15B
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.LessThan:                 // 426  0x1AA
-                        _CheckStack(stack, 2, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("{0}^{1}", value1, value2));
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("{0} < {1}", value1, value2));
-                        break;
+                        case ExcelOpCodes.Mult:                     // 358  0x166
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.GreaterThan:              // 437  0x1B5
-                        _CheckStack(stack, 2, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("{0} * {1}", value1, value2));
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("{0} > {1}", value1, value2));
-                        break;
+                        case ExcelOpCodes.Div:                      // 369  0x171
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.LessThanOrEqual:          // 448  0x1C0
-                        _CheckStack(stack, 2, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("{0} / {1}", value1, value2));
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("{0} >= {1}", value1, value2));
-                        break;
+                        case ExcelOpCodes.Add:                      // 388  0x184
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.GreaterThanOrEqual:       // 459  0x1CB
-                        _CheckStack(stack, 2, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("({0} + {1})", value1, value2));
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("{0} >= {1}", value1, value2));
-                        break;
+                        case ExcelOpCodes.Sub:                      // 399  0x18F
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.EqualTo:                  // 470  0x1D6
-                        _CheckStack(stack, 2, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("({0} - {1})", value1, value2));
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("{0} == {1}", value1, value2));
-                        break;
+                        case ExcelOpCodes.LessThan:                 // 426  0x1AA
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.NotEqualTo:               // 481  0x1E1
-                        _CheckStack(stack, 2, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("{0} < {1}", value1, value2));
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("{0} != {1}", value1, value2));
-                        break;
+                        case ExcelOpCodes.GreaterThan:              // 437  0x1B5
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.And:                      // 516  0x204
-                        _CheckStack(stack, 1, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("{0} > {1}", value1, value2));
+                            break;
 
-                        unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                        stack.Push(String.Format("{0} &&[{1}]", stack.Pop(), unknown));
-                        break;
+                        case ExcelOpCodes.LessThanOrEqual:          // 448  0x1C0
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.Or:                       // 527  0x20F
-                        _CheckStack(stack, 1, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("{0} >= {1}", value1, value2));
+                            break;
 
-                        unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                        stack.Push(String.Format("{0} ||[{1}]", stack.Pop(), unknown));
-                        break;
+                        case ExcelOpCodes.GreaterThanOrEqual:       // 459  0x1CB
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.EndIf:                    // 538  0x21A
-                        _CheckStack(stack, 2, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("{0} >= {1}", value1, value2));
+                            break;
 
-                        value2 = stack.Pop();
-                        value1 = stack.Pop();
-                        stack.Push(String.Format("({0} {1})", value1, value2));
-                        break;
+                        case ExcelOpCodes.EqualTo:                  // 470  0x1D6
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.GetStat:                  // 666  0x29A
-                        index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                        index >>= 22;
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("{0} == {1}", value1, value2));
+                            break;
 
-                        stack.Push(String.Format("GetStat({0})", _GetExcelValueFromCode(index, (uint)ExcelTableCodes.Stats)));
-                        break;
+                        case ExcelOpCodes.NotEqualTo:               // 481  0x1E1
+                            _CheckStack(stack, 2, opCode);
 
-                    case ExcelOpCodes.SetStat:                  // 669  0x29D
-                        _CheckStack(stack, 1, opCode);
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("{0} != {1}", value1, value2));
+                            break;
 
-                        index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                        index >>= 22;
+                        case ExcelOpCodes.And:                      // 516  0x204
+                            _CheckStack(stack, 1, opCode);
 
-                        script += String.Format("SetStat({0}, {1})", _GetExcelValueFromCode(index, (uint)ExcelTableCodes.Stats), stack.Pop());
-                        break;
+                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            stack.Push(String.Format("{0} &&[{1}]", stack.Pop(), unknown));
+                            break;
 
-                    case ExcelOpCodes.GetUnknown:               // 680  0x2A8
-                        index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                        index >>= 22;
+                        case ExcelOpCodes.Or:                       // 527  0x20F
+                            _CheckStack(stack, 1, opCode);
 
-                        stack.Push("GetUnknown(" + index + ")");
-                        break;
+                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            stack.Push(String.Format("{0} ||[{1}]", stack.Pop(), unknown));
+                            break;
 
-                    case ExcelOpCodes.Unknown700:               // 0x2BC:
-                        unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                        case ExcelOpCodes.EndIf:                    // 538  0x21A
+                            _CheckStack(stack, 2, opCode);
 
-                        script += String.Format("Unknown700[{0}]", unknown);
-                        break;
+                            value2 = stack.Pop();
+                            value1 = stack.Pop();
+                            stack.Push(String.Format("({0} {1})", value1, value2));
+                            break;
 
-                    case ExcelOpCodes.Unknown707:               // 0x2C3:
-                        uint unknown1 = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                        uint unknown2 = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                        case ExcelOpCodes.GetStat:                  // 666  0x29A
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
 
-                        Debug.Assert(unknown2 == 714);
+                            stack.Push(String.Format("GetStat({0})", _GetExcelValueFromCode(index, (uint)ExcelTableCodes.Stats)));
+                            break;
 
-                        script += String.Format("Unknown707[{0},{1}]", unknown1, unknown2);
-                        break;
+                        case ExcelOpCodes.GetUnknown667:            // 667  0x29B
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
 
-                    case ExcelOpCodes.CastTypeUnknown708:       // 708  0x2C4   // String
-                        stack.Push("(String)");
-                        break;
+                            stack.Push(String.Format("GetUnknown667({0})", index));
+                            break;
 
-                    case ExcelOpCodes.CastTypeColor:            // 709  0x2C5   // Color
-                        stack.Push("(Color)");
-                        break;
+                        case ExcelOpCodes.SetStat:                  // 669  0x29D
+                            _CheckStack(stack, 1, opCode);
 
-                    case ExcelOpCodes.CastTypeInt:              // 710  0x2C6
-                        stack.Push("(int?)");
-                        break;
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
 
-                    case ExcelOpCodes.CastTypeUnknown6:         // 711  0x2C7
-                        stack.Push("(type6)");
-                        break;
+                            stack.Push(String.Format("SetStat({0}, {1})", _GetExcelValueFromCode(index, (uint)ExcelTableCodes.Stats), stack.Pop()));
+                            break;
 
-                    case ExcelOpCodes.CastTypeUnknown714:       // 714  0x2CA
-                        stack.Push("(unknown714)");
-                        break;
+                        case ExcelOpCodes.SetUnknown673:            // 673  0x2A1
+                            _CheckStack(stack, 1, opCode);
 
-                    default:
-                        throw new Exceptions.ExcelScriptUnknownOpCode("Unknown OpCode: " + opCode);
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
+
+                            stack.Push(String.Format("SetUnknown673({0}, {1})", index, stack.Pop()));
+                            break;
+
+                        case ExcelOpCodes.SetUnknown674:            // 674  0x2A2
+                            _CheckStack(stack, 1, opCode);
+
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
+
+                            stack.Push(String.Format("SetUnknown674({0}, {1})", index, stack.Pop()));
+                            break;
+
+                        case ExcelOpCodes.GetUnknown680:            // 680  0x2A8
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
+
+                            stack.Push(String.Format("GetUnknown680({0})", index));
+                            break;
+
+                        case ExcelOpCodes.GetUnknown683:            // 683  0x2AB
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
+
+                            stack.Push(String.Format("GetUnknown683({0})", index));
+                            break;
+
+                        case ExcelOpCodes.GetUnknown687:            // 687  0x2AF
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
+
+                            stack.Push(String.Format("GetUnknown687({0})", index));
+                            break;
+
+                        case ExcelOpCodes.GetUnknown688:            // 687  0x2B0
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
+
+                            stack.Push(String.Format("GetUnknown688({0})", index));
+                            break;
+
+                        case ExcelOpCodes.Unknown700:               // 700 0x2BC:
+                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                            stack.Push(String.Format("unknown700[{0}]", unknown));
+                            break;
+
+                        case ExcelOpCodes.Unknown707:               // 707 0x2C3:
+                            uint unknown1 = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            uint unknown2 = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                            Debug.Assert(unknown2 == 714);
+
+                            stack.Push(String.Format("Unknown707[{0},{1}]", unknown1, unknown2));
+                            break;
+
+                        case ExcelOpCodes.CastTypeUnknown708:       // 708  0x2C4   // String
+                            stack.Push("(String)");
+                            break;
+
+                        case ExcelOpCodes.CastTypeColor:            // 709  0x2C5   // Color
+                            stack.Push("(Color)");
+                            break;
+
+                        case ExcelOpCodes.CastTypeInt:              // 710  0x2C6
+                            stack.Push("(int?)");
+                            break;
+
+                        case ExcelOpCodes.CastTypeUnknown6:         // 711  0x2C7
+                            stack.Push("(type6)");
+                            break;
+
+                        case ExcelOpCodes.TypeUnknown12:            // 712  0x2C8
+                            stack.Push("(unknown12)");
+                            break;
+
+                        case ExcelOpCodes.CastTypeUnknown714:       // 714  0x2CA
+                            stack.Push("(unknown714)");
+                            break;
+
+                        default:
+                            throw new Exceptions.ExcelScriptUnknownOpCode(opCode.ToString(), _DumpStack(stack));
+                    }
+
+                    infCheck++;
+                    if (infCheck >= 1000) throw new Exceptions.ExcelScriptInfiniteCheck(opCode.ToString(), _DumpStack(stack));
                 }
+            }
+            catch (Exception e)
+            {
+                String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", _debugRoot, stringId);
+                String debugOutput = String.Format("{0}\n{1}\n\n\n", debugPos, e);   
+                File.AppendAllText(debugOutputPath, debugOutput);
 
-                infCheck++;
-                if (infCheck >= 1000) throw new Exceptions.ExcelScriptInfiniteCheck("");
+                throw;
             }
         }
 
