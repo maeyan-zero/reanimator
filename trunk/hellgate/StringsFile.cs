@@ -300,6 +300,11 @@ namespace Hellgate
             return writer.ToString().ToUnicodeByteArray();
         }
 
+        public override byte[] ExportSQL()
+        {
+            throw new NotImplementedException();
+        }
+
         private static String _EncapsulateString(String str)
         {
             return String.IsNullOrEmpty(str) ? String.Empty : String.Format("\"{0}\"", str);
