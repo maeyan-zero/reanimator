@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Win32;
 
-namespace Revival
+namespace Revival.Common
 {
     public abstract class Config
     {
@@ -73,6 +73,12 @@ namespace Revival
             set { SetValue("SaveDir", value); }
         }
 
+        public static string BackupDir
+        {
+            get { return GetValue("BackupDir", String.Format(@"C:\Users\{0}\Documents\My Games\Hellgate\Save\Singleplayer\Backup", Environment.UserName)); }
+            set { SetValue("BackupDir", value); }
+        }
+
         public static string ScriptDir
         {
             get { return GetValue("ScriptDir", @"C:\Program Files\Flagship Studios\Hellgate London\Reanimator\Scripts"); }
@@ -107,6 +113,12 @@ namespace Revival
         {
             get { return GetValue("GenerateRelations", true); }
             set { SetValue("GenerateRelations", value); }
+        }
+
+        public static bool LoadTCv4DataFiles
+        {
+            get { return GetValue("LoadTCv4DataFiles", false); }
+            set { SetValue("LoadTCv4DataFiles", value); }
         }
 
         public static bool LoadMPVersion

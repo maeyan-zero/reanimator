@@ -137,7 +137,7 @@ namespace Revival
             #endregion
 
             #region SQL test
-            if (false)
+            if (true)
             {
                 fileManager = new FileManager(@"D:\Games\Hellgate London");
                 fileManager.LoadTableFiles();
@@ -151,7 +151,6 @@ namespace Revival
 
                 foreach (DataFile dataFile in fileManager.DataFiles.Values)
                 {
-                    if (dataFile.IsStringsFile) continue;
                     byte[] buffer = dataFile.ExportSQL();
                     Console.WriteLine(dataFile.FileName);
                     FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, buffer);
@@ -159,7 +158,10 @@ namespace Revival
                     {
                         String dir = Path.GetDirectoryName(dataFile.FilePath);
                         if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-                        File.WriteAllBytes(dataFile.FilePath.Replace(".txt.cooked", ".sql"), buffer);
+                        string fileName = dataFile.FilePath;
+                        fileName = fileName.Replace(".txt.cooked", ".sql");
+                        fileName = fileName.Replace(".xls.uni.cooked", ".sql");
+                        File.WriteAllBytes(fileName, buffer);
                     }
                 }
 
