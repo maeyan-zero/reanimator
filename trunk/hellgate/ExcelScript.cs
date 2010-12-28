@@ -7,13 +7,13 @@ using Revival.Common;
 
 namespace Hellgate
 {
-    public static class ExcelScript
+    public class ExcelScript
     {
         #region Type Definitions
         private class Argument
         {
             public String Name;
-            public String Type;
+            public int Type;
             public int TableIndex = -1;
         }
 
@@ -25,264 +25,264 @@ namespace Hellgate
             public int ArgCount { get { return Args == null ? 0 : Args.Length; } }
         }
 
-        private static readonly Dictionary<int, Function> ClientFunctions = new Dictionary<int, Function>
+        private static readonly List<Function> ClientFunctions = new List<Function>
         {
-            { 0, new Function { Name = "setUnitTypeAreaFloorVis", ReturnType = "void", Args = new[] { new Argument { Name = "nLevelArea", Type = "index", TableIndex = 138 }, new Argument { Name = "nFloor", Type = "int" }, new Argument { Name = "nVis", Type = "int" } } }},
-            { 1, new Function { Name = "setUnitTypeAreaFloorInteractive", ReturnType = "void", Args = new[] { new Argument { Name = "nLevelArea", Type = "index", TableIndex = 138 }, new Argument { Name = "nFloor", Type = "int" } } }},
-            { 2, new Function { Name = "setUnitTypeAreaFloorDisabled", ReturnType = "void", Args = new[] { new Argument { Name = "nLevelArea", Type = "index", TableIndex = 138 }, new Argument { Name = "nFloor", Type = "int" } } }},
-            { 3, new Function { Name = "showDialog", ReturnType = "void", Args = new[] { new Argument { Name = "nDialog", Type = "index", TableIndex = 53 } } }},
-            { 4, new Function { Name = "setQuestBit", ReturnType = "void", Args = new[] { new Argument { Name = "nBit", Type = "int" } } }},
-            { 5, new Function { Name = "getQuestBit", ReturnType = "void", Args = new[] { new Argument { Name = "nBit", Type = "int" } } }},
-            { 6, new Function { Name = "isQuestTaskComplete", ReturnType = "void", Args = new[] { new Argument { Name = "nQuestTask", Type = "index", TableIndex = 165 } } }},
-            { 7, new Function { Name = "isQuestTaskActive", ReturnType = "void", Args = new[] { new Argument { Name = "nQuestTask", Type = "index", TableIndex = 165 } } }},
-            { 8, new Function { Name = "isTalkingTo", ReturnType = "void", Args = new[] { new Argument { Name = "nNPCID", Type = "index", TableIndex = 64 } } }},
-            { 9, new Function { Name = "setTargetVisibility", ReturnType = "void", Args = new[] { new Argument { Name = "nVis", Type = "int" } } }},
-            { 10, new Function { Name = "setTargetVisibilityOnFloor", ReturnType = "void", Args = new[] { new Argument { Name = "nVis", Type = "int" }, new Argument { Name = "nFloor", Type = "int" } } }},
-            { 11, new Function { Name = "setStateOnTarget", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 } } }},
-            { 12, new Function { Name = "setTargetInteractive", ReturnType = "void", Args = new[] { new Argument { Name = "nInteractive", Type = "int" } } }},
-            { 13, new Function { Name = "setTargetToTeam", ReturnType = "void", Args = new[] { new Argument { Name = "nTeam", Type = "int" } } }},
-            { 14, new Function { Name = "getIsTargetOfType", ReturnType = "void", Args = new[] { new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 } } }},
-            { 15, new Function { Name = "setMonsterInLevelToTarget", ReturnType = "void", Args = new[] { new Argument { Name = "nMonsterID", Type = "index", TableIndex = 115 } } }},
-            { 16, new Function { Name = "setObjectInLevelToTarget", ReturnType = "void", Args = new[] { new Argument { Name = "nObjectID", Type = "index", TableIndex = 119 } } }},
-            { 17, new Function { Name = "getIsTargetMonster", ReturnType = "void", Args = new[] { new Argument { Name = "nMonsterID", Type = "index", TableIndex = 115 } } }},
-            { 18, new Function { Name = "getIsTargetObject", ReturnType = "void", Args = new[] { new Argument { Name = "nObjectID", Type = "index", TableIndex = 119 } } }},
-            { 19, new Function { Name = "resetTargetObject", ReturnType = "void" }},
-            { 20, new Function { Name = "messageStatVal", ReturnType = "void", Args = new[] { new Argument { Name = "nStatId", Type = "index", TableIndex = 27 }, new Argument { Name = "nIndex", Type = "int" } } }},
-            { 21, new Function { Name = "getStatVal", ReturnType = "void", Args = new[] { new Argument { Name = "nStatId", Type = "index", TableIndex = 27 }, new Argument { Name = "nIndex", Type = "int" } } }},
-            { 22, new Function { Name = "createMap", ReturnType = "void" }},
-            { 23, new Function { Name = "randomizeMapSpawner", ReturnType = "void" }},
-            { 24, new Function { Name = "randomizeMapSpawnerEpic", ReturnType = "void" }},
-            { 25, new Function { Name = "setMapSpawnerByLevelAreaID", ReturnType = "void", Args = new[] { new Argument { Name = "nLevelAreaID", Type = "int" } } }},
-            { 26, new Function { Name = "setMapSpawnerByLevelArea", ReturnType = "void", Args = new[] { new Argument { Name = "nLevelAreaID", Type = "index", TableIndex = 138 } } }},
-            { 27, new Function { Name = "abs", ReturnType = "int", Args = new[] { new Argument { Name = "a", Type = "int" } } }},
-            { 28, new Function { Name = "min", ReturnType = "int", Args = new[] { new Argument { Name = "a", Type = "int" }, new Argument { Name = "b", Type = "int" } } }},
-            { 29, new Function { Name = "max", ReturnType = "int", Args = new[] { new Argument { Name = "a", Type = "int" }, new Argument { Name = "b", Type = "int" } } }},
-            { 30, new Function { Name = "pin", ReturnType = "int", Args = new[] { new Argument { Name = "value", Type = "int" }, new Argument { Name = "min", Type = "int" }, new Argument { Name = "max", Type = "int" } } }},
-            { 31, new Function { Name = "pct", ReturnType = "int", Args = new[] { new Argument { Name = "a", Type = "int" }, new Argument { Name = "b", Type = "int" } } }},
-            { 32, new Function { Name = "pctFloat", ReturnType = "int", Args = new[] { new Argument { Name = "a", Type = "int" }, new Argument { Name = "b", Type = "int" }, new Argument { Name = "c", Type = "int" } } }},
-            { 33, new Function { Name = "rand", ReturnType = "int", Args = new[] { new Argument { Name = "a", Type = "int" }, new Argument { Name = "b", Type = "int" } } }},
-            { 34, new Function { Name = "randByUnitId", ReturnType = "void", Args = new[] { new Argument { Name = "a", Type = "int" }, new Argument { Name = "b", Type = "int" } } }},
-            { 35, new Function { Name = "chance", ReturnType = "int", Args = new[] { new Argument { Name = "nChance", Type = "int" }, new Argument { Name = "nChanceOutOf", Type = "int" } } }},
-            { 36, new Function { Name = "chanceByStateMod", ReturnType = "void", Args = new[] { new Argument { Name = "nChance", Type = "int" }, new Argument { Name = "nChanceOutOf", Type = "int" }, new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "nModBy", Type = "int" } } }},
-            { 37, new Function { Name = "randSkillSeed", ReturnType = "void", Args = new[] { new Argument { Name = "a", Type = "int" }, new Argument { Name = "b", Type = "int" } } }},
-            { 38, new Function { Name = "roll", ReturnType = "int", Args = new[] { new Argument { Name = "a", Type = "int" }, new Argument { Name = "b", Type = "int" } } }},
-            { 39, new Function { Name = "divMult", ReturnType = "void", Args = new[] { new Argument { Name = "a", Type = "int" }, new Argument { Name = "b", Type = "int" }, new Argument { Name = "c", Type = "int" } } }},
-            { 40, new Function { Name = "distribute", ReturnType = "int", Args = new[] { new Argument { Name = "numdie", Type = "int" }, new Argument { Name = "diesize", Type = "int" }, new Argument { Name = "start", Type = "int" } } }},
-            { 41, new Function { Name = "roundstat", ReturnType = "int", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "value", Type = "int" } } }},
-            { 42, new Function { Name = "getEventType", ReturnType = "void", Args = new[] { new Argument { Name = "nAffixID", Type = "index", TableIndex = 25 } } }},
-            { 43, new Function { Name = "getAffixIDByName", ReturnType = "void", Args = new[] { new Argument { Name = "nAffixID", Type = "index", TableIndex = 52 } } }},
-            { 44, new Function { Name = "get_skill_level", ReturnType = "type6", Args = new[] { new Argument { Name = "nSkill", Type = "index", TableIndex = 41 } } }},
-            { 45, new Function { Name = "get_skill_level_object", ReturnType = "void", Args = new[] { new Argument { Name = "nSkill", Type = "index", TableIndex = 41 } } }},
-            { 46, new Function { Name = "pickskill", ReturnType = "type6", Args = new[] { new Argument { Name = "stats", Type = "type6" }, new Argument { Name = "nSkillLevel", Type = "int" } } }},
-            { 47, new Function { Name = "pickskillbyunittype", ReturnType = "type6", Args = new[] { new Argument { Name = "stats", Type = "type6" }, new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 }, new Argument { Name = "nSkillLevel", Type = "int" } } }},
-            { 48, new Function { Name = "removeoldestpetoftype", ReturnType = "void", Args = new[] { new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 } } }},
-            { 49, new Function { Name = "killoldestpetoftype", ReturnType = "void", Args = new[] { new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 } } }},
-            { 50, new Function { Name = "pickskillbyskillgroup", ReturnType = "type6", Args = new[] { new Argument { Name = "stats", Type = "type6" }, new Argument { Name = "nSkillGroup", Type = "index", TableIndex = 39 }, new Argument { Name = "nSkillLevel", Type = "int" } } }},
-            { 51, new Function { Name = "learnskill", ReturnType = "type6", Args = new[] { new Argument { Name = "skill", Type = "index", TableIndex = 41 } } }},
-            { 52, new Function { Name = "getStatOwnerDivBySkillVar", ReturnType = "void", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "nVar", Type = "int" } } }},
-            { 53, new Function { Name = "getStatOwnerDivBy", ReturnType = "type6", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "nDivBy", Type = "int" } } }},
-            { 54, new Function { Name = "switchUnitAndObject", ReturnType = "void" }},
-            { 55, new Function { Name = "getAchievementCompleteCount", ReturnType = "void", Args = new[] { new Argument { Name = "nAchievementID", Type = "index", TableIndex = 180 } } }},
-            { 56, new Function { Name = "getVarRange", ReturnType = "void" }},
-            { 57, new Function { Name = "getVar", ReturnType = "void", Args = new[] { new Argument { Name = "nVariable", Type = "int" } } }},
-            { 58, new Function { Name = "getAttackerSkillVarBySkill", ReturnType = "void", Args = new[] { new Argument { Name = "nSkill", Type = "index", TableIndex = 41 }, new Argument { Name = "nVariable", Type = "int" } } }},
-            { 59, new Function { Name = "getVarFromSkill", ReturnType = "void", Args = new[] { new Argument { Name = "nSkill", Type = "index", TableIndex = 41 }, new Argument { Name = "nVariable", Type = "int" } } }},
-            { 60, new Function { Name = "getVarFromSkillFromObject", ReturnType = "void", Args = new[] { new Argument { Name = "nSkill", Type = "index", TableIndex = 41 }, new Argument { Name = "nVariable", Type = "int" } } }},
-            { 61, new Function { Name = "hasStateObject", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 } } }},
-            { 62, new Function { Name = "hasState", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 } } }},
-            { 63, new Function { Name = "clearStateObject", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 } } }},
-            { 64, new Function { Name = "clearState", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 } } }},
-            { 65, new Function { Name = "clearStateClient", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 } } }},
-            { 66, new Function { Name = "isDualWielding", ReturnType = "void" }},
-            { 67, new Function { Name = "getWieldingIsACount", ReturnType = "void", Args = new[] { new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
-            { 68, new Function { Name = "setState", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 } } }},
-            { 69, new Function { Name = "setStateObject", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 } } }},
-            { 70, new Function { Name = "setStateWithTimeMS", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" } } }},
-            { 71, new Function { Name = "addStateWithTimeMS", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" } } }},
-            { 72, new Function { Name = "addStateWithTimeMSClient", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" } } }},
-            { 73, new Function { Name = "setStateWithTimeMSOnObject", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" } } }},
-            { 74, new Function { Name = "setStateWithTimeMSScriptOnObject", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" } } }},
-            { 75, new Function { Name = "BroadcastEquipEvent", ReturnType = "void" }},
-            { 76, new Function { Name = "setAITargetToSkillTarget", ReturnType = "void" }},
-            { 77, new Function { Name = "setObjectAITargetToUnitAITarget", ReturnType = "void" }},
-            { 78, new Function { Name = "makeAIAwareOfObject", ReturnType = "void" }},
-            { 79, new Function { Name = "setAITargetToObject", ReturnType = "void" }},
-            { 80, new Function { Name = "hasSkillTarget", ReturnType = "void" }},
-            { 81, new Function { Name = "setStateOnSkillTargetWithTimeMSScript", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" }, new Argument { Name = "clearFirst", Type = "int" } } }},
-            { 82, new Function { Name = "runScriptParamOnStateClear", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "paramIndex", Type = "int" } } }},
-            { 83, new Function { Name = "getCountOfUnitsInArea", ReturnType = "void", Args = new[] { new Argument { Name = "area", Type = "int" } } }},
-            { 84, new Function { Name = "runScriptOnUnitsInAreaPCT", ReturnType = "void", Args = new[] { new Argument { Name = "scriptIndex", Type = "int" }, new Argument { Name = "area", Type = "int" }, new Argument { Name = "chance", Type = "int" }, new Argument { Name = "flag", Type = "int" } } }},
-            { 85, new Function { Name = "doSkillAndScriptOnUnitsInAreaPCT", ReturnType = "void", Args = new[] { new Argument { Name = "nSkill", Type = "index", TableIndex = 41 }, new Argument { Name = "scriptIndex", Type = "int" }, new Argument { Name = "area", Type = "int" }, new Argument { Name = "chance", Type = "int" }, new Argument { Name = "flag", Type = "int" } } }},
-            { 86, new Function { Name = "doSkillOnUnitsInAreaPCT", ReturnType = "void", Args = new[] { new Argument { Name = "nSkill", Type = "index", TableIndex = 41 }, new Argument { Name = "area", Type = "int" }, new Argument { Name = "chance", Type = "int" }, new Argument { Name = "flag", Type = "int" } } }},
-            { 87, new Function { Name = "setStateWithTimeMSScript", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" } } }},
-            { 88, new Function { Name = "setStateWithTimeMSScriptParam", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" }, new Argument { Name = "paramIndex", Type = "int" } } }},
-            { 89, new Function { Name = "setStateWithTimeMSScriptParamObject", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" }, new Argument { Name = "paramIndex", Type = "int" } } }},
-            { 90, new Function { Name = "addStateWithTimeMSScriptParamObject", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" }, new Argument { Name = "paramIndex", Type = "int" } } }},
-            { 91, new Function { Name = "addStateWithTimeMSScript", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" } } }},
-            { 92, new Function { Name = "addStateWithTimeMSScriptParam", ReturnType = "void", Args = new[] { new Argument { Name = "nState", Type = "index", TableIndex = 73 }, new Argument { Name = "timerMS", Type = "int" }, new Argument { Name = "paramIndex", Type = "int" } } }},
-            { 93, new Function { Name = "setDmgEffect", ReturnType = "void", Args = new[] { new Argument { Name = "nDmgEffect", Type = "index", TableIndex = 31 }, new Argument { Name = "nChance", Type = "int" }, new Argument { Name = "nTime", Type = "int" }, new Argument { Name = "nRoll", Type = "int" } } }},
-            { 94, new Function { Name = "getStatOwner", ReturnType = "type6", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 95, new Function { Name = "getStatParent", ReturnType = "type6", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 96, new Function { Name = "addPCTStatOnOwner", ReturnType = "void", Args = new[] { new Argument { Name = "nStat", Type = "index", TableIndex = 27 }, new Argument { Name = "nValue", Type = "int" }, new Argument { Name = "nParam", Type = "int" } } }},
-            { 97, new Function { Name = "setStatOnOwner", ReturnType = "void", Args = new[] { new Argument { Name = "nStat", Type = "index", TableIndex = 27 }, new Argument { Name = "nValue", Type = "int" }, new Argument { Name = "nParam", Type = "int" } } }},
-            { 98, new Function { Name = "total", ReturnType = "unknown4", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 99, new Function { Name = "basetotal", ReturnType = "unknown4", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 100, new Function { Name = "basestat", ReturnType = "unknown4", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 101, new Function { Name = "getcur", ReturnType = "unknown4", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "param", Type = "type5" } } }},
-            { 102, new Function { Name = "statidx", ReturnType = "index", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 103, new Function { Name = "invcount", ReturnType = "type6", Args = new[] { new Argument { Name = "location", Type = "index", TableIndex = 24 } } }},
-            { 104, new Function { Name = "dmgrider", ReturnType = "unknown4" }},
-            { 105, new Function { Name = "procrider", ReturnType = "unknown4" }},
-            { 106, new Function { Name = "knockback", ReturnType = "void", Args = new[] { new Argument { Name = "a", Type = "int" } } }},
-            { 107, new Function { Name = "colorcoderequirement", ReturnType = "void", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "param", Type = "type5" } } }},
-            { 108, new Function { Name = "color_code_modunit_requirement", ReturnType = "void", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 }, new Argument { Name = "param", Type = "type5" } } }},
-            { 109, new Function { Name = "color_code_modunit_requirement2", ReturnType = "void", Args = new[] { new Argument { Name = "stat1", Type = "index", TableIndex = 27 }, new Argument { Name = "param1", Type = "type5" }, new Argument { Name = "stat2", Type = "index", TableIndex = 27 }, new Argument { Name = "param2", Type = "type5" } } }},
-            { 110, new Function { Name = "feedchange", ReturnType = "type6", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 111, new Function { Name = "feedcolorcode", ReturnType = "void", Args = new[] { new Argument { Name = "stat", Type = "index", TableIndex = 27 } } }},
-            { 112, new Function { Name = "colorposneg", ReturnType = "void" }},
-            { 113, new Function { Name = "colorcodeprice", ReturnType = "type6" }},
-            { 114, new Function { Name = "colorcodeclassreq", ReturnType = "void" }},
-            { 115, new Function { Name = "colorcodeskillslots", ReturnType = "void" }},
-            { 116, new Function { Name = "colorcodeskillusable", ReturnType = "void" }},
-            { 117, new Function { Name = "colorcodeskillgroupusable", ReturnType = "void" }},
-            { 118, new Function { Name = "meetsclassreqs", ReturnType = "type6" }},
-            { 119, new Function { Name = "fontcolorrow", ReturnType = "void", Args = new[] { new Argument { Name = "nColorIndex", Type = "index", TableIndex = 7 } } }},
-            { 120, new Function { Name = "nodrop", ReturnType = "type6" }},
-            { 121, new Function { Name = "notrade", ReturnType = "type6" }},
-            { 122, new Function { Name = "BuyPriceByValue", ReturnType = "type6", Args = new[] { new Argument { Name = "valueType", Type = "int" } } }},
-            { 123, new Function { Name = "SellPriceByValue", ReturnType = "type6", Args = new[] { new Argument { Name = "valueType", Type = "int" } } }},
-            { 124, new Function { Name = "buyprice", ReturnType = "type6" }},
-            { 125, new Function { Name = "buypriceRealWorld", ReturnType = "type6" }},
-            { 126, new Function { Name = "sellprice", ReturnType = "type6" }},
-            { 127, new Function { Name = "sellpriceRealWorld", ReturnType = "type6" }},
-            { 128, new Function { Name = "hitChance", ReturnType = "type6" }},
-            { 129, new Function { Name = "dodgeChance", ReturnType = "type6" }},
-            { 130, new Function { Name = "numaffixes", ReturnType = "type6" }},
-            { 131, new Function { Name = "qualitypricemult", ReturnType = "type6" }},
-            { 132, new Function { Name = "enemies_in_radius", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 133, new Function { Name = "visible_enemies_in_radius", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 134, new Function { Name = "champions_in_radius", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 135, new Function { Name = "distance_sq_to_champion", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 136, new Function { Name = "champion_hp_pct", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 137, new Function { Name = "bosses_in_radius", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 138, new Function { Name = "distance_sq_to_boss", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 139, new Function { Name = "boss_hp_pct", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 140, new Function { Name = "enemy_corpses_in_radius", ReturnType = "int", Args = new[] { new Argument { Name = "unit", Type = "type6" }, new Argument { Name = "radius", Type = "int" } } }},
-            { 141, new Function { Name = "monsters_killed", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
-            { 142, new Function { Name = "monsters_killed_nonteam", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
-            { 143, new Function { Name = "monsters_pct_left", ReturnType = "type6" }},
-            { 144, new Function { Name = "hp_lost", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
-            { 145, new Function { Name = "meters_moved", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
-            { 146, new Function { Name = "attacks", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
-            { 147, new Function { Name = "is_alive", ReturnType = "type6" }},
-            { 148, new Function { Name = "monster_level", ReturnType = "type6" }},
-            { 149, new Function { Name = "has_active_task", ReturnType = "type6" }},
-            { 150, new Function { Name = "is_usable", ReturnType = "type6" }},
-            { 151, new Function { Name = "is_examinable", ReturnType = "type6" }},
-            { 152, new Function { Name = "is_operatable", ReturnType = "type6" }},
-            { 153, new Function { Name = "isa", ReturnType = "type6", Args = new[] { new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
-            { 154, new Function { Name = "is_subscriber", ReturnType = "type6" }},
-            { 155, new Function { Name = "is_hardcore", ReturnType = "type6" }},
-            { 156, new Function { Name = "is_elite", ReturnType = "type6" }},
-            { 157, new Function { Name = "get_difficulty", ReturnType = "type6" }},
-            { 158, new Function { Name = "get_act", ReturnType = "type6" }},
-            { 159, new Function { Name = "email_send_item_okay", ReturnType = "type6", Args = new[] { new Argument { Name = "", Type = "void" } } }},
-            { 160, new Function { Name = "email_receive_item_okay", ReturnType = "type6", Args = new[] { new Argument { Name = "", Type = "void" } } }},
-            { 161, new Function { Name = "colorcodesubscriber", ReturnType = "void" }},
-            { 162, new Function { Name = "item_requires_subscriber", ReturnType = "type6" }},
-            { 163, new Function { Name = "colorcodenightmare", ReturnType = "void" }},
-            { 164, new Function { Name = "item_is_nightmare_specific", ReturnType = "type6" }},
-            { 165, new Function { Name = "quality", ReturnType = "type6" }},
-            { 166, new Function { Name = "meetsitemreqs", ReturnType = "type6" }},
-            { 167, new Function { Name = "weapondps", ReturnType = "type6" }},
-            { 168, new Function { Name = "SkillTargetIsA", ReturnType = "void", Args = new[] { new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
-            { 169, new Function { Name = "GetObjectIsA", ReturnType = "void", Args = new[] { new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
-            { 170, new Function { Name = "GetMissileSourceIsA", ReturnType = "void", Args = new[] { new Argument { Name = "unittype", Type = "index", TableIndex = 23 } } }},
-            { 171, new Function { Name = "GetSkillHasReqWeapon", ReturnType = "type6", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 172, new Function { Name = "has_use_skill", ReturnType = "type6", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 173, new Function { Name = "hasdomname", ReturnType = "type6" }},
-            { 174, new Function { Name = "dps", ReturnType = "type6", Args = new[] { new Argument { Name = "time", Type = "int" } } }},
-            { 175, new Function { Name = "ObjectCanUpgrade", ReturnType = "void" }},
-            { 176, new Function { Name = "use_state_duration", ReturnType = "type6" }},
-            { 177, new Function { Name = "uses_missiles", ReturnType = "type6" }},
-            { 178, new Function { Name = "uses_lasers", ReturnType = "type6" }},
-            { 179, new Function { Name = "has_damage_radius", ReturnType = "type6" }},
-            { 180, new Function { Name = "missile_count", ReturnType = "type6" }},
-            { 181, new Function { Name = "laser_count", ReturnType = "type6" }},
-            { 182, new Function { Name = "shots_per_minute", ReturnType = "type6" }},
-            { 183, new Function { Name = "milliseconds_per_shot", ReturnType = "type6" }},
-            { 184, new Function { Name = "player_crit_chance", ReturnType = "type6", Args = new[] { new Argument { Name = "nSlot", Type = "int" } } }},
-            { 185, new Function { Name = "player_crit_damage", ReturnType = "type6", Args = new[] { new Argument { Name = "nSlot", Type = "int" } } }},
-            { 186, new Function { Name = "add_item_level_armor", ReturnType = "void", Args = new[] { new Argument { Name = "nLevel", Type = "int" }, new Argument { Name = "nPercent", Type = "int" } } }},
-            { 187, new Function { Name = "player_level_skill_power_cost_percent", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 188, new Function { Name = "item_level_damage_mult", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 189, new Function { Name = "item_level_feed", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 190, new Function { Name = "item_level_sfx_attack", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 191, new Function { Name = "item_level_sfx_defense", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 192, new Function { Name = "item_level_shield_buffer", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 193, new Function { Name = "monster_level_sfx_defense", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 194, new Function { Name = "monster_level_sfx_attack", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 195, new Function { Name = "monster_level_damage", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 196, new Function { Name = "monster_level_damage_pct", ReturnType = "int", Args = new[] { new Argument { Name = "nLevel", Type = "int" }, new Argument { Name = "nPCT", Type = "int" } } }},
-            { 197, new Function { Name = "monster_level_shields", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 198, new Function { Name = "monster_level_armor", ReturnType = "int", Args = new[] { new Argument { Name = "level", Type = "int" } } }},
-            { 199, new Function { Name = "unit_ai_changer_attack", ReturnType = "type6" }},
-            { 200, new Function { Name = "does_field_damage", ReturnType = "type6" }},
-            { 201, new Function { Name = "distance_to_player", ReturnType = "type6" }},
-            { 202, new Function { Name = "has_container", ReturnType = "type6" }},
-            { 203, new Function { Name = "monster_armor", ReturnType = "type6", Args = new[] { new Argument { Name = "nDamageType", Type = "index", TableIndex = 30 }, new Argument { Name = "nPercent", Type = "int" } } }},
-            { 204, new Function { Name = "getSkillDmgMult", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillLvl", Type = "int" }, new Argument { Name = "a", Type = "int" } } }},
-            { 205, new Function { Name = "getSkillArmorMult", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillLvl", Type = "int" }, new Argument { Name = "a", Type = "int" } } }},
-            { 206, new Function { Name = "getSkillAttackSpeedMult", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillLvl", Type = "int" }, new Argument { Name = "a", Type = "int" } } }},
-            { 207, new Function { Name = "getSkillToHitMult", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillLvl", Type = "int" }, new Argument { Name = "a", Type = "int" } } }},
-            { 208, new Function { Name = "getSkillPctDmgMult", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillLvl", Type = "int" }, new Argument { Name = "a", Type = "int" } } }},
-            { 209, new Function { Name = "getPetCountOfType", ReturnType = "void", Args = new[] { new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 } } }},
-            { 210, new Function { Name = "runScriptOnPetsOfType", ReturnType = "void", Args = new[] { new Argument { Name = "nUnitType", Type = "index", TableIndex = 23 }, new Argument { Name = "a", Type = "int" } } }},
-            { 211, new Function { Name = "randaffixtype", ReturnType = "void", Args = new[] { new Argument { Name = "affixType", Type = "index", TableIndex = 50 } } }},
-            { 212, new Function { Name = "randaffixgroup", ReturnType = "void", Args = new[] { new Argument { Name = "affixGroup", Type = "affixGroup" } } }},
-            { 213, new Function { Name = "applyaffix", ReturnType = "void", Args = new[] { new Argument { Name = "affix", Type = "index", TableIndex = 52 }, new Argument { Name = "bForce", Type = "int" } } }},
-            { 214, new Function { Name = "getBonusValue", ReturnType = "void", Args = new[] { new Argument { Name = "a", Type = "int" } } }},
-            { 215, new Function { Name = "getBonusAll", ReturnType = "void" }},
-            { 216, new Function { Name = "getDMGAugmentation", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillVar", Type = "int" }, new Argument { Name = "nLevel", Type = "int" }, new Argument { Name = "nPercentOfLevel", Type = "int" }, new Argument { Name = "nSkillPointsInvested", Type = "int" } } }},
-            { 217, new Function { Name = "getDMGAugmentationPCT", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillVar", Type = "int" }, new Argument { Name = "nLevel", Type = "int" }, new Argument { Name = "nPercentOfLevel", Type = "int" }, new Argument { Name = "nSkillPointsInvested", Type = "int" } } }},
-            { 218, new Function { Name = "getMonsterHPAtLevel", ReturnType = "void", Args = new[] { new Argument { Name = "nLevel", Type = "int" } } }},
-            { 219, new Function { Name = "getMonsterHPAtLevelByPCT", ReturnType = "void", Args = new[] { new Argument { Name = "nLevel", Type = "int" }, new Argument { Name = "nPCT", Type = "int" } } }},
-            { 220, new Function { Name = "display_dmg_absorbed_pct", ReturnType = "type6" }},
-            { 221, new Function { Name = "dmg_percent_by_energy", ReturnType = "type6" }},
-            { 222, new Function { Name = "weapon_range", ReturnType = "type6" }},
-            { 223, new Function { Name = "IsObjectDestructable", ReturnType = "void" }},
-            { 224, new Function { Name = "GlobalThemeIsEnabled", ReturnType = "void", Args = new[] { new Argument { Name = "nTheme", Type = "index", TableIndex = 167 } } }},
-            { 225, new Function { Name = "SetRespawnPlayer", ReturnType = "type6" }},
-            { 226, new Function { Name = "AddSecondaryRespawnPlayer", ReturnType = "type6" }},
-            { 227, new Function { Name = "RemoveHPAndCheckForDeath", ReturnType = "type6", Args = new[] { new Argument { Name = "nRemove", Type = "int" } } }},
-            { 228, new Function { Name = "getSkillStat", ReturnType = "void", Args = new[] { new Argument { Name = "nSkillStat", Type = "index", TableIndex = 44 }, new Argument { Name = "nSkillLvl", Type = "int" } } }},
-            { 229, new Function { Name = "TownPortalIsAllowed", ReturnType = "type6" }},
-            { 230, new Function { Name = "lowerManaCostOnSkillByPct", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 }, new Argument { Name = "nPctPower", Type = "int" } } }},
-            { 231, new Function { Name = "lowerCoolDownOnSkillByPct", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 }, new Argument { Name = "nPctCooldown", Type = "int" } } }},
-            { 232, new Function { Name = "skillIsOn", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 233, new Function { Name = "getSkillRange", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 234, new Function { Name = "setDmgEffectParams", ReturnType = "void", Args = new[] { new Argument { Name = "nDmgEffect", Type = "index", TableIndex = 31 }, new Argument { Name = "nParam0", Type = "int" }, new Argument { Name = "nParam1", Type = "int" }, new Argument { Name = "nParam2", Type = "int" } } }},
-            { 235, new Function { Name = "setDmgEffectSkill", ReturnType = "void", Args = new[] { new Argument { Name = "nDmgEffect", Type = "index", TableIndex = 31 }, new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 236, new Function { Name = "setDmgEffectSkillOnTarget", ReturnType = "void", Args = new[] { new Argument { Name = "nDmgEffect", Type = "index", TableIndex = 31 }, new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 237, new Function { Name = "getSkillID", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 238, new Function { Name = "fireMissileFromObject", ReturnType = "void", Args = new[] { new Argument { Name = "missileID", Type = "index", TableIndex = 110 } } }},
-            { 239, new Function { Name = "caculateGemSockets", ReturnType = "void" }},
-            { 240, new Function { Name = "caculateRareGemSockets", ReturnType = "void" }},
-            { 241, new Function { Name = "caculateCraftingSlots", ReturnType = "void" }},
-            { 242, new Function { Name = "executeSkill", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 243, new Function { Name = "executeSkillOnObject", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 244, new Function { Name = "stopSkill", ReturnType = "void", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 245, new Function { Name = "powercost", ReturnType = "type6", Args = new[] { new Argument { Name = "skillID", Type = "index", TableIndex = 41 } } }},
-            { 246, new Function { Name = "is_stash_ui_open", ReturnType = "" }},
-            { 247, new Function { Name = "setRecipeLearned", ReturnType = "void" }},
-            { 248, new Function { Name = "getRecipeLearned", ReturnType = "void" }},
-            { 249, new Function { Name = "createRecipe", ReturnType = "void" }},
-            { 250, new Function { Name = "createSpecificRecipe", ReturnType = "void", Args = new[] { new Argument { Name = "nRecipeID", Type = "index", TableIndex = 108 } } }},
-            { 251, new Function { Name = "getCurrentGameTick", ReturnType = "void" }}
+            /*  0*/ new Function { Name = "setUnitTypeAreaFloorVis", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevelArea", Type = 1, TableIndex = 138 }, new Argument { Name = "nFloor", Type = 0 }, new Argument { Name = "nVis", Type = 0 } } },
+            /*  1*/ new Function { Name = "setUnitTypeAreaFloorInteractive", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevelArea", Type = 1, TableIndex = 138 }, new Argument { Name = "nFloor", Type = 0 } } },
+            /*  2*/ new Function { Name = "setUnitTypeAreaFloorDisabled", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevelArea", Type = 1, TableIndex = 138 }, new Argument { Name = "nFloor", Type = 0 } } },
+            /*  3*/ new Function { Name = "showDialog", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nDialog", Type = 1, TableIndex = 53 } } },
+            /*  4*/ new Function { Name = "setQuestBit", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nBit", Type = 0 } } },
+            /*  5*/ new Function { Name = "getQuestBit", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nBit", Type = 0 } } },
+            /*  6*/ new Function { Name = "isQuestTaskComplete", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nQuestTask", Type = 1, TableIndex = 165 } } },
+            /*  7*/ new Function { Name = "isQuestTaskActive", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nQuestTask", Type = 1, TableIndex = 165 } } },
+            /*  8*/ new Function { Name = "isTalkingTo", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nNPCID", Type = 1, TableIndex = 64 } } },
+            /*  9*/ new Function { Name = "setTargetVisibility", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nVis", Type = 0 } } },
+            /* 10*/ new Function { Name = "setTargetVisibilityOnFloor", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nVis", Type = 0 }, new Argument { Name = "nFloor", Type = 0 } } },
+            /* 11*/ new Function { Name = "setStateOnTarget", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 } } },
+            /* 12*/ new Function { Name = "setTargetInteractive", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nInteractive", Type = 0 } } },
+            /* 13*/ new Function { Name = "setTargetToTeam", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nTeam", Type = 0 } } },
+            /* 14*/ new Function { Name = "getIsTargetOfType", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nUnitType", Type = 1, TableIndex = 23 } } },
+            /* 15*/ new Function { Name = "setMonsterInLevelToTarget", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nMonsterID", Type = 1, TableIndex = 115 } } },
+            /* 16*/ new Function { Name = "setObjectInLevelToTarget", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nObjectID", Type = 1, TableIndex = 119 } } },
+            /* 17*/ new Function { Name = "getIsTargetMonster", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nMonsterID", Type = 1, TableIndex = 115 } } },
+            /* 18*/ new Function { Name = "getIsTargetObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nObjectID", Type = 1, TableIndex = 119 } } },
+            /* 19*/ new Function { Name = "resetTargetObject", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 20*/ new Function { Name = "messageStatVal", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nStatId", Type = 1, TableIndex = 27 }, new Argument { Name = "nIndex", Type = 0 } } },
+            /* 21*/ new Function { Name = "getStatVal", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nStatId", Type = 1, TableIndex = 27 }, new Argument { Name = "nIndex", Type = 0 } } },
+            /* 22*/ new Function { Name = "createMap", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 23*/ new Function { Name = "randomizeMapSpawner", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 24*/ new Function { Name = "randomizeMapSpawnerEpic", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 25*/ new Function { Name = "setMapSpawnerByLevelAreaID", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevelAreaID", Type = 0 } } },
+            /* 26*/ new Function { Name = "setMapSpawnerByLevelArea", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevelAreaID", Type = 1, TableIndex = 138 } } },
+            /* 27*/ new Function { Name = "abs", Args = new[] { new Argument { Name = "a", Type = 0 } } },
+            /* 28*/ new Function { Name = "min", Args = new[] { new Argument { Name = "a", Type = 0 }, new Argument { Name = "b", Type = 0 } } },
+            /* 29*/ new Function { Name = "max", Args = new[] { new Argument { Name = "a", Type = 0 }, new Argument { Name = "b", Type = 0 } } },
+            /* 30*/ new Function { Name = "pin", Args = new[] { new Argument { Name = "value", Type = 0 }, new Argument { Name = "min", Type = 0 }, new Argument { Name = "max", Type = 0 } } },
+            /* 31*/ new Function { Name = "pct", Args = new[] { new Argument { Name = "a", Type = 0 }, new Argument { Name = "b", Type = 0 } } },
+            /* 32*/ new Function { Name = "pctFloat", Args = new[] { new Argument { Name = "a", Type = 0 }, new Argument { Name = "b", Type = 0 }, new Argument { Name = "c", Type = 0 } } },
+            /* 33*/ new Function { Name = "rand", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "a", Type = 0 }, new Argument { Name = "b", Type = 0 } } },
+            /* 34*/ new Function { Name = "randByUnitId", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "a", Type = 0 }, new Argument { Name = "b", Type = 0 } } },
+            /* 35*/ new Function { Name = "chance", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "nChance", Type = 0 }, new Argument { Name = "nChanceOutOf", Type = 0 } } },
+            /* 36*/ new Function { Name = "chanceByStateMod", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nChance", Type = 0 }, new Argument { Name = "nChanceOutOf", Type = 0 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "nModBy", Type = 0 } } },
+            /* 37*/ new Function { Name = "randSkillSeed", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "a", Type = 0 }, new Argument { Name = "b", Type = 0 } } },
+            /* 38*/ new Function { Name = "roll", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "a", Type = 0 }, new Argument { Name = "b", Type = 0 } } },
+            /* 39*/ new Function { Name = "divMult", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "a", Type = 0 }, new Argument { Name = "b", Type = 0 }, new Argument { Name = "c", Type = 0 } } },
+            /* 40*/ new Function { Name = "distribute", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "numdie", Type = 0 }, new Argument { Name = "diesize", Type = 0 }, new Argument { Name = "start", Type = 0 } } },
+            /* 41*/ new Function { Name = "roundstat", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 }, new Argument { Name = "value", Type = 0 } } },
+            /* 42*/ new Function { Name = "getEventType", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nAffixID", Type = 1, TableIndex = 25 } } },
+            /* 43*/ new Function { Name = "getAffixIDByName", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nAffixID", Type = 1, TableIndex = 52 } } },
+            /* 44*/ new Function { Name = "get_skill_level", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "nSkill", Type = 1, TableIndex = 41 } } },
+            /* 45*/ new Function { Name = "get_skill_level_object", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkill", Type = 1, TableIndex = 41 } } },
+            /* 46*/ new Function { Name = "pickskill", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "stats", Type = 6 }, new Argument { Name = "nSkillLevel", Type = 0 } } },
+            /* 47*/ new Function { Name = "pickskillbyunittype", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "stats", Type = 6 }, new Argument { Name = "nUnitType", Type = 1, TableIndex = 23 }, new Argument { Name = "nSkillLevel", Type = 0 } } },
+            /* 48*/ new Function { Name = "removeoldestpetoftype", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nUnitType", Type = 1, TableIndex = 23 } } },
+            /* 49*/ new Function { Name = "killoldestpetoftype", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nUnitType", Type = 1, TableIndex = 23 } } },
+            /* 50*/ new Function { Name = "pickskillbyskillgroup", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "stats", Type = 6 }, new Argument { Name = "nSkillGroup", Type = 1, TableIndex = 39 }, new Argument { Name = "nSkillLevel", Type = 0 } } },
+            /* 51*/ new Function { Name = "learnskill", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "skill", Type = 1, TableIndex = 41 } } },
+            /* 52*/ new Function { Name = "getStatOwnerDivBySkillVar", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 }, new Argument { Name = "nVar", Type = 0 } } },
+            /* 53*/ new Function { Name = "getStatOwnerDivBy", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 }, new Argument { Name = "nDivBy", Type = 0 } } },
+            /* 54*/ new Function { Name = "switchUnitAndObject", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 55*/ new Function { Name = "getAchievementCompleteCount", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nAchievementID", Type = 1, TableIndex = 180 } } },
+            /* 56*/ new Function { Name = "getVarRange", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 57*/ new Function { Name = "getVar", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nVariable", Type = 0 } } },
+            /* 58*/ new Function { Name = "getAttackerSkillVarBySkill", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkill", Type = 1, TableIndex = 41 }, new Argument { Name = "nVariable", Type = 0 } } },
+            /* 59*/ new Function { Name = "getVarFromSkill", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkill", Type = 1, TableIndex = 41 }, new Argument { Name = "nVariable", Type = 0 } } },
+            /* 60*/ new Function { Name = "getVarFromSkillFromObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkill", Type = 1, TableIndex = 41 }, new Argument { Name = "nVariable", Type = 0 } } },
+            /* 61*/ new Function { Name = "hasStateObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 } } },
+            /* 62*/ new Function { Name = "hasState", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 } } },
+            /* 63*/ new Function { Name = "clearStateObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 } } },
+            /* 64*/ new Function { Name = "clearState", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 } } },
+            /* 65*/ new Function { Name = "clearStateClient", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 } } },
+            /* 66*/ new Function { Name = "isDualWielding", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 67*/ new Function { Name = "getWieldingIsACount", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "unittype", Type = 1, TableIndex = 23 } } },
+            /* 68*/ new Function { Name = "setState", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 } } },
+            /* 69*/ new Function { Name = "setStateObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 } } },
+            /* 70*/ new Function { Name = "setStateWithTimeMS", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 } } },
+            /* 71*/ new Function { Name = "addStateWithTimeMS", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 } } },
+            /* 72*/ new Function { Name = "addStateWithTimeMSClient", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 } } },
+            /* 73*/ new Function { Name = "setStateWithTimeMSOnObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 } } },
+            /* 74*/ new Function { Name = "setStateWithTimeMSScriptOnObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 } } },
+            /* 75*/ new Function { Name = "BroadcastEquipEvent", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 76*/ new Function { Name = "setAITargetToSkillTarget", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 77*/ new Function { Name = "setObjectAITargetToUnitAITarget", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 78*/ new Function { Name = "makeAIAwareOfObject", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 79*/ new Function { Name = "setAITargetToObject", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 80*/ new Function { Name = "hasSkillTarget", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /* 81*/ new Function { Name = "setStateOnSkillTargetWithTimeMSScript", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 }, new Argument { Name = "clearFirst", Type = 0 } } },
+            /* 82*/ new Function { Name = "runScriptParamOnStateClear", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "paramIndex", Type = 0 } } },
+            /* 83*/ new Function { Name = "getCountOfUnitsInArea", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "area", Type = 0 } } },
+            /* 84*/ new Function { Name = "runScriptOnUnitsInAreaPCT", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "scriptIndex", Type = 0 }, new Argument { Name = "area", Type = 0 }, new Argument { Name = "chance", Type = 0 }, new Argument { Name = "flag", Type = 0 } } },
+            /* 85*/ new Function { Name = "doSkillAndScriptOnUnitsInAreaPCT", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkill", Type = 1, TableIndex = 41 }, new Argument { Name = "scriptIndex", Type = 0 }, new Argument { Name = "area", Type = 0 }, new Argument { Name = "chance", Type = 0 }, new Argument { Name = "flag", Type = 0 } } },
+            /* 86*/ new Function { Name = "doSkillOnUnitsInAreaPCT", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkill", Type = 1, TableIndex = 41 }, new Argument { Name = "area", Type = 0 }, new Argument { Name = "chance", Type = 0 }, new Argument { Name = "flag", Type = 0 } } },
+            /* 87*/ new Function { Name = "setStateWithTimeMSScript", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 } } },
+            /* 88*/ new Function { Name = "setStateWithTimeMSScriptParam", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 }, new Argument { Name = "paramIndex", Type = 0 } } },
+            /* 89*/ new Function { Name = "setStateWithTimeMSScriptParamObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 }, new Argument { Name = "paramIndex", Type = 0 } } },
+            /* 90*/ new Function { Name = "addStateWithTimeMSScriptParamObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 }, new Argument { Name = "paramIndex", Type = 0 } } },
+            /* 91*/ new Function { Name = "addStateWithTimeMSScript", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 } } },
+            /* 92*/ new Function { Name = "addStateWithTimeMSScriptParam", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nState", Type = 1, TableIndex = 73 }, new Argument { Name = "timerMS", Type = 0 }, new Argument { Name = "paramIndex", Type = 0 } } },
+            /* 93*/ new Function { Name = "setDmgEffect", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nDmgEffect", Type = 1, TableIndex = 31 }, new Argument { Name = "nChance", Type = 0 }, new Argument { Name = "nTime", Type = 0 }, new Argument { Name = "nRoll", Type = 0 } } },
+            /* 94*/ new Function { Name = "getStatOwner", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 } } },
+            /* 95*/ new Function { Name = "getStatParent", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 } } },
+            /* 96*/ new Function { Name = "addPCTStatOnOwner", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nStat", Type = 1, TableIndex = 27 }, new Argument { Name = "nValue", Type = 0 }, new Argument { Name = "nParam", Type = 0 } } },
+            /* 97*/ new Function { Name = "setStatOnOwner", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nStat", Type = 1, TableIndex = 27 }, new Argument { Name = "nValue", Type = 0 }, new Argument { Name = "nParam", Type = 0 } } },
+            /* 98*/ new Function { Name = "total", Args = new[] { new Argument { Name = "game3", Type = 3 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 } } },
+            /* 99*/ new Function { Name = "basetotal", Args = new[] { new Argument { Name = "game3", Type = 3 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 } } },
+            /*100*/ new Function { Name = "basestat", Args = new[] { new Argument { Name = "game3", Type = 3 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 } } },
+            /*101*/ new Function { Name = "getcur", Args = new[] { new Argument { Name = "game3", Type = 3 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 }, new Argument { Name = "param", Type = 7 } } },
+            /*102*/ new Function { Name = "statidx", Args = new[] { new Argument { Name = "stat", Type = 1, TableIndex = 27 } } },
+            /*103*/ new Function { Name = "invcount", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "location", Type = 1, TableIndex = 24 } } },
+            /*104*/ new Function { Name = "dmgrider", Args = new[] { new Argument { Name = "game3", Type = 3 } } },
+            /*105*/ new Function { Name = "procrider", Args = new[] { new Argument { Name = "game3", Type = 3 } } },
+            /*106*/ new Function { Name = "knockback", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "a", Type = 0 } } },
+            /*107*/ new Function { Name = "colorcoderequirement", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 }, new Argument { Name = "param", Type = 7 } } },
+            /*108*/ new Function { Name = "color_code_modunit_requirement", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 }, new Argument { Name = "param", Type = 7 } } },
+            /*109*/ new Function { Name = "color_code_modunit_requirement2", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "stat1", Type = 1, TableIndex = 27 }, new Argument { Name = "param1", Type = 7 }, new Argument { Name = "stat2", Type = 1, TableIndex = 27 }, new Argument { Name = "param2", Type = 7 } } },
+            /*110*/ new Function { Name = "feedchange", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 } } },
+            /*111*/ new Function { Name = "feedcolorcode", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "stat", Type = 1, TableIndex = 27 } } },
+            /*112*/ new Function { Name = "colorposneg", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*113*/ new Function { Name = "colorcodeprice", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*114*/ new Function { Name = "colorcodeclassreq", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*115*/ new Function { Name = "colorcodeskillslots", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*116*/ new Function { Name = "colorcodeskillusable", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*117*/ new Function { Name = "colorcodeskillgroupusable", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*118*/ new Function { Name = "meetsclassreqs", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*119*/ new Function { Name = "fontcolorrow", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nColorIndex", Type = 1, TableIndex = 7 } } },
+            /*120*/ new Function { Name = "nodrop", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*121*/ new Function { Name = "notrade", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*122*/ new Function { Name = "BuyPriceByValue", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "valueType", Type = 0 } } },
+            /*123*/ new Function { Name = "SellPriceByValue", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "valueType", Type = 0 } } },
+            /*124*/ new Function { Name = "buyprice", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*125*/ new Function { Name = "buypriceRealWorld", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*126*/ new Function { Name = "sellprice", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*127*/ new Function { Name = "sellpriceRealWorld", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*128*/ new Function { Name = "hitChance", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*129*/ new Function { Name = "dodgeChance", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*130*/ new Function { Name = "numaffixes", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*131*/ new Function { Name = "qualitypricemult", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*132*/ new Function { Name = "enemies_in_radius", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "unit", Type = 5 }, new Argument { Name = "radius", Type = 0 } } },
+            /*133*/ new Function { Name = "visible_enemies_in_radius", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "unit", Type = 5 }, new Argument { Name = "radius", Type = 0 } } },
+            /*134*/ new Function { Name = "champions_in_radius", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "unit", Type = 5 }, new Argument { Name = "radius", Type = 0 } } },
+            /*135*/ new Function { Name = "distance_sq_to_champion", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "unit", Type = 5 }, new Argument { Name = "radius", Type = 0 } } },
+            /*136*/ new Function { Name = "champion_hp_pct", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "unit", Type = 5 }, new Argument { Name = "radius", Type = 0 } } },
+            /*137*/ new Function { Name = "bosses_in_radius", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "unit", Type = 5 }, new Argument { Name = "radius", Type = 0 } } },
+            /*138*/ new Function { Name = "distance_sq_to_boss", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "unit", Type = 5 }, new Argument { Name = "radius", Type = 0 } } },
+            /*139*/ new Function { Name = "boss_hp_pct", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "unit", Type = 5 }, new Argument { Name = "radius", Type = 0 } } },
+            /*140*/ new Function { Name = "enemy_corpses_in_radius", Args = new[] { new Argument { Name = "game4", Type = 4 }, new Argument { Name = "unit", Type = 5 }, new Argument { Name = "radius", Type = 0 } } },
+            /*141*/ new Function { Name = "monsters_killed", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "time", Type = 0 } } },
+            /*142*/ new Function { Name = "monsters_killed_nonteam", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "time", Type = 0 } } },
+            /*143*/ new Function { Name = "monsters_pct_left", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*144*/ new Function { Name = "hp_lost", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "time", Type = 0 } } },
+            /*145*/ new Function { Name = "meters_moved", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "time", Type = 0 } } },
+            /*146*/ new Function { Name = "attacks", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "time", Type = 0 } } },
+            /*147*/ new Function { Name = "is_alive", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*148*/ new Function { Name = "monster_level", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*149*/ new Function { Name = "has_active_task", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*150*/ new Function { Name = "is_usable", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*151*/ new Function { Name = "is_examinable", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*152*/ new Function { Name = "is_operatable", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*153*/ new Function { Name = "isa", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "unittype", Type = 1, TableIndex = 23 } } },
+            /*154*/ new Function { Name = "is_subscriber", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*155*/ new Function { Name = "is_hardcore", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*156*/ new Function { Name = "is_elite", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*157*/ new Function { Name = "get_difficulty", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*158*/ new Function { Name = "get_act", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*159*/ new Function { Name = "email_send_item_okay", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "context", Type = 2 } } },
+            /*160*/ new Function { Name = "email_receive_item_okay", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "context", Type = 2 } } },
+            /*161*/ new Function { Name = "colorcodesubscriber", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*162*/ new Function { Name = "item_requires_subscriber", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*163*/ new Function { Name = "colorcodenightmare", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*164*/ new Function { Name = "item_is_nightmare_specific", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*165*/ new Function { Name = "quality", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*166*/ new Function { Name = "meetsitemreqs", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*167*/ new Function { Name = "weapondps", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*168*/ new Function { Name = "SkillTargetIsA", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "unittype", Type = 1, TableIndex = 23 } } },
+            /*169*/ new Function { Name = "GetObjectIsA", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "unittype", Type = 1, TableIndex = 23 } } },
+            /*170*/ new Function { Name = "GetMissileSourceIsA", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "unittype", Type = 1, TableIndex = 23 } } },
+            /*171*/ new Function { Name = "GetSkillHasReqWeapon", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*172*/ new Function { Name = "has_use_skill", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*173*/ new Function { Name = "hasdomname", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*174*/ new Function { Name = "dps", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "time", Type = 0 } } },
+            /*175*/ new Function { Name = "ObjectCanUpgrade", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*176*/ new Function { Name = "use_state_duration", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*177*/ new Function { Name = "uses_missiles", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*178*/ new Function { Name = "uses_lasers", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*179*/ new Function { Name = "has_damage_radius", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*180*/ new Function { Name = "missile_count", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*181*/ new Function { Name = "laser_count", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*182*/ new Function { Name = "shots_per_minute", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*183*/ new Function { Name = "milliseconds_per_shot", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*184*/ new Function { Name = "player_crit_chance", Args = new[] { new Argument { Name = "pUnit", Type = 5 }, new Argument { Name = "nSlot", Type = 0 } } },
+            /*185*/ new Function { Name = "player_crit_damage", Args = new[] { new Argument { Name = "pUnit", Type = 5 }, new Argument { Name = "nSlot", Type = 0 } } },
+            /*186*/ new Function { Name = "add_item_level_armor", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevel", Type = 0 }, new Argument { Name = "nPercent", Type = 0 } } },
+            /*187*/ new Function { Name = "player_level_skill_power_cost_percent", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*188*/ new Function { Name = "item_level_damage_mult", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*189*/ new Function { Name = "item_level_feed", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*190*/ new Function { Name = "item_level_sfx_attack", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*191*/ new Function { Name = "item_level_sfx_defense", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*192*/ new Function { Name = "item_level_shield_buffer", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*193*/ new Function { Name = "monster_level_sfx_defense", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*194*/ new Function { Name = "monster_level_sfx_attack", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*195*/ new Function { Name = "monster_level_damage", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*196*/ new Function { Name = "monster_level_damage_pct", Args = new[] { new Argument { Name = "nLevel", Type = 0 }, new Argument { Name = "nPCT", Type = 0 } } },
+            /*197*/ new Function { Name = "monster_level_shields", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*198*/ new Function { Name = "monster_level_armor", Args = new[] { new Argument { Name = "level", Type = 0 } } },
+            /*199*/ new Function { Name = "unit_ai_changer_attack", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*200*/ new Function { Name = "does_field_damage", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*201*/ new Function { Name = "distance_to_player", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*202*/ new Function { Name = "has_container", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*203*/ new Function { Name = "monster_armor", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "nDamageType", Type = 1, TableIndex = 30 }, new Argument { Name = "nPercent", Type = 0 } } },
+            /*204*/ new Function { Name = "getSkillDmgMult", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkillLvl", Type = 0 }, new Argument { Name = "a", Type = 0 } } },
+            /*205*/ new Function { Name = "getSkillArmorMult", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkillLvl", Type = 0 }, new Argument { Name = "a", Type = 0 } } },
+            /*206*/ new Function { Name = "getSkillAttackSpeedMult", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkillLvl", Type = 0 }, new Argument { Name = "a", Type = 0 } } },
+            /*207*/ new Function { Name = "getSkillToHitMult", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkillLvl", Type = 0 }, new Argument { Name = "a", Type = 0 } } },
+            /*208*/ new Function { Name = "getSkillPctDmgMult", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkillLvl", Type = 0 }, new Argument { Name = "a", Type = 0 } } },
+            /*209*/ new Function { Name = "getPetCountOfType", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nUnitType", Type = 1, TableIndex = 23 } } },
+            /*210*/ new Function { Name = "runScriptOnPetsOfType", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nUnitType", Type = 1, TableIndex = 23 }, new Argument { Name = "a", Type = 0 } } },
+            /*211*/ new Function { Name = "randaffixtype", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "affixType", Type = 1, TableIndex = 50 } } },
+            /*212*/ new Function { Name = "randaffixgroup", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "3h", Type = 1, TableIndex = 52 } } },
+            /*213*/ new Function { Name = "applyaffix", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "affix", Type = 1, TableIndex = 52 }, new Argument { Name = "bForce", Type = 0 } } },
+            /*214*/ new Function { Name = "getBonusValue", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "a", Type = 0 } } },
+            /*215*/ new Function { Name = "getBonusAll", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*216*/ new Function { Name = "getDMGAugmentation", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkillVar", Type = 0 }, new Argument { Name = "nLevel", Type = 0 }, new Argument { Name = "nPercentOfLevel", Type = 0 }, new Argument { Name = "nSkillPointsInvested", Type = 0 } } },
+            /*217*/ new Function { Name = "getDMGAugmentationPCT", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkillVar", Type = 0 }, new Argument { Name = "nLevel", Type = 0 }, new Argument { Name = "nPercentOfLevel", Type = 0 }, new Argument { Name = "nSkillPointsInvested", Type = 0 } } },
+            /*218*/ new Function { Name = "getMonsterHPAtLevel", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevel", Type = 0 } } },
+            /*219*/ new Function { Name = "getMonsterHPAtLevelByPCT", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevel", Type = 0 }, new Argument { Name = "nPCT", Type = 0 } } },
+            /*220*/ new Function { Name = "display_dmg_absorbed_pct", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*221*/ new Function { Name = "dmg_percent_by_energy", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*222*/ new Function { Name = "weapon_range", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*223*/ new Function { Name = "IsObjectDestructable", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*224*/ new Function { Name = "GlobalThemeIsEnabled", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nTheme", Type = 1, TableIndex = 167 } } },
+            /*225*/ new Function { Name = "SetRespawnPlayer", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*226*/ new Function { Name = "AddSecondaryRespawnPlayer", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*227*/ new Function { Name = "RemoveHPAndCheckForDeath", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "nRemove", Type = 0 } } },
+            /*228*/ new Function { Name = "getSkillStat", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nSkillStat", Type = 1, TableIndex = 44 }, new Argument { Name = "nSkillLvl", Type = 0 } } },
+            /*229*/ new Function { Name = "TownPortalIsAllowed", Args = new[] { new Argument { Name = "unit", Type = 5 } } },
+            /*230*/ new Function { Name = "lowerManaCostOnSkillByPct", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 }, new Argument { Name = "nPctPower", Type = 0 } } },
+            /*231*/ new Function { Name = "lowerCoolDownOnSkillByPct", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 }, new Argument { Name = "nPctCooldown", Type = 0 } } },
+            /*232*/ new Function { Name = "skillIsOn", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*233*/ new Function { Name = "getSkillRange", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*234*/ new Function { Name = "setDmgEffectParams", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nDmgEffect", Type = 1, TableIndex = 31 }, new Argument { Name = "nParam0", Type = 0 }, new Argument { Name = "nParam1", Type = 0 }, new Argument { Name = "nParam2", Type = 0 } } },
+            /*235*/ new Function { Name = "setDmgEffectSkill", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nDmgEffect", Type = 1, TableIndex = 31 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*236*/ new Function { Name = "setDmgEffectSkillOnTarget", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nDmgEffect", Type = 1, TableIndex = 31 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*237*/ new Function { Name = "getSkillID", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*238*/ new Function { Name = "fireMissileFromObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "missileID", Type = 1, TableIndex = 110 } } },
+            /*239*/ new Function { Name = "caculateGemSockets", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*240*/ new Function { Name = "caculateRareGemSockets", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*241*/ new Function { Name = "caculateCraftingSlots", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*242*/ new Function { Name = "executeSkill", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*243*/ new Function { Name = "executeSkillOnObject", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*244*/ new Function { Name = "stopSkill", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*245*/ new Function { Name = "powercost", Args = new[] { new Argument { Name = "unit", Type = 5 }, new Argument { Name = "skillID", Type = 1, TableIndex = 41 } } },
+            /*246*/ new Function { Name = "is_stash_ui_open" },
+            /*247*/ new Function { Name = "setRecipeLearned", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*248*/ new Function { Name = "getRecipeLearned", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*249*/ new Function { Name = "createRecipe", Args = new[] { new Argument { Name = "context", Type = 2 } } },
+            /*250*/ new Function { Name = "createSpecificRecipe", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nRecipeID", Type = 1, TableIndex = 108 } } },
+            /*251*/ new Function { Name = "getCurrentGameTick", Args = new[] { new Argument { Name = "context", Type = 2 } } }
         };
 
         /* OpCode           Function                                Action
-         * 0    0x00        Return                                  Must(?) be at end of script.
+         * 0    0x00        Return                                  Must be at end of script.
          * 
          * 3    0x03        Call Function                           Calls a client function.
          * e.g.
@@ -347,14 +347,15 @@ namespace Hellgate
          * 
          */
 
+        // op code array in client found at:  .data:00000001407161C8
         private enum ExcelOpCodes : uint
         {
             Return = 0,                     // 0x00
             Unknown2 = 2,                   // 0x02     // I think this might be calls to properties scripts
             Call = 3,                       // 0x03
-            Unknown4 = 4,                   // 0x04
+            Unknown4 = 4,                   // 0x04     // Ternary conditional?     From ASM this is a function call like 2 and 3, 
             Unknown6 = 6,                   // 0x06
-            Unknown14 = 14,                 // 0x0E
+            Unknown14 = 14,                 // 0x0E     // Ternary conditional?
             Push = 26,                      // 0x1A
             Complement = 320,               // 0x140
             Not = 339,                      // 0x153
@@ -372,23 +373,42 @@ namespace Hellgate
             And = 516,                      // 0x204
             Or = 527,                       // 0x20F
             EndIf = 538,                    // 0x21A    // I think... Or something like that...
-            GetStat = 666,                  // 0x29A
-            GetUnknown667 = 667,            // 0x29B
-            SetStat = 669,                  // 0x29D
-            SetUnknown673 = 673,            // 0x2A1
-            SetUnknown674 = 674,            // 0x2A2
-            GetUnknown680 = 680,            // 0x2A8
-            GetUnknown683 = 683,            // 0x2AB
-            GetUnknown687 = 687,            // 0x2AF
-            GetUnknown688 = 688,            // 0x2B0
-            Unknown700 = 700,               // 0x2BC    // not sure - simplest versions found: 700,6,0 and 26,5,700,6,358,0
-            Unknown707 = 707,               // 0x2C3    // not sure - is usually: 707,0,714,...  or sometimes 707,1,714...
-            CastTypeUnknown708 = 708,       // 0x2C4    // String I think - need to confirm this
-            CastTypeColor = 709,            // 0x2C5
-            CastTypeInt = 710,              // 0x2C6    // I think this is an int cast - need to confirm this
-            CastTypeUnknown6 = 711,         // 0x2C7
-            TypeUnknown12 = 712,            // 0x2C8
-            CastTypeUnknown714 = 714        // 0x2CA
+            GetStat666 = 666,               // 0x29A    // these are used for different arg/return types (int/uint/float/double/etc)
+            GetStat667 = 667,               // 0x29B    // not sure which are which yet - do it later
+            SetStat669 = 669,               // 0x29D
+            SetStat673 = 673,               // 0x2A1
+            SetStat674 = 674,               // 0x2A2
+            GetStat680 = 680,               // 0x2A8
+            SetStat683 = 683,               // 0x2AB
+            SetStat687 = 687,               // 0x2AF
+            SetStat688 = 688,               // 0x2B0
+            PushContextVarInt32 = 700,      // 0x2BC    .rdata:000000014060C1A8     aPushContextV_3 db 'push context variable %s value = %d  type = int'
+            PushContextVarUInt32 = 701,     // 0x2BD    .rdata:000000014060C1E0     aPushContextV_4 db 'push context variable %s value = %u  type = unsigned int'
+            PushContextVarInt64 = 702,      // 0x2BE    .rdata:000000014060C220     aPushContextV_5 db 'push context variable %s value = %I64d  type = INT64'
+            PushContextVarUInt64 = 703,     // 0x2BF    .rdata:000000014060C258     aPushContextV_6 db 'push context variable %s value = %I64u  type = UINT64'
+            PushContextVarFloat = 704,      // 0x2C0    .rdata:000000014060C290     aPushContextV_7 db 'push context variable %s value = %f  type = float'
+            PushContextVarDouble = 705,     // 0x2C1    .rdata:000000014060C2C8     aPushContextV_8 db 'push context variable %s value = %f  type = double'
+            PushContextVarDouble2 = 706,    // 0x2C2    706 = 705 = sub_14023DF8C
+            PushContextVarPtr = 707,        // 0x2C3    .rdata:000000014060C300     aPushContextV_9 db 'push context variable %s value = %x  type = pointer'
+            GlobalVarGame3 = 708,           // 0x2C4    I don't think these are "global vars" as such (more like a "type" of local var... kind of)
+            GlobalVarContext = 709,         // 0x2C5    but until I know more this will do for now
+            GlobalVarGame4 = 710,           // 0x2C6
+            GlobalVarUnit = 711,            // 0x2C7
+            GlobalVarStats = 712,           // 0x2C8
+            CastTypeUnknown714 = 714        // 0x2CA    // set type/size = 4??
+        }
+
+        private enum ContextVariables : uint
+        {
+            Unit,           // 0
+            Object,         // 1
+            Source,         // 2
+            Statslist,      // 3
+            Skill,          // 4
+            StateId,        // 5
+            SkLvl,          // 6
+            Param1,         // 7
+            Param2          // 8
         }
 
         private enum ExcelTableCodes : uint
@@ -397,7 +417,7 @@ namespace Hellgate
         }
         #endregion
 
-        private static String _debugRoot = @"C:\excel_script_debug\";
+        private const String DebugRoot = @"C:\excel_script_debug\";
         private static bool _debug;
         public static void EnableDebug(bool enableDebug)
         {
@@ -405,8 +425,8 @@ namespace Hellgate
 
             if (!_debug) return;
 
-            Directory.CreateDirectory(_debugRoot);
-            String[] oldLogs = Directory.GetFiles(_debugRoot);
+            Directory.CreateDirectory(DebugRoot);
+            String[] oldLogs = Directory.GetFiles(DebugRoot);
             foreach (String logPath in oldLogs)
             {
                 File.Delete(logPath);
@@ -423,12 +443,18 @@ namespace Hellgate
             _fileManager = fileManager;
         }
 
-        private static String _GetExcelValueFromCode(uint index, uint code)
+        private class StackObject
         {
-            if (_fileManager == null) return index.ToString();
+            public String Value;
+            public int Precedence;          // using chart from http://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B (with exponent = 4)
+            public int FunctionDepth;
+        }
 
-            String indexStr = _fileManager.GetExcelRowStringFromRowIndex(code, (int) index);
-            return String.IsNullOrEmpty(indexStr) ? index.ToString() : String.Format("'{0}'", indexStr);
+
+        private readonly Stack<StackObject> _stack;
+        public ExcelScript()
+        {
+            _stack = new Stack<StackObject>();
         }
 
         /// <summary>
@@ -442,15 +468,18 @@ namespace Hellgate
         /// <param name="col">For debugging purposes only.</param>
         /// <param name="colName">For debugging purposes only.</param>
         /// <returns>Decompiled excel script byte codes as human readable script.</returns>
-        public static String Decompile(byte[] scriptBytes, int offset, String scriptString=null, String stringId=null, int row=0, int col=0, String colName=null)
+        public String Decompile(byte[] scriptBytes, int offset, String scriptString = null, String stringId = null, int row = 0, int col = 0, String colName = null)
         {
             bool debug = (stringId != null) && _debug;
-            bool debugShowGoodScript = false;
+            bool debubShowParsed = false;
+            bool debugOutputParsed = false;
+            bool debugScriptParsed = true;
             String debugPos = null;
 
             if (debug)
             {
-                debugShowGoodScript = true;
+                debubShowParsed = false;
+                debugOutputParsed = true;
                 String rowName = String.Empty;
                 if (_fileManager != null)
                 {
@@ -458,21 +487,20 @@ namespace Hellgate
                     if (stringId == "ITEMDISPLAY")
                     {
                         colIndex = 1;
-                        debugShowGoodScript = false;
+                        debubShowParsed = false;
                     }
 
                     rowName = _fileManager.GetExcelRowStringFromStringId(stringId, row, colIndex);
                 }
 
                 debugPos = String.Format("row({0}): '{1}', col({2}): '{3}', scriptBytes: {4}", row, rowName, col, colName, scriptString);
-                if (debugShowGoodScript) Debug.WriteLine(debugPos);
+                if (debubShowParsed) Debug.WriteLine(debugPos);
             }
+
+            String script = String.Empty;
 
             try
             {
-                String script = String.Empty;
-                Stack<String> stack = new Stack<String>();
-
                 int infCheck = 0;
                 while (true)
                 {
@@ -482,52 +510,49 @@ namespace Hellgate
                     uint index;
                     uint unknown;
 
-                    //if (row == 4)
-                    //{
-                    //    int bp = 0;
-                    //}
+                    if (row == 21)
+                    {
+                        int bp = 0;
+                    }
 
                     switch (opCode)
                     {
                         case ExcelOpCodes.Return:                   // 0    0x00
-                            _CheckStack(stack, 1, opCode);
+                            _CheckStack(1, opCode);
 
-                            if (stack.Count > 1)
+                            if (_stack.Count > 1)
                             {
-                                String error = String.Format("Error: Stack has more than 1 value upon script return: \n{0}", _DumpStack(stack));
+                                String error = String.Format("Error: Stack has more than 1 value upon script return: script = \"{0}\"\n{1}", script, _DumpStack(_stack));
                                 throw new Exceptions.ExcelScriptInvalidStackState(error);
                             }
 
-                            script += stack.Pop();
-                            if (debugShowGoodScript) Debug.WriteLine(script);
+                            script += _stack.Pop().Value;
+                            if (debubShowParsed) Debug.WriteLine(script);
                             return script;
                             break;
 
                         case ExcelOpCodes.Unknown2:                 // 2    0x02
-                            _CheckStack(stack, 1, opCode);
+                            _CheckStack(1, opCode);
 
                             unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            stack.Push(String.Format("Unknown2[{0}]", unknown));
+                            _stack.Push(new StackObject { Value = String.Format("Unknown2[{0}]", unknown) });
                             break;
 
                         case ExcelOpCodes.Call:                     // 3    0x03
                             int functionIndex = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
-
-                            Function excelScriptFunction;
-                            if (!ClientFunctions.TryGetValue(functionIndex, out excelScriptFunction))
+                            if (functionIndex < 0 || functionIndex > ClientFunctions.Count)
                             {
                                 throw new Exceptions.ExcelScriptUnknownFunctionCall("Unknown function index: " + functionIndex);
                             }
 
-                            int modifier = 1;
-                            if (excelScriptFunction.ReturnType == "int") modifier = 0;
-                            _CheckStack(stack, excelScriptFunction.ArgCount + modifier, ExcelOpCodes.Call); // +1 for modifier/return type
-                            String argString = String.Empty;
+                            Function excelScriptFunction = ClientFunctions[functionIndex];
+                            _CheckStack(excelScriptFunction.ArgCount, ExcelOpCodes.Call, excelScriptFunction);
+                            String argsString = String.Empty;
 
-                            // todo: is this backwards? doesn't really matter much I guess
-                            for (int i = 0; i < excelScriptFunction.ArgCount; i++)
+                            for (int i = excelScriptFunction.ArgCount-1; i >= 0; i--)
                             {
-                                String argStr = stack.Pop();
+                                StackObject argStackObject = _stack.Pop();
+                                String argStr = argStackObject.Value;
 
                                 int tableIndex = excelScriptFunction.Args[i].TableIndex;
                                 if (tableIndex >= 0)
@@ -538,325 +563,387 @@ namespace Hellgate
                                     if (excelString == null)
                                     {
                                         Console.WriteLine(String.Format("Warning: Unknown row index '{0}' on table index '{1}'.", rowIndex, tableIndex));
-                                        argString += rowIndex.ToString();
+                                        argsString += rowIndex.ToString();
                                     }
                                     else
                                     {
-                                        argString += String.Format("'{0}'", excelString);
+                                        argsString = String.Format("'{0}'", excelString) + argsString;
                                     }
                                 }
                                 else
                                 {
-                                    argString += argStr;
+                                    argsString = argStr + argsString;
                                 }
 
-                                if (i < excelScriptFunction.ArgCount - 1) argString += ", ";
+                                if (i != 0) argsString = ", " + argsString;
                             }
 
-                            String modifierStr = String.Empty;
-                            if (modifier > 0) modifierStr = stack.Pop();
+                            //String modifierStr = String.Empty;
+                            //if (modifier > 0) modifierStr = _stack.Pop().Value;
 
-                            String functionCallString = String.Format("{0}{1}({2})", modifierStr, excelScriptFunction.Name, argString);
-                            stack.Push(functionCallString);
+                            String functionCallString = String.Format("{0}({1})", excelScriptFunction.Name, argsString);
+                            _stack.Push(new StackObject { Value = functionCallString });
                             break;
 
                         case ExcelOpCodes.Unknown4:                 // 4    0x04
-                            _CheckStack(stack, 1, opCode);
+                            _CheckStack(1, opCode);
 
                             unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            stack.Push(String.Format("Unknown4[{0}]", unknown));
+                            _stack.Push(new StackObject { Value = String.Format("Unknown4[{0}]", unknown) });
                             break;
 
                         case ExcelOpCodes.Unknown6:                 // 6    0x06
-                            _CheckStack(stack, 1, opCode);
+                            _CheckStack(1, opCode);
 
                             unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            stack.Push(String.Format("Unknown6[{0}]", unknown));
+                            _stack.Push(new StackObject { Value = String.Format("Unknown6[{0}]", unknown) });
                             break;
 
                         case ExcelOpCodes.Unknown14:                // 14    0x0E
-                            _CheckStack(stack, 1, opCode);
+                            _CheckStack(1, opCode);
 
                             unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            stack.Push(String.Format("Unknown14[{0}]", unknown));
+                            _stack.Push(new StackObject { Value = String.Format("Unknown14[{0}]", unknown) });
                             break;
 
                         case ExcelOpCodes.Push:                     // 26   0x1A
                             int value = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
-                            stack.Push(value.ToString());
+                            _stack.Push(new StackObject { Value = value.ToString() });
                             break;
 
                         case ExcelOpCodes.Complement:               // 320  0x140
-                            _CheckStack(stack, 1, opCode);
+                            _CheckStack(1, opCode);
 
                             // todo: check stack value - if negative, remove negative, etc
-                            stack.Push(String.Format("-{0}", stack.Pop()));
+                            _stack.Push(new StackObject { Value = String.Format("-{0}", _stack.Pop().Value) });
                             break;
 
                         case ExcelOpCodes.Not:                      // 339  0x153
-                            _CheckStack(stack, 1, opCode);
+                            _CheckStack(1, opCode);
 
-                            stack.Push(String.Format("!{0}", stack.Pop()));
+                            _stack.Push(new StackObject { Value = String.Format("!{0}", _stack.Pop().Value) });
                             break;
 
-                        case ExcelOpCodes.Pow:                     // 347  0x15B
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("{0}^{1}", value1, value2));
+                        case ExcelOpCodes.Pow:                      // 347  0x15B
+                            _DoOperator("^", 4, opCode);
                             break;
 
                         case ExcelOpCodes.Mult:                     // 358  0x166
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("{0} * {1}", value1, value2));
+                            _DoOperator("*", 5, opCode);
                             break;
 
                         case ExcelOpCodes.Div:                      // 369  0x171
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("{0} / {1}", value1, value2));
+                            _DoOperator("/", 5, opCode);
                             break;
 
                         case ExcelOpCodes.Add:                      // 388  0x184
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("({0} + {1})", value1, value2));
+                            _DoOperator("+", 6, opCode);
                             break;
 
                         case ExcelOpCodes.Sub:                      // 399  0x18F
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("({0} - {1})", value1, value2));
+                            _DoOperator("-", 6, opCode);
                             break;
 
                         case ExcelOpCodes.LessThan:                 // 426  0x1AA
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("{0} < {1}", value1, value2));
+                            _DoOperator("<", 8, opCode);
                             break;
 
                         case ExcelOpCodes.GreaterThan:              // 437  0x1B5
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("{0} > {1}", value1, value2));
+                            _DoOperator(">", 8, opCode);
                             break;
 
                         case ExcelOpCodes.LessThanOrEqual:          // 448  0x1C0
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("{0} >= {1}", value1, value2));
+                            _DoOperator("<=", 8, opCode);
                             break;
 
                         case ExcelOpCodes.GreaterThanOrEqual:       // 459  0x1CB
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("{0} >= {1}", value1, value2));
+                            _DoOperator(">=", 8, opCode);
                             break;
 
                         case ExcelOpCodes.EqualTo:                  // 470  0x1D6
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("{0} == {1}", value1, value2));
+                            _DoOperator("==", 9, opCode);
                             break;
 
                         case ExcelOpCodes.NotEqualTo:               // 481  0x1E1
-                            _CheckStack(stack, 2, opCode);
-
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("{0} != {1}", value1, value2));
+                            _DoOperator("!=", 9, opCode);
                             break;
 
                         case ExcelOpCodes.And:                      // 516  0x204
-                            _CheckStack(stack, 1, opCode);
+                            _CheckStack(1, opCode);
 
                             unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            stack.Push(String.Format("{0} &&[{1}]", stack.Pop(), unknown));
+                            _stack.Push(new StackObject { Value = String.Format("{0} &&[{1}]", _stack.Pop().Value, unknown) });
                             break;
 
                         case ExcelOpCodes.Or:                       // 527  0x20F
-                            _CheckStack(stack, 1, opCode);
+                            _CheckStack(1, opCode);
 
                             unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            stack.Push(String.Format("{0} ||[{1}]", stack.Pop(), unknown));
+                            _stack.Push(new StackObject { Value = String.Format("{0} ||[{1}]", _stack.Pop().Value, unknown) });
                             break;
 
                         case ExcelOpCodes.EndIf:                    // 538  0x21A
-                            _CheckStack(stack, 2, opCode);
+                            _CheckStack(2, opCode);
 
-                            value2 = stack.Pop();
-                            value1 = stack.Pop();
-                            stack.Push(String.Format("({0} {1})", value1, value2));
+                            value2 = _stack.Pop().Value;
+                            value1 = _stack.Pop().Value;
+                            _stack.Push(new StackObject { Value = String.Format("({0} {1})", value1, value2) });
                             break;
 
-                        case ExcelOpCodes.GetStat:                  // 666  0x29A
+                        case ExcelOpCodes.GetStat666:               // 666  0x29A
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            index >>= 22;
+                            // todo: we are losing bits with this shift - figure out what they're used for
+                            _DoFunction("GetStat666", index, (uint)ExcelTableCodes.Stats, opCode, false);
+                            break;
+
+                        case ExcelOpCodes.GetStat667:               // 667  0x29B
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                             index >>= 22;
 
-                            stack.Push(String.Format("GetStat({0})", _GetExcelValueFromCode(index, (uint)ExcelTableCodes.Stats)));
+                            _DoFunction("GetStat667", index, (uint)ExcelTableCodes.Stats, opCode, false);
                             break;
 
-                        case ExcelOpCodes.GetUnknown667:            // 667  0x29B
+                        case ExcelOpCodes.SetStat669:               // 669  0x29D
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                             index >>= 22;
 
-                            stack.Push(String.Format("GetUnknown667({0})", index));
+                            _DoFunction("SetStat669", index, (uint)ExcelTableCodes.Stats, opCode, true);
                             break;
 
-                        case ExcelOpCodes.SetStat:                  // 669  0x29D
-                            _CheckStack(stack, 1, opCode);
-
+                        case ExcelOpCodes.SetStat673:               // 673  0x2A1
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                             index >>= 22;
 
-                            stack.Push(String.Format("SetStat({0}, {1})", _GetExcelValueFromCode(index, (uint)ExcelTableCodes.Stats), stack.Pop()));
+                            _DoFunction("SetStat673", index, (uint)ExcelTableCodes.Stats, opCode, true);
                             break;
 
-                        case ExcelOpCodes.SetUnknown673:            // 673  0x2A1
-                            _CheckStack(stack, 1, opCode);
-
+                        case ExcelOpCodes.SetStat674:               // 674  0x2A2
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                             index >>= 22;
 
-                            stack.Push(String.Format("SetUnknown673({0}, {1})", index, stack.Pop()));
+                            _DoFunction("SetStat674", index, (uint)ExcelTableCodes.Stats, opCode, true);
                             break;
 
-                        case ExcelOpCodes.SetUnknown674:            // 674  0x2A2
-                            _CheckStack(stack, 1, opCode);
-
+                        case ExcelOpCodes.GetStat680:               // 680  0x2A8
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                             index >>= 22;
 
-                            stack.Push(String.Format("SetUnknown674({0}, {1})", index, stack.Pop()));
+                            _DoFunction("GetStat680", index, (uint)ExcelTableCodes.Stats, opCode, false);
                             break;
 
-                        case ExcelOpCodes.GetUnknown680:            // 680  0x2A8
+                        case ExcelOpCodes.SetStat683:               // 683  0x2AB
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                             index >>= 22;
 
-                            stack.Push(String.Format("GetUnknown680({0})", index));
+                            _DoFunction("SetStat683", index, (uint)ExcelTableCodes.Stats, opCode, true);
                             break;
 
-                        case ExcelOpCodes.GetUnknown683:            // 683  0x2AB
+                        case ExcelOpCodes.SetStat687:               // 687  0x2AF
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                             index >>= 22;
 
-                            stack.Push(String.Format("GetUnknown683({0})", index));
+                            _DoFunction("SetStat687", index, (uint)ExcelTableCodes.Stats, opCode, true);
                             break;
 
-                        case ExcelOpCodes.GetUnknown687:            // 687  0x2AF
+                        case ExcelOpCodes.SetStat688:               // 688  0x2B0
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
                             index >>= 22;
 
-                            stack.Push(String.Format("GetUnknown687({0})", index));
+                            _DoFunction("SetStat688", index, (uint)ExcelTableCodes.Stats, opCode, true);
                             break;
 
-                        case ExcelOpCodes.GetUnknown688:            // 687  0x2B0
+                        case ExcelOpCodes.PushContextVarInt32:      // 700 0x2BC
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            index >>= 22;
 
-                            stack.Push(String.Format("GetUnknown688({0})", index));
+                            _PushContextVariable("PushContextVarInt32", index);
                             break;
 
-                        case ExcelOpCodes.Unknown700:               // 700 0x2BC:
-                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                        case ExcelOpCodes.PushContextVarUInt32:     // 701 0x2BD
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
 
-                            stack.Push(String.Format("unknown700[{0}]", unknown));
+                            _PushContextVariable("PushContextVarUInt32", index);
                             break;
 
-                        case ExcelOpCodes.Unknown707:               // 707 0x2C3:
-                            uint unknown1 = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            uint unknown2 = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                        case ExcelOpCodes.PushContextVarInt64:      // 702 0x2BE
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
 
-                            Debug.Assert(unknown2 == 714);
-
-                            stack.Push(String.Format("Unknown707[{0},{1}]", unknown1, unknown2));
+                            _PushContextVariable("PushContextVarInt64", index);
                             break;
 
-                        case ExcelOpCodes.CastTypeUnknown708:       // 708  0x2C4   // String
-                            stack.Push("(String)");
+                        case ExcelOpCodes.PushContextVarUInt64:     // 703 0x2BF
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                            _PushContextVariable("PushContextVarUInt64", index);
                             break;
 
-                        case ExcelOpCodes.CastTypeColor:            // 709  0x2C5   // Color
-                            stack.Push("(Color)");
+                        case ExcelOpCodes.PushContextVarFloat:      // 704 0x2C0
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                            _PushContextVariable("PushContextVarFloat", index);
                             break;
 
-                        case ExcelOpCodes.CastTypeInt:              // 710  0x2C6
-                            stack.Push("(int?)");
+                        case ExcelOpCodes.PushContextVarDouble:     // 705 0x2C1
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                            _PushContextVariable("PushContextVarDouble", index);
                             break;
 
-                        case ExcelOpCodes.CastTypeUnknown6:         // 711  0x2C7
-                            stack.Push("(type6)");
+                        case ExcelOpCodes.PushContextVarDouble2:    // 706 0x2C2
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                            _PushContextVariable("PushContextVarDouble2", index);
                             break;
 
-                        case ExcelOpCodes.TypeUnknown12:            // 712  0x2C8
-                            stack.Push("(unknown12)");
+                        case ExcelOpCodes.PushContextVarPtr:        // 707 0x2C3
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                            _PushContextVariable("PushContextVarPtr", index);
+                            break;
+
+                        case ExcelOpCodes.GlobalVarGame3:           // 708  0x2C4
+                            _stack.Push(new StackObject { Value = "game3" });
+                            break;
+
+                        case ExcelOpCodes.GlobalVarContext:         // 709  0x2C5
+                            _stack.Push(new StackObject { Value = "context" });
+                            break;
+
+                        case ExcelOpCodes.GlobalVarGame4:           // 710  0x2C6
+                            _stack.Push(new StackObject { Value = "game4" });
+                            break;
+
+                        case ExcelOpCodes.GlobalVarUnit:            // 711  0x2C7
+                            _stack.Push(new StackObject { Value = "unit" });
+                            break;
+
+                        case ExcelOpCodes.GlobalVarStats:           // 712  0x2C8
+                            _stack.Push(new StackObject { Value = "stats" });
                             break;
 
                         case ExcelOpCodes.CastTypeUnknown714:       // 714  0x2CA
-                            stack.Push("(unknown714)");
+                            _stack.Push(new StackObject { Value = "(unknown714)" });
                             break;
 
                         default:
-                            throw new Exceptions.ExcelScriptUnknownOpCode(opCode.ToString(), _DumpStack(stack));
+                            throw new Exceptions.ExcelScriptUnknownOpCode(opCode.ToString(), _DumpStack(_stack));
                     }
 
                     infCheck++;
-                    if (infCheck >= 1000) throw new Exceptions.ExcelScriptInfiniteCheck(opCode.ToString(), _DumpStack(stack));
+                    if (infCheck >= 1000) throw new Exceptions.ExcelScriptInfiniteCheck(opCode.ToString(), _DumpStack(_stack));
                 }
             }
             catch (Exception e)
             {
-                String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", _debugRoot, stringId);
-                String debugOutput = String.Format("{0}\n{1}\n\n\n", debugPos, e);   
-                File.AppendAllText(debugOutputPath, debugOutput);
+                if (debug)
+                {
+                    String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", DebugRoot, stringId);
+                    String debugOutput = String.Format("{0}\n{1}\n\n\n", debugPos, e);
+                    File.AppendAllText(debugOutputPath, debugOutput);
+                    debugScriptParsed = false;
+                }
 
                 throw;
             }
+            finally
+            {
+                if (debugOutputParsed && debugScriptParsed)
+                {
+                    String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", DebugRoot, stringId);
+                    String debugOutput = String.Format("{0}\n{1}\n\n\n", debugPos, script);
+                    File.AppendAllText(debugOutputPath, debugOutput);
+                }
+            }
         }
 
-        private static void _CheckStack(Stack<String> stack, int requiredCount, ExcelOpCodes opCode)
+        private void _PushContextVariable(String functionName, uint varIndex)
         {
-            if (requiredCount <= stack.Count) return;
+            String funcString = String.Format("{0}('{1}')", functionName, ((ContextVariables) varIndex).ToString().ToLower());
 
-            String error = String.Format("The OpCode {0} requires {1} values on the stack.\n{2}", opCode, requiredCount, _DumpStack(stack));
+            _stack.Push(new StackObject { Value = funcString });
+        }
+
+        private void _DoOperator(String op, int precedence, ExcelOpCodes opCode)
+        {
+            _CheckStack(2, opCode);
+
+            StackObject value2Object = _stack.Pop();
+            StackObject value1Object = _stack.Pop();
+
+            const String operatorFormat = "{0} {1} {2}";
+            const String operatorFormatParentheses = "({0}) {1} {2}";
+
+            String opFormat = value1Object.Precedence > precedence ? operatorFormatParentheses : operatorFormat;
+
+            StackObject newStackObject = new StackObject
+            {
+                Value = String.Format(opFormat, value1Object.Value, op, value2Object.Value),
+                Precedence = precedence,
+                FunctionDepth = value1Object.FunctionDepth
+            };
+
+            _stack.Push(newStackObject);
+        }
+
+        private void _DoFunction(String name, uint index, uint tableCode, ExcelOpCodes opCode, bool isSet)
+        {
+            String argStr = String.Empty;
+            if (isSet)
+            {
+                _CheckStack(1, opCode);
+
+                argStr = ", " + _stack.Pop().Value;
+            }
+
+            String indexStr = index.ToString();
+            if (tableCode > 0)
+            {
+                indexStr = _GetExcelValueFromCode(index, tableCode);
+            }
+
+            StackObject newStackObject = new StackObject
+            {
+                Value = String.Format("{0}({1}{2})", name, indexStr, argStr)
+            };
+
+            _stack.Push(newStackObject);
+        }
+
+        private void _CheckStack(int requiredCount, ExcelOpCodes opCode, Function functionDetails=null)
+        {
+            if (requiredCount <= _stack.Count) return;
+
+            String extra = String.Empty;
+            if (functionDetails != null)
+            {
+                extra = String.Format(" Function Name: '{0}'", functionDetails.Name);
+            }
+
+            String error = String.Format("The OpCode {0} requires {1} values on the stack.{2}\n{3}", opCode, requiredCount, extra, _DumpStack(_stack));
             throw new Exceptions.ExcelScriptInvalidStackState(error);
         }
 
-        private static String _DumpStack(Stack<String> stack)
+        private static String _DumpStack(Stack<StackObject> stack)
         {
-            String stackDump = "Stack Dump : LIFO\n";
+            String stackDump = "Stack Dump : LIFO\nIndex\tPrecedence\tFunctionDepth\tValue\n";
 
             int stackCount = stack.Count;
             for (int i = 0; i < stackCount; i++)
             {
-                stackDump += String.Format("{0}\t{1}\n", i, stack.Pop());
+                StackObject stackObject = stack.Pop();
+                stackDump += String.Format("{0}\t\t{1}\t\t\t{2}\t\t\t\t{3}\n", i, stackObject.Precedence, stackObject.FunctionDepth, stackObject.Value);
             }
 
             return stackDump;
         }
 
+        private static String _GetExcelValueFromCode(uint index, uint code)
+        {
+            if (_fileManager == null) return index.ToString();
 
+            String indexStr = _fileManager.GetExcelRowStringFromRowIndex(code, (int)index);
+            return String.IsNullOrEmpty(indexStr) ? index.ToString() : String.Format("'{0}'", indexStr);
+        }
 
 
         //// Get Functions From ASM Stuff ////
@@ -890,6 +977,16 @@ namespace Hellgate
                     { "r15", "0" },
                 };
 
+            // Function                       		Type
+            // Script_AddParam_Int                  0
+            // Script_AddParam_ExcelIndex           1
+			// Script_AddParam_AffixGroup			1	// ??
+            // Script_AddParam_Context              2
+            // Script_AddParam_Game3                3	// not sure what's the difference with these two - is one a pointer and one by value? (random guess)
+            // Script_AddParam_Game4                4
+            // Script_AddParam_Unit                 r8	// always 5 or 6
+			// Script_AddParam_Param				7	// not sure what type
+
             List<Function> functions = new List<Function>();
             Function function = null;
             int argIndex = 0;
@@ -906,10 +1003,10 @@ namespace Hellgate
 
                 String opCode = asmStr[0];
 
-                if (line == 2605)
-                {
-                    int bp = 0;
-                }
+                //if (line == 2605)
+                //{
+                //    int bp = 0;
+                //}
 
                 switch (opCode)
                 {
@@ -967,111 +1064,113 @@ namespace Hellgate
                         break;
 
                     case "call":
-                        if (asmStr[1].Contains("DoStringCryptHash "))
+                        if (asmStr[1].Contains("Script_AddFunction"))
                         {
                             if (function != null) functions.Add(function);
 
-                            function = new Function { Args = new Argument[5] };
+                            function = new Function { Args = new Argument[10] };
                             argIndex = 0;
                             haveFuncName = true;
-                            haveReturnType = false;
-                            haveVoidArg = false;
+                            //haveReturnType = false;
+                            //haveVoidArg = false;
 
                             function.Name = registers["rcx"];
                         }
-                        else if (asmStr[1].Contains("DoStringCryptHash_0"))
+                        else if (asmStr[1].Contains("Script_AddParam_Int"))
                         {
                             Debug.Assert(function != null && haveFuncName);
 
-                            if (!haveReturnType)
-                            {
-                                function.ReturnType = "void";
-                                haveReturnType = true;
-                            }
-                            else
-                            {
-                                // if we've already go a return type/arg, but now adding void, then the first type we added wasn't also an argument
-                                Debug.Assert(argIndex <= 1);
-                                if (argIndex == 1)
-                                {
-                                    Debug.Assert(function.ReturnType == function.Args[0].Type);
-                                }
+                            function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = 0 };
 
-                                Argument argument = new Argument
-                                {
-                                    Name = "",
-                                    Type = "void"
-                                };
-                                function.Args = new[] { argument };
-                                haveVoidArg = true;
-                            }
+                            //if (!haveReturnType)
+                            //{
+                            //    function.ReturnType = "void";
+                            //    haveReturnType = true;
+                            //}
+                            //else
+                            //{
+                            //    // if we've already go a return type/arg, but now adding void, then the first type we added wasn't also an argument
+                            //    Debug.Assert(argIndex <= 1);
+                            //    if (argIndex == 1)
+                            //    {
+                            //        Debug.Assert(function.ReturnType == function.Args[0].Type);
+                            //    }
+
+                            //    Argument argument = new Argument
+                            //    {
+                            //        Name = "",
+                            //        Type = "void"
+                            //    };
+                            //    function.Args = new[] { argument };
+                            //    haveVoidArg = true;
+                            //}
                         }
-                        else if (asmStr[1].Contains("DoStringCryptHash_1"))
+                        else if (asmStr[1].Contains("Script_AddParam_ExcelIndex") || asmStr[1].Contains("Script_AddParam_AffixGroup"))
                         {
-                            Debug.Assert(function != null && haveFuncName && !haveVoidArg);
-
-                            if (!haveReturnType)
-                            {
-                                function.ReturnType = "int";
-                                haveReturnType = true;
-                            }
-
-                            function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = "int" };
-                        }
-                        else if (asmStr[1].Contains("DoStringCryptHash_2")) // arg type
-                        {
-                            Debug.Assert(function != null && haveFuncName && !haveVoidArg);
-
-                            if (!haveReturnType)
-                            {
-                                function.ReturnType = "index";
-                                haveReturnType = true;
-                            }
+                            Debug.Assert(function != null && haveFuncName);
 
                             String strIndex = registers["rdx"];
-                            Debug.Assert(strIndex != null);
+                            Debug.Assert(!String.IsNullOrEmpty(strIndex));
                             String tableIndex = strIndex.Replace("h", "");
-                            function.Args[argIndex++] = new Argument { Name = registers["r8"], Type = "index", TableIndex = Int32.Parse(tableIndex, NumberStyles.HexNumber) };
-                        }
-                        else if (asmStr[1].Contains("DoStringCryptHash_3")) // return type
-                        {
-                            Debug.Assert(function != null && haveFuncName && !haveReturnType);
+                            function.Args[argIndex++] = new Argument { Name = registers["r8"], Type = 1, TableIndex = Int32.Parse(tableIndex, NumberStyles.HexNumber) };
 
-                            function.ReturnType = "int";
-                            haveReturnType = true;
-                        }
-                        else if (asmStr[1].Contains("DoStringCryptHash_4")) // return type
-                        {
-                            Debug.Assert(function != null && haveFuncName && !haveReturnType);
+                            //if (!haveReturnType)
+                            //{
+                            //    function.ReturnType = "int";
+                            //    haveReturnType = true;
+                            //}
 
-                            function.ReturnType = "unknown4";
-                            haveReturnType = true;
+                            //function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = "int" };
                         }
-                        else if (asmStr[1].Contains("DoStringCryptHash_5")) // arg type
+                        else if (asmStr[1].Contains("Script_AddParam_Context"))
                         {
-                            Debug.Assert(function != null && haveFuncName && !haveVoidArg && haveReturnType);
+                            Debug.Assert(function != null && haveFuncName);
 
-                            function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = "type5" };
+                            function.Args[argIndex++] = new Argument { Name = "context", Type = 2 };
+
+                            //if (!haveReturnType)
+                            //{
+                            //    function.ReturnType = "index";
+                            //    haveReturnType = true;
+                            //}
+
+                            //String strIndex = registers["rdx"];
+                            //Debug.Assert(strIndex != null);
+                            //String tableIndex = strIndex.Replace("h", "");
+                            //function.Args[argIndex++] = new Argument { Name = registers["r8"], Type = "index", TableIndex = Int32.Parse(tableIndex, NumberStyles.HexNumber) };
                         }
-                        else if (asmStr[1].Contains("DoStringCryptHash_6")) // arg type
+                        else if (asmStr[1].Contains("Script_AddParam_Game3"))
                         {
-                            Debug.Assert(function != null && haveFuncName && !haveVoidArg);
+                            Debug.Assert(function != null && haveFuncName);
 
-                            if (!haveReturnType)
-                            {
-                                function.ReturnType = "type6";
-                                haveReturnType = true;
-                            }
-                            else
-                            {
-                                function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = "type6" };
-                            }
+                            function.Args[argIndex++] = new Argument { Name = "game3", Type = 3 };
+
+                            //function.ReturnType = "int";
+                            //haveReturnType = true;
                         }
-                        else if (asmStr[1].Contains("sub_1402456F8")) // arg type
+                        else if (asmStr[1].Contains("Script_AddParam_Game4"))
                         {
-                            Debug.Assert(function != null && haveFuncName && !haveVoidArg && haveReturnType);
+                            Debug.Assert(function != null && haveFuncName);
 
-                            function.Args[argIndex++] = new Argument { Name = registers["r9"], Type = "affixGroup" };
+                            function.Args[argIndex++] = new Argument { Name = "game4", Type = 4 };
+
+                            //function.ReturnType = "unknown4";
+                            //haveReturnType = true;
+                        }
+                        else if (asmStr[1].Contains("Script_AddParam_Unit"))
+                        {
+                            Debug.Assert(function != null && haveFuncName);
+
+                            String strType = registers["r8"];
+                            Debug.Assert(!String.IsNullOrEmpty(strType));
+                            String typeValue = strType.Replace("h", "");
+                            function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = Int32.Parse(typeValue, NumberStyles.HexNumber) };
+                        }
+                        else if (asmStr[1].Contains("Script_AddParam_Param"))
+                        {
+                            Debug.Assert(function != null && haveFuncName);
+
+                            function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = 7 };
                         }
                         else
                         {
@@ -1087,8 +1186,10 @@ namespace Hellgate
             }
             if (function != null) functions.Add(function);
 
+
             // {index, new Function { Name = "FunctionName", ReturnType = "Type", Args = new[] { new Argument { Name = "", Type = "" } } }},
 
+            // todo: change to a list (no idea why I used dict for sequential *list* of functions)
             int index = 0;
             foreach (Function func in functions)
             {
@@ -1099,8 +1200,8 @@ namespace Hellgate
                 {
                     if (arg == null) break;
 
-                    const String argFormatStringBasic = "new Argument {{ Name = \"{0}\", Type = \"{1}\" }}";
-                    const String argFormatStringIndex = "new Argument {{ Name = \"{0}\", Type = \"{1}\", TableIndex = {2} }}";
+                    const String argFormatStringBasic = "new Argument {{ Name = \"{0}\", Type = {1} }}";
+                    const String argFormatStringIndex = "new Argument {{ Name = \"{0}\", Type = {1}, TableIndex = {2} }}";
 
                     String argFormatString = arg.TableIndex >= 0 ? argFormatStringIndex : argFormatStringBasic;
                     formattedArgStrings[i++] = String.Format(argFormatString, arg.Name, arg.Type, arg.TableIndex);
@@ -1111,8 +1212,8 @@ namespace Hellgate
                     formattedArgString = ", Args = new[] { " + formattedArgString + " }";
                 }
 
-                const String dictionaryFormat = "{{ {0}, new Function {{ Name = \"{1}\", ReturnType = \"{2}\"{3} }}}},";
-                String cSharpDicCode = String.Format(dictionaryFormat, index++, func.Name, func.ReturnType, formattedArgString);
+                const String dictionaryFormat = "/*{0,3}*/ new Function {{ Name = \"{1}\"{2} }},";
+                String cSharpDicCode = String.Format(dictionaryFormat, index++, func.Name, formattedArgString);
                 Debug.WriteLine(cSharpDicCode);
             }
         }
