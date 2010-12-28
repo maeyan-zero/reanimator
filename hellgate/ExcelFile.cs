@@ -932,15 +932,15 @@ namespace Hellgate
                             int[] buffer = ReadScriptTable(offset);
 
                             String scriptString = FileTools.ArrayToStringGeneric(buffer, ",");
-                            //try
-                            //{
-                            //    scriptString = "\"" + ExcelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldInfo.Name) + "\"";
-                            //}
-                            //catch (Exception e)
-                            //{
-                            //    Debug.WriteLine(e.ToString());
-                            //    scriptString = "ScriptError(" + scriptString + ")";
-                            //}
+                            try
+                            {
+                                scriptString = "\"" + ExcelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldInfo.Name) + "\"";
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.WriteLine(e.ToString());
+                                scriptString = "ScriptError(" + scriptString + ")";
+                            }
 
                             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptString));
                             continue;
@@ -1013,6 +1013,151 @@ namespace Hellgate
 
             Array.Resize(ref csvBuffer, csvOffset);
             return csvBuffer;
+        }
+
+        public override byte[] ExportSQL()
+        {
+            StringWriter stringWriter = new StringWriter();
+            FieldInfo[] fieldInfo = DataType.GetFields();
+
+            stringWriter.WriteLine(String.Format("CREATE TABLE {0}", StringId.ToLower()));
+            stringWriter.WriteLine("(");
+            stringWriter.WriteLine("\tid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,");
+
+            String columnDec = "\t{0} {1}{2}";
+            int noColumns = fieldInfo.Count();
+            int colCount = 1;
+
+            foreach (FieldInfo field in fieldInfo)
+            {
+                String columnName = field.Name;
+                String dataType = String.Empty;
+                String formatted = String.Empty;
+
+                // Special types
+                OutputAttribute excelOutput = GetExcelOutputAttribute(field);
+                if (excelOutput != null)
+                {
+                    if (excelOutput.IsScript || excelOutput.IsSecondaryString || excelOutput.IsStringOffset)
+                    {
+                        dataType = "TEXT";
+                    }
+                    else if (excelOutput.IsBitmask)
+                    {
+                        dataType = "BIGINT";
+                    }
+                }
+
+                if (dataType == String.Empty)
+                {
+                    if (field.FieldType == typeof(int))
+                    {
+                        dataType = "INT";
+                    }
+                    else if (field.FieldType == typeof(float))
+                    {
+                        dataType = "DECIMAL";
+                    }
+                    else if (field.FieldType == typeof(string))
+                    {
+                        MarshalAsAttribute marshalAs = (MarshalAsAttribute)field.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                        dataType = String.Format("VARCHAR({0})", marshalAs.SizeConst);
+                    }
+                }
+
+                formatted = String.Format(columnDec, columnName, dataType, colCount < noColumns ? "," : String.Empty);
+                stringWriter.WriteLine(formatted);
+                colCount++;
+            }
+
+            stringWriter.WriteLine(");");
+            stringWriter.WriteLine("INSERT INTO {0} VALUES", StringId.ToLower());
+            stringWriter.WriteLine("(");
+
+            colCount = 1;
+            int rowCount = 0;
+            int noRows = Rows.Count;
+            StringWriter valueString = new StringWriter();
+            
+            foreach (Object rowObject in Rows)
+            {
+                valueString.Write(String.Format("\t({0},", rowCount)); // write the id
+
+                foreach (FieldInfo field in fieldInfo)
+                {
+                    OutputAttribute excelOutput = GetExcelOutputAttribute(field);
+                    Object objValue = field.GetValue(rowObject);
+                    bool valueParsed = false;
+
+                    if (excelOutput != null)
+                    {
+                        if (excelOutput.IsScript)
+                        {
+                            int[] scriptTable = ReadScriptTable((int)objValue);
+                            if (scriptTable != null)
+                            {
+                                string scriptString = FileTools.ArrayToStringGeneric(scriptTable, ",");
+                                scriptString = String.Format("\"{0}\"", scriptString);
+                                valueString.Write(scriptString);
+                            }
+                            else
+                            {
+                                valueString.Write("\"\"");
+                            }
+                            valueParsed = true;
+                        }
+                        else if (excelOutput.IsSecondaryString)
+                        {
+                            if ((int)objValue != -1)
+                            {
+                                string secString = ReadSecondaryStringTable((int)objValue);
+                                valueString.Write(String.Format("\"{0}\"", secString));
+                            }
+                            else
+                            {
+                                valueString.Write("\"\"");
+                            }
+                            valueParsed = true;
+                        }
+                        else if (excelOutput.IsStringOffset)
+                        {
+                            string offString = ReadStringTable((int)objValue);
+                            valueString.Write(String.Format("\"{0}\"", offString));
+                            valueParsed = true;
+                        }
+                        else if (excelOutput.IsBitmask)
+                        {
+                            valueString.Write((uint)objValue);
+                            valueParsed = true;
+                        }
+                    }
+
+                    if (valueParsed == false)
+                    {
+                        if (field.FieldType == typeof(string))
+                        {
+                            valueString.Write(String.Format("\"{0}\"", objValue));
+                        }
+                        else
+                        {
+                            valueString.Write(objValue);
+                        }
+                    }
+
+                    if (colCount < noColumns) valueString.Write(",");
+                    else valueString.Write(")");
+                    colCount++;
+                }
+                if (rowCount < noRows - 1) valueString.WriteLine(",");
+                else valueString.WriteLine("\n);");
+                rowCount++;
+                colCount = 1;
+            }
+
+            stringWriter.Write(valueString.ToString());
+
+            byte[] buffer = FileTools.StringToASCIIByteArray(stringWriter.ToString());
+            return buffer;
         }
 
         /// <summary>

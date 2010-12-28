@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Hellgate;
+using Revival.Common;
 using ExceptionLogger = Revival.Common.ExceptionLogger;
 
 namespace Revival
@@ -30,9 +31,9 @@ namespace Revival
 
             bool doCookTxt = false;
             bool doCookXml = false;
-            bool doPackDat = false;
-            bool doSearchCd = false;
-            bool doExcludeRaw = false;
+            bool doPackDat = false; // do pack any referenced files into a hellgate london dat/idx
+            bool doSearchCd = false; // search the current directory for files to cook and pack
+            bool doExcludeRaw = false; // do not pack source files, only cooked versions.
             bool doLevelRules = false;
             bool doRoomDefinitions = false;
 
@@ -135,9 +136,37 @@ namespace Revival
             }
             #endregion
 
+            #region SQL test
+            if (false)
+            {
+                fileManager = new FileManager(@"D:\Games\Hellgate London");
+                fileManager.LoadTableFiles();
+
+                byte[] sqlBuffer = new byte[1024];
+                int sqlOffset = 0;
+
+                string createDB = "CREATE DATABASE hellgate_london;\nUSE hellgate_london;\n";
+                byte[] createDBArray = FileTools.StringToASCIIByteArray(createDB);
+                FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, createDBArray);
+
+                foreach (DataFile dataFile in fileManager.DataFiles.Values)
+                {
+                    if (dataFile.IsStringsFile) continue;
+                    byte[] buffer = dataFile.ExportSQL();
+                    Console.WriteLine(dataFile.FileName);
+                    FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, buffer);
+                }
+
+                Array.Resize(ref sqlBuffer, sqlOffset);
+                File.WriteAllBytes("hellgate_london_db.sql", sqlBuffer);
+                return;
+            }
+            #endregion
+
             Console.WriteLine(WelcomeMsg);
             Console.WriteLine(String.Empty);
 
+            #region Command Line Arugements
             if (args.Length == 0)
             {
                 // No arguments defined - this is the default program
@@ -230,7 +259,9 @@ namespace Revival
                     }
                 }
             }
+            #endregion
 
+            #region Program Functions
             // Search for Txt files to cook
             if (doSearchCd && doCookTxt)
             {
@@ -305,6 +336,7 @@ namespace Revival
                 filesToPack.AddRange(SearchForFilesToPack(currentDir, doExcludeRaw));
                 PackDatFile(filesToPack.ToArray(), Path.Combine(currentDir, _defaultDat + ".idx"));
             }
+            #endregion
 
             return;
         }

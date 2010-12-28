@@ -65,9 +65,15 @@ namespace Hellgate
         public byte[] ExportCollada()
         {
             Collada colladaDoc = new Collada(_geometry.ToArray(), _index.ToArray(), Id);
+            System.Type[] extraTypes = new System.Type[]
+            {
+                typeof(Collada.Asset),
+                typeof(Collada.Asset.Contributor),
+                typeof(Collada.Asset.Unit)
+            };
 
             MemoryStream memoryStream = new MemoryStream();
-            XmlSerializer xmlSerializerHeader = new XmlSerializer(colladaDoc.GetType());
+            XmlSerializer xmlSerializerHeader = new XmlSerializer(colladaDoc.GetType(), extraTypes);
             xmlSerializerHeader.Serialize(memoryStream, colladaDoc);
 
             return memoryStream.ToArray();
@@ -803,7 +809,7 @@ namespace Hellgate
             internal Model.Geometry[] GeometryData { get; private set; }
             internal Model.Index[] IndexData { get; private set; }
             internal string ModelID { get; private set; }
-            private Collada() { }
+            internal Collada() { }
 
             public Collada(Model.Geometry[] geometryData, Model.Index[] indexData, string modelID)
             {
@@ -813,7 +819,7 @@ namespace Hellgate
             }
 
             #region Asset
-            [XmlElement("asset")]
+            [XmlElement("asset", typeof(Asset))]
             public Asset AssetElement { get { return new Asset(); } }
 
             public class Asset
@@ -848,6 +854,8 @@ namespace Hellgate
 
                 public class Unit
                 {
+                    internal Unit() { }
+
                     internal Unit(double meter = 0.01, string name = "centimeter")
                     {
                         this.Meter = meter;
@@ -868,13 +876,14 @@ namespace Hellgate
 
             #region Library Geometries
             [XmlElement("library_geometries")]
-            public LibraryGeometries LibraryGeometriesElement;
+            public LibraryGeometries LibraryGeometriesElement { get { return new LibraryGeometries(GeometryData, IndexData, ModelID); } }
 
             public class LibraryGeometries
             {
                 internal Model.Geometry[] GeometryData { get; private set; }
                 internal Model.Index[] IndexData { get; private set; }
                 internal string ModelID { get; private set; }
+                internal LibraryGeometries() { }
 
                 internal LibraryGeometries(Model.Geometry[] geometryData, Model.Index[] indexData, string modelID)
                 {
@@ -899,6 +908,7 @@ namespace Hellgate
                 {
                     internal Model.Geometry[] GeometryData { get; private set; }
                     internal Model.Index[] IndexData { get; private set; }
+                    internal Geometry() { }
 
                     internal Geometry(Model.Geometry[] geometryData, Model.Index[] indexData, string modelID)
                     {
@@ -921,6 +931,7 @@ namespace Hellgate
                         internal Model.Geometry[] GeometryData { get; private set; }
                         internal Model.Index[] IndexData { get; private set; }
                         internal string LibraryID { get; private set; }
+                        internal Mesh() { }
 
                         internal Mesh(Model.Geometry[] geometryData, Model.Index[] indexData, string libraryID)
                         {
@@ -989,6 +1000,7 @@ namespace Hellgate
                             internal float[,] Data;
                             internal string[] Coordinate;
                             internal string Semantic;
+                            internal Source() { }
 
                             internal Source(float[,] data, string libraryID, string name, string[] coordinate, string semantic)
                             {
@@ -1011,6 +1023,7 @@ namespace Hellgate
                             public class FloatArray
                             {
                                 internal float[,] Data { get; set; }
+                                internal FloatArray() { }
 
                                 internal FloatArray(float[,] data, string id)
                                 {
@@ -1048,6 +1061,7 @@ namespace Hellgate
                                 internal float[,] Data;
                                 internal string SourceID;
                                 internal string[] Coordinate;
+                                internal TechniqueCommon() { }
 
                                 internal TechniqueCommon(float[,] data, string id, string[] coordinate)
                                 {
@@ -1063,6 +1077,7 @@ namespace Hellgate
                                 {
                                     internal float[,] Data { get; set; }
                                     internal string[] Coordinate { get; set; }
+                                    internal Accessor() { }
 
                                     internal Accessor(float[,] data, string source, string[] dimension)
                                     {
@@ -1096,7 +1111,9 @@ namespace Hellgate
 
                                     public class Param
                                     {
-                                        public Param(string name, string type = "float")
+                                        internal Param() { }
+
+                                        internal Param(string name, string type = "float")
                                         {
                                             this.Name = name;
                                             this.Type = type;
