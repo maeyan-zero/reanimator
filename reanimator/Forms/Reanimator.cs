@@ -87,7 +87,7 @@ namespace Reanimator.Forms
 
         private static void _ExtractFunctionList()
         {
-            String path = @"C:\SP_FunctionNamePtrGeneration.txt";
+            const String path = @"C:\SP_FunctionNamePtrGeneration.txt";
             String[] functionCode = File.ReadAllLines(path);
 
             ExcelScript.ExtractFunctionList(functionCode);
@@ -348,7 +348,7 @@ namespace Reanimator.Forms
 
                 Console.WriteLine("Cooking file: " + fileEntry.RelativeFullPathWithoutPatch);
 
-                //if (!fileEntry.RelativeFullPathWithoutPatch.Contains("damageeffects")) continue;
+                //if (!fileEntry.RelativeFullPathWithoutPatch.Contains("display_char")) continue;
 
                 byte[] csvBytes = excelFile.ExportCSV();
                 File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);

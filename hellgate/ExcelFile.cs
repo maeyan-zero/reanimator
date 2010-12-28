@@ -932,15 +932,16 @@ namespace Hellgate
                             int[] buffer = ReadScriptTable(offset);
 
                             String scriptString = FileTools.ArrayToStringGeneric(buffer, ",");
-                            try
-                            {
-                                scriptString = "\"" + ExcelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldInfo.Name) + "\"";
-                            }
-                            catch (Exception e)
-                            {
-                                Debug.WriteLine(e.ToString());
-                                scriptString = "ScriptError(" + scriptString + ")";
-                            }
+                            //try
+                            //{
+                            //    ExcelScript excelScript = new ExcelScript();
+                            //    scriptString = "\"" + excelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldInfo.Name) + "\"";
+                            //}
+                            //catch (Exception e)
+                            //{
+                            //    //Debug.WriteLine(e.ToString());
+                            //    scriptString = "ScriptError(" + scriptString + ")";
+                            //}
 
                             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptString));
                             continue;
