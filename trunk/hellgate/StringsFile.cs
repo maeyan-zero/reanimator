@@ -302,7 +302,49 @@ namespace Hellgate
 
         public override byte[] ExportSQL(string tablePrefix = "hgl")
         {
-            throw new NotImplementedException();
+            StringWriter stringWriter = new StringWriter();
+            string tableName = String.Format("{0}_{1}", tablePrefix, StringId.ToLower());
+            stringWriter.WriteLine(String.Format("CREATE TABLE {0} (", tableName));
+            stringWriter.WriteLine("\tid NOT NULL AUTO_INCREMENT PRIMARY KEY");
+            stringWriter.WriteLine("\tpk INT,");
+            stringWriter.WriteLine("\tfk INT,");
+            stringWriter.WriteLine("\tstringid VARCHAR(64),");
+            stringWriter.WriteLine("\tu1 INT,");
+            stringWriter.WriteLine("\tstring TEXT,");
+            stringWriter.WriteLine("\ta1 VARCHAR(16),");
+            stringWriter.WriteLine("\ta2 VARCHAR(16),");
+            stringWriter.WriteLine("\ta3 VARCHAR(16),");
+            stringWriter.WriteLine("\ta4 VARCHAR(16)");
+            stringWriter.WriteLine(");");
+
+            stringWriter.WriteLine(String.Format("INSERT INTO {0} VALUES", tableName));
+            int rowCount = 0;
+            foreach (StringBlock stringBlock in Rows)
+            {
+                stringWriter.Write("\t(");
+                stringWriter.Write(stringBlock.ReferenceId);
+                stringWriter.Write(",");
+                stringWriter.Write(stringBlock.Unknown);
+                stringWriter.Write(",");
+                stringWriter.Write(_EncapsulateString(stringBlock.StringId));
+                stringWriter.Write(",");
+                stringWriter.Write(stringBlock.Reserved);
+                stringWriter.Write(",");
+                stringWriter.Write(_EncapsulateString(stringBlock.String));
+                stringWriter.Write(",");
+                stringWriter.Write(_EncapsulateString(stringBlock.Attribute1));
+                stringWriter.Write(",");
+                stringWriter.Write(_EncapsulateString(stringBlock.Attribute2));
+                stringWriter.Write(",");
+                stringWriter.Write(_EncapsulateString(stringBlock.Attribute3));
+                stringWriter.Write(",");
+                stringWriter.Write(_EncapsulateString(stringBlock.Attribute4));
+                stringWriter.Write(")");
+                stringWriter.WriteLine(rowCount++ < Count - 1 ? "," : ";");
+            }
+
+            byte[] buffer = FileTools.StringToUnicodeByteArray(stringWriter.ToString());
+            return buffer;
         }
 
         private static String _EncapsulateString(String str)
