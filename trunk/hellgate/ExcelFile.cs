@@ -1015,14 +1015,14 @@ namespace Hellgate
             return csvBuffer;
         }
 
-        public override byte[] ExportSQL()
+        public override byte[] ExportSQL(string tablePrefix = "hgl")
         {
             StringWriter stringWriter = new StringWriter();
             FieldInfo[] fieldInfo = DataType.GetFields();
+            string tableName = String.Format("{0}_{1}", tablePrefix, StringId.ToLower());
 
-            stringWriter.WriteLine(String.Format("CREATE TABLE {0}", StringId.ToLower()));
-            stringWriter.WriteLine("(");
-            stringWriter.WriteLine("\tid INT NOT NULL AUTO_INCREMENT PRIMARY KEY,");
+            stringWriter.WriteLine(String.Format("CREATE TABLE {0} (", tableName));
+            stringWriter.WriteLine("\tid INT NOT NULL PRIMARY KEY,");
 
             String columnDec = "\t{0} {1}{2}";
             int noColumns = fieldInfo.Count();
@@ -1071,8 +1071,8 @@ namespace Hellgate
             }
 
             stringWriter.WriteLine(");");
-            stringWriter.WriteLine("INSERT INTO {0} VALUES", StringId.ToLower());
-            stringWriter.WriteLine("(");
+            stringWriter.WriteLine("INSERT INTO {0}", tableName);
+            stringWriter.WriteLine("VALUES");
 
             colCount = 1;
             int rowCount = 0;
@@ -1149,7 +1149,7 @@ namespace Hellgate
                     colCount++;
                 }
                 if (rowCount < noRows - 1) valueString.WriteLine(",");
-                else valueString.WriteLine("\n);");
+                else valueString.WriteLine(";");
                 rowCount++;
                 colCount = 1;
             }

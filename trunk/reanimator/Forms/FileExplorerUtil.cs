@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Hellgate;
 using Reanimator.Properties;
+using Config = Revival.Common.Config;
+using ExceptionLogger = Revival.Common.ExceptionLogger;
 
 namespace Reanimator.Forms
 {

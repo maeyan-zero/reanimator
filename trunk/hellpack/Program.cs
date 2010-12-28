@@ -155,6 +155,12 @@ namespace Revival
                     byte[] buffer = dataFile.ExportSQL();
                     Console.WriteLine(dataFile.FileName);
                     FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, buffer);
+                    if (true)
+                    {
+                        String dir = Path.GetDirectoryName(dataFile.FilePath);
+                        if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+                        File.WriteAllBytes(dataFile.FilePath.Replace(".txt.cooked", ".sql"), buffer);
+                    }
                 }
 
                 Array.Resize(ref sqlBuffer, sqlOffset);

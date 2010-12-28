@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using Reanimator.Forms.HeroEditorFunctions;
+using Config = Revival.Common.Config;
+using ExceptionLogger = Revival.Common.ExceptionLogger;
 
 namespace Reanimator.Forms.ItemTransfer
 {

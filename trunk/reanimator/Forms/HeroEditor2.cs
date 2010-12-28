@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Hellgate;
 using Reanimator.Forms.HeroEditorFunctions;
 using System.IO;
+using Config = Revival.Common.Config;
 
 namespace Reanimator.Forms
 {

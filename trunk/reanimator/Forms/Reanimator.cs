@@ -1246,7 +1246,7 @@ namespace Reanimator.Forms
                         if (_tablesLoadedTCv4 != null)
                         {
                             _tablesLoadedTCv4.MdiParent = this;
-                            _tablesLoadedTCv4.Bounds = new Rectangle(_fileExplorer.Size.Width + 10 + 300 + 10, 0, 300, 350);
+                            _tablesLoadedTCv4.Bounds = new Rectangle(_fileExplorer.Size.Width + 10, 350 + 10, 300, 350);
                             _tablesLoadedTCv4.Text = "Hellgate TCv4 Tables Loaded [" + _fileManagerTCv4.DataFiles.Count + "]";
                             _tablesLoadedTCv4.Show();
                         }

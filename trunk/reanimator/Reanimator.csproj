@@ -181,8 +181,6 @@
     </Compile>
     <Compile Include="MemoryReader.cs" />
     <Compile Include="Patches.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="ExceptionLogger.cs" />
     <Compile Include="Forms\HeroEditorFunctions\Atlas_functions.cs" />
     <Compile Include="Forms\HeroEditorFunctions\AttributesControl.cs">
       <SubType>UserControl</SubType>
