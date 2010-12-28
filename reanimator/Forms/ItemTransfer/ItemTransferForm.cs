@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using Hellgate;
 using Reanimator.Forms.HeroEditorFunctions;
 using Reanimator.Properties;
+using Config = Revival.Common.Config;
 
 namespace Reanimator.Forms.ItemTransfer
 {

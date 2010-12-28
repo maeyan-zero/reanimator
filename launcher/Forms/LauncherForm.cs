@@ -12,6 +12,7 @@ using Ionic.Zip;
 using FileEntry = Hellgate.IndexFile.FileEntry;
 using System.Threading;
 using System.Globalization;
+using Config = Revival.Common.Config;
 
 namespace Launcher.Forms
 {

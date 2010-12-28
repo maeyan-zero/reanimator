@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Imaging;
+using Config = Revival.Common.Config;
 
 namespace Reanimator.Forms.HeroEditorFunctions
 {

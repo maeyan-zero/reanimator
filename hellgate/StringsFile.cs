@@ -300,7 +300,7 @@ namespace Hellgate
             return writer.ToString().ToUnicodeByteArray();
         }
 
-        public override byte[] ExportSQL()
+        public override byte[] ExportSQL(string tablePrefix = "hgl")
         {
             throw new NotImplementedException();
         }

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using Hellgate;
+using Config = Revival.Common.Config;
+using ExceptionLogger = Revival.Common.ExceptionLogger;
 
 namespace Reanimator.Forms
 {
