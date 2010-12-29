@@ -99,9 +99,9 @@ namespace Hellgate
             public static readonly int[] BitField = new[] { 666, 667, 669, 673, 674, 680, 683, 687, 688 };
         }
 
-        private class ExcelPropertiesScript
+        public class ExcelFunction
         {
-            internal class Parameter
+            public class Parameter
             {
                 public String Name { get; set; }                // short string name e.g. dmg_elec, dam, dur, etc
                 public UInt32 Unknown { get; set; }             // todo: check if is Name string-hash (quite sure it is, but need to check... doesn't really matter either way)
@@ -110,9 +110,9 @@ namespace Hellgate
             }
 
             public List<Parameter> Parameters { get; private set; }
-            public byte[] ScriptValues { get; set; }
+            public byte[] ScriptByteCode { get; set; }
 
-            public ExcelPropertiesScript()
+            public ExcelFunction()
             {
                 Parameters = new List<Parameter>();
             }
@@ -212,23 +212,23 @@ namespace Hellgate
 
         private bool _ParsePropertiesScriptTable(byte[] data, ref int offset)
         {
-            _rowScripts = new List<ExcelPropertiesScript>();
+            ExcelFunctions = new List<ExcelFunction>();
 
             while (offset <= data.Length)
             {
                 if (_CheckToken(data, offset, Token.dneh)) return true;
 
-                ExcelPropertiesScript excelScript = new ExcelPropertiesScript();
+                ExcelFunction excelScript = new ExcelFunction();
                 if (!_ParsePropertiesScript(data, ref offset, ref excelScript)) return false;
-                _rowScripts.Add(excelScript);
+                ExcelFunctions.Add(excelScript);
             }
 
             return false;
         }
 
-        private static bool _ParsePropertiesScript(byte[] data, ref int offset, ref ExcelPropertiesScript excelScript)
+        private static bool _ParsePropertiesScript(byte[] data, ref int offset, ref ExcelFunction excelScript)
         {
-            ExcelPropertiesScript.Parameter parameter = new ExcelPropertiesScript.Parameter();
+            ExcelFunction.Parameter parameter = new ExcelFunction.Parameter();
 
             // token and version checks
             if (!_CheckToken(data, ref offset, Token.mysh)) return false;
@@ -285,8 +285,8 @@ namespace Hellgate
             // the actual script values
             int valuesByteCount = FileTools.ByteArrayToInt32(data, ref offset);
             if (valuesByteCount <= 0) return false;
-            excelScript.ScriptValues = new byte[valuesByteCount];
-            Buffer.BlockCopy(data, offset, excelScript.ScriptValues, 0, valuesByteCount);
+            excelScript.ScriptByteCode = new byte[valuesByteCount];
+            Buffer.BlockCopy(data, offset, excelScript.ScriptByteCode, 0, valuesByteCount);
             offset += valuesByteCount;
 
             return true;
@@ -294,9 +294,9 @@ namespace Hellgate
 
         private void _PropertiesScriptToByteArray(ref byte[] buffer, ref int offset)
         {
-            foreach (ExcelPropertiesScript excelScript in _rowScripts)
+            foreach (ExcelFunction excelScript in ExcelFunctions)
             {
-                foreach (ExcelPropertiesScript.Parameter paramater in excelScript.Parameters)
+                foreach (ExcelFunction.Parameter paramater in excelScript.Parameters)
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
                     FileTools.WriteToBuffer(ref buffer, ref offset, Token.MyshVersion);
@@ -308,9 +308,9 @@ namespace Hellgate
                     FileTools.WriteToBuffer(ref buffer, ref offset, paramater.TypeValues.ToByteArray());
                 }
 
-                if (excelScript.ScriptValues == null) continue;
-                FileTools.WriteToBuffer(ref buffer, ref offset, (Int32)excelScript.ScriptValues.Length);
-                FileTools.WriteToBuffer(ref buffer, ref offset, excelScript.ScriptValues);
+                if (excelScript.ScriptByteCode == null) continue;
+                FileTools.WriteToBuffer(ref buffer, ref offset, (Int32)excelScript.ScriptByteCode.Length);
+                FileTools.WriteToBuffer(ref buffer, ref offset, excelScript.ScriptByteCode);
             }
         }
 

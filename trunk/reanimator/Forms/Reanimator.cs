@@ -332,8 +332,8 @@ namespace Reanimator.Forms
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.LoadTableFiles();
             fileManager.ExtractAllExcel();
-            ExcelScript.SetFileManager(fileManager);
             ExcelScript.EnableDebug(true);
+            ExcelScript.SetFileManager(fileManager);
 
             foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
             {
@@ -348,7 +348,7 @@ namespace Reanimator.Forms
 
                 Console.WriteLine("Cooking file: " + fileEntry.RelativeFullPathWithoutPatch);
 
-                //if (!fileEntry.RelativeFullPathWithoutPatch.Contains("display_char")) continue;
+                //if (!fileEntry.RelativeFullPathWithoutPatch.Contains("recipelists")) continue;
 
                 byte[] csvBytes = excelFile.ExportCSV();
                 File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);

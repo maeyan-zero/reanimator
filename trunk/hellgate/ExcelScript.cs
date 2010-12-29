@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Revival.Common;
 
 namespace Hellgate
@@ -12,20 +13,21 @@ namespace Hellgate
         #region Type Definitions
         private class Argument
         {
-            public String Name;
-            public int Type;
-            public int TableIndex = -1;
+            public String Name;             // name of argument
+            public int Type;                // not used, just kept "just because"
+            public int TableIndex = -1;     // used for excel index arguments
+            public int ByteOffset = -1;     // used for excel script functions
         }
 
         private class Function
         {
-            public String Name;
-            public String ReturnType;
-            public Argument[] Args;
+            public String Name;             // name of function
+            public Argument[] Args;         // function arguments (null if none)
             public int ArgCount { get { return Args == null ? 0 : Args.Length; } }
+            public String ExcelScript;      // used for excel script functions - contains the decompiled script
         }
 
-        private static readonly List<Function> ClientFunctions = new List<Function>
+        private static readonly List<Function> CallFunctions = new List<Function>
         {
             /*  0*/ new Function { Name = "setUnitTypeAreaFloorVis", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevelArea", Type = 1, TableIndex = 138 }, new Argument { Name = "nFloor", Type = 0 }, new Argument { Name = "nVis", Type = 0 } } },
             /*  1*/ new Function { Name = "setUnitTypeAreaFloorInteractive", Args = new[] { new Argument { Name = "context", Type = 2 }, new Argument { Name = "nLevelArea", Type = 1, TableIndex = 138 }, new Argument { Name = "nFloor", Type = 0 } } },
@@ -288,61 +290,53 @@ namespace Hellgate
          * e.g.
          *      26,0, 3,185, 0                                      -> return player_crit_damage(0); // 0 = right hand, 1 = left hand
          *      
-         * 
-         * 26   0x1A        Push                                    Pushes a number onto the stack.
+          * 26   0x1A        Push                                    Pushes a number onto the stack.
          * e.g.
          *      26,1000, 0                                          -> return 1000;
-         * 
          * 
          * 339  0x166       Negation                                Performs a boolean-not operation.
          * e.g.
          *      26,42, 26,13, 470, 339, 0                           -> return !(42 == 13); // = true
          *      
-         * 
          * 358  0x166       Multiplication                          Product of the two most recently pushed numbers.
          * e.g.
          *      26,10, 26,20, 358, 0                                -> return 10 * 20; // = 200
          *      
-         * 
          * 369  0x171       Division                                Divition of the two most recently pushed numbers.
          * e.g.
          *      26, 200, 26, 5, 369, 0                              -> return 200 / 5; // = 40
-         *      
          * 
          * 388  0x184       Addition                                Sum of the two most recently pushed numbers.
          * e.g.
          *      26,5, 26,10, 388, 26,100, 358, 0                    -> return (5 + 10) * 100; // = 150
-         *      
          * 
          * 399  0x18F       Substraction                            Difference of the two most recently pushed numbers.
          * e.g.
          *      26,13, 26,42, 388, 26,99, 358, 26,4108, 399, 0      -> return (13 + 42) * 99 - 4108; // = 1337
-         *      
          * 
          * 426  0x1AA       Less Than                               Performs a less-than comparison test.
          * e.g.
          *      26,55, 26,50, 470, 0                                -> return (55 < 50); // = false
          * 
+         * 437  0x1B5       Greater Than                            Performs a greater-than comparison test.
+         * e.g.
+         *      26,42, 26,13, 470, 0                                -> return (42 > 12); // = true
          * 
          * 470  0x1D6       Equal To                                Performs an equal-to comparison test.
          * e.g.
          *      26,50, 26,50, 470, 0                                -> return (50 == 50); // = true
          * 
-         * 
          * 481  0x1E1       Not Equal To                            Performs a not equal-to comparison test.
          * e.g.
          *      26,130, 26,120, 470, 0                              -> return (130 != 120); // = true
          * 
-         * 
          * 666  0x29A       GetStatValue                            Gets the value of a stat at the following supplied index (from STATS table).
          * e.g.
          *      666, 612368384, 0                                   -> return GetStatValue(612368384); // = GetStatValue(612368384 << 22 = 146) = GetStatValue("experience");
-         *      
          * 
          * 669  0x29D       SetStatValue                            Sets the value of a stat.
          * e.g.
          *      26,10, 669,25165824, 0                              -> return SetStatValue(25165824); // = SetStatValue(25165824 << 22 = 6) = SetStatValue("hp_cur");
-         *      
          * 
          * 
          */
@@ -351,12 +345,16 @@ namespace Hellgate
         private enum ExcelOpCodes : uint
         {
             Return = 0,                     // 0x00
-            Unknown2 = 2,                   // 0x02     // I think this might be calls to properties scripts
+            CallPropery = 2,                // 0x02
             Call = 3,                       // 0x03
-            Unknown4 = 4,                   // 0x04     // Ternary conditional?     From ASM this is a function call like 2 and 3, 
-            Unknown6 = 6,                   // 0x06
+            Unknown4 = 4,                   // 0x04     // Ternary conditional?
+            AllocateVar = 6,                // 0x06
             Unknown14 = 14,                 // 0x0E     // Ternary conditional?
             Push = 26,                      // 0x1A
+            PushLocalVarInt32 = 50,         // 0x32     .rdata:0000000140606B18     aPushLocalVar_3 db 'push local variable at offset %u  value = %d  type = int'
+            PushLocalVarPtr = 57,           // 0x39     .rdata:0000000140606D08     aPushLocalVa_10 db 'push local variable at offset %u  value = %x  type = pointer'
+            AssignLocalVarInt32 = 98,       // 0x62     .rdata:0000000140607988     aAssignLocalV_3 db 'assign local variable at offset %u  value = %d  type = int'
+            AssignLocalVarPtr = 105,        // 0x69     .rdata:0000000140607B90     aAssignLocal_10 db 'assign local variable at offset %u  value = %x  type = pointer'
             Complement = 320,               // 0x140
             Not = 339,                      // 0x153
             Pow = 347,                      // 0x15B
@@ -395,20 +393,21 @@ namespace Hellgate
             GlobalVarGame4 = 710,           // 0x2C6
             GlobalVarUnit = 711,            // 0x2C7
             GlobalVarStats = 712,           // 0x2C8
-            CastTypeUnknown714 = 714        // 0x2CA    // set type/size = 4??
+            AssignContextVar = 713,         // 0x2C9
+            NotEntirlySure714 = 714         // 0x2CA    // set type/size = 4??
         }
 
         private enum ContextVariables : uint
         {
-            Unit,           // 0
-            Object,         // 1
-            Source,         // 2
-            Statslist,      // 3
-            Skill,          // 4
-            StateId,        // 5
-            SkLvl,          // 6
-            Param1,         // 7
-            Param2          // 8
+            Unit,           // 0        // not seen used
+            Object,         // 1        // not seen used
+            Source,         // 2        // not seen used
+            Statslist,      // 3        // ptr
+            Skill,          // 4        // not seen used
+            StateId,        // 5        // not seen used
+            SkLvl,          // 6        // int32
+            Param1,         // 7        // seen used as int32
+            Param2          // 8        // seen used as int32
         }
 
         private enum ExcelTableCodes : uint
@@ -436,29 +435,52 @@ namespace Hellgate
         private static FileManager _fileManager;
         public static void SetFileManager(FileManager fileManager)
         {
-            if (fileManager == null) return;
+            if (fileManager == null) throw new ArgumentNullException("fileManager", "File manager cannot be null!");
             if (fileManager.DataFiles == null || fileManager.DataFiles.Count == 0) fileManager.LoadTableFiles();
-            if (fileManager.DataFiles.Count == 0) return;
+            if (fileManager.DataFiles.Count == 0) throw new Exceptions.ExcelScriptNotInitialised("SetFileManager was unable to initialise the excel table files!");
 
             _fileManager = fileManager;
+
+            ExcelFile propertiesTable = _fileManager.GetDataFile("PROPERTIES") as ExcelFile;
+            ExcelFile skillsTable = _fileManager.GetDataFile("SKILLS") as ExcelFile;
+
+            if (propertiesTable == null || skillsTable == null) throw new Exceptions.ExcelScriptNotInitialised("SetFileManager was unable to obtain the properties and skills excel tables!");
+
+            _ParsePropertiesExcelFunctions(propertiesTable);
+            _ParseSkillsExcelFunctions(skillsTable);
         }
 
         private class StackObject
         {
             public String Value;
             public int Precedence;          // using chart from http://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B (with exponent = 4)
-            public int FunctionDepth;
+            public bool IsFunction;
+            public uint ByteOffset;         // for local vars
+
+            public override string ToString()
+            {
+                return Value;
+            }
         }
 
+        private static bool _havePropertiesFunctions;
+        private static bool _haveSkillsFunctions;
 
+        private String _script;
         private readonly Stack<StackObject> _stack;
+        private readonly StackObject[] _vars;
+        private ExcelFile.ExcelFunction _excelScriptFunction;
+        private Function _excelFunction;
+
         public ExcelScript()
         {
+            _script = String.Empty;
             _stack = new Stack<StackObject>();
+            _vars = new StackObject[10];
         }
 
         /// <summary>
-        /// Decompiles an excel script from byte codes to human readable text.
+        /// Decompiles a script from byte codes to human readable text.
         /// </summary>
         /// <param name="scriptBytes">The script byte-code array.</param>
         /// <param name="offset">The starting offset within the byte code array.</param>
@@ -469,6 +491,35 @@ namespace Hellgate
         /// <param name="colName">For debugging purposes only.</param>
         /// <returns>Decompiled excel script byte codes as human readable script.</returns>
         public String Decompile(byte[] scriptBytes, int offset, String scriptString = null, String stringId = null, int row = 0, int col = 0, String colName = null)
+        {
+            if (!_havePropertiesFunctions && !_debug) throw new Exceptions.ExcelScriptNotInitialised("Properties excel script functions have not been parsed; they must be loaded before any decompiling can be done.\nPlease ensure you have provided a valid FileManager for initialisation.");
+            if (!_haveSkillsFunctions && !_debug) throw new Exceptions.ExcelScriptNotInitialised("Skills excel script functions have not been parsed; they must be loaded before any decompiling can be done.\nPlease ensure you have provided a valid FileManager for initialisation.");
+
+            return _Decompile(scriptBytes, offset, scriptString, stringId, row, col, colName);
+        }
+
+        /// <summary>
+        /// Decompiles an excel script function from byte codes to human readable text.
+        /// </summary>
+        /// <param name="excelScriptFunction">The excel script function to decompile.</param>
+        /// <param name="excelFunction">The associated excel function to use for agrument reference.</param>
+        /// <param name="scriptString">For debugging purposes only.</param>
+        /// <param name="stringId">For debugging purposes only.</param>
+        /// <param name="row">For debugging purposes only.</param>
+        /// <param name="col">For debugging purposes only.</param>
+        /// <param name="colName">For debugging purposes only.</param>
+        /// <returns>Decompiled excel script byte codes as human readable script.</returns>
+        private String Decompile(ExcelFile.ExcelFunction excelScriptFunction, Function excelFunction, String scriptString = null, String stringId = null, int row = 0, int col = 0, String colName = null)
+        {
+            if (excelScriptFunction == null) throw new ArgumentNullException("excelScriptFunction", "The excel script function cannot be null!");
+            if (excelFunction == null) throw new ArgumentNullException("excelFunction", "The excel function cannot be null!");
+
+            _excelScriptFunction = excelScriptFunction;
+            _excelFunction = excelFunction;
+            return _Decompile(_excelScriptFunction.ScriptByteCode, 0, scriptString, stringId, row, col, colName);
+        }
+
+        private String _Decompile(byte[] scriptBytes, int offset, String scriptString = null, String stringId = null, int row = 0, int col = 0, String colName = null)
         {
             bool debug = (stringId != null) && _debug;
             bool debubShowParsed = false;
@@ -484,10 +535,16 @@ namespace Hellgate
                 if (_fileManager != null)
                 {
                     int colIndex = 0;
-                    if (stringId == "ITEMDISPLAY")
+                    switch (stringId)
                     {
-                        colIndex = 1;
-                        debubShowParsed = false;
+                        case "ITEMDISPLAY":
+                            colIndex = 1;
+                            debubShowParsed = false;
+                            break;
+
+                        case "MUSICCONDITIONS":
+                            colIndex = 4;
+                            break;
                     }
 
                     rowName = _fileManager.GetExcelRowStringFromStringId(stringId, row, colIndex);
@@ -496,8 +553,6 @@ namespace Hellgate
                 debugPos = String.Format("row({0}): '{1}', col({2}): '{3}', scriptBytes: {4}", row, rowName, col, colName, scriptString);
                 if (debubShowParsed) Debug.WriteLine(debugPos);
             }
-
-            String script = String.Empty;
 
             try
             {
@@ -508,7 +563,12 @@ namespace Hellgate
                     String value1;
                     String value2;
                     uint index;
+                    int functionIndex;
                     uint unknown;
+                    uint byteOffset;
+                    StackObject stackObject1;
+                    StackObject stackObject2;
+                    String argName;
 
                     if (row == 21)
                     {
@@ -522,67 +582,75 @@ namespace Hellgate
 
                             if (_stack.Count > 1)
                             {
-                                String error = String.Format("Error: Stack has more than 1 value upon script return: script = \"{0}\"\n{1}", script, _DumpStack(_stack));
-                                throw new Exceptions.ExcelScriptInvalidStackState(error);
+                                while (_stack.Count > 1)
+                                {
+                                    StackObject stackObject = _stack.Pop();
+
+                                    if (!stackObject.IsFunction)
+                                    {
+                                        String error = String.Format("Error: Stack has more than 1 value upon script return: script = \"{0}\"\n{1}", _script, _DumpStack(_stack));
+                                        throw new Exceptions.ExcelScriptInvalidStackState(error);
+                                    }
+
+                                    _script = " " + stackObject.Value + ";" + _script;
+                                }
                             }
 
-                            script += _stack.Pop().Value;
-                            if (debubShowParsed) Debug.WriteLine(script);
-                            return script;
+                            _script = _stack.Pop().Value + ";" + _script;
+                            if (debubShowParsed) Debug.WriteLine(_script);
+                            return _script;
                             break;
 
-                        case ExcelOpCodes.Unknown2:                 // 2    0x02
-                            _CheckStack(1, opCode);
+                        case ExcelOpCodes.CallPropery:              // 2    0x02
+                            functionIndex = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
 
-                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            _stack.Push(new StackObject { Value = String.Format("Unknown2[{0}]", unknown) });
+                            _CallFunction(functionIndex);
                             break;
 
                         case ExcelOpCodes.Call:                     // 3    0x03
-                            int functionIndex = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
-                            if (functionIndex < 0 || functionIndex > ClientFunctions.Count)
-                            {
-                                throw new Exceptions.ExcelScriptUnknownFunctionCall("Unknown function index: " + functionIndex);
-                            }
+                            functionIndex = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
 
-                            Function excelScriptFunction = ClientFunctions[functionIndex];
-                            _CheckStack(excelScriptFunction.ArgCount, ExcelOpCodes.Call, excelScriptFunction);
-                            String argsString = String.Empty;
+                            _CallFunction(functionIndex);
+                            //if (functionIndex < 0 || functionIndex > CallFunctions.Count)
+                            //{
+                            //    throw new Exceptions.ExcelScriptUnknownFunctionCall("Unknown function index: " + functionIndex);
+                            //}
 
-                            for (int i = excelScriptFunction.ArgCount-1; i >= 0; i--)
-                            {
-                                StackObject argStackObject = _stack.Pop();
-                                String argStr = argStackObject.Value;
+                            //Function excelScriptFunction = CallFunctions[functionIndex];
+                            //_CheckStack(excelScriptFunction.ArgCount, ExcelOpCodes.Call, excelScriptFunction);
+                            //String argsString = String.Empty;
 
-                                int tableIndex = excelScriptFunction.Args[i].TableIndex;
-                                if (tableIndex >= 0)
-                                {
-                                    int rowIndex = int.Parse(argStr);
-                                    String excelString = _fileManager.GetExcelRowStringFromExcelIndex(tableIndex, rowIndex);
+                            //for (int i = excelScriptFunction.ArgCount - 1; i >= 0; i--)
+                            //{
+                            //    StackObject argStackObject = _stack.Pop();
+                            //    String argStr = argStackObject.Value;
 
-                                    if (excelString == null)
-                                    {
-                                        Console.WriteLine(String.Format("Warning: Unknown row index '{0}' on table index '{1}'.", rowIndex, tableIndex));
-                                        argsString += rowIndex.ToString();
-                                    }
-                                    else
-                                    {
-                                        argsString = String.Format("'{0}'", excelString) + argsString;
-                                    }
-                                }
-                                else
-                                {
-                                    argsString = argStr + argsString;
-                                }
+                            //    int tableIndex = excelScriptFunction.Args[i].TableIndex;
+                            //    if (tableIndex >= 0)
+                            //    {
+                            //        int rowIndex = int.Parse(argStr);
+                            //        String excelString = _fileManager.GetExcelRowStringFromExcelIndex(tableIndex, rowIndex);
 
-                                if (i != 0) argsString = ", " + argsString;
-                            }
+                            //        if (excelString == null)
+                            //        {
+                            //            Console.WriteLine(String.Format("Warning: Unknown row index '{0}' on table index '{1}'.", rowIndex, tableIndex));
+                            //            argsString += rowIndex.ToString();
+                            //        }
+                            //        else
+                            //        {
+                            //            argsString = String.Format("'{0}'", excelString) + argsString;
+                            //        }
+                            //    }
+                            //    else
+                            //    {
+                            //        argsString = argStr + argsString;
+                            //    }
 
-                            //String modifierStr = String.Empty;
-                            //if (modifier > 0) modifierStr = _stack.Pop().Value;
+                            //    if (i != 0) argsString = ", " + argsString;
+                            //}
 
-                            String functionCallString = String.Format("{0}({1})", excelScriptFunction.Name, argsString);
-                            _stack.Push(new StackObject { Value = functionCallString });
+                            //String functionCallString = String.Format("{0}({1})", excelScriptFunction.Name, argsString);
+                            //_stack.Push(new StackObject { Value = functionCallString, IsFunction = true });
                             break;
 
                         case ExcelOpCodes.Unknown4:                 // 4    0x04
@@ -592,18 +660,19 @@ namespace Hellgate
                             _stack.Push(new StackObject { Value = String.Format("Unknown4[{0}]", unknown) });
                             break;
 
-                        case ExcelOpCodes.Unknown6:                 // 6    0x06
-                            _CheckStack(1, opCode);
+                        case ExcelOpCodes.AllocateVar:              // 6    0x06
+                            byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            Debug.Assert((byteOffset % 4) == 0);
 
-                            unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            _stack.Push(new StackObject { Value = String.Format("Unknown6[{0}]", unknown) });
+                            value1 = String.Format(" var{0} = ", byteOffset);
+                            _stack.Push(new StackObject { Value = value1, ByteOffset = byteOffset });
                             break;
 
                         case ExcelOpCodes.Unknown14:                // 14    0x0E
                             _CheckStack(1, opCode);
 
                             unknown = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            _stack.Push(new StackObject { Value = String.Format("Unknown14[{0}]", unknown) });
+                            _stack.Push(new StackObject { Value = String.Format("if ({0})[{1}] ", _stack.Pop().Value, unknown) });
                             break;
 
                         case ExcelOpCodes.Push:                     // 26   0x1A
@@ -611,11 +680,90 @@ namespace Hellgate
                             _stack.Push(new StackObject { Value = value.ToString() });
                             break;
 
+                        case ExcelOpCodes.PushLocalVarInt32:        // 50   0x32
+                            Debug.Assert(_excelScriptFunction != null && _excelFunction != null);
+
+                            byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            argName = (from arg in _excelFunction.Args
+                                       where arg.ByteOffset == byteOffset
+                                       select arg.Name).FirstOrDefault();
+
+                            if (argName == null)
+                            {
+                                index = byteOffset / 4;
+                                StackObject localVar = _vars[index];
+                                Debug.Assert(localVar != null);
+
+                                argName = "var" + byteOffset;
+                            }
+
+                            _stack.Push(new StackObject { Value = argName });
+                            break;
+
+                        case ExcelOpCodes.PushLocalVarPtr:          // 57   0x39
+                            Debug.Assert(_excelScriptFunction != null && _excelFunction != null);
+
+                            byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            argName = (from arg in _excelFunction.Args
+                                       where arg.ByteOffset == byteOffset
+                                       select arg.Name).FirstOrDefault();
+
+                            if (argName == null)
+                            {
+                                index = byteOffset / 4;
+                                StackObject localVar = _vars[index];
+                                Debug.Assert(localVar != null);
+
+                                argName = "var" + byteOffset;
+                            }
+
+                            _stack.Push(new StackObject { Value = argName });
+                            break;
+
+                        case ExcelOpCodes.AssignLocalVarInt32:      // 98   0x62
+                            _CheckStack(2, opCode);
+
+                            stackObject2 = _stack.Pop();
+                            stackObject1 = _stack.Pop();
+
+                            index = stackObject1.ByteOffset / 4;
+                            Debug.Assert(index >= 0 && index < _vars.Length);
+
+                            // todo: check ensure stackObject2 is correct type??
+                            _vars[index] = stackObject2;
+                            value1 = String.Format("int{0}{1}", stackObject1.Value, stackObject2.Value);
+                            _stack.Push(new StackObject { Value = value1, IsFunction = true });
+                            break;
+
+                        case ExcelOpCodes.AssignLocalVarPtr:        // 105   0x69
+                            _CheckStack(2, opCode);
+
+                            stackObject2 = _stack.Pop();
+                            stackObject1 = _stack.Pop();
+
+                            index = stackObject1.ByteOffset / 4;
+                            Debug.Assert(index >= 0 && index < _vars.Length);
+
+                            // todo: check ensure stackObject2 is correct type??
+                            _vars[index] = stackObject2;
+                            value1 = String.Format("void*{0}{1}", stackObject1.Value, stackObject2.Value);
+                            _stack.Push(new StackObject { Value = value1, IsFunction = true });
+                            break;
+
                         case ExcelOpCodes.Complement:               // 320  0x140
                             _CheckStack(1, opCode);
 
-                            // todo: check stack value - if negative, remove negative, etc
-                            _stack.Push(new StackObject { Value = String.Format("-{0}", _stack.Pop().Value) });
+                            StackObject toComplementObject = _stack.Pop();
+                            if (toComplementObject.Value[0] == '-') // if already negative, remove sign
+                            {
+                                toComplementObject.Value = toComplementObject.Value.Substring(1, toComplementObject.Value.Length - 1);
+                            }
+                            else
+                            {
+                                toComplementObject.Value = "-" + toComplementObject.Value;
+                            }
+
+                            _stack.Push(toComplementObject);
                             break;
 
                         case ExcelOpCodes.Not:                      // 339  0x153
@@ -821,8 +969,19 @@ namespace Hellgate
                             _stack.Push(new StackObject { Value = "stats" });
                             break;
 
-                        case ExcelOpCodes.CastTypeUnknown714:       // 714  0x2CA
-                            _stack.Push(new StackObject { Value = "(unknown714)" });
+                        case ExcelOpCodes.AssignContextVar:         // 713  0x2C9
+                            _CheckStack(1, opCode);
+
+                            stackObject1 = _stack.Pop();
+                            index = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+
+                            value1 = String.Format("SetContextVar({0}, {1})", ((ContextVariables) index).ToString().ToLower(), stackObject1.Value);
+                            _stack.Push(new StackObject { Value = value1, IsFunction = true });
+                            break;
+
+                        case ExcelOpCodes.NotEntirlySure714:        // 714  0x2CA
+                            _stack.Pop();
+                            //_stack.Push(new StackObject { Value = "(unknown714)" });
                             break;
 
                         default:
@@ -849,18 +1008,65 @@ namespace Hellgate
             {
                 if (debugOutputParsed && debugScriptParsed)
                 {
+                    String[] code = _script.Split(new[] { "; ", ";" }, StringSplitOptions.RemoveEmptyEntries);
+                    String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
+
                     String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", DebugRoot, stringId);
-                    String debugOutput = String.Format("{0}\n{1}\n\n\n", debugPos, script);
+                    String debugOutput = String.Format("{0}\n{1}\n\n", debugPos, codeStr);
                     File.AppendAllText(debugOutputPath, debugOutput);
                 }
             }
         }
 
+        private void _CallFunction(int functionIndex)
+        {
+            if (functionIndex < 0 || functionIndex > CallFunctions.Count)
+            {
+                throw new Exceptions.ExcelScriptUnknownFunctionCall("Unknown function index: " + functionIndex);
+            }
+
+            Function excelScriptFunction = CallFunctions[functionIndex];
+            _CheckStack(excelScriptFunction.ArgCount, ExcelOpCodes.Call, excelScriptFunction);
+            String argsString = String.Empty;
+
+            for (int i = excelScriptFunction.ArgCount - 1; i >= 0; i--)
+            {
+                StackObject argStackObject = _stack.Pop();
+                String argStr = argStackObject.Value;
+
+                int tableIndex = excelScriptFunction.Args[i].TableIndex;
+                if (tableIndex >= 0)
+                {
+                    int rowIndex = int.Parse(argStr);
+                    String excelString = _fileManager.GetExcelRowStringFromExcelIndex(tableIndex, rowIndex);
+
+                    if (excelString == null)
+                    {
+                        Console.WriteLine(String.Format("Warning: Unknown row index '{0}' on table index '{1}'.", rowIndex, tableIndex));
+                        argsString += rowIndex.ToString();
+                    }
+                    else
+                    {
+                        argsString = String.Format("'{0}'", excelString) + argsString;
+                    }
+                }
+                else
+                {
+                    argsString = argStr + argsString;
+                }
+
+                if (i != 0) argsString = ", " + argsString;
+            }
+
+            String functionCallString = String.Format("{0}({1})", excelScriptFunction.Name, argsString);
+            _stack.Push(new StackObject { Value = functionCallString, IsFunction = true });
+        }
+
         private void _PushContextVariable(String functionName, uint varIndex)
         {
-            String funcString = String.Format("{0}('{1}')", functionName, ((ContextVariables) varIndex).ToString().ToLower());
+            String funcString = String.Format("{0}('{1}')", functionName, ((ContextVariables)varIndex).ToString().ToLower());
 
-            _stack.Push(new StackObject { Value = funcString });
+            _stack.Push(new StackObject { Value = funcString, IsFunction = true });
         }
 
         private void _DoOperator(String op, int precedence, ExcelOpCodes opCode)
@@ -878,8 +1084,7 @@ namespace Hellgate
             StackObject newStackObject = new StackObject
             {
                 Value = String.Format(opFormat, value1Object.Value, op, value2Object.Value),
-                Precedence = precedence,
-                FunctionDepth = value1Object.FunctionDepth
+                Precedence = precedence
             };
 
             _stack.Push(newStackObject);
@@ -903,13 +1108,14 @@ namespace Hellgate
 
             StackObject newStackObject = new StackObject
             {
-                Value = String.Format("{0}({1}{2})", name, indexStr, argStr)
+                Value = String.Format("{0}({1}{2})", name, indexStr, argStr),
+                IsFunction = true
             };
 
             _stack.Push(newStackObject);
         }
 
-        private void _CheckStack(int requiredCount, ExcelOpCodes opCode, Function functionDetails=null)
+        private void _CheckStack(int requiredCount, ExcelOpCodes opCode, Function functionDetails = null)
         {
             if (requiredCount <= _stack.Count) return;
 
@@ -925,13 +1131,13 @@ namespace Hellgate
 
         private static String _DumpStack(Stack<StackObject> stack)
         {
-            String stackDump = "Stack Dump : LIFO\nIndex\tPrecedence\tFunctionDepth\tValue\n";
+            String stackDump = "Stack Dump : LIFO\nIndex\tPrecedence\tIsFunction\tValue\n";
 
             int stackCount = stack.Count;
             for (int i = 0; i < stackCount; i++)
             {
                 StackObject stackObject = stack.Pop();
-                stackDump += String.Format("{0}\t\t{1}\t\t\t{2}\t\t\t\t{3}\n", i, stackObject.Precedence, stackObject.FunctionDepth, stackObject.Value);
+                stackDump += String.Format("{0}\t\t{1}\t\t\t{2}\t\t{3}\n", i, stackObject.Precedence, stackObject.IsFunction, stackObject.Value);
             }
 
             return stackDump;
@@ -946,8 +1152,139 @@ namespace Hellgate
         }
 
 
-        //// Get Functions From ASM Stuff ////
-        /// 
+        #region Excel Script Functions Stuff
+
+        /// <summary>
+        /// Parses and appends the properties excel script functions to the global call function array.
+        /// Must be called before the skills table and before script decompiling can begin.
+        /// </summary>
+        /// <param name="propertiesTable">The properties excel file containing the excel script functions to parse.</param>
+        private static int _ParsePropertiesExcelFunctions(ExcelFile propertiesTable)
+        {
+            if (propertiesTable == null) throw new ArgumentNullException("propertiesTable", "Properties excel file cannot be null!");
+
+            int added = _ParseExcelFunctions(propertiesTable);
+            if (added > 0) _havePropertiesFunctions = true;
+
+            return added;
+        }
+
+        /// <summary>
+        /// Parses and appends the skills excel script functions to the global call function array.
+        /// Must be called after the properties table and before script decompiling can begin.
+        /// </summary>
+        /// <param name="skillsTable">The skills excel file containing the excel script functions to parse.</param>
+        private static int _ParseSkillsExcelFunctions(ExcelFile skillsTable)
+        {
+            if (skillsTable == null) throw new ArgumentNullException("skillsTable", "Skills excel file cannot be null!");
+            if (!_havePropertiesFunctions) throw new Exceptions.ExcelScriptNotInitialised("Properties excel script functions have not been parsed! They must be loaded before the skills excel script functions!");
+
+            int added = _ParseExcelFunctions(skillsTable);
+            if (added > 0) _haveSkillsFunctions = true;
+
+            return added;
+        }
+
+        /// <summary>
+        /// Main worker function that parses and appends excel script functions to the global call function array.
+        /// </summary>
+        /// <param name="excelFile">The  excel file containing the excel script functions to parse.</param>
+        /// <returns>The number of functions added.</returns>
+        private static int _ParseExcelFunctions(ExcelFile excelFile)
+        {
+            int startFuncCount = CallFunctions.Count;
+            int voidFunctions = 0;
+
+            foreach (ExcelFile.ExcelFunction excelFunction in excelFile.ExcelFunctions)
+            {
+                if (excelFunction.Parameters.Count == 1) // not sure what to do with them - they don't appear to be used
+                {
+                    voidFunctions++;
+                    continue;
+                }
+
+                Function function = new Function();
+                List<Argument> arguments = new List<Argument>();
+
+                for (int i = 0; i < excelFunction.Parameters.Count; i++)
+                {
+                    ExcelFile.ExcelFunction.Parameter parameter = excelFunction.Parameters[i];
+
+                    if (i == 0)
+                    {
+                        function.Name = parameter.Name;
+                        int functionIndex = parameter.TypeValues[4];
+                        Debug.Assert(functionIndex == CallFunctions.Count);
+
+                        continue;
+                    }
+
+                    //if (function.Name == "mod_feed_strength")
+                    //{
+                    //    int bp = 0;
+                    //}
+
+                    Argument arg = new Argument
+                    {
+                        Name = parameter.Name,
+                        Type = 0, // I think they're all int
+                        ByteOffset = parameter.TypeValues[3],
+                    };
+
+                    arguments.Add(arg);
+                }
+
+                String byteCodeString = null;
+                if (_debug)
+                {
+                    int offset = 0;
+                    byteCodeString = FileTools.ByteArrayToInt32Array(excelFunction.ScriptByteCode, ref offset, excelFunction.ScriptByteCode.Length / 4).ToString(",");
+                }
+
+                function.Args = arguments.ToArray();
+                try
+                {
+                    ExcelScript excelScript = new ExcelScript();
+                    function.ExcelScript = excelScript.Decompile(excelFunction, function, byteCodeString, "PROPERTIES", 0, 0, function.Name);
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.ToString());
+                    continue;
+                }
+
+                if (_debug)
+                {
+                    String[] code = function.ExcelScript.Split(new[] {"; ", ";"}, StringSplitOptions.RemoveEmptyEntries);
+                    String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
+
+                    String args = String.Empty;
+                    for (int i = 0; i < function.ArgCount; i++)
+                    {
+                        args += "int " + function.Args[i].Name;
+
+                        if (i != function.ArgCount - 1) args += ", ";
+                    }
+
+                    String funcString = String.Format("void {0}({1})\n{{\n{2}}}\n", function.Name, args, codeStr);
+                    Debug.WriteLine(funcString);
+                }
+
+                CallFunctions.Add(function);
+            }
+
+            return CallFunctions.Count - startFuncCount + voidFunctions;
+        }
+
+        #endregion
+
+        #region Get Functions From ASM Stuff
+
+        /// <summary>
+        /// Normalises a register, removing the double word char for rx registers, and converting the 32 bit registers to their 64 bit code (e.g. eax -> rax).
+        /// </summary>
+        /// <param name="reg">The register string to normalise.</param>
+        /// <returns>The normalised register.</returns>
         private static String _NormReg(String reg)
         {
             reg = reg.Replace(" ", "");
@@ -980,12 +1317,12 @@ namespace Hellgate
             // Function                       		Type
             // Script_AddParam_Int                  0
             // Script_AddParam_ExcelIndex           1
-			// Script_AddParam_AffixGroup			1	// ??
+            // Script_AddParam_AffixGroup			1	// ??
             // Script_AddParam_Context              2
             // Script_AddParam_Game3                3	// not sure what's the difference with these two - is one a pointer and one by value? (random guess)
             // Script_AddParam_Game4                4
             // Script_AddParam_Unit                 r8	// always 5 or 6
-			// Script_AddParam_Param				7	// not sure what type
+            // Script_AddParam_Param				7	// not sure what type
 
             List<Function> functions = new List<Function>();
             Function function = null;
@@ -1071,8 +1408,6 @@ namespace Hellgate
                             function = new Function { Args = new Argument[10] };
                             argIndex = 0;
                             haveFuncName = true;
-                            //haveReturnType = false;
-                            //haveVoidArg = false;
 
                             function.Name = registers["rcx"];
                         }
@@ -1081,29 +1416,6 @@ namespace Hellgate
                             Debug.Assert(function != null && haveFuncName);
 
                             function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = 0 };
-
-                            //if (!haveReturnType)
-                            //{
-                            //    function.ReturnType = "void";
-                            //    haveReturnType = true;
-                            //}
-                            //else
-                            //{
-                            //    // if we've already go a return type/arg, but now adding void, then the first type we added wasn't also an argument
-                            //    Debug.Assert(argIndex <= 1);
-                            //    if (argIndex == 1)
-                            //    {
-                            //        Debug.Assert(function.ReturnType == function.Args[0].Type);
-                            //    }
-
-                            //    Argument argument = new Argument
-                            //    {
-                            //        Name = "",
-                            //        Type = "void"
-                            //    };
-                            //    function.Args = new[] { argument };
-                            //    haveVoidArg = true;
-                            //}
                         }
                         else if (asmStr[1].Contains("Script_AddParam_ExcelIndex") || asmStr[1].Contains("Script_AddParam_AffixGroup"))
                         {
@@ -1113,49 +1425,24 @@ namespace Hellgate
                             Debug.Assert(!String.IsNullOrEmpty(strIndex));
                             String tableIndex = strIndex.Replace("h", "");
                             function.Args[argIndex++] = new Argument { Name = registers["r8"], Type = 1, TableIndex = Int32.Parse(tableIndex, NumberStyles.HexNumber) };
-
-                            //if (!haveReturnType)
-                            //{
-                            //    function.ReturnType = "int";
-                            //    haveReturnType = true;
-                            //}
-
-                            //function.Args[argIndex++] = new Argument { Name = registers["rdx"], Type = "int" };
                         }
                         else if (asmStr[1].Contains("Script_AddParam_Context"))
                         {
                             Debug.Assert(function != null && haveFuncName);
 
                             function.Args[argIndex++] = new Argument { Name = "context", Type = 2 };
-
-                            //if (!haveReturnType)
-                            //{
-                            //    function.ReturnType = "index";
-                            //    haveReturnType = true;
-                            //}
-
-                            //String strIndex = registers["rdx"];
-                            //Debug.Assert(strIndex != null);
-                            //String tableIndex = strIndex.Replace("h", "");
-                            //function.Args[argIndex++] = new Argument { Name = registers["r8"], Type = "index", TableIndex = Int32.Parse(tableIndex, NumberStyles.HexNumber) };
                         }
                         else if (asmStr[1].Contains("Script_AddParam_Game3"))
                         {
                             Debug.Assert(function != null && haveFuncName);
 
                             function.Args[argIndex++] = new Argument { Name = "game3", Type = 3 };
-
-                            //function.ReturnType = "int";
-                            //haveReturnType = true;
                         }
                         else if (asmStr[1].Contains("Script_AddParam_Game4"))
                         {
                             Debug.Assert(function != null && haveFuncName);
 
                             function.Args[argIndex++] = new Argument { Name = "game4", Type = 4 };
-
-                            //function.ReturnType = "unknown4";
-                            //haveReturnType = true;
                         }
                         else if (asmStr[1].Contains("Script_AddParam_Unit"))
                         {
@@ -1187,9 +1474,8 @@ namespace Hellgate
             if (function != null) functions.Add(function);
 
 
-            // {index, new Function { Name = "FunctionName", ReturnType = "Type", Args = new[] { new Argument { Name = "", Type = "" } } }},
+            // new Function { Name = "FunctionName", ReturnType = "Type", Args = new[] { new Argument { Name = "", Type = "" } } },
 
-            // todo: change to a list (no idea why I used dict for sequential *list* of functions)
             int index = 0;
             foreach (Function func in functions)
             {
@@ -1228,5 +1514,7 @@ namespace Hellgate
 
             return strLen <= 0 ? null : asmCode.Substring(strStart + 1, strLen);
         }
+
+        #endregion
     }
 }
