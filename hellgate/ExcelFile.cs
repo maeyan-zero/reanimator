@@ -24,7 +24,7 @@ namespace Hellgate
         private readonly byte[] _myshBuffer;
         private byte[][] _extendedBuffer;
         private StringCollection _secondaryStrings;
-        private List<ExcelPropertiesScript> _rowScripts;
+        public List<ExcelFunction> ExcelFunctions;
         public List<Int32[]> IndexSortArray; // is only available/set when ExcelFile.ExcelDebug = true
 
         private ExcelHeader _excelFileHeader = new ExcelHeader
@@ -117,7 +117,7 @@ namespace Hellgate
             int colCount = Attributes.HasExtended ? DataType.GetFields().Count() + 2 : DataType.GetFields().Count() + 1;
             if (isProperties)
             {
-                _rowScripts = new List<ExcelPropertiesScript>();
+                ExcelFunctions = new List<ExcelFunction>();
                 _scriptBuffer = new byte[1]; // properties is weird - do this just to ensure 100% byte-for-byte accuracy
                 colCount++;
             }
@@ -306,10 +306,10 @@ namespace Hellgate
                 {
                     String value = tableRows[row][col];
                     String[] scripts = value.Split('\n');
-                    ExcelPropertiesScript excelScript = new ExcelPropertiesScript();
+                    ExcelFunction excelScript = new ExcelFunction();
                     if (scripts.Length > 1)
                     {
-                        _rowScripts.Add(excelScript);
+                        ExcelFunctions.Add(excelScript);
                     }
 
                     int i = 0;
@@ -324,7 +324,7 @@ namespace Hellgate
 
                         // script parameters
                         int typeValuesCount = values.Length - 3;
-                        ExcelPropertiesScript.Parameter parameter = new ExcelPropertiesScript.Parameter
+                        ExcelFunction.Parameter parameter = new ExcelFunction.Parameter
                         {
                             Name = values[0],
                             Unknown = UInt32.Parse(values[1]),
@@ -353,7 +353,7 @@ namespace Hellgate
                             scriptValues[j] = Int32.Parse(values[j]);
                         }
 
-                        excelScript.ScriptValues = scriptValues.ToByteArray();
+                        excelScript.ScriptByteCode = scriptValues.ToByteArray();
                     }
                 }
 
@@ -789,7 +789,7 @@ namespace Hellgate
                         FileTools.WriteToBuffer(ref buffer, ref offset, Token.mysh);
                         FileTools.WriteToBuffer(ref buffer, ref offset, _myshBuffer);
                     }
-                    else if (_rowScripts != null)
+                    else if (ExcelFunctions != null)
                     {
                         _PropertiesScriptToByteArray(ref buffer, ref offset);
                     }
@@ -975,26 +975,26 @@ namespace Hellgate
                 }
 
                 // properties scripts
-                if (isProperties && scriptRow < _rowScripts.Count)
+                if (isProperties && scriptRow < ExcelFunctions.Count)
                 {
-                    if (tableHeader.Unknown1 != 2 || scriptRow == _rowScripts.Count - 1) // need 1 extra row for some reason
+                    if (tableHeader.Unknown1 != 2 || scriptRow == ExcelFunctions.Count - 1) // need 1 extra row for some reason
                     {
                         FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-                        ExcelPropertiesScript excelScript = _rowScripts[scriptRow++];
+                        ExcelFunction excelScript = ExcelFunctions[scriptRow++];
                         String output = String.Empty;
-                        foreach (ExcelPropertiesScript.Parameter paramater in excelScript.Parameters)
+                        foreach (ExcelFunction.Parameter paramater in excelScript.Parameters)
                         {
                             output += String.Format("\n{0},{1},{2},{3}", paramater.Name, paramater.Unknown,
                                                     paramater.TypeId, paramater.TypeValues.ToString(","));
                         }
                         FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(output));
 
-                        if (excelScript.ScriptValues != null)
+                        if (excelScript.ScriptByteCode != null)
                         {
                             int offset = 0;
                             String scriptValues = "\n" +
-                                                  FileTools.ByteArrayToInt32Array(excelScript.ScriptValues, ref offset,
-                                                                                  excelScript.ScriptValues.Length / 4).ToString(",") + "\n";
+                                                  FileTools.ByteArrayToInt32Array(excelScript.ScriptByteCode, ref offset,
+                                                                                  excelScript.ScriptByteCode.Length / 4).ToString(",") + "\n";
                             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptValues));
                         }
                     }
@@ -1168,19 +1168,19 @@ namespace Hellgate
         /// <returns>Byte array of XML document for writing, or null on error.</returns>
         public byte[] ExportScriptTable()
         {
-            if (_rowScripts == null || _rowScripts.Count == 0) return null;
+            if (ExcelFunctions == null || ExcelFunctions.Count == 0) return null;
 
             // this functions is quick and dirty - ignore me
             XmlDocument xmlDocument = new XmlDocument();
             XmlElement mainElement = xmlDocument.CreateElement("ExcelScript");
             xmlDocument.AppendChild(mainElement);
 
-            foreach (ExcelPropertiesScript excelScript in _rowScripts)
+            foreach (ExcelFunction excelScript in ExcelFunctions)
             {
                 XmlElement scriptElement = xmlDocument.CreateElement("Script");
                 mainElement.AppendChild(scriptElement);
 
-                foreach (ExcelPropertiesScript.Parameter paramater in excelScript.Parameters)
+                foreach (ExcelFunction.Parameter paramater in excelScript.Parameters)
                 {
                     XmlElement paramElement = xmlDocument.CreateElement("Parameter");
                     scriptElement.AppendChild(paramElement);
@@ -1212,12 +1212,12 @@ namespace Hellgate
 
                 XmlElement scriptValues = xmlDocument.CreateElement("Values");
 
-                if (excelScript.ScriptValues != null)
+                if (excelScript.ScriptByteCode != null)
                 {
-                    int intCount = excelScript.ScriptValues.Length / 4;
+                    int intCount = excelScript.ScriptByteCode.Length / 4;
                     String text = String.Empty;
                     int offset = 0;
-                    Int32[] intArray = FileTools.ByteArrayToInt32Array(excelScript.ScriptValues, ref offset, intCount);
+                    Int32[] intArray = FileTools.ByteArrayToInt32Array(excelScript.ScriptByteCode, ref offset, intCount);
                     for (int i = 0; i < intArray.Length; i++)
                     {
                         // testing if some of those huge numbers are actually two shorts...

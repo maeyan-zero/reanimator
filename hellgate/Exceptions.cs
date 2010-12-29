@@ -136,5 +136,13 @@ namespace Hellgate
                 CustomMessage = function;
             }
         }
+
+        public class ExcelScriptNotInitialised : ReanimatorException
+        {
+            public ExcelScriptNotInitialised(String reason)
+            {
+                CustomMessage = reason;
+            }
+        }
     }
 }
