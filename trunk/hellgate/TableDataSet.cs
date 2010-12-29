@@ -138,7 +138,7 @@ namespace Hellgate
             #region Generate Rows
             int row = 1;
             object[] baseRow = new object[outputAttributes.Count];
-            ObjectDelegator objectDelegator = new ObjectDelegator(fieldInfos, "GetValue");
+            ObjectDelegator objectDelegator = new ObjectDelegator(fieldInfos, ObjectDelegator.SupportedFields.GetValue);
             foreach (Object tableRow in excelFile.Rows)
             {
                 int col = 1;
@@ -216,7 +216,7 @@ namespace Hellgate
 
         private DataTable _LoadStringsTable()
         {
-            ObjectDelegator objectDelegator = new ObjectDelegator(typeof(StringsFile.StringBlock), "GetValue");
+            ObjectDelegator objectDelegator = new ObjectDelegator(typeof(StringsFile.StringBlock), ObjectDelegator.SupportedFields.GetValue);
 
             DataTable dataTable = XlsDataSet.Tables[StringsTableName];
             if (dataTable != null) return dataTable;

@@ -137,7 +137,7 @@ namespace Revival
             #endregion
 
             #region SQL test
-            if (true)
+            if (false)
             {
                 fileManager = new FileManager(@"D:\Games\Hellgate London");
                 fileManager.LoadTableFiles();
