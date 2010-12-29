@@ -131,7 +131,7 @@ namespace Hellgate
             Rows = new List<Object>();
             const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             FieldInfo[] fieldInfos = DataType.GetFields(bindingFlags);
-            ObjectDelegator objectDelegator = new ObjectDelegator(fieldInfos, "SetValue");
+            ObjectDelegator objectDelegator = new ObjectDelegator(fieldInfos, ObjectDelegator.SupportedFields.SetValue);
             bool needOutputAttributes = true;
             OutputAttribute[] outputAttributes = new OutputAttribute[fieldInfos.Length];
             for (int row = 0; row < tableRows.Count(); row++)
@@ -844,7 +844,7 @@ namespace Hellgate
         /// <returns>The CSV as a byte array.</returns>
         public override byte[] ExportCSV()
         {
-            ObjectDelegator objectDelegator = new ObjectDelegator(Attributes.RowType, "GetValue");
+            ObjectDelegator objectDelegator = new ObjectDelegator(Attributes.RowType, ObjectDelegator.SupportedFields.GetValue);
 
             FieldInfo[] dataTypeFields = DataType.GetFields();
             int noCols = dataTypeFields.Count();

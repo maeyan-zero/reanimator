@@ -7,6 +7,12 @@ namespace Revival.Common
 {
     public class ObjectDelegator
     {
+        public enum SupportedFields
+        {
+            GetValue = 1,
+            SetValue = 2
+        }
+
         public delegate Object FieldGetValueDelegate(Object target);
 
         public delegate void FieldSetValueDelegate(Object target, Object value);
@@ -19,12 +25,12 @@ namespace Revival.Common
         private readonly FieldSetValueDelegate[] _fieldSetValueDelegates;
 
 
-        public ObjectDelegator(Type type, String field)
+        public ObjectDelegator(Type type, SupportedFields field)
         {
             FieldInfo[] fieldInfos = type.GetFields();
             switch (field)
             {
-                case "GetValue":
+                case SupportedFields.GetValue:
                     _fieldGetValueDelegates = new FieldGetValueDelegate[fieldInfos.Length];
                     for (int i = 0; i < fieldInfos.Length; i++)
                     {
@@ -33,7 +39,7 @@ namespace Revival.Common
                     }
                     break;
 
-                case "SetValue":
+                case SupportedFields.SetValue:
                     _fieldSetValueDelegates = new FieldSetValueDelegate[fieldInfos.Length];
                     for (int i = 0; i < fieldInfos.Length; i++)
                     {
@@ -46,50 +52,29 @@ namespace Revival.Common
             }
         }
 
-        public ObjectDelegator(IList<FieldInfo> fieldInfos, ICollection<String> fields)
+        public ObjectDelegator(IList<FieldInfo> fieldInfos, ICollection<SupportedFields> fields)
         {
             if (fieldInfos == null) throw new ArgumentNullException("fieldInfos", "Cannot be null!");
             if (fields == null) throw new ArgumentNullException("fields", "Cannot be null!");
             if (fields.Count == 0) throw new ArgumentException("Fields array cannot be empty!", "fields");
 
-            foreach (String field in fields)
+            foreach (SupportedFields field in fields)
             {
                 _DoField(fieldInfos, field);
             }
         }
 
         // todo: really should change the CSV stuff to have it use like objectDelegate["field"] like the DataTables and remove above ctor()
-        public ObjectDelegator(IList<FieldInfo> fieldInfos, String field)
+        public ObjectDelegator(IList<FieldInfo> fieldInfos, SupportedFields field)
         {
             _DoField(fieldInfos, field);
-            //switch (field)
-            //{
-            //    case "GetValue":
-            //        _fieldGetValueDelegatesDict = new Dictionary<String, FieldGetValueDelegate>();
-            //        foreach (FieldInfo fieldInfo in fieldInfos)
-            //        {
-            //            _fieldGetValueDelegatesDict.Add(fieldInfo.Name, _CreateGetField(fieldInfo));
-            //        }
-            //        break;
-
-            //    case "SetValue":
-            //        _fieldSetValueDelegatesDict = new Dictionary<String, FieldSetValueDelegate>();
-            //        foreach (FieldInfo fieldInfo in fieldInfos)
-            //        {
-            //            _fieldSetValueDelegatesDict.Add(fieldInfo.Name, _CreateSetField(fieldInfo));
-            //        }
-            //        break;
-
-            //    default:
-            //        throw new NotSupportedException("The field " + field + "is not supported!");
-            //}
         }
 
-        private void _DoField(IList<FieldInfo> fieldInfos, String field)
+        private void _DoField(IList<FieldInfo> fieldInfos, SupportedFields field)
         {
             switch (field)
             {
-                case "GetValue":
+                case SupportedFields.GetValue:
                     _fieldGetValueDelegatesDict = new Dictionary<String, FieldGetValueDelegate>();
                     foreach (FieldInfo fieldInfo in fieldInfos)
                     {
@@ -97,7 +82,7 @@ namespace Revival.Common
                     }
                     break;
 
-                case "SetValue":
+                case SupportedFields.SetValue:
                     _fieldSetValueDelegatesDict = new Dictionary<String, FieldSetValueDelegate>();
                     foreach (FieldInfo fieldInfo in fieldInfos)
                     {

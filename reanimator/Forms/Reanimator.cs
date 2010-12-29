@@ -36,7 +36,7 @@ namespace Reanimator.Forms
 
             //_ExtractFunctionList();
             //_ExcelValuesDeepScan();
-            _DoCookTest();
+            //_DoCookTest();
             //_ConvertTCv4ExcelToSP();
             //_LoadAllMLIFiles();
             //_LoadAllRooms();
@@ -136,7 +136,7 @@ namespace Reanimator.Forms
                 // create delegates
                 if (!objectDelegators.TryGetValue(excelFile.StringId, out excelDelegator))
                 {
-                    excelDelegator = new ObjectDelegator(fieldInfos, "GetValue");
+                    excelDelegator = new ObjectDelegator(fieldInfos, ObjectDelegator.SupportedFields.GetValue);
                     objectDelegators.Add(excelFile.StringId, excelDelegator);
                 }
 
@@ -348,7 +348,7 @@ namespace Reanimator.Forms
 
                 Console.WriteLine("Cooking file: " + fileEntry.RelativeFullPathWithoutPatch);
 
-                //if (!fileEntry.RelativeFullPathWithoutPatch.Contains("recipelists")) continue;
+                //if (!fileEntry.RelativeFullPathWithoutPatch.Contains("display_item")) continue;
 
                 byte[] csvBytes = excelFile.ExportCSV();
                 File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);
@@ -432,12 +432,12 @@ namespace Reanimator.Forms
                 // create delegates
                 if (!objectDelegators.TryGetValue(excelFile.StringId, out excelDelegator))
                 {
-                    excelDelegator = new ObjectDelegator(fieldInfos, new[] { "GetValue", "SetValue" });
+                    excelDelegator = new ObjectDelegator(fieldInfos, new[] { ObjectDelegator.SupportedFields.GetValue, ObjectDelegator.SupportedFields.SetValue });
                     objectDelegators.Add(excelFile.StringId, excelDelegator);
                 }
                 if (!objectDelegators.TryGetValue(stringIdTCv4, out excelDelegatorTCv4))
                 {
-                    excelDelegatorTCv4 = new ObjectDelegator(fieldInfosTCv4, "GetValue");
+                    excelDelegatorTCv4 = new ObjectDelegator(fieldInfosTCv4, ObjectDelegator.SupportedFields.GetValue);
                     objectDelegators.Add(stringIdTCv4, excelDelegatorTCv4);
                 }
 
@@ -544,7 +544,7 @@ namespace Reanimator.Forms
                 Type rowType = excelFile.Attributes.RowType;
                 FieldInfo[] fieldInfos = rowType.GetFields();
 
-                excelDelegator = new ObjectDelegator(fieldInfos, new[] { "GetValue", "SetValue" });
+                excelDelegator = new ObjectDelegator(fieldInfos, new[] { ObjectDelegator.SupportedFields.GetValue, ObjectDelegator.SupportedFields.SetValue });
 
                 objectDelegators.Add(excelFile.StringId, excelDelegator);
             }
