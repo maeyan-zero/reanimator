@@ -347,6 +347,7 @@
     <Compile Include="Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoomDefinitionFile.cs" />
+    <Compile Include="ScriptUtil.cs" />
     <Compile Include="StringsFile.cs" />
     <Compile Include="StringsFileDef.cs" />
     <Compile Include="TableDataSet.cs" />

@@ -440,6 +440,36 @@ namespace Hellgate
             return _excelCodeToTable.TryGetValue(code, out excelTable) ? excelTable : null;
         }
 
+        public int GetExcelRowIndexFromTableIndex(int tableIndex, String value)
+        {
+            uint tableCode = _GetTableCodeFromTableIndex(tableIndex);
+            return GetExcelRowIndex(tableCode, value);
+        }
+
+        public String GetExcelRowStringFromTableIndex(int tableIndex, int rowIndex)
+        {
+            uint tableCode = _GetTableCodeFromTableIndex(tableIndex);
+            return GetExcelRowStringFromRowIndex(tableCode, rowIndex);
+        }
+
+        private uint _GetTableCodeFromTableIndex(int tableIndex)
+        {
+            if (_excelIndexToCodeList == null)
+            {
+                DataFile excelTables;
+                if (!DataFiles.TryGetValue("EXCELTABLES", out excelTables)) return 0;
+
+                _excelIndexToCodeList = new List<uint>();
+                foreach (Excel.ExcelTables excelTable in excelTables.Rows)
+                {
+                    _excelIndexToCodeList.Add((uint)excelTable.code);
+                }
+            }
+
+            return _excelIndexToCodeList[tableIndex];
+        }
+
+
         public int GetExcelRowIndex(uint code, String value)
         {
             if (DataFiles == null || DataFiles["EXCELTABLES"] == null) return -1;
@@ -471,24 +501,6 @@ namespace Hellgate
 
 
             return -1;
-        }
-
-        public String GetExcelRowStringFromExcelIndex(int excelIndex, int rowIndex)
-        {
-            if (_excelIndexToCodeList == null)
-            {
-                DataFile excelTables;
-                if (!DataFiles.TryGetValue("EXCELTABLES", out excelTables)) return null;
-
-                _excelIndexToCodeList = new List<uint>();
-                foreach (Excel.ExcelTables excelTable in excelTables.Rows)
-                {
-                    _excelIndexToCodeList.Add((uint)excelTable.code);
-                }
-            }
-
-            uint tableCode = _excelIndexToCodeList[excelIndex];
-            return GetExcelRowStringFromRowIndex(tableCode, rowIndex);
         }
 
         public String GetExcelRowStringFromStringId(String stringId, int rowIndex, int colIndex=0)

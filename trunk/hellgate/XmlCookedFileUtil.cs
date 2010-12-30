@@ -227,7 +227,7 @@ namespace Hellgate
                 if (ExcelStringsMissing == null) ExcelStringsMissing = new HashSet<String>();
                 if (!ExcelStringsMissing.Contains(excelString)) ExcelStringsMissing.Add(excelString);
                 
-                if (ThrowOnMissingExcelString) throw new Exceptions.UnknownExcelElementException("excelString = " + excelString);
+                if (ThrowOnMissingExcelString) throw new Exceptions.UnknownExcelStringException(excelString);
                 Console.WriteLine("Warning: Inaccurate uncook - Unknown ExcelString = " + excelString);
             }
 
