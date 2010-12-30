@@ -54,12 +54,14 @@ namespace Hellgate
             }
         }
 
-        public class UnknownExcelElementException : ReanimatorException
+        public class UnknownExcelStringException : ReanimatorException
         {
-            public UnknownExcelElementException(String excelElement)
+            public UnknownExcelStringException(String excelString, int offset=-1)
             {
-                if (String.IsNullOrEmpty(excelElement)) excelElement = String.Empty;
-                CustomMessage = "An unknown Excel Element was encountered!\n" + excelElement;
+                String offsetStr = ".";
+                if (offset > 0) offsetStr = String.Format(" at offset {0}.", offset);
+
+                CustomMessage = String.Format("An unknown Excel string '{0}' was encountered{1}", excelString, offsetStr);
             }
         }
 
@@ -105,43 +107,92 @@ namespace Hellgate
             }
         }
 
-        public class ExcelScriptInvalidStackState : ReanimatorException
+        public class ScriptInvalidStackStateException : ReanimatorException
         {
-            public ExcelScriptInvalidStackState(String reason)
+            public ScriptInvalidStackStateException(String reason)
             {
                 CustomMessage = reason;
             }
         }
 
-        public class ExcelScriptUnknownOpCode : ReanimatorException
+        public class ScriptUnknownOpCodeException : ReanimatorException
         {
-            public ExcelScriptUnknownOpCode(String opCode, String stack)
+            public ScriptUnknownOpCodeException(String opCode, String stack)
             {
                 CustomMessage = String.Format("Unknown OpCode: {0}\n{1}", opCode, stack);
             }
         }
 
-        public class ExcelScriptInfiniteCheck : ReanimatorException
+        public class ScriptInfiniteCheckException : ReanimatorException
         {
-            public ExcelScriptInfiniteCheck(String opCode, String stack)
+            public ScriptInfiniteCheckException(String opCode, String stack)
             {
                 CustomMessage = String.Format("Warning: Forced loop beak - infinite Loop check override (>= 1000 loops).\nLast Op Code = {0}\n{1}", opCode, stack);
             }
         }
 
-        public class ExcelScriptUnknownFunctionCall : ReanimatorException
+        public class ScriptUnexpectedFunctionIndexException : ReanimatorException
         {
-            public ExcelScriptUnknownFunctionCall(String function)
+            public ScriptUnexpectedFunctionIndexException(int functionIndex)
             {
-                CustomMessage = function;
+                CustomMessage = String.Format("Unexpected function index '{0}'.", functionIndex);
             }
         }
 
-        public class ExcelScriptNotInitialised : ReanimatorException
+        public class ScriptNotInitialisedException : ReanimatorException
         {
-            public ExcelScriptNotInitialised(String reason)
+            public ScriptNotInitialisedException(String reason)
             {
                 CustomMessage = reason;
+            }
+        }
+
+        public class ScriptUnknownFunctionException : ReanimatorException
+        {
+            public ScriptUnknownFunctionException(String functionName)
+            {
+                CustomMessage = String.Format("The function '{0}' could not be found!", functionName);
+            }
+        }
+
+        public class ScriptFunctionArgumentCountException : ReanimatorException
+        {
+            public ScriptFunctionArgumentCountException(String functionName, int requiredCount, String extra=null)
+            {
+                if (extra == null) extra = String.Empty;
+                CustomMessage = String.Format("The function '{0}' did not have the required argument count of '{1}'.{2}", functionName, requiredCount, extra);
+            }
+        }
+
+        public class ScriptFormatException : ReanimatorException
+        {
+            public ScriptFormatException(String details, int scriptOffset)
+            {
+                CustomMessage = String.Format("A script format exception has occured at offset '{0}':\n{1}", scriptOffset, details);
+            }
+        }
+
+        public class ScriptUnknownVarNameException : ReanimatorException
+        {
+            public ScriptUnknownVarNameException(String varName, int scriptOffset)
+            {
+                CustomMessage = String.Format("At offset '{0}', an unknown variable name '{1}' was encountered.", scriptOffset, varName);
+            }
+        }
+
+        public class ScriptInvalidArgTypeException : ReanimatorException
+        {
+            public ScriptInvalidArgTypeException(String varName, String argType, int scriptOffset)
+            {
+                CustomMessage = String.Format("An invalid argument '{0}' was supplied at offset '{1}'. Expecting type '{2}'.", varName, scriptOffset, argType);
+            }
+        }
+
+        public class ScriptUnexpectedScriptTermination : ReanimatorException
+        {
+            public ScriptUnexpectedScriptTermination()
+            {
+                CustomMessage = "The script string terminates unexpectedly.";
             }
         }
     }

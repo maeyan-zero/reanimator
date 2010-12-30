@@ -934,12 +934,25 @@ namespace Hellgate
                             String scriptString = FileTools.ArrayToStringGeneric(buffer, ",");
                             //try
                             //{
+                            //    String debugScriptString = scriptString;
                             //    ExcelScript excelScript = new ExcelScript();
-                            //    scriptString = "\"" + excelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldInfo.Name) + "\"";
+                            //    scriptString = excelScript.Decompile(_scriptBuffer, offset, debugScriptString, StringId, row, col, fieldInfo.Name);
+
+                            //    ExcelScript recompiledScript = new ExcelScript();
+                            //    int[] recompiledBytes = recompiledScript.Compile(scriptString, debugScriptString, StringId, row, col, fieldInfo.Name);
+
+                            //    if (!buffer.SequenceEqual(recompiledBytes))
+                            //    {
+                            //        ExcelScript reDecompiledScript = new ExcelScript();
+                            //        String scriptString2 = excelScript.Decompile(_scriptBuffer, offset, debugScriptString, StringId, row, col, fieldInfo.Name);
+                            //        int bp = 0;
+                            //    }
+
+                            //    scriptString = "\"" + scriptString + "\"";
                             //}
                             //catch (Exception e)
                             //{
-                            //    //Debug.WriteLine(e.ToString());
+                            //    Debug.WriteLine(e.ToString());
                             //    scriptString = "ScriptError(" + scriptString + ")";
                             //}
 

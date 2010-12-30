@@ -348,7 +348,7 @@ namespace Reanimator.Forms
 
                 Console.WriteLine("Cooking file: " + fileEntry.RelativeFullPathWithoutPatch);
 
-                //if (!fileEntry.RelativeFullPathWithoutPatch.Contains("display_item")) continue;
+                if (fileEntry.RelativeFullPathWithoutPatch.Contains("display_item")) continue;
 
                 byte[] csvBytes = excelFile.ExportCSV();
                 File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);
