@@ -85,13 +85,14 @@
             this.tableDataPage.Text = "Table Data";
             this.tableDataPage.UseVisualStyleBackColor = true;
             // 
-            // tableData_DataGridView
+            // _tableData_DataGridView
             // 
             this._tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tableData_DataGridView.Location = new System.Drawing.Point(3, 3);
-            this._tableData_DataGridView.Name = "tableData_DataGridView";
+            this._tableData_DataGridView.Name = "_tableData_DataGridView";
             this._tableData_DataGridView.Size = new System.Drawing.Size(738, 552);
             this._tableData_DataGridView.TabIndex = 1;
+            this._tableData_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this._TableData_DataGridView_CellDoubleClick);
             this._tableData_DataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this._TableData_DataGridView_KeyUp);
             // 
             // indexArraysPage

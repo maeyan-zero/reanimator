@@ -176,11 +176,29 @@ namespace Hellgate
                         continue;
                     }
 
-                    if ((excelOutputAttribute.IsScript))
+                    if (excelOutputAttribute.IsScript)
                     {
                         int valueInt = (int)value;
-                        int[] intTable = excelFile.ReadScriptTable(valueInt);
-                        baseRow[col++] = (intTable != null) ? FileTools.ArrayToStringGeneric(intTable, ",") : String.Empty;
+                        if (valueInt == 0)
+                        {
+                            baseRow[col++] = String.Empty;
+                            continue;
+                        }
+
+                        ExcelScript excelScript = new ExcelScript();
+                        String script;
+
+                        try
+                        {
+                            script = excelScript.Decompile(excelFile.ScriptBuffer, valueInt);
+                        }
+                        catch (Exception)
+                        {
+                            int[] scriptCode = excelFile.ReadScriptTable(valueInt);
+                            script = FileTools.ArrayToStringGeneric(scriptCode, ",");
+                        }
+
+                        baseRow[col++] = script;
                         continue;
                     }
 

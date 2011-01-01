@@ -24,6 +24,8 @@ namespace Hellgate
         private readonly byte[] _myshBuffer;
         private byte[][] _extendedBuffer;
         private StringCollection _secondaryStrings;
+
+        public byte[] ScriptBuffer { get { return _scriptBuffer; } }
         public List<ExcelFunction> ExcelFunctions;
         public List<Int32[]> IndexSortArray; // is only available/set when ExcelFile.ExcelDebug = true
 
@@ -938,15 +940,15 @@ namespace Hellgate
                             //    ExcelScript excelScript = new ExcelScript();
                             //    scriptString = excelScript.Decompile(_scriptBuffer, offset, debugScriptString, StringId, row, col, fieldInfo.Name);
 
-                            //    ExcelScript recompiledScript = new ExcelScript();
-                            //    int[] recompiledBytes = recompiledScript.Compile(scriptString, debugScriptString, StringId, row, col, fieldInfo.Name);
+                            //    //ExcelScript recompiledScript = new ExcelScript();
+                            //    //int[] recompiledBytes = recompiledScript.Compile(scriptString, debugScriptString, StringId, row, col, fieldInfo.Name);
 
-                            //    if (!buffer.SequenceEqual(recompiledBytes))
-                            //    {
-                            //        ExcelScript reDecompiledScript = new ExcelScript();
-                            //        String scriptString2 = excelScript.Decompile(_scriptBuffer, offset, debugScriptString, StringId, row, col, fieldInfo.Name);
-                            //        int bp = 0;
-                            //    }
+                            //    //if (!buffer.SequenceEqual(recompiledBytes))
+                            //    //{
+                            //    //    ExcelScript reDecompiledScript = new ExcelScript();
+                            //    //    String scriptString2 = excelScript.Decompile(_scriptBuffer, offset, debugScriptString, StringId, row, col, fieldInfo.Name);
+                            //    //    int bp = 0;
+                            //    //}
 
                             //    scriptString = "\"" + scriptString + "\"";
                             //}
