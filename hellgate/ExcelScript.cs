@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Hellgate.Excel;
 using Revival.Common;
 
@@ -224,13 +225,13 @@ namespace Hellgate
                     case '&':       // 516  0x204
                         if (script[offset + 1] != '&') throw new NotImplementedException(String.Format("Binary AND operations are not currently implemented. Offset = '{0}'", offset));
 
-
+                        throw new NotImplementedException(String.Format("Conditional && operators are not currently implement. Offset = '{0}'", offset));
                         break;
 
                     case '|':       // 527  0x20F
                         if (script[offset + 1] != '|') throw new NotImplementedException(String.Format("Binary OR operations are not currently implemented. Offset = '{0}'", offset));
 
-
+                        throw new NotImplementedException(String.Format("Conditional || operators are not currently implement. Offset = '{0}'", offset));
                         break;
 
                     case '-':
@@ -342,6 +343,7 @@ namespace Hellgate
 
                         _SkipWhite(script, ref offset);
 
+                        int functionStartOffset = offset;
                         if (script[offset] == '(') // we have a function
                         {
                             // is it a stat set/get function?
@@ -428,7 +430,7 @@ namespace Hellgate
                                     scriptByteCode.AddRange(getStatArgBytes);
                                 }
 
-                                Debug.Assert(script[offset] == ')');
+                                if (script[offset] != ')') throw new Exceptions.ScriptFormatException(String.Format("Unexpected end of function '{0}' starting at offset '{1}'", nameStr, functionStartOffset), offset);
                                 offset++;
 
                                 scriptByteCode.AddRange(callStatFunc);

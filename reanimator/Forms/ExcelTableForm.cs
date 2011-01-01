@@ -570,7 +570,7 @@ namespace Reanimator.Forms
             DataGridViewCell dataGridViewCell = _tableData_DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
             if (dataGridViewCell == null) return; // shouldn't happen, but just in case
 
-            ScriptEditor scriptEditor = new ScriptEditor(dataGridViewCell) { MdiParent = MdiParent };
+            ScriptEditor scriptEditor = new ScriptEditor(dataGridViewCell, "todo", dataColumn.ColumnName) { MdiParent = MdiParent };
             scriptEditor.Show();
         }
     }
