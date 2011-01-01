@@ -155,6 +155,10 @@ namespace Hellgate
                         offset++;
                         break;
 
+                    case '\n':      // end of line
+                        offset++;
+                        break;
+
                     case ':':       // 4    0x04
                         offset++;
                         _SkipWhite(script, ref offset);
@@ -220,7 +224,7 @@ namespace Hellgate
                     case '&':       // 516  0x204
                         if (script[offset + 1] != '&') throw new NotImplementedException(String.Format("Binary AND operations are not currently implemented. Offset = '{0}'", offset));
 
-                        
+
                         break;
 
                     case '|':       // 527  0x20F
@@ -508,6 +512,8 @@ namespace Hellgate
             }
         }
 
+        public String GetScript { get { return _script; } }
+
         /// <summary>
         /// Decompiles a script from byte codes to human readable text.
         /// </summary>
@@ -524,7 +530,7 @@ namespace Hellgate
             if (!_havePropertiesFunctions && !_debug) throw new Exceptions.ScriptNotInitialisedException("Properties excel script functions have not been parsed; they must be loaded before any decompiling can be done.\nPlease ensure you have provided a valid FileManager for initialisation.");
             if (!_haveSkillsFunctions && !_debug) throw new Exceptions.ScriptNotInitialisedException("Skills excel script functions have not been parsed; they must be loaded before any decompiling can be done.\nPlease ensure you have provided a valid FileManager for initialisation.");
 
-            return _Decompile(scriptBytes, offset, offset, scriptBytes.Length, scriptString, stringId, row, col, colName).Value;
+            return _script = _Decompile(scriptBytes, offset, offset, scriptBytes.Length, scriptString, stringId, row, col, colName).Value;
         }
 
         /// <summary>
@@ -545,7 +551,7 @@ namespace Hellgate
 
             _excelScriptFunction = excelScriptFunction;
             _excelFunction = excelFunction;
-            return _Decompile(_excelScriptFunction.ScriptByteCode, 0, 0, _excelScriptFunction.ScriptByteCode.Length, scriptString, stringId, row, col, colName).Value;
+            return _script = _Decompile(_excelScriptFunction.ScriptByteCode, 0, 0, _excelScriptFunction.ScriptByteCode.Length, scriptString, stringId, row, col, colName).Value;
         }
 
         /// <summary>
@@ -574,7 +580,7 @@ namespace Hellgate
 
             if (debug)
             {
-                debugFormatConditionalByteCounts = false;
+                debugFormatConditionalByteCounts = true;
                 debugOutputParsed = true;
                 debugShowParsed = false;
 
@@ -609,7 +615,7 @@ namespace Hellgate
             int infCheck = 0;
             int scriptStartOffset = offset;
             uint bytesRead = 0;
-            int falseStatements = -1;
+            bool processStackOnReturn = true;
             try
             {
                 while (offset < scriptStartOffset + maxBytes)
@@ -624,8 +630,9 @@ namespace Hellgate
                     StackObject stackObject1;
                     StackObject stackObject2;
                     String argName;
+                    int subMaxBytes;
 
-                    if (row == 8 && col == 155)
+                    if (row == 549 && col == 23)
                     {
                         //debugOutputBytesRead = true;
                         int bp = 0;
@@ -635,8 +642,7 @@ namespace Hellgate
                     {
                         case ScriptOpCodes.Return:                   // 0    0x00
                             bytesRead += (uint)(offset - scriptStartOffset);
-                            if (debugOutputBytesRead) Console.WriteLine("Read from {0} to {1} = {2} bytes.", scriptStartOffset, offset, scriptStartOffset - offset);
-                            return _Return(startStackCount, bytesRead, falseStatements, debugShowParsed);
+                            return _Return(startStackCount, bytesRead, processStackOnReturn, debugShowParsed);
 
                         case ScriptOpCodes.CallPropery:              // 2    0x02
                             functionIndex = FileTools.ByteArrayToInt32(scriptBytes, ref offset);
@@ -653,25 +659,20 @@ namespace Hellgate
                         case ScriptOpCodes.TernaryFalse:             // 4    0x04
                             _CheckStack(1, opCode);
 
+                            int trueStatementCount = _stack.Count - startStackCount;
+                            Debug.Assert(trueStatementCount > 0);
+
                             byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
+                            subMaxBytes = (int)byteOffset - (offset - startOffset);
+                            stackObject1 = _Decompile(scriptBytes, offset, startOffset, subMaxBytes, scriptString, stringId, row, col, colName);
 
-                            const String ternaryFalseFormatRelease = "{0} : {2}";
-                            const String ternaryFalseFormatDebug = "{0} :[{1}] {2}";
-                            String ternaryFalseFormat = debugFormatConditionalByteCounts ? ternaryFalseFormatDebug : ternaryFalseFormatRelease;
+                            Debug.Assert(stackObject1.StatementCount > 0);
+                            stackObject1.FalseStatements = stackObject1.StatementCount;
+                            stackObject1.TrueStatements = trueStatementCount;
+                            processStackOnReturn = false;
 
-                            int falseSubScriptMaxBytes = (int)byteOffset - (offset - startOffset);
-                            StackObject decompiledFalseObject = _Decompile(scriptBytes, offset, startOffset, falseSubScriptMaxBytes, scriptString, stringId, row, col, colName);
-                            Debug.Assert(decompiledFalseObject.FalseStatements == -1 && decompiledFalseObject.TrueStatements > 0);
-                            decompiledFalseObject.FalseStatements = decompiledFalseObject.TrueStatements;
-                            decompiledFalseObject.TrueStatements = -1;
-
-                            falseStatements = decompiledFalseObject.FalseStatements;
-
-                            //value1 = String.Format(ternaryFalseFormat, _stack.Pop().Value, byteOffset, decompiledFalseObject.Value);
-                            _stack.Push(decompiledFalseObject);
-
-                            if (debugOutputBytesRead) Console.WriteLine("Read from {0} to {1} = {2} bytes.", offset, offset + decompiledFalseObject.ByteOffset, decompiledFalseObject.ByteOffset);
-                            offset += (int)decompiledFalseObject.ByteOffset;
+                            _stack.Push(stackObject1);
+                            offset += (int)stackObject1.ByteOffset;
                             break;
 
                         case ScriptOpCodes.AllocateVar:              // 6    0x06
@@ -686,15 +687,15 @@ namespace Hellgate
                             _CheckStack(1, opCode);
 
                             byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            int subScriptMaxBytes = (int)byteOffset - (offset - startOffset);
-                            StackObject decompiledConditionObject = _Decompile(scriptBytes, offset, startOffset, subScriptMaxBytes, scriptString, stringId, row, col, colName);
-                            Debug.Assert(decompiledConditionObject.FalseStatements != -1 || decompiledConditionObject.TrueStatements != -1);
+                            subMaxBytes = (int)byteOffset - (offset - startOffset);
+                            stackObject1 = _Decompile(scriptBytes, offset, startOffset, subMaxBytes, scriptString, stringId, row, col, colName);
+                            Debug.Assert(stackObject1.FalseStatements != -1 || stackObject1.TrueStatements != -1);
 
                             String ternaryTrueFormat;
                             String conditionsScript;
-                            if (decompiledConditionObject.FalseStatements == -1)
+                            if (stackObject1.FalseStatements == -1)
                             {
-                                if (decompiledConditionObject.TrueStatements == 1)
+                                if (stackObject1.TrueStatements == 1)
                                 {
                                     const String onlyTrue1Rel = "if ({0}) {2};";
                                     const String onlyTrue1Debug = "if ({0})[{1}] {2};";
@@ -702,16 +703,20 @@ namespace Hellgate
                                 }
                                 else
                                 {
-                                    const String onlyTrueRel = "if ({0}) {{{2}}}";
-                                    const String onlyTrueDebug = "if ({0})[{1}] {{{2}}}";
+                                    const String onlyTrueRel = "if ({0})\n{{\n{2}\n}}";
+                                    const String onlyTrueDebug = "if ({0})[{1}]\n{{\n{2}\n}}";
                                     ternaryTrueFormat = debugFormatConditionalByteCounts ? onlyTrueDebug : onlyTrueRel;
                                 }
 
-                                conditionsScript = String.Format(ternaryTrueFormat, _stack.Pop().Value, byteOffset, decompiledConditionObject.Value);
+                                conditionsScript = String.Format(ternaryTrueFormat, _stack.Pop().Value, byteOffset, stackObject1.Value);
                             }
                             else
                             {
-                                if (decompiledConditionObject.TrueStatements == 1 && decompiledConditionObject.FalseStatements == 1)
+                                StackObject falseObj = _stack.Pop();
+                                StackObject trueObj = _stack.Pop();
+                                StackObject ifObj = _stack.Pop();
+
+                                if (stackObject1.TrueStatements == 1 && stackObject1.FalseStatements == 1)
                                 {
                                     const String true1False1Rel = "({0}) ? {2} : {3}";
                                     const String true1False1Debug = "({0}) ?[{1}] {2} : {3}";
@@ -719,21 +724,25 @@ namespace Hellgate
                                 }
                                 else
                                 {
-                                    int asdf = 0;
-                                    ternaryTrueFormat = "sdf";
+                                    const String trueFalseRel = "if ({0})\n{{\n{2}}}\nelse\n{{\n{3}}}";
+                                    const String trueFalseDebug = "if ({0})[{1}]\n{{\n{2}}}\nelse\n{{\n{3}}}";
+                                    ternaryTrueFormat = debugFormatConditionalByteCounts ? trueFalseDebug : trueFalseRel;
+
+                                    String[] code = trueObj.Value.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                                    String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
+                                    trueObj.Value = codeStr;
+
+                                    code = falseObj.Value.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                                    codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
+                                    falseObj.Value = codeStr;
                                 }
 
-                                StackObject falseObj = _stack.Pop();
-                                StackObject trueObj = _stack.Pop();
-                                StackObject ifObj = _stack.Pop();
                                 conditionsScript = String.Format(ternaryTrueFormat, ifObj.Value, byteOffset, trueObj.Value, falseObj.Value);
                             }
 
 
                             _stack.Push(new StackObject { Value = conditionsScript, IsIf = true });
-
-                            if (debugOutputBytesRead) Console.WriteLine("Read from {0} to {1} = {2} bytes.", offset, offset + decompiledConditionObject.ByteOffset, decompiledConditionObject.ByteOffset);
-                            offset += (int)decompiledConditionObject.ByteOffset;
+                            offset += (int)stackObject1.ByteOffset;
                             break;
 
                         case ScriptOpCodes.Push:                     // 26   0x1A
@@ -743,47 +752,12 @@ namespace Hellgate
 
                         case ScriptOpCodes.PushLocalVarInt32:        // 50   0x32
                             byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-
-                            argName = null;
-                            if (_excelFunction != null)
-                            {
-                                argName = (from arg in _excelFunction.Args
-                                           where arg.ByteOffset == byteOffset
-                                           select arg.Name).FirstOrDefault();
-                            }
-
-                            if (argName == null)
-                            {
-                                index = byteOffset / 4;
-                                StackObject localVar = _vars[index];
-                                Debug.Assert(localVar != null);
-
-                                argName = "var" + byteOffset;
-                            }
-
-                            Debug.Assert(argName != null);
-
-                            _stack.Push(new StackObject { Value = argName });
+                            _PushLocalVar(byteOffset, ArgType.Int32);
                             break;
 
                         case ScriptOpCodes.PushLocalVarPtr:          // 57   0x39
-                            Debug.Assert(_excelScriptFunction != null && _excelFunction != null);
-
                             byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            argName = (from arg in _excelFunction.Args
-                                       where arg.ByteOffset == byteOffset
-                                       select arg.Name).FirstOrDefault();
-
-                            if (argName == null)
-                            {
-                                index = byteOffset / 4;
-                                StackObject localVar = _vars[index];
-                                Debug.Assert(localVar != null);
-
-                                argName = "var" + byteOffset;
-                            }
-
-                            _stack.Push(new StackObject { Value = argName, Type = ArgType.Ptr });
+                            _PushLocalVar(byteOffset, ArgType.Ptr);
                             break;
 
                         case ScriptOpCodes.AssignLocalVarInt32:      // 98   0x62
@@ -886,38 +860,73 @@ namespace Hellgate
                             _CheckStack(1, opCode);
 
                             byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            //Debug.Assert(byteOffset%4 == 0);
-                            //unknown = FileTools.ByteArrayToUInt32(scriptBytes, startOffset + (int)byteOffset);
-                            //Debug.Assert(unknown == 538);
+                            Debug.Assert(byteOffset % 4 == 0 && FileTools.ByteArrayToUInt32(scriptBytes, startOffset + (int)byteOffset - 4) == (uint)ScriptOpCodes.EndIf);
 
-                            const String andFormatRelease = "{0} && ";
-                            const String andFormatDebug = "{0} &&[{1}] ";
-                            String andFormat = debugFormatConditionalByteCounts ? andFormatDebug : andFormatRelease;
+                            stackObject1 = _stack.Pop();
+                            stackObject1.OpCode = opCode;
+                            _stack.Push(stackObject1);
 
-                            _stack.Push(new StackObject { Value = String.Format(andFormat, _stack.Pop().Value, byteOffset) });
+                            subMaxBytes = (int)byteOffset - (offset - startOffset);
+                            stackObject1 = _Decompile(scriptBytes, offset, startOffset, subMaxBytes, scriptString, stringId, row, col, colName);
+
+
+                            const String andFormatRelease = "{0}";
+                            const String andFormatDebug = "{0}[{1}]";
+                            String andOutputFormat = debugFormatConditionalByteCounts ? andFormatDebug : andFormatRelease;
+
+                            _stack.Push(new StackObject { Value = String.Format(andOutputFormat, _stack.Pop().Value, byteOffset), OpCode = opCode });
+                            offset += (int)stackObject1.ByteOffset;
+                            debugOutputFuncWithOpCode = true;
                             break;
 
                         case ScriptOpCodes.Or:                       // 527  0x20F
                             _CheckStack(1, opCode);
 
                             byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref offset);
-                            //Debug.Assert(byteOffset%4 == 0);
-                            //unknown = FileTools.ByteArrayToUInt32(scriptBytes, startOffset + (int)byteOffset);
-                            //Debug.Assert(unknown == 538);
+                            Debug.Assert(byteOffset % 4 == 0 && FileTools.ByteArrayToUInt32(scriptBytes, startOffset + (int)byteOffset - 4) == (uint)ScriptOpCodes.EndIf);
 
-                            const String orFormatRelease = "{0} || ";
-                            const String orFormatDebug = "{0} ||[{1}] ";
-                            String orFormat = debugFormatConditionalByteCounts ? orFormatDebug : orFormatRelease;
+                            stackObject1 = _stack.Pop();
+                            stackObject1.OpCode = opCode;
+                            _stack.Push(stackObject1);
 
-                            _stack.Push(new StackObject { Value = String.Format(orFormat, _stack.Pop().Value, byteOffset) });
+                            subMaxBytes = (int)byteOffset - (offset - startOffset);
+                            stackObject1 = _Decompile(scriptBytes, offset, startOffset, subMaxBytes, scriptString, stringId, row, col, colName);
+
+                            const String orFormatRelease = "{0}";
+                            const String orFormatDebug = "{0}[{1}]";
+                            String orOuputFormat = debugFormatConditionalByteCounts ? orFormatDebug : orFormatRelease;
+
+                            _stack.Push(new StackObject { Value = String.Format(orOuputFormat, _stack.Pop().Value, byteOffset), OpCode = opCode });
+                            offset += (int)stackObject1.ByteOffset;
+                            debugOutputFuncWithOpCode = true;
                             break;
 
                         case ScriptOpCodes.EndIf:                    // 538  0x21A
                             _CheckStack(2, opCode);
 
-                            value2 = _stack.Pop().Value;
-                            value1 = _stack.Pop().Value;
-                            _stack.Push(new StackObject { Value = String.Format("({0} {1})", value1, value2) });
+                            stackObject2 = _stack.Pop();
+                            stackObject1 = _stack.Pop();
+
+                            const String orFormat = "{0} || {1}";
+                            const String andFormat = "{0} && {1}";
+                            const String orAndFormat = "{0} || ({1})";
+                            const String andOrFormat = "{0} && ({1})";
+
+                            String endIfFormat;
+                            if (stackObject1.OpCode == ScriptOpCodes.Or && stackObject2.OpCode == ScriptOpCodes.And)
+                            {
+                                endIfFormat = orAndFormat;
+                            }
+                            else if (stackObject1.OpCode == ScriptOpCodes.And && stackObject2.OpCode == ScriptOpCodes.Or)
+                            {
+                                endIfFormat = andOrFormat;
+                            }
+                            else
+                            {
+                                endIfFormat = stackObject1.OpCode == ScriptOpCodes.Or ? orFormat : andFormat;
+                            }
+
+                            _stack.Push(new StackObject { Value = String.Format(endIfFormat, stackObject1.Value, stackObject2.Value), OpCode = stackObject1.OpCode });
                             break;
 
                         case ScriptOpCodes.GetStat666:               // 666  0x29A
@@ -1074,18 +1083,18 @@ namespace Hellgate
             {
                 if (((debugOutputParsed && debugScriptParsed) || (debugOutputFuncWithOpCode && debugScriptParsed)) && startStackCount == 0)
                 {
-                    String[] code = _script.Split(new[] { "; ", ";" }, StringSplitOptions.RemoveEmptyEntries);
-                    String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
+                    //String[] code = _script.Split(new[] { "; ", ";" }, StringSplitOptions.RemoveEmptyEntries);
+                    //String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
 
                     String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", DebugRoot, stringId);
-                    String debugOutput = String.Format("{0}\n{1}\n\n", debugPos, codeStr);
+                    String debugOutput = String.Format("{0}\n{1}\n\n", debugPos, _script);
                     File.AppendAllText(debugOutputPath, debugOutput);
                 }
             }
 
             bytesRead += (uint)(offset - scriptStartOffset);
             if (debugOutputBytesRead) Console.WriteLine("Read from {0} to {1} = {2} bytes.", scriptStartOffset, offset, scriptStartOffset - offset);
-            return _Return(startStackCount, bytesRead, falseStatements, debugShowParsed);
+            return _Return(startStackCount, bytesRead, processStackOnReturn, debugShowParsed);
         }
     }
 }

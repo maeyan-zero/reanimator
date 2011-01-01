@@ -448,9 +448,11 @@ namespace Hellgate
             public bool IsVarAssign;            // for local vars
             public uint ByteOffset;             // for local vars
             public ArgType Type;
+            public int StatementCount = -1;
             public int TrueStatements = -1;
             public int FalseStatements = -1;
             public bool IsPrecedenceFunc;
+            public ScriptOpCodes OpCode;
 
             public override string ToString()
             {
@@ -549,7 +551,7 @@ namespace Hellgate
                 index++;
             }
             if (index == script.Length) throw new Exceptions.ScriptFormatException("_GetNumberStr() failed, expected ';' terminator.", --index);
-            
+
             if (script[index] >= 'A' && script[index] <= 'Z' ||
                 script[index] >= 'a' && script[index] <= 'z' ||
                 script[index] == '_') return null;
@@ -600,60 +602,129 @@ namespace Hellgate
 
         #region Decomiler Helper Functions
 
-        private StackObject _Return(int startStackCount, uint bytesRead, int falseStatements, bool debugShowParsed)
+        private void _PushLocalVar(uint byteOffset, ArgType argType)
+        {
+            String argName = null;
+            if (_excelFunction != null)
+            {
+                argName = (from arg in _excelFunction.Args
+                           where arg.ByteOffset == byteOffset
+                           select arg.Name).FirstOrDefault();
+            }
+
+            if (argName == null)
+            {
+                uint index = byteOffset / 4;
+                StackObject localVar = _vars[index];
+                Debug.Assert(localVar != null);
+
+                argName = "var" + index;
+            }
+            Debug.Assert(argName != null);
+
+
+            _stack.Push(new StackObject { Value = argName, Type = argType });
+
+        }
+
+        private StackObject _Return(int startStackCount, uint bytesRead, bool processStackOnReturn, bool debugShowParsed)
         {
             _CheckStack(1, ScriptOpCodes.Return);
 
             String script = String.Empty;
-            StackObject stackObject;
-            int trueStatements = _stack.Count - startStackCount;
+            StackObject stackObject = _stack.Peek();
+            int statementCount = _stack.Count - startStackCount; // will be > 0 for if, else, ||, &&
+            int stackCount = _stack.Count;
 
-            while (_stack.Count > 1 && _stack.Count - 1 > startStackCount && falseStatements == -1)
+            for (int i = stackCount; processStackOnReturn && i > startStackCount; i--)
             {
                 stackObject = _stack.Pop();
 
-                if (!stackObject.IsFunction && !stackObject.IsVarAssign && !stackObject.IsIf)
+                if (statementCount != 1 || startStackCount <= 0) // if (statementCount == 1 && startStackCount > 0), then we don't want to check this - we're in an if/else block
                 {
-                    _stack.Push(stackObject); // re-add for stack dump
-                    String error = String.Format("Error: Stack has more than 1 value upon script return: script = \"{0}\"\n{1}", _script, _DumpStack(_stack));
-                    throw new Exceptions.ScriptInvalidStackStateException(error);
+                    if (!stackObject.IsFunction && !stackObject.IsVarAssign && !stackObject.IsIf && _stack.Count != 0)
+                    {
+                        _stack.Push(stackObject); // re-add for stack dump
+                        String error = String.Format("Error: Stack has more than 1 value upon script return: script = \"{0}\"\n{1}", _script, _DumpStack(_stack));
+                        throw new Exceptions.ScriptInvalidStackStateException(error);
+                    }
                 }
+
+                String semiColon = ";";
+                if (statementCount == 1 && startStackCount > 0) semiColon = String.Empty; // if true, we're in an if/else/||/&& block, and only 1 statement, so no ;
+
+                String newLine = (i == stackCount) ? String.Empty : "\n"; // if last object, then don't add new line
 
                 if (stackObject.IsIf)
                 {
-                    script = " " + stackObject.Value + script;
+                    script = stackObject.Value + newLine + script;
                 }
                 else
                 {
-                    script = " " + stackObject.Value + ";" + script;
+                    script = stackObject.Value + semiColon + newLine + script;
                 }
             }
 
-            if (falseStatements == -1)
+            if (startStackCount == 0)
             {
-                stackObject = _stack.Pop();
-                if (stackObject.IsIf || (trueStatements == 1 && startStackCount > 0))
-                {
-                    script = stackObject.Value + script;
-                }
-                else
-                {
-                    script = stackObject.Value + ";" + script;
-                }
-
-                if (debugShowParsed) Debug.WriteLine(script);
-                if (startStackCount == 0) _script += script;
+                _script += script;
+                if (debugShowParsed) Debug.WriteLine(_script);
             }
 
+            //while (processStackOnReturn && _stack.Count > 1 && _stack.Count - 1 > startStackCount)
+            ////while (_stack.Count > 1 && _stack.Count - 1 > startStackCount)
+            //{
+            //    stackObject = _stack.Pop();
 
-            if (falseStatements > 0) trueStatements -= falseStatements;
+            //    if (!stackObject.IsFunction && !stackObject.IsVarAssign && !stackObject.IsIf)
+            //    {
+            //        _stack.Push(stackObject); // re-add for stack dump
+            //        String error = String.Format("Error: Stack has more than 1 value upon script return: script = \"{0}\"\n{1}", _script, _DumpStack(_stack));
+            //        throw new Exceptions.ScriptInvalidStackStateException(error);
+            //    }
+
+            //    if (stackObject.IsIf)
+            //    {
+            //        script = stackObject.Value + script;
+            //    }
+            //    else
+            //    {
+            //        script = stackObject.Value + ";\n" + script;
+            //    }
+            //}
+
+            //if (processStackOnReturn)
+            //{
+            //    stackObject = _stack.Pop();
+            //    if (stackObject.IsIf ||                                 // if IsIf, we don't want a ;
+            //        (statementCount == 1 && startStackCount > 0))       // if true, we're in an if/else/||/&& block, and only 1 statement, so no ;
+            //    {
+            //        script = stackObject.Value + script;
+            //    }
+            //    else
+            //    {
+            //        script = stackObject.Value + ";\n" + script;
+            //    }
+
+            //    if (debugShowParsed) Debug.WriteLine(script);
+            //    if (startStackCount == 0) _script += script;
+            //}
+
             StackObject returnStackObject = new StackObject
             {
                 Value = script,
                 ByteOffset = bytesRead,
-                TrueStatements = trueStatements,
-                FalseStatements = falseStatements
+                StatementCount = statementCount,
+                TrueStatements = stackObject.TrueStatements,
+                FalseStatements = stackObject.FalseStatements
             };
+
+            // if we have a statementCount, but no true statement count, we had an if-block with no else-block
+            if (returnStackObject.TrueStatements == -1 && statementCount > 0)
+            {
+                returnStackObject.TrueStatements = statementCount;
+            }
+
             return returnStackObject;
         }
 
@@ -747,7 +818,7 @@ namespace Hellgate
             {
                 opFormat = operatorFormatRParentheses;
             }
-            
+
 
             if (value1Object.Precedence == value2Object.Precedence && value1Object.IsPrecedenceFunc && value2Object.IsPrecedenceFunc)
             {
@@ -908,6 +979,7 @@ namespace Hellgate
         /// <returns>The number of functions added.</returns>
         private static int _ParseExcelFunctions(ExcelFile excelFile)
         {
+            bool debugOutputLikeFunction = false;
             int startFuncCount = CallFunctions.Count;
             int voidFunctions = 0;
 
@@ -951,7 +1023,7 @@ namespace Hellgate
                 }
 
                 String byteCodeString = null;
-                if (_debug)
+                if (_debug && debugOutputLikeFunction)
                 {
                     int offset = 0;
                     byteCodeString = FileTools.ByteArrayToInt32Array(excelFunction.ScriptByteCode, ref offset, excelFunction.ScriptByteCode.Length / 4).ToString(",");
@@ -969,7 +1041,7 @@ namespace Hellgate
                     continue;
                 }
 
-                if (_debug)
+                if (_debug && debugOutputLikeFunction)
                 {
                     String[] code = function.ExcelScript.Split(new[] { "; ", ";" }, StringSplitOptions.RemoveEmptyEntries);
                     String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));

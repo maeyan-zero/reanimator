@@ -209,7 +209,7 @@ namespace Reanimator.Forms
             //            relationTextBox = null;
             //        }
             //    }
-                
+
             //    column++;
             //}
 
@@ -303,8 +303,8 @@ namespace Reanimator.Forms
             NumericUpDown nud = sender as NumericUpDown;
             if (nud == null) return;
 
-           // DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
-           // dr[nud.Name] = (cb.CheckState == CheckState.Checked ? 1 : 0);
+            // DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
+            // dr[nud.Name] = (cb.CheckState == CheckState.Checked ? 1 : 0);
         }
 
         void cb_ItemCheck(object sender, EventArgs e)
@@ -326,14 +326,14 @@ namespace Reanimator.Forms
             if (clb == null) return;
 
             DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
-            uint value = (uint) dr[clb.Name];
-            value ^= (uint) (1 << (e.Index));
+            uint value = (uint)dr[clb.Name];
+            value ^= (uint)(1 << (e.Index));
             dr[clb.Name] = value;
         }
 
         static void UpdateCheckedListBox(CheckedListBox clb, DataRow dr, DataColumn dc)
         {
-            uint value = (uint) dr[dc];
+            uint value = (uint)dr[dc];
             for (int i = 0; i < clb.Items.Count; i++)
             {
                 clb.SetItemChecked(i, ((1 << i) & value) > 0 ? true : false);
@@ -552,6 +552,26 @@ namespace Reanimator.Forms
             if (e.KeyCode != Keys.C || !e.Control) return;
 
             Clipboard.SetDataObject(_tableData_DataGridView.GetClipboardContent());
+        }
+
+        private void _TableData_DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // ensure valid double click
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+
+            // ensure valid script column
+            DataGridViewColumn dataGridViewColumn = _tableData_DataGridView.Columns[e.ColumnIndex];
+            DataColumn dataColumn = _dataTable.Columns[dataGridViewColumn.Name];
+            if (!(bool)dataColumn.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsScript]) return;
+
+            // todo: ensure each cell only has at most one editor for itself
+            
+            // create editor
+            DataGridViewCell dataGridViewCell = _tableData_DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            if (dataGridViewCell == null) return; // shouldn't happen, but just in case
+
+            ScriptEditor scriptEditor = new ScriptEditor(dataGridViewCell) { MdiParent = MdiParent };
+            scriptEditor.Show();
         }
     }
 
