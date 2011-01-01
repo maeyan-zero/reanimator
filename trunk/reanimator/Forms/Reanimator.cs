@@ -1282,6 +1282,7 @@ namespace Reanimator.Forms
             progressForm.SetCurrentItemText("Loading Table View...");
             _tablesLoaded = new TablesLoaded(_fileManager);
 
+
             if (!Config.LoadTCv4DataFiles) return;
 
             progressForm.SetCurrentItemText("Loading TCv4 File Manager...");

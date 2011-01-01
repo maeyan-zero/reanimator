@@ -28,50 +28,53 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this._save_button = new System.Windows.Forms.Button();
-            this._testCompile_button = new System.Windows.Forms.Button();
-            this._scriptEditor_richTextBox = new System.Windows.Forms.RichTextBox();
+            this._save_Button = new System.Windows.Forms.Button();
+            this._testCompile_Button = new System.Windows.Forms.Button();
+            this._scriptEditor_RichTextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
-            // _save_button
+            // _save_Button
             // 
-            this._save_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this._save_button.Location = new System.Drawing.Point(267, 200);
-            this._save_button.Name = "_save_button";
-            this._save_button.Size = new System.Drawing.Size(75, 23);
-            this._save_button.TabIndex = 0;
-            this._save_button.Text = "Save";
-            this._save_button.UseVisualStyleBackColor = true;
+            this._save_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this._save_Button.Location = new System.Drawing.Point(372, 200);
+            this._save_Button.Name = "_save_Button";
+            this._save_Button.Size = new System.Drawing.Size(75, 23);
+            this._save_Button.TabIndex = 0;
+            this._save_Button.Text = "Save";
+            this._save_Button.UseVisualStyleBackColor = true;
+            this._save_Button.Click += new System.EventHandler(this._Save_Button_Click);
             // 
-            // _testCompile_button
+            // _testCompile_Button
             // 
-            this._testCompile_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this._testCompile_button.Location = new System.Drawing.Point(174, 200);
-            this._testCompile_button.Name = "_testCompile_button";
-            this._testCompile_button.Size = new System.Drawing.Size(87, 23);
-            this._testCompile_button.TabIndex = 2;
-            this._testCompile_button.Text = "Test Compile";
-            this._testCompile_button.UseVisualStyleBackColor = true;
+            this._testCompile_Button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this._testCompile_Button.Location = new System.Drawing.Point(279, 200);
+            this._testCompile_Button.Name = "_testCompile_Button";
+            this._testCompile_Button.Size = new System.Drawing.Size(87, 23);
+            this._testCompile_Button.TabIndex = 2;
+            this._testCompile_Button.Text = "Test Compile";
+            this._testCompile_Button.UseVisualStyleBackColor = true;
+            this._testCompile_Button.Click += new System.EventHandler(this._TestCompile_Button_Click);
             // 
-            // _scriptEditor_richTextBox
+            // _scriptEditor_RichTextBox
             // 
-            this._scriptEditor_richTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this._scriptEditor_RichTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this._scriptEditor_richTextBox.Location = new System.Drawing.Point(13, 13);
-            this._scriptEditor_richTextBox.Name = "_scriptEditor_richTextBox";
-            this._scriptEditor_richTextBox.Size = new System.Drawing.Size(329, 181);
-            this._scriptEditor_richTextBox.TabIndex = 3;
-            this._scriptEditor_richTextBox.Text = "";
+            this._scriptEditor_RichTextBox.Location = new System.Drawing.Point(13, 13);
+            this._scriptEditor_RichTextBox.Name = "_scriptEditor_RichTextBox";
+            this._scriptEditor_RichTextBox.Size = new System.Drawing.Size(434, 181);
+            this._scriptEditor_RichTextBox.TabIndex = 3;
+            this._scriptEditor_RichTextBox.Text = "";
+            this._scriptEditor_RichTextBox.TextChanged += new System.EventHandler(this._ScriptEditor_RichTextBox_TextChanged);
             // 
             // ScriptEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(354, 231);
-            this.Controls.Add(this._scriptEditor_richTextBox);
-            this.Controls.Add(this._testCompile_button);
-            this.Controls.Add(this._save_button);
+            this.ClientSize = new System.Drawing.Size(459, 231);
+            this.Controls.Add(this._scriptEditor_RichTextBox);
+            this.Controls.Add(this._testCompile_Button);
+            this.Controls.Add(this._save_Button);
             this.Name = "ScriptEditor";
             this.Text = "ScriptEditor";
             this.ResumeLayout(false);
@@ -80,8 +83,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button _save_button;
-        private System.Windows.Forms.Button _testCompile_button;
-        private System.Windows.Forms.RichTextBox _scriptEditor_richTextBox;
+        private System.Windows.Forms.Button _save_Button;
+        private System.Windows.Forms.Button _testCompile_Button;
+        private System.Windows.Forms.RichTextBox _scriptEditor_RichTextBox;
     }
 }
