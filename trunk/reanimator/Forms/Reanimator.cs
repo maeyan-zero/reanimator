@@ -1274,13 +1274,13 @@ namespace Reanimator.Forms
                 MessageBox.Show("Failed to load excel and strings files!", "Data Table Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
+            ExcelScript.SetFileManager(_fileManager);
 
             progressForm.SetCurrentItemText("Loading File Explorer...");
             _fileExplorer = new FileExplorer(_fileManager);
 
             progressForm.SetCurrentItemText("Loading Table View...");
             _tablesLoaded = new TablesLoaded(_fileManager);
-
 
             if (!Config.LoadTCv4DataFiles) return;
 
