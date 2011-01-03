@@ -297,7 +297,7 @@ namespace Hellgate
             {"_TCv4_INTERACT", new DataFileAttributes {IsTCv4 = true, RowType = typeof(Interact)}},
             {"_TCv4_INTERACT_MENU", new DataFileAttributes {IsTCv4 = true, RowType = typeof(InteractMenu)}},
             {"_TCv4_INVENTORY_TYPES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(InventoryTypes)}},
-            {"_TCv4_INVLOC", new DataFileAttributes {IsTCv4 = true, RowType = typeof(InvLoc)}},
+            {"_TCv4_INVLOCIDX", new DataFileAttributes {FileName = "INVLOC", IsTCv4 = true, RowType = typeof(InvLoc)}},
             {"_TCv4_ITEM_LEVELS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemLevels)}},
             {"_TCv4_ITEM_LOOK_GROUPS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ItemLookGroups)}},
             {"_TCv4_LEVEL_DRLG_CHOICE", new DataFileAttributes {IsTCv4 = true, FileName = "LEVELS_DRLG_CHOICE", RowType = typeof(LevelsDrlgChoice)}},
