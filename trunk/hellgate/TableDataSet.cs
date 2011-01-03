@@ -185,7 +185,7 @@ namespace Hellgate
                             continue;
                         }
 
-                        ExcelScript excelScript = new ExcelScript();
+                        ExcelScript excelScript = new ExcelScript(this);
                         String script;
 
                         try

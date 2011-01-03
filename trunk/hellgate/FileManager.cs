@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -26,6 +25,7 @@ namespace Hellgate
         public DataSet XlsDataSet { get; private set; }
         private List<uint> _excelIndexToCodeList;
         private Dictionary<uint, ExcelFile> _excelCodeToTable;
+        private readonly String _excelTableStringId;
 
         /// <summary>
         /// Initialize the File Manager by the given Hellgate path.
@@ -36,6 +36,7 @@ namespace Hellgate
         {
             HellgatePath = hellgatePath;
             MPVersion = mpVersion;
+            _excelTableStringId = MPVersion ? "_TCv4_EXCELTABLES" : "EXCELTABLES";
             Language = "english"; // do we need to bother with anything other than english?
             Reload();
         }
@@ -419,17 +420,18 @@ namespace Hellgate
         /// <returns>The Excel Table as a DataTable, or null if not found.</returns>
         public ExcelFile GetExcelTableFromCode(uint code)
         {
-            if (DataFiles == null || DataFiles.ContainsKey("EXCELTABLES") == false) return null;
+            if (DataFiles == null || DataFiles.ContainsKey(_excelTableStringId) == false) return null;
 
             if (_excelCodeToTable == null)
             {
-                ExcelFile excelTables = (ExcelFile)DataFiles["EXCELTABLES"];
+                ExcelFile excelTables = (ExcelFile)DataFiles[_excelTableStringId];
                 _excelCodeToTable = new Dictionary<uint, ExcelFile>();
 
                 foreach (Excel.ExcelTables excelTablesRow in excelTables.Rows)
                 {
+                    String excelName = (MPVersion) ? "_TCv4_" + excelTablesRow.name : excelTablesRow.name;
                     DataFile dataFile;
-                    if (DataFiles.TryGetValue(excelTablesRow.name, out dataFile))
+                    if (DataFiles.TryGetValue(excelName, out dataFile))
                     {
                         _excelCodeToTable[(uint)excelTablesRow.code] = (ExcelFile)dataFile;
                     }
@@ -457,7 +459,7 @@ namespace Hellgate
             if (_excelIndexToCodeList == null)
             {
                 DataFile excelTables;
-                if (!DataFiles.TryGetValue("EXCELTABLES", out excelTables)) return 0;
+                if (!DataFiles.TryGetValue(_excelTableStringId, out excelTables)) return 0;
 
                 _excelIndexToCodeList = new List<uint>();
                 foreach (Excel.ExcelTables excelTable in excelTables.Rows)
@@ -472,7 +474,7 @@ namespace Hellgate
 
         public int GetExcelRowIndex(uint code, String value)
         {
-            if (DataFiles == null || DataFiles["EXCELTABLES"] == null) return -1;
+            if (DataFiles == null || DataFiles[_excelTableStringId] == null) return -1;
 
             ExcelFile excelTable = GetExcelTableFromCode(code);
             if (excelTable == null) return -1;
@@ -516,27 +518,12 @@ namespace Hellgate
 
         public String GetExcelRowStringFromRowIndex(uint code, int rowIndex, int colIndex=0)
         {
-            if (DataFiles == null || DataFiles.ContainsKey("EXCELTABLES") == false || rowIndex < 0) return null;
+            if (DataFiles == null || DataFiles.ContainsKey(_excelTableStringId) == false || rowIndex < 0) return null;
 
             ExcelFile excelTable = GetExcelTableFromCode(code);
 
             String stringVal = _GetExcelRowStringFromExcelFile(excelTable, rowIndex, colIndex);
             return stringVal;
-            //if (excelTable == null || rowIndex >= excelTable.Rows.Count) return null;
-
-
-            //Type type = excelTable.Rows[0].GetType();
-            //FieldInfo[] fields = type.GetFields();
-            //FieldInfo field = fields[0];
-
-            //bool isStringField = (field.FieldType == typeof(String));
-            //Object row = excelTable.Rows[rowIndex];
-
-            //if (isStringField) return (String)field.GetValue(row);
-
-            //int offset = (int)field.GetValue(row);
-            //String stringVal = excelTable.ReadStringTable(offset);
-            //return stringVal;
         }
 
         private static String _GetExcelRowStringFromExcelFile(ExcelFile excelTable, int rowIndex, int colIndex)

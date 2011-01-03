@@ -10,8 +10,10 @@ namespace Hellgate
     public partial class ExcelScript
     {
         private const String DebugRoot = @"C:\excel_script_debug\";
+        private const String DebugRootTCv4 = @"C:\excel_script_debug_tcv4\";
         private const String DebugFormat = "Debug: Row({0}), Col({1}) = '{2}', StringId = '{3}', ScriptByteString = '{4}'";
         private static bool _debug;
+        private String _debugRoot;
         private bool _debugFormatConditionalByteCounts;
         private String _debugOutput;
         private String _debugScriptByteString;
@@ -20,27 +22,77 @@ namespace Hellgate
         private int _debugRow;
         private int _debugCol;
 
-        private static FileManager _fileManager;
+        private List<Function> _callFunctions;
+        private readonly FileManager _fileManager;
+        private static FileManager _staticFileManager;
         private static bool _havePropertiesFunctions;
         private static bool _haveSkillsFunctions;
 
-        private static ExcelFile _statsTable;
-        private static ObjectDelegator _statsDelegator;
+        // yea, this static stuff is a bit gross, but otherwise we're going to be regenerating and retrieving a lot of the same data over and over again
+        // todo: a possible fix would be to update/implement the file manager with the functions we need (e.g. storing the object delegators, which makes sense anyways)
+        private ExcelFile _statsTable;
+        private ObjectDelegator _statsDelegator;
+        private static ExcelFile _statsFile;
+        private static ExcelFile _statsFileTCv4;
+        private static ObjectDelegator _statsFileDelegator;
+        private static ObjectDelegator _statsFileDelegatorTCv4;
 
         private String _script;
+        public Int32[] ScriptCode { get; private set; }
         private int _offset;
         private int _level;
         private int _startOffset;
-        private readonly Stack<StackObject> _stack;
-        private readonly List<StackObject> _vars;
+        private Stack<StackObject> _stack;
+        private List<StackObject> _vars;
         private ExcelFile.ExcelFunction _excelScriptFunction;
         private Function _excelFunction;
+        private readonly bool _forceTCv4ExcelUsage;
+        private readonly bool _forceStandardCallFunctionList;
+
+        // yea, these are a bit dodgy, but meh, only want it for MP -> SP converions
+        public static void SetStaticFileManager(FileManager fileManager)
+        {
+            _staticFileManager = fileManager;
+        }
 
         public ExcelScript()
         {
+            if (_staticFileManager == null) throw new Exceptions.ScriptNotInitialisedException("No static file manager has been set!\nFor per-instance use, use other constructor.");
+            _fileManager = _staticFileManager;
+
+            _Init();
+        }
+
+        public ExcelScript(FileManager fileManager)
+        {
+            if (fileManager == null) throw new ArgumentNullException("fileManager", "File Manager cannot be null.");
+            _fileManager = fileManager;
+
+            _Init();
+        }
+
+
+        public ExcelScript(FileManager fileManager, bool forceTCv4ExcelUsage, bool forceStandardCallFunctionList)
+        {
+            if (fileManager == null) throw new ArgumentNullException("fileManager", "File Manager cannot be null.");
+
+            _fileManager = fileManager;
+            _forceTCv4ExcelUsage = forceTCv4ExcelUsage;
+            _forceStandardCallFunctionList = forceStandardCallFunctionList;
+
+            _Init();
+        }
+
+        private void _Init()
+        {
+            _callFunctions = (_fileManager.MPVersion && !_forceStandardCallFunctionList) ? CallFunctionsTCv4 : CallFunctions;
+            _statsTable = (_fileManager.MPVersion || _forceTCv4ExcelUsage) ? _statsFileTCv4 : _statsFile;
+            _statsDelegator = (_fileManager.MPVersion || _forceTCv4ExcelUsage) ? _statsFileDelegatorTCv4 : _statsFileDelegator;
             _script = String.Empty;
             _stack = new Stack<StackObject>();
             _vars = new List<StackObject>();
+
+            if (_debug) _debugRoot = (_fileManager.MPVersion || _forceTCv4ExcelUsage) ? DebugRootTCv4 : DebugRoot;
         }
 
         /// <summary>
@@ -71,7 +123,7 @@ namespace Hellgate
                 _debugOutput = String.Format(DebugFormat, _debugRow, _debugCol, _debugColName, _debugStringId, _debugScriptByteString);
             }
 
-            return _Compile('\0', null);
+            return ScriptCode = _Compile('\0', null);
         }
 
         private Int32[] _Compile(char terminator, Argument argument, bool withinCondition = false, int byteOffset = 0, bool overloadedFunction = false)
@@ -511,19 +563,56 @@ namespace Hellgate
                                                 select func).First();
                                 }
 
+                                // if we are using standard call functions with tcv4 excel usage, we need to check the function arguments count
+                                int ignoreArgs = 0;
+                                Function functionTCv4 = null;
+                                if (_forceStandardCallFunctionList && _forceTCv4ExcelUsage)
+                                {
+                                    functionTCv4 = (from func in CallFunctionsTCv4
+                                                    where function.ArgCount <= func.ArgCount && function.Name == func.Name
+                                                    select func).FirstOrDefault();
+                                    Debug.Assert(functionTCv4 != null); // hopefully there are none with removed args, only added...
+
+                                    if (function.ArgCount < functionTCv4.ArgCount) ignoreArgs = functionTCv4.ArgCount - function.ArgCount;
+                                }
+
                                 int maxArgCount = function.ArgCount;
                                 if (maxArgCount == 0) _offset++; // opening parenthesis
 
                                 int argsFound = 0;
-                                for (int argIndex = 0; argIndex < maxArgCount; argIndex++, argsFound++)
+                                for (int argIndex = 0; argIndex < maxArgCount + ignoreArgs; argIndex++, argsFound++)
                                 {
                                     _offset++; // opening parenthesis and commas
 
-                                    char argTerminator = ',';
-                                    if (argIndex == maxArgCount - 1) argTerminator = ')';
 
-                                    Int32[] argByteCode = _Compile(argTerminator, function.Args[argIndex], false, 0, isOverloaded);
-                                    scriptByteCode.AddRange(argByteCode);
+                                    // if TCv4 function has more args than standard, then use TCv4 arg when past standard count (script bytes wont be added anyways)
+                                    Argument functionArg = null;
+                                    if (argIndex < function.ArgCount)
+                                    {
+                                        functionArg = function.Args[argIndex];
+                                    }
+                                    else if (functionTCv4 != null)
+                                    {
+                                        functionArg = functionTCv4.Args[argIndex];
+                                    }
+                                    Debug.Assert(functionArg != null);
+
+                                    // if we have an argument with an excel index, we need to get the TCv4 excel index instead
+                                    if (functionTCv4 != null && functionArg.TableIndex != -1)
+                                    {
+                                        functionArg = (from arg in functionTCv4.Args
+                                                       where arg.Name == functionArg.Name
+                                                       select arg).FirstOrDefault();
+                                        Debug.Assert(functionArg.TableIndex != -1);
+                                    }
+
+                                    // determine applicable argument terminator
+                                    char argTerminator = ',';
+                                    if (argIndex == maxArgCount + ignoreArgs - 1) argTerminator = ')';
+
+                                    // get argument byte code
+                                    Int32[] argByteCode = _Compile(argTerminator, functionArg, false, 0, isOverloaded);
+                                    if (argIndex < maxArgCount) scriptByteCode.AddRange(argByteCode);
 
 
                                     if (!isOverloaded) continue;
@@ -542,7 +631,7 @@ namespace Hellgate
                                     }
                                 }
 
-                                int functionIndex = CallFunctions.IndexOf(function);
+                                int functionIndex = _callFunctions.IndexOf(function);
                                 if (functionIndex > 251) // properties etc functions
                                 {
                                     scriptByteCode.AddRange(new[] { (Int32)ScriptOpCodes.CallPropery, functionIndex, 0 });
@@ -592,9 +681,12 @@ namespace Hellgate
                                 throw new NotImplementedException(String.Format("void type usage not implemented at offset '{0}'", nameStrStart));
                             }
 
+                            // funciton with too many arguments
+                            if (_script[_offset] == ',' && argument != null) throw new Exceptions.ScriptFormatException("Attempted function call with too many arguments encountered.", nameStrStart);
+
                             // is var usage
                             varObj = _GetVar(nameStr);
-                            if (varObj == null) throw new Exceptions.ScriptUnknownVarNameException("nameStr", nameStrStart);
+                            if (varObj == null) throw new Exceptions.ScriptUnknownVarNameException(nameStr, nameStrStart);
 
                             scriptByteCode.AddRange(new[] { (Int32)ScriptOpCodes.PushLocalVarInt32, (Int32)varObj.ByteOffset });
                         }
@@ -833,7 +925,15 @@ namespace Hellgate
                             _stack.Push(new StackObject { Value = value1, ByteOffset = byteOffset });
                             break;
 
-                        case ScriptOpCodes.TernaryTrue:              // 14    0x0E
+                        case ScriptOpCodes.Unknown9:                // 9    0x09
+                            _CheckStack(1, opCode);
+
+                            stackObject1 = _stack.Pop();
+                            stackObject1.Value = String.Format("(Unknown9)({0})", stackObject1.Value);
+                            _stack.Push(stackObject1);
+                            break;
+
+                        case ScriptOpCodes.TernaryTrue:             // 14   0x0E
                             _CheckStack(1, opCode);
 
                             byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref _offset);
@@ -1256,7 +1356,7 @@ namespace Hellgate
             {
                 if (debug)
                 {
-                    String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", DebugRoot, _debugStringId);
+                    String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", _debugRoot, _debugStringId);
                     String debugOutput = String.Format("{0}\n{1}\n\n\n", debugPos, e);
                     File.AppendAllText(debugOutputPath, debugOutput);
                     debugScriptParsed = false;
@@ -1268,7 +1368,7 @@ namespace Hellgate
             {
                 if (((debugOutputParsed && debugScriptParsed) || (debugOutputFuncWithOpCode && debugScriptParsed)) && startStackCount == 0)
                 {
-                    String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", DebugRoot, _debugStringId);
+                    String debugOutputPath = String.Format("{0}{1}_scriptdebug.txt", _debugRoot, _debugStringId);
                     String debugOutput = String.Format("{0}\n{1}\n\n", debugPos, _script);
                     File.AppendAllText(debugOutputPath, debugOutput);
                 }

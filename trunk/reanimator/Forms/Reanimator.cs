@@ -34,10 +34,16 @@ namespace Reanimator.Forms
 
             if (true) return;
 
+            FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.LoadTableFiles();
+            fileManager.ExtractAllExcel();
+
+            return;
+
             //_ExtractFunctionList();
             //_ExcelValuesDeepScan();
-            _DoCookTest();
-            //_ConvertTCv4ExcelToSP();
+            //_DoCookTest();
+            _ConvertTCv4ExcelToSP();
             //_LoadAllMLIFiles();
             //_LoadAllRooms();
             //_LoadAllLevelRules();
@@ -85,9 +91,13 @@ namespace Reanimator.Forms
 
         #region alexs_stuff
 
+        /// <summary>
+        /// Extracts the script call functions list from the client assembly function.
+        /// </summary>
         private static void _ExtractFunctionList()
         {
-            const String path = @"C:\SP_FunctionNamePtrGeneration.txt";
+            //const String path = @"C:\SP_FunctionNamePtrGeneration.txt";
+            const String path = @"C:\MP_FunctionNamePtrGeneration.txt";
             String[] functionCode = File.ReadAllLines(path);
 
             ExcelScript.ExtractFunctionList(functionCode);
@@ -333,7 +343,7 @@ namespace Reanimator.Forms
             fileManager.LoadTableFiles();
             fileManager.ExtractAllExcel();
             ExcelScript.EnableDebug(true);
-            ExcelScript.SetFileManager(fileManager);
+            ExcelScript.GenerateExcelScriptFunctions(fileManager);
 
             foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
             {
@@ -376,8 +386,7 @@ namespace Reanimator.Forms
 
         private static void _ConvertTCv4ExcelToSP()
         {
-            return;
-
+            // init file manager and load excel files
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.ExtractAllExcel();
             FileManager fileManagerTCv4 = new FileManager(Config.HglDir, true);
@@ -396,15 +405,14 @@ namespace Reanimator.Forms
                 return;
             }
 
+            // generate excel script functions
+            ExcelScript.GenerateExcelScriptFunctions(fileManager);
+            ExcelScript.GenerateExcelScriptFunctions(fileManagerTCv4);
+
+            // conver tables
             Dictionary<String, ObjectDelegator> objectDelegators = new Dictionary<String, ObjectDelegator>();
             foreach (ExcelFile excelFile in fileManager.DataFiles.Values.Where(dataFile => dataFile.IsExcelFile))
             {
-                if (excelFile.Attributes.RowType == typeof(Hellgate.Excel.Items) ||
-                    excelFile.Attributes.RowType == typeof(Hellgate.Excel.Properties))
-                {
-                    continue;
-                }
-
                 Console.WriteLine("Converting Excel table " + excelFile.StringId + "...");
 
                 // ensure we have a TCv4 version loaded
@@ -464,21 +472,26 @@ namespace Reanimator.Forms
                 // begin conversion process
                 Object[] rows = new Object[excelFileTCv4.Rows.Count];
                 bool failed = false;
+                int col = -1;
+                byte[] scriptBuffer = new byte[1024];
+                int scriptBufferOffset = 4; // first Int32 = byte count
                 foreach (FieldInfo fieldInfo in fieldInfos)
                 {
+                    col++;
+
                     ObjectDelegator.FieldGetValueDelegate getTCv4Value = excelDelegatorTCv4.GetFieldGetDelegate(fieldInfo.Name);
                     ObjectDelegator.FieldSetValueDelegate setValue = excelDelegator.GetFieldSetDelegate(fieldInfo.Name);
                     ExcelFile.OutputAttribute outputAttribute = ExcelFile.GetExcelOutputAttribute(fieldInfo);
 
-                    int col = -1;
+                    int row = -1;
                     foreach (Object rowTCv4 in excelFileTCv4.Rows)
                     {
-                        if (rows[++col] == null) rows[col] = Activator.CreateInstance(excelFile.Attributes.RowType);
+                        if (rows[++row] == null) rows[row] = Activator.CreateInstance(excelFile.Attributes.RowType);
                         Object value = getTCv4Value(rowTCv4);
 
                         if (outputAttribute == null)
                         {
-                            setValue(rows[col], value);
+                            setValue(rows[row], value);
                             continue;
                         }
 
@@ -514,10 +527,39 @@ namespace Reanimator.Forms
                         }
                         else if (outputAttribute.IsScript)
                         {
-                            int bp = 0;
+                            int scriptOffset = (int) value;
+                            if (scriptOffset != 0)
+                            {
+                                ExcelScript excelScriptTCv4 = new ExcelScript(fileManagerTCv4);
+
+                                try
+                                {
+                                    excelScriptTCv4.Decompile(excelFileTCv4.ScriptBuffer, scriptOffset, null, excelFileTCv4.StringId, row, col, fieldInfo.Name);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("TCv4 Decompile Error:\n" + e);
+                                    continue;
+                                }
+
+                                ExcelScript excelScript = new ExcelScript(fileManagerTCv4, true, true);
+
+                                try
+                                {
+                                    excelScript.Compile(excelScriptTCv4.GetScript, null, excelFileTCv4.StringId, row, col, fieldInfo.Name);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("SP Recompile Error:\n" + e);
+                                    continue;
+                                }
+
+                                value = scriptBufferOffset;
+                                FileTools.WriteToBuffer(ref scriptBuffer, ref scriptBufferOffset, excelScript.ScriptCode.ToByteArray());
+                            }
                         }
 
-                        setValue(rows[col], value);
+                        setValue(rows[row], value);
                     }
 
                     if (failed) break;
@@ -1280,7 +1322,8 @@ namespace Reanimator.Forms
                 MessageBox.Show("Failed to load excel and strings files!", "Data Table Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
-            ExcelScript.SetFileManager(_fileManager);
+            ExcelScript.GenerateExcelScriptFunctions(_fileManager);
+            ExcelScript.SetStaticFileManager(_fileManager);
 
             progressForm.SetCurrentItemText("Loading File Explorer...");
             _fileExplorer = new FileExplorer(_fileManager);
@@ -1300,6 +1343,7 @@ namespace Reanimator.Forms
                 MessageBox.Show("Failed to load TCv4 excel and strings files!", "Data Table Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
+            ExcelScript.GenerateExcelScriptFunctions(_fileManagerTCv4);
 
             progressForm.SetCurrentItemText("Loading TCv4 Table View...");
             _tablesLoadedTCv4 = new TablesLoaded(_fileManagerTCv4);
