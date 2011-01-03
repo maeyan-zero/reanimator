@@ -188,11 +188,19 @@ namespace Hellgate
             }
         }
 
-        public class ScriptUnexpectedScriptTermination : ReanimatorException
+        public class ScriptUnexpectedScriptTerminationException : ReanimatorException
         {
-            public ScriptUnexpectedScriptTermination()
+            public ScriptUnexpectedScriptTerminationException()
             {
                 CustomMessage = "The script string terminates unexpectedly.";
+            }
+        }
+
+        public class ScriptVariableAlreadyDefinedException : ReanimatorException
+        {
+            public ScriptVariableAlreadyDefinedException(String varNamem, int scriptOffset)
+            {
+                CustomMessage = "Attempting to redefineThe variable {0} is already definied";
             }
         }
     }

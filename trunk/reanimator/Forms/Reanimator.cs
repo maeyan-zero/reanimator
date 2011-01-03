@@ -352,9 +352,15 @@ namespace Reanimator.Forms
 
                 byte[] csvBytes = excelFile.ExportCSV();
                 File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);
-                //ExcelFile excelFileCSV = new ExcelFile(csvBytes, fileEntry.RelativeFullPathWithoutPatch);
+                ExcelFile excelFileCSV = new ExcelFile(csvBytes, fileEntry.RelativeFullPathWithoutPatch);
 
                 //byte[] recookedBytes = excelFileCSV.ToByteArray();
+                byte[] csvBytes2 = excelFileCSV.ExportCSV();
+
+                if (!csvBytes.SequenceEqual(csvBytes2))
+                {
+                    int b5p = 0;
+                }
 
                 //if (excelFile.StringId == "GLOBAL_STRING")
                 //{
