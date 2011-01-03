@@ -450,5 +450,20 @@ namespace Hellgate
             // Empty Strings files
             {"Strings_Install_MSI", new DataFileAttributes {IsEmpty = true}}
         };
+
+        public static string StringToSQLString(string source)
+        {
+            source = source.Replace(@"\", @"\\");
+            source = source.Replace("\"", "\\\"");
+            source = source.Replace(Environment.NewLine, @"\n");
+            //source = source.Replace("%", @"\%");
+            //source = source.Replace("_", @"\_");
+            return source;
+        }
+
+        public static String EncapsulateString(String str)
+        {
+            return str == null ? String.Empty : String.Format("\"{0}\"", str);
+        }
     }
 }

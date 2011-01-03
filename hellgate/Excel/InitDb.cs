@@ -14,9 +14,9 @@ namespace Hellgate.Excel
         public string criteria;
         public Int32 rangeLow;
         public Int32 rangeHigh;
-        public float numMin;
-        public float numMax;
-        public float numInit;
+        public Int32 numMin;
+        public Int32 numMax;
+        public Int32 numInit;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]
         public string featKnob;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)]

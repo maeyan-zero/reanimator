@@ -1033,6 +1033,8 @@ namespace Hellgate
 
         public override byte[] ExportSQL(string tablePrefix = "hgl")
         {
+            string[] sqlReserved = new string[] { "group", "condition", "left", "right", "default", "key", "force", "analyze", "kill", "usage", "order" };
+
             StringWriter stringWriter = new StringWriter();
             FieldInfo[] fieldInfo = DataType.GetFields();
             string tableName = String.Format("{0}_{1}", tablePrefix, StringId.ToLower());
@@ -1050,30 +1052,26 @@ namespace Hellgate
                 String dataType = String.Empty;
                 String formatted = String.Empty;
 
+                if (sqlReserved.Where(str => str == columnName.ToLower()).Any() == true)
+                {
+                    columnName = "a" + columnName;
+                }
+
                 // Special types
                 OutputAttribute excelOutput = GetExcelOutputAttribute(field);
                 if (excelOutput != null)
                 {
-                    if (excelOutput.IsScript || excelOutput.IsSecondaryString || excelOutput.IsStringOffset)
-                    {
-                        dataType = "TEXT";
-                    }
-                    else if (excelOutput.IsBitmask)
-                    {
-                        dataType = "BIGINT";
-                    }
+                    if (excelOutput.IsScript || excelOutput.IsSecondaryString || excelOutput.IsStringOffset) dataType = "TEXT";
+                    else if (excelOutput.IsBitmask) dataType = "BIGINT";
                 }
 
                 if (dataType == String.Empty)
                 {
-                    if (field.FieldType == typeof(int))
-                    {
-                        dataType = "INT";
-                    }
-                    else if (field.FieldType == typeof(float))
-                    {
-                        dataType = "DECIMAL";
-                    }
+                    if (field.FieldType == typeof(int)) dataType = "INT";
+                    else if (field.FieldType == typeof(float)) dataType = "DECIMAL";
+                    else if (field.FieldType == typeof(byte)) dataType = "TINYINT";
+                    else if (field.FieldType == typeof(short)) dataType = "SMALLINT";
+                    else if (field.FieldType == typeof(uint) || field.FieldType == typeof(Int64)) dataType = "BIGINT";
                     else if (field.FieldType == typeof(string))
                     {
                         MarshalAsAttribute marshalAs = (MarshalAsAttribute)field.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
@@ -1138,7 +1136,10 @@ namespace Hellgate
                         else if (excelOutput.IsStringOffset)
                         {
                             string offString = ReadStringTable((int)objValue);
-                            valueString.Write(String.Format("\"{0}\"", offString));
+                            offString = StringToSQLString(offString);
+                            offString = String.Format("\"{0}\"", offString);
+
+                            valueString.Write(offString);
                             valueParsed = true;
                         }
                         else if (excelOutput.IsBitmask)
@@ -1152,7 +1153,8 @@ namespace Hellgate
                     {
                         if (field.FieldType == typeof(string))
                         {
-                            valueString.Write(String.Format("\"{0}\"", objValue));
+                            string strValue = EncapsulateString(StringToSQLString((objValue.ToString())));
+                            valueString.Write(strValue);
                         }
                         else
                         {
@@ -1172,7 +1174,7 @@ namespace Hellgate
 
             stringWriter.Write(valueString.ToString());
 
-            byte[] buffer = FileTools.StringToASCIIByteArray(stringWriter.ToString());
+            byte[] buffer = FileTools.StringToASCIIByteArray (stringWriter.ToString());
             return buffer;
         }
 
