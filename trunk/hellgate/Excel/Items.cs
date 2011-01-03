@@ -729,7 +729,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 useSound;//index                               // 270  0x0000000000000B1C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
-        public Int32 cantUseSound;//index                           // 271  0x0000000000000B20  XLS_ReadIndex
+        public Int32 cantUseSoundA;//index                          // 271  0x0000000000000B20  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantFireSound;//index                          // 272  0x0000000000000B24  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]

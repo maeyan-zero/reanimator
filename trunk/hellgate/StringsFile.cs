@@ -288,13 +288,13 @@ namespace Hellgate
                 writer.WriteLine(String.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
                                                stringBlock.ReferenceId,
                                                stringBlock.Unknown,
-                                               _EncapsulateString(stringBlock.StringId),
+                                               EncapsulateString(stringBlock.StringId),
                                                stringBlock.Reserved,
-                                               _EncapsulateString(stringBlock.String),
-                                               _EncapsulateString(stringBlock.Attribute1),
-                                               _EncapsulateString(stringBlock.Attribute2),
-                                               _EncapsulateString(stringBlock.Attribute3),
-                                               _EncapsulateString(stringBlock.Attribute4)));
+                                               EncapsulateString(stringBlock.String),
+                                               EncapsulateString(stringBlock.Attribute1),
+                                               EncapsulateString(stringBlock.Attribute2),
+                                               EncapsulateString(stringBlock.Attribute3),
+                                               EncapsulateString(stringBlock.Attribute4)));
             }
 
             return writer.ToString().ToUnicodeByteArray();
@@ -305,7 +305,7 @@ namespace Hellgate
             StringWriter stringWriter = new StringWriter();
             string tableName = String.Format("{0}_{1}", tablePrefix, StringId.ToLower());
             stringWriter.WriteLine(String.Format("CREATE TABLE {0} (", tableName));
-            stringWriter.WriteLine("\tid NOT NULL AUTO_INCREMENT PRIMARY KEY");
+            //stringWriter.WriteLine("\tid INT NOT NULL AUTO_INCREMENT PRIMARY KEY");
             stringWriter.WriteLine("\tpk INT,");
             stringWriter.WriteLine("\tfk INT,");
             stringWriter.WriteLine("\tstringid VARCHAR(64),");
@@ -326,30 +326,25 @@ namespace Hellgate
                 stringWriter.Write(",");
                 stringWriter.Write(stringBlock.Unknown);
                 stringWriter.Write(",");
-                stringWriter.Write(_EncapsulateString(stringBlock.StringId));
+                stringWriter.Write(EncapsulateString(stringBlock.StringId));
                 stringWriter.Write(",");
                 stringWriter.Write(stringBlock.Reserved);
                 stringWriter.Write(",");
-                stringWriter.Write(_EncapsulateString(stringBlock.String));
+                stringWriter.Write(EncapsulateString(StringToSQLString(stringBlock.String)));
                 stringWriter.Write(",");
-                stringWriter.Write(_EncapsulateString(stringBlock.Attribute1));
+                stringWriter.Write(EncapsulateString(stringBlock.Attribute1));
                 stringWriter.Write(",");
-                stringWriter.Write(_EncapsulateString(stringBlock.Attribute2));
+                stringWriter.Write(EncapsulateString(stringBlock.Attribute2));
                 stringWriter.Write(",");
-                stringWriter.Write(_EncapsulateString(stringBlock.Attribute3));
+                stringWriter.Write(EncapsulateString(stringBlock.Attribute3));
                 stringWriter.Write(",");
-                stringWriter.Write(_EncapsulateString(stringBlock.Attribute4));
+                stringWriter.Write(EncapsulateString(stringBlock.Attribute4));
                 stringWriter.Write(")");
                 stringWriter.WriteLine(rowCount++ < Count - 1 ? "," : ";");
             }
 
-            byte[] buffer = FileTools.StringToUnicodeByteArray(stringWriter.ToString());
+            byte[] buffer = FileTools.ToASCIIByteArray(stringWriter.ToString());
             return buffer;
-        }
-
-        private static String _EncapsulateString(String str)
-        {
-            return String.IsNullOrEmpty(str) ? String.Empty : String.Format("\"{0}\"", str);
         }
     }
 }
