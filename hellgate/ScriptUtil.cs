@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Hellgate.Excel;
 using Revival.Common;
 
 namespace Hellgate
@@ -394,7 +396,7 @@ namespace Hellgate
             NotEqualTo = 481,               // 0x1E1
             And = 516,                      // 0x204    .rdata:000000014060AB50     aLandjmpOffse_6 db 'landjmp  offset = %u  type = int'
             Or = 527,                       // 0x20F    .rdata:000000014060AF00     aLorjmpOffset_6 db 'lorjmp  offset = %u  type = int'
-            EndIf = 538,                    // 0x21A    .rdata:000000014060B198     aLogendTypeInt  db 'logend  type = int'
+            EndCond = 538,                  // 0x21A    .rdata:000000014060B198     aLogendTypeInt  db 'logend  type = int'
             GetStat666 = 666,               // 0x29A    these are used for different arg/return types (int/uint/float/double/etc)
             GetStat667 = 667,               // 0x29B    not sure which are which yet - do it later
             SetStat669 = 669,               // 0x29D
@@ -416,7 +418,7 @@ namespace Hellgate
             GlobalVarContext = 709,         // 0x2C5    but until I know more this will do for now
             GlobalVarGame4 = 710,           // 0x2C6
             GlobalVarUnit = 711,            // 0x2C7
-            GlobalVarStats = 712,           // 0x2C8
+            GlobalVarStatsList = 712,       // 0x2C8
             AssignContextVar = 713,         // 0x2C9
             UsePtrObjectReference = 714     // 0x2CA    // set type/size = 4??  // pointer object usage?? (let's try that) - seems to work
         }
@@ -434,11 +436,6 @@ namespace Hellgate
             Param2          // 8        // seen used as int32
         }
 
-        private enum ExcelTableCodes : uint
-        {
-            Stats = 23088
-        }
-
         private class StackObject
         {
             public String Value;
@@ -449,8 +446,10 @@ namespace Hellgate
             public uint ByteOffset;             // for local vars
             public ArgType Type;
             public int StatementCount = -1;
+            public int OperatorCount = -1;
             public int TrueStatements = -1;
             public int FalseStatements = -1;
+            public int IfLevel = -1;
             public bool IsPrecedenceFunc;
             public ScriptOpCodes OpCode;
 
@@ -501,27 +500,129 @@ namespace Hellgate
 
         #region Compiler Helper Functions
 
+        private StackObject _GetVar(String varName)
+        {
+            return _vars.FirstOrDefault(varObj => varObj.Value == varName);
+        }
+
+        private static int _GetByteOffset(ICollection scriptByteCode)
+        {
+            return scriptByteCode.Count * 4;
+        }
+
+        private void _CompileStatFunctions(List<Int32> scriptByteCode, String nameStr, int funcNameStartOffset, int functionStartOffset, Int32[] contextPtr)
+        {
+            ScriptOpCodes funcOpCode = _GetScriptOpCode(nameStr.ToLower(CultureInfo.InvariantCulture));
+            if (funcOpCode == 0) throw new Exceptions.ScriptUnknownVarNameException(nameStr, funcNameStartOffset);
+
+            _offset++;
+            _SkipWhite();
+
+            // do we have excel string or row index?
+            String excelStr;
+            Excel.Stats statRow = null;
+            int rowIndex = -1;
+            if (_script[_offset] == '\'')
+            {
+                excelStr = _GetString();
+
+                foreach (Stats tableRow in _statsTable.Rows)
+                {
+                    rowIndex++;
+
+                    if ((String)_statsDelegator["stat"](tableRow) != excelStr) continue;
+
+                    statRow = tableRow;
+                    break;
+                }
+
+                if (statRow == null) throw new Exceptions.UnknownExcelStringException(excelStr, _offset);
+                _offset += excelStr.Length + 1;
+            }
+            else
+            {
+                rowIndex = _GetNumber();
+
+                if (rowIndex < 0 || rowIndex > _statsTable.Rows.Count) throw new IndexOutOfRangeException(String.Format("Excel row index '{0}' out of range at script offset '{1}'", rowIndex, _offset - rowIndex.ToString().Length));
+
+                statRow = (Stats)_statsTable.Rows[rowIndex];
+                excelStr = rowIndex.ToString(); // for exception below
+            }
+
+            _SkipWhite();
+
+            int param1Table = (int)_statsDelegator["param1Table"](statRow);
+            bool isSetStat = (nameStr.StartsWith("Set"));
+
+            Int32[] callStatFunc = new[] { (Int32)funcOpCode, 0 };
+            if (param1Table == -1 &&
+                (isSetStat || _script[_offset] != ',')) // some excel calls have not-used(?) extra params
+            {
+                int param = rowIndex << 22;
+                callStatFunc[1] = param;
+            }
+            else
+            {
+                if (_script[_offset] != ',') throw new Exceptions.ScriptFunctionArgumentCountException(nameStr, 2, String.Format("\nThe GetStat for stat '{0}' requires an extra parameter at offset '{1}'.", excelStr, _offset));
+
+                _offset++;
+                _SkipWhite();
+
+                int paramRowIndex = -1;
+                if (_script[_offset] == '\'') // excel string
+                {
+                    String paramStr = _GetString();
+                    paramRowIndex = _fileManager.GetExcelRowIndexFromTableIndex(param1Table, paramStr);
+                    if (paramRowIndex == -1) throw new Exceptions.UnknownExcelStringException(paramStr, _offset);
+                    _offset += paramStr.Length + 1;
+                }
+                else // row index
+                {
+                    paramRowIndex = _GetNumber();
+                    if (paramRowIndex == -1) throw new Exceptions.UnknownExcelStringException(paramRowIndex.ToString(), _offset);
+                }
+
+                int param = (rowIndex << 22) | paramRowIndex;
+                callStatFunc[1] = param;
+            }
+
+            if (isSetStat)
+            {
+                if (_script[_offset] != ',') throw new Exceptions.ScriptFunctionArgumentCountException(nameStr, 2, String.Format("\nThe GetStat for stat '{0}' requires an value to set it to at offset '{1}'.", excelStr, _offset));
+                _offset++;
+
+                Int32[] getStatArgBytes = _Compile(')', null, false, _GetByteOffset(scriptByteCode));
+                scriptByteCode.AddRange(getStatArgBytes);
+            }
+
+            if (_script[_offset] != ')') throw new Exceptions.ScriptFormatException(String.Format("Unexpected end of function '{0}' starting at offset '{1}'", nameStr, functionStartOffset), _offset);
+            _offset++;
+
+            if (contextPtr != null) scriptByteCode.AddRange(contextPtr);
+            scriptByteCode.AddRange(callStatFunc);
+        }
+
         private static ArgType _GetArgType(String argNameLower)
         {
             return Enum.GetValues(typeof(ArgType)).Cast<ArgType>().Where(type => type.ToString().ToLower() == argNameLower).FirstOrDefault();
         }
 
-        private static String _GetString(String script, int offset)
+        private String _GetString()
         {
-            int endIndex = script.IndexOf('\'', offset);
-            int strLen = endIndex - offset;
-            if (strLen < 0) throw new Exceptions.ScriptFormatException("Unexpected end of string.", offset);
+            int endIndex = _script.IndexOf('\'', ++_offset);
+            int strLen = endIndex - _offset;
+            if (strLen < 0) throw new Exceptions.ScriptFormatException("Unexpected end of string.", _offset);
 
-            return script.Substring(offset, endIndex - offset);
+            return _script.Substring(_offset, endIndex - _offset);
         }
 
-        private static int _GetNumber(String script, ref int offset)
+        private int _GetNumber()
         {
-            String numStr = _GetNumberStr(script, ref offset);
-            if (String.IsNullOrEmpty(numStr)) throw new Exceptions.ScriptFormatException("Unexpected string number format", offset);
+            String numStr = _GetNumberStr();
+            if (String.IsNullOrEmpty(numStr)) throw new Exceptions.ScriptFormatException("Unexpected string number format", _offset);
 
             int scriptNum;
-            if (!int.TryParse(numStr, out scriptNum)) throw new Exceptions.ScriptFormatException(String.Format("Failed to convert script segment '{0}' to number.", numStr), offset);
+            if (!int.TryParse(numStr, out scriptNum)) throw new Exceptions.ScriptFormatException(String.Format("Failed to convert script segment '{0}' to number.", numStr), _offset);
 
             return scriptNum;
         }
@@ -531,65 +632,67 @@ namespace Hellgate
             return Enum.GetValues(typeof(ScriptOpCodes)).Cast<ScriptOpCodes>().Where(scriptOpCodes => scriptOpCodes.ToString().ToLower() == opCodeLower).FirstOrDefault();
         }
 
-        private static bool _IsNumber(String script, int offset)
+        private bool _IsNumber()
         {
-            while (script[offset] == '-') offset++;
-            return (script[offset] >= '0' && script[offset] <= '9');
+            int startOffset = _offset;
+            while (_script[startOffset] == '-') startOffset++;
+            return (_script[startOffset] >= '0' && _script[startOffset] <= '9');
         }
 
-        private static String _GetNumberStr(String script, ref int offset)
+        private String _GetNumberStr()
         {
-            int index = offset;
+            int index = _offset;
 
             // remove/count negative chars
-            while (script[offset] == '-') offset++;
-            int negativeCount = offset - index;
+            while (_script[_offset] == '-') _offset++;
+            int negativeCount = _offset - index;
 
             index += negativeCount;
-            while (index < script.Length && script[index] >= '0' && script[index] <= '9')
+            while (index < _script.Length && _script[index] >= '0' && _script[index] <= '9')
             {
                 index++;
             }
-            if (index == script.Length) throw new Exceptions.ScriptFormatException("_GetNumberStr() failed, expected ';' terminator.", --index);
+            if (index == _script.Length) throw new Exceptions.ScriptFormatException("_GetNumberStr() failed, expected ';' terminator.", --index);
 
-            if (script[index] >= 'A' && script[index] <= 'Z' ||
-                script[index] >= 'a' && script[index] <= 'z' ||
-                script[index] == '_') return null;
+            if (_script[index] >= 'A' && _script[index] <= 'Z' ||
+                _script[index] >= 'a' && _script[index] <= 'z' ||
+                _script[index] == '_') return null;
 
-            int numLen = index - offset;
-            String numStr = script.Substring(offset, numLen);
-            offset += numLen;
+            int numLen = index - _offset;
+            String numStr = _script.Substring(_offset, numLen);
+            _offset += numLen;
 
             if (negativeCount % 2 == 1) numStr = "-" + numStr;
             return numStr;
         }
 
-        private static void _SkipWhite(String script, ref int offset)
+        private void _SkipWhite()
         {
-            if (offset >= script.Length) return;
+            if (_offset >= _script.Length) return;
 
-            while (offset < script.Length && script[offset++] == ' ') { }
-
-            offset--;
+            while (_offset < _script.Length && (_script[_offset] == ' ' || _script[_offset] == '\n' || _script[_offset] == '\t'))
+            {
+                _offset++;
+            }
         }
 
-        private static String _GetNameStr(String script, ref int offset)
+        private String _GetNameStr()
         {
-            int index = offset;
-            if (_IsNumber(script, index)) throw new Exceptions.ScriptFormatException("Unexpected number character in name string!", offset);
+            int index = _offset;
+            if (_IsNumber()) throw new Exceptions.ScriptFormatException("Unexpected number character in name string!", _offset);
 
-            while (script[index] >= '0' && script[index] <= '9' ||
-                   script[index] >= 'A' && script[index] <= 'Z' ||
-                   script[index] >= 'a' && script[index] <= 'z' ||
-                   script[index] == '_')
+            while (_script[index] >= '0' && _script[index] <= '9' ||
+                   _script[index] >= 'A' && _script[index] <= 'Z' ||
+                   _script[index] >= 'a' && _script[index] <= 'z' ||
+                   _script[index] == '_')
             {
                 index++;
             }
 
-            int strLen = index - offset;
-            String nameStr = script.Substring(offset, strLen);
+            int strLen = index - _offset;
+            String nameStr = _script.Substring(_offset, strLen);
 
-            offset += strLen;
+            _offset += strLen;
             return nameStr;
         }
 
@@ -598,11 +701,40 @@ namespace Hellgate
             return CallFunctions.FirstOrDefault(function => function.Name == functionName);
         }
 
+        private static Function[] _GetFunctions(String functionName)
+        {
+            return (from function in CallFunctions
+                    where function.Name == functionName
+                    select function).ToArray();
+        }
+
         #endregion
 
         #region Decomiler Helper Functions
 
-        private void _PushLocalVar(uint byteOffset, ArgType argType)
+        private void _DecompileCondion(byte[] scriptBytes, ScriptOpCodes opCode, int ifLevel)
+        {
+            _CheckStack(1, opCode);
+
+            uint byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref _offset);
+            Debug.Assert(byteOffset % 4 == 0 && FileTools.ByteArrayToUInt32(scriptBytes, _startOffset + (int)byteOffset - 4) == (uint)ScriptOpCodes.EndCond);
+
+            StackObject conditionObject = _stack.Pop();
+            conditionObject.OpCode = opCode;
+            _stack.Push(conditionObject);
+
+            int subMaxBytes = (int)byteOffset - (_offset - _startOffset);
+            _Decompile(scriptBytes, subMaxBytes, ifLevel + 1);
+
+
+            if (!_debug || !_debugFormatConditionalByteCounts) return;
+
+            conditionObject = _stack.Pop();
+            conditionObject.Value = String.Format("{0}[{1}]", conditionObject.Value, byteOffset);
+            _stack.Push(conditionObject);
+        }
+
+        private void _PushLocalVar(int byteOffset, ArgType argType)
         {
             String argName = null;
             if (_excelFunction != null)
@@ -614,10 +746,12 @@ namespace Hellgate
 
             if (argName == null)
             {
-                uint index = byteOffset / 4;
-                StackObject localVar = _vars[index];
+                StackObject localVar = (from varObj in _vars
+                                        where varObj.ByteOffset == byteOffset
+                                        select varObj).FirstOrDefault();
                 Debug.Assert(localVar != null);
 
+                int index = byteOffset / 4;
                 argName = "var" + index;
             }
             Debug.Assert(argName != null);
@@ -627,7 +761,7 @@ namespace Hellgate
 
         }
 
-        private StackObject _Return(int startStackCount, uint bytesRead, bool processStackOnReturn, bool debugShowParsed)
+        private StackObject _Return(int startStackCount, uint bytesRead, bool processStackOnReturn, int ifLevel, bool debugShowParsed)
         {
             _CheckStack(1, ScriptOpCodes.Return);
 
@@ -671,52 +805,14 @@ namespace Hellgate
                 if (debugShowParsed) Debug.WriteLine(_script);
             }
 
-            //while (processStackOnReturn && _stack.Count > 1 && _stack.Count - 1 > startStackCount)
-            ////while (_stack.Count > 1 && _stack.Count - 1 > startStackCount)
-            //{
-            //    stackObject = _stack.Pop();
-
-            //    if (!stackObject.IsFunction && !stackObject.IsVarAssign && !stackObject.IsIf)
-            //    {
-            //        _stack.Push(stackObject); // re-add for stack dump
-            //        String error = String.Format("Error: Stack has more than 1 value upon script return: script = \"{0}\"\n{1}", _script, _DumpStack(_stack));
-            //        throw new Exceptions.ScriptInvalidStackStateException(error);
-            //    }
-
-            //    if (stackObject.IsIf)
-            //    {
-            //        script = stackObject.Value + script;
-            //    }
-            //    else
-            //    {
-            //        script = stackObject.Value + ";\n" + script;
-            //    }
-            //}
-
-            //if (processStackOnReturn)
-            //{
-            //    stackObject = _stack.Pop();
-            //    if (stackObject.IsIf ||                                 // if IsIf, we don't want a ;
-            //        (statementCount == 1 && startStackCount > 0))       // if true, we're in an if/else/||/&& block, and only 1 statement, so no ;
-            //    {
-            //        script = stackObject.Value + script;
-            //    }
-            //    else
-            //    {
-            //        script = stackObject.Value + ";\n" + script;
-            //    }
-
-            //    if (debugShowParsed) Debug.WriteLine(script);
-            //    if (startStackCount == 0) _script += script;
-            //}
-
             StackObject returnStackObject = new StackObject
             {
                 Value = script,
                 ByteOffset = bytesRead,
                 StatementCount = statementCount,
                 TrueStatements = stackObject.TrueStatements,
-                FalseStatements = stackObject.FalseStatements
+                FalseStatements = stackObject.FalseStatements,
+                IfLevel = ifLevel
             };
 
             // if we have a statementCount, but no true statement count, we had an if-block with no else-block
@@ -797,7 +893,7 @@ namespace Hellgate
             _stack.Push(new StackObject { Value = funcString, IsFunction = true });
         }
 
-        private void _DoOperator(String op, int precedence, ScriptOpCodes opCode)
+        private void _DoOperator(String op, int precedence, ScriptOpCodes opCode, int ifLevel)
         {
             _CheckStack(2, opCode);
 
@@ -810,32 +906,49 @@ namespace Hellgate
             const String operatorFormat2Parentheses = "({0}){1}({2})";
 
             String opFormat = operatorFormat;
+            bool debugTest = false;
             if (value1Object.Precedence > precedence)
             {
                 opFormat = operatorFormatLParentheses;
+                debugTest = true;
             }
             else if (value2Object.Precedence > precedence)
+            {
+                opFormat = operatorFormatRParentheses;
+                debugTest = true;
+            }
+
+            // some of these extra conditions are purely to ensure complete fidelity when recompiling
+            // in some cases they are completely unnecessary from an arithmetic perspective
+            if (value1Object.Precedence == value2Object.Precedence && value1Object.IsPrecedenceFunc && value2Object.IsPrecedenceFunc)
+            {
+                opFormat = operatorFormat2Parentheses;
+            }
+            else if (value1Object.OperatorCount > 0 && value2Object.OperatorCount > 0) // e.g.   (a * b) * (c * d)
+            {
+                opFormat = operatorFormat2Parentheses;
+            }
+            else if (value2Object.OperatorCount > 0 && value2Object.Precedence >= precedence && !debugTest)
             {
                 opFormat = operatorFormatRParentheses;
             }
 
 
-            if (value1Object.Precedence == value2Object.Precedence && value1Object.IsPrecedenceFunc && value2Object.IsPrecedenceFunc)
-            {
-                opFormat = operatorFormat2Parentheses;
-            }
-
+            int operatorCount = (value2Object.OperatorCount == -1) ? 1 : value2Object.OperatorCount + 1;
             StackObject newStackObject = new StackObject
             {
                 Value = String.Format(opFormat, value1Object.Value, op, value2Object.Value),
                 Precedence = precedence,
-                IsPrecedenceFunc = true
+                IsPrecedenceFunc = true,
+                OperatorCount = operatorCount,
+                ByteOffset = (uint)_offset,
+                IfLevel = ifLevel
             };
 
             _stack.Push(newStackObject);
         }
 
-        private void _StatsFunction(String name, uint value, uint tableCode, ScriptOpCodes opCode, bool isSet)
+        private void _StatsFunction(String name, uint value, ScriptOpCodes opCode, bool isSet)
         {
             uint rowIndex = value >> 22;
             uint param = value & 0x3FFFFF;
@@ -862,7 +975,7 @@ namespace Hellgate
             else
             {
                 Debug.Assert(rowIndex >= 0 && rowIndex < _statsTable.Rows.Count);
-                Excel.Stats statsRow = (Excel.Stats)_statsTable.Rows[(int)rowIndex];
+                Stats statsRow = (Excel.Stats)_statsTable.Rows[(int)rowIndex];
 
                 indexStr = (String)_statsDelegator["stat"](statsRow);
 
@@ -870,10 +983,6 @@ namespace Hellgate
                 if (param1Table != -1)
                 {
                     paramStr = _fileManager.GetExcelRowStringFromTableIndex(param1Table, (int)param);
-                }
-                else if (param != 0)
-                {
-                    paramStr = param.ToString();
                 }
                 else
                 {
@@ -897,6 +1006,10 @@ namespace Hellgate
             if (!String.IsNullOrEmpty(paramStr))
             {
                 paramStr = String.Format(", '{0}'", paramStr);
+            }
+            else if (param != 0) // we have an excel index, but no excel row string
+            {
+                paramStr = ", " + param;
             }
 
             // create new stack object

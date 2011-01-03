@@ -562,7 +562,7 @@ namespace Reanimator.Forms
             // ensure valid script column
             DataGridViewColumn dataGridViewColumn = _tableData_DataGridView.Columns[e.ColumnIndex];
             DataColumn dataColumn = _dataTable.Columns[dataGridViewColumn.Name];
-            if (!(bool)dataColumn.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsScript]) return;
+            if (!dataColumn.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsScript) || !(bool)dataColumn.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsScript]) return;
 
             // todo: ensure each cell only has at most one editor for itself
             

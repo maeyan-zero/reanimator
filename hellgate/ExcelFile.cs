@@ -229,15 +229,19 @@ namespace Hellgate
                             }
 
                             value = value.Replace("\"", "");
-                            string[] splitValue = value.Split(',');
-                            int count = splitValue.Length;
-                            int[] intValue = new int[count];
-                            for (int i = 0; i < count; i++)
-                            {
-                                intValue[i] = int.Parse(splitValue[i]);
-                            }
+
+                            ExcelScript excelScript = new ExcelScript();
+                            int[] scriptByteCode = excelScript.Compile(value, null, StringId, row, col, fieldInfo.Name);
+
+                            //string[] splitValue = value.Split(',');
+                            //int count = splitValue.Length;
+                            //int[] intValue = new int[count];
+                            //for (int i = 0; i < count; i++)
+                            //{
+                            //    intValue[i] = int.Parse(splitValue[i]);
+                            //}
                             objectDelegator[fieldInfo.Name, rowInstance] = integerBufferOffset;
-                            FileTools.WriteToBuffer(ref _scriptBuffer, ref integerBufferOffset, FileTools.IntArrayToByteArray(intValue));
+                            FileTools.WriteToBuffer(ref _scriptBuffer, ref integerBufferOffset, scriptByteCode.ToByteArray());
                             continue;
                         }
 
@@ -934,29 +938,30 @@ namespace Hellgate
                             int[] buffer = ReadScriptTable(offset);
 
                             String scriptString = FileTools.ArrayToStringGeneric(buffer, ",");
-                            //try
-                            //{
-                            //    String debugScriptString = scriptString;
-                            //    ExcelScript excelScript = new ExcelScript();
-                            //    scriptString = excelScript.Decompile(_scriptBuffer, offset, debugScriptString, StringId, row, col, fieldInfo.Name);
+                            try
+                            {
+                                //String debugScriptString = scriptString;
+                                ExcelScript excelScript = new ExcelScript();
+                                scriptString = "\"" + excelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldInfo.Name) + "\"";
 
-                            //    //ExcelScript recompiledScript = new ExcelScript();
-                            //    //int[] recompiledBytes = recompiledScript.Compile(scriptString, debugScriptString, StringId, row, col, fieldInfo.Name);
+                                //ExcelScript recompiledScript = new ExcelScript();
+                                //int[] recompiledBytes = recompiledScript.Compile(scriptString, debugScriptString, StringId, row, col, fieldInfo.Name);
 
-                            //    //if (!buffer.SequenceEqual(recompiledBytes))
-                            //    //{
-                            //    //    ExcelScript reDecompiledScript = new ExcelScript();
-                            //    //    String scriptString2 = excelScript.Decompile(_scriptBuffer, offset, debugScriptString, StringId, row, col, fieldInfo.Name);
-                            //    //    int bp = 0;
-                            //    //}
+                                //if (!buffer.SequenceEqual(recompiledBytes))
+                                //{
+                                //    String recompiledBytesString = FileTools.ArrayToStringGeneric(recompiledBytes, ",");
+                                //    ExcelScript reDecompiledScript = new ExcelScript();
+                                //    String scriptString2 = excelScript.Decompile(recompiledBytes.ToByteArray(), 0, debugScriptString, StringId, row, col, fieldInfo.Name);
+                                //    int bp = 0;
+                                //}
 
-                            //    scriptString = "\"" + scriptString + "\"";
-                            //}
-                            //catch (Exception e)
-                            //{
-                            //    Debug.WriteLine(e.ToString());
-                            //    scriptString = "ScriptError(" + scriptString + ")";
-                            //}
+                                //scriptString = "\"" + scriptString + "\"";
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.WriteLine(e.ToString());
+                                scriptString = "ScriptError(" + scriptString + ")";
+                            }
 
                             FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptString));
                             continue;
