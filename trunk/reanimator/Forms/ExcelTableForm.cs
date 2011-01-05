@@ -570,7 +570,7 @@ namespace Reanimator.Forms
             DataGridViewCell dataGridViewCell = _tableData_DataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
             if (dataGridViewCell == null) return; // shouldn't happen, but just in case
 
-            ScriptEditor scriptEditor = new ScriptEditor(dataGridViewCell, "todo", dataColumn.ColumnName) { MdiParent = MdiParent };
+            ScriptEditor scriptEditor = new ScriptEditor(_fileManager, dataGridViewCell, "todo", dataColumn.ColumnName) { MdiParent = MdiParent };
             scriptEditor.Show();
         }
     }
@@ -580,8 +580,7 @@ namespace Reanimator.Forms
         public static void DoubleBuffered(this Object dgv, bool setting)
         {
             Type dgvType = dgv.GetType();
-            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered",
-                BindingFlags.Instance | BindingFlags.NonPublic);
+            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             pi.SetValue(dgv, setting, null);
         }
     }

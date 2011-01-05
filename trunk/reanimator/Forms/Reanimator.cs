@@ -39,10 +39,10 @@ namespace Reanimator.Forms
             //ExcelScript.GenerateExcelScriptFunctions(fileManagerTCv4);
             //ExcelScript.SetStaticFileManager(fileManagerTCv4);
             //fileManagerTCv4.ExtractAllExcel(@"C:\excel_tcv4\", true);
+            //TestScripts.ExtractAllCSV();
 
-
-           // return;
-            TestScripts.TestExcelCooking();
+            //return;
+            //TestScripts.TestExcelCooking();
             //TestScripts.TestAllCodeValues();
 
             //return;
@@ -608,8 +608,6 @@ namespace Reanimator.Forms
                 MessageBox.Show("Failed to load excel and strings files!", "Data Table Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
-            ExcelScript.GenerateExcelScriptFunctions(_fileManager);
-            ExcelScript.SetStaticFileManager(_fileManager);
 
             progressForm.SetCurrentItemText("Loading File Explorer...");
             _fileExplorer = new FileExplorer(_fileManager);
@@ -629,7 +627,6 @@ namespace Reanimator.Forms
                 MessageBox.Show("Failed to load TCv4 excel and strings files!", "Data Table Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
-            ExcelScript.GenerateExcelScriptFunctions(_fileManagerTCv4);
 
             progressForm.SetCurrentItemText("Loading TCv4 Table View...");
             _tablesLoadedTCv4 = new TablesLoaded(_fileManagerTCv4);

@@ -14,6 +14,25 @@ namespace Reanimator
 {
     public static class TestScripts
     {
+        public static void ExtractAllCSV()
+        {
+            const String root = @"C:\test_mod\";
+            FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.LoadTableFiles();
+
+            foreach (DataFile dataFile in fileManager.DataFiles.Values)
+            {
+                if (!dataFile.IsExcelFile) continue;
+
+                ExcelFile excelFile = (ExcelFile) dataFile;
+                byte[] csvBytes = excelFile.ExportCSV(fileManager);
+
+                String savePath = Path.Combine(root, excelFile.FilePath).Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised);
+                Directory.CreateDirectory(Directory.GetDirectoryRoot(savePath));
+                File.WriteAllBytes(savePath, csvBytes);
+            }
+        }
+
         public static void TestAllCodeValues()
         {
             FileManager fileManager = new FileManager(Config.HglDir);
@@ -117,8 +136,6 @@ namespace Reanimator
         {
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.LoadTableFiles();
-            ExcelScript.GenerateExcelScriptFunctions(fileManager);
-            ExcelScript.SetStaticFileManager(fileManager);
             ExcelFile.EnableDebug = true;
 
             foreach (DataFile dataFile in fileManager.DataFiles.Values)
@@ -328,11 +345,6 @@ namespace Reanimator
                 Debug.WriteLine("Error: No TCv4 Excel files loaded!");
                 return;
             }
-
-            // generate excel script functions
-            ExcelScript.GenerateExcelScriptFunctions(fileManager);
-            ExcelScript.GenerateExcelScriptFunctions(fileManagerTCv4);
-            ExcelScript.SetStaticFileManager(fileManager);
 
             // convert tables
             int converted = -1;
@@ -661,53 +673,53 @@ namespace Reanimator
                         }
                         else if (outputAttribute.IsScript)
                         {
-                            int scriptOffset = (int)value;
-                            if (scriptOffset != 0)
-                            {
-                                ExcelScript excelScriptTCv4 = new ExcelScript(fileManagerTCv4);
+                            //int scriptOffset = (int)value;
+                            //if (scriptOffset != 0)
+                            //{
+                            //    ExcelScript excelScriptTCv4 = new ExcelScript(fileManagerTCv4);
 
-                                try
-                                {
-                                    excelScriptTCv4.Decompile(excelFileTCv4.ScriptBuffer, scriptOffset, null, excelFileTCv4.StringId, row, col, fieldInfo.Name);
-                                }
-                                catch (Exception e)
-                                {
-                                    Debug.WriteLine("TCv4 Decompile Error:\n" + e);
-                                    continue;
-                                }
+                            //    try
+                            //    {
+                            //        excelScriptTCv4.Decompile(excelFileTCv4.ScriptBuffer, scriptOffset, null, excelFileTCv4.StringId, row, col, fieldInfo.Name);
+                            //    }
+                            //    catch (Exception e)
+                            //    {
+                            //        Debug.WriteLine("TCv4 Decompile Error:\n" + e);
+                            //        continue;
+                            //    }
 
-                                ExcelScript excelScriptCompiler = new ExcelScript(fileManagerTCv4, true, true);
+                            //    ExcelScript excelScriptCompiler = new ExcelScript(fileManagerTCv4, true, true);
 
-                                try
-                                {
-                                    excelScriptCompiler.Compile(excelScriptTCv4.GetScript, null, excelFileTCv4.StringId, row, col, fieldInfo.Name);
-                                    value = scriptBufferOffset;
-                                }
-                                catch (Exceptions.ScriptUnknownFunctionException e)
-                                {
-                                    if (isCharDisplay || isInventory)
-                                    {
-                                        value = 0;
-                                    }
-                                    else
-                                    {
-                                        Debug.WriteLine("SP Recompile Error: \n" + excelScriptTCv4.GetScript + "\n" + e);
-                                        value = 0;
-                                        //continue;
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    Debug.WriteLine("SP Recompile Error: \n" + excelScriptTCv4.GetScript + "\n" + e);
-                                    value = 0;
-                                    //continue;
-                                }
+                            //    try
+                            //    {
+                            //        excelScriptCompiler.Compile(excelScriptTCv4.ScriptString, null, excelFileTCv4.StringId, row, col, fieldInfo.Name);
+                            //        value = scriptBufferOffset;
+                            //    }
+                            //    catch (Exceptions.ScriptUnknownFunctionException e)
+                            //    {
+                            //        if (isCharDisplay || isInventory)
+                            //        {
+                            //            value = 0;
+                            //        }
+                            //        else
+                            //        {
+                            //            Debug.WriteLine("SP Recompile Error: \n" + excelScriptTCv4.ScriptString + "\n" + e);
+                            //            value = 0;
+                            //            //continue;
+                            //        }
+                            //    }
+                            //    catch (Exception e)
+                            //    {
+                            //        Debug.WriteLine("SP Recompile Error: \n" + excelScriptTCv4.ScriptString + "\n" + e);
+                            //        value = 0;
+                            //        //continue;
+                            //    }
 
-                                if ((int)value != 0)
-                                {
-                                    FileTools.WriteToBuffer(ref scriptBuffer, ref scriptBufferOffset, excelScriptCompiler.ScriptCode.ToByteArray());
-                                }
-                            }
+                            //    if ((int)value != 0)
+                            //    {
+                            //        FileTools.WriteToBuffer(ref scriptBuffer, ref scriptBufferOffset, excelScriptCompiler.ScriptCode.ToByteArray());
+                            //    }
+                            //}
                         }
 
                         setValue1(rows[row], value);
@@ -999,7 +1011,6 @@ namespace Reanimator
             fileManager.LoadTableFiles();
             fileManager.ExtractAllExcel();
             ExcelScript.EnableDebug(true);
-            ExcelScript.GenerateExcelScriptFunctions(fileManager);
 
             foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
             {

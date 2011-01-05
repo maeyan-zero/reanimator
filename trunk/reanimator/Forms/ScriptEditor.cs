@@ -7,13 +7,15 @@ namespace Reanimator.Forms
 {
     public partial class ScriptEditor : Form
     {
+        private readonly FileManager _fileManager;
         private readonly DataGridViewCell _dataGridViewCell;
         private bool _textChanged;
 
-        public ScriptEditor(DataGridViewCell dataGridViewCell, String rowName, String colName)
+        public ScriptEditor(FileManager fileManager, DataGridViewCell dataGridViewCell, String rowName, String colName)
         {
             InitializeComponent();
 
+            _fileManager = fileManager;
             _dataGridViewCell = dataGridViewCell;
             Text = String.Format("Script Editor: Row({0}) '{1}', Col({2}) '{3}'", dataGridViewCell.RowIndex, rowName, dataGridViewCell.ColumnIndex, colName);
 
@@ -31,7 +33,7 @@ namespace Reanimator.Forms
 
         private void _TestCompile_Button_Click(object sender, EventArgs e)
         {
-            ExcelScript script = new ExcelScript();
+            ExcelScript script = new ExcelScript(_fileManager);
             try
             {
                 script.Compile(_scriptEditor_RichTextBox.Text);
@@ -57,7 +59,7 @@ namespace Reanimator.Forms
                 return;
             }
 
-            ExcelScript script = new ExcelScript();
+            ExcelScript script = new ExcelScript(_fileManager);
             try
             {
                 script.Compile(_scriptEditor_RichTextBox.Text);
