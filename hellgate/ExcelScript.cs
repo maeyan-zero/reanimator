@@ -55,6 +55,9 @@ namespace Hellgate
             _staticFileManager = fileManager;
         }
 
+        /// <summary>
+        /// Primary constructor - To be used in conjunction with SetStaticFileManager
+        /// </summary>
         public ExcelScript()
         {
             if (_staticFileManager == null) throw new Exceptions.ScriptNotInitialisedException("No static file manager has been set!\nFor per-instance use, use other constructor.");
@@ -63,6 +66,10 @@ namespace Hellgate
             _Init();
         }
 
+        /// <summary>
+        /// Secondary constructor - Used when wanting to specify a source file manager.
+        /// </summary>
+        /// <param name="fileManager">The file manager to use for excel lookup details.</param>
         public ExcelScript(FileManager fileManager)
         {
             if (fileManager == null) throw new ArgumentNullException("fileManager", "File Manager cannot be null.");
@@ -71,7 +78,12 @@ namespace Hellgate
             _Init();
         }
 
-
+        /// <summary>
+        /// Primarly used for MP -> SP excel table conversion.
+        /// </summary>
+        /// <param name="fileManager">The file manager to use for excel lookup details.</param>
+        /// <param name="forceTCv4ExcelUsage">Set to true to force the excel lookup to occur from the TCv4 tables.</param>
+        /// <param name="forceStandardCallFunctionList">Set to true to force TCv4 functions and arguments to be converted to the SP client function call usage.</param>
         public ExcelScript(FileManager fileManager, bool forceTCv4ExcelUsage, bool forceStandardCallFunctionList)
         {
             if (fileManager == null) throw new ArgumentNullException("fileManager", "File Manager cannot be null.");
@@ -83,6 +95,9 @@ namespace Hellgate
             _Init();
         }
 
+        /// <summary>
+        /// Initialises instance variables.
+        /// </summary>
         private void _Init()
         {
             _callFunctions = (_fileManager.MPVersion && !_forceStandardCallFunctionList) ? CallFunctionsTCv4 : CallFunctions;
@@ -96,7 +111,7 @@ namespace Hellgate
         }
 
         /// <summary>
-        /// 
+        /// Compiles a script string to its byte code form.
         /// </summary>
         /// <param name="script">The script string to compile to byte code.</param>
         /// <param name="debugScriptByteString">For debugging purposes only.</param>
@@ -126,6 +141,15 @@ namespace Hellgate
             return ScriptCode = _Compile('\0', null);
         }
 
+        /// <summary>
+        /// Compiles a script string to its byte code form.
+        /// </summary>
+        /// <param name="terminator">A terminator character to stop at.</param>
+        /// <param name="argument">A Client Function Argument to be used as a comparison when applicable.</param>
+        /// <param name="withinCondition">Set to True when within a condition statement.</param>
+        /// <param name="byteOffset">The current byte offset of the compiled byte code.</param>
+        /// <param name="overloadedFunction">Set to true if currently within an overloaded function call stack.</param>
+        /// <returns>The compiled script as an int array.</returns>
         private Int32[] _Compile(char terminator, Argument argument, bool withinCondition = false, int byteOffset = 0, bool overloadedFunction = false)
         {
             _level++;
@@ -597,7 +621,7 @@ namespace Hellgate
                                     }
                                     Debug.Assert(functionArg != null);
 
-                                    // if we have an argument with an excel index, we need to get the TCv4 excel index instead
+                                    // if we have an argument with an excel index, and we have a TCv4 function, we need to get the TCv4 excel index instead
                                     if (functionTCv4 != null && functionArg.TableIndex != -1)
                                     {
                                         functionArg = (from arg in functionTCv4.Args

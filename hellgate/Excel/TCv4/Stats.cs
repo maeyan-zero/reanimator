@@ -22,14 +22,13 @@ namespace Hellgate.Excel.TCv4
         public Int32 regenDelayOnDec;
         public Int32 regenDelayOnZero;
         public Int32 regenDelayMonster;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        byte[] undefined1;
+        public Int32 undefined1;
+        public Int32 undefined2;
         public Int32 offset;
         public Int32 shift;
         public Int32 minSet;
         public Int32 maxSet;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        byte[] undefined3;
+        public Int32 undefined3;
         public Int32 minAssert;
         public Int32 maxAssert;
         public Int32 undefined4;

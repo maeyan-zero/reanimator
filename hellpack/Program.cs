@@ -58,13 +58,15 @@ namespace Revival
 
                 foreach (DataFile dataFile in fileManager.DataFiles.Values)
                 {
-                    //if (dataFile.IsStringsFile) continue;
+                    if (dataFile.IsStringsFile) continue;
+
+                    ExcelFile excelFile = (ExcelFile) dataFile;
 
                     Console.WriteLine(dataFile.FileName);
                     String dir = Path.GetDirectoryName(dataFile.FilePath);
                     if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
 
-                    byte[] ebuffer = dataFile.ExportCSV();
+                    byte[] ebuffer = excelFile.ExportCSV(fileManager);
                     //for (int i = 0; i < 10; i++)
                     //{
                     //    Stopwatch stopwatch = new Stopwatch();

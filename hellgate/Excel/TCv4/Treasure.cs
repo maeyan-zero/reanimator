@@ -50,43 +50,81 @@ namespace Hellgate.Excel.TCv4
         public Int32 item1m;/*this isn't actually defined, but it determines the type of object in item1, whether it's a specific item(01), a unit type(02),
             another treasure class(03), an item quality(04), or something else yet to be determined.*/
         public Int32 item1;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]   // this is equal to 19 Int32
-        byte[] unknown05;
+        public Int32 unknown05a;
+        public Int32 unknown05b;
+        public Int32 unknown05c;
+        public Int32 unknown05d;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
+        Int32[] unknown05efghi;
+        public Int32 unknown05j;
+        public Int32 unknown05k;
+        public Int32 unknown05l;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
+        Int32[] unknown05mnopqrs;
         public Int32 value1;
         public Int32 item2m;
         public Int32 item2;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
-        byte[] unknown06;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown06abcdefghi;
+        public Int32 unknown06j;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown06klmnopqrs;
         public Int32 value2;
         public Int32 item3m;
         public Int32 item3;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
-        byte[] unknown07;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown07abcdefghi;
+        public Int32 unknown07j;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown07klmnopqrs;
         public Int32 value3;
         public Int32 item4m;
         public Int32 item4;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
-        byte[] unknown08;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown08abcdefghi;
+        public Int32 unknown08j;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown08klmnopqrs;
         public Int32 value4;
         public Int32 item5m;
         public Int32 item5;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
-        byte[] unknown09;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown09abcdefghi;
+        public Int32 unknown09j;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown09klmnopqrs;
         public Int32 value5;
         public Int32 item6m;
         public Int32 item6;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
-        byte[] unknown10;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown10abcdefghi;
+        public Int32 unknown10j;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown10klmnopqrs;
         public Int32 value6;
         public Int32 item7m;
         public Int32 item7;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
-        byte[] unknown11;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown11abcdefghi;
+        public Int32 unknown11j;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown11klmnopqrs;
         public Int32 value7;
         public Int32 item8m;
         public Int32 item8;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 76)]
-        byte[] unknown12;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown12abcdefghi;
+        public Int32 unknown12j;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        Int32[] unknown12klmnopqrs;
         public Int32 value8;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8804)]
         byte[] unknown13;

@@ -46,8 +46,8 @@ namespace Hellgate.Excel
         public Int32 blendOpCabalist;//idx;
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpHunter;//idx;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
-        public Int32 blendOpAdventurer;//idx;
+        [ExcelOutput(ConstantValue = -1)]
+         Int32 blendOpAdventurer;//idx;
         public Int32 offHandlayer;//idx;
         public Int32 undefined2;
         public Int32 attachType;

@@ -84,25 +84,25 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 Object;                                                                    // 17       0x00000000000000D0      XLS_ReadIndex,0x77
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType0;
+        public Int32 itemUnitType0;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType1;
+        public Int32 itemUnitType1;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType2;
+        public Int32 itemUnitType2;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType3;
+        public Int32 itemUnitType3;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType4;
+        public Int32 itemUnitType4;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType5;
+        public Int32 itemUnitType5;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType6;
+        public Int32 itemUnitType6;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType7;
+        public Int32 itemUnitType7;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType8;
+        public Int32 itemUnitType8;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 ItemUnitType9;
+        public Int32 itemUnitType9;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 quality;                                                                   // 19       0x00000000000000D8      XLS_ReadIndex,0x43
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]

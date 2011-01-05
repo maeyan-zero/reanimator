@@ -6,7 +6,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Hellgate.Excel;
 using Revival.Common;
 
 namespace Hellgate
@@ -709,7 +708,7 @@ namespace Hellgate
          */
 
         // op code array in client found at:  .data:00000001407161C8
-        private enum ScriptOpCodes : uint
+        public enum ScriptOpCodes : uint
         {
             Return = 0,                     // 0x00
             CallPropery = 2,                // 0x02

@@ -46,7 +46,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 clutter_tcv4;
         public Int32 roomMessage_tcv4;
         public Int32 havokSliceType;
-        public Int32 roomVersion_tcv4;
+        public Int32 roomVersion;
         public Int32 spawnClass1_tcv4;
         public Int32 spawnClass2_tcv4;
         public Int32 spawnClass3_tcv4;

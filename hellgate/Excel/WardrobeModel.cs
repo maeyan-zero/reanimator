@@ -12,7 +12,9 @@ namespace Hellgate.Excel
         public Int32 undefined1;
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_MODEL_GROUP", SortColumnOrder = 1, SecondarySortColumn = "appearanceGroup")]
         public Int32 modelGroup;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 appearanceGroup;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 appearanceGroup2;//idx;
         public Int32 undefined2;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]

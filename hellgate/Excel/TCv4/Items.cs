@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel.TCv4
 {
@@ -8,8 +9,7 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class ItemsTCv4
     {
-        ExcelFile.RowHeader header;                               // ReadOrder   OffsetFromHeader     ReadFunction
-
+        RowHeader header;                               			// ReadOrder   OffsetFromHeader     ReadFunction
         [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 name;//pchar                                   // 1    0x0000000000000000  XLS_ReadCharPtr1
         Int32 buffer1;
@@ -477,7 +477,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 accuracyBase;                                  // 130  0x0000000000000754  XLS_ReadInt32
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknownBytes07;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 refillHotKey;//index                           // 262  0x0000000000000768  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_GROUP")]
         public Int32 animGroup;//index                              // 121  0x000000000000076C  XLS_ReadIndex
@@ -649,9 +649,9 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsTableIndex = true, TableStringId = "INVENTORY_TYPES")]
         public Int32 inventory;//index                              // 229  0x00000000000009F8  XLS_ReadIndex
         public Int32 craftingInventory;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 recipeIngredientInvLoc;//index                 // 230  0x00000000000009FC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 recipeResultInvLoc;//index                     // 231  0x0000000000000A00  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 startingTreasure;//index                       // 232  0x0000000000000A04  XLS_ReadIndex,65

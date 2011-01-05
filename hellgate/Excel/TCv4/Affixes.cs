@@ -55,7 +55,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 affixType14;
         public Int32 affixType15;
         public Int32 suffix;
-        [ExcelOutput(SortColumnOrder = 4)] // not secondary string like SP version
+        [ExcelOutput(SortColumnOrder = 4, IsTableIndex = true, TableStringId = "_TCv4_AFFIX_GROUP")] // not secondary string like SP version
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]
