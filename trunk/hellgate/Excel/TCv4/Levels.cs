@@ -128,9 +128,9 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsBool = true)]
         public Int32 firstLevelCheating;
         public Int32 playerExpLevel;
+        public Int32 startingGold;
         public Int32 bonusStartingTreasure;//idx
         public Int32 sequenceNumber;
-        public Int32 startingGold;
         public Int32 act;//?idx
         public Int32 worldMapRow;
         public Int32 worldMapCol;

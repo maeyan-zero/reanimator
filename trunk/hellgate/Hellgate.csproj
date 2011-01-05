@@ -112,7 +112,7 @@
     <Compile Include="Crypt.cs" />
     <Compile Include="DataFile.cs" />
     <Compile Include="ExcelFile.cs" />
-    <Compile Include="ExcelFileDef.cs" />
+    <Compile Include="ExcelFileUtil.cs" />
     <Compile Include="ExcelScript.cs" />
     <Compile Include="Excel\Achievements.cs" />
     <Compile Include="Excel\Act.cs" />
@@ -242,6 +242,7 @@
     <Compile Include="Excel\TCv4\Affixes.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Excel\TCv4\AffixGroups.cs" />
     <Compile Include="Excel\TCv4\BackGroundSounds2D.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -349,7 +350,7 @@
     <Compile Include="RoomDefinitionFile.cs" />
     <Compile Include="ScriptUtil.cs" />
     <Compile Include="StringsFile.cs" />
-    <Compile Include="StringsFileDef.cs" />
+    <Compile Include="StringsFileUtil.cs" />
     <Compile Include="TableDataSet.cs" />
     <Compile Include="Unit.cs" />
     <Compile Include="XmlCookedFile.cs" />

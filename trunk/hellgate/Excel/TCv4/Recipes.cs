@@ -91,7 +91,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 treasureResult4;
         public Int32 treasureResult5;
         public Int32 treasureResult6;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 mustPlaceInInvSlot;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask01 bitmask;

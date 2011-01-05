@@ -118,7 +118,7 @@ namespace Hellgate.Excel
         public Int32 startingGold;
         public Int32 bonusStartingTreasure;//idx
         public Int32 sequenceNumber;
-        public Int32 blank;//?idx
+        public Int32 act;//?idx
         public Int32 worldMapRow;
         public Int32 worldMapCol;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]

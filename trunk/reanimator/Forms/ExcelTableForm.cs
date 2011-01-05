@@ -514,7 +514,7 @@ namespace Reanimator.Forms
         {
             if (_excelFile.ParseDataTable(_dataTable) == true)
             {
-                byte[] buffer = _excelFile.ExportCSV();
+                byte[] buffer = _excelFile.ExportCSV(_fileManager);
                 if (buffer == null)
                 {
                     MessageBox.Show("Error exporting CSV. Contact developer");

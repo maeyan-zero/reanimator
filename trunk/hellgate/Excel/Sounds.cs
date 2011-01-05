@@ -109,7 +109,7 @@ namespace Hellgate.Excel
         Int32 undefined18b;
         public Int32 undefined18c;//information
         public Int32 undefined18d;//information - is NOT string offset
-         Int32 undefined18e;
+        Int32 undefined18e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined18f;//information
         Int32 undefined18g;
@@ -224,7 +224,7 @@ namespace Hellgate.Excel
         public float sideSend;
         public Int32 lfeSend;//lfe ?
         public Int32 mixState;//idx
-        public Int32 undefined43;
+        public Int32 bus;
         public Int32 vcas1;//list
         public Int32 vcas2;
         public Int32 vcas3;
@@ -245,7 +245,7 @@ namespace Hellgate.Excel
         public Int32 effects;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined46;
-        public Int32 undefined46d;
+        public Int32 adsr_tcv4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32[] undefined47;
 

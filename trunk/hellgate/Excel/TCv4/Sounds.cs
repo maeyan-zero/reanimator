@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
-namespace Hellgate.Excel.TCv4
+namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class SoundsTCv4
     {
-        ExcelFile.RowHeader header;
-
+        RowHeader header;
         [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 name; //pchar
-        public Int32 undefined1;
+        Int32 undefined1;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 extension; //pchar
-        public Int32 undefined2;
+        Int32 undefined2;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 lqExtension; //pchar
-        public Int32 undefined3a;
-        public Int32 undefined3b;
+        Int32 undefined3a;
+        Int32 undefined3b;
         public Int32 pickType;//unk
         public Int32 language;//idx
         public Int32 volume;
@@ -31,196 +31,187 @@ namespace Hellgate.Excel.TCv4
         public BitMask01 bitmask01;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 directory;//pchar
-        public Int32 undefined5;
-        public Int32 fileName1;
-        public Int32 undefined6a;
-        public Int32 undefined6b;
+        Int32 undefined5;
+        Int32 fileName1;
+        Int32 undefined6a;
+        Int32 undefined6b;
         public Int32 undefined6c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined6d;//information
-        public Int32 undefined6e;
+        Int32 undefined6e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined6f;//information
         Int32 undefined6g;
         public float weight1;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined7;
-        public Int32 fileName2;
-        public Int32 undefined8a;
-        public Int32 undefined8b;
+        Int32 fileName2;
+        Int32 undefined8a;
+        Int32 undefined8b;
         public Int32 undefined8c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined8d;//information
-        public Int32 undefined8e;
+        Int32 undefined8e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined8f;//information
-        public Int32 undefined8g;
+        Int32 undefined8g;
         public float weight2;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined9;
-        public Int32 fileName3;
-        public Int32 undefined10a;
-        public Int32 undefined10b;
+        Int32 fileName3;
+        Int32 undefined10a;
+        Int32 undefined10b;
         public Int32 undefined10c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined10d;//information
-        public Int32 undefined10e;
+        Int32 undefined10e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined10f;//information
-        public Int32 undefined10g;
+        Int32 undefined10g;
         public float weight3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined11;
-        public Int32 fileName4;
-        public Int32 undefined12a;
-        public Int32 undefined12b;
+        Int32 fileName4;
+        Int32 undefined12a;
+        Int32 undefined12b;
         public Int32 undefined12c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined12d;//information
-        public Int32 undefined12e;
+        Int32 undefined12e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined12f;//information
-        public Int32 undefined12g;
+        Int32 undefined12g;
         public float weight4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined13;
-        public Int32 fileName5;
-        public Int32 undefined14a;
-        public Int32 undefined14b;
+        Int32 fileName5;
+        Int32 undefined14a;
+        Int32 undefined14b;
         public Int32 undefined14c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined14d;//information
-        public Int32 undefined14e;
+        Int32 undefined14e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined14f;//information
-        public Int32 undefined14g;
+        Int32 undefined14g;
         public float weight5;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined15;
-        public Int32 fileName6;
-        public Int32 undefined16a;
-        public Int32 undefined16b;
+        Int32 fileName6;
+        Int32 undefined16a;
+        Int32 undefined16b;
         public Int32 undefined16c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined16d;//information
-        public Int32 undefined16e;
+        Int32 undefined16e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined16f;//information
-        public Int32 undefined16g;
+        Int32 undefined16g;
         public float weight6;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined17;
-        public Int32 fileName7;
-        public Int32 undefined18a;
-        public Int32 undefined18b;
+        Int32 fileName7;
+        Int32 undefined18a;
+        Int32 undefined18b;
         public Int32 undefined18c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined18d;//information
-        public Int32 undefined18e;
+        Int32 undefined18e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined18f;//information
-        public Int32 undefined18g;
+        Int32 undefined18g;
         public float weight7;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined19;
-        public Int32 fileName8;
-        public Int32 undefined20a;
-        public Int32 undefined20b;
+        Int32 fileName8;
+        Int32 undefined20a;
+        Int32 undefined20b;
         public Int32 undefined20c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined20d;//information
-        public Int32 undefined20e;
+        Int32 undefined20e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined20f;//information
-        public Int32 undefined20g;
+        Int32 undefined20g;
         public float weight8;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined21;
-        public Int32 fileName9;
-        public Int32 undefined22a;
-        public Int32 undefined22b;
+        Int32 fileName9;
+        Int32 undefined22a;
+        Int32 undefined22b;
         public Int32 undefined22c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined22d;//information
-        public Int32 undefined22e;
+        Int32 undefined22e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined22f;//information
-        public Int32 undefined22g;
+        Int32 undefined22g;
         public float weight9;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined23;
-        public Int32 fileName10;
-        public Int32 undefined24a;
-        public Int32 undefined24b;
+        Int32 fileName10;
+        Int32 undefined24a;
+        Int32 undefined24b;
         public Int32 undefined24c;//information
-        [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined24d;//information
-        public Int32 undefined24e;
+        Int32 undefined24e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined24f;//information
-        public Int32 undefined24g;
+        Int32 undefined24g;
         public float weight10;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined25;
-        public Int32 fileName11;
-        public Int32 undefined26a;
-        public Int32 undefined26b;
+        Int32 fileName11;
+        Int32 undefined26a;
+        Int32 undefined26b;
         public Int32 undefined26c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined26d;//information
-        public Int32 undefined26e;
+        [ExcelOutput(ConstantValue = -1)]
+        Int32 undefined26d;//information
+        Int32 undefined26e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined26f;//information
-        public Int32 undefined26g;
+        Int32 undefined26g;
         public float weight11;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined27;
-        public Int32 fileName12;
-        public Int32 undefined28a;
-        public Int32 undefined28b;
+        Int32 fileName12;
+        Int32 undefined28a;
+        Int32 undefined28b;
         public Int32 undefined28c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined28d;//information
-        public Int32 undefined28e;
+        [ExcelOutput(ConstantValue = -1)]
+        Int32 undefined28d;//information
+        Int32 undefined28e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined28f;//information
         public Int32 undefined28g;
         public float weight12;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined29;
-        public Int32 fileName13;
-        public Int32 undefined30a;
-        public Int32 undefined30b;
+        Int32 fileName13;
+        Int32 undefined30a;
+        Int32 undefined30b;
         public Int32 undefined30c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined30d;//information
-        public Int32 undefined30e;
+        [ExcelOutput(ConstantValue = -1)]
+        Int32 undefined30d;//information
+        Int32 undefined30e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined30f;//information
-        public Int32 undefined30g;
+        Int32 undefined30g;
         public float weight13;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined31;
-        public Int32 fileName14;
-        public Int32 undefined32a;
-        public Int32 undefined32b;
+        Int32 fileName14;
+        Int32 undefined32a;
+        Int32 undefined32b;
         public Int32 undefined32c;//information
-        [ExcelOutput(IsStringOffset = true)]
-        public Int32 undefined32d;//information
-        public Int32 undefined32e;
+        [ExcelOutput(ConstantValue = -1)]
+        Int32 undefined32d;//information
+        Int32 undefined32e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined32f;//information
-        public Int32 undefined32g;
+        Int32 undefined32g;
         public float weight14;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined33;
         public Int32 freqVar;
-        public Int32 undefined34;
+        Int32 undefined34;
         public Int32 volVar;
         public Int32 undefined123;//needs labeling
         public Int32 undefined1234;//needs labeling
         public Int32 maxWithInRad;
         public float radius;
+		[ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 hardwarePriority;
         public Int32 gamePriority;
         public float fadeOutTime;
@@ -231,7 +222,7 @@ namespace Hellgate.Excel.TCv4
         public float centerSend;
         public float rearSend;
         public float sideSend;
-        public float lfeSend;//lfe ?
+        public Int32 lfeSend;//lfe ?
         public Int32 mixState;//idx
         public Int32 bus;
         public Int32 vcas1;//list
@@ -240,7 +231,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 vcas4;
         public Int32 vcas5;
         public Int32 vcas6;
+		[ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 vcas7;
+		[ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 vcas8;
         public Int32 musicRef;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]

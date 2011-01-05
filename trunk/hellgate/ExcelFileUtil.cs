@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -45,19 +46,19 @@ namespace Hellgate
         [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
         public class OutputAttribute : Attribute
         {
-            public bool IsBitmask { get; set; }
-            public uint DefaultBitmask { get; set; }
-            public bool IsBool { get; set; }
-            public bool IsStringOffset { get; set; }
-            public bool IsScript { get; set; }
-            public bool IsStringIndex { get; set; }
-            public bool IsTableIndex { get; set; }
-            public bool IsSecondaryString { get; set; }
-            public string TableStringId { get; set; }
-            public int SortColumnOrder { get; set; }
-            public string SecondarySortColumn { get; set; }
-            public Object ConstantValue { get; set; }
-            public bool DebugIgnoreConstantCheck { get; set; }
+            public bool IsBitmask;
+            public uint DefaultBitmask;
+            public bool IsBool;
+            public bool IsStringOffset;
+            public bool IsScript;
+            public bool IsStringIndex;
+            public bool IsTableIndex;
+            public bool IsSecondaryString;
+            public String TableStringId;
+            public int SortColumnOrder;
+            public String SecondarySortColumn;
+            public Object ConstantValue;
+            public bool DebugIgnoreConstantCheck;
         }
 
         private abstract class Token
@@ -117,7 +118,80 @@ namespace Hellgate
                 Parameters = new List<Parameter>();
             }
         }
+
+        //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        //public struct Code : IComparable
+        //{
+        //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        //    private char[] _code;
+
+        //    public static implicit operator String(Code source)
+        //    {
+        //        return new String(source._code);
+        //    }
+
+        //    public static implicit operator int(Code source)
+        //    {
+        //        return source._code[0] + (source._code[1] << 8) + (source._code[2] << 16) + (source._code[3] << 24);
+        //    }
+
+        //    public static implicit operator Code(String source)
+        //    {
+        //        Code code = new Code { _code = new char[4] };
+        //        if (source.Length > 0) code._code[0] = source[0];
+        //        if (source.Length > 1) code._code[1] = source[1];
+        //        if (source.Length > 2) code._code[2] = source[2];
+        //        if (source.Length > 3) code._code[3] = source[3];
+        //        return code;
+        //    }
+
+        //    int IComparable.CompareTo(Object obj)
+        //    {
+        //        int code1 = this;
+        //        int code2 = (Code)obj;
+
+        //        if (code1 < code2) return -1;
+        //        if (code1 > code2) return 1;
+        //        return 0;
+        //    }
+
+        //    public override string ToString()
+        //    {
+        //        return new String(_code);
+        //    }
+        //}
         #endregion
+
+        private static String _CodeToString(int code)
+        {
+            if (code == 0) return String.Empty;
+
+            char[] chars = new[]
+            {
+                (char) (code & 0xFF),
+                (char) ((code & 0xFF00) >> 8),
+                (char) ((code & 0xFF0000) >> 16),
+                (char) ((code & 0xFF000000) >> 24)
+            };
+
+            String charStr = new String(chars);
+            if (charStr[1] == 0x00) return charStr.Substring(0, 1);
+            if (charStr[2] == 0x00) return charStr.Substring(0, 2);
+            if (charStr[3] == 0x00) return charStr.Substring(0, 3);
+            return charStr;
+        }
+
+        private static int _StringToCode(String codeStr)
+        {
+            if (String.IsNullOrEmpty(codeStr)) return 0;
+
+            int code = 0;
+            if (codeStr.Length > 3) code += (codeStr[3] << 24);
+            if (codeStr.Length > 2) code += (codeStr[2] << 16);
+            if (codeStr.Length > 1) code += (codeStr[1] << 8);
+            if (codeStr.Length > 0) code += (codeStr[0]);
+            return code;
+        }
 
         public static OutputAttribute GetExcelOutputAttribute(FieldInfo fieldInfo)
         {
@@ -210,6 +284,27 @@ namespace Hellgate
             return _secondaryStrings[index];
         }
 
+        public void SetSecondaryStringsCollection(StringCollection secondaryStrings)
+        {
+            _secondaryStrings = secondaryStrings;
+        }
+
+        public void SetScriptCode(byte[] scritpByteCode)
+        {
+            _scriptBuffer = scritpByteCode;
+        }
+
+        //public void AppendToScriptBuffer(byte[] scriptBytes)
+        //{
+        //    Int32 byteCount = _scriptBuffer.Length + scriptBytes.Length;
+        //    byte[] scriptBuffer = new byte[byteCount];
+
+        //    Buffer.BlockCopy(_scriptBuffer, 0, scriptBuffer, 0, _scriptBuffer.Length);
+        //    Buffer.BlockCopy(scriptBytes, 0, scriptBuffer, _scriptBuffer.Length, scriptBytes.Length);
+
+        //    _scriptBuffer = scriptBuffer;
+        //}
+
         private bool _ParsePropertiesScriptTable(byte[] data, ref int offset)
         {
             ExcelFunctions = new List<ExcelFunction>();
@@ -251,7 +346,7 @@ namespace Hellgate
                 case 0x38: // 56 // "nPowerChange" from TCv4 Skills
                     paramLength = 4;
                     break;
-                    
+
                 case 0x39: // 57 // oldstats, x, sel, dmgtype, ?
                     paramLength = 4;
                     break;
@@ -413,7 +508,7 @@ namespace Hellgate
             {
                 foreach (object row in Rows)
                 {
-                    fieldInfo.SetValue(row, ((string) fieldInfo.GetValue(row)).Replace(dash, dashReplace).Replace(score, scoreReplace));
+                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace(dash, dashReplace).Replace(score, scoreReplace));
                 }
             }
 
@@ -469,7 +564,7 @@ namespace Hellgate
 
                 int pos = attribute.SortColumnOrder - 1;
 
-                    // need to order by string, not string offset
+                // need to order by string, not string offset
                 if (attribute.IsStringOffset)
                 {
                     var sortedList = from element in Rows
@@ -585,7 +680,7 @@ namespace Hellgate
                     stringHash = stringHash3;
                 }
 
-                byte[] unknown0x01 = new byte[] {0x01, 0x00, 0x00, 0x00}; // not sure if this was the same for name - gave up
+                byte[] unknown0x01 = new byte[] { 0x01, 0x00, 0x00, 0x00 }; // not sure if this was the same for name - gave up
                 UInt32 stringHash4 = Crypt.GetStringHash(unknown0x01, stringHash);
                 stringHash = stringHash4;
 
@@ -603,7 +698,7 @@ namespace Hellgate
                         // sub_140011BB0+217  028 lea     r9, [rbx+20h]
                         break;
 
-                        // and a few more cases as well
+                    // and a few more cases as well
 
                     default: // Int32
                         // sub_140011BB0+306  028 lea     r9, [rbx+20h]

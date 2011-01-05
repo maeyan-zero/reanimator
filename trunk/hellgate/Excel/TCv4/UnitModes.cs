@@ -1,29 +1,52 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel.TCv4
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class UnitModesTCv4
     {
-        ExcelFile.RowHeader header;
+        RowHeader header;
         [ExcelOutput(IsStringOffset = true, SortColumnOrder = 1)]
         public Int32 mode;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] undefined1;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public Int32[] block;
+        public Int32 block1;
+        public Int32 block2;
+        public Int32 block3;
+        public Int32 block4;
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 block5;
+		[ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 251)]
+        Int32[] block;
         [ExcelOutput(IsBool = true)]
         public Int32 blockOnGround;//bool
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public Int32[] wait;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public Int32[] clear;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
-        public Int32[] endBlock;
+        Int32[] wait;
+        public Int32 clear1;
+        public Int32 clear2;
+        public Int32 clear3;
+        public Int32 clear4;
+        public Int32 clear5;
+        public Int32 clear6;
+        public Int32 clear7;
+        public Int32 clear8;
+        public Int32 clear9;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 247)]
+        Int32[] clear;
+        public Int32 endBlock1;
+        public Int32 endBlock2;
+        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        public Int32 endBlock3;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 253)]
+        Int32[] endBlock;
         public Int32 group;//idx
         public Int32 otherhand;//idx
         public Int32 backUp;//idx

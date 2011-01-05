@@ -12,7 +12,8 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string recipe;
-        public Int32 String;
+        [ExcelOutput(ConstantValue = -1)]
+        Int32 String;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         [ExcelOutput(IsBool = true)]
@@ -90,7 +91,7 @@ namespace Hellgate.Excel
         public Int32 treasureResult4;
         public Int32 treasureResult5;
         public Int32 treasureResult6;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 mustPlaceInInvSlot;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask01 bitmask;

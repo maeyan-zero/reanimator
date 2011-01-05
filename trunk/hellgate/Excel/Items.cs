@@ -5,6 +5,7 @@ using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class Items
     {
@@ -339,11 +340,11 @@ namespace Hellgate.Excel
         public Int32 level;                                         // 89   0x0000000000000600  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
         public Int32 monsterQuality;//index                         // 48   0x0000000000000604  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monsterClassAtUniqueQuality;//index            // 49   0x0000000000000608  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monsterClassAtChampionQuality;//index          // 50   0x000000000000060C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 minionClass;//index                            // 52   0x0000000000000610  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_NAME_TYPES")]
         public Int32 monsterNameType;//index                        // 53   0x0000000000000614  XLS_ReadIndex
@@ -457,7 +458,7 @@ namespace Hellgate.Excel
         public Int32 accuracyBase;                                  // 130  0x0000000000000754  XLS_ReadInt32
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknownBytes07;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 refillHotKey;//index                           // 262  0x0000000000000768  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_GROUP")]
         public Int32 animGroup;//index                              // 121  0x000000000000076C  XLS_ReadIndex
@@ -620,9 +621,9 @@ namespace Hellgate.Excel
         public Int32 firstTimeTreasure;//index                      // 106  0x00000000000009F4  XLS_ReadIndex,65
         [ExcelOutput(IsTableIndex = true, TableStringId = "INVENTORY")]
         public Int32 inventory;//index                              // 229  0x00000000000009F8  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 recipeIngredientInvLoc;//index                 // 230  0x00000000000009FC  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOC")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 recipeResultInvLoc;//index                     // 231  0x0000000000000A00  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 startingTreasure;//index                       // 232  0x0000000000000A04  XLS_ReadIndex,65
@@ -729,7 +730,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 useSound;//index                               // 270  0x0000000000000B1C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
-        public Int32 cantUseSoundA;//index                          // 271  0x0000000000000B20  XLS_ReadIndex
+        public Int32 cantUseSound;//index                          	// 271  0x0000000000000B20  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantFireSound;//index                          // 272  0x0000000000000B24  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]

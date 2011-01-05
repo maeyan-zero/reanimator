@@ -10,7 +10,7 @@ namespace Hellgate.Excel.TCv4
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
-        public short code;
+        public Int16 code;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string miniIcon;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]

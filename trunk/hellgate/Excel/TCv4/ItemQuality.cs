@@ -14,7 +14,7 @@ namespace Hellgate.Excel.TCv4
         public String quality;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
-        Int32 craftingBreakdownTreasure;
+        public Int32 craftingBreakdownTreasure;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 displayName;
         [ExcelOutput(IsStringIndex = true)]

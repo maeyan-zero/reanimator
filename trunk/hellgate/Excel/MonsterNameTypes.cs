@@ -13,6 +13,6 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
         [ExcelOutput(SortColumnOrder = 2)]
-        public short code;
+        public Int16 code;
     }
 }

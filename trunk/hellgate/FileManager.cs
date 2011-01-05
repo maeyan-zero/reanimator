@@ -25,7 +25,8 @@ namespace Hellgate
         public DataSet XlsDataSet { get; private set; }
         private List<uint> _excelIndexToCodeList;
         private Dictionary<uint, ExcelFile> _excelCodeToTable;
-        private readonly String _excelTableStringId;
+        private readonly String _excelTablesStringId;
+        private Dictionary<String, ObjectDelegator> _dataFileDelegators = new Dictionary<String, ObjectDelegator>();
 
         /// <summary>
         /// Initialize the File Manager by the given Hellgate path.
@@ -36,7 +37,7 @@ namespace Hellgate
         {
             HellgatePath = hellgatePath;
             MPVersion = mpVersion;
-            _excelTableStringId = MPVersion ? "_TCv4_EXCELTABLES" : "EXCELTABLES";
+            _excelTablesStringId = MPVersion ? "_TCv4_EXCELTABLES" : "EXCELTABLES";
             Language = "english"; // do we need to bother with anything other than english?
             Reload();
         }
@@ -90,6 +91,8 @@ namespace Hellgate
         /// <param name="fullPath">The full path of the index file to parse.</param>
         private void _LoadIndexFile(String fullPath)
         {
+            //if (!fullPath.Contains("4580")) return;
+
             // if there is no accompanying .dat at all, then ignore .idx
             String datFullPath = fullPath.Replace(IndexFile.FileExtension, IndexFile.DatFileExtension);
             if (!File.Exists(datFullPath)) return;
@@ -177,19 +180,19 @@ namespace Hellgate
         /// Loads all of the available Excel and Strings files to a hashtable.
         /// </summary>
         /// <returns>Returns true on success.</returns>
-        public bool LoadTableFiles()
+        public bool LoadTableFiles(bool ignorePatchedOut = false)
         {
-            ExcelFile.EnableDebug = false;
+            //ExcelFile.EnableDebug = true;
 
             // want excel files and strings files
             foreach (FileEntry fileEntry in
                 FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.Extension) ||
                     (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) && fileEntry.RelativeFullPath.Contains(Language))))
             {
-                byte[] fileBytes = GetFileBytes(fileEntry);
+                byte[] fileBytes = GetFileBytes(fileEntry, ignorePatchedOut);
 
                 //if (!fileEntry.FileNameString.Contains("sounds")) continue;
-                //if (fileEntry.FileNameString.Contains("invloc"))
+                //if (!MPVersion && fileEntry.FileNameString.Contains("act.txt.cooked"))
                 //{
                 //    int bp = 0;
                 //}
@@ -204,166 +207,12 @@ namespace Hellgate
                     }
                     catch (Exception e)
                     {
+                        Debug.WriteLine(e.ToString());
                         ExceptionLogger.LogException(e);
                         Console.WriteLine(String.Format("Critical Error: Failed to load excel file {0} (MPVersion={1})", fileEntry.FileNameString, MPVersion));
                         continue;
                     }
                     if (dataFile.Attributes.IsEmpty) continue;
-
-                    #region ExcelFileDebug
-                    if (ExcelFile.EnableDebug && !MPVersion && false)
-                    {
-                        ExcelFile excelFile = (ExcelFile)dataFile;
-                        //Console.WriteLine("Loading " + fileEntry.FileNameString);
-
-                        try
-                        {
-                            byte[] dataFileBytes = dataFile.ToByteArray();
-                            if (dataFile.StringId == "SOUNDS" && false)
-                            {
-                                byte[] csvBytes = dataFile.ExportCSV();
-                                ExcelFile soundsCSV = new ExcelFile(csvBytes, fileEntry.RelativeFullPathWithoutPatch);
-                                byte[] soundsBytes = soundsCSV.ToByteArray();
-                                //byte[] soundsBytesFromCSV = soundsCSV.ExportCSV();
-                                //ExcelFile soundsCSVFromBytesFromCSV = new ExcelFile(soundsBytesFromCSV, fileEntry.RelativeFullPathWithoutPatch);
-
-                                // some brute force ftw
-                                byte[][] bytesArrays = new[] {fileBytes, soundsBytes};
-                                for (int z = 0; z < bytesArrays.Length; z++)
-                                {
-                                    byte[] bytes = bytesArrays[z];
-
-                                    int offset = 0x20;
-                                    int stringsBytesCount = FileTools.ByteArrayToInt32(bytes, ref offset);
-
-                                    StringWriter stringWriterByteStrings = new StringWriter();
-                                    stringWriterByteStrings.WriteLine(stringsBytesCount + " bytes");
-                                    List<String> strings = new List<String>();
-                                    List<int> offsets = new List<int>();
-
-                                    while (offset < stringsBytesCount + 0x20)
-                                    {
-                                        String str = FileTools.ByteArrayToStringASCII(bytes, offset);
-                                        strings.Add(str);
-                                        offsets.Add(offset);
-
-                                        offset += str.Length + 1;
-                                    }
-
-                                    String[] sortedStrings = strings.ToArray();
-                                    int[] sortedOffsets = offsets.ToArray();
-                                    Array.Sort(sortedStrings, sortedOffsets);
-                                    stringWriterByteStrings.WriteLine(strings.Count + " strings");
-                                    for (int i = 0; i < strings.Count; i++)
-                                    {
-                                        stringWriterByteStrings.WriteLine(sortedStrings[i] + "\t\t\t" + sortedOffsets[i]);
-                                    }
-                                    
-                                    File.WriteAllText(@"C:\excel_debug\strings" + z + ".txt", stringWriterByteStrings.ToString());
-                                }
-                            }
-
-                            if (fileBytes.Length != dataFileBytes.Length)
-                            {
-                                Console.WriteLine("ToByteArray() dataFileBytes has differing length: " + dataFile.StringId);
-                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
-                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArray", dataFileBytes);
-                            }
-                            else
-                            {
-                                ExcelFile fromBytesExcel = new ExcelFile(dataFileBytes, fileEntry.RelativeFullPathWithoutPatch);
-                                if (!fromBytesExcel.HasIntegrity)
-                                {
-                                    Console.WriteLine("fromBytesExcel = new Excel from ToByteArray() failed: " + dataFile.StringId);
-                                }
-                                else
-                                {
-                                    byte[] dataFileBytesFromToByteArray = fromBytesExcel.ToByteArray();
-
-                                    // check generated sort index arrays
-                                    if (excelFile.IndexSortArray != null)
-                                    {
-                                        if (fromBytesExcel.IndexSortArray == null || excelFile.IndexSortArray.Count != fromBytesExcel.IndexSortArray.Count)
-                                        {
-                                            Console.WriteLine("fromBytesExcel has not-matching IndexSortArray count: " + excelFile.StringId);
-                                        }
-                                        else
-                                        {
-                                            bool hasError = false;
-                                            for (int i = 0; i < excelFile.IndexSortArray.Count; i++)
-                                            {
-                                                if (excelFile.IndexSortArray[i].SequenceEqual(fromBytesExcel.IndexSortArray[i])) continue;
-
-                                                Console.WriteLine(String.Format("IndexSortArray[{0}] NOT EQUAL to original: {1}", i, excelFile.StringId));
-                                                hasError = true;
-                                            }
-
-                                            if (hasError)
-                                            {
-                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
-                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
-                                            }
-                                        }
-                                    }
-
-
-                                    // more checks
-                                    if (fileBytes.Length != dataFileBytesFromToByteArray.Length)
-                                    {
-                                        Console.WriteLine("ToByteArray() dataFileBytesFromToByteArray has differing length: " + dataFile.StringId);
-                                    }
-                                    else
-                                    {
-                                        byte[] csvBytes = fromBytesExcel.ExportCSV();
-                                        ExcelFile csvExcel = new ExcelFile(csvBytes, fileEntry.RelativeFullPathWithoutPatch);
-                                        if (!csvExcel.HasIntegrity)
-                                        {
-                                            Console.WriteLine("csvExcel = new Excel from ExportCSV() failed: " + dataFile.StringId);
-                                        }
-                                        else
-                                        {
-                                            byte[] recookedExcelBytes = csvExcel.ToByteArray();
-
-                                            UInt32 structureId = BitConverter.ToUInt32(fileBytes, 4);
-                                            UInt32 fromCSVStructureId = BitConverter.ToUInt32(recookedExcelBytes, 4);
-                                            if (structureId != fromCSVStructureId)
-                                            {
-                                                Console.WriteLine("Warning: Structure Id value do not match: " + structureId + " != " + fromCSVStructureId);
-                                            }
-
-
-                                            int recookedLength = recookedExcelBytes.Length;
-                                            if (excelFile.StringId == "SKILLS") recookedLength += 12; // 12 bytes in int ptr data not used/referenced at all and are removed/lost in bytes -> csv -> bytes
-
-                                            if (fileBytes.Length != recookedLength)
-                                            {
-                                                Console.WriteLine("Recooked Excel file has differing length: " + dataFile.StringId);
-
-                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
-                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".csv", csvBytes);
-                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArray", dataFileBytes);
-                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
-                                                File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".recookedExcelBytes", recookedExcelBytes);
-                                            }
-                                            else
-                                            {
-                                                ExcelFile finalExcel = new ExcelFile(recookedExcelBytes, fileEntry.RelativeFullPathWithoutPatch);
-                                                Debug.Assert(finalExcel.HasIntegrity);
-                                                byte[] finalCheck = finalExcel.ToByteArray();
-                                                if (excelFile.StringId == "SKILLS") Debug.Assert(finalCheck.Length + 12 == dataFileBytes.Length);
-                                                else Debug.Assert(finalCheck.Length == dataFileBytes.Length);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("Excel file Exception: " + dataFile.StringId + "\n" + e);
-                        }
-                    }
-                    #endregion
                 }
                 else
                 {
@@ -385,6 +234,10 @@ namespace Hellgate
                 try
                 {
                     DataFiles.Add(dataFile.StringId, dataFile);
+
+                    FieldInfo[] dataFileFields = dataFile.Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    ObjectDelegator dataFileDelegator = new ObjectDelegator(dataFileFields, new[] { ObjectDelegator.SupportedFields.GetValue, ObjectDelegator.SupportedFields.SetValue });
+                    _dataFileDelegators.Add(dataFile.StringId, dataFileDelegator);
                 }
                 catch (Exception e)
                 {
@@ -414,17 +267,56 @@ namespace Hellgate
         }
 
         /// <summary>
+        /// Checks if a data table has a specified column name.
+        /// </summary>
+        /// <param name="stringId">The StringId of the data table to check.</param>
+        /// <param name="colName">The column name to check for.</param>
+        /// <returns>True if the table has the column.</returns>
+        public bool DataTableHasColumn(String stringId, String colName)
+        {
+            if (DataFiles == null || !DataFiles.ContainsKey(stringId)) return false;
+
+            ObjectDelegator objectDelegator = _dataFileDelegators[stringId];
+            return objectDelegator.ContainsGetFieldDelegate(colName);
+        }
+        
+        /// <summary>
+        /// Obtains an int value from an excel table using a StringId, column name, and row index.
+        /// Returns 0x4C494146 on fail (will output as 'FAIL').
+        /// </summary>
+        /// <param name="stringId">An Excel Table StringId.</param>
+        /// <param name="colName">The column name to check.</param>
+        /// <param name="rowIndex">The row index to obtain the value from.</param>
+        /// <returns></returns>
+        public int GetExcelIntFromStringId(String stringId, String colName, int rowIndex)
+        {
+            if (DataFiles == null || !DataFiles.ContainsKey(stringId)) return 0x4C494146;
+
+            ExcelFile excelFile = DataFiles[stringId] as ExcelFile;
+            if (excelFile == null) return 0x4C494146;
+            if (rowIndex < 0 || rowIndex >= excelFile.Rows.Count) return 0x4C494146;
+
+            ObjectDelegator excelDelegator = _dataFileDelegators[stringId];
+            Object row = excelFile.Rows[rowIndex];
+
+            Object value = excelDelegator[colName](row);
+            if (value.GetType() == typeof(int)) return (int) value;
+
+            return (int)(short)value;
+        }
+
+        /// <summary>
         /// Retrieves an Excel Table from its Code value. If it's not loaded, then it will be loaded and returned.
         /// </summary>
         /// <param name="code">The code of the Excel Table to retrieve.</param>
         /// <returns>The Excel Table as a DataTable, or null if not found.</returns>
         public ExcelFile GetExcelTableFromCode(uint code)
         {
-            if (DataFiles == null || DataFiles.ContainsKey(_excelTableStringId) == false) return null;
+            if (DataFiles == null || DataFiles.ContainsKey(_excelTablesStringId) == false) return null;
 
             if (_excelCodeToTable == null)
             {
-                ExcelFile excelTables = (ExcelFile)DataFiles[_excelTableStringId];
+                ExcelFile excelTables = (ExcelFile)DataFiles[_excelTablesStringId];
                 _excelCodeToTable = new Dictionary<uint, ExcelFile>();
 
                 foreach (Excel.ExcelTables excelTablesRow in excelTables.Rows)
@@ -459,7 +351,7 @@ namespace Hellgate
             if (_excelIndexToCodeList == null)
             {
                 DataFile excelTables;
-                if (!DataFiles.TryGetValue(_excelTableStringId, out excelTables)) return 0;
+                if (!DataFiles.TryGetValue(_excelTablesStringId, out excelTables)) return 0;
 
                 _excelIndexToCodeList = new List<uint>();
                 foreach (Excel.ExcelTables excelTable in excelTables.Rows)
@@ -472,40 +364,91 @@ namespace Hellgate
         }
 
 
+
+        public int GetExcelRowIndexFromStringId(String stringId, int value, String colName)
+        {
+            if (DataFiles == null || DataFiles[stringId] == null) return -1;
+
+            ExcelFile excelFile = (ExcelFile)DataFiles[stringId];
+            ObjectDelegator excelDelegator = _dataFileDelegators[stringId];
+            ObjectDelegator.FieldGetValueDelegate getValue = excelDelegator[colName];
+
+            int rowIndex = -1;
+            bool foundRow = false;
+            foreach (Object row in excelFile.Rows)
+            {
+                rowIndex++;
+
+                int intVal = 0;
+                Object val = getValue(row);
+                if (val.GetType() == typeof(Int16))
+                {
+                    intVal = (int) (short) val;
+                }
+                else
+                {
+                    intVal = (int) val;
+                }
+
+                if (intVal != value) continue;
+
+                foundRow = true;
+                break;
+            }
+
+            return (foundRow) ? rowIndex : -1;
+        }
+
+
+
+        public int GetExcelRowIndex(String stringId, String value)
+        {
+            if (DataFiles == null) return -1;
+
+            ExcelFile excelFile = DataFiles[stringId] as ExcelFile;
+            if (excelFile == null) return -1;
+
+            return _GetExcelRowIndex(excelFile, value);
+        }
+
         public int GetExcelRowIndex(uint code, String value)
         {
-            if (DataFiles == null || DataFiles[_excelTableStringId] == null) return -1;
+            if (DataFiles == null || DataFiles[_excelTablesStringId] == null) return -1;
 
-            ExcelFile excelTable = GetExcelTableFromCode(code);
-            if (excelTable == null) return -1;
+            return _GetExcelRowIndex(GetExcelTableFromCode(code), value);
+        }
 
-            Type type = excelTable.Rows[0].GetType();
-            FieldInfo[] fields = type.GetFields();
-            FieldInfo field = fields[0];
-
+        public int _GetExcelRowIndex(ExcelFile excelTable, String value)
+        {
+            FieldInfo field = excelTable.Attributes.RowType.GetFields()[0];
             bool isStringField = (field.FieldType == typeof(String));
+
+            ObjectDelegator excelDelegator = _dataFileDelegators[excelTable.StringId];
+            ObjectDelegator.FieldGetValueDelegate getValue = excelDelegator[field.Name];
+
             int i = 0;
             foreach (Object row in excelTable.Rows)
             {
                 if (isStringField)
                 {
-                    String val = (String)field.GetValue(row);
+                    String val = (String)getValue(row);
                     if (val == value) return i;
                 }
                 else // string offset
                 {
-                    int offset = (int)field.GetValue(row);
+                    int offset = (int)getValue(row);
                     String stringVal = excelTable.ReadStringTable(offset);
                     if (stringVal == value) return i;
                 }
                 i++;
             }
 
-
             return -1;
         }
 
-        public String GetExcelRowStringFromStringId(String stringId, int rowIndex, int colIndex=0)
+
+
+        public String GetExcelRowStringFromStringId(String stringId, int rowIndex, int colIndex = 0)
         {
             if (DataFiles == null || String.IsNullOrEmpty(stringId) || DataFiles.ContainsKey(stringId) == false) return null;
 
@@ -516,9 +459,9 @@ namespace Hellgate
             return stringVal;
         }
 
-        public String GetExcelRowStringFromRowIndex(uint code, int rowIndex, int colIndex=0)
+        public String GetExcelRowStringFromRowIndex(uint code, int rowIndex, int colIndex = 0)
         {
-            if (DataFiles == null || DataFiles.ContainsKey(_excelTableStringId) == false || rowIndex < 0) return null;
+            if (DataFiles == null || DataFiles.ContainsKey(_excelTablesStringId) == false || rowIndex < 0) return null;
 
             ExcelFile excelTable = GetExcelTableFromCode(code);
 
@@ -648,15 +591,51 @@ namespace Hellgate
         /// Extracts all Excel files to their \data\ locations.
         /// Primarly a debug function.
         /// </summary>
-        public void ExtractAllExcel()
+        public void ExtractAllExcel(String root = null, bool doCSVAsWell = false)
         {
+            if (root == null) root = HellgatePath;
+
             foreach (FileEntry fileEntry in FileEntries.Values)
             {
                 if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension)) continue;
 
-                byte[] fileBytes = GetFileBytes(fileEntry, true);
-                String filePath = Path.Combine(HellgatePath, fileEntry.RelativeFullPathWithoutPatch);
+                FileEntry extractFileEntry = fileEntry;
+                //if (fileEntry.Index.ToString().Contains("4580") && fileEntry.Siblings != null)
+                //{
+                //    extractFileEntry = (from fi in fileEntry.Siblings
+                //                        where fi.Index.ToString().Contains("4256")
+                //                        select fi).FirstOrDefault();
+
+                //    if (extractFileEntry == null)
+                //    {
+                //        extractFileEntry = (from fi in fileEntry.Siblings
+                //                            where fi.Index.ToString().Contains("000")
+                //                            select fi).FirstOrDefault();
+                //    }
+
+                //    Debug.Assert(extractFileEntry != null);
+                //}
+
+                byte[] fileBytes = GetFileBytes(extractFileEntry, true);
+                String filePath = Path.Combine(root, extractFileEntry.RelativeFullPathWithoutPatch);
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                 File.WriteAllBytes(filePath, fileBytes);
+
+
+                if (!doCSVAsWell) continue;
+                byte[] csvBytes;
+
+                try
+                {
+                    ExcelFile excelFile = new ExcelFile(fileBytes, filePath, MPVersion);
+                    csvBytes = excelFile.ExportCSV(this);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+
+                File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);
             }
         }
 

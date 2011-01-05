@@ -242,7 +242,6 @@ namespace Hellgate
 
             // TCv4 - No Definition
             {"_TCv4_ACHIEVEMENTSLOTS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
-            {"_TCv4_AFFIX_GROUPS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
             {"_TCv4_DONATION_REWARDS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
             {"_TCv4_LOADING_SCREEN", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
             {"_TCv4_PLAYERRANKS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
@@ -253,6 +252,9 @@ namespace Hellgate
             {"_TCv4_EMOTES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
             {"_TCv4_RECIPE_PROPERTIES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}, // todo: no definition
 
+            
+            // TCv4 - New
+            {"_TCv4_AFFIX_GROUPS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(AffixGroupsTCv4)}},
 
 
             // TCv4 - Same

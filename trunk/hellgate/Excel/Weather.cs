@@ -12,6 +12,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;//idx
         public Int32 theme1;
         public Int32 theme2;
