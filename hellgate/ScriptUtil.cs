@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Revival.Common;
 
 namespace Hellgate
@@ -801,46 +800,7 @@ namespace Hellgate
         }
         #endregion
 
-        #region Static Init Functions etc
-
-        /// <summary>
-        /// Initialiser function to generate the excel script functions.
-        /// </summary>
-        /// <param name="fileManager">The File Manager to use when looking for excel details.</param>
-        public static void GenerateExcelScriptFunctions(FileManager fileManager)
-        {
-            if (fileManager == null) throw new ArgumentNullException("fileManager", "File Manager cannot be null!");
-            if (fileManager.DataFiles == null || fileManager.DataFiles.Count == 0) fileManager.LoadTableFiles();
-            if (fileManager.DataFiles.Count == 0) throw new Exceptions.ScriptNotInitialisedException("SetFileManager was unable to initialise the excel table files!");
-
-
-            ExcelFile propertiesTable;
-            ExcelFile skillsTable;
-            if (fileManager.MPVersion)
-            {
-                _statsFileTCv4 = fileManager.GetDataFile("_TCv4_STATS") as ExcelFile;
-                FieldInfo[] statsFields = _statsFileTCv4.Attributes.RowType.GetFields();
-                _statsFileDelegatorTCv4 = new ObjectDelegator(statsFields, ObjectDelegator.SupportedFields.GetValue);
-
-                propertiesTable = fileManager.GetDataFile("_TCv4_PROPERTIES") as ExcelFile;
-                skillsTable = fileManager.GetDataFile("_TCv4_SKILLS") as ExcelFile;
-            }
-            else
-            {
-                _statsFile = fileManager.GetDataFile("STATS") as ExcelFile;
-                FieldInfo[] statsFields = _statsFile.Attributes.RowType.GetFields();
-                _statsFileDelegator = new ObjectDelegator(statsFields, ObjectDelegator.SupportedFields.GetValue);
-
-                propertiesTable = fileManager.GetDataFile("PROPERTIES") as ExcelFile;
-                skillsTable = fileManager.GetDataFile("SKILLS") as ExcelFile;
-            }
-            
-            if (propertiesTable == null || skillsTable == null) throw new Exceptions.ScriptNotInitialisedException("SetFileManager was unable to obtain the properties and skills excel tables!");
-
-
-            _ParsePropertiesExcelFunctions(propertiesTable, fileManager);
-            _ParseSkillsExcelFunctions(skillsTable, fileManager);
-        }
+        #region Static Debug Function
 
         public static void EnableDebug(bool enableDebug, bool isTCv4=false)
         {
@@ -1417,50 +1377,46 @@ namespace Hellgate
         #region Excel Script Functions Stuff
 
         /// <summary>
-        /// Parses and appends the properties excel script functions to the global call function array.
-        /// Must be called before the skills table and before script decompiling can begin.
+        /// Initialiser function to generate the excel script functions.
         /// </summary>
-        /// <param name="propertiesTable">The properties excel file containing the excel script functions to parse.</param>
-        /// <param name="fileManager">The File Manager to use when looking for excel details.</param>
-        private static int _ParsePropertiesExcelFunctions(ExcelFile propertiesTable, FileManager fileManager)
+        private void _GenerateExcelScriptFunctions()
         {
-            if (propertiesTable == null) throw new ArgumentNullException("propertiesTable", "Properties excel file cannot be null!");
+            ExcelFile propertiesTable;
+            ExcelFile skillsTable;
+            if (_fileManager.MPVersion)
+            {
+                propertiesTable = _fileManager.GetDataFile("_TCv4_PROPERTIES") as ExcelFile;
+                skillsTable = _fileManager.GetDataFile("_TCv4_SKILLS") as ExcelFile;
+            }
+            else
+            {
+                propertiesTable = _fileManager.GetDataFile("PROPERTIES") as ExcelFile;
+                skillsTable = _fileManager.GetDataFile("SKILLS") as ExcelFile;
+            }
 
-            int added = _ParseExcelFunctions(propertiesTable, fileManager);
-            if (added > 0) _havePropertiesFunctions = true;
+            if (propertiesTable == null || skillsTable == null) throw new Exceptions.ScriptNotInitialisedException("_GenerateExcelScriptFunctions() was unable to obtain the Properties and Skills excel tables!");
 
-            return added;
-        }
+            _ParseExcelFunctions(propertiesTable);
+            _ParseExcelFunctions(skillsTable);
 
-        /// <summary>
-        /// Parses and appends the skills excel script functions to the global call function array.
-        /// Must be called after the properties table and before script decompiling can begin.
-        /// </summary>
-        /// <param name="skillsTable">The skills excel file containing the excel script functions to parse.</param>
-        /// <param name="fileManager">The File Manager to use when looking for excel details.</param>
-        private static int _ParseSkillsExcelFunctions(ExcelFile skillsTable, FileManager fileManager)
-        {
-            if (skillsTable == null) throw new ArgumentNullException("skillsTable", "Skills excel file cannot be null!");
-            if (!_havePropertiesFunctions) throw new Exceptions.ScriptNotInitialisedException("Properties excel script functions have not been parsed! They must be loaded before the skills excel script functions!");
-
-            int added = _ParseExcelFunctions(skillsTable, fileManager);
-            if (added > 0) _haveSkillsFunctions = true;
-
-            return added;
+            if (_fileManager.MPVersion)
+            {
+                _haveExcelFunctionsTCv4 = true;
+            }
+            else
+            {
+                _haveExcelFunctions = true;
+            }
         }
 
         /// <summary>
         /// Main worker function that parses and appends excel script functions to the global call function array.
         /// </summary>
         /// <param name="excelFile">The  excel file containing the excel script functions to parse.</param>
-        /// <param name="fileManager">The File Manager to use when looking for excel details.</param>
         /// <returns>The number of functions added.</returns>
-        private static int _ParseExcelFunctions(ExcelFile excelFile, FileManager fileManager)
+        private void _ParseExcelFunctions(ExcelFile excelFile)
         {
             const bool debugOutputLikeFunction = true;
-            List<Function> functionList = (fileManager.MPVersion) ? CallFunctionsTCv4 : CallFunctions;
-            int startFuncCount = functionList.Count;
-            int voidFunctions = 0;
 
             foreach (ExcelFile.ExcelFunction excelFunction in excelFile.ExcelFunctions)
             {
@@ -1469,11 +1425,8 @@ namespace Hellgate
                 //    int bp = 0;
                 //}
 
-                if (excelFunction.Parameters[0].TypeValues.Length <= 4) // not sure what to do with them - they don't appear to be used
-                {
-                    voidFunctions++;
-                    continue;
-                }
+                // not sure what to do with them - they don't appear to be used
+                if (excelFunction.Parameters[0].TypeValues.Length <= 4) continue;
 
                 Function function = new Function();
                 List<Argument> arguments = new List<Argument>();
@@ -1486,15 +1439,10 @@ namespace Hellgate
                     {
                         function.Name = parameter.Name;
                         int functionIndex = parameter.TypeValues[4];
-                        Debug.Assert(functionIndex == functionList.Count);
+                        Debug.Assert(functionIndex == _callFunctions.Count);
 
                         continue;
                     }
-
-                    //if (function.Name == "fuel_slots")
-                    //{
-                    //    int bp = 0;
-                    //}
 
                     Argument arg = new Argument
                     {
@@ -1514,16 +1462,8 @@ namespace Hellgate
                 }
 
                 function.Args = arguments.ToArray();
-                try
-                {
-                    ExcelScript excelScript = new ExcelScript(fileManager);
-                    function.ExcelScript = excelScript.Decompile(excelFunction, function, byteCodeString, "PROPERTIES", 0, 0, function.Name);
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.ToString());
-                    continue;
-                }
+
+                function.ExcelScript = _Decompile(excelFunction, function, byteCodeString, "PROPERTIES", 0, 0, function.Name);
 
                 if (_debug && debugOutputLikeFunction)
                 {
@@ -1542,10 +1482,8 @@ namespace Hellgate
                     Debug.WriteLine(funcString);
                 }
 
-                functionList.Add(function);
+                _callFunctions.Add(function);
             }
-
-            return functionList.Count - startFuncCount + voidFunctions;
         }
 
         #endregion

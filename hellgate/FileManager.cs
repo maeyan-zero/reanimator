@@ -26,7 +26,7 @@ namespace Hellgate
         private List<uint> _excelIndexToCodeList;
         private Dictionary<uint, ExcelFile> _excelCodeToTable;
         private readonly String _excelTablesStringId;
-        private Dictionary<String, ObjectDelegator> _dataFileDelegators = new Dictionary<String, ObjectDelegator>();
+        public readonly Dictionary<String, ObjectDelegator> DataFileDelegators = new Dictionary<String, ObjectDelegator>();
 
         /// <summary>
         /// Initialize the File Manager by the given Hellgate path.
@@ -237,7 +237,7 @@ namespace Hellgate
 
                     FieldInfo[] dataFileFields = dataFile.Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                     ObjectDelegator dataFileDelegator = new ObjectDelegator(dataFileFields, new[] { ObjectDelegator.SupportedFields.GetValue, ObjectDelegator.SupportedFields.SetValue });
-                    _dataFileDelegators.Add(dataFile.StringId, dataFileDelegator);
+                    DataFileDelegators.Add(dataFile.StringId, dataFileDelegator);
                 }
                 catch (Exception e)
                 {
@@ -276,7 +276,7 @@ namespace Hellgate
         {
             if (DataFiles == null || !DataFiles.ContainsKey(stringId)) return false;
 
-            ObjectDelegator objectDelegator = _dataFileDelegators[stringId];
+            ObjectDelegator objectDelegator = DataFileDelegators[stringId];
             return objectDelegator.ContainsGetFieldDelegate(colName);
         }
         
@@ -296,7 +296,7 @@ namespace Hellgate
             if (excelFile == null) return 0x4C494146;
             if (rowIndex < 0 || rowIndex >= excelFile.Rows.Count) return 0x4C494146;
 
-            ObjectDelegator excelDelegator = _dataFileDelegators[stringId];
+            ObjectDelegator excelDelegator = DataFileDelegators[stringId];
             Object row = excelFile.Rows[rowIndex];
 
             Object value = excelDelegator[colName](row);
@@ -370,7 +370,7 @@ namespace Hellgate
             if (DataFiles == null || DataFiles[stringId] == null) return -1;
 
             ExcelFile excelFile = (ExcelFile)DataFiles[stringId];
-            ObjectDelegator excelDelegator = _dataFileDelegators[stringId];
+            ObjectDelegator excelDelegator = DataFileDelegators[stringId];
             ObjectDelegator.FieldGetValueDelegate getValue = excelDelegator[colName];
 
             int rowIndex = -1;
@@ -423,7 +423,7 @@ namespace Hellgate
             FieldInfo field = excelTable.Attributes.RowType.GetFields()[0];
             bool isStringField = (field.FieldType == typeof(String));
 
-            ObjectDelegator excelDelegator = _dataFileDelegators[excelTable.StringId];
+            ObjectDelegator excelDelegator = DataFileDelegators[excelTable.StringId];
             ObjectDelegator.FieldGetValueDelegate getValue = excelDelegator[field.Name];
 
             int i = 0;

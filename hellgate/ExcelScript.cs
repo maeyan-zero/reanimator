@@ -9,11 +9,14 @@ namespace Hellgate
 {
     public partial class ExcelScript
     {
+        #region Members
+
+        // debug members
+        private static bool _debug;
         private const String DebugRoot = @"C:\excel_script_debug\";
         private const String DebugRootTCv4 = @"C:\excel_script_debug_tcv4\";
         private const String DebugFormat = "Debug: Row({0}), Col({1}) = '{2}', StringId = '{3}', ScriptByteString = '{4}'";
-        private static bool _debug;
-        private String _debugRoot;
+        private readonly String _debugRoot;
         private bool _debugFormatConditionalByteCounts;
         private String _debugOutput;
         private String _debugScriptByteString;
@@ -22,21 +25,21 @@ namespace Hellgate
         private int _debugRow;
         private int _debugCol;
 
-        private List<Function> _callFunctions;
+        // excel function stuffs
+        private static bool _haveExcelFunctions;
+        private static bool _haveExcelFunctionsTCv4;
+        private ExcelFile.ExcelFunction _excelScriptFunction;
+        private Function _excelFunction;
+
+        // members for excel handling
+        private readonly List<Function> _callFunctions;
         private readonly FileManager _fileManager;
-        private static FileManager _staticFileManager;
-        private static bool _havePropertiesFunctions;
-        private static bool _haveSkillsFunctions;
+        private readonly ExcelFile _statsTable;
+        private readonly ObjectDelegator _statsDelegator;
+        private ExcelFile _statsFile;
+        private ExcelFile _statsFileTCv4;
 
-        // yea, this static stuff is a bit gross, but otherwise we're going to be regenerating and retrieving a lot of the same data over and over again
-        // todo: a possible fix would be to update/implement the file manager with the functions we need (e.g. storing the object delegators, which makes sense anyways)
-        private ExcelFile _statsTable;
-        private ObjectDelegator _statsDelegator;
-        private static ExcelFile _statsFile;
-        private static ExcelFile _statsFileTCv4;
-        private static ObjectDelegator _statsFileDelegator;
-        private static ObjectDelegator _statsFileDelegatorTCv4;
-
+        // compile/decompile members
         private String _script;
         public Int32[] ScriptCode { get; private set; }
         private int _offset;
@@ -44,71 +47,31 @@ namespace Hellgate
         private int _startOffset;
         private Stack<StackObject> _stack;
         private List<StackObject> _vars;
-        private ExcelFile.ExcelFunction _excelScriptFunction;
-        private Function _excelFunction;
-        private readonly bool _forceTCv4ExcelUsage;
-        private readonly bool _forceStandardCallFunctionList;
 
-        // yea, these are a bit dodgy, but meh, only want it for MP -> SP converions
-        public static void SetStaticFileManager(FileManager fileManager)
-        {
-            _staticFileManager = fileManager;
-        }
+        #endregion
 
         /// <summary>
-        /// Primary constructor - To be used in conjunction with SetStaticFileManager
+        /// Initialise private variables and generate excel script functions if required.
         /// </summary>
-        public ExcelScript()
-        {
-            if (_staticFileManager == null) throw new Exceptions.ScriptNotInitialisedException("No static file manager has been set!\nFor per-instance use, use other constructor.");
-            _fileManager = _staticFileManager;
-
-            _Init();
-        }
-
-        /// <summary>
-        /// Secondary constructor - Used when wanting to specify a source file manager.
-        /// </summary>
-        /// <param name="fileManager">The file manager to use for excel lookup details.</param>
         public ExcelScript(FileManager fileManager)
         {
             if (fileManager == null) throw new ArgumentNullException("fileManager", "File Manager cannot be null.");
             _fileManager = fileManager;
 
-            _Init();
+            String statsStringId = (_fileManager.MPVersion) ? "_TCv4_STATS" : "STATS";
+            if (!_fileManager.DataFiles.ContainsKey(statsStringId)) throw new Exceptions.ScriptNotInitialisedException("The supplied file manager did not have a valid Stats table.");
+
+            _callFunctions = (_fileManager.MPVersion) ? CallFunctionsTCv4 : CallFunctions;
+            _statsTable = (ExcelFile)_fileManager.DataFiles[statsStringId];
+            _statsDelegator = _fileManager.DataFileDelegators[statsStringId];
+
+            if (_debug) _debugRoot = (_fileManager.MPVersion) ? DebugRootTCv4 : DebugRoot;
+
+            if (!_fileManager.MPVersion && !_haveExcelFunctions) _GenerateExcelScriptFunctions();
+            if (_fileManager.MPVersion && !_haveExcelFunctionsTCv4) _GenerateExcelScriptFunctions();
         }
 
-        /// <summary>
-        /// Primarly used for MP -> SP excel table conversion.
-        /// </summary>
-        /// <param name="fileManager">The file manager to use for excel lookup details.</param>
-        /// <param name="forceTCv4ExcelUsage">Set to true to force the excel lookup to occur from the TCv4 tables.</param>
-        /// <param name="forceStandardCallFunctionList">Set to true to force TCv4 functions and arguments to be converted to the SP client function call usage.</param>
-        public ExcelScript(FileManager fileManager, bool forceTCv4ExcelUsage, bool forceStandardCallFunctionList)
-        {
-            if (fileManager == null) throw new ArgumentNullException("fileManager", "File Manager cannot be null.");
-
-            _fileManager = fileManager;
-            _forceTCv4ExcelUsage = forceTCv4ExcelUsage;
-            _forceStandardCallFunctionList = forceStandardCallFunctionList;
-
-            _Init();
-        }
-
-        /// <summary>
-        /// Initialises instance variables.
-        /// </summary>
-        private void _Init()
-        {
-            _callFunctions = (_fileManager.MPVersion && !_forceStandardCallFunctionList) ? CallFunctionsTCv4 : CallFunctions;
-            _statsTable = (_fileManager.MPVersion || _forceTCv4ExcelUsage) ? _statsFileTCv4 : _statsFile;
-            _statsDelegator = (_fileManager.MPVersion || _forceTCv4ExcelUsage) ? _statsFileDelegatorTCv4 : _statsFileDelegator;
-            _script = String.Empty;
-            _stack = new Stack<StackObject>();
-            _vars = new List<StackObject>();
-
-            if (_debug) _debugRoot = (_fileManager.MPVersion || _forceTCv4ExcelUsage) ? DebugRootTCv4 : DebugRoot;
-        }
+        #region Compiler Functions
 
         /// <summary>
         /// Compiles a script string to its byte code form.
@@ -124,6 +87,7 @@ namespace Hellgate
         {
             if (String.IsNullOrEmpty(script)) throw new ArgumentNullException("script", "Script string cannot be null or empty!");
 
+            _vars = new List<StackObject>();
             _offset = 0;
             _script = script;
             _level = -1;
@@ -590,15 +554,15 @@ namespace Hellgate
                                 // if we are using standard call functions with tcv4 excel usage, we need to check the function arguments count
                                 int ignoreArgs = 0;
                                 Function functionTCv4 = null;
-                                if (_forceStandardCallFunctionList && _forceTCv4ExcelUsage)
-                                {
-                                    functionTCv4 = (from func in CallFunctionsTCv4
-                                                    where function.ArgCount <= func.ArgCount && function.Name == func.Name
-                                                    select func).FirstOrDefault();
-                                    Debug.Assert(functionTCv4 != null); // hopefully there are none with removed args, only added...
+                                //if (_forceStandardCallFunctionList && _forceTCv4ExcelUsage)
+                                //{
+                                //    functionTCv4 = (from func in CallFunctionsTCv4
+                                //                    where function.ArgCount <= func.ArgCount && function.Name == func.Name
+                                //                    select func).FirstOrDefault();
+                                //    Debug.Assert(functionTCv4 != null); // hopefully there are none with removed args, only added...
 
-                                    if (function.ArgCount < functionTCv4.ArgCount) ignoreArgs = functionTCv4.ArgCount - function.ArgCount;
-                                }
+                                //    if (function.ArgCount < functionTCv4.ArgCount) ignoreArgs = functionTCv4.ArgCount - function.ArgCount;
+                                //}
 
                                 int maxArgCount = function.ArgCount;
                                 if (maxArgCount == 0) _offset++; // opening parenthesis
@@ -764,7 +728,9 @@ namespace Hellgate
             }
         }
 
-        public String GetScript { get { return _script; } }
+        #endregion
+
+        #region Decompiler Functions
 
         /// <summary>
         /// Decompiles a script from byte codes to human readable text.
@@ -779,9 +745,8 @@ namespace Hellgate
         /// <returns>Decompiled excel script byte codes as human readable script.</returns>
         public String Decompile(byte[] scriptBytes, int offset, String debugScriptByteString = null, String debugStringId = null, int debugRow = 0, int debugCol = 0, String debugColName = null)
         {
-            if (!_havePropertiesFunctions && !_debug) throw new Exceptions.ScriptNotInitialisedException("Properties excel script functions have not been parsed; they must be loaded before any decompiling can be done.\nPlease ensure you have provided a valid FileManager for initialisation.");
-            if (!_haveSkillsFunctions && !_debug) throw new Exceptions.ScriptNotInitialisedException("Skills excel script functions have not been parsed; they must be loaded before any decompiling can be done.\nPlease ensure you have provided a valid FileManager for initialisation.");
-
+            _vars = new List<StackObject>();
+            _stack = new Stack<StackObject>();
             _startOffset = offset;
             _offset = offset;
 
@@ -808,11 +773,13 @@ namespace Hellgate
         /// <param name="debugCol">For debugging purposes only.</param>
         /// <param name="debugColName">For debugging purposes only.</param>
         /// <returns>Decompiled excel script byte codes as human readable script.</returns>
-        private String Decompile(ExcelFile.ExcelFunction excelScriptFunction, Function excelFunction, String debugScriptByteString = null, String debugStringId = null, int debugRow = 0, int debugCol = 0, String debugColName = null)
+        private String _Decompile(ExcelFile.ExcelFunction excelScriptFunction, Function excelFunction, String debugScriptByteString = null, String debugStringId = null, int debugRow = 0, int debugCol = 0, String debugColName = null)
         {
             if (excelScriptFunction == null) throw new ArgumentNullException("excelScriptFunction", "The excel script function cannot be null!");
             if (excelFunction == null) throw new ArgumentNullException("excelFunction", "The excel function cannot be null!");
 
+            _vars = new List<StackObject>();
+            _stack = new Stack<StackObject>();
             _excelScriptFunction = excelScriptFunction;
             _excelFunction = excelFunction;
             _startOffset = 0;
@@ -1402,5 +1369,7 @@ namespace Hellgate
             if (debugOutputBytesRead) Console.WriteLine("Read from {0} to {1} = {2} bytes.", scriptStartOffset, _offset, scriptStartOffset - _offset);
             return _Return(startStackCount, bytesRead, processStackOnReturn, ifLevel, debugShowParsed);
         }
+
+        #endregion
     }
 }
