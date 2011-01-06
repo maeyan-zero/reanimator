@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using Hellgate;
+using Revival.Common;
 using Config = Revival.Common.Config;
 using ExceptionLogger = Revival.Common.ExceptionLogger;
 
@@ -15,6 +17,7 @@ namespace Reanimator.Forms
     public partial class FileExplorer : Form
     {
         private readonly FileManager _fileManager;
+        private readonly FileManager _fileManagerTCv4;
         private TreeView _clonedTreeView;
         private bool _isFiltering;
 
@@ -22,12 +25,14 @@ namespace Reanimator.Forms
         /// Main constructor. Initialises the file tree system from a valid FileManager.
         /// </summary>
         /// <param name="fileManager">The FileManager to base the explorer tree on.</param>
-        public FileExplorer(FileManager fileManager)
+        /// <param name="fileManagerTCv4">The FileManager to use for TCv4 specific extractions.</param>
+        public FileExplorer(FileManager fileManager, FileManager fileManagerTCv4)
         {
             // init stuffs
             InitializeComponent();
             _files_fileTreeView.DoubleBuffered(true);
             _fileManager = fileManager;
+            _fileManagerTCv4 = fileManagerTCv4;
             backupKey_label.ForeColor = BackupColor;
             noEditorKey_label.ForeColor = NoEditColor;
 
@@ -44,6 +49,9 @@ namespace Reanimator.Forms
             _GenerateFileTree();
             _files_fileTreeView.TreeViewNodeSorter = new NodeSorter();
             _files_fileTreeView.EndUpdate();
+
+            _quickExcelTCv4_checkBox.Checked = (fileManagerTCv4 != null);
+            _quickExcelTCv4_checkBox.Enabled = Config.LoadTCv4DataFiles;
         }
 
         /// <summary>
@@ -193,7 +201,7 @@ namespace Reanimator.Forms
             {
                 MessageBox.Show("todo");
             }
-            else if (nodeFullPath.EndsWith(StringsFile.FileExtention))
+            else if (nodeFullPath.EndsWith(StringsFile.Extention))
             {
                 MessageBox.Show("todo");
             }
@@ -1152,7 +1160,7 @@ namespace Reanimator.Forms
                 {
                     if ((indexFile.FileNameWithoutExtension == "sp_hellgate_1.10.180.3416_1.0.86.4580" ||
                         indexFile.FileNameWithoutExtension == "sp_hellgate_localized_1.10.180.3416_1.0.86.4580") &&
-                        (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) ||
+                        (fileEntry.FileNameString.EndsWith(StringsFile.Extention) ||
                         fileEntry.FileNameString.EndsWith(ExcelFile.Extension)))
                     {
                         indexFile.PatchOutFile(fileEntry);
@@ -1177,6 +1185,88 @@ namespace Reanimator.Forms
                 byte[] indexBytes = indexFile.ToByteArray();
                 Crypt.Encrypt(indexBytes);
                 File.WriteAllBytes(indexFile.FilePath, indexBytes);
+            }
+        }
+
+        private void _QuickExcelBrowse_Button_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            DialogResult dr = folderBrowserDialog.ShowDialog(this);
+
+            if (dr != DialogResult.OK) return;
+            _quickExcelDir_textBox.Text = folderBrowserDialog.SelectedPath;
+        }
+
+        private void _QuickExcel_Button_Click(object sender, EventArgs e)
+        {
+            ProgressForm progressForm = new ProgressForm(_DoQuickExcel, _fileManager);
+            progressForm.ConfigBar(0, 20, 1);
+            progressForm.SetLoadingText("Uncooking excel files..."); ;
+            progressForm.Show(this);
+
+
+            if (!_quickExcelTCv4_checkBox.Checked || !_quickExcelTCv4_checkBox.Enabled) return;
+            ProgressForm progressFormTCv4 = new ProgressForm(_DoQuickExcel, _fileManagerTCv4);
+            progressFormTCv4.ConfigBar(0, 20, 1);
+            progressFormTCv4.SetLoadingText("Uncooking TCv4 excel files..."); ;
+            progressFormTCv4.Show(this);
+            progressFormTCv4.Top = progressForm.Top + progressForm.Height + 20;
+        }
+
+        private void _DoQuickExcel(ProgressForm progressForm, Object param)
+        {
+            FileManager fileManager = (FileManager) param;
+            String root = _quickExcelDir_textBox.Text;
+            if (root == "") return;
+            if (fileManager.MPVersion) root = Path.Combine(root, "tcv4");
+
+            int i = 0;
+            foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
+            {
+                if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension) &&
+                    (!fileEntry.FileNameString.EndsWith(StringsFile.Extention) || !fileEntry.DirectoryString.Contains(fileManager.Language))) continue;
+
+                if (i++%10 == 0 && progressForm != null) progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutPatch);
+
+                byte[] fileBytes;
+                try
+                {
+                    fileBytes = fileManager.GetFileBytes(fileEntry, true);
+                }
+                catch (Exception e)
+                {
+                    String error = String.Format("Failed to get '{0}' file bytes, continue?\n\n{1}", fileEntry.RelativeFullPathWithoutPatch, e);
+                    DialogResult dr = MessageBox.Show(error, "Excel Extration Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                    if (dr == DialogResult.No) return;
+                    continue;
+                }
+
+                ExcelFile excelFile = null;
+                if (fileEntry.FileNameString.EndsWith(ExcelFile.Extension))
+                {
+                    excelFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch, fileManager.MPVersion);
+                    if (excelFile.Attributes.IsEmpty) continue;
+                }
+
+                byte[] writeBytes = fileBytes;
+                if (excelFile != null)
+                {
+                    try
+                    {
+                        writeBytes = excelFile.ExportCSV(fileManager);
+                    }
+                    catch (Exception e)
+                    {
+                        String error = String.Format("Failed to export CSV for '{0}', continue?\n\n{1}", fileEntry.RelativeFullPathWithoutPatch, e);
+                        DialogResult dr = MessageBox.Show(error, "Excel Extration Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                        if (dr == DialogResult.No) return;
+                        continue;
+                    }
+                }
+
+                String filePath = Path.Combine(root, fileEntry.RelativeFullPathWithoutPatch);
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                File.WriteAllBytes(filePath, writeBytes);
             }
         }
     }

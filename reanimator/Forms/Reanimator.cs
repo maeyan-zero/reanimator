@@ -609,14 +609,16 @@ namespace Reanimator.Forms
                                 MessageBoxIcon.Error);
             }
 
-            progressForm.SetCurrentItemText("Loading File Explorer...");
-            _fileExplorer = new FileExplorer(_fileManager);
-
             progressForm.SetCurrentItemText("Loading Table View...");
             _tablesLoaded = new TablesLoaded(_fileManager);
 
+            if (!Config.LoadTCv4DataFiles)
+            {
+                progressForm.SetCurrentItemText("Loading File Explorer...");
+                _fileExplorer = new FileExplorer(_fileManager, null);
+                return;
+            }
 
-            if (!Config.LoadTCv4DataFiles) return;
 
             progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
             _fileManagerTCv4 = new FileManager(Config.HglDir, true);
@@ -630,6 +632,9 @@ namespace Reanimator.Forms
 
             progressForm.SetCurrentItemText("Loading TCv4 Table View...");
             _tablesLoadedTCv4 = new TablesLoaded(_fileManagerTCv4);
+
+            progressForm.SetCurrentItemText("Loading File Explorer...");
+            _fileExplorer = new FileExplorer(_fileManager, _fileManagerTCv4);
         }
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)

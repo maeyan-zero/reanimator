@@ -114,7 +114,7 @@ namespace Reanimator.Forms
                     nodeObject.CanCookWith = true;
                 }
                 else if (fileEntry.FileNameString.EndsWith(ExcelFile.Extension) ||
-                         fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) ||                      
+                         fileEntry.FileNameString.EndsWith(StringsFile.Extention) ||                      
                          fileEntry.FileNameString.EndsWith("txt"))
                 {
                     nodeObject.CanEdit = true;

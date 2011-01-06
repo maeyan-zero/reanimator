@@ -7,8 +7,8 @@ namespace Hellgate
 {
     partial class StringsFile
     {
-        public const String FileExtention = ".xls.uni.cooked";
-        public const String FileExtentionClean = ".xls.uni";
+        public const String Extention = ".xls.uni.cooked";
+        public const String ExtensionDeserialised = ".xls.uni";
         public const String FolderPath = @"excel\strings\english\";
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -52,8 +52,8 @@ namespace Hellgate
         private static String _GetStringId(String filePath)
         {
             // there are less than a dozen strings files, so might as well do case-insensitive search
-            String stringId = Path.GetFileName(filePath).Replace(FileExtention, "");
-            stringId = Path.GetFileName(stringId.ToLower()).Replace(FileExtentionClean, ""); // this line is added for uncooked
+            String stringId = Path.GetFileName(filePath).Replace(Extention, "");
+            stringId = Path.GetFileName(stringId.ToLower()).Replace(ExtensionDeserialised, ""); // this line is added for uncooked
             return DataFileMap.Keys.FirstOrDefault(key => key.ToLower() == stringId);
         }
     }

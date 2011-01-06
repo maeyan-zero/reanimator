@@ -946,6 +946,8 @@ namespace Hellgate
 
         public byte[] ExportCSV(FileManager fileManager, IEnumerable<String> columnNames = null)
         {
+            if (Attributes.IsEmpty) return new byte[0];
+
             //// init stuffs
             byte[] csvBuffer = new byte[1024];
             int csvOffset = 0;
