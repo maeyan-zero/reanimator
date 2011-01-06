@@ -42,7 +42,7 @@ namespace Reanimator.Forms
             //TestScripts.ExtractAllCSV();
 
             //return;
-            //TestScripts.TestExcelCooking();
+            TestScripts.TestExcelCooking();
             //TestScripts.TestAllCodeValues();
 
             //return;

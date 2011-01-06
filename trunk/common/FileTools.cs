@@ -299,7 +299,6 @@ namespace Revival.Common
             }
 
             return result;
-            //return ByteArrayToStringASCII(byteArray, offset, 0x00);
         }
 
         /// <summary>
@@ -671,7 +670,7 @@ namespace Revival.Common
             }
         }
 
-        public static string[][] CSVToStringArray(byte[] source, int columns, byte delimiter)
+        public static string[][] CSVToStringArray(byte[] source, int columns, byte delimiter, bool ignoreFirstRow=false)
         {
             if (source == null) return null;
             if (source.Length == 0) return null;
@@ -681,7 +680,6 @@ namespace Revival.Common
             byte EN = 0x22;
             int offset = 0;
             int length = source.Length;
-            const bool ignoreFirstRow = true;
             List<string[]> rowCollection = new List<string[]>();
             int row = 0;
             while (offset < length)

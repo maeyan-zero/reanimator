@@ -72,7 +72,7 @@ namespace Reanimator
                 Debug.WriteLine(String.Format("{0} fields found.", codeFields.Length));
                 fileCountWithCode++;
 
-                ObjectDelegator objectDelegator = new ObjectDelegator(codeFields, ObjectDelegator.SupportedFields.GetValue);
+                ObjectDelegator objectDelegator = new ObjectDelegator(codeFields);
 
                 Debug.WriteLine("Codes found: ");
                 foreach (FieldInfo fieldInfo in codeFields)
@@ -432,12 +432,12 @@ namespace Reanimator
                 // create delegates
                 if (!objectDelegators.TryGetValue(excelFile.StringId, out excelDelegator))
                 {
-                    excelDelegator = new ObjectDelegator(fieldInfos, new[] { ObjectDelegator.SupportedFields.GetValue, ObjectDelegator.SupportedFields.SetValue });
+                    excelDelegator = new ObjectDelegator(fieldInfos);
                     objectDelegators.Add(excelFile.StringId, excelDelegator);
                 }
                 if (!objectDelegators.TryGetValue(stringIdTCv4, out excelDelegatorTCv41))
                 {
-                    excelDelegatorTCv41 = new ObjectDelegator(fieldInfosTCv41, ObjectDelegator.SupportedFields.GetValue);
+                    excelDelegatorTCv41 = new ObjectDelegator(fieldInfosTCv41);
                     objectDelegators.Add(stringIdTCv4, excelDelegatorTCv41);
                 }
 
@@ -467,7 +467,7 @@ namespace Reanimator
                     Array.Resize(ref fieldInfosTCv42, fieldInfosTCv42.Length + 1);
                     fieldInfosTCv42[fieldInfosTCv42.Length - 1] = rowHeaderFieldTCv42;
 
-                    excelDelegatorTCv42 = new ObjectDelegator(fieldInfosTCv42, ObjectDelegator.SupportedFields.GetValue);
+                    excelDelegatorTCv42 = new ObjectDelegator(fieldInfosTCv42);
                 }
 
                 // debug: ensure we have same columns
@@ -514,7 +514,7 @@ namespace Reanimator
                     ObjectDelegator.FieldSetValueDelegate setValue1 = excelDelegator.GetFieldSetDelegate(fieldInfo.Name);
                     ObjectDelegator.FieldSetValueDelegate setValue2 = null;
                     ObjectDelegator.FieldGetValueDelegate getValue = excelDelegator.GetFieldGetDelegate(fieldInfo.Name);
-                    ExcelFile.OutputAttribute outputAttribute = ExcelFile.GetExcelOutputAttribute(fieldInfo);
+                    ExcelFile.OutputAttribute outputAttribute = ExcelFile.GetExcelAttribute(fieldInfo);
 
                     // table specialisation stuffs
                     bool isUnitTypeField = false;                       // achievements
@@ -814,7 +814,7 @@ namespace Reanimator
                 // create delegates
                 if (!objectDelegators.TryGetValue(excelFile.StringId, out excelDelegator))
                 {
-                    excelDelegator = new ObjectDelegator(fieldInfos, ObjectDelegator.SupportedFields.GetValue);
+                    excelDelegator = new ObjectDelegator(fieldInfos);
                     objectDelegators.Add(excelFile.StringId, excelDelegator);
                 }
 
@@ -825,7 +825,7 @@ namespace Reanimator
                     if (++col == 0) continue; // row header
 
                     ObjectDelegator.FieldGetValueDelegate getValue = excelDelegator.GetFieldGetDelegate(fieldInfo.Name);
-                    ExcelFile.OutputAttribute outputAttribute = ExcelFile.GetExcelOutputAttribute(fieldInfo);
+                    ExcelFile.OutputAttribute outputAttribute = ExcelFile.GetExcelAttribute(fieldInfo);
 
                     bool isArray = false;
                     bool allEqual = true;
@@ -1062,7 +1062,7 @@ namespace Reanimator
                 Type rowType = excelFile.Attributes.RowType;
                 FieldInfo[] fieldInfos = rowType.GetFields();
 
-                excelDelegator = new ObjectDelegator(fieldInfos, new[] { ObjectDelegator.SupportedFields.GetValue, ObjectDelegator.SupportedFields.SetValue });
+                excelDelegator = new ObjectDelegator(fieldInfos);
 
                 objectDelegators.Add(excelFile.StringId, excelDelegator);
             }

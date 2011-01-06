@@ -193,7 +193,7 @@ namespace Hellgate
             return code;
         }
 
-        public static OutputAttribute GetExcelOutputAttribute(FieldInfo fieldInfo)
+        public static OutputAttribute GetExcelAttribute(FieldInfo fieldInfo)
         {
             object[] query = fieldInfo.GetCustomAttributes(typeof(OutputAttribute), true);
             return (query.Length != 0) ? (OutputAttribute)query[0] : null;
@@ -555,7 +555,7 @@ namespace Hellgate
             FieldInfo rowHeaderField = DataType.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (FieldInfo fieldInfo in DataType.GetFields())
             {
-                OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
+                OutputAttribute attribute = GetExcelAttribute(fieldInfo);
                 if (attribute == null || attribute.SortColumnOrder == 0) continue;
 
                 // Precedence Hack

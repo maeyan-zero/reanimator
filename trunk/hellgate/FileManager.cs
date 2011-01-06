@@ -236,7 +236,7 @@ namespace Hellgate
                     DataFiles.Add(dataFile.StringId, dataFile);
 
                     FieldInfo[] dataFileFields = dataFile.Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    ObjectDelegator dataFileDelegator = new ObjectDelegator(dataFileFields, new[] { ObjectDelegator.SupportedFields.GetValue, ObjectDelegator.SupportedFields.SetValue });
+                    ObjectDelegator dataFileDelegator = new ObjectDelegator(dataFileFields);
                     DataFileDelegators.Add(dataFile.StringId, dataFileDelegator);
                 }
                 catch (Exception e)
