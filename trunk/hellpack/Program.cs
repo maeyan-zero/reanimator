@@ -276,6 +276,7 @@ namespace Revival
             {
                 string[] result = SearchForExcelFiles(currentDir);
                 if (result != null) excelFilesToCook.AddRange(result);
+
                 result = SearchForStringFiles(currentDir);
                 if (result != null) stringFilesToCook.AddRange(result);
             }
@@ -283,7 +284,8 @@ namespace Revival
             // Search for Xml files to cook
             if (doSearchCd && doCookXml)
             {
-                xmlFilesToCook.AddRange(SearchForXmlFiles(currentDir));
+                String[] xmlToCook = SearchForXmlFiles(currentDir);
+                if (xmlToCook != null) xmlFilesToCook.AddRange(xmlToCook);
             }
 
             // Search for .drl Level Rules files to cook
@@ -305,7 +307,7 @@ namespace Revival
             // Cook Txt files)
             if (doCookTxt)
             {
-                CookExcelFiles(excelFilesToCook.ToArray());
+                _CookExcelFiles(excelFilesToCook.ToArray());
                 CookStringFiles(stringFilesToCook.ToArray());
             }
 
@@ -346,7 +348,7 @@ namespace Revival
             if (doPackDat)
             {
                 filesToPack.AddRange(SearchForFilesToPack(currentDir, doExcludeRaw));
-                PackDatFile(filesToPack.ToArray(), Path.Combine(currentDir, _defaultDat + ".idx"));
+                PackDatFile(filesToPack.ToArray(), Path.Combine(currentDir, _defaultDat + ".idx"), false);
             }
             #endregion
 
@@ -440,11 +442,38 @@ namespace Revival
             return filesToPack.ToArray();
         }
 
-        public static bool PackDatFile(string[] filesToPack, string outputPath)
+        public static bool PackDatFile(IEnumerable<String> filesToPack, String outputPath, bool forceCreateNewIndex)
         {
-            IndexFile newPack = new IndexFile() { FilePath = outputPath };
+            IndexFile indexFile = null;
+            bool isAppend = false;
+            if (!forceCreateNewIndex && File.Exists(outputPath))
+            {
+                Console.Write("Hellpack has detected an existing index. Append to previous index? [Y/N]: ");
+                char ans = (char)Console.Read();
+                if (ans == 'y' || ans == 'Y')
+                {
+                    indexFile = new IndexFile(File.ReadAllBytes(outputPath)) {FilePath = outputPath};
+                    isAppend = true;
+                }
+            }
+
+            if (indexFile == null) indexFile = new IndexFile { FilePath = outputPath };
+
             foreach (String filePath in filesToPack)
             {
+                DateTime fileTime = File.GetLastWriteTime(filePath);
+
+                // if we're appending, check if we've already added this file by checking the modified time
+                if (isAppend)
+                {
+                    IndexFile.FileEntry fileEntry = indexFile.GetFileEntry(filePath);
+                    if (fileEntry != null)
+                    {
+                        DateTime fileEntryTime = DateTime.FromFileTime(fileEntry.FileTime);
+                        if (fileEntryTime == fileTime) continue;
+                    }
+                }
+
                 String fileName = Path.GetFileName(filePath);
                 String directory = Path.GetDirectoryName(filePath);
                 int dataCursor = directory.IndexOf("data");
@@ -463,14 +492,14 @@ namespace Revival
                 }
 
                 Console.WriteLine("Packing " + directory + fileName);
-                if (newPack.AddFile(directory, fileName, buffer) == false)
+                if (indexFile.AddFile(directory, fileName, buffer, fileTime) == false)
                 {
                     Console.WriteLine("Warning: Failed to add file to index...");
                 }
             }
 
             string thisPack = Path.GetFileNameWithoutExtension(outputPath);
-            byte[] indexBytes = newPack.ToByteArray();
+            byte[] indexBytes = indexFile.ToByteArray();
             Crypt.Encrypt(indexBytes);
             Console.WriteLine("Writing " + thisPack);
             try
@@ -536,12 +565,121 @@ namespace Revival
         }
 
 
-
-        public static void CookExcelFiles(string[] excelFilesToCook)
+        private static void _CookExcelFiles(IEnumerable<String> excelFilesToCook)
         {
+            Dictionary<String, ExcelFile> excelFiles = new Dictionary<String, ExcelFile>();
+
+            Console.WriteLine("Reading Excel CSV content...");
             foreach (String excelPath in excelFilesToCook)
             {
-                CookExcelFile(excelPath);
+                Console.Write(Path.GetFileName(excelPath) + "... ");
+
+                byte[] fileBytes;
+                try
+                {
+                    fileBytes = File.ReadAllBytes(excelPath);
+                }
+                catch (Exception e)
+                {
+                    ExceptionLogger.LogException(e);
+
+                    Console.WriteLine("\nFailed to read file contents!\nIgnore and Continue? [Y/N]: ");
+                    char c = (char) Console.Read();
+                    if (c == 'y' || c == 'Y') continue;
+
+                    return;
+                }
+
+                ExcelFile excelFile = new ExcelFile(excelPath);
+                try
+                {
+                    excelFile.LoadCSV(fileBytes);
+                }
+                catch (Exception e)
+                {
+                    ExceptionLogger.LogException(e);
+
+                    Console.WriteLine("\nFailed to load CSV contents!\nIgnore and Continue? [Y/N]: ");
+                    char c = (char) Console.Read();
+                    if (c == 'y' || c == 'Y') continue;
+
+                    return;
+                }
+
+                excelFiles.Add(excelFile.StringId, excelFile);
+            }
+
+            if (excelFiles.Count == 0) return;
+
+            Console.WriteLine("\nProcessing Excel CSV content...");
+            foreach (ExcelFile excelFile in excelFiles.Values)
+            {
+                Console.WriteLine("Cooking " + Path.GetFileName(excelFile.FilePath));
+
+                try
+                {
+                    excelFile.ParseCSV(_fileManager, excelFiles);
+                }
+                catch (Exception e)
+                {
+                    ExceptionLogger.LogException(e);
+
+                    Console.WriteLine("Failed to parse CSV data!\nIgnore and Continue? [Y/N]: ");
+                    char c = (char) Console.Read();
+                    if (c == 'y' || c == 'Y') continue;
+
+                    return;
+                }
+
+                if (excelFile.HasIntegrity == false)
+                {
+                    Console.WriteLine("Failed to parse CSV data!\nIgnore and Continue? [Y/N]: ");
+                    char c = (char) Console.Read();
+                    if (c == 'y' || c == 'Y') continue;
+
+                    return;
+                }
+
+                byte[] cookedFileBytes;
+                try
+                {
+                    cookedFileBytes = excelFile.ToByteArray();
+                }
+                catch (Exception e)
+                {
+                    ExceptionLogger.LogException(e);
+
+                    Console.WriteLine("Failed to serialise CSV data!\nIgnore and Continue? [Y/N]: ");
+                    char c = (char)Console.Read();
+                    if (c == 'y' || c == 'Y') continue;
+
+                    return;
+                }
+
+                if (cookedFileBytes == null)
+                {
+                    Console.WriteLine("Failed to serialise CSV data!\nIgnore and Continue? [Y/N]: ");
+                    char c = (char)Console.Read();
+                    if (c == 'y' || c == 'Y') continue;
+
+                    return;
+                }
+
+                String savePath = excelFile.FilePath.Replace(ExcelFile.ExtensionDeserialised, ExcelFile.Extension);
+                try
+                {
+                    File.WriteAllBytes(savePath, cookedFileBytes);
+                }
+                catch (Exception e)
+                {
+                    ExceptionLogger.LogException(e);
+
+                    Console.WriteLine("Failed to write cooked excel file!\nIgnore and Continue? [Y/N]: ");
+                    char c = (char)Console.Read();
+                    if (c == 'y' || c == 'Y') continue;
+
+                    return;
+                }
             }
         }
 

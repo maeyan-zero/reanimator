@@ -684,13 +684,12 @@ namespace Revival.Common
             int row = 0;
             while (offset < length)
             {
-                String[] newRow = new string[columns];
+                String[] newRow = new String[columns];
                 for (int i = 0; i < columns; i++)
                 {
-                    byte[] buffer = (!(offset >= length)) ? GetDelimintedByteArray(source, ref offset, delimiter) : null;
+                    byte[] buffer = (offset < length) ? GetDelimintedByteArray(source, ref offset, delimiter) : null;
                     String newString = (buffer == null || buffer.Length == 0) ? String.Empty : ByteArrayToStringASCII(buffer, 0);
-                    newString = newString.Replace("\"", "");
-                    newRow[i] = newString;
+                    newRow[i] = newString.Replace("\"", "");
                 }
 
                 //if (offset < source.Length && source[offset] == delimiter) offset += sizeof(byte);

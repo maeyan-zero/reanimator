@@ -250,7 +250,7 @@ namespace Launcher.Forms
             toolStripStatusLabel.Text = String.Format("Packing {0}...", RevivalMod.Data.Modifications.ID + ".idx");
             string hglDataPath = Path.Combine(Config.HglDir, "data");
             string modDatPath = Path.Combine(hglDataPath, RevivalMod.Data.Modifications.ID) + ".idx";
-            bool packResult = Hellpack.PackDatFile(filesToPack, modDatPath);
+            bool packResult = Hellpack.PackDatFile(filesToPack, modDatPath, true);
 
             if (packResult == false)
             {
@@ -339,7 +339,7 @@ namespace Launcher.Forms
                                 ExceptionLogger.LogException(ex);
                                 continue;
                             }
-                            indexFile.AddFile(directory, fileName, fbuffer);
+                            indexFile.AddFile(directory, fileName, fbuffer, DateTime.Now);
                         }
                     }
                 }
@@ -352,7 +352,7 @@ namespace Launcher.Forms
                     byte[] ebuffer = dataTable.ToByteArray();
                     string fileName = Path.GetFileName(dataTable.FilePath);
                     string fileDir = Path.GetDirectoryName(dataTable.FilePath) + "\\";
-                    indexFile.AddFile(fileDir, fileName, ebuffer);
+                    indexFile.AddFile(fileDir, fileName, ebuffer, DateTime.Now);
                 }
 
                 if (indexFile.Count > 0)

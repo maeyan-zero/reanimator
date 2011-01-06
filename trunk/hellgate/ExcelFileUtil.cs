@@ -16,6 +16,7 @@ namespace Hellgate
         public const String FolderPath = @"excel\";
         public const String Extension = ".txt.cooked";
         public const String ExtensionDeserialised = ".txt";
+        private const byte CSVDelimiter = (byte)'\t';
 
         #region Excel Types
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -162,6 +163,97 @@ namespace Hellgate
         //}
         #endregion
 
+        //public static String[] OrderExcelFileCooking(FileManager fileManager, IEnumerable<String> excelFilePaths)
+        //{
+        //    // get all StringIds first
+        //    List<String> excelStringIds = new List<String>();
+        //    foreach (String excelPath in excelFilePaths)
+        //    {
+        //        String stringId = GetStringId(excelPath, fileManager.MPVersion);
+        //        if (String.IsNullOrEmpty(stringId))
+        //        {
+        //            Console.WriteLine("Error: Unable to obtain StringId for excel file: " + excelPath);
+        //            return null;
+        //        }
+
+        //        excelStringIds.Add(stringId);
+        //    }
+
+        //    List<String> orderedExcel = new List<String>();
+        //    int i = -1;
+        //    foreach (String stringId in excelStringIds)
+        //    {
+        //        i++;
+
+        //        ObjectDelegator excelDelegator = fileManager.DataFileDelegators[stringId];
+        //        foreach (ObjectDelegator.FieldDelegate fieldDelegate in excelDelegator)
+        //        {
+        //            if (!fieldDelegate.IsPublic) continue;
+
+        //            OutputAttribute excelAttribute = GetExcelAttribute(fieldDelegate.Info);
+        //            if (excelAttribute == null) continue;
+        //            if (!excelAttribute.IsTableIndex || String.IsNullOrEmpty(excelAttribute.TableStringId)) continue;
+
+        //            String tableStringId = excelAttribute.TableStringId;
+        //            if (fileManager.MPVersion) tableStringId = "_TCv4_" + tableStringId;
+        //            if (tableStringId == stringId)
+        //            {
+        //                int bp = 0;
+        //            }
+
+        //            int indexOf = excelStringIds.IndexOf(tableStringId);
+        //            if (indexOf == -1) continue;
+
+        //            int bp2 = 0;
+        //        }
+        //    }
+
+        //    return orderedExcel.ToArray();
+        //}
+
+        /// <summary>
+        /// CSV method only.
+        /// </summary>
+        /// <param name="value">The value to search for.</param>
+        /// <param name="colName">The column to check for. Set to null to use first value column.</param>
+        /// <returns>The row index of the value, -1 on not found.</returns>
+        private int _GetRowIndexFromValue(String value, String colName)
+        {
+            if (_csvTable == null) return -1;
+
+            String[] columns = _csvTable[0];
+
+            bool found = false;
+            int col = 1; // 0 = row header
+            if (!String.IsNullOrEmpty(colName))
+            {
+                col = -1;
+                foreach (String column in columns)
+                {
+                    col++;
+                    if (column != colName) continue;
+
+                    found = true;
+                    break;
+                }
+
+                if (!found) return -1;
+            }
+
+            int row = -2; // 0 = row header
+            found = false;
+            foreach (String[] csvRow in _csvTable)
+            {
+                row++;
+                if (csvRow[col] != value) continue;
+
+                found = true;
+                break;
+            }
+
+            return (found) ? row : -1;
+        }
+
         private static String _CodeToString(int code)
         {
             if (code == 0) return String.Empty;
@@ -199,12 +291,12 @@ namespace Hellgate
             return (query.Length != 0) ? (OutputAttribute)query[0] : null;
         }
 
-        private String _GetStringId()
+        public static String GetStringId(String filePath, bool isTCv4)
         {
-            String stringIdPrepend = _isTCv4 ? "_TCv4_" : "";
+            String stringIdPrepend = isTCv4 ? "_TCv4_" : "";
 
             // check if the file name is the same as the string id
-            String baseStringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(FilePath)).ToUpper();
+            String baseStringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
             String stringIdAsKey = stringIdPrepend + baseStringId;
 
             DataFileAttributes dataFileAttributes;
@@ -218,7 +310,7 @@ namespace Hellgate
             foreach (KeyValuePair<String, DataFileAttributes> keyValuePair in DataFileMap)
             {
                 DataFileAttributes dataFileAttribute = keyValuePair.Value;
-                if (dataFileAttribute.FileName != baseStringId || dataFileAttribute.IsTCv4 != _isTCv4) continue;
+                if (dataFileAttribute.FileName != baseStringId || dataFileAttribute.IsTCv4 != isTCv4) continue;
 
                 stringId = keyValuePair.Key;
             }
@@ -494,7 +586,6 @@ namespace Hellgate
                 }
             }
         }
-
 
         private void _DoPrecedenceHack(FieldInfo fieldInfo, OutputAttribute outputAttribute)
         {

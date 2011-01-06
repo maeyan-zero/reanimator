@@ -361,7 +361,7 @@ namespace Revival
                         //    catch (Exception) { }
                         //}
 
-                        destinationIndex.AddFile(fileEntry.DirectoryString, fileEntry.FileNameString, fileBytes);
+                        destinationIndex.AddFile(fileEntry.DirectoryString, fileEntry.FileNameString, fileBytes, DateTime.Now);
                     }
                 }
 

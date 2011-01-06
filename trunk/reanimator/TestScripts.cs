@@ -14,6 +14,48 @@ namespace Reanimator
 {
     public static class TestScripts
     {
+        public static void RepackMPDats()
+        {
+            //String filePath1 = Config.HglDataDir + @"\data\hellgate000.idx";
+            //IndexFile spHellgate4256 = new IndexFile(File.ReadAllBytes(filePath1));
+            //spHellgate4256.FilePath = filePath1;
+
+            String filePath1 = Config.HglDataDir + @"\data\mp_hellgate_1.10.180.3416_1.0.86.4580.idx";
+            String filePath2 = Config.HglDataDir + @"\data\mp_hellgate_localized_1.10.180.3416_1.0.86.4580.idx";
+
+            IndexFile mpHellgate4580 = new IndexFile(File.ReadAllBytes(filePath1));
+            mpHellgate4580.FilePath = filePath1;
+            IndexFile mpHellgateLocal4580 = new IndexFile(File.ReadAllBytes(filePath2));
+            mpHellgateLocal4580.FilePath = filePath2;
+            
+            IndexFile[] indexFiles = new[] { mpHellgate4580, mpHellgateLocal4580 };
+            //IndexFile[] indexFiles = new[] { spHellgate4256 };
+
+            foreach (IndexFile indexFile in indexFiles)
+            {
+                IndexFile newIndexFile = new IndexFile();
+                newIndexFile.FilePath = indexFile.FilePath.Replace("mp_hellgate", "sp_hellgate");
+                newIndexFile.BeginDatWriting();
+
+                indexFile.BeginDatReading();
+                foreach (IndexFile.FileEntry fileEntry in indexFile.Files)
+                {
+                    byte[] fileBytes = indexFile.GetFileBytes(fileEntry);
+
+                    newIndexFile.AddFile(fileEntry.DirectoryString, fileEntry.FileNameString, fileBytes, DateTime.Now);
+                }
+                indexFile.EndDatAccess();
+
+                
+                
+                byte[] indexFileBytes = newIndexFile.ToByteArray();
+                Crypt.Encrypt(indexFileBytes);
+                File.WriteAllBytes(newIndexFile.FilePath, indexFileBytes);
+                newIndexFile.EndDatAccess();
+            }
+        }
+
+
         public static void ExtractAllCSV()
         {
             const String root = @"C:\test_mod\";

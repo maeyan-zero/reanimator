@@ -42,7 +42,8 @@ namespace Reanimator.Forms
             //TestScripts.ExtractAllCSV();
 
             //return;
-            TestScripts.TestExcelCooking();
+            //TestScripts.RepackMPDats();
+            //TestScripts.TestExcelCooking();
             //TestScripts.TestAllCodeValues();
 
             //return;
@@ -62,6 +63,7 @@ namespace Reanimator.Forms
             //    MdiParent = this
             //};
             //levelRulesEditor.Show(););
+            Environment.FailFast("asdf");
             return;
 
             //
