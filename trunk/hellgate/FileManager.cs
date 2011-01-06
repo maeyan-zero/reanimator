@@ -187,7 +187,7 @@ namespace Hellgate
             // want excel files and strings files
             foreach (FileEntry fileEntry in
                 FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.Extension) ||
-                    (fileEntry.FileNameString.EndsWith(StringsFile.FileExtention) && fileEntry.RelativeFullPath.Contains(Language))))
+                    (fileEntry.FileNameString.EndsWith(StringsFile.Extention) && fileEntry.RelativeFullPath.Contains(Language))))
             {
                 byte[] fileBytes = GetFileBytes(fileEntry, ignorePatchedOut);
 

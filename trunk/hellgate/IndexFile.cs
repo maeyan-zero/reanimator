@@ -257,7 +257,7 @@ namespace Hellgate
         private const String PatchPrefix = @"backup\";
         private const UInt32 RequiredVersion = 0x04;
         private readonly static String[] NoCompressionExt = new[] { ".bik", ".ogg", ".mp2", ".wav", ".wm" };
-        public readonly static String[] NoPatchExt = new[] { ".bik", ".ogg", ".mp2", ".wav", ".wm", StringsFile.FileExtention, "lightingmap.dds" };
+        public readonly static String[] NoPatchExt = new[] { ".bik", ".ogg", ".mp2", ".wav", ".wm", StringsFile.Extention, "lightingmap.dds" };
 
         public String FilePath { get; set; }
         public String FileDirectory { get { return Path.GetDirectoryName(FilePath); } }

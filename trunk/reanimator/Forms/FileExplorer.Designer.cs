@@ -78,6 +78,13 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.quickXml_button = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
+            this._quickExcel_button = new System.Windows.Forms.Button();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this._quickExcelTCv4_checkBox = new System.Windows.Forms.CheckBox();
+            this._quickExcelBrowse_button = new System.Windows.Forms.Button();
+            this._quickExcelDir_textBox = new System.Windows.Forms.TextBox();
+            this._quckExcel_label = new System.Windows.Forms.Label();
             this.contextMenuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.fileExplorer_tabPage.SuspendLayout();
@@ -94,6 +101,8 @@
             this.advancedCommands_tabPage.SuspendLayout();
             this.extractUncook_groupBox.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip1
@@ -635,7 +644,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(61, 360);
+            this.button1.Location = new System.Drawing.Point(11, 465);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(125, 54);
             this.button1.TabIndex = 1;
@@ -662,6 +671,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 88.228F));
             this.tableLayoutPanel1.Controls.Add(this.quickXml_button, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.label5, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this._quickExcel_button, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -693,6 +704,95 @@
             this.label5.Text = "Will uncook all .xml.cooked files from entire HGL filesystem to a user specified " +
                 "location.\r\n(requires ~800 MB free space)";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // _quickExcel_button
+            // 
+            this._quickExcel_button.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._quickExcel_button.Location = new System.Drawing.Point(3, 77);
+            this._quickExcel_button.Name = "_quickExcel_button";
+            this._quickExcel_button.Size = new System.Drawing.Size(88, 69);
+            this._quickExcel_button.TabIndex = 2;
+            this._quickExcel_button.Text = "Excel Files";
+            this._quickExcel_button.UseVisualStyleBackColor = true;
+            this._quickExcel_button.Click += new System.EventHandler(this._QuickExcel_Button_Click);
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.ColumnCount = 1;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this._quckExcel_label, 0, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(97, 77);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 2;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(707, 69);
+            this.tableLayoutPanel2.TabIndex = 3;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel3.ColumnCount = 3;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.94294F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.05706F));
+            this.tableLayoutPanel3.Controls.Add(this._quickExcelTCv4_checkBox, 2, 0);
+            this.tableLayoutPanel3.Controls.Add(this._quickExcelBrowse_button, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this._quickExcelDir_textBox, 0, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 37);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(701, 29);
+            this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // _quickExcelTCv4_checkBox
+            // 
+            this._quickExcelTCv4_checkBox.AutoSize = true;
+            this._quickExcelTCv4_checkBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._quickExcelTCv4_checkBox.Location = new System.Drawing.Point(335, 3);
+            this._quickExcelTCv4_checkBox.Name = "_quickExcelTCv4_checkBox";
+            this._quickExcelTCv4_checkBox.Size = new System.Drawing.Size(363, 23);
+            this._quickExcelTCv4_checkBox.TabIndex = 7;
+            this._quickExcelTCv4_checkBox.Text = "Include TCv4 Files (requires TCv4 loading option enabled)";
+            this._quickExcelTCv4_checkBox.UseVisualStyleBackColor = true;
+            // 
+            // _quickExcelBrowse_button
+            // 
+            this._quickExcelBrowse_button.Location = new System.Drawing.Point(247, 3);
+            this._quickExcelBrowse_button.Name = "_quickExcelBrowse_button";
+            this._quickExcelBrowse_button.Size = new System.Drawing.Size(75, 23);
+            this._quickExcelBrowse_button.TabIndex = 9;
+            this._quickExcelBrowse_button.Text = "Browse";
+            this._quickExcelBrowse_button.UseVisualStyleBackColor = true;
+            this._quickExcelBrowse_button.Click += new System.EventHandler(this._QuickExcelBrowse_Button_Click);
+            // 
+            // _quickExcelDir_textBox
+            // 
+            this._quickExcelDir_textBox.Location = new System.Drawing.Point(3, 3);
+            this._quickExcelDir_textBox.Name = "_quickExcelDir_textBox";
+            this._quickExcelDir_textBox.Size = new System.Drawing.Size(238, 20);
+            this._quickExcelDir_textBox.TabIndex = 0;
+            this._quickExcelDir_textBox.Text = "C:\\test_mod";
+            // 
+            // _quckExcel_label
+            // 
+            this._quckExcel_label.AutoSize = true;
+            this._quckExcel_label.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._quckExcel_label.Location = new System.Drawing.Point(3, 0);
+            this._quckExcel_label.Name = "_quckExcel_label";
+            this._quckExcel_label.Size = new System.Drawing.Size(701, 34);
+            this._quckExcel_label.TabIndex = 1;
+            this._quckExcel_label.Text = "Uncook all excel files to the specified location, maintinaing their directory str" +
+                "ucture.\r\nIf applicable, the TCv4 files will be placed in an initial directory /T" +
+                "Cv4/";
+            this._quckExcel_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FileExplorer
             // 
@@ -727,6 +827,10 @@
             this.extractUncook_groupBox.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -777,11 +881,18 @@
         private System.Windows.Forms.TextBox loadingLocation_textBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TabPage advancedCommands_tabPage;
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox extractUncook_groupBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button quickXml_button;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button _quickExcel_button;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.CheckBox _quickExcelTCv4_checkBox;
+        private System.Windows.Forms.Button _quickExcelBrowse_button;
+        private System.Windows.Forms.TextBox _quickExcelDir_textBox;
+        private System.Windows.Forms.Label _quckExcel_label;
 
     }
 }

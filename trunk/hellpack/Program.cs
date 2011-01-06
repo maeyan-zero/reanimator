@@ -236,7 +236,7 @@ namespace Revival
                                 doCookTxt = true;
                                 break;
                             }
-                            if (arg.EndsWith(StringsFile.FileExtentionClean))
+                            if (arg.EndsWith(StringsFile.ExtensionDeserialised))
                             {
                                 stringFilesToCook.Add(arg);
                                 doCookTxt = true;
@@ -388,7 +388,7 @@ namespace Revival
             string dataDir = Path.Combine(hellgatePath, "data");
             string dataCommonDir = Path.Combine(hellgatePath, "data_common");
             string stringDataDir = Path.Combine(dataDir, StringsFile.FolderPath);
-            string stringWildCard = String.Format(SearchPattern, StringsFile.FileExtentionClean);
+            string stringWildCard = String.Format(SearchPattern, StringsFile.ExtensionDeserialised);
 
             if (Directory.Exists(stringDataDir))
             {
