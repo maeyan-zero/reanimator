@@ -1,98 +1,94 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
 namespace Revival.Common
 {
-    public class ObjectDelegator
+    public class ObjectDelegator : IEnumerable
     {
-        public enum SupportedFields
-        {
-            GetValue = 1,
-            SetValue = 2
-        }
-
         public delegate Object FieldGetValueDelegate(Object target);
-
         public delegate void FieldSetValueDelegate(Object target, Object value);
 
-        private Dictionary<String, FieldGetValueDelegate> _fieldGetValueDelegatesDict;
-        private Dictionary<String, FieldSetValueDelegate> _fieldSetValueDelegatesDict;
-
-        // todo: update CSV to use above dictionary methods and remove these
-        private readonly FieldGetValueDelegate[] _fieldGetValueDelegates;
-        private readonly FieldSetValueDelegate[] _fieldSetValueDelegates;
-
-
-        public ObjectDelegator(Type type, SupportedFields field)
+        public class FieldDelegate
         {
-            FieldInfo[] fieldInfos = type.GetFields();
-            switch (field)
+            public String Name;
+            public FieldGetValueDelegate GetValue;
+            public FieldSetValueDelegate SetValue;
+            public FieldInfo Info;
+
+            public Type FieldType { get { return Info.FieldType; } }
+            public bool IsPublic { get { return Info.IsPublic; } }
+        }
+
+        public class DelegatorEnumerator : IEnumerator
+        {
+            private readonly Dictionary<String, FieldDelegate> _delegatesDict;
+            private Dictionary<String, FieldDelegate>.Enumerator _delegatesEnumerator;
+
+            public DelegatorEnumerator(Dictionary<String, FieldDelegate> delegatesDict)
             {
-                case SupportedFields.GetValue:
-                    _fieldGetValueDelegates = new FieldGetValueDelegate[fieldInfos.Length];
-                    for (int i = 0; i < fieldInfos.Length; i++)
-                    {
-                        FieldGetValueDelegate getValueDelegate = _CreateGetField(fieldInfos[i]);
-                        _fieldGetValueDelegates[i] = getValueDelegate;
-                    }
-                    break;
+                _delegatesDict = delegatesDict;
+                Reset();
+            }
 
-                case SupportedFields.SetValue:
-                    _fieldSetValueDelegates = new FieldSetValueDelegate[fieldInfos.Length];
-                    for (int i = 0; i < fieldInfos.Length; i++)
-                    {
-                        _fieldSetValueDelegates[i] = _CreateSetField(fieldInfos[i]);
-                    }
-                    break;
+            public bool MoveNext()
+            {
+                return _delegatesEnumerator.MoveNext();
+            }
 
-                default:
-                    throw new NotSupportedException("The field " + field + "is not supported!");
+            public void Reset()
+            {
+                _delegatesEnumerator = _delegatesDict.GetEnumerator();
+            }
+
+            object IEnumerator.Current
+            {
+                get { return Current; }
+            }
+
+            public FieldDelegate Current
+            {
+                get
+                {
+                    try
+                    {
+                        return _delegatesEnumerator.Current.Value;
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        throw new InvalidOperationException();
+                    }
+                }
             }
         }
 
-        public ObjectDelegator(IList<FieldInfo> fieldInfos, ICollection<SupportedFields> fields)
+        private readonly Dictionary<String, FieldDelegate> _fieldDelegatesDict = new Dictionary<String, FieldDelegate>();
+
+        public ObjectDelegator(IEnumerable<FieldInfo> fieldInfos)
         {
             if (fieldInfos == null) throw new ArgumentNullException("fieldInfos", "Cannot be null!");
-            if (fields == null) throw new ArgumentNullException("fields", "Cannot be null!");
-            if (fields.Count == 0) throw new ArgumentException("Fields array cannot be empty!", "fields");
 
-            foreach (SupportedFields field in fields)
+            foreach (FieldInfo fieldInfo in fieldInfos)
             {
-                _DoField(fieldInfos, field);
+                AddField(fieldInfo);
             }
         }
 
-        // todo: really should change the CSV stuff to have it use like objectDelegate["field"] like the DataTables and remove above ctor()
-        public ObjectDelegator(IList<FieldInfo> fieldInfos, SupportedFields field)
+        public void AddField(FieldInfo fieldInfo)
         {
-            _DoField(fieldInfos, field);
-        }
+            if (_fieldDelegatesDict.ContainsKey(fieldInfo.Name)) return;
 
-        private void _DoField(IList<FieldInfo> fieldInfos, SupportedFields field)
-        {
-            switch (field)
+            FieldDelegate fieldDelegate = new FieldDelegate
             {
-                case SupportedFields.GetValue:
-                    _fieldGetValueDelegatesDict = new Dictionary<String, FieldGetValueDelegate>();
-                    foreach (FieldInfo fieldInfo in fieldInfos)
-                    {
-                        _fieldGetValueDelegatesDict.Add(fieldInfo.Name, _CreateGetField(fieldInfo));
-                    }
-                    break;
+                Name = fieldInfo.Name,
+                GetValue = _CreateGetField(fieldInfo),
+                SetValue = _CreateSetField(fieldInfo),
+                Info = fieldInfo
+            };
 
-                case SupportedFields.SetValue:
-                    _fieldSetValueDelegatesDict = new Dictionary<String, FieldSetValueDelegate>();
-                    foreach (FieldInfo fieldInfo in fieldInfos)
-                    {
-                        _fieldSetValueDelegatesDict.Add(fieldInfo.Name, _CreateSetField(fieldInfo));
-                    }
-                    break;
-
-                default:
-                    throw new NotSupportedException("The field " + field + "is not supported!");
-            }
+            _fieldDelegatesDict.Add(fieldInfo.Name, fieldDelegate);
         }
 
         private static FieldSetValueDelegate _CreateSetField(FieldInfo field)
@@ -138,60 +134,55 @@ namespace Revival.Common
             return (FieldGetValueDelegate)getMethod.CreateDelegate(typeof(FieldGetValueDelegate));
         }
 
-        public FieldGetValueDelegate this[int index]
+        public int FieldCount
+        {
+            get { return _fieldDelegatesDict.Count; }
+        }
+
+        // "getter"
+        public FieldGetValueDelegate this[String fieldName]
         {
             get
             {
-                if (index < 0 || index > _fieldGetValueDelegates.Length) return null;
-
-                return _fieldGetValueDelegates[index];
+                return GetFieldGetDelegate(fieldName);
             }
         }
 
-        public FieldGetValueDelegate this[String index]
-        {
-            get
-            {
-                return _fieldGetValueDelegatesDict[index];
-            }
-        }
-
-        public Object this[int index, Object target]
-        {
-            set
-            {
-                if (index < 0 || index > _fieldSetValueDelegates.Length) return;
-
-                _fieldSetValueDelegates[index](target, value);
-            }
-        }
-
+        // "setter"
         public Object this[String fieldName, Object target]
         {
             set
             {
-                FieldSetValueDelegate fieldSetValueDelegate;
-                if (_fieldSetValueDelegatesDict.TryGetValue(fieldName, out fieldSetValueDelegate))
-                {
-                    fieldSetValueDelegate(target, value);
-                }
+                FieldSetValueDelegate fieldSetDelegate = GetFieldSetDelegate(fieldName);
+                if (fieldSetDelegate != null) fieldSetDelegate(target, value);
             }
         }
 
         public FieldGetValueDelegate GetFieldGetDelegate(String fieldName)
         {
-            return _fieldGetValueDelegatesDict[fieldName];
+            FieldDelegate fieldDelegate;
+            return _fieldDelegatesDict.TryGetValue(fieldName, out fieldDelegate) ? fieldDelegate.GetValue : null;
         }
 
         public FieldSetValueDelegate GetFieldSetDelegate(String fieldName)
         {
-            return _fieldSetValueDelegatesDict[fieldName];
+            FieldDelegate fieldDelegate;
+            return _fieldDelegatesDict.TryGetValue(fieldName, out fieldDelegate) ? fieldDelegate.SetValue : null;
         }
-
 
         public bool ContainsGetFieldDelegate(String fieldName)
         {
-            return _fieldGetValueDelegatesDict.ContainsKey(fieldName);
+            return _fieldDelegatesDict.ContainsKey(fieldName);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public DelegatorEnumerator GetEnumerator()
+        {
+            return new DelegatorEnumerator(_fieldDelegatesDict);
         }
     }
 }

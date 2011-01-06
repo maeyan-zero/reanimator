@@ -49,7 +49,7 @@ namespace Hellgate
             FieldInfo[] fieldInfos = dataType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (FieldInfo fieldInfo in fieldInfos)
             {
-                OutputAttribute excelAttribute = ExcelFile.GetExcelOutputAttribute(fieldInfo);
+                OutputAttribute excelAttribute = ExcelFile.GetExcelAttribute(fieldInfo);
 
                 // The only private field we add is the TableHeader
                 if (fieldInfo.IsPrivate)
@@ -138,7 +138,7 @@ namespace Hellgate
             #region Generate Rows
             int row = 1;
             object[] baseRow = new object[outputAttributes.Count];
-            ObjectDelegator objectDelegator = new ObjectDelegator(fieldInfos, ObjectDelegator.SupportedFields.GetValue);
+            ObjectDelegator objectDelegator = new ObjectDelegator(fieldInfos);
             foreach (Object tableRow in excelFile.Rows)
             {
                 int col = 1;
@@ -234,7 +234,7 @@ namespace Hellgate
 
         private DataTable _LoadStringsTable()
         {
-            ObjectDelegator objectDelegator = new ObjectDelegator(typeof(StringsFile.StringBlock), ObjectDelegator.SupportedFields.GetValue);
+            ObjectDelegator objectDelegator = DataFileDelegators["Strings_Strings"];
 
             DataTable dataTable = XlsDataSet.Tables[StringsTableName];
             if (dataTable != null) return dataTable;
@@ -262,9 +262,10 @@ namespace Hellgate
                 {
                     DataRow dataRow = dataTable.NewRow();
 
-                    for (int col = 0; col < fieldInfos.Length; col++)
+                    int col = 0;
+                    foreach (FieldInfo fieldInfo in fieldInfos)
                     {
-                        dataRow[col] = objectDelegator[col](tableRow);
+                        dataRow[col++] = objectDelegator[fieldInfo.Name](tableRow);
                     }
 
                     dataTable.Rows.Add(dataRow);
@@ -320,7 +321,7 @@ namespace Hellgate
                 }
 
                 OutputAttribute excelOutputAttribute =
-                    ExcelFile.GetExcelOutputAttribute(fieldInfo);
+                    ExcelFile.GetExcelAttribute(fieldInfo);
 
                 if ((excelOutputAttribute == null))
                 {

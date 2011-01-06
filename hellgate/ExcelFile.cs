@@ -130,129 +130,148 @@ namespace Hellgate
             return ParseCSV(csvBytes, null);
         }
 
-        public bool ParseCSV(byte[] csvBytes, FileManager fileManager)
+        public bool ParseCSV(byte[] csvBytes, FileManager fileManager, String[] columnNames = null)
         {
-            // Pre-checks
+            // sanity checks
             if (csvBytes == null) return false;
             if (csvBytes.Length < 32) return false;
+            if (fileManager.DataFiles.Count == 0) fileManager = null;
 
-            // Initialization
+
+            // function setup
             int offset = 0;
             const byte delimiter = (byte)'\t';
             int stringBufferOffset = 0;
             int integerBufferOffset = 1;
             bool isProperties = (StringId == "PROPERTIES" || StringId == "_TCv4_PROPERTIES");
+            ObjectDelegator objectDelegator;
+            OutputAttribute[] excelAttributes;
+            bool needOutputAttributes = true;
 
-            StringId = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(csvBytes, ref offset, delimiter), 0);
-            StringId = StringId.Replace("\"", "");//in case strings embedded
+            if (fileManager == null || !fileManager.DataFileDelegators.ContainsKey(StringId))
+            {
+                FieldInfo[] fieldInfos = DataType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                objectDelegator = new ObjectDelegator(fieldInfos);
+                excelAttributes = new OutputAttribute[fieldInfos.Length];
+            }
+            else
+            {
+                objectDelegator = fileManager.DataFileDelegators[StringId];
+                excelAttributes = new OutputAttribute[objectDelegator.FieldCount];
+            }
+
+
+            // get columns
+            int colCount = 1;
+            while (csvBytes[offset++] != '\n') if (csvBytes[offset] == '\t') colCount++;
+            String[][] tableRows = FileTools.CSVToStringArray(csvBytes, colCount, delimiter);
+            String[] columns = tableRows[0];
+            int rowCount = tableRows.Length;
+            //String[] strings = 
+            //StringId = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(csvBytes, ref offset, delimiter), 0);
+            //StringId = StringId.Replace("\"", ""); // in case strings embedded
 
 
             // Mutate the buffer into a string array
-            int colCount = Attributes.HasExtended ? DataType.GetFields().Count() + 2 : DataType.GetFields().Count() + 1;
+            //int colCount = Attributes.HasExtended ? DataType.GetFields().Count() + 2 : DataType.GetFields().Count() + 1;
             if (isProperties)
             {
                 ExcelFunctions = new List<ExcelFunction>();
                 _scriptBuffer = new byte[1]; // properties is weird - do this just to ensure 100% byte-for-byte accuracy
-                colCount++;
+                //colCount++;
             }
 
-
-            string[][] tableRows = FileTools.CSVToStringArray(csvBytes, colCount, delimiter);
-            if (tableRows == null) return false;
 
             // Parse the tableRows
             bool failedParsing = false;
             Rows = new List<Object>();
-            const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            FieldInfo[] fieldInfos = DataType.GetFields(bindingFlags);
-            ObjectDelegator objectDelegator = new ObjectDelegator(fieldInfos, ObjectDelegator.SupportedFields.SetValue);
-            bool needOutputAttributes = true;
-            OutputAttribute[] outputAttributes = new OutputAttribute[fieldInfos.Length];
-            for (int row = 0; row < tableRows.Count(); row++)
+            for (int row = 1; row < rowCount; row++)
             {
-                int col = 0;
-                int fieldCol = -1;
+                int col = -1;
+                int csvCol = 0;
                 Object rowInstance = Activator.CreateInstance(DataType);
-                foreach (FieldInfo fieldInfo in fieldInfos)
+                foreach (ObjectDelegator.FieldDelegate fieldDelegate in objectDelegator)
                 {
-                    fieldCol++;
+                    col++;
 
-                    if (needOutputAttributes) outputAttributes[fieldCol] = GetExcelOutputAttribute(fieldInfo);
-                    OutputAttribute attribute = outputAttributes[fieldCol];
+                    if (needOutputAttributes) excelAttributes[col] = GetExcelAttribute(fieldDelegate.Info);
+                    OutputAttribute excelAttribute = excelAttributes[col];
 
-                    if (fieldInfo.Name == "code")
-                    {
-                        int code = _StringToCode(tableRows[row][col++]);
 
-                        if (fieldInfo.FieldType == typeof(short))
-                        {
-                            objectDelegator[fieldInfo.Name, rowInstance] = (short)code;
-                        }
-                        else
-                        {
-                            objectDelegator[fieldInfo.Name, rowInstance] = code;
-                        }
-                        
-                        continue;
-                    }
-
-                    // Initialize private fields 
-                    if (fieldInfo.IsPrivate)
+                    // columns not present
+                    if (!columns.Contains(fieldDelegate.Name))
                     {
                         // create row header object
-                        if (fieldInfo.FieldType == typeof(RowHeader))
+                        if (fieldDelegate.FieldType == typeof(RowHeader))
                         {
-                            String headerString = tableRows[row][col++];
+                            String headerString = tableRows[row][csvCol++];
                             RowHeader rowHeader = (RowHeader)FileTools.StringToObject(headerString, ",", typeof(RowHeader));
-                            objectDelegator[fieldInfo.Name, rowInstance] = rowHeader;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = rowHeader;
                             continue;
                         }
 
                         // assign default values
                         MarshalAsAttribute arrayMarshal = null;
                         Array arrayInstance = null;
-                        if (fieldInfo.FieldType.BaseType == typeof(Array))
+                        if (fieldDelegate.FieldType.BaseType == typeof(Array))
                         {
-                            arrayMarshal = (MarshalAsAttribute)fieldInfo.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
-                            arrayInstance = (Array)Activator.CreateInstance(fieldInfo.FieldType, arrayMarshal.SizeConst);
-                            objectDelegator[fieldInfo.Name, rowInstance] = arrayInstance;
+                            arrayMarshal = (MarshalAsAttribute)fieldDelegate.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                            arrayInstance = (Array)Activator.CreateInstance(fieldDelegate.FieldType, arrayMarshal.SizeConst);
+                            objectDelegator[fieldDelegate.Name, rowInstance] = arrayInstance;
                         }
-                        else if (fieldInfo.FieldType == typeof(String))
+                        else if (fieldDelegate.FieldType == typeof(String))
                         {
-                            objectDelegator[fieldInfo.Name, rowInstance] = String.Empty;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = String.Empty;
                         }
-                        
+
                         // assign constant non-zero values
-                        if (attribute == null || attribute.ConstantValue == null) continue;
-                        if (fieldInfo.FieldType.BaseType == typeof(Array))
+                        if (excelAttribute == null || excelAttribute.ConstantValue == null) continue;
+                        if (fieldDelegate.FieldType.BaseType == typeof(Array))
                         {
                             Debug.Assert(arrayInstance != null, "arrayInstance == null");
                             Debug.Assert(arrayMarshal != null, "arrayMarshal == null");
 
                             for (int i = 0; i < arrayMarshal.SizeConst; i++)
                             {
-                                arrayInstance.SetValue(attribute.ConstantValue, i);
+                                arrayInstance.SetValue(excelAttribute.ConstantValue, i);
                             }
                         }
                         else
                         {
-                            objectDelegator[fieldInfo.Name, rowInstance] = attribute.ConstantValue;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = excelAttribute.ConstantValue;
                         }
 
                         continue;
                     }
 
-                    // Parse public fields
-                    // All public fields must be inside the CSV
-                    String value = tableRows[row][col++];
-                    if (attribute != null)
+
+                    // columns present
+                    String value = tableRows[row][csvCol++];
+
+                    if (fieldDelegate.Name == "code")
                     {
-                        if (attribute.IsTableIndex && fileManager != null)
+                        int code = _StringToCode(value);
+
+                        if (fieldDelegate.FieldType == typeof(short))
                         {
-                            bool hasCodeColumn = fileManager.DataTableHasColumn(attribute.TableStringId, "code");
+                            objectDelegator[fieldDelegate.Name, rowInstance] = (short)code;
+                        }
+                        else
+                        {
+                            objectDelegator[fieldDelegate.Name, rowInstance] = code;
+                        }
+
+                        continue;
+                    }
+
+                    if (excelAttribute != null)
+                    {
+                        if (excelAttribute.IsTableIndex && fileManager != null)
+                        {
+                            bool hasCodeColumn = fileManager.DataTableHasColumn(excelAttribute.TableStringId, "code");
                             if (value.Length == 0 && hasCodeColumn)
                             {
-                                objectDelegator[fieldInfo.Name, rowInstance] = -1;
+                                objectDelegator[fieldDelegate.Name, rowInstance] = -1;
                                 continue;
                             }
 
@@ -267,38 +286,38 @@ namespace Hellgate
                             if (hasCodeColumn)
                             {
                                 int code = _StringToCode(value);
-                                rowIndex = fileManager.GetExcelRowIndexFromStringId(attribute.TableStringId, code, "code");
+                                rowIndex = fileManager.GetExcelRowIndexFromStringId(excelAttribute.TableStringId, code, "code");
                             }
                             else
                             {
-                                rowIndex = fileManager.GetExcelRowIndex(attribute.TableStringId, value);
+                                rowIndex = fileManager.GetExcelRowIndex(excelAttribute.TableStringId, value);
                             }
 
-                            objectDelegator[fieldInfo.Name, rowInstance] = rowIndex * isNegative;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = rowIndex * isNegative;
                             continue;
                         }
 
-                        if (attribute.IsStringOffset)
+                        if (excelAttribute.IsStringOffset)
                         {
                             if (_stringBuffer == null) _stringBuffer = new byte[1024];
 
                             if (String.IsNullOrEmpty(value))
                             {
-                                objectDelegator[fieldInfo.Name, rowInstance] = -1;
+                                objectDelegator[fieldDelegate.Name, rowInstance] = -1;
                                 continue;
                             }
 
-                            objectDelegator[fieldInfo.Name, rowInstance] = stringBufferOffset;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = stringBufferOffset;
                             FileTools.WriteToBuffer(ref _stringBuffer, ref stringBufferOffset, FileTools.StringToASCIIByteArray(value));
                             stringBufferOffset++; // \0
                             continue;
                         }
 
-                        if (attribute.IsScript)
+                        if (excelAttribute.IsScript)
                         {
-                            if (value == "0")
+                            if ((fileManager == null && value == "0") || value == "")
                             {
-                                objectDelegator[fieldInfo.Name, rowInstance] = 0;
+                                objectDelegator[fieldDelegate.Name, rowInstance] = 0;
                                 continue;
                             }
                             if (_scriptBuffer == null)
@@ -307,13 +326,11 @@ namespace Hellgate
                                 _scriptBuffer[0] = 0x00;
                             }
 
-                            value = value.Replace("\"", "");
-
                             int[] scriptByteCode;
                             if (fileManager != null)
                             {
                                 ExcelScript excelScript = new ExcelScript(fileManager);
-                                scriptByteCode = excelScript.Compile(value, null, StringId, row, col, fieldInfo.Name);
+                                scriptByteCode = excelScript.Compile(value, null, StringId, row, col, fieldDelegate.Name);
                             }
                             else
                             {
@@ -326,41 +343,40 @@ namespace Hellgate
                                 }
                             }
 
-                            objectDelegator[fieldInfo.Name, rowInstance] = integerBufferOffset;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = integerBufferOffset;
                             FileTools.WriteToBuffer(ref _scriptBuffer, ref integerBufferOffset, scriptByteCode.ToByteArray());
                             continue;
                         }
 
-                        if ((attribute.IsSecondaryString))
+                        if (excelAttribute.IsSecondaryString)
                         {
-                            if ((_secondaryStrings == null))
+                            if (_secondaryStrings == null) _secondaryStrings = new StringCollection();
+
+                            if (value == "")
                             {
-                                _secondaryStrings = new StringCollection();
-                            }
-                            if ((String.IsNullOrEmpty(value)))
-                            {
-                                objectDelegator[fieldInfo.Name, rowInstance] = -1;
+                                objectDelegator[fieldDelegate.Name, rowInstance] = -1;
                                 continue;
                             }
-                            if (!(_secondaryStrings.Contains(value)))
+                            if (!_secondaryStrings.Contains(value))
                             {
                                 _secondaryStrings.Add(value);
                             }
-                            objectDelegator[fieldInfo.Name, rowInstance] = _secondaryStrings.IndexOf(value);
+
+                            objectDelegator[fieldDelegate.Name, rowInstance] = _secondaryStrings.IndexOf(value);
                             continue;
                         }
 
-                        if ((attribute.IsBitmask))
+                        if (excelAttribute.IsBitmask)
                         {
-                            objectDelegator[fieldInfo.Name, rowInstance] = UInt32.Parse(value);
+                            objectDelegator[fieldDelegate.Name, rowInstance] = UInt32.Parse(value);
                             continue;
                         }
                     }
 
                     try
                     {
-                        Object objValue = FileTools.StringToObject(value, fieldInfo.FieldType);
-                        objectDelegator[fieldInfo.Name, rowInstance] = objValue;
+                        Object objValue = FileTools.StringToObject(value, fieldDelegate.FieldType);
+                        objectDelegator[fieldDelegate.Name, rowInstance] = objValue;
                     }
                     catch (Exception e)
                     {
@@ -372,30 +388,27 @@ namespace Hellgate
                 if (failedParsing) break;
                 needOutputAttributes = false;
 
-                // For item types, items, missiles, monsters etc
-                // This must be a hex byte delimited array
-                if ((Attributes.HasExtended))
+                // applicable only for Unit type; items, missiles, monsters, objects, players
+                if (Attributes.HasExtended)
                 {
-                    if ((_extendedBuffer == null))
-                    {
-                        _extendedBuffer = new byte[tableRows.Count()][];
-                    }
-                    const char split = ',';
-                    string value = tableRows[row][col];
-                    string[] stringArray = value.Split(split);
+                    if (_extendedBuffer == null) _extendedBuffer = new byte[rowCount - 1][];
+
+                    String value = tableRows[row][csvCol];
+                    String[] stringArray = value.Split(',');
                     byte[] byteArray = new byte[stringArray.Length];
+
                     for (int i = 0; i < byteArray.Length; i++)
                     {
-                        byteArray[i] = Byte.Parse(stringArray[i], NumberStyles.HexNumber);
+                        byteArray[i] = Byte.Parse(stringArray[i]);
                     }
-                    _extendedBuffer[row] = byteArray;
+                    _extendedBuffer[row-1] = byteArray;
                 }
 
                 // properties has extra Scripts stuffs
                 // yea, this is a bit messy, but it's a single table only and mostly done out of curiosity
                 if (isProperties)
                 {
-                    String value = tableRows[row][col];
+                    String value = tableRows[row][csvCol];
                     String[] scripts = value.Split('\n');
                     ExcelFunction excelScript = new ExcelFunction();
                     if (scripts.Length > 1)
@@ -647,7 +660,7 @@ namespace Hellgate
 
                     // Public fields -> these are inside the datatable
                     object value = dataTable.Rows[row][col++];
-                    OutputAttribute attribute = GetExcelOutputAttribute(fieldInfo);
+                    OutputAttribute attribute = GetExcelAttribute(fieldInfo);
                     if (attribute != null)
                     {
                         if (attribute.IsStringOffset)
@@ -938,96 +951,114 @@ namespace Hellgate
             return ExportCSV(null);
         }
 
-        public byte[] ExportCSV(FileManager fileManager)
+        public byte[] ExportCSV(FileManager fileManager, String[] columnNames = null)
         {
-            ObjectDelegator objectDelegator = new ObjectDelegator(Attributes.RowType, ObjectDelegator.SupportedFields.GetValue);
-
-            FieldInfo[] dataTypeFields = DataType.GetFields();
-            int noCols = dataTypeFields.Count();
-            int noRows = Count + 1; // +1 for column headers
-            const byte delimiter = (byte)'\t';
-
+            //// init stuffs
             byte[] csvBuffer = new byte[1024];
             int csvOffset = 0;
-            int row = 0;
+            bool isProperties = (StringId == "PROPERTIES" || StringId == "_TCv4_PROPERTIES");
+
+            ObjectDelegator objectDelegator;
+            if (fileManager == null || !fileManager.DataFileDelegators.ContainsKey(StringId))
+            {
+                objectDelegator = new ObjectDelegator(Attributes.RowType.GetFields());
+
+                FieldInfo headerField = DataType.GetField("header", BindingFlags.Instance | BindingFlags.NonPublic);
+                objectDelegator.AddField(headerField);
+            }
+            else
+            {
+                objectDelegator = fileManager.DataFileDelegators[StringId];
+            }
+
+
+            //// header row
+            List<String> columnsList = new List<String> { StringId };
+            foreach (ObjectDelegator.FieldDelegate fieldDelegate in objectDelegator)
+            {
+                if (columnNames == null)
+                {
+                    if (!fieldDelegate.IsPublic) continue;
+                }
+                else if (!columnNames.Contains(fieldDelegate.Name))
+                {
+                    continue;
+                }
+
+                columnsList.Add(fieldDelegate.Name);
+            }
+
+            // type-specific columns
+            if (Attributes.HasExtended) columnsList.Add("ExtendedProps");
+            if (isProperties) columnsList.Add("Script");
+
+            // output header row
+            String[] columns = columnsList.ToArray();
+            //String headerRow = columns.Aggregate(String.Empty, (csvHeader, col) => csvHeader + "\t" + col) + Environment.NewLine;
+            //FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, headerRow.ToASCIIByteArray());
+
+
+            //// csv conversion init
+            int colCount = columns.Length;
+            int rowCount = Count + 1; // +1 for column headers
+            const byte delimiter = (byte)'\t';
+
             int scriptRow = 0;
 
-            // Table Header - put stringID in this field
-            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(_GetStringId(FilePath)));
-            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-            // Public Field Headers
-            foreach (FieldInfo fieldInfo in dataTypeFields)
-            {
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(fieldInfo.Name));
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-            }
-            // Add extra column for extended properties
-            if ((Attributes.HasExtended))
-            {
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("ExtendedProps"));
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-            }
-            // if properties we have the scripts to export as well
-            bool isProperties = (StringId == "PROPERTIES" || StringId == "_TCv4_PROPERTIES");
-            if (isProperties)
-            {
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("Script"));
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-            }
-            // End of line
-            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(Environment.NewLine));
 
-
-            // Parse each row, resolve buffers if needed
-            bool needOutputAttributes = true;
-            OutputAttribute[] outputAttributes = new OutputAttribute[noCols];
-            foreach (Object rowObject in Rows)
+            //// csv generation
+            String[][] strings = new string[rowCount][];
+            strings[0] = columns;
+            int col = -1;
+            foreach (ObjectDelegator.FieldDelegate fieldDelegate in objectDelegator)
             {
-                // Write Table Header
-                FieldInfo headerField = DataType.GetField("header", BindingFlags.Instance | BindingFlags.NonPublic);
-                RowHeader tableHeader = (RowHeader)headerField.GetValue(rowObject);
-                string tableHeaderString = FileTools.ObjectToStringGeneric(tableHeader, ",");
-                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(tableHeaderString));
+                if (!columns.Contains(fieldDelegate.Name) && fieldDelegate.Name != "header") continue;
 
-                int col = -1;
-                foreach (FieldInfo fieldInfo in dataTypeFields)
+                col++;
+                OutputAttribute excelAttribute = GetExcelAttribute(fieldDelegate.Info);
+
+                int row = 0;
+                foreach (Object rowObject in Rows)
                 {
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-
-                    col++;
-                    if (needOutputAttributes) outputAttributes[col] = GetExcelOutputAttribute(fieldInfo);
-                    OutputAttribute attribute = outputAttributes[col];
-
-                    //if (col == 22 && row == 29)
-                    //{
-                    //    int bp = 0;
-                    //}
-
-                    if (fieldInfo.Name == "code")
+                    String[] rowStr = strings[++row];
+                    if (rowStr == null)
                     {
-                        int code;
-                        if (fieldInfo.FieldType == typeof(short))
-                        {
-                            code = (int)(short)objectDelegator[col](rowObject);
-                        }
-                        else
-                        {
-                            code = (int)objectDelegator[col](rowObject);
-                        }
-                        
-                        FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, _CodeToString(code).ToASCIIByteArray());
+                        rowStr = new String[colCount];
+                        strings[row] = rowStr;
+                    }
+
+                    if (fieldDelegate.Name == "header")
+                    {
+                        RowHeader tableHeader = (RowHeader)objectDelegator[fieldDelegate.Name](rowObject);
+                        rowStr[col] = FileTools.ObjectToStringGeneric(tableHeader, ",");
                         continue;
                     }
 
-                    if (attribute != null)
+                    if (fieldDelegate.Name == "code")
                     {
-                        if (attribute.IsTableIndex && fileManager != null)
+                        int code;
+                        if (fieldDelegate.FieldType == typeof(short))
                         {
-                            int index = (int)objectDelegator[col](rowObject);
-                            if (index == -1)
+                            code = (int)(short)objectDelegator[fieldDelegate.Name](rowObject);
+                        }
+                        else
+                        {
+                            code = (int)objectDelegator[fieldDelegate.Name](rowObject);
+                        }
+
+                        rowStr[col] = "\"" + _CodeToString(code) + "\"";
+                        continue;
+                    }
+
+                    if (excelAttribute != null)
+                    {
+                        if (excelAttribute.IsTableIndex && fileManager != null)
+                        {
+                            int index = (int)objectDelegator[fieldDelegate.Name](rowObject);
+                            if (index == -1) // empty string/no code
                             {
-                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, "\"\"".ToASCIIByteArray());
-                                continue; // empty string/no code
+                                rowStr[col] = "\"\"";
+                                continue;
                             }
 
                             String negative = String.Empty;
@@ -1037,40 +1068,36 @@ namespace Hellgate
                                 negative = "-";
                             }
 
-                            if (fileManager.DataTableHasColumn(attribute.TableStringId, "code"))
+                            if (fileManager.DataTableHasColumn(excelAttribute.TableStringId, "code"))
                             {
-                                int code = fileManager.GetExcelIntFromStringId(attribute.TableStringId, "code", index);
+                                int code = fileManager.GetExcelIntFromStringId(excelAttribute.TableStringId, "code", index);
                                 String codeStr = String.Format("\"{0}{1}\"", negative, _CodeToString(code));
 
-                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, codeStr.ToASCIIByteArray());
+                                rowStr[col] = codeStr;
                             }
                             else
                             {
-                                String value = fileManager.GetExcelRowStringFromStringId(attribute.TableStringId, index);
+                                String value = fileManager.GetExcelRowStringFromStringId(excelAttribute.TableStringId, index);
                                 value = String.Format("\"{0}{1}\"", negative, value);
 
-                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, value.ToASCIIByteArray());
+                                rowStr[col] = value;
                             }
-
                             continue;
                         }
 
-                        if ((attribute.IsStringOffset))
+                        if (excelAttribute.IsStringOffset)
                         {
-                            int offset = (int)objectDelegator[col](rowObject);
+                            int offset = (int)objectDelegator[fieldDelegate.Name](rowObject);
                             if (offset != -1)
                             {
-                                byte[] stringBytes = ReadStringTableAsBytes(offset);
-                                if (stringBytes == null) continue;
-
-                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, stringBytes);
+                                rowStr[col] = ReadStringTable(offset);
                             }
                             continue;
                         }
 
-                        if ((attribute.IsScript))
+                        if (excelAttribute.IsScript)
                         {
-                            int offset = (int)objectDelegator[col](rowObject);
+                            int offset = (int)objectDelegator[fieldDelegate.Name](rowObject);
                             if ((offset == 0))
                             {
                                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("0"));
@@ -1085,7 +1112,7 @@ namespace Hellgate
                                 {
                                     //String debugScriptString = scriptString;
                                     ExcelScript excelScript = new ExcelScript(fileManager);
-                                    scriptString = "\"" + excelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldInfo.Name) + "\"";
+                                    scriptString = "\"" + excelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldDelegate.Name) + "\"";
 
                                     //ExcelScript recompiledScript = new ExcelScript();
                                     //int[] recompiledBytes = recompiledScript.Compile(scriptString, debugScriptString, StringId, row, col, fieldInfo.Name);
@@ -1107,79 +1134,98 @@ namespace Hellgate
                                 }
                             }
 
-                            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptString));
+                            rowStr[col] = scriptString;
+                            //FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptString));
                             continue;
                         }
 
-                        if ((attribute.IsSecondaryString))
+                        if (excelAttribute.IsSecondaryString)
                         {
-                            int index = (int)objectDelegator[col](rowObject);
+                            int index = (int)objectDelegator[fieldDelegate.Name](rowObject);
                             if (index != -1)
                             {
-                                FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(_secondaryStrings[index]));
+                                rowStr[col] = _secondaryStrings[index];
+                                //FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(_secondaryStrings[index]));
                             }
                             continue;
                         }
 
-                        if ((attribute.IsBitmask))
+                        if (excelAttribute.IsBitmask)
                         {
-                            uint uintValue = (uint)objectDelegator[col](rowObject);
+                            uint uintValue = (uint)objectDelegator[fieldDelegate.Name](rowObject);
                             string stringValue = uintValue.ToString();
-                            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(stringValue));
+                            rowStr[col] = stringValue;
+                            //FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(stringValue));
                             continue;
                         }
                     }
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(objectDelegator[col](rowObject).ToString()));
-                }
-                needOutputAttributes = false;
 
-                // Extended Buffer if applies
-                if (Attributes.HasExtended)
-                {
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(FileTools.ByteArrayToDelimitedASCIIString(_extendedBuffer[row], ',', typeof(byte))));
-                }
-
-                // properties scripts
-                if (isProperties && scriptRow < ExcelFunctions.Count)
-                {
-                    if (tableHeader.Unknown1 != 2 || scriptRow == ExcelFunctions.Count - 1) // need 1 extra row for some reason
-                    {
-                        FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-                        ExcelFunction excelScript = ExcelFunctions[scriptRow++];
-                        String output = String.Empty;
-                        foreach (ExcelFunction.Parameter paramater in excelScript.Parameters)
-                        {
-                            output += String.Format("\n{0},{1},{2},{3}", paramater.Name, paramater.Unknown,
-                                                    paramater.TypeId, paramater.TypeValues.ToString(","));
-                        }
-                        FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(output));
-
-                        if (excelScript.ScriptByteCode != null)
-                        {
-                            int offset = 0;
-                            String scriptValues = "\n" +
-                                                  FileTools.ByteArrayToInt32Array(excelScript.ScriptByteCode, ref offset,
-                                                                                  excelScript.ScriptByteCode.Length / 4).ToString(",") + "\n";
-                            FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptValues));
-                        }
-                    }
-                    else
-                    {
-                        FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(Environment.NewLine));
-                    }
-                }
-
-                row++;
-                if (row != noRows - 1)
-                {
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, delimiter);
-                    FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(Environment.NewLine));
+                    rowStr[col] = objectDelegator[fieldDelegate.Name](rowObject).ToString();
                 }
             }
 
-            Array.Resize(ref csvBuffer, csvOffset);
-            return csvBuffer;
+            // extended properties
+            if (Attributes.HasExtended)
+            {
+                col++;
+                int row = -1;
+                foreach (String[] rowStr in strings)
+                {
+                    if (row == -1) // columns header row
+                    {
+                        row++;
+                        continue;
+                    }
+
+                    rowStr[col] = _extendedBuffer[row++].ToString(",");
+                }
+            }
+
+            // properties scripts
+            if (isProperties)
+            {
+                // not point in doing this
+                //if (tableHeader.Unknown1 != 2 || scriptRow == ExcelFunctions.Count - 1) // need 1 extra row for some reason
+
+                col++;
+                int row = -1;
+                foreach (String[] rowStr in strings)
+                {
+                    if (row == -1)
+                    {
+                        row++;
+                        continue;
+                    }
+
+                    if (row >= ExcelFunctions.Count) break;
+
+                    ExcelFunction excelScript = ExcelFunctions[row++];
+                    String excelScriptFunction = String.Empty;
+                    foreach (ExcelFunction.Parameter paramater in excelScript.Parameters)
+                    {
+                        excelScriptFunction += String.Format("\n{0},{1},{2},{3}", paramater.Name, paramater.Unknown, paramater.TypeId, paramater.TypeValues.ToString(","));
+                    }
+
+                    if (excelScript.ScriptByteCode != null)
+                    {
+                        int offset = 0;
+                        excelScriptFunction += "\n" + FileTools.ByteArrayToInt32Array(excelScript.ScriptByteCode, ref offset, excelScript.ScriptByteCode.Length / 4).ToString(",") + "\n";
+                    }
+
+                    rowStr[col] = excelScriptFunction;
+                }
+            }
+
+            String[] rows = new String[rowCount];
+            col = 0;
+            foreach (String[] rowStr in strings)
+            {
+                rows[col] = String.Join("\t", rowStr);
+                col++;
+            }
+
+            String csvString = String.Join(Environment.NewLine, rows);
+            return csvString.ToASCIIByteArray();
         }
 
         public override byte[] ExportSQL(string tablePrefix = "hgl")
@@ -1209,7 +1255,7 @@ namespace Hellgate
                 }
 
                 // Special types
-                OutputAttribute excelOutput = GetExcelOutputAttribute(field);
+                OutputAttribute excelOutput = GetExcelAttribute(field);
                 if (excelOutput != null)
                 {
                     if (excelOutput.IsScript || excelOutput.IsSecondaryString || excelOutput.IsStringOffset) dataType = "TEXT";
@@ -1243,14 +1289,14 @@ namespace Hellgate
             int rowCount = 0;
             int noRows = Rows.Count;
             StringWriter valueString = new StringWriter();
-            
+
             foreach (Object rowObject in Rows)
             {
                 valueString.Write(String.Format("\t({0},", rowCount)); // write the id
 
                 foreach (FieldInfo field in fieldInfo)
                 {
-                    OutputAttribute excelOutput = GetExcelOutputAttribute(field);
+                    OutputAttribute excelOutput = GetExcelAttribute(field);
                     Object objValue = field.GetValue(rowObject);
                     bool valueParsed = false;
 
@@ -1325,7 +1371,7 @@ namespace Hellgate
 
             stringWriter.Write(valueString.ToString());
 
-            byte[] buffer = FileTools.StringToASCIIByteArray (stringWriter.ToString());
+            byte[] buffer = FileTools.StringToASCIIByteArray(stringWriter.ToString());
             return buffer;
         }
 
