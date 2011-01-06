@@ -132,9 +132,14 @@ namespace Reanimator
         /// <summary>
         /// Function to test all excel files cooking/recooking/etc to/from byte arrays and csv types.
         /// </summary>
-        public static void TestExcelCooking()
+        public static void TestExcelCooking(bool TCv4 = false)
         {
-            FileManager fileManager = new FileManager(Config.HglDir);
+            String root = @"C:\excel_debug";
+            if (TCv4) root = Path.Combine(root, "tcv4");
+            root += @"\"; // lazy
+            Directory.CreateDirectory(root);
+
+            FileManager fileManager = new FileManager(Config.HglDir, TCv4);
             fileManager.LoadTableFiles();
             ExcelFile.EnableDebug = true;
 
@@ -200,12 +205,12 @@ namespace Reanimator
                     if (fileBytes.Length != dataFileBytes.Length)
                     {
                         Debug.WriteLine("ToByteArray() dataFileBytes has differing length: " + dataFile.StringId);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArray", dataFileBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArray", dataFileBytes);
                         continue;
                     }
 
-                    ExcelFile fromBytesExcel = new ExcelFile(excelFile.FilePath);
+                    ExcelFile fromBytesExcel = new ExcelFile(excelFile.FilePath, fileManager.MPVersion);
                     fromBytesExcel.ParseData(dataFileBytes);
                     Debug.Write("new ExcelFile... ");
                     if (!fromBytesExcel.HasIntegrity)
@@ -246,8 +251,8 @@ namespace Reanimator
 
                         if (hasError)
                         {
-                            File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
-                            File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
+                            File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
+                            File.WriteAllBytes(root + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
                             continue;
                         }
                     }
@@ -257,29 +262,31 @@ namespace Reanimator
                     Debug.Write("ExportCSV -> ");
                     byte[] csvBytes = fromBytesExcel.ExportCSV(fileManager);
                     Debug.Write("new ExcelFile");
-                    ExcelFile csvExcel = new ExcelFile(excelFile.FilePath);
+                    ExcelFile csvExcel = new ExcelFile(excelFile.FilePath, fileManager.MPVersion);
                     csvExcel.ParseCSV(csvBytes, fileManager);
                     Debug.Write("... ");
                     if (!csvExcel.HasIntegrity)
                     {
                         Debug.WriteLine("Failed!");
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".csv", csvBytes);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArray", dataFileBytes);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
+                        File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".csv", csvBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArray", dataFileBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
                         continue;
                     }
 
-                    Debug.Write("StructureId... ");
                     byte[] recookedExcelBytes = csvExcel.ToByteArray();
-                    UInt32 structureId = BitConverter.ToUInt32(fileBytes, 4);
-                    UInt32 fromCSVStructureId = BitConverter.ToUInt32(recookedExcelBytes, 4);
-                    if (structureId != fromCSVStructureId)
+                    if (!fileManager.MPVersion)
                     {
-                        Debug.WriteLine("Warning: Structure Id value do not match: " + structureId + " != " + fromCSVStructureId);
-                        continue;
+                        Debug.Write("StructureId... ");
+                        UInt32 structureId = BitConverter.ToUInt32(fileBytes, 4);
+                        UInt32 fromCSVStructureId = BitConverter.ToUInt32(recookedExcelBytes, 4);
+                        if (structureId != fromCSVStructureId)
+                        {
+                            Debug.WriteLine("Structure Id value do not match: " + structureId + " != " + fromCSVStructureId);
+                            continue;
+                        }
                     }
-
 
                     Debug.Write("Final Checks... ");
                     int recookedLength = recookedExcelBytes.Length;
@@ -287,15 +294,15 @@ namespace Reanimator
                     if (fileBytes.Length != recookedLength)
                     {
                         Debug.WriteLine("Recooked Excel file has differing length!");
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".orig", fileBytes);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".csv", csvBytes);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArray", dataFileBytes);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".recookedExcelBytes", recookedExcelBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".csv", csvBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArray", dataFileBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
+                        File.WriteAllBytes(root + dataFile.StringId + ".recookedExcelBytes", recookedExcelBytes);
                         continue;
                     }
 
-                    ExcelFile finalExcel = new ExcelFile(excelFile.FilePath);
+                    ExcelFile finalExcel = new ExcelFile(excelFile.FilePath, fileManager.MPVersion);
                     finalExcel.ParseData(recookedExcelBytes);
                     Debug.Assert(finalExcel.HasIntegrity);
                     byte[] finalCheck = finalExcel.ToByteArray();
@@ -306,8 +313,8 @@ namespace Reanimator
                     if (!csvBytes.SequenceEqual(csvCheck))
                     {
                         Debug.WriteLine("csvBytes.SequenceEqual failed!");
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".csv", csvBytes);
-                        File.WriteAllBytes(@"C:\excel_debug\" + dataFile.StringId + ".final.csv", csvCheck);
+                        File.WriteAllBytes(root + dataFile.StringId + ".csv", csvBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".final.csv", csvCheck);
                         continue;
                     }
 

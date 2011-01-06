@@ -234,7 +234,8 @@ namespace Hellgate
 
         private DataTable _LoadStringsTable()
         {
-            ObjectDelegator objectDelegator = DataFileDelegators["Strings_Strings"];
+            ObjectDelegator objectDelegator;
+            if (!DataFileDelegators.TryGetValue("Strings_Strings", out objectDelegator)) return null;
 
             DataTable dataTable = XlsDataSet.Tables[StringsTableName];
             if (dataTable != null) return dataTable;
