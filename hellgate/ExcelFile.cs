@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -28,7 +26,8 @@ namespace Hellgate
         public byte[] ScriptBuffer { get { return _scriptBuffer; } }
         public List<ExcelFunction> ExcelFunctions;
         public List<Int32[]> IndexSortArray; // is only available/set when ExcelFile.ExcelDebug = true
-        private bool _isTCv4;
+        private readonly bool _isTCv4;
+        private String[][] _csvTable;
 
         private ExcelHeader _excelFileHeader = new ExcelHeader
         {
@@ -50,7 +49,7 @@ namespace Hellgate
             IsExcelFile = true;
             FilePath = filePath;
             _isTCv4 = isTCv4;
-            StringId = _GetStringId();
+            StringId = GetStringId(filePath, isTCv4);
             if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
 
             // get the excel type attributes
@@ -84,7 +83,7 @@ namespace Hellgate
             IsExcelFile = true;
             FilePath = filePath;
             _isTCv4 = isTCv4;
-            StringId = _GetStringId();
+            StringId = GetStringId(filePath, isTCv4);
             if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
 
             // get the excel type attributes
@@ -123,6 +122,14 @@ namespace Hellgate
             Rows = new List<Object>(newRows);
         }
 
+        public void LoadCSV(byte[] csvBytes)
+        {
+            int offset = 0;
+            int colCount = 1;
+            while (csvBytes[offset++] != '\n') if (csvBytes[offset] == '\t') colCount++;
+            _csvTable = FileTools.CSVToStringArray(csvBytes, colCount, (byte)'\t');
+        }
+
         /// <summary>
         /// Creates a ExcelFile based on the CSV file.
         /// </summary>
@@ -130,20 +137,30 @@ namespace Hellgate
         /// <returns>True if the buffer parsed okay.</returns>
         public override sealed bool ParseCSV(byte[] csvBytes)
         {
-            return ParseCSV(csvBytes, null);
+            return (csvBytes != null && ParseCSV(csvBytes, null));
         }
 
-        public bool ParseCSV(byte[] csvBytes, FileManager fileManager, String[] columnNames = null)
+        public bool ParseCSV(byte[] csvBytes, FileManager fileManager)
         {
-            // sanity checks
             if (csvBytes == null) return false;
-            if (csvBytes.Length < 32) return false;
             if (fileManager != null && fileManager.DataFiles.Count == 0) fileManager = null;
 
+            return _ParseCSV(csvBytes, fileManager, null);
+        }
 
+        public void ParseCSV(FileManager fileManager, Dictionary<String, ExcelFile> csvExcelFiles)
+        {
+            Debug.Assert(fileManager != null && fileManager.DataFiles.Count != 0);
+            Debug.Assert(csvExcelFiles != null && csvExcelFiles.Count != 0);
+            Debug.Assert(_csvTable != null);
+
+            _ParseCSV(null, fileManager, csvExcelFiles);
+        }
+
+
+        private bool _ParseCSV(byte[] csvBytes, FileManager fileManager, Dictionary<String, ExcelFile> csvExcelFiles)
+        {
             // function setup
-            int offset = 0;
-            const byte delimiter = (byte)'\t';
             int stringBufferOffset = 0;
             int integerBufferOffset = 1;
             bool isProperties = (StringId == "PROPERTIES" || StringId == "_TCv4_PROPERTIES");
@@ -164,18 +181,29 @@ namespace Hellgate
             }
 
 
-            // get columns
-            int colCount = 1;
-            while (csvBytes[offset++] != '\n') if (csvBytes[offset] == '\t') colCount++;
-            String[][] tableRows = FileTools.CSVToStringArray(csvBytes, colCount, delimiter);
-            String[] columns = tableRows[0];
+            String[][] tableRows;
+            if (csvBytes == null)
+            {
+                tableRows = _csvTable;
+            }
+            else
+            {
+                // get columns
+                int offset = 0;
+                int colCount = 1;
+                while (csvBytes[offset++] != '\n') if (csvBytes[offset] == CSVDelimiter) colCount++;
+                tableRows = FileTools.CSVToStringArray(csvBytes, colCount, CSVDelimiter);
+            }
+
             int rowCount = tableRows.Length;
+            String[] columns = tableRows[0];
 
             if (isProperties)
             {
                 ExcelFunctions = new List<ExcelFunction>();
                 _scriptBuffer = new byte[1]; // properties is weird - do this just to ensure 100% byte-for-byte accuracy
             }
+
 
 
             // Parse the tableRows
@@ -264,12 +292,24 @@ namespace Hellgate
                     {
                         if (excelAttribute.IsTableIndex && fileManager != null)
                         {
-                            bool hasCodeColumn = fileManager.DataTableHasColumn(excelAttribute.TableStringId, "code");
+                            if (value == "-1")
+                            {
+                                objectDelegator[fieldDelegate.Name, rowInstance] = -1;
+                                continue;
+                            }
+
+                            String tableStringId = excelAttribute.TableStringId;
+                            if (_isTCv4) tableStringId = "_TCv4_" + tableStringId;
+
+                            bool hasCodeColumn = fileManager.DataTableHasColumn(tableStringId, "code");
                             if (value.Length == 0 && hasCodeColumn)
                             {
                                 objectDelegator[fieldDelegate.Name, rowInstance] = -1;
                                 continue;
                             }
+
+                            //LEVEL references multiple blank TREASURE row index values - all appear to be empty rows though, so meh...
+                            //Debug.Assert(!String.IsNullOrEmpty(value));
 
                             int isNegative = 1;
                             if (value.Length > 0 && value[0] == '-')
@@ -278,15 +318,24 @@ namespace Hellgate
                                 value = value.Substring(1, value.Length - 1);
                             }
 
-                            int rowIndex;
-                            if (hasCodeColumn)
+                            int rowIndex = -1;
+                            ExcelFile relatedExcel = null;
+                            if (csvExcelFiles != null && csvExcelFiles.TryGetValue(tableStringId, out relatedExcel))
                             {
-                                int code = _StringToCode(value);
-                                rowIndex = fileManager.GetExcelRowIndexFromStringId(excelAttribute.TableStringId, code, "code");
+                                rowIndex = relatedExcel._GetRowIndexFromValue(value, hasCodeColumn ? "code" : null);
                             }
-                            else
+
+                            if (relatedExcel == null)
                             {
-                                rowIndex = fileManager.GetExcelRowIndex(excelAttribute.TableStringId, value);
+                                if (hasCodeColumn)
+                                {
+                                    int code = _StringToCode(value);
+                                    rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
+                                }
+                                else
+                                {
+                                    rowIndex = fileManager.GetExcelRowIndex(tableStringId, value);
+                                }
                             }
 
                             objectDelegator[fieldDelegate.Name, rowInstance] = rowIndex * isNegative;
@@ -682,7 +731,7 @@ namespace Hellgate
                     }
 
                     // Public fields -> these are inside the datatable
-                    object value = dataTable.Rows[row][col++];
+                    Object value = dataTable.Rows[row][col++];
                     OutputAttribute attribute = GetExcelAttribute(fieldInfo);
                     if (attribute != null)
                     {
@@ -738,14 +787,11 @@ namespace Hellgate
                             continue;
                         }
 
-                        if ((attribute.IsSecondaryString))
+                        if (attribute.IsSecondaryString)
                         {
-                            if (newSecondaryStrings == null)
-                            {
-                                newSecondaryStrings = new StringCollection();
-                            }
+                            if (newSecondaryStrings == null) newSecondaryStrings = new StringCollection();
 
-                            string strValue = value as string;
+                            String strValue = value as String;
                             if (strValue == null) return false;
 
                             if (String.IsNullOrEmpty(strValue))
@@ -1074,7 +1120,7 @@ namespace Hellgate
                             int index = (int)objectDelegator[fieldDelegate.Name](rowObject);
                             if (index == -1) // empty string/no code
                             {
-                                rowStr[col] = "\"\"";
+                                rowStr[col] = "\"-1\"";
                                 continue;
                             }
 
@@ -1392,6 +1438,8 @@ namespace Hellgate
             return buffer;
         }
 
+        #region Unused
+
         /// <summary>
         /// Quick and dirty function to export mysh scripts as xml.
         /// Only applicable to PROPERTIES and SKILLS tables.
@@ -1536,5 +1584,7 @@ namespace Hellgate
 
             return spDataTable;
         }
+
+        #endregion
     }
 }

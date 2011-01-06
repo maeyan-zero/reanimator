@@ -442,6 +442,7 @@ namespace Reanimator.Forms
 
                 Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                 File.WriteAllBytes(filePath, fileBytes);
+                File.SetLastWriteTime(filePath, DateTime.FromFileTime(fileEntry.FileTime));
                 break;
             }
 

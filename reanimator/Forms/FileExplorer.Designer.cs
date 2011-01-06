@@ -175,13 +175,13 @@
             this.fileExplorer_splitContainer.Panel2.Controls.Add(this.groupBox2);
             this.fileExplorer_splitContainer.Panel2.Controls.Add(this.groupBox1);
             this.fileExplorer_splitContainer.Size = new System.Drawing.Size(823, 643);
-            this.fileExplorer_splitContainer.SplitterDistance = 321;
+            this.fileExplorer_splitContainer.SplitterDistance = 300;
             this.fileExplorer_splitContainer.TabIndex = 3;
             // 
             // filterReset_button
             // 
             this.filterReset_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.filterReset_button.Location = new System.Drawing.Point(266, 3);
+            this.filterReset_button.Location = new System.Drawing.Point(222, 3);
             this.filterReset_button.Name = "filterReset_button";
             this.filterReset_button.Size = new System.Drawing.Size(50, 23);
             this.filterReset_button.TabIndex = 7;
@@ -192,7 +192,7 @@
             // filterApply_button
             // 
             this.filterApply_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.filterApply_button.Location = new System.Drawing.Point(210, 3);
+            this.filterApply_button.Location = new System.Drawing.Point(166, 3);
             this.filterApply_button.Name = "filterApply_button";
             this.filterApply_button.Size = new System.Drawing.Size(50, 23);
             this.filterApply_button.TabIndex = 6;
@@ -206,7 +206,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.filter_textBox.Location = new System.Drawing.Point(38, 5);
             this.filter_textBox.Name = "filter_textBox";
-            this.filter_textBox.Size = new System.Drawing.Size(166, 20);
+            this.filter_textBox.Size = new System.Drawing.Size(122, 20);
             this.filter_textBox.TabIndex = 5;
             this.filter_textBox.Text = "*.*";
             this.filter_textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this._Filter_TextBox_KeyDown);
@@ -233,7 +233,7 @@
             this.legend_tableLayoutPanel.RowCount = 2;
             this.legend_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.legend_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.legend_tableLayoutPanel.Size = new System.Drawing.Size(313, 45);
+            this.legend_tableLayoutPanel.Size = new System.Drawing.Size(269, 45);
             this.legend_tableLayoutPanel.TabIndex = 3;
             // 
             // noEditorKey_label
@@ -242,7 +242,7 @@
             this.noEditorKey_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.noEditorKey_label.Location = new System.Drawing.Point(3, 0);
             this.noEditorKey_label.Name = "noEditorKey_label";
-            this.noEditorKey_label.Size = new System.Drawing.Size(307, 22);
+            this.noEditorKey_label.Size = new System.Drawing.Size(263, 22);
             this.noEditorKey_label.TabIndex = 4;
             this.noEditorKey_label.Text = "File has no editor";
             this.noEditorKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -253,7 +253,7 @@
             this.backupKey_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.backupKey_label.Location = new System.Drawing.Point(3, 22);
             this.backupKey_label.Name = "backupKey_label";
-            this.backupKey_label.Size = new System.Drawing.Size(307, 23);
+            this.backupKey_label.Size = new System.Drawing.Size(263, 23);
             this.backupKey_label.TabIndex = 0;
             this.backupKey_label.Text = "File is patched out";
             this.backupKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -268,7 +268,7 @@
             this._files_fileTreeView.ContextMenuStrip = this.contextMenuStrip1;
             this._files_fileTreeView.Location = new System.Drawing.Point(3, 31);
             this._files_fileTreeView.Name = "_files_fileTreeView";
-            this._files_fileTreeView.Size = new System.Drawing.Size(313, 556);
+            this._files_fileTreeView.Size = new System.Drawing.Size(269, 556);
             this._files_fileTreeView.TabIndex = 1;
             this._files_fileTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterCheck);
             this._files_fileTreeView.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterCollapse);
@@ -283,7 +283,7 @@
             this.groupBox3.Controls.Add(this.tableLayoutPanel4);
             this.groupBox3.Location = new System.Drawing.Point(4, 489);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(489, 134);
+            this.groupBox3.Size = new System.Drawing.Size(474, 134);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cooking";
@@ -362,7 +362,7 @@
             this.groupBox2.Controls.Add(this.options_tableLayoutPanel);
             this.groupBox2.Location = new System.Drawing.Point(3, 157);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(489, 326);
+            this.groupBox2.Size = new System.Drawing.Size(474, 326);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
@@ -500,7 +500,7 @@
             this.groupBox1.Controls.Add(this.details_tableLayoutPanel);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(490, 148);
+            this.groupBox1.Size = new System.Drawing.Size(475, 148);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Details";

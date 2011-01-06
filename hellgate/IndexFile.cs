@@ -421,8 +421,9 @@ namespace Hellgate
         /// <param name="directory">The directory that will be stored in the index.</param>
         /// <param name="fileName">The filename that will be stored in the index.</param>
         /// <param name="bytesToWrite">Byte array of the file to add.</param>
+        /// <param name="fileTime">File time to set to the file.</param>
         /// <returns>Returns true if the operation was successful.</returns>
-        public bool AddFile(String directory, String fileName, byte[] bytesToWrite)
+        public bool AddFile(String directory, String fileName, byte[] bytesToWrite, DateTime fileTime)
         {
             if (bytesToWrite == null) return false;
             if (bytesToWrite.Length <= 0) return false;
@@ -436,7 +437,7 @@ namespace Hellgate
             FileDetailsStruct fileStruct = new FileDetailsStruct
             {
                 UncompressedSize = bytesToWrite.Length,
-                FileTime = DateTime.Now.ToFileTime(),
+                FileTime = fileTime.ToFileTime(),
                 FileNameSHA1Hash = Crypt.GetStringSHA1UInt32(fileName),
                 FolderPathSHA1Hash = Crypt.GetStringSHA1UInt32(directory),
                 StartToken = Token.Info,
@@ -633,6 +634,14 @@ namespace Hellgate
             }
 
             return true;
+        }
+
+        public FileEntry GetFileEntry(String relativePath)
+        {
+            return Files.FirstOrDefault(fileEntry => fileEntry.RelativeFullPath == relativePath ||
+                                                     fileEntry.RelativeFullPathWithoutPatch == relativePath ||
+                                                     relativePath.EndsWith(fileEntry.RelativeFullPath) ||
+                                                     relativePath.EndsWith(fileEntry.RelativeFullPathWithoutPatch));
         }
 
         /// <summary>
