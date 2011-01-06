@@ -135,7 +135,7 @@ namespace Hellgate
             // sanity checks
             if (csvBytes == null) return false;
             if (csvBytes.Length < 32) return false;
-            if (fileManager.DataFiles.Count == 0) fileManager = null;
+            if (fileManager != null && fileManager.DataFiles.Count == 0) fileManager = null;
 
 
             // function setup
@@ -167,18 +167,11 @@ namespace Hellgate
             String[][] tableRows = FileTools.CSVToStringArray(csvBytes, colCount, delimiter);
             String[] columns = tableRows[0];
             int rowCount = tableRows.Length;
-            //String[] strings = 
-            //StringId = FileTools.ByteArrayToStringASCII(FileTools.GetDelimintedByteArray(csvBytes, ref offset, delimiter), 0);
-            //StringId = StringId.Replace("\"", ""); // in case strings embedded
 
-
-            // Mutate the buffer into a string array
-            //int colCount = Attributes.HasExtended ? DataType.GetFields().Count() + 2 : DataType.GetFields().Count() + 1;
             if (isProperties)
             {
                 ExcelFunctions = new List<ExcelFunction>();
                 _scriptBuffer = new byte[1]; // properties is weird - do this just to ensure 100% byte-for-byte accuracy
-                //colCount++;
             }
 
 
@@ -951,7 +944,7 @@ namespace Hellgate
             return ExportCSV(null);
         }
 
-        public byte[] ExportCSV(FileManager fileManager, String[] columnNames = null)
+        public byte[] ExportCSV(FileManager fileManager, IEnumerable<String> columnNames = null)
         {
             //// init stuffs
             byte[] csvBuffer = new byte[1024];
@@ -992,18 +985,10 @@ namespace Hellgate
             if (Attributes.HasExtended) columnsList.Add("ExtendedProps");
             if (isProperties) columnsList.Add("Script");
 
-            // output header row
+            // column header row
             String[] columns = columnsList.ToArray();
-            //String headerRow = columns.Aggregate(String.Empty, (csvHeader, col) => csvHeader + "\t" + col) + Environment.NewLine;
-            //FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, headerRow.ToASCIIByteArray());
-
-
-            //// csv conversion init
             int colCount = columns.Length;
             int rowCount = Count + 1; // +1 for column headers
-            const byte delimiter = (byte)'\t';
-
-            int scriptRow = 0;
 
 
             //// csv generation
@@ -1135,7 +1120,6 @@ namespace Hellgate
                             }
 
                             rowStr[col] = scriptString;
-                            //FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(scriptString));
                             continue;
                         }
 
@@ -1145,7 +1129,6 @@ namespace Hellgate
                             if (index != -1)
                             {
                                 rowStr[col] = _secondaryStrings[index];
-                                //FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(_secondaryStrings[index]));
                             }
                             continue;
                         }
@@ -1155,7 +1138,6 @@ namespace Hellgate
                             uint uintValue = (uint)objectDelegator[fieldDelegate.Name](rowObject);
                             string stringValue = uintValue.ToString();
                             rowStr[col] = stringValue;
-                            //FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray(stringValue));
                             continue;
                         }
                     }
@@ -1216,6 +1198,8 @@ namespace Hellgate
                 }
             }
 
+
+            //// join string arrays and create byte array
             String[] rows = new String[rowCount];
             col = 0;
             foreach (String[] rowStr in strings)

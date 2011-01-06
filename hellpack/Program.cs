@@ -19,11 +19,10 @@ namespace Revival
         const string BadSyntaxMsg = "Incorrect argument given: {0}";
         const string UsageMsg = "Usage: todo";
         const string HellgateMissingMsg = "Warning: Can not cook XML, Hellgate London directory missing.";
-
+        private static FileManager _fileManager;
 
         static void Main(string[] args)
         {
-            FileManager fileManager;
             string hellgatePath = Config.HglDir;
             string currentDir = Directory.GetCurrentDirectory();
             string dataDir = Path.Combine(currentDir, Hellgate.Common.DataPath);
@@ -48,15 +47,15 @@ namespace Revival
             if (false)
             {
 
-                fileManager = new FileManager(@"D:\Games\Hellgate London");
-                fileManager.LoadTableFiles();
+                _fileManager = new FileManager(@"D:\Games\Hellgate London");
+                _fileManager.LoadTableFiles();
                 
 
                 //byte[] buffer = fileManager.DataFiles["SOUNDS"].ExportCSV();
                 //return;
                 //File.WriteAllBytes(@"D:\levels_rules.txt", buffer);
 
-                foreach (DataFile dataFile in fileManager.DataFiles.Values)
+                foreach (DataFile dataFile in _fileManager.DataFiles.Values)
                 {
                     if (dataFile.IsStringsFile) continue;
 
@@ -66,7 +65,7 @@ namespace Revival
                     String dir = Path.GetDirectoryName(dataFile.FilePath);
                     if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
 
-                    byte[] ebuffer = excelFile.ExportCSV(fileManager);
+                    byte[] ebuffer = excelFile.ExportCSV(_fileManager);
                     //for (int i = 0; i < 10; i++)
                     //{
                     //    Stopwatch stopwatch = new Stopwatch();
@@ -122,9 +121,9 @@ namespace Revival
             #region Model conversion testing
             if (false)
             {
-                fileManager = new FileManager(@"D:\Games\Hellgate London");
+                _fileManager = new FileManager(@"D:\Games\Hellgate London");
                 string filePath = @"data\units\items\weapons\agitator\low\agitator_mesh.am";
-                byte[] buffer = fileManager.GetFileBytes(filePath);
+                byte[] buffer = _fileManager.GetFileBytes(filePath);
                 if (buffer == null)
                 {
                     Console.WriteLine("Could not read specified file.");
@@ -141,8 +140,8 @@ namespace Revival
             #region SQL test
             if (false)
             {
-                fileManager = new FileManager(@"D:\Games\Hellgate London");
-                fileManager.LoadTableFiles();
+                _fileManager = new FileManager(@"D:\Games\Hellgate London");
+                _fileManager.LoadTableFiles();
 
                 byte[] sqlBuffer = new byte[1024];
                 int sqlOffset = 0;
@@ -151,7 +150,7 @@ namespace Revival
                 byte[] createDBArray = FileTools.StringToASCIIByteArray(createDB);
                 FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, createDBArray);
 
-                foreach (DataFile dataFile in fileManager.DataFiles.Values)
+                foreach (DataFile dataFile in _fileManager.DataFiles.Values)
                 {
                     byte[] buffer = dataFile.ExportSQL();
                     Console.WriteLine(dataFile.FileName);
@@ -299,7 +298,11 @@ namespace Revival
                 // todo
             }
 
-            // Cook Txt files
+            // need for code/name -> row index lookups
+            _fileManager = new FileManager(hellgatePath);
+            _fileManager.LoadTableFiles();
+
+            // Cook Txt files)
             if (doCookTxt)
             {
                 CookExcelFiles(excelFilesToCook.ToArray());
@@ -310,16 +313,15 @@ namespace Revival
             if (doCookXml)
             {
                 // ensure we have the correct hellgate installation path
-                if (Directory.Exists(hellgatePath) == true)
+                if (Directory.Exists(hellgatePath))
                 {
-                    fileManager = new FileManager(hellgatePath);
-                    if (fileManager.HasIntegrity == false)
+                    if (_fileManager.HasIntegrity == false)
                     {
                         Console.WriteLine("Warning: XML could not be cooked - fileManager.Integrity = false");
                     }
                     else
                     {
-                        CookXmlFiles(xmlFilesToCook.ToArray(), fileManager);
+                        CookXmlFiles(xmlFilesToCook.ToArray(), _fileManager);
                     }
                 }
                 else
@@ -557,10 +559,10 @@ namespace Revival
                 return false;
             }
 
-            ExcelFile excelFile;
+            ExcelFile excelFile = new ExcelFile(excelPath);
             try
             {
-                excelFile = new ExcelFile(excelBuffer, excelPath);
+                excelFile.ParseCSV(excelBuffer, _fileManager);
             }
             catch (Exception e)
             {
