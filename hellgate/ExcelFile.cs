@@ -28,6 +28,7 @@ namespace Hellgate
         public byte[] ScriptBuffer { get { return _scriptBuffer; } }
         public List<ExcelFunction> ExcelFunctions;
         public List<Int32[]> IndexSortArray; // is only available/set when ExcelFile.ExcelDebug = true
+        private bool _isTCv4;
 
         private ExcelHeader _excelFileHeader = new ExcelHeader
         {
@@ -48,7 +49,8 @@ namespace Hellgate
 
             IsExcelFile = true;
             FilePath = filePath;
-            StringId = _GetStringId(filePath, isTCv4);
+            _isTCv4 = isTCv4;
+            StringId = _GetStringId();
             if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
 
             // get the excel type attributes
@@ -81,7 +83,8 @@ namespace Hellgate
 
             IsExcelFile = true;
             FilePath = filePath;
-            StringId = _GetStringId(filePath, isTCv4);
+            _isTCv4 = isTCv4;
+            StringId = _GetStringId();
             if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
 
             // get the excel type attributes
@@ -361,7 +364,34 @@ namespace Hellgate
 
                         if (excelAttribute.IsBitmask)
                         {
-                            objectDelegator[fieldDelegate.Name, rowInstance] = UInt32.Parse(value);
+                            Object enumVal;
+                            try
+                            {
+                                enumVal = Enum.Parse(fieldDelegate.FieldType, value);
+                            }
+                            catch (Exception)
+                            {
+                                String[] enumStrings = value.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                                String[] enumNames = Enum.GetNames(fieldDelegate.FieldType);
+                                String enumString = String.Empty;
+
+                                String enumSeperator = String.Empty;
+                                foreach (String enumStr in enumStrings)
+                                {
+                                    if (!enumNames.Contains(enumStr))
+                                    {
+                                        Debug.WriteLine(String.Format("{0}: bitfield name '{1}' not found.", StringId, enumStr));
+                                        continue;
+                                    }
+
+                                    enumString += enumSeperator + enumStr;
+                                    enumSeperator = ",";
+                                }
+
+                                enumVal = enumString == "" ? 0 : Enum.Parse(fieldDelegate.FieldType, enumString);
+                            }
+
+                            objectDelegator[fieldDelegate.Name, rowInstance] = (uint) enumVal;
                             continue;
                         }
                     }
@@ -1048,6 +1078,9 @@ namespace Hellgate
                                 continue;
                             }
 
+                            String tableStringId = excelAttribute.TableStringId;
+                            if (_isTCv4) tableStringId = "_TCv4_" + tableStringId;
+
                             String negative = String.Empty;
                             if (index < 0)
                             {
@@ -1055,16 +1088,16 @@ namespace Hellgate
                                 negative = "-";
                             }
 
-                            if (fileManager.DataTableHasColumn(excelAttribute.TableStringId, "code"))
+                            if (fileManager.DataTableHasColumn(tableStringId, "code"))
                             {
-                                int code = fileManager.GetExcelIntFromStringId(excelAttribute.TableStringId, "code", index);
+                                int code = fileManager.GetExcelIntFromStringId(tableStringId, "code", index);
                                 String codeStr = String.Format("\"{0}{1}\"", negative, _CodeToString(code));
 
                                 rowStr[col] = codeStr;
                             }
                             else
                             {
-                                String value = fileManager.GetExcelRowStringFromStringId(excelAttribute.TableStringId, index);
+                                String value = fileManager.GetExcelRowStringFromStringId(tableStringId, index);
                                 value = String.Format("\"{0}{1}\"", negative, value);
 
                                 rowStr[col] = value;
@@ -1137,9 +1170,7 @@ namespace Hellgate
 
                         if (excelAttribute.IsBitmask)
                         {
-                            uint uintValue = (uint)objectDelegator[fieldDelegate.Name](rowObject);
-                            string stringValue = uintValue.ToString();
-                            rowStr[col] = stringValue;
+                            rowStr[col] = "\"" + objectDelegator[fieldDelegate.Name](rowObject) + "\"";
                             continue;
                         }
                     }

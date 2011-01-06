@@ -132,14 +132,14 @@ namespace Reanimator
         /// <summary>
         /// Function to test all excel files cooking/recooking/etc to/from byte arrays and csv types.
         /// </summary>
-        public static void TestExcelCooking(bool TCv4 = false)
+        public static void TestExcelCooking(bool doTCv4 = false)
         {
             String root = @"C:\excel_debug";
-            if (TCv4) root = Path.Combine(root, "tcv4");
+            if (doTCv4) root = Path.Combine(root, "tcv4");
             root += @"\"; // lazy
             Directory.CreateDirectory(root);
 
-            FileManager fileManager = new FileManager(Config.HglDir, TCv4);
+            FileManager fileManager = new FileManager(Config.HglDir, doTCv4);
             fileManager.LoadTableFiles();
             ExcelFile.EnableDebug = true;
 
@@ -148,7 +148,7 @@ namespace Reanimator
                 ExcelFile excelFile = dataFile as ExcelFile;
                 if (excelFile == null) continue;
 
-                //if (excelFile.StringId != "RECIPES") continue;
+                //if (excelFile.StringId != "SKILLS") continue;
 
                 Debug.Write(String.Format("Checking {0}... ", dataFile.StringId));
 
@@ -293,9 +293,14 @@ namespace Reanimator
                     if (excelFile.StringId == "SKILLS") recookedLength += 12; // 12 bytes in int ptr data not used/referenced at all and are removed/lost in bytes -> csv -> bytes
                     if (fileBytes.Length != recookedLength)
                     {
+                        ExcelFile finalExcelDump = new ExcelFile(excelFile.FilePath, fileManager.MPVersion);
+                        finalExcelDump.ParseData(recookedExcelBytes);
+                        byte[] csvDump = finalExcelDump.ExportCSV(fileManager);
+
                         Debug.WriteLine("Recooked Excel file has differing length!");
                         File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".csv", csvBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".txt", csvBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".recooked.txt", csvDump);
                         File.WriteAllBytes(root + dataFile.StringId + ".toByteArray", dataFileBytes);
                         File.WriteAllBytes(root + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
                         File.WriteAllBytes(root + dataFile.StringId + ".recookedExcelBytes", recookedExcelBytes);
@@ -313,8 +318,8 @@ namespace Reanimator
                     if (!csvBytes.SequenceEqual(csvCheck))
                     {
                         Debug.WriteLine("csvBytes.SequenceEqual failed!");
-                        File.WriteAllBytes(root + dataFile.StringId + ".csv", csvBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".final.csv", csvCheck);
+                        File.WriteAllBytes(root + dataFile.StringId + ".txt", csvBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".final.txt", csvCheck);
                         continue;
                     }
 
