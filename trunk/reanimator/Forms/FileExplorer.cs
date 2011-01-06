@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
@@ -1251,9 +1252,26 @@ namespace Reanimator.Forms
                 byte[] writeBytes = fileBytes;
                 if (excelFile != null)
                 {
+                    String[] columns = null;
+                    if (fileManager.MPVersion)
+                    {
+                        DataFile spVersion;
+                        if (_fileManager.DataFiles.TryGetValue(excelFile.StringId.Replace("_TCv4_", ""), out spVersion))
+                        {
+                            FieldInfo[] fieldInfos = spVersion.Attributes.RowType.GetFields();
+                            columns = new String[fieldInfos.Length];
+
+                            int col = 0;
+                            foreach (FieldInfo fieldInfo in fieldInfos)
+                            {
+                                columns[col++] = fieldInfo.Name;
+                            }
+                        }
+                    }
+
                     try
                     {
-                        writeBytes = excelFile.ExportCSV(fileManager);
+                        writeBytes = excelFile.ExportCSV(fileManager, columns);
                     }
                     catch (Exception e)
                     {
@@ -1264,7 +1282,7 @@ namespace Reanimator.Forms
                     }
                 }
 
-                String filePath = Path.Combine(root, fileEntry.RelativeFullPathWithoutPatch);
+                String filePath = Path.Combine(root, fileEntry.RelativeFullPathWithoutPatch).Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised);
                 Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                 File.WriteAllBytes(filePath, writeBytes);
             }

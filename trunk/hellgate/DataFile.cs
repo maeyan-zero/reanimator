@@ -204,7 +204,7 @@ namespace Hellgate
 
                 
             // TCv4 - different
-            {"_TCv4_ACHIEVEMENTS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(AchievementsTCv4)}},
+            {"_TCv4_ACHIEVEMENTS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(AchievementsTCv4), HasScriptTable = true}},
             {"_TCv4_ACT", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ActTCv4)}},
             {"_TCv4_AFFIXES", new DataFileAttributes {IsTCv4 = true, RowType = typeof(AffixesTCv4)}},
             {"_TCv4_BACKGROUNDSOUNDS2D", new DataFileAttributes {IsTCv4 = true, RowType = typeof(BackGroundSounds2DTCv4)}},
@@ -432,21 +432,21 @@ namespace Hellgate
 
 
             // Strings files
-            {"Strings_Affix", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Cinematic", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Common", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Credits", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_DisplayFormat", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Install", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Items", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Level", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_LoadingTips", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Monsters", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Names", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Quest", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Skills", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Strings", new DataFileAttributes {RowType = typeof(StringsFile)}},
-            {"Strings_Revival", new DataFileAttributes {RowType = typeof(StringsFile)}},
+            {"Strings_Affix", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Cinematic", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Common", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Credits", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_DisplayFormat", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Install", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Items", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Level", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_LoadingTips", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Monsters", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Names", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Quest", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Skills", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Strings", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"Strings_Revival", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
 
 
             // Empty Strings files
