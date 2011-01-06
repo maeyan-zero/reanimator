@@ -199,12 +199,12 @@ namespace Hellgate
             return (query.Length != 0) ? (OutputAttribute)query[0] : null;
         }
 
-        private static String _GetStringId(String filePath, bool isTCv4 = false)
+        private String _GetStringId()
         {
-            String stringIdPrepend = isTCv4 ? "_TCv4_" : "";
+            String stringIdPrepend = _isTCv4 ? "_TCv4_" : "";
 
             // check if the file name is the same as the string id
-            String baseStringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
+            String baseStringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(FilePath)).ToUpper();
             String stringIdAsKey = stringIdPrepend + baseStringId;
 
             DataFileAttributes dataFileAttributes;
@@ -218,7 +218,7 @@ namespace Hellgate
             foreach (KeyValuePair<String, DataFileAttributes> keyValuePair in DataFileMap)
             {
                 DataFileAttributes dataFileAttribute = keyValuePair.Value;
-                if (dataFileAttribute.FileName != baseStringId || dataFileAttribute.IsTCv4 != isTCv4) continue;
+                if (dataFileAttribute.FileName != baseStringId || dataFileAttribute.IsTCv4 != _isTCv4) continue;
 
                 stringId = keyValuePair.Key;
             }
