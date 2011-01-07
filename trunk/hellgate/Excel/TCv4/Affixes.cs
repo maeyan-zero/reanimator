@@ -25,49 +25,49 @@ namespace Hellgate.Excel.TCv4
         public Int32 replaceNameString;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 flavorText;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_ITEM_LOOK_GROUPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_LOOK_GROUPS")]
         public Int32 lookGroup;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_FONTCOLORS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 nameColor;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_FONTCOLORS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 gridColor;
         public Int32 dom;
         [ExcelOutput(SortColumnOrder = 3)]
         public Int32 code;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES", SortColumnOrder = 2, SecondarySortColumn = "code")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES", SortColumnOrder = 2, SecondarySortColumn = "code")]
         public Int32 affixType1;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType2;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType4;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType5;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType6;
         //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         //Int32[] affixtype_TCV4;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType7;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType8;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType9;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType10;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType11;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType12;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType13;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType14;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIXTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affixType15;
         public Int32 suffix;
-        [ExcelOutput(SortColumnOrder = 4, IsTableIndex = true, TableStringId = "_TCv4_AFFIX_GROUPS")] // not secondary string like SP version
+        [ExcelOutput(SortColumnOrder = 4, IsTableIndex = true, TableStringId = "AFFIX_GROUPS")] // not secondary string like SP version
         public Int32 group;
         public Int32 style;
         [ExcelOutput(IsBool = true)]
@@ -76,27 +76,27 @@ namespace Hellgate.Excel.TCv4
         public Int32 spawn;
         public Int32 minLevel;
         public Int32 maxLevel;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes1;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes2;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes4;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes5;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 allowTypes6;
         [ExcelOutput(IsScript = true)]
         public Int32 weight;
         public Int32 luckWeight;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         Int32[] unknown04;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_COLORSETS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "COLORSETS")]
         public Int32 colorSet;
         public Int32 colorSetPriority;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_STATES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;
         public Int32 saveState;
         [ExcelOutput(IsScript = true)]
@@ -136,7 +136,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 property6;
         [ExcelOutput(IsScript = true)]
         public Int32 statsFeed_tcv4;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyOnItemsRequiringUnitType;
         public Int32 undefined_tcv4;
     }

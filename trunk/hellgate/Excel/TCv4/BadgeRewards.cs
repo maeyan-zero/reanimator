@@ -15,10 +15,13 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 badgeName;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 item;//idx
         public Int32 dontApplyIfPlayerHasRewardItemFor;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;//idx
         public Int32 minUnitVersion_tcv4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitTypeLimiter_tcv4;
         public Int32 unitTypeLimitPerPlayer_tcv4;
         public Int32 forceOnRespec_tcv4;
