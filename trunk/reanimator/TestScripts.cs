@@ -27,7 +27,7 @@ namespace Reanimator
             mpHellgate4580.FilePath = filePath1;
             IndexFile mpHellgateLocal4580 = new IndexFile(File.ReadAllBytes(filePath2));
             mpHellgateLocal4580.FilePath = filePath2;
-            
+
             IndexFile[] indexFiles = new[] { mpHellgate4580, mpHellgateLocal4580 };
             //IndexFile[] indexFiles = new[] { spHellgate4256 };
 
@@ -46,8 +46,8 @@ namespace Reanimator
                 }
                 indexFile.EndDatAccess();
 
-                
-                
+
+
                 byte[] indexFileBytes = newIndexFile.ToByteArray();
                 Crypt.Encrypt(indexFileBytes);
                 File.WriteAllBytes(newIndexFile.FilePath, indexFileBytes);
@@ -66,7 +66,7 @@ namespace Reanimator
             {
                 if (!dataFile.IsExcelFile) continue;
 
-                ExcelFile excelFile = (ExcelFile) dataFile;
+                ExcelFile excelFile = (ExcelFile)dataFile;
                 byte[] csvBytes = excelFile.ExportCSV(fileManager);
 
                 String savePath = Path.Combine(root, excelFile.FilePath).Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised);
@@ -330,7 +330,7 @@ namespace Reanimator
                         }
                     }
 
-                    Debug.Write("Final Checks... ");
+                    Debug.Write("Almost Done... ");
                     int recookedLength = recookedExcelBytes.Length;
                     if (excelFile.StringId == "SKILLS") recookedLength += 12; // 12 bytes in int ptr data not used/referenced at all and are removed/lost in bytes -> csv -> bytes
                     if (fileBytes.Length != recookedLength)
@@ -365,7 +365,108 @@ namespace Reanimator
                         continue;
                     }
 
-                    Debug.WriteLine("OK");
+                    Debug.Write("\nPerforming deep scan: ");
+                    ObjectDelegator objectDelegator = fileManager.DataFileDelegators[excelFile.StringId];
+                    int lastPercent = 0;
+                    int col = 0;
+                    bool failed = false;
+                    foreach (ObjectDelegator.FieldDelegate fieldDelegate in objectDelegator)
+                    {
+                        int percent = col * 100 / objectDelegator.FieldCount - 1;
+                        int dotCount = percent - lastPercent;
+                        for (int i = 0; i < dotCount; i++) Debug.Write(".");
+
+                        lastPercent = percent;
+
+                        ExcelFile.OutputAttribute excelAttribute = ExcelFile.GetExcelAttribute(fieldDelegate.Info);
+                        bool isArray = (fieldDelegate.FieldType.BaseType == typeof (Array));
+
+                        for (int row = 0; row < excelFile.Rows.Count; row++)
+                        {
+                            Object obj1 = fieldDelegate.GetValue(excelFile.Rows[row]);
+                            Object obj2 = fieldDelegate.GetValue(finalExcel.Rows[row]);
+
+                            if (isArray)
+                            {
+                                if (excelFile.StringId == "TREASURE")
+                                {
+                                    int bp = 0;
+                                }
+                                IEnumerator arrayEnumator1 = ((Array)obj1).GetEnumerator();
+                                IEnumerator arrayEnumator2 = ((Array)obj2).GetEnumerator();
+                                int index = -1;
+                                while (arrayEnumator1.MoveNext() && arrayEnumator2.MoveNext())
+                                {
+                                    index++;
+                                    Object elementVal1 = arrayEnumator1.Current;
+                                    Object elementVal2 = arrayEnumator2.Current;
+
+                                    if (elementVal1.Equals(elementVal2)) continue;
+
+                                    Debug.WriteLine(String.Format("Array Element '{0}' != '{1}' on col({2}) = '{3}', row({4}), index({5})", elementVal1, elementVal2, col, fieldDelegate.Name, row, index));
+                                    failed = true;
+                                    break;
+                                }
+                                if (failed) break;
+
+                                continue;
+                            }
+
+                            if (obj1.Equals(obj2)) continue;
+
+                            if (excelAttribute != null)
+                            {
+                                if (excelAttribute.IsStringOffset)
+                                {
+                                    int offset1 = (int) obj1;
+                                    int offset2 = (int) obj2;
+
+                                    String str1 = excelFile.ReadStringTable(offset1);
+                                    String str2 = finalExcel.ReadStringTable(offset2);
+
+                                    if (str1 == str2) continue;
+
+                                    obj1 = str1;
+                                    obj2 = str2;
+                                }
+
+                                if (excelAttribute.IsScript)
+                                {
+                                    int offset1 = (int)obj1;
+                                    int offset2 = (int)obj2;
+
+                                    Int32[] script1 = excelFile.ReadScriptTable(offset1);
+                                    Int32[] script2 = finalExcel.ReadScriptTable(offset2);
+
+                                    if (script1.SequenceEqual(script2)) continue;
+
+                                    obj1 = script1.ToString(",");
+                                    obj2 = script2.ToString(",");
+                                }
+                            }
+
+                            String str = obj1 as String;
+                            if ((str != null && str.StartsWith("+N%-N% base damage as [elem]")) ||  // '+N%-N% base damage as [elem]…' != '+N%-N% base damage as [elem]?' on col(2) = 'exampleDescription', row(132)
+                                fieldDelegate.Name == "bonusStartingTreasure")                      // refernces multiple different blank rows
+                                continue; 
+
+                            Debug.WriteLine(String.Format("'{0}' != '{1}' on col({2}) = '{3}', row({4})", obj1, obj2, col, fieldDelegate.Name, row));
+                            failed = true;
+                            break;
+                        }
+                        if (failed) break;
+
+                        col++;
+                    }
+
+                    if (failed)
+                    {
+                        File.WriteAllBytes(root + dataFile.StringId + ".txt", csvBytes);
+                        File.WriteAllBytes(root + dataFile.StringId + ".final.txt", csvCheck);
+                        continue;
+                    }
+
+                    Debug.WriteLine("OK\n");
                 }
                 catch (Exception e)
                 {

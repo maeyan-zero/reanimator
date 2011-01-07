@@ -40,7 +40,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsStringIndex = true)]
         public Int32 decripShort;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
-        string iconFrame;
+        public String iconFrame;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 ctrlStat;//idx
         public Int32 displayCtrl;
