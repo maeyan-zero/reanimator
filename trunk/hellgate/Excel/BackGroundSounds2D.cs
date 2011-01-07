@@ -23,6 +23,7 @@ namespace Hellgate.Excel
         public float maxSilentTime;
         public float fadeIn;
         public float fadeOut;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 sound;//idx
     }
 }
