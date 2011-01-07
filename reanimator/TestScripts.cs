@@ -190,7 +190,7 @@ namespace Reanimator
                 ExcelFile excelFile = dataFile as ExcelFile;
                 if (excelFile == null) continue;
 
-                //if (excelFile.StringId != "SKILLS") continue;
+                //if (excelFile.StringId != "LEVEL_THEMES") continue;
 
                 Debug.Write(String.Format("Checking {0}... ", dataFile.StringId));
 

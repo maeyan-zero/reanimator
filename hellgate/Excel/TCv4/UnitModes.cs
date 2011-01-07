@@ -15,40 +15,63 @@ namespace Hellgate.Excel.TCv4
         byte[] undefined1;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")] // x256 of these
         public Int32 block1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 block2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 block3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 block4;
-        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 block5;
 		[ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 251)]
         Int32[] block;
         [ExcelOutput(IsBool = true)]
         public Int32 blockOnGround;//bool
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")] // x256 of these
+        public Int32 wait1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
+        public Int32 wait2;
+        [ExcelOutput(ConstantValue = -1)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 254)]
         Int32[] wait;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")] // x256 of these
         public Int32 clear1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 clear2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 clear3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 clear4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 clear5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 clear6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 clear7;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 clear8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 clear9;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 247)]
         Int32[] clear;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")] // x256 of these
         public Int32 endBlock1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 endBlock2;
-        [ExcelOutput(DebugIgnoreConstantCheck = true)]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 endBlock3;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 253)]
         Int32[] endBlock;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 group;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
         public Int32 otherhand;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
         public Int32 backUp;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 forceClear;//bool
@@ -57,7 +80,9 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsBool = true)]
         public Int32 clearSkill;//bool
         public Int32 setstateformode_tcv4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 clearState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 clearStateEnd;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 doEvent;//bool
@@ -75,8 +100,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 endFunction;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
         Int32[] undefined4;
-        public Int32 endMode;//idx  // what type of idx? IsStringIndex?
-        public Int32 velocityName;//idx?    // what type of idx? IsStringIndex?
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
+        public Int32 endMode;//idx
+        public Int32 velocityName; // XLS_InternalIndex_VelocityName (XLS_UNITMODE_DATA+3DB), 0x09
         public Int32 velocityPriority;
         public Int32 animPriority;
         public Int32 loadPriorityPercent;

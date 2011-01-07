@@ -13,121 +13,56 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string treasureClass;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 allowUnitTypes1;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 allowUnitTypes2;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 allowUnitTypes3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 allowUnitTypes4;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 allowUnitTypes5;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 allowUnitTypes6;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+        public Int32[] allowUnitTypes;
         [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
         public Int32 globalThemeRequired;
-        public Int32 unknown02;
-        public Int32 pickTypes;
-        public Int32 picks;
-        public Int32 undefined01;
-        public Int32 undefined02;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
-        Int32[] unknown03;
-        public Int32 undefined03;//this needed to be changed so that the mutant dyes could drop randomly.
-        public Int32 undefined04;
-        public Int32 undefined05;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
-        Int32[] unknown04;
+        Int32 unknown02;
+        public Int32 pickType; // XLS_ReadInternalIndex_PickType (XLS_TREASURE_DATA+1D5), 0x08
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+        public Int32[] picks;
         public float noDrop;
         [ExcelOutput(IsScript = true)]
         public Int32 levelBoost;
         public float moneyChanceMultiplier;
         public float moneyLuckChanceMultiplier;
         public float moneyAmountMultiplier;
-        public Int32 item1m;/*this isn't actually defined, but it determines the type of object in item1, whether it's a specific item(01), a unit type(02),
-            another treasure class(03), an item quality(04), or something else yet to be determined.*/
-        public Int32 item1;
-        public Int32 unknown05a;
-        public Int32 unknown05b;
-        public Int32 unknown05c;
-        public Int32 unknown05d;
-        [ExcelOutput(ConstantValue = -1)]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        Int32[] unknown05efghi;
-        public Int32 unknown05j;
-        public Int32 unknown05k;
-        public Int32 unknown05l;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
-        Int32[] unknown05mnopqrs;
+
+        /* first index is type, which determines whether next index is a specific item(01), a unit type(02),
+         * another treasure class(03), an item quality(04), or something else yet to be determined */
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public Int32[] item1; // is 0x58 (22x Int32; 21x item, 1x value) in length - is multiple relational index like SPAWN_CLASS
         public Int32 value1;
-        public Int32 item2m;
-        public Int32 item2;
-        [ExcelOutput(ConstantValue = -1)]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown06abcdefghi;
-        public Int32 unknown06j;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown06klmnopqrs;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public Int32[] item2;
         public Int32 value2;
-        public Int32 item3m;
-        public Int32 item3;
-        [ExcelOutput(ConstantValue = -1)]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown07abcdefghi;
-        public Int32 unknown07j;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown07klmnopqrs;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public Int32[] item3;
         public Int32 value3;
-        public Int32 item4m;
-        public Int32 item4;
-        [ExcelOutput(ConstantValue = -1)]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown08abcdefghi;
-        public Int32 unknown08j;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown08klmnopqrs;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public Int32[] item4;
         public Int32 value4;
-        public Int32 item5m;
-        public Int32 item5;
-        [ExcelOutput(ConstantValue = -1)]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown09abcdefghi;
-        public Int32 unknown09j;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown09klmnopqrs;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public Int32[] item5;
         public Int32 value5;
-        public Int32 item6m;
-        public Int32 item6;
-        [ExcelOutput(ConstantValue = -1)]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown10abcdefghi;
-        public Int32 unknown10j;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown10klmnopqrs;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public Int32[] item6;
         public Int32 value6;
-        public Int32 item7m;
-        public Int32 item7;
-        [ExcelOutput(ConstantValue = -1)]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown11abcdefghi;
-        public Int32 unknown11j;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown11klmnopqrs;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public Int32[] item7;
         public Int32 value7;
-        public Int32 item8m;
-        public Int32 item8;
-        [ExcelOutput(ConstantValue = -1)]
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown12abcdefghi;
-        public Int32 unknown12j;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        Int32[] unknown12klmnopqrs;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 21)]
+        public Int32[] item8;
         public Int32 value8;
+
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8804)]
         byte[] unknown13;
         [ExcelOutput(IsBitmask = true)]
         public Bitmask01 spawnCondition;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 spawnFromMonsterUnitType;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_THEMES")]
         public Int32 spawnFromLevelTheme;
 
         [FlagsAttribute]

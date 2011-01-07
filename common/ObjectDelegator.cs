@@ -158,6 +158,12 @@ namespace Revival.Common
             }
         }
 
+        public FieldDelegate GetFieldDelegate(String fieldName)
+        {
+            FieldDelegate fieldDelegate;
+            return _fieldDelegatesDict.TryGetValue(fieldName, out fieldDelegate) ? fieldDelegate : null;
+        }
+
         public FieldGetValueDelegate GetFieldGetDelegate(String fieldName)
         {
             FieldDelegate fieldDelegate;
