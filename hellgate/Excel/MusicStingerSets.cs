@@ -12,6 +12,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//empty entry is first in index.
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSIC_REF")]
         public Int32 musicRef;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined1;
@@ -25,6 +26,7 @@ namespace Hellgate.Excel
         public Int32 stinger1Measure8;
         public Int32 stinger1Measure9;
         public Int32 stinger1Measure10;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICSTINGERS")]
         public Int32 stinger1;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined2;
@@ -37,6 +39,7 @@ namespace Hellgate.Excel
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32[] stinger2Measures;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICSTINGERS")]
         public Int32 stinger2;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined4;
@@ -50,6 +53,7 @@ namespace Hellgate.Excel
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
         Int32[] stinger3Measures;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICSTINGERS")]
         public Int32 stinger3;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined6;
@@ -61,6 +65,7 @@ namespace Hellgate.Excel
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         Int32[] stinger4Measures;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICSTINGERS")]
         public Int32 stinger4;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined8;

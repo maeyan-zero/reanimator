@@ -19,6 +19,7 @@ namespace Hellgate.Excel
         public Int32 fadeOutDelayBeats;
         public Int32 introBeats;
         public Int32 outroBeats;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 soundGroup;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] undefined;
