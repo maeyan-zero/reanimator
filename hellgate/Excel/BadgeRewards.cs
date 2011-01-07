@@ -15,8 +15,10 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 badgeName;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 item;//idx
         public Int32 dontApplyIfPlayerHasRewardItemFor;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;//idx
     }
 }

@@ -40,9 +40,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 name;
         Int32 null0C;
         public Int32 weight;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyUnitType;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_AFFIX_GROUPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIX_GROUPS")]
         public Int32 parent;
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
