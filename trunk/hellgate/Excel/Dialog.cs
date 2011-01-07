@@ -18,8 +18,11 @@ namespace Hellgate.Excel
         public Int32 stringHellGate;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 stringMythos;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 sound;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
         public Int32 mode;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MOVIELISTS")]
         public Int32 movieListOnFinished;//idx
     }
 }

@@ -41,6 +41,7 @@ namespace Hellgate.Excel
         public Int32 decripShort;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         string iconFrame;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 ctrlStat;//idx
         public Int32 displayCtrl;
         public Int32 displayFunc;
