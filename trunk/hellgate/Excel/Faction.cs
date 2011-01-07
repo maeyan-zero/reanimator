@@ -16,17 +16,29 @@ namespace Hellgate.Excel
         public Int32 code;
         [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
         public Int32 displayString;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitTypeStartStanding1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDefStartStanding1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FACTION_STANDING")]
         public Int32 startStanding1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitTypeStartStanding2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDefStartStanding2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FACTION_STANDING")]
         public Int32 startStanding2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitTypeStartStanding3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDefStartStanding3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FACTION_STANDING")]
         public Int32 startStanding3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitTypeStartStanding4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDefStartStanding4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FACTION_STANDING")]
         public Int32 startStanding4;
     }
 }

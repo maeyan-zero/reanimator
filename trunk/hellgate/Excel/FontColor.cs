@@ -16,6 +16,7 @@ namespace Hellgate.Excel
         public byte green;
         public byte red;
         public byte alpha;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 fontColor;//index
     }
 }
