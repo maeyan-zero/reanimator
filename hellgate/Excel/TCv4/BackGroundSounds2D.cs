@@ -28,6 +28,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 undefined_TCV4_3;
         public Int32 undefined_TCV4_4;
         public Int32 undefined_TCV4_5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "_TCv4_SOUNDS")]
         public Int32 sound;//idx
         public Int32 undefined_TCV4_6;
     }

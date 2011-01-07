@@ -32,6 +32,7 @@ namespace Hellgate.Excel
         public float minIntrasetDelay;
         public float maxIntrasetDelay;
         public float setChance;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 sound;//idx
     }
 }
