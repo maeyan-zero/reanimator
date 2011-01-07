@@ -87,6 +87,7 @@ namespace Hellgate
             public const String IsBool = "IsBool";
             public const String IsScript = "IsScript";
             public const String IsSecondaryString = "IsSecondaryString";
+            public const String IsArray = "IsArray";
         }
 
         private static class IntTableDef

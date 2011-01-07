@@ -46,7 +46,7 @@ namespace Hellgate.Excel
         public Int32 isA14;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 isA15;
-        //[ExcelOutput(IsStringIndex = true)]?
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 String;//stridx
     }
 }

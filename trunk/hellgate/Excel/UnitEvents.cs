@@ -14,10 +14,10 @@ namespace Hellgate.Excel
         public String name;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknown2;
-        public Int32 recordPlayer;
-        public Int32 recordMonster;
-        public Int32 recordMissile;
-        public Int32 recordItem;
-        public Int32 recordObject;
+        public Int32 recordPlayer; // XLS_ReadIndex_UnitEventType (Excel_UNIT_EVENT_TYPE_DATA+65), 0x08
+        public Int32 recordMonster; // XLS_ReadIndex_UnitEventType (Excel_UNIT_EVENT_TYPE_DATA+65), 0x08
+        public Int32 recordMissile; // XLS_ReadIndex_UnitEventType (Excel_UNIT_EVENT_TYPE_DATA+65), 0x08
+        public Int32 recordItem; // XLS_ReadIndex_UnitEventType (Excel_UNIT_EVENT_TYPE_DATA+65), 0x08
+        public Int32 recordObject; // XLS_ReadIndex_UnitEventType (Excel_UNIT_EVENT_TYPE_DATA+65), 0x08
     }
 }

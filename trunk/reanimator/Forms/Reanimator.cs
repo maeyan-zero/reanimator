@@ -43,7 +43,7 @@ namespace Reanimator.Forms
 
             //return;
             //TestScripts.RepackMPDats();
-            //TestScripts.TestExcelCooking();
+            TestScripts.TestExcelCooking();
             //TestScripts.TestAllCodeValues();
 
             //return;

@@ -292,53 +292,81 @@ namespace Hellgate
                     {
                         if (excelAttribute.IsTableIndex && fileManager != null)
                         {
-                            if (value == "-1")
+                            int arraySize = 1;
+                            bool isArray = (fieldDelegate.FieldType.BaseType == typeof (Array));
+                            if (isArray)
                             {
-                                objectDelegator[fieldDelegate.Name, rowInstance] = -1;
-                                continue;
+                                MarshalAsAttribute arrayMarshal = (MarshalAsAttribute)fieldDelegate.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                                arraySize = arrayMarshal.SizeConst;
+                                Debug.Assert(arraySize > 0);
                             }
 
-                            String tableStringId = excelAttribute.TableStringId;
-                            if (_isTCv4) tableStringId = "_TCv4_" + tableStringId;
+                            String[] indexStrs = value.Split(new[] { ',' });
+                            Int32[] rowIndexValues = new int[arraySize];
+                            for (int i = 0; i < arraySize; i++) rowIndexValues[i] = -1;
 
-                            bool hasCodeColumn = fileManager.DataTableHasColumn(tableStringId, "code");
-                            if (value.Length == 0 && hasCodeColumn)
+                            int maxElements = indexStrs.Length;
+                            if (maxElements > arraySize)
                             {
-                                objectDelegator[fieldDelegate.Name, rowInstance] = -1;
-                                continue;
+                                Debug.WriteLine(String.Format("{0}: Loss of array elements detected. row = {1}, col = {2}.", StringId, row, col));
+                                maxElements = arraySize;
                             }
 
-                            //LEVEL references multiple blank TREASURE row index values - all appear to be empty rows though, so meh...
-                            //Debug.Assert(!String.IsNullOrEmpty(value));
-
-                            int isNegative = 1;
-                            if (value.Length > 0 && value[0] == '-')
+                            for (int i = 0; i < maxElements; i++)
                             {
-                                isNegative = -1;
-                                value = value.Substring(1, value.Length - 1);
-                            }
+                                value = indexStrs[i];
+                                if (value == "-1") continue;
 
-                            int rowIndex = -1;
-                            ExcelFile relatedExcel = null;
-                            if (csvExcelFiles != null && csvExcelFiles.TryGetValue(tableStringId, out relatedExcel))
-                            {
-                                rowIndex = relatedExcel._GetRowIndexFromValue(value, hasCodeColumn ? "code" : null);
-                            }
 
-                            if (relatedExcel == null)
-                            {
-                                if (hasCodeColumn)
+                                String tableStringId = excelAttribute.TableStringId;
+                                if (_isTCv4) tableStringId = "_TCv4_" + tableStringId;
+
+                                bool hasCodeColumn = fileManager.DataTableHasColumn(tableStringId, "code");
+                                if (value.Length == 0 && hasCodeColumn) continue;
+
+
+                                //LEVEL references multiple blank TREASURE row index values - all appear to be empty rows though, so meh...
+                                //Debug.Assert(!String.IsNullOrEmpty(value));
+
+                                int isNegative = 1;
+                                if (value.Length > 0 && value[0] == '-')
                                 {
-                                    int code = _StringToCode(value);
-                                    rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
+                                    isNegative = -1;
+                                    value = value.Substring(1, value.Length - 1);
                                 }
-                                else
+
+                                int rowIndex = -1;
+                                ExcelFile relatedExcel = null;
+                                if (csvExcelFiles != null && csvExcelFiles.TryGetValue(tableStringId, out relatedExcel))
                                 {
-                                    rowIndex = fileManager.GetExcelRowIndex(tableStringId, value);
+                                    rowIndex = relatedExcel._GetRowIndexFromValue(value, hasCodeColumn ? "code" : null);
                                 }
+
+                                if (relatedExcel == null)
+                                {
+                                    if (hasCodeColumn && value.Length <= 4)
+                                    {
+                                        int code = _StringToCode(value);
+                                        rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
+                                    }
+                                    else
+                                    {
+                                        rowIndex = fileManager.GetExcelRowIndex(tableStringId, value);
+                                    }
+                                }
+
+                                rowIndexValues[i] = rowIndex * isNegative;
                             }
 
-                            objectDelegator[fieldDelegate.Name, rowInstance] = rowIndex * isNegative;
+                            if (isArray)
+                            {
+                                objectDelegator[fieldDelegate.Name, rowInstance] = rowIndexValues;
+                            }
+                            else
+                            {
+                                objectDelegator[fieldDelegate.Name, rowInstance] = rowIndexValues[0];
+                            }
+
                             continue;
                         }
 
@@ -440,7 +468,7 @@ namespace Hellgate
                                 enumVal = enumString == "" ? 0 : Enum.Parse(fieldDelegate.FieldType, enumString);
                             }
 
-                            objectDelegator[fieldDelegate.Name, rowInstance] = (uint) enumVal;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = (uint)enumVal;
                             continue;
                         }
                     }
@@ -473,7 +501,7 @@ namespace Hellgate
                     {
                         byteArray[i] = Byte.Parse(stringArray[i]);
                     }
-                    _extendedBuffer[row-1] = byteArray;
+                    _extendedBuffer[row - 1] = byteArray;
                 }
 
                 // properties has extra Scripts stuffs
@@ -1059,7 +1087,7 @@ namespace Hellgate
                 columnsList.Add(fieldDelegate.Name);
             }
 
-            // type-specific columns
+            // excel table type-specific columns
             if (Attributes.HasExtended) columnsList.Add("ExtendedProps");
             if (isProperties) columnsList.Add("Script");
 
@@ -1117,37 +1145,57 @@ namespace Hellgate
                     {
                         if (excelAttribute.IsTableIndex && fileManager != null)
                         {
-                            int index = (int)objectDelegator[fieldDelegate.Name](rowObject);
-                            if (index == -1) // empty string/no code
+                            if (fieldDelegate.Name == "missileToAttach")
                             {
-                                rowStr[col] = "\"-1\"";
-                                continue;
+                                int bp = 0;
                             }
 
-                            String tableStringId = excelAttribute.TableStringId;
-                            if (_isTCv4) tableStringId = "_TCv4_" + tableStringId;
-
-                            String negative = String.Empty;
-                            if (index < 0)
+                            int[] indexValues;
+                            Object indexObj = objectDelegator[fieldDelegate.Name](rowObject);
+                            if (objectDelegator.GetFieldDelegate(fieldDelegate.Name).FieldType.BaseType == typeof(Array))
                             {
-                                index *= -1;
-                                negative = "-";
-                            }
-
-                            if (fileManager.DataTableHasColumn(tableStringId, "code"))
-                            {
-                                int code = fileManager.GetExcelIntFromStringId(tableStringId, "code", index);
-                                String codeStr = String.Format("\"{0}{1}\"", negative, _CodeToString(code));
-
-                                rowStr[col] = codeStr;
+                                indexValues = (int[])indexObj;
                             }
                             else
                             {
-                                String value = fileManager.GetExcelRowStringFromStringId(tableStringId, index);
-                                value = String.Format("\"{0}{1}\"", negative, value);
-
-                                rowStr[col] = value;
+                                indexValues = new[] { (int)objectDelegator[fieldDelegate.Name](rowObject) };
                             }
+
+                            String[] indexStrs = new String[indexValues.Length];
+                            for (int i = 0; i < indexStrs.Length; i++)
+                            {
+                                if (indexValues[i] == -1) // empty string/no code
+                                {
+                                    indexStrs[i] = "-1";
+                                    continue;
+                                }
+
+                                String tableStringId = excelAttribute.TableStringId;
+                                if (_isTCv4) tableStringId = "_TCv4_" + tableStringId;
+
+                                String negative = String.Empty;
+                                if (indexValues[i] < 0)
+                                {
+                                    indexValues[i] *= -1;
+                                    negative = "-";
+                                }
+
+                                String indexStr = null;
+                                if (fileManager.DataTableHasColumn(tableStringId, "code"))
+                                {
+                                    int code = fileManager.GetExcelIntFromStringId(tableStringId, "code", indexValues[i]);
+                                    if (code != 0) indexStr = _CodeToString(code);
+                                }
+
+                                if (indexStr == null)
+                                {
+                                    indexStr = fileManager.GetExcelRowStringFromStringId(tableStringId, indexValues[i]);
+                                }
+
+                                indexStrs[i] = negative + indexStr;
+                            }
+
+                            rowStr[col] = "\"" + String.Join(",", indexStrs) + "\"";
                             continue;
                         }
 

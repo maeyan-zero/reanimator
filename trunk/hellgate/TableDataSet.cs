@@ -55,23 +55,35 @@ namespace Hellgate
                 if (fieldInfo.IsPrivate)
                 {
                     if (fieldInfo.FieldType != typeof(ExcelFile.RowHeader)) continue;
+
                     outputAttributes.Add(null);
                     dataTable.Columns.Add(fieldInfo.Name, typeof(string));
                     continue;
                 }
 
-                if ((excelAttribute == null))
+
+                Type fieldType = fieldInfo.FieldType;
+                bool isArray = false;
+                if (fieldInfo.FieldType.BaseType == typeof(Array))
+                {
+                    fieldType = typeof(String);
+                    isArray = true;
+                }
+
+                DataColumn dataColumn = dataTable.Columns.Add(fieldInfo.Name, fieldType);
+                if (isArray)
+                {
+                    dataColumn.ExtendedProperties.Add(ColumnKeys.IsArray, true);
+                }
+
+                if (excelAttribute == null)
                 {
                     outputAttributes.Add(null);
-                    dataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
                     continue;
                 }
 
                 outputAttributes.Add(excelAttribute);
 
-                DataColumn dataColumn = dataTable.Columns.Add(fieldInfo.Name, fieldInfo.FieldType);
-                
-                // Define DataColumn DataType, overrides default above
                 if ((excelAttribute.IsStringOffset))
                 {
                     dataColumn.DataType = typeof(String);
@@ -104,7 +116,7 @@ namespace Hellgate
                     dataColumnString.ExtendedProperties.Add(ColumnKeys.IsRelationGenerated, true);
                 }
 
-                if ((excelAttribute.IsTableIndex))
+                if (excelAttribute.IsTableIndex)
                 {
                     dataColumn.ExtendedProperties.Add(ColumnKeys.IsTableIndex, true);
 
@@ -148,7 +160,6 @@ namespace Hellgate
 
                     if (fieldInfo.IsPrivate)
                     {
-
                         if (fieldInfo.FieldType != typeof(ExcelFile.RowHeader)) continue;
                         baseRow[col++] = FileTools.ObjectToStringGeneric(value, ",");
                         continue;
@@ -156,8 +167,13 @@ namespace Hellgate
 
                     OutputAttribute excelOutputAttribute = outputAttributes[col];
 
-                    if ((excelOutputAttribute == null))
+                    if (excelOutputAttribute == null)
                     {
+                        if (value.GetType().BaseType == typeof(Array))
+                        {
+                            value = ((Array)value).ToString(",");
+                        }
+
                         baseRow[col++] = value;
                         continue;
                     }
@@ -202,11 +218,19 @@ namespace Hellgate
                         continue;
                     }
 
-                    if ((excelOutputAttribute.IsTableIndex) || (excelOutputAttribute.IsStringIndex))
+                    if (excelOutputAttribute.IsTableIndex || excelOutputAttribute.IsStringIndex)
                     {
-                        int valueInt = (int)value;
-                        baseRow[col++] = valueInt;
-                        col++;
+                        if (value.GetType().BaseType == typeof(Array))
+                        {
+                            value = ((Array)value).ToString(",");
+                        }
+                        else
+                        {
+                            value = (int)value;
+                        }
+
+                        baseRow[col++] = value;
+                        col++; // for _strings relational column
                         continue;
                     }
 
@@ -256,7 +280,7 @@ namespace Hellgate
             foreach (DataFile dataFile in DataFiles.Values)
             {
                 if (!dataFile.IsStringsFile) continue;
-                StringsFile stringsFile = (StringsFile) dataFile;
+                StringsFile stringsFile = (StringsFile)dataFile;
 
                 // generate rows
                 foreach (StringsFile.StringBlock tableRow in stringsFile.Rows)
@@ -303,7 +327,7 @@ namespace Hellgate
                 DataColumn dc = mainDataTable.Columns[col];
 
                 if (!(dc.ExtendedProperties.Contains(ColumnKeys.IsRelationGenerated))) continue;
-                
+
                 mainDataTable.Columns.Remove(dc);
             }
 
@@ -354,7 +378,7 @@ namespace Hellgate
                     }
                 }
 
-                if ((excelOutputAttribute.IsTableIndex))
+                if (excelOutputAttribute.IsTableIndex)
                 {
                     String tableStringId = excelOutputAttribute.TableStringId;
 
@@ -363,9 +387,13 @@ namespace Hellgate
                     if (dt != null)
                     {
                         DataColumn dcParent = dt.Columns["Index"];
+                        String relatedColumn = dt.Columns[2].ColumnName;
 
-                        string relatedColumn = dt.Columns[2].ColumnName;
-
+                        if (dcChild.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsArray) && (bool)dcChild.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsArray])
+                        {
+                            col++;
+                            continue;
+                        }
 
                         String relationName = excelFile.StringId + dcChild.ColumnName + ExcelFile.ColumnTypeKeys.IsTableIndex;
                         DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
