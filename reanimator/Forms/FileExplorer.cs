@@ -76,27 +76,11 @@ namespace Reanimator.Forms
             TreeView treeView = (TreeView)sender;
             TreeNode selectedNode = treeView.SelectedNode;
             NodeObject nodeObject = (NodeObject)selectedNode.Tag;
-
-            fileName_textBox.DataBindings.Clear();
-            fileSize_textBox.DataBindings.Clear();
-            fileCompressed_textBox.DataBindings.Clear();
-            loadingLocation_textBox.DataBindings.Clear();
-
-
-            // if it's a folder, it's rather boring
-            if (nodeObject.IsFolder)
-            {
-                fileName_textBox.Text = selectedNode.Text;
-                fileSize_textBox.Text = String.Empty;
-                fileCompressed_textBox.Text = String.Empty;
-                loadingLocation_textBox.Text = String.Empty;
-                fileTime_textBox.Text = String.Empty;
-
-                return;
-            }
-
-
             IndexFile.FileEntry fileIndex = nodeObject.FileEntry;
+
+            _files_listView.Items.Clear();
+            if (nodeObject.IsFolder)  return;
+
 
             // no file index means it's either an uncooked file, or a new file
             if (fileIndex == null)
@@ -122,40 +106,42 @@ namespace Reanimator.Forms
                     return;
                 }
 
-                fileName_textBox.Text = fileInfo.Name;
-                fileName_textBox.ReadOnly = true;
-                fileSize_textBox.Text = fileInfo.Length.ToString();
-                fileCompressed_textBox.Text = String.Empty;
-                fileTime_textBox.Text = fileInfo.CreationTime.ToString();
-                loadingLocation_textBox.Text = fileDataPath;
+                String[] fileDetails = new String[5];
+                fileDetails[0] = fileInfo.Name;
+                fileDetails[1] = fileInfo.Length.ToString();
+                fileDetails[2] = String.Empty;
+                fileDetails[3] = fileInfo.LastWriteTime.ToString();
+                fileDetails[4] = fileDataPath;
 
+                ListViewItem listViewItem = new ListViewItem(fileDetails);
+
+                _files_listView.Items.Add(listViewItem);
                 return;
             }
 
+            _ListView_AddFileItem(fileIndex);
 
-            fileName_textBox.ReadOnly = false;
-            fileName_textBox.DataBindings.Add("Text", fileIndex, "FileNameString");
-            fileSize_textBox.DataBindings.Add("Text", fileIndex, "UncompressedSize");
-            fileCompressed_textBox.DataBindings.Add("Text", fileIndex, "CompressedSize");
-            fileTime_textBox.Text = (DateTime.FromFileTime(fileIndex.FileStruct.FileTime)).ToString();
+            if (fileIndex.Siblings == null) return;
 
-            if (fileIndex.IsPatchedOut)
+            foreach (IndexFile.FileEntry fileEntry in fileIndex.Siblings)
             {
-                String fileDataPath = selectedNode.FullPath;
-                String filePath = Path.Combine(Config.HglDir, fileDataPath);
-                if (File.Exists(filePath))
-                {
-                    loadingLocation_textBox.Text = fileDataPath;
-                }
-                else
-                {
-                    loadingLocation_textBox.DataBindings.Add("Text", fileIndex, "Index");
-                }
+                _ListView_AddFileItem(fileEntry);
             }
-            else
-            {
-                loadingLocation_textBox.DataBindings.Add("Text", fileIndex, "Index");
-            }
+        }
+
+        private void _ListView_AddFileItem(IndexFile.FileEntry fileEntry)
+        {
+            String[] fileDetails = new String[5];
+            fileDetails[0] = fileEntry.FileNameString;
+            fileDetails[1] = fileEntry.UncompressedSize.ToString();
+            fileDetails[2] = fileEntry.CompressedSize.ToString();
+            fileDetails[3] = DateTime.FromFileTime(fileEntry.FileTime).ToString();
+            fileDetails[4] = fileEntry.IsPatchedOut ? fileEntry.RelativeFullPathWithoutPatch : fileEntry.Index.ToString();
+
+            ListViewItem listViewItem = new ListViewItem(fileDetails) { Tag = fileEntry };
+            if (fileEntry.IsPatchedOut) listViewItem.ForeColor = BackupColor;
+
+            _files_listView.Items.Add(listViewItem);
         }
 
         // todo: finish me
@@ -891,7 +877,7 @@ namespace Reanimator.Forms
             List<TreeNode> uncookingNodes = (from treeNode in checkedNodes
                                              let nodeObject = (NodeObject)treeNode.Tag
                                              where nodeObject.CanCookWith && !nodeObject.IsUncookedVersion
-                                               select treeNode).ToList();
+                                             select treeNode).ToList();
             if (uncookingNodes.Count == 0)
             {
                 MessageBox.Show("Unable to find any checked files that can be uncooked!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -1216,7 +1202,7 @@ namespace Reanimator.Forms
 
         private void _DoQuickExcel(ProgressForm progressForm, Object param)
         {
-            FileManager fileManager = (FileManager) param;
+            FileManager fileManager = (FileManager)param;
             String root = _quickExcelDir_textBox.Text;
             if (root == "") return;
             if (fileManager.MPVersion) root = Path.Combine(root, "tcv4");
@@ -1227,7 +1213,7 @@ namespace Reanimator.Forms
                 if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension) &&
                     (!fileEntry.FileNameString.EndsWith(StringsFile.Extention) || !fileEntry.DirectoryString.Contains(fileManager.Language))) continue;
 
-                if (i++%10 == 0 && progressForm != null) progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutPatch);
+                if (i++ % 10 == 0 && progressForm != null) progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutPatch);
 
                 byte[] fileBytes;
                 try

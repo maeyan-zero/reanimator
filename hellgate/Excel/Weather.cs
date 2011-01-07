@@ -14,9 +14,13 @@ namespace Hellgate.Excel
         public string name;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_THEMES")]
         public Int32 theme1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_THEMES")]
         public Int32 theme2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_THEMES")]
         public Int32 theme3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_THEMES")]
         public Int32 theme4;
     }
 }

@@ -12,32 +12,50 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 layers1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 layers2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 layers3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 layers4;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        //Int32[] layersUnused;
-        public Int32 undefined01;
-        public Int32 undefined02;
-        public Int32 undefined03;
-        public Int32 undefined04;
-        public Int32 undefined05;
-        public Int32 undefined06;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
+        public Int32 layers5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
+        public Int32 layers6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
+        public Int32 layers7;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
+        public Int32 layers8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
+        public Int32 layers9;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
+        public Int32 layers10;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 Base;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 head;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 hair;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 facialHair;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 skin;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 hairColorTexture;//idx
         public byte skinColor;
         public byte hairColor;
         short undefined;
         [ExcelOutput(IsBool = true)]
         public Int32 randomize;//bool
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYERSET")]
         public Int32 randomLayerSets1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYERSET")]
         public Int32 randomLayerSets2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYERSET")]
         public Int32 randomLayerSets3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYERSET")]
         public Int32 randomLayerSets4;
     }
 }

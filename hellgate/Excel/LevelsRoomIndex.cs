@@ -8,7 +8,7 @@ namespace Hellgate.Excel
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class LevelsRoomIndex
     {
-        RowHeader header;                                         //                  0x00     0
+        RowHeader header;                                           //                  0x00     0
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;                                         // 0x00     0       0x10     16
@@ -47,8 +47,11 @@ namespace Hellgate.Excel
         public string reverbEnvironment;                            // 0x88     136
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined2;                                         // 0x188    392
+        [ExcelOutput(IsTableIndex = true, TableStringId = "BACKGROUNDSOUNDS")]
         public Int32 backGroundSound;//idx                          // 0x190    400
+        [ExcelOutput(IsTableIndex = true, TableStringId = "PROPS")]
         public Int32 noGore;//idx;                                  // 0x194    404
+        [ExcelOutput(IsTableIndex = true, TableStringId = "PROPS")]
         public Int32 noHumans;//idx                                 // 0x198    408
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined3;                                         // 0x19C    412
