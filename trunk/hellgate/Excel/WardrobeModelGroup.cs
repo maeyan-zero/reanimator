@@ -12,6 +12,6 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        public Int32 appearanceGroupCategory;
+        public Int32 appearanceGroupCategory; // XLS_InternalIndex_AppearanceGroupCategory (XLS_WARDROBE_MODEL_GROUP+58), 0x0D
     }
 }

@@ -10,9 +10,10 @@ namespace Hellgate.Excel
     {
         RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]//Except it's by unique drlgFileName, and it starts at 918 which is an empty entry?
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string drlgFileName;
-        public Int32 undefined1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_FILE_PATHS")]
+        public Int32 folderCode;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string drlgRuleSet;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
@@ -42,8 +43,11 @@ namespace Hellgate.Excel
         [ExcelOutput(IsBool = true)]
         public Int32 askQuests;//bool
         public Int32 randomQuestPercent;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "QUESTS_TASKS_FOR_TUGBOAT")]
         public Int32 questTaskComplete;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_THEMES")]
         public Int32 theme_RunRule;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_THEMES")]
         public Int32 theme_SkipRule;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined2;

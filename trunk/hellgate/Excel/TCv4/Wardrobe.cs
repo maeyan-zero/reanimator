@@ -19,21 +19,35 @@ namespace Hellgate.Excel.TCv4
         public Int32 order;
         [ExcelOutput(IsBool = true)]
         public Int32 debug;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups7;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups9;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 randomAppearanceGroups10;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYERSET")]
         public Int32 layerSet1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYERSET")]
         public Int32 layerSet2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYERSET")]
         public Int32 layerSet3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYERSET")]
         public Int32 layerSet4;
-        public Int32 layerSet5;
+        Int32 undefined3; // is all zero; not defined in ASM
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_MODEL_GROUP")]
         public Int32 modelGroup;//idx;
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_TEXTURESET_GROUP")]
@@ -52,6 +66,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 blendOpCyclops;
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 blendOpCyclopsFemale;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 offHandlayer;//idx;
         public Int32 undefined2;
         public Int32 attachType;
@@ -71,6 +86,7 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsBool = true)]
         public Int32 hasBoneIndex;//bool
         public Int32 boneIndex;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;//idx
     }
 }

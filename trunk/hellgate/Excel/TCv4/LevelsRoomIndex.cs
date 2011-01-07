@@ -47,10 +47,15 @@ namespace Hellgate.Excel.TCv4
         public Int32 roomMessage_tcv4;
         public Int32 havokSliceType;
         public Int32 roomVersion;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 spawnClass1_tcv4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 spawnClass2_tcv4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 spawnClass3_tcv4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 spawnClass4_tcv4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 spawnClass5_tcv4;
         public Int32 runSpawnClassXTimes1_tcv4;
         public Int32 runSpawnClassXTimes2_tcv4;
@@ -70,8 +75,11 @@ namespace Hellgate.Excel.TCv4
         Int32[] undefined2;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined_tcv4_2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "BACKGROUNDSOUNDS")]
         public Int32 backGroundSound;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "PROPS")]
         public Int32 noGore;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "PROPS")]
         public Int32 noHumans;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined3;

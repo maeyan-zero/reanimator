@@ -18,8 +18,11 @@ namespace Hellgate.Excel.TCv4
         public Int32 code;
         public Int32 bitfieldIndex;
         public Int32 unknown1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 defaultSubLevel;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 previousLevel;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 nextLevel;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 levelDisplayName;
@@ -40,6 +43,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 alwaysActive;
         [ExcelOutput(IsBool = true)]
         public Int32 startingLocation;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelRestartRedirect;//index
         public Int32 unknown2;
         [ExcelOutput(IsBool = true)]
@@ -48,6 +52,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 firstPortalandRecallLoc;
         [ExcelOutput(IsBool = true)]
         public Int32 safe;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevelTownPortal;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 tutorial;
@@ -73,24 +78,43 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsBool = true)]
         public Int32 allowRandomOrientation;
         public Int32 hellriftChancePercent;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 hellriftSubLevel1;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 hellriftSubLevel2;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 hellriftSubLevel3;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 hellriftSubLevel4;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 hellriftSubLevel5;//index
+         [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 madLibs;//index
+         [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 properNames;//index
+         [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 adjectives;//index
+         [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 nouns;//index
+         [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 affixs;//index
+         [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 suffixs;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevel1;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevel2;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevel3;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevel4;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevel5;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevel6;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevel7;//index
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevel8;//index
         [ExcelOutput(IsBool = true)]
         public Int32 autoWaypoint;
@@ -98,6 +122,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 multiplayerOnly;
         [ExcelOutput(IsBool = true)]
         public Int32 useTeamColors;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 waypoint;//index
         public Int32 srvLevelType;
         public Int32 playerMax;
@@ -113,7 +138,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 monsterLevelActivatorDelta;
         public Int32 selectRandomThemePct;
         public Int32 partySizeRecommended;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 questSpawnClass;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 interactableSpawnClass;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 stringEnter;//stridx
@@ -132,6 +159,7 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 bonusStartingTreasure;//idx
         public Int32 sequenceNumber;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ACT")]
         public Int32 act;//?idx
         public Int32 worldMapRow;
         public Int32 worldMapCol;
@@ -139,17 +167,26 @@ namespace Hellgate.Excel.TCv4
         public string worldMapFrame;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string worldMapFrameUnexplored;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 worldMapColor;
         public Int32 worldMapLabelPos;
         public float worldMapLabelXOffs;
         public float worldMapLabelYOffs;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 worldMapConnectIDs1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 worldMapConnectIDs2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 worldMapConnectIDs3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 worldMapConnectIDs4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 worldMapConnectIDs5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 worldMapConnectIDs6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 worldMapConnectIDs7;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 worldMapConnectIDs8;
         public Int32 adventureChancePercent;
         [ExcelOutput(IsScript = true)]

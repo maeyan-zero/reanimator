@@ -57,6 +57,19 @@ namespace Hellgate
             };
 
             HasIntegrity = _LoadFileTable();
+            _OrderSiblings();
+        }
+
+        private void _OrderSiblings()
+        {
+            foreach (FileEntry fileEntry in FileEntries.Values)
+            {
+                if (fileEntry.Siblings == null || fileEntry.Siblings.Count == 1) continue;
+
+                fileEntry.Siblings = (from entry in fileEntry.Siblings
+                                      orderby entry.FileTime descending 
+                                      select entry).ToList();
+            }
         }
 
         /// <summary>

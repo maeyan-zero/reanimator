@@ -202,7 +202,7 @@ namespace Hellgate
             {"WEATHER", new DataFileAttributes {RowType = typeof(Weather), StructureId = 0x9FF616C5}},
             {"WEATHER_SETS", new DataFileAttributes {RowType = typeof(WeatherSets), StructureId = 0xE70A388C}},
 
-                
+
             // TCv4 - different
             {"_TCv4_ACHIEVEMENTS", new DataFileAttributes {IsTCv4 = true, RowType = typeof(AchievementsTCv4), HasScriptTable = true}},
             {"_TCv4_ACT", new DataFileAttributes {IsTCv4 = true, RowType = typeof(ActTCv4)}},

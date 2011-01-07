@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this._fileEntry_contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +44,12 @@
             this.noEditorKey_label = new System.Windows.Forms.Label();
             this.backupKey_label = new System.Windows.Forms.Label();
             this._files_fileTreeView = new System.Windows.Forms.TreeView();
+            this._files_listView = new System.Windows.Forms.ListView();
+            this._fileName_columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this._size_columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this._compressed_columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this._date_columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this._location_columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.uncook_button = new System.Windows.Forms.Button();
@@ -60,18 +66,6 @@
             this.packPatch_button = new System.Windows.Forms.Button();
             this.packPatch_label = new System.Windows.Forms.Label();
             this.revertFile_button = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.details_tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.fileTime_textBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.fileSize_textBox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.fileName_textBox = new System.Windows.Forms.TextBox();
-            this.fileCompressed_textBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.loadingLocation_textBox = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.advancedCommands_tabPage = new System.Windows.Forms.TabPage();
             this.button1 = new System.Windows.Forms.Button();
             this.extractUncook_groupBox = new System.Windows.Forms.GroupBox();
@@ -85,7 +79,7 @@
             this._quickExcelBrowse_button = new System.Windows.Forms.Button();
             this._quickExcelDir_textBox = new System.Windows.Forms.TextBox();
             this._quckExcel_label = new System.Windows.Forms.Label();
-            this.contextMenuStrip1.SuspendLayout();
+            this._fileEntry_contextMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.fileExplorer_tabPage.SuspendLayout();
             this.fileExplorer_splitContainer.Panel1.SuspendLayout();
@@ -96,8 +90,6 @@
             this.tableLayoutPanel4.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.options_tableLayoutPanel.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.details_tableLayoutPanel.SuspendLayout();
             this.advancedCommands_tabPage.SuspendLayout();
             this.extractUncook_groupBox.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -105,14 +97,14 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
-            // contextMenuStrip1
+            // _fileEntry_contextMenu
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this._fileEntry_contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editToolStripMenuItem,
             this.toolStripSeparator1,
             this.toolStripMenuItem1});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(133, 54);
+            this._fileEntry_contextMenu.Name = "contextMenuStrip1";
+            this._fileEntry_contextMenu.Size = new System.Drawing.Size(133, 54);
             // 
             // editToolStripMenuItem
             // 
@@ -136,20 +128,23 @@
             this.tabControl1.Controls.Add(this.fileExplorer_tabPage);
             this.tabControl1.Controls.Add(this.advancedCommands_tabPage);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(837, 675);
+            this.tabControl1.Size = new System.Drawing.Size(872, 768);
             this.tabControl1.TabIndex = 3;
             // 
             // fileExplorer_tabPage
             // 
             this.fileExplorer_tabPage.BackColor = System.Drawing.SystemColors.Menu;
             this.fileExplorer_tabPage.Controls.Add(this.fileExplorer_splitContainer);
-            this.fileExplorer_tabPage.Location = new System.Drawing.Point(4, 22);
+            this.fileExplorer_tabPage.Location = new System.Drawing.Point(4, 24);
+            this.fileExplorer_tabPage.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.fileExplorer_tabPage.Name = "fileExplorer_tabPage";
-            this.fileExplorer_tabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.fileExplorer_tabPage.Size = new System.Drawing.Size(829, 649);
+            this.fileExplorer_tabPage.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.fileExplorer_tabPage.Size = new System.Drawing.Size(864, 740);
             this.fileExplorer_tabPage.TabIndex = 0;
             this.fileExplorer_tabPage.Text = "File Explorer";
             // 
@@ -157,7 +152,8 @@
             // 
             this.fileExplorer_splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fileExplorer_splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fileExplorer_splitContainer.Location = new System.Drawing.Point(3, 3);
+            this.fileExplorer_splitContainer.Location = new System.Drawing.Point(2, 3);
+            this.fileExplorer_splitContainer.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.fileExplorer_splitContainer.Name = "fileExplorer_splitContainer";
             // 
             // fileExplorer_splitContainer.Panel1
@@ -171,19 +167,22 @@
             // 
             // fileExplorer_splitContainer.Panel2
             // 
+            this.fileExplorer_splitContainer.Panel2.Controls.Add(this._files_listView);
             this.fileExplorer_splitContainer.Panel2.Controls.Add(this.groupBox3);
             this.fileExplorer_splitContainer.Panel2.Controls.Add(this.groupBox2);
-            this.fileExplorer_splitContainer.Panel2.Controls.Add(this.groupBox1);
-            this.fileExplorer_splitContainer.Size = new System.Drawing.Size(823, 643);
-            this.fileExplorer_splitContainer.SplitterDistance = 300;
+            this.fileExplorer_splitContainer.Size = new System.Drawing.Size(860, 734);
+            this.fileExplorer_splitContainer.SplitterDistance = 313;
+            this.fileExplorer_splitContainer.SplitterWidth = 5;
             this.fileExplorer_splitContainer.TabIndex = 3;
             // 
             // filterReset_button
             // 
             this.filterReset_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.filterReset_button.Location = new System.Drawing.Point(222, 3);
+            this.filterReset_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filterReset_button.Location = new System.Drawing.Point(251, 3);
+            this.filterReset_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.filterReset_button.Name = "filterReset_button";
-            this.filterReset_button.Size = new System.Drawing.Size(50, 23);
+            this.filterReset_button.Size = new System.Drawing.Size(58, 27);
             this.filterReset_button.TabIndex = 7;
             this.filterReset_button.Text = "Reset";
             this.filterReset_button.UseVisualStyleBackColor = true;
@@ -192,9 +191,11 @@
             // filterApply_button
             // 
             this.filterApply_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.filterApply_button.Location = new System.Drawing.Point(166, 3);
+            this.filterApply_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filterApply_button.Location = new System.Drawing.Point(189, 3);
+            this.filterApply_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.filterApply_button.Name = "filterApply_button";
-            this.filterApply_button.Size = new System.Drawing.Size(50, 23);
+            this.filterApply_button.Size = new System.Drawing.Size(58, 27);
             this.filterApply_button.TabIndex = 6;
             this.filterApply_button.Text = "Apply";
             this.filterApply_button.UseVisualStyleBackColor = true;
@@ -204,9 +205,11 @@
             // 
             this.filter_textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.filter_textBox.Location = new System.Drawing.Point(38, 5);
+            this.filter_textBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filter_textBox.Location = new System.Drawing.Point(44, 6);
+            this.filter_textBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.filter_textBox.Name = "filter_textBox";
-            this.filter_textBox.Size = new System.Drawing.Size(122, 20);
+            this.filter_textBox.Size = new System.Drawing.Size(141, 23);
             this.filter_textBox.TabIndex = 5;
             this.filter_textBox.Text = "*.*";
             this.filter_textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this._Filter_TextBox_KeyDown);
@@ -214,9 +217,11 @@
             // filter_label
             // 
             this.filter_label.AutoSize = true;
-            this.filter_label.Location = new System.Drawing.Point(3, 8);
+            this.filter_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filter_label.Location = new System.Drawing.Point(2, 9);
+            this.filter_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.filter_label.Name = "filter_label";
-            this.filter_label.Size = new System.Drawing.Size(29, 13);
+            this.filter_label.Size = new System.Drawing.Size(33, 15);
             this.filter_label.TabIndex = 4;
             this.filter_label.Text = "Filter";
             // 
@@ -228,21 +233,24 @@
             this.legend_tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.legend_tableLayoutPanel.Controls.Add(this.noEditorKey_label, 0, 0);
             this.legend_tableLayoutPanel.Controls.Add(this.backupKey_label, 0, 1);
-            this.legend_tableLayoutPanel.Location = new System.Drawing.Point(3, 593);
+            this.legend_tableLayoutPanel.Location = new System.Drawing.Point(2, 676);
+            this.legend_tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.legend_tableLayoutPanel.Name = "legend_tableLayoutPanel";
             this.legend_tableLayoutPanel.RowCount = 2;
             this.legend_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.legend_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.legend_tableLayoutPanel.Size = new System.Drawing.Size(269, 45);
+            this.legend_tableLayoutPanel.Size = new System.Drawing.Size(304, 52);
             this.legend_tableLayoutPanel.TabIndex = 3;
             // 
             // noEditorKey_label
             // 
             this.noEditorKey_label.AutoSize = true;
             this.noEditorKey_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.noEditorKey_label.Location = new System.Drawing.Point(3, 0);
+            this.noEditorKey_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.noEditorKey_label.Location = new System.Drawing.Point(2, 0);
+            this.noEditorKey_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.noEditorKey_label.Name = "noEditorKey_label";
-            this.noEditorKey_label.Size = new System.Drawing.Size(263, 22);
+            this.noEditorKey_label.Size = new System.Drawing.Size(300, 26);
             this.noEditorKey_label.TabIndex = 4;
             this.noEditorKey_label.Text = "File has no editor";
             this.noEditorKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -251,9 +259,11 @@
             // 
             this.backupKey_label.AutoSize = true;
             this.backupKey_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.backupKey_label.Location = new System.Drawing.Point(3, 22);
+            this.backupKey_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.backupKey_label.Location = new System.Drawing.Point(2, 26);
+            this.backupKey_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.backupKey_label.Name = "backupKey_label";
-            this.backupKey_label.Size = new System.Drawing.Size(263, 23);
+            this.backupKey_label.Size = new System.Drawing.Size(300, 26);
             this.backupKey_label.TabIndex = 0;
             this.backupKey_label.Text = "File is patched out";
             this.backupKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -265,10 +275,12 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._files_fileTreeView.CheckBoxes = true;
-            this._files_fileTreeView.ContextMenuStrip = this.contextMenuStrip1;
-            this._files_fileTreeView.Location = new System.Drawing.Point(3, 31);
+            this._files_fileTreeView.ContextMenuStrip = this._fileEntry_contextMenu;
+            this._files_fileTreeView.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._files_fileTreeView.Location = new System.Drawing.Point(2, 36);
+            this._files_fileTreeView.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._files_fileTreeView.Name = "_files_fileTreeView";
-            this._files_fileTreeView.Size = new System.Drawing.Size(269, 556);
+            this._files_fileTreeView.Size = new System.Drawing.Size(303, 637);
             this._files_fileTreeView.TabIndex = 1;
             this._files_fileTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterCheck);
             this._files_fileTreeView.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterCollapse);
@@ -276,14 +288,65 @@
             this._files_fileTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterSelect);
             this._files_fileTreeView.DoubleClick += new System.EventHandler(this._FilesTreeView_DoubleClick);
             // 
+            // _files_listView
+            // 
+            this._files_listView.AllowColumnReorder = true;
+            this._files_listView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._files_listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this._fileName_columnHeader,
+            this._size_columnHeader,
+            this._compressed_columnHeader,
+            this._date_columnHeader,
+            this._location_columnHeader});
+            this._files_listView.ContextMenuStrip = this._fileEntry_contextMenu;
+            this._files_listView.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._files_listView.FullRowSelect = true;
+            this._files_listView.GridLines = true;
+            this._files_listView.Location = new System.Drawing.Point(2, 3);
+            this._files_listView.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this._files_listView.Name = "_files_listView";
+            this._files_listView.Size = new System.Drawing.Size(536, 130);
+            this._files_listView.TabIndex = 4;
+            this._files_listView.UseCompatibleStateImageBehavior = false;
+            this._files_listView.View = System.Windows.Forms.View.Details;
+            // 
+            // _fileName_columnHeader
+            // 
+            this._fileName_columnHeader.Text = "File";
+            this._fileName_columnHeader.Width = 127;
+            // 
+            // _size_columnHeader
+            // 
+            this._size_columnHeader.Text = "Size";
+            this._size_columnHeader.Width = 44;
+            // 
+            // _compressed_columnHeader
+            // 
+            this._compressed_columnHeader.Text = "Compressed";
+            this._compressed_columnHeader.Width = 61;
+            // 
+            // _date_columnHeader
+            // 
+            this._date_columnHeader.Text = "Date";
+            this._date_columnHeader.Width = 126;
+            // 
+            // _location_columnHeader
+            // 
+            this._location_columnHeader.Text = "Location";
+            this._location_columnHeader.Width = 132;
+            // 
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.tableLayoutPanel4);
-            this.groupBox3.Location = new System.Drawing.Point(4, 489);
+            this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.Location = new System.Drawing.Point(5, 564);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(474, 134);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox3.Size = new System.Drawing.Size(533, 155);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cooking";
@@ -300,20 +363,23 @@
             this.tableLayoutPanel4.Controls.Add(this.cook_label, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.cook_button, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.uncook_label, 1, 1);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(5, 19);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(6, 22);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(478, 110);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(538, 127);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // uncook_button
             // 
             this.uncook_button.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uncook_button.Location = new System.Drawing.Point(3, 3);
+            this.uncook_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uncook_button.Location = new System.Drawing.Point(2, 3);
+            this.uncook_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.uncook_button.Name = "uncook_button";
-            this.uncook_button.Size = new System.Drawing.Size(141, 49);
+            this.uncook_button.Size = new System.Drawing.Size(162, 57);
             this.uncook_button.TabIndex = 0;
             this.uncook_button.Text = "Uncook";
             this.uncook_button.UseVisualStyleBackColor = true;
@@ -323,9 +389,11 @@
             // 
             this.cook_label.AutoSize = true;
             this.cook_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cook_label.Location = new System.Drawing.Point(150, 0);
+            this.cook_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cook_label.Location = new System.Drawing.Point(168, 0);
+            this.cook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.cook_label.Name = "cook_label";
-            this.cook_label.Size = new System.Drawing.Size(325, 55);
+            this.cook_label.Size = new System.Drawing.Size(368, 63);
             this.cook_label.TabIndex = 1;
             this.cook_label.Text = "Uncook checked file/folders that can be uncooked.\r\nThey will be placed in their a" +
                 "pplicable \\data\\ location.";
@@ -334,9 +402,11 @@
             // cook_button
             // 
             this.cook_button.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cook_button.Location = new System.Drawing.Point(3, 58);
+            this.cook_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cook_button.Location = new System.Drawing.Point(2, 66);
+            this.cook_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cook_button.Name = "cook_button";
-            this.cook_button.Size = new System.Drawing.Size(141, 49);
+            this.cook_button.Size = new System.Drawing.Size(162, 58);
             this.cook_button.TabIndex = 2;
             this.cook_button.Text = "Cook";
             this.cook_button.UseVisualStyleBackColor = true;
@@ -346,9 +416,11 @@
             // 
             this.uncook_label.AutoSize = true;
             this.uncook_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uncook_label.Location = new System.Drawing.Point(150, 55);
+            this.uncook_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uncook_label.Location = new System.Drawing.Point(168, 63);
+            this.uncook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.uncook_label.Name = "uncook_label";
-            this.uncook_label.Size = new System.Drawing.Size(325, 55);
+            this.uncook_label.Size = new System.Drawing.Size(368, 64);
             this.uncook_label.TabIndex = 3;
             this.uncook_label.Text = "Cook checked files/folders that can be cooked.\r\nWARNING: Cooked files will be pla" +
                 "ced in \\data\\ location overwriting previous versions.\r\n(files in .dat will be un" +
@@ -360,9 +432,12 @@
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.options_tableLayoutPanel);
-            this.groupBox2.Location = new System.Drawing.Point(3, 157);
+            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.Location = new System.Drawing.Point(2, 181);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(474, 326);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.groupBox2.Size = new System.Drawing.Size(534, 376);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
@@ -383,24 +458,27 @@
             this.options_tableLayoutPanel.Controls.Add(this.packPatch_button, 0, 2);
             this.options_tableLayoutPanel.Controls.Add(this.packPatch_label, 1, 2);
             this.options_tableLayoutPanel.Controls.Add(this.revertFile_button, 0, 3);
-            this.options_tableLayoutPanel.Location = new System.Drawing.Point(6, 19);
+            this.options_tableLayoutPanel.Location = new System.Drawing.Point(7, 22);
+            this.options_tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.options_tableLayoutPanel.Name = "options_tableLayoutPanel";
             this.options_tableLayoutPanel.RowCount = 4;
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.options_tableLayoutPanel.Size = new System.Drawing.Size(477, 301);
+            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.options_tableLayoutPanel.Size = new System.Drawing.Size(535, 347);
             this.options_tableLayoutPanel.TabIndex = 1;
             // 
             // revertFile_label
             // 
             this.revertFile_label.AutoSize = true;
             this.revertFile_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.revertFile_label.Location = new System.Drawing.Point(150, 225);
+            this.revertFile_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.revertFile_label.Location = new System.Drawing.Point(167, 258);
+            this.revertFile_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.revertFile_label.Name = "revertFile_label";
-            this.revertFile_label.Size = new System.Drawing.Size(324, 76);
+            this.revertFile_label.Size = new System.Drawing.Size(366, 89);
             this.revertFile_label.TabIndex = 9;
             this.revertFile_label.Text = "Re-Patch necessary index files to have the game to load original unmodified check" +
                 "ed files/folders.";
@@ -410,9 +488,11 @@
             // 
             this.extractPatch_label.AutoSize = true;
             this.extractPatch_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extractPatch_label.Location = new System.Drawing.Point(150, 75);
+            this.extractPatch_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.extractPatch_label.Location = new System.Drawing.Point(167, 86);
+            this.extractPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extractPatch_label.Name = "extractPatch_label";
-            this.extractPatch_label.Size = new System.Drawing.Size(324, 75);
+            this.extractPatch_label.Size = new System.Drawing.Size(366, 86);
             this.extractPatch_label.TabIndex = 5;
             this.extractPatch_label.Text = "Extract checked files/folders to game data location, then patch necessary index f" +
                 "iles forcing the game to load extracted files.\r\nNote: Non-patchable files (e.g. " +
@@ -423,9 +503,11 @@
             // 
             this.extract_label.AutoSize = true;
             this.extract_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extract_label.Location = new System.Drawing.Point(150, 0);
+            this.extract_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.extract_label.Location = new System.Drawing.Point(167, 0);
+            this.extract_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extract_label.Name = "extract_label";
-            this.extract_label.Size = new System.Drawing.Size(324, 75);
+            this.extract_label.Size = new System.Drawing.Size(366, 86);
             this.extract_label.TabIndex = 4;
             this.extract_label.Text = "Extract checked files/folders to a selected location.";
             this.extract_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -435,9 +517,11 @@
             this.extract_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.extract_button.Location = new System.Drawing.Point(3, 3);
+            this.extract_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.extract_button.Location = new System.Drawing.Point(2, 3);
+            this.extract_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.extract_button.Name = "extract_button";
-            this.extract_button.Size = new System.Drawing.Size(141, 69);
+            this.extract_button.Size = new System.Drawing.Size(161, 80);
             this.extract_button.TabIndex = 2;
             this.extract_button.Text = "Extract to...";
             this.extract_button.UseVisualStyleBackColor = true;
@@ -448,9 +532,11 @@
             this.extractPatch_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.extractPatch_button.Location = new System.Drawing.Point(3, 78);
+            this.extractPatch_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.extractPatch_button.Location = new System.Drawing.Point(2, 89);
+            this.extractPatch_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.extractPatch_button.Name = "extractPatch_button";
-            this.extractPatch_button.Size = new System.Drawing.Size(141, 69);
+            this.extractPatch_button.Size = new System.Drawing.Size(161, 80);
             this.extractPatch_button.TabIndex = 1;
             this.extractPatch_button.Text = "Extract and Patch Index";
             this.extractPatch_button.UseVisualStyleBackColor = true;
@@ -461,9 +547,11 @@
             this.packPatch_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.packPatch_button.Location = new System.Drawing.Point(3, 153);
+            this.packPatch_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.packPatch_button.Location = new System.Drawing.Point(2, 175);
+            this.packPatch_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.packPatch_button.Name = "packPatch_button";
-            this.packPatch_button.Size = new System.Drawing.Size(141, 69);
+            this.packPatch_button.Size = new System.Drawing.Size(161, 80);
             this.packPatch_button.TabIndex = 6;
             this.packPatch_button.Text = "Pack and Patch Custom Dat";
             this.packPatch_button.UseVisualStyleBackColor = true;
@@ -472,9 +560,11 @@
             // 
             this.packPatch_label.AutoSize = true;
             this.packPatch_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.packPatch_label.Location = new System.Drawing.Point(150, 150);
+            this.packPatch_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.packPatch_label.Location = new System.Drawing.Point(167, 172);
+            this.packPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.packPatch_label.Name = "packPatch_label";
-            this.packPatch_label.Size = new System.Drawing.Size(324, 75);
+            this.packPatch_label.Size = new System.Drawing.Size(366, 86);
             this.packPatch_label.TabIndex = 7;
             this.packPatch_label.Text = "Pack checked files/folders into a custom dat/idx to have the game load the files " +
                 "from an isolated .dat.";
@@ -485,168 +575,35 @@
             this.revertFile_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.revertFile_button.Location = new System.Drawing.Point(3, 228);
+            this.revertFile_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.revertFile_button.Location = new System.Drawing.Point(2, 261);
+            this.revertFile_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.revertFile_button.Name = "revertFile_button";
-            this.revertFile_button.Size = new System.Drawing.Size(141, 70);
+            this.revertFile_button.Size = new System.Drawing.Size(161, 83);
             this.revertFile_button.TabIndex = 8;
             this.revertFile_button.Text = "Revert and Restore";
             this.revertFile_button.UseVisualStyleBackColor = true;
             this.revertFile_button.Click += new System.EventHandler(this._RevertRestoreButton_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.details_tableLayoutPanel);
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(475, 148);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Details";
-            // 
-            // details_tableLayoutPanel
-            // 
-            this.details_tableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.details_tableLayoutPanel.ColumnCount = 2;
-            this.details_tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 31.90045F));
-            this.details_tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 68.09955F));
-            this.details_tableLayoutPanel.Controls.Add(this.fileTime_textBox, 1, 4);
-            this.details_tableLayoutPanel.Controls.Add(this.label3, 0, 2);
-            this.details_tableLayoutPanel.Controls.Add(this.fileSize_textBox, 1, 1);
-            this.details_tableLayoutPanel.Controls.Add(this.label2, 0, 1);
-            this.details_tableLayoutPanel.Controls.Add(this.label1, 0, 0);
-            this.details_tableLayoutPanel.Controls.Add(this.fileName_textBox, 1, 0);
-            this.details_tableLayoutPanel.Controls.Add(this.fileCompressed_textBox, 1, 2);
-            this.details_tableLayoutPanel.Controls.Add(this.label4, 0, 3);
-            this.details_tableLayoutPanel.Controls.Add(this.loadingLocation_textBox, 1, 3);
-            this.details_tableLayoutPanel.Controls.Add(this.label8, 0, 4);
-            this.details_tableLayoutPanel.Location = new System.Drawing.Point(7, 20);
-            this.details_tableLayoutPanel.Name = "details_tableLayoutPanel";
-            this.details_tableLayoutPanel.RowCount = 5;
-            this.details_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.details_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.details_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.details_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.details_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.details_tableLayoutPanel.Size = new System.Drawing.Size(477, 122);
-            this.details_tableLayoutPanel.TabIndex = 0;
-            // 
-            // fileTime_textBox
-            // 
-            this.fileTime_textBox.Location = new System.Drawing.Point(155, 99);
-            this.fileTime_textBox.Name = "fileTime_textBox";
-            this.fileTime_textBox.ReadOnly = true;
-            this.fileTime_textBox.Size = new System.Drawing.Size(200, 20);
-            this.fileTime_textBox.TabIndex = 12;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 48);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(146, 24);
-            this.label3.TabIndex = 8;
-            this.label3.Text = "Compressed Size (bytes)";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // fileSize_textBox
-            // 
-            this.fileSize_textBox.Location = new System.Drawing.Point(155, 27);
-            this.fileSize_textBox.Name = "fileSize_textBox";
-            this.fileSize_textBox.ReadOnly = true;
-            this.fileSize_textBox.Size = new System.Drawing.Size(100, 20);
-            this.fileSize_textBox.TabIndex = 5;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 24);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(146, 24);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Size (bytes)";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(146, 24);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "File Name";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // fileName_textBox
-            // 
-            this.fileName_textBox.Location = new System.Drawing.Point(155, 3);
-            this.fileName_textBox.Name = "fileName_textBox";
-            this.fileName_textBox.Size = new System.Drawing.Size(278, 20);
-            this.fileName_textBox.TabIndex = 2;
-            // 
-            // fileCompressed_textBox
-            // 
-            this.fileCompressed_textBox.Location = new System.Drawing.Point(155, 51);
-            this.fileCompressed_textBox.Name = "fileCompressed_textBox";
-            this.fileCompressed_textBox.ReadOnly = true;
-            this.fileCompressed_textBox.Size = new System.Drawing.Size(100, 20);
-            this.fileCompressed_textBox.TabIndex = 7;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(3, 72);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(146, 24);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Loading Location";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // loadingLocation_textBox
-            // 
-            this.loadingLocation_textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.loadingLocation_textBox.Location = new System.Drawing.Point(155, 75);
-            this.loadingLocation_textBox.Name = "loadingLocation_textBox";
-            this.loadingLocation_textBox.ReadOnly = true;
-            this.loadingLocation_textBox.Size = new System.Drawing.Size(319, 20);
-            this.loadingLocation_textBox.TabIndex = 10;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label8.Location = new System.Drawing.Point(3, 96);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(146, 26);
-            this.label8.TabIndex = 11;
-            this.label8.Text = "Index Table Time";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // advancedCommands_tabPage
             // 
             this.advancedCommands_tabPage.BackColor = System.Drawing.SystemColors.Menu;
             this.advancedCommands_tabPage.Controls.Add(this.button1);
             this.advancedCommands_tabPage.Controls.Add(this.extractUncook_groupBox);
-            this.advancedCommands_tabPage.Location = new System.Drawing.Point(4, 22);
+            this.advancedCommands_tabPage.Location = new System.Drawing.Point(4, 24);
+            this.advancedCommands_tabPage.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.advancedCommands_tabPage.Name = "advancedCommands_tabPage";
-            this.advancedCommands_tabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.advancedCommands_tabPage.Size = new System.Drawing.Size(829, 649);
+            this.advancedCommands_tabPage.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.advancedCommands_tabPage.Size = new System.Drawing.Size(864, 740);
             this.advancedCommands_tabPage.TabIndex = 1;
             this.advancedCommands_tabPage.Text = "Advanced Commands";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(11, 465);
+            this.button1.Location = new System.Drawing.Point(13, 537);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(125, 54);
+            this.button1.Size = new System.Drawing.Size(146, 62);
             this.button1.TabIndex = 1;
             this.button1.Text = "Patch out all files";
             this.button1.UseVisualStyleBackColor = true;
@@ -657,9 +614,11 @@
             this.extractUncook_groupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.extractUncook_groupBox.Controls.Add(this.tableLayoutPanel1);
-            this.extractUncook_groupBox.Location = new System.Drawing.Point(8, 6);
+            this.extractUncook_groupBox.Location = new System.Drawing.Point(9, 7);
+            this.extractUncook_groupBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.extractUncook_groupBox.Name = "extractUncook_groupBox";
-            this.extractUncook_groupBox.Size = new System.Drawing.Size(813, 168);
+            this.extractUncook_groupBox.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.extractUncook_groupBox.Size = new System.Drawing.Size(844, 194);
             this.extractUncook_groupBox.TabIndex = 0;
             this.extractUncook_groupBox.TabStop = false;
             this.extractUncook_groupBox.Text = "Quick Extract && Uncook";
@@ -674,20 +633,22 @@
             this.tableLayoutPanel1.Controls.Add(this._quickExcel_button, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(2, 19);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(807, 149);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(840, 172);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // quickXml_button
             // 
             this.quickXml_button.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.quickXml_button.Location = new System.Drawing.Point(3, 3);
+            this.quickXml_button.Location = new System.Drawing.Point(2, 3);
+            this.quickXml_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.quickXml_button.Name = "quickXml_button";
-            this.quickXml_button.Size = new System.Drawing.Size(88, 68);
+            this.quickXml_button.Size = new System.Drawing.Size(94, 80);
             this.quickXml_button.TabIndex = 0;
             this.quickXml_button.Text = "XML Files";
             this.quickXml_button.UseVisualStyleBackColor = true;
@@ -697,9 +658,10 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(97, 0);
+            this.label5.Location = new System.Drawing.Point(100, 0);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(707, 74);
+            this.label5.Size = new System.Drawing.Size(738, 86);
             this.label5.TabIndex = 1;
             this.label5.Text = "Will uncook all .xml.cooked files from entire HGL filesystem to a user specified " +
                 "location.\r\n(requires ~800 MB free space)";
@@ -708,9 +670,10 @@
             // _quickExcel_button
             // 
             this._quickExcel_button.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._quickExcel_button.Location = new System.Drawing.Point(3, 77);
+            this._quickExcel_button.Location = new System.Drawing.Point(2, 89);
+            this._quickExcel_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._quickExcel_button.Name = "_quickExcel_button";
-            this._quickExcel_button.Size = new System.Drawing.Size(88, 69);
+            this._quickExcel_button.Size = new System.Drawing.Size(94, 80);
             this._quickExcel_button.TabIndex = 2;
             this._quickExcel_button.Text = "Excel Files";
             this._quickExcel_button.UseVisualStyleBackColor = true;
@@ -725,12 +688,13 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this._quckExcel_label, 0, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(97, 77);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(100, 89);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(707, 69);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(738, 80);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // tableLayoutPanel3
@@ -740,34 +704,37 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.94294F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 88F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 103F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.05706F));
             this.tableLayoutPanel3.Controls.Add(this._quickExcelTCv4_checkBox, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this._quickExcelBrowse_button, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this._quickExcelDir_textBox, 0, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 37);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(2, 43);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(701, 29);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(734, 34);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // _quickExcelTCv4_checkBox
             // 
             this._quickExcelTCv4_checkBox.AutoSize = true;
             this._quickExcelTCv4_checkBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._quickExcelTCv4_checkBox.Location = new System.Drawing.Point(335, 3);
+            this._quickExcelTCv4_checkBox.Location = new System.Drawing.Point(357, 3);
+            this._quickExcelTCv4_checkBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._quickExcelTCv4_checkBox.Name = "_quickExcelTCv4_checkBox";
-            this._quickExcelTCv4_checkBox.Size = new System.Drawing.Size(363, 23);
+            this._quickExcelTCv4_checkBox.Size = new System.Drawing.Size(375, 28);
             this._quickExcelTCv4_checkBox.TabIndex = 7;
             this._quickExcelTCv4_checkBox.Text = "Include TCv4 Files (requires TCv4 loading option enabled)";
             this._quickExcelTCv4_checkBox.UseVisualStyleBackColor = true;
             // 
             // _quickExcelBrowse_button
             // 
-            this._quickExcelBrowse_button.Location = new System.Drawing.Point(247, 3);
+            this._quickExcelBrowse_button.Location = new System.Drawing.Point(254, 3);
+            this._quickExcelBrowse_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._quickExcelBrowse_button.Name = "_quickExcelBrowse_button";
-            this._quickExcelBrowse_button.Size = new System.Drawing.Size(75, 23);
+            this._quickExcelBrowse_button.Size = new System.Drawing.Size(86, 25);
             this._quickExcelBrowse_button.TabIndex = 9;
             this._quickExcelBrowse_button.Text = "Browse";
             this._quickExcelBrowse_button.UseVisualStyleBackColor = true;
@@ -775,9 +742,10 @@
             // 
             // _quickExcelDir_textBox
             // 
-            this._quickExcelDir_textBox.Location = new System.Drawing.Point(3, 3);
+            this._quickExcelDir_textBox.Location = new System.Drawing.Point(2, 3);
+            this._quickExcelDir_textBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._quickExcelDir_textBox.Name = "_quickExcelDir_textBox";
-            this._quickExcelDir_textBox.Size = new System.Drawing.Size(238, 20);
+            this._quickExcelDir_textBox.Size = new System.Drawing.Size(248, 23);
             this._quickExcelDir_textBox.TabIndex = 0;
             this._quickExcelDir_textBox.Text = "C:\\test_mod";
             // 
@@ -785,9 +753,10 @@
             // 
             this._quckExcel_label.AutoSize = true;
             this._quckExcel_label.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._quckExcel_label.Location = new System.Drawing.Point(3, 0);
+            this._quckExcel_label.Location = new System.Drawing.Point(2, 0);
+            this._quckExcel_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this._quckExcel_label.Name = "_quckExcel_label";
-            this._quckExcel_label.Size = new System.Drawing.Size(701, 34);
+            this._quckExcel_label.Size = new System.Drawing.Size(734, 40);
             this._quckExcel_label.TabIndex = 1;
             this._quckExcel_label.Text = "Uncook all excel files to the specified location, maintinaing their directory str" +
                 "ucture.\r\nIf applicable, the TCv4 files will be placed in an initial directory /T" +
@@ -796,16 +765,18 @@
             // 
             // FileExplorer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(837, 675);
+            this.ClientSize = new System.Drawing.Size(872, 768);
             this.ControlBox = false;
             this.Controls.Add(this.tabControl1);
             this.DoubleBuffered = true;
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "FileExplorer";
             this.Text = "Hellgate File Explorer";
             this.Shown += new System.EventHandler(this.FileExplorer_Shown);
-            this.contextMenuStrip1.ResumeLayout(false);
+            this._fileEntry_contextMenu.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.fileExplorer_tabPage.ResumeLayout(false);
             this.fileExplorer_splitContainer.Panel1.ResumeLayout(false);
@@ -820,9 +791,6 @@
             this.groupBox2.ResumeLayout(false);
             this.options_tableLayoutPanel.ResumeLayout(false);
             this.options_tableLayoutPanel.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.details_tableLayoutPanel.ResumeLayout(false);
-            this.details_tableLayoutPanel.PerformLayout();
             this.advancedCommands_tabPage.ResumeLayout(false);
             this.extractUncook_groupBox.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -837,7 +805,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip _fileEntry_contextMenu;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
@@ -868,18 +836,6 @@
         private System.Windows.Forms.Button packPatch_button;
         private System.Windows.Forms.Label packPatch_label;
         private System.Windows.Forms.Button revertFile_button;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TableLayoutPanel details_tableLayoutPanel;
-        private System.Windows.Forms.TextBox fileTime_textBox;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox fileSize_textBox;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox fileName_textBox;
-        private System.Windows.Forms.TextBox fileCompressed_textBox;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox loadingLocation_textBox;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TabPage advancedCommands_tabPage;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox extractUncook_groupBox;
@@ -893,6 +849,12 @@
         private System.Windows.Forms.Button _quickExcelBrowse_button;
         private System.Windows.Forms.TextBox _quickExcelDir_textBox;
         private System.Windows.Forms.Label _quckExcel_label;
+        private System.Windows.Forms.ListView _files_listView;
+        private System.Windows.Forms.ColumnHeader _fileName_columnHeader;
+        private System.Windows.Forms.ColumnHeader _size_columnHeader;
+        private System.Windows.Forms.ColumnHeader _compressed_columnHeader;
+        private System.Windows.Forms.ColumnHeader _date_columnHeader;
+        private System.Windows.Forms.ColumnHeader _location_columnHeader;
 
     }
 }
