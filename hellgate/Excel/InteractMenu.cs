@@ -12,6 +12,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INTERACT")]
         public Int32 interaction;//index
         [ExcelOutput(IsStringIndex = true)]
         public Int32 stringTitle;

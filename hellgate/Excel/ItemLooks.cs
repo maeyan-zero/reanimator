@@ -9,13 +9,15 @@ namespace Hellgate.Excel
     class ItemLooks
     {
         RowHeader header;
-        [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "lookGroup")]
+        [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "lookGroup", IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 item;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_LOOK_GROUPS")]
         public Int32 lookGroup;//idx
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string folder;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string name;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 wardrobe;//idx;
         public Int32 undefined2;
     }

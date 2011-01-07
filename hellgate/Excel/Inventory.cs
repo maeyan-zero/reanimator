@@ -11,63 +11,106 @@ namespace Hellgate.Excel
         RowHeader header;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string description;
-        [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "inventoryType")]
+        [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "inventoryType", IsTableIndex = true, TableStringId = "INVENTORY_TYPES")]
         public Int32 inventoryType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 location;//idx
         public Int32 colorSetPriority;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 slotStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 maxSlotStat;//idx
         public Int32 unknown;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public Bitmask01 bitmask;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types0;//these reference unitTypes
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyItemsUsableByType0;//these reference unitTypes
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyItemsUsableByType1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyItemsUsableByType2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyItemsUsableByType3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyItemsUsableByType4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyItemsUsableByType5;
         public Int32 width;
         public Int32 height;
         public Int32 filter;
         public Int32 checkClass;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 preventloc1;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 preventtype1a;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 preventtype1b;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 preventtype1c;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 preventtype1d;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 preventtype1e;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 preventtype1f;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 allowskill1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 allowskill2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 allowskill3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype1a;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype1b;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype1c;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype1d;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype1e;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype1f;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype2a;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype2b;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype2c;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype2d;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype2e;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype2f;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype3a;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype3b;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype3c;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype3d;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype3e;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 skillallowtype3f;
-        public Int32 allowskilllevel1;//idx
-        public Int32 allowskilllevel2;//idx
-        public Int32 allowskilllevel3;//idx
-        public Int32 weaponIndex;//idx
+        public Int32 allowskilllevel1;
+        public Int32 allowskilllevel2;
+        public Int32 allowskilllevel3;
+        public Int32 weaponIndex;
         [ExcelOutput(IsBool = true)]
         public Int32 physicallyInContainer;
         [ExcelOutput(IsBool = true)]
@@ -90,6 +133,7 @@ namespace Hellgate.Excel
         public Int32 playerPutRestricted;
         [ExcelOutput(IsScript = true)]
         public Int32 playerTakeRestricted;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 invLocFallbackOnLoadError;//idx
 
         [FlagsAttribute]
