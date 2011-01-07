@@ -12,9 +12,13 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string name;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EFFECTS")]
         public Int32 indoorEffect;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EFFECTS")]
         public Int32 outdoorEffect;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EFFECTS")]
         public Int32 indoorGridEffect;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EFFECTS")]
         public Int32 flashLightEffect;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 noCollide;

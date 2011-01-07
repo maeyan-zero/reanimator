@@ -18,8 +18,9 @@ namespace Hellgate.Excel
         public Int32 folder;
         public Int32 subFolder;
         public Int32 undefined1;
-        public float rangeForFallBack;
-        public Int32 distanceForFallBack;
+        public float rangeToFallBack;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EFFECTS")]
+        public Int32 distanceFallBack;
         public Int32 undefined2;
         public Int32 undefined3;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
