@@ -43,28 +43,37 @@ namespace Hellgate.Excel.TCv4
         public Int32 vendorRarity;
         public Int32 luckRarity;
         public Int32 gamblingRarity_tcv4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_LOOK_GROUP")]
         public Int32 lookGroup;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 flippySound;
         public Int32 usable;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 scrapQuality;
         public Int32 isSpecialScrapQuality;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 scrapQualityDefault;
         public Int32 extraScrapChance;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 extraScrapItem;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 extraScrapQuality;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 dismantleResultSound;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 downgrade;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 upgrade;
         public Int32 qualityLevel_tcv4;
         public Int32 prefixName;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 prefixType;
         public Int32 prefixCount;
         public Int32 force;
         public Int32 suffixName;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 suffixType;
         public Int32 suffixCount;
         public float procChance;
@@ -110,10 +119,15 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsScript = true)]
         public Int32 affix2Type6Weight;
         public Int32 affix2Type1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix2Type2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix2Type3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix2Type4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix2Type5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix2Type6;
         [ExcelOutput(IsScript = true)]
         public Int32 affix3Chance;
@@ -129,11 +143,17 @@ namespace Hellgate.Excel.TCv4
         public Int32 affix3Type5Weight;
         [ExcelOutput(IsScript = true)]
         public Int32 affix3Type6Weight;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix3Type1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix3Type2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix3Type3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix3Type4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix3Type5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix3Type6;
         [ExcelOutput(IsScript = true)]
         public Int32 affix4Chance;
@@ -149,11 +169,17 @@ namespace Hellgate.Excel.TCv4
         public Int32 affix4Type5Weight;
         [ExcelOutput(IsScript = true)]
         public Int32 affix4Type6Weight;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix4Type1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix4Type2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix4Type3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix4Type4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix4Type5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix4Type6;
         [ExcelOutput(IsScript = true)]
         public Int32 affix5Chance;
@@ -169,11 +195,17 @@ namespace Hellgate.Excel.TCv4
         public Int32 affix5Type5Weight;
         [ExcelOutput(IsScript = true)]
         public Int32 affix5Type6Weight;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix5Type1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix5Type2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix5Type3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix5Type4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix5Type5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix5Type6;
         [ExcelOutput(IsScript = true)]
         public Int32 affix6Chance;
@@ -189,11 +221,17 @@ namespace Hellgate.Excel.TCv4
         public Int32 affix6Type5Weight;
         [ExcelOutput(IsScript = true)]
         public Int32 affix6Type6Weight;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix6Type1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix6Type2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix6Type3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix6Type4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix6Type5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix6Type6;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String badgeFrame;

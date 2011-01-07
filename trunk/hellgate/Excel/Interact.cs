@@ -22,6 +22,7 @@ namespace Hellgate.Excel
         public Int32 setTalkingTo;
         [ExcelOutput(IsBool = true)]
         public Int32 playGreeting;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INTERACT_MENU")]
         public Int32 interactMenu;//index
     }
 }
