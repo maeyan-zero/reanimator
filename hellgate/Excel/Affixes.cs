@@ -25,8 +25,11 @@ namespace Hellgate.Excel
         public Int32 replaceNameString;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 flavorText;
-        public Int32 unknown03;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_LOOK_GROUPS")]
+        public Int32 lookGroup;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 nameColor;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 gridColor;
         public Int32 dom;
         [ExcelOutput(SortColumnOrder = 3)]
@@ -72,9 +75,12 @@ namespace Hellgate.Excel
         public Int32 luckWeight;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         Int32[] unknown04;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "COLORSETS")]
         public Int32 colorSet;
         public Int32 colorSetPriority;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;
+        [ExcelOutput(IsBool = true)]
         public Int32 saveState;
         [ExcelOutput(IsScript = true)]
         public Int32 buyPriceMulti;
@@ -87,11 +93,17 @@ namespace Hellgate.Excel
         [ExcelOutput(IsScript = true)]
         public Int32 cond;
         public Int32 itemLevel;
+        [ExcelOutput(IsScript = true)]
         public Int32 prop1Cond;
+        [ExcelOutput(IsScript = true)]
         public Int32 prop2Cond;
+        [ExcelOutput(IsScript = true)]
         public Int32 prop3Cond;
+        [ExcelOutput(IsScript = true)]
         public Int32 prop4Cond;
+        [ExcelOutput(IsScript = true)]
         public Int32 prop5Cond;
+        [ExcelOutput(IsScript = true)]
         public Int32 prop6Cond;
         [ExcelOutput(IsScript = true)]
         public Int32 property1;
