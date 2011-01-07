@@ -14,6 +14,7 @@ namespace Hellgate.Excel
         public string AffixType;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 NameColor;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 DownGrade;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 Required;
