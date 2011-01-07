@@ -12,16 +12,27 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 concrete;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 wood;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 metal;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 tile;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 squishy;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 gravel;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 snow;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 dirt;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 water;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 rubble;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined;//idx
     }
 }

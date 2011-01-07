@@ -11,7 +11,9 @@ namespace Hellgate.Excel
         RowHeader header;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string name;
-        public Int32 unknown1;
-        public Int32 unknown2;
+        [ExcelOutput(IsBool = true)]
+        public Int32 allowPrefixed;
+        [ExcelOutput(IsBool = true)]
+        public Int32 allowSuffixed;
     }
 }
