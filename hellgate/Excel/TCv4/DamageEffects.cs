@@ -23,15 +23,25 @@ namespace Hellgate.Excel.TCv4
         Int32 conditional;
         [ExcelOutput(IsScript = true)]
         public Int32 missileStats;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 invulnerableState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 attackersProhibitingState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 defendersProhibitingState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 attackerRequiresState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 defenderRequiresState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 sfxState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
         public Int32 missileToAttach;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
         public Int32 fieldMissile;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 executeSkill;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 executeSkillOnTarget;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 noRollIfParentDmgTypeSuccess;
@@ -53,15 +63,25 @@ namespace Hellgate.Excel.TCv4
         public Int32 useOverrideStats;
         public Int32 PlayerVsMonsterScalingIndex;
         public Int32 doNotUseEffectChanceStat_tcv4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 attackStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 attackLocalStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 attackSplashStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 attackPctStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 attackPctLocalStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 attackPctSplashStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 attackPctCasteStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 defenseStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 effectDefenseStat;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 effectDefensePctStat;//idx
         public Int32 defaultDurationInTicks;
         public Int32 defaultStrength;
