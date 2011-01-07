@@ -15,7 +15,9 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string behaviourTable;
         public Int32 undefined1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AI_START")]
         public Int32 startFunction;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 blockingState;//idx
         public Int32 undefined2;
         [ExcelOutput(IsBool = true)]
@@ -45,8 +47,10 @@ namespace Hellgate.Excel
         public Int32 canSeeUnsearchables;
         [ExcelOutput(IsBool = true)]
         public Int32 giveStateOnDeath;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 giveStateToUnitType;//idx
         public float giveStateRange;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 stateToGive;//idx
     }
 }

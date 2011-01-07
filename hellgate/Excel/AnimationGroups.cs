@@ -22,17 +22,25 @@ namespace Hellgate.Excel
         public Int32 showInHammer;
         [ExcelOutput(IsBool = true)]
         public Int32 copyFootSteps;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_STANCE")]
         public Int32 defaultStance;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_STANCE")]
         public Int32 defaultStanceInTown;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 canStartSkillWithLeftweapon;
         public float secondsToHoldStanceInTown;
         public Int32 undefined;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_GROUP")]
         public Int32 fallback;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_GROUP")]
         public Int32 rightWeapon;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_GROUP")]
         public Int32 leftWeapon;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_GROUP")]
         public Int32 rightAnims;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_GROUP")]
         public Int32 leftAnims;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_GROUP")]
         public Int32 legAnims;//idx
     }
 }
