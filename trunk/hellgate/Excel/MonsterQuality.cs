@@ -15,6 +15,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 rarity;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 nameColor;//idx
         [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
         public Int32 displayNameStringKey;//stridx
@@ -31,6 +32,7 @@ namespace Hellgate.Excel
         //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         public Int32 undefined2;
         public Single undefined3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 State;//idx
         public float MoneyChanceMultiplier;
         public float MoneyAmountMultiplier;
@@ -46,8 +48,11 @@ namespace Hellgate.Excel
         [ExcelOutput(IsScript = true)]
         public Int32 prop3;//intptr
         public Int32 AffixCount;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 AffixType1;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 AffixType2;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 AffixType3;//idx
         [ExcelOutput(IsScript = true)]
         public Int32 AffixProbability1;//intptr
@@ -57,10 +62,13 @@ namespace Hellgate.Excel
         public Int32 AffixProbability3;//intptr
         public Int32 experienceMultiplier;
         public Int32 luckMultiplier;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
         public Int32 MonsterQualityDowngrade;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
         public Int32 MinionQuality;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 ShowLabel;//bool
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 TreasureClass;//idx
     }
 }

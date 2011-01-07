@@ -16,20 +16,32 @@ namespace Hellgate.Excel
         public string fileName;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string lowResFileName;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 audioLanguages0;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 audioLanguages1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 audioLanguages2;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32[] audioLanguages;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regionList0;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regionList1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regionList2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regionList3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regionList4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regionList5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regionList6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regionList7;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regionList8;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 23)]
@@ -53,7 +65,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsBool = true)]
         public Int32 onlyWithCensoredSku;//bool
         [ExcelOutput(IsBool = true)]
-        public Int32 disAllowInCensoredSku;//bool
+        public Int32 disallowInCensoredSku;//bool
         public float creditMovieDisplayedInSeconds;
     }
 }

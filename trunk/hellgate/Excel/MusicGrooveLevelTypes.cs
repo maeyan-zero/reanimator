@@ -15,6 +15,7 @@ namespace Hellgate.Excel
         public Int32 undefined;
         [ExcelOutput(IsBool = true)]
         public Int32 required;//bool
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELTYPES")]
         public Int32 alternative;//idx
     }
 }

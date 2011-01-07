@@ -9,6 +9,7 @@ namespace Hellgate.Excel
     class MusicConditions
     {
         RowHeader header;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSIC_REF")]
         public Int32 musicRef;//idx
         public Int32 unknownA;
         public Int32 unknownB;
@@ -21,7 +22,9 @@ namespace Hellgate.Excel
         public Int32 percentChance1;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass1;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode1;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove1;//idx
         public Int32 unknown1_1;
         public Int32 unknown1_2;
@@ -39,7 +42,9 @@ namespace Hellgate.Excel
         public Int32 percentChance2;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass2;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode2;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove2;//idx
         public Int32 unknown2_1;
         public Int32 unknown2_2;
@@ -57,7 +62,9 @@ namespace Hellgate.Excel
         public Int32 percentChance3;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass3;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode3;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove3;//idx
         public Int32 unknown3_1;
         public Int32 unknown3_2;
@@ -75,7 +82,9 @@ namespace Hellgate.Excel
         public Int32 percentChance4;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass4;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode4;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove4;//idx
         public Int32 unknown4_1;
         public Int32 unknown4_2;
@@ -93,7 +102,9 @@ namespace Hellgate.Excel
         public Int32 percentChance5;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass5;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode5;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove5;//idx
         public Int32 unknown5_1;
         public Int32 unknown5_2;
@@ -111,7 +122,9 @@ namespace Hellgate.Excel
         public Int32 percentChance6;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass6;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGONDITIONS")]
         public Int32 useConditionCode6;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove6;//idx
         public Int32 unknown6_1;
         public Int32 unknown6_2;
@@ -129,7 +142,9 @@ namespace Hellgate.Excel
         public Int32 percentChance7;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass7;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode7;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove7;//idx
         public Int32 unknown7_1;
         public Int32 unknown7_2;
@@ -147,7 +162,9 @@ namespace Hellgate.Excel
         public Int32 percentChance8;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass8;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode8;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove8;//idx
         public Int32 unknown8_1;
         public Int32 unknown8_2;
@@ -165,7 +182,9 @@ namespace Hellgate.Excel
         public Int32 percentChance9;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass9;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode9;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove9;//idx
         public Int32 unknown9_1;
         public Int32 unknown9_2;
@@ -183,7 +202,9 @@ namespace Hellgate.Excel
         public Int32 percentChance10;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass10;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode10;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove10;//idx
         public Int32 unknown10_1;
         public Int32 unknown10_2;

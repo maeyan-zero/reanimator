@@ -18,9 +18,12 @@ namespace Hellgate.Excel
         public Int32 beatsPerMeasure;
         public Int32 offsetInMilliSeconds;
         public Int32 grooveUpdateInMeasures;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 defaultGroove;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 offGoove;//idx
         public Int32 undefined4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 soundGroup;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         Int32[] undefined;
