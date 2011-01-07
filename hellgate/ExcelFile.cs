@@ -274,7 +274,7 @@ namespace Hellgate
 
                     if (fieldDelegate.Name == "code")
                     {
-                        int code = _StringToCode(value);
+                        int code = (StringId == "REGION") ? int.Parse(value) : _StringToCode(value);
 
                         if (fieldDelegate.FieldType == typeof(short))
                         {
@@ -288,12 +288,12 @@ namespace Hellgate
                         continue;
                     }
 
+                    bool isArray = (fieldDelegate.FieldType.BaseType == typeof(Array));
                     if (excelAttribute != null)
                     {
                         if (excelAttribute.IsTableIndex && fileManager != null)
                         {
                             int arraySize = 1;
-                            bool isArray = (fieldDelegate.FieldType.BaseType == typeof (Array));
                             if (isArray)
                             {
                                 MarshalAsAttribute arrayMarshal = (MarshalAsAttribute)fieldDelegate.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
@@ -475,7 +475,17 @@ namespace Hellgate
 
                     try
                     {
-                        Object objValue = FileTools.StringToObject(value, fieldDelegate.FieldType);
+                        Object objValue;
+                        if (isArray)
+                        {
+                            Debug.Assert(fieldDelegate.FieldType == typeof (Int32[]));
+
+                            objValue = FileTools.StringToArray<Int32>(value, ",");
+                        }
+                        else
+                        {
+                            objValue = FileTools.StringToObject(value, fieldDelegate.FieldType);
+                        }
                         objectDelegator[fieldDelegate.Name, rowInstance] = objValue;
                     }
                     catch (Exception e)
@@ -1120,7 +1130,7 @@ namespace Hellgate
 
                     if (fieldDelegate.Name == "header")
                     {
-                        RowHeader tableHeader = (RowHeader)objectDelegator[fieldDelegate.Name](rowObject);
+                        RowHeader tableHeader = (RowHeader)fieldDelegate.GetValue(rowObject);
                         rowStr[col] = FileTools.ObjectToStringGeneric(tableHeader, ",");
                         continue;
                     }
@@ -1130,35 +1140,39 @@ namespace Hellgate
                         int code;
                         if (fieldDelegate.FieldType == typeof(short))
                         {
-                            code = (int)(short)objectDelegator[fieldDelegate.Name](rowObject);
+                            code = (int)(short)fieldDelegate.GetValue(rowObject);
                         }
                         else
                         {
-                            code = (int)objectDelegator[fieldDelegate.Name](rowObject);
+                            code = (int)fieldDelegate.GetValue(rowObject);
                         }
 
-                        rowStr[col] = "\"" + _CodeToString(code) + "\"";
+                        if (StringId == "REGION") // can't export region code values as chars due to weird chars
+                        {
+                            rowStr[col] = "\"" + code + "\"";
+                        }
+                        else
+                        {
+                            rowStr[col] = "\"" + _CodeToString(code) + "\"";
+                        }
+
                         continue;
                     }
 
+                    bool isArray = (fieldDelegate.FieldType.BaseType == typeof(Array));
                     if (excelAttribute != null)
                     {
                         if (excelAttribute.IsTableIndex && fileManager != null)
                         {
-                            if (fieldDelegate.Name == "missileToAttach")
-                            {
-                                int bp = 0;
-                            }
-
                             int[] indexValues;
-                            Object indexObj = objectDelegator[fieldDelegate.Name](rowObject);
-                            if (objectDelegator.GetFieldDelegate(fieldDelegate.Name).FieldType.BaseType == typeof(Array))
+                            Object indexObj = fieldDelegate.GetValue(rowObject);
+                            if (isArray)
                             {
                                 indexValues = (int[])indexObj;
                             }
                             else
                             {
-                                indexValues = new[] { (int)objectDelegator[fieldDelegate.Name](rowObject) };
+                                indexValues = new[] { (int)fieldDelegate.GetValue(rowObject) };
                             }
 
                             String[] indexStrs = new String[indexValues.Length];
@@ -1201,7 +1215,7 @@ namespace Hellgate
 
                         if (excelAttribute.IsStringOffset)
                         {
-                            int offset = (int)objectDelegator[fieldDelegate.Name](rowObject);
+                            int offset = (int)fieldDelegate.GetValue(rowObject);
                             if (offset != -1)
                             {
                                 rowStr[col] = ReadStringTable(offset);
@@ -1211,7 +1225,7 @@ namespace Hellgate
 
                         if (excelAttribute.IsScript)
                         {
-                            int offset = (int)objectDelegator[fieldDelegate.Name](rowObject);
+                            int offset = (int)fieldDelegate.GetValue(rowObject);
                             if ((offset == 0))
                             {
                                 FileTools.WriteToBuffer(ref csvBuffer, ref csvOffset, FileTools.StringToASCIIByteArray("0"));
@@ -1254,7 +1268,7 @@ namespace Hellgate
 
                         if (excelAttribute.IsSecondaryString)
                         {
-                            int index = (int)objectDelegator[fieldDelegate.Name](rowObject);
+                            int index = (int)fieldDelegate.GetValue(rowObject);
                             if (index != -1)
                             {
                                 rowStr[col] = _secondaryStrings[index];
@@ -1264,12 +1278,24 @@ namespace Hellgate
 
                         if (excelAttribute.IsBitmask)
                         {
-                            rowStr[col] = "\"" + objectDelegator[fieldDelegate.Name](rowObject) + "\"";
+                            rowStr[col] = "\"" + fieldDelegate.GetValue(rowObject) + "\"";
                             continue;
                         }
                     }
 
-                    rowStr[col] = objectDelegator[fieldDelegate.Name](rowObject).ToString();
+                    Object outValue = fieldDelegate.GetValue(rowObject);
+                    if (isArray)
+                    {
+                        rowStr[col] = ((Array)outValue).ToString(",");
+                    }
+                    else if (fieldDelegate.FieldType == typeof(float))
+                    {
+                        rowStr[col] = ((float)outValue).ToString("r");
+                    }
+                    else
+                    {
+                        rowStr[col] = outValue.ToString();
+                    }
                 }
             }
 

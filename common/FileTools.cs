@@ -418,6 +418,20 @@ namespace Revival.Common
             return null;
         }
 
+        public static T[] StringToArray<T>(String array, String delimiter)
+        {
+            Type type = typeof (T);
+            String[] elements = array.Split(new[] {delimiter}, StringSplitOptions.None);
+            T[] returnArray = new T[elements.Length];
+
+            for (int i = 0; i < elements.Length; i++)
+            {
+                returnArray[i] = (T)StringToObject(elements[i], type);
+            }
+
+            return returnArray;
+        }
+
         /// <summary>
         /// Searches a byte array for a sequence of bytes.<br />
         /// <i>Uses 0x90 as a wild card.</i>
