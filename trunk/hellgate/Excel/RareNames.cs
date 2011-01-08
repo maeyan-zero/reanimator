@@ -17,11 +17,17 @@ namespace Hellgate.Excel
         //[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 4)] // changed to int.. problem reading last character
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 types6;
         [ExcelOutput(IsScript = true)]
         public Int32 cond;//intptr
