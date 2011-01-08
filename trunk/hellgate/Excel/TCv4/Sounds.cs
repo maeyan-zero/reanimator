@@ -20,6 +20,7 @@ namespace Hellgate.Excel
         Int32 undefined3a;
         Int32 undefined3b;
         public Int32 pickType;//unk
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 language;//idx
         public Int32 volume;
         public float undefined2a;
@@ -36,6 +37,7 @@ namespace Hellgate.Excel
         Int32 undefined6a;
         Int32 undefined6b;
         public Int32 undefined6c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined6d;//information
         Int32 undefined6e;
         [ExcelOutput(IsStringOffset = true)]
@@ -48,6 +50,7 @@ namespace Hellgate.Excel
         Int32 undefined8a;
         Int32 undefined8b;
         public Int32 undefined8c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined8d;//information
         Int32 undefined8e;
         [ExcelOutput(IsStringOffset = true)]
@@ -60,6 +63,7 @@ namespace Hellgate.Excel
         Int32 undefined10a;
         Int32 undefined10b;
         public Int32 undefined10c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined10d;//information
         Int32 undefined10e;
         [ExcelOutput(IsStringOffset = true)]
@@ -72,6 +76,7 @@ namespace Hellgate.Excel
         Int32 undefined12a;
         Int32 undefined12b;
         public Int32 undefined12c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined12d;//information
         Int32 undefined12e;
         [ExcelOutput(IsStringOffset = true)]
@@ -84,6 +89,7 @@ namespace Hellgate.Excel
         Int32 undefined14a;
         Int32 undefined14b;
         public Int32 undefined14c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined14d;//information
         Int32 undefined14e;
         [ExcelOutput(IsStringOffset = true)]
@@ -96,6 +102,7 @@ namespace Hellgate.Excel
         Int32 undefined16a;
         Int32 undefined16b;
         public Int32 undefined16c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined16d;//information
         Int32 undefined16e;
         [ExcelOutput(IsStringOffset = true)]
@@ -108,6 +115,7 @@ namespace Hellgate.Excel
         Int32 undefined18a;
         Int32 undefined18b;
         public Int32 undefined18c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined18d;//information
         Int32 undefined18e;
         [ExcelOutput(IsStringOffset = true)]
@@ -120,6 +128,7 @@ namespace Hellgate.Excel
         Int32 undefined20a;
         Int32 undefined20b;
         public Int32 undefined20c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined20d;//information
         Int32 undefined20e;
         [ExcelOutput(IsStringOffset = true)]
@@ -132,6 +141,7 @@ namespace Hellgate.Excel
         Int32 undefined22a;
         Int32 undefined22b;
         public Int32 undefined22c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined22d;//information
         Int32 undefined22e;
         [ExcelOutput(IsStringOffset = true)]
@@ -144,6 +154,7 @@ namespace Hellgate.Excel
         Int32 undefined24a;
         Int32 undefined24b;
         public Int32 undefined24c;//information
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 undefined24d;//information
         Int32 undefined24e;
         [ExcelOutput(IsStringOffset = true)]
@@ -223,21 +234,31 @@ namespace Hellgate.Excel
         public float rearSend;
         public float sideSend;
         public Int32 lfeSend;//lfe ?
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUND_MIXSTATES")]
         public Int32 mixState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDBUSES")]
         public Int32 bus;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas1;//list
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas6;
 		[ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 vcas7;
 		[ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 vcas8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSIC_REF")]
         public Int32 musicRef;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined44;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICSTINGERS")]
         public Int32 stingerRef;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined45;

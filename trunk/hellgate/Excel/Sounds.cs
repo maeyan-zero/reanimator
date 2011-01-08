@@ -236,13 +236,19 @@ namespace Hellgate.Excel
         public Int32 lfeSend;//lfe ?
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUND_MIXSTATES")]
         public Int32 mixState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDBUSES")]
         public Int32 bus;
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas1;//list
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDVCAS")]
         public Int32 vcas6;
         [ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 vcas7;
