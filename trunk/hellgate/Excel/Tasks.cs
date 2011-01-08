@@ -31,12 +31,18 @@ namespace Hellgate.Excel
         Int32 undefined1;
         [ExcelOutput(IsBool = true)]
         public Int32 doNotOfferSimilarTasks;//bool
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 nameStringKey;//stridx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "DIALOG")]
         public Int32 descriptionDialog;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "DIALOG")]
         public Int32 completedDialog;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "DIALOG")]
         public Int32 inCompleteDialog;//idx
         public Int32 numRewardTakes;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasureClassReward;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasureClassCollect;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 collectModdedToRewards;//bool;
