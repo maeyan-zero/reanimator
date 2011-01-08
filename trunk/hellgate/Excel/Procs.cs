@@ -19,9 +19,11 @@ namespace Hellgate.Excel
         public float coolDownInSeconds;
         public Int32 targetInstrumentOwner;//a single bit
         public float delayeProcTimeInSeconds;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skill1;//idx
-        public Int32 skill1Param;//idx
+        public Int32 skill1Param;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skill2;//idx
-        public Int32 skill2Param;//idx
+        public Int32 skill2Param;
     }
 }

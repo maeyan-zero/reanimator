@@ -19,22 +19,39 @@ namespace Hellgate.Excel
         [ExcelOutput(IsBool = true)]
         public Int32 doNotIdentify;//bool
         public Int32 numAllowedTakes;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 treasure0UnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure0;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 treasure1UnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure1;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 treasure2UnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure2;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 treasure3UnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure3;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 treasure4UnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure4;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 treasure5UnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure5;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 treasure6UnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure6;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 treasure7UnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure7;//idx
+        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
         public Int32 offerString;//stridx
     }
 }

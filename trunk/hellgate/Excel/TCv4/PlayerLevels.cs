@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel.TCv4
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class PlayerLevelsTCv4
     {
-        ExcelFile.RowHeader header;
-
+        RowHeader header;
+        [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "level", IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType;//idx
         public Int32 level;
         public Int32 experience;
@@ -35,8 +36,11 @@ namespace Hellgate.Excel.TCv4
         public Int32 prop3;//intptr
         [ExcelOutput(IsScript = true)]
         public Int32 prop4;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 spellSlot1;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 spellSlot2;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 spellSlot3;//idx
     }
 }
