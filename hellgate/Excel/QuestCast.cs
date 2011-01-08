@@ -14,21 +14,37 @@ namespace Hellgate.Excel
         public string name;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType0;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster0;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType1;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster1;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType2;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster2;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType3;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster3;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType4;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster4;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType5;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster5;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType6;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster6;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType7;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monster7;//idx
     }
 }
