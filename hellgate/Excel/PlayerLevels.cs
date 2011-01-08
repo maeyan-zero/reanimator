@@ -9,7 +9,7 @@ namespace Hellgate.Excel
     class PlayerLevels
     {
         RowHeader header;
-        [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "level")]
+        [ExcelOutput(SortColumnOrder = 1, SecondarySortColumn = "level", IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType;//idx
         public Int32 level;
         public Int32 experience;
@@ -35,8 +35,11 @@ namespace Hellgate.Excel
         public Int32 prop3;//intptr
         [ExcelOutput(IsScript = true)]
         public Int32 prop4;//intptr
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 spellSlot1;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 spellSlot2;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 spellSlot3;//idx
     }
 }
