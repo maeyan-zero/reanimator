@@ -9,8 +9,10 @@ namespace Hellgate.Excel
     class StatsFunc
     {
         RowHeader header;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 target;
         public Int32 app;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 controlUnit;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] undefined1;

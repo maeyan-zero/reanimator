@@ -18,18 +18,30 @@ namespace Hellgate.Excel
         [ExcelOutput(IsStringOffset = true)]
         public Int32 file;
         Int32 buffer2;              // always 0
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA0;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA7;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 isA9;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 statePreventedBy;
         public Int32 duration;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 onDeath;
         public Int32 skillScriptParam;
         Int32 unknown18;            // always 0
@@ -55,14 +67,21 @@ namespace Hellgate.Excel
         [ExcelOutput(IsStringOffset = true)]
         public Int32 unknown34;     //undefined as well.
         Int32 unknown35;            // always 0
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 iconBackColor;
         Int32 unknown37;            // always 0
         Int32 unknown38;            // always 0
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 iconTooltipStringHellgate;//stridx
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 iconTooltipStringMythos;
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 iconTooltipStringAll;
+        //[ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 assocState1;            // always -1
+        //[ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 assocState2;            // always -1
+        //[ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 assocState3;            // always -1
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask01 bitmask01;
