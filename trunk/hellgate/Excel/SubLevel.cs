@@ -12,6 +12,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_DRLGS")]
         public Int32 drlg;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 allowTownPortals;//bool
@@ -32,9 +33,13 @@ namespace Hellgate.Excel
         public float entranceFlatHeightMin;
         [ExcelOutput(IsBool = true)]
         public Int32 autoCreateEntrance;//bool
+        [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 objectEntrance;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 objectExit;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 alternativeEntranceUnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 alternativeExitUnitType;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 allowLayoutMarkersForEntrance;//bool
@@ -42,11 +47,15 @@ namespace Hellgate.Excel
         public string layoutMarkerEntranceName;
         [ExcelOutput(IsBool = true)]
         public Int32 allowPathNodesForEntrance;//bool
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 subLevelNext;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 overRideLevelSpawns;//bool
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 spawnClass;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WEATHER_SETS")]
         public Int32 weather;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 stateWhenInsideSubLevel;//idx
     }
 }

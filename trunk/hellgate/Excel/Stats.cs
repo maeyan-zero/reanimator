@@ -15,7 +15,9 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 type;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 assocStat1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 assocStat2;
         public Int32 regenIntervalInMS;
         public Int32 regenDivisor;
@@ -32,8 +34,11 @@ namespace Hellgate.Excel
         public Int32 minAssert;
         public Int32 maxAssert;
         public Int32 undefined4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 accrueToTypes1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 accrueToTypes2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 unitType;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask01 bitmask01;
@@ -55,6 +60,7 @@ namespace Hellgate.Excel
         byte[] undefined6;
         public Int32 valShift;
         public Int32 valOffs;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 valTable;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] undefined7;
@@ -72,25 +78,38 @@ namespace Hellgate.Excel
         public Int32 param2Offs;
         public Int32 param3Offs;
         public Int32 param4Offs;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 param1Table;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 param2Table;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 param3Table;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 param4Table;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
         byte[] undefined9;
         public Int32 minTicksBetweenDbCommand;
         public Int32 databaseUnitField;
         public Int32 specFunc;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 sfStat1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 sfStat2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 sfStat3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 sfStat4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         byte[] undefined10;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 checkAgainstTypes1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 checkAgainstTypes2;
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 reqFailString;//stridx
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 reqFailStringHellgate;
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 reqFailStringMythos;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] undefined11;

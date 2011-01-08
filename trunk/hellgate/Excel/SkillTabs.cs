@@ -14,6 +14,7 @@ namespace Hellgate.Excel
         public string name;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 displayString;//stridx
         [ExcelOutput(IsBool = true)]
         public Int32 drawOnlyKnown;//bool

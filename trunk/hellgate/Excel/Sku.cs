@@ -32,28 +32,47 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string movielistIntro;
         Int32 undefined2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MOVIES")]
         public Int32 titlescreenMovie;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MOVIES")]
         public Int32 titlescreenMovieWide;//idx;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages7;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages9;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages10;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages11;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages12;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 languages13;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 51)]
         Int32[] languages;
         Int32 undefined3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regions1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regions2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regions3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
         public Int32 regions4;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]

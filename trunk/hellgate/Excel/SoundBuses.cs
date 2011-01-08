@@ -18,6 +18,7 @@ namespace Hellgate.Excel
         [ExcelOutput(DebugIgnoreConstantCheck = true)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string effects;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDBUSES")]
         public Int32 sendsTo;//idx
         [ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 vca1;//idx
