@@ -55,8 +55,11 @@ namespace Hellgate.Excel.TCv4
         public Int32 accumulationString;//stridx
         [ExcelOutput(IsStringIndex = true)]
         public Int32 stringAfterRequiredWeapon;//stridx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillsToAccumulate1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillsToAccumulate2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillsToAccumulate3;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String events;
@@ -68,16 +71,23 @@ namespace Hellgate.Excel.TCv4
         public String smallIcon;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         byte[] unknown2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 iconColor;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 iconBackgroundColor;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLTABS")]
         public Int32 skillTab;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 124)]
         byte[] unknown3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
         Int32[] empty3_tcv4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 skillGroup1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 skillGroup2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 skillGroup3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 skillGroup4;
         public Int32 skillPageColumn;
         public Int32 skillPageRow;
@@ -102,13 +112,20 @@ namespace Hellgate.Excel.TCv4
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public String summonedAi;
         public Int32 unknown201;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 summonedInvLocation1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 summonedInvLocation2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 summonedInvLocation3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 summonedInvLocation4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 summonedInvLocation5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 summonedInvLocation6;
         public Int32 maxSummonedMinorPetClasses;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 uiThrobsOnState;//idx
         public float powerCost;
         public float powerCostPerLevel;
@@ -179,9 +196,13 @@ namespace Hellgate.Excel.TCv4
         Int32 requiredStatValuesB28;
         Int32 requiredStatValuesB29;
         Int32 requiredStatValuesB30;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 requiredSkills1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 requiredSkills2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 requiredSkills3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 requiredSkills4;
         public Int32 levelsOfRequiredSkills1;
         public Int32 levelsOfRequiredSkills2;
@@ -191,20 +212,32 @@ namespace Hellgate.Excel.TCv4
         public Int32 bOnlyRequireOne;
         [ExcelOutput(IsBool = true)]
         public Int32 bUsesCraftingPoints;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 weaponLocation1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "INVLOCIDX")]
         public Int32 weaponLocation2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 fallBackSkills1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 fallBackSkills2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 fallBackSkills3;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 68)]
         byte[] unknown6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 targetUnittype;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 ignoreUnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 ignoreTargetsWithState1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 ignoreTargetsWithState2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 selectTargetsWithState1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 selectTargetsWithState2;
-		public Int32 unknown301;
+        public Int32 unknown301;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
         public Int32 modeOverride;//idx
         public Int32 bonusSkills0;
         public Int32 bonusSkills1;
@@ -324,40 +357,61 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsScript = true)]
         public Int32 coolDownSkillScript;
         public Int32 selectCondition;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillOnpulse;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 selectCheckStat;//idx
         public Int32 startFunc;
         public Int32 targetFunc;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 givesSkill;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 extraSkillToTurnOn;//idx
         public Int32 playerInputOverride;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 requiresUnitType;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 requiresWeaponUnitType;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown9;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 fuseMissilesOnStateClear;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 requiresState;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 prohibitingState0;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 prohibitingState1;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 prohibitingState2;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 prohibitingState3;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 stateOnSelect;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 clearStateOnSelect;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 clearStateOnDeselect;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 preventClearStateOnSelect;//idx
         public Int32 holdTicks;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
         public Int32 holdWithMode;//idx
         public Int32 warmUpTicks;
         public Int32 testTicks;
         public Int32 coolDown;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLGROUPS")]
         public Int32 coolDownSkillGroup;//idx
         public Int32 coolDownForGroup;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 coolDownFinishedSound;//idx
         public Int32 coolDownMinPercent;
         public Int32 activatorKey;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
         public Int32 activateMode;//idx
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 activateSkill;//idx
         public Int32 activatePriority;
         public float rangeMin;
@@ -368,6 +422,7 @@ namespace Hellgate.Excel.TCv4
         public float weaponRangeMultiplier;
         public float impactForwardBias;
         public float modeSpeed;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "DAMAGETYPES")]
         public Int32 damageTypeOverride;//idx
         public float damageMultiplier;
         public Int32 maxExtraSpreadBullets;
@@ -377,17 +432,26 @@ namespace Hellgate.Excel.TCv4
         public float Param2;
         public Int32 usage;
         public Int32 family;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNIT_EVENT_TYPES")]
         public Int32 unitEventTrigger0;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNIT_EVENT_TYPES")]
         public Int32 unitEventTrigger1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNIT_EVENT_TYPES")]
         public Int32 unitEventTrigger2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNIT_EVENT_TYPES")]
         public Int32 unitEventTrigger3;
         public Int32 unitEventTriggerChanceScript;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown10;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 linkedLevelSkill0;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 linkedLevelSkill1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 linkedLevelSkill2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillParent;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
         public Int32 fieldMissile;
         public Int32 unlockPurchaseItem_tcv4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
