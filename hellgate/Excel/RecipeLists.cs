@@ -14,13 +14,21 @@ namespace Hellgate.Excel
         public string recipeList;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPES")]
         public Int32 recipes1;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPES")]
         public Int32 recipes2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPES")]
         public Int32 recipes3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPES")]
         public Int32 recipes4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPES")]
         public Int32 recipes5;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPES")]
         public Int32 recipes6;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPES")]
         public Int32 recipes7;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "RECIPES")]
         public Int32 recipes8;
         [ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 recipes9;
