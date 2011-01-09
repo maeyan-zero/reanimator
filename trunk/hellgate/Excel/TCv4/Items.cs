@@ -566,7 +566,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 stealthDefensePct;                             // 181  0x00000000000008EC  XLS_ReadInt32
         public Int32 stealthAttackPct;                              // 180  0x00000000000008F0  XLS_ReadInt32
         public Int32 aiChangeDefense;                               // 184  0x00000000000008F4  XLS_ReadInt32
-        public Int32 armor;                                         // 186  0x00000000000008F8  XLS_ReadInt32
+        public float armor;                                         // 186  0x00000000000008F8  XLS_ReadInt32
         public Int32 armorPhys;                                     // 188  0x00000000000008FC  XLS_ReadInt32
         public Int32 armorFire;                                     // 189  0x0000000000000900  XLS_ReadInt32
         public Int32 armorElec;                                     // 190  0x0000000000000904  XLS_ReadInt32
@@ -579,7 +579,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 maxArmor;                                      // 187  0x0000000000000928  XLS_ReadInt32
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 44)]
         byte[] unknownBytes16;                                      // 0x000000000000092C to 0x0000000000000958
-        public Int32 shields;                                       // 194  0x0000000000000958  XLS_ReadInt32
+        public float shields;                                       // 194  0x0000000000000958  XLS_ReadInt32
         public Int32 shieldPhys;                                    // 195  0x000000000000095C  XLS_ReadInt32
         public Int32 shieldFire;                                    // 196  0x0000000000000960  XLS_ReadInt32
         public Int32 shieldElec;                                    // 197  0x0000000000000964  XLS_ReadInt32
@@ -763,7 +763,7 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 useSound;//index                               // 270  0x0000000000000B1C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
-        public Int32 cantUseSound;//index                           // 271  0x0000000000000B20  XLS_ReadIndex
+        public Int32 cantUseSoundA;//index                           // 271  0x0000000000000B20  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantFireSound;//index                          // 272  0x0000000000000B24  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
@@ -804,7 +804,7 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantSound;//index                              // 292  0x0000000000000B6C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
-        public Int32 CantUseSound;//index                           // 290  0x0000000000000B70  XLS_ReadIndex
+        public Int32 cantUseSoundB;//index                           // 290  0x0000000000000B70  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 cantUseYetSound;//index                        // 291  0x0000000000000B74  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]

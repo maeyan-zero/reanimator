@@ -300,22 +300,22 @@ namespace Hellgate
             return writer.ToString().ToUnicodeByteArray();
         }
 
-        public override byte[] ExportSQL(string tablePrefix = "hgl")
+        public override byte[] ExportSQL(string tablePrefix = "")
         {
             StringWriter stringWriter = new StringWriter();
-            string tableName = String.Format("{0}_{1}", tablePrefix, StringId.ToLower());
-            stringWriter.WriteLine(String.Format("CREATE TABLE {0} (", tableName));
-            //stringWriter.WriteLine("\tid INT NOT NULL AUTO_INCREMENT PRIMARY KEY");
-            stringWriter.WriteLine("\tpk INT,");
-            stringWriter.WriteLine("\tfk INT,");
-            stringWriter.WriteLine("\tstringid VARCHAR(64),");
-            stringWriter.WriteLine("\tu1 INT,");
-            stringWriter.WriteLine("\tstring TEXT,");
-            stringWriter.WriteLine("\ta1 VARCHAR(16),");
-            stringWriter.WriteLine("\ta2 VARCHAR(16),");
-            stringWriter.WriteLine("\ta3 VARCHAR(16),");
-            stringWriter.WriteLine("\ta4 VARCHAR(16)");
-            stringWriter.WriteLine(");");
+            string tableName = "strings"; String.Format("{0}{1}", tablePrefix, StringId.ToLower());
+            //stringWriter.WriteLine(String.Format("CREATE TABLE {0} (", tableName));
+            ////stringWriter.WriteLine("\tid INT NOT NULL AUTO_INCREMENT PRIMARY KEY");
+            //stringWriter.WriteLine("\tpk INT,");
+            //stringWriter.WriteLine("\tfk INT,");
+            //stringWriter.WriteLine("\tstringid VARCHAR(64),");
+            //stringWriter.WriteLine("\tu1 INT,");
+            //stringWriter.WriteLine("\tstring TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci,");
+            //stringWriter.WriteLine("\ta1 VARCHAR(16),");
+            //stringWriter.WriteLine("\ta2 VARCHAR(16),");
+            //stringWriter.WriteLine("\ta3 VARCHAR(16),");
+            //stringWriter.WriteLine("\ta4 VARCHAR(16)");
+            //stringWriter.WriteLine(");");
 
             stringWriter.WriteLine(String.Format("INSERT INTO {0} VALUES", tableName));
             int rowCount = 0;
@@ -343,7 +343,7 @@ namespace Hellgate
                 stringWriter.WriteLine(rowCount++ < Count - 1 ? "," : ";");
             }
 
-            byte[] buffer = FileTools.ToASCIIByteArray(stringWriter.ToString());
+            byte[] buffer = FileTools.StringToUnicodeByteArray(stringWriter.ToString());
             return buffer;
         }
     }
