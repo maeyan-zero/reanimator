@@ -16,6 +16,7 @@ namespace Hellgate.Excel
         public String String;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public String string_tugboat;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "EXCELTABLES")]
         public Int32 dataTable;//tbl
         Int32 unknown2;             // always 0
         Int32 unknown3;             // always 0

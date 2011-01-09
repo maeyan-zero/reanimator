@@ -29,11 +29,13 @@ namespace Hellgate.Excel
         public Int32 unknown1_1;
         public Int32 unknown1_2;
         public Int32 unknown1_3;
-        public Int32 unknown1_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond1;
         public Int32 unknown1_5;
         public Int32 unknown1_6;
         public Int32 unknown1_7;
-        public Int32 unknown1_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove1;
         public Int32 unknown1_9;
         public Int32 unknown1_10;
         public Int32 unknown1_11;
@@ -49,11 +51,13 @@ namespace Hellgate.Excel
         public Int32 unknown2_1;
         public Int32 unknown2_2;
         public Int32 unknown2_3;
-        public Int32 unknown2_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond2;
         public Int32 unknown2_5;
         public Int32 unknown2_6;
         public Int32 unknown2_7;
-        public Int32 unknown2_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove2;
         public Int32 unknown2_9;
         public Int32 unknown2_10;
         public Int32 unknown2_11;
@@ -69,11 +73,13 @@ namespace Hellgate.Excel
         public Int32 unknown3_1;
         public Int32 unknown3_2;
         public Int32 unknown3_3;
-        public Int32 unknown3_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond3;
         public Int32 unknown3_5;
         public Int32 unknown3_6;
         public Int32 unknown3_7;
-        public Int32 unknown3_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove3;
         public Int32 unknown3_9;
         public Int32 unknown3_10;
         public Int32 unknown3_11;
@@ -89,11 +95,13 @@ namespace Hellgate.Excel
         public Int32 unknown4_1;
         public Int32 unknown4_2;
         public Int32 unknown4_3;
-        public Int32 unknown4_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond4;
         public Int32 unknown4_5;
         public Int32 unknown4_6;
         public Int32 unknown4_7;
-        public Int32 unknown4_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove4;
         public Int32 unknown4_9;
         public Int32 unknown4_10;
         public Int32 unknown4_11;
@@ -109,11 +117,13 @@ namespace Hellgate.Excel
         public Int32 unknown5_1;
         public Int32 unknown5_2;
         public Int32 unknown5_3;
-        public Int32 unknown5_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond5;
         public Int32 unknown5_5;
         public Int32 unknown5_6;
         public Int32 unknown5_7;
-        public Int32 unknown5_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove5;
         public Int32 unknown5_9;
         public Int32 unknown5_10;
         public Int32 unknown5_11;
@@ -129,11 +139,13 @@ namespace Hellgate.Excel
         public Int32 unknown6_1;
         public Int32 unknown6_2;
         public Int32 unknown6_3;
-        public Int32 unknown6_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond6;
         public Int32 unknown6_5;
         public Int32 unknown6_6;
         public Int32 unknown6_7;
-        public Int32 unknown6_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove6;
         public Int32 unknown6_9;
         public Int32 unknown6_10;
         public Int32 unknown6_11;
@@ -149,11 +161,13 @@ namespace Hellgate.Excel
         public Int32 unknown7_1;
         public Int32 unknown7_2;
         public Int32 unknown7_3;
-        public Int32 unknown7_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond7;
         public Int32 unknown7_5;
         public Int32 unknown7_6;
         public Int32 unknown7_7;
-        public Int32 unknown7_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove7;
         public Int32 unknown7_9;
         public Int32 unknown7_10;
         public Int32 unknown7_11;
@@ -169,11 +183,13 @@ namespace Hellgate.Excel
         public Int32 unknown8_1;
         public Int32 unknown8_2;
         public Int32 unknown8_3;
-        public Int32 unknown8_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond8;
         public Int32 unknown8_5;
         public Int32 unknown8_6;
         public Int32 unknown8_7;
-        public Int32 unknown8_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove8;
         public Int32 unknown8_9;
         public Int32 unknown8_10;
         public Int32 unknown8_11;
@@ -189,11 +205,13 @@ namespace Hellgate.Excel
         public Int32 unknown9_1;
         public Int32 unknown9_2;
         public Int32 unknown9_3;
-        public Int32 unknown9_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond9;
         public Int32 unknown9_5;
         public Int32 unknown9_6;
         public Int32 unknown9_7;
-        public Int32 unknown9_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove9;
         public Int32 unknown9_9;
         public Int32 unknown9_10;
         public Int32 unknown9_11;
@@ -209,11 +227,13 @@ namespace Hellgate.Excel
         public Int32 unknown10_1;
         public Int32 unknown10_2;
         public Int32 unknown10_3;
-        public Int32 unknown10_4;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
+        public Int32 unknownMusicCond10;
         public Int32 unknown10_5;
         public Int32 unknown10_6;
         public Int32 unknown10_7;
-        public Int32 unknown10_8;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
+        public Int32 unknownGroove10;
         public Int32 unknown10_9;
         public Int32 unknown10_10;
         public Int32 unknown10_11;

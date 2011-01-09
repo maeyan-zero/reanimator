@@ -17,9 +17,9 @@ namespace Hellgate.Excel
         public Int32 rarity;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 nameColor;//idx
-        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 displayNameStringKey;//stridx
-        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Affix")]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 championFormatStringKey;//stridx
         [ExcelOutput(IsBool = true)]
         public Int32 pickProperName;//bool

@@ -22,7 +22,7 @@ namespace Hellgate.Excel
         public Int32 movie3;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 language;//idx
-        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 String;//stridx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined;
