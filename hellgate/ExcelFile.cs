@@ -1365,23 +1365,45 @@ namespace Hellgate
             return csvString.ToASCIIByteArray();
         }
 
-        public override byte[] ExportSQL(string tablePrefix = "hgl")
+        public override byte[] ExportSQL(string tablePrefix = "")
+        {
+            return ExportSQL(null);
+        }
+
+        public byte[] ExportSQL(FileManager fileManager, string tablePrefix = "")
         {
             string[] sqlReserved = new string[] { "group", "condition", "left", "right", "default", "key", "force", "analyze", "kill", "usage", "order" };
 
             StringWriter stringWriter = new StringWriter();
-            FieldInfo[] fieldInfo = DataType.GetFields();
-            string tableName = String.Format("{0}_{1}", tablePrefix, StringId.ToLower());
+            string tableName = String.Format("{0}{1}", tablePrefix, StringId.ToLower());
 
             stringWriter.WriteLine(String.Format("CREATE TABLE {0} (", tableName));
             stringWriter.WriteLine("\tid INT NOT NULL PRIMARY KEY,");
 
             String columnDec = "\t{0} {1}{2}";
-            int noColumns = fieldInfo.Count();
+
             int colCount = 1;
 
-            foreach (FieldInfo field in fieldInfo)
+
+            ObjectDelegator objectDelegator;
+            if (fileManager == null || !fileManager.DataFileDelegators.ContainsKey(StringId))
             {
+                objectDelegator = new ObjectDelegator(Attributes.RowType.GetFields());
+
+                FieldInfo headerField = DataType.GetField("header", BindingFlags.Instance | BindingFlags.NonPublic);
+                objectDelegator.AddField(headerField);
+            }
+            else
+            {
+                objectDelegator = fileManager.DataFileDelegators[StringId];
+            }
+
+            int noColumns = objectDelegator.FieldCount - 1; // remove header
+
+            foreach (ObjectDelegator.FieldDelegate field in objectDelegator)
+            {
+                if (field.Name == "header") continue; // dont want this
+
                 String columnName = field.Name;
                 String dataType = String.Empty;
                 String formatted = String.Empty;
@@ -1392,7 +1414,7 @@ namespace Hellgate
                 }
 
                 // Special types
-                OutputAttribute excelOutput = GetExcelAttribute(field);
+                OutputAttribute excelOutput = GetExcelAttribute(field.Info);
                 if (excelOutput != null)
                 {
                     if (excelOutput.IsScript || excelOutput.IsSecondaryString || excelOutput.IsStringOffset) dataType = "TEXT";
@@ -1408,9 +1430,10 @@ namespace Hellgate
                     else if (field.FieldType == typeof(uint) || field.FieldType == typeof(Int64)) dataType = "BIGINT";
                     else if (field.FieldType == typeof(string))
                     {
-                        MarshalAsAttribute marshalAs = (MarshalAsAttribute)field.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                        MarshalAsAttribute marshalAs = (MarshalAsAttribute)field.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
                         dataType = String.Format("VARCHAR({0})", marshalAs.SizeConst);
                     }
+                    else if (field.FieldType.BaseType == typeof(Array)) { dataType = "TEXT"; }
                 }
 
                 formatted = String.Format(columnDec, columnName, dataType, colCount < noColumns ? "," : String.Empty);
@@ -1431,9 +1454,11 @@ namespace Hellgate
             {
                 valueString.Write(String.Format("\t({0},", rowCount)); // write the id
 
-                foreach (FieldInfo field in fieldInfo)
+                foreach (ObjectDelegator.FieldDelegate field in objectDelegator)
                 {
-                    OutputAttribute excelOutput = GetExcelAttribute(field);
+                    if (field.Name == "header") continue; // dont want this
+
+                    OutputAttribute excelOutput = GetExcelAttribute(field.Info);
                     Object objValue = field.GetValue(rowObject);
                     bool valueParsed = false;
 
@@ -1444,9 +1469,31 @@ namespace Hellgate
                             int[] scriptTable = ReadScriptTable((int)objValue);
                             if (scriptTable != null)
                             {
-                                string scriptString = FileTools.ArrayToStringGeneric(scriptTable, ",");
-                                scriptString = String.Format("\"{0}\"", scriptString);
-                                valueString.Write(scriptString);
+                                int offset = (int)objValue;
+                                int[] scriptbuffer = ReadScriptTable(offset);
+
+                                String scriptString = FileTools.ArrayToStringGeneric(scriptbuffer, ",");
+                                try
+                                {
+                                    if (fileManager != null)
+                                    {
+                                        ExcelScript excelScript = new ExcelScript(fileManager);
+                                        scriptString = excelScript.Decompile(_scriptBuffer, offset);
+                                        scriptString = StringToSQLString(scriptString);
+                                        scriptString = EncapsulateString(scriptString);
+                                        valueString.Write(scriptString);
+                                    }
+                                    else
+                                    {
+                                        valueString.Write(scriptString);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    valueString.Write(EncapsulateString(scriptString));
+                                    Debug.WriteLine(e.ToString());
+                                    scriptString = "ScriptError(" + scriptString + ")";
+                                }
                             }
                             else
                             {
@@ -1488,6 +1535,16 @@ namespace Hellgate
                         if (field.FieldType == typeof(string))
                         {
                             string strValue = EncapsulateString(StringToSQLString((objValue.ToString())));
+                            valueString.Write(strValue);
+                        }
+                        else if (field.FieldType.BaseType == typeof(Array))
+                        {
+                            string strValue = EncapsulateString(((Array)objValue).ToString(","));
+                            valueString.Write(strValue);
+                        }
+                        else if (field.FieldType == typeof(float))
+                        {
+                            string strValue = ((float)objValue).ToString("r");
                             valueString.Write(strValue);
                         }
                         else

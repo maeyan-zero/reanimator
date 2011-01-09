@@ -229,7 +229,7 @@ namespace Hellgate
                 }
                 else
                 {
-                    if (MPVersion) continue; // todo: need to add _TCv4_ stringId keys to DataFileMap before we can load them 
+                    //if (MPVersion) continue; // todo: need to add _TCv4_ stringId keys to DataFileMap before we can load them 
                     dataFile = new StringsFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
                 }
 

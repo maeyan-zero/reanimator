@@ -33,7 +33,7 @@ namespace Hellgate
         public abstract bool ParseDataTable(DataTable dataTable);
         public abstract byte[] ToByteArray();
         public abstract byte[] ExportCSV();
-        public abstract byte[] ExportSQL(string tablePrefix = "hgl");
+        public abstract byte[] ExportSQL(string tablePrefix = "hgl_");
 
         public class DataFileAttributes
         {
@@ -447,6 +447,21 @@ namespace Hellgate
             {"Strings_Skills", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
             {"Strings_Strings", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
             {"Strings_Revival", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            // TC versions
+            {"_TCv4_Strings_Affix", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Cinematic", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Common", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Credits", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_DisplayFormat", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Install", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Items", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Level", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_LoadingTips", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Monsters", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Names", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Quest", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Skills", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
+            {"_TCv4_Strings_Strings", new DataFileAttributes {RowType = typeof(StringsFile.StringBlock)}},
 
 
             // Empty Strings files
@@ -457,6 +472,7 @@ namespace Hellgate
         {
             source = source.Replace(@"\", @"\\");
             source = source.Replace("\"", "\\\"");
+            source = source.Replace("\n", @"\n");
             source = source.Replace(Environment.NewLine, @"\n");
             //source = source.Replace("%", @"\%");
             //source = source.Replace("_", @"\_");

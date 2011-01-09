@@ -122,7 +122,7 @@ namespace Revival
             if (false)
             {
                 _fileManager = new FileManager(@"D:\Games\Hellgate London");
-                string filePath = @"data\units\items\weapons\agitator\low\agitator_mesh.am";
+                string filePath = @"data\background\tubestations\charingcross\cc_southbound.m";
                 byte[] buffer = _fileManager.GetFileBytes(filePath);
                 if (buffer == null)
                 {
@@ -140,19 +140,23 @@ namespace Revival
             #region SQL test
             if (false)
             {
-                _fileManager = new FileManager(@"D:\Games\Hellgate London");
+                _fileManager = new FileManager(@"D:\Games\Hellgate London", true);
                 _fileManager.LoadTableFiles();
 
                 byte[] sqlBuffer = new byte[1024];
                 int sqlOffset = 0;
 
-                string createDB = "CREATE DATABASE hellgate_london;\nUSE hellgate_london;\n";
-                byte[] createDBArray = FileTools.StringToASCIIByteArray(createDB);
-                FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, createDBArray);
+                //string createDB = "CREATE DATABASE hellgate_london;\nUSE hellgate_london;\n";
+                //byte[] createDBArray = FileTools.StringToASCIIByteArray(createDB);
+                //FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, createDBArray);
 
                 foreach (DataFile dataFile in _fileManager.DataFiles.Values)
                 {
-                    byte[] buffer = dataFile.ExportSQL();
+                    if (dataFile.IsStringsFile) continue;
+                    ExcelFile excelFile = dataFile as ExcelFile;
+                    byte[] buffer = excelFile.ExportSQL(_fileManager, "hgl");
+                    //if (dataFile.IsExcelFile) continue;
+                    //byte[] buffer = dataFile.ExportSQL("hgl_tcv4_");
                     Console.WriteLine(dataFile.FileName);
                     FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, buffer);
                     if (true)
