@@ -15,7 +15,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 style;
-        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 nameStringKey;
         [ExcelOutput(IsBool = true)]
         public Int32 subscriberOnly;

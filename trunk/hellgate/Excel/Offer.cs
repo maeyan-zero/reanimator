@@ -51,7 +51,7 @@ namespace Hellgate.Excel
         public Int32 treasure7UnitType;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure7;//idx
-        [ExcelOutput(IsStringIndex = true, TableStringId = "Strings_Strings")]
+        [ExcelOutput(IsStringIndex = true)]
         public Int32 offerString;//stridx
     }
 }

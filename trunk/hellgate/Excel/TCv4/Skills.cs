@@ -440,6 +440,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 unitEventTrigger2;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNIT_EVENT_TYPES")]
         public Int32 unitEventTrigger3;
+        [ExcelOutput(IsScript = true)]
         public Int32 unitEventTriggerChanceScript;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown10;
