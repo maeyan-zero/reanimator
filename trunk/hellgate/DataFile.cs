@@ -35,6 +35,13 @@ namespace Hellgate
         public abstract byte[] ExportCSV();
         public abstract byte[] ExportSQL(string tablePrefix = "hgl_");
 
+        public enum StructVersion
+        {
+            SinglePlayer = 0,
+            TestCenter,
+            OpenBeta3416
+        }
+
         public class DataFileAttributes
         {
             public bool IsTCv4;
@@ -46,6 +53,7 @@ namespace Hellgate
             public bool HasScriptTable;
             public bool HasExtended;
             public UInt32 StructureId;
+            public StructVersion Version;
         }
 
         public static readonly Dictionary<String, DataFileAttributes> DataFileMap = new Dictionary<String, DataFileAttributes>
