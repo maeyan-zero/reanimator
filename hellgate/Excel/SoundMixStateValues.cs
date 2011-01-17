@@ -18,7 +18,7 @@ namespace Hellgate.Excel
         public float undefined2;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string effects;
-        Int32 undefined3; // always 0
+        public Int32 undefined3; // always 0 in SP, not TCv4 though
         Int32 undefined4; // always 0
         Int32 undefined5; // always 0
     }

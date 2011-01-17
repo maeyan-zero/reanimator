@@ -8,10 +8,12 @@ namespace Hellgate.Excel.TCv4
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class DamageTypesTCv4
     {
-        ExcelFile.RowHeader header;
+        RowHeader header;
 
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string stat;
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int16 code;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string miniIcon;

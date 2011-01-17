@@ -185,7 +185,7 @@ namespace Hellgate.Excel
         Int32 undefined28e;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 undefined28f;//information
-        public Int32 undefined28g;
+        Int32 undefined28g;
         public float weight12;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] undefined29;
@@ -267,8 +267,10 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] undefined46;
         public Int32 adsr_tcv4;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
-        Int32[] undefined47;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
+        public Int32[] undefined47;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        public Int32[] undefined48;
 
         [FlagsAttribute]
         public enum BitMask01 : uint

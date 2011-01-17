@@ -20,6 +20,7 @@ namespace Revival.Common
 
             public Type FieldType { get { return Info.FieldType; } }
             public bool IsPublic { get { return Info.IsPublic; } }
+            public bool IsPrivate { get { return Info.IsPrivate; } }
         }
 
         public class DelegatorEnumerator : IEnumerator

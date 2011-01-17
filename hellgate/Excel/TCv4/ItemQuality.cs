@@ -118,6 +118,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 affix2Type5Weight;
         [ExcelOutput(IsScript = true)]
         public Int32 affix2Type6Weight;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix2Type1;
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXTYPES")]
         public Int32 affix2Type2;

@@ -314,8 +314,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 merchantNotAvailableTillQuestTaskComplete;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 paperdollBackgroundLevel;//index               // 43   0x00000000000005A0  XLS_ReadIndex
-        public Int32 paperdollWeapon1;                              // 44   0x00000000000005A4  XLS_ReadIntArray,2
-        public Int32 paperdollWeapon2;                              // 44   0x00000000000005A8
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+        public Int32[] paperdollWeapon;                             // 44   0x00000000000005A4  XLS_ReadIndexArray,2
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 paperdollSkill;//index                         // 45   0x00000000000005AC  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "COLORSETS")]
@@ -348,7 +349,7 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 censorClassNoGore;//index                      // 40   0x00000000000005E8  XLS_ReadIndex
         public Int32 sex;                                           // 41   0x00000000000005EC  XLS_ReadInternalIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "PLAYERRACE")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "PLAYER_RACE")]
         public Int32 race;//index                                   // 42   0x00000000000005F0  XLS_ReadIndex
         public Int32 rarity;                                        // 107  0x00000000000005F4  XLS_ReadInt32
         public Int32 spawnChance;                                   // 109  0x00000000000005F8  XLS_ReadInt32
@@ -356,15 +357,15 @@ namespace Hellgate.Excel.TCv4
         public Int32 level;                                         // 89   0x0000000000000600  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_QUALITY")]
         public Int32 monsterQuality;//index                         // 48   0x0000000000000604  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")] // todo: is this MONSTER_QUALITY
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monsterClassAtUniqueQuality;//index            // 49   0x0000000000000608  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")] // todo: is this MONSTER_QUALITY
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monsterClassAtChampionQuality;//index          // 50   0x000000000000060C  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")] // todo: is this MONSTER_QUALITY
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 minionClass;//index                            // 52   0x0000000000000610  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTER_NAME_TYPES")]
         public Int32 monsterNameType;//index                        // 53   0x0000000000000614  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMQUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 itemQuality;//index                            // 51   0x0000000000000618  XLS_ReadIndex
         public Int32 angerRange;                                    // 416  0x000000000000061C  XLS_ReadInt32
         public Int32 baseLevel;                                     // 90   0x0000000000000620  XLS_ReadInt32
@@ -454,23 +455,18 @@ namespace Hellgate.Excel.TCv4
         public Int32 wardrobeFallback;                              // 114  0x000000000000070C  XLS_ReadIndex
         public Int32 null0;                                         // 115  0x0000000000000710  XLS_ReadInt32
         public Int32 wardrobeMip;                                   // 118  0x0000000000000714  XLS_ReadInt32
-        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARENCE_GROUP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 wardrobeAppearanceGroup;                       // 116  0x0000000000000718  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARENCE_GROUP")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 wardrobeAppearanceGroup1st;                    // 117  0x000000000000071C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_STANCE")]
         public Int32 startingStance;                                // 120  0x0000000000000720  XLS_ReadIndex
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknownBytes06;
         public Int32 summonedInvLoc;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 containerUnitType1;                            // 261  0x0000000000000738  XLS_ReadUNITTYPEIndexArray,4
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 containerUnitType2;                            // 261  0x000000000000073C
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 containerUnitType3;// always 0                 // 261  0x0000000000000740
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
-        public Int32 containerUnitType4;// but we could use them    // 261  0x0000000000000744
+        public Int32[] containerUnitType;                           // 261  0x0000000000000738  XLS_ReadIndex_UnitTypeArray,4
         public Int32 firingErrorIncrease;                           // 127  0x0000000000000748  XLS_ReadInt32
         public Int32 firingErrorDecrease;                           // 128  0x000000000000074C  XLS_ReadInt32
         public Int32 firingErrorMax;                                // 129  0x0000000000000750  XLS_ReadInt32
@@ -488,14 +484,9 @@ namespace Hellgate.Excel.TCv4
         public float approxDps;                                     // 132  0x0000000000000778  XLS_ReadFloat
         [ExcelOutput(IsStringIndex = true)]
         public Int32 tooltipDamageString;//stridx                   // 137  0x000000000000077C  XLS_ReadStringIndex
-        public Int32 requiredAffixGroups1;                          // 126  0x0000000000000780  XLS_ReadIntArray,8
-        public Int32 requiredAffixGroups2;                          // 126  0x0000000000000784
-        public Int32 requiredAffixGroups3;                          // 126  0x0000000000000788
-        public Int32 requiredAffixGroups4;                          // 126  0x000000000000078C
-        public Int32 requiredAffixGroups5;                          // 126  0x0000000000000790
-        public Int32 requiredAffixGroups6;                          // 126  0x0000000000000794
-        public Int32 requiredAffixGroups7;                          // 126  0x0000000000000798
-        public Int32 requiredAffixGroups8;                          // 126  0x000000000000079C
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
+        public Int32[] requiredAffixGroups;                         // 126  0x0000000000000780  XLS_ReadIndexArray,8
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 spawnMonsterClass;//index                      // 133  0x00000000000007A0  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
@@ -626,19 +617,10 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsScript = true)]
         public Int32 propsElite;                                    // 217  0x00000000000009D0  XLS_ReadIntPtr
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
-        public Int32 affix1;//index                                 // 220  0x00000000000009D4  XLS_ReadIntArray,6
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
-        public Int32 affix2;//index                                 // 220  0x00000000000009D8
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
-        public Int32 affix3;//index                                 // 220  0x00000000000009DC
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
-        public Int32 affix4;//index                                 // 220  0x00000000000009E0
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
-        public Int32 affix5;//index                                 // 220  0x00000000000009E4
-        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
-        public Int32 affix6;//index                                 // 220  0x00000000000009E8
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 36)]
-        byte[] undefinedP;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+        public Int32[] affix;//index                                // 220  0x00000000000009D4  XLS_ReadIndexArray,6
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
+        public Int32[] undefinedP;
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasure;//index                               // 104  0x00000000000009EC  XLS_ReadIndex,65
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
@@ -658,7 +640,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 invWidth;                                      // 256  0x0000000000000A08  XLS_ReadInt32
         public Int32 invHeight;                                     // 257  0x0000000000000A0C  XLS_ReadInt32
         public Int64 qualities;                                     // 123  0x0000000000000A10  XLS_ReadBits - I think this reads 8 bytes (64 bits); input = 0x40 = 64
-        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMQUALITY")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 requiredQuality;//index                        // 124  0x0000000000000A18  XLS_ReadIndex
         public Int32 qualityName;                                   // 125  0x0000000000000A1C  XLS_ReadInternalIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
@@ -667,39 +649,18 @@ namespace Hellgate.Excel.TCv4
         public Int32 skillHitUnit;//index                           // 391  0x0000000000000A24  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillHitBackground;//index                     // 392  0x0000000000000A28  XLS_ReadIndex
-        public Int32 skillMissed1;                                         // 393  0x0000000000000A2C  XLS_ReadIntArray,0F
-        public Int32 skillMissed2;                                         // 393  0x0000000000000A30
-        public Int32 skillMissed3;                                         // 393  0x0000000000000A34
-        public Int32 skillMissed4;                                         // 393  0x0000000000000A38
-        public Int32 skillMissed5;                                         // 393  0x0000000000000A3C
-        public Int32 skillMissed6;                                         // 393  0x0000000000000A40
-        public Int32 skillMissed7;                                         // 393  0x0000000000000A44
-        public Int32 skillMissed8;                                         // 393  0x0000000000000A48
-        public Int32 skillMissed9;                                         // 393  0x0000000000000A4C
-        public Int32 skillMissed10;                                        // 393  0x0000000000000A50
-        public Int32 skillMissed11;                                        // 393  0x0000000000000A54
-        public Int32 skillMissed12;                                        // 393  0x0000000000000A58
-        public Int32 skillMissed13;                                        // 393  0x0000000000000A5C
-        public Int32 skillMissed14;                                        // 393  0x0000000000000A60
-        public Int32 skillMissed15;                                        // 393  0x0000000000000A64
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 15)]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
+        public Int32[] skillMissed;                                 // 393  0x0000000000000A2C  XLS_ReadIndexArray,0F
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         byte[] unknownBytes20;                                      // 0x0000000000000A68 to 0x0000000000000A6C
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillOnFuse;//index                            // 394  0x0000000000000A6C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillOnDamageRepeat;//index                    // 395  0x0000000000000A70  XLS_ReadIndex
-        public Int32 startingskills1;                               // 234  0x0000000000000A74  XLS_ReadIntArray,0C
-        public Int32 startingskills2;                               // 234  0x0000000000000A78
-        public Int32 startingskills3;                               // 234  0x0000000000000A7C
-        public Int32 startingskills4;                               // 234  0x0000000000000A80
-        public Int32 startingskills5;                               // 234  0x0000000000000A84
-        public Int32 startingskills6;                               // 234  0x0000000000000A88
-        public Int32 startingskills7;                               // 234  0x0000000000000A8C
-        public Int32 startingskills8;                               // 234  0x0000000000000A90
-        public Int32 startingskills9;                               // 234  0x0000000000000A94
-        public Int32 startingskills10;                              // 234  0x0000000000000A98
-        public Int32 startingskills11;                              // 234  0x0000000000000A9C
-        public Int32 startingskills12;                              // 234  0x0000000000000AA0
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+        public Int32[] startingskills;                              // 234  0x0000000000000A74  XLS_ReadIndexArray,0C
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 unitDieBeginSkill;//index                      // 235  0x0000000000000AA4  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
@@ -722,10 +683,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 raceSkill;
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillLevelActive;//index                       // 243  0x0000000000000AC4  XLS_ReadIndex
-        public Int32 initState1;                                    // 244  0x0000000000000AC8  XLS_ReadIntArray,4
-        public Int32 initState2;                                    // 244  0x0000000000000ACC
-        public Int32 initState3;                                    // 244  0x0000000000000AD0
-        public Int32 initState4;                                    // 244  0x0000000000000AD4        
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
+        public Int32[] initState;                                   // 244  0x0000000000000AC8  XLS_ReadIndexArray,4
         public Int32 initStateTicks;                                // 245  0x0000000000000AD8  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 dyingState;//index                             // 246  0x0000000000000ADC  XLS_ReadIndex
@@ -899,6 +859,7 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTTRIGGERS")]
         public Int32 triggerType;//index                            // 403  0x0000000000000CB0  XLS_ReadIndex
         public Int32 triggerSound;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 operatorStatesTriggerProhibited;               // 404  0x0000000000000CB4  XLS_ReadIntArray,01
         [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public Int32 sublevelDest;//index                           // 405  0x0000000000000CB8  XLS_ReadIndex
@@ -935,9 +896,9 @@ namespace Hellgate.Excel.TCv4
         public Int32 corpseExplodePoints;                           // 471  0x0000000000000D00  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 requiredAttackerUnitType;//index               // 472  0x0000000000000D04  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_AREAS_AFFIXS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_AREAS")]
         public Int32 startingLevelArea;//index                      // 474  0x0000000000000D08  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_AREAS_AFFIXS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_AREAS")]
         public Int32 warpToLevelArea;//index                        // 476  0x0000000000000D0C  XLS_ReadIndex
         public Int32 warpToFloor;                                   // 477  0x0000000000000D10  XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
@@ -962,14 +923,16 @@ namespace Hellgate.Excel.TCv4
         public Int32 undefined1_1;
         public Int32 undefined1_2;
         public Int32 undefined1_3;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 88)]
-        byte[] undefined2_2;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 22)]
+        Int32[] unknownBytes26;
         public Int32 undefined1_4;
         public Int32 undefined1_5;
         public Int32 setStateOnHit;
         public Int32 durationMSStateOnHit;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 56)] // add 4
-        byte[] undefined2_3;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+        Int32[] unknownBytes27;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+        Int32[] unknownBytes28;
 
         public abstract class Items
         {

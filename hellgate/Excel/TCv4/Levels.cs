@@ -202,7 +202,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 scriptPlayerEnterLevel;
         [ExcelOutput(IsBool = true)]
         public Int32 allowOverworldTravel;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        byte[] unknown4;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        Int32[] unknown4;
     }
 }

@@ -268,7 +268,7 @@ namespace Hellgate.Excel
         Int32[] undefined46;
         public Int32 adsr_tcv4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
-        Int32[] undefined47;
+        public Int32[] undefined47;
 
         [FlagsAttribute]
         public enum BitMask01 : uint

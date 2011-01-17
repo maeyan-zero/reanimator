@@ -65,6 +65,7 @@ namespace Reanimator.Forms
 
         private class ExtractPackPatchArgs
         {
+            public bool ExtractFiles;
             public bool KeepStructure;
             public bool PatchFiles;
             public String RootDir;
@@ -402,48 +403,53 @@ namespace Reanimator.Forms
             // make sure we want to extract this file
             if (!treeNode.Checked || nodeObject.Index == null || nodeObject.FileEntry == null) return true;
 
-
-            // get path
             IndexFile.FileEntry fileEntry = nodeObject.FileEntry;
-            String filePath = extractPatchArgs.KeepStructure
-                                  ? Path.Combine(extractPatchArgs.RootDir, treeNode.FullPath)
-                                  : Path.Combine(extractPatchArgs.RootDir, fileEntry.FileNameString);
 
 
-            // does it exist?
-            bool fileExists = File.Exists(filePath);
-            if (fileExists && overwrite == DialogResult.None)
+            // are we extracting?
+            if (extractPatchArgs.ExtractFiles)
             {
-                overwrite = MessageBox.Show("An extract file already exists, do you wish to overwrite the file, and all following?\nFile: " + filePath,
-                    "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                if (overwrite == DialogResult.Cancel) return false;
-            }
-            if (fileExists && overwrite == DialogResult.No) return true;
+                // get path
+                String filePath = extractPatchArgs.KeepStructure
+                                      ? Path.Combine(extractPatchArgs.RootDir, treeNode.FullPath)
+                                      : Path.Combine(extractPatchArgs.RootDir, fileEntry.FileNameString);
 
 
-            // save file
-            DialogResult extractDialogResult = DialogResult.Retry;
-            while (extractDialogResult == DialogResult.Retry)
-            {
-                byte[] fileBytes = _fileManager.GetFileBytes(fileEntry, extractPatchArgs.PatchFiles);
-                if (fileBytes == null)
+                // does it exist?
+                bool fileExists = File.Exists(filePath);
+                if (fileExists && overwrite == DialogResult.None)
                 {
-                    extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
-                                                   MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+                    overwrite = MessageBox.Show("An extract file already exists, do you wish to overwrite the file, and all following?\nFile: " + filePath,
+                                                "Question", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                    if (overwrite == DialogResult.Cancel) return false;
+                }
+                if (fileExists && overwrite == DialogResult.No) return true;
 
-                    if (extractDialogResult == DialogResult.Abort)
+
+                // save file
+                DialogResult extractDialogResult = DialogResult.Retry;
+                while (extractDialogResult == DialogResult.Retry)
+                {
+                    byte[] fileBytes = _fileManager.GetFileBytes(fileEntry, extractPatchArgs.PatchFiles);
+                    if (fileBytes == null)
                     {
-                        overwrite = DialogResult.Cancel;
-                        return false;
+                        extractDialogResult = MessageBox.Show("Failed to read file from .dat! Try again?", "Error",
+                                                              MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+
+                        if (extractDialogResult == DialogResult.Abort)
+                        {
+                            overwrite = DialogResult.Cancel;
+                            return false;
+                        }
+
+                        continue;
                     }
 
-                    continue;
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+                    File.WriteAllBytes(filePath, fileBytes);
+                    File.SetLastWriteTime(filePath, DateTime.FromFileTime(fileEntry.FileTime));
+                    break;
                 }
-
-                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-                File.WriteAllBytes(filePath, fileBytes);
-                File.SetLastWriteTime(filePath, DateTime.FromFileTime(fileEntry.FileTime));
-                break;
             }
 
 

@@ -408,8 +408,7 @@ namespace Hellgate.Excel
         public Int32 questDescription;//index                       // 260  0x00000000000006CC  XLS_ReadIndex
         [ExcelOutput(IsScript = true)]
         public Int32 pickUpCondition;                               // 258  0x00000000000006D0  XLS_ReadScript
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        byte[] unknownBytes04;
+        public Int32 useCondition;
         [ExcelOutput(IsScript = true)]
         public Int32 scriptOnUse;                                   // 248  0x00000000000006D8  XLS_ReadScript
         [ExcelOutput(IsScript = true)]
@@ -443,8 +442,9 @@ namespace Hellgate.Excel
         public Int32 wardrobeAppearanceGroup1st;                    // 117  0x000000000000071C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "ANIMATION_STANCE")]
         public Int32 startingStance;                                // 120  0x0000000000000720  XLS_ReadIndex
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         byte[] unknownBytes06;
+        public Int32 summonedInvLoc;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32[] containerUnitType;                           // 261  0x0000000000000738  XLS_ReadIndex_UnitTypeArray,4
@@ -632,7 +632,7 @@ namespace Hellgate.Excel
         public Int32 skillOnDamageRepeat;//index                    // 395  0x0000000000000A70  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        public Int32[] startingskills;                          // 234  0x0000000000000A74  XLS_ReadIndexArray,0C
+        public Int32[] startingskills;                              // 234  0x0000000000000A74  XLS_ReadIndexArray,0C
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 unitDieBeginSkill;//index                      // 235  0x0000000000000AA4  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
@@ -873,11 +873,11 @@ namespace Hellgate.Excel
         public Int32 cameraTarget;                                  // 455  0x0000000000000D20  XLS_ReadInt32
         public Int32 null2;                                         // 456  0x0000000000000D24  XLS_ReadInt32
         public Int32 null3;                                         // 457  0x0000000000000D28  XLS_ReadInt32
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 88)]
-        byte[] unknownBytes26;                                      // 0x0000000000000D2C to 0x0000000000000D84
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 22)]
+        Int32[] unknownBytes26;                                     // 0x0000000000000D2C to 0x0000000000000D84
         public Int32 null4;                                         // 458  0x0000000000000D84  XLS_ReadInt32
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 48)]
-        byte[] unknownBytes27;                                      // 0x0000000000000D88 to 0x0000000000000DB8
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+        Int32[] unknownBytes27;                                     // 0x0000000000000D88 to 0x0000000000000DB8
 
         [FlagsAttribute]
         public enum BitMask01 : uint

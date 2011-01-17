@@ -620,7 +620,8 @@ namespace Hellgate
                                 }
 
                                 int functionIndex = _callFunctions.IndexOf(function);
-                                if (functionIndex > 251) // properties etc functions
+                                int funcCountMax = (_fileManager.MPVersion) ? 336 : 251;
+                                if (functionIndex > funcCountMax) // properties etc functions
                                 {
                                     scriptByteCode.AddRange(new[] { (Int32)ScriptOpCodes.CallPropery, functionIndex, 0 });
                                 }

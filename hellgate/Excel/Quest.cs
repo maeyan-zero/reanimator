@@ -378,6 +378,6 @@ namespace Hellgate.Excel
         public Int32 monsterBoss;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
         public Int32 globalthemeRequired;//idx
-        Int32 undefined8;
+        public Int32 undefined8;
     }
 }

@@ -8,9 +8,10 @@ namespace Hellgate.Excel.TCv4
     class SkillsTCv4
     {
         ExcelFile.RowHeader header;
-
+        [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String skill;
+        [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
         public Int32 buffer;
         [ExcelOutput(IsBitmask = true)]
@@ -69,8 +70,9 @@ namespace Hellgate.Excel.TCv4
         public String largeIcon;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String smallIcon;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        byte[] unknown2;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        Int32[] unknown2;
+        Int32 unknown2b;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 iconColor;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]

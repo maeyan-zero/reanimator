@@ -10,7 +10,7 @@ namespace Reanimator.Forms
 {
     public partial class HeroEditor2 : Form
     {
-        Unit _hero;
+        SaveFile _hero;
         // todo: rewrite TableDataSet _dataSet;
         string _filePath;
         UnitHelpFunctions _itemFunctions;
@@ -91,7 +91,7 @@ namespace Reanimator.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Unit.StatBlock.Stat skillLevel = _hero.Stats.stats[18];
+            SaveFile.StatBlock.Stat skillLevel = _hero.Stats.stats[18];
             UnitHelpFunctions.SaveCharacterFile(_hero, _filePath);
         }
     }

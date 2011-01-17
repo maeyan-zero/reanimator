@@ -45,7 +45,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
         }
 
-        public void Initialize(List<Unit> items)
+        public void Initialize(List<SaveFile> items)
         {
             InitArray();
 
@@ -76,9 +76,9 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        private void InitInventories(List<Unit> items)
+        private void InitInventories(List<SaveFile> items)
         {
-            foreach (Unit item in items)
+            foreach (SaveFile item in items)
             {
                 AddItem(item);
 
@@ -97,7 +97,7 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        public void AddItem(Unit item)
+        public void AddItem(SaveFile item)
         {
             // get inventory type that the item uses
             TradeInventoryTypes type = TradeInventoryTypes.Inventory;
@@ -122,7 +122,7 @@ namespace Reanimator.Forms.ItemTransfer
             AddOrRemoveItem(type, item, false);
         }
 
-        public void RemoveItem(Unit item)
+        public void RemoveItem(SaveFile item)
         {
             // get inventory type that the item uses
             TradeInventoryTypes type = TradeInventoryTypes.Inventory;
@@ -147,7 +147,7 @@ namespace Reanimator.Forms.ItemTransfer
             AddOrRemoveItem(type, item, true);
         }
 
-        private void AddOrRemoveItem(TradeInventoryTypes type, Unit item, bool removeItem)
+        private void AddOrRemoveItem(TradeInventoryTypes type, SaveFile item, bool removeItem)
         {
             // get corresponding inventory
             bool[,] inventory = _charInventory[(int)type];
@@ -237,7 +237,7 @@ namespace Reanimator.Forms.ItemTransfer
 
     public class ItemInfo
     {
-        Unit _item;
+        SaveFile _item;
         Size _itemSize;
 
         public Point Location
@@ -251,13 +251,13 @@ namespace Reanimator.Forms.ItemTransfer
             get { return _itemSize; }
         }
 
-        public Unit Item
+        public SaveFile Item
         {
             get { return _item; }
             set { _item = value; }
         }
 
-        public ItemInfo(Unit item)
+        public ItemInfo(SaveFile item)
         {
             _item = item;
 

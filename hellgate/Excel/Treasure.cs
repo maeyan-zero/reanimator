@@ -68,15 +68,15 @@ namespace Hellgate.Excel
         [FlagsAttribute]
         public enum Bitmask01 : uint
         {
-            createForAllPlayersInLevel = (1 << 0),
-            requiredUsableByOperator = (1 << 1),
-            requiredUsableBySpawner = (1 << 2),
-            subscriberOnly = (1 << 3),
-            maxSlots = (1 << 4),
-            resultsNotRequired = (1 << 5),
-            stackTreasure = (1 << 6),
-            multiplayerOnly = (1 << 7),
-            singlePlayerOnly = (1 << 8)
+            CreateForAllPlayersInLevel = (1 << 0),
+            RequiredUsableByOperator = (1 << 1),
+            RequiredUsableBySpawner = (1 << 2),
+            SubscriberOnly = (1 << 3),
+            MaxSlots = (1 << 4),
+            ResultsNotRequired = (1 << 5),
+            StackTreasure = (1 << 6),
+            MultiplayerOnly = (1 << 7),
+            SinglePlayerOnly = (1 << 8)
         }
     }
 }
