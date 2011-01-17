@@ -381,9 +381,9 @@
             this._indexFiles_label.AutoSize = true;
             this._indexFiles_label.Location = new System.Drawing.Point(2, 147);
             this._indexFiles_label.Name = "_indexFiles_label";
-            this._indexFiles_label.Size = new System.Drawing.Size(271, 15);
+            this._indexFiles_label.Size = new System.Drawing.Size(371, 15);
             this._indexFiles_label.TabIndex = 10;
-            this._indexFiles_label.Text = "Using Selected Index Files (todo; using all for now)";
+            this._indexFiles_label.Text = "Using Selected Index Files (Note: Not Implemented - uses all for now)";
             // 
             // _indexFiles_listBox
             // 

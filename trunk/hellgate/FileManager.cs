@@ -137,10 +137,10 @@ namespace Hellgate
             // loop through index files
             foreach (PackFileEntry currFileEntry in packFile.Files)
             {
-                if (currFileEntry.Name.Contains("bldg_c_station_warp_next_layout.xml.cooked") || currFileEntry.Name.Contains("sku."))
-                {
-                    int bp = 0;
-                }
+                //if (currFileEntry.Name.Contains("bldg_c_station_warp_next_layout.xml.cooked") || currFileEntry.Name.Contains("sku."))
+                //{
+                //    int bp = 0;
+                //}
 
                 ulong pathHash = currFileEntry.PathHash;
 

@@ -155,8 +155,9 @@ namespace Reanimator.Forms
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 InitialDirectory = (!(String.IsNullOrEmpty(Config.LastDirectory))) ? Config.LastDirectory : Config.HglDataDir,
-                Filter = "Hellgate London Files (*.*)|*.idx;*.txt.cooked;*.xls.uni.cooked;*.xml.cooked;*.hg1|" +
+                Filter = "Hellgate London Files (*.*)|*.idx;*.hpt;*.txt.cooked;*.xls.uni.cooked;*.xml.cooked;*.hg1|" +
                          "Index Files|*.idx|" +
+                         "Hellgate Pack Files|*.hpt|" +
                          "Excel Files|*.txt.cooked|" +
                          "String Files|*.xls.uni.cooked|" +
                          "XML Files|*.xml.cooked|" +
@@ -168,7 +169,7 @@ namespace Reanimator.Forms
             string fileName = openFileDialog.FileName;
             Config.LastDirectory = Path.GetDirectoryName(fileName);
 
-            if ((fileName.EndsWith(".idx")))
+            if (fileName.EndsWith(IndexFile.Extension) || fileName.EndsWith(HellgatePackFile.Extension))
             {
                 OpenIndexFile(fileName);
                 return;
@@ -205,9 +206,18 @@ namespace Reanimator.Forms
         /// <param name="filePath">Path to the Index or StringsFile.</param>
         private void OpenIndexFile(String filePath)
         {
-            byte[] buffer;
-            IndexFile indexFile;
             TableForm tableForm;
+            PackFile packFile;
+            if (filePath.EndsWith(IndexFile.Extension))
+            {
+                packFile = new IndexFile(filePath);
+            }
+            else
+            {
+                packFile = new HellgatePackFile(filePath);
+            }
+
+            
 
             // Check if the form is already open.
             // If true, then activate the form.
@@ -215,7 +225,7 @@ namespace Reanimator.Forms
             if (isOpen)
             {
                 tableForm = _openTableForms.Where(tf => tf.FilePath == filePath).First();
-                if ((tableForm.Created))
+                if (tableForm.Created)
                 {
                     tableForm.Select();
                     return;
@@ -224,6 +234,7 @@ namespace Reanimator.Forms
 
             // Try read the file.
             // If an exception is caught, log the error and inform the user.
+            byte[] buffer;
             try
             {
                 buffer = File.ReadAllBytes(filePath);
@@ -234,25 +245,24 @@ namespace Reanimator.Forms
                 return;
             }
 
-            // Initialize the indexFile.
-            indexFile = new IndexFile(filePath, buffer);
-
-            // If the Index file is initialized without error, load the form.
-            // Otherwise, show a message box.
-            if (indexFile.HasIntegrity)
+            // parse file
+            try
             {
-                tableForm = new TableForm(indexFile) { MdiParent = this };
-
-                if (!_openTableForms.Contains(tableForm)) _openTableForms.Add(tableForm);
-
-                tableForm.Show();
+                packFile.ParseFileBytes(buffer);
             }
-            else
+            catch (Exception ex)
             {
-                string message = String.Format("The index file {0} appears invalid or malformed.", filePath);
-                string caption = "Bad File Format";
-                MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExceptionLogger.LogException(ex, false);
+                return;
             }
+
+            tableForm = new TableForm(packFile)
+            {
+                MdiParent = this,
+                Text = Text + ": " + packFile.Path
+            };
+            if (!_openTableForms.Contains(tableForm)) _openTableForms.Add(tableForm);
+            tableForm.Show();
         }
 
         /// <summary>

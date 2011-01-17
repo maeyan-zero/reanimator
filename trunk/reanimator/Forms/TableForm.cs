@@ -10,27 +10,26 @@ namespace Reanimator
 {
     public partial class TableForm : ThreadedFormBase, IDisposable, IMdiChildBase
     {
-        private readonly IndexFile _indexFile;
+        private readonly PackFile _packFile;
         private readonly StringsFile _stringsFileData;
         private List<int> _foundIndices;
         private int _currentSelection;
 
-        public string FilePath { get { return (_indexFile != null) ? _indexFile.FilePath : string.Empty; } }
-        private bool IsIndexFile { get { return _indexFile == null ? false : true; } }
+        public string FilePath { get { return (_packFile != null) ? _packFile.Path : string.Empty; } }
+        private bool IsIndexFile { get { return _packFile == null ? false : true; } }
 
-        public TableForm(IndexFile indexFile)
+        public TableForm(PackFile packFile)
         {
-            _indexFile = indexFile;
-            Text += ": " + FilePath;
+            _packFile = packFile;
             TableFormInit();
 
             try
             {
-                _indexFile.BeginDatReading();
+                _packFile.BeginDatReading();
             }
             catch(Exception e)
             {
-                String message = "Unable to open accompanying data file: \n" + _indexFile.NameWithoutExtension + ".dat\nYou will be unable to extract any files.\n" + e;
+                String message = "Unable to open accompanying data file: \n" + _packFile.NameWithoutExtension + ".dat\nYou will be unable to extract any files.\n" + e;
                 MessageBox(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
@@ -60,7 +59,7 @@ namespace Reanimator
             _foundIndices = new List<int>();
             _currentSelection = 0;
 
-            if (_indexFile != null) dataGridView.DataSource = _indexFile.Files.ToArray();
+            if (_packFile != null) dataGridView.DataSource = _packFile.Files.ToArray();
             if (_stringsFileData != null) dataGridView.DataSource = _stringsFileData.Rows.ToArray();
         }
 
@@ -123,7 +122,7 @@ namespace Reanimator
         private void _DataGridView_CellContextMenuStripNeeded(object sender, DataGridViewCellEventArgs e)
         {
             if (!IsIndexFile) return;
-            if (!_indexFile.DatFileOpen) return;
+            //if (!_packFile.DatFileOpen) return;
 
             Point pt = dataGridView.PointToClient(MousePosition);
             DataGridView.HitTestInfo hti = dataGridView.HitTest(pt.X, pt.Y);
@@ -184,47 +183,33 @@ namespace Reanimator
 
         private void DoExtractFiles(ProgressForm progressBar, Object param)
         {
-            PackFileEntry[] files = param as PackFileEntry[];
-            if (param == null)
-            {
-                return;
-            }
-            if (!_indexFile.DatFileOpen)
-            {
-                return;
-            }
+            PackFileEntry[] files = (PackFileEntry[]) param;
 
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.SelectedPath = _indexFile.Directory;
-            if (this.ShowDialog(folderBrowserDialog) != DialogResult.OK)
-            {
-                return;
-            }
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog {SelectedPath = _packFile.Directory};
+            if (ShowDialog(folderBrowserDialog) != DialogResult.OK) return;
 
             String extractToPath = folderBrowserDialog.SelectedPath;
             bool keepPath = false;
             DialogResult dr = MessageBox("Keep directory structure?", "Path", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-            if (dr == DialogResult.Cancel)
-            {
-                return;
-            }
-            else if (dr == DialogResult.Yes)
+            if (dr == DialogResult.Cancel) return;
+            if (dr == DialogResult.Yes)
             {
                 keepPath = true;
-                extractToPath += @"\" + _indexFile.NameWithoutExtension;
+                extractToPath += @"\" + _packFile.NameWithoutExtension;
             }
 
             progressBar.ConfigBar(0, files.Length, 1);
             progressBar.SetLoadingText("Extracting files to... " + extractToPath);
 
             int filesSaved = 0;
+            _packFile.BeginDatReading();
             foreach (PackFileEntry file in files)
             {
                 while (true)
                 {
                     try
                     {
-                        byte[] buffer = _indexFile.GetFileBytes(file);
+                        byte[] buffer = _packFile.GetFileBytes(file);
 
                         string keepPathString = "\\";
                         if (keepPath)
@@ -247,6 +232,7 @@ namespace Reanimator
                     }
                 }
             }
+            _packFile.EndDatAccess();
 
             MessageBox(filesSaved + " file(s) saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -280,9 +266,9 @@ namespace Reanimator
 
         new public void Dispose()
         {
-            if (_indexFile != null)
+            if (_packFile != null)
             {
-                _indexFile.Dispose();
+                _packFile.Dispose();
             }
 
             Dispose(true);
@@ -373,9 +359,9 @@ namespace Reanimator
 
         public void SaveButton()
         {
-            byte[] saveData = _indexFile.ToByteArray();
+            byte[] saveData = _packFile.ToByteArray();
             Crypt.Encrypt(saveData);
-            FileStream fOut = new FileStream(_indexFile.Directory + _indexFile.NameWithoutExtension + ".new.idx", FileMode.Create);
+            FileStream fOut = new FileStream(_packFile.Directory + _packFile.NameWithoutExtension + ".new.idx", FileMode.Create);
             fOut.Write(saveData, 0, saveData.Length);
             fOut.Dispose();
         }
