@@ -309,7 +309,7 @@
             this._selectedFile_groupBox.Size = new System.Drawing.Size(531, 157);
             this._selectedFile_groupBox.TabIndex = 6;
             this._selectedFile_groupBox.TabStop = false;
-            this._selectedFile_groupBox.Text = "Selected File Details";
+            this._selectedFile_groupBox.Text = "Selected File Details (Right Click for Options (TODO))";
             // 
             // _files_listView
             // 

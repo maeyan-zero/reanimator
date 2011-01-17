@@ -121,6 +121,7 @@ namespace Hellgate
                     continue;
                 }
 
+                if (packFile.Count == 0) continue;
                 IndexFiles.Add(packFile);
                 _LoadIndexFile(packFile);
             }
