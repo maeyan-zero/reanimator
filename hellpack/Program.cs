@@ -456,26 +456,22 @@ namespace Revival
                 char ans = (char)Console.Read();
                 if (ans == 'y' || ans == 'Y')
                 {
-                    indexFile = new IndexFile(File.ReadAllBytes(outputPath)) {FilePath = outputPath};
+                    indexFile = new IndexFile(outputPath, File.ReadAllBytes(outputPath));
                     isAppend = true;
                 }
             }
 
-            if (indexFile == null) indexFile = new IndexFile { FilePath = outputPath };
+            if (indexFile == null) indexFile = new IndexFile(outputPath);
 
             foreach (String filePath in filesToPack)
             {
-                DateTime fileTime = File.GetLastWriteTime(filePath);
+                DateTime lastModified = File.GetLastWriteTime(filePath);
 
                 // if we're appending, check if we've already added this file by checking the modified time
                 if (isAppend)
                 {
-                    IndexFile.FileEntry fileEntry = indexFile.GetFileEntry(filePath);
-                    if (fileEntry != null)
-                    {
-                        DateTime fileEntryTime = DateTime.FromFileTime(fileEntry.FileTime);
-                        if (fileEntryTime == fileTime) continue;
-                    }
+                    PackFileEntry fileEntry = indexFile.GetFileEntry(filePath);
+                    if (fileEntry != null && fileEntry.LastModified == lastModified) continue;
                 }
 
                 String fileName = Path.GetFileName(filePath);
@@ -496,7 +492,7 @@ namespace Revival
                 }
 
                 Console.WriteLine("Packing " + directory + fileName);
-                if (indexFile.AddFile(directory, fileName, buffer, fileTime) == false)
+                if (indexFile.AddFile(directory, fileName, buffer, lastModified) == false)
                 {
                     Console.WriteLine("Warning: Failed to add file to index...");
                 }

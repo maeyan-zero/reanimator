@@ -53,7 +53,7 @@ namespace Reanimator.Forms
             _quickExcelTCv4_checkBox.Checked = (fileManagerTCv4 != null);
             _quickExcelTCv4_checkBox.Enabled = Config.LoadTCv4DataFiles;
             _fileActionsExtract_checkBox.Enabled = true;
-            _location_textBox.Text = Config.HglDir;
+            _fileActionsPath_textBox.Text = Config.HglDir;
 
             // populate index files used
             // todo
@@ -84,14 +84,14 @@ namespace Reanimator.Forms
             TreeView treeView = (TreeView)sender;
             TreeNode selectedNode = treeView.SelectedNode;
             NodeObject nodeObject = (NodeObject)selectedNode.Tag;
-            IndexFile.FileEntry fileIndex = nodeObject.FileEntry;
+            PackFileEntry fileEntry = nodeObject.FileEntry;
 
             _files_listView.Items.Clear();
             if (nodeObject.IsFolder)  return;
 
 
             // no file index means it's either an uncooked file, or a new file
-            if (fileIndex == null)
+            if (fileEntry == null)
             {
                 // todo: this entires if-block is a little dodgy and assumes alot
 
@@ -127,24 +127,24 @@ namespace Reanimator.Forms
                 return;
             }
 
-            _ListView_AddFileItem(fileIndex);
+            _ListView_AddFileItem(fileEntry);
 
-            if (fileIndex.Siblings == null) return;
+            if (fileEntry.Siblings == null) return;
 
-            foreach (IndexFile.FileEntry fileEntry in fileIndex.Siblings)
+            foreach (PackFileEntry siblingEntry in fileEntry.Siblings)
             {
-                _ListView_AddFileItem(fileEntry);
+                _ListView_AddFileItem(siblingEntry);
             }
         }
 
-        private void _ListView_AddFileItem(IndexFile.FileEntry fileEntry)
+        private void _ListView_AddFileItem(PackFileEntry fileEntry)
         {
             String[] fileDetails = new String[5];
-            fileDetails[0] = fileEntry.FileNameString;
-            fileDetails[1] = fileEntry.UncompressedSize.ToString();
-            fileDetails[2] = fileEntry.CompressedSize.ToString();
+            fileDetails[0] = fileEntry.Name;
+            fileDetails[1] = fileEntry.SizeUncompressed.ToString();
+            fileDetails[2] = fileEntry.SizeCompressed.ToString();
             fileDetails[3] = DateTime.FromFileTime(fileEntry.FileTime).ToString();
-            fileDetails[4] = fileEntry.IsPatchedOut ? fileEntry.RelativeFullPathWithoutPatch : fileEntry.Index.ToString();
+            fileDetails[4] = fileEntry.IsPatchedOut ? fileEntry.Path : fileEntry.Pack.ToString();
 
             ListViewItem listViewItem = new ListViewItem(fileDetails) { Tag = fileEntry };
             if (fileEntry.IsPatchedOut) listViewItem.ForeColor = BackupColor;
@@ -202,7 +202,7 @@ namespace Reanimator.Forms
             }
             else if (nodeFullPath.EndsWith(XmlCookedFile.Extension))
             {
-                IndexFile.FileEntry fileIndex = nodeObject.FileEntry;
+                PackFileEntry fileIndex = nodeObject.FileEntry;
                 String xmlDataPath = Path.Combine(Config.HglDir, nodeFullPath.Replace(".cooked", ""));
 
                 byte[] fileData = _fileManager.GetFileBytes(fileIndex);
@@ -300,13 +300,13 @@ namespace Reanimator.Forms
             }
 
             // are we extracting?
-            bool extractFiles = _fileActionsExtract_checkBox.Enabled;
+            bool extractFiles = _fileActionsExtract_checkBox.Checked;
             String savePath = String.Empty;
             bool keepStructure = false;
             if (extractFiles)
             {
                 // where do we want to save it
-                savePath = _location_textBox.Text;
+                savePath = _fileActionsPath_textBox.Text;
                 if (String.IsNullOrEmpty(savePath))
                 {
                     // where do we want to save it
@@ -324,7 +324,7 @@ namespace Reanimator.Forms
             }
 
             // are we patching?
-            bool patchFiles = _fileActionsPatch_checkBox.Enabled;
+            bool patchFiles = _fileActionsPatch_checkBox.Checked;
 
             // are we doing anything...
             if (!extractFiles && !patchFiles)
@@ -346,8 +346,23 @@ namespace Reanimator.Forms
             ProgressForm progressForm = new ProgressForm(_DoExtractPatch, extractPatchArgs);
             progressForm.SetLoadingText(String.Format("Extracting file(s)... ({0})", checkedNodes.Count));
             progressForm.Show(this);
-
         }
+
+        /// <summary>
+        /// Event Function for "Browse" Button - Click for File Actions section.
+        /// Promts user for folder location.
+        /// </summary>
+        /// <param name="sender">The button clicked.</param>
+        /// <param name="e">The Click event args.</param>
+        private void _FileActionsBrowse_Button_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog { SelectedPath = Config.HglDir };
+            if (folderBrowserDialog.ShowDialog(this) != DialogResult.OK) return;
+
+            _fileActionsPath_textBox.Text = folderBrowserDialog.SelectedPath;
+            _fileActionsExtract_checkBox.Checked = true;
+        }
+
 
         /// <summary>
         /// Event Function for "Extract to..." Button - Click.
@@ -510,8 +525,7 @@ namespace Reanimator.Forms
                 // todo: implement Crypt.StringHash for FilePathHash and FolderPathHash
                 NodeObject nodeObject = (NodeObject)checkedNode.Tag;
                 if (nodeObject.FileEntry == null ||
-                    nodeObject.FileEntry.FileStruct == null ||
-                    nodeObject.FileEntry.FileStruct.FileNameSHA1Hash == 0)
+                    nodeObject.FileEntry.NameHash == 0)
                 {
                     packResults.WriteLine("{0} - File Has No Base Version", filePath);
                     continue;
@@ -600,7 +614,7 @@ namespace Reanimator.Forms
                 }
 
                 // update fileTime to now - ensures it will override older versions
-                fileEntry.FileStruct.FileTime = DateTime.Now.ToFileTime();
+                fileEntry.FileTime = DateTime.Now.ToFileTime();
 
                 // read in file data
                 String filePath = Path.Combine(Config.HglDir, packNode.FullPath);
@@ -1105,8 +1119,7 @@ namespace Reanimator.Forms
 
 
             // get all .xml.cooked
-            IEnumerable<IndexFile.FileEntry> xmlCookedFiles =
-                _fileManager.FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(XmlCookedFile.Extension));
+            IEnumerable<PackFileEntry> xmlCookedFiles = _fileManager.FileEntries.Values.Where(fileEntry => fileEntry.Name.EndsWith(XmlCookedFile.Extension));
 
 
             // loop through file entries
@@ -1119,17 +1132,17 @@ namespace Reanimator.Forms
             int uncookFailed = 0;
             int tcv4Warnings = 0;
             int excelWarnings = 0;
-            foreach (IndexFile.FileEntry fileEntry in xmlCookedFiles)
+            foreach (PackFileEntry fileEntry in xmlCookedFiles)
             {
                 // update progress
                 if (i % progressStepRate == 0)
                 {
-                    progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutPatch);
+                    progressForm.SetCurrentItemText(fileEntry.Path);
                 }
                 i++;
 
                 // get file and uncook
-                Console.WriteLine(fileEntry.RelativeFullPathWithoutPatch);
+                Console.WriteLine(fileEntry.Path);
                 byte[] fileBytes;
                 XmlCookedFile xmlCookedFile = new XmlCookedFile();
 
@@ -1150,7 +1163,7 @@ namespace Reanimator.Forms
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("Warning: Failed to uncook file: " + fileEntry.FileNameString + "\n");
+                    Console.WriteLine("Warning: Failed to uncook file: " + fileEntry.Name + "\n");
                     uncookFailed++;
                     continue;
                 }
@@ -1172,7 +1185,7 @@ namespace Reanimator.Forms
                 }
 
                 // save file
-                String savePath = Path.Combine(extractPatchArgs.RootDir, fileEntry.RelativeFullPathWithoutPatch);
+                String savePath = Path.Combine(extractPatchArgs.RootDir, fileEntry.Path);
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath));
 
                 try
@@ -1214,33 +1227,31 @@ namespace Reanimator.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            foreach (IndexFile.FileEntry fileEntry in _fileManager.FileEntries.Values)
+            foreach (PackFileEntry fileEntry in _fileManager.FileEntries.Values)
             {
-                IndexFile indexFile = fileEntry.Index;
+                PackFile indexFile = fileEntry.Pack;
 
 
                 // don't patch out string files or sound/movie files
-                if (IndexFile.NoPatchExt.Any(ext => fileEntry.FileNameString.EndsWith(ext)))
+                if (IndexFile.NoPatchExt.Any(ext => fileEntry.Name.EndsWith(ext)))
                 {
-                    if ((indexFile.FileNameWithoutExtension == "sp_hellgate_1.10.180.3416_1.0.86.4580" ||
-                        indexFile.FileNameWithoutExtension == "sp_hellgate_localized_1.10.180.3416_1.0.86.4580") &&
-                        (fileEntry.FileNameString.EndsWith(StringsFile.Extention) ||
-                        fileEntry.FileNameString.EndsWith(ExcelFile.Extension)))
+                    if ((indexFile.NameWithoutExtension == "sp_hellgate_1.10.180.3416_1.0.86.4580" ||
+                        indexFile.NameWithoutExtension == "sp_hellgate_localized_1.10.180.3416_1.0.86.4580") &&
+                        (fileEntry.Name.EndsWith(StringsFile.Extention) ||
+                        fileEntry.Name.EndsWith(ExcelFile.Extension)))
                     {
-                        indexFile.PatchOutFile(fileEntry);
+                        fileEntry.IsPatchedOut = true;
                     }
 
                     continue;
                 }
 
-
-                indexFile.PatchOutFile(fileEntry);
-
+                fileEntry.IsPatchedOut = true;
                 if (fileEntry.Siblings == null) continue;
 
-                foreach (IndexFile.FileEntry siblingEntry in fileEntry.Siblings)
+                foreach (PackFileEntry siblingEntry in fileEntry.Siblings)
                 {
-                    siblingEntry.Index.PatchOutFile(siblingEntry);
+                    siblingEntry.IsPatchedOut = true;
                 }
             }
 
@@ -1285,12 +1296,12 @@ namespace Reanimator.Forms
             if (fileManager.MPVersion) root = Path.Combine(root, "tcv4");
 
             int i = 0;
-            foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
+            foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
             {
-                if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension) &&
-                    (!fileEntry.FileNameString.EndsWith(StringsFile.Extention) || !fileEntry.DirectoryString.Contains(fileManager.Language))) continue;
+                if (!fileEntry.Name.EndsWith(ExcelFile.Extension) &&
+                    (!fileEntry.Name.EndsWith(StringsFile.Extention) || !fileEntry.Directory.Contains(fileManager.Language))) continue;
 
-                if (i++ % 10 == 0 && progressForm != null) progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutPatch);
+                if (i++ % 10 == 0 && progressForm != null) progressForm.SetCurrentItemText(fileEntry.Path);
 
                 byte[] fileBytes;
                 try
@@ -1299,16 +1310,16 @@ namespace Reanimator.Forms
                 }
                 catch (Exception e)
                 {
-                    String error = String.Format("Failed to get '{0}' file bytes, continue?\n\n{1}", fileEntry.RelativeFullPathWithoutPatch, e);
+                    String error = String.Format("Failed to get '{0}' file bytes, continue?\n\n{1}", fileEntry.Path, e);
                     DialogResult dr = MessageBox.Show(error, "Excel Extration Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                     if (dr == DialogResult.No) return;
                     continue;
                 }
 
                 ExcelFile excelFile = null;
-                if (fileEntry.FileNameString.EndsWith(ExcelFile.Extension))
+                if (fileEntry.Name.EndsWith(ExcelFile.Extension))
                 {
-                    excelFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch, fileManager.MPVersion);
+                    excelFile = new ExcelFile(fileBytes, fileEntry.Path, fileManager.MPVersion);
                     if (excelFile.Attributes.IsEmpty) continue;
                 }
 
@@ -1338,14 +1349,14 @@ namespace Reanimator.Forms
                     }
                     catch (Exception e)
                     {
-                        String error = String.Format("Failed to export CSV for '{0}', continue?\n\n{1}", fileEntry.RelativeFullPathWithoutPatch, e);
+                        String error = String.Format("Failed to export CSV for '{0}', continue?\n\n{1}", fileEntry.Path, e);
                         DialogResult dr = MessageBox.Show(error, "Excel Extration Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
                         if (dr == DialogResult.No) return;
                         continue;
                     }
                 }
 
-                String filePath = Path.Combine(root, fileEntry.RelativeFullPathWithoutPatch).Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised);
+                String filePath = Path.Combine(root, fileEntry.Path).Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised);
                 Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                 File.WriteAllBytes(filePath, writeBytes);
             }

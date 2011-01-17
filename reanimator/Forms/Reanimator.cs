@@ -32,14 +32,21 @@ namespace Reanimator.Forms
 
             if (true) return;
 
+            const String test = @"data\background\city\bldg_c_station_warp_next_layout.xml.cooked";
+            String dir = Path.GetDirectoryName(test) + "\\";
+            String name = Path.GetFileName(test);
+
+            uint dirHash = Crypt.GetStringSHA1UInt32(dir);
+            uint nameHash = Crypt.GetStringSHA1UInt32(name);
+
             //const String hellpackTablePath = @"D:\Games\Hellgate\Data\hgl.hpt";
             //byte[] hellpackFileBytes = File.ReadAllBytes(hellpackTablePath);
             //HellgatePackFile test = new HellgatePackFile(hellpackTablePath, hellpackFileBytes);
 
 
 
-            FileManager fileManager = new FileManager(Config.HglDir);
-            fileManager.ExtractAllExcel();
+            //FileManager fileManager = new FileManager(Config.HglDir);
+            //fileManager.ExtractAllExcel();
 
             //FileManager fileManagerTCv4 = new FileManager(Config.HglDir, true);
             //fileManagerTCv4.LoadTableFiles();
@@ -50,7 +57,7 @@ namespace Reanimator.Forms
 
             //return;
             //TestScripts.RepackMPDats();
-            TestScripts.CheckIdenticalFieldsToTCv4();
+            //TestScripts.CheckIdenticalFieldsToTCv4();
             //TestScripts.TestExcelCooking(true);
             //TestScripts.TestAllCodeValues();
 
@@ -71,9 +78,9 @@ namespace Reanimator.Forms
             //    MdiParent = this
             //};
             //levelRulesEditor.Show(););
-            Process.GetCurrentProcess().Kill();
-            Environment.FailFast("asdf");
-            return;
+            //Process.GetCurrentProcess().Kill();
+            //Environment.FailFast("asdf");
+            //return;
 
             //
             //return;
@@ -199,7 +206,7 @@ namespace Reanimator.Forms
         private void OpenIndexFile(String filePath)
         {
             byte[] buffer;
-            Hellgate.IndexFile indexFile;
+            IndexFile indexFile;
             TableForm tableForm;
 
             // Check if the form is already open.
@@ -228,21 +235,16 @@ namespace Reanimator.Forms
             }
 
             // Initialize the indexFile.
-            indexFile = new Hellgate.IndexFile(buffer)
-            {
-                FilePath = filePath
-            };
+            indexFile = new IndexFile(filePath, buffer);
 
             // If the Index file is initialized without error, load the form.
             // Otherwise, show a message box.
-            if ((indexFile.HasIntegrity == true))
+            if (indexFile.HasIntegrity)
             {
-                tableForm = new TableForm(indexFile)
-                {
-                    MdiParent = this
-                };
-                if (!(_openTableForms.Contains(tableForm)))
-                    _openTableForms.Add(tableForm);
+                tableForm = new TableForm(indexFile) { MdiParent = this };
+
+                if (!_openTableForms.Contains(tableForm)) _openTableForms.Add(tableForm);
+
                 tableForm.Show();
             }
             else

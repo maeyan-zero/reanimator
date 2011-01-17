@@ -28,6 +28,11 @@ namespace Hellgate
             {
                 CustomMessage = "Unexpected file header version!";
             }
+
+            public NotSupportedFileVersionException(uint expected, uint got)
+            {
+                CustomMessage = String.Format("File version {0} not supported. Only {1} supported.", got, expected);
+            }
         }
 
         public class NotInitializedException : ReanimatorException
@@ -51,6 +56,11 @@ namespace Hellgate
             public UnexpectedTokenException(String str)
             {
                 CustomMessage = str;
+            }
+
+            public UnexpectedTokenException(uint expected, uint got)
+            {
+                CustomMessage = String.Format("Expected token {0} but got {1} instead.", expected.ToString("X"), got.ToString("X"));
             }
         }
 

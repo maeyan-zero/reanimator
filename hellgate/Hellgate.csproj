@@ -342,10 +342,16 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="HellgateFile.cs" />
+    <Compile Include="HellgatePackFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="IndexFile.cs" />
     <Compile Include="LevelRulesFile.cs" />
     <Compile Include="MLIFile.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="PackFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoomDefinitionFile.cs" />
     <Compile Include="ScriptUtil.cs" />

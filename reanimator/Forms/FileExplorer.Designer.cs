@@ -56,8 +56,8 @@
             this._indexFiles_listBox = new System.Windows.Forms.ListBox();
             this._startProcess_button = new System.Windows.Forms.Button();
             this._patchNote_label = new System.Windows.Forms.Label();
-            this._browse_button = new System.Windows.Forms.Button();
-            this._location_textBox = new System.Windows.Forms.TextBox();
+            this._fileActionsBrowse_button = new System.Windows.Forms.Button();
+            this._fileActionsPath_textBox = new System.Windows.Forms.TextBox();
             this._fileActionsExtract_checkBox = new System.Windows.Forms.CheckBox();
             this._fileActionsPatch_checkBox = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -365,8 +365,8 @@
             this._fileActions_groupBox.Controls.Add(this._indexFiles_listBox);
             this._fileActions_groupBox.Controls.Add(this._startProcess_button);
             this._fileActions_groupBox.Controls.Add(this._patchNote_label);
-            this._fileActions_groupBox.Controls.Add(this._browse_button);
-            this._fileActions_groupBox.Controls.Add(this._location_textBox);
+            this._fileActions_groupBox.Controls.Add(this._fileActionsBrowse_button);
+            this._fileActions_groupBox.Controls.Add(this._fileActionsPath_textBox);
             this._fileActions_groupBox.Controls.Add(this._fileActionsExtract_checkBox);
             this._fileActions_groupBox.Controls.Add(this._fileActionsPatch_checkBox);
             this._fileActions_groupBox.Location = new System.Drawing.Point(4, 166);
@@ -414,24 +414,25 @@
             this._patchNote_label.TabIndex = 7;
             this._patchNote_label.Text = "Note: Non-patchable files (e.g. sounds) wont be patch out automatically.";
             // 
-            // _browse_button
+            // _fileActionsBrowse_button
             // 
-            this._browse_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._browse_button.Location = new System.Drawing.Point(450, 49);
-            this._browse_button.Name = "_browse_button";
-            this._browse_button.Size = new System.Drawing.Size(75, 23);
-            this._browse_button.TabIndex = 3;
-            this._browse_button.Text = "Browse";
-            this._browse_button.UseVisualStyleBackColor = true;
+            this._fileActionsBrowse_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this._fileActionsBrowse_button.Location = new System.Drawing.Point(450, 49);
+            this._fileActionsBrowse_button.Name = "_fileActionsBrowse_button";
+            this._fileActionsBrowse_button.Size = new System.Drawing.Size(75, 23);
+            this._fileActionsBrowse_button.TabIndex = 3;
+            this._fileActionsBrowse_button.Text = "Browse";
+            this._fileActionsBrowse_button.UseVisualStyleBackColor = true;
+            this._fileActionsBrowse_button.Click += new System.EventHandler(this._FileActionsBrowse_Button_Click);
             // 
-            // _location_textBox
+            // _fileActionsPath_textBox
             // 
-            this._location_textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this._fileActionsPath_textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this._location_textBox.Location = new System.Drawing.Point(7, 49);
-            this._location_textBox.Name = "_location_textBox";
-            this._location_textBox.Size = new System.Drawing.Size(437, 23);
-            this._location_textBox.TabIndex = 2;
+            this._fileActionsPath_textBox.Location = new System.Drawing.Point(7, 49);
+            this._fileActionsPath_textBox.Name = "_fileActionsPath_textBox";
+            this._fileActionsPath_textBox.Size = new System.Drawing.Size(437, 23);
+            this._fileActionsPath_textBox.TabIndex = 2;
             // 
             // _fileActionsExtract_checkBox
             // 
@@ -979,8 +980,8 @@
         private System.Windows.Forms.ColumnHeader _location_columnHeader;
         private System.Windows.Forms.CheckBox _fileActionsPatch_checkBox;
         private System.Windows.Forms.Label _patchNote_label;
-        private System.Windows.Forms.Button _browse_button;
-        private System.Windows.Forms.TextBox _location_textBox;
+        private System.Windows.Forms.Button _fileActionsBrowse_button;
+        private System.Windows.Forms.TextBox _fileActionsPath_textBox;
         private System.Windows.Forms.CheckBox _fileActionsExtract_checkBox;
         private System.Windows.Forms.Button _startProcess_button;
         private System.Windows.Forms.Label _indexFiles_label;

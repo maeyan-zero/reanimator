@@ -76,7 +76,7 @@
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView.Size = new System.Drawing.Size(700, 380);
             this.dataGridView.TabIndex = 2;
-            this.dataGridView.DataSourceChanged += new System.EventHandler(this.dataGridView_DataSourceChanged);
+            this.dataGridView.DataSourceChanged += new System.EventHandler(this._DataGridView_DataSourceChanged);
             // 
             // IndexFileCheckBoxColumn
             // 
