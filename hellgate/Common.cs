@@ -9,8 +9,8 @@ namespace Hellgate
         public static string DefaultHellgatePath = @"C:\Program Files\Flagship Studios\Hellgate London";
         public const string DataPath = @"data\";
         public const string DataCommonPath = @"data_common\";
-        public static readonly string[] MPFiles = new[] { "mp_hellgate*", "hgl*" };
-        public static readonly string[] SPFiles = new[] { "hellgate*", "sp_hellgate*", "hgl*" };
+        public static readonly string[] MPFiles = new[] { "mp_hellgate*", "hgl*", "x_hellgate*" };
+        public static readonly string[] SPFiles = new[] { "hellgate*", "sp_hellgate*", "hgl*", "x_hellgate*" };
         public static readonly string[] OriginalDats = new[]
         {
             "hellgate000",

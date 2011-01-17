@@ -59,7 +59,6 @@ namespace Reanimator.Forms
             // todo
             _indexFiles_listBox.Items.AddRange(fileManager.IndexFiles.ToArray());
             //for (int i = 0; i < fileManager.IndexFiles.Count; i++) _indexFiles_listBox.SetSelected(i, true);
-            _indexFiles_listBox.Enabled = false;
             //if (fileManagerTCv4 != null) _indexFiles_listBox.Items.AddRange(fileManagerTCv4.IndexFiles.ToArray());
         }
 
