@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Revival.Common;
-using FileEntry = Hellgate.IndexFile.FileEntry;
 
 namespace Hellgate
 {
@@ -19,8 +18,8 @@ namespace Hellgate
         public string HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
         public string HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
         public string Language { get; private set; } // determines which folder to check for the strings files
-        public List<IndexFile> IndexFiles { get; private set; }
-        public Dictionary<ulong, FileEntry> FileEntries { get; private set; }
+        public List<PackFile> IndexFiles { get; private set; }
+        public Dictionary<ulong, PackFileEntry> FileEntries { get; private set; }
         public SortedDictionary<String, DataFile> DataFiles { get; private set; }
         public DataSet XlsDataSet { get; private set; }
         private List<uint> _excelIndexToCodeList;
@@ -48,8 +47,8 @@ namespace Hellgate
         public void Reload()
         {
             DataFiles = new SortedDictionary<String, DataFile>();
-            IndexFiles = new List<IndexFile>();
-            FileEntries = new Dictionary<ulong, FileEntry>();
+            IndexFiles = new List<PackFile>();
+            FileEntries = new Dictionary<ulong, PackFileEntry>();
             XlsDataSet = new DataSet("xlsDataSet")
             {
                 Locale = new CultureInfo("en-us", true),
@@ -62,7 +61,7 @@ namespace Hellgate
 
         private void _OrderSiblings()
         {
-            foreach (FileEntry fileEntry in FileEntries.Values)
+            foreach (PackFileEntry fileEntry in FileEntries.Values)
             {
                 if (fileEntry.Siblings == null || fileEntry.Siblings.Count == 1) continue;
 
@@ -82,7 +81,7 @@ namespace Hellgate
             string[] query = MPVersion ? Common.MPFiles : Common.SPFiles;
             foreach (String fileQuery in query)
             {
-                idxPaths.AddRange(Directory.GetFiles(HellgateDataPath, fileQuery).Where(p => p.EndsWith(IndexFile.FileExtension)));
+                idxPaths.AddRange(Directory.GetFiles(HellgateDataPath, fileQuery).Where(p => p.EndsWith(IndexFile.Extension) || p.EndsWith(HellgatePackFile.Extension)));
             }
             if (idxPaths.Count == 0)
             {
@@ -92,7 +91,38 @@ namespace Hellgate
 
             foreach (String idxPath in idxPaths)
             {
-                _LoadIndexFile(idxPath);
+                HellgateFile hellgateFile;
+                String datFullPath;
+                if (idxPath.EndsWith(IndexFile.Extension))
+                {
+                    hellgateFile = new IndexFile(idxPath);
+                    datFullPath = idxPath.Replace(IndexFile.Extension, ((IndexFile)hellgateFile).DatExtension);
+                }
+                else
+                {
+                    hellgateFile = new HellgatePackFile(idxPath);
+                    datFullPath = idxPath.Replace(HellgatePackFile.Extension, ((HellgatePackFile)hellgateFile).DatExtension);
+                }
+
+                // if there is no accompanying .dat at all, then ignore .idx
+                if (!File.Exists(datFullPath)) continue;
+
+
+                // read in and parse index
+                PackFile packFile = (PackFile)hellgateFile;
+                try
+                {
+                    byte[] fileBytes = File.ReadAllBytes(idxPath);
+                    hellgateFile.ParseFileBytes(fileBytes);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Warning: Failed to read in index file: " + idxPath);
+                    continue;
+                }
+
+                IndexFiles.Add(packFile);
+                _LoadIndexFile(packFile);
             }
 
             return FileEntries.Count != 0;
@@ -101,40 +131,18 @@ namespace Hellgate
         /// <summary>
         /// Parses a single index file on the specified path. Checking for accompanying dat file and populating file index.
         /// </summary>
-        /// <param name="fullPath">The full path of the index file to parse.</param>
-        private void _LoadIndexFile(String fullPath)
+        /// <param name="packFile">The full path of the index file to parse.</param>
+        private void _LoadIndexFile(PackFile packFile)
         {
-            //if (!fullPath.Contains("4580")) return;
-
-            // if there is no accompanying .dat at all, then ignore .idx
-            String datFullPath = fullPath.Replace(IndexFile.FileExtension, IndexFile.DatFileExtension);
-            if (!File.Exists(datFullPath)) return;
-
-
-            // read in and parse index
-            IndexFile index;
-            try
-            {
-                byte[] idxBytes = File.ReadAllBytes(fullPath);
-                index = new IndexFile(idxBytes) { FilePath = fullPath };
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Warning: Failed to read in index file: " + fullPath);
-                return;
-            }
-            if (!index.HasIntegrity) return;
-            IndexFiles.Add(index);
-
             // loop through index files
-            foreach (FileEntry currFileEntry in index.Files)
+            foreach (PackFileEntry currFileEntry in packFile.Files)
             {
-                //if (currFileEntry.FileNameString.Contains("levels_rules.txt.cooked"))
-                //{
-                //    int bp = 0;
-                //}
+                if (currFileEntry.Name.Contains("bldg_c_station_warp_next_layout.xml.cooked") || currFileEntry.Name.Contains("sku."))
+                {
+                    int bp = 0;
+                }
 
-                ulong pathHash = currFileEntry.LongPathHash;
+                ulong pathHash = currFileEntry.PathHash;
 
                 // have we added the file yet
                 if (!FileEntries.ContainsKey(pathHash))
@@ -144,13 +152,13 @@ namespace Hellgate
                 }
 
                 // we haven't added the file, so we need to compare file times and backup states
-                FileEntry origFileEntry = FileEntries[pathHash];
+                PackFileEntry origFileEntry = FileEntries[pathHash];
 
                 // do backup checks first as they'll "override" the FileTime values (i.e. file not found causes game to go to older version)
                 // if currFile IS a backup, and orig is NOT, then add to Siblings as game will be loading orig over "backup" anyways
                 if (currFileEntry.IsPatchedOut && !origFileEntry.IsPatchedOut)
                 {
-                    if (origFileEntry.Siblings == null) origFileEntry.Siblings = new List<FileEntry>();
+                    if (origFileEntry.Siblings == null) origFileEntry.Siblings = new List<PackFileEntry>();
                     origFileEntry.Siblings.Add(currFileEntry);
 
                     continue;
@@ -169,7 +177,7 @@ namespace Hellgate
                     }
 
                     // add the "orig" (now old) to the curr FileEntry.Siblings list
-                    if (currFileEntry.Siblings == null) currFileEntry.Siblings = new List<FileEntry>();
+                    if (currFileEntry.Siblings == null) currFileEntry.Siblings = new List<PackFileEntry>();
                     currFileEntry.Siblings.Add(origFileEntry);
                     FileEntries[pathHash] = currFileEntry;
 
@@ -179,7 +187,7 @@ namespace Hellgate
                 // if curr is older (or equal to; hellgate000 has duplicates) than the orig, then add this to the Siblings list (i.e. orig is newer)
                 if (origFileEntry.FileTime >= currFileEntry.FileTime)
                 {
-                    if (origFileEntry.Siblings == null) origFileEntry.Siblings = new List<FileEntry>();
+                    if (origFileEntry.Siblings == null) origFileEntry.Siblings = new List<PackFileEntry>();
                     origFileEntry.Siblings.Add(currFileEntry);
 
                     continue;
@@ -195,12 +203,12 @@ namespace Hellgate
         /// <returns>Returns true on success.</returns>
         public bool LoadTableFiles(bool ignorePatchedOut = false)
         {
-            //ExcelFile.EnableDebug = true;
+            BeginAllDatReadAccess();
 
             // want excel files and strings files
-            foreach (FileEntry fileEntry in
-                FileEntries.Values.Where(fileEntry => fileEntry.FileNameString.EndsWith(ExcelFile.Extension) ||
-                    (fileEntry.FileNameString.EndsWith(StringsFile.Extention) && fileEntry.RelativeFullPath.Contains(Language))))
+            foreach (PackFileEntry fileEntry in
+                FileEntries.Values.Where(fileEntry => fileEntry.Name.EndsWith(ExcelFile.Extension) ||
+                    (fileEntry.Name.EndsWith(StringsFile.Extention) && fileEntry.Path.Contains(Language))))
             {
                 byte[] fileBytes = GetFileBytes(fileEntry, ignorePatchedOut);
 
@@ -212,17 +220,17 @@ namespace Hellgate
 
                 // parse file data
                 DataFile dataFile;
-                if (fileEntry.FileNameString.EndsWith(ExcelFile.Extension))
+                if (fileEntry.Name.EndsWith(ExcelFile.Extension))
                 {
                     try
                     {
-                        dataFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch, MPVersion);
+                        dataFile = new ExcelFile(fileBytes, fileEntry.Path, MPVersion);
                     }
                     catch (Exception e)
                     {
                         Debug.WriteLine(e.ToString());
                         ExceptionLogger.LogException(e);
-                        Console.WriteLine(String.Format("Critical Error: Failed to load excel file {0} (MPVersion={1})", fileEntry.FileNameString, MPVersion));
+                        Console.WriteLine(String.Format("Critical Error: Failed to load excel file {0} (MPVersion={1})", fileEntry.Name, MPVersion));
                         continue;
                     }
                     if (dataFile.Attributes.IsEmpty) continue;
@@ -230,7 +238,7 @@ namespace Hellgate
                 else
                 {
                     //if (MPVersion) continue; // todo: need to add _TCv4_ stringId keys to DataFileMap before we can load them 
-                    dataFile = new StringsFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
+                    dataFile = new StringsFile(fileBytes, fileEntry.Path);
                 }
 
                 if (!dataFile.HasIntegrity)
@@ -240,7 +248,7 @@ namespace Hellgate
                 }
                 if (dataFile.StringId == null)
                 {
-                    Console.WriteLine(String.Format("Error: StringId is null. {0} was not indexed.", fileEntry.FileNameString));
+                    Console.WriteLine(String.Format("Error: StringId is null. {0} was not indexed.", fileEntry.Name));
                     continue;
                 }
 
@@ -513,7 +521,7 @@ namespace Hellgate
             String fileName = Path.GetFileName(relativeFilePath).ToLower();
             UInt64 filePathHash = Crypt.GetStringsSHA1UInt64(directoryString, fileName);
 
-            FileEntry fileEntry;
+            PackFileEntry fileEntry;
             return FileEntries.TryGetValue(filePathHash, out fileEntry) ? GetFileBytes(fileEntry, ignorePatchedOut) : null;
         }
 
@@ -524,14 +532,14 @@ namespace Hellgate
         /// <param name="fileEntry">The file entry details to read.</param>
         /// <param name="ignorePatchedOut">If true, will ignore the files patched out state effectivly forcing file reading from .dats as if it was never patched out.</param>
         /// <returns>The file byte array, or null on error.</returns>
-        public byte[] GetFileBytes(FileEntry fileEntry, bool ignorePatchedOut = false)
+        public byte[] GetFileBytes(PackFileEntry fileEntry, bool ignorePatchedOut = false)
         {
             if (fileEntry == null) return null;
             byte[] fileBytes = null;
 
 
             // if file is backed up, check for unpacked copy
-            String filePath = fileEntry.RelativeFullPath;
+            String filePath = fileEntry.Path;
             if (fileEntry.IsPatchedOut && !ignorePatchedOut)
             {
                 filePath = filePath.Replace(@"backup\", "");
@@ -554,17 +562,14 @@ namespace Hellgate
             // if not backed up or if backed up but file not found/readable, then read from .dat
             if (fileBytes == null)
             {
-                // open .dat
-                if (!fileEntry.Index.DatFileOpen && !fileEntry.Index.OpenDat(FileAccess.Read))
+                try
                 {
-                    Console.WriteLine("Warning: Failed to open .dat for reading: " + fileEntry.Index.FileNameWithoutExtension);
-                    return null;
+                    fileBytes = fileEntry.Pack.GetFileBytes(fileEntry);
                 }
-
-                fileBytes = fileEntry.Index.GetFileBytes(fileEntry);
-                if (fileBytes == null)
+                catch (Exception e)
                 {
-                    Console.WriteLine("Warning: Failed to read file from .dat: " + fileEntry.FileNameString);
+                    ExceptionLogger.LogException(e);
+                    Console.WriteLine("Warning: Failed to read file from .dat: " + fileEntry.Name);
                     return null;
                 }
             }
@@ -578,7 +583,7 @@ namespace Hellgate
         public void EndAllDatAccess()
         {
             // close any/all open dats
-            foreach (IndexFile indexFile in IndexFiles)
+            foreach (PackFile indexFile in IndexFiles)
             {
                 indexFile.EndDatAccess();
             }
@@ -588,16 +593,12 @@ namespace Hellgate
         /// Attempts to open all .dat files for reading.
         /// </summary>
         /// <returns>True if .dat files were opened, false upon failure.</returns>
-        public bool BeginAllDatReadAccess()
+        public void BeginAllDatReadAccess()
         {
-            // open accompanying dat files
-            if (IndexFiles.Any(indexFile => !indexFile.BeginDatReading()))
+            foreach (PackFile packFile in IndexFiles)
             {
-                EndAllDatAccess();
-                return false;
+                packFile.BeginDatReading();
             }
-
-            return true;
         }
 
         /// <summary>
@@ -608,11 +609,11 @@ namespace Hellgate
         {
             if (root == null) root = HellgatePath;
 
-            foreach (FileEntry fileEntry in FileEntries.Values)
+            foreach (PackFileEntry fileEntry in FileEntries.Values)
             {
-                if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension)) continue;
+                if (!fileEntry.Name.EndsWith(ExcelFile.Extension)) continue;
 
-                FileEntry extractFileEntry = fileEntry;
+                PackFileEntry extractFileEntry = fileEntry;
                 //if (fileEntry.Index.ToString().Contains("4580") && fileEntry.Siblings != null)
                 //{
                 //    extractFileEntry = (from fi in fileEntry.Siblings
@@ -630,7 +631,7 @@ namespace Hellgate
                 //}
 
                 byte[] fileBytes = GetFileBytes(extractFileEntry, true);
-                String filePath = Path.Combine(root, extractFileEntry.RelativeFullPathWithoutPatch);
+                String filePath = Path.Combine(root, extractFileEntry.Path);
                 Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                 File.WriteAllBytes(filePath, fileBytes);
 

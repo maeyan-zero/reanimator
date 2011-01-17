@@ -321,48 +321,41 @@ namespace Revival
 
                 // Try open the index file
                 byte[] sbuffer;
-                IndexFile sourceIndex;
-                IndexFile destinationIndex;
+                PackFile sourceIndex = new IndexFile(sourcePath);
+                PackFile destinationIndex = new IndexFile(destinationPath);
                 try
                 {
-                    sbuffer = File.ReadAllBytes(sourcePath);
+                    sourceIndex.ParseFileBytes(File.ReadAllBytes(sourcePath));
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("Error: {0} filed to load. Make sure you have run Hellgate London at least once (MP version for MP files) before installating this modification.", sourceIndex);
                     ExceptionLogger.LogException(ex);
                     return false;
                 }
-                sourceIndex = new IndexFile(sbuffer) { FilePath = sourcePath };
-                if (sourceIndex.HasIntegrity == false)
-                {
-                    Console.WriteLine("Error: {0} has no integrity. Make sure you have run Hellgate London at least once (MP version for MP files) before installating this modification.", sourceIndex);
-                    return false;
-                }
 
-                destinationIndex = new IndexFile() { FilePath = destinationPath };
                 sourceIndex.BeginDatReading();
 
                 // Extract each path/file
-                foreach (FileEntry fileEntry in sourceIndex.Files)
+                foreach (PackFileEntry fileEntry in sourceIndex.Files)
                 {
-                    if (script.Extraction.paths.Where(p => Regex.IsMatch(fileEntry.RelativeFullPath, p.Replace(@"\", @"\\"))).Any())
-                    {
-                        byte[] fileBytes = sourceIndex.GetFileBytes(fileEntry);
-                        //if (fileEntry.FileNameString.Contains(XmlCookedFile.FileExtention))
-                        //{
-                        //    try
-                        //    {
-                        //        XmlCookedFile xmlCookedFile = new XmlCookedFile();
-                        //        xmlCookedFile.Uncook(fileBytes);
+                    if (!script.Extraction.paths.Where(p => Regex.IsMatch(fileEntry.Path, p.Replace(@"\", @"\\"))).Any()) continue;
 
-                        //        XmlCookedFile reCooked = new XmlCookedFile();
-                        //        fileBytes = reCooked.CookXmlDocument(xmlCookedFile.XmlDoc);
-                        //    }
-                        //    catch (Exception) { }
-                        //}
+                    byte[] fileBytes = sourceIndex.GetFileBytes(fileEntry);
+                    //if (fileEntry.FileNameString.Contains(XmlCookedFile.FileExtention))
+                    //{
+                    //    try
+                    //    {
+                    //        XmlCookedFile xmlCookedFile = new XmlCookedFile();
+                    //        xmlCookedFile.Uncook(fileBytes);
 
-                        destinationIndex.AddFile(fileEntry.DirectoryString, fileEntry.FileNameString, fileBytes, DateTime.Now);
-                    }
+                    //        XmlCookedFile reCooked = new XmlCookedFile();
+                    //        fileBytes = reCooked.CookXmlDocument(xmlCookedFile.XmlDoc);
+                    //    }
+                    //    catch (Exception) { }
+                    //}
+
+                    destinationIndex.AddFile(fileEntry.Directory, fileEntry.Name, fileBytes);
                 }
 
                 // Write the file
@@ -370,16 +363,18 @@ namespace Revival
                 Crypt.Encrypt(ibuffer);
                 try
                 {
-                    File.WriteAllBytes(destinationIndex.FilePath, ibuffer);
-                    sourceIndex.Dispose();
-                    destinationIndex.Dispose();
+                    File.WriteAllBytes(destinationIndex.Path, ibuffer);
                 }
                 catch (Exception ex)
                 {
                     ExceptionLogger.LogException(ex);
+                    return false;
+                }
+                finally
+                {
+                    sourceIndex.EndDatAccess();
                     sourceIndex.Dispose();
                     destinationIndex.Dispose();
-                    return false;
                 }
             }
             #endregion

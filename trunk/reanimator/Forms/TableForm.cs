@@ -5,47 +5,46 @@ using System.Windows.Forms;
 using System.IO;
 using Reanimator.Forms;
 using Hellgate;
-using FileEntry = Hellgate.IndexFile.FileEntry;
 
 namespace Reanimator
 {
     public partial class TableForm : ThreadedFormBase, IDisposable, IMdiChildBase
     {
-        
-        Hellgate.IndexFile IndexFile;
-        Hellgate.StringsFile StringsFileData;
-        List<int> foundIndices;
-        int currentSelection;
-        public string FilePath { get { return (!(IndexFile == null)) ? IndexFile.FilePath : string.Empty; } }
+        private readonly IndexFile _indexFile;
+        private readonly StringsFile _stringsFileData;
+        private List<int> _foundIndices;
+        private int _currentSelection;
 
-        public bool IsIndexFile
-        {
-            get { return IndexFile == null ? false : true; }
-        }
+        public string FilePath { get { return (_indexFile != null) ? _indexFile.FilePath : string.Empty; } }
+        private bool IsIndexFile { get { return _indexFile == null ? false : true; } }
 
-        public TableForm(Hellgate.IndexFile indexFile)
+        public TableForm(IndexFile indexFile)
         {
-            IndexFile = indexFile;
+            _indexFile = indexFile;
             Text += ": " + FilePath;
             TableFormInit();
-            if (!(IndexFile.OpenDat(FileAccess.Read)))
+
+            try
             {
-                string caption = "Warning";
-                string message = "Unable to open accompanying data file: \n" + IndexFile.FileNameWithoutExtension + ".dat\nYou will be unable to extract any files.";
-                MessageBox(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                _indexFile.BeginDatReading();
+            }
+            catch(Exception e)
+            {
+                String message = "Unable to open accompanying data file: \n" + _indexFile.NameWithoutExtension + ".dat\nYou will be unable to extract any files.\n" + e;
+                MessageBox(message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
-        public TableForm(Hellgate.StringsFile stringsFile)
+        public TableForm(StringsFile stringsFile)
         {
-            StringsFileData = stringsFile;
+            _stringsFileData = stringsFile;
             TableFormInit();
         }
 
         private void TableFormInit()
         {
             InitializeComponent();
-            dataGridView.CellContextMenuStripNeeded += dataGridView_CellContextMenuStripNeeded;
+            dataGridView.CellContextMenuStripNeeded += _DataGridView_CellContextMenuStripNeeded;
             dataGridView.RowHeadersVisible = false;
             dataGridView.AllowUserToOrderColumns = true;
 
@@ -58,28 +57,25 @@ namespace Reanimator
             IndexFileCheckBoxColumn.Width = 24;
             IndexFileCheckBoxColumn.Name = "IndexFileCheckBoxColumn";
             
-            foundIndices = new List<int>();
-            currentSelection = 0;
+            _foundIndices = new List<int>();
+            _currentSelection = 0;
 
-            if (!(IndexFile == null))
-                dataGridView.DataSource = IndexFile.Files.ToArray();
-
-            if (!(StringsFileData == null))
-                dataGridView.DataSource = StringsFileData.Rows.ToArray();
+            if (_indexFile != null) dataGridView.DataSource = _indexFile.Files.ToArray();
+            if (_stringsFileData != null) dataGridView.DataSource = _stringsFileData.Rows.ToArray();
         }
 
         /// <summary>
         /// Returns a list of items that were checked in the DataGridView
         /// </summary>
         /// <returns>A list of all checked items</returns>
-        public FileEntry[] GetCheckedFiles()
+        public PackFileEntry[] GetCheckedFiles()
         {
             int counter = 0;
             //A list of checked files
-            List<FileEntry> fileIndex = new List<FileEntry>();
+            List<PackFileEntry> fileIndex = new List<PackFileEntry>();
 
             //Get the data bound to the DataGridView
-            FileEntry[] index = (FileEntry[])this.dataGridView.DataSource;
+            PackFileEntry[] index = (PackFileEntry[])dataGridView.DataSource;
 
             //Iterate through the Rows and check if the checkBoxes were checked 
             foreach (DataGridViewRow row in this.dataGridView.Rows)
@@ -105,13 +101,13 @@ namespace Reanimator
             return fileIndex.ToArray();
         }
 
-        public FileEntry[] GetSelectedFiles()
+        public PackFileEntry[] GetSelectedFiles()
         {
             int counter = 0;
-            List<FileEntry> fileIndex = new List<FileEntry>();
-            FileEntry[] index = (FileEntry[])this.dataGridView.DataSource;
+            List<PackFileEntry> fileIndex = new List<PackFileEntry>();
+            PackFileEntry[] index = (PackFileEntry[])dataGridView.DataSource;
 
-            foreach (DataGridViewRow row in this.dataGridView.Rows)
+            foreach (DataGridViewRow row in dataGridView.Rows)
             {
                 if (row.Selected)
                 {
@@ -124,16 +120,10 @@ namespace Reanimator
             return fileIndex.ToArray();
         }
 
-        private void dataGridView_CellContextMenuStripNeeded(object sender, DataGridViewCellEventArgs e)
+        private void _DataGridView_CellContextMenuStripNeeded(object sender, DataGridViewCellEventArgs e)
         {
-            if (!this.IsIndexFile)
-            {
-                return;
-            }
-            if (!IndexFile.DatFileOpen)
-            {
-                return;
-            }
+            if (!IsIndexFile) return;
+            if (!_indexFile.DatFileOpen) return;
 
             Point pt = dataGridView.PointToClient(MousePosition);
             DataGridView.HitTestInfo hti = dataGridView.HitTest(pt.X, pt.Y);
@@ -187,25 +177,25 @@ namespace Reanimator
             //ExtractFiles(index.FileTable);
         }
 
-        private void ExtractFiles(FileEntry[] files)
+        private void ExtractFiles(PackFileEntry[] files)
         {
             new ProgressForm(DoExtractFiles, files).ShowDialog(this);
         }
 
         private void DoExtractFiles(ProgressForm progressBar, Object param)
         {
-           FileEntry[] files = param as FileEntry[];
+            PackFileEntry[] files = param as PackFileEntry[];
             if (param == null)
             {
                 return;
             }
-            if (!IndexFile.DatFileOpen)
+            if (!_indexFile.DatFileOpen)
             {
                 return;
             }
 
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.SelectedPath = IndexFile.FileDirectory;
+            folderBrowserDialog.SelectedPath = _indexFile.Directory;
             if (this.ShowDialog(folderBrowserDialog) != DialogResult.OK)
             {
                 return;
@@ -221,30 +211,30 @@ namespace Reanimator
             else if (dr == DialogResult.Yes)
             {
                 keepPath = true;
-                extractToPath += @"\" + IndexFile.FileNameWithoutExtension;
+                extractToPath += @"\" + _indexFile.NameWithoutExtension;
             }
 
             progressBar.ConfigBar(0, files.Length, 1);
             progressBar.SetLoadingText("Extracting files to... " + extractToPath);
 
             int filesSaved = 0;
-            foreach (FileEntry file in files)
+            foreach (PackFileEntry file in files)
             {
                 while (true)
                 {
                     try
                     {
-                        byte[] buffer = IndexFile.GetFileBytes(file);
+                        byte[] buffer = _indexFile.GetFileBytes(file);
 
                         string keepPathString = "\\";
                         if (keepPath)
                         {
-                            keepPathString += file.DirectoryStringWithoutPatch;
+                            keepPathString += file.Directory;
                             Directory.CreateDirectory(extractToPath + keepPathString);
                         }
 
-                        progressBar.SetCurrentItemText(file.FileNameString);
-                        FileStream fileOut = new FileStream(extractToPath + keepPathString + file.FileNameString, FileMode.Create);
+                        progressBar.SetCurrentItemText(file.Name);
+                        FileStream fileOut = new FileStream(extractToPath + keepPathString + file.Name, FileMode.Create);
                         fileOut.Write(buffer, 0, buffer.Length);
                         fileOut.Close();
                         filesSaved++;
@@ -252,15 +242,8 @@ namespace Reanimator
                     }
                     catch (Exception e)
                     {
-                        DialogResult failedDr = MessageBox("Failed to extract file from dat!\nFile: " + file.FileNameString + "\n\n" + e.ToString(), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
-                        if (failedDr == DialogResult.Ignore)
-                        {
-                            break;
-                        }
-                        else if (failedDr == DialogResult.Abort)
-                        {
-                            return;
-                        }
+                        DialogResult failedDr = MessageBox("Failed to extract file from dat!\nFile: " + file.Name + "\n\n" + e.ToString(), "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Error);
+                        if (failedDr == DialogResult.Ignore || failedDr == DialogResult.Abort) break;
                     }
                 }
             }
@@ -268,7 +251,7 @@ namespace Reanimator
             MessageBox(filesSaved + " file(s) saved!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void dataGridView_DataSourceChanged(object sender, EventArgs e)
+        private void _DataGridView_DataSourceChanged(object sender, EventArgs e)
         {
             infoText_Label.Text = "Contains " + ((Array)dataGridView.DataSource).Length + " entries.";
         }
@@ -297,9 +280,9 @@ namespace Reanimator
 
         new public void Dispose()
         {
-            if (IndexFile != null)
+            if (_indexFile != null)
             {
-                IndexFile.Dispose();
+                _indexFile.Dispose();
             }
 
             Dispose(true);
@@ -316,7 +299,7 @@ namespace Reanimator
         /// <param name="e">Parameters</param>
         private void Search_Click(object sender, EventArgs e)
         {
-            foundIndices.Clear();
+            _foundIndices.Clear();
             int counter = 0;
 
             this.dataGridView.SuspendLayout();
@@ -328,7 +311,7 @@ namespace Reanimator
                 {
                     if (cell.Value != null && cell.Value.ToString().ToLower().Contains(tb_searchString.Text.ToLower()))
                     {
-                        foundIndices.Add(row.Index);
+                        _foundIndices.Add(row.Index);
                         cell.Selected = true;
                         counter++;
                     }
@@ -337,9 +320,9 @@ namespace Reanimator
 
             searchResults_Label.Text = counter + " matching entries found";
 
-            if (foundIndices.Count > 0)
+            if (_foundIndices.Count > 0)
             {
-                ScrollToPosition(foundIndices[0]);
+                ScrollToPosition(_foundIndices[0]);
             }
 
             this.dataGridView.ResumeLayout();
@@ -390,9 +373,9 @@ namespace Reanimator
 
         public void SaveButton()
         {
-            byte[] saveData = IndexFile.ToByteArray();
+            byte[] saveData = _indexFile.ToByteArray();
             Crypt.Encrypt(saveData);
-            FileStream fOut = new FileStream(IndexFile.FileDirectory + IndexFile.FileNameWithoutExtension + ".new.idx", FileMode.Create);
+            FileStream fOut = new FileStream(_indexFile.Directory + _indexFile.NameWithoutExtension + ".new.idx", FileMode.Create);
             fOut.Write(saveData, 0, saveData.Length);
             fOut.Dispose();
         }
@@ -409,20 +392,20 @@ namespace Reanimator
 
         private void MoveToNextFoundItem(int direction)
         {
-            if (foundIndices.Count > 0)
+            if (_foundIndices.Count > 0)
             {
-                currentSelection += direction;
+                _currentSelection += direction;
 
-                if (currentSelection < 0)
+                if (_currentSelection < 0)
                 {
-                    currentSelection = 0;
+                    _currentSelection = 0;
                 }
-                else if (currentSelection > foundIndices.Count - 1)
+                else if (_currentSelection > _foundIndices.Count - 1)
                 {
-                    currentSelection = foundIndices.Count - 1;
+                    _currentSelection = _foundIndices.Count - 1;
                 }
 
-                ScrollToPosition(foundIndices[currentSelection]);
+                ScrollToPosition(_foundIndices[_currentSelection]);
             }
         }
 
@@ -435,16 +418,18 @@ namespace Reanimator
         {
             if (!IsIndexFile) return;
 
-            IndexFile.FileEntry[] filesIndex = dataGridView.DataSource as IndexFile.FileEntry[];
-            DataGridViewSelectedRowCollection selectedRows = dataGridView.SelectedRows;
+            // todo - we really should change the table view so it can be sorted etc - just stupid how we have it now
+            MessageBox("update me");
+            //IndexFile.FileEntry[] filesIndex = dataGridView.DataSource as IndexFile.FileEntry[];
+            //DataGridViewSelectedRowCollection selectedRows = dataGridView.SelectedRows;
 
-            foreach (DataGridViewRow row in selectedRows)
-            {
-                if (!IndexFile.PatchOutFile(row.Index))
-                {
-                    MessageBox("Failed to patch out file!");
-                }
-            }
+            //foreach (DataGridViewRow row in selectedRows)
+            //{
+            //    if (!_indexFile.PatchOutFile(row.Index))
+            //    {
+            //        MessageBox("Failed to patch out file!");
+            //    }
+            //}
         }
 
         private void replaceSelectedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -457,7 +442,7 @@ namespace Reanimator
             ReplaceFiles(GetCheckedFiles());
         }
 
-        void ReplaceFiles(FileEntry[] files)
+        void ReplaceFiles(PackFileEntry[] files)
         {
             //if (!index.BeginDatWriting())
             //{

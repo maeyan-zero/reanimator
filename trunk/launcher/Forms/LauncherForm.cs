@@ -242,7 +242,7 @@ namespace Launcher.Forms
                 {
                     if (fileEntry.IsPatchedOut)
                     {
-                        indexFile.PatchInFile(fileEntry);
+                        fileEntry.IsPatchedOut = false;
                         isModified = true;
                     }
                 }

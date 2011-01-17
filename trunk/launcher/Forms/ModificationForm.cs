@@ -289,7 +289,7 @@ namespace Launcher.Forms
 
 
                 string indexPath = Path.Combine(Config.HglDir, "data", RevivalMod.Data.Modifications.ID + "_125.idx");
-                IndexFile indexFile = new IndexFile() { FilePath = indexPath };
+                IndexFile indexFile = new IndexFile(indexPath);
 
                 // Apply the scripts
                 List<string> modifiedTables = new List<string>();

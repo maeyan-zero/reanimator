@@ -27,7 +27,7 @@ namespace Reanimator.Forms
         private int _graphicsOffsetY;
         private float _graphicsScale = 1.0f;
 
-        public LevelRulesEditor(FileManager fileManager, IndexFile.FileEntry fileEntry)
+        public LevelRulesEditor(FileManager fileManager, PackFileEntry fileEntry)
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -40,13 +40,13 @@ namespace Reanimator.Forms
             {
                 if (levelRule.StaticRooms != null)
                 {
-                    _LoadRooms(levelRule.StaticRooms, fileEntry.RelativeFullPathWithoutPatch);
+                    _LoadRooms(levelRule.StaticRooms, fileEntry.Path);
                 }
                 else
                 {
                     foreach (LevelRulesFile.Room[] levelRules in levelRule.Rules)
                     {
-                        _LoadRooms(levelRules, fileEntry.RelativeFullPathWithoutPatch);
+                        _LoadRooms(levelRules, fileEntry.Path);
                     }
                 }
             }

@@ -35,8 +35,8 @@ namespace Reanimator.Forms
 
         private class NodeObject
         {
-            public IndexFile Index;
-            public IndexFile.FileEntry FileEntry;
+            public PackFile Index;
+            public PackFileEntry FileEntry;
             public bool IsFolder;
             public bool CanEdit;
             public bool CanCookWith;
@@ -78,10 +78,10 @@ namespace Reanimator.Forms
         /// </summary>
         private void _GenerateFileTree()
         {
-            foreach (IndexFile.FileEntry fileEntry in _fileManager.FileEntries.Values)
+            foreach (PackFileEntry fileEntry in _fileManager.FileEntries.Values)
             {
-                NodeObject nodeObject = new NodeObject { Index = fileEntry.Index, FileEntry = fileEntry };
-                String[] nodeKeys = fileEntry.DirectoryStringWithoutPatch.Split('\\');
+                NodeObject nodeObject = new NodeObject { Index = fileEntry.Pack, FileEntry = fileEntry };
+                String[] nodeKeys = fileEntry.Directory.Split('\\');
                 TreeNode treeNode = null;
 
                 //if (fileEntry.FileNameString == "ct_conna.mop")
@@ -105,7 +105,7 @@ namespace Reanimator.Forms
 
 
                 // need to have canEdit check before we update the node below or it'll be false for newer versions);
-                if (fileEntry.FileNameString.EndsWith(XmlCookedFile.Extension))
+                if (fileEntry.Name.EndsWith(XmlCookedFile.Extension))
                     // todo: before we can do this, need to fix up the "sanity check" part just below
                     //fileEntry.FileNameString.EndsWith(RoomDefinitionFile.Extension) ||
                     //fileEntry.FileNameString.EndsWith(LevelRulesFile.Extension) ||
@@ -114,16 +114,16 @@ namespace Reanimator.Forms
                     nodeObject.CanEdit = true;
                     nodeObject.CanCookWith = true;
                 }
-                else if (fileEntry.FileNameString.EndsWith(ExcelFile.Extension) ||
-                         fileEntry.FileNameString.EndsWith(StringsFile.Extention) ||                      
-                         fileEntry.FileNameString.EndsWith("txt"))
+                else if (fileEntry.Name.EndsWith(ExcelFile.Extension) ||
+                         fileEntry.Name.EndsWith(StringsFile.Extention) ||
+                         fileEntry.Name.EndsWith("txt"))
                 {
                     nodeObject.CanEdit = true;
                 }
 
 
                 // our new node
-                TreeNode node = treeNode.Nodes.Add(fileEntry.RelativeFullPathWithoutPatch, fileEntry.FileNameString);
+                TreeNode node = treeNode.Nodes.Add(fileEntry.Path, fileEntry.Name);
                 _AssignIcons(node);
 
 
@@ -318,13 +318,16 @@ namespace Reanimator.Forms
             progressForm.ConfigBar(1, extractPatchArgs.CheckedNodes.Count, progressStepRate);
             progressForm.SetCurrentItemText("Extracting file(s)...");
 
-            if (!_fileManager.BeginAllDatReadAccess())
+            try
             {
-                MessageBox.Show(
-                    "Failed to open dat files for reading!\nEnsure no other programs are using them and try again.",
-                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _fileManager.BeginAllDatReadAccess();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to open dat files for reading!\nEnsure no other programs are using them and try again.\n" + e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             int i = 0;
             foreach (TreeNode extractNode in extractPatchArgs.CheckedNodes)
             {
@@ -403,7 +406,7 @@ namespace Reanimator.Forms
             // make sure we want to extract this file
             if (!treeNode.Checked || nodeObject.Index == null || nodeObject.FileEntry == null) return true;
 
-            IndexFile.FileEntry fileEntry = nodeObject.FileEntry;
+            PackFileEntry fileEntry = nodeObject.FileEntry;
 
 
             // are we extracting?
@@ -412,7 +415,7 @@ namespace Reanimator.Forms
                 // get path
                 String filePath = extractPatchArgs.KeepStructure
                                       ? Path.Combine(extractPatchArgs.RootDir, treeNode.FullPath)
-                                      : Path.Combine(extractPatchArgs.RootDir, fileEntry.FileNameString);
+                                      : Path.Combine(extractPatchArgs.RootDir, fileEntry.Name);
 
 
                 // does it exist?
@@ -447,7 +450,7 @@ namespace Reanimator.Forms
 
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                     File.WriteAllBytes(filePath, fileBytes);
-                    File.SetLastWriteTime(filePath, DateTime.FromFileTime(fileEntry.FileTime));
+                    File.SetLastWriteTime(filePath, fileEntry.LastModified);
                     break;
                 }
             }
@@ -458,7 +461,7 @@ namespace Reanimator.Forms
 
 
             // don't patch out string files or sound/movie files
-            if (IndexFile.NoPatchExt.Any(ext => fileEntry.FileNameString.EndsWith(ext))) return true;
+            if (IndexFile.NoPatchExt.Any(ext => fileEntry.Name.EndsWith(ext))) return true;
 
 
             // if we're patching out the file, then change its bgColor and set its nodeObject state to backup
@@ -470,15 +473,14 @@ namespace Reanimator.Forms
             if (fileEntry.Siblings != null && fileEntry.Siblings.Count > 0)
             {
                 // this file has siblings - loop through
-                foreach (IndexFile.FileEntry siblingFileEntry in fileEntry.Siblings)
+                foreach (PackFileEntry siblingFileEntry in fileEntry.Siblings.Where(siblingFileEntry => !siblingFileEntry.IsPatchedOut))
                 {
-                    IndexFile siblingIndex = siblingFileEntry.Index;
-                    bool wasPatchedOut = siblingIndex.PatchOutFile(siblingFileEntry);
+                    siblingFileEntry.IsPatchedOut = true;
 
-                    indexFileKey = siblingIndex.FileNameWithoutExtension;
-                    if (wasPatchedOut && !indexToWrite.ContainsKey(indexFileKey))
+                    indexFileKey = siblingFileEntry.Pack.NameWithoutExtension;
+                    if (!indexToWrite.ContainsKey(indexFileKey))
                     {
-                        indexToWrite.Add(indexFileKey, siblingIndex);
+                        indexToWrite.Add(indexFileKey, siblingFileEntry.Pack);
                     }
                 }
             }
@@ -486,15 +488,14 @@ namespace Reanimator.Forms
 
             // now patch the curr file as well
             // only add index to list if it needs to be
-            IndexFile indexFile = nodeObject.Index;
-            if (!indexFile.PatchOutFile(fileEntry)) return true;
+            PackFile indexFile = nodeObject.Index;
+            if (fileEntry.IsPatchedOut) return true;
 
-
-            // add index to indexToWrite list
-            indexFileKey = indexFile.FileNameWithoutExtension;
+            fileEntry.IsPatchedOut = true;
+            indexFileKey = indexFile.NameWithoutExtension;
             if (!indexToWrite.ContainsKey(indexFileKey))
             {
-                indexToWrite.Add(indexFileKey, fileEntry.Index);
+                indexToWrite.Add(indexFileKey, fileEntry.Pack);
             }
             return true;
         }
@@ -592,19 +593,19 @@ namespace Reanimator.Forms
             foreach (TreeNode treeNode in uncookingNodes)
             {
                 NodeObject nodeObject = (NodeObject)treeNode.Tag;
-                IndexFile.FileEntry fileEntry = nodeObject.FileEntry;
+                PackFileEntry fileEntry = nodeObject.FileEntry;
 
 
                 // update progress if applicable
                 if (i % progressUpdateFreq == 0 && progressForm != null)
                 {
-                    progressForm.SetCurrentItemText(fileEntry.RelativeFullPathWithoutPatch);
+                    progressForm.SetCurrentItemText(fileEntry.Path);
                 }
                 i++;
 
 
                 // get the file bytes
-                String relativePath = fileEntry.RelativeFullPathWithoutPatch;
+                String relativePath = fileEntry.Path;
                 byte[] fileBytes;
                 try
                 {

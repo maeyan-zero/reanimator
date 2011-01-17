@@ -98,18 +98,16 @@ namespace Reanimator
             String filePath1 = Config.HglDataDir + @"\data\mp_hellgate_1.10.180.3416_1.0.86.4580.idx";
             String filePath2 = Config.HglDataDir + @"\data\mp_hellgate_localized_1.10.180.3416_1.0.86.4580.idx";
 
-            IndexFile mpHellgate4580 = new IndexFile(File.ReadAllBytes(filePath1));
-            mpHellgate4580.FilePath = filePath1;
-            IndexFile mpHellgateLocal4580 = new IndexFile(File.ReadAllBytes(filePath2));
-            mpHellgateLocal4580.FilePath = filePath2;
+            IndexFile mpHellgate4580 = new IndexFile(filePath1, File.ReadAllBytes(filePath1));
+            IndexFile mpHellgateLocal4580 = new IndexFile(filePath2, File.ReadAllBytes(filePath2));
 
             IndexFile[] indexFiles = new[] { mpHellgate4580, mpHellgateLocal4580 };
             //IndexFile[] indexFiles = new[] { spHellgate4256 };
 
             foreach (IndexFile indexFile in indexFiles)
             {
-                IndexFile newIndexFile = new IndexFile();
-                newIndexFile.FilePath = indexFile.FilePath.Replace("mp_hellgate", "sp_hellgate");
+                String filePath = indexFile.FilePath.Replace("mp_hellgate", "sp_hellgate");
+                IndexFile newIndexFile = new IndexFile(filePath);
                 newIndexFile.BeginDatWriting();
 
                 indexFile.BeginDatReading();
@@ -117,7 +115,7 @@ namespace Reanimator
                 {
                     byte[] fileBytes = indexFile.GetFileBytes(fileEntry);
 
-                    newIndexFile.AddFile(fileEntry.DirectoryString, fileEntry.FileNameString, fileBytes, DateTime.Now);
+                    newIndexFile.AddFile(fileEntry.Directory, fileEntry.Name, fileBytes);
                 }
                 indexFile.EndDatAccess();
 
@@ -1013,17 +1011,17 @@ namespace Reanimator
             Dictionary<uint, uint> rowTypeCounts = new Dictionary<uint, uint>();
             Dictionary<String, uint[]> outputMessages = new Dictionary<String, uint[]>();
             Dictionary<String, ObjectDelegator> objectDelegators = new Dictionary<String, ObjectDelegator>();
-            foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
+            foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
             {
-                if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension)) continue;
+                if (!fileEntry.Name.EndsWith(ExcelFile.Extension)) continue;
 
                 byte[] fileBytes = fileManager.GetFileBytes(fileEntry, true);
                 Debug.Assert(fileBytes != null);
 
-                ExcelFile excelFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
+                ExcelFile excelFile = new ExcelFile(fileBytes, fileEntry.Path);
                 if (excelFile.Attributes.IsEmpty) continue;
 
-                Debug.WriteLine("Checking file: " + fileEntry.RelativeFullPathWithoutPatch);
+                Debug.WriteLine("Checking file: " + fileEntry.Path);
 
                 uint structureId = excelFile.Attributes.StructureId;
                 uint structureUseCount = 0;
@@ -1242,24 +1240,24 @@ namespace Reanimator
             fileManager.ExtractAllExcel();
             ExcelScript.EnableDebug(true);
 
-            foreach (IndexFile.FileEntry fileEntry in fileManager.FileEntries.Values)
+            foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
             {
-                if (!fileEntry.FileNameString.EndsWith(ExcelFile.Extension)) continue;
+                if (!fileEntry.Name.EndsWith(ExcelFile.Extension)) continue;
 
                 byte[] fileBytes = fileManager.GetFileBytes(fileEntry, true);
                 Debug.Assert(fileBytes != null);
-                String filePath = Path.Combine(Config.HglDir, fileEntry.RelativeFullPathWithoutPatch);
+                String filePath = Path.Combine(Config.HglDir, fileEntry.Path);
 
-                ExcelFile excelFile = new ExcelFile(fileBytes, fileEntry.RelativeFullPathWithoutPatch);
+                ExcelFile excelFile = new ExcelFile(fileBytes, fileEntry.Path);
                 if (excelFile.Attributes.IsEmpty) continue;
 
-                Console.WriteLine("Cooking file: " + fileEntry.RelativeFullPathWithoutPatch);
+                Console.WriteLine("Cooking file: " + fileEntry.Path);
 
                 //if (!fileEntry.RelativeFullPathWithoutPatch.Contains("display_item")) continue;
 
                 byte[] csvBytes = excelFile.ExportCSV(fileManager);
                 File.WriteAllBytes(filePath.Replace(ExcelFile.Extension, ExcelFile.ExtensionDeserialised), csvBytes);
-                ExcelFile excelFileCSV = new ExcelFile(fileEntry.RelativeFullPathWithoutPatch);
+                ExcelFile excelFileCSV = new ExcelFile(fileEntry.Path);
                 excelFileCSV.ParseCSV(csvBytes, fileManager);
 
                 //byte[] recookedBytes = excelFileCSV.ToByteArray();

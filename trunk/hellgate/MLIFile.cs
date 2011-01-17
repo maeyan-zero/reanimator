@@ -128,8 +128,6 @@ namespace Hellgate
             Debug.Assert(offset == fileBytes.Length);
         }
 
-
-
         /// <summary>
         /// Parses and XML document and returns the serialized byte array.
         /// </summary>
