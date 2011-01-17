@@ -102,6 +102,8 @@ namespace Hellgate
         public abstract String DatExtension { get; }
 
         public List<PackFileEntry> Files { get; private set; }
+        public int Count { get { return Files.Count; } }
+
 
         protected PackFile(String filePath)
         {
