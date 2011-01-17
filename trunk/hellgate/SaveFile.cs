@@ -22,14 +22,14 @@ namespace Hellgate
     {
         public int unknown;											// 16 bits
         public int statCount;										// 16 bits
-        public List<Unit.StatBlock.Stat> stats;
+        public List<SaveFile.StatBlock.Stat> stats;
     };
 
     [Serializable]
     public struct UnitStatName
     {
         public int unknown1;										// 16 bits
-        public Unit.StatBlock statBlock;							// nameCount * UnitStatBlock stuffs
+        public SaveFile.StatBlock statBlock;							// nameCount * UnitStatBlock stuffs
     };
 
     [Serializable]
@@ -53,10 +53,10 @@ namespace Hellgate
     };
 
     [Serializable]
-    public class Unit
+    public class SaveFile
     {
         //Used for XMLSerialization
-        public Unit()
+        public SaveFile()
         {
             Init();
         }
@@ -304,7 +304,7 @@ namespace Hellgate
 
         [XmlIgnore]
         public bool IsGood { get; private set; }
-        public Unit(BitBuffer bb)
+        public SaveFile(BitBuffer bb)
         {
             _bitBuffer = bb;
             Init();
@@ -315,11 +315,11 @@ namespace Hellgate
             PlayerFlags1 = new List<int>();
             PlayerFlags2 = new List<int>();
             _bitOffsets = new List<UnitBitOffsets>();
-            Items = new List<Unit>();
+            Items = new List<SaveFile>();
             IsGood = false;
         }
 
-        public bool AddItem(Unit item)
+        public bool AddItem(SaveFile item)
         {
             if (!Items.Contains(item))
             {
@@ -331,7 +331,7 @@ namespace Hellgate
             return false;
         }
 
-        public void RemoveItem(Unit item)
+        public void RemoveItem(SaveFile item)
         {
             Items.Remove(item);
             _itemCount = Items.Count;
@@ -492,7 +492,7 @@ namespace Hellgate
         // if (testBit(pUnit->bitField1, 0x12))
         int _itemEndBitOffset;									        // 32           // bit offset to end of items block
         int _itemCount;										            // 10 
-        public List<Unit> Items;                                                        // each item is just a standard data block
+        public List<SaveFile> Items;                                                        // each item is just a standard data block
 
         // if (testBit(pUnit->bitField1, 0x1A))
         uint _weaponConfigFlag;                                         // 32           // must be 0x91103A74; always present
@@ -525,7 +525,7 @@ namespace Hellgate
         /// </summary>
         /// <param name="unit">Unit to be read into.</param>
         /// <returns>True on success.</returns>
-        private bool ReadUnit(Unit unit)
+        private bool ReadUnit(SaveFile unit)
         {
             unit._majorVersion = _bitBuffer.ReadBits(16);
             if (unit._majorVersion != 0x00BF)
@@ -742,7 +742,7 @@ namespace Hellgate
                 unit._itemCount = _bitBuffer.ReadBits(10);
                 for (int i = 0; i < unit._itemCount; i++)
                 {
-                    Unit item = new Unit(_bitBuffer);
+                    SaveFile item = new SaveFile(_bitBuffer);
 
                     if (!item.ParseUnit())
                         return false;
@@ -988,7 +988,7 @@ namespace Hellgate
             return true;
         }
 
-        private bool ReadAppearance(ref Unit heroUnit, ref UnitAppearance appearance)
+        private bool ReadAppearance(ref SaveFile heroUnit, ref UnitAppearance appearance)
         {
             appearance.equippedItemCount = _bitBuffer.ReadBits(3);
             for (int i = 0; i < appearance.equippedItemCount; i++)
@@ -1092,7 +1092,7 @@ namespace Hellgate
             return saveBuffer.GetData();
         }
 
-        private static void WriteUnit(BitBuffer saveBuffer, Unit unit, bool isItem, byte[] charStringBytes)
+        private static void WriteUnit(BitBuffer saveBuffer, SaveFile unit, bool isItem, byte[] charStringBytes)
         {
             /***** Unit Header *****
              * majorVersion                                     16                  Should be 0xBF.

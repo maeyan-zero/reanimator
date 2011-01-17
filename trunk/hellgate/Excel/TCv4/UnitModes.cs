@@ -91,11 +91,11 @@ namespace Hellgate.Excel.TCv4
         [ExcelOutput(IsStringOffset = true)]
         public Int32 doFunction;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        Int32[] undefined2;
+        public Int32[] undefined2;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 clearFunction;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        Int32[] undefined3;
+        public Int32[] undefined3;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 endFunction;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]

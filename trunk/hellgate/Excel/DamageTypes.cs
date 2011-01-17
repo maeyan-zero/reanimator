@@ -44,6 +44,6 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 thornsState;
         public Int32 vulnerabilityInPVPTugboat;
-        Int32 vulnerabilityInPVPHellgate;
+        public Int32 vulnerabilityInPVPHellgate;
     }
 }

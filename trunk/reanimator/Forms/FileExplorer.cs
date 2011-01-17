@@ -5,11 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using Hellgate;
-using Revival.Common;
 using Config = Revival.Common.Config;
 using ExceptionLogger = Revival.Common.ExceptionLogger;
 
@@ -51,8 +49,18 @@ namespace Reanimator.Forms
             _files_fileTreeView.TreeViewNodeSorter = new NodeSorter();
             _files_fileTreeView.EndUpdate();
 
+            // general setups
             _quickExcelTCv4_checkBox.Checked = (fileManagerTCv4 != null);
             _quickExcelTCv4_checkBox.Enabled = Config.LoadTCv4DataFiles;
+            _fileActionsExtract_checkBox.Enabled = true;
+            _location_textBox.Text = Config.HglDir;
+
+            // populate index files used
+            // todo
+            _indexFiles_listBox.Items.AddRange(fileManager.IndexFiles.ToArray());
+            //for (int i = 0; i < fileManager.IndexFiles.Count; i++) _indexFiles_listBox.SetSelected(i, true);
+            _indexFiles_listBox.Enabled = false;
+            //if (fileManagerTCv4 != null) _indexFiles_listBox.Items.AddRange(fileManagerTCv4.IndexFiles.ToArray());
         }
 
         /// <summary>
@@ -275,6 +283,73 @@ namespace Reanimator.Forms
         }
 
         /// <summary>
+        /// Event Function for "Start" Button - Click.
+        /// Extracts and/or patches files out of selected index files to the specified location.
+        /// </summary>
+        /// <param name="sender">The button clicked.</param>
+        /// <param name="e">The Click event args.</param>
+        private void _StartProcess_Button_Click(object sender, EventArgs e)
+        {
+            // make sure we have at least 1 checked file
+            List<TreeNode> checkedNodes = new List<TreeNode>();
+            if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
+            {
+                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                return;
+            }
+
+            // are we extracting?
+            bool extractFiles = _fileActionsExtract_checkBox.Enabled;
+            String savePath = String.Empty;
+            bool keepStructure = false;
+            if (extractFiles)
+            {
+                // where do we want to save it
+                savePath = _location_textBox.Text;
+                if (String.IsNullOrEmpty(savePath))
+                {
+                    // where do we want to save it
+                    FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog { SelectedPath = Config.HglDir };
+                    if (folderBrowserDialog.ShowDialog(this) != DialogResult.OK) return;
+
+                    savePath = folderBrowserDialog.SelectedPath;
+                }
+
+                // do we want to keep the directory structure?
+                DialogResult drKeepStructure = MessageBox.Show("Keep directory structure?", "Path", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (drKeepStructure == DialogResult.Cancel) return;
+
+                keepStructure = (drKeepStructure == DialogResult.Yes);
+            }
+
+            // are we patching?
+            bool patchFiles = _fileActionsPatch_checkBox.Enabled;
+
+            // are we doing anything...
+            if (!extractFiles && !patchFiles)
+            {
+                MessageBox.Show("Please select at lease one action out of extracting or patching to perform!", "No Actions Checked", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            // start process
+            ExtractPackPatchArgs extractPatchArgs = new ExtractPackPatchArgs
+            {
+                ExtractFiles = extractFiles,
+                KeepStructure = keepStructure,
+                PatchFiles = patchFiles,
+                RootDir = savePath,
+                CheckedNodes = checkedNodes
+            };
+
+            ProgressForm progressForm = new ProgressForm(_DoExtractPatch, extractPatchArgs);
+            progressForm.SetLoadingText(String.Format("Extracting file(s)... ({0})", checkedNodes.Count));
+            progressForm.Show(this);
+
+        }
+
+        /// <summary>
         /// Event Function for "Extract to..." Button - Click.
         /// Checks and extracts files to prompted location.
         /// </summary>
@@ -301,6 +376,7 @@ namespace Reanimator.Forms
 
             ExtractPackPatchArgs extractPatchArgs = new ExtractPackPatchArgs
             {
+                ExtractFiles = true,
                 KeepStructure = (drKeepStructure == DialogResult.Yes),
                 PatchFiles = false,
                 RootDir = folderBrowserDialog.SelectedPath,
@@ -336,6 +412,7 @@ namespace Reanimator.Forms
 
             ExtractPackPatchArgs extractPatchArgs = new ExtractPackPatchArgs
             {
+                ExtractFiles = true,
                 KeepStructure = true,
                 PatchFiles = true,
                 RootDir = Config.HglDir,

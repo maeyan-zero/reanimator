@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Xml;
 using Hellgate;
 using Revival.Common;
@@ -14,6 +15,80 @@ namespace Reanimator
 {
     public static class TestScripts
     {
+        public static void CheckIdenticalFieldsToTCv4()
+        {
+            FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.ExtractAllExcel();
+            FileManager fileManagerTCv4 = new FileManager(Config.HglDir, true);
+
+            fileManager.LoadTableFiles();
+            fileManagerTCv4.LoadTableFiles(true);
+
+            foreach (ExcelFile excelFile in fileManager.DataFiles.Values.Where(dataFile => dataFile.IsExcelFile))
+            {
+                Debug.WriteLine("Checking: " + excelFile.StringId);
+
+                if (excelFile.StringId == "LANGUAGE" || excelFile.StringId == "REGION") continue; ;
+
+                ObjectDelegator objectDelegator = fileManager.DataFileDelegators[excelFile.StringId];
+                ObjectDelegator objectDelegatorTCv4 = fileManagerTCv4.DataFileDelegators["_TCv4_" + excelFile.StringId];
+
+                foreach (ObjectDelegator.FieldDelegate fieldDelegate in objectDelegator)
+                {
+                    ObjectDelegator.FieldDelegate fieldDelegateTCv4 = objectDelegatorTCv4.GetFieldDelegate(fieldDelegate.Name);
+                    if (fieldDelegateTCv4 == null)
+                    {
+                        if (fieldDelegate.Name == "blendOpAdventurer") continue; // field removed in TCv4 from WARDROBE_LAYER
+                        if (fieldDelegate.Name == "unitVersionToGetSkillRespec") continue; // field removed in TCv4 from CHAR_DISPLAY
+                        if (fieldDelegate.Name == "String") continue; // field removed in TCv4 from RECIPIES
+                        if (fieldDelegate.Name == "unknown5") continue; // field removed in TCv4 from LEVEL
+                        if (fieldDelegate.Name == "undefined11a") continue; // field removed in TCv4 from STATS
+
+                        Debug.WriteLine(String.Format("Field '{0}' not found in TCv4 table.", fieldDelegate.Name));
+                        continue;
+                    }
+                    
+                    // check excel attributes
+                    ExcelFile.OutputAttribute outputAttribute = ExcelFile.GetExcelAttribute(fieldDelegate.Info);
+                    ExcelFile.OutputAttribute outputAttributeTCv4 = ExcelFile.GetExcelAttribute(fieldDelegateTCv4.Info);
+                    if (!Equals(outputAttribute, outputAttributeTCv4))
+                    {
+                        Debug.WriteLine(String.Format("Field '{0}' doesn't have matching excel attributes.", fieldDelegate.Name));
+                    }
+
+                    // check field types
+                    if (fieldDelegate.FieldType.BaseType == typeof(Array))
+                    {
+                        if (fieldDelegateTCv4.FieldType.BaseType != typeof(Array))
+                        {
+                            Debug.WriteLine(String.Format("Field '{0}' is of type array, but TCv4 field is not.", fieldDelegate.Name));
+                            continue;
+                        }
+
+                        MarshalAsAttribute arrayMarshal = (MarshalAsAttribute)fieldDelegate.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                        MarshalAsAttribute arrayMarshalTCv4 = (MarshalAsAttribute)fieldDelegateTCv4.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+
+                        if (arrayMarshal.SizeConst == arrayMarshalTCv4.SizeConst) continue;
+
+                        Debug.WriteLine(String.Format("Array fields '{0}' have lengths '{1}' != '{2}'", fieldDelegate.Name, arrayMarshal.SizeConst, arrayMarshalTCv4.SizeConst));
+                    }
+
+                    // check field accessor
+                    if (fieldDelegate.IsPublic && !fieldDelegateTCv4.IsPublic)
+                    {
+                        Debug.WriteLine(String.Format("Field '{0}' is public, but not so in TCv4 class.", fieldDelegate.Name));
+                    }
+                    else if (fieldDelegate.IsPrivate && !fieldDelegateTCv4.IsPrivate)
+                    {
+                        Debug.WriteLine(String.Format("Field '{0}' is private, but not so in TCv4 class.", fieldDelegate.Name));
+                    }
+
+                    if (fieldDelegate.FieldType == fieldDelegateTCv4.FieldType || fieldDelegate.FieldType.BaseType == typeof(Enum)) continue;
+                    Debug.WriteLine(String.Format("Field '{0}' of type '{1}' does not match TCv4 of type '{2}'", fieldDelegate.Name, fieldDelegate.FieldType, fieldDelegateTCv4.FieldType));
+                }
+            }
+        }
+
         public static void RepackMPDats()
         {
             //String filePath1 = Config.HglDataDir + @"\data\hellgate000.idx";
@@ -244,7 +319,7 @@ namespace Reanimator
                     }
 
                     Debug.Write("ToByteArray... ");
-                    if (fileBytes.Length != dataFileBytes.Length)
+                    if (fileBytes.Length != dataFileBytes.Length && !doTCv4) // some TCv4 tables don't have their sort columns yet
                     {
                         Debug.WriteLine("ToByteArray() dataFileBytes has differing length: " + dataFile.StringId);
                         File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
@@ -265,7 +340,7 @@ namespace Reanimator
                     // more checks
                     Debug.Write("ToByteArray -> ToByteArray... ");
                     byte[] dataFileBytesFromToByteArray = fromBytesExcel.ToByteArray();
-                    if (fileBytes.Length != dataFileBytesFromToByteArray.Length)
+                    if (fileBytes.Length != dataFileBytesFromToByteArray.Length && !doTCv4) // some TCv4 tables don't have their sort columns yet
                     {
                         Debug.WriteLine("ToByteArray() dataFileBytesFromToByteArray has differing length!");
                         continue;
@@ -333,7 +408,7 @@ namespace Reanimator
                     Debug.Write("Almost Done... ");
                     int recookedLength = recookedExcelBytes.Length;
                     if (excelFile.StringId == "SKILLS") recookedLength += 12; // 12 bytes in int ptr data not used/referenced at all and are removed/lost in bytes -> csv -> bytes
-                    if (fileBytes.Length != recookedLength)
+                    if (fileBytes.Length != recookedLength && !doTCv4) // some TCv4 tables don't have their sort columns yet
                     {
                         ExcelFile finalExcelDump = new ExcelFile(excelFile.FilePath, fileManager.MPVersion);
                         finalExcelDump.ParseData(recookedExcelBytes);
@@ -354,7 +429,7 @@ namespace Reanimator
                     Debug.Assert(finalExcel.HasIntegrity);
                     byte[] finalCheck = finalExcel.ToByteArray();
                     if (excelFile.StringId == "SKILLS") Debug.Assert(finalCheck.Length + 12 == dataFileBytes.Length);
-                    else Debug.Assert(finalCheck.Length == dataFileBytes.Length);
+                    else Debug.Assert(finalCheck.Length == dataFileBytes.Length || doTCv4);
                     byte[] csvCheck = finalExcel.ExportCSV(fileManager);
 
                     if (!csvBytes.SequenceEqual(csvCheck))

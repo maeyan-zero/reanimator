@@ -111,12 +111,13 @@ namespace Hellgate.Excel
         public Int32 reqFailStringHellgate;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 reqFailStringMythos;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        byte[] undefined11;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+        public Int32[] undefined11;
+        public Int32 undefined11a;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string versionFunction;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        byte[] undefined12;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        public Int32[] undefined12;
 
         [FlagsAttribute]
         public enum BitMask01 : uint

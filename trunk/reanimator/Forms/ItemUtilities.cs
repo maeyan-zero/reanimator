@@ -26,14 +26,14 @@ namespace Reanimator.Forms
         //    _statsTable = _dataSet.GetExcelTableFromStringId("STATS");
         //}
 
-        public void LoadCharacterValues(Unit unit)
+        public void LoadCharacterValues(SaveFile unit)
         {
             GenerateUnitNameStrings(new[] { unit }, null);
 
             // todo: rewrite PopulateItems(unit);
         }
 
-        private void GenerateUnitNameStrings(Unit[] units, Hashtable hash)
+        private void GenerateUnitNameStrings(SaveFile[] units, Hashtable hash)
         {
             if (hash == null)
             {
@@ -42,8 +42,8 @@ namespace Reanimator.Forms
 
             try
             {
-                Unit.StatBlock.Stat stat;
-                foreach (Unit unit in units)
+                SaveFile.StatBlock.Stat stat;
+                foreach (SaveFile unit in units)
                 {
                     for (int counter = 0; counter < unit.Stats.Length; counter++)
                     {
@@ -77,7 +77,7 @@ namespace Reanimator.Forms
             }
         }
 
-        public string MapIdToString(Unit.StatBlock.Stat stat, int tableId, int lookupId)
+        public string MapIdToString(SaveFile.StatBlock.Stat stat, int tableId, int lookupId)
         {
             string value = string.Empty;
 
@@ -101,9 +101,9 @@ namespace Reanimator.Forms
             return value;
         }
 
-        public static Unit OpenCharacterFile(string fileName)
+        public static SaveFile OpenCharacterFile(string fileName)
         {
-            Unit unit = null;
+            SaveFile unit = null;
 
             FileStream heroFile;
             try
@@ -118,7 +118,7 @@ namespace Reanimator.Forms
 
             BitBuffer bitBuffer = new BitBuffer(FileTools.StreamToByteArray(heroFile)) { DataByteOffset = 0x2028 };
 
-            unit = new Unit(bitBuffer);
+            unit = new SaveFile(bitBuffer);
             unit.ParseUnit();
 
             heroFile.Close();
@@ -279,13 +279,13 @@ namespace Reanimator.Forms
         //    }
         //}
 
-        public static bool SetSimpleValue(Unit unit, string valueName, int value)
+        public static bool SetSimpleValue(SaveFile unit, string valueName, int value)
         {
             //if (!initialized) return;
 
             for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+                SaveFile.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Name != valueName) continue;
 
@@ -296,13 +296,13 @@ namespace Reanimator.Forms
             return false;
         }
 
-        public static bool SetSimpleValue(Unit unit, int valueId, int value)
+        public static bool SetSimpleValue(SaveFile unit, int valueId, int value)
         {
             //if (!initialized) return;
 
             for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+                SaveFile.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Id != valueId) continue;
 
@@ -313,13 +313,13 @@ namespace Reanimator.Forms
             return false;
         }
 
-        public static bool SetComplexValue(Unit unit, string valueName, Unit.StatBlock.Stat stat)
+        public static bool SetComplexValue(SaveFile unit, string valueName, SaveFile.StatBlock.Stat stat)
         {
             //if (!initialized) return;
 
             for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+                SaveFile.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Name != valueName) continue;
 
@@ -330,11 +330,11 @@ namespace Reanimator.Forms
             return false;
         }
 
-        public static int GetSimpleValue(Unit unit, string valueName)
+        public static int GetSimpleValue(SaveFile unit, string valueName)
         {
             for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+                SaveFile.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Name == valueName)
                 {
@@ -345,15 +345,15 @@ namespace Reanimator.Forms
             return 0;
         }
 
-        public static int GetSimpleValue(Unit unit, int valueId)
+        public static int GetSimpleValue(SaveFile unit, int valueId)
         {
             for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+                SaveFile.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Id == valueId)
                 {
-                    Unit.StatBlock.Stat.Values entry = unitStats.values[0];
+                    SaveFile.StatBlock.Stat.Values entry = unitStats.values[0];
 
                     // if all atributes are 0 the value is most likely a simple value
                     if (entry.Attribute1 == 0 && entry.Attribute2 == 0 && entry.Attribute3 == 0)
@@ -368,11 +368,11 @@ namespace Reanimator.Forms
             return 0;
         }
 
-        public static Unit.StatBlock.Stat GetComplexValue(Unit unit, string valueName)
+        public static SaveFile.StatBlock.Stat GetComplexValue(SaveFile unit, string valueName)
         {
             for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+                SaveFile.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -382,11 +382,11 @@ namespace Reanimator.Forms
             return null;
         }
 
-        public static Unit.StatBlock.Stat GetComplexValue(Unit unit, ItemValueNames valueName)
+        public static SaveFile.StatBlock.Stat GetComplexValue(SaveFile unit, ItemValueNames valueName)
         {
             for (int counter = 0; counter < unit.Stats.Length; counter++)
             {
-                Unit.StatBlock.Stat unitStats = unit.Stats[counter];
+                SaveFile.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Id == (int)valueName)
                 {
@@ -403,9 +403,9 @@ namespace Reanimator.Forms
         /// <param name="valueName">The name/id of the value to add</param>
         /// <param name="value">The actual value to add</param>
         /// <param name="bitCount">The bitCount of this value (possibly defines the maximum value of the "value" entry)</param>
-        public static void AddSimpleValue(Unit unit, ItemValueNames valueName, int value, int bitCount)
+        public static void AddSimpleValue(SaveFile unit, ItemValueNames valueName, int value, int bitCount)
         {
-            List<Unit.StatBlock.Stat> newStats = new List<Unit.StatBlock.Stat>();
+            List<SaveFile.StatBlock.Stat> newStats = new List<SaveFile.StatBlock.Stat>();
             //copies the existing values to a new array
             newStats.AddRange(unit.Stats.stats);
 
@@ -416,10 +416,10 @@ namespace Reanimator.Forms
             }
 
             //generates a new stat
-            Unit.StatBlock.Stat newStat = new Unit.StatBlock.Stat();
+            SaveFile.StatBlock.Stat newStat = new SaveFile.StatBlock.Stat();
             //generates the entry that holds the stat value
-            Unit.StatBlock.Stat.Values newValue = new Unit.StatBlock.Stat.Values();
-            newStat.values = new List<Unit.StatBlock.Stat.Values>();
+            SaveFile.StatBlock.Stat.Values newValue = new SaveFile.StatBlock.Stat.Values();
+            newStat.values = new List<SaveFile.StatBlock.Stat.Values>();
             //adds the entry to the new stat
             newStat.values.Add(newValue);
             //sets the bitCOunt value (maximum stat value defined by the number of bits?)
@@ -448,7 +448,7 @@ namespace Reanimator.Forms
             public Int32 DataOffset2;
         };
 
-        public static void SaveCharacterFile(Unit unit, string filePath)
+        public static void SaveCharacterFile(SaveFile unit, string filePath)
         {
             DialogResult dr = DialogResult.Retry;
             while (dr == DialogResult.Retry)

@@ -22,13 +22,13 @@ namespace Hellgate.Excel
         public Int32 values7;
         public Int32 values8;
         public float fadeInTimeInSeconds;
-        Int32 undefined1; // is always 0
+        public Int32 undefined1; // is always 0
         public float fadeOutTimeInSeconds;
-        Int32 undefined2; // is always 0
+        public Int32 undefined2; // is always 0
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string reverbOverRide;
-        Int32 undefined3; // is always 0
-        Int32 undefined4; // is always 0
+        public Int32 undefined3; // is always 0
+        public Int32 undefined4; // is always 0
         Int32 undefined5; // is always 0
     }
 }

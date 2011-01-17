@@ -352,7 +352,7 @@
     <Compile Include="StringsFile.cs" />
     <Compile Include="StringsFileUtil.cs" />
     <Compile Include="TableDataSet.cs" />
-    <Compile Include="Unit.cs" />
+    <Compile Include="SaveFile.cs" />
     <Compile Include="XmlCookedFile.cs" />
     <Compile Include="XmlCookedFileUtil.cs" />
     <Compile Include="XmlCookedFileTree.cs" />

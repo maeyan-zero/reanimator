@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.IO;
 using Hellgate;
@@ -31,6 +32,12 @@ namespace Reanimator.Forms
 
             if (true) return;
 
+            //const String hellpackTablePath = @"D:\Games\Hellgate\Data\hgl.hpt";
+            //byte[] hellpackFileBytes = File.ReadAllBytes(hellpackTablePath);
+            //HellgatePackFile test = new HellgatePackFile(hellpackTablePath, hellpackFileBytes);
+
+
+
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.ExtractAllExcel();
 
@@ -43,7 +50,8 @@ namespace Reanimator.Forms
 
             //return;
             //TestScripts.RepackMPDats();
-            TestScripts.TestExcelCooking();
+            TestScripts.CheckIdenticalFieldsToTCv4();
+            //TestScripts.TestExcelCooking(true);
             //TestScripts.TestAllCodeValues();
 
             //return;
@@ -63,6 +71,7 @@ namespace Reanimator.Forms
             //    MdiParent = this
             //};
             //levelRulesEditor.Show(););
+            Process.GetCurrentProcess().Kill();
             Environment.FailFast("asdf");
             return;
 

@@ -19,7 +19,7 @@ namespace Reanimator.Forms.ItemTransfer
         // todo: rewrite private TableDataSet _dataSet;
 
         private string _characterPath;
-        private Unit _characterUnit;
+        private SaveFile _characterUnit;
 
         private readonly UnitHelpFunctions _itemHelpFunctions;
 
@@ -108,13 +108,13 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
-        private void InitInventory(Unit unit, ItemPanel itemPanel)
+        private void InitInventory(SaveFile unit, ItemPanel itemPanel)
         {
             itemPanel.Controls.Clear();
 
             try
             {
-                foreach (Unit item in unit.Items)
+                foreach (SaveFile item in unit.Items)
                 {
                     if (item.inventoryType == (int)InventoryType)
                     {
@@ -185,7 +185,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if (_characterUnit == null || _selectedItem == null) return;
 
-            Unit.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item.BaseUnit, ItemValueNames.applied_affix.ToString());
+            SaveFile.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item.BaseUnit, ItemValueNames.applied_affix.ToString());
             if (value != null)
             {
                 MessageBox.Show(value.ToString());

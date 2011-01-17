@@ -66,8 +66,8 @@ namespace Hellgate.Excel
         public String largeIcon;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String smallIcon;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
-        byte[] unknown2;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        Int32[] unknown2;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 iconColor;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]

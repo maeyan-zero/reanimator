@@ -113,12 +113,12 @@ namespace Hellgate.Excel.TCv4
         public Int32 reqFailStringHellgate;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 reqFailStringMythos;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        byte[] undefined11;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+        Int32[] undefined11;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string versionFunction;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        byte[] undefined12;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
+        public Int32[] undefined12;
         public Int32 sendToOthersStat_tcv4;
         public Int32 undefined4_tcv4;
 

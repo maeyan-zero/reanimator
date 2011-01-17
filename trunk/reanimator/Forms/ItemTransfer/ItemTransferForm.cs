@@ -462,7 +462,7 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                Unit character = null;// todo: rewrite  UnitHelpFunctions.OpenCharacterFile(_dataSet, _characterPath2);
+                SaveFile character = null;// todo: rewrite  UnitHelpFunctions.OpenCharacterFile(_dataSet, _characterPath2);
 
 //XmlUtilities<Unit>.Serialize(character, @"F:\before.xml");
 

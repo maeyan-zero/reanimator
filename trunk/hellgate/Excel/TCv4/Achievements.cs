@@ -107,7 +107,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 quality;                                                                   // 19       0x00000000000000D8      XLS_ReadIndex,0x43
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skill;                                                                     // 20       0x00000000000000DC      XLS_ReadIndex,0x29
-        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVELS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 level;                                                                     // 21       0x00000000000000E0      XLS_ReadIndex,0x69
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 stat;                                                                      // 22       0x00000000000000E4      XLS_ReadIndex,0x1B

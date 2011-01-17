@@ -98,6 +98,7 @@ namespace Hellgate.Excel.TCv4
         public Int32 colorSetPriority;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;
+        [ExcelOutput(IsBool = true)]
         public Int32 saveState;
         [ExcelOutput(IsScript = true)]
         public Int32 buyPriceMulti;
