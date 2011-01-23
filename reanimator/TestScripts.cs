@@ -993,10 +993,11 @@ namespace Reanimator
         public static void ExtractFunctionList()
         {
             //const String path = @"C:\SP_FunctionNamePtrGeneration.txt";
-            const String path = @"C:\MP_FunctionNamePtrGeneration.txt";
+            //const String path = @"C:\MP_FunctionNamePtrGeneration.txt";
+            const String path = @"C:\FunctionNamePtrGeneration.txt";
             String[] functionCode = File.ReadAllLines(path);
 
-            ExcelScript.ExtractFunctionList(functionCode);
+            ExcelScript.ExtractFunctionListCStyle(functionCode);
         }
 
         /// <summary>
