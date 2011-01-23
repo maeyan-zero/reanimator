@@ -299,7 +299,7 @@ namespace Hellgate
             /*251*/ new Function { Name = "getCurrentGameTick", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } }
         };
 
-        private static readonly List<Function> CallFunctionsTCv4 = new List<Function>
+        private static readonly List<Function> CallFunctionsTestCenter = new List<Function>
         {
             /*  0*/ new Function { Name = "setUnitTypeAreaFloorVis", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nLevelArea", Type = ArgType.ExcelIndex, TableIndex = 139 }, new Argument { Name = "nFloor", Type = ArgType.Int32 }, new Argument { Name = "nVis", Type = ArgType.Int32 } } },
             /*  1*/ new Function { Name = "setUnitTypeAreaFloorInteractive", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nLevelArea", Type = ArgType.ExcelIndex, TableIndex = 139 }, new Argument { Name = "nFloor", Type = ArgType.Int32 } } },
@@ -640,6 +640,11 @@ namespace Hellgate
             /*336*/ new Function { Name = "reevaluate_stacksize", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } }
         };
 
+        private static readonly List<Function> CallFunctionsResurrection = new List<Function>
+        {
+
+        };
+
         /* OpCode           Function                                Action
          * 0    0x00        Return                                  Must be at end of script.
          * 
@@ -808,7 +813,7 @@ namespace Hellgate
 
             if (!_debug) return;
 
-            String debugRoot = isTCv4 ? DebugRootTCv4 : DebugRoot;
+            String debugRoot = isTCv4 ? DebugRootTestCenter : DebugRoot;
             Directory.CreateDirectory(debugRoot);
             String[] oldLogs = Directory.GetFiles(debugRoot);
             foreach (String logPath in oldLogs)
@@ -1381,32 +1386,14 @@ namespace Hellgate
         /// </summary>
         private void _GenerateExcelScriptFunctions()
         {
-            ExcelFile propertiesTable;
-            ExcelFile skillsTable;
-            if (_fileManager.MPVersion)
-            {
-                propertiesTable = _fileManager.GetDataFile("_TCv4_PROPERTIES") as ExcelFile;
-                skillsTable = _fileManager.GetDataFile("_TCv4_SKILLS") as ExcelFile;
-            }
-            else
-            {
-                propertiesTable = _fileManager.GetDataFile("PROPERTIES") as ExcelFile;
-                skillsTable = _fileManager.GetDataFile("SKILLS") as ExcelFile;
-            }
+            ExcelFile propertiesTable = _fileManager.GetDataFile("PROPERTIES") as ExcelFile;
+            ExcelFile skillsTable = _fileManager.GetDataFile("SKILLS") as ExcelFile;
 
             if (propertiesTable == null || skillsTable == null) throw new Exceptions.ScriptNotInitialisedException("_GenerateExcelScriptFunctions() was unable to obtain the Properties and Skills excel tables!");
 
             _ParseExcelFunctions(propertiesTable);
             _ParseExcelFunctions(skillsTable);
-
-            if (_fileManager.MPVersion)
-            {
-                _haveExcelFunctionsTCv4 = true;
-            }
-            else
-            {
-                _haveExcelFunctions = true;
-            }
+            _haveExcelFunctions = true;
         }
 
         /// <summary>

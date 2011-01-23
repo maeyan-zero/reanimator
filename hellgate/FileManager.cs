@@ -12,20 +12,33 @@ namespace Hellgate
 {
     public partial class FileManager : IDisposable
     {
+        [Flags]
+        public enum ClientVersionFlags
+        {
+            SinglePlayer = (1 << 0),
+            TestCenter = (1 << 1),
+            Resurrection = (1 << 2)
+        }
+
+        private const String ExcelTablesStringId = "EXCELTABLES";
+
+        public readonly Dictionary<String, ObjectDelegator> DataFileDelegators = new Dictionary<String, ObjectDelegator>();
+        public readonly ClientVersionFlags ClientVersion;
+
         public bool HasIntegrity { get; private set; }
-        public bool MPVersion { get; private set; }
-        public string HellgatePath { get; private set; }
-        public string HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
-        public string HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
-        public string Language { get; private set; } // determines which folder to check for the strings files
+        public bool IsVersionTestCenter { get { return (ClientVersion & ClientVersionFlags.TestCenter) > 0; } }
+        public bool IsVersionResurrection { get { return (ClientVersion & ClientVersionFlags.Resurrection) > 0; } }
+        public String HellgatePath { get; private set; }
+        public String HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
+        public String HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
+        public String Language { get; private set; } // determines which folder to check for the strings files
         public List<PackFile> IndexFiles { get; private set; }
         public Dictionary<ulong, PackFileEntry> FileEntries { get; private set; }
         public SortedDictionary<String, DataFile> DataFiles { get; private set; }
         public DataSet XlsDataSet { get; private set; }
+
         private List<uint> _excelIndexToCodeList;
         private Dictionary<uint, ExcelFile> _excelCodeToTable;
-        private readonly String _excelTablesStringId;
-        public readonly Dictionary<String, ObjectDelegator> DataFileDelegators = new Dictionary<String, ObjectDelegator>();
 
         /// <summary>
         /// Initialize the File Manager by the given Hellgate path.
@@ -34,9 +47,16 @@ namespace Hellgate
         /// <param name="mpVersion">Set true to initialize only the MP files data.</param>
         public FileManager(String hellgatePath, bool mpVersion = false)
         {
+            // what version are we loading from
+            ClientVersion = ClientVersionFlags.SinglePlayer;
+            if (mpVersion) ClientVersion |= ClientVersionFlags.TestCenter;
+
+            String versionDat = Path.Combine(hellgatePath, "Version.dat");
+            if (File.Exists(versionDat)) ClientVersion |= ClientVersionFlags.Resurrection;
+
+
+            // rest of ctor
             HellgatePath = hellgatePath;
-            MPVersion = mpVersion;
-            _excelTablesStringId = MPVersion ? "_TCv4_EXCELTABLES" : "EXCELTABLES";
             Language = "english"; // do we need to bother with anything other than english?
             Reload();
         }
@@ -78,7 +98,7 @@ namespace Hellgate
         private bool _LoadFileTable()
         {
             List<String> idxPaths = new List<String>();
-            string[] query = MPVersion ? Common.MPFiles : Common.SPFiles;
+            string[] query = IsVersionTestCenter ? Common.MPFiles : Common.SPFiles;
             foreach (String fileQuery in query)
             {
                 idxPaths.AddRange(Directory.GetFiles(HellgateDataPath, fileQuery).Where(p => p.EndsWith(IndexFile.Extension) || p.EndsWith(HellgatePackFile.Extension)));
@@ -225,13 +245,19 @@ namespace Hellgate
                 {
                     try
                     {
-                        dataFile = new ExcelFile(fileBytes, fileEntry.Path, MPVersion);
+                        dataFile = new ExcelFile(fileBytes, fileEntry.Path, ClientVersion);
                     }
-                    catch (Exception e)
+                    catch (Exceptions.DataFileStringIdNotFound dataFileStringIdNotFound)
                     {
-                        Debug.WriteLine(e.ToString());
-                        ExceptionLogger.LogException(e);
-                        Console.WriteLine(String.Format("Critical Error: Failed to load excel file {0} (MPVersion={1})", fileEntry.Name, MPVersion));
+                        Debug.WriteLine(dataFileStringIdNotFound.ToString());
+                        ExceptionLogger.LogException(dataFileStringIdNotFound);
+                        continue;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.ToString());
+                        ExceptionLogger.LogException(ex);
+                        Console.WriteLine(String.Format("Critical Error: Failed to load excel file {0} (ClientVersion = {1})", fileEntry.Name, ClientVersion));
                         continue;
                     }
                     if (dataFile.Attributes.IsEmpty) continue;
@@ -334,18 +360,17 @@ namespace Hellgate
         /// <returns>The Excel Table as a DataTable, or null if not found.</returns>
         public ExcelFile GetExcelTableFromCode(uint code)
         {
-            if (DataFiles == null || DataFiles.ContainsKey(_excelTablesStringId) == false) return null;
+            if (DataFiles == null || DataFiles.ContainsKey(ExcelTablesStringId) == false) return null;
 
             if (_excelCodeToTable == null)
             {
-                ExcelFile excelTables = (ExcelFile)DataFiles[_excelTablesStringId];
+                ExcelFile excelTables = (ExcelFile)DataFiles[ExcelTablesStringId];
                 _excelCodeToTable = new Dictionary<uint, ExcelFile>();
 
                 foreach (Excel.ExcelTables excelTablesRow in excelTables.Rows)
                 {
-                    String excelName = (MPVersion) ? "_TCv4_" + excelTablesRow.name : excelTablesRow.name;
                     DataFile dataFile;
-                    if (DataFiles.TryGetValue(excelName, out dataFile))
+                    if (DataFiles.TryGetValue(excelTablesRow.name, out dataFile))
                     {
                         _excelCodeToTable[(uint)excelTablesRow.code] = (ExcelFile)dataFile;
                     }
@@ -373,7 +398,7 @@ namespace Hellgate
             if (_excelIndexToCodeList == null)
             {
                 DataFile excelTables;
-                if (!DataFiles.TryGetValue(_excelTablesStringId, out excelTables)) return 0;
+                if (!DataFiles.TryGetValue(ExcelTablesStringId, out excelTables)) return 0;
 
                 _excelIndexToCodeList = new List<uint>();
                 foreach (Excel.ExcelTables excelTable in excelTables.Rows)
@@ -435,7 +460,7 @@ namespace Hellgate
 
         public int GetExcelRowIndex(uint code, String value)
         {
-            if (DataFiles == null || DataFiles[_excelTablesStringId] == null) return -1;
+            if (DataFiles == null || DataFiles[ExcelTablesStringId] == null) return -1;
 
             return _GetExcelRowIndex(GetExcelTableFromCode(code), value);
         }
@@ -483,7 +508,7 @@ namespace Hellgate
 
         public String GetExcelRowStringFromRowIndex(uint code, int rowIndex, int colIndex = 0)
         {
-            if (DataFiles == null || DataFiles.ContainsKey(_excelTablesStringId) == false || rowIndex < 0) return null;
+            if (DataFiles == null || DataFiles.ContainsKey(ExcelTablesStringId) == false || rowIndex < 0) return null;
 
             ExcelFile excelTable = GetExcelTableFromCode(code);
 
@@ -642,7 +667,7 @@ namespace Hellgate
 
                 try
                 {
-                    ExcelFile excelFile = new ExcelFile(fileBytes, filePath, MPVersion);
+                    ExcelFile excelFile = new ExcelFile(fileBytes, filePath, ClientVersion);
                     csvBytes = excelFile.ExportCSV(this);
                 }
                 catch (Exception)

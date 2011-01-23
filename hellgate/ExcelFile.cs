@@ -21,13 +21,12 @@ namespace Hellgate
         private byte[] _scriptBuffer;
         private readonly byte[] _myshBuffer;
         private byte[][] _extendedBuffer;
-        private StringCollection _secondaryStrings;
+        private String[][] _csvTable;
 
+        public List<String> SecondaryStrings { get; private set; }
         public byte[] ScriptBuffer { get { return _scriptBuffer; } }
         public List<ExcelFunction> ExcelFunctions;
         public List<Int32[]> IndexSortArray; // is only available/set when ExcelFile.ExcelDebug = true
-        private readonly bool _isTCv4;
-        private String[][] _csvTable;
 
         private ExcelHeader _excelFileHeader = new ExcelHeader
         {
@@ -42,18 +41,30 @@ namespace Hellgate
         };
         #endregion
 
-        public ExcelFile(String filePath, bool isTCv4 = false)
+        public ExcelFile(String filePath, FileManager.ClientVersionFlags clientVersion = FileManager.ClientVersionFlags.SinglePlayer)
         {
             Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
 
             IsExcelFile = true;
             FilePath = filePath;
-            _isTCv4 = isTCv4;
-            StringId = GetStringId(filePath, isTCv4);
+            StringId = _GetStringId(filePath);
             if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
 
             // get the excel type attributes
-            Attributes = DataFileMap[StringId];
+            DataFileAttributes dataFileAttributes = null;
+            if ((clientVersion & FileManager.ClientVersionFlags.Resurrection) > 0)
+            {
+                DataFileMapResurrection.TryGetValue(StringId, out dataFileAttributes);
+            }
+            if (dataFileAttributes == null && (clientVersion & FileManager.ClientVersionFlags.TestCenter) > 0)
+            {
+                DataFileMapTestCenter.TryGetValue(StringId, out dataFileAttributes);
+            }
+            if (dataFileAttributes == null)
+            {
+                DataFileMap.TryGetValue(StringId, out dataFileAttributes);
+            }
+            Attributes = dataFileAttributes;
             if (Attributes.IsEmpty)
             {
                 HasIntegrity = true;
@@ -75,19 +86,31 @@ namespace Hellgate
         /// </summary>
         /// <param name="buffer">Byte array of the given Excel file object.</param>
         /// <param name="filePath">Path to file being loaded.</param>
-        /// <param name="isTCv4">Set to true if the buffer contains TCv4 data.</param>
-        public ExcelFile(byte[] buffer, String filePath, bool isTCv4 = false)
+        /// <param name="clientVersion">The versions of excel files to try to load from.</param>
+        public ExcelFile(byte[] buffer, String filePath, FileManager.ClientVersionFlags clientVersion = FileManager.ClientVersionFlags.SinglePlayer)
         {
             Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
 
             IsExcelFile = true;
             FilePath = filePath;
-            _isTCv4 = isTCv4;
-            StringId = GetStringId(filePath, isTCv4);
+            StringId = _GetStringId(filePath);
             if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
 
             // get the excel type attributes
-            Attributes = DataFileMap[StringId];
+            DataFileAttributes dataFileAttributes = null;
+            if ((clientVersion & FileManager.ClientVersionFlags.Resurrection) > 0)
+            {
+                DataFileMapResurrection.TryGetValue(StringId, out dataFileAttributes);
+            }
+            if (dataFileAttributes == null && (clientVersion & FileManager.ClientVersionFlags.TestCenter) > 0)
+            {
+                DataFileMapTestCenter.TryGetValue(StringId, out dataFileAttributes);
+            }
+            if (dataFileAttributes == null)
+            {
+                DataFileMap.TryGetValue(StringId, out dataFileAttributes);
+            }
+            Attributes = dataFileAttributes;
             if (Attributes.IsEmpty)
             {
                 HasIntegrity = true;
@@ -319,8 +342,6 @@ namespace Hellgate
 
 
                                 String tableStringId = excelAttribute.TableStringId;
-                                if (_isTCv4) tableStringId = "_TCv4_" + tableStringId;
-
                                 bool hasCodeColumn = fileManager.DataTableHasColumn(tableStringId, "code");
                                 if (value.Length == 0 && hasCodeColumn) continue;
 
@@ -423,19 +444,19 @@ namespace Hellgate
 
                         if (excelAttribute.IsSecondaryString)
                         {
-                            if (_secondaryStrings == null) _secondaryStrings = new StringCollection();
+                            if (SecondaryStrings == null) SecondaryStrings = new List<String>();
 
                             if (value == "")
                             {
                                 objectDelegator[fieldDelegate.Name, rowInstance] = -1;
                                 continue;
                             }
-                            if (!_secondaryStrings.Contains(value))
+                            if (!SecondaryStrings.Contains(value))
                             {
-                                _secondaryStrings.Add(value);
+                                SecondaryStrings.Add(value);
                             }
 
-                            objectDelegator[fieldDelegate.Name, rowInstance] = _secondaryStrings.IndexOf(value);
+                            objectDelegator[fieldDelegate.Name, rowInstance] = SecondaryStrings.IndexOf(value);
                             continue;
                         }
 
@@ -642,11 +663,11 @@ namespace Hellgate
             if (!(_CheckToken(buffer, offset, Token.cxeh)))
             {
                 int stringCount = FileTools.ByteArrayToInt32(buffer, ref offset);
-                if (stringCount != 0) _secondaryStrings = new StringCollection();
+                if (stringCount != 0) SecondaryStrings = new List<String>();
                 for (int i = 0; i < stringCount; i++)
                 {
                     int charCount = FileTools.ByteArrayToInt32(buffer, ref offset);
-                    _secondaryStrings.Add(FileTools.ByteArrayToStringASCII(buffer, offset));
+                    SecondaryStrings.Add(FileTools.ByteArrayToStringASCII(buffer, offset));
                     offset += charCount;
                 }
             }
@@ -730,8 +751,8 @@ namespace Hellgate
             byte[] newIntegerBuffer = null;
             int newIntegerBufferOffset = 1;
             byte[][] newExtendedBuffer = null;
-            StringCollection newSecondaryStrings = null;
-            List<object> newTable = new List<object>();
+            List<String> newSecondaryStrings = null;
+            List<Object> newTable = new List<object>();
 
             bool failedParsing = false;
             const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -827,7 +848,7 @@ namespace Hellgate
 
                         if (attribute.IsSecondaryString)
                         {
-                            if (newSecondaryStrings == null) newSecondaryStrings = new StringCollection();
+                            if (newSecondaryStrings == null) newSecondaryStrings = new List<String>();
 
                             String strValue = value as String;
                             if (strValue == null) return false;
@@ -900,7 +921,7 @@ namespace Hellgate
             _stringBuffer = newStringBuffer;
             _scriptBuffer = newIntegerBuffer;
             _extendedBuffer = newExtendedBuffer;
-            _secondaryStrings = newSecondaryStrings;
+            SecondaryStrings = newSecondaryStrings;
 
             return true;
         }
@@ -955,10 +976,10 @@ namespace Hellgate
 
 
             // Secondary Strings
-            if (_secondaryStrings != null)
+            if (SecondaryStrings != null)
             {
-                FileTools.WriteToBuffer(ref buffer, ref offset, _secondaryStrings.Count);
-                foreach (string str in _secondaryStrings)
+                FileTools.WriteToBuffer(ref buffer, ref offset, SecondaryStrings.Count);
+                foreach (string str in SecondaryStrings)
                 {
                     FileTools.WriteToBuffer(ref buffer, ref offset, str.Length + 1); // +1 for \0
                     FileTools.WriteToBuffer(ref buffer, ref offset, FileTools.StringToASCIIByteArray(str));
@@ -1185,8 +1206,6 @@ namespace Hellgate
                                 }
 
                                 String tableStringId = excelAttribute.TableStringId;
-                                if (_isTCv4) tableStringId = "_TCv4_" + tableStringId;
-
                                 String negative = String.Empty;
                                 if (indexValues[i] < 0)
                                 {
@@ -1271,7 +1290,7 @@ namespace Hellgate
                             int index = (int)fieldDelegate.GetValue(rowObject);
                             if (index != -1)
                             {
-                                rowStr[col] = _secondaryStrings[index];
+                                rowStr[col] = SecondaryStrings[index];
                             }
                             continue;
                         }

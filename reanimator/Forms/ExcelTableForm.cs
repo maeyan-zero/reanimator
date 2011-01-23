@@ -41,9 +41,9 @@ namespace Reanimator.Forms
             _dataChanged = false;
             _selectedIndexChange = false;
 
-            Init();
+            _Init();
 
-            ProgressForm progress = new ProgressForm(LoadTable, _dataFile);
+            ProgressForm progress = new ProgressForm(_LoadTable, _dataFile);
             progress.SetStyle(ProgressBarStyle.Marquee);
             progress.SetLoadingText("Generating DataTable...");
             progress.SetCurrentItemText(String.Empty);
@@ -51,9 +51,8 @@ namespace Reanimator.Forms
             _dataTable.RowChanged += (sender, e) => { _dataChanged = true; };
 
             // make it look pretty
-            // todo: rewrite
-            //rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
-            //rows_ListBox.SelectedIndex = 0;
+            rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
+            rows_ListBox.SelectedIndex = 0;
 
             // fixes mouse scroll wheel
             // todo: this is dodgy and causes focused elements within the layoutpanel to lose focus (e.g. a text box) - rather anoying
@@ -61,7 +60,7 @@ namespace Reanimator.Forms
             rows_LayoutPanel.MouseEnter += (sender, e) => rows_LayoutPanel.Focus();
         }
 
-        private void UseDataView()
+        private void _UseDataView()
         {
             String temp = _tableData_DataGridView.DataMember;
             DataTable dataTable = _fileManager.XlsDataSet.Tables[temp];
@@ -70,7 +69,7 @@ namespace Reanimator.Forms
             _tableData_DataGridView.DataSource = _dataView;
         }
 
-        private void Init()
+        private void _Init()
         {
             InitializeComponent();
 
@@ -81,13 +80,13 @@ namespace Reanimator.Forms
             _tableData_DataGridView.DataMember = null;
         }
 
-        private void LoadTable(ProgressForm progress, Object var)
+        private void _LoadTable(ProgressForm progress, Object var)
         {
             DataFile dataFile = var as DataFile;
             if (dataFile == null) return;
 
 
-            // table tab
+            //// Table View
             _tableData_DataGridView.SuspendLayout();
             _dataTable = _fileManager.LoadTable(dataFile, true);
             if (_dataTable == null)
@@ -124,123 +123,134 @@ namespace Reanimator.Forms
             }
             _tableData_DataGridView.ResumeLayout();
 
-            // todo: rewrite
-            //// list view tab
-            //int rowCount = _dataTable.Rows.Count;
-            //Object[] rows = new Object[rowCount];
-            //int row = 0;
-            //foreach (DataRow dr in _dataTable.Rows)
-            //{
-            //    rows[row++] = dr[0] + ": " + dr[1];
-            //}
-            //rows_ListBox.SuspendLayout();
-            //rows_ListBox.Items.AddRange(rows);
-            //rows_ListBox.SelectedIndexChanged += rows_ListBox_SelectedIndexChanged;
-            //rows_ListBox.ResumeLayout();
+            //// List View
+            int rowCount = _dataTable.Rows.Count;
+            Object[] rows = new Object[rowCount];
+            int row = 0;
+            foreach (DataRow dr in _dataTable.Rows)
+            {
+                rows[row++] = dr[0] + ": " + dr[2];
+            }
+            rows_ListBox.SuspendLayout();
+            rows_ListBox.Items.AddRange(rows);
+            rows_ListBox.SelectedIndexChanged += _Rows_ListBox_SelectedIndexChanged;
+            rows_ListBox.ResumeLayout();
 
-            //rows_LayoutPanel.SuspendLayout();
-            //int column = 0;
-            //TextBox relationTextBox = null;
-            //foreach (DataColumn dc in _dataTable.Columns)
-            //{
-            //    if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBool) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBool])
-            //    {
-            //        CheckBox cb = new CheckBox
-            //                          {
-            //                              Parent = rows_LayoutPanel,
-            //                              AutoSize = true,
-            //                              Dock = DockStyle.Fill,
-            //                              Name = dc.ColumnName,
-            //                              Text = dc.ColumnName
-            //                          };
-            //        rows_LayoutPanel.SetColumnSpan(cb, 2);
+            rows_LayoutPanel.SuspendLayout();
+            int column = 0;
+            TextBox relationTextBox = null;
+            foreach (DataColumn dc in _dataTable.Columns)
+            {
+                if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBool) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBool])
+                {
+                    CheckBox cb = new CheckBox
+                    {
+                        Parent = rows_LayoutPanel,
+                        AutoSize = true,
+                        Dock = DockStyle.Fill,
+                        Name = dc.ColumnName,
+                        Text = dc.ColumnName
+                    };
+                    rows_LayoutPanel.SetColumnSpan(cb, 2);
 
-            //        cb.CheckedChanged += cb_ItemCheck;
-            //        _specialControls.Add(dc.ColumnName, cb);
+                    cb.CheckedChanged += _RowView_CheckBox_ItemCheck;
+                    _specialControls.Add(dc.ColumnName, cb);
 
-            //        column++;
-            //        continue;
-            //    }
+                    column++;
+                    continue;
+                }
 
-            //    new Label { Text = dc.ColumnName, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill, TextAlign = ContentAlignment.MiddleLeft};
+                new Label
+                {
+                    Text = dc.ColumnName,
+                    Parent = rows_LayoutPanel,
+                    AutoSize = true,
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleLeft
+                };
 
-            //    if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
-            //    {
-            //        CheckedListBox clb = new CheckedListBox
-            //                                 {
-            //                                     Parent = rows_LayoutPanel,
-            //                                     AutoSize = true,
-            //                                     Dock = DockStyle.Fill,
-            //                                     MultiColumn = false,
-            //                                     Name = dc.ColumnName
-            //                                 };
+                if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
+                {
+                    CheckedListBox clb = new CheckedListBox
+                    {
+                        Parent = rows_LayoutPanel,
+                        AutoSize = true,
+                        Dock = DockStyle.Fill,
+                        MultiColumn = false,
+                        Name = dc.ColumnName
+                    };
 
-            //        clb.ItemCheck += clb_ItemCheck;
-            //        _specialControls.Add(dc.ColumnName, clb);
+                    clb.ItemCheck += _RowView_CheckedListBox_ItemCheck;
+                    _specialControls.Add(dc.ColumnName, clb);
 
-            //        Type cellType = dc.DataType;
+                    Type cellType = dc.DataType;
 
-            //        foreach (Enum type in Enum.GetValues(cellType))
-            //        {
-            //            clb.Items.Add(type, false);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        TextBox tb = new TextBox { Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill};
-            //        tb.DataBindings.Add("Text", _dataTable, dc.ColumnName);
+                    foreach (Enum type in Enum.GetValues(cellType))
+                    {
+                        clb.Items.Add(type, false);
+                    }
+                }
+                else
+                {
+                    TextBox tb = new TextBox
+                    {
+                        Text = String.Empty,
+                        Parent = rows_LayoutPanel,
+                        AutoSize = true,
+                        Dock = DockStyle.Fill
+                    };
+                    tb.DataBindings.Add("Text", _dataTable, dc.ColumnName);
 
-            //        if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsRelationGenerated]) ||
-            //            (column == 0))
-            //        {
-            //            tb.ReadOnly = true;
-            //            if (relationTextBox != null)
-            //                relationTextBox.TextChanged += (sender, e) =>
-            //                        tb.ResetText();
-            //        }
+                    if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsRelationGenerated]) || column == 0)
+                    {
+                        tb.ReadOnly = true;
+                        if (relationTextBox != null) relationTextBox.TextChanged += (sender, e) => tb.ResetText();
+                    }
 
-            //        if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringIndex) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringIndex]) ||
-            //            (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringId) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringId]))
-            //        {
-            //            relationTextBox = tb;
-            //        }
-            //        else
-            //        {
-            //            relationTextBox = null;
-            //        }
-            //    }
+                    if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringIndex) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringIndex]) ||
+                        (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringOffset) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringOffset]))
+                    {
+                        relationTextBox = tb;
+                    }
+                    else
+                    {
+                        relationTextBox = null;
+                    }
+                }
 
-            //    column++;
-            //}
+                column++;
+            }
 
-            //new Label {Text = String.Empty, Parent = rows_LayoutPanel, AutoSize = true, Dock = DockStyle.Fill};
-            //rows_LayoutPanel.ResumeLayout();
+            new Label
+            {
+                Text = String.Empty,
+                Parent = rows_LayoutPanel,
+                AutoSize = true,
+                Dock = DockStyle.Fill
+            };
+            rows_LayoutPanel.ResumeLayout();
+            rows_LayoutPanel.Width += 10;
 
 
-            if (_excelFile == null)
+            //// Debug Stuff
+            // secondary strings)
+            if (_excelFile == null || !ExcelFile.EnableDebug || _excelFile.IndexSortArray == null)
             {
                 tabControl1.TabPages.RemoveByKey("stringsPage");
                 tabControl1.TabPages.RemoveByKey("indexArraysPage");
                 return;
             }
 
-            // todo: rewrite
             // strings tab
-            //if (_excelFile.SecondaryStrings != null && _excelFile.SecondaryStrings.Count > 0)
-            //{
-            //    strings_ListBox.SuspendLayout();
-            //    strings_ListBox.DataSource = _excelFile.SecondaryStrings;
-            //    strings_ListBox.ResumeLayout();
-            //}
-            //else
-            //{
-            //    tabControl1.TabPages.RemoveByKey("stringsPage");
-            //}
-
-            if (!ExcelFile.EnableDebug || _excelFile.IndexSortArray == null)
+            if (_excelFile.SecondaryStrings != null && _excelFile.SecondaryStrings.Count > 0)
             {
-                tabControl1.TabPages.RemoveByKey("indexArraysPage");
-                return;
+                _strings_ListBox.SuspendLayout();
+                _strings_ListBox.DataSource = _excelFile.SecondaryStrings;
+                _strings_ListBox.ResumeLayout();
+            }
+            else
+            {
+                tabControl1.TabPages.RemoveByKey("stringsPage");
             }
 
             // is messy, but all we need for debugging
@@ -277,7 +287,7 @@ namespace Reanimator.Forms
             indexArrays_DataGridView.ResumeLayout();
         }
 
-        void DoIntOffsetType(DataColumn dc)
+        private void DoIntOffsetType(DataColumn dc)
         {
             //Type type = dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IntOffsetType] as Type;
             //if (type == null) return;
@@ -296,7 +306,7 @@ namespace Reanimator.Forms
             //}
         }
 
-        void nud_ValueChanged(object sender, EventArgs e)
+        private void nud_ValueChanged(object sender, EventArgs e)
         {
             if (_selectedIndexChange) return;
 
@@ -307,31 +317,27 @@ namespace Reanimator.Forms
             // dr[nud.Name] = (cb.CheckState == CheckState.Checked ? 1 : 0);
         }
 
-        void cb_ItemCheck(object sender, EventArgs e)
+        private void _RowView_CheckBox_ItemCheck(object sender, EventArgs e)
         {
             if (_selectedIndexChange) return;
 
-            CheckBox cb = sender as CheckBox;
-            if (cb == null) return;
-
+            CheckBox cb = (CheckBox) sender;
             DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
             dr[cb.Name] = (cb.CheckState == CheckState.Checked ? 1 : 0);
         }
 
-        void clb_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void _RowView_CheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (_selectedIndexChange) return;
 
-            CheckedListBox clb = sender as CheckedListBox;
-            if (clb == null) return;
-
+            CheckedListBox clb = (CheckedListBox) sender;
             DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
             uint value = (uint)dr[clb.Name];
             value ^= (uint)(1 << (e.Index));
             dr[clb.Name] = value;
         }
 
-        static void UpdateCheckedListBox(CheckedListBox clb, DataRow dr, DataColumn dc)
+        private static void _UpdateCheckedListBox(CheckedListBox clb, DataRow dr, DataColumn dc)
         {
             uint value = (uint)dr[dc];
             for (int i = 0; i < clb.Items.Count; i++)
@@ -340,7 +346,7 @@ namespace Reanimator.Forms
             }
         }
 
-        void rows_ListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void _Rows_ListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             _selectedIndexChange = true;
 
@@ -363,7 +369,7 @@ namespace Reanimator.Forms
                     if (clb == null) continue;
 
                     DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
-                    UpdateCheckedListBox(clb, dr, dc);
+                    _UpdateCheckedListBox(clb, dr, dc);
                 }
             }
 
@@ -384,8 +390,13 @@ namespace Reanimator.Forms
             String savePath = FormTools.SaveFileDialogBox(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
             if (String.IsNullOrEmpty(savePath)) return;
 
-            MessageBox.Show("REWRITE");
-            byte[] data = null; // todo: rewrite _dataFile.GenerateFile(table);
+            if (!_dataFile.ParseDataTable(table))
+            {
+                MessageBox.Show("Error: Failed to parse data table!");
+                return;
+            }
+
+            byte[] data = _dataFile.ToByteArray();
             if (FormTools.WriteFileWithRetry(savePath, data))
             {
                 MessageBox.Show("Table saved Successfully!", "Completed", MessageBoxButtons.OK,
@@ -393,7 +404,7 @@ namespace Reanimator.Forms
             }
         }
 
-        private void regenTable_Click(object sender, EventArgs e)
+        private void _RegenTable_Click(object sender, EventArgs e)
         {
             // make sure we're trying to rebuild an excel table, and that it's actually in the dataset
             if (_excelFile == null) return;
@@ -402,7 +413,7 @@ namespace Reanimator.Forms
             // remove from view or die, lol
             _tableData_DataGridView.DataMember = null;
             _tableData_DataGridView.DataSource = null;
-            strings_ListBox.DataSource = null;
+            _strings_ListBox.DataSource = null;
 
             // remove and reload
             DataTable dt = _fileManager.XlsDataSet.Tables[_dataFile.StringId];
@@ -428,7 +439,7 @@ namespace Reanimator.Forms
             _tableData_DataGridView.Refresh();
             _tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
             _tableData_DataGridView.DataMember = _dataFile.StringId;
-            // todo: rewrite strings_ListBox.DataSource = _excelFile.SecondaryStrings;
+            _strings_ListBox.DataSource = _excelFile.SecondaryStrings;
             _dataChanged = true;
 
             MessageBox.Show(
@@ -478,71 +489,68 @@ namespace Reanimator.Forms
             }
         }
 
-        private void ImportButton_Click(object sender, EventArgs e)
+        private void _ImportButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog() { InitialDirectory = Config.LastDirectory };
-            if (fileDialog.ShowDialog() == DialogResult.OK)
+            if (fileDialog.ShowDialog() != DialogResult.OK) return;
+
+            Config.LastDirectory = Path.GetDirectoryName(fileDialog.FileName);
+
+            byte[] buffer;
+            try
             {
-                Config.LastDirectory = Path.GetDirectoryName(fileDialog.FileName);
-
-                byte[] buffer = null;
-                try
-                {
-                    buffer = File.ReadAllBytes(fileDialog.FileName);
-                }
-                catch
-                {
-                    MessageBox.Show("There was a problem opening the file. Make sure the file isn't locked by another program (like Excel)");
-                    return;
-                }
-
-                if (_excelFile.ParseCSV(buffer) == true)
-                {
-                    _dataTable = _fileManager.LoadTable(_excelFile, true);
-                    _tableData_DataGridView.DataSource = _dataTable;
-                    _tableData_DataGridView.Refresh();
-                }
-                else
-                {
-                    MessageBox.Show("Error importing this table. Make sure the table has the correct number of columns and the correct data. If you have a string where a number is expected, the import will not work.");
-                    return;
-                }
+                buffer = File.ReadAllBytes(fileDialog.FileName);
             }
-        }
-
-        private void ExportButton_Click(object sender, EventArgs e)
-        {
-            if (_excelFile.ParseDataTable(_dataTable) == true)
+            catch
             {
-                byte[] buffer = _excelFile.ExportCSV(_fileManager);
-                if (buffer == null)
-                {
-                    MessageBox.Show("Error exporting CSV. Contact developer");
-                    return;
-                }
+                MessageBox.Show("There was a problem opening the file. Make sure the file isn't locked by another program (like Excel)");
+                return;
+            }
 
-                // prompts the user to choose where to save the file
-                SaveFileDialog saveFileDialog = new SaveFileDialog
-                {
-                    Filter = "Text Tables|*.txt",
-                    InitialDirectory = Config.ScriptDir,
-                    FileName = _dataFile.FileName
-                };
-                if (saveFileDialog.ShowDialog(this) != DialogResult.OK) return;
-
-                try
-                {
-                    File.WriteAllBytes(saveFileDialog.FileName, buffer);
-                }
-                catch (Exception ex)
-                {
-                    ExceptionLogger.LogException(ex, false);
-                    return;
-                }
+            if (_excelFile.ParseCSV(buffer) == true)
+            {
+                _dataTable = _fileManager.LoadTable(_excelFile, true);
+                _tableData_DataGridView.DataSource = _dataTable;
+                _tableData_DataGridView.Refresh();
             }
             else
             {
+                MessageBox.Show("Error importing this table. Make sure the table has the correct number of columns and the correct data. If you have a string where a number is expected, the import will not work.");
+                return;
+            }
+        }
+
+        private void _ExportButton_Click(object sender, EventArgs e)
+        {
+            if (_excelFile.ParseDataTable(_dataTable) != true)
+            {
                 MessageBox.Show("Error parsing dataTable. Contact developer.");
+                return;
+            }
+
+            byte[] buffer = _excelFile.ExportCSV(_fileManager);
+            if (buffer == null)
+            {
+                MessageBox.Show("Error exporting CSV. Contact developer");
+                return;
+            }
+
+            // prompts the user to choose where to save the file
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text Tables|*.txt",
+                InitialDirectory = Config.ScriptDir,
+                FileName = _dataFile.FileName
+            };
+            if (saveFileDialog.ShowDialog(this) != DialogResult.OK) return;
+
+            try
+            {
+                File.WriteAllBytes(saveFileDialog.FileName, buffer);
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, false);
                 return;
             }
         }

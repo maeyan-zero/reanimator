@@ -35,7 +35,7 @@
             this.indexArraysPage = new System.Windows.Forms.TabPage();
             this.indexArrays_DataGridView = new System.Windows.Forms.DataGridView();
             this.stringsPage = new System.Windows.Forms.TabPage();
-            this.strings_ListBox = new System.Windows.Forms.ListBox();
+            this._strings_ListBox = new System.Windows.Forms.ListBox();
             this.rowViewPage = new System.Windows.Forms.TabPage();
             this.rows_LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.rows_ListBox = new System.Windows.Forms.ListBox();
@@ -61,17 +61,15 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tableDataPage);
             this.tabControl1.Controls.Add(this.indexArraysPage);
             this.tabControl1.Controls.Add(this.stringsPage);
             this.tabControl1.Controls.Add(this.rowViewPage);
-            this.tabControl1.Location = new System.Drawing.Point(0, 6);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(817, 580);
+            this.tabControl1.Size = new System.Drawing.Size(817, 618);
             this.tabControl1.TabIndex = 4;
             // 
             // tableDataPage
@@ -80,17 +78,19 @@
             this.tableDataPage.Location = new System.Drawing.Point(4, 24);
             this.tableDataPage.Name = "tableDataPage";
             this.tableDataPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tableDataPage.Size = new System.Drawing.Size(809, 552);
+            this.tableDataPage.Size = new System.Drawing.Size(809, 590);
             this.tableDataPage.TabIndex = 0;
             this.tableDataPage.Text = "Table Data";
             this.tableDataPage.UseVisualStyleBackColor = true;
             // 
             // _tableData_DataGridView
             // 
-            this._tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._tableData_DataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this._tableData_DataGridView.Location = new System.Drawing.Point(3, 3);
             this._tableData_DataGridView.Name = "_tableData_DataGridView";
-            this._tableData_DataGridView.Size = new System.Drawing.Size(803, 546);
+            this._tableData_DataGridView.Size = new System.Drawing.Size(803, 563);
             this._tableData_DataGridView.TabIndex = 1;
             this._tableData_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this._TableData_DataGridView_CellDoubleClick);
             this._tableData_DataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this._TableData_DataGridView_KeyUp);
@@ -101,7 +101,7 @@
             this.indexArraysPage.Location = new System.Drawing.Point(4, 24);
             this.indexArraysPage.Name = "indexArraysPage";
             this.indexArraysPage.Padding = new System.Windows.Forms.Padding(3);
-            this.indexArraysPage.Size = new System.Drawing.Size(809, 552);
+            this.indexArraysPage.Size = new System.Drawing.Size(809, 590);
             this.indexArraysPage.TabIndex = 1;
             this.indexArraysPage.Text = "Index Arrays";
             this.indexArraysPage.UseVisualStyleBackColor = true;
@@ -112,30 +112,32 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.indexArrays_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.indexArrays_DataGridView.Location = new System.Drawing.Point(-5, 0);
+            this.indexArrays_DataGridView.Location = new System.Drawing.Point(3, 3);
             this.indexArrays_DataGridView.Name = "indexArrays_DataGridView";
-            this.indexArrays_DataGridView.Size = new System.Drawing.Size(743, 561);
+            this.indexArrays_DataGridView.Size = new System.Drawing.Size(803, 563);
             this.indexArrays_DataGridView.TabIndex = 0;
             // 
             // stringsPage
             // 
-            this.stringsPage.Controls.Add(this.strings_ListBox);
+            this.stringsPage.Controls.Add(this._strings_ListBox);
             this.stringsPage.Location = new System.Drawing.Point(4, 24);
             this.stringsPage.Name = "stringsPage";
             this.stringsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.stringsPage.Size = new System.Drawing.Size(809, 552);
+            this.stringsPage.Size = new System.Drawing.Size(809, 590);
             this.stringsPage.TabIndex = 2;
             this.stringsPage.Text = "Strings";
             this.stringsPage.UseVisualStyleBackColor = true;
             // 
-            // strings_ListBox
+            // _strings_ListBox
             // 
-            this.strings_ListBox.FormattingEnabled = true;
-            this.strings_ListBox.ItemHeight = 15;
-            this.strings_ListBox.Location = new System.Drawing.Point(7, 7);
-            this.strings_ListBox.Name = "strings_ListBox";
-            this.strings_ListBox.Size = new System.Drawing.Size(245, 649);
-            this.strings_ListBox.TabIndex = 0;
+            this._strings_ListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this._strings_ListBox.FormattingEnabled = true;
+            this._strings_ListBox.ItemHeight = 15;
+            this._strings_ListBox.Location = new System.Drawing.Point(7, 7);
+            this._strings_ListBox.Name = "_strings_ListBox";
+            this._strings_ListBox.Size = new System.Drawing.Size(245, 559);
+            this._strings_ListBox.TabIndex = 0;
             // 
             // rowViewPage
             // 
@@ -144,7 +146,7 @@
             this.rowViewPage.Location = new System.Drawing.Point(4, 24);
             this.rowViewPage.Name = "rowViewPage";
             this.rowViewPage.Padding = new System.Windows.Forms.Padding(3);
-            this.rowViewPage.Size = new System.Drawing.Size(809, 552);
+            this.rowViewPage.Size = new System.Drawing.Size(809, 590);
             this.rowViewPage.TabIndex = 3;
             this.rowViewPage.Text = "Row View";
             this.rowViewPage.UseVisualStyleBackColor = true;
@@ -158,11 +160,12 @@
             this.rows_LayoutPanel.ColumnCount = 2;
             this.rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.rows_LayoutPanel.Location = new System.Drawing.Point(231, 7);
             this.rows_LayoutPanel.Name = "rows_LayoutPanel";
             this.rows_LayoutPanel.RowCount = 1;
             this.rows_LayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.rows_LayoutPanel.Size = new System.Drawing.Size(542, 531);
+            this.rows_LayoutPanel.Size = new System.Drawing.Size(570, 559);
             this.rows_LayoutPanel.TabIndex = 1;
             // 
             // rows_ListBox
@@ -173,7 +176,7 @@
             this.rows_ListBox.ItemHeight = 15;
             this.rows_ListBox.Location = new System.Drawing.Point(7, 7);
             this.rows_ListBox.Name = "rows_ListBox";
-            this.rows_ListBox.Size = new System.Drawing.Size(216, 514);
+            this.rows_ListBox.Size = new System.Drawing.Size(216, 559);
             this.rows_ListBox.TabIndex = 0;
             // 
             // toolStrip1
@@ -206,7 +209,7 @@
             this.toolStripButton1.Size = new System.Drawing.Size(47, 22);
             this.toolStripButton1.Text = "Reload";
             this.toolStripButton1.ToolTipText = "Reloads this table.";
-            this.toolStripButton1.Click += new System.EventHandler(this.regenTable_Click);
+            this.toolStripButton1.Click += new System.EventHandler(this._RegenTable_Click);
             // 
             // toolStripSeparator1
             // 
@@ -254,7 +257,7 @@
             this.toolStripButton3.Size = new System.Drawing.Size(44, 22);
             this.toolStripButton3.Text = "Export";
             this.toolStripButton3.ToolTipText = "Export a tab delimited txt file of this table.";
-            this.toolStripButton3.Click += new System.EventHandler(this.ExportButton_Click);
+            this.toolStripButton3.Click += new System.EventHandler(this._ExportButton_Click);
             // 
             // toolStripSeparator3
             // 
@@ -270,7 +273,7 @@
             this.toolStripLabel1.Size = new System.Drawing.Size(47, 22);
             this.toolStripLabel1.Text = "Import";
             this.toolStripLabel1.ToolTipText = "Open a tab delimited txt file of this table.";
-            this.toolStripLabel1.Click += new System.EventHandler(this.ImportButton_Click);
+            this.toolStripLabel1.Click += new System.EventHandler(this._ImportButton_Click);
             // 
             // ExcelTableForm
             // 
@@ -279,6 +282,7 @@
             this.ClientSize = new System.Drawing.Size(817, 618);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tabControl1);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ExcelTableForm";
             this.Text = "ExcelTable";
@@ -304,7 +308,7 @@
         private System.Windows.Forms.DataGridView indexArrays_DataGridView;
         public System.Windows.Forms.DataGridView _tableData_DataGridView;
         private System.Windows.Forms.TabPage stringsPage;
-        private System.Windows.Forms.ListBox strings_ListBox;
+        private System.Windows.Forms.ListBox _strings_ListBox;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.TabPage rowViewPage;
         private System.Windows.Forms.ListBox rows_ListBox;

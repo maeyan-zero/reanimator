@@ -96,7 +96,6 @@ namespace Hellgate
         {
             public DataFileStringIdNotFound(String filePath)
             {
-                if (String.IsNullOrEmpty(filePath)) filePath = String.Empty;
                 CustomMessage = "Unable to find an appropriate StringId for the DataFile: " + filePath + "\n";
             }
         }

@@ -57,7 +57,7 @@ namespace Hellgate
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class FileEntryStruct
+        private class FileEntryStruct
         {
             public UInt32 StartToken;                   //                  must be Token.Sect
             public UInt32 DirectoryHash;                // 0    0x00        this is the first 4 bytes of an SHA1 crypto hash of the folder path string
@@ -79,7 +79,7 @@ namespace Hellgate
             public UInt32 EndToken;                     //                  must be Token.Sect
         }
 
-        public class FileEntry : PackFileEntry
+        private class FileEntry : PackFileEntry
         {
             private readonly FileEntryStruct _fileEntryStruct;
 

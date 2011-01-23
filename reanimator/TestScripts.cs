@@ -111,7 +111,7 @@ namespace Reanimator
                 newIndexFile.BeginDatWriting();
 
                 indexFile.BeginDatReading();
-                foreach (IndexFile.FileEntry fileEntry in indexFile.Files)
+                foreach (PackFileEntry fileEntry in indexFile.Files)
                 {
                     byte[] fileBytes = indexFile.GetFileBytes(fileEntry);
 
@@ -325,7 +325,7 @@ namespace Reanimator
                         continue;
                     }
 
-                    ExcelFile fromBytesExcel = new ExcelFile(excelFile.FilePath, fileManager.MPVersion);
+                    ExcelFile fromBytesExcel = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
                     fromBytesExcel.ParseData(dataFileBytes);
                     Debug.Write("new ExcelFile... ");
                     if (!fromBytesExcel.HasIntegrity)
@@ -377,7 +377,7 @@ namespace Reanimator
                     Debug.Write("ExportCSV -> ");
                     byte[] csvBytes = fromBytesExcel.ExportCSV(fileManager);
                     Debug.Write("new ExcelFile");
-                    ExcelFile csvExcel = new ExcelFile(excelFile.FilePath, fileManager.MPVersion);
+                    ExcelFile csvExcel = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
                     csvExcel.ParseCSV(csvBytes, fileManager);
                     Debug.Write("... ");
                     if (!csvExcel.HasIntegrity)
@@ -391,7 +391,7 @@ namespace Reanimator
                     }
 
                     byte[] recookedExcelBytes = csvExcel.ToByteArray();
-                    if (!fileManager.MPVersion)
+                    if (!fileManager.IsVersionTestCenter)
                     {
                         Debug.Write("StructureId... ");
                         UInt32 structureId = BitConverter.ToUInt32(fileBytes, 4);
@@ -408,7 +408,7 @@ namespace Reanimator
                     if (excelFile.StringId == "SKILLS") recookedLength += 12; // 12 bytes in int ptr data not used/referenced at all and are removed/lost in bytes -> csv -> bytes
                     if (fileBytes.Length != recookedLength && !doTCv4) // some TCv4 tables don't have their sort columns yet
                     {
-                        ExcelFile finalExcelDump = new ExcelFile(excelFile.FilePath, fileManager.MPVersion);
+                        ExcelFile finalExcelDump = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
                         finalExcelDump.ParseData(recookedExcelBytes);
                         byte[] csvDump = finalExcelDump.ExportCSV(fileManager);
 
@@ -422,7 +422,7 @@ namespace Reanimator
                         continue;
                     }
 
-                    ExcelFile finalExcel = new ExcelFile(excelFile.FilePath, fileManager.MPVersion);
+                    ExcelFile finalExcel = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
                     finalExcel.ParseData(recookedExcelBytes);
                     Debug.Assert(finalExcel.HasIntegrity);
                     byte[] finalCheck = finalExcel.ToByteArray();
@@ -679,12 +679,12 @@ namespace Reanimator
 
                 //// affixes
                 ExcelFile affixGroupsTable = null;
-                StringCollection affixGroupsList = null;
+                List<String> affixGroupsList = null;
                 List<Int32> affixGroupWeightScripts = null;
                 if (isAffixes)
                 {
                     affixGroupsTable = fileManagerTCv4.GetDataFile("_TCv4_AFFIX_GROUPS") as ExcelFile;
-                    affixGroupsList = new StringCollection();
+                    affixGroupsList = new List<String>();
                     affixGroupWeightScripts = new List<Int32>();
                     Debug.Assert(affixGroupsTable != null);
 
@@ -1212,10 +1212,16 @@ namespace Reanimator
 
                 if (structureCount != msgCount) continue; // if not equal, then we have a message in one table, but in another table it's not applicable
 
-                String[] stringIds = (from dataTableAttribute in DataFile.DataFileMap
+                String[] stringIds1 = (from dataTableAttribute in DataFile.DataFileMap
                                       where dataTableAttribute.Value.StructureId == forStructureId
                                       select dataTableAttribute.Key).ToArray();
-                String stringIdPrepend = String.Join(",", stringIds);
+                String[] stringIds2 = (from dataTableAttribute in DataFile.DataFileMapTestCenter
+                                      where dataTableAttribute.Value.StructureId == forStructureId
+                                      select dataTableAttribute.Key).ToArray();
+                String[] stringIds3 = (from dataTableAttribute in DataFile.DataFileMapResurrection
+                                      where dataTableAttribute.Value.StructureId == forStructureId
+                                      select dataTableAttribute.Key).ToArray();
+                String stringIdPrepend = String.Join(",", stringIds1) + String.Join(",", stringIds2) + String.Join(",", stringIds3);
 
                 if (previousStringId != stringIdPrepend)
                 {
