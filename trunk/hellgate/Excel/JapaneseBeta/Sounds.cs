@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 using RowHeader = Hellgate.ExcelFile.RowHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.JapaneseBeta
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class SoundsBeta
@@ -23,7 +23,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 language;//internalIndexArray count-1 type-7
         public Int32 volume;
-        public float undefined02;
+        public float undefinedFloat02;
         public float minRange;
         public float maxRange;
         public Int32 rollOffType;//internalIndexArray count-1 type-5

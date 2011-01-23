@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 using RowHeader = Hellgate.ExcelFile.RowHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.JapaneseBeta
 {
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -396,7 +396,7 @@ namespace Hellgate.Excel
         public float collidableAfterXSeconds;                       // 77   0x00000000000006AC  XLS_ReadFloat
         public float homeAfterXSeconds;                             // 78   0x00000000000006B0  XLS_ReadFloat
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
-        public Items.BitMask09 bitmask09;                           // 85   0x00000000000006B4  XLS_ReadBitmask
+        public BitMask09 bitmask09;                                 // 85   0x00000000000006B4  XLS_ReadBitmask
         public float impactCameraShakeDuration;                     // 80   0x00000000000006B8  XLS_ReadFloat
         public float impactCameraShakeMagnitude;                    // 81   0x00000000000006BC  XLS_ReadFloat
         public float impactCameraShakeDegrade;                      // 82   0x00000000000006C0  XLS_ReadFloat

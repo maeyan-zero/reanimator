@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 using RowHeader = Hellgate.ExcelFile.RowHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.JapaneseBeta
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class SkillsBeta
@@ -556,7 +556,7 @@ namespace Hellgate.Excel
 			canNotStartInPvp = 256,	//68
 			_undefined69 = 512,
 			canStartInRts = 1024,	//6A
-			alwaysTestCanStartSkill = 2048	//6B
+			alwaysTestCanStartSkill = 2048,	//6B
 			isAggressive = 4096,	//6C
 			angersTargetOnExecute = 8192,	//6D
 			isRanged = 16384,	//6E

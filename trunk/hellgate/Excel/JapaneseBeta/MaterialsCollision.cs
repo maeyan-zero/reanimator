@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 using RowHeader = Hellgate.ExcelFile.RowHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.JapaneseBeta
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class MaterialsCollisionBeta

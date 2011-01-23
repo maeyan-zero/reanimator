@@ -1,29 +1,27 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using RowHeader = Hellgate.ExcelFile.RowHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.JapaneseBeta
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class EffectsFilesBeta
     {
-        RowHeader header;
-        [ExcelOutput(SortColumnOrder = 1)]
+        ExcelFile.RowHeader header;
+        [ExcelFile.OutputAttribute(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string FXOName;
-        [ExcelOutput(SortColumnOrder = 2)]
+        [ExcelFile.OutputAttribute(SortColumnOrder = 2)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string fxFile;
         public Int32 folder;
         public Int32 subFolder;
         public Int32 undefined1;
         public float rangeToFallBack;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "EFFECTS")]
+        [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "EFFECTS")]
         public Int32 distanceFallBack;
         public Int32 undefined2;
         public Int32 undefined3;
-        [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
+        [ExcelFile.OutputAttribute(IsBitmask = true, DefaultBitmask = 0)]
         public EffectsFiles.BitMask01 bitmask01;
         public Int32 vertexFormat;
         public Int32 techniqueGroup;
