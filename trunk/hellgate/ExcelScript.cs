@@ -14,7 +14,8 @@ namespace Hellgate
         // debug members
         private static bool _debug;
         private const String DebugRoot = @"C:\excel_script_debug\";
-        private const String DebugRootTCv4 = @"C:\excel_script_debug_tcv4\";
+        private const String DebugRootTestCenter = @"C:\excel_script_debug_testcenter\";
+        private const String DebugRootResurrection = @"C:\excel_script_debug_resurrection\";
         private const String DebugFormat = "Debug: Row({0}), Col({1}) = '{2}', StringId = '{3}', ScriptByteString = '{4}'";
         private readonly String _debugRoot;
         private bool _debugFormatConditionalByteCounts;
@@ -26,8 +27,10 @@ namespace Hellgate
         private int _debugCol;
 
         // excel function stuffs
+        private static int _initCallFunctionsCountSinglePlayer;
+        private static int _initCallFunctionsTestCenterCount;
+        private static int _initCallFunctionsResurrectionCount;
         private static bool _haveExcelFunctions;
-        private static bool _haveExcelFunctionsTCv4;
         private ExcelFile.ExcelFunction _excelScriptFunction;
         private Function _excelFunction;
 
@@ -36,10 +39,9 @@ namespace Hellgate
         private readonly FileManager _fileManager;
         private readonly ExcelFile _statsTable;
         private readonly ObjectDelegator _statsDelegator;
-        private ExcelFile _statsFile;
-        private ExcelFile _statsFileTCv4;
 
         // compile/decompile members
+        private readonly int _initCallFunctionsCount;
         private String _script;
         public Int32[] ScriptCode { get; private set; }
         private int _offset;
@@ -56,19 +58,40 @@ namespace Hellgate
         public ExcelScript(FileManager fileManager)
         {
             if (fileManager == null) throw new ArgumentNullException("fileManager", "File Manager cannot be null.");
+            if (!fileManager.DataFiles.ContainsKey("STATS")) throw new Exceptions.ScriptNotInitialisedException("The supplied file manager did not have a valid Stats table.");
+
+            // these initial counts are required for script compiling when determing if a function is from the .exe or from an Excel table
+            if (!_haveExcelFunctions)
+            {
+                _initCallFunctionsCountSinglePlayer = CallFunctions.Count;
+                _initCallFunctionsTestCenterCount = CallFunctionsTestCenter.Count;
+                _initCallFunctionsResurrectionCount = CallFunctionsResurrection.Count;
+            }
+
             _fileManager = fileManager;
+            if (_fileManager.IsVersionResurrection)
+            {
+                _callFunctions = CallFunctionsResurrection;
+                _initCallFunctionsCount = _initCallFunctionsResurrectionCount;
+                if (_debug) _debugRoot = DebugRootResurrection;
+            }
+            else if (_fileManager.IsVersionTestCenter)
+            {
+                _callFunctions = CallFunctionsTestCenter;
+                _initCallFunctionsCount = _initCallFunctionsTestCenterCount;
+                if (_debug) _debugRoot = DebugRootTestCenter;
+            }
+            else
+            {
+                _callFunctions = CallFunctions;
+                _initCallFunctionsCount = _initCallFunctionsCountSinglePlayer;
+                if (_debug) _debugRoot = DebugRoot;
+            }
 
-            String statsStringId = (_fileManager.MPVersion) ? "_TCv4_STATS" : "STATS";
-            if (!_fileManager.DataFiles.ContainsKey(statsStringId)) throw new Exceptions.ScriptNotInitialisedException("The supplied file manager did not have a valid Stats table.");
+            _statsTable = (ExcelFile)_fileManager.DataFiles["STATS"];
+            _statsDelegator = _fileManager.DataFileDelegators["STATS"];
 
-            _callFunctions = (_fileManager.MPVersion) ? CallFunctionsTCv4 : CallFunctions;
-            _statsTable = (ExcelFile)_fileManager.DataFiles[statsStringId];
-            _statsDelegator = _fileManager.DataFileDelegators[statsStringId];
-
-            if (_debug) _debugRoot = (_fileManager.MPVersion) ? DebugRootTCv4 : DebugRoot;
-
-            if (!_fileManager.MPVersion && !_haveExcelFunctions) _GenerateExcelScriptFunctions();
-            if (_fileManager.MPVersion && !_haveExcelFunctionsTCv4) _GenerateExcelScriptFunctions();
+            if (_callFunctions.Count == _initCallFunctionsCount) _GenerateExcelScriptFunctions();
         }
 
         #region Compiler Functions
@@ -620,8 +643,7 @@ namespace Hellgate
                                 }
 
                                 int functionIndex = _callFunctions.IndexOf(function);
-                                int funcCountMax = (_fileManager.MPVersion) ? 336 : 251;
-                                if (functionIndex > funcCountMax) // properties etc functions
+                                if (functionIndex > _initCallFunctionsCount) // properties etc functions
                                 {
                                     scriptByteCode.AddRange(new[] { (Int32)ScriptOpCodes.CallPropery, functionIndex, 0 });
                                 }

@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Hellgate;
 using Revival;
 using Revival.Common;
-using ModData = Revival.Modification.Revival;
 using Script = Revival.Modification.Revival.Modification.Script;
 using Hellpack = Revival.Hellpack;
-using FileEntry = Hellgate.IndexFile.FileEntry;
 
 namespace Launcher.Forms
 {

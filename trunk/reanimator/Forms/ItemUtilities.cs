@@ -118,7 +118,7 @@ namespace Reanimator.Forms
 
             BitBuffer bitBuffer = new BitBuffer(FileTools.StreamToByteArray(heroFile)) { DataByteOffset = 0x2028 };
 
-            unit = new SaveFile(bitBuffer);
+            unit = new SaveFile(fileName, bitBuffer);
             unit.ParseUnit();
 
             heroFile.Close();

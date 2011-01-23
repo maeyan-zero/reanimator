@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using Hellgate;
 using Revival;
 using Ionic.Zip;
-using FileEntry = Hellgate.IndexFile.FileEntry;
 using System.Threading;
 using System.Globalization;
 using Config = Revival.Common.Config;
@@ -238,26 +237,24 @@ namespace Launcher.Forms
             foreach (IndexFile indexFile in HellgateFileManager.IndexFiles)
             {
                 bool isModified = false;
-                foreach (FileEntry fileEntry in indexFile.Files)
+                foreach (PackFileEntry fileEntry in indexFile.Files)
                 {
-                    if (fileEntry.IsPatchedOut)
-                    {
-                        fileEntry.IsPatchedOut = false;
-                        isModified = true;
-                    }
+                    if (!fileEntry.IsPatchedOut) continue;
+
+                    fileEntry.IsPatchedOut = false;
+                    isModified = true;
                 }
-                if (isModified)
+                if (!isModified) continue;
+
+                byte[] ibuffer = indexFile.ToByteArray();
+                Crypt.Encrypt(ibuffer);
+                try
                 {
-                    byte[] ibuffer = indexFile.ToByteArray();
-                    Crypt.Encrypt(ibuffer);
-                    try
-                    {
-                        File.WriteAllBytes(indexFile.FilePath, ibuffer);
-                    }
-                    catch
-                    {
-                        errorOccurred = true;
-                    }
+                    File.WriteAllBytes(indexFile.FilePath, ibuffer);
+                }
+                catch
+                {
+                    errorOccurred = true;
                 }
             }
 

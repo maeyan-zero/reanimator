@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
@@ -15,7 +14,7 @@ namespace Reanimator.Forms
 {
     public partial class HeroEditor : Form
     {
-        enum CharacterClass
+        private enum CharacterClass
         {
             Blademaster = 1,
             Guardian = 3,
@@ -27,31 +26,27 @@ namespace Reanimator.Forms
             Engineer = 13
         }
 
-        readonly SaveFile _heroUnit;
-        // todo: rewrite readonly TableDataSet _dataSet;
-        // todo: rewrite readonly TableFiles _tableFiles;
-        readonly String _filePath;
-        readonly UnitHelpFunctions _itemFunctions;
-        CharacterClass _characterClass;
-        UnitWrapper _wrapper;
+        private readonly FileManager _fileManager;
+        private readonly SaveFile _heroUnit;
+        private readonly UnitHelpFunctions _itemFunctions;
+        private CharacterClass _characterClass;
+        private UnitWrapper _wrapper;
 
-        //// todo: rewrite public HeroEditor(Unit heroUnit, TableDataSet tableDataSet, String filePath)
-        //{
-        //    _heroUnit = heroUnit;
-        //    _dataSet = tableDataSet;
-        //    _tableFiles = tableDataSet.TableFiles;
-        //    //_panel = new CompletePanelControl();
-        //    //_statsTable = _excelTables.GetTable("stats") as Stats;
-        //    _filePath = filePath;
+        public HeroEditor(SaveFile heroFile, FileManager fileManager)
+        {
+            _heroUnit = heroFile;
+            _fileManager = fileManager;
+            //_panel = new CompletePanelControl();
+            //_statsTable = _excelTables.GetTable("stats") as Stats;
 
-        //    _itemFunctions = new UnitHelpFunctions(_dataSet);
-        //    _itemFunctions.LoadCharacterValues(_heroUnit);
-        //    //_itemFunctions.GenerateUnitNameStrings();
-        //    //_itemFunctions.PopulateItems(ref _heroUnit);
-        //    _wrapper = new UnitWrapper(_dataSet, heroUnit);
+            //_itemFunctions = new UnitHelpFunctions(_dataSet);
+            _itemFunctions.LoadCharacterValues(_heroUnit);
+            //_itemFunctions.GenerateUnitNameStrings();
+            //_itemFunctions.PopulateItems(ref _heroUnit);
+            //_wrapper = new UnitWrapper(_dataSet, heroFile);
 
-        //    InitializeComponent();
-        //}
+            InitializeComponent();
+        }
 
         private void HeroEditor_Load(object sender, EventArgs e)
         {
@@ -877,7 +872,7 @@ namespace Reanimator.Forms
         {
             try
             {
-                String path = String.Format("{0}-singleplayer -load\"{1}\"", Config.GameClientPath, _filePath);
+                String path = String.Format("{0}-singleplayer -load\"{1}\"", Config.GameClientPath, _heroUnit.Path);
                 System.Diagnostics.Process.Start(path);
             }
             catch (Exception ex)

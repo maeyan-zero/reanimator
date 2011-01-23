@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
-using Reanimator.Forms;
 using Hellgate;
 
-namespace Reanimator
+namespace Reanimator.Forms
 {
     public partial class TableForm : ThreadedFormBase, IDisposable, IMdiChildBase
     {
         private readonly PackFile _packFile;
-        private readonly StringsFile _stringsFileData;
         private List<int> _foundIndices;
         private int _currentSelection;
 
@@ -34,12 +32,6 @@ namespace Reanimator
             }
         }
 
-        public TableForm(StringsFile stringsFile)
-        {
-            _stringsFileData = stringsFile;
-            TableFormInit();
-        }
-
         private void TableFormInit()
         {
             InitializeComponent();
@@ -60,14 +52,13 @@ namespace Reanimator
             _currentSelection = 0;
 
             if (_packFile != null) dataGridView.DataSource = _packFile.Files.ToArray();
-            if (_stringsFileData != null) dataGridView.DataSource = _stringsFileData.Rows.ToArray();
         }
 
         /// <summary>
         /// Returns a list of items that were checked in the DataGridView
         /// </summary>
         /// <returns>A list of all checked items</returns>
-        public PackFileEntry[] GetCheckedFiles()
+        private PackFileEntry[] GetCheckedFiles()
         {
             int counter = 0;
             //A list of checked files
@@ -100,7 +91,7 @@ namespace Reanimator
             return fileIndex.ToArray();
         }
 
-        public PackFileEntry[] GetSelectedFiles()
+        private PackFileEntry[] GetSelectedFiles()
         {
             int counter = 0;
             List<PackFileEntry> fileIndex = new List<PackFileEntry>();

@@ -33,7 +33,7 @@ namespace Hellgate
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class FileEntryStruct
+        private class FileEntryStruct
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
             public String Path;
@@ -49,7 +49,7 @@ namespace Hellgate
             public UInt32 Unknown7;
         }
 
-        public class FileEntry : PackFileEntry
+        private class FileEntry : PackFileEntry
         {
             private readonly FileEntryStruct _fileEntryStruct;
 

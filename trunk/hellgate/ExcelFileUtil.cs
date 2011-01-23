@@ -292,35 +292,41 @@ namespace Hellgate
             return (query.Length != 0) ? (OutputAttribute)query[0] : null;
         }
 
-        public static String GetStringId(String filePath, bool isTCv4)
+        private static String _GetStringId(String filePath)
         {
-            String stringIdPrepend = isTCv4 ? "_TCv4_" : "";
-
-            // check if the file name is the same as the string id
+            // create string id from file name
             String baseStringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
-            String stringIdAsKey = stringIdPrepend + baseStringId;
+            String stringIdAsKey = baseStringId;
 
-            DataFileAttributes dataFileAttributes;
-            if (DataFileMap.TryGetValue(stringIdAsKey, out dataFileAttributes))
+            Dictionary<String, DataFileAttributes>[] dataFileMaps = new[] { DataFileMap, DataFileMapTestCenter, DataFileMapResurrection };
+            foreach (Dictionary<String, DataFileAttributes> dataFileMap in dataFileMaps)
             {
-                if (!dataFileAttributes.IsEmpty && !dataFileAttributes.IsMythos) return stringIdAsKey;
+                // check if the file name is the same as the string id
+                DataFileAttributes dataFileAttributes;
+                if (dataFileMap.TryGetValue(stringIdAsKey, out dataFileAttributes))
+                {
+                    if (!dataFileAttributes.IsEmpty && !dataFileAttributes.IsMythos) return stringIdAsKey;
+                }
+
+                // file name is different to string id, then we have to loop through and check for name replace elements
+                String stringId = null;
+                foreach (KeyValuePair<String, DataFileAttributes> keyValuePair in dataFileMap)
+                {
+                    DataFileAttributes dataFileAttribute = keyValuePair.Value;
+                    if (dataFileAttribute.FileName != baseStringId) continue;
+
+                    stringId = keyValuePair.Key;
+                }
+
+                // if the stringId isn't found from file name checks, but we have it as a key,
+                // then we have a file with the same name as an entry with a key that is empty or mythos. So return the original key.
+                if (dataFileAttributes != null && stringId == null) return stringIdAsKey;
+
+                if (stringId == null) continue;
+                return stringId;
             }
 
-            // file name is different to string id, then we have to loop through and check for name replace elements
-            String stringId = null;
-            foreach (KeyValuePair<String, DataFileAttributes> keyValuePair in DataFileMap)
-            {
-                DataFileAttributes dataFileAttribute = keyValuePair.Value;
-                if (dataFileAttribute.FileName != baseStringId || dataFileAttribute.IsTCv4 != isTCv4) continue;
-
-                stringId = keyValuePair.Key;
-            }
-
-            // if the stringId isn't found from file name checks, but we have it as a key,
-            // then we have a file with the same name as an entry with a key that is empty or mythos. So return the original key.
-            if (dataFileAttributes != null && stringId == null) return stringIdAsKey;
-
-            return stringId;
+            return null;
         }
 
         private static bool _CheckToken(byte[] buffer, ref int offset, int token)
@@ -374,12 +380,12 @@ namespace Hellgate
 
         public string ReadSecondaryStringTable(int index)
         {
-            return _secondaryStrings[index];
+            return SecondaryStrings[index];
         }
 
-        public void SetSecondaryStringsCollection(StringCollection secondaryStrings)
+        public void SetSecondaryStringsCollection(List<String> secondaryStrings)
         {
-            _secondaryStrings = secondaryStrings;
+            SecondaryStrings = secondaryStrings;
         }
 
         public void SetScriptCode(byte[] scritpByteCode)

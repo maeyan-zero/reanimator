@@ -55,10 +55,12 @@ namespace Hellgate
     [Serializable]
     public class SaveFile
     {
+        public String Path { get; private set; }
+
         //Used for XMLSerialization
         public SaveFile()
         {
-            Init();
+            _Init();
         }
 
         [Serializable]
@@ -304,13 +306,20 @@ namespace Hellgate
 
         [XmlIgnore]
         public bool IsGood { get; private set; }
-        public SaveFile(BitBuffer bb)
+        public SaveFile(String filePath, BitBuffer bb)
         {
+            Path = filePath;
             _bitBuffer = bb;
-            Init();
+            _Init();
         }
 
-        private void Init()
+        private SaveFile(BitBuffer bb)
+        {
+            _bitBuffer = bb;
+            _Init();
+        }
+
+        private void _Init()
         {
             PlayerFlags1 = new List<int>();
             PlayerFlags2 = new List<int>();

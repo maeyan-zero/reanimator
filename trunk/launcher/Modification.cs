@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using Hellgate;
 using Revival.Common;
-using FileEntry = Hellgate.IndexFile.FileEntry;
 using Script = Revival.Modification.Revival.Modification.Script;
 using System.Text.RegularExpressions;
 
@@ -52,20 +51,19 @@ namespace Revival
             foreach (IndexFile indexFile in fileManager.IndexFiles)
             {
                 bool isModified = indexFile.Repair();
-                if (isModified)
+                if (!isModified) continue;
+
+                byte[] ibuffer = indexFile.ToByteArray();
+                Crypt.Encrypt(ibuffer);
+                try
                 {
-                    byte[] ibuffer = indexFile.ToByteArray();
-                    Crypt.Encrypt(ibuffer);
-                    try
-                    {
-                        File.WriteAllBytes(indexFile.FilePath, ibuffer);
-                    }
-                    catch(Exception ex)
-                    {
-                        ExceptionLogger.LogException(ex);
-                        Console.WriteLine(String.Format("Error writing file {0}", indexFile.FilePath));
-                        errorOccurred = true;
-                    }
+                    File.WriteAllBytes(indexFile.FilePath, ibuffer);
+                }
+                catch(Exception ex)
+                {
+                    ExceptionLogger.LogException(ex);
+                    Console.WriteLine(String.Format("Error writing file {0}", indexFile.FilePath));
+                    errorOccurred = true;
                 }
             }
 

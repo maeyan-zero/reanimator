@@ -1,4 +1,4 @@
-﻿namespace Reanimator
+﻿namespace Reanimator.Forms
 {
     partial class TableForm
     {

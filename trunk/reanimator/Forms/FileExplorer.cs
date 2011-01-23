@@ -601,7 +601,7 @@ namespace Reanimator.Forms
                 i++;
 
                 // add to our custom index if not already present
-                IndexFile.FileEntry fileEntry = null; // todo: rewrite args.PackIndex.GetFileFromIndex(packNode.FullPath);
+                PackFileEntry fileEntry = null; // todo: rewrite args.PackIndex.GetFileFromIndex(packNode.FullPath);
                 if (fileEntry == null)
                 {
                     //fileEntry = args.PackIndex.AddFileToIndex(oldNodeObject.FileEntry);
@@ -904,46 +904,6 @@ namespace Reanimator.Forms
         //    // get full file path
         //    filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
         //    return File.Exists(filePath);
-        //}
-
-        /// <summary>
-        /// Reads in a file's bytes from where HGL would read it.<br />
-        /// That is, from the .dat or data directorys if the file has been patched out.
-        /// </summary>
-        /// <param name="filePath">The path to the file - relative to HGL e.g. "data\colorsets.xml.cooked"</param>
-        /// <returns>File byte data, or null if not found.</returns>
-        //public byte[] GetFileBytes(String filePath)
-        //{
-        //    if (String.IsNullOrEmpty(filePath)) return null;
-
-        //    if (filePath[0] == '\\')
-        //    {
-        //        filePath = filePath.Replace(@"\data", "data");
-        //    }
-
-        //    TreeNode treeNode = (TreeNode)_fileTable[filePath];
-        //    if (treeNode == null) return null;
-
-        //    NodeObject nodeObject = (NodeObject)treeNode.Tag;
-
-        //    // are we loading from file or dat
-        //    byte[] fileBytes;
-        //    if (nodeObject.IsBackup)
-        //    {
-        //        filePath = Path.Combine(Config.HglDir, treeNode.FullPath);
-        //        fileBytes = File.ReadAllBytes(filePath);
-        //    }
-        //    else
-        //    {
-        //        IndexFile idx = nodeObject.Index;
-        //        Debug.Assert(idx != null);
-
-        //        idx.BeginDatReading();
-        //        // todo: rewrite fileBytes = idx.ReadDatFile(nodeObject.FileEntry);
-        //        idx.EndDatAccess();
-        //    }
-
-        //    return null;// todo: rewrite  fileBytes;
         //}
 
         /// <summary>
@@ -1292,7 +1252,7 @@ namespace Reanimator.Forms
             FileManager fileManager = (FileManager)param;
             String root = _quickExcelDir_textBox.Text;
             if (root == "") return;
-            if (fileManager.MPVersion) root = Path.Combine(root, "tcv4");
+            if (fileManager.IsVersionTestCenter) root = Path.Combine(root, "tcv4");
 
             int i = 0;
             foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
@@ -1318,7 +1278,7 @@ namespace Reanimator.Forms
                 ExcelFile excelFile = null;
                 if (fileEntry.Name.EndsWith(ExcelFile.Extension))
                 {
-                    excelFile = new ExcelFile(fileBytes, fileEntry.Path, fileManager.MPVersion);
+                    excelFile = new ExcelFile(fileBytes, fileEntry.Path, fileManager.ClientVersion);
                     if (excelFile.Attributes.IsEmpty) continue;
                 }
 
@@ -1326,10 +1286,10 @@ namespace Reanimator.Forms
                 if (excelFile != null)
                 {
                     String[] columns = null;
-                    if (fileManager.MPVersion)
+                    if (fileManager.IsVersionTestCenter)
                     {
                         DataFile spVersion;
-                        if (_fileManager.DataFiles.TryGetValue(excelFile.StringId.Replace("_TCv4_", ""), out spVersion))
+                        if (_fileManager.DataFiles.TryGetValue(excelFile.StringId, out spVersion))
                         {
                             FieldInfo[] fieldInfos = spVersion.Attributes.RowType.GetFields();
                             columns = new String[fieldInfos.Length];
