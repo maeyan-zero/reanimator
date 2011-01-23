@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 using RowHeader = Hellgate.ExcelFile.RowHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.JapaneseBeta
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class StatsBeta
@@ -122,9 +122,9 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         public Int32[] undefined12;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]//table 
-        public Int32 param1Table;
+        public Int32 param5Table;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1)]
-        public Int32[] undefined12;
+        public Int32[] undefined13;
 
         [FlagsAttribute]
         public enum BitMask01 : uint

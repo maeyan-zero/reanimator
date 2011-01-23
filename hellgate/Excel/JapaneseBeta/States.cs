@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 using RowHeader = Hellgate.ExcelFile.RowHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.JapaneseBeta
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class StatesBeta
@@ -70,7 +70,7 @@ namespace Hellgate.Excel
         Int32 unknown35;            // always 0
 		Int32 unknown35a;
         [ExcelOutput(IsStringOffset = true)]
-		public Int32 unIconFront
+        public Int32 unIconFront;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 iconBackColor;
         Int32 unknown37;            // always 0
