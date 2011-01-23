@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Revival.Common;
 
 namespace Hellgate
@@ -642,7 +643,286 @@ namespace Hellgate
 
         private static readonly List<Function> CallFunctionsResurrection = new List<Function>
         {
-
+            /*  0*/ new Function { Name = "abs", Args = new[] { new Argument { Name = "a", Type = ArgType.Int32 } } },
+            /*  1*/ new Function { Name = "min", Args = new[] { new Argument { Name = "a", Type = ArgType.Int32 }, new Argument { Name = "b", Type = ArgType.Int32 } } },
+            /*  2*/ new Function { Name = "max", Args = new[] { new Argument { Name = "a", Type = ArgType.Int32 }, new Argument { Name = "b", Type = ArgType.Int32 } } },
+            /*  3*/ new Function { Name = "pin", Args = new[] { new Argument { Name = "value", Type = ArgType.Int32 }, new Argument { Name = "min", Type = ArgType.Int32 }, new Argument { Name = "max", Type = ArgType.Int32 } } },
+            /*  4*/ new Function { Name = "pct", Args = new[] { new Argument { Name = "a", Type = ArgType.Int32 }, new Argument { Name = "b", Type = ArgType.Int32 } } },
+            /*  5*/ new Function { Name = "pctFloat", Args = new[] { new Argument { Name = "a", Type = ArgType.Int32 }, new Argument { Name = "b", Type = ArgType.Int32 }, new Argument { Name = "c", Type = ArgType.Int32 } } },
+            /*  6*/ new Function { Name = "rand", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "a", Type = ArgType.Int32 }, new Argument { Name = "b", Type = ArgType.Int32 } } },
+            /*  7*/ new Function { Name = "randByUnitId", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "a", Type = ArgType.Int32 }, new Argument { Name = "b", Type = ArgType.Int32 } } },
+            /*  8*/ new Function { Name = "chance", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "nChance", Type = ArgType.Int32 }, new Argument { Name = "nChanceOutOf", Type = ArgType.Int32 } } },
+            /*  9*/ new Function { Name = "chanceByStateMod", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nChance", Type = ArgType.Int32 }, new Argument { Name = "nChanceOutOf", Type = ArgType.Int32 }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "nModBy", Type = ArgType.Int32 } } },
+            /* 10*/ new Function { Name = "randSkillSeed", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "a", Type = ArgType.Int32 }, new Argument { Name = "b", Type = ArgType.Int32 } } },
+            /* 11*/ new Function { Name = "roll", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "a", Type = ArgType.Int32 }, new Argument { Name = "b", Type = ArgType.Int32 } } },
+            /* 12*/ new Function { Name = "divMult", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "a", Type = ArgType.Int32 }, new Argument { Name = "b", Type = ArgType.Int32 }, new Argument { Name = "c", Type = ArgType.Int32 } } },
+            /* 13*/ new Function { Name = "distribute", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "numdie", Type = ArgType.Int32 }, new Argument { Name = "diesize", Type = ArgType.Int32 }, new Argument { Name = "start", Type = ArgType.Int32 } } },
+            /* 14*/ new Function { Name = "roundstat", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "value", Type = ArgType.Int32 } } },
+            /* 15*/ new Function { Name = "getEventType", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nAffixID", Type = ArgType.ExcelIndex, TableIndex = 25 } } },
+            /* 16*/ new Function { Name = "getAffixIDByName", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nAffixID", Type = ArgType.ExcelIndex, TableIndex = 53 } } },
+            /* 17*/ new Function { Name = "get_skill_level", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "nSkill", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /* 18*/ new Function { Name = "get_skill_level_object", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkill", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /* 19*/ new Function { Name = "pickskill", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "stats", Type = ArgType.StatsList }, new Argument { Name = "nSkillLevel", Type = ArgType.Int32 } } },
+            /* 20*/ new Function { Name = "pickskillbyunittype", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "stats", Type = ArgType.StatsList }, new Argument { Name = "nUnitType", Type = ArgType.ExcelIndex, TableIndex = 23 }, new Argument { Name = "nSkillLevel", Type = ArgType.Int32 } } },
+            /* 21*/ new Function { Name = "removeoldestpetoftype", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nUnitType", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /* 22*/ new Function { Name = "killoldestpetoftype", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nUnitType", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /* 23*/ new Function { Name = "pickskillbyskillgroup", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "stats", Type = ArgType.StatsList }, new Argument { Name = "nSkillGroup", Type = ArgType.ExcelIndex, TableIndex = 39 }, new Argument { Name = "nSkillLevel", Type = ArgType.Int32 } } },
+            /* 24*/ new Function { Name = "learnskill", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "skill", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /* 25*/ new Function { Name = "getStatOwnerDivBySkillVar", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "nVar", Type = ArgType.Int32 } } },
+            /* 26*/ new Function { Name = "getStatOwnerDivBy", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "nDivBy", Type = ArgType.Int32 } } },
+            /* 27*/ new Function { Name = "switchUnitAndObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 28*/ new Function { Name = "getAchievementCompleteCount", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nAchievementID", Type = ArgType.ExcelIndex, TableIndex = 183 } } },
+            /* 29*/ new Function { Name = "getVarRange", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 30*/ new Function { Name = "getVar", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nVariable", Type = ArgType.Int32 } } },
+            /* 31*/ new Function { Name = "getAttackerSkillVarBySkill", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkill", Type = ArgType.ExcelIndex, TableIndex = 41 }, new Argument { Name = "nVariable", Type = ArgType.Int32 } } },
+            /* 32*/ new Function { Name = "getVarFromSkill", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkill", Type = ArgType.ExcelIndex, TableIndex = 41 }, new Argument { Name = "nVariable", Type = ArgType.Int32 } } },
+            /* 33*/ new Function { Name = "getVarFromSkillFromObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkill", Type = ArgType.ExcelIndex, TableIndex = 41 }, new Argument { Name = "nVariable", Type = ArgType.Int32 } } },
+            /* 34*/ new Function { Name = "hasStateObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 } } },
+            /* 35*/ new Function { Name = "hasState", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 } } },
+            /* 36*/ new Function { Name = "clearStateObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 } } },
+            /* 37*/ new Function { Name = "clearState", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 } } },
+            /* 38*/ new Function { Name = "clearStateClient", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 } } },
+            /* 39*/ new Function { Name = "isDualWielding", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 40*/ new Function { Name = "getWieldingIsACount", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "unittype", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /* 41*/ new Function { Name = "setState", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 } } },
+            /* 42*/ new Function { Name = "setStateObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 } } },
+            /* 43*/ new Function { Name = "setStateWithTimeMS", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 } } },
+            /* 44*/ new Function { Name = "addStateWithTimeMS", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 } } },
+            /* 45*/ new Function { Name = "addStateWithTimeMSClient", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 } } },
+            /* 46*/ new Function { Name = "setStateWithTimeMSOnObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 } } },
+            /* 47*/ new Function { Name = "setStateWithTimeMSScriptOnObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 } } },
+            /* 48*/ new Function { Name = "BroadcastEquipEvent", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 49*/ new Function { Name = "setAITargetToSkillTarget", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 50*/ new Function { Name = "setObjectAITargetToUnitAITarget", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 51*/ new Function { Name = "makeAIAwareOfObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 52*/ new Function { Name = "setAITargetToObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 53*/ new Function { Name = "hasSkillTarget", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 54*/ new Function { Name = "setStateOnSkillTargetWithTimeMSScript", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 }, new Argument { Name = "clearFirst", Type = ArgType.Int32 } } },
+            /* 55*/ new Function { Name = "runScriptParamOnStateClear", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "paramIndex", Type = ArgType.Int32 } } },
+            /* 56*/ new Function { Name = "getCountOfUnitsInArea", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "area", Type = ArgType.Int32 } } },
+            /* 57*/ new Function { Name = "runScriptOnUnitsInAreaPCT", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "scriptIndex", Type = ArgType.Int32 }, new Argument { Name = "area", Type = ArgType.Int32 }, new Argument { Name = "chance", Type = ArgType.Int32 }, new Argument { Name = "flag", Type = ArgType.Int32 } } },
+            /* 58*/ new Function { Name = "doSkillAndScriptOnUnitsInAreaPCT", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkill", Type = ArgType.ExcelIndex, TableIndex = 41 }, new Argument { Name = "scriptIndex", Type = ArgType.Int32 }, new Argument { Name = "area", Type = ArgType.Int32 }, new Argument { Name = "chance", Type = ArgType.Int32 }, new Argument { Name = "flag", Type = ArgType.Int32 } } },
+            /* 59*/ new Function { Name = "doSkillOnUnitsInAreaPCT", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkill", Type = ArgType.ExcelIndex, TableIndex = 41 }, new Argument { Name = "area", Type = ArgType.Int32 }, new Argument { Name = "chance", Type = ArgType.Int32 }, new Argument { Name = "flag", Type = ArgType.Int32 } } },
+            /* 60*/ new Function { Name = "setStateWithTimeMSScript", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 } } },
+            /* 61*/ new Function { Name = "setStateWithTimeMSScriptParam", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 }, new Argument { Name = "paramIndex", Type = ArgType.Int32 } } },
+            /* 62*/ new Function { Name = "setStateWithTimeMSScriptParamObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 }, new Argument { Name = "paramIndex", Type = ArgType.Int32 } } },
+            /* 63*/ new Function { Name = "addStateWithTimeMSScriptParamObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 }, new Argument { Name = "paramIndex", Type = ArgType.Int32 } } },
+            /* 64*/ new Function { Name = "addStateWithTimeMSScript", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 } } },
+            /* 65*/ new Function { Name = "addStateWithTimeMSScriptParam", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nState", Type = ArgType.ExcelIndex, TableIndex = 75 }, new Argument { Name = "timerMS", Type = ArgType.Int32 }, new Argument { Name = "paramIndex", Type = ArgType.Int32 } } },
+            /* 66*/ new Function { Name = "setDmgEffect", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nDmgEffect", Type = ArgType.ExcelIndex, TableIndex = 31 }, new Argument { Name = "nChance", Type = ArgType.Int32 }, new Argument { Name = "nTime", Type = ArgType.Int32 }, new Argument { Name = "nRoll", Type = ArgType.Int32 } } },
+            /* 67*/ new Function { Name = "getStatOwner", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /* 68*/ new Function { Name = "getStatParent", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /* 69*/ new Function { Name = "addPCTStatOnOwner", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nStat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "nValue", Type = ArgType.Int32 }, new Argument { Name = "nParam", Type = ArgType.Int32 } } },
+            /* 70*/ new Function { Name = "setStatOnOwner", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nStat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "nValue", Type = ArgType.Int32 }, new Argument { Name = "nParam", Type = ArgType.Int32 } } },
+            /* 71*/ new Function { Name = "total", Args = new[] { new Argument { Name = "game3", Type = ArgType.Game3 }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /* 72*/ new Function { Name = "basetotal", Args = new[] { new Argument { Name = "game3", Type = ArgType.Game3 }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /* 73*/ new Function { Name = "basestat", Args = new[] { new Argument { Name = "game3", Type = ArgType.Game3 }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /* 74*/ new Function { Name = "getcur", Args = new[] { new Argument { Name = "game3", Type = ArgType.Game3 }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "param", Type = ArgType.Param } } },
+            /* 75*/ new Function { Name = "statidx", Args = new[] { new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /* 76*/ new Function { Name = "invcount", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "location", Type = ArgType.ExcelIndex, TableIndex = 24 } } },
+            /* 77*/ new Function { Name = "is_in_invloc", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "location", Type = ArgType.ExcelIndex, TableIndex = 24 } } },
+            /* 78*/ new Function { Name = "dmgrider", Args = new[] { new Argument { Name = "game3", Type = ArgType.Game3 } } },
+            /* 79*/ new Function { Name = "procrider", Args = new[] { new Argument { Name = "game3", Type = ArgType.Game3 } } },
+            /* 80*/ new Function { Name = "knockback", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "a", Type = ArgType.Int32 } } },
+            /* 81*/ new Function { Name = "colorcoderequirement", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "param", Type = ArgType.Param } } },
+            /* 82*/ new Function { Name = "color_code_modunit_requirement", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "param", Type = ArgType.Param } } },
+            /* 83*/ new Function { Name = "color_code_modunit_requirement2", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "stat1", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "param1", Type = ArgType.Param }, new Argument { Name = "stat2", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "param2", Type = ArgType.Param } } },
+            /* 84*/ new Function { Name = "feedchange", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "nCheckBonus", Type = ArgType.Int32 } } },
+            /* 85*/ new Function { Name = "hoverstatchange", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /* 86*/ new Function { Name = "hoverstatchangeSetItem", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /* 87*/ new Function { Name = "feedcolorcode", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /* 88*/ new Function { Name = "color_code_pos_neg_val2", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 89*/ new Function { Name = "colorposneg", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 90*/ new Function { Name = "colorcodeprice", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /* 91*/ new Function { Name = "colorcodeclassreq", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 92*/ new Function { Name = "colorcodeSexReq", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 93*/ new Function { Name = "colorcodeskillslots", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 94*/ new Function { Name = "colorcodeskillusable", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 95*/ new Function { Name = "colorcodeskillgroupusable", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /* 96*/ new Function { Name = "meetsclassreqs", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /* 97*/ new Function { Name = "meetsSexReqs", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /* 98*/ new Function { Name = "fontcolorrow", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nColorIndex", Type = ArgType.ExcelIndex, TableIndex = 7 } } },
+            /* 99*/ new Function { Name = "nodrop", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*100*/ new Function { Name = "notrade", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*101*/ new Function { Name = "objectNotrade", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*102*/ new Function { Name = "BuyPriceByValue", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "valueType", Type = ArgType.Int32 } } },
+            /*103*/ new Function { Name = "SellPriceByValue", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "valueType", Type = ArgType.Int32 } } },
+            /*104*/ new Function { Name = "buyprice", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*105*/ new Function { Name = "buypriceRealWorld", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "nindex", Type = ArgType.Int32 } } },
+            /*106*/ new Function { Name = "usetermRealWorld", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "nindex", Type = ArgType.Int32 } } },
+            /*107*/ new Function { Name = "IsExistPackageContents", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*108*/ new Function { Name = "sellprice", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*109*/ new Function { Name = "sellpriceRealWorld", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*110*/ new Function { Name = "hitChance", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*111*/ new Function { Name = "dodgeChance", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*112*/ new Function { Name = "numaffixes", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*113*/ new Function { Name = "qualitypricemult", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*114*/ new Function { Name = "enemies_in_radius", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*115*/ new Function { Name = "visible_enemies_in_radius", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*116*/ new Function { Name = "champions_in_radius", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*117*/ new Function { Name = "mutant_in_radius", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*118*/ new Function { Name = "mutant_hp_pct", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*119*/ new Function { Name = "distance_sq_to_champion", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*120*/ new Function { Name = "champion_hp_pct", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*121*/ new Function { Name = "bosses_in_radius", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*122*/ new Function { Name = "distance_sq_to_boss", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*123*/ new Function { Name = "boss_hp_pct", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*124*/ new Function { Name = "enemy_corpses_in_radius", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "radius", Type = ArgType.Int32 } } },
+            /*125*/ new Function { Name = "monsters_killed", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "time", Type = ArgType.Int32 } } },
+            /*126*/ new Function { Name = "monsters_killed_nonteam", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "time", Type = ArgType.Int32 } } },
+            /*127*/ new Function { Name = "monsters_pct_left", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*128*/ new Function { Name = "hp_lost", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "time", Type = ArgType.Int32 } } },
+            /*129*/ new Function { Name = "meters_moved", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "time", Type = ArgType.Int32 } } },
+            /*130*/ new Function { Name = "attacks", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "time", Type = ArgType.Int32 } } },
+            /*131*/ new Function { Name = "is_alive", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*132*/ new Function { Name = "monster_level", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*133*/ new Function { Name = "has_active_task", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*134*/ new Function { Name = "is_usable", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*135*/ new Function { Name = "is_examinable", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*136*/ new Function { Name = "is_operatable", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*137*/ new Function { Name = "isa", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "unittype", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /*138*/ new Function { Name = "issuba", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "unittype", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /*139*/ new Function { Name = "is_subscriber", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*140*/ new Function { Name = "has_value_state", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*141*/ new Function { Name = "has_standard_state", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*142*/ new Function { Name = "has_premium_state", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*143*/ new Function { Name = "has_inv_ext1_state", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*144*/ new Function { Name = "has_inv_ext2_state", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*145*/ new Function { Name = "has_inv_ext3_state", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*146*/ new Function { Name = "is_SharedStash", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*147*/ new Function { Name = "is_hardcore", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*148*/ new Function { Name = "is_elite", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*149*/ new Function { Name = "get_difficulty", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*150*/ new Function { Name = "same_game_variant", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*151*/ new Function { Name = "player_is_in_guild", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*152*/ new Function { Name = "get_act", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*153*/ new Function { Name = "email_send_item_okay", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "context", Type = ArgType.Context } } },
+            /*154*/ new Function { Name = "email_receive_item_okay", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "context", Type = ArgType.Context } } },
+            /*155*/ new Function { Name = "colorcodesubscriber", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*156*/ new Function { Name = "item_requires_subscriber", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*157*/ new Function { Name = "colorcodevariantnormal", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*158*/ new Function { Name = "colorcodevarianthardcore", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*159*/ new Function { Name = "colorcodevariantelite", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*160*/ new Function { Name = "colorcodevarianthardcoreelite", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*161*/ new Function { Name = "colorcodenightmare", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*162*/ new Function { Name = "item_is_nightmare_specific", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*163*/ new Function { Name = "item_is_variant_normal", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*164*/ new Function { Name = "item_is_variant_hardcore", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*165*/ new Function { Name = "item_is_variant_elite", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*166*/ new Function { Name = "item_is_variant_hardcore_elite", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*167*/ new Function { Name = "quality", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*168*/ new Function { Name = "meetsitemreqs", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*169*/ new Function { Name = "weapondps", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*170*/ new Function { Name = "SkillTargetIsA", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "unittype", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /*171*/ new Function { Name = "GetObjectIsA", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "unittype", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /*172*/ new Function { Name = "GetMissileSourceIsA", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "unittype", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /*173*/ new Function { Name = "GetSkillHasReqWeapon", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*174*/ new Function { Name = "has_use_skill", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*175*/ new Function { Name = "hasdomname", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*176*/ new Function { Name = "dps", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "time", Type = ArgType.Int32 } } },
+            /*177*/ new Function { Name = "ObjectCanUpgrade", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*178*/ new Function { Name = "use_state_duration", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*179*/ new Function { Name = "uses_missiles", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*180*/ new Function { Name = "uses_lasers", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*181*/ new Function { Name = "has_damage_radius", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*182*/ new Function { Name = "missile_count", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*183*/ new Function { Name = "laser_count", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*184*/ new Function { Name = "shots_per_minute", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*185*/ new Function { Name = "milliseconds_per_shot", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*186*/ new Function { Name = "player_crit_chance", Args = new[] { new Argument { Name = "pUnit", Type = ArgType.Unit }, new Argument { Name = "nSlot", Type = ArgType.Int32 } } },
+            /*187*/ new Function { Name = "player_crit_damage", Args = new[] { new Argument { Name = "pUnit", Type = ArgType.Unit }, new Argument { Name = "nSlot", Type = ArgType.Int32 } } },
+            /*188*/ new Function { Name = "add_item_level_armor", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nLevel", Type = ArgType.Int32 }, new Argument { Name = "nPercent", Type = ArgType.Int32 } } },
+            /*189*/ new Function { Name = "player_level_skill_power_cost_percent", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*190*/ new Function { Name = "item_level_damage_mult", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*191*/ new Function { Name = "item_level_feed", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*192*/ new Function { Name = "item_level_upgprice", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*193*/ new Function { Name = "item_upgrade_feed", Args = new[] { new Argument { Name = "upgradeCnt", Type = ArgType.Int32 } } },
+            /*194*/ new Function { Name = "item_quality_feed_weight", Args = new[] { new Argument { Name = "quality", Type = ArgType.Int32 } } },
+            /*195*/ new Function { Name = "item_level_sfx_attack", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*196*/ new Function { Name = "item_level_sfx_defense", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*197*/ new Function { Name = "item_level_shield_buffer", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*198*/ new Function { Name = "monster_level_sfx_defense", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*199*/ new Function { Name = "monster_level_sfx_attack", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*200*/ new Function { Name = "monster_level_damage", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*201*/ new Function { Name = "monster_level_damage_pct", Args = new[] { new Argument { Name = "nLevel", Type = ArgType.Int32 }, new Argument { Name = "nPCT", Type = ArgType.Int32 } } },
+            /*202*/ new Function { Name = "monster_level_shields", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*203*/ new Function { Name = "monster_level_armor", Args = new[] { new Argument { Name = "level", Type = ArgType.Int32 } } },
+            /*204*/ new Function { Name = "unit_ai_changer_attack", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*205*/ new Function { Name = "does_field_damage", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*206*/ new Function { Name = "distance_to_player", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*207*/ new Function { Name = "has_container", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*208*/ new Function { Name = "monster_armor", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "nDamageType", Type = ArgType.ExcelIndex, TableIndex = 30 }, new Argument { Name = "nPercent", Type = ArgType.Int32 } } },
+            /*209*/ new Function { Name = "getSkillDmgMult", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkillLvl", Type = ArgType.Int32 }, new Argument { Name = "a", Type = ArgType.Int32 } } },
+            /*210*/ new Function { Name = "getSkillArmorMult", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkillLvl", Type = ArgType.Int32 }, new Argument { Name = "a", Type = ArgType.Int32 } } },
+            /*211*/ new Function { Name = "getSkillAttackSpeedMult", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkillLvl", Type = ArgType.Int32 }, new Argument { Name = "a", Type = ArgType.Int32 } } },
+            /*212*/ new Function { Name = "getSkillToHitMult", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkillLvl", Type = ArgType.Int32 }, new Argument { Name = "a", Type = ArgType.Int32 } } },
+            /*213*/ new Function { Name = "getSkillPctDmgMult", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkillLvl", Type = ArgType.Int32 }, new Argument { Name = "a", Type = ArgType.Int32 } } },
+            /*214*/ new Function { Name = "getPetCountOfType", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nUnitType", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /*215*/ new Function { Name = "runScriptOnPetsOfType", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nUnitType", Type = ArgType.ExcelIndex, TableIndex = 23 }, new Argument { Name = "a", Type = ArgType.Int32 } } },
+            /*216*/ new Function { Name = "randaffixtype", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "affixType", Type = ArgType.ExcelIndex, TableIndex = 51 } } },
+            /*217*/ new Function { Name = "randaffixgroup", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "affixGroup", Type = ArgType.ExcelIndex, TableIndex = 53 } } },
+            /*218*/ new Function { Name = "applyaffix", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "affix", Type = ArgType.ExcelIndex, TableIndex = 53 }, new Argument { Name = "bForce", Type = ArgType.Int32 } } },
+            /*219*/ new Function { Name = "getBonusValue", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "a", Type = ArgType.Int32 } } },
+            /*220*/ new Function { Name = "getBonusAll", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*221*/ new Function { Name = "getDMGAugmentation", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkillVar", Type = ArgType.Int32 }, new Argument { Name = "nLevel", Type = ArgType.Int32 }, new Argument { Name = "nPercentOfLevel", Type = ArgType.Int32 }, new Argument { Name = "nSkillPointsInvested", Type = ArgType.Int32 } } },
+            /*222*/ new Function { Name = "getDMGAugmentationPCT", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkillVar", Type = ArgType.Int32 }, new Argument { Name = "nLevel", Type = ArgType.Int32 }, new Argument { Name = "nPercentOfLevel", Type = ArgType.Int32 }, new Argument { Name = "nSkillPointsInvested", Type = ArgType.Int32 } } },
+            /*223*/ new Function { Name = "getMonsterHPAtLevel", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nLevel", Type = ArgType.Int32 } } },
+            /*224*/ new Function { Name = "getMonsterHPAtLevelByPCT", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nLevel", Type = ArgType.Int32 }, new Argument { Name = "nPCT", Type = ArgType.Int32 } } },
+            /*225*/ new Function { Name = "display_dmg_absorbed_pct", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*226*/ new Function { Name = "dmg_percent_by_energy", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*227*/ new Function { Name = "weapon_range", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*228*/ new Function { Name = "IsObjectDestructable", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*229*/ new Function { Name = "GlobalThemeIsEnabled", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nTheme", Type = ArgType.ExcelIndex, TableIndex = 170 } } },
+            /*230*/ new Function { Name = "SetRespawnPlayer", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*231*/ new Function { Name = "AddSecondaryRespawnPlayer", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*232*/ new Function { Name = "RemoveHPAndCheckForDeath", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "nRemove", Type = ArgType.Int32 } } },
+            /*233*/ new Function { Name = "getSkillStat", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nSkillStat", Type = ArgType.ExcelIndex, TableIndex = 44 }, new Argument { Name = "nSkillLvl", Type = ArgType.Int32 } } },
+            /*234*/ new Function { Name = "TownPortalIsAllowed", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*235*/ new Function { Name = "RecallIsAllowed", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*236*/ new Function { Name = "lowerManaCostOnSkillByPct", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 }, new Argument { Name = "nPctPower", Type = ArgType.Int32 } } },
+            /*237*/ new Function { Name = "lowerCoolDownOnSkillByPct", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 }, new Argument { Name = "nPctCooldown", Type = ArgType.Int32 } } },
+            /*238*/ new Function { Name = "skillIsOn", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*239*/ new Function { Name = "getSkillRange", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*240*/ new Function { Name = "setDmgEffectParams", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nDmgEffect", Type = ArgType.ExcelIndex, TableIndex = 31 }, new Argument { Name = "nParam0", Type = ArgType.Int32 }, new Argument { Name = "nParam1", Type = ArgType.Int32 }, new Argument { Name = "nParam2", Type = ArgType.Int32 } } },
+            /*241*/ new Function { Name = "setDmgEffectSkill", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nDmgEffect", Type = ArgType.ExcelIndex, TableIndex = 31 }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*242*/ new Function { Name = "setDmgEffectSkillOnTarget", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nDmgEffect", Type = ArgType.ExcelIndex, TableIndex = 31 }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*243*/ new Function { Name = "getSkillID", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*244*/ new Function { Name = "fireMissileFromObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "missileID", Type = ArgType.ExcelIndex, TableIndex = 114 } } },
+            /*245*/ new Function { Name = "caculateGemSockets", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*246*/ new Function { Name = "caculateRareGemSockets", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*247*/ new Function { Name = "caculateCraftingSlots", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*248*/ new Function { Name = "executeSkill", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*249*/ new Function { Name = "executeSkillOnObject", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*250*/ new Function { Name = "stopSkill", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*251*/ new Function { Name = "powercost", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "skillID", Type = ArgType.ExcelIndex, TableIndex = 41 } } },
+            /*252*/ new Function { Name = "is_stash_ui_open" },
+            /*253*/ new Function { Name = "setRecipeLearned", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*254*/ new Function { Name = "getRecipeLearned", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*255*/ new Function { Name = "createRecipe", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*256*/ new Function { Name = "createSpecificRecipe", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nRecipeID", Type = ArgType.ExcelIndex, TableIndex = 112 } } },
+            /*257*/ new Function { Name = "getCurrentGameTick", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*258*/ new Function { Name = "has_a", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nUnitType", Type = ArgType.ExcelIndex, TableIndex = 23 } } },
+            /*259*/ new Function { Name = "item_belongs_to_gambler", Args = new[] { new Argument { Name = "context", Type = ArgType.Context } } },
+            /*260*/ new Function { Name = "combat_has_secondary_attacks", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 } } },
+            /*261*/ new Function { Name = "combat_is_primary_attack", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 } } },
+            /*262*/ new Function { Name = "constrain", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nOldVersion", Type = ArgType.Int32 }, new Argument { Name = "nUpdateVersion", Type = ArgType.Int32 }, new Argument { Name = "nStat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "nParam", Type = ArgType.Param }, new Argument { Name = "nMin", Type = ArgType.Int32 }, new Argument { Name = "nMax", Type = ArgType.Int32 } } },
+            /*263*/ new Function { Name = "modifyratio", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nOldVersion", Type = ArgType.Int32 }, new Argument { Name = "nUpdateVersion", Type = ArgType.Int32 }, new Argument { Name = "nStat", Type = ArgType.ExcelIndex, TableIndex = 27 }, new Argument { Name = "nParam", Type = ArgType.Param }, new Argument { Name = "nOldMin", Type = ArgType.Int32 }, new Argument { Name = "nOldMax", Type = ArgType.Int32 }, new Argument { Name = "nMin", Type = ArgType.Int32 }, new Argument { Name = "nMax", Type = ArgType.Int32 } } },
+            /*264*/ new Function { Name = "max_item_augments", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*265*/ new Function { Name = "is_pvp", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 } } },
+            /*266*/ new Function { Name = "is_pvptdm", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 } } },
+            /*267*/ new Function { Name = "is_pvpctl", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 } } },
+            /*268*/ new Function { Name = "is_pvpelm", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 } } },
+            /*269*/ new Function { Name = "drain_target_power", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nValue", Type = ArgType.Int32 } } },
+            /*270*/ new Function { Name = "display_pvp_exp_to_next", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*271*/ new Function { Name = "display_pvp_win_percentage", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*272*/ new Function { Name = "getStatsOnStateSet", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "stat", Type = ArgType.ExcelIndex, TableIndex = 27 } } },
+            /*273*/ new Function { Name = "getItemStateDuration", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "context", Type = ArgType.Context } } },
+            /*274*/ new Function { Name = "hasItem", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "itemID", Type = ArgType.ExcelIndex, TableIndex = 103 } } },
+            /*275*/ new Function { Name = "skill_script_param", Args = new[] { new Argument { Name = "game4", Type = ArgType.Game4 }, new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "state", Type = ArgType.ExcelIndex, TableIndex = 75 } } },
+            /*276*/ new Function { Name = "is_allow_sword", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "context", Type = ArgType.Context } } },
+            /*277*/ new Function { Name = "is_bindable", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*278*/ new Function { Name = "getConditionRatio", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+            /*279*/ new Function { Name = "refund_regist_item_okay", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "context", Type = ArgType.Context } } }
         };
 
         /* OpCode           Function                                Action
@@ -807,7 +1087,7 @@ namespace Hellgate
 
         #region Static Debug Function
 
-        public static void EnableDebug(bool enableDebug, bool isTCv4=false)
+        public static void EnableDebug(bool enableDebug, bool isTCv4 = false)
         {
             _debug = enableDebug;
 
@@ -1476,6 +1756,160 @@ namespace Hellgate
         #endregion
 
         #region Get Functions From ASM Stuff
+
+        public static void ExtractFunctionListCStyle(IEnumerable<String> functionCode)
+        {
+            Regex argsRegex = new Regex(@"([^ \f\n\r\t\v]*)\((.*)\)");
+            Regex stringRegex = new Regex("\"(.*)\"");
+            List<Function> functions = new List<Function>();
+            List<Argument> arguments = new List<Argument>();
+            Function function = null;
+
+            foreach (String call in functionCode)
+            {
+                Match match = argsRegex.Match(call);
+                String callFunc = match.Groups[1].Value;
+                String[] funcArgs = match.Groups[2].Value.Split(new[] { ',' });
+                Debug.Assert(!String.IsNullOrEmpty(callFunc));
+
+                switch (callFunc)
+                {
+                    case "Script_AddFunction":
+                        {
+                            String funcName = funcArgs[0];
+                            Debug.Assert(!String.IsNullOrEmpty(funcName));
+                            funcName = stringRegex.Match(funcName).Groups[1].Value;
+                            Debug.Assert(!String.IsNullOrEmpty(funcName));
+
+                            if (function != null)
+                            {
+                                function.Args = arguments.ToArray();
+                                functions.Add(function);
+                            }
+
+                            function = new Function { Name = funcName };
+                            arguments = new List<Argument>();
+                        }
+                        break;
+
+                    case "Script_AddParam_Int":
+                        {
+                            Debug.Assert(function != null);
+
+                            String argName = funcArgs[0];
+                            Debug.Assert(!String.IsNullOrEmpty(argName));
+                            argName = stringRegex.Match(argName).Groups[1].Value;
+                            Debug.Assert(!String.IsNullOrEmpty(argName));
+
+                            arguments.Add(new Argument { Name = argName, Type = ArgType.Int32 });
+                        }
+                        break;
+
+                    case "Script_AddParam_Param":
+                        {
+                            Debug.Assert(function != null);
+
+                            String argName = funcArgs[0];
+                            Debug.Assert(!String.IsNullOrEmpty(argName));
+                            argName = stringRegex.Match(argName).Groups[1].Value;
+                            Debug.Assert(!String.IsNullOrEmpty(argName));
+
+                            arguments.Add(new Argument { Name = argName, Type = ArgType.Param });
+                        }
+                        break;
+
+                    case "Script_AddParam_Unit":
+                        {
+                            Debug.Assert(function != null);
+                            Debug.Assert(funcArgs.Length >= 2);
+
+                            String argName = funcArgs[0];
+                            Debug.Assert(!String.IsNullOrEmpty(argName));
+                            argName = stringRegex.Match(argName).Groups[1].Value;
+                            Debug.Assert(!String.IsNullOrEmpty(argName));
+
+                            String argType = funcArgs[1];
+                            Debug.Assert(!String.IsNullOrEmpty(argType));
+                            int argTypeInt = int.Parse(argType);
+
+                            arguments.Add(new Argument { Name = argName, Type = (ArgType)argTypeInt });
+                        }
+                        break;
+
+                    case "Script_AddParam_ExcelIndex":
+                        {
+                            Debug.Assert(function != null);
+                            Debug.Assert(funcArgs.Length >= 2);
+
+                            String excelIndex = funcArgs[0];
+                            Debug.Assert(!String.IsNullOrEmpty(excelIndex));
+                            int excelIndexInt = int.Parse(excelIndex);
+
+                            String argName = funcArgs[1];
+                            Debug.Assert(!String.IsNullOrEmpty(argName));
+                            argName = stringRegex.Match(argName).Groups[1].Value;
+                            Debug.Assert(!String.IsNullOrEmpty(argName));
+
+                            arguments.Add(new Argument { Name = argName, Type = ArgType.ExcelIndex, TableIndex = excelIndexInt });
+                        }
+                        break;
+
+                    case "Script_AddParam_ExcelIndex_0": // only used on "randaffixgroup();"
+                        Debug.Assert(function != null);
+                        arguments.Add(new Argument { Name = "affixGroup", Type = ArgType.ExcelIndex, TableIndex = 0x35 });
+                        break;
+
+                    case "Script_AddParam_Context":
+                        Debug.Assert(function != null);
+                        arguments.Add(new Argument { Name = "context", Type = ArgType.Context });
+                        break;
+
+                    case "Script_AddParam_Game3":
+                        Debug.Assert(function != null);
+                        arguments.Add(new Argument { Name = "game3", Type = ArgType.Game3 });
+                        break;
+
+                    case "Script_AddParam_Game4":
+                        Debug.Assert(function != null);
+                        arguments.Add(new Argument { Name = "game4", Type = ArgType.Game4 });
+                        break;
+
+                    default:
+                        Debug.Assert(false);
+                        break;
+                }
+            }
+            Debug.Assert(function != null);
+            function.Args = arguments.ToArray();
+            functions.Add(function);
+
+            int index = 0;
+            foreach (Function func in functions)
+            {
+                String argsString = String.Empty;
+                String[] formattedArgStrings = new String[func.ArgCount];
+                int i = 0;
+                foreach (Argument arg in func.Args)
+                {
+                    if (arg == null) break;
+
+                    const String argFormatStringBasic = "new Argument {{ Name = \"{0}\", Type = ArgType.{1} }}";
+                    const String argFormatStringIndex = "new Argument {{ Name = \"{0}\", Type = ArgType.{1}, TableIndex = {2} }}";
+
+                    String argFormatString = arg.TableIndex >= 0 ? argFormatStringIndex : argFormatStringBasic;
+                    formattedArgStrings[i++] = String.Format(argFormatString, arg.Name, arg.Type, arg.TableIndex);
+                }
+                String formattedArgString = String.Join(", ", formattedArgStrings, 0, i);
+                if (formattedArgString.Length > 0)
+                {
+                    formattedArgString = ", Args = new[] { " + formattedArgString + " }";
+                }
+
+                const String dictionaryFormat = "/*{0,3}*/ new Function {{ Name = \"{1}\"{2} }},";
+                String cSharpDicCode = String.Format(dictionaryFormat, index++, func.Name, formattedArgString);
+                Debug.WriteLine(cSharpDicCode);
+            }
+        }
 
         /// <summary>
         /// Normalises a register, removing the double word char for rx registers, and converting the 32 bit registers to their 64 bit code (e.g. eax -> rax).

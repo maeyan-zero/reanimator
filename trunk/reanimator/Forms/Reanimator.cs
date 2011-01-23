@@ -30,6 +30,8 @@ namespace Reanimator.Forms
             #region alexs_stuff
 
             if (true) return;
+            //TestScripts.ExtractFunctionList();
+
 
             const String test = @"data\background\city\bldg_c_station_warp_next_layout.xml.cooked";
             String dir = Path.GetDirectoryName(test) + "\\";
