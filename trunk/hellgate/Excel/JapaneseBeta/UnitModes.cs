@@ -89,6 +89,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 doEvent;//bool
         [ExcelOutput(IsBool = true)]
         public Int32 endEvent;//bool
+        Int32 undefinedA;
         [ExcelOutput(IsStringOffset = true)]
         public Int32 doFunction;//pchar
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]

@@ -160,6 +160,8 @@ namespace Hellgate.Excel.JapaneseBeta
         public string worldMapFrame;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string worldMapFrameUnexplored;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+        byte[] undefinedByte;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 worldMapColor;
         public Int32 worldMapLabelPos; // XLS_InternalIndex_WorldMapLabelPos (XLS_LEVEL_DEFINITION+A61), 0x0C

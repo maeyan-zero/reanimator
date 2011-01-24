@@ -36,6 +36,8 @@ namespace Hellgate.Excel.JapaneseBeta
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 autoActivateLevel;//idx
         [ExcelOutput(IsBool = true)]
+        public Int32 onlyOneDifficulty;
+        [ExcelOutput(IsBool = true)]
         public Int32 activateByTransmission;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 transmissionIncomingLevel;
@@ -59,7 +61,9 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 questPreReqs07;
         //[ExcelOutput(IsTableIndex = true, TableStringId = "QUEST")]
         public Int32 questPreReqs08;
-		public Int32 itmePreReqsCount;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
+        public Int32 itemPreReq;
+		public Int32 itemPreReqsCount;
         [ExcelOutput(IsBool = true)]
         public Int32 currentlyUnavailable;
         public Int32 minLevelPreReq;
@@ -122,7 +126,6 @@ namespace Hellgate.Excel.JapaneseBeta
         public float giverItemDropRate;
         public Int32 level;
         public Int32 levelNightmare;
-        public Int32 undefined1;
         public float experienceMultiplier;
         public float moneyMultiplier;
         public Int32 statPoints;
