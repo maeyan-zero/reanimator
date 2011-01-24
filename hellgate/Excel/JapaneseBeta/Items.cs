@@ -375,6 +375,7 @@ namespace Hellgate.Excel.JapaneseBeta
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 pickupPullState;//index                        // 87   0x000000000000066C  XLS_ReadIndex
         public float extraDyingTimeInSeconds;                       // 70   0x0000000000000670  XLS_ReadFloat
+		public Int32 undefined_01;
         [ExcelOutput(IsTableIndex = true, TableStringId = "NPC")]
         public Int32 npcInfo;//index                                // 71   0x0000000000000674  XLS_ReadIndex
         public Int32 balanceTestCount;                              // 72   0x0000000000000678  XLS_ReadInt32
@@ -586,7 +587,7 @@ namespace Hellgate.Excel.JapaneseBeta
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 15)]
         public Int32[] affix;//index                                // 220  0x00000000000009D4  XLS_ReadIndexArray,6
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_SETITEM_GROUPS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_SETITEM_GROUPS")]
         public Int32 setGroup;
         public Int32 setAffix1NumRequired;
         [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXES")]
@@ -641,8 +642,8 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 skillOnFuse;//index                            // 394  0x0000000000000A6C  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillOnDamageRepeat;//index                    // 395  0x0000000000000A70  XLS_ReadIndex
-        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32[] startingskills;                              // 234  0x0000000000000A74  XLS_ReadIndexArray,0C
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 unitDieBeginSkill;//index                      // 235  0x0000000000000AA4  XLS_ReadIndex
@@ -660,7 +661,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 rightSkill;//index                             // 241  0x0000000000000ABC  XLS_ReadIndex
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
-        public Int32 initSkill;//index                              // 242  0x0000000000000AC0  XLS_ReadIndex
+        public Int32[] initSkill;//index                              // 242  0x0000000000000AC0  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillLevelActive;//index                       // 243  0x0000000000000AC4  XLS_ReadIndex
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
@@ -888,7 +889,7 @@ namespace Hellgate.Excel.JapaneseBeta
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_THEMES")]
         public Int32 levelThemeRequired;//index                     // 479  0x0000000000000D18  XLS_ReadIndex
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "MONSCALING_FIELDLEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSCALING_FIELDLEVEL")]
         public Int32[] gameModeRequired;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODE_GROUPS")]
         public Int32 modeGroupOnClient;//index                      // 475  0x0000000000000D1C  XLS_ReadIndex
@@ -899,13 +900,13 @@ namespace Hellgate.Excel.JapaneseBeta
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 22)]
         Int32[] unknownBytes26;                                     // 0x0000000000000D2C to 0x0000000000000D84
         public Int32 null5;                                         // 458  0x0000000000000D84  XLS_ReadInt32
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] unknownBytes27;                                     // 0x0000000000000D88 to 0x0000000000000DB8
         public bool noUseWithConsumableItem;        
         public bool noItemMode;
         public Int32 bindability;
         public Int32 defenceType;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 36)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] unknownBytes28;
 
         [FlagsAttribute]
