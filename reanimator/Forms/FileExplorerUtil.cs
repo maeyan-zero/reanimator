@@ -73,6 +73,23 @@ namespace Reanimator.Forms
             public IndexFile PackIndex;
         }
 
+        public TreeNodeCollection GetDirectories(String directory)
+        {
+            directory = directory.Replace(Config.HglDir, ""); // remove absolute reference for tree node lookups
+            String[] directoryKeys = directory.Split(new[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+
+            TreeNodeCollection currDir = _files_fileTreeView.Nodes;
+            foreach (String dir in directoryKeys)
+            {
+                TreeNode currNode = currDir[dir];
+                if (currNode == null) return null;
+
+                currDir = currNode.Nodes;
+            }
+
+            return currDir;
+        }
+
         /// <summary>
         /// Loop over all file entries and generate tree nodes.
         /// </summary>

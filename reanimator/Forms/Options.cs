@@ -7,8 +7,12 @@ namespace Reanimator.Forms
 {
     public partial class Options : Form
     {
-        public Options()
+        private FileExplorer _fileExplorer;
+
+        public Options(FileExplorer fileExplorer)
         {
+            _fileExplorer = fileExplorer;
+
             InitializeComponent();
         }
 
@@ -29,6 +33,7 @@ namespace Reanimator.Forms
 
             Config.HglDir = folderBrowserDialogue.SelectedPath;
             hglDir_TextBox.Text = Config.HglDir;
+            _UpdateStringsLanguages();
         }
 
         private void Options_Load(object sender, EventArgs e)
@@ -41,7 +46,23 @@ namespace Reanimator.Forms
             txtEditor_TextBox.Text = Config.TxtEditor;
             xmlEditor_TextBox.Text = Config.XmlEditor;
             csvEditor_TextBox.Text = Config.CsvEditor;
-            tcv4_CheckBox.Checked = Config.LoadTCv4DataFiles;
+            _tcv4_CheckBox.Checked = Config.LoadTCv4DataFiles;
+            _UpdateStringsLanguages();
+        }
+
+        private void _UpdateStringsLanguages()
+        {
+            _stringsLang_comboBox.Items.Clear();
+
+            TreeNodeCollection directories = _fileExplorer.GetDirectories(@"\data\excel\strings\");
+
+            _stringsLang_comboBox.Items.Add(String.Empty); // needed if current language isn't set, or isn't found in currently chosen HG path (e.g. Resurrection clients without English)
+            foreach (TreeNode stringsDir in directories)
+            {
+                _stringsLang_comboBox.Items.Add(stringsDir.Name);
+            }
+
+            _stringsLang_comboBox.SelectedItem = Config.StringsLanguage;
         }
 
         private void _GameClientPath_Button_Click(object sender, EventArgs e)
@@ -111,7 +132,12 @@ namespace Reanimator.Forms
 
         private void _TCv4_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            Config.LoadTCv4DataFiles = tcv4_CheckBox.Checked;
+            Config.LoadTCv4DataFiles = _tcv4_CheckBox.Checked;
+        }
+
+        private void _StringsLang_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Config.StringsLanguage = (String)_stringsLang_comboBox.SelectedItem;
         }
     }
 }

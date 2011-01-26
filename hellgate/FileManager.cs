@@ -57,7 +57,7 @@ namespace Hellgate
 
             // rest of ctor
             HellgatePath = hellgatePath;
-            Language = "english"; // do we need to bother with anything other than english?
+            Language = Config.StringsLanguage;
             Reload();
         }
 

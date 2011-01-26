@@ -121,34 +121,34 @@ namespace Revival.Common
             set { SetValue("LoadTCv4DataFiles", value); }
         }
 
-        public static bool LoadMPVersion
-        {
-            get { return GetValue("LoadMPVersion", false); }
-            set { SetValue("LoadMPVersion", value); }
-        }
-
-        public static string LastDirectory
+        public static String LastDirectory
         {
             get { return GetValue("LastDirectory", ""); }
             set { SetValue("LastDirectory", value); }
         }
 
-        public static string TxtEditor
+        public static String TxtEditor
         {
             get { return GetValue("TxtEditor", "notepad.exe"); }
             set { SetValue("TxtEditor", value); }
         }
 
-        public static string XmlEditor
+        public static String XmlEditor
         {
             get { return GetValue("XmlEditor", "notepad.exe"); }
             set { SetValue("XmlEditor", value); }
         }
 
-        public static string CsvEditor
+        public static String CsvEditor
         {
             get { return GetValue("CsvEditor", "notepad.exe"); }
             set { SetValue("CsvEditor", value); }
+        }
+
+        public static String StringsLanguage
+        {
+            get { return GetValue("StringsLanguage", "english"); }
+            set { SetValue("StringsLanguage", value); }
         }
     }
 }
