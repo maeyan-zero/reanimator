@@ -17,7 +17,7 @@ namespace Reanimator.Forms
         private TablesLoaded _tablesLoadedTCv4;
         private FileManager _fileManager;
         private FileManager _fileManagerTCv4;
-        private readonly Options _optionsForm = new Options();
+        private Options _optionsForm;
         private readonly List<TableForm> _openTableForms = new List<TableForm>();
         private readonly List<ExcelTableForm> _openExcelTableForms = new List<ExcelTableForm>();
         private List<HeroEditor> _openHeroEditorForms = new List<HeroEditor>();
@@ -531,18 +531,18 @@ namespace Reanimator.Forms
 
         private void _OptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (_optionsForm == null) _optionsForm = new Options(_fileExplorer);
             _optionsForm.ShowDialog(this);
         }
 
         private void _ClientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Config.HglDir + "\\SP_x64";
-            if (openFileDialog.ShowDialog(this) != DialogResult.OK)
+            OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                return;
-            }
+                Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*",
+                InitialDirectory = Config.HglDir + "\\SP_x64"
+            };
+            if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
 
             FileStream clientFile;
             try
