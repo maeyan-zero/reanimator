@@ -9,7 +9,7 @@ namespace Hellgate.Excel.JapaneseBeta
         ExcelFile.RowHeader header;
         [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 monsterClass;
-        [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "SPAWNCLASS")]
+        [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "SPAWN_CLASS")]
         public Int32 spawnClass;
         public Int32 spawnTime;
         [ExcelFile.OutputAttribute(IsStringIndex = true)]

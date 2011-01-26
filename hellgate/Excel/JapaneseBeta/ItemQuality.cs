@@ -92,28 +92,15 @@ namespace Hellgate.Excel.JapaneseBeta
 		public Int32 requiredUnbindItem;
         public float procChance;
         public float luckProbMod;
-        [ExcelOutput(IsScript = true)]
-        public Int32 affix1Chance;
-        [ExcelOutput(IsScript = true)]
-        public Int32 affix1Type1Weight;
-        [ExcelOutput(IsScript = true)]
-        public Int32 affix1Type2Weight;
-        [ExcelOutput(IsScript = true)]
-        public Int32 affix1Type3Weight;
-        [ExcelOutput(IsScript = true)]
-        public Int32 affix1Type4Weight;
-        [ExcelOutput(IsScript = true)]
-        public Int32 affix1Type5Weight;
-        [ExcelOutput(IsScript = true)]
-        public Int32 affix1Type6Weight;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 44
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXPICK")]//table 44
         public Int32 nAffixPick;
         [ExcelOutput(IsBool = true)]
         public Int32 setItem;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 44
+        [ExcelOutput(IsTableIndex = true, TableStringId = "AFFIXPICK")]//table 44
         public Int32 nSetAffixPick;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public String badgeFrame;
+        Int32 undefined_01;
         [ExcelOutput(IsBool = true)]
         public Int32 allowItemPickupMessage;
     }
