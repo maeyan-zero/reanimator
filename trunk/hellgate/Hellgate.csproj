@@ -108,6 +108,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharacterFile.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Crypt.cs" />
     <Compile Include="DataFile.cs" />
@@ -430,7 +431,8 @@
     <Compile Include="StringsFile.cs" />
     <Compile Include="StringsFileUtil.cs" />
     <Compile Include="TableDataSet.cs" />
-    <Compile Include="SaveFile.cs" />
+    <Compile Include="UnitObject.cs" />
+    <Compile Include="UnitObjectUtil.cs" />
     <Compile Include="XmlCookedFile.cs" />
     <Compile Include="XmlCookedFileUtil.cs" />
     <Compile Include="XmlCookedFileTree.cs" />
@@ -480,12 +482,6 @@
     <Compile Include="Xml\XmlDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\common\Common.csproj">
-      <Project>{F2C2B5C8-8ACE-44BE-A3CF-A3C045A64A61}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -501,6 +497,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\common\Common.csproj">
+      <Project>{F2C2B5C8-8ACE-44BE-A3CF-A3C045A64A61}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

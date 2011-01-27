@@ -35,6 +35,14 @@ namespace Hellgate
             }
         }
 
+        public class NotSupportedVersionException : ReanimatorException
+        {
+            public NotSupportedVersionException(String expected, String got)
+            {
+                CustomMessage = String.Format("The version {0} is not supported. Only version {1} is supported.", got, expected);
+            }
+        }
+
         public class NotInitializedException : ReanimatorException
         {
             public NotInitializedException()
@@ -80,6 +88,14 @@ namespace Hellgate
             public UnknownExcelCodeException(int code)
             {
                 CustomMessage = "Unknown Excel Table code value = " + code;
+            }
+        }
+
+        public class InvalidFileException : ReanimatorException
+        {
+            public InvalidFileException(String message)
+            {
+                CustomMessage = message;
             }
         }
 
@@ -207,9 +223,17 @@ namespace Hellgate
 
         public class ScriptVariableAlreadyDefinedException : ReanimatorException
         {
-            public ScriptVariableAlreadyDefinedException(String varNamem, int scriptOffset)
+            public ScriptVariableAlreadyDefinedException(String varName, int scriptOffset)
             {
-                CustomMessage = "Attempting to redefineThe variable {0} is already definied";
+                CustomMessage = String.Format("The variable {0} is already definied. Redefintion attempted at script offset {1}.", varName, scriptOffset);
+            }
+        }
+
+        public class CharacterFileNotImplementedException : ReanimatorException
+        {
+            public CharacterFileNotImplementedException(String message)
+            {
+                CustomMessage = message;
             }
         }
     }

@@ -7,7 +7,7 @@ namespace Reanimator.Forms
 {
     public partial class Options : Form
     {
-        private FileExplorer _fileExplorer;
+        private readonly FileExplorer _fileExplorer;
 
         public Options(FileExplorer fileExplorer)
         {
@@ -55,6 +55,7 @@ namespace Reanimator.Forms
             _stringsLang_comboBox.Items.Clear();
 
             TreeNodeCollection directories = _fileExplorer.GetDirectories(@"\data\excel\strings\");
+            if (directories == null) return;
 
             _stringsLang_comboBox.Items.Add(String.Empty); // needed if current language isn't set, or isn't found in currently chosen HG path (e.g. Resurrection clients without English)
             foreach (TreeNode stringsDir in directories)

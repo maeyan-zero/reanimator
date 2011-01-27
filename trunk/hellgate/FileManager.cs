@@ -97,6 +97,12 @@ namespace Hellgate
         /// <returns>Result of the initialization. Occurance of an error will return false.</returns>
         private bool _LoadFileTable()
         {
+            if (!Directory.Exists(HellgateDataPath))
+            {
+                Console.WriteLine(@"Critical Error: HellgateDataPath data\ does not exist!");
+                return false;
+            }
+
             List<String> idxPaths = new List<String>();
             string[] query = IsVersionTestCenter ? Common.MPFiles : Common.SPFiles;
             foreach (String fileQuery in query)

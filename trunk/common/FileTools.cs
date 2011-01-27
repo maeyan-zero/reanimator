@@ -12,6 +12,46 @@ namespace Revival.Common
 {
     public static class FileTools
     {
+        public static int UnixTime()
+        {
+            TimeSpan timeSpan = (DateTime.Now - new DateTime(1970, 1, 1));
+            return (int)timeSpan.TotalSeconds;
+        }
+
+        public static int UnixTimeUTC()
+        {
+            TimeSpan timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1));
+            return (int)timeSpan.TotalSeconds;
+        }
+
+        public static int MemCmp(byte[] buffer1, int offset1, byte[] buffer2, int offset2, int count)
+        {
+            Debug.Assert(offset1 + count <= buffer1.Length);
+            Debug.Assert(offset2 + count <= buffer2.Length);
+            for (int i = 0; i < count; i++, offset1++, offset2++)
+            {
+                if (buffer1[offset1] == buffer2[offset2]) continue;
+                if (buffer1[offset1] < buffer2[offset2]) return -1;
+                return 1;
+            }
+
+            return 0;
+        }
+
+        public static void MemSet(byte[] buffer, int offset, int count, byte value)
+        {
+            Debug.Assert(offset + count <= buffer.Length);
+            for (int i = 0; i < count; i++)
+            {
+                buffer[offset++] = value;
+            }
+        }
+
+        public static void ZeroMemory(byte[] buffer, int offset, int count)
+        {
+            MemSet(buffer, offset, count, 0x00);
+        }
+
         /// <summary>
         /// Reads a Stream and converts it to a byte array.
         /// </summary>
@@ -32,6 +72,20 @@ namespace Revival.Common
                 byte[] output = ms.ToArray();
                 return output;
             }
+        }
+
+        /// <summary>
+        /// Converts an array of bytes to an Int16 from a given offset.<br />
+        /// <i>offset</i> is incremented by the size of an Int16.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Int16.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted Int16 value.</returns>
+        public static Int16 ByteArrayToInt16(byte[] byteArray, ref int offset)
+        {
+            Int16 value = BitConverter.ToInt16(byteArray, offset);
+            offset += 2;
+            return value;
         }
 
         /// <summary>
