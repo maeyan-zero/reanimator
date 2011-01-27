@@ -30,6 +30,23 @@ namespace Reanimator.Forms
             #region alexs_stuff
 
             if (true) return;
+
+
+            const String savePath = @"D:\Projects\Hellgate London\ServerTest\ServerTest\bin\Debug\accounts\alex2069\Kaila.hg1";
+            CharacterFile characterFile = new CharacterFile(savePath, true);
+            byte[] charBytes = File.ReadAllBytes(savePath);
+
+            try
+            {
+                characterFile.ParseFileBytes(charBytes);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+            
+
+
             //TestScripts.ExtractFunctionList();
 
 
@@ -364,17 +381,14 @@ namespace Reanimator.Forms
                 return;
             }
 
-            // this is a bit dodgy using exceptions as if-else, but meh
-            // todo: add check for file name existence etc
             try
             {
-                Process notePad = new Process { StartInfo = { FileName = "notepad++.exe", Arguments = xmlPath } };
-                notePad.Start();
+                Process process = new Process { StartInfo = { FileName = Config.XmlEditor, Arguments = xmlPath } };
+                process.Start();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Process notePad = new Process { StartInfo = { FileName = "notepad.exe", Arguments = xmlPath } };
-                notePad.Start();
+                MessageBox.Show("Failed to start default XML Editor.\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

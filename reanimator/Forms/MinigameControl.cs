@@ -14,7 +14,7 @@ namespace Reanimator.Forms
         AttributeValues[] currentMinigame;
         Random random;
         Difficulty difficulty;
-        SaveFile.StatBlock.Stat.Values[] minigameValues;
+        UnitObject.StatBlock.Stat.Values[] minigameValues;
 
         // List of available mini game icons
         private enum MinigameIcons
@@ -64,7 +64,7 @@ namespace Reanimator.Forms
             InitializeComponent();
         }
 
-        public MinigameControl(SaveFile.StatBlock.Stat.Values[] minigame) : this()
+        public MinigameControl(UnitObject.StatBlock.Stat.Values[] minigame) : this()
         {
             minigameValues = minigame;
             random = new Random(DateTime.Now.Millisecond);

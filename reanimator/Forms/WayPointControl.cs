@@ -6,7 +6,7 @@ namespace Reanimator.Forms
 {
     public partial class WayPointControl : UserControl
     {
-        SaveFile.StatBlock.Stat.Values wayPointValues;
+        UnitObject.StatBlock.Stat.Values wayPointValues;
         int bits;
 
         public WayPointControl()
@@ -16,7 +16,7 @@ namespace Reanimator.Forms
             bits = 0;
         }
 
-        public WayPointControl(SaveFile.StatBlock.Stat.Values values) : this()
+        public WayPointControl(UnitObject.StatBlock.Stat.Values values) : this()
         {
             wayPointValues = values;
         }

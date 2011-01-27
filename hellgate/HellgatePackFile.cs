@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Revival.Common;
@@ -125,7 +124,7 @@ namespace Hellgate
 
             public override Int64 FileTime
             {
-                get { return  _fileEntryStruct.FileTime; }
+                get { return _fileEntryStruct.FileTime; }
                 set { _fileEntryStruct.FileTime = value; }
             }
         }
@@ -134,9 +133,9 @@ namespace Hellgate
         private FileEntryStruct[] _fileEntryStructs;
         private FileStream _datFile;
 
-        public HellgatePackFile(String filePath) : base (filePath) { }
+        public HellgatePackFile(String filePath) : base(filePath) { }
 
-        public override bool AddFile(string directory, string fileName, byte[] bytes, DateTime? fileTime = null)
+        public override bool AddFile(String directory, String fileName, byte[] bytes, DateTime? fileTime = null)
         {
             throw new NotImplementedException();
         }
@@ -159,8 +158,8 @@ namespace Hellgate
 
 
             // read file entries
-            int bytesRemaining = (int) (fileInfo.Length - offset);
-            int structSize = Marshal.SizeOf(typeof (FileEntryStruct));
+            int bytesRemaining = (int)(fileInfo.Length - offset);
+            int structSize = Marshal.SizeOf(typeof(FileEntryStruct));
             if (bytesRemaining % structSize != 0)
             {
                 // todo: add fail/warning?

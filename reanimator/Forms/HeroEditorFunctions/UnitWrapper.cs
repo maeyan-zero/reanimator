@@ -9,7 +9,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 {
     public abstract class CharacterProperty
     {
-        protected SaveFile _hero;
+        protected UnitObject _hero;
 
         // todo: rewrite protected TableDataSet _dataSet;
         protected DataTable _statsTable;
@@ -23,7 +23,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         //    _statsTable = _dataSet.GetExcelTableFromStringId("STATS");
         //}
 
-        public SaveFile BaseUnit
+        public UnitObject BaseUnit
         {
             get { return _hero; }
             set { _hero = value; }
@@ -53,7 +53,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class UnitWrapper
     {
-        SaveFile _hero;
+        UnitObject _hero;
         string _savePath;
         // todo: rewrite TableDataSet _dataSet;
         int _unitType;
@@ -205,12 +205,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        private CharacterClass GetCharacterClass(SaveFile _hero)
+        private CharacterClass GetCharacterClass(UnitObject _hero)
         {
             return (CharacterClass)Enum.Parse(typeof(CharacterClass), _hero.unitCode.ToString());
         }
 
-        public SaveFile HeroUnit
+        public UnitObject HeroUnit
         {
             get { return _hero; }
         }
@@ -229,7 +229,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class CharacterWaypoint : CharacterProperty
     {
-        SaveFile.StatBlock.Stat _waypoints;
+        UnitObject.StatBlock.Stat _waypoints;
         string[] _waypointNames;
 
         //// todo: rewrite public CharacterWaypoint(Unit heroUnit, TableDataSet dataSet)
@@ -268,17 +268,17 @@ namespace Reanimator.Forms.HeroEditorFunctions
         //    //UnitHelpFunctions.SetComplexValue(_hero, ItemValueNames.waypoint_flags.ToString(), _waypoints);
         //}
 
-        private SaveFile.StatBlock.Stat.Values GenerateNormal()
+        private UnitObject.StatBlock.Stat.Values GenerateNormal()
         {
-            SaveFile.StatBlock.Stat.Values normal = new SaveFile.StatBlock.Stat.Values();
+            UnitObject.StatBlock.Stat.Values normal = new UnitObject.StatBlock.Stat.Values();
             normal.Attribute2 = 16705;
             normal.Stat = 1535;
             return normal;
         }
 
-        private SaveFile.StatBlock.Stat.Values GenerateNightmare()
+        private UnitObject.StatBlock.Stat.Values GenerateNightmare()
         {
-            SaveFile.StatBlock.Stat.Values nightmare = new SaveFile.StatBlock.Stat.Values();
+            UnitObject.StatBlock.Stat.Values nightmare = new UnitObject.StatBlock.Stat.Values();
             nightmare.Attribute2 = 16961;
             nightmare.Stat = 1535;
             return nightmare;
@@ -778,9 +778,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
         //    skills.values = availableSkills;
         //}
 
-        private SkillTab CreateSkillsFromRow(List<SaveFile.StatBlock.Stat.Values> availableSkills, DataTable skillTable, DataRow[] skillRows)
+        private SkillTab CreateSkillsFromRow(List<UnitObject.StatBlock.Stat.Values> availableSkills, DataTable skillTable, DataRow[] skillRows)
         {
-            List<SaveFile.StatBlock.Stat.Values> values = new List<SaveFile.StatBlock.Stat.Values>();
+            List<UnitObject.StatBlock.Stat.Values> values = new List<UnitObject.StatBlock.Stat.Values>();
             SkillTab skillInSkillTab = new SkillTab();
 
             //iterate through all available skills
@@ -789,7 +789,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 //get the skill id
                 int skillId = (int)row["code"];
                 //if the skill is already present, use that one
-                SaveFile.StatBlock.Stat.Values tmpSkill = availableSkills.Find(tmp => tmp.Attribute1 == skillId);
+                UnitObject.StatBlock.Stat.Values tmpSkill = availableSkills.Find(tmp => tmp.Attribute1 == skillId);
                 if (tmpSkill != null)
                 {
                     values.Add(tmpSkill);
@@ -797,7 +797,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 //if not, add a new one
                 else
                 {
-                    SaveFile.StatBlock.Stat.Values skillEntry = new SaveFile.StatBlock.Stat.Values();
+                    UnitObject.StatBlock.Stat.Values skillEntry = new UnitObject.StatBlock.Stat.Values();
                     skillEntry.Attribute1 = skillId;
 
                     values.Add(skillEntry);
@@ -806,7 +806,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             //_hero.Stats.statCount
 
             //and finally... initialize all skills :)
-            foreach (SaveFile.StatBlock.Stat.Values skillBlock in values)
+            foreach (UnitObject.StatBlock.Stat.Values skillBlock in values)
             {
                 Skill skill = InitializeSkill(skillTable, skillBlock);
                 skillInSkillTab.Skills.Add(skill);
@@ -814,7 +814,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             return skillInSkillTab;
         }
 
-        private Skill InitializeSkill(DataTable table, SaveFile.StatBlock.Stat.Values skillBlock)
+        private Skill InitializeSkill(DataTable table, UnitObject.StatBlock.Stat.Values skillBlock)
         {
             DataRow[] availableSkillRows = table.Select("code = " + skillBlock.Attribute1);
 
@@ -1115,7 +1115,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        public List<SaveFile> Items
+        public List<UnitObject> Items
         {
             get
             {
@@ -1312,11 +1312,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        public List<SaveFile> GetItemsOfQuality(ItemQuality quality)
+        public List<UnitObject> GetItemsOfQuality(ItemQuality quality)
         {
-            List<SaveFile> tmp = new List<SaveFile>();
+            List<UnitObject> tmp = new List<UnitObject>();
 
-            foreach (SaveFile item in BaseUnit.Items)
+            foreach (UnitObject item in BaseUnit.Items)
             {
                 if (UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.item_quality) == (int)quality)
                 {
@@ -1326,11 +1326,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
             return tmp;
         }
 
-        public List<SaveFile> GetItemsOfInventoryType(InventoryTypes type)
+        public List<UnitObject> GetItemsOfInventoryType(InventoryTypes type)
         {
-            List<SaveFile> tmp = new List<SaveFile>();
+            List<UnitObject> tmp = new List<UnitObject>();
 
-            foreach (SaveFile item in BaseUnit.Items)
+            foreach (UnitObject item in BaseUnit.Items)
             {
                 if (item.inventoryType == (int)type)
                 {
@@ -1341,13 +1341,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
             return tmp;
         }
 
-        public void AddItem(SaveFile item)
+        public void AddItem(UnitObject item)
         {
             BaseUnit.AddItem(item);
             // todo: rewrite _items.Add(new CharacterItems(item, _dataSet));
         }
 
-        public void RemoveItem(SaveFile item)
+        public void RemoveItem(UnitObject item)
         {
             BaseUnit.RemoveItem(item);
             CharacterItems tmpItem = _items.Find(tmp => tmp.BaseUnit == item);
@@ -1521,7 +1521,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class EngineerDrone : CharacterProperty
     {
-        SaveFile _drone;
+        UnitObject _drone;
 
         //// todo: rewrite public EngineerDrone(Unit heroUnit, TableDataSet dataSet)
         //    : base(heroUnit, dataSet)
@@ -1529,7 +1529,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         //    _drone = BaseUnit.Items.Find(item => item.unitCode == (int)CharacterClass.Drone);
         //}
 
-        public SaveFile Drone
+        public UnitObject Drone
         {
             get
             {
@@ -1551,13 +1551,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
         //{
         //}
 
-        public SaveFile[] WeaponSlot1
+        public UnitObject[] WeaponSlot1
         {
             get
             {
-                List<SaveFile> _weapons = new List<SaveFile>();
+                List<UnitObject> _weapons = new List<UnitObject>();
 
-                foreach(SaveFile item in BaseUnit.Items)
+                foreach(UnitObject item in BaseUnit.Items)
                 {
                     if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
@@ -1569,13 +1569,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        public SaveFile[] WeaponSlot2
+        public UnitObject[] WeaponSlot2
         {
             get
             {
-                List<SaveFile> _weapons = new List<SaveFile>();
+                List<UnitObject> _weapons = new List<UnitObject>();
 
-                foreach (SaveFile item in BaseUnit.Items)
+                foreach (UnitObject item in BaseUnit.Items)
                 {
                     if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
@@ -1587,13 +1587,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        public SaveFile[] WeaponSlot3
+        public UnitObject[] WeaponSlot3
         {
             get
             {
-                List<SaveFile> _weapons = new List<SaveFile>();
+                List<UnitObject> _weapons = new List<UnitObject>();
 
-                foreach (SaveFile item in BaseUnit.Items)
+                foreach (UnitObject item in BaseUnit.Items)
                 {
                     if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
@@ -1628,7 +1628,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class Skill
     {
-        SaveFile.StatBlock.Stat.Values _skillBlock;
+        UnitObject.StatBlock.Stat.Values _skillBlock;
         string _name;
         string _description;
         int _maxLevel;
@@ -1637,7 +1637,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         int[] _levelsOfRequiredSkills;
         Point _position;
 
-        public SaveFile.StatBlock.Stat.Values SkillBlock
+        public UnitObject.StatBlock.Stat.Values SkillBlock
         {
             get { return _skillBlock; }
             set { _skillBlock = value; }
@@ -1705,7 +1705,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        public Skill(string name, string description, string iconName, int maxLevel, Point position, int[] requiredSkills, int[] levelsOfRequiredSkills, SaveFile.StatBlock.Stat.Values skillBlock)
+        public Skill(string name, string description, string iconName, int maxLevel, Point position, int[] requiredSkills, int[] levelsOfRequiredSkills, UnitObject.StatBlock.Stat.Values skillBlock)
         {
             _name = name;
             _description = description;

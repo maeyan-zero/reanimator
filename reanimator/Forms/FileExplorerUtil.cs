@@ -81,6 +81,8 @@ namespace Reanimator.Forms
             TreeNodeCollection currDir = _files_fileTreeView.Nodes;
             foreach (String dir in directoryKeys)
             {
+                if (currDir == null || currDir.Count == 0) return null;
+
                 TreeNode currNode = currDir[dir];
                 if (currNode == null) return null;
 

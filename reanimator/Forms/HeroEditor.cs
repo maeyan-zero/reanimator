@@ -27,12 +27,12 @@ namespace Reanimator.Forms
         }
 
         private readonly FileManager _fileManager;
-        private readonly SaveFile _heroUnit;
+        private readonly UnitObject _heroUnit;
         private readonly UnitHelpFunctions _itemFunctions;
         private CharacterClass _characterClass;
         private UnitWrapper _wrapper;
 
-        public HeroEditor(SaveFile heroFile, FileManager fileManager)
+        public HeroEditor(UnitObject heroFile, FileManager fileManager)
         {
             _heroUnit = heroFile;
             _fileManager = fileManager;
@@ -69,15 +69,15 @@ namespace Reanimator.Forms
             InitInventory();
         }
 
-        private void PopulateItemDropDown(SaveFile unit)
+        private void PopulateItemDropDown(UnitObject unit)
         {
-            foreach (SaveFile item in unit.Items)
+            foreach (UnitObject item in unit.Items)
             {
                 currentlyEditing_ComboBox.Items.Add(item);
             }
         }
 
-        private void PopulateStats(SaveFile unit)
+        private void PopulateStats(UnitObject unit)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace Reanimator.Forms
 
                 for (int i = 0; i < unit.Stats.Length; i++)
                 {
-                    SaveFile.StatBlock.Stat stat = unit.Stats[i];
+                    UnitObject.StatBlock.Stat stat = unit.Stats[i];
 
                     stats_ListBox.Items.Add(stat);
                 }
@@ -102,7 +102,7 @@ namespace Reanimator.Forms
             {
                 panel1.Controls.Clear();
 
-                SaveFile.StatBlock.Stat stat = (SaveFile.StatBlock.Stat)stats_ListBox.SelectedItem;
+                UnitObject.StatBlock.Stat stat = (UnitObject.StatBlock.Stat)stats_ListBox.SelectedItem;
                 // yea, copy/paste nastiness ftw
                 if (stat.Attribute1 != null)
                 {
@@ -180,12 +180,12 @@ namespace Reanimator.Forms
          * if Attribute1 not set -> Resource = tableID && values.Attribute1 set -> values.Attribute1 = codeID
          * if Attribute1 not set -> Resource = tableID && values.Attribute1 not set -> values.stat = codeID
          */
-        private void SetStatValues(SaveFile.StatBlock.Stat stat)
+        private void SetStatValues(UnitObject.StatBlock.Stat stat)
         {
             int heightOffset = 0;
             for (int i = 0; i < stat.Length; i++)
             {
-                SaveFile.StatBlock.Stat.Values statValues = stat[i];
+                UnitObject.StatBlock.Stat.Values statValues = stat[i];
 
                 bool hasExtraAttribute = false;
                 string lookUpString;
@@ -240,7 +240,7 @@ namespace Reanimator.Forms
                 Label valueLabel = new Label { Text = "Value: ", Left = leftOffset, Width = 40, Top = 3 + heightOffset };
                 TextBox valueTextBox = new TextBox { Left = valueLabel.Right, Top = heightOffset };
 
-                lookUpString = _itemFunctions.MapIdToString(stat, stat.resource, stat.values[i].Stat);
+                lookUpString = _itemFunctions.MapIdToString(stat, stat.Resource, stat.values[i].Stat);
                 if (!String.IsNullOrEmpty(lookUpString))
                 {
                     valueTextBox.Text = lookUpString;
@@ -385,63 +385,53 @@ namespace Reanimator.Forms
                     text += "PlayerFlags2: " + val + "\n";
                 }
             }
-            text += "timeStamp1: " + _heroUnit.timeStamp1 + "\n";
-            text += "timeStamp2: " + _heroUnit.timeStamp2 + "\n";
-            text += "timeStamp3: " + _heroUnit.timeStamp3 + "\n";
+            text += "timeStamp1: " + _heroUnit.TimeStamp1 + "\n";
+            text += "timeStamp2: " + _heroUnit.TimeStamp2 + "\n";
+            text += "timeStamp3: " + _heroUnit.TimeStamp3 + "\n";
             text += "unknown_01_03_1: " + _heroUnit.inventoryType + "\n";
             text += "unknown_01_03_2: " + _heroUnit.inventoryPositionX + "\n";
             text += "unknown_01_03_3: " + _heroUnit.inventoryPositionY + "\n";
-            if (_heroUnit.unknown_01_03_4 != null)
+            if (_heroUnit.unknown_01_03_4 != 0)
             {
-                foreach (byte val in _heroUnit.unknown_01_03_4)
-                {
-                    text += "unknown_01_03_4: " + (int)val;
-                }
+                text += "unknown_01_03_4: 0x" + _heroUnit.unknown_01_03_4.ToString("X16") + "\n";
             }
             text += "unknown_02: " + _heroUnit.unknown_02 + "\n";
             text += "unknown_09: " + _heroUnit.unknown_09 + "\n";
-            if (_heroUnit.unitUniqueId != null)
+            if (_heroUnit.ObjectId != 0)
             {
-                foreach (byte val in _heroUnit.unitUniqueId)
-                {
-                    text += "unitUniqueId: " + (int)val + "\n";
-                }
+                text += "ObjectId: 0x" + _heroUnit.ObjectId.ToString("X16") + "\n";
             }
             text += "unknownBool_01_03: " + _heroUnit.unknownBool_01_03 + "\n";
             text += "unknownBool_06: " + _heroUnit.unknownBool_06 + "\n";
-            text += "unknownBool1: " + _heroUnit.isDead + "\n";
+            text += "unknownBool1: " + _heroUnit.IsDead + "\n";
             text += "unknownCount1F: " + _heroUnit.unknownCount1F + "\n";
             text += "unitType: " + _heroUnit.unitType + "\n";
 
             text += "\n\n\n\n";
 
-            SaveFile.UnitAppearance appearance = _heroUnit.Appearance;
+            UnitObject.UnitAppearance appearance = _heroUnit.Appearance;
             text += "unknown1: " + appearance.unknown1 + "\n";
-
-            if (appearance.unknown2 != null)
+            if (appearance.unknown2 != 0)
             {
-                foreach (byte val in appearance.unknown2)
-                {
-                    text += "unknown2: " + (int)val + "\n";
-                }
+                text += "unknown2: 0x" + appearance.unknown2.ToString("X16") + "\n";
             }
 
             richTextBox2.Text = text;
         }
 
-        public static void Serialize(SaveFile.StatBlock.Stat stats, string path)
+        public static void Serialize(UnitObject.StatBlock.Stat stats, string path)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(SaveFile.StatBlock.Stat));
+            XmlSerializer serializer = new XmlSerializer(typeof(UnitObject.StatBlock.Stat));
             TextWriter tw = new StreamWriter(path);
             serializer.Serialize(tw, stats);
             tw.Close();
         }
 
-        public static SaveFile.StatBlock.Stat Deserialize(string path)
+        public static UnitObject.StatBlock.Stat Deserialize(string path)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(SaveFile.StatBlock.Stat));
+            XmlSerializer serializer = new XmlSerializer(typeof(UnitObject.StatBlock.Stat));
             TextReader tr = new StreamReader(path);
-            SaveFile.StatBlock.Stat stats = (SaveFile.StatBlock.Stat)serializer.Deserialize(tr);
+            UnitObject.StatBlock.Stat stats = (UnitObject.StatBlock.Stat)serializer.Deserialize(tr);
             tr.Close();
 
             return stats;
@@ -449,7 +439,7 @@ namespace Reanimator.Forms
 
         private void PopulateMinigame()
         {
-            SaveFile.StatBlock.Stat minigame = UnitHelpFunctions.GetComplexValue(_heroUnit, ItemValueNames.minigame_category_needed.ToString());
+            UnitObject.StatBlock.Stat minigame = UnitHelpFunctions.GetComplexValue(_heroUnit, ItemValueNames.minigame_category_needed.ToString());
 
             // As long as VS won't let me place the control in the form by hand I'll initialize it here
             MinigameControl control = new MinigameControl(minigame.values.ToArray());
@@ -458,7 +448,7 @@ namespace Reanimator.Forms
 
         private void PopulateWaypoints()
         {
-            SaveFile.StatBlock.Stat wayPoints = UnitHelpFunctions.GetComplexValue(_heroUnit, ItemValueNames.waypoint_flags.ToString());
+            UnitObject.StatBlock.Stat wayPoints = UnitHelpFunctions.GetComplexValue(_heroUnit, ItemValueNames.waypoint_flags.ToString());
 
             if (wayPoints != null)
             {
@@ -481,7 +471,7 @@ namespace Reanimator.Forms
             }
         }
 
-        private void PopulateGeneral(SaveFile heroUnit)
+        private void PopulateGeneral(UnitObject heroUnit)
         {
             try
             {
@@ -753,7 +743,7 @@ namespace Reanimator.Forms
         {
             try
             {
-                SaveFile unit = (SaveFile)currentlyEditing_ComboBox.SelectedItem;
+                UnitObject unit = (UnitObject)currentlyEditing_ComboBox.SelectedItem;
 
                 // todo: rewrite ShowInvInfo(unit);
 
@@ -765,7 +755,7 @@ namespace Reanimator.Forms
             }
         }
 
-        SaveFile _currentlySelectedItem;
+        UnitObject _currentlySelectedItem;
         //// todo: rewrite private void ShowInvInfo(Unit unit)
         //{
         //    //save currently selected item
@@ -813,7 +803,7 @@ namespace Reanimator.Forms
         //    ShowItemMods(unit.Items.ToArray());
         //}
 
-        private void ShowItemMods(SaveFile[] items)
+        private void ShowItemMods(UnitObject[] items)
         {
             cb_availableMods.Items.Clear();
 
@@ -844,7 +834,7 @@ namespace Reanimator.Forms
             _currentlySelectedItem.inventoryPositionY = (int)nud_invPosY.Value;
         }
 
-        private static int GetItemWidth(SaveFile item)
+        private static int GetItemWidth(UnitObject item)
         {
             int width = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.inventory_width.ToString());
 
@@ -856,7 +846,7 @@ namespace Reanimator.Forms
             return width;
         }
 
-        private static int GetItemHeight(SaveFile item)
+        private static int GetItemHeight(UnitObject item)
         {
             int height = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.inventory_height.ToString());
 
@@ -1031,7 +1021,7 @@ namespace Reanimator.Forms
             CheckItemValues(itemValues, _heroUnit.Items.ToArray());
             listBox2.DataSource = itemValues;
 
-            CheckItemValues(itemValues, new SaveFile[] { _heroUnit });
+            CheckItemValues(itemValues, new UnitObject[] { _heroUnit });
 
             itemValues.Sort();
 
@@ -1042,11 +1032,11 @@ namespace Reanimator.Forms
             }
         }
 
-        private static void CheckItemValues(ICollection<String> values, IEnumerable<SaveFile> items)
+        private static void CheckItemValues(ICollection<String> values, IEnumerable<UnitObject> items)
         {
-            foreach (SaveFile item in items)
+            foreach (UnitObject item in items)
             {
-                foreach (SaveFile.StatBlock.Stat stat in item.Stats.stats)
+                foreach (UnitObject.StatBlock.Stat stat in item.Stats.stats)
                 {
                     string val = stat.Name + " = " + stat.Id.ToString() + ",";
                     if (!values.Contains(val))
@@ -1085,7 +1075,7 @@ namespace Reanimator.Forms
 
         private void saveAsData_Click(object sender, EventArgs e)
         {
-            SaveFile unit = currentlyEditing_ComboBox.SelectedItem as SaveFile;
+            UnitObject unit = currentlyEditing_ComboBox.SelectedItem as UnitObject;
             if (unit == null) return;
 
             String savePath = FormTools.SaveFileDialogBox("dat", "Data", unit.Name, null);
@@ -1110,11 +1100,11 @@ namespace Reanimator.Forms
             String filePath = FormTools.OpenFileDialogBox("dat", "Data", null);
             if (String.IsNullOrEmpty(filePath)) return;
 
-            SaveFile unit;
+            UnitObject unit;
             using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 BinaryFormatter bf = new BinaryFormatter { TypeFormat = FormatterTypeStyle.XsdString };
-                unit = bf.Deserialize(fs) as SaveFile;
+                unit = bf.Deserialize(fs) as UnitObject;
                 fs.Close();
             }
             if (unit == null) return;
@@ -1126,7 +1116,7 @@ namespace Reanimator.Forms
 
         private void button8_Click(object sender, EventArgs e)
         {
-            _heroUnit.Items.Remove((SaveFile)currentlyEditing_ComboBox.SelectedItem);
+            _heroUnit.Items.Remove((UnitObject)currentlyEditing_ComboBox.SelectedItem);
         }
 
         private void InitInventory()
@@ -1135,7 +1125,7 @@ namespace Reanimator.Forms
             {
                 const int ITEMSIZE = 56;
 
-                foreach (SaveFile item in _heroUnit.Items)
+                foreach (UnitObject item in _heroUnit.Items)
                 {
                     foreach (Control control in tp_characterInventory.Controls)
                     {
@@ -1268,7 +1258,7 @@ namespace Reanimator.Forms
 
         void b_Click(object sender, EventArgs e)
         {
-            SaveFile unit = (SaveFile)((Button)sender).Tag;
+            UnitObject unit = (UnitObject)((Button)sender).Tag;
 
             currentlyEditing_ComboBox.SelectedItem = unit;
 
@@ -1279,7 +1269,7 @@ namespace Reanimator.Forms
         {
             ListBox view = (ListBox)sender;
 
-            SaveFile unit = (SaveFile)view.SelectedItems[0];
+            UnitObject unit = (UnitObject)view.SelectedItems[0];
 
             currentlyEditing_ComboBox.SelectedItem = unit;
 
@@ -1297,22 +1287,20 @@ namespace Reanimator.Forms
 
         private void cb_availableMods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SaveFile mod = (SaveFile)cb_availableMods.SelectedItem;
-            SaveFile.StatBlock.Stat affix = mod.Stats.GetStatByName(ItemValueNames.applied_affix.ToString());
+            UnitObject mod = (UnitObject)cb_availableMods.SelectedItem;
+            UnitObject.StatBlock.Stat affix = mod.Stats.GetStatByName(ItemValueNames.applied_affix.ToString());
 
-            if (affix != null)
-            {
-                tb_modAttribute.Text = affix.Id.ToString();
-                tb_modValue.Text = affix.values[0].Stat.ToString();
-            }
+            if (affix == null) return;
+            tb_modAttribute.Text = affix.Id.ToString();
+            tb_modValue.Text = affix.values[0].Stat.ToString();
         }
 
         private void b_saveXML_Click(object sender, EventArgs e)
         {
-            SaveFile unit = currentlyEditing_ComboBox.SelectedItem as SaveFile;
+            CharacterFile unit = currentlyEditing_ComboBox.SelectedItem as CharacterFile;
             if (unit == null) return;
 
-            XmlUtilities<SaveFile>.Serialize(unit, @"F:\" + unit.Name + ".xml");
+            XmlUtilities<CharacterFile>.Serialize(unit, @"F:\" + unit.Character.Name + ".xml");
         }
 
         private void b_loadXML_Click(object sender, EventArgs e)
@@ -1320,7 +1308,7 @@ namespace Reanimator.Forms
             String filePath = FormTools.OpenFileDialogBox("xml", "XML", null);
             if (String.IsNullOrEmpty(filePath)) return;
 
-            SaveFile unit = XmlUtilities<SaveFile>.Deserialize(filePath);
+            UnitObject unit = XmlUtilities<UnitObject>.Deserialize(filePath);
 
             if (unit != null)
             {
