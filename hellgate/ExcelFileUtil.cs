@@ -78,7 +78,7 @@ namespace Hellgate
         public abstract class ColumnTypeKeys
         {
             public const String IsFinalData = "IsFinalData";
-            public const String IsExtendedProps = "IsExtendedProps";
+            public const String IsStats = "IsStats";
             public const String IsStringOffset = "IsStringOffset";
             public const String IsStringIndex = "IsStringIndex";
             public const String IsRelationGenerated = "IsRelationGenerated";
@@ -373,9 +373,9 @@ namespace Hellgate
             return FileTools.GetDelimintedByteArray(_stringBuffer, ref offset, 0);
         }
 
-        public byte[] ReadExtendedProperties(int index)
+        public byte[] ReadStats(int index)
         {
-            return (_extendedBuffer != null) ? _extendedBuffer[index] : null;
+            return (_statsBuffer != null) ? _statsBuffer[index] : null;
         }
 
         public string ReadSecondaryStringTable(int index)

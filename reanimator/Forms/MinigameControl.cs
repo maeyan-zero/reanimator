@@ -82,7 +82,7 @@ namespace Reanimator.Forms
             for (int counter = 0; counter < minigameValues.Length; counter++)
             {
                 AttributeValues game = GetMatchingValues(minigameValues[counter].Attribute1, minigameValues[counter].Attribute2);
-                SetMinigame(game.Icon, minigameValues[counter].Stat - 1, counter + 1);
+                SetMinigame(game.Icon, minigameValues[counter].StatValue - 1, counter + 1);
             }
         }
 
@@ -195,7 +195,7 @@ namespace Reanimator.Forms
 
             minigameValues[buttonIndex].Attribute1 = values[valueIndex].Attr0;
             minigameValues[buttonIndex].Attribute2 = values[valueIndex].Attr1;
-            minigameValues[buttonIndex].Stat = count + 1;
+            minigameValues[buttonIndex].StatValue = count + 1;
         }
 
         private int CheckIfLAreadyExists(int newIndex)

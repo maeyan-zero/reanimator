@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -20,7 +19,7 @@ namespace Hellgate
         private byte[] _stringBuffer;
         private byte[] _scriptBuffer;
         private readonly byte[] _myshBuffer;
-        private byte[][] _extendedBuffer;
+        private byte[][] _statsBuffer;
         private String[][] _csvTable;
 
         public List<String> SecondaryStrings { get; private set; }
@@ -520,9 +519,9 @@ namespace Hellgate
                 needOutputAttributes = false;
 
                 // applicable only for Unit type; items, missiles, monsters, objects, players
-                if (Attributes.HasExtended)
+                if (Attributes.HasStats)
                 {
-                    if (_extendedBuffer == null) _extendedBuffer = new byte[rowCount - 1][];
+                    if (_statsBuffer == null) _statsBuffer = new byte[rowCount - 1][];
 
                     String value = tableRows[row][csvCol];
                     String[] stringArray = value.Split(',');
@@ -532,7 +531,7 @@ namespace Hellgate
                     {
                         byteArray[i] = Byte.Parse(stringArray[i]);
                     }
-                    _extendedBuffer[row - 1] = byteArray;
+                    _statsBuffer[row - 1] = byteArray;
                 }
 
                 // properties has extra Scripts stuffs
@@ -640,17 +639,17 @@ namespace Hellgate
 
             // Primary Indice Block
             if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
-            if (Attributes.HasExtended) // items, objects, missles, players
+            if (Attributes.HasStats) // items, objects, missles, players
             {
-                _extendedBuffer = new byte[Count][];
+                _statsBuffer = new byte[Count][];
                 for (int i = 0; i < Count; i++)
                 {
                     offset += sizeof(int); // Skip the indice
 
                     int size = FileTools.ByteArrayToInt32(buffer, ref offset);
-                    _extendedBuffer[i] = new byte[size];
+                    _statsBuffer[i] = new byte[size];
 
-                    Buffer.BlockCopy(buffer, offset, _extendedBuffer[i], 0, size);
+                    Buffer.BlockCopy(buffer, offset, _statsBuffer[i], 0, size);
                     offset += size;
                 }
             }
@@ -750,7 +749,7 @@ namespace Hellgate
             int newStringBufferOffset = 0;
             byte[] newIntegerBuffer = null;
             int newIntegerBufferOffset = 1;
-            byte[][] newExtendedBuffer = null;
+            byte[][] newStatsBuffer = null;
             List<String> newSecondaryStrings = null;
             List<Object> newTable = new List<object>();
 
@@ -891,17 +890,17 @@ namespace Hellgate
 
                 // For item types, items, missiles, monsters etc
                 // This must be a hex byte delimited array
-                if ((Attributes.HasExtended))
+                if (Attributes.HasStats)
                 {
-                    if (newExtendedBuffer == null)
+                    if (newStatsBuffer == null)
                     {
-                        newExtendedBuffer = new byte[dataTable.Rows.Count][];
+                        newStatsBuffer = new byte[dataTable.Rows.Count][];
                     }
                     const char split = ',';
                     string value = dataTable.Rows[row][col] as string;
                     if (String.IsNullOrEmpty(value))
                     {
-                        Console.WriteLine("Error parsing Extended property string.");
+                        Console.WriteLine("Error parsing stats string.");
                         return false;
                     }
                     string[] stringArray = value.Split(split);
@@ -910,7 +909,7 @@ namespace Hellgate
                     {
                         byteArray[i] = Byte.Parse(stringArray[i]);
                     }
-                    newExtendedBuffer[row] = byteArray;
+                    newStatsBuffer[row] = byteArray;
                 }
 
                 newTable.Add(rowInstance);
@@ -920,7 +919,7 @@ namespace Hellgate
             Rows = newTable;
             _stringBuffer = newStringBuffer;
             _scriptBuffer = newIntegerBuffer;
-            _extendedBuffer = newExtendedBuffer;
+            _statsBuffer = newStatsBuffer;
             SecondaryStrings = newSecondaryStrings;
 
             return true;
@@ -968,10 +967,10 @@ namespace Hellgate
             for (int i = 0; i < Rows.Count; i++)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, i);
-                if (!Attributes.HasExtended) continue;
+                if (!Attributes.HasStats) continue;
 
-                FileTools.WriteToBuffer(ref buffer, ref offset, _extendedBuffer[i].Length);
-                FileTools.WriteToBuffer(ref buffer, ref offset, _extendedBuffer[i]);
+                FileTools.WriteToBuffer(ref buffer, ref offset, _statsBuffer[i].Length);
+                FileTools.WriteToBuffer(ref buffer, ref offset, _statsBuffer[i]);
             }
 
 
@@ -1119,7 +1118,7 @@ namespace Hellgate
             }
 
             // excel table type-specific columns
-            if (Attributes.HasExtended) columnsList.Add("ExtendedProps");
+            if (Attributes.HasStats) columnsList.Add("Stats");
             if (isProperties) columnsList.Add("Script");
 
             // column header row
@@ -1318,8 +1317,8 @@ namespace Hellgate
                 }
             }
 
-            // extended properties
-            if (Attributes.HasExtended)
+            // stats
+            if (Attributes.HasStats)
             {
                 col++;
                 int row = -1;
@@ -1331,7 +1330,7 @@ namespace Hellgate
                         continue;
                     }
 
-                    rowStr[col] = _extendedBuffer[row++].ToString(",");
+                    rowStr[col] = _statsBuffer[row++].ToString(",");
                 }
             }
 

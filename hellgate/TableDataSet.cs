@@ -57,7 +57,7 @@ namespace Hellgate
                     if (fieldInfo.FieldType != typeof(ExcelFile.RowHeader)) continue;
 
                     outputAttributes.Add(null);
-                    dataTable.Columns.Add(fieldInfo.Name, typeof(string));
+                    dataTable.Columns.Add(fieldInfo.Name, typeof(String));
                     continue;
                 }
 
@@ -84,28 +84,28 @@ namespace Hellgate
 
                 outputAttributes.Add(excelAttribute);
 
-                if ((excelAttribute.IsStringOffset))
+                if (excelAttribute.IsStringOffset)
                 {
                     dataColumn.DataType = typeof(String);
                     dataColumn.ExtendedProperties.Add(ColumnKeys.IsStringOffset, true);
                     dataColumn.DefaultValue = String.Empty;
                 }
 
-                if ((excelAttribute.IsScript))
+                if (excelAttribute.IsScript)
                 {
                     dataColumn.DataType = typeof(String);
                     dataColumn.ExtendedProperties.Add(ColumnKeys.IsScript, true);
                     dataColumn.DefaultValue = String.Empty;
                 }
 
-                if ((excelAttribute.IsSecondaryString))
+                if (excelAttribute.IsSecondaryString)
                 {
                     dataColumn.DataType = typeof(String);
                     dataColumn.ExtendedProperties.Add(ColumnKeys.IsSecondaryString, true);
                     dataColumn.DefaultValue = String.Empty;
                 }
 
-                if ((excelAttribute.IsStringIndex))
+                if (excelAttribute.IsStringIndex)
                 {
                     dataColumn.ExtendedProperties.Add(ColumnKeys.IsStringIndex, true);
 
@@ -127,22 +127,22 @@ namespace Hellgate
                     dataColumnString.ExtendedProperties.Add(ColumnKeys.IsRelationGenerated, true);
                 }
 
-                if ((excelAttribute.IsBitmask))
+                if (excelAttribute.IsBitmask)
                 {
                     dataColumn.ExtendedProperties.Add(ColumnKeys.IsBitmask, true);
                 }
 
-                if ((excelAttribute.IsBool))
+                if (excelAttribute.IsBool)
                 {
                     dataColumn.ExtendedProperties.Add(ColumnKeys.IsBool, true);
                 }
             }
 
-            if ((excelFile.Attributes.HasExtended)) // items, missiles, monsters, objects, players
+            if (excelFile.Attributes.HasStats) // items, missiles, monsters, objects, players
             {
-                DataColumn extendedDataColumn = dataTable.Columns.Add("ExtendedProperties");
+                DataColumn extendedDataColumn = dataTable.Columns.Add("Stats");
                 extendedDataColumn.DataType = typeof(String);
-                extendedDataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsExtendedProps, true);
+                extendedDataColumn.ExtendedProperties.Add(ExcelFile.ColumnTypeKeys.IsStats, true);
                 outputAttributes.Add(null);
             }
             #endregion
@@ -178,14 +178,14 @@ namespace Hellgate
                         continue;
                     }
 
-                    if ((excelOutputAttribute.IsStringOffset))
+                    if (excelOutputAttribute.IsStringOffset)
                     {
                         int valueInt = (int)value;
                         baseRow[col++] = (valueInt != -1) ? excelFile.ReadStringTable(valueInt) : String.Empty;
                         continue;
                     }
 
-                    if ((excelOutputAttribute.IsSecondaryString))
+                    if (excelOutputAttribute.IsSecondaryString)
                     {
                         int valueInt = (int)value;
                         baseRow[col++] = (valueInt != -1) ? excelFile.ReadSecondaryStringTable(valueInt) : String.Empty;
@@ -238,10 +238,10 @@ namespace Hellgate
                     baseRow[col++] = value;
                 }
 
-                // Extended properties, only a component of the items class
-                if ((excelFile.Attributes.HasExtended))
+                // stats, only a component of the UnitData row type
+                if (excelFile.Attributes.HasStats)
                 {
-                    baseRow[col++] = FileTools.ArrayToStringGeneric(excelFile.ReadExtendedProperties(row - 1), ",");
+                    baseRow[col++] = FileTools.ArrayToStringGeneric(excelFile.ReadStats(row - 1), ",");
                 }
 
                 dataTable.Rows.Add(baseRow);

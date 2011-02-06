@@ -121,6 +121,10 @@ namespace Reanimator.Forms
             {
                 _tableData_DataGridView.DataMember = _dataFile.IsStringsFile ? FileManager.StringsTableName : _dataFile.StringId;
             }
+
+            DataGridViewColumn codeColumn = _tableData_DataGridView.Columns["code"];
+            if (codeColumn != null) codeColumn.DefaultCellStyle.Format = "X04";
+
             _tableData_DataGridView.ResumeLayout();
 
             //// List View

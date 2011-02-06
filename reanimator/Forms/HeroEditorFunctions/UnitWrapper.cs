@@ -207,7 +207,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         private CharacterClass GetCharacterClass(UnitObject _hero)
         {
-            return (CharacterClass)Enum.Parse(typeof(CharacterClass), _hero.unitCode.ToString());
+            return (CharacterClass)Enum.Parse(typeof(CharacterClass), _hero.UnitCode.ToString());
         }
 
         public UnitObject HeroUnit
@@ -272,7 +272,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             UnitObject.StatBlock.Stat.Values normal = new UnitObject.StatBlock.Stat.Values();
             normal.Attribute2 = 16705;
-            normal.Stat = 1535;
+            normal.StatValue = 1535;
             return normal;
         }
 
@@ -280,25 +280,25 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             UnitObject.StatBlock.Stat.Values nightmare = new UnitObject.StatBlock.Stat.Values();
             nightmare.Attribute2 = 16961;
-            nightmare.Stat = 1535;
+            nightmare.StatValue = 1535;
             return nightmare;
         }
 
         public int NormalWaypoints
         {
-            get { return _waypoints.values[0].Stat; }
+            get { return _waypoints.values[0].StatValue; }
             set
             {
-                _waypoints.values[0].Stat = value;
+                _waypoints.values[0].StatValue = value;
             }
         }
 
         public int NightmareWaypoints
         {
-            get { return _waypoints.values[1].Stat; }
+            get { return _waypoints.values[1].StatValue; }
             set
             {
-                _waypoints.values[1].Stat = value;
+                _waypoints.values[1].StatValue = value;
             }
         }
 
@@ -913,7 +913,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             {
                 foreach(CharacterItems item in type.Items)
                 {
-                    _hero.AddItem(item.BaseUnit);
+                    _hero.Items.Add(item.BaseUnit);
                 }
             }
         }
@@ -1046,7 +1046,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         private string CreateImagePath()
         {
-            DataRow[] itemsRows = _itemTable.Select(String.Format("code = '{0}'", BaseUnit.unitCode));
+            DataRow[] itemsRows = _itemTable.Select(String.Format("code = '{0}'", BaseUnit.UnitCode));
             if (itemsRows.Length == 0)
             {
                 return null;
@@ -1234,11 +1234,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), BaseUnit.inventoryType.ToString());
+                return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), BaseUnit.InventoryType.ToString());
             }
             set
             {
-                BaseUnit.inventoryType = (int)value;
+                BaseUnit.InventoryType = (int)value;
             }
         }
 
@@ -1246,12 +1246,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return new Point(BaseUnit.inventoryPositionX, BaseUnit.inventoryPositionY);
+                return new Point(BaseUnit.InventoryPositionX, BaseUnit.InventoryPositionY);
             }
             set
             {
-                BaseUnit.inventoryPositionX = value.X;
-                BaseUnit.inventoryPositionY = value.Y;
+                BaseUnit.InventoryPositionX = value.X;
+                BaseUnit.InventoryPositionY = value.Y;
             }
         }
 
@@ -1332,7 +1332,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
             foreach (UnitObject item in BaseUnit.Items)
             {
-                if (item.inventoryType == (int)type)
+                if (item.InventoryType == (int)type)
                 {
                     tmp.Add(item);
                 }
@@ -1343,13 +1343,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         public void AddItem(UnitObject item)
         {
-            BaseUnit.AddItem(item);
+            BaseUnit.Items.Add(item);
             // todo: rewrite _items.Add(new CharacterItems(item, _dataSet));
         }
 
         public void RemoveItem(UnitObject item)
         {
-            BaseUnit.RemoveItem(item);
+            BaseUnit.Items.Remove(item);
             CharacterItems tmpItem = _items.Find(tmp => tmp.BaseUnit == item);
             _items.Remove(tmpItem);
         }
@@ -1357,12 +1357,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
         public void AddItem(CharacterItems item)
         {
             _items.Add(item);
-            BaseUnit.AddItem(item.BaseUnit);
+            BaseUnit.Items.Add(item.BaseUnit);
         }
 
         public void RemoveItem(CharacterItems item)
         {
-            BaseUnit.RemoveItem(item.BaseUnit);
+            BaseUnit.Items.Remove(item.BaseUnit);
             _items.Remove(item);
         }
 
@@ -1559,7 +1559,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
                 foreach(UnitObject item in BaseUnit.Items)
                 {
-                    if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                    if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
                         _weapons.Add(item);
                     }
@@ -1577,7 +1577,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
                 foreach (UnitObject item in BaseUnit.Items)
                 {
-                    if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                    if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
                         _weapons.Add(item);
                     }
@@ -1595,7 +1595,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
                 foreach (UnitObject item in BaseUnit.Items)
                 {
-                    if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                    if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
                         _weapons.Add(item);
                     }
@@ -1680,7 +1680,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         public int CurrentLevel
         {
-            get { return _skillBlock.Stat; }
+            get { return _skillBlock.StatValue; }
             set
             {
                 if (value > _maxLevel)
@@ -1688,7 +1688,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                     value = _maxLevel;
                 }
 
-                _skillBlock.Stat = value;
+                _skillBlock.StatValue = value;
             }
         }
 

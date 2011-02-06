@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Hellgate.Excel.JapaneseBeta;
 using Revival.Common;
 
 namespace Hellgate
@@ -332,6 +333,11 @@ namespace Hellgate
 
             ObjectDelegator objectDelegator = DataFileDelegators[stringId];
             return objectDelegator.ContainsGetFieldDelegate(colName);
+        }
+
+        public StatsBeta GetExcelStatsRowFromIndex(int rowIndex)
+        {
+            return (StatsBeta)DataFiles["STATS"].Rows[rowIndex];
         }
         
         /// <summary>
