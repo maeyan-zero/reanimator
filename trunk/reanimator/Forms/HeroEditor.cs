@@ -27,14 +27,16 @@ namespace Reanimator.Forms
         }
 
         private readonly FileManager _fileManager;
+        private readonly CharacterFile _characterFile;
         private readonly UnitObject _heroUnit;
         private readonly UnitHelpFunctions _itemFunctions;
         private CharacterClass _characterClass;
         private UnitWrapper _wrapper;
 
-        public HeroEditor(UnitObject heroFile, FileManager fileManager)
+        public HeroEditor(CharacterFile characterFile, FileManager fileManager)
         {
-            _heroUnit = heroFile;
+            _characterFile = characterFile;
+            _heroUnit = characterFile.Character;
             _fileManager = fileManager;
             //_panel = new CompletePanelControl();
             //_statsTable = _excelTables.GetTable("stats") as Stats;
@@ -83,7 +85,7 @@ namespace Reanimator.Forms
             {
                 stats_ListBox.Items.Clear();
 
-                for (int i = 0; i < unit.Stats.Length; i++)
+                for (int i = 0; i < unit.Stats.stats.Count; i++)
                 {
                     UnitObject.StatBlock.Stat stat = unit.Stats[i];
 
@@ -209,7 +211,7 @@ namespace Reanimator.Forms
                     }
                     else
                     {
-                        lookUpString = _itemFunctions.MapIdToString(stat, stat.AttributeAt(j).TableId, stat.values[i].AttributeAt(j));
+                        lookUpString = _itemFunctions.MapIdToString(stat, stat.AttributeAt(j).TableCode, stat.values[i].AttributeAt(j));
                     }
 
                     if (lookUpString != string.Empty)
@@ -240,7 +242,7 @@ namespace Reanimator.Forms
                 Label valueLabel = new Label { Text = "Value: ", Left = leftOffset, Width = 40, Top = 3 + heightOffset };
                 TextBox valueTextBox = new TextBox { Left = valueLabel.Right, Top = heightOffset };
 
-                lookUpString = _itemFunctions.MapIdToString(stat, stat.Resource, stat.values[i].Stat);
+                lookUpString = _itemFunctions.MapIdToString(stat, stat.Resource, stat.values[i].StatValue);
                 if (!String.IsNullOrEmpty(lookUpString))
                 {
                     valueTextBox.Text = lookUpString;
@@ -385,36 +387,34 @@ namespace Reanimator.Forms
                     text += "PlayerFlags2: " + val + "\n";
                 }
             }
-            text += "timeStamp1: " + _heroUnit.TimeStamp1 + "\n";
-            text += "timeStamp2: " + _heroUnit.TimeStamp2 + "\n";
-            text += "timeStamp3: " + _heroUnit.TimeStamp3 + "\n";
-            text += "unknown_01_03_1: " + _heroUnit.inventoryType + "\n";
-            text += "unknown_01_03_2: " + _heroUnit.inventoryPositionX + "\n";
-            text += "unknown_01_03_3: " + _heroUnit.inventoryPositionY + "\n";
-            if (_heroUnit.unknown_01_03_4 != 0)
+            text += "TimeStamp1: " + _heroUnit.TimeStamp1 + "\n";
+            text += "TimeStamp2: " + _heroUnit.TimeStamp2 + "\n";
+            text += "TimeStamp3: " + _heroUnit.TimeStamp3 + "\n";
+            text += "InventoryType: " + _heroUnit.InventoryType + "\n";
+            text += "InventoryPositionX: " + _heroUnit.InventoryPositionX + "\n";
+            text += "InventoryPositionY: " + _heroUnit.InventoryPositionY + "\n";
+            if (_heroUnit.Unknown0103Int64 != 0)
             {
-                text += "unknown_01_03_4: 0x" + _heroUnit.unknown_01_03_4.ToString("X16") + "\n";
+                text += "Unknown0103Int64: 0x" + _heroUnit.Unknown0103Int64.ToString("X16") + "\n";
             }
-            text += "unknown_02: " + _heroUnit.unknown_02 + "\n";
-            text += "unknown_09: " + _heroUnit.unknown_09 + "\n";
+            text += "Unknown02: " + _heroUnit.Unknown02 + "\n";
+            text += "Unknown09: " + _heroUnit.Unknown09 + "\n";
             if (_heroUnit.ObjectId != 0)
             {
                 text += "ObjectId: 0x" + _heroUnit.ObjectId.ToString("X16") + "\n";
             }
-            text += "unknownBool_01_03: " + _heroUnit.unknownBool_01_03 + "\n";
-            text += "unknownBool_06: " + _heroUnit.unknownBool_06 + "\n";
-            text += "unknownBool1: " + _heroUnit.IsDead + "\n";
-            text += "unknownCount1F: " + _heroUnit.unknownCount1F + "\n";
-            text += "unitType: " + _heroUnit.unitType + "\n";
+            text += "IsInventory: " + _heroUnit.IsInventory + "\n";
+            text += "UnknownBool06: " + _heroUnit.UnknownBool06 + "\n";
+            text += "IsDead: " + _heroUnit.IsDead + "\n";
+            text += "UnknownCount1F: " + _heroUnit.UnknownCount1F + "\n";
+            text += "UnitType: " + _heroUnit.UnitType + "\n";
 
             text += "\n\n\n\n";
 
             UnitObject.UnitAppearance appearance = _heroUnit.Appearance;
-            text += "unknown1: " + appearance.unknown1 + "\n";
-            if (appearance.unknown2 != 0)
-            {
-                text += "unknown2: 0x" + appearance.unknown2.ToString("X16") + "\n";
-            }
+            text += "Unknown1: " + appearance.Unknown1 + "\n";
+            text += "Unknown16: 0x" + appearance.Unknown16.ToString("X16") + "\n";
+            text += "Unknown23: 0x" + appearance.Unknown23.ToString("X16") + "\n";
 
             richTextBox2.Text = text;
         }
@@ -478,7 +478,7 @@ namespace Reanimator.Forms
                 name_TextBox.Text = heroUnit.Name;
 
                 string job;
-                switch (heroUnit.unitCode)
+                switch (heroUnit.UnitCode)
                 {
                     case (0x7679):
                         job = "Male Summoner";
@@ -680,9 +680,9 @@ namespace Reanimator.Forms
         {
             if (set)
             {
-                if (!_heroUnit.PlayerFlags1.Contains(stateId))
+                if (!_heroUnit.PlayerFlags1.Contains((short)stateId))
                 {
-                    _heroUnit.PlayerFlags1.Add(stateId);
+                    _heroUnit.PlayerFlags1.Add((short)stateId);
                 }
                 if (!_heroUnit.PlayerFlags2.Contains(stateId))
                 {
@@ -694,7 +694,7 @@ namespace Reanimator.Forms
             }
             else
             {
-                _heroUnit.PlayerFlags1.Remove(stateId);
+                _heroUnit.PlayerFlags1.Remove((short)stateId);
                 _heroUnit.PlayerFlags2.Remove(stateId);
             }
 
@@ -826,12 +826,12 @@ namespace Reanimator.Forms
 
         private void nud_invPosX_ValueChanged(object sender, EventArgs e)
         {
-            _currentlySelectedItem.inventoryPositionX = (int)nud_invPosX.Value;
+            _currentlySelectedItem.InventoryPositionX = (int)nud_invPosX.Value;
         }
 
         private void nud_invPosY_ValueChanged(object sender, EventArgs e)
         {
-            _currentlySelectedItem.inventoryPositionY = (int)nud_invPosY.Value;
+            _currentlySelectedItem.InventoryPositionY = (int)nud_invPosY.Value;
         }
 
         private static int GetItemWidth(UnitObject item)
@@ -862,7 +862,7 @@ namespace Reanimator.Forms
         {
             try
             {
-                String path = String.Format("{0}-singleplayer -load\"{1}\"", Config.GameClientPath, _heroUnit.Path);
+                String path = String.Format("{0}-singleplayer -load\"{1}\"", Config.GameClientPath, _characterFile.Path);
                 System.Diagnostics.Process.Start(path);
             }
             catch (Exception ex)
@@ -1129,7 +1129,7 @@ namespace Reanimator.Forms
                 {
                     foreach (Control control in tp_characterInventory.Controls)
                     {
-                        if (item.inventoryType.ToString() != (string)control.Tag) continue;
+                        if (item.InventoryType.ToString() != (string)control.Tag) continue;
 
                         int quality = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.item_quality.ToString());
                         int quantity = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.item_quantity.ToString());
@@ -1138,7 +1138,7 @@ namespace Reanimator.Forms
                             quantity = 1;
                         }
 
-                        if (item.inventoryType == 19760 || item.inventoryType == 28208 || item.inventoryType == 26928 || item.inventoryType == 22577)
+                        if (item.InventoryType == 19760 || item.InventoryType == 28208 || item.InventoryType == 26928 || item.InventoryType == 22577)
                         {
                             ((ListBox)control).Items.Add(item);
 
@@ -1178,8 +1178,8 @@ namespace Reanimator.Forms
                                                Width = GetItemWidth(item) * ITEMSIZE,
                                                Height = GetItemHeight(item) * ITEMSIZE,
                                                Location =
-                                                   new Point(item.inventoryPositionX * ITEMSIZE,
-                                                             item.inventoryPositionY * ITEMSIZE),
+                                                   new Point(item.InventoryPositionX * ITEMSIZE,
+                                                             item.InventoryPositionY * ITEMSIZE),
                                                Tag = item
                                            };
                             b.Click += b_Click;
@@ -1193,7 +1193,7 @@ namespace Reanimator.Forms
                                 b.Text = quantity + "x " + item.Name;
                             }
 
-                            switch (item.inventoryType)
+                            switch (item.InventoryType)
                             {
                                 case (int)InventoryTypes.Inventory:
                                     tp_inventory.Controls.Add(b);
@@ -1211,11 +1211,11 @@ namespace Reanimator.Forms
 
                             break;
                         }
-                        else if (item.inventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                        else if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
                         {
                             lb_equipped.Items.Add(item);
 
-                            TextBox box = (TextBox)tp_characterInventory.Controls["tb_hand" + item.inventoryPositionX];
+                            TextBox box = (TextBox)tp_characterInventory.Controls["tb_hand" + item.InventoryPositionX];
 
                             if (quantity == 1)
                             {
@@ -1292,7 +1292,7 @@ namespace Reanimator.Forms
 
             if (affix == null) return;
             tb_modAttribute.Text = affix.Id.ToString();
-            tb_modValue.Text = affix.values[0].Stat.ToString();
+            tb_modValue.Text = affix.values[0].StatValue.ToString();
         }
 
         private void b_saveXML_Click(object sender, EventArgs e)

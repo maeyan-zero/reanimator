@@ -23,7 +23,7 @@ namespace Reanimator.Forms
 
         private void InitializeWayPointList()
         {
-            int value = wayPointValues.Stat;
+            int value = wayPointValues.StatValue;
 
             clb_wayPoints.SuspendLayout();
             clb_wayPoints.BeginUpdate();
@@ -60,7 +60,7 @@ namespace Reanimator.Forms
                 bits -= (int)Math.Pow(2, e.Index);
             }
 
-            wayPointValues.Stat = bits;
+            wayPointValues.StatValue = bits;
         }
 
         private void WayPointControl_Load(object sender, EventArgs e)

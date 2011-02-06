@@ -102,15 +102,15 @@ namespace Reanimator.Forms.ItemTransfer
             // get inventory type that the item uses
             TradeInventoryTypes type = TradeInventoryTypes.Inventory;
 
-            if (item.inventoryType == (int)InventoryTypes.Cube)
+            if (item.InventoryType == (int)InventoryTypes.Cube)
             {
                 type = TradeInventoryTypes.Cube;
             }
-            else if (item.inventoryType == (int)InventoryTypes.Stash)
+            else if (item.InventoryType == (int)InventoryTypes.Stash)
             {
                 type = TradeInventoryTypes.Stash;
             }
-            else if (item.inventoryType == (int)InventoryTypes.Inventory)
+            else if (item.InventoryType == (int)InventoryTypes.Inventory)
             {
                 type = TradeInventoryTypes.Inventory;
             }
@@ -127,15 +127,15 @@ namespace Reanimator.Forms.ItemTransfer
             // get inventory type that the item uses
             TradeInventoryTypes type = TradeInventoryTypes.Inventory;
 
-            if (item.inventoryType == (int)InventoryTypes.Cube)
+            if (item.InventoryType == (int)InventoryTypes.Cube)
             {
                 type = TradeInventoryTypes.Cube;
             }
-            else if (item.inventoryType == (int)InventoryTypes.Stash)
+            else if (item.InventoryType == (int)InventoryTypes.Stash)
             {
                 type = TradeInventoryTypes.Stash;
             }
-            else if (item.inventoryType == (int)InventoryTypes.Inventory)
+            else if (item.InventoryType == (int)InventoryTypes.Inventory)
             {
                 type = TradeInventoryTypes.Inventory;
             }
@@ -152,8 +152,8 @@ namespace Reanimator.Forms.ItemTransfer
             // get corresponding inventory
             bool[,] inventory = _charInventory[(int)type];
 
-            int x = item.inventoryPositionX;
-            int y = item.inventoryPositionY;
+            int x = item.InventoryPositionX;
+            int y = item.InventoryPositionY;
 
             int width = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.inventory_width.ToString());
             int height = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.inventory_height.ToString());
@@ -270,14 +270,14 @@ namespace Reanimator.Forms.ItemTransfer
 
         private void SetLocation(Point point)
         {
-            _item.inventoryPositionX = point.X;
-            _item.inventoryPositionY = point.Y;
+            _item.InventoryPositionX = point.X;
+            _item.InventoryPositionY = point.Y;
         }
 
         private Point GetLocation()
         {
-            int x = _item.inventoryPositionX;
-            int y = _item.inventoryPositionY;
+            int x = _item.InventoryPositionX;
+            int y = _item.InventoryPositionY;
 
             return new Point(x, y);
         }

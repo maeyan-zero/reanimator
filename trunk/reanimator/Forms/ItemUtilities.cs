@@ -45,9 +45,9 @@ namespace Reanimator.Forms
                 UnitObject.StatBlock.Stat stat;
                 foreach (UnitObject unit in units)
                 {
-                    for (int counter = 0; counter < unit.Stats.Length; counter++)
+                    for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
                     {
-                        stat = unit.Stats[counter];
+                        stat = unit.Stats.stats[counter];
 
                         String name;
                         if (hash.Contains(stat.Code))
@@ -276,13 +276,13 @@ namespace Reanimator.Forms
         {
             //if (!initialized) return;
 
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
             {
                 UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Name != valueName) continue;
 
-                unitStats.values[0].Stat = value;
+                unitStats.values[0].StatValue = value;
                 return true;
             }
 
@@ -293,13 +293,13 @@ namespace Reanimator.Forms
         {
             //if (!initialized) return;
 
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
             {
                 UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Id != valueId) continue;
 
-                unitStats.values[0].Stat = value;
+                unitStats.values[0].StatValue = value;
                 return true;
             }
 
@@ -310,7 +310,7 @@ namespace Reanimator.Forms
         {
             //if (!initialized) return;
 
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
             {
                 UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
 
@@ -325,13 +325,13 @@ namespace Reanimator.Forms
 
         public static int GetSimpleValue(UnitObject unit, string valueName)
         {
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
             {
                 UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
 
                 if (unitStats.Name == valueName)
                 {
-                    return unitStats.values[0].Stat;
+                    return unitStats.values[0].StatValue;
                 }
             }
             //MessageBox.Show("Field \"" + valueName + "\" not present in unit " + unit.Name + "!");
@@ -340,7 +340,7 @@ namespace Reanimator.Forms
 
         public static int GetSimpleValue(UnitObject unit, int valueId)
         {
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
             {
                 UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
 
@@ -351,7 +351,7 @@ namespace Reanimator.Forms
                     // if all atributes are 0 the value is most likely a simple value
                     if (entry.Attribute1 == 0 && entry.Attribute2 == 0 && entry.Attribute3 == 0)
                     {
-                        return entry.Stat;
+                        return entry.StatValue;
                     }
 
                     ExceptionLogger.LogException(new Exception("IsComplexAttributeException"), "GetSimpleValue", unitStats.Id + " is of type ComplexValue", false);
@@ -363,7 +363,7 @@ namespace Reanimator.Forms
 
         public static UnitObject.StatBlock.Stat GetComplexValue(UnitObject unit, string valueName)
         {
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
             {
                 UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
 
@@ -377,7 +377,7 @@ namespace Reanimator.Forms
 
         public static UnitObject.StatBlock.Stat GetComplexValue(UnitObject unit, ItemValueNames valueName)
         {
-            for (int counter = 0; counter < unit.Stats.Length; counter++)
+            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
             {
                 UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
 
@@ -416,7 +416,7 @@ namespace Reanimator.Forms
             //adds the entry to the new stat
             newStat.values.Add(newValue);
             //sets the bitCOunt value (maximum stat value defined by the number of bits?)
-            newStat.bitCount = bitCount;
+            newStat.BitCount = bitCount;
             //sets the length of the stat array (may be unnecessary)
             //newStat.Length = 1;
             //sets the Id of the new stat
@@ -485,7 +485,7 @@ namespace Reanimator.Forms
 
                         // main character data
                         saveFile.Seek(0x2028, SeekOrigin.Begin);
-                        byte[] saveData = unit.GenerateSaveData(charStringBytes);
+                        byte[] saveData = null;// todo: update me unit.GenerateSaveData(charStringBytes);
                         saveFile.Write(saveData, 0, saveData.Length);
                     }
 

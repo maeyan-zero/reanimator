@@ -90,7 +90,7 @@ namespace Reanimator.Forms.ItemTransfer
 
             //_characterUnit = UnitHelpFunctions.OpenCharacterFile(_tableFiles, _characterPath);
 
-            if (_characterUnit != null && _characterUnit.IsGood)
+            if (_characterUnit != null)
             {
                 _itemHelpFunctions.LoadCharacterValues(_characterUnit);
 
@@ -116,7 +116,7 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 foreach (UnitObject item in unit.Items)
                 {
-                    if (item.inventoryType == (int)InventoryType)
+                    if (item.InventoryType == (int)InventoryType)
                     {
                         //InventoryItem iItem = new InventoryItem(item);
                         //iItem.InitButton(false);

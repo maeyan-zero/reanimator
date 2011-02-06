@@ -462,11 +462,25 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                UnitObject character = null;// todo: rewrite  UnitHelpFunctions.OpenCharacterFile(_dataSet, _characterPath2);
+                CharacterFile characterFile2 = new CharacterFile(_characterPath2);
+                try
+                {
+                    byte[] characterBytes2 = File.ReadAllBytes(_characterPath2);
+                    characterFile2.ParseFileBytes(characterBytes2);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error while parsing the character file!\n" + ex);
+                    return;
+                }
+
+
+                UnitObject character = characterFile2.Character;
 
 //XmlUtilities<Unit>.Serialize(character, @"F:\before.xml");
 
-                if (character != null && character.IsGood)
+                if (character != null)
                 {
                     _itemHelpFunctions.LoadCharacterValues(character);
                     _characterUnit2 = null;// todo: rewrite  new UnitWrapper(_dataSet, character);
