@@ -372,6 +372,27 @@
                 ElementType = ElementType.FloatQuadArrayVariable,
                 DefaultValue = 0.7f,
                 Count = 4
+            },
+            new XmlCookElement
+            {
+                Name = "bNoCastShadow",
+                ElementType = ElementType.Int32,
+                DefaultValue = 0,
+                IsResurrection = true
+            },
+            new XmlCookElement
+            {
+                Name = "fSpecularPower",
+                ElementType = ElementType.Float,
+                DefaultValue = 1.0f,
+                IsResurrection = true
+            },
+            new XmlCookElement
+            {
+                Name = "fNormalPower",
+                ElementType = ElementType.Float,
+                DefaultValue = 1.0f,
+                IsResurrection = true
             }
         };
 

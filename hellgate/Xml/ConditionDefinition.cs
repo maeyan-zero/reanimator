@@ -54,7 +54,7 @@ namespace Hellgate.Xml
                 DefaultValue = null,
                 ExcelTableCode = 27953, // ITEMS
                 ElementType = ElementType.ExcelIndex,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {

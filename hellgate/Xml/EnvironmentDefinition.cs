@@ -60,7 +60,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 FlagId = 1,
                 FlagMask = 0x20,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {
@@ -235,6 +235,31 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "fAppearanceSHIntensity",
+                DefaultValue = 1.0f,
+                ElementType = ElementType.Float
+            },
+            new XmlCookElement
+            {
+                Name = "fCharacterLight_Distance",
+                DefaultValue = 2.0f,
+                ElementType = ElementType.Float,
+                IsResurrection = true
+            },
+            new XmlCookElement
+            {
+                Name = "fCharacterLight_FalloffStart",
+                DefaultValue = 1.0f,
+                ElementType = ElementType.Float
+            },
+            new XmlCookElement
+            {
+                Name = "fCharacterLight_FalloffEnd",
+                DefaultValue = 3.0f,
+                ElementType = ElementType.Float
+            },
+            new XmlCookElement
+            {
+                Name = "tCharacterLight_Color",
                 DefaultValue = 1.0f,
                 ElementType = ElementType.Float
             },

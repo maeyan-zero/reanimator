@@ -96,7 +96,7 @@ namespace Hellgate.Xml
                 DefaultValue = null,
                 ElementType = ElementType.StringArrayFixed,
                 Count = 2,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {
@@ -148,7 +148,7 @@ namespace Hellgate.Xml
                 DefaultValue = -1,
                 ElementType = ElementType.Int32Array_0x0A06,
                 Count = 2,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {
@@ -357,7 +357,7 @@ namespace Hellgate.Xml
             new XmlCookElement
             {
                 Name = "pszBoneNames",
-                DefaultValue = null,
+                DefaultValue = "0", // was null in SP/TC clients...
                 ElementType = ElementType.StringArrayVariable
             },
             new XmlCookElement

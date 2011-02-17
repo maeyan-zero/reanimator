@@ -1079,7 +1079,7 @@ namespace Reanimator.Forms
 
             // get all .xml.cooked
             IEnumerable<PackFileEntry> xmlCookedFiles = _fileManager.FileEntries.Values.Where(fileEntry => fileEntry.Name.EndsWith(XmlCookedFile.Extension));
-
+            _fileManager.BeginAllDatReadAccess();
 
             // loop through file entries
             int count = xmlCookedFiles.Count();
@@ -1089,7 +1089,8 @@ namespace Reanimator.Forms
             int uncooked = 0;
             int readFailed = 0;
             int uncookFailed = 0;
-            int tcv4Warnings = 0;
+            int testCentreWarnings = 0;
+            int resurrectionWarnings = 0;
             int excelWarnings = 0;
             foreach (PackFileEntry fileEntry in xmlCookedFiles)
             {
@@ -1120,8 +1121,9 @@ namespace Reanimator.Forms
                 {
                     xmlCookedFile.ParseFileBytes(fileBytes);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Debug.WriteLine(ex.ToString());
                     Console.WriteLine("Warning: Failed to uncook file: " + fileEntry.Name + "\n");
                     uncookFailed++;
                     continue;
@@ -1129,11 +1131,17 @@ namespace Reanimator.Forms
 
                 // did we have any uncooking issues?
                 bool hadWarning = false;
-                if (xmlCookedFile.HasTCv4Elements)
+                if (xmlCookedFile.HasTestCentreElements)
                 {
-                    Console.WriteLine("Warning: File has TCv4-specific elements.");
+                    Console.WriteLine("Warning: File has TestCentre-specific elements.");
                     hadWarning = true;
-                    tcv4Warnings++;
+                    testCentreWarnings++;
+                }
+                if (xmlCookedFile.HasResurrectionElements)
+                {
+                    Console.WriteLine("Warning: File has Resurrection-specific elements.");
+                    hadWarning = true;
+                    resurrectionWarnings++;
                 }
                 if (xmlCookedFile.HasExcelStringsMissing)
                 {
@@ -1161,12 +1169,14 @@ namespace Reanimator.Forms
                 uncooked++;
             }
 
+            _fileManager.EndAllDatAccess();
 
             // output final results
             Console.WriteLine("\nXML Files Uncooked: " + uncooked);
             if (readFailed > 0) Console.WriteLine(readFailed + " file(s) could not be read from the data files.");
             if (uncookFailed > 0) Console.WriteLine(uncookFailed + " file(s) failed to uncook at all.");
-            if (tcv4Warnings > 0) Console.WriteLine(tcv4Warnings + " file(s) had TCv4-specific XML elements which wont be included when recooked.");
+            if (testCentreWarnings > 0) Console.WriteLine(testCentreWarnings + " file(s) had TestCentre-specific XML elements which wont be included when recooked.");
+            if (resurrectionWarnings > 0) Console.WriteLine(resurrectionWarnings + " file(s) had Resurrection-specific XML elements which wont be included when recooked.");
             if (excelWarnings > 0) Console.WriteLine(excelWarnings + " file(s) had excel warnings and cannot be safely recooked.");
             textWriter.Close();
             Console.SetOut(consoleOut);

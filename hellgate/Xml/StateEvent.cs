@@ -88,6 +88,15 @@ namespace Hellgate.Xml
             },
             new XmlCookElement
             {
+                Name = "STATE_EVENT_FLAG_ON_WEAPONS_ATTACHMENT",
+                DefaultValue = false,
+                ElementType = ElementType.Flag,
+                FlagId = 1,
+                FlagMask = (1 << 16),
+                IsResurrection = true,
+            },
+            new XmlCookElement
+            {
                 Name = "STATE_EVENT_FLAG_IGNORE_CAMERA",
                 DefaultValue = false,
                 ElementType = ElementType.Flag,
@@ -117,6 +126,24 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 FlagId = 1,
                 FlagMask = (1 << 13)
+            },
+            new XmlCookElement
+            {
+                Name = "STATE_EVENT_FLAG_SAME_TEAM_ONLY",
+                DefaultValue = false,
+                ElementType = ElementType.Flag,
+                FlagId = 1,
+                FlagMask = (1 << 17),
+                IsResurrection = true
+            },
+            new XmlCookElement
+            {
+                Name = "STATE_EVENT_FLAG_OTHER_TEAM_ONLY",
+                DefaultValue = false,
+                ElementType = ElementType.Flag,
+                FlagId = 1,
+                FlagMask = (1 << 18),
+                IsResurrection = true
             },
             new XmlCookElement
             {
@@ -226,6 +253,13 @@ namespace Hellgate.Xml
                 Name = "tAttachmentDef.vNormal.fZ",
                 DefaultValue = 0.0f,
                 ElementType = ElementType.Float
+            },
+            new XmlCookElement
+            {
+                Name = "tAttachmentDef.fScale",
+                DefaultValue = 1.0f,
+                ElementType = ElementType.Float,
+                IsResurrection = true
             },
             new XmlCookElement
             {

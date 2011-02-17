@@ -39,6 +39,15 @@ namespace Hellgate.Xml
             },
             new XmlCookElement
             {
+                Name = "ROOM_PATH_NODE_DEF_USE_TUGBOAT_FLAG",
+                ElementType = ElementType.Flag,
+                FlagId = 1,
+                FlagMask = (1 << 2), // 4
+                DefaultValue = false,
+                IsResurrection = true // field appears to be renamed and new valued
+            },
+            new XmlCookElement
+            {
                 Name = "fRadius",
                 ElementType = ElementType.Float,
                 DefaultValue = 1.5f
@@ -103,7 +112,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.FloatArrayFixed,
                 DefaultValue = 0.0f,
                 Count = 3,
-                IsTCv4 = true
+                IsTestCentre = true
             }
         };
 

@@ -27,18 +27,22 @@ namespace Hellgate
         public XmlDocument XmlDoc { get; private set; }
 
         public String FileName { get; private set; }
-        private bool CookExcludeTCv4 { get; set; }
+        private bool CookExcludeTestCentre { get; set; }
+        private bool CookExcludeResurrection { get; set; }
         private bool ThrowOnMissingExcelString { get; set; }
         public HashSet<String> ExcelStringsMissing { get; private set; }
         public bool HasExcelStringsMissing { get { return (ExcelStringsMissing != null); } }
-        public bool HasTCv4Elements { get; private set; }
+        public bool HasTestCentreElements { get; private set; }
+        public bool HasResurrectionElements { get; private set; }
 
         public XmlCookedFile()
         {
             Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
-            CookExcludeTCv4 = true;
+            CookExcludeTestCentre = true;
+            CookExcludeResurrection = true;
             ThrowOnMissingExcelString = false;
-            HasTCv4Elements = false;
+            HasTestCentreElements = false;
+            HasResurrectionElements = false;
         }
 
         public XmlCookedFile(String fileName) : this()
@@ -66,12 +70,15 @@ namespace Hellgate
             _buffer = new byte[1024];
 
             // header details //
+            int elementCount = xmlDefinition.Count;
+            if (CookExcludeTestCentre) elementCount -= xmlDefinition.CountOfTestCentreElements;
+            if (CookExcludeResurrection) elementCount -= xmlDefinition.CountOfResurrectionElements;
             XmlCookFileHeader xmlCookFileHeader = new XmlCookFileHeader
             {
                 MagicWord = FileMagicWord,
                 Version = RequiredVersion,
                 XmlRootDefinition = xmlDefinitionHash,
-                XmlRootElementCount = CookExcludeTCv4 ? xmlDefinition.CountExcludeTCv4 : xmlDefinition.Count
+                XmlRootElementCount = elementCount
             };
             FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookFileHeader);
 
@@ -97,7 +104,9 @@ namespace Hellgate
         private int _CookXmlData(XmlDefinition xmlDefinition, XmlNode xmlNode)
         {
             int offsetStart = _offset;
-            int elementCount = CookExcludeTCv4 ? xmlDefinition.CountExcludeTCv4 : xmlDefinition.Count;
+            int elementCount = xmlDefinition.Count;
+            if (CookExcludeTestCentre) elementCount -= xmlDefinition.CountOfTestCentreElements;
+            if (CookExcludeResurrection) elementCount -= xmlDefinition.CountOfResurrectionElements;
 
             // bitField info
             int bitFieldOffset = _offset;
@@ -110,7 +119,8 @@ namespace Hellgate
             bool bpTest = true;
             foreach (XmlCookElement xmlCookElement in xmlDefinition.Elements)
             {
-                if (xmlCookElement.IsTCv4 && CookExcludeTCv4) continue;
+                if (xmlCookElement.IsTestCentre && CookExcludeTestCentre) continue;
+                if (xmlCookElement.IsResurrection && CookExcludeResurrection) continue;
 
                 //if (bpTest && _offset >= 597)
                 //{
@@ -281,7 +291,8 @@ namespace Hellgate
             int offsetStart = _offset;
             foreach (XmlCookElement xmlCookElement in xmlDefinition.Elements)
             {
-                if (xmlCookElement.IsTCv4 && CookExcludeTCv4) continue;
+                if (xmlCookElement.IsTestCentre && CookExcludeTestCentre) continue;
+                if (xmlCookElement.IsResurrection && CookExcludeResurrection) continue;
 
                 // write name hash and token
                 FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlCookElement.NameHash);
@@ -372,7 +383,9 @@ namespace Hellgate
                             break;
                         }
 
-                        int elementCount = CookExcludeTCv4 ? xmlChildDefinition.CountExcludeTCv4 : xmlChildDefinition.Count;
+                        int elementCount = xmlDefinition.Count;
+                        if (CookExcludeTestCentre) elementCount -= xmlDefinition.CountOfTestCentreElements;
+                        if (CookExcludeResurrection) elementCount -= xmlDefinition.CountOfResurrectionElements;
                         FileTools.WriteToBuffer(ref _buffer, ref _offset, elementCount);
 
                         int bytesWritten = _CookXmlDefinition(xmlChildDefinition, cookedDefinitions);
@@ -649,10 +662,11 @@ namespace Hellgate
                 uint elementHash = FileTools.ByteArrayToUInt32(_buffer, ref _offset);
 
                 XmlCookElement xmlCookElement = _GetXmlCookElement(xmlDefinition, elementHash);
-                if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException("Unexpected xml element hash: 0x" + elementHash.ToString("X8"));
+                if (xmlCookElement == null) throw new Exceptions.UnexpectedTokenException(String.Format("XML Definition {0} contains an unknown Element Hash: 0x{1:X8}.", xmlDefinition.RootElement, elementHash));
                 xmlTree.AddElement(xmlCookElement);
 
-                if (xmlCookElement.IsTCv4) HasTCv4Elements = true;
+                if (xmlCookElement.IsTestCentre) HasTestCentreElements = true;
+                if (xmlCookElement.IsResurrection) HasResurrectionElements = true;
 
                 //if (xmlCookElement.Name == "pShortConnections")
                 //{
@@ -710,7 +724,11 @@ namespace Hellgate
                         Int32 arraySize = _ReadInt32(null, null);
 
                         Debug.Assert((UInt32)xmlCookElement.DefaultValue == defaultDoubleWord);
-                        Debug.Assert(xmlCookElement.Count == arraySize);
+                        if (xmlCookElement.Count != arraySize)
+                        {
+                            Debug.WriteLine(String.Format("Warning: XmlCookElement {0} array size changed from {1} to {2}", xmlCookElement.Name, xmlCookElement.Count, arraySize));
+                            xmlCookElement.Count = arraySize;
+                        }
                         break;
 
 
@@ -757,7 +775,12 @@ namespace Hellgate
                         Int32 excelTableArrCount = _ReadInt32(null, null);
 
                         Debug.Assert(xmlCookElement.ExcelTableCode == excelTableArrCode);
-                        Debug.Assert(xmlCookElement.Count == excelTableArrCount);
+                        if (xmlCookElement.Count != excelTableArrCount)
+                        {
+                            Debug.WriteLine(String.Format("Warning: XmlCookElement {0} array size changed from {1} to {2}", xmlCookElement.Name, xmlCookElement.Count, excelTableArrCount));
+                            xmlCookElement.Count = excelTableArrCount;
+                        }
+
                         break;
 
 

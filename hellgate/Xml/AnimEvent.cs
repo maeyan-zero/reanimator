@@ -86,6 +86,13 @@
             },
             new XmlCookElement
             {
+                Name = "tAttachmentDef.fScale",
+                DefaultValue = 1.0f,
+                ElementType = ElementType.Float,
+                IsResurrection = true
+            },
+            new XmlCookElement
+            {
                 Name = "tCondition",
                 DefaultValue = null,
                 ElementType = ElementType.Table,
