@@ -31,20 +31,39 @@ namespace Hellgate.Xml
             get { return Elements.Count; }
         }
 
-        private int _countExcludeTCv4;
-        public int CountExcludeTCv4
+        private int _countOfTestCentreElements = -1;
+        public int CountOfTestCentreElements
         {
             get
             {
-                if (_countExcludeTCv4 == 0 && Count != 0)
+                if (_countOfTestCentreElements == -1 && Count != 0)
                 {
-                    foreach (XmlCookElement xmlCookElement in Elements.Where(xmlCookElement => !xmlCookElement.IsTCv4))
+                    foreach (XmlCookElement xmlCookElement in Elements.Where(xmlCookElement => xmlCookElement.IsTestCentre))
                     {
-                        _countExcludeTCv4++;
+                        _countOfTestCentreElements++;
                     }
                 }
 
-                return _countExcludeTCv4;
+                if (_countOfTestCentreElements < 0) _countOfTestCentreElements = 0;
+                return _countOfTestCentreElements;
+            }
+        }
+
+        private int _countOfResurrectionElements = -1;
+        public int CountOfResurrectionElements
+        {
+            get
+            {
+                if (_countOfResurrectionElements == -1 && Count != 0)
+                {
+                    foreach (XmlCookElement xmlCookElement in Elements.Where(xmlCookElement => xmlCookElement.IsResurrection))
+                    {
+                        _countOfResurrectionElements++;
+                    }
+                }
+
+                if (_countOfResurrectionElements < 0) _countOfResurrectionElements = 0;
+                return _countOfResurrectionElements;
             }
         }
 

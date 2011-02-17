@@ -56,7 +56,8 @@ namespace Hellgate.Xml
         public Int32 BitFlagCount;          // used for BitIndex, total field BitCount
         public Int32 Count;                 // general array-type count
         public bool TreatAsData;
-        public bool IsTCv4;                 // TCv4 elements only
+        public bool IsTestCentre;           // TestCentre elements only
+        public bool IsResurrection;         // Resurrection elements only
         public UInt32 HashOverride;         // Elements with unknown strings
     }
 }

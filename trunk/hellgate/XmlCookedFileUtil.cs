@@ -71,7 +71,7 @@ namespace Hellgate
                 // GlobalDefinition (default.xml)
                 new GlobalDefinition(),
 
-                // Shared (used in States, Skills amd Appearance)
+                // Shared (used in States, Skills and Appearance)
                 new ConditionDefinition(),
 
                 // Level Layout (contains object positions etc)
@@ -543,7 +543,7 @@ namespace Hellgate
             if (innerText != null) element.InnerText = innerText;
             parentNode.AppendChild(element);
 
-            if (xmlCookElement != null && xmlCookElement.IsTCv4)
+            if (xmlCookElement != null && xmlCookElement.IsTestCentre)
             {
                 element.SetAttribute("IsTCv4", "true");    
             }

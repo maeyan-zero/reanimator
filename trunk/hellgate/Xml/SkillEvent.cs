@@ -348,7 +348,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 FlagId = 2,
                 FlagMask = 0x0800,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {
@@ -357,7 +357,7 @@ namespace Hellgate.Xml
                 DefaultValue = false,
                 FlagId = 2,
                 FlagMask = 0x1000,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {
@@ -476,6 +476,13 @@ namespace Hellgate.Xml
                 Name = "tAttachmentDef.vNormal.fZ",
                 DefaultValue = 0.0f,
                 ElementType = ElementType.Float
+            },
+            new XmlCookElement
+            {
+                Name = "tAttachmentDef.fScale",
+                DefaultValue = 1.0f,
+                ElementType = ElementType.Float,
+                IsResurrection = true
             },
             new XmlCookElement
             {

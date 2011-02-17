@@ -19,9 +19,9 @@ namespace Hellgate
         private byte[] _stringBuffer;
         private byte[] _scriptBuffer;
         private readonly byte[] _myshBuffer;
-        private byte[][] _statsBuffer;
         private String[][] _csvTable;
 
+        public byte[][] StatsBuffer;
         public List<String> SecondaryStrings { get; private set; }
         public byte[] ScriptBuffer { get { return _scriptBuffer; } }
         public List<ExcelFunction> ExcelFunctions;
@@ -521,7 +521,7 @@ namespace Hellgate
                 // applicable only for Unit type; items, missiles, monsters, objects, players
                 if (Attributes.HasStats)
                 {
-                    if (_statsBuffer == null) _statsBuffer = new byte[rowCount - 1][];
+                    if (StatsBuffer == null) StatsBuffer = new byte[rowCount - 1][];
 
                     String value = tableRows[row][csvCol];
                     String[] stringArray = value.Split(',');
@@ -531,7 +531,7 @@ namespace Hellgate
                     {
                         byteArray[i] = Byte.Parse(stringArray[i]);
                     }
-                    _statsBuffer[row - 1] = byteArray;
+                    StatsBuffer[row - 1] = byteArray;
                 }
 
                 // properties has extra Scripts stuffs
@@ -641,15 +641,15 @@ namespace Hellgate
             if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
             if (Attributes.HasStats) // items, objects, missles, players
             {
-                _statsBuffer = new byte[Count][];
+                StatsBuffer = new byte[Count][];
                 for (int i = 0; i < Count; i++)
                 {
                     offset += sizeof(int); // Skip the indice
 
                     int size = FileTools.ByteArrayToInt32(buffer, ref offset);
-                    _statsBuffer[i] = new byte[size];
+                    StatsBuffer[i] = new byte[size];
 
-                    Buffer.BlockCopy(buffer, offset, _statsBuffer[i], 0, size);
+                    Buffer.BlockCopy(buffer, offset, StatsBuffer[i], 0, size);
                     offset += size;
                 }
             }
@@ -919,7 +919,7 @@ namespace Hellgate
             Rows = newTable;
             _stringBuffer = newStringBuffer;
             _scriptBuffer = newIntegerBuffer;
-            _statsBuffer = newStatsBuffer;
+            StatsBuffer = newStatsBuffer;
             SecondaryStrings = newSecondaryStrings;
 
             return true;
@@ -969,8 +969,8 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, i);
                 if (!Attributes.HasStats) continue;
 
-                FileTools.WriteToBuffer(ref buffer, ref offset, _statsBuffer[i].Length);
-                FileTools.WriteToBuffer(ref buffer, ref offset, _statsBuffer[i]);
+                FileTools.WriteToBuffer(ref buffer, ref offset, StatsBuffer[i].Length);
+                FileTools.WriteToBuffer(ref buffer, ref offset, StatsBuffer[i]);
             }
 
 
@@ -1330,7 +1330,7 @@ namespace Hellgate
                         continue;
                     }
 
-                    rowStr[col] = _statsBuffer[row++].ToString(",");
+                    rowStr[col] = StatsBuffer[row++].ToString(",");
                 }
             }
 

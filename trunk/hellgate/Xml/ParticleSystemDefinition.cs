@@ -51,7 +51,7 @@
                 Name = "fMinParticlesPercentDropRate",
                 DefaultValue = 0.0f,
                 ElementType = ElementType.Float,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {

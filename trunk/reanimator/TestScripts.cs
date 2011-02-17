@@ -1444,7 +1444,8 @@ namespace Reanimator
 
             int count = 0;
             List<XmlCookedFile> excelStringWarnings = new List<XmlCookedFile>();
-            List<String> tcv4Warnings = new List<String>();
+            List<String> testCentreWarnings = new List<String>();
+            List<String> resurrectionWarnings = new List<String>();
             foreach (String xmlFilePath in xmlFiles)
             {
                 String path = xmlFilePath;
@@ -1473,8 +1474,9 @@ namespace Reanimator
                 count++;
 
                 if (xmlCookedFile.HasExcelStringsMissing) excelStringWarnings.Add(xmlCookedFile);
-                if (xmlCookedFile.HasTCv4Elements) tcv4Warnings.Add(Path.GetFileName(fileName));
-                if (xmlCookedFile.HasExcelStringsMissing || xmlCookedFile.HasTCv4Elements) continue;
+                if (xmlCookedFile.HasTestCentreElements) testCentreWarnings.Add(Path.GetFileName(fileName));
+                if (xmlCookedFile.HasResurrectionElements) resurrectionWarnings.Add(Path.GetFileName(fileName));
+                if (xmlCookedFile.HasExcelStringsMissing || xmlCookedFile.HasTestCentreElements || xmlCookedFile.HasResurrectionElements) continue;
 
                 XmlCookedFile recookedXmlFile = new XmlCookedFile();
                 byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
@@ -1504,10 +1506,15 @@ namespace Reanimator
                     foreach (String str in xmlCookedFile.ExcelStringsMissing) Console.WriteLine("\t\t- \"" + str + "\"");
                 }
             }
-            if (tcv4Warnings.Count > 0)
+            if (testCentreWarnings.Count > 0)
             {
-                Console.WriteLine("Warning: " + tcv4Warnings.Count + " files had TCv4-specific elements:");
-                foreach (String str in tcv4Warnings) Console.WriteLine("\t" + str);
+                Console.WriteLine("Warning: " + testCentreWarnings.Count + " files had TestCentre-specific elements:");
+                foreach (String str in testCentreWarnings) Console.WriteLine("\t" + str);
+            }
+            if (resurrectionWarnings.Count > 0)
+            {
+                Console.WriteLine("Warning: " + resurrectionWarnings.Count + " files had Resurrection-specific elements:");
+                foreach (String str in resurrectionWarnings) Console.WriteLine("\t" + str);
             }
             textWriter.Close();
             Console.SetOut(consoleOut);

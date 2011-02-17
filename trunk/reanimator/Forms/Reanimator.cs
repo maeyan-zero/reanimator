@@ -28,7 +28,9 @@ namespace Reanimator.Forms
             InitializeComponent();
 
             #region alexs_stuff
-
+            //Config.HglDir = @"D:\Games\Hellgate";
+            //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
+            //Config.HglDir = @"D:\Games\Hellgate London";
             if (true) return;
             Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
             //Config.HglDir = @"D:\Games\Hellgate";

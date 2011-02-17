@@ -375,7 +375,7 @@ namespace Hellgate
 
         public byte[] ReadStats(int index)
         {
-            return (_statsBuffer != null) ? _statsBuffer[index] : null;
+            return (StatsBuffer != null) ? StatsBuffer[index] : null;
         }
 
         public string ReadSecondaryStringTable(int index)

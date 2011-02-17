@@ -180,7 +180,14 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Flag,
                 FlagId = 1,
                 FlagMask = 0x0200,
-                IsTCv4 = true
+                IsTestCentre = true
+            },
+            new XmlCookElement
+            {
+                Name = "nMonsterLevelAdjust",
+                ElementType = ElementType.Int32,
+                DefaultValue = 0,
+                IsResurrection = true
             },
             new XmlCookElement
             {
@@ -206,21 +213,21 @@ namespace Hellgate.Xml
                 ElementType = ElementType.FloatArrayFixed,
                 DefaultValue = 1.0f,
                 Count = 3,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {
                 Name = "fSpawnClassRadius",
                 ElementType = ElementType.Float,
                 DefaultValue = 0.0f,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {
                 Name = "iSpawnClassExecuteXTimes",
                 ElementType = ElementType.Int32,
                 DefaultValue = 1,
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {
@@ -228,7 +235,7 @@ namespace Hellgate.Xml
                 ElementType = ElementType.Float,
                 DefaultValue = 1.0f,
                 HashOverride = 0xBEBAFCBE, // 3199925438
-                IsTCv4 = true
+                IsTestCentre = true
             },
             new XmlCookElement
             {
