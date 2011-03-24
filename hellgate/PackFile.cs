@@ -152,14 +152,18 @@ namespace Hellgate
             if (DatFile != null) return;
 
             String filePath = String.Format(@"{0}\{1}{2}", Directory, NameWithoutExtension, DatExtension);
-            DatFile = new FileStream(filePath, FileMode.Open, fileAccess);
 
-            // can we write to it?
-            if (fileAccess == FileAccess.Read) return;
+            if (File.Exists(filePath) == false)
+            {
+                // create new dat and add header
+                DatFile = new FileStream(filePath, FileMode.Create, fileAccess);
+                WriteDatHeader();
+            }
+            else
+            {
+                DatFile = new FileStream(filePath, FileMode.Open, fileAccess);
+            }
 
-            // create new dat and add header
-            DatFile = new FileStream(filePath, FileMode.Create, fileAccess);
-            WriteDatHeader();
         }
 
         /// <summary>
@@ -182,6 +186,9 @@ namespace Hellgate
         protected void _AddFileToDat(byte[] fileData, PackFileEntry fileEntry)
         {
             Debug.Assert(DatFile != null && fileData != null && fileEntry != null);
+
+            // ensure .dat file open
+            BeginDatWriting();
 
             DatFile.Seek(0, SeekOrigin.End);
 
@@ -216,6 +223,9 @@ namespace Hellgate
             fileEntry.Offset = (int)DatFile.Position;
             fileEntry.SizeUncompressed = fileData.Length;
             DatFile.Write(writeBuffer, 0, writeLength);
+
+            EndDatAccess(); // Friday 25th March. There is a work around to a problem with the File Packing in Hellpack
+            // Needs tracing back
         }
 
         /// <summary>

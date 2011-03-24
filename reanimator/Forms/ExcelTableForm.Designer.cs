@@ -40,12 +40,8 @@
             this.rows_LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.rows_ListBox = new System.Windows.Forms.ListBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.copyScriptLabel = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripButton();
@@ -184,12 +180,8 @@
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripSeparator1,
             this.toolStripButton2,
             this.toolStripSeparator2,
-            this.copyScriptLabel,
-            this.toolStripSeparator4,
             this.toolStripButton3,
             this.toolStripSeparator3,
             this.toolStripLabel1});
@@ -200,30 +192,14 @@
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(47, 22);
-            this.toolStripButton1.Text = "Reload";
-            this.toolStripButton1.ToolTipText = "Reloads this table.";
-            this.toolStripButton1.Click += new System.EventHandler(this._RegenTable_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
             // toolStripButton2
             // 
             this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
             this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(39, 22);
-            this.toolStripButton2.Text = "Dupe";
+            this.toolStripButton2.Size = new System.Drawing.Size(92, 22);
+            this.toolStripButton2.Text = "Duplicate Rows";
             this.toolStripButton2.ToolTipText = "Duplicates the selected rows and appends them to the end of the table.";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
@@ -231,22 +207,6 @@
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // copyScriptLabel
-            // 
-            this.copyScriptLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.copyScriptLabel.Image = ((System.Drawing.Image)(resources.GetObject("copyScriptLabel.Image")));
-            this.copyScriptLabel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.copyScriptLabel.Name = "copyScriptLabel";
-            this.copyScriptLabel.Size = new System.Drawing.Size(86, 22);
-            this.copyScriptLabel.Text = "Copy as Script";
-            this.copyScriptLabel.ToolTipText = "Copy the selected rows as a Reanimator script.";
-            this.copyScriptLabel.Click += new System.EventHandler(this.copyScriptLabel_Click);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripButton3
             // 
@@ -313,12 +273,8 @@
         private System.Windows.Forms.TabPage rowViewPage;
         private System.Windows.Forms.ListBox rows_ListBox;
         private System.Windows.Forms.TableLayoutPanel rows_LayoutPanel;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton copyScriptLabel;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton toolStripLabel1;
