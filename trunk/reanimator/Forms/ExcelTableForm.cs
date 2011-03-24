@@ -388,7 +388,7 @@ namespace Reanimator.Forms
             if (table == null) return;
 
             String saveType = _dataFile.IsExcelFile ? "Cooked Excel Tables" : "Cooked String Tables";
-            String saveExtension = _dataFile.FileExtension;
+            String saveExtension = _dataFile.IsExcelFile ? "txt.cooked" : "todo"; // todo quick fix
             String saveInitialPath = Path.Combine(Config.HglDir, _dataFile.FilePath);
 
             String savePath = FormTools.SaveFileDialogBox(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
@@ -496,6 +496,8 @@ namespace Reanimator.Forms
         private void _ImportButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog() { InitialDirectory = Config.LastDirectory };
+            fileDialog.DefaultExt ="txt" ;
+            fileDialog.AddExtension = true;
             if (fileDialog.ShowDialog() != DialogResult.OK) return;
 
             Config.LastDirectory = Path.GetDirectoryName(fileDialog.FileName);
@@ -511,8 +513,13 @@ namespace Reanimator.Forms
                 return;
             }
 
-            if (_excelFile.ParseCSV(buffer) == true)
+            if (_excelFile.ParseCSV(buffer, _fileManager) == true)
             {
+                //_fileManager.Reload();
+                //_fileManager.LoadTableFiles();
+                _fileManager.DataFiles[_excelFile.StringId] = _excelFile;
+                _fileManager.XlsDataSet.Relations.Clear();
+                _fileManager.XlsDataSet.Tables.Remove(_excelFile.StringId);
                 _dataTable = _fileManager.LoadTable(_excelFile, true);
                 _tableData_DataGridView.DataSource = _dataTable;
                 _tableData_DataGridView.Refresh();

@@ -398,9 +398,6 @@ namespace Hellgate
         {
             if (bytesToWrite == null || bytesToWrite.Length == 0) throw new ArgumentNullException("bytesToWrite", "Bytes to write cannot be empty!");
 
-            // ensure .dat file open
-            BeginDatWriting();
-
             bool doCompress = NoCompressionExt.All(extentsion => !fileName.EndsWith(extentsion));
             if (fileTime == null) fileTime = DateTime.Now;
 
@@ -418,6 +415,9 @@ namespace Hellgate
             };
 
             PackFileEntry fileEntry = new FileEntry(fileStruct);
+            fileEntry.Directory = directory;
+            fileEntry.Name = fileName;
+
             Files.Add(fileEntry);
 
             _AddFileToDat(bytesToWrite, fileEntry);

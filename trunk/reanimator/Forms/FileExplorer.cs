@@ -1264,6 +1264,9 @@ namespace Reanimator.Forms
             if (root == "") return;
             if (fileManager.IsVersionTestCenter) root = Path.Combine(root, "tcv4");
 
+            foreach (IndexFile file in fileManager.IndexFiles) // Open Dats for reading
+                file.BeginDatReading();
+
             int i = 0;
             foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
             {
@@ -1329,6 +1332,9 @@ namespace Reanimator.Forms
                 Directory.CreateDirectory(Path.GetDirectoryName(filePath));
                 File.WriteAllBytes(filePath, writeBytes);
             }
+
+            foreach (IndexFile file in fileManager.IndexFiles) // Close Dats
+                file.EndDatAccess();
         }
     }
 }

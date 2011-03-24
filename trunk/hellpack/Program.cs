@@ -498,6 +498,9 @@ namespace Revival
                 }
             }
 
+            foreach (IndexFile file in _fileManager.IndexFiles)
+                file.EndDatAccess();
+
             string thisPack = Path.GetFileNameWithoutExtension(outputPath);
             byte[] indexBytes = indexFile.ToByteArray();
             Crypt.Encrypt(indexBytes);
