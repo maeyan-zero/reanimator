@@ -28,90 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExcelTableForm));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tableDataPage = new System.Windows.Forms.TabPage();
-            this._tableData_DataGridView = new System.Windows.Forms.DataGridView();
-            this.indexArraysPage = new System.Windows.Forms.TabPage();
-            this.indexArrays_DataGridView = new System.Windows.Forms.DataGridView();
             this.stringsPage = new System.Windows.Forms.TabPage();
             this._strings_ListBox = new System.Windows.Forms.ListBox();
-            this.rowViewPage = new System.Windows.Forms.TabPage();
-            this.rows_LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.rows_ListBox = new System.Windows.Forms.ListBox();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripButton();
-            this.tabControl1.SuspendLayout();
-            this.tableDataPage.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).BeginInit();
+            this.indexArraysPage = new System.Windows.Forms.TabPage();
+            this.indexArrays_DataGridView = new System.Windows.Forms.DataGridView();
+            this.tableDataPage = new System.Windows.Forms.TabPage();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.duplicateRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showRowViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this._tableData_DataGridView = new System.Windows.Forms.DataGridView();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.stringsPage.SuspendLayout();
             this.indexArraysPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.indexArrays_DataGridView)).BeginInit();
-            this.stringsPage.SuspendLayout();
-            this.rowViewPage.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.tableDataPage.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).BeginInit();
+            this.tabControl1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tableDataPage);
-            this.tabControl1.Controls.Add(this.indexArraysPage);
-            this.tabControl1.Controls.Add(this.stringsPage);
-            this.tabControl1.Controls.Add(this.rowViewPage);
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(817, 618);
-            this.tabControl1.TabIndex = 4;
-            // 
-            // tableDataPage
-            // 
-            this.tableDataPage.Controls.Add(this._tableData_DataGridView);
-            this.tableDataPage.Location = new System.Drawing.Point(4, 24);
-            this.tableDataPage.Name = "tableDataPage";
-            this.tableDataPage.Padding = new System.Windows.Forms.Padding(3);
-            this.tableDataPage.Size = new System.Drawing.Size(809, 590);
-            this.tableDataPage.TabIndex = 0;
-            this.tableDataPage.Text = "Table Data";
-            this.tableDataPage.UseVisualStyleBackColor = true;
-            // 
-            // _tableData_DataGridView
-            // 
-            this._tableData_DataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this._tableData_DataGridView.Location = new System.Drawing.Point(3, 3);
-            this._tableData_DataGridView.Name = "_tableData_DataGridView";
-            this._tableData_DataGridView.Size = new System.Drawing.Size(803, 563);
-            this._tableData_DataGridView.TabIndex = 1;
-            this._tableData_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this._TableData_DataGridView_CellDoubleClick);
-            this._tableData_DataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this._TableData_DataGridView_KeyUp);
-            // 
-            // indexArraysPage
-            // 
-            this.indexArraysPage.Controls.Add(this.indexArrays_DataGridView);
-            this.indexArraysPage.Location = new System.Drawing.Point(4, 24);
-            this.indexArraysPage.Name = "indexArraysPage";
-            this.indexArraysPage.Padding = new System.Windows.Forms.Padding(3);
-            this.indexArraysPage.Size = new System.Drawing.Size(809, 590);
-            this.indexArraysPage.TabIndex = 1;
-            this.indexArraysPage.Text = "Index Arrays";
-            this.indexArraysPage.UseVisualStyleBackColor = true;
-            // 
-            // indexArrays_DataGridView
-            // 
-            this.indexArrays_DataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.indexArrays_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.indexArrays_DataGridView.Location = new System.Drawing.Point(3, 3);
-            this.indexArrays_DataGridView.Name = "indexArrays_DataGridView";
-            this.indexArrays_DataGridView.Size = new System.Drawing.Size(803, 563);
-            this.indexArrays_DataGridView.TabIndex = 0;
             // 
             // stringsPage
             // 
@@ -135,148 +80,223 @@
             this._strings_ListBox.Size = new System.Drawing.Size(245, 559);
             this._strings_ListBox.TabIndex = 0;
             // 
-            // rowViewPage
+            // indexArraysPage
             // 
-            this.rowViewPage.Controls.Add(this.rows_LayoutPanel);
-            this.rowViewPage.Controls.Add(this.rows_ListBox);
-            this.rowViewPage.Location = new System.Drawing.Point(4, 24);
-            this.rowViewPage.Name = "rowViewPage";
-            this.rowViewPage.Padding = new System.Windows.Forms.Padding(3);
-            this.rowViewPage.Size = new System.Drawing.Size(809, 590);
-            this.rowViewPage.TabIndex = 3;
-            this.rowViewPage.Text = "Row View";
-            this.rowViewPage.UseVisualStyleBackColor = true;
+            this.indexArraysPage.Controls.Add(this.indexArrays_DataGridView);
+            this.indexArraysPage.Location = new System.Drawing.Point(4, 24);
+            this.indexArraysPage.Name = "indexArraysPage";
+            this.indexArraysPage.Padding = new System.Windows.Forms.Padding(3);
+            this.indexArraysPage.Size = new System.Drawing.Size(809, 590);
+            this.indexArraysPage.TabIndex = 1;
+            this.indexArraysPage.Text = "Index Arrays";
+            this.indexArraysPage.UseVisualStyleBackColor = true;
             // 
-            // rows_LayoutPanel
+            // indexArrays_DataGridView
             // 
-            this.rows_LayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.indexArrays_DataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.rows_LayoutPanel.AutoScroll = true;
-            this.rows_LayoutPanel.ColumnCount = 2;
-            this.rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.rows_LayoutPanel.Location = new System.Drawing.Point(231, 7);
-            this.rows_LayoutPanel.Name = "rows_LayoutPanel";
-            this.rows_LayoutPanel.RowCount = 1;
-            this.rows_LayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.rows_LayoutPanel.Size = new System.Drawing.Size(570, 559);
-            this.rows_LayoutPanel.TabIndex = 1;
+            this.indexArrays_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.indexArrays_DataGridView.Location = new System.Drawing.Point(3, 3);
+            this.indexArrays_DataGridView.Name = "indexArrays_DataGridView";
+            this.indexArrays_DataGridView.Size = new System.Drawing.Size(803, 563);
+            this.indexArrays_DataGridView.TabIndex = 0;
             // 
-            // rows_ListBox
+            // tableDataPage
             // 
-            this.rows_ListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.rows_ListBox.FormattingEnabled = true;
-            this.rows_ListBox.ItemHeight = 15;
-            this.rows_ListBox.Location = new System.Drawing.Point(7, 7);
-            this.rows_ListBox.Name = "rows_ListBox";
-            this.rows_ListBox.Size = new System.Drawing.Size(216, 559);
-            this.rows_ListBox.TabIndex = 0;
+            this.tableDataPage.Controls.Add(this.splitContainer1);
+            this.tableDataPage.Controls.Add(this.menuStrip1);
+            this.tableDataPage.Location = new System.Drawing.Point(4, 24);
+            this.tableDataPage.Name = "tableDataPage";
+            this.tableDataPage.Padding = new System.Windows.Forms.Padding(3);
+            this.tableDataPage.Size = new System.Drawing.Size(809, 590);
+            this.tableDataPage.TabIndex = 0;
+            this.tableDataPage.Text = "Table Data";
+            this.tableDataPage.UseVisualStyleBackColor = true;
             // 
-            // toolStrip1
+            // menuStrip1
             // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton2,
-            this.toolStripSeparator2,
-            this.toolStripButton3,
-            this.toolStripSeparator3,
-            this.toolStripLabel1});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 593);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.toolStrip1.Size = new System.Drawing.Size(817, 25);
-            this.toolStrip1.TabIndex = 7;
-            this.toolStrip1.Text = "toolStrip1";
+            this.menuStrip1.AllowMerge = false;
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.editToolStripMenuItem,
+            this.viewToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(3, 3);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(803, 24);
+            this.menuStrip1.TabIndex = 3;
+            this.menuStrip1.Text = "menuStrip1";
             // 
-            // toolStripButton2
+            // fileToolStripMenuItem
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(92, 22);
-            this.toolStripButton2.Text = "Duplicate Rows";
-            this.toolStripButton2.ToolTipText = "Duplicates the selected rows and appends them to the end of the table.";
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.importToolStripMenuItem,
+            this.exportToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "&File";
             // 
-            // toolStripSeparator2
+            // importToolStripMenuItem
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+            this.importToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.importToolStripMenuItem.Text = "&Import..";
+            this.importToolStripMenuItem.Click += new System.EventHandler(this._ImportButton_Click);
             // 
-            // toolStripButton3
+            // exportToolStripMenuItem
             // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(44, 22);
-            this.toolStripButton3.Text = "Export";
-            this.toolStripButton3.ToolTipText = "Export a tab delimited txt file of this table.";
-            this.toolStripButton3.Click += new System.EventHandler(this._ExportButton_Click);
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.exportToolStripMenuItem.Text = "&Export..";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this._ExportButton_Click);
             // 
-            // toolStripSeparator3
+            // editToolStripMenuItem
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.duplicateRowsToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "&Edit";
             // 
-            // toolStripLabel1
+            // duplicateRowsToolStripMenuItem
             // 
-            this.toolStripLabel1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripLabel1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripLabel1.Image")));
-            this.toolStripLabel1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(47, 22);
-            this.toolStripLabel1.Text = "Import";
-            this.toolStripLabel1.ToolTipText = "Open a tab delimited txt file of this table.";
-            this.toolStripLabel1.Click += new System.EventHandler(this._ImportButton_Click);
+            this.duplicateRowsToolStripMenuItem.Name = "duplicateRowsToolStripMenuItem";
+            this.duplicateRowsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.duplicateRowsToolStripMenuItem.Text = "&Duplicate Rows";
+            this.duplicateRowsToolStripMenuItem.Click += new System.EventHandler(this.toolStripButton2_Click);
+            // 
+            // viewToolStripMenuItem
+            // 
+            this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showRowViewToolStripMenuItem});
+            this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.viewToolStripMenuItem.Text = "&View";
+            // 
+            // showRowViewToolStripMenuItem
+            // 
+            this.showRowViewToolStripMenuItem.Checked = true;
+            this.showRowViewToolStripMenuItem.CheckOnClick = true;
+            this.showRowViewToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showRowViewToolStripMenuItem.Name = "showRowViewToolStripMenuItem";
+            this.showRowViewToolStripMenuItem.Size = new System.Drawing.Size(102, 22);
+            this.showRowViewToolStripMenuItem.Text = "&Rows";
+            this.showRowViewToolStripMenuItem.Click += new System.EventHandler(this._ToggleRowView);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 27);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this._tableData_DataGridView);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel1);
+            this.splitContainer1.Panel2.Controls.Add(this.panel1);
+            this.splitContainer1.Size = new System.Drawing.Size(803, 560);
+            this.splitContainer1.SplitterDistance = 481;
+            this.splitContainer1.TabIndex = 2;
+            // 
+            // panel1
+            // 
+            this.panel1.AutoSize = true;
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel1.Location = new System.Drawing.Point(318, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(0, 560);
+            this.panel1.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoScroll = true;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(318, 560);
+            this.tableLayoutPanel1.TabIndex = 2;
+            // 
+            // _tableData_DataGridView
+            // 
+            this._tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._tableData_DataGridView.Location = new System.Drawing.Point(0, 0);
+            this._tableData_DataGridView.Name = "_tableData_DataGridView";
+            this._tableData_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this._tableData_DataGridView.Size = new System.Drawing.Size(481, 560);
+            this._tableData_DataGridView.TabIndex = 1;
+            this._tableData_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this._TableData_DataGridView_CellDoubleClick);
+            this._tableData_DataGridView.SelectionChanged += new System.EventHandler(this._Rows_ListBox_SelectedIndexChanged);
+            this._tableData_DataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this._TableData_DataGridView_KeyUp);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tableDataPage);
+            this.tabControl1.Controls.Add(this.indexArraysPage);
+            this.tabControl1.Controls.Add(this.stringsPage);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(817, 618);
+            this.tabControl1.TabIndex = 4;
             // 
             // ExcelTableForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(817, 618);
-            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tabControl1);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "ExcelTableForm";
             this.Text = "ExcelTable";
-            this.tabControl1.ResumeLayout(false);
-            this.tableDataPage.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).EndInit();
+            this.stringsPage.ResumeLayout(false);
             this.indexArraysPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.indexArrays_DataGridView)).EndInit();
-            this.stringsPage.ResumeLayout(false);
-            this.rowViewPage.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.tableDataPage.ResumeLayout(false);
+            this.tableDataPage.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).EndInit();
+            this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tableDataPage;
-        private System.Windows.Forms.TabPage indexArraysPage;
-        private System.Windows.Forms.DataGridView indexArrays_DataGridView;
-        public System.Windows.Forms.DataGridView _tableData_DataGridView;
         private System.Windows.Forms.TabPage stringsPage;
         private System.Windows.Forms.ListBox _strings_ListBox;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.TabPage rowViewPage;
-        private System.Windows.Forms.ListBox rows_ListBox;
-        private System.Windows.Forms.TableLayoutPanel rows_LayoutPanel;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton toolStripLabel1;
+        private System.Windows.Forms.TabPage indexArraysPage;
+        private System.Windows.Forms.DataGridView indexArrays_DataGridView;
+        private System.Windows.Forms.TabPage tableDataPage;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        public System.Windows.Forms.DataGridView _tableData_DataGridView;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem duplicateRowsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showRowViewToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControl1;
+
     }
 }
