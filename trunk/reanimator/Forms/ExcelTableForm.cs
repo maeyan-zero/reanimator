@@ -36,6 +36,7 @@ namespace Reanimator.Forms
         {
             _dataFile = dataFile;
             _excelFile = _dataFile as ExcelFile;
+            _dataTable = fileManager.GetDataTable(dataFile.StringId);
             _fileManager = fileManager;
             _specialControls = new Hashtable();
             _dataChanged = false;
@@ -50,14 +51,9 @@ namespace Reanimator.Forms
             progress.ShowDialog(this);
             _dataTable.RowChanged += (sender, e) => { _dataChanged = true; };
 
-            // make it look pretty
-            rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
-            rows_ListBox.SelectedIndex = 0;
 
-            // fixes mouse scroll wheel
-            // todo: this is dodgy and causes focused elements within the layoutpanel to lose focus (e.g. a text box) - rather anoying
-            rows_LayoutPanel.Click += (sender, e) => rows_LayoutPanel.Focus();
-            rows_LayoutPanel.MouseEnter += (sender, e) => rows_LayoutPanel.Focus();
+            //rows_ListBox.SelectedIndex = 0;
+
         }
 
         private void _UseDataView()
@@ -80,66 +76,10 @@ namespace Reanimator.Forms
             _tableData_DataGridView.DataMember = null;
         }
 
-        private void _LoadTable(ProgressForm progress, Object var)
+        private TableLayoutPanel _RowViewFactory(TableLayoutPanel rows_LayoutPanel)
         {
-            DataFile dataFile = var as DataFile;
-            if (dataFile == null) return;
-
-
-            //// Table View
-            _tableData_DataGridView.SuspendLayout();
-            _dataTable = _fileManager.LoadTable(dataFile, true);
-            if (_dataTable == null)
-            {
-                MessageBox.Show("Failed to load DataTable!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-            // need to manually populate columns due to fillweight = 100 by default (overflow crap; 655 * 100 > max int)
-            if (_dataTable.Columns.Count > 655)
-            {
-                _tableData_DataGridView.AutoGenerateColumns = false;
-                DataGridViewColumn[] columns = new DataGridViewColumn[_dataTable.Columns.Count];
-
-                int i = 0;
-                foreach (DataGridViewTextBoxColumn dataGridViewColumn in
-                    from DataColumn dataColumn in _dataTable.Columns
-                    select new DataGridViewTextBoxColumn
-                    {
-                        Name = dataColumn.ColumnName,
-                        FillWeight = 1,
-                        DataPropertyName = dataColumn.ColumnName
-                    })
-                {
-                    columns[i++] = dataGridViewColumn;
-                }
-
-                _tableData_DataGridView.Columns.AddRange(columns);
-                _tableData_DataGridView.DataMember = _dataFile.StringId;
-            }
-            else
-            {
-                _tableData_DataGridView.DataMember = _dataFile.IsStringsFile ? FileManager.StringsTableName : _dataFile.StringId;
-            }
-
-            DataGridViewColumn codeColumn = _tableData_DataGridView.Columns["code"];
-            if (codeColumn != null) codeColumn.DefaultCellStyle.Format = "X04";
-
-            _tableData_DataGridView.ResumeLayout();
-
-            //// List View
-            int rowCount = _dataTable.Rows.Count;
-            Object[] rows = new Object[rowCount];
-            int row = 0;
-            foreach (DataRow dr in _dataTable.Rows)
-            {
-                rows[row++] = dr[0] + ": " + dr[2];
-            }
-            rows_ListBox.SuspendLayout();
-            rows_ListBox.Items.AddRange(rows);
-            rows_ListBox.SelectedIndexChanged += _Rows_ListBox_SelectedIndexChanged;
-            rows_ListBox.ResumeLayout();
-
+            // make it look pretty
+            rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
             rows_LayoutPanel.SuspendLayout();
             int column = 0;
             TextBox relationTextBox = null;
@@ -236,6 +176,78 @@ namespace Reanimator.Forms
             rows_LayoutPanel.Width += 10;
 
 
+            // fixes mouse scroll wheel
+            // todo: this is dodgy and causes focused elements within the layoutpanel to lose focus (e.g. a text box) - rather anoying
+            rows_LayoutPanel.Click += (sender, e) => rows_LayoutPanel.Focus();
+            rows_LayoutPanel.MouseEnter += (sender, e) => rows_LayoutPanel.Focus();
+
+            return rows_LayoutPanel;
+        }
+
+        private void _LoadTable(ProgressForm progress, Object var)
+        {
+            DataFile dataFile = var as DataFile;
+            if (dataFile == null) return;
+
+            //int rowCount = _dataTable.Rows.Count;
+            //Object[] rows = new Object[rowCount];
+            //int row = 0;
+            //foreach (DataRow dr in _dataTable.Rows)
+            //{
+            //    rows[row++] = dr[0] + ": " + dr[2];
+            //}
+            //rows_ListBox.SuspendLayout();
+            //rows_ListBox.Items.AddRange(rows);
+            //rows_ListBox.SelectedIndexChanged += _Rows_ListBox_SelectedIndexChanged;
+            //rows_ListBox.ResumeLayout();
+
+            tableLayoutPanel1 = _RowViewFactory(tableLayoutPanel1);
+
+            //// Table View
+            _tableData_DataGridView.SuspendLayout();
+            _dataTable = _fileManager.LoadTable(dataFile, true);
+            if (_dataTable == null)
+            {
+                MessageBox.Show("Failed to load DataTable!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            // need to manually populate columns due to fillweight = 100 by default (overflow crap; 655 * 100 > max int)
+            if (_dataTable.Columns.Count > 655)
+            {
+                _tableData_DataGridView.AutoGenerateColumns = false;
+                DataGridViewColumn[] columns = new DataGridViewColumn[_dataTable.Columns.Count];
+
+                int i = 0;
+                foreach (DataGridViewTextBoxColumn dataGridViewColumn in
+                    from DataColumn dataColumn in _dataTable.Columns
+                    select new DataGridViewTextBoxColumn
+                    {
+                        Name = dataColumn.ColumnName,
+                        FillWeight = 1,
+                        DataPropertyName = dataColumn.ColumnName
+                    })
+                {
+                    columns[i++] = dataGridViewColumn;
+                }
+
+                _tableData_DataGridView.Columns.AddRange(columns);
+                _tableData_DataGridView.DataMember = _dataFile.StringId;
+            }
+            else
+            {
+                _tableData_DataGridView.DataMember = _dataFile.IsStringsFile ? FileManager.StringsTableName : _dataFile.StringId;
+            }
+
+            DataGridViewColumn codeColumn = _tableData_DataGridView.Columns["code"];
+            if (codeColumn != null) codeColumn.DefaultCellStyle.Format = "X04";
+
+            _tableData_DataGridView.ResumeLayout();
+
+            //// List View
+
+
+
             //// Debug Stuff
             // secondary strings)
             if (_excelFile == null || !ExcelFile.EnableDebug || _excelFile.IndexSortArray == null)
@@ -326,7 +338,7 @@ namespace Reanimator.Forms
             if (_selectedIndexChange) return;
 
             CheckBox cb = (CheckBox) sender;
-            DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
+            DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
             dr[cb.Name] = (cb.CheckState == CheckState.Checked ? 1 : 0);
         }
 
@@ -335,7 +347,7 @@ namespace Reanimator.Forms
             if (_selectedIndexChange) return;
 
             CheckedListBox clb = (CheckedListBox) sender;
-            DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
+            DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
             uint value = (uint)dr[clb.Name];
             value ^= (uint)(1 << (e.Index));
             dr[clb.Name] = value;
@@ -354,8 +366,8 @@ namespace Reanimator.Forms
         {
             _selectedIndexChange = true;
 
-            rows_LayoutPanel.SuspendLayout();
-            BindingContext[_dataTable].Position = rows_ListBox.SelectedIndex;
+            tableLayoutPanel1.SuspendLayout();
+            BindingContext[_dataTable].Position = _tableData_DataGridView.CurrentRow.Index;
 
             foreach (DataColumn dc in _dataTable.Columns)
             {
@@ -364,7 +376,7 @@ namespace Reanimator.Forms
                     CheckBox cb = _specialControls[dc.ColumnName] as CheckBox;
                     if (cb == null) continue;
 
-                    DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
+                    DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
                     cb.Checked = ((int)dr[dc]) == 1 ? true : false;
                 }
                 else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
@@ -372,12 +384,12 @@ namespace Reanimator.Forms
                     CheckedListBox clb = _specialControls[dc.ColumnName] as CheckedListBox;
                     if (clb == null) continue;
 
-                    DataRow dr = _dataTable.Rows[rows_ListBox.SelectedIndex];
+                    DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
                     _UpdateCheckedListBox(clb, dr, dc);
                 }
             }
 
-            rows_LayoutPanel.ResumeLayout();
+            tableLayoutPanel1.ResumeLayout();
 
             _selectedIndexChange = false;
         }
@@ -593,6 +605,11 @@ namespace Reanimator.Forms
 
             ScriptEditor scriptEditor = new ScriptEditor(_fileManager, dataGridViewCell, "todo", dataColumn.ColumnName) { MdiParent = MdiParent };
             scriptEditor.Show();
+        }
+
+        private void _ToggleRowView(object sender, EventArgs e)
+        {
+            splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
         }
     }
 
