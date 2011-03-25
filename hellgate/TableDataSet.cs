@@ -12,7 +12,7 @@ namespace Hellgate
     {
         public const String StringsTableName = "StringsTable";
 
-        public DataTable LoadTable(DataFile dataFile, bool doRelations)
+        public DataTable LoadTable(DataFile dataFile, bool doRelations, bool force = false)
         {
             DataTable dataTable = null;
             if (dataFile.IsStringsFile)
@@ -21,18 +21,22 @@ namespace Hellgate
             }
             else if (dataFile.IsExcelFile)
             {
-                dataTable = _LoadExcelTable(dataFile as ExcelFile, doRelations);
+                dataTable = _LoadExcelTable(dataFile as ExcelFile, doRelations, force);
             }
 
             return dataTable;
         }
 
-        private DataTable _LoadExcelTable(ExcelFile excelFile, bool doRelations)
+        private DataTable _LoadExcelTable(ExcelFile excelFile, bool doRelations, bool force)
         {
             String tableName = excelFile.StringId;
             DataTable dataTable = XlsDataSet.Tables[tableName];
-            if (dataTable != null) return dataTable;
-
+            if (dataTable != null && force == false) return dataTable;
+            if (dataTable != null && force == true)
+            {
+                XlsDataSet.Relations.Clear();
+                XlsDataSet.Tables.Remove(tableName);
+            }
             dataTable = XlsDataSet.Tables.Add(tableName);
             dataTable.TableName = tableName;
 
