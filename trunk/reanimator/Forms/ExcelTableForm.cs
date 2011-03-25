@@ -394,7 +394,7 @@ namespace Reanimator.Forms
             String savePath = FormTools.SaveFileDialogBox(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
             if (String.IsNullOrEmpty(savePath)) return;
 
-            if (!_dataFile.ParseDataTable(table))
+            if (!_dataFile.ParseDataTable(table, _fileManager))
             {
                 MessageBox.Show("Error: Failed to parse data table!");
                 return;
@@ -408,7 +408,7 @@ namespace Reanimator.Forms
             }
         }
 
-        private void _RegenTable_Click(object sender, EventArgs e)
+        private void _RegenTable_Click()
         {
             // make sure we're trying to rebuild an excel table, and that it's actually in the dataset
             if (_excelFile == null) return;
@@ -427,8 +427,8 @@ namespace Reanimator.Forms
             }
             if (dt.ParentRelations.Count != 0)
             {
-                MessageBox.Show("Warning - Has Parent Relations!\nTest Me!\n\nPossible cache dataset relations issue!", "Warning", MessageBoxButtons.OK,
-                                MessageBoxIcon.Exclamation);
+                //MessageBox.Show("Warning - Has Parent Relations!\nTest Me!\n\nPossible cache dataset relations issue!", "Warning", MessageBoxButtons.OK,
+                //                MessageBoxIcon.Exclamation);
                 dt.ParentRelations.Clear();
             }
 
@@ -436,7 +436,7 @@ namespace Reanimator.Forms
             _fileManager.LoadTable(_dataFile, true);
 
             // display updated table
-            MessageBox.Show("Table regenerated!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+           //  MessageBox.Show("Table regenerated!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             // todo: when adding new columns the window will need to be close/reopened to show the changes
             // the dataGridView is storing its own little cache or something - 
@@ -513,27 +513,29 @@ namespace Reanimator.Forms
                 return;
             }
 
-            if (_excelFile.ParseCSV(buffer, _fileManager) == true)
+            try
             {
-                //_fileManager.Reload();
-                //_fileManager.LoadTableFiles();
-                _fileManager.DataFiles[_excelFile.StringId] = _excelFile;
-                _fileManager.XlsDataSet.Relations.Clear();
-                _fileManager.XlsDataSet.Tables.Remove(_excelFile.StringId);
-                _dataTable = _fileManager.LoadTable(_excelFile, true);
-                _tableData_DataGridView.DataSource = _dataTable;
-                _tableData_DataGridView.Refresh();
+                if (_excelFile.ParseCSV(buffer, _fileManager) == true)
+                {
+                    _RegenTable_Click();
+                }
+                else
+                {
+                    MessageBox.Show("Error importing this table. Make sure the table has the correct number of columns and the correct data. If you have a string where a number is expected, the import will not work.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Error importing this table. Make sure the table has the correct number of columns and the correct data. If you have a string where a number is expected, the import will not work.");
+                MessageBox.Show("Critical parsing error. Are you importing the right table?\nDetails: " + ex.Message);
                 return;
             }
+        
+
         }
 
         private void _ExportButton_Click(object sender, EventArgs e)
         {
-            if (_excelFile.ParseDataTable(_dataTable) != true)
+            if (_excelFile.ParseDataTable(_dataTable, _fileManager) != true)
             {
                 MessageBox.Show("Error parsing dataTable. Contact developer.");
                 return;

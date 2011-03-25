@@ -112,7 +112,7 @@ namespace Hellgate
             return HasIntegrity = true;
         }
 
-        public override bool ParseDataTable(DataTable table)
+        public override bool ParseDataTable(DataTable table, FileManager fileManager = null)
         {
             byte[] buffer = new byte[1024];
             int offset = 0;

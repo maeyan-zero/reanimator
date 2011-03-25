@@ -166,8 +166,16 @@ namespace Hellgate
         {
             if (csvBytes == null) return false;
             if (fileManager != null && fileManager.DataFiles.Count == 0) fileManager = null;
-
-            return _ParseCSV(csvBytes, fileManager, null);
+            bool result = false;
+            try
+            {
+                result = _ParseCSV(csvBytes, fileManager, null);
+            }
+            catch (Exception e)
+            {
+                ExceptionLogger.LogException(e, true);
+            }
+            return result;
         }
 
         public void ParseCSV(FileManager fileManager, Dictionary<String, ExcelFile> csvExcelFiles)
@@ -741,9 +749,10 @@ namespace Hellgate
         /// </summary>
         /// <param name="dataTable">The DataTable to read the data from.</param>
         /// <returns>True if the DataTable parsed okay.</returns>
-        public override bool ParseDataTable(DataTable dataTable)
+        public override bool ParseDataTable(DataTable dataTable, FileManager fileManager)
         {
-            if (dataTable == null) throw new ArgumentNullException();
+            if (dataTable == null) throw new ArgumentNullException("dataTable");
+            //if (fileManager == null) throw new ArgumentNullException("fileManager");
 
             byte[] newStringBuffer = null;
             int newStringBufferOffset = 0;
@@ -756,12 +765,26 @@ namespace Hellgate
             bool failedParsing = false;
             const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             FieldInfo[] dataFields = DataType.GetFields(bindingFlags);
+            OutputAttribute[] excelAttributes;
+            ObjectDelegator objectDelegator;
+
+            if (fileManager == null || !fileManager.DataFileDelegators.ContainsKey(StringId))
+            {
+                FieldInfo[] fieldInfos = DataType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                objectDelegator = new ObjectDelegator(fieldInfos);
+                excelAttributes = new OutputAttribute[fieldInfos.Length];
+            }
+            else
+            {
+                objectDelegator = fileManager.DataFileDelegators[StringId];
+                excelAttributes = new OutputAttribute[objectDelegator.FieldCount];
+            }
 
             for (int row = 0; row < dataTable.Rows.Count; row++)
             {
                 int col = 1; // Skip the indice column (column 0)
                 Object rowInstance = Activator.CreateInstance(DataType);
-                foreach (FieldInfo fieldInfo in dataFields)
+                foreach (ObjectDelegator.FieldDelegate fieldInfo in objectDelegator)
                 {
                     // Initialize private fields 
                     if ((fieldInfo.IsPrivate))
@@ -775,7 +798,7 @@ namespace Hellgate
                         }
                         if ((fieldInfo.FieldType.BaseType == typeof(Array)))
                         {
-                            MarshalAsAttribute marshal = (MarshalAsAttribute)fieldInfo.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                            MarshalAsAttribute marshal = (MarshalAsAttribute)fieldInfo.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
                             Array arrayInstance = (Array)Activator.CreateInstance(fieldInfo.FieldType, marshal.SizeConst);
                             fieldInfo.SetValue(rowInstance, arrayInstance);
                             continue;
@@ -790,9 +813,99 @@ namespace Hellgate
 
                     // Public fields -> these are inside the datatable
                     Object value = dataTable.Rows[row][col++];
-                    OutputAttribute attribute = GetExcelAttribute(fieldInfo);
+                    OutputAttribute attribute = GetExcelAttribute(fieldInfo.Info);
+                    bool isArray = (fieldInfo.FieldType.BaseType == typeof(Array));
                     if (attribute != null)
                     {
+                        if (attribute.IsTableIndex)
+                        {
+                            int arraySize = 1;
+                            if (isArray)
+                            {
+                                MarshalAsAttribute arrayMarshal = (MarshalAsAttribute)fieldInfo.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                                arraySize = arrayMarshal.SizeConst;
+                                Debug.Assert(arraySize > 0);
+                            }
+
+                            string strValue = value.ToString();
+
+                            String[] indexStrs = strValue.Split(new[] { ',' });
+                            Int32[] rowIndexValues = new int[arraySize];
+                            for (int i = 0; i < arraySize; i++) rowIndexValues[i] = -1;
+
+                            int maxElements = indexStrs.Length;
+                            if (maxElements > arraySize)
+                            {
+                                Debug.WriteLine(String.Format("{0}: Loss of array elements detected. row = {1}, col = {2}.", StringId, row, col));
+                                maxElements = arraySize;
+                            }
+
+                            for (int i = 0; i < maxElements; i++)
+                            {
+                                strValue = indexStrs[i];
+                                if (strValue == "-1") continue;
+
+
+                                String tableStringId = attribute.TableStringId;
+                                bool hasCodeColumn = fileManager.DataTableHasColumn(tableStringId, "code");
+                                if (strValue.Length == 0 && hasCodeColumn) continue;
+
+
+                                //LEVEL references multiple blank TREASURE row index values - all appear to be empty rows though, so meh...
+                                //Debug.Assert(!String.IsNullOrEmpty(value));
+
+                                int isNegative = 1;
+                                if (strValue.Length > 0 && strValue[0] == '-')
+                                {
+                                    isNegative = -1;
+                                    strValue = strValue.Substring(1, strValue.Length - 1);
+                                }
+
+                                int rowIndex = -1;
+                                DataFile relatedDataFile = null;
+                                ExcelFile relatedExcel = null;
+                                if (fileManager.DataFiles.TryGetValue(tableStringId, out relatedDataFile))
+                                {
+                                    relatedExcel = relatedDataFile as ExcelFile;
+                                    rowIndex = relatedExcel._GetRowIndexFromValue(strValue, hasCodeColumn ? "code" : null);
+                                }
+
+                                if (relatedExcel == null)
+                                {
+                                    if (hasCodeColumn && strValue.Length <= 4)
+                                    {
+                                        int code = _StringToCode(strValue);
+                                        rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
+                                    }
+                                    else
+                                    {
+                                        rowIndex = fileManager.GetExcelRowIndex(tableStringId, strValue);
+                                    }
+                                }
+
+                                rowIndexValues[i] = rowIndex * isNegative;
+                            }
+
+                            if (isArray)
+                            {
+                                objectDelegator[fieldInfo.Name, rowInstance] = rowIndexValues;
+                            }
+                            else
+                            {
+                                objectDelegator[fieldInfo.Name, rowInstance] = rowIndexValues[0];
+                            }
+
+                            col++; // Skip lookup
+                            continue;
+                        }
+
+                        if (attribute.IsStringIndex)
+                        {
+                            fieldInfo.SetValue(rowInstance, value);
+                            col++; // Skip lookup
+                            continue;
+                        }
+
                         if (attribute.IsStringOffset)
                         {
                             if (newStringBuffer == null)
@@ -817,31 +930,38 @@ namespace Hellgate
 
                         if ((attribute.IsScript))
                         {
-                            if ((newIntegerBuffer == null))
+                            string strValue = value as string;
+
+                            if ((fileManager == null && value == "0") || value == "")
+                            {
+                                objectDelegator[fieldInfo.Name, rowInstance] = 0;
+                                continue;
+                            }
+                            if (newIntegerBuffer == null)
                             {
                                 newIntegerBuffer = new byte[1024];
                                 newIntegerBuffer[0] = 0x00;
                             }
 
-                            string strValue = value as string;
-                            if (strValue == null) return false;
-
-                            if (strValue == "0" || String.IsNullOrEmpty(strValue))
+                            int[] scriptByteCode;
+                            if (fileManager != null)
                             {
-                                fieldInfo.SetValue(rowInstance, 0);
-                                continue;
+                                ExcelScript excelScript = new ExcelScript(fileManager);
+                                scriptByteCode = excelScript.Compile(strValue);
+                            }
+                            else
+                            {
+                                string[] splitValue = strValue.Split(',');
+                                int count = splitValue.Length;
+                                scriptByteCode = new int[count];
+                                for (int i = 0; i < count; i++)
+                                {
+                                    scriptByteCode[i] = int.Parse(splitValue[i]);
+                                }
                             }
 
-                            strValue = strValue.Replace("\"", "");
-                            string[] splitValue = strValue.Split(',');
-                            int count = splitValue.Length;
-                            int[] intValue = new int[count];
-                            for (int i = 0; i < count; i++)
-                            {
-                                intValue[i] = int.Parse(splitValue[i]);
-                            }
-                            fieldInfo.SetValue(rowInstance, newIntegerBufferOffset);
-                            FileTools.WriteToBuffer(ref newIntegerBuffer, ref newIntegerBufferOffset, FileTools.IntArrayToByteArray(intValue));
+                            objectDelegator[fieldInfo.Name, rowInstance] = newIntegerBufferOffset;
+                            FileTools.WriteToBuffer(ref newIntegerBuffer, ref newIntegerBufferOffset, scriptByteCode.ToByteArray());
                             continue;
                         }
 
@@ -862,13 +982,6 @@ namespace Hellgate
                                 newSecondaryStrings.Add(strValue);
                             }
                             fieldInfo.SetValue(rowInstance, newSecondaryStrings.IndexOf(strValue));
-                            continue;
-                        }
-
-                        if (attribute.IsStringIndex || attribute.IsTableIndex)
-                        {
-                            fieldInfo.SetValue(rowInstance, value);
-                            col++; // Skip lookup
                             continue;
                         }
                     }

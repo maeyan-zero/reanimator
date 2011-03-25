@@ -28,7 +28,7 @@ namespace Hellgate
         }
         public abstract bool ParseData(byte[] buffer);
         public abstract bool ParseCSV(byte[] buffer);
-        public abstract bool ParseDataTable(DataTable dataTable);
+        public abstract bool ParseDataTable(DataTable dataTable, FileManager fileManager);
         public abstract byte[] ToByteArray();
         public abstract byte[] ExportCSV();
         public abstract byte[] ExportSQL(String tablePrefix = "hgl_");
