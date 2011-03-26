@@ -137,6 +137,7 @@ namespace Hellgate
 
                 // read in and parse index
                 PackFile packFile = (PackFile)hellgateFile;
+
                 try
                 {
                     byte[] fileBytes = File.ReadAllBytes(idxPath);
