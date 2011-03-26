@@ -19,7 +19,7 @@ namespace Hellgate
         public int Count { get { return (Rows != null) ? Rows.Count : 0; } }
         public string FilePath { get; protected set; }
         public string FileExtension { get; set; }
-        public string FileName { get { return Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(FilePath)); } }
+        public string FileName { get { return Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(FilePath))); } } // files can have up to 3 extentsions
         public List<Object> Rows { get; protected set; }
 
         public override string ToString()
@@ -30,7 +30,7 @@ namespace Hellgate
         public abstract bool ParseCSV(byte[] buffer);
         public abstract bool ParseDataTable(DataTable dataTable, FileManager fileManager);
         public abstract byte[] ToByteArray();
-        public abstract byte[] ExportCSV();
+        public abstract byte[] ExportCSV(FileManager fileManager);
         public abstract byte[] ExportSQL(String tablePrefix = "hgl_");
 
         public class DataFileAttributes

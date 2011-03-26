@@ -275,7 +275,7 @@ namespace Hellgate
         /// Converts the StringsFile to a tab-delimited CSV
         /// </summary>
         /// <returns>The CSV as a byte array.</returns>
-        public override byte[] ExportCSV()
+        public override byte[] ExportCSV(FileManager fileManager = null)
         {
             StringWriter writer = new StringWriter();
 

@@ -31,11 +31,16 @@ namespace Reanimator.Forms
 
         private readonly DataFile _dataFile;
         private readonly ExcelFile _excelFile;
+        private readonly StringsFile _stringsFile;
+
+        private bool IsExcelFile { get { return _excelFile != null; } }
+        private bool isStringsFile { get { return _stringsFile != null; } }
 
         public ExcelTableForm(DataFile dataFile, FileManager fileManager)
         {
             _dataFile = dataFile;
             _excelFile = _dataFile as ExcelFile;
+            _stringsFile = _dataFile as StringsFile;
             _fileManager = fileManager;
             _specialControls = new Hashtable();
             _dataChanged = false;
@@ -302,25 +307,6 @@ namespace Reanimator.Forms
             indexArrays_DataGridView.ResumeLayout();
         }
 
-        private void DoIntOffsetType(DataColumn dc)
-        {
-            //Type type = dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IntOffsetType] as Type;
-            //if (type == null) return;
-
-            //if (type == typeof(ExcelFile.SingleInt32))
-            //{
-            //    NumericUpDown nud = new NumericUpDown
-            //                            {
-            //                                Parent = rows_LayoutPanel,
-            //                                AutoSize = true,
-            //                                Dock = DockStyle.Fill
-            //                            };
-
-            //    nud.ValueChanged += nud_ValueChanged;
-            //    _specialControls.Add(dc.ColumnName, nud);
-            //}
-        }
-
         private void nud_ValueChanged(object sender, EventArgs e)
         {
             if (_selectedIndexChange) return;
@@ -399,7 +385,7 @@ namespace Reanimator.Forms
             if (table == null) return;
 
             String saveType = _dataFile.IsExcelFile ? "Cooked Excel Tables" : "Cooked String Tables";
-            String saveExtension = _dataFile.IsExcelFile ? "txt.cooked" : "todo"; // todo quick fix
+            String saveExtension = _dataFile.IsExcelFile ? "txt.cooked" : "uni.xls.cooked";
             String saveInitialPath = Path.Combine(Config.HglDir, _dataFile.FilePath);
 
             String savePath = FormTools.SaveFileDialogBox(saveExtension, saveType, _dataFile.FileName, saveInitialPath);
@@ -506,11 +492,12 @@ namespace Reanimator.Forms
 
         private void _ImportButton_Click(object sender, EventArgs e)
         {
-            OpenFileDialog fileDialog = new OpenFileDialog() { InitialDirectory = Config.LastDirectory };
-            fileDialog.DefaultExt ="txt" ;
-            fileDialog.AddExtension = true;
+            OpenFileDialog fileDialog = new OpenFileDialog()
+            {
+                InitialDirectory = Config.LastDirectory,
+                Filter = "Text Files (.txt)|*.txt|All Types (*.*)|*.*"
+            };
             if (fileDialog.ShowDialog() != DialogResult.OK) return;
-
             Config.LastDirectory = Path.GetDirectoryName(fileDialog.FileName);
 
             byte[] buffer;
@@ -520,13 +507,14 @@ namespace Reanimator.Forms
             }
             catch
             {
-                MessageBox.Show("There was a problem opening the file. Make sure the file isn't locked by another program (like Excel)");
+                MessageBox.Show("There was a problem opening the file. Make sure the file isn't locked by another program (like Excel)", "Reading Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
 
             try
             {
-                if (_excelFile.ParseCSV(buffer, _fileManager) == true)
+                bool parseSuccess = IsExcelFile ? _excelFile.ParseCSV(buffer, _fileManager) : _stringsFile.ParseCSV(buffer);
+                if (parseSuccess == true)
                 {
                     _RegenTable_Click();
                 }
@@ -538,33 +526,34 @@ namespace Reanimator.Forms
             catch (Exception ex)
             {
                 MessageBox.Show("Critical parsing error. Are you importing the right table?\nDetails: " + ex.Message);
-                return;
             }
-        
-
         }
 
         private void _ExportButton_Click(object sender, EventArgs e)
         {
-            if (_excelFile.ParseDataTable(_dataTable, _fileManager) != true)
+            // Parse the DataTable object
+            if (_dataFile.ParseDataTable(_dataTable, _fileManager) != true)
             {
-                MessageBox.Show("Error parsing dataTable. Contact developer.");
+                MessageBox.Show("Error parsing dataTable. Please contact a developer.");
+                // Todo log error. this should never happen
                 return;
             }
 
-            byte[] buffer = _excelFile.ExportCSV(_fileManager);
+            // Export it to a CSV stream
+            byte[] buffer = _dataFile.ExportCSV(_fileManager);
             if (buffer == null)
             {
-                MessageBox.Show("Error exporting CSV. Contact developer");
+                MessageBox.Show("Error exporting CSV. Please contact a developer");
+                // Todo log error. this should never happen
                 return;
             }
 
-            // prompts the user to choose where to save the file
+            // Prompt the user where to save
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "Text Tables|*.txt",
-                InitialDirectory = Config.ScriptDir,
-                FileName = _dataFile.FileName
+                InitialDirectory = Config.LastDirectory,
+                FileName = _dataFile.FileName,
+                Filter = "Text Files (.txt)|*.txt|All Types (*.*)|*.*"
             };
             if (saveFileDialog.ShowDialog(this) != DialogResult.OK) return;
 
@@ -574,6 +563,7 @@ namespace Reanimator.Forms
             }
             catch (Exception ex)
             {
+                MessageBox.Show("Sorry, there was a problem saving the file.\n" + ex.Message, "Saving Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 ExceptionLogger.LogException(ex, false);
                 return;
             }
