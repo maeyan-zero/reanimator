@@ -22,3 +22,17 @@ The default behaviour of Hellpack is to compile all raw (.txt) files into serial
 || /e || Do not pack source files. || On ||
 || /p:name || name = .idx .dat filename || sp_hellgate_1337 ||
 || /h:path || path = path to hellgate installation || ||
+
+= Usage Example =
+
+This article assumes you have a little knowledge with the modding terminology.
+
+So you have Hellgate London installed here: C:\Hellgate London
+
+You may like to put Hellpack inside this directory (along with its required .dlls). This is the most convenient place to execute it when designing mods.
+
+Now you probably want to add some excel tables to your project as they are the heart of Hellgate mods. This is quickly achieved utilizing the File Explorer from inside Reanimator. From the File Explorer, click the top tab 'Advanced'. Next to the button that says Excel files, set this path to your Hellgate London directory then click the button. This gives you a source copy of every excel table that can be edited in Open Office/Excel/Notepad and/or imported and exported from Reanimator. You'll find there are things you can do in Excel that you can't with Reanimator and vice versa.
+
+Using Windows file explorer, browse your Hellgate London directory. Then browse the *data/excel* and *data_common/excel* paths and there should be ~150 .txt files. For more information on importing/exporting these files into various programs please see another wiki page.
+
+After you've edited them, its time to test your modification! To compile it, simply double click Hellpack and presuming nothing goes wrong, the .idx and .dat will be placed in the *data* directory and ready for immediate usage - just lauch Hellgate. Repeat this process whenever you update any files and want Hellgate to use them. As a modder, you will be doing this a lot!
