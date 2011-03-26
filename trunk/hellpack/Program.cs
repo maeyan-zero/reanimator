@@ -13,12 +13,15 @@ namespace Revival
     public static class Hellpack
     {
         static string _defaultDat = "sp_hellgate_1337";
-        const string SearchPattern = "*{0}";
-        const string WelcomeMsg = "Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2010\nhttp://www.hellgateaus.net";
-        const string NoPathsMsg = "Sorry, no data paths were found. Check error.xml for details.";
-        const string BadSyntaxMsg = "Incorrect argument given: {0}";
-        const string UsageMsg = "Usage: todo";
-        const string HellgateMissingMsg = "Warning: Can not cook XML, Hellgate London directory missing.";
+        const string UsageMsg = " /t\tCook excel tables\n" +
+                                " /x\tCook xml files\n" +
+                                " /lr\tCook level rules\n" +
+                                " /rd\tCook room definitions\n" +
+                                " /p\tPack all files into .dat\n" +
+                                " /s\tSearch current directory for files\n" +
+                                " /e\tDo not pack source files\n" +
+                                " /p:%\t% = .idx .dat filename\n" +
+                                " /h:%\t% = Path to Hellgate installation\n";
         private static FileManager _fileManager;
 
         static void Main(string[] args)
@@ -176,7 +179,7 @@ namespace Revival
             }
             #endregion
 
-            Console.WriteLine(WelcomeMsg);
+            Console.WriteLine("Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2010\nhttp://www.hellgateaus.net");
             Console.WriteLine(String.Empty);
 
             #region Command Line Arugements
@@ -218,6 +221,10 @@ namespace Revival
                         case "/rd":
                             doRoomDefinitions = true;
                             break;
+                        case "/?":
+                        case "/help":
+                            Console.WriteLine(UsageMsg);
+                            return;
                         default:
                             if (arg.StartsWith("/p:"))
                             {
@@ -266,8 +273,9 @@ namespace Revival
                             }
                             else
                             {
-                                Console.WriteLine(String.Format(BadSyntaxMsg, arg));
-                                break;
+                                Console.WriteLine(String.Format("Incorrect argument given: {0}", arg));
+                                Console.WriteLine(UsageMsg);
+                                return;
                             }
                     }
                 }
@@ -334,7 +342,7 @@ namespace Revival
                 }
                 else
                 {
-                    Console.WriteLine(HellgateMissingMsg);
+                    Console.WriteLine("Warning: Can not cook XML, Hellgate London directory missing.");
                 }
             }
 
@@ -354,7 +362,7 @@ namespace Revival
             if (doPackDat)
             {
                 filesToPack.AddRange(SearchForFilesToPack(currentDir, doExcludeRaw));
-                PackDatFile(filesToPack.ToArray(), Path.Combine(currentDir, _defaultDat + ".idx"), false);
+                PackDatFile(filesToPack.ToArray(), Path.Combine(dataDir, _defaultDat + ".idx"), false);
             }
             #endregion
 
@@ -373,7 +381,7 @@ namespace Revival
             string dataCommonDir = Path.Combine(hellgatePath, "data_common");
             string excelDataDir = Path.Combine(dataDir, ExcelFile.FolderPath);
             string excelDataCommonDir = Path.Combine(dataCommonDir, ExcelFile.FolderPath);
-            string excelWildCard = String.Format(SearchPattern, ExcelFile.ExtensionDeserialised);
+            string excelWildCard = String.Format("*{0}", ExcelFile.ExtensionDeserialised);
 
             if (Directory.Exists(excelDataDir))
             {
@@ -396,7 +404,7 @@ namespace Revival
             string dataDir = Path.Combine(hellgatePath, "data");
             string dataCommonDir = Path.Combine(hellgatePath, "data_common");
             string stringDataDir = Path.Combine(dataDir, StringsFile.FolderPath);
-            string stringWildCard = String.Format(SearchPattern, StringsFile.ExtensionDeserialised);
+            string stringWildCard = String.Format("*{0}", StringsFile.ExtensionDeserialised);
 
             if (Directory.Exists(stringDataDir))
             {
@@ -414,7 +422,7 @@ namespace Revival
 
             if (Directory.Exists(dataDir))
             {
-                string xmlWildCard = String.Format(SearchPattern, XmlCookedFile.ExtensionDeserialised);
+                string xmlWildCard = String.Format("*{0}", XmlCookedFile.ExtensionDeserialised);
                 xmlPaths = Directory.GetFiles(dataDir, xmlWildCard, SearchOption.AllDirectories);
                 xmlPaths = xmlPaths.Where(str => !str.Contains("uix")).ToArray(); // remove uix xml files
             }
@@ -431,7 +439,7 @@ namespace Revival
             if (Directory.Exists(dataDir))
             {
                 string[] result = Directory.GetFiles(dataDir, "*", SearchOption.AllDirectories);
-                filesToPack.AddRange(result);
+                filesToPack.AddRange(result.Where(s => !s.Contains(".idx") && !s.Contains(".dat"))); // ignore existing .dat .idx files
             }
 
             if (Directory.Exists(dataCommonDir))
