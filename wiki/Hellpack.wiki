@@ -1,0 +1,23 @@
+#summary Describes the uses and syntax of the Hellpack utility.
+
+= Introduction =
+
+When your creating modifications, you want a quick way to compile your projects without having to drudge around with a gui to perform minimalistic and frequent operations.
+
+Hellpack is a utility thats default behaviour is to scan its current directory for files that can be compiled and packed into a distributable .idx .dat combination. There are a number of switches available that run modify the program behaviour that can be easily put into a .bat file for quick double click access. These topics are described in more detail below.
+
+
+= Details =
+
+The default behaviour of Hellpack is to compile all raw (.txt) files into serialized formats (.cooked) and then packed into Hellgate format data packages (.idx, .dat). From the directory Hellpack resides it searches for 2 primary directories: *data* and *data_common*. These directories are deep scanned and all files are packed except for the raw versions [by default]. This behaviour can be modified using command line arguments.
+
+|| switch || description || default ||
+|| /t || Cook excel tables. || On ||
+|| /x || Cook xml files. || On ||
+|| /lr || Cook level rules. || On ||
+|| /rd || Cook room definitions. || On ||
+|| /p || Pack all files into .idx .dat || On ||
+|| /s || Search current directory for files. || On ||
+|| /e || Do not pack source files. || On ||
+|| /p:name || name = .idx .dat filename || sp_hellgate_1337 ||
+|| /h:path || path = path to hellgate installation || ||
