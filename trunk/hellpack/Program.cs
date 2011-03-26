@@ -306,7 +306,9 @@ namespace Revival
 
             // need for code/name -> row index lookups
             _fileManager = new FileManager(hellgatePath);
+            _fileManager.BeginAllDatReadAccess();
             _fileManager.LoadTableFiles();
+            _fileManager.EndAllDatAccess();
 
             // Cook Txt files)
             if (doCookTxt)

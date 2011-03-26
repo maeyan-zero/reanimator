@@ -36,7 +36,6 @@ namespace Reanimator.Forms
         {
             _dataFile = dataFile;
             _excelFile = _dataFile as ExcelFile;
-            _dataTable = fileManager.GetDataTable(dataFile.StringId);
             _fileManager = fileManager;
             _specialControls = new Hashtable();
             _dataChanged = false;
@@ -188,7 +187,7 @@ namespace Reanimator.Forms
         {
             DataFile dataFile = var as DataFile;
             if (dataFile == null) return;
-
+            _dataTable = _fileManager.GetDataTable(dataFile.StringId);
             //int rowCount = _dataTable.Rows.Count;
             //Object[] rows = new Object[rowCount];
             //int row = 0;

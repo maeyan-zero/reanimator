@@ -674,6 +674,8 @@ namespace Reanimator.Forms
             progressForm.SetCurrentItemText("Loading File Manager...");
             _fileManager = new FileManager(Config.HglDir, false);
 
+            foreach (IndexFile file in _fileManager.IndexFiles) file.BeginDatReading();
+
             progressForm.SetCurrentItemText("Loading Excel and Strings Tables...");
             if (!_fileManager.LoadTableFiles())
             {
@@ -707,6 +709,8 @@ namespace Reanimator.Forms
 
             progressForm.SetCurrentItemText("Loading File Explorer...");
             _fileExplorer = new FileExplorer(_fileManager, _fileManagerTCv4);
+
+            foreach (IndexFile file in _fileManager.IndexFiles) file.EndDatAccess();
         }
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)
@@ -834,16 +838,7 @@ namespace Reanimator.Forms
 
         private void _ScriptEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    ScriptEditor scriptEditor = new ScriptEditor(_tableDataSet);
-            //    scriptEditor.MdiParent = this;
-            //    scriptEditor.Show();
-            //}
-            //catch (Exception ex)
-            //{
-            //    ExceptionLogger.LogException(ex, "_ScriptEditorToolStripMenuItem_Click", false);
-            //}
+            _fileExplorer.Visible = !_fileExplorer.Visible;
         }
 
         private void _PatchToolToolStripMenuItem_Click(object sender, EventArgs e)

@@ -231,8 +231,6 @@ namespace Hellgate
         /// <returns>Returns true on success.</returns>
         public bool LoadTableFiles(bool ignorePatchedOut = false)
         {
-            BeginAllDatReadAccess();
-
             // want excel files and strings files
             foreach (PackFileEntry fileEntry in
                 FileEntries.Values.Where(fileEntry => fileEntry.Name.EndsWith(ExcelFile.Extension) ||
@@ -299,8 +297,6 @@ namespace Hellgate
                     Console.WriteLine("Critical Error: Cannot add table data file to dictionary: " + dataFile + "\n" + e);
                 }
             }
-
-            EndAllDatAccess();
 
             return true;
         }
