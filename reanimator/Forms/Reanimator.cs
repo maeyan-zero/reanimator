@@ -1,4 +1,4 @@
-﻿using System;
+ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -26,6 +26,7 @@ namespace Reanimator.Forms
         public Reanimator()
         {
             InitializeComponent();
+            setIcon();
 
             #region alexs_stuff
             //Config.HglDir = @"D:\Games\Hellgate";
@@ -165,7 +166,50 @@ namespace Reanimator.Forms
             //}
             #endregion
         }
+        
+        /// <summary>
+        /// Checks the Windows Version and sets the coresponding icon
+        /// </summary>
+        private void setIcon()
+        {
+            OperatingSystem osInfo = Environment.OSVersion;
+            string pathName = "Resources.icon2";
 
+            switch(osInfo.Platform)
+             {
+               case PlatformID.Win32NT:
+                {
+                    switch(osInfo.Version.Major)
+                    {
+                        case 5:
+                        {
+                            // 5 = XP/2000/2003 server edition
+                            pathName = "Resources.icon1";
+                            break;
+                        }
+
+                        case 6:
+                        {
+                            // 6 = Vista
+                            pathName = "Resources.icon2";
+                            break;
+                        }
+
+                        case 7:
+                        {
+                            // 7 = Windows 7
+                             pathName = "Resources.icon2";
+                             break;
+                        }
+                    }
+                    break;
+                }
+            }
+            System.Drawing.Icon ico = new System.Drawing.Icon(pathName);
+            this.Icon = ico;
+        }
+        
+        
         /// <summary>
         /// Checks the registry for the Hellgate path, if it doesn't exist prompt the user to find it.
         /// </summary>
