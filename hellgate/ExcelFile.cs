@@ -1186,9 +1186,9 @@ namespace Hellgate
         /// Converts the ExcelFile to a CSV
         /// </summary>
         /// <returns>The CSV as a byte array.</returns>
-        public override byte[] ExportCSV()
+        public override byte[] ExportCSV(FileManager fileManager)
         {
-            return ExportCSV(null);
+            return ExportCSV(fileManager);
         }
 
         public byte[] ExportCSV(FileManager fileManager, IEnumerable<String> columnNames = null)
