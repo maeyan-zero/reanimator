@@ -145,7 +145,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(872, 768);
+            this.tabControl1.Size = new System.Drawing.Size(900, 768);
             this.tabControl1.TabIndex = 3;
             // 
             // fileExplorer_tabPage
@@ -156,7 +156,7 @@
             this.fileExplorer_tabPage.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.fileExplorer_tabPage.Name = "fileExplorer_tabPage";
             this.fileExplorer_tabPage.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.fileExplorer_tabPage.Size = new System.Drawing.Size(864, 740);
+            this.fileExplorer_tabPage.Size = new System.Drawing.Size(892, 740);
             this.fileExplorer_tabPage.TabIndex = 0;
             this.fileExplorer_tabPage.Text = "File Explorer";
             // 
@@ -183,8 +183,8 @@
             this.fileExplorer_splitContainer.Panel2.Controls.Add(this._fileActions_groupBox);
             this.fileExplorer_splitContainer.Panel2.Controls.Add(this.groupBox3);
             this.fileExplorer_splitContainer.Panel2.Controls.Add(this.groupBox2);
-            this.fileExplorer_splitContainer.Size = new System.Drawing.Size(860, 734);
-            this.fileExplorer_splitContainer.SplitterDistance = 313;
+            this.fileExplorer_splitContainer.Size = new System.Drawing.Size(888, 734);
+            this.fileExplorer_splitContainer.SplitterDistance = 323;
             this.fileExplorer_splitContainer.SplitterWidth = 5;
             this.fileExplorer_splitContainer.TabIndex = 3;
             // 
@@ -192,7 +192,7 @@
             // 
             this.filterReset_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.filterReset_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filterReset_button.Location = new System.Drawing.Point(251, 3);
+            this.filterReset_button.Location = new System.Drawing.Point(261, 3);
             this.filterReset_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.filterReset_button.Name = "filterReset_button";
             this.filterReset_button.Size = new System.Drawing.Size(58, 27);
@@ -205,7 +205,7 @@
             // 
             this.filterApply_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.filterApply_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filterApply_button.Location = new System.Drawing.Point(189, 3);
+            this.filterApply_button.Location = new System.Drawing.Point(199, 3);
             this.filterApply_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.filterApply_button.Name = "filterApply_button";
             this.filterApply_button.Size = new System.Drawing.Size(58, 27);
@@ -222,7 +222,7 @@
             this.filter_textBox.Location = new System.Drawing.Point(44, 6);
             this.filter_textBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.filter_textBox.Name = "filter_textBox";
-            this.filter_textBox.Size = new System.Drawing.Size(141, 23);
+            this.filter_textBox.Size = new System.Drawing.Size(151, 23);
             this.filter_textBox.TabIndex = 5;
             this.filter_textBox.Text = "*.*";
             this.filter_textBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this._Filter_TextBox_KeyDown);
@@ -252,7 +252,7 @@
             this.legend_tableLayoutPanel.RowCount = 2;
             this.legend_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.legend_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.legend_tableLayoutPanel.Size = new System.Drawing.Size(304, 52);
+            this.legend_tableLayoutPanel.Size = new System.Drawing.Size(314, 52);
             this.legend_tableLayoutPanel.TabIndex = 3;
             // 
             // noEditorKey_label
@@ -263,7 +263,7 @@
             this.noEditorKey_label.Location = new System.Drawing.Point(2, 0);
             this.noEditorKey_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.noEditorKey_label.Name = "noEditorKey_label";
-            this.noEditorKey_label.Size = new System.Drawing.Size(300, 26);
+            this.noEditorKey_label.Size = new System.Drawing.Size(310, 26);
             this.noEditorKey_label.TabIndex = 4;
             this.noEditorKey_label.Text = "File has no editor";
             this.noEditorKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -276,7 +276,7 @@
             this.backupKey_label.Location = new System.Drawing.Point(2, 26);
             this.backupKey_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.backupKey_label.Name = "backupKey_label";
-            this.backupKey_label.Size = new System.Drawing.Size(300, 26);
+            this.backupKey_label.Size = new System.Drawing.Size(310, 26);
             this.backupKey_label.TabIndex = 0;
             this.backupKey_label.Text = "File is patched out";
             this.backupKey_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -293,7 +293,7 @@
             this._files_fileTreeView.Location = new System.Drawing.Point(2, 36);
             this._files_fileTreeView.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._files_fileTreeView.Name = "_files_fileTreeView";
-            this._files_fileTreeView.Size = new System.Drawing.Size(303, 637);
+            this._files_fileTreeView.Size = new System.Drawing.Size(313, 637);
             this._files_fileTreeView.TabIndex = 1;
             this._files_fileTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterCheck);
             this._files_fileTreeView.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(this._FilesTreeView_AfterCollapse);
@@ -303,10 +303,12 @@
             // 
             // _selectedFile_groupBox
             // 
+            this._selectedFile_groupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this._selectedFile_groupBox.Controls.Add(this._files_listView);
             this._selectedFile_groupBox.Location = new System.Drawing.Point(4, 3);
             this._selectedFile_groupBox.Name = "_selectedFile_groupBox";
-            this._selectedFile_groupBox.Size = new System.Drawing.Size(531, 157);
+            this._selectedFile_groupBox.Size = new System.Drawing.Size(549, 157);
             this._selectedFile_groupBox.TabIndex = 6;
             this._selectedFile_groupBox.TabStop = false;
             this._selectedFile_groupBox.Text = "Selected File Details (Right Click for Options (TODO))";
@@ -329,7 +331,7 @@
             this._files_listView.Location = new System.Drawing.Point(5, 22);
             this._files_listView.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._files_listView.Name = "_files_listView";
-            this._files_listView.Size = new System.Drawing.Size(521, 129);
+            this._files_listView.Size = new System.Drawing.Size(539, 129);
             this._files_listView.TabIndex = 5;
             this._files_listView.UseCompatibleStateImageBehavior = false;
             this._files_listView.View = System.Windows.Forms.View.Details;
@@ -361,6 +363,8 @@
             // 
             // _fileActions_groupBox
             // 
+            this._fileActions_groupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this._fileActions_groupBox.Controls.Add(this._indexFiles_label);
             this._fileActions_groupBox.Controls.Add(this._indexFiles_listBox);
             this._fileActions_groupBox.Controls.Add(this._startProcess_button);
@@ -371,7 +375,7 @@
             this._fileActions_groupBox.Controls.Add(this._fileActionsPatch_checkBox);
             this._fileActions_groupBox.Location = new System.Drawing.Point(4, 166);
             this._fileActions_groupBox.Name = "_fileActions_groupBox";
-            this._fileActions_groupBox.Size = new System.Drawing.Size(531, 289);
+            this._fileActions_groupBox.Size = new System.Drawing.Size(549, 289);
             this._fileActions_groupBox.TabIndex = 5;
             this._fileActions_groupBox.TabStop = false;
             this._fileActions_groupBox.Text = "Checked File Actions";
@@ -417,7 +421,7 @@
             // _fileActionsBrowse_button
             // 
             this._fileActionsBrowse_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._fileActionsBrowse_button.Location = new System.Drawing.Point(450, 49);
+            this._fileActionsBrowse_button.Location = new System.Drawing.Point(468, 49);
             this._fileActionsBrowse_button.Name = "_fileActionsBrowse_button";
             this._fileActionsBrowse_button.Size = new System.Drawing.Size(75, 23);
             this._fileActionsBrowse_button.TabIndex = 3;
@@ -431,7 +435,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._fileActionsPath_textBox.Location = new System.Drawing.Point(7, 49);
             this._fileActionsPath_textBox.Name = "_fileActionsPath_textBox";
-            this._fileActionsPath_textBox.Size = new System.Drawing.Size(437, 23);
+            this._fileActionsPath_textBox.Size = new System.Drawing.Size(455, 23);
             this._fileActionsPath_textBox.TabIndex = 2;
             // 
             // _fileActionsExtract_checkBox
@@ -464,7 +468,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox3.Size = new System.Drawing.Size(533, 98);
+            this.groupBox3.Size = new System.Drawing.Size(551, 98);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cooking";
@@ -475,8 +479,8 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.93525F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.06475F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161F));
+            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.Controls.Add(this.uncook_button, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.cook_label, 1, 0);
             this.tableLayoutPanel4.Controls.Add(this.cook_button, 0, 1);
@@ -487,17 +491,18 @@
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(538, 70);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(556, 70);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // uncook_button
             // 
-            this.uncook_button.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uncook_button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.uncook_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uncook_button.Location = new System.Drawing.Point(2, 3);
             this.uncook_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.uncook_button.Name = "uncook_button";
-            this.uncook_button.Size = new System.Drawing.Size(162, 29);
+            this.uncook_button.Size = new System.Drawing.Size(157, 29);
             this.uncook_button.TabIndex = 0;
             this.uncook_button.Text = "Uncook";
             this.uncook_button.UseVisualStyleBackColor = true;
@@ -508,10 +513,10 @@
             this.cook_label.AutoSize = true;
             this.cook_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cook_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cook_label.Location = new System.Drawing.Point(168, 0);
+            this.cook_label.Location = new System.Drawing.Point(163, 0);
             this.cook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.cook_label.Name = "cook_label";
-            this.cook_label.Size = new System.Drawing.Size(368, 35);
+            this.cook_label.Size = new System.Drawing.Size(391, 35);
             this.cook_label.TabIndex = 1;
             this.cook_label.Text = "Uncook checked file/folders that can be uncooked.\r\nThey will be placed in their a" +
                 "pplicable \\data\\ location.";
@@ -519,12 +524,13 @@
             // 
             // cook_button
             // 
-            this.cook_button.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cook_button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.cook_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cook_button.Location = new System.Drawing.Point(2, 38);
             this.cook_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cook_button.Name = "cook_button";
-            this.cook_button.Size = new System.Drawing.Size(162, 29);
+            this.cook_button.Size = new System.Drawing.Size(157, 29);
             this.cook_button.TabIndex = 2;
             this.cook_button.Text = "Cook";
             this.cook_button.UseVisualStyleBackColor = true;
@@ -535,10 +541,10 @@
             this.uncook_label.AutoSize = true;
             this.uncook_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.uncook_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uncook_label.Location = new System.Drawing.Point(168, 35);
+            this.uncook_label.Location = new System.Drawing.Point(163, 35);
             this.uncook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.uncook_label.Name = "uncook_label";
-            this.uncook_label.Size = new System.Drawing.Size(368, 35);
+            this.uncook_label.Size = new System.Drawing.Size(391, 35);
             this.uncook_label.TabIndex = 3;
             this.uncook_label.Text = "Cook checked files/folders that can be cooked.\r\nWARNING: Cooked files will be pla" +
                 "ced in \\data\\ location overwriting previous versions.\r\n(files in .dat will be un" +
@@ -555,7 +561,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox2.Size = new System.Drawing.Size(534, 154);
+            this.groupBox2.Size = new System.Drawing.Size(552, 154);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
@@ -566,8 +572,8 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.options_tableLayoutPanel.ColumnCount = 2;
-            this.options_tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.99548F));
-            this.options_tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.00452F));
+            this.options_tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 161F));
+            this.options_tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.options_tableLayoutPanel.Controls.Add(this.revertFile_label, 1, 3);
             this.options_tableLayoutPanel.Controls.Add(this.extractPatch_label, 1, 1);
             this.options_tableLayoutPanel.Controls.Add(this.extract_label, 1, 0);
@@ -580,12 +586,11 @@
             this.options_tableLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.options_tableLayoutPanel.Name = "options_tableLayoutPanel";
             this.options_tableLayoutPanel.RowCount = 4;
-            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.options_tableLayoutPanel.Size = new System.Drawing.Size(535, 125);
+            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.options_tableLayoutPanel.Size = new System.Drawing.Size(553, 125);
             this.options_tableLayoutPanel.TabIndex = 1;
             // 
             // revertFile_label
@@ -593,10 +598,10 @@
             this.revertFile_label.AutoSize = true;
             this.revertFile_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.revertFile_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.revertFile_label.Location = new System.Drawing.Point(167, 93);
+            this.revertFile_label.Location = new System.Drawing.Point(163, 93);
             this.revertFile_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.revertFile_label.Name = "revertFile_label";
-            this.revertFile_label.Size = new System.Drawing.Size(366, 32);
+            this.revertFile_label.Size = new System.Drawing.Size(388, 32);
             this.revertFile_label.TabIndex = 9;
             this.revertFile_label.Text = "Re-Patch necessary index files to have the game to load original unmodified check" +
                 "ed files/folders.";
@@ -607,10 +612,10 @@
             this.extractPatch_label.AutoSize = true;
             this.extractPatch_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extractPatch_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.extractPatch_label.Location = new System.Drawing.Point(167, 31);
+            this.extractPatch_label.Location = new System.Drawing.Point(163, 31);
             this.extractPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extractPatch_label.Name = "extractPatch_label";
-            this.extractPatch_label.Size = new System.Drawing.Size(366, 31);
+            this.extractPatch_label.Size = new System.Drawing.Size(388, 31);
             this.extractPatch_label.TabIndex = 5;
             this.extractPatch_label.Text = "Extract checked files/folders to game data location, then patch necessary index f" +
                 "iles forcing the game to load extracted files.\r\nNote: Non-patchable files (e.g. " +
@@ -622,24 +627,23 @@
             this.extract_label.AutoSize = true;
             this.extract_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extract_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.extract_label.Location = new System.Drawing.Point(167, 0);
+            this.extract_label.Location = new System.Drawing.Point(163, 0);
             this.extract_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extract_label.Name = "extract_label";
-            this.extract_label.Size = new System.Drawing.Size(366, 31);
+            this.extract_label.Size = new System.Drawing.Size(388, 31);
             this.extract_label.TabIndex = 4;
             this.extract_label.Text = "Extract checked files/folders to a selected location.";
             this.extract_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // extract_button
             // 
-            this.extract_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.extract_button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.extract_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.extract_button.Location = new System.Drawing.Point(2, 3);
             this.extract_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.extract_button.Name = "extract_button";
-            this.extract_button.Size = new System.Drawing.Size(161, 25);
+            this.extract_button.Size = new System.Drawing.Size(157, 25);
             this.extract_button.TabIndex = 2;
             this.extract_button.Text = "Extract to...";
             this.extract_button.UseVisualStyleBackColor = true;
@@ -647,14 +651,13 @@
             // 
             // extractPatch_button
             // 
-            this.extractPatch_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.extractPatch_button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.extractPatch_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.extractPatch_button.Location = new System.Drawing.Point(2, 34);
             this.extractPatch_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.extractPatch_button.Name = "extractPatch_button";
-            this.extractPatch_button.Size = new System.Drawing.Size(161, 25);
+            this.extractPatch_button.Size = new System.Drawing.Size(157, 25);
             this.extractPatch_button.TabIndex = 1;
             this.extractPatch_button.Text = "Extract and Patch Index";
             this.extractPatch_button.UseVisualStyleBackColor = true;
@@ -662,14 +665,13 @@
             // 
             // packPatch_button
             // 
-            this.packPatch_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.packPatch_button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.packPatch_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.packPatch_button.Location = new System.Drawing.Point(2, 65);
             this.packPatch_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.packPatch_button.Name = "packPatch_button";
-            this.packPatch_button.Size = new System.Drawing.Size(161, 25);
+            this.packPatch_button.Size = new System.Drawing.Size(157, 25);
             this.packPatch_button.TabIndex = 6;
             this.packPatch_button.Text = "Pack and Patch Custom Dat";
             this.packPatch_button.UseVisualStyleBackColor = true;
@@ -679,10 +681,10 @@
             this.packPatch_label.AutoSize = true;
             this.packPatch_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.packPatch_label.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.packPatch_label.Location = new System.Drawing.Point(167, 62);
+            this.packPatch_label.Location = new System.Drawing.Point(163, 62);
             this.packPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.packPatch_label.Name = "packPatch_label";
-            this.packPatch_label.Size = new System.Drawing.Size(366, 31);
+            this.packPatch_label.Size = new System.Drawing.Size(388, 31);
             this.packPatch_label.TabIndex = 7;
             this.packPatch_label.Text = "Pack checked files/folders into a custom dat/idx to have the game load the files " +
                 "from an isolated .dat.";
@@ -690,14 +692,13 @@
             // 
             // revertFile_button
             // 
-            this.revertFile_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.revertFile_button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.revertFile_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.revertFile_button.Location = new System.Drawing.Point(2, 96);
             this.revertFile_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.revertFile_button.Name = "revertFile_button";
-            this.revertFile_button.Size = new System.Drawing.Size(161, 26);
+            this.revertFile_button.Size = new System.Drawing.Size(157, 26);
             this.revertFile_button.TabIndex = 8;
             this.revertFile_button.Text = "Revert and Restore";
             this.revertFile_button.UseVisualStyleBackColor = true;
@@ -885,12 +886,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(872, 768);
+            this.ClientSize = new System.Drawing.Size(900, 768);
             this.ControlBox = false;
             this.Controls.Add(this.tabControl1);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FileExplorer";
             this.Text = "Hellgate File Explorer";
             this.Shown += new System.EventHandler(this.FileExplorer_Shown);
