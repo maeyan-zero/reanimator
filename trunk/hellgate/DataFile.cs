@@ -546,6 +546,7 @@ namespace Hellgate
             {"PLAYER_EVENT_BUFF", new DataFileAttributes {RowType = typeof(PlayerEventBuffBeta)}},
             {"PLAYERRANKS", new DataFileAttributes {RowType = typeof(PlayerRanksBeta)}},
             {"PLAYERS", new DataFileAttributes {RowType = typeof(ItemsBeta), HasStats = true}},
+            {"PLAYERLEVELS", new DataFileAttributes {RowType = typeof(PlayerLevelsBeta), HasScriptTable = true}},
             {"PROPS", new DataFileAttributes {RowType = typeof(LevelsRoomIndexBeta)}},
             {"PVP", new DataFileAttributes {RowType = typeof(PvpBeta)}},
             {"PVP_ENTRY_CONDITION", new DataFileAttributes {FileName = "PVP_ENTRY CONDITION", RowType = typeof(PvpEntryConditionBeta)}},
