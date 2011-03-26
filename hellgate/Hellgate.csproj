@@ -210,6 +210,7 @@
     <Compile Include="Excel\JapaneseBeta\ObjectTriggers.cs" />
     <Compile Include="Excel\JapaneseBeta\PlayerCondition.cs" />
     <Compile Include="Excel\JapaneseBeta\PlayerEventBuff.cs" />
+    <Compile Include="Excel\JapaneseBeta\PlayerLevels.cs" />
     <Compile Include="Excel\JapaneseBeta\PlayerRanks.cs" />
     <Compile Include="Excel\JapaneseBeta\Pvp.cs" />
     <Compile Include="Excel\JapaneseBeta\PvpEntryCondition.cs" />

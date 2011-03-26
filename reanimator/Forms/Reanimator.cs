@@ -674,7 +674,7 @@ namespace Reanimator.Forms
             progressForm.SetCurrentItemText("Loading File Manager...");
             _fileManager = new FileManager(Config.HglDir, false);
 
-            foreach (IndexFile file in _fileManager.IndexFiles) file.BeginDatReading();
+            foreach (PackFile file in _fileManager.IndexFiles) file.BeginDatReading();
 
             progressForm.SetCurrentItemText("Loading Excel and Strings Tables...");
             if (!_fileManager.LoadTableFiles())
