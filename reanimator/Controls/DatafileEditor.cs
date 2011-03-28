@@ -280,7 +280,6 @@ namespace Reanimator.Controls
             }
         }
 
-
         public void Import()
         {
             OpenFileDialog fileDialog = new OpenFileDialog()
@@ -427,8 +426,6 @@ namespace Reanimator.Controls
             // dr[nud.Name] = (cb.CheckState == CheckState.Checked ? 1 : 0);
         }
 
-
-
         private static void _UpdateCheckedListBox(CheckedListBox clb, DataRow dr, DataColumn dc)
         {
             uint value = (uint)dr[dc];
@@ -479,9 +476,11 @@ namespace Reanimator.Controls
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button1.Location = new System.Drawing.Point(382, 147);
+            this.button1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button1.Location = new System.Drawing.Point(384, 151);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(12, 89);
+            this.button1.Size = new System.Drawing.Size(10, 50);
             this.button1.TabIndex = 1;
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this._ToggleRowView);
@@ -492,7 +491,6 @@ namespace Reanimator.Controls
             this._tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tableData_DataGridView.Location = new System.Drawing.Point(0, 0);
             this._tableData_DataGridView.Name = "_tableData_DataGridView";
-            this._tableData_DataGridView.ReadOnly = true;
             this._tableData_DataGridView.Size = new System.Drawing.Size(395, 353);
             this._tableData_DataGridView.TabIndex = 0;
             this._tableData_DataGridView.SelectionChanged += new System.EventHandler(this._tableData_DataGridView_SelectionChanged);

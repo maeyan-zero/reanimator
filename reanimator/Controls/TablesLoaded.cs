@@ -14,9 +14,9 @@ namespace Reanimator.Controls
     public partial class TablesLoaded : UserControl
     {
         private readonly FileManager _fileManager;
-        private ExcelTableForm _excelTableForm;
+        private TableEditorForm _excelTableForm;
 
-        public TablesLoaded(FileManager fileManager, ExcelTableForm excelTableForm)
+        public TablesLoaded(FileManager fileManager, TableEditorForm excelTableForm)
         {
             InitializeComponent();
 
@@ -36,7 +36,7 @@ namespace Reanimator.Controls
 
             if (_excelTableForm == null || _excelTableForm.IsDisposed)
             {
-                _excelTableForm = new ExcelTableForm(_fileManager) { };
+                _excelTableForm = new TableEditorForm(_fileManager) { };
             }
 
             bool isOpen = _excelTableForm.IsTabOpen(item.Key);

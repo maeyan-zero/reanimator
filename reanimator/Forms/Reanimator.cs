@@ -16,11 +16,11 @@ namespace Reanimator.Forms
         private FileExplorer  _fileExplorer;
         private FileManager _fileManager;
         private FileManager _fileManagerTCv4;
-        private ExcelTableForm _excelTableForm;
-        private ExcelTableForm _excelTableFormTCv4;
+        private TableEditorForm _excelTableForm;
+        private TableEditorForm _excelTableFormTCv4;
         private Options _optionsForm;
         private readonly List<TableForm> _openTableForms = new List<TableForm>();
-        private readonly List<ExcelTableForm> _openExcelTableForms = new List<ExcelTableForm>();
+        private readonly List<TableEditorForm> _openExcelTableForms = new List<TableEditorForm>();
         private List<HeroEditor> _openHeroEditorForms = new List<HeroEditor>();
         private const bool AlexInstaLoad = false;
 
@@ -679,7 +679,7 @@ namespace Reanimator.Forms
                     progressForm.SetLoadingText("Initializing Reanimator subsystems...");
                     progressForm.Disposed += delegate
                     {
-                        _excelTableForm = new ExcelTableForm(_fileManager) { MdiParent = this };
+                        _excelTableForm = new TableEditorForm(_fileManager) { MdiParent = this };
                         _excelTableForm.Show();
                     };
                     progressForm.Show(this);
@@ -946,7 +946,7 @@ namespace Reanimator.Forms
         {
             if (_excelTableForm == null || _excelTableForm.IsDisposed)
             {
-                _excelTableForm = new ExcelTableForm(_fileManager) { MdiParent = this };
+                _excelTableForm = new TableEditorForm(_fileManager) { MdiParent = this };
             }
 
             _excelTableForm.Show();
@@ -975,9 +975,9 @@ namespace Reanimator.Forms
             options.ShowDialog(this);
         }
 
-        private void tablesListToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveAsToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            _excelTableForm.ToggleTablesLoadedView();
+
         }
 
 
