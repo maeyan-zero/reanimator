@@ -36,5 +36,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView _tableData_DataGridView;
         private System.Windows.Forms.TableLayoutPanel rows_LayoutPanel;
+        private System.Windows.Forms.Button button1;
     }
 }

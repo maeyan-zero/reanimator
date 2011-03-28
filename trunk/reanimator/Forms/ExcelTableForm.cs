@@ -31,6 +31,11 @@ namespace Reanimator.Forms
             splitContainer2.Panel1.Controls.Add(_tablesLoaded);
         }
 
+        public void ToggleTablesLoadedView()
+        {
+             splitContainer1.Panel1Collapsed = !splitContainer1.Panel1Collapsed;
+        }
+
         /// <summary>
         /// Checks if the excel table is already open.
         /// </summary>
