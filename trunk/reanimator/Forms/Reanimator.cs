@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.IO;
 using Hellgate;
 using Revival.Common;
+using Reanimator.Properties;
 
 namespace Reanimator.Forms
 {
@@ -26,7 +27,7 @@ namespace Reanimator.Forms
         public Reanimator()
         {
             InitializeComponent();
-            //setIcon();
+            setIcon();
 
             #region alexs_stuff
             //Config.HglDir = @"D:\Games\Hellgate";
@@ -173,39 +174,32 @@ namespace Reanimator.Forms
         private void setIcon()
         {
             OperatingSystem osInfo = Environment.OSVersion;
-            string pathName = "Resources.icon2";
+            Icon pathName = Resources.icon2;
 
-            switch(osInfo.Platform)
-             {
-               case PlatformID.Win32NT:
-                {
-                    switch(osInfo.Version.Major)
+            switch (osInfo.Platform)
+            {
+                case PlatformID.Win32NT:
                     {
-                        case 5:
+                        switch (osInfo.Version.Major)
                         {
-                            // 5 = XP/2000/2003 server edition
-                            pathName = "Resources.icon1";
-                            break;
-                        }
+                            case 5:
+                                {
+                                    // 5 = XP/2000/2003 server edition
+                                    pathName = Resources.icon1;
+                                    break;
+                                }
 
-                        case 6:
-                        {
-                            // 6 = Vista
-                            pathName = "Resources.icon2";
-                            break;
+                            case 6:
+                                {
+                                    // 6 = Vista
+                                    pathName = Resources.icon2;
+                                    break;
+                                }
                         }
-
-                        case 7:
-                        {
-                            // 7 = Windows 7
-                             pathName = "Resources.icon2";
-                             break;
-                        }
+                        break;
                     }
-                    break;
-                }
             }
-            System.Drawing.Icon ico = new System.Drawing.Icon(pathName);
+            System.Drawing.Icon ico = pathName;
             this.Icon = ico;
         }
         
