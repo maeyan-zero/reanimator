@@ -10,6 +10,5 @@ namespace Reanimator
         void SaveButton();
         void Import();
         void Export();
-        void CloseTab();
     }
 }

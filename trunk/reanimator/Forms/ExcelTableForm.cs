@@ -1,39 +1,35 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Reflection;
-using System.IO;
 using Hellgate;
-using Revival.Common;
 using Reanimator.Controls;
 
 namespace Reanimator.Forms
 {
-    public partial class ExcelTableForm : Form, IMdiChildBase
+    public partial class TableEditorForm : Form, IMdiChildBase
     {
-        readonly FileManager _fileManager;
+        private readonly FileManager _fileManager;
         private TablesLoaded _tablesLoaded;
 
-        public ExcelTableForm(FileManager fileManager)
+        /// <summary>
+        /// The form constructor.
+        /// </summary>
+        /// <param name="fileManager">Requires initialized Hellgate.FileManager</param>
+        public TableEditorForm(FileManager fileManager)
         {
             _fileManager = fileManager;
-            InitializeComponent();
+            _InitializeComponent();
             _CreateTablesList();
         }
 
+        /// <summary>
+        /// Creates the list of tables and opens the table in a new tab when double clicked.
+        /// </summary>
         private void _CreateTablesList()
         {
             _tablesLoaded = new TablesLoaded(_fileManager, this) { Dock = DockStyle.Fill };
-            splitContainer2.Panel1.Controls.Add(_tablesLoaded);
-        }
-
-        public void ToggleTablesLoadedView()
-        {
-             splitContainer1.Panel1Collapsed = !splitContainer1.Panel1Collapsed;
+            _splitContainer2.Panel1.Controls.Add(_tablesLoaded);
         }
 
         /// <summary>
@@ -43,8 +39,8 @@ namespace Reanimator.Forms
         /// <returns>true if control is open</returns>
         public bool IsTabOpen(string id)
         {
-            return (from TabPage tab in tabControl.TabPages
-                    where tab.Text == id
+            return (from TabPage tab in _tabControl.TabPages
+                    where tab.Name == id
                     select tab).Any();
         }
 
@@ -54,7 +50,7 @@ namespace Reanimator.Forms
         /// <param name="id">string id associate with the datatable</param>
         public void FocusTabPage(string id)
         {
-            tabControl.SelectTab(id);
+            _tabControl.SelectTab(id);
         }
 
         /// <summary>
@@ -65,7 +61,7 @@ namespace Reanimator.Forms
         {
             DataFile dataFile = _fileManager.GetDataFile(id);
             DatafileEditor editor = new DatafileEditor(dataFile, _fileManager) { Dock = DockStyle.Fill };
-            TabPage tabPage = new TabPage(id) { Parent = tabControl, Name = id };
+            TabPage tabPage = new TabPage(id) { Parent = _tabControl, Name = id };
 
             ProgressForm progress = new ProgressForm(editor.InitThreadedComponents, null);
             progress.SetStyle(ProgressBarStyle.Marquee);
@@ -73,37 +69,75 @@ namespace Reanimator.Forms
             progress.SetCurrentItemText(String.Empty);
             progress.ShowDialog(this);
 
-            tabControl.SuspendLayout();
+            _tabControl.SuspendLayout();
             tabPage.Controls.Add(editor);
-            tabControl.ResumeLayout();
+            _tabControl.ResumeLayout();
         }
 
+        /// <summary>
+        /// Saves the current document in serialized format.
+        /// </summary>
         public void SaveButton()
         {
-            ((DatafileEditor)tabControl.SelectedTab.Controls[0]).SaveButton();
+            if (_tabControl.SelectedTab == null) return;
+            ((DatafileEditor)_tabControl.SelectedTab.Controls[0]).SaveButton();
         }
 
+        /// <summary>
+        /// Imports a text document into this table.
+        /// </summary>
         public void Import()
         {
-            ((DatafileEditor)tabControl.SelectedTab.Controls[0]).Import();
+            if (_tabControl.SelectedTab == null) return;
+            ((DatafileEditor)_tabControl.SelectedTab.Controls[0]).Import();
         }
 
+        /// <summary>
+        /// Exports the table as a text document.
+        /// </summary>
         public void Export()
         {
-            ((DatafileEditor)tabControl.SelectedTab.Controls[0]).Export();
+            if (_tabControl.SelectedTab == null) return;
+            ((DatafileEditor)_tabControl.SelectedTab.Controls[0]).Export();
         }
 
-        public void CloseTab()
+        /// <summary>
+        /// Closes the current tab.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _closeTabButton_Click(object sender, EventArgs e)
         {
-            tabControl.TabPages.Remove(tabControl.SelectedTab);
+            if (_tabControl.SelectedTab == null) return;
+            _tabControl.TabPages.Remove(_tabControl.SelectedTab);
         }
 
-        private void closeTabButton_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Hides or Shows the list of tables.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _tableViewToggleButton_Click(object sender, EventArgs e)
         {
-            if (tabControl.SelectedTab == null) return;
-            tabControl.TabPages.Remove(tabControl.SelectedTab);
+            _splitContainer1.Panel1Collapsed = !_splitContainer1.Panel1Collapsed;
         }
+
+        /// <summary>
+        /// Reloads the current tab.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _reloadTableButton_Click(object sender, EventArgs e)
+        {
+            // TODO: this doesn't work
+            if (_tabControl.SelectedTab == null) return;
+            string id = _tabControl.SelectedTab.Name;
+            _tabControl.SuspendLayout();
+            _tabControl.TabPages.Remove(_tabControl.SelectedTab);
+            this.CreateTab(id);
+            this.FocusTabPage(id);
+            _tabControl.ResumeLayout();
+        }
+
     }
-
-
 }
