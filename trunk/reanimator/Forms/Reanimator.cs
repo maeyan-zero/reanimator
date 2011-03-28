@@ -12,11 +12,11 @@ namespace Reanimator.Forms
 {
     public partial class Reanimator : Form
     {
-        private FileExplorer _fileExplorer;
-        private TablesLoaded _tablesLoaded;
-        private TablesLoaded _tablesLoadedTCv4;
+        private FileExplorer  _fileExplorer;
         private FileManager _fileManager;
         private FileManager _fileManagerTCv4;
+        private ExcelTableForm _excelTableForm;
+        private ExcelTableForm _excelTableFormTCv4;
         private Options _optionsForm;
         private readonly List<TableForm> _openTableForms = new List<TableForm>();
         private readonly List<ExcelTableForm> _openExcelTableForms = new List<ExcelTableForm>();
@@ -26,7 +26,7 @@ namespace Reanimator.Forms
         public Reanimator()
         {
             InitializeComponent();
-            setIcon();
+            //setIcon();
 
             #region alexs_stuff
             //Config.HglDir = @"D:\Games\Hellgate";
@@ -685,21 +685,12 @@ namespace Reanimator.Forms
                     progressForm.SetLoadingText("Initializing Reanimator subsystems...");
                     progressForm.Disposed += delegate
                     {
-                        _fileExplorer.MdiParent = this;
-                        _fileExplorer.Show();
-
-                        _tablesLoaded.MdiParent = this;
-                        _tablesLoaded.Bounds = new Rectangle(_fileExplorer.Size.Width + 10, 0, 300, 350);
-                        _tablesLoaded.Text = "Hellgate Tables Loaded [" + _fileManager.DataFiles.Count + "]";
-                        _tablesLoaded.Show();
-
-                        if (_tablesLoadedTCv4 != null)
-                        {
-                            _tablesLoadedTCv4.MdiParent = this;
-                            _tablesLoadedTCv4.Bounds = new Rectangle(_fileExplorer.Size.Width + 10, 350 + 10, 300, 350);
-                            _tablesLoadedTCv4.Text = "Hellgate TCv4 Tables Loaded [" + _fileManagerTCv4.DataFiles.Count + "]";
-                            _tablesLoadedTCv4.Show();
-                        }
+                        //_fileExplorer.MdiParent = this;
+                        //_fileExplorer.Show();
+                        _excelTableForm.MdiParent = this;
+                        _excelTableForm.MaximizeBox = true;
+                        _excelTableForm.Show();
+                        
 
                         XmlCookedFile.Initialize(_fileManager);
                     };
@@ -727,16 +718,17 @@ namespace Reanimator.Forms
                                 MessageBoxIcon.Error);
             }
 
-            progressForm.SetCurrentItemText("Loading Table View...");
-            _tablesLoaded = new TablesLoaded(_fileManager);
-
             if (!Config.LoadTCv4DataFiles)
             {
-                progressForm.SetCurrentItemText("Loading File Explorer...");
-                _fileExplorer = new FileExplorer(_fileManager, null);
+                //progressForm.SetCurrentItemText("Loading File Explorer...");
+                //_fileExplorer = new FileExplorer(_fileManager, null);
+
+                // Load Table Editor instead
+                progressForm.SetCurrentItemText("Loading Table Editor...");
+                _excelTableForm = new ExcelTableForm(_fileManager);
+
                 return;
             }
-
 
             progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
             _fileManagerTCv4 = new FileManager(Config.HglDir, true);
@@ -748,11 +740,10 @@ namespace Reanimator.Forms
                                 MessageBoxIcon.Error);
             }
 
-            progressForm.SetCurrentItemText("Loading TCv4 Table View...");
-            _tablesLoadedTCv4 = new TablesLoaded(_fileManagerTCv4);
-
             progressForm.SetCurrentItemText("Loading File Explorer...");
             _fileExplorer = new FileExplorer(_fileManager, _fileManagerTCv4);
+
+
 
             foreach (IndexFile file in _fileManager.IndexFiles) file.EndDatAccess();
         }
@@ -794,15 +785,16 @@ namespace Reanimator.Forms
         {
             try
             {
-                if (showExcelTablesToolStripMenuItem.Checked)
-                {
-                    _tablesLoaded.Location = new Point(0, 0);
-                    _tablesLoaded.Show();
-                }
-                else
-                {
-                    _tablesLoaded.Hide();
-                }
+                // todo: map to new control
+                //if (showExcelTablesToolStripMenuItem.Checked)
+                //{
+                //    _tablesLoaded.Location = new Point(0, 0);
+                //    _tablesLoaded.Show();
+                //}
+                //else
+                //{
+                //    _tablesLoaded.Hide();
+                //}
             }
             catch (Exception ex)
             {
@@ -944,6 +936,17 @@ namespace Reanimator.Forms
 
             //        File.WriteAllBytes(path + filename, buffer);
             //    }
+        }
+
+        private void excelTableEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_excelTableForm == null || _excelTableForm.IsDisposed)
+            {
+                _excelTableForm = new ExcelTableForm(_fileManager) { MdiParent = this };
+            }
+
+            _excelTableForm.Show();
+            _excelTableForm.Focus();
         }
 
         //private void _ConvertTestCenterFiles(ProgressForm progress, object obj)

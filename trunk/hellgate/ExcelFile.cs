@@ -157,12 +157,12 @@ namespace Hellgate
         /// </summary>
         /// <param name="csvBytes">The CSV file as a byte array.</param>
         /// <returns>True if the buffer parsed okay.</returns>
-        public override sealed bool ParseCSV(byte[] csvBytes)
+        public bool ParseCSV(byte[] csvBytes)
         {
             return (csvBytes != null && ParseCSV(csvBytes, null));
         }
 
-        public bool ParseCSV(byte[] csvBytes, FileManager fileManager)
+        public override bool ParseCSV(byte[] csvBytes, FileManager fileManager)
         {
             if (csvBytes == null) return false;
             if (fileManager != null && fileManager.DataFiles.Count == 0) fileManager = null;
