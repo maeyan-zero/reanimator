@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Revival.Common
 {
@@ -108,6 +109,16 @@ namespace Revival.Common
             }
 
             return false;
+        }
+    }
+
+    public static class ExtensionMethods
+    {
+        public static void DoubleBuffered(this Object dgv, bool setting)
+        {
+            Type dgvType = dgv.GetType();
+            PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            pi.SetValue(dgv, setting, null);
         }
     }
 }

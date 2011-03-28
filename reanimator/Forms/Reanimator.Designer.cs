@@ -49,7 +49,7 @@
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.statusBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showExcelTablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.scriptEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.clientPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,7 +78,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.excelTableEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -247,8 +247,8 @@
             this.viewMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusBarToolStripMenuItem,
             this.toolStripSeparator1,
-            this.showExcelTablesToolStripMenuItem,
-            this.scriptEditorToolStripMenuItem});
+            this.scriptEditorToolStripMenuItem,
+            this.excelTableEditorToolStripMenuItem});
             this.viewMenu.Name = "viewMenu";
             this.viewMenu.Size = new System.Drawing.Size(44, 20);
             this.viewMenu.Text = "&View";
@@ -259,19 +259,14 @@
             this.statusBarToolStripMenuItem.CheckOnClick = true;
             this.statusBarToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.statusBarToolStripMenuItem.Name = "statusBarToolStripMenuItem";
-            this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.statusBarToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.statusBarToolStripMenuItem.Text = "&Status Bar";
             this.statusBarToolStripMenuItem.Click += new System.EventHandler(this.StatusBarToolStripMenuItem_Click);
             // 
-            // showExcelTablesToolStripMenuItem
+            // toolStripSeparator1
             // 
-            this.showExcelTablesToolStripMenuItem.Checked = true;
-            this.showExcelTablesToolStripMenuItem.CheckOnClick = true;
-            this.showExcelTablesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showExcelTablesToolStripMenuItem.Name = "showExcelTablesToolStripMenuItem";
-            this.showExcelTablesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.showExcelTablesToolStripMenuItem.Text = "&Excel Tables";
-            this.showExcelTablesToolStripMenuItem.Click += new System.EventHandler(this._ShowExcelTablesToolStripMenuItem_Click);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(163, 6);
             // 
             // scriptEditorToolStripMenuItem
             // 
@@ -279,7 +274,7 @@
             this.scriptEditorToolStripMenuItem.CheckOnClick = true;
             this.scriptEditorToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.scriptEditorToolStripMenuItem.Name = "scriptEditorToolStripMenuItem";
-            this.scriptEditorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.scriptEditorToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.scriptEditorToolStripMenuItem.Text = "File Explorer";
             this.scriptEditorToolStripMenuItem.Click += new System.EventHandler(this._ScriptEditorToolStripMenuItem_Click);
             // 
@@ -493,23 +488,26 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel.Text = "Status";
             // 
-            // toolStripSeparator1
+            // excelTableEditorToolStripMenuItem
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.excelTableEditorToolStripMenuItem.CheckOnClick = true;
+            this.excelTableEditorToolStripMenuItem.Name = "excelTableEditorToolStripMenuItem";
+            this.excelTableEditorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.excelTableEditorToolStripMenuItem.Text = "Table Editor";
+            this.excelTableEditorToolStripMenuItem.Click += new System.EventHandler(this.excelTableEditorToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 512);
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized; 
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip;
             this.Name = "Reanimator";
             this.Text = "Reanimator";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this._Reanimator_Load);
             this.ResizeEnd += new System.EventHandler(this._Reanimator_ResizeEnd);
             this.menuStrip.ResumeLayout(false);
@@ -561,7 +559,6 @@
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ToolStripMenuItem clientPatchesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bypassSecurityx64ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showExcelTablesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tradeItemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem searchTablesToolStripMenuItem;
@@ -572,5 +569,6 @@
         private System.Windows.Forms.ToolStripMenuItem convertTCv4FilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSinglePlayerFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem excelTableEditorToolStripMenuItem;
     }
 }

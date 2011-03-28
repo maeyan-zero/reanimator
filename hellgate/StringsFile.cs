@@ -81,7 +81,7 @@ namespace Hellgate
             return HasIntegrity = ((offset == buffer.Length)) ? true : false;
         }
 
-        public override sealed bool ParseCSV(byte[] buffer)
+        public override sealed bool ParseCSV(byte[] buffer, FileManager fileManager = null)
         {
             if ((buffer == null)) return false;
 

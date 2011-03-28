@@ -24,10 +24,10 @@ namespace Hellgate
 
         public override string ToString()
         {
-            return StringId;
+            return StringId; 
         }
         public abstract bool ParseData(byte[] buffer);
-        public abstract bool ParseCSV(byte[] buffer);
+        public abstract bool ParseCSV(byte[] buffer, FileManager fileManager);
         public abstract bool ParseDataTable(DataTable dataTable, FileManager fileManager);
         public abstract byte[] ToByteArray();
         public abstract byte[] ExportCSV(FileManager fileManager);
