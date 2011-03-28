@@ -13,7 +13,7 @@ using Reanimator.Controls;
 
 namespace Reanimator.Forms
 {
-    public partial class ExcelTableForm : Form
+    public partial class ExcelTableForm : Form, IMdiChildBase
     {
         readonly FileManager _fileManager;
         private TablesLoaded _tablesLoaded;
@@ -23,22 +23,12 @@ namespace Reanimator.Forms
             _fileManager = fileManager;
             InitializeComponent();
             _CreateTablesList();
-            //ProgressForm progress = new ProgressForm(_LoadTable, _dataFile);
-            //progress.SetStyle(ProgressBarStyle.Marquee);
-            //progress.SetLoadingText("Generating DataTable...");
-            //progress.SetCurrentItemText(String.Empty);
-            //progress.ShowDialog(this);
         }
 
         private void _CreateTablesList()
         {
             _tablesLoaded = new TablesLoaded(_fileManager, this) { Dock = DockStyle.Fill };
-            splitContainer1.Panel1.Controls.Add(_tablesLoaded);
-        }
-
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            tabControl.TabPages.Remove(tabControl.SelectedTab);
+            splitContainer2.Panel1.Controls.Add(_tablesLoaded);
         }
 
         /// <summary>
@@ -48,7 +38,9 @@ namespace Reanimator.Forms
         /// <returns>true if control is open</returns>
         public bool IsTabOpen(string id)
         {
-            return tabControl.TabPages.ContainsKey(id);
+            return (from TabPage tab in tabControl.TabPages
+                    where tab.Text == id
+                    select tab).Any();
         }
 
         /// <summary>
@@ -57,7 +49,7 @@ namespace Reanimator.Forms
         /// <param name="id">string id associate with the datatable</param>
         public void FocusTabPage(string id)
         {
-            tabControl.SelectedTab = tabControl.TabPages[id];
+            tabControl.SelectTab(id);
         }
 
         /// <summary>
@@ -68,11 +60,43 @@ namespace Reanimator.Forms
         {
             DataFile dataFile = _fileManager.GetDataFile(id);
             DatafileEditor editor = new DatafileEditor(dataFile, _fileManager) { Dock = DockStyle.Fill };
-            TabPage tabPage = new TabPage(id) { Parent = tabControl };
+            TabPage tabPage = new TabPage(id) { Parent = tabControl, Name = id };
+
+            ProgressForm progress = new ProgressForm(editor.InitThreadedComponents, null);
+            progress.SetStyle(ProgressBarStyle.Marquee);
+            progress.SetLoadingText("Generating DataTable...");
+            progress.SetCurrentItemText(String.Empty);
+            progress.ShowDialog(this);
 
             tabControl.SuspendLayout();
             tabPage.Controls.Add(editor);
             tabControl.ResumeLayout();
+        }
+
+        public void SaveButton()
+        {
+            ((DatafileEditor)tabControl.SelectedTab.Controls[0]).SaveButton();
+        }
+
+        public void Import()
+        {
+            ((DatafileEditor)tabControl.SelectedTab.Controls[0]).Import();
+        }
+
+        public void Export()
+        {
+            ((DatafileEditor)tabControl.SelectedTab.Controls[0]).Export();
+        }
+
+        public void CloseTab()
+        {
+            tabControl.TabPages.Remove(tabControl.SelectedTab);
+        }
+
+        private void closeTabButton_Click(object sender, EventArgs e)
+        {
+            if (tabControl.SelectedTab == null) return;
+            tabControl.TabPages.Remove(tabControl.SelectedTab);
         }
     }
 
