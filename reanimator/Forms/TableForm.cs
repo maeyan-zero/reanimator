@@ -7,7 +7,7 @@ using Hellgate;
 
 namespace Reanimator.Forms
 {
-    public partial class TableForm : ThreadedFormBase, IDisposable, IMdiChildBase
+    public partial class TableForm : ThreadedFormBase, IDisposable//, IMdiChildBase
     {
         private readonly PackFile _packFile;
         private List<int> _foundIndices;

@@ -8,5 +8,8 @@ namespace Reanimator
     interface IMdiChildBase
     {
         void SaveButton();
+        void Import();
+        void Export();
+        void CloseTab();
     }
 }

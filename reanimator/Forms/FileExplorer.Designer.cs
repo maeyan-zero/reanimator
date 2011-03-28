@@ -309,7 +309,7 @@
             this._selectedFile_groupBox.Controls.Add(this._files_listView);
             this._selectedFile_groupBox.Location = new System.Drawing.Point(4, 3);
             this._selectedFile_groupBox.Name = "_selectedFile_groupBox";
-            this._selectedFile_groupBox.Size = new System.Drawing.Size(532, 157);
+            this._selectedFile_groupBox.Size = new System.Drawing.Size(515, 157);
             this._selectedFile_groupBox.TabIndex = 6;
             this._selectedFile_groupBox.TabStop = false;
             this._selectedFile_groupBox.Text = "Selected File Details (Right Click for Options (TODO))";
@@ -332,7 +332,7 @@
             this._files_listView.Location = new System.Drawing.Point(5, 22);
             this._files_listView.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._files_listView.Name = "_files_listView";
-            this._files_listView.Size = new System.Drawing.Size(522, 129);
+            this._files_listView.Size = new System.Drawing.Size(505, 129);
             this._files_listView.TabIndex = 5;
             this._files_listView.UseCompatibleStateImageBehavior = false;
             this._files_listView.View = System.Windows.Forms.View.Details;
@@ -376,7 +376,7 @@
             this._fileActions_groupBox.Controls.Add(this._fileActionsPatch_checkBox);
             this._fileActions_groupBox.Location = new System.Drawing.Point(4, 166);
             this._fileActions_groupBox.Name = "_fileActions_groupBox";
-            this._fileActions_groupBox.Size = new System.Drawing.Size(532, 289);
+            this._fileActions_groupBox.Size = new System.Drawing.Size(515, 289);
             this._fileActions_groupBox.TabIndex = 5;
             this._fileActions_groupBox.TabStop = false;
             this._fileActions_groupBox.Text = "Checked File Actions";
@@ -422,7 +422,7 @@
             // _fileActionsBrowse_button
             // 
             this._fileActionsBrowse_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._fileActionsBrowse_button.Location = new System.Drawing.Point(451, 49);
+            this._fileActionsBrowse_button.Location = new System.Drawing.Point(434, 49);
             this._fileActionsBrowse_button.Name = "_fileActionsBrowse_button";
             this._fileActionsBrowse_button.Size = new System.Drawing.Size(75, 23);
             this._fileActionsBrowse_button.TabIndex = 3;
@@ -436,7 +436,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._fileActionsPath_textBox.Location = new System.Drawing.Point(7, 49);
             this._fileActionsPath_textBox.Name = "_fileActionsPath_textBox";
-            this._fileActionsPath_textBox.Size = new System.Drawing.Size(438, 23);
+            this._fileActionsPath_textBox.Size = new System.Drawing.Size(421, 23);
             this._fileActionsPath_textBox.TabIndex = 2;
             // 
             // _fileActionsExtract_checkBox
@@ -469,7 +469,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox3.Size = new System.Drawing.Size(534, 98);
+            this.groupBox3.Size = new System.Drawing.Size(517, 98);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cooking";
@@ -492,7 +492,7 @@
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(539, 70);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(522, 70);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // uncook_button
@@ -517,7 +517,7 @@
             this.cook_label.Location = new System.Drawing.Point(163, 0);
             this.cook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.cook_label.Name = "cook_label";
-            this.cook_label.Size = new System.Drawing.Size(374, 35);
+            this.cook_label.Size = new System.Drawing.Size(357, 35);
             this.cook_label.TabIndex = 1;
             this.cook_label.Text = "Uncook checked file/folders that can be uncooked.\r\nThey will be placed in their a" +
                 "pplicable \\data\\ location.";
@@ -545,7 +545,7 @@
             this.uncook_label.Location = new System.Drawing.Point(163, 35);
             this.uncook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.uncook_label.Name = "uncook_label";
-            this.uncook_label.Size = new System.Drawing.Size(374, 35);
+            this.uncook_label.Size = new System.Drawing.Size(357, 35);
             this.uncook_label.TabIndex = 3;
             this.uncook_label.Text = "Cook checked files/folders that can be cooked.\r\nWARNING: Cooked files will be pla" +
                 "ced in \\data\\ location overwriting previous versions.\r\n(files in .dat will be un" +
@@ -562,7 +562,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox2.Size = new System.Drawing.Size(535, 154);
+            this.groupBox2.Size = new System.Drawing.Size(518, 154);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
@@ -591,7 +591,7 @@
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.options_tableLayoutPanel.Size = new System.Drawing.Size(536, 125);
+            this.options_tableLayoutPanel.Size = new System.Drawing.Size(519, 125);
             this.options_tableLayoutPanel.TabIndex = 1;
             // 
             // revertFile_label
@@ -602,7 +602,7 @@
             this.revertFile_label.Location = new System.Drawing.Point(163, 93);
             this.revertFile_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.revertFile_label.Name = "revertFile_label";
-            this.revertFile_label.Size = new System.Drawing.Size(371, 32);
+            this.revertFile_label.Size = new System.Drawing.Size(354, 32);
             this.revertFile_label.TabIndex = 9;
             this.revertFile_label.Text = "Re-Patch necessary index files to have the game to load original unmodified check" +
                 "ed files/folders.";
@@ -616,7 +616,7 @@
             this.extractPatch_label.Location = new System.Drawing.Point(163, 31);
             this.extractPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extractPatch_label.Name = "extractPatch_label";
-            this.extractPatch_label.Size = new System.Drawing.Size(371, 31);
+            this.extractPatch_label.Size = new System.Drawing.Size(354, 31);
             this.extractPatch_label.TabIndex = 5;
             this.extractPatch_label.Text = "Extract checked files/folders to game data location, then patch necessary index f" +
                 "iles forcing the game to load extracted files.\r\nNote: Non-patchable files (e.g. " +
@@ -631,7 +631,7 @@
             this.extract_label.Location = new System.Drawing.Point(163, 0);
             this.extract_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extract_label.Name = "extract_label";
-            this.extract_label.Size = new System.Drawing.Size(371, 31);
+            this.extract_label.Size = new System.Drawing.Size(354, 31);
             this.extract_label.TabIndex = 4;
             this.extract_label.Text = "Extract checked files/folders to a selected location.";
             this.extract_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -685,7 +685,7 @@
             this.packPatch_label.Location = new System.Drawing.Point(163, 62);
             this.packPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.packPatch_label.Name = "packPatch_label";
-            this.packPatch_label.Size = new System.Drawing.Size(371, 31);
+            this.packPatch_label.Size = new System.Drawing.Size(354, 31);
             this.packPatch_label.TabIndex = 7;
             this.packPatch_label.Text = "Pack checked files/folders into a custom dat/idx to have the game load the files " +
                 "from an isolated .dat.";
@@ -714,7 +714,7 @@
             this.advancedCommands_tabPage.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.advancedCommands_tabPage.Name = "advancedCommands_tabPage";
             this.advancedCommands_tabPage.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.advancedCommands_tabPage.Size = new System.Drawing.Size(892, 740);
+            this.advancedCommands_tabPage.Size = new System.Drawing.Size(892, 666);
             this.advancedCommands_tabPage.TabIndex = 1;
             this.advancedCommands_tabPage.Text = "Advanced Commands";
             // 
@@ -893,7 +893,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "FileExplorer";
-            this.Text = "File Explorer";
+            this.Text = "Hellgate File Explorer";
             this.Shown += new System.EventHandler(this.FileExplorer_Shown);
             this._fileEntry_contextMenu.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);

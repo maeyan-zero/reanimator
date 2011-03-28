@@ -685,14 +685,8 @@ namespace Reanimator.Forms
                     progressForm.SetLoadingText("Initializing Reanimator subsystems...");
                     progressForm.Disposed += delegate
                     {
-                        //_fileExplorer.MdiParent = this;
-                        //_fileExplorer.Show();
-                        _excelTableForm.MdiParent = this;
-                        _excelTableForm.MaximizeBox = true;
+                        _excelTableForm = new ExcelTableForm(_fileManager) { MdiParent = this };
                         _excelTableForm.Show();
-                        
-
-                        XmlCookedFile.Initialize(_fileManager);
                     };
                     progressForm.Show(this);
                 }
@@ -718,14 +712,16 @@ namespace Reanimator.Forms
                                 MessageBoxIcon.Error);
             }
 
+            XmlCookedFile.Initialize(_fileManager);
+
             if (!Config.LoadTCv4DataFiles)
             {
                 //progressForm.SetCurrentItemText("Loading File Explorer...");
                 //_fileExplorer = new FileExplorer(_fileManager, null);
 
                 // Load Table Editor instead
-                progressForm.SetCurrentItemText("Loading Table Editor...");
-                _excelTableForm = new ExcelTableForm(_fileManager);
+                //progressForm.SetCurrentItemText("Loading Table Editor...");
+                //_excelTableForm = new ExcelTableForm(_fileManager) { };
 
                 return;
             }
@@ -872,9 +868,25 @@ namespace Reanimator.Forms
                 + "For more info visit us at: http://www.hellgateaus.net", "Credits", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void _ScriptEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void _FileExplorerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _fileExplorer.Visible = !_fileExplorer.Visible;
+            if (_fileExplorer == null || _fileExplorer.IsDisposed)
+            {
+                ProgressForm progressForm = new ProgressForm(_LoadFileExplorer, null);
+                progressForm.SetStyle(ProgressBarStyle.Marquee);
+                progressForm.SetLoadingText("Initializing File Explorer...");
+                progressForm.SetCurrentItemText("");
+                progressForm.Disposed += delegate
+                {
+                    _fileExplorer.Show();
+                };
+                progressForm.Show(this);
+            }
+        }
+
+        private void _LoadFileExplorer(ProgressForm progress, object obj)
+        {
+            _fileExplorer = new FileExplorer(_fileManager, _fileManagerTCv4);
         }
 
         private void _PatchToolToolStripMenuItem_Click(object sender, EventArgs e)
@@ -947,6 +959,27 @@ namespace Reanimator.Forms
 
             _excelTableForm.Show();
             _excelTableForm.Focus();
+        }
+
+        private void importToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IMdiChildBase mdiChildBase = ActiveMdiChild as IMdiChildBase;
+            if (mdiChildBase == null) return;
+
+            mdiChildBase.Import();
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            IMdiChildBase mdiChildBase = ActiveMdiChild as IMdiChildBase;
+            if (mdiChildBase == null) return;
+
+            mdiChildBase.Export();
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
         //private void _ConvertTestCenterFiles(ProgressForm progress, object obj)
