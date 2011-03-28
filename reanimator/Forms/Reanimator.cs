@@ -714,7 +714,7 @@ namespace Reanimator.Forms
 
             XmlCookedFile.Initialize(_fileManager);
 
-            if (!Config.LoadTCv4DataFiles)
+            if (Config.LoadTCv4DataFiles)
             {
                 //progressForm.SetCurrentItemText("Loading File Explorer...");
                 //_fileExplorer = new FileExplorer(_fileManager, null);
@@ -723,25 +723,23 @@ namespace Reanimator.Forms
                 //progressForm.SetCurrentItemText("Loading Table Editor...");
                 //_excelTableForm = new ExcelTableForm(_fileManager) { };
 
-                return;
+                progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
+                _fileManagerTCv4 = new FileManager(Config.HglDir, true);
+
+                progressForm.SetCurrentItemText("Loading TCv4 Excel and Strings Tables...");
+                if (!_fileManagerTCv4.LoadTableFiles())
+                {
+                    MessageBox.Show("Failed to load TCv4 excel and strings files!", "Data Table Error",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Error);
+                }
+
             }
 
-            progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
-            _fileManagerTCv4 = new FileManager(Config.HglDir, true);
-
-            progressForm.SetCurrentItemText("Loading TCv4 Excel and Strings Tables...");
-            if (!_fileManagerTCv4.LoadTableFiles())
-            {
-                MessageBox.Show("Failed to load TCv4 excel and strings files!", "Data Table Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-            }
-
-            progressForm.SetCurrentItemText("Loading File Explorer...");
-            _fileExplorer = new FileExplorer(_fileManager, _fileManagerTCv4);
-
-
-
-            foreach (IndexFile file in _fileManager.IndexFiles) file.EndDatAccess();
+            if (Config.LoadTCv4DataFiles)
+                foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.EndDatAccess();
+            
+            foreach (PackFile file in _fileManager.IndexFiles) file.EndDatAccess();
         }
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)
