@@ -971,8 +971,15 @@ namespace Reanimator.Forms
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Options options = new Options(null);
+            options.ShowDialog(this);
         }
+
+        private void tablesListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _excelTableForm.ToggleTablesLoadedView();
+        }
+
 
         //private void _ConvertTestCenterFiles(ProgressForm progress, object obj)
         //{

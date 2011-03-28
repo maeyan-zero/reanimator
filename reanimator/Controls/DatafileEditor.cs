@@ -448,6 +448,7 @@ namespace Reanimator.Controls
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button1 = new System.Windows.Forms.Button();
             this._tableData_DataGridView = new System.Windows.Forms.DataGridView();
             this.rows_LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -465,6 +466,7 @@ namespace Reanimator.Controls
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button1);
             this.splitContainer1.Panel1.Controls.Add(this._tableData_DataGridView);
             // 
             // splitContainer1.Panel2
@@ -474,6 +476,16 @@ namespace Reanimator.Controls
             this.splitContainer1.SplitterDistance = 395;
             this.splitContainer1.TabIndex = 0;
             // 
+            // button1
+            // 
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.button1.Location = new System.Drawing.Point(382, 147);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(12, 89);
+            this.button1.TabIndex = 1;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this._ToggleRowView);
+            // 
             // _tableData_DataGridView
             // 
             this._tableData_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -481,7 +493,6 @@ namespace Reanimator.Controls
             this._tableData_DataGridView.Location = new System.Drawing.Point(0, 0);
             this._tableData_DataGridView.Name = "_tableData_DataGridView";
             this._tableData_DataGridView.ReadOnly = true;
-            this._tableData_DataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this._tableData_DataGridView.Size = new System.Drawing.Size(395, 353);
             this._tableData_DataGridView.TabIndex = 0;
             this._tableData_DataGridView.SelectionChanged += new System.EventHandler(this._tableData_DataGridView_SelectionChanged);
@@ -491,7 +502,8 @@ namespace Reanimator.Controls
             this.rows_LayoutPanel.AutoScroll = true;
             this.rows_LayoutPanel.AutoSize = true;
             this.rows_LayoutPanel.ColumnCount = 1;
-            this.rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.rows_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rows_LayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.rows_LayoutPanel.Name = "rows_LayoutPanel";
