@@ -23,7 +23,7 @@ namespace Hellgate.Excel
         public Int32 detailsString;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 rewardTypeString;
-        public Int32 revealCondition;
+        public RevealCondition revealCondition;
         public Int32 revealValue;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ACHIEVEMENTS")]
         public Int32 revealParentAchievement;
@@ -47,7 +47,7 @@ namespace Hellgate.Excel
         public Int32 playerClass8;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 playerClass9;
-        public Int32 type;
+        public AchievementType type;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ACHIEVEMENTS")]
         public Int32 notActiveTillParentComplete;
         public Int32 completeNumber;
@@ -97,5 +97,38 @@ namespace Hellgate.Excel
         public Int32 rewardSkill;
         [ExcelOutput(IsScript = true)]
         public Int32 rewardScript;
+
+        public enum RevealCondition : int
+        {
+            Always,
+            Value,
+            Completion
+        }
+
+        public enum AchievementType : int
+        {
+            KillMonsters,
+            KillWithWeapon,
+            _2,
+            _3,
+            _4,
+            _5,
+            _6,
+            _7,
+            _8,
+            _9,
+            _10,
+            _11,
+            _12,
+            _13,
+            _14,
+            _15,
+            _16,
+            _17,
+            _18,
+            _19,
+            _20,
+            _21
+        }
     }
 }

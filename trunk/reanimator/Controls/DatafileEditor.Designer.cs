@@ -5,7 +5,7 @@
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer _components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -13,29 +13,20 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing && (_components != null))
             {
-                components.Dispose();
+                _components.Dispose();
             }
             base.Dispose(disposing);
         }
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void _InitializeComponent()
-        {
-
-        }
-
         #endregion
 
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer _splitContainer;
         private System.Windows.Forms.DataGridView _tableData_DataGridView;
-        private System.Windows.Forms.TableLayoutPanel rows_LayoutPanel;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TableLayoutPanel _rows_LayoutPanel;
+        private System.Windows.Forms.Button _toggleRowViewButton;
     }
 }
