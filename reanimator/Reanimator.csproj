@@ -179,6 +179,12 @@
     <Compile Include="Forms\HeroEditorFunctions\UserValues.Designer.cs">
       <DependentUpon>UserValues.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ItemQualityCalculatorForm\ItemQualityCalculator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ItemQualityCalculatorForm\ItemQualityCalculator.designer.cs">
+      <DependentUpon>ItemQualityCalculator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ItemTransfer\ItemTransferForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -376,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DropOverviewForm\DropOverview.resx">
       <DependentUpon>DropOverview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ItemQualityCalculatorForm\ItemQualityCalculator.resx">
+      <DependentUpon>ItemQualityCalculator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TableEditorForm.resx">
       <DependentUpon>TableEditorForm.cs</DependentUpon>
