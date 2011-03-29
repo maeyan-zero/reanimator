@@ -75,6 +75,8 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.extrasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dropTableOverviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -289,6 +291,7 @@
             this.excelTableEditorToolStripMenuItem,
             this.scriptEditorToolStripMenuItem,
             this.tradeItemsToolStripMenuItem,
+            this.extrasToolStripMenuItem,
             this.toolStripSeparator1,
             this.statusBarToolStripMenuItem});
             this.viewMenu.Name = "viewMenu";
@@ -450,6 +453,21 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(214, 17);
             this.toolStripStatusLabel.Text = "Reanimator (c) Revival Team 2009-2011";
             // 
+            // extrasToolStripMenuItem
+            // 
+            this.extrasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dropTableOverviewToolStripMenuItem});
+            this.extrasToolStripMenuItem.Name = "extrasToolStripMenuItem";
+            this.extrasToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.extrasToolStripMenuItem.Text = "Extras";
+            // 
+            // dropTableOverviewToolStripMenuItem
+            // 
+            this.dropTableOverviewToolStripMenuItem.Name = "dropTableOverviewToolStripMenuItem";
+            this.dropTableOverviewToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.dropTableOverviewToolStripMenuItem.Text = "Drop table overview";
+            this.dropTableOverviewToolStripMenuItem.Click += new System.EventHandler(this.dropTableOverviewToolStripMenuItem_Click);
+            // 
             // Reanimator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -520,5 +538,7 @@
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem tradeItemsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem extrasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dropTableOverviewToolStripMenuItem;
     }
 }
