@@ -21,12 +21,18 @@
         }
 
         #region Component Designer generated code
+        /// <summary>
+        /// Initializes the GUI components.
+        /// </summary>
+        private void _InitializeComponent()
+        {
 
+        }
         #endregion
 
         private System.Windows.Forms.SplitContainer _splitContainer;
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataGridView _tableData_DataGridView;
         private System.Windows.Forms.TableLayoutPanel _rows_LayoutPanel;
-        private System.Windows.Forms.Button _toggleRowViewButton;
     }
 }

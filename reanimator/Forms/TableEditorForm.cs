@@ -75,12 +75,21 @@ namespace Reanimator.Forms
         }
 
         /// <summary>
-        /// Saves the current document in serialized format.
+        /// Prompts the user for a save location.
         /// </summary>
-        public void SaveButton()
+        public void Save()
         {
             if (_tabControl.SelectedTab == null) return;
-            ((DatafileEditor)_tabControl.SelectedTab.Controls[0]).SaveButton();
+            ((DatafileEditor)_tabControl.SelectedTab.Controls[0]).Save();
+        }
+
+        /// <summary>
+        /// Saves the current document in serialized format.
+        /// </summary>
+        public void SaveAs()
+        {
+            if (_tabControl.SelectedTab == null) return;
+            ((DatafileEditor)_tabControl.SelectedTab.Controls[0]).SaveAs();
         }
 
         /// <summary>

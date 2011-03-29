@@ -7,7 +7,8 @@ namespace Reanimator
 {
     interface IMdiChildBase
     {
-        void SaveButton();
+        void Save();
+        void SaveAs();
         void Import();
         void Export();
     }

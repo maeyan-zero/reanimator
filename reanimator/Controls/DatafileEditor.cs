@@ -35,7 +35,7 @@ namespace Reanimator.Controls
             _selectedIndexChange = false;
             _specialControls = new Hashtable();
 
-            _InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -117,6 +117,18 @@ namespace Reanimator.Controls
             TextBox relationTextBox = null;
             foreach (DataColumn dc in _dataTable.Columns)
             {
+                column++;
+
+                new Label
+                {
+                    Text = dc.ColumnName,
+                    Parent = _rows_LayoutPanel,
+                    AutoSize = true,
+                    Dock = DockStyle.Fill
+                };
+
+                column++;
+
                 if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBool) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBool])
                 {
                     CheckBox cb = new CheckBox
@@ -125,27 +137,14 @@ namespace Reanimator.Controls
                         AutoSize = true,
                         Dock = DockStyle.Fill,
                         Name = dc.ColumnName,
-                        Text = dc.ColumnName
+                        CheckAlign = ContentAlignment.MiddleLeft
                     };
-                    _rows_LayoutPanel.SetColumnSpan(cb, 2);
 
                     cb.CheckedChanged += _RowView_CheckBox_ItemCheck;
                     _specialControls.Add(dc.ColumnName, cb);
-
-                    column++;
-                    continue;
                 }
-
-                new Label
-                {
-                    Text = dc.ColumnName,
-                    Parent = _rows_LayoutPanel,
-                    AutoSize = true,
-                    Dock = DockStyle.Fill,
-                    TextAlign = ContentAlignment.MiddleLeft
-                };
-
-                if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
+                else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) &&
+                        (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
                 {
                     CheckedListBox clb = new CheckedListBox
                     {
@@ -160,11 +159,23 @@ namespace Reanimator.Controls
                     _specialControls.Add(dc.ColumnName, clb);
 
                     Type cellType = dc.DataType;
-
                     foreach (Enum type in Enum.GetValues(cellType))
-                    {
                         clb.Items.Add(type, false);
-                    }
+                }
+                else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsEnum) &&
+                        (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsEnum])
+                {
+                    ComboBox cb = new ComboBox
+                    {
+                        Parent = _rows_LayoutPanel,
+                        Dock = DockStyle.Fill,
+                        Name = dc.ColumnName
+                    };
+                    cb.DataBindings.Add("SelectedIndex", _dataTable, dc.ColumnName);
+                    
+                    Type cellType = dc.DataType;
+                    foreach (Enum type in Enum.GetValues(cellType))
+                        cb.Items.Add(type);
                 }
                 else
                 {
@@ -193,8 +204,8 @@ namespace Reanimator.Controls
                         relationTextBox = null;
                     }
                 }
-
                 column++;
+
             }
 
             new Label
@@ -215,9 +226,17 @@ namespace Reanimator.Controls
         }
 
         /// <summary>
-        /// Prompts the user to save the data file.
+        /// Save the modified file over the original.
         /// </summary>
-        public void SaveButton()
+        public void Save()
+        {
+
+        }
+
+        /// <summary>
+        /// Prompts the user for a location to save the data file.
+        /// </summary>
+        public void SaveAs()
         {
             DataTable table = ((DataSet)_tableData_DataGridView.DataSource).Tables[_tableData_DataGridView.DataMember];
             if (table == null) return;
@@ -421,7 +440,7 @@ namespace Reanimator.Controls
         /// <param name="clb">The checkbox in context.</param>
         /// <param name="dr">The row containing the integer.</param>
         /// <param name="dc">The column containing the integer.</param>
-        private static void _UpdateCheckedListBox(CheckedListBox clb, DataRow dr, DataColumn dc)
+        private void _UpdateCheckedListBox(CheckedListBox clb, DataRow dr, DataColumn dc)
         {
             uint value = (uint)dr[dc];
             for (int i = 0; i < clb.Items.Count; i++)
@@ -514,51 +533,36 @@ namespace Reanimator.Controls
             }
         }
 
-        /// <summary>
-        /// Initializes the GUI components.
-        /// </summary>
-        private void _InitializeComponent()
+        private void InitializeComponent()
         {
             this._splitContainer = new System.Windows.Forms.SplitContainer();
-            this._toggleRowViewButton = new System.Windows.Forms.Button();
             this._tableData_DataGridView = new System.Windows.Forms.DataGridView();
             this._rows_LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.button1 = new System.Windows.Forms.Button();
             this._splitContainer.Panel1.SuspendLayout();
             this._splitContainer.Panel2.SuspendLayout();
             this._splitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // splitContainer1
+            // _splitContainer
             // 
             this._splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this._splitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this._splitContainer.Location = new System.Drawing.Point(0, 0);
-            this._splitContainer.Name = "splitContainer1";
+            this._splitContainer.Name = "_splitContainer";
             // 
-            // splitContainer1.Panel1
+            // _splitContainer.Panel1
             // 
-            this._splitContainer.Panel1.Controls.Add(this._toggleRowViewButton);
+            this._splitContainer.Panel1.Controls.Add(this.button1);
             this._splitContainer.Panel1.Controls.Add(this._tableData_DataGridView);
             // 
-            // splitContainer1.Panel2
+            // _splitContainer.Panel2
             // 
             this._splitContainer.Panel2.Controls.Add(this._rows_LayoutPanel);
-            this._splitContainer.Size = new System.Drawing.Size(570, 353);
-            this._splitContainer.SplitterDistance = 395;
+            this._splitContainer.Size = new System.Drawing.Size(869, 640);
+            this._splitContainer.SplitterDistance = 543;
             this._splitContainer.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this._toggleRowViewButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this._toggleRowViewButton.Cursor = System.Windows.Forms.Cursors.Default;
-            this._toggleRowViewButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this._toggleRowViewButton.Location = new System.Drawing.Point(384, 151);
-            this._toggleRowViewButton.Name = "button1";
-            this._toggleRowViewButton.Size = new System.Drawing.Size(10, 50);
-            this._toggleRowViewButton.TabIndex = 1;
-            this._toggleRowViewButton.UseVisualStyleBackColor = true;
-            this._toggleRowViewButton.Click += new System.EventHandler(this._toggleRowViewButton_Click);
             // 
             // _tableData_DataGridView
             // 
@@ -566,33 +570,44 @@ namespace Reanimator.Controls
             this._tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tableData_DataGridView.Location = new System.Drawing.Point(0, 0);
             this._tableData_DataGridView.Name = "_tableData_DataGridView";
-            this._tableData_DataGridView.Size = new System.Drawing.Size(395, 353);
+            this._tableData_DataGridView.Size = new System.Drawing.Size(543, 640);
             this._tableData_DataGridView.TabIndex = 0;
+            this._tableData_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this._tableData_DataGridView_CellDoubleClick);
             this._tableData_DataGridView.SelectionChanged += new System.EventHandler(this._tableData_DataGridView_SelectionChanged);
+            this._tableData_DataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this._tableData_DataGridView_KeyUp);
             // 
-            // rows_LayoutPanel
+            // _rows_LayoutPanel
             // 
             this._rows_LayoutPanel.AutoScroll = true;
-            this._rows_LayoutPanel.AutoSize = true;
-            this._rows_LayoutPanel.ColumnCount = 1;
-            this._rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this._rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this._rows_LayoutPanel.ColumnCount = 2;
+            this._rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this._rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this._rows_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this._rows_LayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this._rows_LayoutPanel.Name = "rows_LayoutPanel";
+            this._rows_LayoutPanel.Name = "_rows_LayoutPanel";
             this._rows_LayoutPanel.RowCount = 1;
             this._rows_LayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this._rows_LayoutPanel.Size = new System.Drawing.Size(171, 353);
+            this._rows_LayoutPanel.Size = new System.Drawing.Size(322, 640);
             this._rows_LayoutPanel.TabIndex = 0;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button1.Location = new System.Drawing.Point(533, 298);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(10, 54);
+            this.button1.TabIndex = 1;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this._toggleRowViewButton_Click);
             // 
             // DatafileEditor
             // 
             this.Controls.Add(this._splitContainer);
             this.Name = "DatafileEditor";
-            this.Size = new System.Drawing.Size(570, 353);
+            this.Size = new System.Drawing.Size(869, 640);
             this._splitContainer.Panel1.ResumeLayout(false);
             this._splitContainer.Panel2.ResumeLayout(false);
-            this._splitContainer.Panel2.PerformLayout();
             this._splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).EndInit();
             this.ResumeLayout(false);
