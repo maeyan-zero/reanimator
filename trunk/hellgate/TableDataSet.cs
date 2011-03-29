@@ -68,16 +68,26 @@ namespace Hellgate
 
                 Type fieldType = fieldInfo.FieldType;
                 bool isArray = false;
+                bool isEnum = false;
                 if (fieldInfo.FieldType.BaseType == typeof(Array))
                 {
                     fieldType = typeof(String);
                     isArray = true;
+                }
+                else if (fieldInfo.FieldType.BaseType == typeof(Enum) && excelAttribute == null)
+                {
+                    fieldType = fieldInfo.FieldType;
+                    isEnum = true;
                 }
 
                 DataColumn dataColumn = dataTable.Columns.Add(fieldInfo.Name, fieldType);
                 if (isArray)
                 {
                     dataColumn.ExtendedProperties.Add(ColumnKeys.IsArray, true);
+                }
+                else if (isEnum)
+                {
+                    dataColumn.ExtendedProperties.Add(ColumnKeys.IsEnum, true);
                 }
 
                 if (excelAttribute == null)

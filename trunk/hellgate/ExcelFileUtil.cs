@@ -88,6 +88,7 @@ namespace Hellgate
             public const String IsScript = "IsScript";
             public const String IsSecondaryString = "IsSecondaryString";
             public const String IsArray = "IsArray";
+            public const String IsEnum = "IsEnum";
         }
 
         private static class IntTableDef
@@ -255,7 +256,7 @@ namespace Hellgate
             return (found) ? row : -1;
         }
 
-        private static String _CodeToString(int code)
+        public static String _CodeToString(int code)
         {
             if (code == 0) return String.Empty;
 
@@ -274,7 +275,7 @@ namespace Hellgate
             return charStr;
         }
 
-        private static int _StringToCode(String codeStr)
+        public static int _StringToCode(String codeStr)
         {
             if (String.IsNullOrEmpty(codeStr)) return 0;
 

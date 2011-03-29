@@ -697,5 +697,13 @@ namespace Hellgate
             if (XlsDataSet != null) XlsDataSet.Dispose();
         }
         #endregion
+
+        public string[] GetLanguages()
+        {
+            var stringDirs = (from PackFileEntry fileEntry in FileEntries.Values
+             where fileEntry.Directory.Contains(@"\data\excel\strings\")
+             select Path.GetDirectoryName(fileEntry.Directory));
+            return stringDirs.ToArray();
+        }
     }
 }

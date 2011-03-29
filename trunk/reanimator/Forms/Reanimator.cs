@@ -617,7 +617,7 @@ namespace Reanimator.Forms
 
         private void _OptionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_optionsForm == null) _optionsForm = new Options(_fileExplorer);
+            if (_optionsForm == null) _optionsForm = new Options(_fileManager);
             _optionsForm.ShowDialog(this);
         }
 
@@ -679,8 +679,7 @@ namespace Reanimator.Forms
                     progressForm.SetLoadingText("Initializing Reanimator subsystems...");
                     progressForm.Disposed += delegate
                     {
-                        _excelTableForm = new TableEditorForm(_fileManager) { MdiParent = this };
-                        _excelTableForm.Show();
+                        excelTableEditorToolStripMenuItem_Click(null, null);
                     };
                     progressForm.Show(this);
                 }
@@ -706,19 +705,16 @@ namespace Reanimator.Forms
                                 MessageBoxIcon.Error);
             }
 
+            foreach (PackFile file in _fileManager.IndexFiles) file.EndDatAccess();
+
             XmlCookedFile.Initialize(_fileManager);
 
             if (Config.LoadTCv4DataFiles)
             {
-                //progressForm.SetCurrentItemText("Loading File Explorer...");
-                //_fileExplorer = new FileExplorer(_fileManager, null);
-
-                // Load Table Editor instead
-                //progressForm.SetCurrentItemText("Loading Table Editor...");
-                //_excelTableForm = new ExcelTableForm(_fileManager) { };
-
                 progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
                 _fileManagerTCv4 = new FileManager(Config.HglDir, true);
+
+                foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.BeginDatReading();
 
                 progressForm.SetCurrentItemText("Loading TCv4 Excel and Strings Tables...");
                 if (!_fileManagerTCv4.LoadTableFiles())
@@ -727,13 +723,8 @@ namespace Reanimator.Forms
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
                 }
-
-            }
-
-            if (Config.LoadTCv4DataFiles)
                 foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.EndDatAccess();
-            
-            foreach (PackFile file in _fileManager.IndexFiles) file.EndDatAccess();
+            }
         }
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)
@@ -741,7 +732,7 @@ namespace Reanimator.Forms
             IMdiChildBase mdiChildBase = ActiveMdiChild as IMdiChildBase;
             if (mdiChildBase == null) return;
 
-            mdiChildBase.SaveButton();
+            mdiChildBase.SaveAs();
         }
 
         private void _HardcoreModex64DX9ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -894,28 +885,6 @@ namespace Reanimator.Forms
             }
         }
 
-        private void _ConvertTestCenterFilesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //// Select Dump location
-            //FolderBrowserDialog folderBrower = new FolderBrowserDialog();
-            //folderBrower.SelectedPath = Config.HglDataDir;
-            //DialogResult dialogResult = folderBrower.ShowDialog();
-            //if (dialogResult == DialogResult.Cancel) return;
-
-            //// cache all tables
-            //ProgressForm cacheTableProgress = new ProgressForm(_LoadAllExcelTables, null);
-            //cacheTableProgress.SetLoadingText("Caching all tables.");
-            //cacheTableProgress.ShowDialog();
-
-            //// generate all tables
-            //ProgressForm generateTableProgress = new ProgressForm(_ConvertTestCenterFiles, folderBrower.SelectedPath);
-            //generateTableProgress.SetLoadingText("Generating all converted tables, this will take a while.");
-            //generateTableProgress.SetStyle(ProgressBarStyle.Marquee);
-            //generateTableProgress.ShowDialog();
-
-            //MessageBox.Show("Complete");
-        }
-
         private void _SaveSinglePlayerFiles(ProgressForm progress, object obj)
         {
             //    string savePath = (string)obj;
@@ -945,19 +914,23 @@ namespace Reanimator.Forms
         private void excelTableEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_excelTableForm == null || _excelTableForm.IsDisposed)
-            {
-                _excelTableForm = new TableEditorForm(_fileManager) { MdiParent = this };
-            }
-
+                _excelTableForm = new TableEditorForm(_fileManager) { MdiParent = this, Text = "Table Editor [" + _fileManager.ClientVersion.ToString() + "]" };
             _excelTableForm.Show();
             _excelTableForm.Focus();
+
+            if (Config.LoadTCv4DataFiles && (_excelTableFormTCv4 == null || _excelTableFormTCv4.IsDisposed))
+                _excelTableFormTCv4 = new TableEditorForm(_fileManagerTCv4) { MdiParent = this, Text = "Table Editor [" + _fileManagerTCv4.ClientVersion.ToString() + "]" };
+            if (Config.LoadTCv4DataFiles)
+            {
+                _excelTableFormTCv4.Show();
+                _excelTableFormTCv4.Focus();
+            }
         }
 
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             IMdiChildBase mdiChildBase = ActiveMdiChild as IMdiChildBase;
             if (mdiChildBase == null) return;
-
             mdiChildBase.Import();
         }
 
@@ -965,13 +938,12 @@ namespace Reanimator.Forms
         {
             IMdiChildBase mdiChildBase = ActiveMdiChild as IMdiChildBase;
             if (mdiChildBase == null) return;
-
             mdiChildBase.Export();
         }
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Options options = new Options(null);
+            Options options = new Options(_fileManager);
             options.ShowDialog(this);
         }
 
@@ -979,38 +951,6 @@ namespace Reanimator.Forms
         {
 
         }
-
-
-        //private void _ConvertTestCenterFiles(ProgressForm progress, object obj)
-        //{
-        //    string savePath = (string)obj;
-
-        //    foreach (DataTable tcDataTable in _tableDataSet.XlsDataSet.Tables)
-        //    {
-        //        if (!tcDataTable.TableName.Contains("_TCv4_")) continue;
-        //        string spVersion = tcDataTable.TableName.Replace("_TCv4_", "");
-
-        //        progress.SetCurrentItemText("Current table... " + spVersion);
-
-        //        DataTable spDataTable = _tableDataSet.XlsDataSet.Tables[spVersion];
-        //        DataTable convertedDataTable = ExcelFile.ConvertToSinglePlayerVersion(spDataTable, tcDataTable);
-        //        ExcelFile tcExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(tcDataTable.TableName);
-        //        ExcelFile spExcelFile = _tableDataSet.TableFiles.GetExcelTableFromId(spVersion);
-
-        //        spExcelFile.MyshBytes = tcExcelFile.MyshBytes;
-
-        //        byte[] buffer = spExcelFile.GenerateFile(convertedDataTable);
-        //        string path = Path.Combine(savePath, spExcelFile.FilePath);
-        //        string filename = spExcelFile.FileName + "." + spExcelFile.FileExtension;
-
-        //        if (!Directory.Exists(path))
-        //        {
-        //            Directory.CreateDirectory(path);
-        //        }
-
-        //        File.WriteAllBytes(path + filename, buffer);
-        //    }
-        //}
 
         //private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)
         //{

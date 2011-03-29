@@ -1,17 +1,19 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Revival.Common;
+using Hellgate;
 
 namespace Reanimator.Forms
 {
     public partial class Options : Form
     {
-        private readonly FileExplorer _fileExplorer;
+        private readonly FileManager _fileManager;
 
-        public Options(FileExplorer fileExplorer)
+        public Options(FileManager fileManager)
         {
-            _fileExplorer = fileExplorer;
+            _fileManager = fileManager;
 
             InitializeComponent();
         }
@@ -54,13 +56,14 @@ namespace Reanimator.Forms
         {
             _stringsLang_comboBox.Items.Clear();
 
-            TreeNodeCollection directories = _fileExplorer.GetDirectories(@"\data\excel\strings\");
+            String[] directories = _fileManager.GetLanguages();
+            //_fileManager.FileEntries.Values.Where(file => file.Directory.Contains());
             if (directories == null) return;
 
             _stringsLang_comboBox.Items.Add(String.Empty); // needed if current language isn't set, or isn't found in currently chosen HG path (e.g. Resurrection clients without English)
-            foreach (TreeNode stringsDir in directories)
+            foreach (String stringsDir in directories)
             {
-                _stringsLang_comboBox.Items.Add(stringsDir.Name);
+                _stringsLang_comboBox.Items.Add(stringsDir);
             }
 
             _stringsLang_comboBox.SelectedItem = Config.StringsLanguage;
