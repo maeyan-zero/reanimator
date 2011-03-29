@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Revival.Common;
 using Hellgate;
+using System.Drawing;
 
 namespace Reanimator.Forms
 {
@@ -33,9 +34,8 @@ namespace Reanimator.Forms
 
             if (folderBrowserDialogue.ShowDialog(this) != DialogResult.OK) return;
 
-            Config.HglDir = folderBrowserDialogue.SelectedPath;
-            hglDir_TextBox.Text = Config.HglDir;
-            _UpdateStringsLanguages();
+            hglDir_TextBox.Text = folderBrowserDialogue.SelectedPath;
+            UpdateConfigPaths();
         }
 
         private void Options_Load(object sender, EventArgs e)
@@ -79,8 +79,8 @@ namespace Reanimator.Forms
 
             if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
 
-            Config.GameClientPath = openFileDialog.FileName;
             gameClientPath_TextBox.Text = openFileDialog.FileName;
+            UpdateConfigPaths();
         }
 
         private void _ScriptButton_Click(object sender, EventArgs e)
@@ -93,8 +93,8 @@ namespace Reanimator.Forms
 
             if (folderBrowserDialogue.ShowDialog(this) != DialogResult.OK) return;
 
-            Config.ScriptDir = folderBrowserDialogue.SelectedPath;
-            scriptDirText.Text = Config.ScriptDir;
+            scriptDirText.Text = folderBrowserDialogue.SelectedPath;
+            UpdateConfigPaths();
         }
 
         private void _IntPtrTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
@@ -142,6 +142,47 @@ namespace Reanimator.Forms
         private void _StringsLang_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Config.StringsLanguage = (String)_stringsLang_comboBox.SelectedItem;
+        }
+
+        private void UpdateConfigPaths()
+        {
+            Config.HglDir = hglDir_TextBox.Text;
+            Config.GameClientPath = gameClientPath_TextBox.Text;
+            Config.ScriptDir = scriptDirText.Text;
+            _UpdateStringsLanguages();
+        }
+
+        private void HglConfig_TextChanged(object sender, EventArgs e)
+        {
+            bool valid = true;
+            hglDir_TextBox.ForeColor = Color.Black;
+
+            if (!Directory.Exists(hglDir_TextBox.Text))
+            {
+                hglDir_TextBox.ForeColor = Color.Red;
+                valid = false;
+            }
+
+            gameClientPath_TextBox.ForeColor = Color.Black;
+
+            if (!File.Exists(gameClientPath_TextBox.Text))
+            {
+                gameClientPath_TextBox.ForeColor = Color.Red;
+                valid = false;
+            }
+
+            scriptDirText.ForeColor = Color.Black;
+
+            if (!Directory.Exists(scriptDirText.Text))
+            {
+                scriptDirText.ForeColor = Color.Red;
+                valid = false;
+            }
+
+            if (valid)
+            {
+                UpdateConfigPaths();
+            }
         }
     }
 }

@@ -42,6 +42,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this._stringsLang_comboBox = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -61,7 +62,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtEditor_TextBox = new System.Windows.Forms.TextBox();
             this.csvEditor_TextBox = new System.Windows.Forms.TextBox();
-            this._stringsLang_comboBox = new System.Windows.Forms.ComboBox();
             this._pathSettings_GroupBox.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -112,6 +112,7 @@
             this.scriptDirText.Name = "scriptDirText";
             this.scriptDirText.Size = new System.Drawing.Size(408, 23);
             this.scriptDirText.TabIndex = 12;
+            this.scriptDirText.TextChanged += new System.EventHandler(this.HglConfig_TextChanged);
             // 
             // label1
             // 
@@ -141,7 +142,7 @@
             this.gameClientPath_TextBox.Name = "gameClientPath_TextBox";
             this.gameClientPath_TextBox.Size = new System.Drawing.Size(408, 23);
             this.gameClientPath_TextBox.TabIndex = 9;
-            this.gameClientPath_TextBox.Click += new System.EventHandler(this._GameClientPath_Button_Click);
+            this.gameClientPath_TextBox.TextChanged += new System.EventHandler(this.HglConfig_TextChanged);
             // 
             // gameClientPath_Label
             // 
@@ -180,7 +181,7 @@
             this.hglDir_TextBox.Name = "hglDir_TextBox";
             this.hglDir_TextBox.Size = new System.Drawing.Size(408, 23);
             this.hglDir_TextBox.TabIndex = 1;
-            this.hglDir_TextBox.Click += new System.EventHandler(this._HglDirBrowse_Click);
+            this.hglDir_TextBox.TextChanged += new System.EventHandler(this.HglConfig_TextChanged);
             // 
             // _ok_button
             // 
@@ -236,6 +237,17 @@
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Language Files";
+            // 
+            // _stringsLang_comboBox
+            // 
+            this._stringsLang_comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this._stringsLang_comboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this._stringsLang_comboBox.FormattingEnabled = true;
+            this._stringsLang_comboBox.Location = new System.Drawing.Point(6, 38);
+            this._stringsLang_comboBox.Name = "_stringsLang_comboBox";
+            this._stringsLang_comboBox.Size = new System.Drawing.Size(199, 23);
+            this._stringsLang_comboBox.TabIndex = 3;
+            this._stringsLang_comboBox.SelectedIndexChanged += new System.EventHandler(this._StringsLang_ComboBox_SelectedIndexChanged);
             // 
             // label7
             // 
@@ -445,17 +457,6 @@
             this.csvEditor_TextBox.Name = "csvEditor_TextBox";
             this.csvEditor_TextBox.Size = new System.Drawing.Size(324, 23);
             this.csvEditor_TextBox.TabIndex = 6;
-            // 
-            // _stringsLang_comboBox
-            // 
-            this._stringsLang_comboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this._stringsLang_comboBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this._stringsLang_comboBox.FormattingEnabled = true;
-            this._stringsLang_comboBox.Location = new System.Drawing.Point(6, 38);
-            this._stringsLang_comboBox.Name = "_stringsLang_comboBox";
-            this._stringsLang_comboBox.Size = new System.Drawing.Size(199, 23);
-            this._stringsLang_comboBox.TabIndex = 3;
-            this._stringsLang_comboBox.SelectedIndexChanged += new System.EventHandler(this._StringsLang_ComboBox_SelectedIndexChanged);
             // 
             // Options
             // 
