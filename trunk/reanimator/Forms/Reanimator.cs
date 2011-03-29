@@ -9,6 +9,7 @@ using Hellgate;
 using Revival.Common;
 using Reanimator.Properties;
 using Reanimator.Forms.DropOverviewForm;
+using Reanimator.Forms.ItemQualityCalculatorForm;
 
 namespace Reanimator.Forms
 {
@@ -957,6 +958,12 @@ namespace Reanimator.Forms
         {
             DropOverview drops = new DropOverview(_fileManager);
             drops.Show(this);
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ItemQualityCalculator calculator = new ItemQualityCalculator(_fileManager);
+            calculator.Show(this);
         }
 
         //private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)

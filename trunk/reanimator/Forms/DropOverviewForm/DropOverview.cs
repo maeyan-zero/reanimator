@@ -226,9 +226,10 @@ namespace Reanimator.Forms.DropOverviewForm
                         node.Nodes.Add(tNode);
                     }
 
-                    if (entry.dropChance * 100 <= 0.05)
+                    float warningChance = 0.01f;
+                    if (entry.dropChance * 100 <= warningChance)
                     {
-                        MessageBox.Show("Warning! The drop rate of the item " + entry.name + " is pretty low (0.05%)! (" + entry.dropChance * 100 + "%)");
+                        MessageBox.Show(string.Format("Warning! The drop rate of the item {0} is pretty low (<{1}%)! ({2}%)", entry.name, warningChance, entry.dropChance * 100));
                     }
 
                     if (entry.tableToUse != 0)
