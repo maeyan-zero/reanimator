@@ -8,6 +8,7 @@ using System.IO;
 using Hellgate;
 using Revival.Common;
 using Reanimator.Properties;
+using Reanimator.Forms.DropOverviewForm;
 
 namespace Reanimator.Forms
 {
@@ -950,6 +951,12 @@ namespace Reanimator.Forms
         private void saveAsToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void dropTableOverviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DropOverview drops = new DropOverview(_fileManager);
+            drops.Show(this);
         }
 
         //private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)
