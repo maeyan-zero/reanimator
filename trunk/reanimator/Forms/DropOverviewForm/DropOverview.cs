@@ -98,7 +98,14 @@ namespace Reanimator.Forms.DropOverviewForm
 
         private TreasureTableEntry ParseRow(DataRow row, float dropChance, TreeNode node)
         {
+            //the index of the first item entry 13 for SP, 19 for MP
             int tablePosition = 13;
+
+            if ((_fileManager.ClientVersion & FileManager.ClientVersionFlags.Resurrection) == FileManager.ClientVersionFlags.Resurrection)
+            {
+                tablePosition = 19;
+            }
+
             float noDrop = 0;
             bool picks = false;
             string drops = "";
@@ -109,8 +116,6 @@ namespace Reanimator.Forms.DropOverviewForm
                 string pickString = (string)row["picks"];
                 picks = !pickString.StartsWith("0");
 
-                //int tablePosition = 30;
-                //the index of the first item entry 13 for SP, 19 for MP
                 noDrop = (float)row["noDrop"];
                 node.Tag = noDrop;
                 drops = string.Format("{0:0.00}", 100 - noDrop) + "%";
