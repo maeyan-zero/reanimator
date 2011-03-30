@@ -118,9 +118,6 @@ namespace Reanimator.Controls
             int column = 0;
             TextBox relationTextBox = null;
 
-            Hellgate.ExcelFile.OutputAttribute[] excelAttributes;
-            ObjectDelegator objectDelegator;
-
             foreach (DataColumn dc in _dataTable.Columns)
             {
                 column++;
@@ -170,6 +167,9 @@ namespace Reanimator.Controls
                     // Populate the checklist by either a enum or (less commonly) table indices
                     if (!String.IsNullOrEmpty(attribute.TableStringId))
                     {
+                        // TODO: should perhaps use object delegator here, it might be faster
+                        // so far its only its runtime is only 1n so doesnt really matter.
+                        //
                         DataTable dataTable = _fileManager.GetDataTable(attribute.TableStringId);
                         foreach (DataRow row in dataTable.Rows)
                             clb.Items.Add(row[2], false);
@@ -191,7 +191,8 @@ namespace Reanimator.Controls
                         Name = dc.ColumnName
                     };
                     cb.DataBindings.Add("SelectedIndex", _dataTable, dc.ColumnName);
-                    
+                    cb.SelectedIndexChanged += new EventHandler(_RowView_ComboList_ItemChange);
+
                     Type cellType = dc.DataType;
                     foreach (Enum type in Enum.GetValues(cellType))
                         cb.Items.Add(type);
@@ -206,6 +207,7 @@ namespace Reanimator.Controls
                         Dock = DockStyle.Fill
                     };
                     tb.DataBindings.Add("Text", _dataTable, dc.ColumnName);
+                    //tb.TextChanged += new EventHandler(_RowView_TextBox_Changed);
 
                     if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsRelationGenerated]) || column == 0)
                     {
@@ -507,6 +509,25 @@ namespace Reanimator.Controls
                 "Attention: Currently a bug exists such that you must close this form and re-open it to see any changes for the regeneration.\nDoing so will ask if you wish to apply your changes to the cache data.\n\nAlso of note is the you can't edit any cells until you close the window - FIX ME.",
                 "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
+
+        private void _RowView_ComboList_ItemChange(object sender, EventArgs e)
+        {
+            if (_selectedIndexChange) return;
+
+            ComboBox cb = (ComboBox)sender;
+            DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
+            dr[cb.Name] = cb.SelectedIndex;
+        }
+
+        private void _RowView_TextBox_Changed(object sender, EventArgs e)
+        {
+            if (_selectedIndexChange) return;
+
+            TextBox tb = (TextBox)sender;
+            DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
+            dr[tb.Name] = tb.Text;
+        }
+
 
         private void _RowView_CheckBox_ItemCheck(object sender, EventArgs e)
         {
