@@ -10,6 +10,7 @@ using Revival.Common;
 using Reanimator.Properties;
 using Reanimator.Forms.DropOverviewForm;
 using Reanimator.Forms.ItemQualityCalculatorForm;
+using Reanimator.Forms.HeroEditorFunctions;
 
 namespace Reanimator.Forms
 {
@@ -943,6 +944,25 @@ namespace Reanimator.Forms
         {
             ItemQualityCalculator calculator = new ItemQualityCalculator(_fileManager);
             calculator.Show(this);
+        }
+
+        private void savegameOverviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //pre-load the tables to prevent additional waiting times when accessing certain information later on
+            _fileManager.PreLoadTable("STATS");
+            _fileManager.PreLoadTable("PLAYERS");
+
+            string[] savegames = Directory.GetFiles(Config.SaveDir, "*.hg1");
+
+            SavegameOverviewForm savegameForm = new SavegameOverviewForm();
+
+            foreach (string savegame in savegames)
+            {
+                UnitWrapper2 wrapper = new UnitWrapper2(savegame, _fileManager);
+                savegameForm.AddCharacter(wrapper);
+            }
+
+            savegameForm.Show(this);
         }
 
         //private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)

@@ -78,6 +78,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.savegameOverviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -323,7 +324,8 @@
             // 
             this.extrasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.dropTableOverviewToolStripMenuItem,
-            this.toolStripMenuItem1});
+            this.toolStripMenuItem1,
+            this.savegameOverviewToolStripMenuItem});
             this.extrasToolStripMenuItem.Name = "extrasToolStripMenuItem";
             this.extrasToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.extrasToolStripMenuItem.Text = "Extras";
@@ -477,6 +479,13 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(214, 17);
             this.toolStripStatusLabel.Text = "Reanimator (c) Revival Team 2009-2011";
             // 
+            // savegameOverviewToolStripMenuItem
+            // 
+            this.savegameOverviewToolStripMenuItem.Name = "savegameOverviewToolStripMenuItem";
+            this.savegameOverviewToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.savegameOverviewToolStripMenuItem.Text = "Savegame overview";
+            this.savegameOverviewToolStripMenuItem.Click += new System.EventHandler(this.savegameOverviewToolStripMenuItem_Click);
+            // 
             // Reanimator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -550,5 +559,6 @@
         private System.Windows.Forms.ToolStripMenuItem extrasToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dropTableOverviewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem savegameOverviewToolStripMenuItem;
     }
 }

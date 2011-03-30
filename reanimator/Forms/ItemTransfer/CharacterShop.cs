@@ -185,7 +185,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if (_characterUnit == null || _selectedItem == null) return;
 
-            UnitObject.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item.BaseUnit, ItemValueNames.applied_affix.ToString());
+            UnitObject.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item.UnitObject, ItemValueNames.applied_affix.ToString());
             if (value != null)
             {
                 MessageBox.Show(value.ToString());
