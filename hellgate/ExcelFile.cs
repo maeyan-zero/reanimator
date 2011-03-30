@@ -319,6 +319,7 @@ namespace Hellgate
                     }
 
                     bool isArray = (fieldDelegate.FieldType.BaseType == typeof(Array));
+                    bool isEnum = (fieldDelegate.FieldType.BaseType == typeof(Enum));
                     if (excelAttribute != null)
                     {
                         if (excelAttribute.IsTableIndex && fileManager != null)
@@ -503,18 +504,23 @@ namespace Hellgate
 
                     try
                     {
-                        Object objValue;
+                        Object objValue = null;
                         if (isArray)
                         {
                             Debug.Assert(fieldDelegate.FieldType == typeof (Int32[]));
 
                             objValue = FileTools.StringToArray<Int32>(value, ",");
                         }
+                        else if (isEnum)
+                        {
+                            object enumVal = Enum.Parse(fieldDelegate.FieldType, value);
+                            objectDelegator[fieldDelegate.Name, rowInstance] = (uint)enumVal;
+                        }
                         else
                         {
                             objValue = FileTools.StringToObject(value, fieldDelegate.FieldType);
-                        }
-                        objectDelegator[fieldDelegate.Name, rowInstance] = objValue;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = objValue;
+                        }   
                     }
                     catch (Exception e)
                     {
@@ -1422,6 +1428,10 @@ namespace Hellgate
                     else if (fieldDelegate.FieldType == typeof(float))
                     {
                         rowStr[col] = ((float)outValue).ToString("r");
+                    }
+                    else if (fieldDelegate.FieldType.BaseType == typeof(Enum))
+                    {
+                        rowStr[col] = ((UInt32)outValue).ToString();
                     }
                     else
                     {
