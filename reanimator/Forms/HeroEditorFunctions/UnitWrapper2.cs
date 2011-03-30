@@ -5,6 +5,7 @@ using System.Text;
 using Hellgate;
 using System.Data;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Reanimator.Forms.HeroEditorFunctions
 {
@@ -105,10 +106,34 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class CharacterWrapper : CharacterProperty
     {
+        DataTable itemsTable;
+        int unitType;
+
+        EngineerDrone drone;
         CharacterClass characterClass;
         CharacterGameMode characterGameMode;
         CharacterValues characterValues;
+        CharacterSkills characterSkills;
+        WeaponSlots weaponSlots;
         Gender gender;
+
+        public EngineerDrone Drone
+        {
+            get { return drone; }
+            set { drone = value; }
+        }
+
+        public CharacterSkills CharacterSkills
+        {
+            get { return characterSkills; }
+            set { characterSkills = value; }
+        }
+
+        public WeaponSlots WeaponSlots
+        {
+            get { return weaponSlots; }
+            set { weaponSlots = value; }
+        }
 
         public CharacterValues CharacterValues
         {
@@ -137,10 +162,41 @@ namespace Reanimator.Forms.HeroEditorFunctions
         public CharacterWrapper(UnitObject character, FileManager fileManager)
             : base(character, fileManager)
         {
+            itemsTable = fileManager.GetDataTable("ITEMS");
+
+            DataTable players = fileManager.GetDataTable("PLAYERS");
+            DataRow[] playerRow = players.Select("code = " + character.UnitCode);
+
+            if (playerRow.Length > 0)
+            {
+                int playerType = (int)playerRow[0]["unitType"];
+
+                List<int> skillTabs = new List<int>();
+
+                for (int counter = 1; counter < 8; counter++)
+                {
+                    int skillTab = (int)playerRow[0]["SkillTab" + counter];
+                    if (skillTab >= 0)
+                    {
+                        skillTabs.Add(skillTab);
+                    }
+                }
+
+                unitType = playerType - 3;
+
+                characterSkills = new CharacterSkills(character, fileManager, skillTabs.ToArray());
+            }
+
             characterClass = GetCharacterClass(character);
             characterGameMode = new CharacterGameMode(character, fileManager);
             characterValues = new CharacterValues(character, fileManager);
             gender = characterClass.ToString().EndsWith("_Male") ? Gender.Male : Gender.Female;
+            weaponSlots = new WeaponSlots(character, fileManager);
+
+            if (characterClass == CharacterClass.Engineer_Male || characterClass == CharacterClass.Engineer_Female)
+            {
+                //drone = new EngineerDrone(character, fileManager);
+            }
         }
 
         private CharacterClass GetCharacterClass(UnitObject character)
@@ -613,6 +669,318 @@ namespace Reanimator.Forms.HeroEditorFunctions
         }
     }
 
+    public class WeaponSlots : CharacterProperty
+    {
+        public WeaponSlots(UnitObject unitObject, FileManager fileManager)
+            : base(unitObject, fileManager)
+        {
+        }
+
+        public UnitObject[] WeaponSlot1
+        {
+            get
+            {
+                List<UnitObject> _weapons = new List<UnitObject>();
+
+                foreach (UnitObject item in UnitObject.Items)
+                {
+                    if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                    {
+                        _weapons.Add(item);
+                    }
+                }
+
+                return _weapons.ToArray();
+            }
+        }
+
+        public UnitObject[] WeaponSlot2
+        {
+            get
+            {
+                List<UnitObject> _weapons = new List<UnitObject>();
+
+                foreach (UnitObject item in UnitObject.Items)
+                {
+                    if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                    {
+                        _weapons.Add(item);
+                    }
+                }
+
+                return _weapons.ToArray();
+            }
+        }
+
+        public UnitObject[] WeaponSlot3
+        {
+            get
+            {
+                List<UnitObject> _weapons = new List<UnitObject>();
+
+                foreach (UnitObject item in UnitObject.Items)
+                {
+                    if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                    {
+                        _weapons.Add(item);
+                    }
+                }
+
+                return _weapons.ToArray();
+            }
+        }
+    }
+
+    public class CharacterSkills : CharacterProperty
+    {
+        List<SkillTab> _skillTabs;
+        SkillTab _generalSkills;
+
+        public SkillTab GeneralSkills
+        {
+            get { return _generalSkills; }
+        }
+
+        public List<SkillTab> SkillTabs
+        {
+            get { return _skillTabs; }
+        }
+
+        public CharacterSkills(UnitObject unitObject, FileManager fileManager, int[] skillTabs)
+            : base(unitObject, fileManager)
+        {
+            _skillTabs = new List<SkillTab>();
+            
+            //to make things easier, let's add all available character skills to the list
+            List<UnitObject.StatBlock.Stat.Values> availableSkills = new List<UnitObject.StatBlock.Stat.Values>();
+            ////get the skills the character already knows
+            UnitObject.StatBlock.Stat skills = UnitHelpFunctions.GetComplexValue(unitObject, ItemValueNames.skill_level);
+            ////add them to the complete skill list
+            availableSkills.AddRange(skills.values);
+
+            DataTable skillTable = fileManager.GetDataTable("SKILLS");
+
+            //let's add all the skills the character doesn't know yet
+            foreach (int skillTab in skillTabs)
+            {
+                DataRow[] skillRows = skillTable.Select("skillTab = " + skillTab);
+
+                SkillTab skillsInSkillTab = CreateSkillsFromRow(availableSkills, skillTable, skillRows);
+
+                if (skillsInSkillTab.Skills.Count > 0)
+                {
+                    _skillTabs.Add(skillsInSkillTab);
+                }
+            }
+
+
+            // select the general skill tab
+            DataRow[] generalSkillRows = skillTable.Select("skillTab = " + 0);
+            _generalSkills = CreateSkillsFromRow(availableSkills, skillTable, generalSkillRows);
+
+            //add all skills back to the savegame
+            availableSkills.Clear();
+
+            foreach (Skill skill in _generalSkills.Skills)
+            {
+                availableSkills.Add(skill.SkillBlock);
+            }
+
+            foreach (SkillTab skillTab in _skillTabs)
+            {
+                foreach (Skill skill in skillTab.Skills)
+                {
+                    availableSkills.Add(skill.SkillBlock);
+                }
+            }
+
+            //skills.repeatCount = availableSkills.Count;
+            skills.values = availableSkills;
+        }
+
+        private SkillTab CreateSkillsFromRow(List<UnitObject.StatBlock.Stat.Values> availableSkills, DataTable skillTable, DataRow[] skillRows)
+        {
+            List<UnitObject.StatBlock.Stat.Values> values = new List<UnitObject.StatBlock.Stat.Values>();
+            SkillTab skillInSkillTab = new SkillTab();
+
+            //iterate through all available skills
+            foreach (DataRow row in skillRows)
+            {
+                //get the skill id
+                int skillId = (int)row["code"];
+                //if the skill is already present, use that one
+                UnitObject.StatBlock.Stat.Values tmpSkill = availableSkills.Find(tmp => tmp.Attribute1 == skillId);
+                if (tmpSkill != null)
+                {
+                    values.Add(tmpSkill);
+                }
+                //if not, add a new one
+                else
+                {
+                    UnitObject.StatBlock.Stat.Values skillEntry = new UnitObject.StatBlock.Stat.Values();
+                    skillEntry.Attribute1 = skillId;
+
+                    values.Add(skillEntry);
+                }
+            }
+            //_hero.Stats.statCount
+
+            //and finally... initialize all skills :)
+            foreach (UnitObject.StatBlock.Stat.Values skillBlock in values)
+            {
+                Skill skill = InitializeSkill(skillTable, skillBlock);
+                skillInSkillTab.Skills.Add(skill);
+            }
+            return skillInSkillTab;
+        }
+
+        private Skill InitializeSkill(DataTable table, UnitObject.StatBlock.Stat.Values skillBlock)
+        {
+            DataRow[] availableSkillRows = table.Select("code = " + skillBlock.Attribute1);
+
+            string name = availableSkillRows[0]["displayName"].ToString();
+            string description = (string)availableSkillRows[0]["descriptionString"].ToString();
+            string iconName = (string)availableSkillRows[0]["smallIcon"];
+            int maxLevel = (int)availableSkillRows[0]["maxLevel"];
+            int row = (int)availableSkillRows[0]["skillPageRow"];
+            int column = (int)availableSkillRows[0]["skillPageColumn"];
+
+            List<int> requiredSkills = new List<int>();
+            List<int> levelsOfRequiredSkills = new List<int>();
+
+            for (int counter = 1; counter < 5; counter++)
+            {
+                int requiredSkill = (int)availableSkillRows[0]["requiredSkills" + counter];
+                if (requiredSkill >= 0)
+                {
+                    requiredSkills.Add(requiredSkill);
+                }
+                int requiredLevel = (int)availableSkillRows[0]["levelsOfrequiredSkills" + counter];
+                if (requiredLevel >= 0)
+                {
+                    levelsOfRequiredSkills.Add(requiredLevel);
+                }
+            }
+            return new Skill(name, description, iconName, maxLevel, new Point(column, row), requiredSkills.ToArray(), levelsOfRequiredSkills.ToArray(), skillBlock);
+        }
+    }
+
+    public class SkillTab
+    {
+        List<Skill> _skills;
+
+        public List<Skill> Skills
+        {
+            get { return _skills; }
+        }
+
+        public SkillTab()
+        {
+            _skills = new List<Skill>();
+        }
+
+        public Skill GetSkillByName(string name)
+        {
+            return _skills.Find(tmp => tmp.Name == name);
+        }
+    }
+
+    public class Skill
+    {
+        UnitObject.StatBlock.Stat.Values _skillBlock;
+        string _name;
+        string _description;
+        int _maxLevel;
+        string _iconName;
+        int[] _requiredSkills;
+        int[] _levelsOfRequiredSkills;
+        Point _position;
+
+        public UnitObject.StatBlock.Stat.Values SkillBlock
+        {
+            get { return _skillBlock; }
+            set { _skillBlock = value; }
+        }
+
+        public int[] RequiredSkills
+        {
+            get { return _requiredSkills; }
+        }
+
+        public int[] LevelsOfRequiredSkills
+        {
+            get { return _levelsOfRequiredSkills; }
+        }
+
+        public int SkillID
+        {
+            get { return _skillBlock.Attribute1; }
+        }
+
+        public string Name
+        {
+            get { return _name; }
+        }
+
+        public string Description
+        {
+            get { return _description; }
+        }
+
+        public int MaxLevel
+        {
+            get { return _maxLevel; }
+        }
+
+        public string IconName
+        {
+            get { return _iconName; }
+        }
+
+        public int CurrentLevel
+        {
+            get { return _skillBlock.StatValue; }
+            set
+            {
+                if (value > _maxLevel)
+                {
+                    value = _maxLevel;
+                }
+
+                _skillBlock.StatValue = value;
+            }
+        }
+
+        public Point Position
+        {
+            get { return _position; }
+        }
+
+        public bool Learned
+        {
+            get
+            {
+                return CurrentLevel > 0;
+            }
+        }
+
+        public Skill(string name, string description, string iconName, int maxLevel, Point position, int[] requiredSkills, int[] levelsOfRequiredSkills, UnitObject.StatBlock.Stat.Values skillBlock)
+        {
+            _name = name;
+            _description = description;
+            _iconName = iconName;
+            _maxLevel = maxLevel;
+            _position = position;
+            _requiredSkills = requiredSkills;
+            _levelsOfRequiredSkills = levelsOfRequiredSkills;
+            _skillBlock = skillBlock;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
 
     public enum CharacterClass
     {

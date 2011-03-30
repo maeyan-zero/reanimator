@@ -949,8 +949,10 @@ namespace Reanimator.Forms
         private void savegameOverviewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //pre-load the tables to prevent additional waiting times when accessing certain information later on
-            _fileManager.PreLoadTable("STATS");
+            _fileManager.PreLoadTable("ITEMS");
             _fileManager.PreLoadTable("PLAYERS");
+            _fileManager.PreLoadTable("SKILLS");
+            _fileManager.PreLoadTable("STATS");
 
             string[] savegames = Directory.GetFiles(Config.SaveDir, "*.hg1");
 

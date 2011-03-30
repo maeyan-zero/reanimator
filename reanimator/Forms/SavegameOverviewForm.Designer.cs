@@ -28,9 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.savegameOverviewControl1 = new SavegameOverviewControl();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.treeViewSkills = new System.Windows.Forms.TreeView();
+            this.savegameOverviewControl1 = new SavegameOverviewControl();
             this.SuspendLayout();
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(12, 177);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 1;
+            // 
+            // treeViewSkills
+            // 
+            this.treeViewSkills.Location = new System.Drawing.Point(12, 203);
+            this.treeViewSkills.Name = "treeViewSkills";
+            this.treeViewSkills.Size = new System.Drawing.Size(441, 145);
+            this.treeViewSkills.TabIndex = 2;
             // 
             // savegameOverviewControl1
             // 
@@ -41,18 +56,12 @@
             this.savegameOverviewControl1.Size = new System.Drawing.Size(440, 162);
             this.savegameOverviewControl1.TabIndex = 0;
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(12, 180);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
-            // 
             // SavegameOverviewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(465, 360);
+            this.Controls.Add(this.treeViewSkills);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.savegameOverviewControl1);
             this.Name = "SavegameOverviewForm";
@@ -66,5 +75,6 @@
 
         private SavegameOverviewControl savegameOverviewControl1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TreeView treeViewSkills;
     }
 }
