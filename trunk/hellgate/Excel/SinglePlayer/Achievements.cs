@@ -98,14 +98,14 @@ namespace Hellgate.Excel
         [ExcelOutput(IsScript = true)]
         public Int32 rewardScript;
 
-        public enum RevealCondition : int
+        public enum RevealCondition : uint
         {
             Always,
             Value,
             Completion
         }
 
-        public enum AchievementType : int
+        public enum AchievementType : uint
         {
             KillMonsters,
             KillWithWeapon,
