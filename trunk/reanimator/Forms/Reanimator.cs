@@ -762,27 +762,6 @@ namespace Reanimator.Forms
             }
         }
 
-        private void _ShowExcelTablesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // todo: map to new control
-                //if (showExcelTablesToolStripMenuItem.Checked)
-                //{
-                //    _tablesLoaded.Location = new Point(0, 0);
-                //    _tablesLoaded.Show();
-                //}
-                //else
-                //{
-                //    _tablesLoaded.Hide();
-                //}
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogException(ex, "_ShowExcelTablesToolStripMenuItem_Click", false);
-            }
-        }
-
         private void _ApplyModificationsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //try

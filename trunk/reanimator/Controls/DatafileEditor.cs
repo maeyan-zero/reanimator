@@ -8,10 +8,12 @@ using System.Text;
 using System.Windows.Forms;
 
 using Hellgate;
+using OutputAttribute = Hellgate.ExcelFile.OutputAttribute;
 using Revival.Common;
 using Reanimator.Forms;
 using System.Collections;
 using System.IO;
+using System.Reflection;
 
 namespace Reanimator.Controls
 {
@@ -111,10 +113,14 @@ namespace Reanimator.Controls
         /// </summary>
         private void _CreateRowView()
         {
-            _rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
+            //_rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
             _rows_LayoutPanel.SuspendLayout();
             int column = 0;
             TextBox relationTextBox = null;
+
+            Hellgate.ExcelFile.OutputAttribute[] excelAttributes;
+            ObjectDelegator objectDelegator;
+
             foreach (DataColumn dc in _dataTable.Columns)
             {
                 column++;
@@ -158,9 +164,22 @@ namespace Reanimator.Controls
                     clb.ItemCheck += _RowView_CheckedListBox_ItemCheck;
                     _specialControls.Add(dc.ColumnName, clb);
 
-                    Type cellType = dc.DataType;
-                    foreach (Enum type in Enum.GetValues(cellType))
-                        clb.Items.Add(type, false);
+
+                    ExcelFile.OutputAttribute attribute = ExcelFile.GetExcelAttribute(_dataFile.DataType.GetField(dc.ColumnName));
+
+                    // Populate the checklist by either a enum or (less commonly) table indices
+                    if (!String.IsNullOrEmpty(attribute.TableStringId))
+                    {
+                        DataTable dataTable = _fileManager.GetDataTable(attribute.TableStringId);
+                        foreach (DataRow row in dataTable.Rows)
+                            clb.Items.Add(row[2], false);
+                    }
+                    else
+                    {
+                        Type cellType = dc.DataType;
+                        foreach (Enum type in Enum.GetValues(cellType))
+                            clb.Items.Add(type, false);
+                    }
                 }
                 else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsEnum) &&
                         (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsEnum])
